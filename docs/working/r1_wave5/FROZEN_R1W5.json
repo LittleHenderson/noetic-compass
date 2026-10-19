@@ -1,0 +1,818 @@
+{
+ "arm_specs": {
+  "CUT_VIOLATOR": {
+   "att_learn": true,
+   "cut": false,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [],
+   "seed_label": "CUT_VIOLATOR"
+  },
+  "FULL": {
+   "cut": true,
+   "dials": {},
+   "drive": "W3",
+   "off": [],
+   "seed_label": "W3"
+  },
+  "FULL+EYE_PAIRING": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [],
+   "seed_label": "EYE_PAIRING"
+  },
+  "FULL+EYE_PAIRING-CASCADE": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [
+    "CASCADE"
+   ],
+   "seed_label": "EYE_PAIRING"
+  },
+  "FULL+EYE_PAIRING-CUBE_STORE": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [
+    "CUBE_STORE"
+   ],
+   "seed_label": "EYE_PAIRING"
+  },
+  "FULL+EYE_PAIRING-ENGLISH_IN": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [
+    "ENGLISH_IN"
+   ],
+   "seed_label": "EYE_PAIRING"
+  },
+  "FULL+EYE_PAIRING-TRIAD": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [
+    "TRIAD"
+   ],
+   "seed_label": "EYE_PAIRING"
+  },
+  "FULL+EYE_PAIRING_FR": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": true,
+   "off": [],
+   "seed_label": "EYE_PAIRING_FR"
+  },
+  "FULL+EYE_PAIRING_FROZEN": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": false,
+   "geodesic": false,
+   "off": [],
+   "seed_label": "EYE_PAIRING_FROZEN"
+  },
+  "FULL+EYE_PAIRING_NODECLINE": {
+   "att_learn": true,
+   "cut": true,
+   "decline": false,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [],
+   "seed_label": "EYE_PAIRING"
+  },
+  "FULL+EYE_PAIRING_REPLAY": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {},
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [],
+   "seed_label": "EYE_PAIRING"
+  },
+  "FULL+RANDOM_PAIRING": {
+   "cut": true,
+   "dials": {},
+   "drive": "RANDOM",
+   "off": [],
+   "seed_label": "RANDOM"
+  },
+  "FULL+ROUND_ROBIN": {
+   "cut": true,
+   "dials": {},
+   "drive": "ROUND_ROBIN",
+   "off": [],
+   "seed_label": "ROUND_ROBIN"
+  },
+  "FULL-CASCADE": {
+   "cut": true,
+   "dials": {},
+   "drive": "W3",
+   "off": [
+    "CASCADE"
+   ],
+   "seed_label": "W3"
+  },
+  "FULL-CUBE_STORE": {
+   "cut": true,
+   "dials": {},
+   "drive": "W3",
+   "off": [
+    "CUBE_STORE"
+   ],
+   "seed_label": "W3"
+  },
+  "FULL-ENGLISH_IN": {
+   "cut": true,
+   "dials": {},
+   "drive": "W3",
+   "off": [
+    "ENGLISH_IN"
+   ],
+   "seed_label": "W3"
+  },
+  "FULL-TRIAD": {
+   "cut": true,
+   "dials": {},
+   "drive": "W3",
+   "off": [
+    "TRIAD"
+   ],
+   "seed_label": "W3"
+  },
+  "GUARD_VIOLATOR": {
+   "att_learn": true,
+   "cut": true,
+   "decline": true,
+   "dials": {
+    "F1": 9,
+    "F7": 3
+   },
+   "drive": "EYE",
+   "eye_learn": true,
+   "geodesic": false,
+   "off": [],
+   "seed_label": "GUARD_VIOLATOR"
+  }
+ },
+ "attempts": {
+  "plumbing_retry": 1,
+  "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same X5 pins; any package change is a reseal and a new sign line",
+  "scored": 1
+ },
+ "claim_ceiling": "SYNTHETIC_ONLY",
+ "claim_status_if_earned": "ENGINEERED-NOT-VALIDATED",
+ "claim_template": "On synthetic worlds only, inside the same licensed recipe brain and live English path as wave 3b (c38), an idle drive loop in which the Unity Eye counts verified tries per (desire, faculty) pair and whispers its best pairing, starting with no key, resolved at least 20 points more backlog items than random or round-robin pairing on a custodian-sealed exam, its frozen-table control fell to the rival band, it cost at most 2 items on each wave-3b exam, it made no faculty call during conversation and the Eye wrote nothing.",
+ "deviations": [
+  "D-W5-1 Q6 reading",
+  "D-W5-2 pair margin 1/8 of the denominator",
+  "D-W5-3 FULL = wave 3's DRIVE_LOOP rule under X5's fairness rules",
+  "D-W5-4 RB-I3 vendored byte-identical; U1b ConcertLedger excerpt",
+  "D-W5-5 reported arm FULL+EYE_PAIRING_NODECLINE (Q5 counterfactual)",
+  "D-W5-6 I13 compares NODECLINE with FROZEN on C_NULL"
+ ],
+ "exams": {
+  "REPRO_X3": {
+   "files": {
+    "ENGLISH64_ITEMS": {
+     "exam": "E64",
+     "file": "ENGLISH64_X3.json",
+     "sha256": "a5a4286a839fa5d9d3253fc742839967ba4f95736d941383f81d2296b6784139"
+    },
+    "FACES64_ITEMS": {
+     "exam": "F64",
+     "file": "FACES64_X3.json",
+     "sha256": "8c1ff66adfe9b969c5aee9a7703826bb8ec5711955e12bf8768b2d6659278683"
+    }
+   },
+   "reference": "c38 R1_W3B_HOST.json 5f479f613788b7d672141be0a4cf8a423de28e8d989808dd9f9b66ee77e21b8b"
+  },
+  "X5_E64": {
+   "composition": [
+    [
+     "G1_STOCK_THEN_ASK",
+     "PLAIN",
+     "ANSWER",
+     4
+    ],
+    [
+     "G1_STOCK_THEN_ASK",
+     "TWO_INGREDIENT",
+     "ANSWER",
+     4
+    ],
+    [
+     "G1_STOCK_THEN_ASK",
+     "UNKNOWN_INGREDIENT",
+     "ASK",
+     8
+    ],
+    [
+     "G1_STOCK_THEN_ASK",
+     "UNIT_CHANGE",
+     "ASK",
+     8
+    ],
+    [
+     "G2_ABSENT_THEN_ASK",
+     "PLAIN",
+     "ASK",
+     8
+    ],
+    [
+     "G3_QUESTION_FORMS",
+     "PLAIN",
+     "ANSWER",
+     4
+    ],
+    [
+     "G4_WITNESS_IN_ENGLISH",
+     "PLAIN",
+     "LEARN",
+     8
+    ],
+    [
+     "G5_MUST_ASK",
+     "PLAIN",
+     "ASK",
+     8
+    ],
+    [
+     "G6_STORE_READ",
+     "PLAIN",
+     "READ",
+     8
+    ],
+    [
+     "G7_NEXT_SESSION",
+     "PLAIN",
+     "ANSWER",
+     4
+    ]
+   ],
+   "generator": "r1w3b.gen64 (sealed, unchanged)",
+   "items": 64
+  },
+  "X5_F64": {
+   "composition": [
+    [
+     "H1_WISDOM_STATED",
+     "FACE_STATED",
+     "ANSWER",
+     6
+    ],
+    [
+     "H1_WISDOM_STATED",
+     "FACE_IMPLIED",
+     "ANSWER",
+     2
+    ],
+    [
+     "H1_WISDOM_STATED",
+     "UNKNOWN_INGREDIENT",
+     "ASK",
+     8
+    ],
+    [
+     "H1_WISDOM_STATED",
+     "UNIT_CHANGE",
+     "ASK",
+     8
+    ],
+    [
+     "H2_POWER_STATED",
+     "FACE_STATED",
+     "ANSWER",
+     6
+    ],
+    [
+     "H2_POWER_STATED",
+     "FACE_IMPLIED",
+     "ANSWER",
+     2
+    ],
+    [
+     "H2_POWER_STATED",
+     "UNKNOWN_INGREDIENT",
+     "ASK",
+     8
+    ],
+    [
+     "H2_POWER_STATED",
+     "UNIT_CHANGE",
+     "ASK",
+     8
+    ],
+    [
+     "H3_RECIPE_PURPOSE_ABSENT",
+     "PLAIN",
+     "ASK",
+     4
+    ],
+    [
+     "H4_INGREDIENT_PURPOSE_ABSENT",
+     "PLAIN",
+     "ASK",
+     4
+    ],
+    [
+     "H5_PEAK_STATED",
+     "PLAIN",
+     "ANSWER",
+     2
+    ],
+    [
+     "H6_TWO_FACES",
+     "TWO_INGREDIENT",
+     "ANSWER",
+     4
+    ],
+    [
+     "H7_NOT_A_FACE",
+     "PLAIN",
+     "ANSWER",
+     2
+    ]
+   ],
+   "generator": "r1w3b.gen64 (sealed, unchanged)",
+   "items": 64
+  },
+  "X5_PAIR": {
+   "chain_family": {
+    "CLEAN": "C1_CLEAN",
+    "PLANT": "C2_PLANT_BIND"
+   },
+   "conversation_turns": [
+    2,
+    6
+   ],
+   "conversation_windows": [
+    1,
+    3
+   ],
+   "dead_in_noisy": "1/2",
+   "drift_at_session": 16,
+   "easy": "1/3",
+   "face_choices": [
+    [
+     "WISDOM",
+     "RISING"
+    ],
+    [
+     "WISDOM",
+     "WANING"
+    ],
+    [
+     "POWER",
+     "WANING"
+    ],
+    [
+     "POWER",
+     "RISING"
+    ],
+    [
+     "PURPOSE",
+     "WANING"
+    ],
+    [
+     "PURPOSE",
+     "RISING"
+    ]
+   ],
+   "idle_ticks_per_item": 2,
+   "items_per_session": [
+    12,
+    20
+   ],
+   "job_part": {
+    "CLEAN": null,
+    "FACE": "TRIAD",
+    "LACUNA": null,
+    "NOTE": "ENGLISH_IN",
+    "PLANT": "CASCADE",
+    "STALE": "CUBE_STORE",
+    "YIELD": null
+   },
+   "kind_job": {
+    "K1": "PLANT",
+    "K2": "STALE",
+    "K3": "NOTE",
+    "K4": "FACE",
+    "K5": "CLEAN",
+    "K6": "LACUNA",
+    "K7": "YIELD"
+   },
+   "lives": [
+    [
+     "A_STATIONARY_0",
+     "A_STATIONARY",
+     0
+    ],
+    [
+     "A_STATIONARY_1",
+     "A_STATIONARY",
+     1
+    ],
+    [
+     "A_STATIONARY_2",
+     "A_STATIONARY",
+     2
+    ],
+    [
+     "B_DRIFT_0",
+     "B_DRIFT",
+     0
+    ],
+    [
+     "B_DRIFT_1",
+     "B_DRIFT",
+     1
+    ],
+    [
+     "B_DRIFT_2",
+     "B_DRIFT",
+     2
+    ],
+    [
+     "C_NULL_0",
+     "C_NULL",
+     0
+    ],
+    [
+     "C_NULL_1",
+     "C_NULL",
+     1
+    ],
+    [
+     "C_NULL_2",
+     "C_NULL",
+     2
+    ],
+    [
+     "LIVE_E64",
+     "A_STATIONARY",
+     0
+    ],
+    [
+     "LIVE_F64",
+     "A_STATIONARY",
+     0
+    ]
+   ],
+   "max_tries_per_item": 7,
+   "misfile": "1/4",
+   "noisy_wells": 2,
+   "note_templates": [
+    "We have {A} and {B}.",
+    "There are {A}, {B} and {C} in the pantry.",
+    "I just counted {A}.",
+    "We've got {A} and {B} left.",
+    "Right now we have {A}, {B} and {C}.",
+    "We have {A} on the shelf."
+   ],
+   "null_solver_p": "1/3",
+   "sessions_per_life": 32,
+   "world": "rb_i3.world.World (vendored, byte-identical)"
+  }
+ },
+ "hard_gates": [
+  "H1_receipts",
+  "H2_no_invention",
+  "H3_replay",
+  "H4_equal_budgets",
+  "H5_cut_in_conversation (c)",
+  "H6_eye_never_writes (d)",
+  "H7_no_key_leak",
+  "H8_no_key_at_start",
+  "H9_learning_audit",
+  "H10_open_simplex",
+  "H12_guard_clean (e)"
+ ],
+ "instrument_arms": [
+  "CUT_VIOLATOR",
+  "GUARD_VIOLATOR"
+ ],
+ "instrument_rows": [
+  "I1_data_identity",
+  "I3_same_brain_as_c38",
+  "I4_parameter_counts",
+  "I6_completeness",
+  "I7_laptop_reading",
+  "I9_governance",
+  "I10_x5_seed_rule",
+  "I11_cut_check_can_fire",
+  "I12_guard_and_canary_can_fire",
+  "I13_null_control (D-W5-6: NODECLINE vs FROZEN on C_NULL)",
+  "I14_job_map"
+ ],
+ "label": "R1W5",
+ "live_arms": [
+  "FULL",
+  "FULL_REPLAY",
+  "FULL+EYE_PAIRING"
+ ],
+ "live_idle_ticks_before_dialogue": 2,
+ "marks": {
+  "a": "M(FULL) - M(FULL+EYE_PAIRING) <= 2 of 64 on X5_E64 and X5_F64 (M = RIGHT_AND_PLAIN)",
+  "b1": "family A pooled: candidate - RANDOM >= 20 points and candidate - ROUND_ROBIN >= 20 points; each life >= 10 points against each",
+  "b2": "family A pooled: FROZEN <= max(RANDOM, ROUND_ROBIN) + 5 points and candidate - FROZEN >= 20",
+  "beat_margin_per_life_points": "10",
+  "beat_margin_points": "20",
+  "c_d_e": "hard gates H5, H6, H12",
+  "frozen_gap_points": "20",
+  "no_harm_max_loss": 2,
+  "null_band_points": "5",
+  "rival_band_points": "5"
+ },
+ "not_licensed": "anything outside synthetic worlds; that faculties are creative, curious or imaginative; meaning for the 7 Foundations beyond category labels; that the Fisher-Rao geometry helps; that the Eye may act outside tests; any change to wave 3's DRIVE_LOOP = NEUTRAL or to RB-I3's word; statistical superiority (one run); operation on real data",
+ "owner_order": "\u201cEYE_PAIRING wave\u201d (OWNER_APPROVALS_20261018.md, last block, 2026-10-19)",
+ "pair_rule": {
+  "all_on": "FULL+EYE_PAIRING",
+  "both_off": "FULL-X",
+  "c37_reading_sha256": "1cc7dba8236abbfae2ea2b03a7d62ad79134a3f38e6ec244e2131764dc31b336",
+  "function": "r1w3/merge_r1w3.pair_word_exam (sealed wave 3), imported",
+  "margin": "1/8 of the denominator (wave 3's PAIR_MARGIN_RATIO)",
+  "metric": "items RESOLVED with a passing receipt, X5_PAIR family A pooled over its 3 lives",
+  "minus_eye_pairing": "FULL",
+  "minus_x": "FULL+EYE_PAIRING-X",
+  "read_only_if": "this wave's word is EYE_PAIRING_EARNED_KEEP and X was EARNED_KEEP in c37"
+ },
+ "pairs": [
+  [
+   "EYE_PAIRING",
+   "CASCADE"
+  ],
+  [
+   "EYE_PAIRING",
+   "CUBE_STORE"
+  ],
+  [
+   "EYE_PAIRING",
+   "ENGLISH_IN"
+  ],
+  [
+   "EYE_PAIRING",
+   "TRIAD"
+  ]
+ ],
+ "practice_seeds": {
+  "E64": 777501,
+  "F64": 777502,
+  "pair": {
+   "A_STATIONARY_0": 51001,
+   "A_STATIONARY_1": 51002,
+   "A_STATIONARY_2": 51003,
+   "B_DRIFT_0": 52001,
+   "B_DRIFT_1": 52002,
+   "B_DRIFT_2": 52003,
+   "C_NULL_0": 53001,
+   "C_NULL_1": 53002,
+   "C_NULL_2": 53003,
+   "LIVE_E64": 54001,
+   "LIVE_F64": 54002
+  }
+ },
+ "proposed_defaults": {
+  "Q5": {
+   "min_tries": 4,
+   "rule": "the brain follows every STRONG whisper; it declines a SOFT whisper when the Eye's cell has >= 4 tries and score < 1/4; the item is set aside for the session; every decline recorded and counted (reported, not a mark)",
+   "score_below": "1/4",
+   "status": "PROPOSED (coordinator); owner may override before signing"
+  },
+  "Q6": {
+   "dial_default": 6,
+   "dial_range": [
+    3,
+    9
+   ],
+   "pair_max_gap": 4,
+   "rbi1_dynamic_reading": "dial = 10 x pull, pair gap > 4: REPORTED would-trips only",
+   "rule": "the CAS Dial System constraint on the seven drive dials (3..9; involution pairs within 4) checked every idle tick before any attention step; a trip refuses the tick and is counted; > 0 trips on a clean arm is a hard-gate failure (H12); GUARD_VIOLATOR must trip (I12)",
+   "status": "PROPOSED (coordinator); builder's reading D-W5-1; owner may override",
+   "violator_dials": {
+    "F1": 9,
+    "F7": 3
+   }
+  },
+  "Q9": {
+   "recover_match": 5,
+   "rule": "B_DRIFT: sessions after the planted table change until the Eye's best cells match the new key on >= 5 of 7 (reported, not a mark); no memory fading",
+   "status": "PROPOSED (coordinator); owner may override"
+  }
+ },
+ "rb_i3_manifest_sha256": "9ecfb7e7e486b148d82ca2d4f5d4fe263b1d6c27578ce0248c8eff3e1d198ff1",
+ "rb_i3_reading_sha256": "71172e80418d59e2f703d4757b80290c0e43e6a4ee0650d5172a5666425a6851",
+ "same_brain": {
+  "how": "live items by wave 3's own live_w3.run_item and wave 3b's live64.run_arm; jobs by wave 3's cascade_w3 and HELM's readers and triad from the sealed wave-3 helm/; the dispatcher is wave 2's pool_w2",
+  "wave1_freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+  "wave1_zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+  "wave2_freeze_sha256": "c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224",
+  "wave2_zip_sha256": "21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5",
+  "wave3_freeze_sha256": "bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310",
+  "wave3_zip_sha256": "152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362",
+  "wave3b_freeze_sha256": "a6d9dbc78d3f720941c5a358be9a4d514617f8de226811c55938f807833dfbba",
+  "wave3b_zip_sha256": "a4f82556bf0fc26de5635a7c81ec8f5053951d4c64a3906c8e5dd474e3814d26"
+ },
+ "schema": "helm.r1w5.frozen/1",
+ "seed_bands": {
+  "E64": {
+   "hi": 1879000000,
+   "k": "k4",
+   "lo": 1878000001,
+   "rule": "X3 E64 band (1,838,000,001-1,839,000,000) + 40,000,000",
+   "slots": 1000000
+  },
+  "F64": {
+   "hi": 1881000000,
+   "k": "k1",
+   "lo": 1880000001,
+   "rule": "X3 F64 band (1,840,000,001-1,841,000,000) + 40,000,000",
+   "slots": 1000000
+  }
+ },
+ "seed_rule": {
+  "bands": {
+   "E64": {
+    "hi": 1879000000,
+    "k": "k4",
+    "lo": 1878000001,
+    "rule": "X3 E64 band (1,838,000,001-1,839,000,000) + 40,000,000",
+    "slots": 1000000
+   },
+   "F64": {
+    "hi": 1881000000,
+    "k": "k1",
+    "lo": 1880000001,
+    "rule": "X3 F64 band (1,840,000,001-1,841,000,000) + 40,000,000",
+    "slots": 1000000
+   }
+  },
+  "gap": 1000000,
+  "pair_seed_prefix": "R1W5-X5PAIR",
+  "rb_i3_seeds_refused": [
+   11,
+   29,
+   47,
+   101,
+   202,
+   303
+  ],
+  "reserved_wave4": [
+   {
+    "hi": 1859000000,
+    "lo": 1858000001,
+    "space": "reserved_wave4_E64",
+    "what": "wave 4 X4 E64 band (reserved)"
+   },
+   {
+    "hi": 1861000000,
+    "lo": 1860000001,
+    "space": "reserved_wave4_F64",
+    "what": "wave 4 X4 F64 band (reserved)"
+   },
+   {
+    "hi": 1863000000,
+    "lo": 1862000001,
+    "space": "reserved_wave4_SELF",
+    "what": "wave 4 X4 SELF band (reserved)"
+   }
+  ],
+  "seed_source": "sha256 of the owner's exact R1W5 sign-line bytes",
+  "shift_from_x3": 40000000,
+  "used_derivations": {
+   "X0": "641b246a5db9eefc185191d62fbcae99065b38eb019dd6da536904cedab3f7f7",
+   "X1": "a18ddd969b0920512bcb1488dcb3323ec76c6e1c74ee735db33b1b3166d3b991",
+   "X2V1": "841a0b20c3f5575224eab69efcc8b4c8b493fbce536c29467c0ac1502bb5f205",
+   "X2V1_ATTEMPT1": "6aaffe6fe2e6a837650614150cb5d0641c92c7128e2aab1a45d3f8032c547c99",
+   "X2V2": "8731da9c25db898825779c8d9d94338eb61cfd8746581eccb7893588335d764c",
+   "X2V2_PRE_TEXT_STEP": "1818a81330f00c15148a5a4efb97ac29d3ff662e456a88fe58a7b4012764821b",
+   "X3": "40fd6276709154a2c8cbffba5f16bd0b2ea7626ab7c2896ee854794b04c5ac7f"
+  },
+  "x0_seed_rule_sha256": "09956c6b8f16b014d35e9b5770e0e08909ff8cc756a108930bdccd0a0ae6c89f"
+ },
+ "status_program": [
+  "instrument row false -> INSTRUMENT_ERROR / INCONCLUSIVE",
+  "hard gate false -> FAILURE / INCONCLUSIVE",
+  "(a) and (b1) and (b2) -> EYE_PAIRING_EARNED_KEEP",
+  "else not (a) -> EYE_PAIRING_HARMED",
+  "else not (b2) -> LEARNING_DID_NOT_EARN_KEEP",
+  "else INCONCLUSIVE"
+ ],
+ "status_words_frozen_order": [
+  "EYE_PAIRING_EARNED_KEEP",
+  "EYE_PAIRING_HARMED",
+  "LEARNING_DID_NOT_EARN_KEEP",
+  "INCONCLUSIVE"
+ ],
+ "text_rule": {
+  "extra_text_pins": {
+   "205054b2bdac47e639e24cbf46042ce33763b980d5381305d3c59191b4589f7f": "X2 ENGLISH16_X2.json",
+   "69202c0b1d11f880306acfec692efe664247d5717ffd8ec62912859d09483741": "X2 FACES16_X2.json",
+   "87f1db78b53d88c3ba29db2a48c500eb360d4c7312ef8e078fb64f7351817607": "X1 ENGLISH16_X1.json",
+   "8c1ff66adfe9b969c5aee9a7703826bb8ec5711955e12bf8768b2d6659278683": "X3 FACES64_X3.json",
+   "a5a4286a839fa5d9d3253fc742839967ba4f95736d941383f81d2296b6784139": "X3 ENGLISH64_X3.json"
+  },
+  "followups_sha256": "14f5cb49c7fb60a0d40686d0d6b18e8d34aa81de0a61fed345d0f1749d751ef5",
+  "rule": "R1W3-A1 carried + T3b (wave 3b, sealed)",
+  "templates_sha256": "2a63936d25648c76b82831f888d6cbdad58ce58fcbff6551e9ade1af3bc4f3a3"
+ },
+ "u1b_excerpt": {
+  "excerpt_sha256_lf": "18a5a9918607e038bd109e6fdcb0696624469c47382d31373be9d1dcc72275e6",
+  "lines": [
+   55,
+   68
+  ],
+  "source_sha256": "9897e7da0a8e7a8ddfaf801ee3d9e17499da1e34f817f9f4831ae77218a105ea"
+ },
+ "used_derivations": {
+  "X0": "641b246a5db9eefc185191d62fbcae99065b38eb019dd6da536904cedab3f7f7",
+  "X1": "a18ddd969b0920512bcb1488dcb3323ec76c6e1c74ee735db33b1b3166d3b991",
+  "X2V1": "841a0b20c3f5575224eab69efcc8b4c8b493fbce536c29467c0ac1502bb5f205",
+  "X2V1_ATTEMPT1": "6aaffe6fe2e6a837650614150cb5d0641c92c7128e2aab1a45d3f8032c547c99",
+  "X2V2": "8731da9c25db898825779c8d9d94338eb61cfd8746581eccb7893588335d764c",
+  "X2V2_PRE_TEXT_STEP": "1818a81330f00c15148a5a4efb97ac29d3ff662e456a88fe58a7b4012764821b",
+  "X3": "40fd6276709154a2c8cbffba5f16bd0b2ea7626ab7c2896ee854794b04c5ac7f"
+ },
+ "vendor_rb_i3": {
+  "__init__.py": "afc84e3c4dbc266ae92958a71232e0f40414a3d06c488ee87bf5f76335ef7c1a",
+  "attention.py": "fd98d92a23b661d96cbb4f9c99d06c3e6fae9453af259be7e73eddb2a4615df4",
+  "consts.py": "23e3e1ed011f2a8e70400c46be60f44235feea9c358c56521c534b208d4d1503",
+  "eye.py": "c0b191e27b9d2839c4a5b3532937ca9b430ebdb2b49c37397eab9fcf7a32dfad",
+  "world.py": "f821d55e46b33149ecc6504c39618a2598566cc01a46f2b8a27dd1299bd7f289"
+ },
+ "x5_arms": {
+  "A_STATIONARY": [
+   "FULL",
+   "FULL+EYE_PAIRING",
+   "FULL+EYE_PAIRING_FROZEN",
+   "FULL+RANDOM_PAIRING",
+   "FULL+ROUND_ROBIN",
+   "CUT_VIOLATOR",
+   "FULL+EYE_PAIRING_REPLAY",
+   "FULL+EYE_PAIRING_FR",
+   "FULL+EYE_PAIRING_NODECLINE",
+   "GUARD_VIOLATOR",
+   "FULL+EYE_PAIRING-CASCADE",
+   "FULL+EYE_PAIRING-CUBE_STORE",
+   "FULL+EYE_PAIRING-ENGLISH_IN",
+   "FULL+EYE_PAIRING-TRIAD",
+   "FULL-CASCADE",
+   "FULL-CUBE_STORE",
+   "FULL-ENGLISH_IN",
+   "FULL-TRIAD"
+  ],
+  "B_DRIFT": [
+   "FULL",
+   "FULL+EYE_PAIRING",
+   "FULL+EYE_PAIRING_FROZEN",
+   "FULL+RANDOM_PAIRING",
+   "FULL+ROUND_ROBIN",
+   "CUT_VIOLATOR",
+   "FULL+EYE_PAIRING_FR"
+  ],
+  "C_NULL": [
+   "FULL",
+   "FULL+EYE_PAIRING",
+   "FULL+EYE_PAIRING_FROZEN",
+   "FULL+RANDOM_PAIRING",
+   "FULL+ROUND_ROBIN",
+   "CUT_VIOLATOR",
+   "FULL+EYE_PAIRING_NODECLINE"
+  ]
+ }
+}

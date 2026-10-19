@@ -1,0 +1,99 @@
+{
+ "python": "3.14.0",
+ "suites": {
+  "r1w3.test_kit_r1w3 (wave-3 zip)": {
+   "exit": 0,
+   "ran": [
+    5
+   ],
+   "seconds": 0.34,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w3.test_units_w3 (wave-3 zip)": {
+   "exit": 0,
+   "ran": [
+    36
+   ],
+   "seconds": 3.08,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w3b.test_kit_w3b (wave-3b zip)": {
+   "exit": 0,
+   "ran": [
+    5
+   ],
+   "seconds": 0.35,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w3b.test_units_w3b (wave-3b zip)": {
+   "exit": 0,
+   "ran": [
+    18
+   ],
+   "seconds": 14.43,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w5.test_kit_w5": {
+   "exit": 0,
+   "ran": [
+    5
+   ],
+   "seconds": 0.44,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "r1w5.test_run_w5 (AWS only)": {
+   "exit": 0,
+   "ran": [
+    3
+   ],
+   "seconds": 0.21,
+   "verdict": [
+    "OK (skipped=3)"
+   ]
+  },
+  "r1w5.test_units_w5": {
+   "exit": 0,
+   "ran": [
+    32
+   ],
+   "seconds": 26.77,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "wave1 carried (v3 folder)": {
+   "exit": 0,
+   "ran": [
+    128
+   ],
+   "seconds": 72.18,
+   "verdict": [
+    "OK"
+   ]
+  },
+  "wave2 carried units (wave-2 folder)": {
+   "exit": 0,
+   "ran": [
+    34
+   ],
+   "seconds": 3.48,
+   "verdict": [
+    "OK"
+   ]
+  }
+ },
+ "w3_zip": "HELM_R1_W3_20261019_SOURCE_R1W3_v3.zip",
+ "w3b_zip": "HELM_R1_W3B_20261019_SOURCE_R1W3B.zip",
+ "zip": "HELM_R1_W5_20261019_SOURCE_R1W5.zip",
+ "zip_extracted_to": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner\\4c449f9b-0ce1-4a65-8176-1db6509485b5\\scratchpad\\seal_test\\sealed_extract\\HELM_R1_W5_20261019"
+}
