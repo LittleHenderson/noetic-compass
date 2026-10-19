@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - HELM language line, fix E (dictionary half): alias-wide lexicon v2; DEV 99 read 0 -> 41, sealed 98 (once) 0 -> 34; Scribe L4 scoring prepared, NOT_RUN
+
+Laptop, stdlib, 0 USD. FROZEN_LEXICON_V2.json pushed first (0b7cde89). lexicon_v2.py (dd60f490) = v1 unchanged
++ 10 source-tagged Noetic phrases + `mental` -> C, with a v1/v2 switch. `behavior` -> O and `judgment` -> E were
+refused by the frozen domain test. tabulate_v2.py computes every number the old script typed in (all equal).
+481: v1 265/199/17 -> v2 337/124/20 (MATCH/UNPARSEABLE/MISMATCH); 439: 233/197/9 -> 304/122/13; no v1 MATCH lost.
+DEV 99: 0 -> 39/58/2. Sealed 98, scored once, counts only: 0 -> 32/64/2, sha256 e269a448... unchanged.
+NO_STATE 148 -> 21 (vocabulary gaps, closed); NO_DOMAIN 56 -> 69 (mostly English that never names a domain; no
+word can fix it). Tests: language_v3 26+11+5+26 OK, new 19 + 6 OK. Scribe L4 (84812689) scoring plan +
+script written, NOT_RUN pending owner word: needs torch on an AWS CPU t3.medium (~0.01 USD); its one-clause output
+cannot hold a recipe, so exact match is 0/98 by construction. Failed approach logged: adding `behavior` as an O word
+(refused by the frozen rule; the SDG writer used "operational behavior" for two P cells). Spec sheet §7.50.
+
 ## 2026-10-16 PDT - HELM-R1 WAVE 1 SCORED (job c34-g, AWS): the recipe brain in GB3's slot beat GB3 on the freshly sealed exam - 32 against 9, and 32 against 17/2 widened; frozen reader PASS, R1_BEATS_GB3, all seven hard gates and all eight instrument rows holding
 
 Owner's wave authority at §7.44 ("M1; R1, cap $10, sha256 of the bytes
