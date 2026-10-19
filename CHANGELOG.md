@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 WAVE 3 RESEALED v2 before signing: cube store read path repaired (spec sheet 7.66 amended)
+
+Coordinator's decision (plumbing defect, owner not yet signed). Builder: Claude Code sub-agent.
+
+- Fixed in docs/working/noetic_council/cube_store: 'What do we have on hand?' no longer goes to FIND_SHARED_PART ('and' inside 'hand'); LIST_PARTS no longer lists an absent part ("None Water"). Two new cases, 19/21 before, 21/21 after.
+- v1 zip 2d5b4f0e... VOID_UNSIGNED. v2 zip HELM_R1_W3_20261019_SOURCE_R1W3_v2.zip 26b0ef7e..., freeze a72063f5...; exactly 4 members changed.
+- Tests from the v2 seal: 493 passed, 4 AWS-only skipped, 0 failed. Drive-loop rule, FROZEN_R1W3.json and everything else unchanged.
+- Owner sign line now names 26b0ef7e.
+
 ## 2026-10-19 PDT - HELM-R1 WAVE 3 PACKET SEALED, NOT LAUNCHED (spec sheet 7.66; laptop, 0 USD)
 
 Owner order "wave 3 plan" plus the 2026-10-19 rulings (decoupling-stop adopted, drive loop design, growth unparked). Builder: Claude Code sub-agent.

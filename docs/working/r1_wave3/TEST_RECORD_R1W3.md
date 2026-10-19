@@ -5,7 +5,7 @@ torch. Everything below is a FACT about the code and the builder's fixtures; not
 
 ## 1. All pure-Python suites, run from an extracted copy of the SEALED zip (`build/test_from_seal.py`)
 
-Zip `2d5b4f0eab1c151c05194d6fe7ee2c3c247a55f3a7d91c2445cdf9cb186b45f7`. Counts file `TEST_COUNTS_R1W3.json` (sha256
+Zip `2d5b4f0eab1c151c05194d6fe7ee2c3c247a55f3a7d91c2445cdf9cb186b45f7` (v1, now VOID_UNSIGNED; v2 in section 4). Counts file `TEST_COUNTS_R1W3.json` (sha256
 `ae40ea05e8f946dbd2afabe53f4afc52ea0f2138a341057cd7ac5116b399ee10`).
 
 | Suite | Ran | Result | Seconds |
@@ -59,3 +59,31 @@ Fixture numbers, shown so the owner can see the machinery move (NOT results; fix
 - X2 seed rule: whole 1,000,000-wide bands free; GB 954 / 1,000, TB 23 / 33, D34 31 / 45 free slots; a dummy-line
   derivation printed `overlap_check: PASS`, every part `in_band: true`; the `--start-slot E16=5` step also PASS.
 - Seal: two seals byte-identical (`build/seal_r1w3.py`); 205 members + the freeze.
+
+## 4. v2 reseal: the cube store's read path repaired before signing (2026-10-19)
+
+Coordinator's decision: the two cube-store faults in section 2 are plumbing, not what the CUBE_STORE switch measures;
+the owner had not signed, so a reseal carries no governance drift.
+
+- Old package `HELM_R1_W3_20261019_SOURCE_R1W3.zip` `2d5b4f0eab1c151c05194d6fe7ee2c3c247a55f3a7d91c2445cdf9cb186b45f7`
+  (freeze `be1b321de2ef2545832b7281e7b53b7f263e6e381fd2b011783a550a447d3c65`): **VOID_UNSIGNED** (kept in `void_v1/`).
+- New package `HELM_R1_W3_20261019_SOURCE_R1W3_v2.zip` `26b0ef7ed25c8431334d98ddf3a566704b105e53feab15103494cea9893f7bf3`
+  (929,130 bytes), freeze `a72063f5223b04f01a428dfa55bfeb3fb9f45bec847286c41a5160f5761da1f3`, 205 members + the freeze,
+  resealed byte-identical. Sources cut at thread commit `554fce5c`.
+- Fixes: `turn.py` — the S6 "do we have X and Y" check needs the WORD `and` (it matched inside "hand"); `operations.py`
+  `list_parts` — the latest branch to a part is its current word; a part whose latest branch is absent is not listed.
+  Two new cube_store cases: before the fix 19 / 21 (both new ones FAIL), after 21 / 21.
+- Diff between the seals (exactly 4 members; every other member byte-identical, incl. `FROZEN_R1W3.json` `e9777c2b...`):
+
+| Member | v1 sha256 | v2 sha256 |
+|---|---|---|
+| `helm/SOURCE_CUT.json` | `a553ea923023f61887ea420c46fa0e2bde72643c6613a4eeae84bf5c4c9e65e7` | `970ad501504fbc5c7ab31e85b0ef4e5683bac4d4e0b08f97933ed131b97ea2f6` |
+| `helm/docs/working/noetic_council/cube_store/operations.py` | `75a210eadfd1180f987107ec9a4afd25f3b0d7a834596addb3f35e099d496a9d` | `c3cc20aae0a7a5d7d9d1f0135aabb868c03bcbf382d2eb91dace9982a534834d` |
+| `helm/docs/working/noetic_council/cube_store/test_all.py` | `91ec14d8a170e016e24bcfa80029f006cd94ac2cc7044afc4ee4200bb23b2540` | `0154df4fd1beac637d512421db0c99c35c75ef8a120de687eccef95d07e9da6b` |
+| `helm/docs/working/noetic_council/cube_store/turn.py` | `3fb0020bd8810f69df643bf2f35545864c1886a5cc879f7a131507e9cef4c6c4` | `006bf3cb5f8da12cd35d928f78c036bcb8e32eefc02dbf98c277dc2ea19ab89c` |
+
+- Full suite from the v2 sealed zip (`TEST_COUNTS_R1W3_v2.json`): 497 run, **493 passed, 4 skipped (AWS-only), 0
+  failed** (as section 1, with cube_store now 21 / 21).
+- Fixture check after the fix (not a result): the three English-16 store-read fixture items now read RIGHT under FULL
+  (e.g. "Currently on hand: 15 Egg, 20 Sugar, 21 Salt." with the absent item no longer listed).
+- The drive-loop rule and everything else are unchanged.
