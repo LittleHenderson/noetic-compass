@@ -13,6 +13,22 @@ Records only. No run, no spend. Checked against `r1w3/drive_w3.py` (sha256 79def
 - Unchanged: the `DRIVE_LOOP` word NEUTRAL, every number, every gate, every claim status. Only the baseline label is corrected. Originals (spec sheet 7.69 text, RUN_RESULT_R1W3_C37.md, the earlier Change Log row) are kept; the erratum stands beside them (spec sheet 7.69 erratum + Change Log row; `ERRATUM_20261019.md` in the run folder).
 - Open questions only (from the DeepSeek-brief compiler; not conclusions): only 4 of 7 faculties can act in drive_w3.py; the "cut in conversation" gate H14 cannot fail for any arm (awake ticks never carry a foundation key, lines 135-137, 175); `DESIGN_R1W3.md`, cited by the code, is missing from disk and from the source zip.
 
+## 2026-10-19 PDT - HELM-R1 WAVE 3b packet sealed, NOT LAUNCHED: the roomier exam for the four unreadable pairs (spec sheet 7.70; laptop, 0 USD)
+
+Owner ruling (2026-10-19 morning): "roomier exam" so the 4 unreadable pairs can be read [yes, cheap]. Builder: Claude Code sub-agent. No launch, no hold, no spend.
+
+- Pairs: CUBE_STORE x ENGLISH_IN, ENGLISH_IN x TRIAD, ENGLISH_IN x VOICE, TRIAD x VOICE (all four c37 CEILING_NOT_READABLE; all four parts EARNED_KEEP in c37).
+- Exams: English-64 and Faces-64 from wave 3's own family code (reproduces e16/f16 exactly, 5 seeds) with new counts and a ladder: plain, two-ingredient, unknown ingredient (ASK), unit change (ASK), face stated/implied. English-64: ANSWER 16, ASK 32, LEARN 8, READ 8. Faces-64: ANSWER 24, ASK 40.
+- Why not just 4x: the old mix makes both singles lose almost every item, so E grows with the exam (English-16 x 4: E about 76 vs room about 64). ASK items survive one part off and make room.
+- Arms 15 + 2 same-brain reruns (FULL on the spent X2 English-16 / Faces-16 must equal c37's records) = 17 host units (c37: 106).
+- Readability stated numerically: CEILING_NOT_READABLE iff L(a) + L(b) > M(FULL) - 8 (wave 3's rule, imported verbatim). The coordinator's "only at FULL >= 62/64" wording was not made a rule (it would turn no-room into fake INTERFERENCE); flagged D-B2.
+- Text rule T3b: A1 extended to the store questions, question forms and "Hi again." (without it, all 6 store questions are forbidden and no seed can pass). X3 bands = X2-v2 + 20,000,000; used table = six pinned derivations (X0, X1, X2-v1 x2, X2-v2 x2); dummy-line check PASS.
+- Marks PROPOSED: English-64 >= 56 right, <= 2 wrong; Faces-64 >= 48 right, <= 4 wrong.
+- Sealed zip a4f82556bf0fc26de5635a7c81ec8f5053951d4c64a3906c8e5dd474e3814d26 (82,393 bytes), freeze a6d9dbc7..., FROZEN_R1W3B 90d4468d...; resealed byte-identical; backup D:/tksCAS-archive/helm_r1w3b_packet_20261019/.
+- Tests from the sealed zips: 526 run, 519 passed, 7 skipped (AWS-only host tests), 0 failed. Dry run on fixtures: 15 units exit 0 in 19.2 s; reader INSTRUMENT_ERROR as designed; every pair readable on fixtures (slack 8-16).
+- Cost PROPOSED: about 0.02-0.06 USD expected, worst about 0.70; cap 1 USD. Sign line in OWNER_SIGN_REQUEST_R1W3B.md.
+- Failed approach logged: the first E64 receiver check failed on the store-read items (text rule), which found the T3b trap before any X3 seed existed; a first test case for ADDITIVE used wrong numbers (fixed in the test, not the rule).
+
 ## 2026-10-19 PDT - HELM-R1 WAVE 3 SCORED (job c37): reader PASS, words licensed, SYNTHETIC_ONLY (spec sheet 7.69; three m6i.xlarge jobs, 0.08 USD)
 
 Owner v3 sign line (sha256 1606306a...), package v3 152bca2a... (freeze bd06f324...). Launch operator: Claude Code sub-agent. Amendments R1W3-A1 and R1W3-A2 (incl. A2.1-c); coordinator option B after the operator's held note (the reader reads one owner line for I9 and I10, so X2 was rebuilt from the v3 line; X2-v1 VOID_UNUSED).

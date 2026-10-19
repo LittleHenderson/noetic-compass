@@ -1,0 +1,126 @@
+{
+ "frozen_r1w3b_sha256": "90d4468d2dd3df64f0b20bf2b71aa716ff515492daf80fe899e37709997e6de8",
+ "label": "R1W3B",
+ "member_count_excluding_freeze": 27,
+ "members": {
+  "FROZEN_R1W3B.json": {
+   "bytes": 10216,
+   "sha256": "90d4468d2dd3df64f0b20bf2b71aa716ff515492daf80fe899e37709997e6de8"
+  },
+  "README_R1W3B.md": {
+   "bytes": 3639,
+   "sha256": "485164f927f171950f3ec45b777305607e47244cca93eb1c63d6729fa1c88d6b"
+  },
+  "RUN_LIMITS_R1W3B.json": {
+   "bytes": 3355,
+   "sha256": "9f164ce3c425bcabd619a6602401413aab0eca6b3dfa87ab1ea5df60bd1b203e"
+  },
+  "SOURCE_CUT.json": {
+   "bytes": 658,
+   "sha256": "e3c3217bd6daaa7307879473d06d1a555924937f1194f4e684dc7b9a1bdb8ee5"
+  },
+  "kit/STAGE_R1W3B.json": {
+   "bytes": 1419,
+   "sha256": "7c30376d54fe134658083325ffdd8810916d36685c9a0f2bb19c52f1054a2a0a"
+  },
+  "kit/job_supervisor.py": {
+   "bytes": 19550,
+   "sha256": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01"
+  },
+  "kit/plan_check.py": {
+   "bytes": 3464,
+   "sha256": "84257a23545bfe87d7d4ef4565feae12adc9c325fa0fff06fefcb626c3301035"
+  },
+  "kit/run_r1w3b.py": {
+   "bytes": 14043,
+   "sha256": "ff7e3ec90cb797410ec2a534dcd3511325b63d8584cd479085ece85156f4c8b0"
+  },
+  "r1w3b/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "r1w3b/check_x3_format.py": {
+   "bytes": 5483,
+   "sha256": "a6aaeb5a72609e527b01821d26bb6819ec17eb7e28987c466c6e8e133b1231d4"
+  },
+  "r1w3b/common_w3b.py": {
+   "bytes": 11714,
+   "sha256": "aa8b55cce28fbe18038c28b49d2d13ec5518c77289e82efb1e69f23e864f08ea"
+  },
+  "r1w3b/gen64.py": {
+   "bytes": 21497,
+   "sha256": "458e01e32cb7a3571de0ae83d52bc1e82f4fd581dd7616fb1f0e6eae75fc4663"
+  },
+  "r1w3b/live64.py": {
+   "bytes": 8476,
+   "sha256": "c84420d02dac8e83a5224590531f2f475f271142f51d4a901f7cbddcf07e339b"
+  },
+  "r1w3b/merge_r1w3b.py": {
+   "bytes": 21759,
+   "sha256": "62b0a3983ede863e6aec136da6ca16420a8b70af5dc73cf07390ac7ce17bcdf6"
+  },
+  "r1w3b/pool_w3b.py": {
+   "bytes": 2503,
+   "sha256": "bcda73e10fa6e91231d5b55c459f02014ac913dd9a1b7cbc1cd62319b2941a25"
+  },
+  "r1w3b/seed_rule_x3.py": {
+   "bytes": 7761,
+   "sha256": "d6f65d8c618f545cf38e4c8b0c5ba4fb8eb6273d1b6522f643d27f34fbea9043"
+  },
+  "r1w3b/summary_w3b.py": {
+   "bytes": 2659,
+   "sha256": "8954a39cb03fb1b118ccd8f8f5be22a316ac19607cf819a310f7493669a137f9"
+  },
+  "r1w3b/switches_w3b.py": {
+   "bytes": 2962,
+   "sha256": "37696ce90ac59b7d1e6a6608af44cce3d47fe37e31d12d3cf2e27c81fe57f61b"
+  },
+  "r1w3b/text_rule_w3b.py": {
+   "bytes": 2854,
+   "sha256": "5b6b99b90309b5dd5e938fb8d8dd9286a77b5d4f0de92ebc72b2dd0044fb63a9"
+  },
+  "tests_r1w3b/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_r1w3b/fixtures/E64_FIXTURE.json": {
+   "bytes": 47733,
+   "sha256": "8fccf22dd9bac1d53ca7989b8f89484d68370cff442aa89b899b1d94f0c6e209"
+  },
+  "tests_r1w3b/fixtures/F64_FIXTURE.json": {
+   "bytes": 66483,
+   "sha256": "29590ed4613207cb35a21ccb38d1d71e5cbb44612bcdc0d6e687601676178ff0"
+  },
+  "tests_r1w3b/test_kit_w3b.py": {
+   "bytes": 4489,
+   "sha256": "4ee78d4c6110fa3e73bcfa4fa0205741fddf744729576fba290e782122f2c6a1"
+  },
+  "tests_r1w3b/test_run_w3b.py": {
+   "bytes": 8164,
+   "sha256": "9181c0382916f6ae9787b6994f2d29145013732571ebe0a2c4fd2203495004ee"
+  },
+  "tests_r1w3b/test_units_w3b.py": {
+   "bytes": 19599,
+   "sha256": "b444927dbde13d5d902acca1f83e732e041a841e1dd89baec5f6695653ca18e2"
+  },
+  "x3_contract/SEED_RULE_X3.md": {
+   "bytes": 2726,
+   "sha256": "70cbdc1c9c2ecdfa19de0340f2bdb6c6f5212f7f0a40f3c78ef7e28e27103cc1"
+  },
+  "x3_contract/X3_CUSTODIAN_CONTRACT.md": {
+   "bytes": 3330,
+   "sha256": "aa91e38aa5d958d631a84ca8e6185e815176cadc8793446c165ab7f0fc4764e1"
+  }
+ },
+ "not_inside": "the wave-3, wave-2 and wave-1 zips (shipped beside it, checked by freeze), X3 (by its pins), the spent X2 language files (by their pinned hashes)",
+ "package": "HELM_R1_W3B_20261019",
+ "schema": "helm.r1w3b.package-freeze/1",
+ "sealed_on": "2026-10-19 (Pacific)",
+ "source_cut_commit": "2c6cf95234c8fb10800d2e808198fe611b79e2b1",
+ "wave1_freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+ "wave1_zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+ "wave2_freeze_sha256": "c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224",
+ "wave2_zip_sha256": "21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5",
+ "wave3_freeze_sha256": "bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310",
+ "wave3_zip_sha256": "152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362"
+}
