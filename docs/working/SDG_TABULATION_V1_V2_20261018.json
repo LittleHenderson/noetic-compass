@@ -1,0 +1,161 @@
+{
+  "timestamp_utc": "2026-10-19T01:53:38Z",
+  "lexicon_v2_sha256": "b1eee572e67445552a80a90630120855218480292574c71bbbffa0f471131113",
+  "lexicon_v1_json_sha256": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0",
+  "frozen_lexicon_v2_sha256": "ef663e28be657058d0b6bfccc5c5076d6eb300c12b94fad74bd89ea3bc8c5431",
+  "total_file_lines": 5268,
+  "accepted_rows": 481,
+  "headline_rows": 439,
+  "excluded_rows": 42,
+  "view_481": {
+    "bridge_v2": {
+      "MATCH": 118,
+      "UNPARSEABLE": 321,
+      "MISMATCH": 42
+    },
+    "lexicon_v1": {
+      "MATCH": 265,
+      "UNPARSEABLE": 199,
+      "MISMATCH": 17,
+      "second_number_agrees": 196,
+      "reasons": {
+        "AMBIGUOUS_DOMAIN_IN_SEGMENT": 16,
+        "AMBIGUOUS_STATE_IN_SEGMENT": 28,
+        "NO_DOMAIN_IN_SEGMENT": 56,
+        "NO_STATE_IN_SEGMENT": 149
+      }
+    },
+    "lexicon_v2": {
+      "MATCH": 337,
+      "UNPARSEABLE": 124,
+      "MISMATCH": 20,
+      "second_number_agrees": 246,
+      "reasons": {
+        "AMBIGUOUS_DOMAIN_IN_SEGMENT": 19,
+        "AMBIGUOUS_STATE_IN_SEGMENT": 32,
+        "NO_DOMAIN_IN_SEGMENT": 69,
+        "NO_STATE_IN_SEGMENT": 21
+      }
+    },
+    "v1_to_v2_transitions": {
+      "MATCH->MATCH": 265,
+      "UNPARSEABLE_ENGLISH->MATCH": 72,
+      "UNPARSEABLE_ENGLISH->UNPARSEABLE_ENGLISH": 123,
+      "UNPARSEABLE_ENGLISH->MISMATCH": 4,
+      "MISMATCH->UNPARSEABLE_ENGLISH": 1,
+      "MISMATCH->MISMATCH": 16
+    }
+  },
+  "view_439": {
+    "bridge_v2": {
+      "MATCH": 118,
+      "UNPARSEABLE": 321,
+      "MISMATCH": 0
+    },
+    "lexicon_v1": {
+      "MATCH": 233,
+      "UNPARSEABLE": 197,
+      "MISMATCH": 9,
+      "second_number_agrees": 174,
+      "reasons": {
+        "AMBIGUOUS_DOMAIN_IN_SEGMENT": 16,
+        "AMBIGUOUS_STATE_IN_SEGMENT": 27,
+        "NO_DOMAIN_IN_SEGMENT": 56,
+        "NO_STATE_IN_SEGMENT": 148
+      }
+    },
+    "lexicon_v2": {
+      "MATCH": 304,
+      "UNPARSEABLE": 122,
+      "MISMATCH": 13,
+      "second_number_agrees": 223,
+      "reasons": {
+        "AMBIGUOUS_DOMAIN_IN_SEGMENT": 19,
+        "AMBIGUOUS_STATE_IN_SEGMENT": 30,
+        "NO_DOMAIN_IN_SEGMENT": 69,
+        "NO_STATE_IN_SEGMENT": 21
+      }
+    },
+    "v1_to_v2_transitions": {
+      "MATCH->MATCH": 233,
+      "UNPARSEABLE_ENGLISH->MATCH": 71,
+      "UNPARSEABLE_ENGLISH->UNPARSEABLE_ENGLISH": 122,
+      "UNPARSEABLE_ENGLISH->MISMATCH": 4,
+      "MISMATCH->MISMATCH": 9
+    }
+  },
+  "computed_replacements_for_old_literals": {
+    "bridge_v2_481_mismatches (old literal 42)": 42,
+    "cce_v1_481_mismatches (old literal 17)": 17,
+    "misread_reduction_v1 (old literal 25)": 25,
+    "error_reduction_pct_v1 (old literal 25/42)": 59.52,
+    "bridge_v2_481 MATCH/UNPARSEABLE/MISMATCH (old literal 118/321/42)": [
+      118,
+      321,
+      42
+    ],
+    "cce_v1_481 MATCH/UNPARSEABLE/MISMATCH (old literal 265/199/17)": [
+      265,
+      199,
+      17
+    ],
+    "bridge_v2_439 MISMATCH (old code: .get default 0)": 0
+  },
+  "split_rederivation": {
+    "v1_unparseable_439": 197,
+    "dev_rederived_sha256_matches_file": true,
+    "sealed_rederived_sha256_matches_expected": true,
+    "note": "computed from the v1 verdicts only; no sealed row text is printed or stored"
+  },
+  "dev_99": {
+    "lexicon_v1": {
+      "MATCH": 0,
+      "UNPARSEABLE": 99,
+      "MISMATCH": 0,
+      "second_number_agrees": 0,
+      "reasons": {
+        "AMBIGUOUS_DOMAIN_IN_SEGMENT": 10,
+        "AMBIGUOUS_STATE_IN_SEGMENT": 16,
+        "NO_DOMAIN_IN_SEGMENT": 21,
+        "NO_STATE_IN_SEGMENT": 77
+      }
+    },
+    "lexicon_v2": {
+      "MATCH": 39,
+      "UNPARSEABLE": 58,
+      "MISMATCH": 2,
+      "second_number_agrees": 28,
+      "reasons": {
+        "AMBIGUOUS_DOMAIN_IN_SEGMENT": 11,
+        "AMBIGUOUS_STATE_IN_SEGMENT": 17,
+        "NO_DOMAIN_IN_SEGMENT": 28,
+        "NO_STATE_IN_SEGMENT": 10
+      }
+    },
+    "v1_to_v2_transitions": {
+      "UNPARSEABLE_ENGLISH->MATCH": 39,
+      "UNPARSEABLE_ENGLISH->UNPARSEABLE_ENGLISH": 58,
+      "UNPARSEABLE_ENGLISH->MISMATCH": 2
+    }
+  },
+  "sealed_98": {
+    "scored_utc": "2026-10-19T01:53:41Z",
+    "rows": 98,
+    "sha256_before": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+    "sha256_after": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+    "unchanged": true,
+    "lexicon_v2_sha256": "b1eee572e67445552a80a90630120855218480292574c71bbbffa0f471131113",
+    "lexicon_v1": {
+      "MATCH": 0,
+      "UNPARSEABLE": 98,
+      "MISMATCH": 0
+    },
+    "lexicon_v2": {
+      "MATCH": 32,
+      "UNPARSEABLE": 64,
+      "MISMATCH": 2
+    },
+    "policy": "counts only; no row text, seed id or per-row verdict recorded; scored once"
+  },
+  "runtime_seconds": 3.124
+}

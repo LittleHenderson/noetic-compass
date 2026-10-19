@@ -1,0 +1,19 @@
+{
+  "scored_utc": "2026-10-19T01:53:41Z",
+  "rows": 98,
+  "sha256_before": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+  "sha256_after": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+  "unchanged": true,
+  "lexicon_v2_sha256": "b1eee572e67445552a80a90630120855218480292574c71bbbffa0f471131113",
+  "lexicon_v1": {
+    "MATCH": 0,
+    "UNPARSEABLE": 98,
+    "MISMATCH": 0
+  },
+  "lexicon_v2": {
+    "MATCH": 32,
+    "UNPARSEABLE": 64,
+    "MISMATCH": 2
+  },
+  "policy": "counts only; no row text, seed id or per-row verdict recorded; scored once"
+}

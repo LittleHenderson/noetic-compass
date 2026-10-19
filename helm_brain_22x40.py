@@ -1,4 +1,8 @@
-"""helm_brain_22x40.py -- Canonical 22-Ingredient x 40-Parameter CAS Recipe Brain for HELM.
+"""helm_brain_22x40.py -- DEMO STAND-IN ONLY. 22-Ingredient x 40-Parameter recipe brain.
+
+STATUS (owner approval 2026-10-18, "recipe brain is canonical"): this is NOT HELM's brain. HELM's one
+official brain is the licensed HELM-R1 wave-1 recipe brain, loaded by helm_brain_canonical.py. This module
+stays importable as DEMO_STANDIN for demos and old tests only; the live loop never constructs it.
 
 Architecture & Transparency Specification:
 - Inputs: 22 named ingredients (Omega_01 .. Omega_22).
@@ -262,6 +266,9 @@ class Recipe22x40Brain:
 
 
 HELMRecipeBrain22x40 = Recipe22x40Brain
+#: The only sanctioned name for this class going forward: a demo stand-in, never the default brain.
+DEMO_STANDIN = Recipe22x40Brain
+IS_CANONICAL = False
 
 
 def self_test():
