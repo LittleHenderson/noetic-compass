@@ -4,6 +4,33 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-18 PDT - HELM-R1 WAVE 2 PACKET SEALED, NOT LAUNCHED: the licensed recipe brain with one part switched off at a time (spec sheet 7.63; laptop, 0 USD; no ledger hold)
+
+Owner words: "wave 2 plan". Builder session (Claude). Nothing ran on AWS; nothing is scored; the owner has not signed.
+
+- Package `Documents/Codex/2026-10-18/r1_wave2/HELM_R1_W2_20261018_SOURCE_R1W2.zip`, sha256 21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5;
+  PACKAGE_FREEZE sha256 c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224 (181 members; resealed byte-identical). Runs beside the
+  unchanged wave-1 v3 zip (31f97d67..., freeze 8c55c413...).
+- Arms: FULL, -RECIPE_MATH, -RPM_GATE, -LACUNA_CADENCE, -RESTART_FALLBACK, -CCE_SKIN, -TRIAD, -ENGLISH_IN, -VOICE,
+  T (frozen c21/c27 numbers, not rerun), LUT. No arm needs torch (only X1's Gate B world regeneration does).
+- Exams: E1 Gate B c21 worlds, E2 Task B RB2c worlds (both exposed), E3 fresh X1, E4 English-16 (16 plain-English
+  turns, 3-valued, PROPOSED mark).
+- X0 re-checked with the receiver's checker: originals still fail 3 of 5, conversions pass 5 of 5, and wave 1's own
+  rule makes X0 exposed -> X1 required, custodian-sealed from the owner's sign-line hash, receiver check before seal.
+- c34-g supervisor defect fixed and tested: outputs declared at r1w2_out/ where the runner keeps them; runner keeps
+  .sha256; supervisor records each declared output's sha256 and names misplaced files; plan_check replays c34-g's
+  own plan and runner and shows the old pair fails. Correction to 7.47 recorded in 7.63 (not edited): c34-g's runner
+  DID write R1_W1_HOST.json.sha256; its copy filter left it behind.
+- Governance gap of wave 1 closed by design: instrument row I9 fails unless the approval record names the exact zip
+  and freeze that ran; any reseal after signing needs a new sign line.
+- Tests (from the extracted sealed zip): 410 passed, 4 skipped (AWS-only host tests), 0 failed: wave 2 units 25 and kit 9; HELM live modules 91 (loop 18, English-in 31, voice 22, triad 15, chat nuance 5); language_v3 87 (lm_t1 26, t1b 11, t1c 5, t1v3 26, lexicon_v2 19); repair_performer 16, the_loop_v3 35, cube_store 19; wave 1's carried unit tests 128. One failure found and fixed before the final seal (the loop's valve-history test needed `tks_meta_valve_weights_v0_4.json` in the cut); the first seal `c6db9556…` is void, never signed.
+- Dry run on exposed data (laptop, one unit at a time): 68 units, 68 exit 0, 391.9 s; FULL reproduces c23 and c26 (wave 1's I3) and c34-g's A1 labels on X0; reader verdict on the dry input `INSTRUMENT_ERROR` as designed
+- Cost PROPOSED: about 0.25-0.35 USD per attempt, worst case 2.34 USD (X1 + scored + one plumbing retry); cap 5 USD.
+- Failed approaches / dead ends: porting wave 1's depth panel to the AWS host was examined and NOT done (its sources
+  hard-code Windows paths in rb_c4/casform.py, rb_c4/taskb.py, lsr_t1/run_t1.py); the depth families stay a laptop
+  stage as in wave 1. The chat-nuance suite writes math_utils.py and sessions/ into the tree it runs in (seen in the
+  worktree; removed; the host run does not run that suite).
+
 ## 2026-10-18 PDT - DWP-T2 RAN (Wisdom rule C kept: C_EARNED_KEEP) AND THE TRIAD ADAPTER helm_triad.py BUILT; spec sheet sections 7.61 and 7.62; laptop MSI, 0 USD, ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY
 
 Owner words: "drops only by a named event with evidence [C]."; "min; earliest ..."; "Desire is Purpose"; one scale

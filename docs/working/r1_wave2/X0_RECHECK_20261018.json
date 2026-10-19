@@ -1,0 +1,105 @@
+{
+ "checked": "2026-10-18 (Pacific) by the wave-2 builder",
+ "checker": "wave-1 v3 r1/check_fresh_format.py (the receiving package's own checker; prints verdicts, counts and hashes, never content)",
+ "converted": {
+  "folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\fresh_w1",
+  "result": {
+   "all_pass": true,
+   "files": {
+    "CCE_PLANTED_W1.json": {
+     "counts": {
+      "MISSING_FACT": 32,
+      "UNPARSEABLE": 32
+     },
+     "present": true,
+     "problems": [],
+     "sha256": "968790c4ae3ccc5e8508069009f5d2e1e71cd46e360e0b02ca020533f285276c",
+     "verdict": "PASS"
+    },
+    "D34_FRESH_TaskB_d3.json": {
+     "present": true,
+     "problems": [],
+     "rows": 1792,
+     "sha256": "a2f5149efbc6ffca319728b2c041bb62ff7fd8e7d20844f909e36a3223d7634a",
+     "verdict": "PASS"
+    },
+    "D34_FRESH_TaskB_d4.json": {
+     "present": true,
+     "problems": [],
+     "rows": 1792,
+     "sha256": "306f317f6093f049fe9067463fad13d4397c0c9a986e8be67792f1281eef5a77",
+     "verdict": "PASS"
+    },
+    "GB_FRESH_W1.json": {
+     "present": true,
+     "problems": [],
+     "seeds": 56,
+     "sha256": "c822cff835923211236be376ad1df46867934c9d093e03a0c1857c0cc36d4f7c",
+     "verdict": "PASS"
+    },
+    "TB_FRESH_W1.json": {
+     "draws": 20,
+     "present": true,
+     "problems": [],
+     "sha256": "7585c4111b8de5eb855ec40ae1be77be4a7b34484a90f2d321170806524c0bce",
+     "verdict": "PASS"
+    }
+   }
+  }
+ },
+ "decision": "X1_REQUIRED: the custodian's own files still fail 3 of 5; the passing copies are coordinator conversions; and wave 1's frozen rule makes X0 EXPOSED after c34-g scored it",
+ "originals": {
+  "folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\tools\\_custodian_original_names (copied under the contract names to a scratch folder)",
+  "result": {
+   "all_pass": false,
+   "files": {
+    "CCE_PLANTED_W1.json": {
+     "counts": null,
+     "present": true,
+     "problems": [
+      "1 problem(s)"
+     ],
+     "sha256": "dc305960a289dad53fa19aa2d6a486a9085d4a35355471f23ce303e6bb89ed63",
+     "verdict": "FAIL"
+    },
+    "D34_FRESH_TaskB_d3.json": {
+     "present": true,
+     "problems": [
+      "TypeError (message withheld)"
+     ],
+     "sha256": "e268b1191b27d1619173a2f43c313d85eb50468b23362d5612cd8bf5cd736b9d",
+     "verdict": "FAIL"
+    },
+    "D34_FRESH_TaskB_d4.json": {
+     "present": true,
+     "problems": [
+      "TypeError (message withheld)"
+     ],
+     "sha256": "fb962f9b14a6f3f207f5416fb6d45dda8e3ac65c4caa30209fa9979743a8d19f",
+     "verdict": "FAIL"
+    },
+    "GB_FRESH_W1.json": {
+     "present": true,
+     "problems": [],
+     "seeds": 56,
+     "sha256": "c822cff835923211236be376ad1df46867934c9d093e03a0c1857c0cc36d4f7c",
+     "verdict": "PASS"
+    },
+    "TB_FRESH_W1.json": {
+     "draws": 20,
+     "present": true,
+     "problems": [],
+     "sha256": "7585c4111b8de5eb855ec40ae1be77be4a7b34484a90f2d321170806524c0bce",
+     "verdict": "PASS"
+    }
+   }
+  }
+ },
+ "schema": "helm.r1w2.x0-recheck/1",
+ "summary": {
+  "converted_pass": 5,
+  "originals_fail": 3,
+  "originals_pass": 2
+ },
+ "wave1_freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b"
+}
