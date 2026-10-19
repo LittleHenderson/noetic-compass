@@ -1,0 +1,493 @@
+{
+ "K1_by_kind": {
+  "P1": 32,
+  "P2": 32,
+  "P3": 32,
+  "P4": 32,
+  "P5": 32,
+  "S4": 16
+ },
+ "K1_candidate_detected": 176,
+ "K2_candidate_false_body_findings": 0,
+ "K3": {
+  "dropped": 0,
+  "fact_sentences": 20768,
+  "invented": 0,
+  "no_evidence_ok": 7008,
+  "no_evidence_total": 7008,
+  "problems": [],
+  "reports": 2336,
+  "sentences": 25440,
+  "technical_ok": 368,
+  "technical_total": 368,
+  "traceable": 20768
+ },
+ "K4": {
+  "awake_raised": 80,
+  "awake_raised_run_after_turn": 80,
+  "clean_summoned": 0,
+  "clean_worlds": 64,
+  "signal_worlds": 80,
+  "summoned": 80
+ },
+ "K5": {
+  "clean_zero": 64,
+  "mech_equal": 2336,
+  "mismatch": [],
+  "p6_named": 32,
+  "p7_named": 32,
+  "runs_equal": 2336,
+  "scans": 2336,
+  "u40_equal": 2336
+ },
+ "answers_3valued_yardstick": {
+  "RIGHT": 6904,
+  "UNDETERMINED": 880,
+  "WRONG": 88
+ },
+ "arms": {
+  "FIXED_CHECKLIST": {
+   "T_next_presentation_on_target": 16,
+   "complete_scans": 0,
+   "detected_by_kind": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0,
+    "P5": 0,
+    "S4": 16
+   },
+   "detected_total": 16,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "1358/1",
+   "reads_per_scan": null,
+   "reads_total": 21728
+  },
+  "FULL/REPORT_AND_WHISPER": {
+   "T_next_presentation_on_target": 240,
+   "complete_scans": 2336,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "82171/22",
+   "reads_per_scan": "82171/292",
+   "reads_total": 657368
+  },
+  "FULL/REPORT_ONLY": {
+   "T_next_presentation_on_target": 49,
+   "complete_scans": 2336,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "82171/22",
+   "reads_per_scan": "82171/292",
+   "reads_total": 657368
+  },
+  "FULL/WHISPER_ONLY": {
+   "T_next_presentation_on_target": 240,
+   "complete_scans": 2336,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "82171/22",
+   "reads_per_scan": "82171/292",
+   "reads_total": 657368
+  },
+  "NO_SCAN/REPORT_AND_WHISPER": {
+   "T_next_presentation_on_target": 0,
+   "complete_scans": 0,
+   "detected_by_kind": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0,
+    "P5": 0,
+    "S4": 0
+   },
+   "detected_total": 0,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": null,
+   "reads_per_scan": null,
+   "reads_total": 0
+  },
+  "NO_SCAN/REPORT_ONLY": {
+   "T_next_presentation_on_target": 0,
+   "complete_scans": 0,
+   "detected_by_kind": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0,
+    "P5": 0,
+    "S4": 0
+   },
+   "detected_total": 0,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": null,
+   "reads_per_scan": null,
+   "reads_total": 0
+  },
+  "NO_SCAN/WHISPER_ONLY": {
+   "T_next_presentation_on_target": 0,
+   "complete_scans": 0,
+   "detected_by_kind": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0,
+    "P5": 0,
+    "S4": 0
+   },
+   "detected_total": 0,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": null,
+   "reads_per_scan": null,
+   "reads_total": 0
+  },
+  "OWNER_INITIATED/REPORT_AND_WHISPER": {
+   "T_next_presentation_on_target": 208,
+   "complete_scans": 736,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "12055/11",
+   "reads_per_scan": "12055/46",
+   "reads_total": 192880
+  },
+  "OWNER_INITIATED/REPORT_ONLY": {
+   "T_next_presentation_on_target": 1,
+   "complete_scans": 736,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "12055/11",
+   "reads_per_scan": "12055/46",
+   "reads_total": 192880
+  },
+  "OWNER_INITIATED/WHISPER_ONLY": {
+   "T_next_presentation_on_target": 208,
+   "complete_scans": 736,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "12055/11",
+   "reads_per_scan": "12055/46",
+   "reads_total": 192880
+  },
+  "PERIODIC/REPORT_AND_WHISPER": {
+   "T_next_presentation_on_target": 240,
+   "complete_scans": 1840,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "32139/11",
+   "reads_per_scan": "32139/115",
+   "reads_total": 514224
+  },
+  "PERIODIC/REPORT_ONLY": {
+   "T_next_presentation_on_target": 1,
+   "complete_scans": 1840,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "32139/11",
+   "reads_per_scan": "32139/115",
+   "reads_total": 514224
+  },
+  "PERIODIC/WHISPER_ONLY": {
+   "T_next_presentation_on_target": 240,
+   "complete_scans": 1840,
+   "detected_by_kind": {
+    "P1": 32,
+    "P2": 32,
+    "P3": 32,
+    "P4": 32,
+    "P5": 32,
+    "S4": 16
+   },
+   "detected_total": 176,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "32139/11",
+   "reads_per_scan": "32139/115",
+   "reads_total": 514224
+  },
+  "RANDOM_SAMPLE_SCAN": {
+   "T_next_presentation_on_target": 148,
+   "complete_scans": 2208,
+   "detected_by_kind": {
+    "P1": 26,
+    "P2": 29,
+    "P3": 29,
+    "P4": 28,
+    "P5": 24,
+    "S4": 12
+   },
+   "detected_total": 148,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "122220/37",
+   "reads_per_scan": "10185/46",
+   "reads_total": 488880
+  },
+  "SELF_INITIATED/REPORT_AND_WHISPER": {
+   "T_next_presentation_on_target": 48,
+   "complete_scans": 184,
+   "detected_by_kind": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0,
+    "P5": 0,
+    "S4": 16
+   },
+   "detected_total": 16,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "5753/2",
+   "reads_per_scan": "5753/23",
+   "reads_total": 46024
+  },
+  "SELF_INITIATED/REPORT_ONLY": {
+   "T_next_presentation_on_target": 48,
+   "complete_scans": 184,
+   "detected_by_kind": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0,
+    "P5": 0,
+    "S4": 16
+   },
+   "detected_total": 16,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "5753/2",
+   "reads_per_scan": "5753/23",
+   "reads_total": 46024
+  },
+  "SELF_INITIATED/WHISPER_ONLY": {
+   "T_next_presentation_on_target": 48,
+   "complete_scans": 184,
+   "detected_by_kind": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0,
+    "P5": 0,
+    "S4": 16
+   },
+   "detected_total": 16,
+   "false_body_findings_on_clean_and_signal": 0,
+   "reads_per_detected_body_fault": "5753/2",
+   "reads_per_scan": "5753/23",
+   "reads_total": 46024
+  }
+ },
+ "beats_checklist": true,
+ "beats_random": true,
+ "checklist": {
+  "by_kind": {
+   "P1": 0,
+   "P2": 0,
+   "P3": 0,
+   "P4": 0,
+   "P5": 0,
+   "S4": 16
+  },
+  "detected": 16,
+  "false_body": 0,
+  "reads": 21728
+ },
+ "claim_ceiling": "SYNTHETIC_ONLY",
+ "claim_status": "ENGINEERED-NOT-VALIDATED",
+ "domain_pathway_naming": {
+  "findings": 848,
+  "with_domain": 128,
+  "with_pathway": 0,
+  "with_rpm_stage_from_face": 192
+ },
+ "examples": {
+  "clean_f": {
+   "register": "f",
+   "text": "I just looked myself over. Everything I've saved still reads back the way I wrote it, all 38 records. My recipe book still matches its seal. My store of facts still gives the same answers it gave before. My notes on what I've been tested on still match their history. I have used all four of my ways of getting unstuck. I haven't been tested in 40 of my 40 areas, so I can't say how I'd do there. I keep no list of open questions yet, so I can't say what's unresolved. My records don't say which drive or path each lesson belongs to, so I can't report on those. Want me to go through any of that?",
+   "tick": 67,
+   "trigger": "PERIODIC",
+   "world": "C001"
+  },
+  "clean_owner": {
+   "register": "A",
+   "text": "Here is my self-check, item by item. All 107 saved records still read back exactly as written. All 17 sealed brain files still match the seal. All 3 earlier answers from my store still come out the same. My notes on what I've been tested on still match their history. My flow rule is still the written table, and all 18 logged decisions still check out. I took in all 8 lessons I was given. My own check-up log is unbroken. I have used all four of my ways of getting unstuck. I haven't been tested in 39 of my 40 areas, so I can't say how I'd do there. I keep no list of open questions yet, so I can't say what's unresolved. My records don't say which drive or path each lesson belongs to, so I can't report on those. Ask me about any line and I'll show the record behind it. Technical view: self-notice = ^1 Mind on ^5 Female ('paying attention' / 'it's who I am'); body check = ^6 Male ('breaking it down'). Body: B1 PASS, B2 PASS, B3 PASS, B4 PASS, B5 PASS, B6 PASS, B7 PASS. Findings: none. RPM resolution lacunarity = 0 (unused: none). U40: COVERED 1, NO_EVIDENCE 39 (domain O is the declared adapter default; no receipt names a pathway). Longest UNDETERMINED runs: Meringue|G1=2. U28/U22: NOT_CHARGEABLE.",
+   "tick": 340,
+   "trigger": "OWNER",
+   "world": "C001"
+  },
+  "fault": {
+   "findings": [
+    [
+     "B1-1",
+     "READBACK_FAILS_NOW",
+     "cube:ing_water",
+     [
+      "trace:4"
+     ]
+    ],
+    [
+     "B3-2",
+     "STALE_ANSWER",
+     "LIST_PARTS@trace:23|cube:ing_water",
+     [
+      "trace:23",
+      "trace:4"
+     ]
+    ]
+   ],
+   "register": "f",
+   "text": "I just looked myself over. My recipe book still matches its seal. My notes on what I've been tested on still match their history. Something I saved does not read back the way I wrote it. An earlier answer about what goes into bread no longer matches my store, and no new write explains it. I have used all four of my ways of getting unstuck. I haven't been tested in 39 of my 40 areas, so I can't say how I'd do there. I keep no list of open questions yet, so I can't say what's unresolved. My records don't say which drive or path each lesson belongs to, so I can't report on those. Want me to go through any of that?",
+   "tick": 203,
+   "trigger": "PERIODIC",
+   "world": "P4-01"
+  },
+  "fault_A": {
+   "register": "A",
+   "text": "Here is my self-check, item by item. All 107 saved records still read back exactly as written. All 3 earlier answers from my store still come out the same. My notes on what I've been tested on still match their history. One of my sealed brain files has changed since it was sealed: rb2/__init__.py. My flow rule is still the written table, and all 18 logged decisions still check out. I took in all 8 lessons I was given. My own check-up log is unbroken. I have used all four of my ways of getting unstuck. I haven't been tested in 39 of my 40 areas, so I can't say how I'd do there. I keep no list of open questions yet, so I can't say what's unresolved. My records don't say which drive or path each lesson belongs to, so I can't report on those. Ask me about any line and I'll show the record behind it. Technical view: self-notice = ^1 Mind on ^5 Female ('paying attention' / 'it's who I am'); body check = ^6 Male ('breaking it down'). Body: B1 PASS, B2 FINDING, B3 PASS, B4 PASS, B5 PASS, B6 PASS, B7 PASS. Findings: B2-1 PACKAGE_HASH_CHANGED package/rb2/__init__.py. RPM resolution lacunarity = 0 (unused: none). U40: COVERED 1, NO_EVIDENCE 39 (domain O is the declared adapter default; no receipt names a pathway). Longest UNDETERMINED runs: Meringue|G1=2. U28/U22: NOT_CHARGEABLE.",
+   "tick": 340,
+   "trigger": "OWNER",
+   "world": "P5-01"
+  }
+ },
+ "frozen_precode_sha256": "f6aafe3a9daab4f3a7c4519a572d62b96a4ddb68d296610318a7b12655871244",
+ "gate_failures": {},
+ "hard_gates": {
+  "H1": true,
+  "H2": true,
+  "H3": true,
+  "H4": true,
+  "H5": true,
+  "H6": true,
+  "H7": true,
+  "H8": true,
+  "H9": true
+ },
+ "marks": {
+  "K1": true,
+  "K2": true,
+  "K3": true,
+  "K4": true,
+  "K5": true
+ },
+ "parts": {
+  "P01": {
+   "free_ram_kb_at_launch": 1476880,
+   "peak_ws_mib": 116.1,
+   "status": "COMPLETED",
+   "tests": 18,
+   "tests_total": 18,
+   "wall_s": 81.6778717
+  },
+  "P02": {
+   "free_ram_kb_at_launch": 1265908,
+   "peak_ws_mib": 115.8,
+   "status": "COMPLETED",
+   "tests": 18,
+   "tests_total": 18,
+   "wall_s": 79.8441998
+  },
+  "P03": {
+   "free_ram_kb_at_launch": 1223452,
+   "peak_ws_mib": 116.1,
+   "status": "COMPLETED",
+   "tests": 18,
+   "tests_total": 18,
+   "wall_s": 105.4221734
+  },
+  "P04": {
+   "free_ram_kb_at_launch": 698156,
+   "peak_ws_mib": 116.1,
+   "status": "COMPLETED",
+   "tests": 18,
+   "tests_total": 18,
+   "wall_s": 89.9922734
+  },
+  "P05": {
+   "free_ram_kb_at_launch": 782424,
+   "peak_ws_mib": 85.3,
+   "status": "COMPLETED",
+   "tests": 18,
+   "tests_total": 18,
+   "wall_s": 9.600415
+  }
+ },
+ "random_control": {
+  "E_exact": "10209310568821288866457642551338565881746587276917186190002312487613849440949755734831053580164264616493882818060320429920169122029684534123192279714761667104677583200680016351770757903510863404850371828660293631108972158212470263449946840497808641881113598666735881863874983353695567235642323071054354831199724264379679008451325997415071144932555856114571450685701221330143374123299318747836760854850660633802255908148360830491745551372655672102686882006823117986286529280864492905568731845793304279890093204049292522679343374384962414028885160455000097853156430851797878142996138955377298889793847047265115110112262829885411151271153233885672129832618204775102748489451295138767902173830147524126404571827006315166295077094019944727379339676366538311109210439568023685839917792656308937142239407112999472/66656690088930169707531878062761474923241158120425839171886313529612489804773649072448948352257976844275698693968127372494049377615883796157397404728238927634526409743531720393682747348232437939774575300700844136089943412033229921299188070452453820343847509020799429648860561958539441538274260900048940852470478015629668103391751835394518531581060035012149350473427239371766256386772645316222625570924701795407285013034873942676750388992316466840770668570430266555454373052482967588598022837824090191899809732515484515338410955642306392365910798254517515803539879662205386232058356112734652782919585495824517671092402442530745177677007010714046192230785254403992889144609631470272171442216747296172753249017081336172131119852386049587382611797537149494938695679363770942272260185547209870126360267687497",
+  "Var_exact": "88302814865252829580867138251054977763321011615845013521385422915196601665777698459353490534033489590522091222114701257293460408247197246321842692998084845565504523908679773185321094892081326590541643186989642890052261578556125606647405220347542007242266559898087210368714274394015140480095044332043063469652555501717279673080081482179411039380524097083281669337452414534447243780605565805917224617784165224245150977256623922074428726790225475254704092888224442232844865060134378600211419630730757693682328199239734571376760991371962563237127010940348411145809194969474866030450785351646650692493609096606490675403417688356032996838325891563883911882789378249206292524419820639796406916341674619636530071040014613259735901483233202444028416109852463893438472008695521767795153845583889591573852829048011239957822717923157670197246625088426215282769865514051071702000618161235033706702387473063157105896163371067701313499877295005748371599165217813926978338152859794880789144614434355816716810595166053220411392647845795976452524714598693643729985566193091849146407682867664702404277588786974232009980926497987277052802813987567481136085331279313324010389767116465865192028813725357567505018802770173112539312154082271200681666310512246281420791788961576431771244693156194363712740918558882396492480232473539584745669878240992632059843833965722912216915218526445876728880754714423311838608000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000/4443114333611681515593261206505004834421418962392984539071397529638027960646368562461891697398594606063964572991978211194648849134588551997838038138940837824848375595828421068434351394413501755221543514924616808047447739814299393558068701265512914715390740417259536716704135003962086581626323407737940037282574598569700550461320070049718051208421034052425906934570093923771118111926624765772792038103003894804358082438107809652311501463698777138608469107964932737376401772879825995363726739267990388301951396199543801853540761148079137306721446427875194249008803305664810303396518653190384793223175736425703314274188631396618419293822320014157136684381325121486046919287422241423431341701162023060293669181438761228872457206993599359525147759786904052500599244123808746936626466663553615640414320597070282602877278542696668159066664142006143864302852922595289523927496070166696358599438299083088315833446128225192033905876990435933621423266552353620764620820849636378363735548619540245201924508997230594480372408336453684113596754273871977154006946296278033369892049505517888703717918179589602960906822260845338373012526811860494868726467347170890305664335894024884348016844016397682402166304236069147329794868340196276258844526555693349711681979552816831316677341381051983823575606760923890206568046110789407595262373444906199499469876610965089644740850955521663078310654680766879884995310472636777424849456116631395877475382385655297144034187143684275818250972472088486746924439446856330042313673698013655959885698557811831037205621923154497168510393438125915328172302550982138737785240835898436050125009",
+  "detected": 148,
+  "within_E_plus_3_sigma": true
+ },
+ "schema": "u3_t1.merged_reading/1",
+ "status_reason": "all gates hold, K1-K5 met, beats checklist and random spot-check",
+ "status_word": "SELF_SCAN_EARNED_KEEP",
+ "whisper": {
+  "D": 240,
+  "T_R": 49,
+  "T_RW": 240,
+  "T_WO": 240,
+  "accepted_on_clean": 0,
+  "ceil_half_D": 120,
+  "writes": 0
+ },
+ "whisper_word": "WHISPER_EARNED_KEEP",
+ "worlds_seen": 368
+}

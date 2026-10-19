@@ -1,0 +1,343 @@
+{
+ "schema": "u3_t1.source_manifest/1",
+ "label": "U3_T1",
+ "thread_branch": {
+  "ref": "origin/claude/project-thread-pmbzd6",
+  "commit": "2c6cf95234c8fb10800d2e808198fe611b79e2b1",
+  "copied_files_note": "vendor_thread/ holds byte copies (git show) of helm_triad.py, helm_voice.py, helm_brain_canonical.py, helm_english_in.py, tks_meta_valve_controller.py, the ledger-universes schema and docs/working/noetic_council/cube_store/*",
+  "helm_triad_sha256": "0d9d0bdaf3ba594e49c72c81f8f2a5749317cee1611906d8b847f8db6c00db1e"
+ },
+ "real_sealed_package_hashed_only": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3",
+ "files": [
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\__init__.py",
+   "sha256": "785b2e03883f20d7cb24219fafdb92d57b4ae11281fe635a9b91d9b18c6c4dc3",
+   "bytes": 2048
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\consts.py",
+   "sha256": "a29a11788260b822b443ad91e8a4d36d00e3fd6e72a45e132d1a56f06fa0b46f",
+   "bytes": 3836
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\world.py",
+   "sha256": "b179a703a23f2a8fd6a8c38692ebd0c561781c8d0afe04ce8cacb030ba075e90",
+   "bytes": 37160
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\eye_scan.py",
+   "sha256": "3829b085bcedd863cf1ad7d728344be2888eb232c1c9af4b37cb390b1be66cad",
+   "bytes": 31694
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\voice_u3.py",
+   "sha256": "13794733e32d0304950094ce6a18b501ffc89d476cb7a1c805d7233319bae34a",
+   "bytes": 11915
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\arms.py",
+   "sha256": "cbda05e151b85390fcf959cca6f85564c3777c2d2a2b47ef78c256da4c7a7f4d",
+   "bytes": 20672
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\run_u3.py",
+   "sha256": "140d6f6decb1d17dedccb137a3a1c8d2587347af01510479fc10fecd356c80bd",
+   "bytes": 4659
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\merge_u3.py",
+   "sha256": "d8f2d4459238b7d8f8ba257dd5181e9d4c4e7b0a49935d11af006b03ed14a126",
+   "bytes": 26926
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\test_u3.py",
+   "sha256": "f94916e96561dec765308e01e2f5b55a90305aa9d94b822e98ac01ab89694232",
+   "bytes": 14911
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\worker.py",
+   "sha256": "15e127295d5c1bcf37d0acbf231b93553a094a2fdc58d1d2c86838710d893624",
+   "bytes": 5994
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\supervisor.ps1",
+   "sha256": "8d7454a7594b7c935a81fe23374e84e2033cf614e56ccb97e008b36b2e24fce7",
+   "bytes": 7515
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\run_all_parts.ps1",
+   "sha256": "dc39c0529e1099e7aae000cd3a0f1d4185f4db01dc5f7e9df1cb9df09c7c2aec",
+   "bytes": 2798
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\PLAN.json",
+   "sha256": "5a3e329b6576eed575387f6d8fc0aaecedca84fe20c7cc775a9b990031c3a3f7",
+   "bytes": 5670
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\FROZEN.json",
+   "sha256": "66afd40b188710469e02bc8d73e8b706c8ddec73c17399a23fb6d20e3e7429a6",
+   "bytes": 20773
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\FROZEN.precode.json",
+   "sha256": "f6aafe3a9daab4f3a7c4519a572d62b96a4ddb68d296610318a7b12655871244",
+   "bytes": 17878
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\FROZEN.precode.sha256",
+   "sha256": "1c61aa179dd72a39d4e391ce15b2e4ed005df567756a2c3dea4b8189035e9478",
+   "bytes": 86
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\OWNER_APPROVAL_EVIDENCE.template.md",
+   "sha256": "c4c4c2f1f293dfc28d544c1ed49f1c496ce7432d9f64ca176133d179f2492757",
+   "bytes": 856
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\make_manifest.py",
+   "sha256": "cf1004ee7ff0e993545bbb5c8405c70a5e3fddb0676e7caa148efac6cbdac55a",
+   "bytes": 2526
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\cube_store\\cube.py",
+   "sha256": "f8133f83afbd55727ed42549ef0b83f637d9bbe9608f32cdc9646cd9c70ad23a",
+   "bytes": 12430
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\cube_store\\operations.py",
+   "sha256": "c3cc20aae0a7a5d7d9d1f0135aabb868c03bcbf382d2eb91dace9982a534834d",
+   "bytes": 8644
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\cube_store\\PROVENANCE.md",
+   "sha256": "c975c869cb7fa5fb90899d090052db595d318d5503f568562cc59f4b7436cc47",
+   "bytes": 1567
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\cube_store\\README.md",
+   "sha256": "115de7109263125ae858780a0e3ba1326e670ba87ccbb476a19bc85c17a35475",
+   "bytes": 1896
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\cube_store\\store.py",
+   "sha256": "9fcb9027a494f84c4b52762e728c5b80926d1ffd87c90c7e227b6c41dd3d2245",
+   "bytes": 4754
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\cube_store\\test_all.py",
+   "sha256": "0154df4fd1beac637d512421db0c99c35c75ef8a120de687eccef95d07e9da6b",
+   "bytes": 24344
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\cube_store\\turn.py",
+   "sha256": "006bf3cb5f8da12cd35d928f78c036bcb8e32eefc02dbf98c277dc2ea19ab89c",
+   "bytes": 26571
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\helm_brain_canonical.py",
+   "sha256": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a",
+   "bytes": 18707
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\helm_english_in.py",
+   "sha256": "82730e6045eeaf19bb066b5e33a0ef6ee78276d22ce45212f5f47a79aec1589b",
+   "bytes": 37049
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\helm_triad.py",
+   "sha256": "0d9d0bdaf3ba594e49c72c81f8f2a5749317cee1611906d8b847f8db6c00db1e",
+   "bytes": 24100
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\helm_voice.py",
+   "sha256": "9555b0b912696ce34af9e91df6d64420585255e4d04d5a9c14f0fa2f4af8ea24",
+   "bytes": 55605
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\LEDGER_UNIVERSES_40_28_22_SCHEMA_20261018.json",
+   "sha256": "a8217c9d821244a4f3da9ce145a432bddd6f3550604795f8d30a04bd92a26a3f",
+   "bytes": 6838
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\vendor_thread\\tks_meta_valve_controller.py",
+   "sha256": "06fb7a3b1c468551c19cd368091f2ceaf84b3da21da4318f2bb96df220eb789a",
+   "bytes": 10430
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\PACKAGE_FREEZE.json",
+   "sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+   "bytes": 16165
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb\\__init__.py",
+   "sha256": "32dba1fad4cd9e1b056a0ef1179df8e8288a9141e218254439bde5f86a8aaec6",
+   "bytes": 423
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb\\brain.py",
+   "sha256": "ef27cd8fbc761b6910691053201d1b9162282ea2d052f3591eadb93cc25c12c5",
+   "bytes": 12317
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb\\common.py",
+   "sha256": "490d3db581fba24ba01267be5982df252b97bc1ef90882966156465ce50095a5",
+   "bytes": 2393
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb\\no_torch.py",
+   "sha256": "973276d037c23ff22bbbe2ad6c913dec283bd1b67f792d02e7f9025bc213850b",
+   "bytes": 1482
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb\\writer.py",
+   "sha256": "7167400e118c3d214febc021e65c616776f75ed817a23859741ccb06ae9fcaa8",
+   "bytes": 4856
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb2\\__init__.py",
+   "sha256": "fcdf6e5fdd6fef2aea3bda908e4ba0cffd5d1f3bee4ae23d7cd73c6d50368207",
+   "bytes": 804
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb2\\brain_b.py",
+   "sha256": "e8013d1c656dfb5c2e1b5ef832d1c4980f1b7077c5f733975f1708c42f20a887",
+   "bytes": 6432
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb2\\compose.py",
+   "sha256": "8edbf7595433bde5afc3b04e8fde7b28bf4f2c6afbdece649221b301a9cbbd0c",
+   "bytes": 11431
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\rb2\\writer_b.py",
+   "sha256": "cde6b1013eb96726411884ae46ed7b7b88a0ba8f5cbbae115a5c6edf50363a53",
+   "bytes": 3382
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t1\\__init__.py",
+   "sha256": "7ebf67f788a8ce18a991d866e217e669bb3585abbb8166432d621c18ec45e6aa",
+   "bytes": 104
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t1\\engine.py",
+   "sha256": "d8589ef494e29add7fefd31be2523fc5f54e9907594d69ea27ddeba41225b751",
+   "bytes": 28210
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t2\\__init__.py",
+   "sha256": "b6ed20f45e3bbe2eda2710333e56d9c90d32a0f794d721e7c382c49fb99b1ce2",
+   "bytes": 128
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t2\\engine.py",
+   "sha256": "c9aa0f01e894a8d55d87ca10c494319b847e3e6d28632fb670315256a868aa6d",
+   "bytes": 26484
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t3\\__init__.py",
+   "sha256": "f0953f478e9a2f74836d484a41f3f7c0848d421933b2e04f744eb6cd6f9f82f0",
+   "bytes": 173
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t3\\engine.py",
+   "sha256": "0e48cd011b6da2aba186e7fc967a10230cc5e8f91001359e0b2f3ecd536a1af4",
+   "bytes": 23768
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t4\\__init__.py",
+   "sha256": "f289815d50f9e7155d928e794079abfd767db20d1e3fd244d94acf3144b48979",
+   "bytes": 187
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_t1\\pkg_copy\\vendor\\lsr_t4\\engine.py",
+   "sha256": "2047144c1d5f5e3c77ee1694407fe2c703ae3c76b3a396d1f6aac9a640480886",
+   "bytes": 38014
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\__init__.py",
+   "sha256": "f2c1d437f4d01160f08693928d096164a3b0512a00ba11cd8fe20323866b03a5",
+   "bytes": 89
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\ledger.py",
+   "sha256": "a7573d467c458f40e9dbd8ec269859e5fba8891bdf724c5f3cba7fbaee140c9d",
+   "bytes": 2125
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\readers.py",
+   "sha256": "0fbe90474c6f43232a4d8d90f2e9f25eed946e2cd88d6d2e05dea1f98dc90c3b",
+   "bytes": 5453
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\universe.py",
+   "sha256": "93cf1223a7f61858f23abe8a5212e3d6ea3fe5462b5a64f2b717302481b5265b",
+   "bytes": 1797
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\report.py",
+   "sha256": "737beead899aeb2f490ba9e80b9e83d5737f26410357b33c544c82a182a504fa",
+   "bytes": 1748
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye\\__init__.py",
+   "sha256": "8108f83c6f46b9d7579c9f007e1b6b68081f2719d4fe55f454e98b720956742e",
+   "bytes": 921
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye\\consts.py",
+   "sha256": "d53578a269bb2d7a125106c46ea698ac0f9ce63c0fb0b8e03aafeadb11ce29a1",
+   "bytes": 3334
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye\\eye.py",
+   "sha256": "9897e7da0a8e7a8ddfaf801ee3d9e17499da1e34f817f9f4831ae77218a105ea",
+   "bytes": 46916
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\lm_t4\\__init__.py",
+   "sha256": "c6095cdfaf1ddd9bf9fab258547dedea27084ec35464a2ac752483d0126f8afb",
+   "bytes": 1266
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_i1\\__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_i1\\drives.py",
+   "sha256": "c45c0ef9f3d6d603ee9e300927799947108de5a695fdcdaeddf51d0eef4a863f",
+   "bytes": 10281
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_self_scan_design_v1\\ARCHITECTURE_U3.md",
+   "sha256": "83d3b2000e6d16a9f37ef59657614ef280b44f093327adde08d6ff6424c1d108",
+   "bytes": 21623
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_self_scan_design_v1\\CAS_MAPPING_U3.md",
+   "sha256": "8f91c8b68bde24425adb453b2906e73cfd7ae3d2a1403f1ca7e9abdabdc038d2",
+   "bytes": 7542
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_self_scan_design_v1\\OPEN_QUESTIONS.md",
+   "sha256": "a9e269fa7aec2d62f54846f7680d243833d3cdd87427272a38621460de6eafe3",
+   "bytes": 1932
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_self_scan_design_v1\\TEST_PLAN_U3.md",
+   "sha256": "290be21b64333819bbd599b636a3629d4eb7e7b2090f8ad101491d48c8a57c61",
+   "bytes": 11968
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_self_scan_design_v1\\TRIGGERS_U3.md",
+   "sha256": "1935897a330cbbd527ceb15213067db2a74a5473ff813ccd201105d07d86c59e",
+   "bytes": 7917
+  },
+  {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_self_scan_design_v1\\u3_sketch.py",
+   "sha256": "4b8ed39de3d1f84002209ca385e5b598c2e746b8ac91ebc899009618a1ba8d0e",
+   "bytes": 26921
+  }
+ ]
+}

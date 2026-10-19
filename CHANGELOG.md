@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM U3-T1 self-scan by the Unity Eye RAN: SELF_SCAN_EARNED_KEEP and WHISPER_EARNED_KEEP by the frozen rule; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.73; 6 laptop parts, 0 USD)
+
+Owner ruling (2026-10-19 morning): the Eye REPORTS AND WHISPERS; "run U3-T1". Builder-operator: Claude Code sub-agent. Sign line (operator-composed): APPROVE u3_t1, source a39c9bd8, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.
+
+- Built in Documents/Codex/2026-10-19/u3_t1/ from the U3 design packet; FROZEN.precode f6aafe3a... written before any code; FROZEN.json 66afd40b... with pre-run instrument amendments A1-A6 (dev-seed worlds only; no rule changed). Reuse by import, unmodified: u1b ConcertLedger, Lacunarity Machine, thread copies of helm_triad (0d9d0bda...), helm_voice, helm_brain_canonical, cube store, valve; wave-1 brain members (freeze 8c55c413...).
+- 368 copies (64 clean, P1-P7 32 each, S1-S5 16 each), 17 arms. Hard gates H1-H9 all hold; tests 18/18 in every part; peak 116.1 MiB; 17:40-17:46 UTC after waiting for RB-G10.
+- Candidate FULL/REPORT_AND_WHISPER: body faults 176/176 named with their record; false alarms 0; 20,768/20,768 fact sentences traceable, 0 invented, 0 dropped; Mind exact on 2,336/2,336 scans; P6 32/32 at exactly 1/4; P7 32/32. SELF trigger: 80/80 signal copies, 0/64 clean.
+- Baselines: FIXED_CHECKLIST 16/176 (S4 only); RANDOM_SAMPLE_SCAN 148/176 (exact chance E 153.16, within E + 3 sigma).
+- Whisper: next presentation on the faulted thing 240/240 (whisper arms) vs 49/240 (report only); 0 whisper writes; 0 whispers on clean copies.
+- Negative kept: the self-initiated trigger alone finds 16/176 (silent faults raise no signal). Limits: faults planted knowing the checks; the whisper's receiver is a stand-in presentation policy; no consciousness claim; 0 pathways named by any receipt.
+- Failed approaches logged (dev worlds, before the run): file-only tampering was erased by the brain's next save (fixed: plant in place); the first scan ran before any mechanism record and whispered "never used" on clean copies (fixed: mechanism records in block 0); an S2 tie made one answer UNDETERMINED (fixed: redraw until one bottleneck).
+- Reading MERGED_READING.json d35a5210...; RESULTS.md 025c5329...; backup D:/tksCAS-archive/u3_t1_20261019/ (125 files, three hash passes, 0 mismatches).
+
 ## 2026-10-19 PDT - HELM-R1 WAVE 3b SCORED (job c38, AWS): reader PASS; ENGLISH_IN x VOICE SYNERGY, the other three pairs INTERFERENCE; no pair left unreadable (spec sheet 7.72; 0.03 USD)
 
 Owner line (sha256 b5fc50dc...): "APPROVE R1W3b: roomier English-64 + Faces-64, pairs CUBE_STORExENGLISH_IN/ENGLISH_INxTRIAD/ENGLISH_INxVOICE/TRIADxVOICE, marks PROPOSED as sealed, sealed package a4f82556, one attempt + one plumbing retry, cap $1." Operator: Claude Code sub-agent.
