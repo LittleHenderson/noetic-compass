@@ -4,6 +4,8 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - CAS and HELM dictionary: docs/reference/CAS_HELM_DICTIONARY.md, 449 A-Z entries plus a symbols table and a how-to-read-a-result box; canonical Noetic and Clarification text quoted verbatim; no new definition, no status changed
+
 ## 2026-10-19 PDT - HELM-R1 wave 5 SCORED (job c40, AWS): frozen reader HARD_GATES_PASS, EYE_PAIRING_EARNED_KEEP; Eye-paired idle loop 70.18% vs random 35.32% / round-robin 33.93% / frozen 38.83%; 0 items lost, 0 calls in conversation, 0 Eye writes; ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY (spec sheet 7.78; one m6i.xlarge, 0.03 USD)
 
 Owner sign line (verbatim, sha256 a9dd6ff2...): "APPROVE R1W5: EYE_PAIRING wave, sealed package b6598687, one attempt + one plumbing retry, cap $1.00." Launch operator: Claude Code sub-agent.
