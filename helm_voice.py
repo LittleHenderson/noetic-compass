@@ -887,6 +887,13 @@ READER_QUESTIONS: Dict[str, List[str]] = {
     "BATCH_NEEDS_PRODUCT": ["What did that batch make: {words} of what?", "{Words} of what, in that batch?"],
     "BATCH_NEEDS_STOCK": ["How much of each ingredient did you start that batch with?",
                           "What did that batch start with? I need the amount of each ingredient."],
+    # rule 6 (STOCK_FRAME_REQUIRED, 2026-10-19): an amount or absence said, but not as what we have on hand
+    "NO_STOCK_FRAME": ["Is {words} what we have on hand right now? If it is, say \"we have {words}\" and I'll "
+                       "save it.",
+                       "Do we have {words} on hand right now? I only save stock when you tell me it's what we have."],
+    "NO_STOCK_FRAME_ABSENT": ["Are you telling me we're out of {item} right now? If so, say \"we're out of {item}\" "
+                              "and I'll note it.",
+                              "Is the {item} really gone from what we have? I only note that when you tell me."],
     "ROUND_TRIP_FAILED": ["I couldn't read that back exactly the way you said it, so I didn't act on it. Could you "
                           "say it another way?",
                           "I couldn't restate that exactly, so I left it alone. Could you put it another way?"],

@@ -37,7 +37,7 @@ from helm_voice import HELMVoice, receipt_from_loop_result, say_name, _norm_name
 
 #: Loop statuses whose own sentence is already plain English; the voice still checks it before it is said.
 PLAIN_LOOP_LINES = ("CLARIFY_STOCK_NOT_RECORDED", "STATED_RECIPE_NOT_TAKEN", "CLARIFY_UNKNOWN_PRODUCT",
-                    "CLARIFY_BATCH_NOT_USABLE", "CLARIFY_ROUND_TRIP_FAILED")
+                    "CLARIFY_BATCH_NOT_USABLE", "CLARIFY_ROUND_TRIP_FAILED", "NOTHING_TO_SAVE")
 
 
 class HELMConversationalSession:

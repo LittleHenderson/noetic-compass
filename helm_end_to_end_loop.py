@@ -74,6 +74,9 @@ from helm_brain_canonical import (CanonicalRecipeBrain, CanonicalBrainRefused, e
 from tks_meta_valve_controller import TKSMetaValveController
 from helm_agentic_executor import AgenticExecutionEngine
 import helm_english_in
+
+#: Rule 6 (STOCK_FRAME_REQUIRED, 2026-10-19): what HELM says when a sentence names an ingredient but states no stock.
+NOTHING_TO_SAVE_LINE = "I don't have anything to save from that. Nothing was saved."
 from helm_voice import reader_question_text
 
 # Canonical CCE translator (language_v3). Missing -> every turn is NOT_VERIFIED and refused.
@@ -536,7 +539,11 @@ class HELMEndToEndLoop:
                    status=reading["status"], rules=reading["rules"], stocks=reading["stocks"],
                    absent=reading["absent"], topic=reading["topic"], witness=reading["witness"],
                    ignored=reading["ignored"], clarify=reading["clarify"], checked_form=reading["checked_form"],
-                   round_trip_ok=reading["round_trip_ok"], lexicon_sha256=reading["lexicon"]["sha256"])
+                   round_trip_ok=reading["round_trip_ok"], lexicon_sha256=reading["lexicon"]["sha256"],
+                   frame_form=reading.get("frame_form"), unframed=reading.get("unframed") or [])
+        if reading["status"] == "NOTHING_TO_SAVE":
+            # rule 6: an ingredient was named, but not as stock, and the sentence is not about our kitchen
+            return self._finish(result, tick, "NOTHING_TO_SAVE", NOTHING_TO_SAVE_LINE, writes_before, "DONE")
         if reading["status"] == "CLARIFY":
             code = reading["clarify"]["code"]
             return self._finish(result, tick, f"CLARIFY_ENGLISH_{code}",
@@ -555,6 +562,14 @@ class HELMEndToEndLoop:
                     self.units[w["product"]] = w["made_unit"]      # "loaves": the word the yield is counted in
                 self.last_topic = w["product"]
             return res
+        # CONTENT: rule 6 again, from the reading alone -- no stock or absence is written without its stock frame,
+        # and the frame form must parse back to the same frames.
+        frame_ok, frame_why = helm_english_in.check_frame_form(reading)
+        self._emit(tick, "Stock frame", what="stock_frame_check", ok=frame_ok, why=frame_why,
+                   frame_form=reading.get("frame_form"))
+        if not frame_ok:
+            return self._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED",
+                                HELMVoiceAdapter.format_round_trip_failed(), writes_before, "WAIT_FOR_USER")
         # CONTENT: the reader's checked-form sentence goes through the SAME parse + round trip as typed checked form.
         checked = reading["checked_form"]
         rt = self.verify_cce_round_trip(checked)
