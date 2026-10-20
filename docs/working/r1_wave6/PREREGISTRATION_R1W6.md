@@ -480,3 +480,55 @@ on a wide teaching turn (D-W6-11). Fixing those is a HELM build, not this packet
   (18 bytes, sha256 `003f4051…`) to this zip and freeze; it was written by the sealed program `r1w6/approval_w6.py` and
   also prints the seed-source hash (a hash of two public values; every exam seed is still derived only by the
   custodian's sealed program). NOT LAUNCHED; no exam exists; no ledger hold.
+
+## 16. Amendment A-R1W6-1 (v2, written 2026-10-20 BEFORE the v2 reseal; coordinator decision "FIX FIRST")
+
+**Why.** The v1 packet (zip `f307bdbc…`) was sealed and pre-approved but never launched: its practice run already
+showed it failing on engineering defects (D-W6-11, D-W6-13). The coordinator's operational decision, under the owner's
+standing order "retest broken tests without asking": fix HELM first, reseal as v2, same owner line, same scope and cap.
+**v1 is `VOID_SUPERSEDED_BY_V2`** (kept as `v1_void_HELM_R1_W6_20261019_SOURCE_R1W6_f307bdbc.zip`; no exam was ever
+drawn from it; nothing ran on any exam).
+
+**What changes, and only this.**
+1. **HELM under test = RB-W1 v4** (PR #400, merge `221cab7038ef5088156794d4f941ba6dfdf27ab7`), cut by `git show` into
+   this package as `helm_now/` (159 files: RB-W1T v3's 158-file list + `test_helm_wide_alongside.py`;
+   `helm_now/SOURCE_CUT.json`). RB-W1T v3's `helm_now/` is no longer imported (RB-W1T's exam, key and scoring code
+   still is). The v4 fixes, each found on wave 6's PRACTICE conversations (no sealed exam was ever opened):
+   (a) a face or purpose clause in a stock or batch sentence is no longer kept as a note: the wide reader asks
+   (`UNREAD_CLAUSE`); (b) a face the licensed triad holds on an ingredient of a wide recipe makes the wide path ask
+   (`CLARIFY_WIDE_FACE_NOT_HELD`), never answer on raw stock; (c) a restated amount ("Actually, we have 4 pounds of
+   cream now.") is read as stock and then converted through the unit table, or asked about (`UNIT_KIND_MISMATCH`);
+   a restatement the wide path cannot read withdraws the old amount; (d) `helm_english_in.quantities_said` no longer
+   raises on a wide reading, so `helm_chat` no longer crashes on a wide teaching turn (regression test in
+   `test_helm_wide_alongside.py`). Routing is RB-W1 v2's rule unchanged: the licensed reader and the triad / faces
+   reader first; the wide path only when the licensed path cannot bind and wrote nothing.
+2. **The harness workaround of D-W6-11 is removed.** The neighbour harnesses get HELM's own modules; a unit test
+   proves HELM's `quantities_said` answers `{}` on a wide reading and that the harness has no proxy.
+3. **The caution mark (K5) stays as D-W6-6 adapted it**, recorded here as part of A-R1W6-1: the mark counts only the
+   SAME_NAME UNDETERMINED recipes (one ingredient name on two lines; a repeated HEAD that is a unit word is a
+   key-grammar artifact); the literal count over every UNDETERMINED key is REPORTED beside it (`K5_ALL_reported`).
+   D-W6-12 (K4 and the artifact class) stays.
+4. **WIDE x VOICE and WIDE x EYE_SCAN are `NOT_EXERCISED_BY_CONSTRUCTION`.** On every exam of this wave one of the two
+   parts changes nothing (no planted fault for the self-scan; the voice rewords only). Their numbers are computed and
+   REPORTED; their word is `NOT_EXERCISED_BY_CONSTRUCTION`, never read; mark P covers the other four pair words
+   (WIDE x CUBE_STORE, ENGLISH_IN, TRIAD, EYE_PAIRING).
+5. The runner runs HELM's suites on a scratch copy of THIS package's `helm_now/` and adds `test_helm_wide_alongside`.
+
+**Unchanged:** every exam, frame, exclusion, quota, generator, key, seed rule and band; every arm and unit (77); every
+instrument row, hard gate, mark threshold and status word and their order (P now over four pairs); the owner's pinned
+line `PAIR WAVE at 1 USD`, the cap 1.00 USD and the attempts; the seed source (now with the v2 zip's sha256).
+- D-W6-16 (v2 seal and v2 practice; facts, not claims) **Sealed v2.** `HELM_R1_W6_20261019_SOURCE_R1W6.zip` sha256
+  `729623429832c5fa99141d96876434d9ebed7417055c87173e7a582b3677be0a` (930,005 bytes, 193 members + the freeze;
+  resealed byte-identical); `PACKAGE_FREEZE.json` `83983cd4d70efe31d993822fca2f38392327a6f72b9066246af5cd17c014341a`;
+  `FROZEN_R1W6.json` `afe9600d7df348bc027017c13a5306d6a11c93505073bd59b81ecfe434c0ed5c`. `APPROVAL_RECORD_R1W6.json`
+  `5187cb7c350d3931cb0fdfb9d6fcdc22313288d16058c877820c83e782fec138` (`.md` `7f0bd262…`), same pinned line, cap and
+  attempts. From the sealed extract: wave-6 suites Ran 27 OK (3 host-only skipped); HELM's suites on a scratch copy of
+  the package's `helm_now/` Ran 187 OK (1 skipped), incl. the chat-crash regression. **v2 practice dry run**
+  (`dry_run/run3/`, 73 units, 254 s): X6_CONV FULL+WIDE WRONG **23 -> 0** (RIGHT_AND_PLAIN 32 -> 38; FULL 30, 0 wrong;
+  items lost 10 -> 0); X6_E64 / X6_F64 switch ON = OFF record for record, 64 / 64 each (60 RIGHT_AND_PLAIN); X6_REAL
+  FULL+WIDE 100 / 106 learned, RIGHT 100, WRONG 0, same-name answered 0 / 8; X6_PAIRW unchanged; every mark met on
+  practice data (reader `INSTRUMENT_ERROR` as designed for a practice mock). Reported: with TRIAD switched off
+  (FULL+WIDE-TRIAD) the conversation part still shows 7 wrong answers: the triad is what makes the wide path ask.
+  **Forecast after v2 practice (not read by any program):** `WIDE_WAVE_EARNED_KEEP` about 0.5 (a fresh draw may hold
+  face or unit phrasings the guard does not cover, or a K4 / K5 miss), `WIDE_WAVE_HARMED` about 0.2,
+  `WIDE_WAVE_NO_GAIN` about 0.15, `INCONCLUSIVE` about 0.15.

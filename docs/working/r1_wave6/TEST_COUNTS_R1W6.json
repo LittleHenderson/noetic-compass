@@ -2,18 +2,18 @@
  "helm_suites_scratch_copy": {
   "detail": "skipped=1",
   "ran": [
-   177
+   187
   ],
   "verdict": "OK"
  },
- "members": 33,
+ "members": 193,
  "members_rehashed_bad": [],
- "package_freeze_sha256": "1b8943c6f9b59a0cef4c179125c4c5cc4c45c6f3d4f55980591f139d4a95db6f",
- "package_zip_sha256": "f307bdbc51210b87d413b5adb834183f3404ce4da5ac6d37ce23873909d7c9e1",
+ "package_freeze_sha256": "83983cd4d70efe31d993822fca2f38392327a6f72b9066246af5cd17c014341a",
+ "package_zip_sha256": "729623429832c5fa99141d96876434d9ebed7417055c87173e7a582b3677be0a",
  "r1w6_suites_from_sealed_extract": {
   "detail": "skipped=3",
   "ran": [
-   25
+   27
   ],
   "verdict": "OK"
  },
