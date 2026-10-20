@@ -346,6 +346,7 @@ TERMS: dict[str, tuple[str, int, str]] = {
     "VALIDATED": (r"(?<!NOT-)\bVALIDATED\b", 0, "a claim-status word: it passed its own pre-set test against controls, on the data it was measured on"),
     "ENGINEERED-NOT-VALIDATED": (r"ENGINEERED-NOT-VALIDATED", 0, "a claim-status word: built and working, with no validated result yet"),
     "wave": (r"(?<!pair )(?<!PAIR )\bwaves?\b", re.I, "one sealed test round in the HELM-R1 series, with each part on its own switch"),
+    "wide brain": (r"\bwide (?:recipe )?brains?\b", re.I, "the recipe brain with its ingredient list opened up (any ingredient name, up to 10 per recipe, exact fractions, 20 units), behind a switch; HELM's canonical-brain candidate, not yet canonical"),
     "pair wave": (r"\bpair[ _-]?wave\b", re.I, "wave 6: the wide brain run together with HELM's other parts to read how each pair behaves"),
     "CTT": (r"\bCTT(?:-[0-9A-Z]+)?\b", 0, "the CAS-token transformer, HELM's optional 'ear': a small translator that proposes a reading only when HELM's own reader would ask, and never writes"),
     "transformer": (r"\btransformers?\b", re.I, "the kind of neural network behind most modern AI chat assistants"),
@@ -910,7 +911,8 @@ system; it reports and {T('whisper', 'whispers')}, and it never writes.</p>
 <p><strong>HELM is not a chatbot built on a large language model.</strong> No {T('LLM')} sits inside it. The first recipe brain had
 68 learned values ({T('parameter', 'parameters')}): 32 requirements, 32 ceilings and 4 bindings ({slink('7.24')}). The licensed brain's run log
 printed 32 learned slots, against 97 for the {T('transformer')} it replaced ({slink('7.47')}). A separate small transformer
-(9,585,566 parameters) exists only as an optional "ear" that may propose a reading; it never writes ({slink('7.82')}).</p>
+(9,585,566 parameters) exists only as an optional "ear" that may propose a reading; it never writes ({slink('7.82')}). A second brain, the {T('wide brain')}, reads any ingredient name; after two {T('sealed')} tests and the {T('pair wave')} it is HELM's
+canonical-brain candidate across the switches ({slink('7.96')}). Making it the main brain is the owner's decision.</p>
 </div>
 
 <h2>Today's status</h2>
@@ -1071,7 +1073,7 @@ Each part below sits behind a switch, so tests can turn one part off and see wha
 <tr><td><strong>Licensed {T('recipe brain')}</strong><br><code>helm_brain_canonical.py</code></td><td>Holds recipes; answers by exact yield; names the limiting ingredient. The way recipes combine is programmed; only the requirement amounts are learned.</td>
 <td>Run log: "RB-B 32 learned slots" ({slink('7.47')}). The first recipe brain had "68 learned values (requirements 32, ceilings 32, bindings 4)" ({slink('7.24')}). For comparison, the {T('GB3')} {T('transformer')} it replaced: 97; widened: 385.</td>
 <td>{T('LICENSED')}, one sentence, {T('SYNTHETIC_ONLY')} ({slink('7.56')}). Wired into HELM's live loop by fixes C and D on 2026-10-18.</td></tr>
-<tr><td><strong>Wide recipe brain</strong> (RB-W1 v3)<br><code>helm_brain_wide.py</code></td><td>The same learning and answering rules, for real recipes: open ingredient names, exact fractions, up to 10 ingredients, 20 kitchen units.</td>
+<tr><td><strong>{T('wide brain', 'Wide recipe brain')}</strong> (RB-W1, reader v5)<br><code>helm_brain_wide.py</code></td><td>The same learning and answering rules, for real recipes: open ingredient names, exact fractions, up to 10 ingredients, 20 kitchen units.</td>
 <td>One requirement coefficient per (recipe, ingredient), learned from one witnessed batch each. Survey estimate, not a measurement: "49,493 coefficients for 9,495 recipes". 9 unit factors are programmed, not learned ({slink('7.83')}).</td>
 <td>Canonical-brain candidate, {T('VALIDATED')} for one sentence, {T('NAMED_CORPORA_ONLY')} ({slink('7.89')}). Switch off by default. With every part on it first read WIDE_WAVE_NO_GAIN ({slink('7.93')}); after the reader fix the re-run read WIDE_WAVE_EARNED_KEEP, so it is now the candidate across the switches; making it canonical is the owner's decision ({slink('7.96')}).</td></tr>
 <tr><td><strong>{T('RPM Gate')}</strong></td><td>Lets a step go ahead, sends it to repair, or refuses; lets the brain answer {T('UNDETERMINED')}.</td><td>0 (a written rule)</td><td>EARNED_KEEP in waves 1, 2 and 3. Switched off in wave 1, wrong answers rose from 32 to 768 ({slink('7.47')}).</td></tr>
@@ -1709,7 +1711,7 @@ def _scene_intended() -> str:
     P.append(_box("i-rt", 210, 282, 240, 50, "env", ["Round-trip check"]))
     P.append(_box("i-gate", 210, 360, 240, 56, "keep", ["RPM Gate", "go / repair / ask"]))
     P.append(_box("i-ask", 476, 360, 122, 56, "keep", ["Ask", "read-back question"]))
-    P.append(_box("i-brain", 210, 452, 240, 72, "plan", ["Wide recipe brain", "main slot: planned", "pair wave: NO_GAIN, not moved"]))
+    P.append(_box("i-brain", 210, 452, 240, 72, "plan", ["Wide recipe brain", "main slot: candidate", "re-run: EARNED_KEEP; owner decides"]))
     P.append(_box("i-ref", 476, 452, 122, 72, "lic", ["Licensed brain", "kept as the", "reference"]))
     P.append(_box("i-cube", 22, 452, 146, 40, "keep", ["Cube store"]))
     P.append(_box("i-triad", 22, 500, 146, 40, "keep", ["Triad"]))
