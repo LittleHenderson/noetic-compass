@@ -108,7 +108,8 @@ _PART = "|".join(sorted(PART_WORDS, key=len, reverse=True))
 #: one amount, as it can start an ingredient line (longest forms first). Exactly one alternative matches.
 AMOUNT_RX = re.compile(
     r"(?P<amt>"
-    r"\d+\s*-\s*\d+/\d+"                              # 1-1/2  (mixed, hyphen)
+    r"\d+\s+and\s+an?\s+(?:half|third|quarter)"       # 1 and a half (v3: was read as 1)
+    r"|\d+\s*-\s*\d+/\d+"                             # 1-1/2  (mixed, hyphen)
     r"|\d+\s+\d+/\d+"                                 # 1 1/2  (mixed)
     r"|\d+\s*[" + _V + r"]"                           # 1½ / 1 ½
     r"|" + _FRAC + r"|" + _DEC + r"|" + _INT +
@@ -127,6 +128,8 @@ def _word_amount(s: str) -> Fraction:
         return Fraction(1)
     if w == "half":
         return Fraction(1, 2)
+    if w.isdigit():                              # v3: "1 and a half"
+        return Fraction(int(w))
     return Fraction(NUMBER_WORDS[w])
 
 
@@ -264,14 +267,14 @@ for _u, _forms in {
         "gram": "gram grams gramme grammes g gr", "ounce": "ounce ounces oz ozs",
         "pound": "pound pounds lb lbs", "kilogram": "kilogram kilograms kilo kilos kg kgs",
         "can": "can cans tin tins", "clove": "clove cloves", "slice": "slice slices", "pinch": "pinch pinches",
-        "package": "package packages pkg pkgs", "bunch": "bunch bunches", "square": "square squares",
+        "package": "package packages pkg pkgs packet packets",   # v3: a packet is a package "bunch": "bunch bunches", "square": "square squares",
         "saltspoon": "saltspoon saltspoons saltspoonful saltspoonfuls", "teacup": "teacup teacups teacupful teacupfuls",
 }.items():
     for _w in _forms.split():
         UNIT_WORDS[_w] = _u
 #: unit words the reader knows are units but the table does not hold (the survey's other units): it asks, never guesses
 OTHER_UNIT_WORDS = set("""stick sticks dozen dozens liter liters litre litres l gallon gallons gal bag bags box boxes jar
-jars carton cartons dash dashes packet packets pack packs head heads sprig sprigs piece pieces stalk stalks handful
+jars carton cartons dash dashes pack packs head heads sprig sprigs piece pieces stalk stalks handful
 handfuls drop drops cake cakes glass glasses wineglass wineglasses wineglassful peck pecks bushel bushels dessertspoon
 dessertspoons dessertspoonful breakfastcup breakfastcups coffeecup coffeecups dram drams cube cubes strip strips inch
 inches sheet sheets scoop scoops bottle bottles ear ears rasher rashers fillet fillets knob knobs tumbler tumblers
@@ -450,7 +453,8 @@ class WideRecipeBook:
     def evaluate(self, product: str, stock: Dict[str, Any]) -> Dict[str, Any]:
         """How much `product` the stock can make, and which ingredient runs out first. Behind the gate:
         UNKNOWN_PRODUCT (never witnessed), G1 (stock absent or a coefficient unlearned), UNIT_KIND_MISMATCH,
-        G2 (yield 0), G3 (two ingredients tie at the minimum). Every gate -> UNDETERMINED, which is not wrong."""
+        G2 (yield 0). Every gate -> UNDETERMINED, which is not wrong. v3: two or more ingredients tied at the
+        minimum -> EVALUATED with the amount, `tied` naming them and no single limiting reagent (was gate G3)."""
         p = norm_name(product)
         rec: Dict[str, Any] = {"product": p, "status": UNDETERMINED, "gate": None, "yield": None,
                                "limiting_reagent": None, "absent": [], "unlearned": [], "mismatch": [],
@@ -490,8 +494,12 @@ class WideRecipeBook:
             rec["zero"] = [n for n in r["support"] if base[n] == 0]
             return rec
         if len(winners) > 1:
-            rec["gate"] = "G3"
+            # v3 (2026-10-20): a tie at the minimum leaves the AMOUNT fully determined (every tied ingredient gives
+            # the same y); only "which one runs out first" has no single answer. v2 refused the whole answer (G3).
+            # Now the amount is answered and the tied ingredients are named; no single limiting reagent is claimed.
             rec["tied"] = winners
+            rec["yield_said"] = say_quantity(y)
+            rec["status"] = EVALUATED if rec["eta_eps_read_back"]["pass"] else UNDETERMINED
             return rec
         rec["limiting_reagent"] = winners[0]
         rec["yield_said"] = say_quantity(y)

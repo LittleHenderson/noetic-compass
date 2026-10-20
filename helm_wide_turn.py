@@ -34,7 +34,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import helm_brain_wide as W
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v2 (2026-10-19)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v3 (2026-10-20)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -51,7 +51,10 @@ seeded stoned pitted skinned boned cleaned washed trimmed shelled blanched mashe
 picked stemmed hulled crumbled lengthwise crosswise inch inches the a of in smashed bruised pounded torn""".split())
 SINGULAR_EXCEPTIONS = {"molasses": "molasses", "hummus": "hummus", "couscous": "couscous", "asparagus": "asparagus",
                        "swiss": "swiss", "loaves": "loaf", "leaves": "leaf", "halves": "half", "knives": "knife",
-                       "cheeses": "cheese", "glasses": "glass", "grits": "grits", "oats": "oats", "greens": "greens"}
+                       "cheeses": "cheese", "glasses": "glass", "grits": "grits", "oats": "oats", "greens": "greens",
+                       # v3: -ie nouns ("cookies" was read as "cooky", "pies" as "py")
+                       "cookies": "cookie", "pies": "pie", "brownies": "brownie", "smoothies": "smoothie",
+                       "veggies": "veggie", "calories": "calorie"}
 APPROX_RX = re.compile(r"^(?:about|around|roughly|approximately|approx\.?|nearly|almost|over|under|at least|up to)\b")
 
 
@@ -112,8 +115,19 @@ def _ask(code: str, **slots: Any) -> Dict[str, Any]:
     return {"code": code, "slots": {k: v for k, v in slots.items() if v is not None}}
 
 
-def parse_line(line: str) -> Dict[str, Any]:
-    """One ingredient line -> {"name", "amount" (Fraction), "unit", "said"} or {"clarify": {...}}."""
+#: v3: two amounts for ONE ingredient are asked about, never summed and never split into a made-up ingredient (v2 read
+#: "1/2 cup plus 1 tablespoon water" as an ingredient named "cup"): "X plus 1 tablespoon ..." anywhere, and "2 large
+#: or 4 small peppers" (a second amount right after the first). "250 g tahini or 200 g peanut butter" (an alternative
+#: INGREDIENT later in the line) is not matched: the line keeps its first amount and its whole text as the name, as v2.
+_AMT_START = r"(?:\d|[" + "".join(W.VULGAR) + r"])"
+ALTERNATIVE_RX = re.compile(r"\bplus\s+" + _AMT_START + r"|^(?:[A-Za-z-]+\s+)?or\s+" + _AMT_START, re.IGNORECASE)
+
+
+def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
+    """One ingredient line -> {"name", "amount" (Fraction), "unit", "said"} or {"clarify": {...}}.
+    v3: `notes` is the rest of the same line after a comma or "and" that does not start a new amount ("cold, cooked
+    rice", "squash, steamed and strained"). The name comes from the line's own words; the notes are used only when
+    those words alone bind to nothing ("1 cup cold, cooked rice" -> "cooked rice")."""
     s = line.strip().strip(".").strip()
     if APPROX_RX.match(s):
         return {"clarify": _ask("AMOUNT_APPROXIMATE", words=s)}
@@ -140,14 +154,21 @@ def parse_line(line: str) -> Dict[str, Any]:
         elif word.lower() in W.OTHER_UNIT_WORDS:
             return {"clarify": _ask("UNIT_NOT_IN_TABLE", unit=word.lower(), words=s)}
     rest = re.sub(r"^of\s+", "", rest)
-    if unit and not bind_name(rest) and m is not None:
+    if ALTERNATIVE_RX.search(rest) or re.match(r"plus\b", rest, re.IGNORECASE):
+        return {"clarify": _ask("AMOUNT_HAS_TWO_PARTS", words=s)}
+    note = notes.strip().strip(".").strip()
+    if unit and not bind_name(rest) and m is not None and not bind_name(note):
         unit, rest = "", m.group(1)
     if re.search(r"\bto taste\b|\bas needed\b", rest) and not unit and amount is None:
         return {"clarify": _ask("NO_AMOUNT", words=s)}
     name = bind_name(rest)
+    if not name and note:                          # v3: "1 cup cold, cooked rice" -> "cooked rice"
+        name = bind_name((rest + " " + note).replace(",", " "))
+    if not name and rest.strip():                  # v3: a line made only of a size word ("12 large, ripe tomatoes")
+        name = bind_name(rest, drop_leading=False)
     if not name:
         return {"clarify": _ask("NO_NAME", words=s)}
-    return {"name": name, "amount": amount, "unit": unit, "said": s}
+    return {"name": name, "amount": amount, "unit": unit, "said": s + (", " + note if note else "")}
 
 
 def _is_note(segment: str) -> bool:
@@ -155,16 +176,61 @@ def _is_note(segment: str) -> bool:
     return bool(words) and all(w in NOTE_WORDS for w in words)
 
 
+#: where one ingredient line may end: ", " / ", and " / "; " / " and " / " & " (never inside "one and a half")
+SEP_RX = re.compile(r",\s*(?:and\s+(?!an?\s+(?:half|third|quarter)\b))?|;\s*(?:and\s+)?"
+                    r"|\s+and\s+(?!an?\s+(?:half|third|quarter)\b)|\s+&\s+")
+#: "a little salt", "a few drops": not an exact amount; after a separator they stay a note of the line before
+VAGUE_AFTER_A = {"little", "few", "bit", "touch", "couple", "lot", "dash", "sprinkle", "sprinkling", "squeeze",
+                 "splash", "drizzle", "knob", "good", "handful", "suspicion", "grating", "dusting", "trifle"}
+
+
+def starts_line(seg: str) -> bool:
+    """v3: does this piece (after a separator) begin a NEW ingredient line? Only if it begins with an amount, a rough
+    or range amount, or "no X" (the line reader then asks about those). Anything else ("cooked rice", "steamed and
+    strained", "whites and yolks separately", "a little salt") is the rest of the line before it."""
+    s = seg.strip()
+    if re.match(r"no\s+[a-z]", s, re.IGNORECASE):
+        return True
+    m = APPROX_RX.match(s.lower())
+    if m and re.match(r"\s*(?:\d|[" + "".join(W.VULGAR) + r"])", s[m.end():]):
+        return True
+    try:
+        got = W.match_amount(s, 0)
+    except W.WideRefused:
+        return True
+    if got is None:
+        return False
+    if s[:got[1]].strip().lower() in ("a", "an"):
+        nxt = re.match(r"\s*([a-z]+)", s[got[1]:].lower())
+        return bool(nxt) and nxt.group(1) not in VAGUE_AFTER_A
+    return True
+
+
+def split_lines(text: str) -> List[Tuple[str, str]]:
+    """'a, b and c' -> [(line, notes)]: cut at a separator only where a new amount begins (v3; v2 cut at every comma
+    and "and", so "1 cup squash, steamed and strained" became three lines and the whole batch was refused)."""
+    pieces: List[Tuple[str, str]] = []
+    pos, sep = 0, ""
+    for m in SEP_RX.finditer(text):
+        pieces.append((sep, text[pos:m.start()]))
+        sep, pos = m.group(0), m.end()
+    pieces.append((sep, text[pos:]))
+    out: List[List[str]] = []
+    for sep, seg in pieces:
+        if not seg.strip():
+            continue
+        if not out or starts_line(seg):
+            out.append([seg.strip(), ""])
+        else:
+            out[-1][1] = (out[-1][1] + sep + seg.strip()) if out[-1][1] else seg.strip()
+    return [(a, b) for a, b in out]
+
+
 def parse_lines(text: str) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """A list of ingredient lines ('a, b and c'). Notes after a comma stay with their line. All or nothing."""
-    segments = [x for x in re.split(r",\s*(?:and\s+(?!an?\s+(?:half|third|quarter)\b))?|;\s*(?:and\s+)?"
-                                    r"|\s+and\s+(?!an?\s+(?:half|third|quarter)\b)|\s+&\s+|\s+plus\s+", text)
-                if x and x.strip()]
     lines: List[Dict[str, Any]] = []
-    for seg in segments:
-        if lines and _is_note(seg):
-            continue
-        rec = parse_line(seg)
+    for seg, notes in split_lines(text):
+        rec = parse_line(seg, notes)
         if "clarify" in rec:
             return [], rec["clarify"]
         lines.append(rec)
@@ -202,11 +268,22 @@ QUESTION_RX = re.compile(r"^(?:how\s+(?:much|many)\s+(?P<p1>.+?)\s+(?:can|could)
                          r"(?:any\s+|some\s+)?(?P<p2>.+?))\s*\??$", re.IGNORECASE)
 
 
-def resolve_ran_out(name: str, batch: List[str]) -> str:
+def _words(text: str) -> List[str]:
+    """Lower-case words of a text, each made singular (for matching a ran-out phrase inside a line)."""
+    return [singular(w) for w in re.sub(r"[^a-z0-9]+", " ", _ascii(text.lower())).split()]
+
+
+def _contains(hay: List[str], needle: List[str]) -> bool:
+    k = len(needle)
+    return k > 0 and any(hay[i:i + k] == needle for i in range(len(hay) - k + 1))
+
+
+def resolve_ran_out(name: str, batch: List[str], said: Optional[Dict[str, str]] = None) -> str:
     """The batch ingredient a ran-out name means: itself if in the batch; else with leading unit words and "of" dropped
     ("cupfuls of stock" -> "stock"); else the ONE batch name it begins ("granulated" -> "granulated or powdered sugar")
-    or the ONE batch name that ends with it ("sugar" -> "brown sugar"). Two candidates -> unchanged (the brain refuses:
-    the ingredient is not in the batch). OUR_CONVENTION."""
+    or the ONE batch name that ends with it ("sugar" -> "brown sugar"); else (v3) the ONE batch line whose own words
+    contain the phrase ("cold" -> the line "1 cup cold, cooked rice"). Two candidates at any step -> unchanged (the
+    brain refuses: the ingredient is not in the batch). OUR_CONVENTION."""
     if name in batch:
         return name
     words = name.split()
@@ -228,12 +305,66 @@ def resolve_ran_out(name: str, batch: List[str]) -> str:
             return hits[0]
         if len(hits) > 1:
             return name
+    if said:                                       # v3: the phrase inside exactly one line's own words
+        needle = _words(name)
+        hits = [b for b in batch if _contains(_words(said.get(b, b)), needle)]
+        if len(hits) == 1:
+            return hits[0]
     return name
 
 
+# ---------------------------------------------------------------------------------------------------- dish names
+#: words that stand where a dish name should be but name no dish ("We made 2 of it from ...", "We made a batch from")
+NOT_A_DISH = {"it", "one", "ones", "some", "thing", "things", "something", "stuff", "that", "this", "them", "those",
+              "these", "batch", "dish", "recipe", "lot", "food", "more", "any", "what"}
+_WRAPPER_RX = re.compile(r"^(?:(?:a|an|the|one|our|my|your|some|this|that)\s+)?(?:(?:double|single|half|whole|big|small|"
+                         r"large|full|new|first|second|another)\s+)?(?:batch(?:es)?|loaf|loaves|pan|pans|tray|trays|"
+                         r"serving|servings|portion|portions|recipe|recipes|lot|lots|round|rounds)\s+(?:of|for)\s+")
+
+
 def bind_product(phrase: str) -> Optional[str]:
-    s = re.sub(r"^(?:batch(?:es)? of|a batch of|loaf of|loaves of)\s+", "", phrase.strip().lower())
-    return bind_name(s) or bind_name(s, drop_leading=False)
+    """v3: the dish name as written, in any case, singular or plural, with "a"/"the", multiword, hyphenated or
+    possessive, wrapped as "a batch of X", "X recipe", "the recipe for X" -> one bound name. None if no dish is named
+    ("it", "a batch"); the wide path then asks for the name once."""
+    s = _ascii(phrase.replace("’", "'").strip().lower())
+    s = re.sub(r"[.!?]+$", "", s).strip()
+    s = _WRAPPER_RX.sub("", s)
+    s = re.sub(r"\s+recipes?$", "", s)
+    s = re.sub(r"'s\b|s'(?=\s|$)", lambda m: "" if m.group(0) == "'s" else "s", s)   # grandma's -> grandma
+    s = re.sub(r"^(?:(?:a|an|the|our|my|your|some|this|that)\s+)+", "", s)
+    name = bind_name(s, drop_leading=False)
+    if not name or name in NOT_A_DISH or re.search(r"\d", name):
+        return None
+    return name
+
+
+def product_key(name: str) -> str:
+    """Two written forms are the same dish when every word, made singular, is the same ("Apple-Pies" = "apple pie")."""
+    return " ".join(_words(name))
+
+
+def match_product(book: W.WideRecipeBook, name: Optional[str]) -> Optional[str]:
+    """The dish in the wide book a bound name means: itself, else the ONE dish with the same product_key."""
+    if not name:
+        return None
+    exact = book.product_of(name)
+    if exact is not None:
+        return exact
+    hits = [p for p in book.recipes if product_key(p) == product_key(name)]
+    return hits[0] if len(hits) == 1 else None
+
+
+def answer_dish_name(text: str) -> Optional[str]:
+    """v3: a reply to "What did that batch make?" -> the bound dish name, or None. Accepts "Gingerbread.", "It was
+    gingerbread", "That's my grandma's apple pie", "We made pancakes", "the recipe for scones"."""
+    t = normalize_text(text).strip()
+    if not t or len(t.split()) > 10 or re.search(r"\d", t) or t.endswith("?"):
+        return None
+    t = re.sub(r"^(?:oh\s+|well\s+|sorry\s+|yes\s+|ok(?:ay)?\s+)?,?\s*", "", t, flags=re.IGNORECASE)
+    t = re.sub(r"^(?:it\s+(?:was|is)|it's|that\s+(?:was|is)|that's|they\s+(?:were|are)|those\s+(?:were|are)|"
+               r"we\s+(?:made|baked|cooked)|i\s+(?:made|baked|cooked)|it'?s\s+called|they'?re|the\s+dish\s+(?:was|is))\s+",
+               "", t, flags=re.IGNORECASE)
+    return bind_product(t)
 
 
 def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
@@ -257,31 +388,41 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
             return clarify(_ask("NO_MADE_AMOUNT"))
         made, end = got
         rest = rest[end:].strip()
-        sep = re.search(r"\s+(?:from|using|with)\s+", rest)
-        if not sep:
+        # v3: the dish name may itself hold "with"/"from" ("chicken with rice from 2 cups rice ..."): try each
+        # separator in turn and keep the first whose tail reads as a batch
+        seps = list(re.finditer(r"(?:^|\s+)(?:from|using|with)\s+", rest))
+        if not seps:
             return clarify(_ask("NO_INGREDIENTS"))
+        first_problem: Optional[Dict[str, Any]] = None
+        for sep in seps:
+            e = END_RX.match(rest[sep.end():])
+            if not e:
+                first_problem = first_problem or _ask("NO_RAN_OUT", product=bind_product(rest[:sep.start()]))
+                continue
+            lines, c = parse_lines(e.group("lines"))
+            if c:
+                first_problem = first_problem or c
+                continue
+            break
+        else:
+            return clarify(first_problem or _ask("NO_INGREDIENTS"))
         product = bind_product(rest[:sep.start()])
-        tail = rest[sep.end():]
-        e = END_RX.match(tail)
-        if not e:
-            return clarify(_ask("NO_RAN_OUT", product=product))
-        lines, c = parse_lines(e.group("lines"))
-        if c:
-            return clarify(c)
         ran_out: List[str] = []
         if e.group("out"):
             words = re.sub(r"\b(?:at the same time|at once|first|both|the|too)\b", " ", e.group("out").lower())
             for part in re.split(r",\s*|\s+and\s+|\s+&\s+", words):
-                n = bind_name(part)
+                n = bind_name(part) or bind_name(part, drop_leading=False)     # v3: "ran out of large" -> "large"
                 if n and n not in ran_out:
                     ran_out.append(n)
-        if not product:
-            return clarify(_ask("NO_PRODUCT"))
         names = [x["name"] for x in lines]
-        ran_out = [resolve_ran_out(n, names) for n in ran_out]
-        out.update(status="WITNESS", witness={"product": product, "made": made, "ran_out": ran_out,
-                                              "stock": {x["name"]: (x["amount"], x["unit"]) for x in lines},
-                                              "said": {x["name"]: x["said"] for x in lines}})
+        said = {x["name"]: x["said"] for x in lines}
+        ran_out = [resolve_ran_out(n, names, said) for n in ran_out]
+        batch = {"product": product, "made": made, "ran_out": ran_out,
+                 "stock": {x["name"]: (x["amount"], x["unit"]) for x in lines}, "said": said}
+        if not product:                            # v3: the batch is kept so the dish name can be asked for ONCE
+            out["pending"] = batch
+            return clarify(_ask("NO_PRODUCT"))
+        out.update(status="WITNESS", witness=batch)
         return out
     m = STOCK_RX.match(t)
     if m:
@@ -338,6 +479,9 @@ def say_wide(rec: Dict[str, Any]) -> str:
     """The brain's evaluate record in plain English."""
     p = rec["product"]
     gate = rec.get("gate")
+    if rec.get("status") == W.EVALUATED and rec.get("tied"):          # v3: a tie still fixes the amount
+        return (f"With what's on hand we can make {rec['yield_said']} {p}. {cap(say_and(rec['tied']))} would run out "
+                f"at exactly the same moment, so no single one sets the limit.")
     if rec.get("status") == W.EVALUATED:
         return (f"With what's on hand we can make {rec['yield_said']} {p}. "
                 f"{cap(rec['limiting_reagent'])} runs out first, so it sets the limit.")
@@ -450,7 +594,8 @@ def say_reader_question(c: Dict[str, Any]) -> str:
     if code == "SAME_INGREDIENT_TWICE":
         return f"You named {s.get('item', 'one ingredient')} twice. Which amount is right?"
     if code == "NO_PRODUCT":
-        return "What was being made?"
+        return ("I got the batch, but not what it made. What's the dish called? Tell me its name and I'll learn "
+                "from that batch. Nothing is saved until then.")
     if code == "NO_INGREDIENTS":
         return "What went into that batch, and how much of each?"
     return "Could you say that another way? Nothing was saved."
@@ -472,36 +617,74 @@ CANNOT_BIND = {"CLARIFY_ENGLISH_UNKNOWN_INGREDIENT", "CLARIFY_ENGLISH_UNKNOWN_PR
                "CLARIFY_NOT_CCE", "CLARIFY_BATCH_NOT_USABLE", "CLARIFY_UNKNOWN_PRODUCT", "NOTHING_TO_SAVE",
                "CLARIFY_STOCK_NOT_RECORDED", "CLARIFY_ENGLISH_PRODUCT_AS_STOCK"}
 #: for a QUESTION about a product the wide book holds, the licensed path also "cannot" when it only asked
-QUESTION_NOT_ANSWERED = CANNOT_BIND | {"UNDETERMINED_CLARIFY", "BRAIN_UNDETERMINED"}
+#: v3: the statuses where the wide path may take a turn (the same set as v2)
+WIDE_MAY_TAKE = CANNOT_BIND
+QUESTION_NOT_ANSWERED = WIDE_MAY_TAKE | {"UNDETERMINED_CLARIFY", "BRAIN_UNDETERMINED"}
+#: v3: a whole batch with no dish name ("We made a batch from ..."): the licensed path asks what it made but cannot use
+#: the reply; the wide path asks for the dish name once and keeps the batch for that one reply
+PENDING_MAY_TAKE = {"CLARIFY_ENGLISH_BATCH_NEEDS_MADE"}
 STOCK_DONE = {"INVENTORY_RECORDED"}
 
 
 def take_over(loop: Any, licensed: Dict[str, Any], reading: Dict[str, Any]) -> bool:
     """Should the wide path take this turn? Only if the licensed path could not bind it and wrote nothing, AND the
-    wide reader reads it as something the wide brain can use: a witnessed batch; stock whose every ingredient is in a
-    recipe the wide brain holds; a question about a product the wide brain holds."""
+    wide reader reads it as something the wide brain can use: a witnessed batch (v3: also one whose dish name is
+    missing -- the wide path then asks for it once); stock whose every ingredient is in a recipe the wide brain holds;
+    a question about a product the wide brain holds."""
     if licensed.get("cubes_written"):
         return False
     status = licensed.get("loop_status")
     book = loop.wide_book
     if reading["status"] == "QUESTION":
-        return status in QUESTION_NOT_ANSWERED and book.product_of(reading["topic"]) is not None
-    if status not in CANNOT_BIND:
+        return status in QUESTION_NOT_ANSWERED and match_product(book, reading["topic"]) is not None
+    if reading["status"] == "CLARIFY" and reading.get("pending") is not None:
+        return status in WIDE_MAY_TAKE or status in PENDING_MAY_TAKE
+    if status not in WIDE_MAY_TAKE:
         return False
     if reading["status"] == "WITNESS":
         return True
     if reading["status"] == "STOCK":
         known = set(book.ingredients)
         return bool(reading["stock"]) and all(n in known for n in reading["stock"])
-    if reading["status"] == "QUESTION":
-        return book.product_of(reading["topic"]) is not None
     return False
+
+
+def _answer_pending(loop: Any, user_english: str, tick: int, licensed: Dict[str, Any],
+                    reading: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """v3: the turn right after the wide path asked for a dish name. The batch waits for ONE reply; it is then used
+    (the reply binds a dish name) or dropped (it does not). Never asked twice. A reply that is itself a batch, stock
+    or question, or one the licensed path used (it wrote something), is handled as usual and the batch is dropped."""
+    pending = getattr(loop, "wide_pending", None)
+    if pending is None:
+        return None
+    loop.wide_pending = None
+    if licensed.get("cubes_written") or reading["status"] in ("WITNESS", "STOCK", "QUESTION"):
+        return None
+    name = answer_dish_name(user_english)
+    if name is None:
+        result = loop._new_result(user_english, tick)
+        writes_before = loop._store_writes()
+        loop._emit(tick, "user", text=user_english.strip())
+        loop._emit(tick, "English in (wide)", reader=READER_VERSION, status="DISH_NAME_NOT_BOUND")
+        return loop._finish(result, tick, "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+                            "I still couldn't tell what that batch made, so I didn't learn from it. Nothing was "
+                            "saved. You can tell me the whole batch again with the dish name in it.",
+                            writes_before, "WAIT_FOR_USER")
+    product = match_product(loop.wide_book, name) or name
+    result = loop._new_result(user_english, tick)
+    result["english_in"] = {"reader": READER_VERSION, "status": "DISH_NAME", "product": product}
+    return wide_witness(loop, product, pending["stock"], pending["made"], pending["ran_out"], tick, result=result)
 
 
 def extended_turn(loop: Any, user_english: str, tick: int, current_inventory: Any = None) -> Dict[str, Any]:
     """WIDE_BRAIN ON: the licensed path first, unchanged; the wide path only where the licensed one cannot bind."""
     res = loop._process_turn_licensed(user_english, tick, current_inventory)
     reading = read_wide(user_english.strip(), last_topic=loop.last_topic)
+    answered = _answer_pending(loop, user_english, tick, res, reading)
+    if answered is not None:
+        answered["path"] = "wide"
+        answered["licensed_first"] = {"loop_status": res.get("loop_status")}
+        return answered
     if res.get("loop_status") in STOCK_DONE and reading["status"] == "STOCK":
         _stock_of(loop).update(reading["stock"])          # one stock on hand; the wide brain reads it too (no write)
     if take_over(loop, res, reading):
@@ -543,6 +726,8 @@ def wide_turn(loop: Any, user_english: str, tick: int) -> Dict[str, Any]:
         return loop._finish(result, tick, "WIDE_NOT_MINE", NOT_MINE_LINE, writes_before, "WAIT_FOR_USER")
     if reading["status"] == "CLARIFY":
         code = reading["clarify"]["code"]
+        if reading.get("pending") is not None:     # v3: keep the batch for ONE reply naming the dish
+            loop.wide_pending = reading["pending"]
         return loop._finish(result, tick, f"CLARIFY_WIDE_{code}", say_reader_question(reading["clarify"]),
                             writes_before, f"WAIT_FOR_USER: {code}")
     if E.cce is None:
@@ -591,7 +776,7 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
     import helm_end_to_end_loop as E
     brain = loop.wide_book
     held = _stock_of(loop)
-    product = brain.product_of(topic)
+    product = match_product(brain, topic)
     loop._emit(tick, "S0 atlas head", topic=topic, product=product, brain=brain.provenance())
     if product is None:
         rec = brain.evaluate(topic, {})
@@ -641,7 +826,8 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
     y, lim = rec["yield"], rec["limiting_reagent"]
     result.update({"output_value": y, "total_output": y, "output": y, "limiting_reagent": lim})
     statement = (f"Theoretical yield {y} of {product} from stock "
-                 f"{'; '.join(say_amount_of(q, u, n) for n, (q, u) in stock.items())}; limiting reagent {lim}; "
+                 f"{'; '.join(say_amount_of(q, u, n) for n, (q, u) in stock.items())}; "
+                 f"{('limiting reagent ' + lim) if lim else ('tied at the limit: ' + ', '.join(rec['tied']))}; "
                  f"wide brain {rec['learned_digest'][:16]}")
     write = loop._write_event_cube(f"wide_yield_{'_'.join(product.split())}_t{tick}", f"{product} yield", statement,
                                    "CHECKED", tick, kind="instance")
@@ -660,6 +846,7 @@ def wide_witness(loop: Any, product: str, stock_before: Dict[str, Any], made: An
     if writes_before is None:
         writes_before = loop._store_writes()
     p = W.norm_name(product)
+    p = match_product(brain, p) or p               # v3: "Apple-Pies" teaches the same dish as "apple pie"
     try:
         stock = {W.norm_name(k): W._stock_entry(v) for k, v in stock_before.items()}
         made_q = W.parse_quantity(made)
