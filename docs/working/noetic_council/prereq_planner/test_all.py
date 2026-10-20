@@ -12,6 +12,7 @@ Acceptance test suite enforcing Sections 7 & 8 of SPEC_PREREQUISITE_GRAPH_PLANNE
   Case H: Determinism (50 iterations yielding identical order & digest)
   Case I: README claim ceiling enforced verbatim
   Case J: Mid-plan repair & refusal (perform_repair called once)
+  Case K: Two 'Before X, Y.' sentences keep every action (synthesize -> verify -> git)
 
 CLAIM CEILING:
 MECHANISM ONLY. ORDERING IS DERIVED FROM STATED PREREQUISITES. NO UNDERSTANDING OF THE REQUEST IS CLAIMED.
@@ -301,6 +302,25 @@ def test_case_j_mid_plan_repair_performer():
         refusal = exc
     ok(refusal is not None, "must raise PlanRefusal if repair fails")
     equal(refusal.code, PLAN_REPAIR_FAILED)
+
+
+@case
+def test_case_k_two_before_sentences_keep_every_action():
+    """Case K: two Form 2 sentences (found by HELM UI v0, 2026-10-19).
+    'Before you commit to git, verify the tests pass. Before you verify the tests, write the code for auth.py.'
+    Old result: verify -> git only; 'write the code for auth.py' was swallowed into the first sentence's clause.
+    EXPECT: synthesize -> verify -> git, each edge sourced to its own sentence.
+    """
+    s1 = "Before you commit to git, verify the tests pass."
+    s2 = "Before you verify the tests, write the code for auth.py."
+    res = build_plan(s1 + " " + s2)
+    equal(res.order, ("synthesize", "verify", "git"), "all three steps, in prerequisite order")
+    edges = {(e.before, e.after): e.source for e in res.edges}
+    equal(edges, {("verify", "git"): s1, ("synthesize", "verify"): s2}, "one edge per sentence, sourced to it")
+    equal(res.order_source, "TEMPORAL_BEFORE")
+
+    receipt = plan_executor.execute_plan(res)
+    equal(receipt.executed_order, ("synthesize", "verify", "git"))
 
 
 # --------------------------------------------------------------------------- #

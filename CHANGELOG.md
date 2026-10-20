@@ -16,6 +16,8 @@ Owner order (verbatim, 68 bytes, sha256 b645e4f4...): "RE-TEST READER" (0.03 USD
 - Transport: c43 held the shared four-key prefix, so c44 used its own prefix helm-rtr1-c44-20261020/, no instance profile, no SSM, four presigned URLs (recorded deviation; no package change).
 - Charge 0.01 USD (cautious 0.01); ledger 111.54 -> 111.64 (hold) -> 111.55 of 200; cleanup VERIFIED three ways; backup D:\tksCAS-archive\rtr1_c44_20261020\ (417 files, three hash passes).
 
+## 2026-10-19 PDT - HELM chat: 4 defects found by HELM UI v0 fixed (owner: "Ok I agree with all 3 cards"): bee reply no longer invents "south of France" (repeats only the user's words; hive-walkthrough branch removed too); `dials` reads the real UnityEyeSupervisor.dial or says "not wired"; session log folder made on first write under helm_ui/sessions or $HELM_SESSION_DIR, never the repo root; two "Before X, Y." sentences now plan synthesize -> verify -> git in both planners (prereq_planner plan_graph.py and helm_agentic_executor.py); tests 43 -> 63 pass on the named suites; 0 USD
+
 ## 2026-10-19 PDT - RB-W1T (sealed test of the wide brain) packet SEALED, NOT LAUNCHED (spec sheet 7.86); nothing scored; 0 USD
 
 Owner pre-approval (verbatim): "WIDE TEST at 1 USD" (cap 1.00 USD, one attempt + one plumbing retry; coordinator mapping in `OWNER_APPROVALS_20261018.md`).

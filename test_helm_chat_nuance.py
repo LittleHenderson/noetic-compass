@@ -35,7 +35,9 @@ def test_sequence_a():
     with redirect_stdout(f):
         session.handle_turn("My grandfather kept bees in the south of France.")
     t1_out = f.getvalue()
-    assert "beekeeping in the south of france" in t1_out.lower()
+    # 2026-10-19: the reply repeats the user's own words (it used to be a hard-coded beekeeping sentence)
+    assert "my grandfather kept bees in the south of france" in t1_out.lower()
+    assert "beekeeping" not in t1_out.lower()
     assert session.turn_count == 1
     assert "south of France" in session.memory.context.user_facts[0]
     print("  [PASS] Turn 1: Personal narrative acknowledged and stored.")
@@ -274,6 +276,49 @@ def test_unified_cube_store_dialogue_integration():
     print("  [PASS] Probe 5: Non-grounded domain refusal wrote zero cubes under strict claim ceiling.")
 
 
+def _say(session, text):
+    f = io.StringIO()
+    with redirect_stdout(f):
+        session.handle_turn(text)
+    return f.getvalue()
+
+
+def test_narrative_reply_adds_no_invented_detail():
+    """Defect found by HELM UI v0 (2026-10-19): any message about bees got a hard-coded reply about
+    "beekeeping in the south of France". The reply must repeat only what the user said (user_facts)."""
+    session = hc.HELMConversationalSession(mode="everyday", session_id="test_narrative_no_invention")
+    out = _say(session, "My uncle kept bees in Ohio.")
+    assert "france" not in out.lower()
+    assert "beekeeping" not in out.lower() and "skilled" not in out.lower()
+    assert '"My uncle kept bees in Ohio"' in out
+    assert session.memory.context.user_facts == ["My uncle kept bees in Ohio"]
+    out2 = _say(session, "My sister is a carpenter.")
+    assert '"My sister is a carpenter"' in out2 and "bee" not in out2.lower()
+
+
+def test_walkthrough_claims_no_hive_program():
+    """The removed "beehive counts" branch fired on any goal with 'count' and described a program never written."""
+    session = hc.HELMConversationalSession(mode="everyday", session_id="test_walkthrough_no_hive")
+    session.memory.context.last_goal = "Write code to count the lines in notes.txt."
+    out = _say(session, "Explain it back to me in your own words.")
+    assert "hive" not in out.lower() and "bee" not in out.lower()
+    assert "count the lines in notes.txt" in out
+
+
+def test_dials_command_reads_real_dial_values():
+    """Defect found by HELM UI v0 (2026-10-19): 'dials' crashed (the Unity Eye has no `dial_params`)."""
+    session = hc.HELMConversationalSession(mode="everyday", session_id="test_dials_real")
+    d = session.engine.eye.dial
+    d.set_breadth(12)
+    out = _say(session, "dials")
+    assert f"Candidate Breadth (K)     : 12" in out
+    assert f"RPA Search Radius (R)     : {d.search_radius_R}" in out
+    assert f"Phase 3 Valve Saliency (σ): {d.valve_novelty_sigma}" in out
+    assert session.turn_count == 0                       # a terminal command is not a turn
+    session.engine.eye = None                            # no Eye at all: says so, does not crash
+    assert "not wired" in _say(session, "dials")
+
+
 if __name__ == "__main__":
     print("=" * 72)
     print("      HELM CONVERSATIONAL NUANCE & MULTI-TURN AUDIT SUITE       ")
@@ -283,6 +328,9 @@ if __name__ == "__main__":
     test_deepseek_7turn_offpath()
     test_epistemic_study_hypothesis()
     test_unified_cube_store_dialogue_integration()
+    test_narrative_reply_adds_no_invented_detail()
+    test_walkthrough_claims_no_hive_program()
+    test_dials_command_reads_real_dial_values()
     print("\n" + "=" * 72)
     print("ALL HELM CONVERSATIONAL NUANCE TESTS PASSED (100% VERIFIED)")
     print("=" * 72)

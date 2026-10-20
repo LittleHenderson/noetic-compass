@@ -24,6 +24,8 @@ from typing import Dict, List, Any, Optional, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CUBE_STORE_DIR = os.path.join(HERE, "docs", "working", "noetic_council", "cube_store")
+#: Default home of chat session logs (helm_ui/.gitignore ignores it). Never the repo root.
+DEFAULT_SESSION_DIR = os.path.join(HERE, "helm_ui", "sessions")
 if os.path.isdir(CUBE_STORE_DIR) and CUBE_STORE_DIR not in sys.path:
     sys.path.insert(0, CUBE_STORE_DIR)
 
@@ -305,8 +307,10 @@ class HELMConversationalMemory:
         self.max_turns = max_turns
         self.turns: List[ConversationTurn] = []
         self.context = WorkingMemoryContext()
-        self.storage_dir = storage_dir or os.path.join(os.path.dirname(__file__), "sessions")
-        os.makedirs(self.storage_dir, exist_ok=True)
+        # Session logs go to the given folder, else $HELM_SESSION_DIR, else helm_ui/sessions (git-ignored) --
+        # never the repo root. The folder is made on the first write (record_turn), not here, so starting a
+        # session leaves no empty folder behind.
+        self.storage_dir = storage_dir or os.environ.get("HELM_SESSION_DIR") or DEFAULT_SESSION_DIR
         self.session_file = os.path.join(self.storage_dir, f"{self.session_id}.jsonl")
 
     def process_turn_with_cube_store(self, text: str) -> Optional[TurnReceipt]:
@@ -352,7 +356,8 @@ class HELMConversationalMemory:
         if len(self.turns) > self.max_turns:
             self.turns = self.turns[-self.max_turns:]
 
-        # Append to persistent JSONL session ledger
+        # Append to persistent JSONL session ledger (its folder is created lazily, on this first write)
+        os.makedirs(os.path.dirname(os.path.abspath(self.session_file)), exist_ok=True)
         with open(self.session_file, "a", encoding="utf-8") as f:
             f.write(json.dumps(asdict(turn)) + "\n")
 
