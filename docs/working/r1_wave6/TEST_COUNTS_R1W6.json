@@ -1,0 +1,21 @@
+{
+ "helm_suites_scratch_copy": {
+  "detail": "skipped=1",
+  "ran": [
+   177
+  ],
+  "verdict": "OK"
+ },
+ "members": 33,
+ "members_rehashed_bad": [],
+ "package_freeze_sha256": "1b8943c6f9b59a0cef4c179125c4c5cc4c45c6f3d4f55980591f139d4a95db6f",
+ "package_zip_sha256": "f307bdbc51210b87d413b5adb834183f3404ce4da5ac6d37ce23873909d7c9e1",
+ "r1w6_suites_from_sealed_extract": {
+  "detail": "skipped=3",
+  "ran": [
+   25
+  ],
+  "verdict": "OK"
+ },
+ "schema": "helm.r1w6.test-counts/1"
+}

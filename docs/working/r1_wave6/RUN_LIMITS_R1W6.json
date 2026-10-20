@@ -1,0 +1,55 @@
+{
+ "attempts": {
+  "plumbing_retry": 1,
+  "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same X6 and x5spent carriers; any package change is a reseal and a new owner word",
+  "scored": 1
+ },
+ "cost_cap_status": "OWNER PRE-APPROVED: 'PAIR WAVE at 1 USD'",
+ "cost_cap_usd": "1.00",
+ "deadline_seconds_whole_command": 2400,
+ "enforced_by_launch_controller": [
+  "cost_cap_usd: 1.00 covers the scored attempt and at most one plumbing retry",
+  "stage_limit_seconds: 3000",
+  "cleanup: host and volumes terminated, launch slot released, own prefix purged, temporary role/profile/bucket removed, proof recorded; independent cleanup check within an hour; a direct read-only look",
+  "backup: deliverable copied to D:/tksCAS-archive/ with three sha256 confirmations"
+ ],
+ "enforced_by_package": [
+  "deadline: kit/run_r1w6.py caps the whole command at 2,400 s; a unit still running is killed and the reading is INSTRUMENT_ERROR (I6)",
+  "workers: 2; no torch anywhere; no GPU; every unit installs RB-W1T's socket guard (HG14)",
+  "refusals before any package code runs: this package's freeze and members; the seven neighbours by freeze (w1 8c55c413, w2 c8f82a6d, w3 bd06f324, w3b a6d9dbc7, w4 0d45017c, w5 a325ea13, rbw1t 04eef886); the X6 carrier (exactly six inputs + X6_PINS.json; a key file is refused: HG13); every carrier file by its pin; the two spent X5 files (1eb17c91, 2c7cac21); disk free >= 5 GiB",
+  "HG15: the wave-1 brain folder is hashed at start and end",
+  "HELM's own suites run on a scratch copy of RB-W1T's helm_now/ (the sealed folder is never written)"
+ ],
+ "estimate": {
+  "custodian": "laptop, 0 USD, no network, one process (about 20 s for seal + check)",
+  "expected_usd_per_attempt": "about 0.03-0.10",
+  "host_seconds": "about 400-700 (boot and checks most of it; suites about 30 s; the pool about 150-300 s at 2 workers)",
+  "host_units": "77 (13 X6_E64, 13 X6_F64, 16 X6_CONV, 8 X6_REAL, 12 X6_PAIR incl. job map, 11 X6_PAIRW incl. job map, 4 REPRO_X5)",
+  "max_usd_per_attempt": "about 0.35 (2,400 s deadline + about 5 minutes of boot and cleanup at 0.46 USD/h)",
+  "measured_laptop_dry_run": "see TEST_RECORD_R1W6.md (73 units, the 4 REPRO_X5 units skipped, one at a time)",
+  "price_usd_per_host_hour": {
+   "conservative_charge": 0.46,
+   "list": 0.192
+  },
+  "worst_case_usd": "about 0.70 (scored + one plumbing retry, both at their maximum)"
+ },
+ "host": {
+  "automatic_retry": false,
+  "cpu_slice": "2 CPUs",
+  "hosts": 1,
+  "image": "ami-0dddfa1ffa6b87af7 (the c21 image: Python 3.12.3)",
+  "instance_type": "one m6i.xlarge-class CPU instance with the kit's 2-CPU / 14 GiB slice (the run-proven controller), or m6i.large as c46/c47 if the operator's controller allows; no GPU",
+  "region": "us-west-2"
+ },
+ "label": "R1W6",
+ "laptop": {
+  "custodian": "pure Python, one process at a time, >= 300 MB free RAM, each command under 300 s",
+  "neural_work": "none",
+  "reading": "r1w6/merge_r1w6.py from an extracted copy of the sealed zip (opens one unit file at a time)"
+ },
+ "ledger": "Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json is the operator's; NO hold placed by the builder.",
+ "package": "HELM_R1_W6_20261019",
+ "schema": "helm.run-limits/1",
+ "sources_on_host": "none of the public sources: the host gets the custodian's X6 carrier and the existing x5spent carrier",
+ "status": "PRE-APPROVED by the owner's line 'PAIR WAVE at 1 USD' (APPROVAL_RECORD_R1W6.json); the operator launches; nothing is held or launched by the builder"
+}
