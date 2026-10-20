@@ -4,6 +4,8 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - HELM Hub: "wave" and "pair wave" defined (owner: "What is a pair wave?"): dictionary entries Wave (HELM-R1 wave) and Pair wave (HELM-R1 wave 6) (454 -> 456); both added to the jargon lint, so every page explains them on first use; scorecard row for 7.91; 21 tests OK; site rebuilt; docs only, no status changed; 0 USD
+
 ## 2026-10-19 PDT - CTT-2R packet SEALED, NOT LAUNCHED (spec sheet 7.92): the ACCEPT-2 acceptance rule on the unchanged c45 weights; owner pre-approved "CTT RULE TEST at 1.50 USD"; 0 USD
 
 - Rule: reader v1.1 first; where it would ask, a translator reading is OFFERED only when all three c45 copies give the identical checked reading, read back as a question (topics too), used only after a yes; at most 2 offers per dialogue, silent after a no. Confident-wrong cap stays 2 / 0 saved.

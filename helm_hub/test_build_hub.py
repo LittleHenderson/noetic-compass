@@ -67,6 +67,20 @@ class BuildTests(unittest.TestCase):
             self.assertIn(t, g)
         self.assertIn("CTT", b.TERMS)
 
+    def test_wave_and_pair_wave_defined(self):
+        g = (b.SITE / "glossary.html").read_text(encoding="utf-8")
+        self.assertIn("Pair wave", g)
+        self.assertIn("HELM-R1 wave 6", g)
+        self.assertIn("one sealed test round in the HELM-R1 series", g)
+        for name in ("build.html", "results.html", "roadmap.html"):
+            t = (b.SITE / name).read_text(encoding="utf-8")
+            box = t[t.find('<details class="words"'):]
+            box = box[:box.find("</details>")]
+            self.assertIn('data-term="wave"', box, name)
+            self.assertIn('data-term="pair wave"', box, name)
+        idx = (b.SITE / "index.html").read_text(encoding="utf-8")
+        self.assertIn('<dfn data-term="pair wave"', idx)
+
     def test_build_page_static_fallback_without_js(self):
         t = (b.SITE / "build.html").read_text(encoding="utf-8")
         # both scenes are in the HTML and not hidden; only scripts hide the inactive one

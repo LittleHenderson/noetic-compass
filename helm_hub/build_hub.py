@@ -345,6 +345,8 @@ TERMS: dict[str, tuple[str, int, str]] = {
     "LICENSED": (r"\bLICENSED\b", 0, "a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)"),
     "VALIDATED": (r"(?<!NOT-)\bVALIDATED\b", 0, "a claim-status word: it passed its own pre-set test against controls, on the data it was measured on"),
     "ENGINEERED-NOT-VALIDATED": (r"ENGINEERED-NOT-VALIDATED", 0, "a claim-status word: built and working, with no validated result yet"),
+    "wave": (r"(?<!pair )(?<!PAIR )\bwaves?\b", re.I, "one sealed test round in the HELM-R1 series, with each part on its own switch"),
+    "pair wave": (r"\bpair[ _-]?wave\b", re.I, "wave 6: the wide brain run together with HELM's other parts to read how each pair behaves"),
     "CTT": (r"\bCTT(?:-[0-9A-Z]+)?\b", 0, "the CAS-token transformer, HELM's optional 'ear': a small translator that proposes a reading only when HELM's own reader would ask, and never writes"),
     "transformer": (r"\btransformers?\b", re.I, "the kind of neural network behind most modern AI chat assistants"),
     "parameter": (r"\bparameters?\b", re.I, "an adjustable number a model learns"),
@@ -483,6 +485,7 @@ CUR: dict[str, tuple[str, str, str, str]] = {
     "7.87": ("scored", "partial", "The fixed English reader on 128 fresh real sentences wrote 0 wrong facts (the old reader wrote 11). Safe, not yet useful: right 115 times against always-ask's 114.", "Safety half only, on the named corpora."),
     "7.88": ("scored", "weak", "The wide brain's first sealed test on real recipes: 0 wrong answers, but it fully learned 90 of 110 (bar 99).", "A recorded negative on learning."),
     "7.89": ("scored", "win", "The wide brain v3, second sealed test on 128 fresh real recipes: fully learned 92 of 96 (bar 87), 93 right, 0 wrong. Now HELM's canonical-brain candidate.", "VALIDATED for one sentence only, named corpora only. Not canonical yet."),
+    "7.91": ("packet", "null", "Wave 6, the pair wave: the wide brain run alongside HELM's other parts, switched off together with each one, to read how each pair behaves; the step that decides whether the wide brain can become HELM's main brain. Sealed, not launched. Practice runs found reading defects, fixed first in RB-W1 v4 (commit cb3db850) before any spending.", "No claim."),
     "7.90": ("scored", "failed", "The transformer ear trained fully. No gain on real sentences (106 / 106 / 105 against the reader's 107). On LLM-written kitchen English it lifted right answers, but broke the cap on confident wrong proposals: FAILURE, EARS_HARMED.", "A narrow negative sentence only. Not 'the ears help'."),
 }
 
@@ -901,7 +904,7 @@ printed 32 learned slots, against 97 for the {T('transformer')} it replaced ({sl
 </div>
 
 <h2>Today's status</h2>
-<p>Each card shows a color, the exact words from the record, and the {T('claim ceiling')}. Most results come from {T('sealed')} exams.
+<p>Each card shows a color, the exact words from the record, and the {T('claim ceiling')}. Tests run in numbered {T('wave', 'waves')}; the next one, the {T('pair wave')}, decides whether the wide brain becomes the main brain. Most results come from {T('sealed')} exams.
 Words ending in {T('EARNED_KEEP')} are the good outcome for a part; a {T('faculty')} is one of HELM's mental jobs. The colors are the owner's scale and
 are a reading aid only. The words in grey boxes are the record's own words. {T('SYNTHETIC_ONLY')} and {T('NAMED_CORPORA_ONLY')} are the two ceilings in use today.
 {T('LICENSED')}, {T('VALIDATED')} and {T('ENGINEERED-NOT-VALIDATED')} are {T('claim status')} words; the others are {T('status word', 'status words')}.</p>
@@ -1049,7 +1052,7 @@ def p_architecture(S: dict) -> str:
     body = f"""
 <h2>The parts</h2>
 <p>HELM is built on {T('CAS')}. Its brain holds {T('recipe', 'recipes')}, answers with exact arithmetic, and names the {T('limiting reagent')}.
-Every saved fact leaves a {T('receipt')}; every sentence it says must pass the {T('round trip')}. Scored tests use {T('sealed')} exams.
+Every saved fact leaves a {T('receipt')}; every sentence it says must pass the {T('round trip')}. Scored tests use {T('sealed')} exams and run in numbered {T('wave', 'waves')}.
 The one place chance is allowed uses saved {T('seed', 'seeds')}.</p>
 <p>A {T('parameter')} is an adjustable number a model learns. Big AI chat assistants have billions. HELM's licensed brain has dozens.
 Each part below sits behind a switch, so tests can turn one part off and see what is lost. A part that loses something when switched off earns the
@@ -1141,7 +1144,7 @@ known. That is why most results carry the {T('claim ceiling')} {T('SYNTHETIC_ONL
 <ul class="tight">
 <li><strong>The {T('SDG')}</strong> (<code>cas-synthetic/</code>): practice English written from {T('CAS')} statements; 5,802 {T('seed', 'seeds', gloss='starting statements the generator writes English from; elsewhere on this page, a seed is a starting number for random choices')} in <code>cas-synthetic/data/path_d/seeds.jsonl</code> (language-map coverage report).</li>
 <li><strong>The kitchen world generator</strong> used to train the {T('transformer')} ear: "200,000 A-world rows" ({slink('7.82')}).</li>
-<li><strong>Exam builders</strong> for each test wave: fresh worlds X0 to X5, each built for one run and then spent ({slink('7.44')}, {slink('7.77')}, {slink('7.78')}).</li>
+<li><strong>Exam builders</strong> for each test {T('wave')}: fresh worlds X0 to X5, each built for one run and then spent ({slink('7.44')}, {slink('7.77')}, {slink('7.78')}).</li>
 </ul>
 
 <h2>Custody: who may see an exam</h2>
@@ -1396,7 +1399,7 @@ Examples: the {T('faculty', 'faculties')} run failed on gate H1 ({slink('7.34')}
 <div class="card"><h3>Read back before writing</h3><p>Every fact is read back and checked before it counts as saved. A write that fails the read-back is refused and nothing is saved.
 Each saved fact leaves a fingerprinted receipt.</p></div>
 <div class="card"><h3>The Eye never writes</h3><p>The {T('Unity Eye')} may report a problem and {T('whisper', 'whisper')} a suggestion.
-HELM may ignore the whisper. In waves 4 and 5 the Eye made 0 writes ({slink('7.77')}, {slink('7.78')}).</p></div>
+HELM may ignore the whisper. In {T('wave', 'waves')} 4 and 5 the Eye made 0 writes ({slink('7.77')}, {slink('7.78')}).</p></div>
 <div class="card"><h3>Refuse rather than guess</h3><p>Missing information gives {T('UNDETERMINED')}; unreadable English gives {T('CLARIFY')}; a step that should not run gets REFUSE
 from the {T('RPM Gate')}. In each case nothing is saved.</p></div>
 <div class="card"><h3>Write audit on the ear</h3><p>The transformer ear runs in its own process, watched by a file-write audit that allows only its own log.
@@ -1418,7 +1421,7 @@ an AI model is not the research governor; only the owner's signed line starts a 
 
 <h2>Who decides: the owner's words on record</h2>
 <p>Every paid run and every ruling traces to the owner's own words. This table lists the headings of the owner-approvals record
-for 2026-10-18 to 2026-10-19 (headings only; dates are Pacific). They name parts of {T('CAS')}, the {T('SDG')}, the {T('CTT')} and the idle {T('drive loop')}.</p>
+for 2026-10-18 to 2026-10-19 (headings only; dates are Pacific). They name parts of {T('CAS')}, the {T('SDG')}, the {T('CTT')}, the {T('pair wave')} and the idle {T('drive loop')}.</p>
 <div class="tablewrap verbatim"><table><thead><tr><th>When</th><th>Heading</th></tr></thead><tbody>{arows or '<tr><td colspan="2">Owner-approvals record not available on this machine.</td></tr>'}</tbody></table></div>
 """
     return page("safety.html", "HELM Safety Record", "Safety and honesty", lede, body, [
@@ -1435,7 +1438,7 @@ def p_roadmap(S: dict) -> str:
     need(S, "7.87", "115")
     lede = "Where HELM is meant to go, with an honest status on every line. Kitchen first, as a test world; everything after it is a plan until a test says otherwise."
     domains = [
-        ("Kitchen (the test world)", "strong", "Real today, inside limits. The licensed brain is LICENSED on made-up worlds; the wide brain is a candidate, VALIDATED for one sentence on real cookbook recipes. The licensed brain's fixed shapes fit 1 of 13,686 real recipes, which is why the wide brain exists.", "§7.56, §7.83, §7.89"),
+        ("Kitchen (the test world)", "strong", "Real today, inside limits. The licensed brain is LICENSED on made-up worlds; the wide brain is a candidate, VALIDATED for one sentence on real cookbook recipes; the pair wave (sealed, not run) decides whether it becomes the main brain. The licensed brain's fixed shapes fit 1 of 13,686 real recipes, which is why the wide brain exists.", "§7.56, §7.83, §7.89, §7.91"),
         ("Software work", "null", "Authored only. A tool-planning file exists with no recorded output; in the UI, tools are switched off by default.", "Roadmap §2.5 and §2.7; status correction row v0.6"),
         ("Everyday planning", "null", "Partly backed. A prerequisite planner orders steps and refuses loops; one worked plan is recorded; not scored on a sealed exam.", "§7.48; status correction row v0.7"),
         ("Research governance", "rule", "In force as a way of working (custodians, sealed exams, frozen readers, owner sign lines), not as something HELM does by itself.", "§7.55, §9.9 of the spec sheet"),
@@ -1859,7 +1862,7 @@ def p_build(S: dict) -> str:
     ]
     intended_steps = [
         ("i-in i-reader i-rt i-gate", 1, "Same turn, same checks: the reader goes first, then the round-trip check, then the RPM Gate."),
-        ("i-brain", 1, "The wide recipe brain moves into the main slot, but only if HELM's next sealed test with all parts switched on (the pair wave, §7.91: sealed, not yet run) says so. Planned."),
+        ("i-brain", 1, "The wide recipe brain moves into the main slot, but only if HELM's next sealed test wave with all parts switched on (the pair wave, §7.91: sealed, not yet run) says so. Planned."),
         ("i-ref", 1, "The licensed brain stays beside it as the reference; its one licensed sentence does not change."),
         ("i-ear i-agree", 1, "The CTT ear is admitted only through a stricter rule: all three trained copies must agree exactly, and HELM asks by default (CTT-2R, preregistered, nothing scored). Planned."),
         ("i-ask", 1, "Anything the ear proposes is still read back to you as a question before it counts; nothing is saved without your yes."),
