@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - RB-W1 v3 fix built (dish names, line splitting, ran-out binding, ties); NOT re-tested on a sealed exam; status unchanged (spec sheet 7.88 note); 0 USD
+
+- Diagnosis on a NEW published practice draw (seed text RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published, PRACTICE_DRAW_V2.json 808cfa2f...): the c46 miss label CLARIFY_ENGLISH_UNKNOWN_PRODUCT is the licensed path's code; the wide reader's own codes showed line splitting (no amount, 18 recipes), units (8), names, ran-out names. Failed approach logged: reading HELM's licensed code as the cause of a wide-path miss.
+- Practice v2, before -> after: fully learned 84 -> 100 of 106; RIGHT 85 -> 101; WRONG 0 -> 0; lessons 465/0/205 -> 577/0/93; unexplained asks 1 -> 0; no harm practice E64/F64 ON = OFF 64/64 each; parameter audit clean.
+- Built: amounts start lines; names from the line's own words; ran-out phrase inside one line; two-part amounts asked; "1 and a half" = 3/2; packet = package; a tie answers the amount; dish-name variants bind; a missing dish name is asked once, then accepted.
+- Tests: test_helm_brain_wide 52 (51 pass; 1 pre-existing failure since a7b1650a, skips on the host); test_helm_end_to_end_loop 18 OK. Files: docs/working/rbw1_fix/.
+
 ## 2026-10-19 PDT - RB-W1T SCORED (job c46, one m6i.large; spec sheet 7.88): reader PASS; status word WIDE_LEARNING_DID_NOT_EARN_KEEP; RB-W1 stays ENGINEERED-NOT-VALIDATED; 0.01 USD
 
 Owner pre-approval (verbatim, pinned 18 bytes, sha256 75904654...): "WIDE TEST at 1 USD"; cap 1.00 USD, one attempt + one plumbing retry.

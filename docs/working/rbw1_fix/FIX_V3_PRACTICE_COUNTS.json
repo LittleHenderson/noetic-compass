@@ -1,0 +1,254 @@
+{
+ "after": {
+  "ASKS": 12,
+  "RIGHT": 101,
+  "WRONG": 0,
+  "answers_on_UNDETERMINED_items": 12,
+  "brain_audit_all_ok": true,
+  "by_cell_fully_learned_rep_RIGHT_WRONG": {
+   "C23:FRACTION": [
+    13,
+    13,
+    13,
+    0
+   ],
+   "C23:INTEGER": [
+    12,
+    13,
+    12,
+    0
+   ],
+   "C23:MIXED": [
+    14,
+    14,
+    14,
+    0
+   ],
+   "C46:FRACTION": [
+    13,
+    14,
+    13,
+    0
+   ],
+   "C46:INTEGER": [
+    11,
+    11,
+    11,
+    0
+   ],
+   "C46:MIXED": [
+    12,
+    12,
+    13,
+    0
+   ],
+   "C710:FRACTION": [
+    11,
+    11,
+    11,
+    0
+   ],
+   "C710:INTEGER": [
+    6,
+    8,
+    6,
+    0
+   ],
+   "C710:MIXED": [
+    8,
+    10,
+    8,
+    0
+   ]
+  },
+  "fully_learned_of_representable": [
+   100,
+   106
+  ],
+  "helm_code_first_miss_recipes": {
+   "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": 10,
+   "CLARIFY_FACE_FACE_UNREAD": 3,
+   "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 1
+  },
+  "helm_code_not_learned_lessons": {
+   "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": 70,
+   "CLARIFY_FACE_FACE_UNREAD": 21,
+   "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 2
+  },
+  "lessons_learned_wrong_not": [
+   577,
+   0,
+   93
+  ],
+  "question_turn": {
+   "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": 12,
+   "CLARIFY_NOT_CCE": 1,
+   "SUCCESS_EVALUATED": 113,
+   "UNDETERMINED_CLARIFY": 2
+  },
+  "stock_turn": {
+   "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": 2,
+   "CLARIFY_ENGLISH_NO_STOCK_FRAME": 1,
+   "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": 8,
+   "CLARIFY_FACE_FACE_UNREAD": 3,
+   "INVENTORY_RECORDED": 1,
+   "STOCK_RECORDED": 113
+  },
+  "unexplained_asks": 0,
+  "wide_reader_code_first_miss_recipes": {
+   "READER_AMOUNT_HAS_TWO_PARTS": 2,
+   "READER_SAME_INGREDIENT_TWICE": 1,
+   "READER_UNIT_NOT_IN_TABLE": 7,
+   "READ_OK_THEN_CLARIFY_FACE_FACE_UNREAD": 3,
+   "READ_OK_THEN_TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 1
+  },
+  "wide_reader_code_not_learned_lessons": {
+   "READER_AMOUNT_HAS_TWO_PARTS": 11,
+   "READER_SAME_INGREDIENT_TWICE": 8,
+   "READER_UNIT_NOT_IN_TABLE": 51,
+   "READ_OK_THEN_CLARIFY_FACE_FACE_UNREAD": 21,
+   "READ_OK_THEN_TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 2
+  }
+ },
+ "after_code": "RB-W1 v3 (this PR)",
+ "after_controls": {
+  "LICENSED": "0 RIGHT 0 WRONG 113 ASKS",
+  "WIDE_NO_LEARNING": "0 learned, every lesson digest = empty digest",
+  "WIDE_REPLAY_identical": true
+ },
+ "before": {
+  "ASKS": 28,
+  "RIGHT": 85,
+  "WRONG": 0,
+  "answers_on_UNDETERMINED_items": 8,
+  "brain_audit_all_ok": true,
+  "by_cell_fully_learned_rep_RIGHT_WRONG": {
+   "C23:FRACTION": [
+    12,
+    13,
+    12,
+    0
+   ],
+   "C23:INTEGER": [
+    9,
+    13,
+    10,
+    0
+   ],
+   "C23:MIXED": [
+    14,
+    14,
+    14,
+    0
+   ],
+   "C46:FRACTION": [
+    11,
+    14,
+    11,
+    0
+   ],
+   "C46:INTEGER": [
+    8,
+    11,
+    8,
+    0
+   ],
+   "C46:MIXED": [
+    11,
+    12,
+    12,
+    0
+   ],
+   "C710:FRACTION": [
+    10,
+    11,
+    10,
+    0
+   ],
+   "C710:INTEGER": [
+    4,
+    8,
+    3,
+    0
+   ],
+   "C710:MIXED": [
+    5,
+    10,
+    5,
+    0
+   ]
+  },
+  "fully_learned_of_representable": [
+   84,
+   106
+  ],
+  "helm_code_first_miss_recipes": {
+   "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": 27,
+   "CLARIFY_FACE_FACE_UNREAD": 3,
+   "CLARIFY_NOT_CCE": 1,
+   "TEACH_REFUSED_REFUSED_NOTHING_RAN_OUT": 1,
+   "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 2
+  },
+  "helm_code_not_learned_lessons": {
+   "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": 173,
+   "CLARIFY_FACE_FACE_UNREAD": 21,
+   "CLARIFY_NOT_CCE": 7,
+   "TEACH_REFUSED_REFUSED_NOTHING_RAN_OUT": 1,
+   "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 3
+  },
+  "lessons_learned_wrong_not": [
+   465,
+   0,
+   205
+  ],
+  "question_turn": {
+   "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": 30,
+   "CLARIFY_NOT_CCE": 1,
+   "SUCCESS_EVALUATED": 93,
+   "UNDETERMINED_CLARIFY": 4
+  },
+  "stock_turn": {
+   "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": 7,
+   "CLARIFY_ENGLISH_NO_STOCK_FRAME": 1,
+   "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": 19,
+   "CLARIFY_FACE_FACE_UNREAD": 3,
+   "CLARIFY_NOT_CCE": 1,
+   "INVENTORY_RECORDED": 1,
+   "STOCK_RECORDED": 96
+  },
+  "unexplained_asks": 1,
+  "wide_reader_code_first_miss_recipes": {
+   "READER_NO_AMOUNT": 18,
+   "READER_NO_NAME": 1,
+   "READER_SAME_INGREDIENT_TWICE": 1,
+   "READER_UNIT_NOT_IN_TABLE": 8,
+   "READ_OK_THEN_CLARIFY_FACE_FACE_UNREAD": 3,
+   "READ_OK_THEN_TEACH_REFUSED_REFUSED_NOTHING_RAN_OUT": 1,
+   "READ_OK_THEN_TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 2
+  },
+  "wide_reader_code_not_learned_lessons": {
+   "READER_NO_AMOUNT": 107,
+   "READER_NO_NAME": 7,
+   "READER_SAME_INGREDIENT_TWICE": 8,
+   "READER_UNIT_NOT_IN_TABLE": 58,
+   "READ_OK_THEN_CLARIFY_FACE_FACE_UNREAD": 21,
+   "READ_OK_THEN_TEACH_REFUSED_REFUSED_NOTHING_RAN_OUT": 1,
+   "READ_OK_THEN_TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 3
+  }
+ },
+ "before_code": "RB-W1 v2 as sealed in RB-W1T v2 (helm_now at 045548b6)",
+ "harness": "RB-W1T v2 package rbw1t.arms_rbw1t + merge_rbw1t.score_main, unchanged; only helm_dir pointed at the code under test",
+ "no_harm_after": {
+  "W5P_E64": "ON records = OFF records 64/64; OFF_NOW = OFF_BASE 64/64; RIGHT 61 WRONG 0 UNDET 3",
+  "W5P_F64": "ON = OFF 64/64; OFF_NOW = OFF_BASE 64/64; RIGHT 60 WRONG 2 UNDET 2 (same as c46)",
+  "X5 spent files": "not run (host-only carrier; the builder never touches spent files)"
+ },
+ "practice_draw": {
+  "file": "PRACTICE_DRAW_V2.json",
+  "inputs_sha256": "cba5f84e6c50f18a63532a482ae538d00a890cb71537ecb322fda38139a0b677",
+  "seed_text": "RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published",
+  "sha256": "808cfa2fa13af801290cd5d9a59cd3cbabcf3c36ec2c2868e2696a352a9ff45c"
+ },
+ "schema": "helm.rbw1.fix-v3-practice-counts/1",
+ "status": "BUILD ONLY; practice draw v2 (published); NOT a sealed exam; status of RB-W1 unchanged (ENGINEERED-NOT-VALIDATED)"
+}

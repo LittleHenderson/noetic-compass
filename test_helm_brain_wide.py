@@ -305,7 +305,11 @@ class E_Undetermined(unittest.TestCase):
         stock["flour"] = (Fraction(9, 2), "cup")              # flour 2, egg 6, ... ; make egg tie at 2
         stock["egg"] = (Fraction(4), "")
         rec = brain.evaluate("gingerbread", stock)
-        self.assertEqual((rec["status"], rec["gate"]), (W.UNDETERMINED, "G3"))
+        # v3: a tie fixes the amount (2); no single limiting reagent is claimed, the tied ones are named
+        self.assertEqual((rec["status"], rec["gate"], rec["yield"], rec["limiting_reagent"]),
+                         (W.EVALUATED, None, "2", None))
+        self.assertEqual(sorted(rec["tied"]), ["egg", "flour"])
+        self.assertIn("at exactly the same moment", WT.say_wide(rec))
         stock["egg"] = (Fraction(0), "")
         rec = brain.evaluate("gingerbread", stock)
         self.assertEqual((rec["status"], rec["gate"]), (W.UNDETERMINED, "G2"))
@@ -519,6 +523,111 @@ class J_V2Routing(unittest.TestCase):
         r = loop.process_turn("How much bread can we make?", tick=5)
         self.assertEqual((r["loop_status"], r["path"], r["output_value"], r["limiting_reagent"]),
                          ("SUCCESS_EVALUATED", "wide", "1", "salt"), r["response"])
+
+
+class K_V3DishNamesAndLines(unittest.TestCase):
+    """RB-W1 v3 fixes (2026-10-20), each a failure class found on the builder's NEW practice draw v2 (seed text
+    RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published), never on a sealed exam."""
+
+    @classmethod
+    def setUpClass(cls):
+        import helm_end_to_end_loop as E2E
+        cls.E2E = E2E
+
+    def names(self, text):
+        lines, c = WT.parse_lines(WT.normalize_text(text))
+        self.assertIsNone(c, text)
+        return [x["name"] for x in lines]
+
+    def test_a_comma_or_and_without_a_new_amount_stays_in_its_line(self):
+        self.assertEqual(self.names("1 cup squash, steamed and strained, 2 cup heavy cream and 6 eggs, slightly beaten"),
+                         ["squash", "heavy cream", "egg"])
+        self.assertEqual(self.names("6 eggs, whites and yolks separately., 2 cup butter. and 6 cups sugar."),
+                         ["egg", "butter", "sugar"])
+        self.assertEqual(self.names("1 cup cold, cooked rice. and 4 tablespoons flour."), ["cooked rice", "flour"])
+        self.assertEqual(self.names("12 large, ripe tomatoes and 6 green peppers"), ["ripe tomato", "green pepper"])
+        self.assertEqual(self.names("3/4 cup of milk and a little salt and 2 eggs"), ["milk", "egg"])
+        self.assertEqual(self.names("250 g raw tahini or 200 g natural peanut butter and 2 g salt"),
+                         ["tahini or 200 g natural peanut butter", "salt"])
+        self.assertEqual(self.names("1 and a half cups flour and an egg"), ["flour", "egg"])
+
+    def test_two_amounts_for_one_ingredient_are_asked_never_summed(self):
+        for text in ("1/2 cup plus 1 tablespoon water", "2 large or 4 small green peppers"):
+            lines, c = WT.parse_lines(text)
+            self.assertEqual((lines, c["code"]), ([], "AMOUNT_HAS_TWO_PARTS"), text)
+        r = WT.read_wide("We have 12 cups of flour and no water.")
+        self.assertEqual((r["status"], r["clarify"]["code"]), ("CLARIFY", "NO_AMOUNT"))
+
+    def test_ran_out_phrase_found_inside_exactly_one_line(self):
+        r = WT.read_wide("We made 1 balls from 1 cup cold, cooked rice., 4 tablespoons flour. and 2 egg slightly "
+                         "beaten. and ran out of cold.")
+        self.assertEqual((r["status"], r["witness"]["ran_out"]), ("WITNESS", ["cooked rice"]))
+        r = WT.read_wide("We made 1 sauce from 12 large, ripe tomatoes, 6 green peppers and 4 onions and ran out of "
+                         "large.")
+        self.assertEqual(r["witness"]["ran_out"], ["ripe tomato"])
+        said = {"white sugar": "1 cup white sugar, sifted", "brown sugar": "1 cup brown sugar, sifted"}
+        self.assertEqual(WT.resolve_ran_out("sifted", list(said), said), "sifted")     # two lines hold it: no guess
+
+    def test_dish_name_variants_bind_to_one_dish(self):
+        forms = ["gingerbread", "Gingerbread", "the gingerbreads", "a batch of gingerbread", "Gingerbread recipe",
+                 "the recipe for gingerbread", "our gingerbread"]
+        self.assertEqual({WT.product_key(WT.bind_product(f)) for f in forms}, {"gingerbread"})
+        self.assertEqual(WT.product_key(WT.bind_product("Grandma's Apple-Pies")),
+                         WT.product_key(WT.bind_product("grandmas apple pie")))
+        self.assertEqual(WT.bind_product("cookies"), "cookie")
+        for f in ("it", "a batch", "some", "2"):
+            self.assertIsNone(WT.bind_product(f), f)
+        r = WT.read_wide("We made 1 chicken with rice from 2 cups rice and 1 pound chicken and ran out of rice.")
+        self.assertEqual(r["witness"]["product"], "chicken with rice")
+
+    def test_live_loop_dish_name_variants_teach_and_answer_one_dish(self):
+        loop = self.E2E.HELMEndToEndLoop(wide_brain=True)
+        for t, text in enumerate(("We made 1 Grandma's Apple-Pies from 2 cups flour and 12 apples and ran out of flour.",
+                                  "We made 1 grandmas apple pie from 4 cups flour and 6 apples and ran out of apples."),
+                                 1):
+            r = loop.process_turn(text, tick=t)
+            self.assertEqual((r["loop_status"], r["path"]), ("WITNESS_ADMITTED", "wide"), r["response"])
+        self.assertEqual(list(loop.wide_book.recipes), ["grandma apple pie"])
+        loop.process_turn("We have 5 cups flour and 9 apples.", tick=3)
+        r = loop.process_turn("How much grandma's apple pie can we make?", tick=4)
+        self.assertEqual((r["loop_status"], r["output_value"], r["limiting_reagent"]),
+                         ("SUCCESS_EVALUATED", "3/2", "apple"), r["response"])
+
+    def test_missing_dish_name_is_asked_once_then_accepted(self):
+        loop = self.E2E.HELMEndToEndLoop(wide_brain=True)
+        r = loop.process_turn("We made 1 from 2 cups flour and 1 cup water and ran out of flour.", tick=1)
+        self.assertEqual((r["loop_status"], r["path"], r["cubes_written"]), ("CLARIFY_WIDE_NO_PRODUCT", "wide", []))
+        self.assertIn("What's the dish called?", r["response"])
+        self.assertEqual(loop.wide_book.recipes, {})
+        r = loop.process_turn("It was flatbread.", tick=2)
+        self.assertEqual((r["loop_status"], r["path"]), ("WITNESS_ADMITTED", "wide"), r["response"])
+        self.assertEqual(loop.wide_book.coefficient("flatbread", "flour"), 2 * 16 * 3)    # 2 cups, in teaspoons
+        r = loop.process_turn("We made a batch from 2 cups rice and 1 cup milk and ran out of rice.", tick=3)
+        self.assertEqual((r["loop_status"], r["path"]), ("CLARIFY_WIDE_NO_PRODUCT", "wide"), r["response"])
+        r = loop.process_turn("hmm?", tick=4)                       # not a dish name: dropped, never asked twice
+        self.assertEqual(r["loop_status"], "CLARIFY_WIDE_DISH_NAME_NOT_BOUND")
+        self.assertEqual(r["cubes_written"], [])
+        r = loop.process_turn("rice pudding", tick=5)
+        self.assertEqual(r["path"], "licensed")
+        self.assertNotIn("rice pudding", loop.wide_book.recipes)
+
+    def test_ten_whole_number_ingredients_with_equal_amounts(self):
+        """10 ingredients, every one 2 (a whole number), the others at twice theirs in each lesson: all ten lessons
+        admitted; a pantry where two tie answers the amount and names both."""
+        loop = self.E2E.HELMEndToEndLoop(wide_brain=True)
+        names = ["flour", "sugar", "oat", "raisin", "walnut", "date", "fig", "almond", "pecan", "cashew"]
+        for j, n in enumerate(names):
+            parts = [f"{2 if i == j else 4} cups {m}" for i, m in enumerate(names)]
+            text = "We made 1 trail cake from " + ", ".join(parts[:-1]) + " and " + parts[-1] + f" and ran out of {n}."
+            r = loop.process_turn(text, tick=1 + j)
+            self.assertEqual(r["loop_status"], "WITNESS_ADMITTED", (n, r["response"]))
+        self.assertEqual(loop.wide_book.unlearned("trail cake"), [])
+        stock = [f"{6 if i < 2 else 10} cups {m}" for i, m in enumerate(names)]
+        loop.process_turn("We have " + ", ".join(stock[:-1]) + " and " + stock[-1] + ".", tick=20)
+        r = loop.process_turn("How much trail cake can we make?", tick=21)
+        self.assertEqual((r["loop_status"], r["output_value"], r["limiting_reagent"]),
+                         ("SUCCESS_EVALUATED", "3", None), r["response"])
+        self.assertIn("Flour and sugar would run out at exactly the same moment", r["response"])
 
 
 class H_SwitchOff(unittest.TestCase):
