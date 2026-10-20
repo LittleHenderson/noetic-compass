@@ -15,6 +15,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 
 ## 2026-10-20 PDT - HELM Hub additions (owner): glossary gains CTT, CTT-1, CTT-2R, the CTT exams and Ears / mouth (dictionary 449 -> 454 entries; CTT added to the jargon lint); new pages build.html (the build, animated: today vs intended, colored by recorded status, still without scripts or with reduced motion) and files.html (every key path with exists check, size and sha256; sealed exams named, never opened; key files by path only); 20 tests OK; site rebuilt; docs only, no status changed; 0 USD
 
+## 2026-10-20 PDT - HELM-R1 wave 6 RESEALED v2 after FIX FIRST (spec sheet 7.91 amendment A-R1W6-1); NOT LAUNCHED; 0 USD
+
+- HELM fixed first (PR #400, merge 221cab70, RB-W1 v4): face / purpose clauses in wide stock sentences asked about; triad faces on wide ingredients respected (ask); restated units converted or asked; stale amounts withdrawn; helm_chat crash on a wide teaching turn fixed (helm_english_in.quantities_said) with a regression test; test_helm_wide_alongside.py 10 tests (9 fail on v3); HELM suites 187 OK.
+- Package v2: own HELM cut (helm_now/, 159 files); harness workaround removed; WIDE x VOICE / EYE_SCAN NOT_EXERCISED_BY_CONSTRUCTION; K5 adaptation recorded as A-R1W6-1.
+- Zip 729623429832c5fa99141d96876434d9ebed7417055c87173e7a582b3677be0a, freeze 83983cd4..., FROZEN afe9600d...; approval record 5187cb7c... (same pinned line PAIR WAVE at 1 USD, cap 1.00 USD); suites 27 + 187 OK from the sealed extract. v1 f307bdbc VOID (never launched).
+- Practice before -> after: conversation wrong answers 23 -> 0 (RIGHT_AND_PLAIN 32 -> 38); English-64 / Faces-64 switch ON = OFF 64/64; real recipes 100/106 learned, 0 wrong; every mark met on practice.
+
 ## 2026-10-19 PDT - HELM-R1 wave 6 "PAIR WAVE" packet SEALED, NOT LAUNCHED (spec sheet 7.91); owner pre-approved "PAIR WAVE at 1 USD"; 0 USD
 
 - The wide recipe brain (WIDE_BRAIN switch, licensed reader first) with every wave-5 part on (cube store, English reader, triad, voice, EYE_SCAN, EYE_PAIRING) plus the new UNSETTLED_ASK caution rule (ask when a recipe names one ingredient on two lines).
