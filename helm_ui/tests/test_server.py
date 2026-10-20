@@ -132,6 +132,41 @@ def test_planner_orders_and_refuses_a_cycle(rig):
     assert cyc["refused"] is True and cyc["code"] == "PLAN_CYCLE" and cyc["stage"] == "plan"
 
 
+def test_planner_keeps_every_action_across_two_before_sentences(rig):
+    # Defect found by this page (2026-10-19): the second sentence's action ("write the code") was dropped.
+    _, c, _ = rig
+    text = "Before you commit to git, verify the tests pass. Before you verify the tests, write the code for auth.py."
+    r = c.post("/plan", json={"text": text}).json()
+    assert r["ok"] and r["refused"] is False
+    assert r["plan"]["order"] == ["synthesize", "verify", "git"]
+
+
+def test_dials_command_reads_the_real_dial(rig):
+    # Defect found by this page (2026-10-19): 'dials' crashed on a missing `dial_params` attribute.
+    _, c, _ = rig
+    c.post("/dials", json={"K": 12})
+    r = c.post("/turn", json={"text": "dials"}).json()
+    assert r["ok"] is True and r["recorded"] is False
+    assert "Candidate Breadth (K)     : 12" in r["reply"]
+
+
+def test_bees_reply_repeats_only_what_was_said(rig):
+    # Defect found by this page (2026-10-19): any bee message got a hard-coded "south of France" reply.
+    _, c, _ = rig
+    r = c.post("/turn", json={"text": "My grandfather kept bees."}).json()
+    assert r["recorded"]
+    assert "france" not in r["reply"].lower() and "beekeeping" not in r["reply"].lower()
+    assert "My grandfather kept bees" in r["reply"]
+
+
+def test_session_folder_is_made_on_first_write_only(rig):
+    # Defect found by this page (2026-10-19): starting a session made an empty sessions/ folder at the repo root.
+    _, c, tmp = rig
+    assert not (tmp / "sessions").exists()          # nothing written yet, so no folder yet
+    c.post("/turn", json={"text": "Hello"})
+    assert len(list((tmp / "sessions").glob("*.jsonl"))) == 1
+
+
 def test_eye_scan_reads_only(rig):
     _, c, _ = rig
     if not (server.U3_DIR / "eye_scan.py").is_file():

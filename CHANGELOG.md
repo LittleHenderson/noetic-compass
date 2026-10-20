@@ -6,6 +6,34 @@ Monorepo-level log. Subprojects keep their own changelogs
 
 ## 2026-10-19 PDT - lexicon_v3 (live, switch HELM_LEXICON_V3 default ON): bare female/male/negative/positive/vibration/rhythm and the bare-noun tier (idea, thought, mind, attention, practice, repetition, groove, realization) no longer pick a Noetic; frozen ALIAS-WIDE v1 / lexicon_v2 untouched; tests reader 31->37, new lexicon_v3 15/15, loop 18, stock-frame 17, faces 16, voice 22, cube store 21/21, chat script PASS; practice E64 61/0/3, F64 60/2/2 unchanged item by item; spec sheet 7.81 note, no status change; 0 USD
 
+## 2026-10-19 PDT - HELM chat: 4 defects found by HELM UI v0 fixed (owner: "Ok I agree with all 3 cards"): bee reply no longer invents "south of France" (repeats only the user's words; hive-walkthrough branch removed too); `dials` reads the real UnityEyeSupervisor.dial or says "not wired"; session log folder made on first write under helm_ui/sessions or $HELM_SESSION_DIR, never the repo root; two "Before X, Y." sentences now plan synthesize -> verify -> git in both planners (prereq_planner plan_graph.py and helm_agentic_executor.py); tests 43 -> 63 pass on the named suites; 0 USD
+
+## 2026-10-19 PDT - RB-W1T (sealed test of the wide brain) packet SEALED, NOT LAUNCHED (spec sheet 7.86); nothing scored; 0 USD
+
+Owner pre-approval (verbatim): "WIDE TEST at 1 USD" (cap 1.00 USD, one attempt + one plumbing retry; coordinator mapping in `OWNER_APPROVALS_20261018.md`).
+
+- What it tests: RB-W1 (PR #380, `015d340d`) on 128 real recipes drawn blind by a custodian from X-REAL's public frames (2-10 parsed lines; 3 ingredient counts x 3 quantity forms; X-REAL's used 128 and the builder's published practice excluded). One witnessed run-out lesson per ingredient (X-REAL v2), fresh amounts on hand, "How much {N} can we make?"; X-REAL's K-R key (three-valued). Arms: licensed brain, WIDE, WIDE replay, WIDE with learning disabled (control), always-ask. No harm: switch OFF byte-identical to `d4488f2a`, switch ON at most 2 lost, on wave-5 practice and spent X5 English-64 / Faces-64.
+- Seed = sha256("WIDE TEST at 1 USD" + ":" + zip sha256), band RW 1,950,000,001-1,951,000,000; custodian only.
+- Package: zip `b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809`, freeze `fadf08f6faf13ebcdb633b7894ebe515838465c52a90c51f6507f2371a28f8b1`; approval record `APPROVAL_RECORD_RBW1T.json` `97fb18ae...`. Tests from the sealed extract: 23/23 RB-W1T, 154 HELM (1 skipped), plan check PASS.
+- Practice dry run (published seed, not an exam): WIDE 54 right, 0 wrong, fully learned 54 of 106 (mark needs 90%); switch ON lost 55 of 64 (E64) and 42 of 64 (F64). Prediction: WIDE_BRAIN_HARMED about 0.85. Finding: the switch replaces the whole English path; meeting the no-harm mark needs a routing change (new build, new seal) - owner/coordinator call.
+- Failed approach logged: matching the brain's names to the grammar's HEAD word scored right answers WRONG ("boiling water poured upon the flax-seed" has HEAD "upon"); replaced before the seal by mapping names through the brain's own lesson records (amendment A-W-1).
+- Not done: wave-1 GB/TB worlds with the switch ON (no cell-index adapter); X-REAL's pair recipes not excluded (ids only in X-REAL custody).
+
+## 2026-10-19 PDT - Noetic drift fix (docs + one docstring; owner: "Ok I agree with all 3 cards"); no behavior or claim change; 0 USD
+
+- `docs/INCIDENT_CATEGORIES.md` + `docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md`: 15 retired Noetic names replaced with canonical ones; 4 examples reclassified by the Colloquialism Test (hallucination `^3`->`^6` Male with `^8`->`^9` landing; Boundary Failures `^3`->`^6`), 1 re-checked and kept; full list in "Reconciliation notes 2026-10-19". `helm_chat.py` header now names helm_brain_canonical.py (HELM-R1 recipe brain) as HELM's brain and 22x40 / tks28 as demos (AST identical apart from the docstring; test_helm_chat_nuance 5/5, test_helm_english_in 31/31). Not done: HELM_DISTRIBUTION_PACKAGE/helm_chat.py (outside git and outside this agent's worktree).
+
+## 2026-10-19 PDT - CTT-1 LAUNCHED (job c43, one g5.xlarge GPU) and STOPPED by its own GPU smoke test (spec sheet 7.85); primary word INCONCLUSIVE; nothing scored; 0.21 USD
+
+Owner pre-approval (verbatim): "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." Cap 8.00 USD, one attempt + one plumbing retry.
+
+- Package v2 83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec verified; payload 15c8bfa0...; i-05cd406380131ee45 g5.xlarge (A10G), ami-0dddfa1ffa6b87af7, us-west-2b; 01:19:32 -> 01:25:49 UTC; host 713.8 s.
+- Preflight: 0 refusals; host unit tests Ran 58 OK (skipped=1); static separation PASS; no pretrained files; smoke build and 9-step smoke train exit 0 (loss 3.33422); A4 parameter count 9,585,566 asserted. FAILED: translator-process audit saw torch-internal write-opens (/dev/null x4, /tmp/ks37dli5) -> preflight ok false -> runner exit 3.
+- Frozen reader: primary INSTRUMENT_ERROR / INCONCLUSIVE (14 missing result files); LLM_WRITTEN pass (staged under the runner's E_HUMAN_W_* names, NAMING_NOTE bf758ce1...) NOT_RUN; real human pass NOT_RUN.
+- Classed CODE (a same-zip retry would repeat it); plumbing retry NOT used. Continuing needs a fixed audit rule, a reseal, and a new owner word.
+- Failed approach logged: the operator's controller placeholder check matched `torch.__version__` and stopped 0 s after run_instances; fixed and the same attempt re-attached to the same instance (no second launch).
+- Charge 0.21 USD (cautious 0.31); ledger 111.33 -> 119.33 (hold) -> 111.54 of 200; cleanup VERIFIED three ways; backup D:\tksCAS-archive\ctt1_c43_20261020\.
+
 ## 2026-10-19 PDT - RTR-1 "RE-TEST READER" packet SEALED, NOT LAUNCHED (spec sheet 7.84); nothing scored; 0 USD
 
 Owner order (verbatim): "RE-TEST READER" (0.03 USD). Coordinator mapping: cap 0.10 USD, one attempt + one plumbing retry.

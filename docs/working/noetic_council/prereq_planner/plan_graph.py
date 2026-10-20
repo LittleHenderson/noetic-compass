@@ -191,6 +191,40 @@ def parse_prerequisites(request: str, allow_temporal: bool = True) -> Tuple[List
     # -------------------------------------------------------------------------
     # Form 2: Temporal discourse markers (F16)
     # -------------------------------------------------------------------------
+    # Several sentences that each carry their own marker ("Before X, Y. Before Y, Z.") are read one
+    # sentence at a time, so no sentence's action is swallowed into another sentence's clause. Each
+    # edge keeps the exact sentence that made it as its source.
+    sentences = _split_sentences(text)
+    if len(sentences) > 1 and any(_TEMPORAL_LEAD.match(sent) for sent in sentences):
+        labels: List[str] = []
+        for sent in sentences:
+            s_omegas, s_edges, s_label = _parse_temporal_sentence(sent)
+            omegas.update(s_omegas)
+            for edge in s_edges:
+                if edge not in edges:
+                    edges.append(edge)
+            if s_label != "NONE" and s_label not in labels:
+                labels.append(s_label)
+        source = labels[0] if len(labels) == 1 else ("TEMPORAL_MULTI_SENTENCE" if labels else "NONE")
+        return sorted(omegas), edges, source
+
+    return _parse_temporal_sentence(text)
+
+
+#: A sentence that opens with a Form 2 temporal marker.
+_TEMPORAL_LEAD = re.compile(r"^(?:before|prior to|after|first)\s+", re.IGNORECASE)
+
+
+def _split_sentences(text: str) -> List[str]:
+    """Split on sentence ends (. ! ? followed by space). 'auth.py' stays whole: no space follows its dot."""
+    return [p.strip() for p in re.split(r"(?<=[.!?])\s+", text.strip()) if p.strip()]
+
+
+def _parse_temporal_sentence(text: str) -> Tuple[List[str], List[PlanEdge], str]:
+    """Form 2 on ONE sentence: before / first-then / after / sequential connectors / single action."""
+    edges: List[PlanEdge] = []
+    omegas: Set[str] = set()
+
     # 1. 'Before X, Y' or 'Prior to X, Y' -> Y comes BEFORE X
     m_before = re.match(r"^(?:before|prior to)\s+(.+?),\s*(.+)$", text, re.IGNORECASE)
     if m_before:

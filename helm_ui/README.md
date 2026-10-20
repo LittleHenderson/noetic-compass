@@ -58,7 +58,8 @@ Then open http://127.0.0.1:8765. The server binds to 127.0.0.1 only. It needs Fa
 
 ## Things HELM itself does that the page shows as they are
 
-- Telling HELM anything about bees gets a reply about "beekeeping in the south of France", even when France was never said. That sentence is hard-coded in `helm_chat.py`. The page shows it unchanged.
-- The terminal command `dials` fails inside `helm_chat.py` (`UnityEyeSupervisor` has no `dial_params`). The page reports the error; the Search dials card reads the dial directly.
-- Making a `HELMConversationalSession` creates an empty `sessions/` folder at the repo root before the page can point the log elsewhere.
+- Fixed 2026-10-19 (found by this page): a hard-coded "beekeeping in the south of France" reply to any message about bees. HELM now repeats only the user's own words. The recorded demo in `demo/` was made before this fix and still shows the old reply.
+- Fixed 2026-10-19: the terminal command `dials` crashed (`UnityEyeSupervisor` has no `dial_params`). It now prints the real dial values, or "not wired".
+- Fixed 2026-10-19: making a `HELMConversationalSession` created an empty `sessions/` folder at the repo root. The log folder is now made on the first logged turn, under `helm_ui/sessions` or `$HELM_SESSION_DIR`.
+- Fixed 2026-10-19: "Before you commit to git, verify the tests pass. Before you verify the tests, write the code for auth.py." planned only verify -> git. It now plans synthesize -> verify -> git.
 - The planner reads only ordering words. "First knead the dough, then let it rise" gives steps named `knead` and `let`. Its own limit: "MECHANISM ONLY. ORDERING IS DERIVED FROM STATED PREREQUISITES. NO UNDERSTANDING OF THE REQUEST IS CLAIMED."

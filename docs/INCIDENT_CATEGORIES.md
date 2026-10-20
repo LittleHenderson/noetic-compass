@@ -2,7 +2,7 @@
 
 Each class is defined structurally — by which operators, domains, drives, pathways, or inversion axes are failing — not by surface symptom. Two incidents with superficially identical outputs can belong to different classes if their structural signatures differ. This is the central claim: the signature is more diagnostic than the output.
 
-Framework reference: CAS v7.4 Corrected Edition. Operator indices (CO-0 through CO-9), domain indices (P/C/E/O), drive indices (F1–F7), pathway structure (A0 → Dn → Wn → Pn), and inversion axes (N/W/F/E/S/A/P) are defined in the `cas-engine` Rust crate and `api/pipeline/` modules of the Noetic Compass codebase.
+Framework reference: CAS v7.4 Corrected Edition. Operator indices (CO-0 through CO-9), domain indices (P/C/E/O), drive indices (F1–F7), pathway structure (A0 → Dn → Wn → Pn), and inversion axes (N/W/F/E/S/A/P) are defined in the `cas-engine` Rust crate and `api/pipeline/` modules of the Noetic Compass codebase. Noetic names and definitions follow `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 1 verbatim (see Reconciliation notes 2026-10-19 at the end).
 
 ---
 
@@ -20,11 +20,11 @@ Framework reference: CAS v7.4 Corrected Edition. Operator indices (CO-0 through 
 
 **Structural signature:** One of the three CAS involution pairs has drifted into imbalance beyond tolerance. The pairs are:
 
-- **CO-2 Attraction ↔ CO-3 Critical Evaluation** — seeing opportunities vs. seeing risks.
-- **CO-5 Receptive Integration ↔ CO-6 Projective Assertion** — absorbing input vs. committing to a position.
-- **CO-8 Causal Reasoning ↔ CO-9 Consequential Grounding** — tracing causes upstream vs. tracing consequences downstream.
+- **CO-2 Positive ↔ CO-3 Negative** — an Idea the Mind has an affinity for and is attracted toward vs. an Idea the Mind is adverse to and repelled by.
+- **CO-5 Female ↔ CO-6 Male** — the Ideas a Mind is composed of vs. the Ideas an Idea is composed of.
+- **CO-8 Above/Cause ↔ CO-9 Below/Effect** — an Idea that triggers a different Idea than itself to come to Mind vs. the Idea brought to Mind by that trigger.
 
-A healthy system holds these in tension. An inverted system has one operator firing strongly and its counterpart suppressed, producing lopsided output (all opportunity, no risk; all assertion, no listening; all cause, no consequence — or the mirror image of each).
+A healthy system holds these in tension. An inverted system has one operator firing strongly and its counterpart suppressed, producing lopsided output (all attraction, no repulsion; all accumulated composition, no unpacking of Ideas; all trigger, no landing — or the mirror image of each).
 
 **Detectable via:** Inversion Scanner N-axis. The involution balance metric computes |score_A − score_B| per pair; values beyond the dial-configurable threshold flag.
 
@@ -72,7 +72,7 @@ A healthy system holds these in tension. An inverted system has one operator fir
 
 ## 7. Adversarial Susceptibility
 
-**Structural signature:** The architecture's per-operator or per-domain scores flip — not degrade — under crafted input. A prompt-injection or jailbreak that converts a P-dominant response to an O-dominant response, or a CO-3 (critical evaluation) output to a CO-2 (attraction) output, without changing the underlying task description is an adversarial inversion.
+**Structural signature:** The architecture's per-operator or per-domain scores flip — not degrade — under crafted input. A prompt-injection or jailbreak that converts a P-dominant response to an O-dominant response, or a CO-3 (Negative — the Mind repelled by the request) output to a CO-2 (Positive — the Mind attracted toward it) output, without changing the underlying task description is an adversarial inversion.
 
 **Detectable via:** Delta-based inversion scanning: compare pre/post profiles under controlled perturbation. The 7-axis scanner computes resistance per axis — low resistance on any axis indicates the architecture flips along that axis under pressure.
 
@@ -95,9 +95,9 @@ A healthy system holds these in tension. An inverted system has one operator fir
 
 ## 9. Hallucination and Confabulation
 
-**Structural signature:** CO-6 (Projective Assertion) fires strongly while CO-3 (Critical Evaluation) is suppressed — confident production of content without the internal check that asks "is what I am producing actually true?" This is distinct from honest uncertainty (which is a CO-3 over-suppression of CO-6) and distinct from deliberate deception (which is a different structural pattern entirely).
+**Structural signature:** An associatively triggered Idea lands as output — CO-8 (Above/Cause) triggers and CO-9 (Below/Effect) lands — while CO-6 (Male) is suppressed: the produced claim is never broken down to look at what's underneath, the internal check that asks "is what I am producing actually true?" This is distinct from honest uncertainty (where CO-6 Male runs, breaks the claim down, finds parts that do not hold, and the landing is withheld or hedged) and distinct from deliberate deception (which is a different structural pattern entirely).
 
-**Detectable via:** The CO-5/CO-6 involution balance combined with the CO-3 score directly measures this. Further, the domain analysis for hallucination-prone outputs shows O-domain strength (fluent production) with E-domain weakness (evaluative grounding).
+**Detectable via:** A low CO-6 (Male) reading alongside an active CO-8 → CO-9 (Above/Cause → Below/Effect) trigger-and-landing chain. This names the signature to look for; it does not claim that the current engine scorer computes it (before 2026-10-19 this line read "The CO-5/CO-6 involution balance combined with the CO-3 score directly measures this" — see Reconciliation notes 2026-10-19). Further, the domain analysis for hallucination-prone outputs shows O-domain strength (fluent production) with E-domain weakness (evaluative grounding).
 
 **Typical surface presentation:** Fabricated legal citations, invented research papers, wrong medication dosages stated with confidence, non-existent API endpoints described in detail.
 
@@ -151,9 +151,9 @@ This section accumulates emerging taxonomy concepts that are not yet formalized 
 
 **Three-part structural signature:**
 
-1. **Human agent:** CO-3 (Critical Evaluation) suppressed — the human did not critically evaluate the AI's output before relying on it.
-2. **AI agent:** CO-3 suppressed — the AI system did not critically evaluate its own output before emitting it.
-3. **Interface:** No structural gate enforcing CO-3 at the handoff between agents — no required checkpoint, disclosure, verification step, or capacity-based duty that would force a CO-3 check before the AI's output becomes an action or commitment.
+1. **Human agent:** CO-6 (Male) suppressed — the human did not break the AI's output down to look at what's underneath before relying on it.
+2. **AI agent:** CO-6 (Male) suppressed — the AI system did not break its own output down to test its parts before emitting it.
+3. **Interface:** No structural gate enforcing CO-6 at the handoff between agents — no required checkpoint, disclosure, verification step, or capacity-based duty that would force a CO-6 decomposition-and-test check before the AI's output becomes an action or commitment.
 
 The interface itself has a cognitive-architecture responsibility that neither agent individually owns. This is structurally different from:
 - **Single-agent autonomous failure** (e.g., Uber ATG — the ADS failed on its own authority; no human was in the decision loop for the specific failure event).
@@ -161,7 +161,7 @@ The interface itself has a cognitive-architecture responsibility that neither ag
 
 **Candidate incidents for this subcategory (from verified database + pending candidates):**
 
-- Mata v. Avianca (Schwartz relied on ChatGPT output without verification; ChatGPT confirmed non-existent citations when asked; neither had a structural CO-3 gate).
+- Mata v. Avianca (Schwartz relied on ChatGPT output without verification; ChatGPT confirmed non-existent citations when asked; neither had a structural CO-6 gate).
 - Moffatt v. Air Canada (chatbot confabulated a bereavement-fare policy; customer reasonably relied; Air Canada denied responsibility on "separate entity" grounds).
 - Tesla Autopilot driver-engagement (anticipated — handoff between automated lane-keeping and driver supervision).
 - Dutch toeslagenaffaire caseworker handoff (anticipated — algorithmic fraud-score relayed to caseworker who did not independently evaluate).
@@ -184,3 +184,42 @@ Most courts at this stage appear to be choosing Path A. S.D.N.Y.'s curation deci
 This is a feature, not a bug. Research frameworks that precede doctrinal development are how legal doctrine eventually gets formed. The database's position is analogous to how transportation-safety structural-causation framing preceded the doctrinal shifts in tort and regulatory law that eventually adopted it (Traynor's *Escola v. Coca-Cola* concurrence on strict liability, for example, preceded the Restatement (Second) § 402A by two decades).
 
 **Status:** Observation logged, not yet a formal category. Revisit when verified-incident evidence supports a formal taxonomy claim about judicial Path A / Path B patterns.
+
+---
+
+## Reconciliation notes 2026-10-19
+
+**Why:** this file used retired Scheme-A/B naming (Attraction, Critical Evaluation, Receptive Integration, Projective Assertion, Causal Reasoning, Consequential Grounding). Per `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarifications 1, 3 and 6, the ten canonical names are verbatim and the only names. Every classification that relied on an analytical reading of `^3` or a deductive reading of `^8` was re-checked with the Colloquialism Test and the Clarification 6 anti-drift annotations (`^3` Negative is visceral aversion; analytical critique is `^6` Male; `^8` Above/Cause is associative triggering; deductive causal analysis is `^6` + `^9`). Owner approval: "Ok I agree with all 3 cards" (2026-10-19). Incident facts and sources were not touched. No claim status changed.
+
+**Renames (retired name → canonical name; 11 occurrences in this file).**
+
+| # | Where | Before | After | Colloquialism used |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | §2 pair 1 | CO-2 Attraction | CO-2 Positive | "Drawn to it like a moth to a flame." |
+| 2 | §2 pair 1 | CO-3 Critical Evaluation | CO-3 Negative | "Can't stomach it." |
+| 3 | §2 pair 2 | CO-5 Receptive Integration | CO-5 Female | "We are the sum of our experiences." |
+| 4 | §2 pair 2 | CO-6 Projective Assertion | CO-6 Male | "Breaking it down." |
+| 5 | §2 pair 3 | CO-8 Causal Reasoning | CO-8 Above/Cause | "That reminds me..." |
+| 6 | §2 pair 3 | CO-9 Consequential Grounding | CO-9 Below/Effect | "It just popped into my head." |
+| 7 | §7 | CO-3 (critical evaluation) | CO-3 (Negative — the Mind repelled by the request) | "Wouldn't touch it with a ten-foot pole." |
+| 8 | §7 | CO-2 (attraction) | CO-2 (Positive — the Mind attracted toward it) | "Can't resist." |
+| 9 | §9 | CO-6 (Projective Assertion) | see reclassification A | see A |
+| 10 | §9 | CO-3 (Critical Evaluation) | see reclassification A | see A |
+| 11 | Boundary Failures, part 1 | CO-3 (Critical Evaluation) | see reclassification B | see B |
+
+**Glosses rewritten to the canonical definitions (no classification change).** §2 pair glosses: "seeing opportunities vs. seeing risks" (an analytical reading of `^3`) → attracted toward vs. repelled by; "absorbing input vs. committing to a position" → the Ideas a Mind is composed of vs. the Ideas an Idea is composed of; "tracing causes upstream vs. tracing consequences downstream" (a deductive reading of `^8`) → an Idea that triggers another Idea vs. the Idea brought to Mind. §2 lopsided-output gloss: "all opportunity, no risk; all assertion, no listening; all cause, no consequence" → "all attraction, no repulsion; all accumulated composition, no unpacking of Ideas; all trigger, no landing".
+
+**Re-checked and KEPT (1).**
+
+- §7 Adversarial Susceptibility, jailbreak flip `CO-3 → CO-2`. Colloquialism for the pre-flip state, a refused harmful request: "wouldn't touch it with a ten-foot pole" (visceral aversion, canonical `^3`). Post-flip: "can't resist" (canonical `^2`). The example holds under the canonical reading; only the names changed.
+
+**Reclassified (2 examples in this file).**
+
+- **A. §9 Hallucination and Confabulation.** Before: "CO-6 (Projective Assertion) fires strongly while CO-3 (Critical Evaluation) is suppressed"; honest uncertainty = "a CO-3 over-suppression of CO-6"; detector = "the CO-5/CO-6 involution balance combined with the CO-3 score". The missing step is checking whether the produced claim is true. Colloquialism: "didn't break it down to look at what's underneath" — that is `^6` Male, not `^3` Negative (no visceral-aversion colloquialism describes a missing fact-check; Clarification 6 Example E). The confident production itself: "one thing led to another" / "it just popped into its head" — `^8` Above/Cause → `^9` Below/Effect, not a "projective assertion". After: `CO-8 → CO-9` landing with `CO-6` Male suppressed; honest uncertainty = `CO-6` runs and the landing is withheld or hedged. The "Detectable via" line now names the signature and states that it does not claim the current engine scorer computes it.
+- **B. Taxonomy Development Notes, Boundary Failures (parts 1, 2, 3 and the Mata v. Avianca bullet).** Before: `CO-3` (Critical Evaluation) suppressed in the human, `CO-3` suppressed in the AI, no `CO-3` gate at the interface. Colloquialism for what each party failed to do: "nobody broke the citations down to look at what's underneath" — `^6` Male. After: `CO-6` (Male) in all four places.
+
+**Same check in `docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md` (4 retired-name occurrences, 2 examples reclassified).**
+
+- "one a failure of critical evaluation (CO-3) under confident projective assertion (CO-6)" (opening framing, fabricated-legal-citation example) → reclassified as in A: `CO-6` Male missing while an associatively triggered Idea lands (`CO-8 → CO-9`).
+- Category list item 9 "CO-6 projective assertion without CO-3 critical evaluation" → reclassified as in A.
+- Re-checked and KEPT: the Uber ATG and toeslagenaffaire Noetic signatures already use canonical names; their `^3` readings are "repelled by" (aversion) and their `^8` readings are triggering, which pass the test. The 2026-04-19 "Foundational Clarifications review" note that quotes "Projective Assertion" is a historical record of the earlier rename and was left as written; the next-steps item that lists drift vocabulary to look for was also left as written.
