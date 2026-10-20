@@ -224,7 +224,14 @@ class HELMEndToEndLoop:
 
     def __init__(self, cube_store: Optional[Any] = None, brain: Optional[CanonicalRecipeBrain] = None,
                  default_aperture: Any = "0.75", trace_path: Optional[str] = None,
-                 brain_dir: Optional[str] = None, **_ignored: Any):
+                 brain_dir: Optional[str] = None, wide_brain: Optional[bool] = None, **_ignored: Any):
+        # RB-W1 switch WIDE_BRAIN (default OFF). OFF: nothing below changes and the wide modules are never imported.
+        self.wide_on = False
+        if wide_brain is not None or os.environ.get("HELM_WIDE_BRAIN"):
+            import helm_brain_wide
+            self.wide_on = helm_brain_wide.wide_brain_on(wide_brain)
+            if self.wide_on and brain is None:
+                brain = helm_brain_wide.WideRecipeBook()
         # Station S0's brain: the canonical recipe brain. The 22x40 cookie brain is never constructed here.
         self.brain = brain if brain is not None else CanonicalRecipeBrain(brain_dir=brain_dir)
         self.valve = TKSMetaValveController(default_aperture=Decimal(str(default_aperture)))
@@ -446,6 +453,9 @@ class HELMEndToEndLoop:
                      current_inventory: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """One user turn through the circuit. `current_inventory`, if given, is rendered as checked-form stock
         sentences and goes through the same parse and round trip as the text; it is never trusted on its own."""
+        if self.wide_on:                       # RB-W1 switch ON: the wide reader, brain and voice (helm_wide_turn)
+            import helm_wide_turn
+            return helm_wide_turn.wide_turn(self, user_english, tick)
         result = self._new_result(user_english, tick)
         writes_before = self._store_writes()
         text = user_english.strip()
@@ -829,6 +839,9 @@ class HELMEndToEndLoop:
                       tick: int = 1) -> Dict[str, Any]:
         """One batch the user actually made. Through: CCE form receipt -> gate -> the brain's own writer ->
         (admitted) store write with read-back, or (refused) a DETECTED failure -> gate REPAIR -> repair child."""
+        if self.wide_on:                       # RB-W1 switch ON: the wide brain's teaching channel
+            import helm_wide_turn
+            return helm_wide_turn.wide_witness(self, product, stock_before, made, ran_out, tick)
         result = self._new_result(f"[witnessed batch] {product}", tick)
         writes_before = self._store_writes()
         prod = self.brain.product_of(product)

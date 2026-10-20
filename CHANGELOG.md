@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RB-W1 WIDE BRAIN BUILT behind switch WIDE_BRAIN (default OFF), NOT tested on a sealed exam (spec sheet 7.83); claim status ENGINEERED-NOT-VALIDATED; licensed brain unchanged; 0 USD
+
+Owner order (verbatim): "WIDEN THE BRAIN" (0 USD to build). Input: recipe shape survey v1 (1 of 13,686 real recipes fit the licensed brain).
+
+- New `helm_brain_wide.py` (brain, exact numbers, unit table, parameter accounting) and `helm_wide_turn.py` (reader, voice, live-loop turn). Switch in `helm_end_to_end_loop.py`: `HELMEndToEndLoop(wide_brain=True)` or env `HELM_WIDE_BRAIN=1`; OFF never imports the wide modules.
+- Stage 1: exact Fractions end to end (thirds, mixed numbers, unicode fractions, number words); floats refused; ranges and "about" asked. Unit table = survey top 20; 9 named exact factors (TSP_PER_TBSP 3, TBSP_PER_CUP 16, CUP_PER_PINT 2, PINT_PER_QUART 2, GILL_PER_PINT 4, ML_PER_TSP 4.92892159375, G_PER_OZ 28.349523125, OZ_PER_LB 16, G_PER_KG 1000); 9 units with no exact standard stay their own count unit; no volume <-> weight.
+- Stage 2: open ingredient names, any product name, up to 10 ingredients. A recipe is added only by an admitted witnessed batch; a coefficient only from a batch where that ingredient alone ran out (same rule as the licensed writer: a = stock / made). Strict memory check (0 allowed; the licensed writer allows 1). Unlearned -> UNDETERMINED, the brain asks.
+- Tests: `test_helm_brain_wide.py` 35/35 (round trips on 2,112 fractions; unit conversions; 6-ingredient recipe learned exactly in 6 lessons, any order; refusals for nothing-ran-out and two-ran-out; UNDETERMINED on unlearned; parameter table printed, no other learned numbers; live loop ON end to end). Existing suites OFF 119/119. Wave-5 practice tests 14/14 (read-only). OFF live trace 139/139 records identical to d4488f2a.
+- Coverage if ON (survey estimate, not measured): 9,495 of 13,686 recipes representable (69.38%); each still needs one run-out lesson per ingredient.
+- Failed approach logged: first wiring crashed because the loop's bias digest reads `brain.brain.learned_digest()` (the licensed adapter wraps its brain); fixed with a read-only `brain` property on the wide book.
+- Sealed test: needs an owner word with a package hash and a cap.
+
 ## 2026-10-19 PDT - CTT-1 RESEALED as v2 (amendment A-CTT-1, spec sheet 7.82 amended): primary word from the machine-side exam; human exam optional later pass; zip 83bfa752...; NOT LAUNCHED
 
 Coordinator decision (operational): the run must not block on human writers. v1 zip 3289755c... VOID_SUPERSEDED_BY_V2 (never launched).
