@@ -4,6 +4,8 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM chat: 4 defects found by HELM UI v0 fixed (owner: "Ok I agree with all 3 cards"): bee reply no longer invents "south of France" (repeats only the user's words; hive-walkthrough branch removed too); `dials` reads the real UnityEyeSupervisor.dial or says "not wired"; session log folder made on first write under helm_ui/sessions or $HELM_SESSION_DIR, never the repo root; two "Before X, Y." sentences now plan synthesize -> verify -> git in both planners (prereq_planner plan_graph.py and helm_agentic_executor.py); tests 43 -> 63 pass on the named suites; 0 USD
+
 ## 2026-10-19 PDT - RB-W1T (sealed test of the wide brain) packet SEALED, NOT LAUNCHED (spec sheet 7.86); nothing scored; 0 USD
 
 Owner pre-approval (verbatim): "WIDE TEST at 1 USD" (cap 1.00 USD, one attempt + one plumbing retry; coordinator mapping in `OWNER_APPROVALS_20261018.md`).

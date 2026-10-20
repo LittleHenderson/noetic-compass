@@ -784,14 +784,24 @@ class DynamicGoalPlanner:
         """Segment goal into causal sequential/parallel clauses based on discourse markers."""
         text = text.strip()
 
+        # 0. Several sentences, at least one opening with a temporal marker ("Before X, Y. Before Y, Z.").
+        #    Read each sentence on its own, link the actions it orders, and sort the links, so no
+        #    sentence's action is swallowed into another sentence's clause.
+        sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
+        if len(sentences) > 1 and any(re.match(r'^(?:before|prior to|after|once|first)\s+', s, re.I) for s in sentences):
+            ordered = self._order_multi_sentence(sentences)
+            if ordered:
+                return ordered
+
         # 1. Check for 'Before X, Y' or 'Prior to X, Y' pattern
         m_before = re.match(r'^(?:before|prior to)\s+(.+?),\s*(.+)$', text, re.IGNORECASE)
         if m_before:
             action_x = m_before.group(1).strip()
             rest = m_before.group(2).strip()
             sub_segments = self._split_into_action_segments(rest)
-            # Check if action_x intent is already represented in sub_segments
-            has_x = any(re.search(r'\b(write|writing|code|coding|program|implement|synthesize)\b', s, re.I) for s in sub_segments)
+            # Check if action_x's own action is already represented in sub_segments. (The old check asked
+            # whether ANY sub-segment was a write, so "Before you verify the tests, write auth.py" lost "verify".)
+            has_x = self._action_key(action_x) in {self._action_key(s) for s in sub_segments}
             if not has_x:
                 sub_segments.append(action_x)
             return sub_segments
@@ -831,6 +841,53 @@ class DynamicGoalPlanner:
                     return [p1, p2]
 
         return segments
+
+    @staticmethod
+    def _action_key(segment: str) -> str:
+        """The tool a segment asks for, in _segment_to_step's own order; used to merge one action named twice."""
+        low = segment.lower()
+        if re.search(r'\b(git|commit|committing|branch|diff|diffing|repo status|recover|recovering)\b', low):
+            return "git"
+        if re.search(r'\b(write|writing|wrote|synthesize|synthesizing|code|coding|program|programming|implement|implementing|script|create.*module)\b', low) \
+                and not re.search(r'\b(verify|verifying|test|testing|audit)\b', low):
+            return "synthesize"
+        if re.search(r'\b(verify|verifying|verification|test|testing|tests|audit|auditing|benchmark|run)\b', low):
+            return "verify"
+        return re.sub(r'\W+', ' ', low).strip()
+
+    def _order_multi_sentence(self, sentences: List[str]) -> List[str]:
+        """Order the actions of several sentences by the links each sentence states. Returns [] on a cycle."""
+        reps: Dict[str, str] = {}        # action key -> first segment that named it
+        appear: List[str] = []           # keys in order of first appearance (tie-break)
+        links: List[Tuple[str, str]] = []
+        for sent in sentences:
+            segs = self._split_into_action_segments(sent.rstrip('.!? '))
+            keys = []
+            for seg in segs:
+                k = self._action_key(seg)
+                if k not in reps:
+                    reps[k] = seg
+                    appear.append(k)
+                if not keys or keys[-1] != k:
+                    keys.append(k)
+            links.extend((a, b) for a, b in zip(keys, keys[1:]) if (a, b) not in links)
+        indeg = {k: 0 for k in appear}
+        for _, b in links:
+            indeg[b] += 1
+        ready = [k for k in appear if indeg[k] == 0]
+        order: List[str] = []
+        while ready:
+            k = ready.pop(0)
+            order.append(k)
+            for a, b in links:
+                if a == k:
+                    indeg[b] -= 1
+                    if indeg[b] == 0:
+                        ready.append(b)
+            ready.sort(key=appear.index)
+        if len(order) != len(appear):
+            return []
+        return [reps[k] for k in order]
 
     def _segment_to_step(self,
                          segment: str,
