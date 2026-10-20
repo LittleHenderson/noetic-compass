@@ -8,3 +8,4 @@
 | Q4 | Is a `NOTE` role allowed (the ear says "this clause carries nothing")? | **Allowed but never suppresses a question**; reported count | silence is a kind of claim |
 | Q5 | Cap for the first paid run | **2.00 USD**, one attempt + one plumbing retry | money |
 | Q6 | Whole-CAS-expression ear | **Parked** until an outside human-labelled CAS corpus exists (§7.23, §10.1) | research direction |
+| Q7 (added after census 1) | Before any ear: widen the unit table (pinch, slice, can, bunch ...) and teach the brain a NOTE line (an ingredient with no exact amount is recorded as present, never as a requirement)? Both deterministic, 0 USD; they shrink the gap the ear is meant to fill (NO_AMOUNT 5,164 + UNIT_NOT_IN_TABLE 1,662 of 10,069 refused lines). | **Yes, both first**, each behind a switch with a frozen test | it changes what the brain holds |
