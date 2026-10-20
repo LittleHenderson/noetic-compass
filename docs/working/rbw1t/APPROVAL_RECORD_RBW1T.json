@@ -1,6 +1,7 @@
 {
  "attempts": "one attempt + one plumbing retry",
  "cap_usd": "1.00",
+ "coordinator_decision_v2": "FIX FIRST (operational; owner's standing order: retest broken tests without asking): routing and learning fixes, reseal as v2; marks unchanged",
  "coordinator_mapping": "RB-W1T sealed test of the wide recipe brain: cap 1.00 USD, one attempt + one plumbing retry, on this package; no re-paste requested; any change of scope or cap needs a new owner word",
  "label": "RBW1T",
  "note": "the seed and the draw are made only by the custodian's sealed program; the builder did not compute the seed. Nothing launched; no spend.",
@@ -8,15 +9,19 @@
  "owner_line_source": "Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md, heading 'Owner pre-approval (2026-10-19, verbatim)'",
  "owner_line_utf8_bytes": 18,
  "owner_line_verbatim": "WIDE TEST at 1 USD",
- "package_freeze_sha256": "fadf08f6faf13ebcdb633b7894ebe515838465c52a90c51f6507f2371a28f8b1",
+ "package_freeze_sha256": "b22690ced5a257ec964160103a28c03cea1d5730a0d006fb22c758a1be3d5ed9",
+ "package_version": "v2",
  "package_zip_name": "HELM_RBW1T_20261019_SOURCE_RBW1T.zip",
- "package_zip_sha256": "b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809",
- "reading_of_the_line": "the line inside the file's outer quotes is written there as \"WIDE TEST at 1 USD\". (owner's own quote marks and a period); the coordinator's message of 2026-10-19 names the verbatim line as WIDE TEST at 1 USD, and that reading is used here and in the seed rule (the record pins its bytes and sha256, so the seed is fixed either way)",
+ "package_zip_sha256": "7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e",
+ "reading_of_the_line": "the approvals file shows the line inside the owner's own quote marks with a trailing period (\"WIDE TEST at 1 USD\".); the pinned 18-byte form WIDE TEST at 1 USD (no quote marks, no period) is the one used, as pinned in v1 and as the coordinator named it",
  "recorded_by": "RB-W1T builder session (Claude), by program",
- "recorded_utc": "2026-10-20T01:35:42Z",
+ "recorded_utc": "2026-10-20T02:05:14Z",
  "schema": "helm.rbw1t.approval/1",
  "seed_rule": "H = sha256(UTF-8 of owner_line_verbatim + ':' + package_zip_sha256), no trailing newline; k = int(H[0:16],16); seed = 1,950,000,001 + (k mod 1,000,000), stepped by the used-table rule",
- "source_file_sha256_at_record": "3a282e969525e5d6012db08ee188fdbdb573f30db985b15796dd5d5c13ece9b6",
  "source_heading_bytes_utf8": "## Owner pre-approval (2026-10-19, verbatim): \"\"WIDE TEST at 1 USD\".\"",
- "superseded_by": null
+ "superseded_by": null,
+ "supersedes": {
+  "status": "VOID_SUPERSEDED_BY_V2 (never launched; no seed drawn)",
+  "v1_zip_sha256": "b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809"
+ }
 }

@@ -1,25 +1,26 @@
 {
- "dry_reading_sha256": "0732c6bbd0d96893c2d41fed9e38af7a72d601741d2f7c79d1d9f92bd1e1f627",
- "dry_run_summary_sha256": "a7b12a9d744a648969eb8d608c2ba17a700e5018ff79bd3c117075e83186f12d",
+ "dry_reading_sha256": "03cf964f215f950f1cf68dce489e0784375346104d154f5077caead137340ca0",
+ "dry_run_summary_sha256": "bbeec2540e435c7e49439d01bc3736c2b1910900b928bb44fb3d485d139940c1",
  "helm_suites_from_sealed_extract_scratch_copy": {
   "detail": "skipped=1",
   "ran": [
-   154
+   170
   ],
   "verdict": "OK"
  },
- "members": 388,
+ "members": 392,
  "members_rehashed_bad": [],
- "package_freeze_sha256": "fadf08f6faf13ebcdb633b7894ebe515838465c52a90c51f6507f2371a28f8b1",
- "package_zip_sha256": "b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809",
+ "package_freeze_sha256": "b22690ced5a257ec964160103a28c03cea1d5730a0d006fb22c758a1be3d5ed9",
+ "package_zip_sha256": "7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e",
  "plan_check": "PASS",
  "rbw1t_suites_from_sealed_extract": {
   "detail": "",
   "ran": [
-   23
+   24
   ],
   "verdict": "OK"
  },
+ "reader_classes_sha256": "c6dc2360c82a37f3b318962f5857442e82b1d6581f5ab8499952de998ade2778",
  "schema": "helm.rbw1t.test-counts/1",
  "sealed_helm_now_not_written": true
 }
