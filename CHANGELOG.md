@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - CTT-1 CAS-token transformer ("ears first") PACKET SEALED, NOT LAUNCHED (spec sheet 7.82): separate from-scratch translator, reader first, HELM's checker decides; main 9,585,566 / twin 2,482,718 parameters; cap 8.00 USD pre-approved; waits for the human exam
+
+Owner order (verbatim): ""SCORE L4"; I WANT THIS BUILT AND TRAINED I'M LIFTING THE GPU DIRECTIVE:  Documents\Codex\2026-10-19\cas_token_transformer_design_v1\;". Owner pre-approval (verbatim): "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." Bound to the sealed zip by APPROVAL_RECORD_CTT.md (coordinator's custody addition: exam seed = sha256(line + ":" + zip sha256)).
+
+- Package HELM_CTT_20261019_SOURCE_CTT.zip 3289755c154111ce41e44bf4d17f4f6bfa14e0dff1f91d287bd5b6c74a5453ec, freeze 4dd5fe86..., deps carrier fc89054a...; preregistration pre-code copy 05c99a7e... written before any code (sections 0-15 unchanged; 12 dated deviations in section 16).
+- What it trains: an encoder-decoder from scratch, 9,585,566 parameters (3 seeds), twin 2,482,718 (deviation: width 128, because the design's width-192 twin would be 4,764,382), shuffled-pairs and frozen-at-init controls. Vocabulary 8,349 = 341 CAS tokens (both compilers' token kinds, meta-logic and fractal nesting tags, tested) + 8,000 English word-pieces built from our own inputs. Copy head points at the user's own numbers and words; no digits or names on the output side.
+- Data (built on the host from frozen seeds): 200,000 generated kitchen turns (content first), about 30,000 SDG notation rows, 7 trace rows, about 1,950 Tatoeba practice inputs (input only). Leakage drops against every exam, counts only.
+- Tests: E-HUMAN-W (128 turns + 16 dialogues written by the owner and two people, custodian-sealed, builder blind) carries the claim; sealed 98 reported only; NO-HARM on the six spent wave exams OFF / OFF-deleted / ON. Gates include H-CWFW (confident well-formed wrong: <= 2 proposed, 0 saved) and H-LEN (0 truncations), from the Scribe c41 lesson (0 of 98, 21 well-formed wrong, 97 cut).
+- Tests from the sealed zips: 50/50 OK on the laptop, no torch. Laptop harness checks: OFF reproduces c40 and c38 (wave 3b's same-brain projection); a fake always-ask proposer leaves every digest equal; a fake topic proposer changes it.
+- Could not do: no local GPU smoke (torch alone 475 MiB > 300 MiB per-process limit; free RAM about 750 MB), so the torch code first runs in the AWS preflight. Taskmaster-1 not used (file size vs laptop limit).
+- Failed approaches / slips: the design's twin shape did not match its size (fixed by keeping the size); receipt hashes differ across hosts (path inside), so the cross-host same-brain check uses wave 3b's projection; custody slip disclosed: the builder printed the first 400 characters of row 1 of the sealed 98 (English only, no gold) - FLAG_FOR_HUMAN_REVIEW.
+- Backup D:/tksCAS-archive/cas_token_transformer_20261019/ (three sha256 passes). Repo copies docs/working/cas_token_transformer/.
+
 ## 2026-10-19 PDT - HELM-R1 X-REAL SCORED (job c42, AWS, spec sheet 7.81): reader PASS; S_UNSAFE_ON_REAL (8 wrong writes on real sentences), R-REBOUND R_SAFE_NOT_CORRECT (0 wrong, 3 of 64 answered), R-ASIS R_ASIS_SAFE; Eye scan caught D1 and E1 only, the plain checksum caught more
 
 Owner pre-approval (verbatim): "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." Only the X-REAL line used. Launch operator: Claude Code sub-agent.
