@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RB-W1T RESEALED as v2 after "FIX FIRST" (spec sheet 7.86 amended; 7.83 follow-up); RB-W1 v2 built (PR #389); nothing scored; 0 USD
+
+Coordinator decision (operational; owner's standing order "retest broken tests without asking"): do not run a sealed test that practice already shows failing on an instrument defect; fix routing and learning, reseal.
+
+- RB-W1 v2 (PR #389, `045548b6`): the WIDE switch extends the licensed path (licensed first; the wide brain only where the licensed path cannot bind and wrote nothing). Reader fixes from failure classes on the published practice draw.
+- Practice (published seed, not an exam), v1 -> v2: WIDE right 54 -> 98, wrong 0 -> 0, fully learned 54 -> 99 of 106 (bar 96); switch ON lost 55 -> 0 (E64) and 42 -> 0 (F64); OFF byte-identical to the base; OFF live trace 139/139 identical.
+- Per class (660 lessons), before -> after: ran-out name not in batch 122 -> 3; no amount 85 -> 25 (left: alternatives, vague amounts); no name 75 -> 0; unit not in table 37 -> 45 (true limit); duplicate 10 -> 10 (true limit); product name 2 -> 0.
+- v2 zip `7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e`, freeze `b22690ce...`; approval record `APPROVAL_RECORD_RBW1T.json` `3a223136...` (owner line as pinned, 18 bytes); v1 `b50f4ca4...` void, never launched. Tests from the zip 24/24 + HELM 170 OK.
+- Prediction v2: WIDE_BRAIN_EARNED_KEEP about 0.35. Failed approach logged: v1's switch replaced the whole English path (lost 55 and 42 practice items); v2 routes licensed-first.
+
 ## 2026-10-19 PDT - lexicon_v3 (live, switch HELM_LEXICON_V3 default ON): bare female/male/negative/positive/vibration/rhythm and the bare-noun tier (idea, thought, mind, attention, practice, repetition, groove, realization) no longer pick a Noetic; frozen ALIAS-WIDE v1 / lexicon_v2 untouched; tests reader 31->37, new lexicon_v3 15/15, loop 18, stock-frame 17, faces 16, voice 22, cube store 21/21, chat script PASS; practice E64 61/0/3, F64 60/2/2 unchanged item by item; spec sheet 7.81 note, no status change; 0 USD
 
 ## 2026-10-19 PDT - CTT-1 RESEALED as v3 (amendment A-CTT-2 after c43's preflight stop; spec sheet 7.82 / 7.85 amended): zip f280633d...; NOT LAUNCHED

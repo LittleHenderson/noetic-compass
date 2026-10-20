@@ -4,7 +4,7 @@ from pathlib import Path
 pkg = Path(sys.argv[1]).resolve()
 sys.path.insert(0, str(pkg))
 from rbw1t import common_rbw1t as C
-doc = {"schema": "helm.rbw1t.frozen/1", "label": C.LABEL, "commit_now": C.COMMIT_NOW, "commit_base": C.COMMIT_BASE,
+doc = {"schema": "helm.rbw1t.frozen/1", "label": C.LABEL, "package_version": C.PACKAGE_VERSION, "commit_now": C.COMMIT_NOW, "commit_base": C.COMMIT_BASE, "base_loop_commit": C.BASE_LOOP_COMMIT,
        "frames": C.FRAMES, "frame_recipes": C.FRAME_RECIPES, "count_strata": [list(x) for x in C.COUNT_STRATA],
        "forms": list(C.FORMS), "quotas": C.QUOTAS, "n_items": C.N_ITEMS, "multipliers": list(C.MULTIPLIERS),
        "surplus_factor": C.SURPLUS_FACTOR, "templates": {"teach": C.TEACH, "stock": C.STOCK, "question": C.QUESTION},

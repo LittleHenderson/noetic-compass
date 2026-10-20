@@ -1,0 +1,49 @@
+{
+ "after_v2": {
+  "lesson_classes": {
+   "NO_AMOUNT": 25,
+   "RAN_OUT_NOT_IN_BATCH": 3,
+   "READABLE": 577,
+   "SAME_INGREDIENT_TWICE": 10,
+   "UNIT_NOT_IN_TABLE": 45
+  },
+  "lessons": 660,
+  "recipes_all_lessons_readable_of_representable_answerable": [
+   99,
+   106
+  ]
+ },
+ "before_v1": {
+  "lesson_classes": {
+   "NO_AMOUNT": 85,
+   "NO_NAME": 75,
+   "NO_PRODUCT": 2,
+   "RAN_OUT_NOT_IN_BATCH": 122,
+   "READABLE": 329,
+   "SAME_INGREDIENT_TWICE": 10,
+   "UNIT_NOT_IN_TABLE": 37
+  },
+  "lessons": 660,
+  "recipes_all_lessons_readable_of_representable_answerable": [
+   54,
+   106
+  ]
+ },
+ "class_names": {
+  "AMOUNT_APPROXIMATE": "approximate",
+  "AMOUNT_IS_A_RANGE": "range",
+  "NO_AMOUNT": "line splitting / quantity: no amount",
+  "NO_NAME": "name binding: no ingredient name",
+  "NO_PRODUCT": "product-name binding",
+  "RAN_OUT_NOT_IN_BATCH": "name binding: ran-out name not in the batch",
+  "SAME_INGREDIENT_TWICE": "duplicate ingredient",
+  "UNIT_NOT_IN_TABLE": "unit not in the 20-unit table"
+ },
+ "practice_seed_text": "RBW1T-PRACTICE-20261019-builder-published",
+ "schema": "helm.rbw1t.reader-classes/1",
+ "true_limits_left": [
+  "UNIT_NOT_IN_TABLE (dash, sprig, box, stick, cake: outside the survey's top-20 table)",
+  "NO_AMOUNT left = alternatives ('or a ham-bone', 'superfine sugar, powdered sugar, or granulated sugar') and vague amounts ('a little mace mixed')",
+  "SAME_INGREDIENT_TWICE (the same ingredient on two lines; the key is UNDETERMINED too)"
+ ]
+}

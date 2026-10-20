@@ -1,19 +1,19 @@
 {
- "commit_base": "d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7",
- "commit_now": "015d340d7861f88bfc0bdfc238d78d06064c129d",
- "member_count": 387,
+ "commit_base": "045548b6a89205f65b419ac95753938ad738f037 with RB-W1 removed (helm_end_to_end_loop.py at d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7)",
+ "commit_now": "045548b6a89205f65b419ac95753938ad738f037",
+ "member_count": 391,
  "members": {
   "FROZEN_RBW1T.json": {
-   "bytes": 4911,
-   "sha256": "3ca9665afc7b1b9b8ef2dc1a2a26d2dd4a88ccfaade60cef0b670ee5c04fe8e9"
+   "bytes": 5002,
+   "sha256": "4bbd41671a89502e594197df1149dcaefd7a3562d8e3500ba4d15c653846be49"
   },
   "PREREGISTRATION_RBW1T.md": {
-   "bytes": 29370,
-   "sha256": "a323de79b8383ee31bedff270a6854e306e6e1ad14434670026798b27370b452"
+   "bytes": 35537,
+   "sha256": "8f51a45df5a30fd7e24f9f23c9d0427df1c0039c483ae6aea946d6d93c48485c"
   },
   "README_RBW1T.md": {
-   "bytes": 3395,
-   "sha256": "3c340e4018cf5a638f6eb89acb7137539caa27e1235c4cd720577e56b8f9af18"
+   "bytes": 3639,
+   "sha256": "0375a3160068cbe48594ad7adfe37002194d85bb2a110a6d6760e97422f10970"
   },
   "RUN_LIMITS_RBW1T.json": {
    "bytes": 3651,
@@ -28,8 +28,8 @@
    "sha256": "987936a74e14409eee43cc3a8016805a9e96938f7b300e18799f341b3b87a6cc"
   },
   "helm_base/SOURCE_CUT.json": {
-   "bytes": 28378,
-   "sha256": "284be020ff5cb4b848c92afaa02f41cb00579cac7d05c679e48da14cb8e57918"
+   "bytes": 28991,
+   "sha256": "6517b8cd9a1549b65509f35ccafde73205e8c82266b87d8e06603b4ba818a052"
   },
   "helm_base/cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
    "bytes": 92461,
@@ -96,8 +96,8 @@
    "sha256": "0154df4fd1beac637d512421db0c99c35c75ef8a120de687eccef95d07e9da6b"
   },
   "helm_base/docs/working/noetic_council/cube_store/turn.py": {
-   "bytes": 26571,
-   "sha256": "006bf3cb5f8da12cd35d928f78c036bcb8e32eefc02dbf98c277dc2ea19ab89c"
+   "bytes": 27914,
+   "sha256": "48af01d8fefbf5aed41c79c4752fdcc22b38fde41691abd82f6a950802e6ba6c"
   },
   "helm_base/docs/working/noetic_council/faculties_v2/PROVENANCE.md": {
    "bytes": 9210,
@@ -359,6 +359,10 @@
    "bytes": 7394,
    "sha256": "b1eee572e67445552a80a90630120855218480292574c71bbbffa0f471131113"
   },
+  "helm_base/docs/working/noetic_council/language_v3/lexicon_v3.py": {
+   "bytes": 12602,
+   "sha256": "7bb1de26f0fcca20d99f6be526a7ce9a0119fec680551803eacf2c8aab8b7585"
+  },
   "helm_base/docs/working/noetic_council/language_v3/measure_marks.py": {
    "bytes": 4589,
    "sha256": "e3fe0d6ae93a7968a0b6a31fea688c33441f22d188f46686ba66733e81328048"
@@ -406,6 +410,10 @@
   "helm_base/docs/working/noetic_council/language_v3/test_lexicon_v2.py": {
    "bytes": 7472,
    "sha256": "27a7f8d571f789de4c8b991a44f79920029b598d262eca6fcb64a978e82914f9"
+  },
+  "helm_base/docs/working/noetic_council/language_v3/test_lexicon_v3.py": {
+   "bytes": 7080,
+   "sha256": "68e6956ccd330f26302501d3b1c901b9829ecc14d606f092f7488c1b4a08eea2"
   },
   "helm_base/docs/working/noetic_council/language_v3/test_lm_t1.py": {
    "bytes": 11799,
@@ -556,8 +564,8 @@
    "sha256": "b8f276587dd462a390d41b413588dc65af67d843872b246690a5d227056bc370"
   },
   "helm_base/helm_agentic_executor.py": {
-   "bytes": 79126,
-   "sha256": "d4548b43b5af530d1e7c3d5f10ba1bd2b92dd90d7d3123086981cde270da9812"
+   "bytes": 82081,
+   "sha256": "a84041b1db69973b9a4da8509ed8142f00e112d1602ab30ac3391263051d8df3"
   },
   "helm_base/helm_brain_22x40.py": {
    "bytes": 15810,
@@ -568,8 +576,8 @@
    "sha256": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a"
   },
   "helm_base/helm_chat.py": {
-   "bytes": 36347,
-   "sha256": "905c1fc231a6792370da463a6e87e6312bb975b05051626f33e3f14b9e77f234"
+   "bytes": 37263,
+   "sha256": "9c5821c3059cb7d599e34f6a0d37a48c2799037a179dd77401026e27567385f1"
   },
   "helm_base/helm_creativity_dial.py": {
    "bytes": 7349,
@@ -580,8 +588,8 @@
    "sha256": "69f1ae559e0323a4677c524b4602733360bdea22054b1604e11ca7bf7a6581c0"
   },
   "helm_base/helm_english_in.py": {
-   "bytes": 51336,
-   "sha256": "31c8a078e8817d39b1272169d8fcdda582db15a4314471eb00cc9bbc2953b33b"
+   "bytes": 53130,
+   "sha256": "46f707f65e89cc7514395237a9e1276dd062f66bf033def93c733cf4bc4ecebf"
   },
   "helm_base/helm_faces_in.py": {
    "bytes": 11652,
@@ -592,8 +600,8 @@
    "sha256": "7f51f4f85e5adcb76ba3e729380164caf13875c7529655300c3202f184a73872"
   },
   "helm_base/helm_memory.py": {
-   "bytes": 19375,
-   "sha256": "54d53475450bc35d89c887a877e68fb359117a94d0d163be5c430d1d1c3d0133"
+   "bytes": 19890,
+   "sha256": "7edc93e05a0381db44fccf4615d4327ba62b58d9c041a6ddf3591adf7e2cbde4"
   },
   "helm_base/helm_triad.py": {
    "bytes": 24100,
@@ -688,16 +696,16 @@
    "sha256": "f92d5e19e4cf3083e2d01226724beb9a1faf11dd849881bafbe88b81ca953a28"
   },
   "helm_base/test_helm_chat_nuance.py": {
-   "bytes": 12277,
-   "sha256": "e2bb4ab808aa2391edb1ada147d837794119d61a178ea6cf6e6834d21a877c89"
+   "bytes": 14813,
+   "sha256": "98520f823690f59709716cf4960d7b4783128c9dc97e572038e1e2c8417e12ca"
   },
   "helm_base/test_helm_end_to_end_loop.py": {
    "bytes": 17969,
    "sha256": "cefff684507b281ec40ef3c85899c445114b7c749ccca339b1cf21241d295c10"
   },
   "helm_base/test_helm_english_in.py": {
-   "bytes": 22839,
-   "sha256": "3ef11cefce03aad26c97cea1127c398b8bf14890e87e45c34e0e873c81b0573e"
+   "bytes": 25918,
+   "sha256": "4a6c422e8488d1de1e1d4a70d4ea4b45ac448e39a7bc02e4f158613b3c9a3fa9"
   },
   "helm_base/test_helm_english_in_stock_frame.py": {
    "bytes": 16176,
@@ -724,8 +732,8 @@
    "sha256": "511ebe94360b108d1f6d90c897be0d061da3205b0ce1ef48c67caf5e67ff3ba5"
   },
   "helm_now/SOURCE_CUT.json": {
-   "bytes": 28772,
-   "sha256": "aa9836999009691d2dd18973c7989de10f233c4b8fd7d48dc07ca099e5ba55eb"
+   "bytes": 29106,
+   "sha256": "d9f41c1202f54f689bab5a999d2893c1b714015110c699de14a247aa37bfdee6"
   },
   "helm_now/cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
    "bytes": 92461,
@@ -792,8 +800,8 @@
    "sha256": "0154df4fd1beac637d512421db0c99c35c75ef8a120de687eccef95d07e9da6b"
   },
   "helm_now/docs/working/noetic_council/cube_store/turn.py": {
-   "bytes": 26571,
-   "sha256": "006bf3cb5f8da12cd35d928f78c036bcb8e32eefc02dbf98c277dc2ea19ab89c"
+   "bytes": 27914,
+   "sha256": "48af01d8fefbf5aed41c79c4752fdcc22b38fde41691abd82f6a950802e6ba6c"
   },
   "helm_now/docs/working/noetic_council/faculties_v2/PROVENANCE.md": {
    "bytes": 9210,
@@ -1055,6 +1063,10 @@
    "bytes": 7394,
    "sha256": "b1eee572e67445552a80a90630120855218480292574c71bbbffa0f471131113"
   },
+  "helm_now/docs/working/noetic_council/language_v3/lexicon_v3.py": {
+   "bytes": 12602,
+   "sha256": "7bb1de26f0fcca20d99f6be526a7ce9a0119fec680551803eacf2c8aab8b7585"
+  },
   "helm_now/docs/working/noetic_council/language_v3/measure_marks.py": {
    "bytes": 4589,
    "sha256": "e3fe0d6ae93a7968a0b6a31fea688c33441f22d188f46686ba66733e81328048"
@@ -1102,6 +1114,10 @@
   "helm_now/docs/working/noetic_council/language_v3/test_lexicon_v2.py": {
    "bytes": 7472,
    "sha256": "27a7f8d571f789de4c8b991a44f79920029b598d262eca6fcb64a978e82914f9"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/test_lexicon_v3.py": {
+   "bytes": 7080,
+   "sha256": "68e6956ccd330f26302501d3b1c901b9829ecc14d606f092f7488c1b4a08eea2"
   },
   "helm_now/docs/working/noetic_council/language_v3/test_lm_t1.py": {
    "bytes": 11799,
@@ -1252,8 +1268,8 @@
    "sha256": "b8f276587dd462a390d41b413588dc65af67d843872b246690a5d227056bc370"
   },
   "helm_now/helm_agentic_executor.py": {
-   "bytes": 79126,
-   "sha256": "d4548b43b5af530d1e7c3d5f10ba1bd2b92dd90d7d3123086981cde270da9812"
+   "bytes": 82081,
+   "sha256": "a84041b1db69973b9a4da8509ed8142f00e112d1602ab30ac3391263051d8df3"
   },
   "helm_now/helm_brain_22x40.py": {
    "bytes": 15810,
@@ -1268,20 +1284,20 @@
    "sha256": "6b074543a7fd314aa5869fc7511f295510a9564f4152d6166945e54f1cc455bc"
   },
   "helm_now/helm_chat.py": {
-   "bytes": 36347,
-   "sha256": "905c1fc231a6792370da463a6e87e6312bb975b05051626f33e3f14b9e77f234"
+   "bytes": 37263,
+   "sha256": "9c5821c3059cb7d599e34f6a0d37a48c2799037a179dd77401026e27567385f1"
   },
   "helm_now/helm_creativity_dial.py": {
    "bytes": 7349,
    "sha256": "9fbdda40d63e87b5c5a0bb1101adf8960c8032dc1d3dd476cfed408c0934c136"
   },
   "helm_now/helm_end_to_end_loop.py": {
-   "bytes": 62331,
-   "sha256": "b486f82efdb25cf459968d02ee0df1328c5e77446d60954e7edac8f72f256008"
+   "bytes": 63398,
+   "sha256": "9d21481c41eeafd5f89e4596103f8e9208e48c54bc1b850a374747853f7407b1"
   },
   "helm_now/helm_english_in.py": {
-   "bytes": 51336,
-   "sha256": "31c8a078e8817d39b1272169d8fcdda582db15a4314471eb00cc9bbc2953b33b"
+   "bytes": 53130,
+   "sha256": "46f707f65e89cc7514395237a9e1276dd062f66bf033def93c733cf4bc4ecebf"
   },
   "helm_now/helm_faces_in.py": {
    "bytes": 11652,
@@ -1292,8 +1308,8 @@
    "sha256": "7f51f4f85e5adcb76ba3e729380164caf13875c7529655300c3202f184a73872"
   },
   "helm_now/helm_memory.py": {
-   "bytes": 19375,
-   "sha256": "54d53475450bc35d89c887a877e68fb359117a94d0d163be5c430d1d1c3d0133"
+   "bytes": 19890,
+   "sha256": "7edc93e05a0381db44fccf4615d4327ba62b58d9c041a6ddf3591adf7e2cbde4"
   },
   "helm_now/helm_triad.py": {
    "bytes": 24100,
@@ -1384,28 +1400,28 @@
    "sha256": "a47726db6c978c357d105f7c1ae4402018764fc2c22c9184f2e1e54746fc094d"
   },
   "helm_now/helm_wide_turn.py": {
-   "bytes": 31786,
-   "sha256": "6d85abef3d39d4f2823d7e50598f4e74eff8a37b9d8c3440ec008717977d27bc"
+   "bytes": 37970,
+   "sha256": "6ad3eb1ae8e2492ae1c8310194e3d7292f4214e82481bda743941ca7248bd04c"
   },
   "helm_now/phrasebook.json": {
    "bytes": 39980,
    "sha256": "f92d5e19e4cf3083e2d01226724beb9a1faf11dd849881bafbe88b81ca953a28"
   },
   "helm_now/test_helm_brain_wide.py": {
-   "bytes": 24602,
-   "sha256": "0d8b28929a00cd6730442e4d61d87505ff0bfa3b9f896a492d635836846bcb4e"
+   "bytes": 30653,
+   "sha256": "0018671505e93d346b0927ff74e5a5b1f9d7aae1c2c597d7b605d2635bfdaf18"
   },
   "helm_now/test_helm_chat_nuance.py": {
-   "bytes": 12277,
-   "sha256": "e2bb4ab808aa2391edb1ada147d837794119d61a178ea6cf6e6834d21a877c89"
+   "bytes": 14813,
+   "sha256": "98520f823690f59709716cf4960d7b4783128c9dc97e572038e1e2c8417e12ca"
   },
   "helm_now/test_helm_end_to_end_loop.py": {
    "bytes": 17969,
    "sha256": "cefff684507b281ec40ef3c85899c445114b7c749ccca339b1cf21241d295c10"
   },
   "helm_now/test_helm_english_in.py": {
-   "bytes": 22839,
-   "sha256": "3ef11cefce03aad26c97cea1127c398b8bf14890e87e45c34e0e873c81b0573e"
+   "bytes": 25918,
+   "sha256": "4a6c422e8488d1de1e1d4a70d4ea4b45ac448e39a7bc02e4f158613b3c9a3fa9"
   },
   "helm_now/test_helm_english_in_stock_frame.py": {
    "bytes": 16176,
@@ -1456,36 +1472,36 @@
    "sha256": "358df49675b94b22edd811382112a893e3830e8c3300dc4c6890b6a94d20f055"
   },
   "practice/INPUTS_PRACTICE_RBW1T.json": {
-   "bytes": 173325,
-   "sha256": "32c26499cbedac83e0f1bafc307b06270a128b0a0587a271e93663aab053f7ae"
+   "bytes": 173670,
+   "sha256": "304ce8815750b89a2ee5d38fb6e9ea0cb5b5ca98976e13015ba299f4cb12afbc"
   },
   "practice/PRACTICE_DRAW_RBW1T.json": {
-   "bytes": 383567,
-   "sha256": "899debd9c115c5b36f65822319cef49934070aacfd835b02ab78f899c0cdf01d"
+   "bytes": 383912,
+   "sha256": "34e1eb4089ac6506ad110efbdad9420c400cc2e41c48520f1761efd7d844b3aa"
   },
   "rbw1t/__init__.py": {
    "bytes": 0,
    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "rbw1t/arms_rbw1t.py": {
-   "bytes": 15041,
-   "sha256": "d5b7d59a061ff7990d4128758f55c81c69f886372b526f66d6ce08749b88f85e"
+   "bytes": 16131,
+   "sha256": "fe17c18a6e72e15bf497dbfd2f3c74e94bcfb6a0e87f04c1d73fc51df626f7f8"
   },
   "rbw1t/check_rbw1t.py": {
    "bytes": 4759,
    "sha256": "a573f9556d6b1247512a7610ac3127221c735ebe2a977904efaa1211a1763118"
   },
   "rbw1t/common_rbw1t.py": {
-   "bytes": 11354,
-   "sha256": "cea6f821e945cf2ff1efdf8faa94605891156d0f7a1a7cf8b51fe5eec26440d8"
+   "bytes": 11566,
+   "sha256": "bcc317b0eac8eef8de554cece13c89471f077bf4d66d6b5f9fca8473c61fd620"
   },
   "rbw1t/custody_rbw1t.py": {
    "bytes": 7886,
    "sha256": "65765b5a79ce080eb224283a5b280743ab00dc174795e6ebe761b58bba60b4f8"
   },
   "rbw1t/exam_rbw1t.py": {
-   "bytes": 8560,
-   "sha256": "eeacdce2248229665ea37d2aa86b1225c9eaf746208bf4cd39ec0fed0c79f993"
+   "bytes": 9036,
+   "sha256": "7ab544cee5b2916287bc78b985ddfb74bad39f026e4c163652fa80de8a997efb"
   },
   "rbw1t/keys_rbw1t.py": {
    "bytes": 6459,
@@ -1516,8 +1532,8 @@
    "sha256": "220ba0bc368f48e798d01b737d9106a9d02a5f5ecd01406c52ca66711c618f63"
   },
   "tests_rbw1t/test_units_rbw1t.py": {
-   "bytes": 11335,
-   "sha256": "d6b30e1c52411e111397cf2ee935b15a6d5fc442f6ecb2048e5b8c6b60f7f98e"
+   "bytes": 12228,
+   "sha256": "27468d1f7da10ae772dd16c4091684d75b520f7ca232d003e5d1cc97e8eff015"
   },
   "vendor/survey_v1/__init__.py": {
    "bytes": 0,
@@ -1553,7 +1569,9 @@
   }
  },
  "package": "HELM_RBW1T_20261019",
+ "package_version": "v2",
  "precode_preregistration_sha256": "c0902a4fb83fd77670085938414ed160b71fd119ba5e8a77e203aab5b45ad424",
  "schema": "helm.rbw1t.package-freeze/1",
- "status": "SEALED, NOT LAUNCHED"
+ "status": "SEALED, NOT LAUNCHED",
+ "supersedes": "v1 zip b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809 (VOID_SUPERSEDED_BY_V2, never launched)"
 }

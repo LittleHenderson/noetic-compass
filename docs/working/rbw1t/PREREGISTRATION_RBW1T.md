@@ -346,3 +346,71 @@ absence, no faces and no stick/packet units). **Status word: `WIDE_BRAIN_HARMED`
 spend: as built, RB-W1's switch replaces the whole English path, not only the recipe brain; the no-harm mark cannot be
 met without a routing change (send only recipe turns to the wide brain), which is a new build and a new seal, not a
 change this builder may make.
+
+## 18. v2 — coordinator decision "FIX FIRST" (operational; owner's standing order: retest broken tests without asking), before any exam exists
+
+Coordinator's words (summary): do not run a sealed test that practice already shows failing on an instrument defect.
+Fix two engineering defects, neither tuned on any sealed exam: (1) routing — the WIDE switch must EXTEND the licensed
+path, not replace it; (2) learning — diagnose the practice misses by failure class and fix the engineering defects;
+leave true limits of the design as predictions; do not move the bar. Reseal as v2. v1 (`b50f4ca4…`, never launched) is
+`VOID_SUPERSEDED_BY_V2`. Marks, thresholds, arms, words, the frame, the strata, the quotas, the multipliers, the keys
+and the seed rule are unchanged. The owner's pre-approval line stays exactly as pinned (`WIDE TEST at 1 USD`, 18 UTF-8
+bytes); the approvals file shows it inside the owner's own quote marks with a trailing period, and the pinned 18-byte
+form is the one used for the seed.
+
+- **A-W-7 The build under test is RB-W1 v2** (PR #389, merge `045548b6a89205f65b419ac95753938ad738f037`), cut by
+  `git show` into `helm_now/`. With the switch ON, every turn goes through the licensed path first, unchanged
+  (`_process_turn_licensed`, `_witness_batch_licensed`); the wide book (`loop.wide_book`, beside the licensed brain)
+  takes a turn only if the licensed path could not bind it and wrote nothing (licensed statuses such as unknown
+  ingredient, unknown product, a fraction it cannot hold) AND the wide reader reads a witnessed batch, stock of
+  ingredients the wide book holds, or a question about a product it holds (for a question, also when the licensed
+  brain only asked). Stock the licensed path recorded is also read into the wide stock (no extra write).
+- **A-W-8 The base is the same commit with RB-W1 removed.** Other owner-approved HELM fixes landed on the thread after
+  `d4488f2a` (chat defects, lexicon v3 / reader v1.2), so a `d4488f2a` base would compare more than the switch.
+  `helm_base/` = the `045548b6` cut with `helm_end_to_end_loop.py` read at `d4488f2a` (RB-W1 v1 + v2 are the only
+  changes to that file since) and without RB-W1's three files. NH-OFF now isolates exactly the switch.
+- **A-W-9 The WIDE arms run wave 3's own `build_loop`** (licensed brain, triad, store and reader exactly as FULL) with
+  `HELM_WIDE_BRAIN=1` set for that unit (restored after); the control swaps in its learning-disabled book. The wide
+  modules are still never imported in an OFF unit (gate HSW).
+- **A-W-6 Ran-out name from the aside-free line.** The ran-out name is the name phrase of the line read with its
+  parenthetical asides removed ("1 cup (250 ml or 8.5 fl oz) dry rice" -> "dry rice"; the verbatim line's grammar
+  stops at "(" and gives "cup"); the verbatim line's phrase if the aside-free line does not parse. The batch lines stay
+  verbatim.
+- **Reader v2 fixes (in RB-W1 v2, each from a failure class on the published practice draw):** parenthetical asides
+  removed before reading; ", and" is one separator; more preparation / size words make a comma segment a note; `_`
+  emphasis removed; hyphenated units ("table-spoons") and a size word before a unit ("1 heaping teaspoon") read; a unit
+  word with no name after it is the name ("3 cloves"); the ran-out name is resolved against the batch (leading unit
+  words and "of" dropped; else the ONE batch name it begins or ends; two candidates -> no guess, the brain refuses); a
+  product name made only of a size word keeps it ("fine").
+
+**Per-class counts on the published practice draw (lesson level, 660 lessons; `dry_run_v2_reader_classes.json`):**
+
+| Class | before (v1) | after (v2) | left as |
+|---|---|---|---|
+| readable (learned) | 329 | 577 | — |
+| name binding: ran-out name not in the batch | 122 | 3 | edge cases (an alternative "egg yolks or 1 egg"; "½ of a good fowl") |
+| line splitting / quantity: no amount | 85 | 25 | true limit: alternatives ("or a ham-bone"; "superfine sugar, powdered sugar, or granulated sugar") and vague amounts ("a little mace mixed") |
+| name binding: no name | 75 | 0 | — |
+| unit not in the 20-unit table | 37 | 45 | true limit of the design (dash 15, sprig 9, box 8, stick 7, cake 6); rises because lines that failed earlier now reach the unit check |
+| duplicate ingredient | 10 | 10 | true limit (the same ingredient on two lines; the key is UNDETERMINED too) |
+| product-name binding | 2 | 0 | — |
+| recipes with every lesson readable / representable answerable | 54 / 106 | 99 / 106 | — |
+
+**Practice numbers v2 (published draw; not an exam):** WIDE (= replay) RIGHT 98, WRONG 0, ASKS 12, not scored 18; fully
+learned 99 of 106 (93.40%; the bar needs 96); WRONG lessons 0; unexplained asks 0; commitments on unsettled items 15
+(reported, never scored). LICENSED, WIDE_NO_LEARNING, ALWAYS_ASK: 0 RIGHT, 0 WRONG; the control's digest stayed the
+empty brain's after all 660 lessons. Parameter audit OK on every item. **No harm on the practice files:** switch OFF =
+base byte for byte (64 of 64 records each); switch ON = OFF item for item and record for record (E64 61/0/3, F64
+60/2/2 RIGHT/WRONG/UNDETERMINED in both; **0 lost**). OFF live trace: 139 of 139 records identical to the base.
+D-W-1 sensitivity (HEAD-only ran-out names): RIGHT 90, fully learned 91 of 106. HELM suites from the cut 170 OK
+(1 skipped); RB-W1T suites 24 OK.
+
+**Honest note on the fixes:** the practice draw was used to find the classes, so practice numbers are optimistic for
+the reader; the sealed exam is a fresh draw from the same frame (practice excluded by id and text). The X5 spent
+English-64 / Faces-64 were not run by the builder.
+
+**Predictions v2 (builder, before any exam; not read by any program):** K1 met about 0.55 (practice 93.40% against
+90%, from fixes found on that same draw; a fresh draw is expected a few points lower); K3 met about 0.8; K4 met about
+0.8; NH-OFF met about 0.95; NH-ON met about 0.85 (0 lost on practice; X5 uses the same families). **Word:
+`WIDE_BRAIN_EARNED_KEEP` about 0.35, `WIDE_LEARNING_DID_NOT_EARN_KEEP` about 0.3, `WIDE_BRAIN_HARMED` about 0.2,
+`INCONCLUSIVE` about 0.15.**

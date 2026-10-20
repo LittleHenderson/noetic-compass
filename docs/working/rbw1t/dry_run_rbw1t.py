@@ -134,7 +134,7 @@ def main():
         names = [X.G.parse_line(x) for x in it["raw_lines"]]
         turns = list(v["turns"])
         for j, (p, h) in enumerate(zip(names, heads)):
-            phrase = X.name_phrase(p)
+            phrase = X.ran_out_name(it["raw_lines"][j], p)
             assert turns[j].endswith("and ran out of " + phrase + ".")
             turns[j] = turns[j][: -len(phrase) - 1] + h + "."
         alt.append(dict(v, turns=turns))

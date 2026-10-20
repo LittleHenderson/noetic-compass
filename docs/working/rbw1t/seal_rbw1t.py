@@ -47,8 +47,10 @@ def main():
     files = sorted(p for p in PKG.rglob("*") if p.is_file() and p.name != "PACKAGE_FREEZE.json")
     members = {p.relative_to(PKG).as_posix(): {"sha256": sha(p), "bytes": p.stat().st_size} for p in files}
     freeze = {"schema": "helm.rbw1t.package-freeze/1", "package": "HELM_RBW1T_20261019", "members": members,
-              "member_count": len(members), "commit_now": "015d340d7861f88bfc0bdfc238d78d06064c129d",
-              "commit_base": "d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7",
+              "member_count": len(members), "package_version": "v2",
+              "commit_now": "045548b6a89205f65b419ac95753938ad738f037",
+              "commit_base": "045548b6a89205f65b419ac95753938ad738f037 with RB-W1 removed (helm_end_to_end_loop.py at d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7)",
+              "supersedes": "v1 zip b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809 (VOID_SUPERSEDED_BY_V2, never launched)",
               "precode_preregistration_sha256": (WS / "PREREGISTRATION_RBW1T.precode.sha256").read_text().split()[0],
               "status": "SEALED, NOT LAUNCHED"}
     raw = (json.dumps(freeze, indent=1, sort_keys=True) + "\n").encode("ascii")
@@ -93,6 +95,7 @@ def main():
               "plan_check": json.loads(r3.stdout)["verdict"] if r3.stdout.strip().startswith("{") else r3.stdout[:200],
               "sealed_helm_now_not_written": sealed_untouched,
               "dry_run_summary_sha256": sha(WS / "dry_run" / "DRY_RUN_SUMMARY_RBW1T.json"),
+              "reader_classes_sha256": sha(WS / "dry_run_v2_reader_classes.json"),
               "dry_reading_sha256": sha(WS / "dry_run" / "DRY_READING_RBW1T.json")}
     (WS / "TEST_COUNTS_RBW1T.json").write_text(json.dumps(counts, indent=1, sort_keys=True) + "\n", encoding="ascii",
                                                newline="\n")

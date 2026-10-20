@@ -13,7 +13,7 @@
  "helm_suites": {
   "detail": "skipped=1",
   "ran": [
-   154
+   170
   ],
   "verdict": "OK"
  },
@@ -58,18 +58,18 @@
    "unexplained_asks": 0
   },
   "WIDE": {
-   "ASKS": 56,
+   "ASKS": 12,
    "NOT_SCORED": 18,
-   "RIGHT": 54,
+   "RIGHT": 98,
    "WRONG": 0,
-   "commitments_on_unsettled": 2,
-   "fully_learned_rep": 54,
-   "lessons_LEARNED": 329,
-   "lessons_NOT_LEARNED": 331,
+   "commitments_on_unsettled": 15,
+   "fully_learned_rep": 99,
+   "lessons_LEARNED": 577,
+   "lessons_NOT_LEARNED": 83,
    "lessons_WRONG": 0,
    "plain": 128,
    "rep_answer": 106,
-   "right_rep": 54,
+   "right_rep": 98,
    "unexplained_asks": 0
   },
   "WIDE_NO_LEARNING": {
@@ -82,29 +82,29 @@
    "lessons_LEARNED": 0,
    "lessons_NOT_LEARNED": 660,
    "lessons_WRONG": 0,
-   "plain": 128,
+   "plain": 117,
    "rep_answer": 106,
    "right_rep": 0,
    "unexplained_asks": 0
   },
   "WIDE_REPLAY": {
-   "ASKS": 56,
+   "ASKS": 12,
    "NOT_SCORED": 18,
-   "RIGHT": 54,
+   "RIGHT": 98,
    "WRONG": 0,
-   "commitments_on_unsettled": 2,
-   "fully_learned_rep": 54,
-   "lessons_LEARNED": 329,
-   "lessons_NOT_LEARNED": 331,
+   "commitments_on_unsettled": 15,
+   "fully_learned_rep": 99,
+   "lessons_LEARNED": 577,
+   "lessons_NOT_LEARNED": 83,
    "lessons_WRONG": 0,
    "plain": 128,
    "rep_answer": 106,
-   "right_rep": 54,
+   "right_rep": 98,
    "unexplained_asks": 0
   }
  },
  "marks": {
-  "K1_LEARNS": false,
+  "K1_LEARNS": true,
   "K3_SAFE": true,
   "K4_HONEST": true,
   "NH_OFF": false,
@@ -115,7 +115,7 @@
    "complete": true,
    "identical_off_now_vs_base": 64,
    "items": 64,
-   "lost_by_wide": 55,
+   "lost_by_wide": 0,
    "replay_identical": true,
    "restored": true,
    "totals": {
@@ -139,8 +139,8 @@
     },
     "WIDE": {
      "CRASHED": 0,
-     "RIGHT": 6,
-     "UNDETERMINED": 58,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
      "WRONG": 0
     }
    },
@@ -150,7 +150,7 @@
    "complete": true,
    "identical_off_now_vs_base": 64,
    "items": 64,
-   "lost_by_wide": 42,
+   "lost_by_wide": 0,
    "replay_identical": true,
    "restored": true,
    "totals": {
@@ -174,9 +174,9 @@
     },
     "WIDE": {
      "CRASHED": 0,
-     "RIGHT": 18,
-     "UNDETERMINED": 46,
-     "WRONG": 0
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
     }
    },
    "wide_audit_ok": true
@@ -216,33 +216,33 @@
  "rbw1t_suites": {
   "detail": "skipped=1",
   "ran": [
-   23
+   24
   ],
   "verdict": "OK"
  },
  "schema": "helm.rbw1t.dry-run/1",
  "sensitivity_D_W_1_head_only_WIDE": {
-  "ASKS": 95,
+  "ASKS": 20,
   "NOT_SCORED": 18,
-  "RIGHT": 15,
+  "RIGHT": 90,
   "WRONG": 0,
   "commitments_on_unsettled": 0,
-  "fully_learned_rep": 15,
-  "lessons_LEARNED": 276,
-  "lessons_NOT_LEARNED": 383,
-  "lessons_WRONG": 1,
+  "fully_learned_rep": 91,
+  "lessons_LEARNED": 521,
+  "lessons_NOT_LEARNED": 139,
+  "lessons_WRONG": 0,
   "plain": 128,
   "rep_answer": 106,
-  "right_rep": 15,
+  "right_rep": 90,
   "unexplained_asks": 0
  },
  "status_word": "INCONCLUSIVE",
  "timing_seconds": {
-  "custody_seal": 1.55,
-  "helm_suites": 3.11,
-  "merge": 0.91,
-  "pool": 15.47,
-  "rbw1t_suites": 1.67
+  "custody_seal": 1.42,
+  "helm_suites": 2.68,
+  "merge": 0.81,
+  "pool": 17.26,
+  "rbw1t_suites": 4.18
  },
  "verdict": "INSTRUMENT_ERROR"
 }
