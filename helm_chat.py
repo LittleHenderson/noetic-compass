@@ -4,7 +4,13 @@ Enables direct, interactive natural language dialogue with HELM in Everyday Amer
 Integrates:
 - Everyday American English Voice Adapter
 - Stage v0.7 Topological Scribe Proposer & Level L4 Neural Proposer
-- Station S0 22x40 Recipe Brain & 40-digit Decimal Arithmetic
+- Station S0: HELM's canonical brain, the licensed HELM-R1 wave-1 recipe brain (c34 PASS R1_BEATS_GB3),
+  loaded by helm_brain_canonical.py and reached through helm_end_to_end_loop (exact Fraction arithmetic).
+  Owner approval 2026-10-18: "recipe brain is canonical". Its license is synthetic-world only.
+  The 22x40 brain (helm_brain_22x40.py, 40-digit Decimal) and the tks28 brain (brains/helm_brain_tks28.py
+  in the local HELM_DISTRIBUTION_PACKAGE copy) are demos / stand-ins only, not HELM's brain; this
+  interface never constructs either. The RB-W1 wide brain (helm_brain_wide.py) sits behind the
+  HELM_WIDE_BRAIN switch (default OFF) and is not the canonical brain.
 - Phase 3 Meta Valve Controller (tks_meta_valve_controller)
 - Immutable RPM Safety Gate (Zero-Hallucination Invariant)
 - Level A1/A2 Stoichiometric Agentic Tool Executor
