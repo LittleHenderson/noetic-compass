@@ -1,0 +1,24 @@
+{
+ "checks": {
+  "approval_binds_freeze": true,
+  "approval_binds_zip": true,
+  "c40_host_sha256": true,
+  "carrier_pins_sha256": true,
+  "carrier_zip_sha256": true,
+  "extra_text_files_present": true,
+  "freeze_member_count": 194,
+  "freeze_members_ok": true,
+  "freeze_sha256": true,
+  "manifest_sha256": true,
+  "neighbours_extracted_by_hash": true,
+  "owner_line_15_bytes": true,
+  "owner_line_file_bytes": true,
+  "owner_line_sha256": true,
+  "receiver_check_sha256": true,
+  "sealed_handoff_sha256": true,
+  "seed_source_recomputed": true,
+  "spent_x6_language_files_sha256": true,
+  "zip_sha256": true
+ },
+ "seed_source_sha256": "430df5a9b41b073d30f78957a12b2117bc8254058be413be06a87c7ce60972bb"
+}
