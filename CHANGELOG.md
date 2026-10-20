@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - HELM-R1 wave 6 RESEALED v3 for the K4 re-run (spec sheet 7.93 follow-up; amendment A-R1W6-2): SEALED, NOT LAUNCHED; owner pre-approved "FIX K4 at 1 USD"; no status changed; 0 USD
+
+- Why: c48 scored v2 as WIDE_WAVE_NO_GAIN (K4: 1 unexplained ask); the cause was a reader defect ("half as much soda" read as a made-up ingredient), fixed by reader v5 (PR #406). The owner pre-approved ONE re-run: cap 1.00 USD, one attempt + one plumbing retry.
+- What changed, and only this: HELM cut at thread head fdf68e0c (only helm_wide_turn.py and test_helm_wide_alongside.py differ from v2's cut); owner line "FIX K4 at 1 USD" (15 bytes); seed bands moved to 1,980-1,989 M (above X6, CTT-2R and USE-1's reservation); the spent X6 exam excluded from the fresh draw (128 REAL + 64 CONV + 64 PAIRW ids; X6's two language files join the text rule). Marks, arms, thresholds and exam sizes unchanged.
+- Sealed v3 zip f1b64a5edf0df2b152c867f328c71b3df8640a759836108079590e7959c31b47 (freeze da1ec4d2...). Tests from the sealed extract: wave-6 Ran 28 OK, HELM Ran 192 OK, 194/194 members re-hashed.
+- Practice dry run v2 -> v3 (practice data only): K4 unexplained asks 0 -> 0; conversation wrong answers 0 -> 0; English-64 / Faces-64 switch ON = OFF 64/64 score for score; REAL fully learned 100 -> 99 of 106 (bar 96), RIGHT 100 -> 99, WRONG 0 -> 0. Negative kept: reader v5 asks on "1 pint cream and same quantity of milk" (a relative form it does not hold); not tuned.
+- v2 (72962342...) is VOID_SPENT; X6 is spent; the c48 reading stands. Approval record v3 APPROVAL_RECORD_R1W6.json 4054cfd6... (by program; seed source 430df5a9...).
+- Files: Documents/Codex/2026-10-19/r1_wave6/ (PREREGISTRATION_R1W6.md section 17 + D-W6-17, TEST_RECORD_R1W6.md, LAUNCH_BRIEF_R1W6_20261019.md, CUSTODIAN_PROCEDURE_R1W6.md v3); copies docs/working/r1_wave6/; backup D:/tksCAS-archive/r1_wave6_v3_20261020/ (three hash passes). Next: custodian draws X6v3, then the operator runs it.
+
 ## 2026-10-20 PDT - HELM-R1 wave 6 K4 cause found (spec sheet 7.93 follow-up): reader defect, fix built (wide reader v5), NOT re-tested, status unchanged; 0 USD
 
 - Cause: X6_REAL recipe RW:pg:42450@476327 (cake), turn 7. The wide reader read "and half as much soda" as 1/2 (no unit) of a made-up ingredient "as much soda"; it never ran out, so its requirement stayed unlearned (gate G1) and HELM asked. Replayed on the laptop on the sealed v2 code: identical to the host record. UNSETTLED_ASK not involved.
