@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RB-W1T (sealed test of the wide brain) packet SEALED, NOT LAUNCHED (spec sheet 7.86); nothing scored; 0 USD
+
+Owner pre-approval (verbatim): "WIDE TEST at 1 USD" (cap 1.00 USD, one attempt + one plumbing retry; coordinator mapping in `OWNER_APPROVALS_20261018.md`).
+
+- What it tests: RB-W1 (PR #380, `015d340d`) on 128 real recipes drawn blind by a custodian from X-REAL's public frames (2-10 parsed lines; 3 ingredient counts x 3 quantity forms; X-REAL's used 128 and the builder's published practice excluded). One witnessed run-out lesson per ingredient (X-REAL v2), fresh amounts on hand, "How much {N} can we make?"; X-REAL's K-R key (three-valued). Arms: licensed brain, WIDE, WIDE replay, WIDE with learning disabled (control), always-ask. No harm: switch OFF byte-identical to `d4488f2a`, switch ON at most 2 lost, on wave-5 practice and spent X5 English-64 / Faces-64.
+- Seed = sha256("WIDE TEST at 1 USD" + ":" + zip sha256), band RW 1,950,000,001-1,951,000,000; custodian only.
+- Package: zip `b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809`, freeze `fadf08f6faf13ebcdb633b7894ebe515838465c52a90c51f6507f2371a28f8b1`; approval record `APPROVAL_RECORD_RBW1T.json` `97fb18ae...`. Tests from the sealed extract: 23/23 RB-W1T, 154 HELM (1 skipped), plan check PASS.
+- Practice dry run (published seed, not an exam): WIDE 54 right, 0 wrong, fully learned 54 of 106 (mark needs 90%); switch ON lost 55 of 64 (E64) and 42 of 64 (F64). Prediction: WIDE_BRAIN_HARMED about 0.85. Finding: the switch replaces the whole English path; meeting the no-harm mark needs a routing change (new build, new seal) - owner/coordinator call.
+- Failed approach logged: matching the brain's names to the grammar's HEAD word scored right answers WRONG ("boiling water poured upon the flax-seed" has HEAD "upon"); replaced before the seal by mapping names through the brain's own lesson records (amendment A-W-1).
+- Not done: wave-1 GB/TB worlds with the switch ON (no cell-index adapter); X-REAL's pair recipes not excluded (ids only in X-REAL custody).
+
 ## 2026-10-19 PDT - Noetic drift fix (docs + one docstring; owner: "Ok I agree with all 3 cards"); no behavior or claim change; 0 USD
 
 - `docs/INCIDENT_CATEGORIES.md` + `docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md`: 15 retired Noetic names replaced with canonical ones; 4 examples reclassified by the Colloquialism Test (hallucination `^3`->`^6` Male with `^8`->`^9` landing; Boundary Failures `^3`->`^6`), 1 re-checked and kept; full list in "Reconciliation notes 2026-10-19". `helm_chat.py` header now names helm_brain_canonical.py (HELM-R1 recipe brain) as HELM's brain and 22x40 / tks28 as demos (AST identical apart from the docstring; test_helm_chat_nuance 5/5, test_helm_english_in 31/31). Not done: HELM_DISTRIBUTION_PACKAGE/helm_chat.py (outside git and outside this agent's worktree).
