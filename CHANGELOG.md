@@ -14,6 +14,14 @@ Coordinator decision (operational): the run must not block on human writers. v1 
 - Zip 83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec, freeze c07654e7...; APPROVAL_RECORD_CTT.md v2 (owner pre-approval line + new hash); cap 8.00 USD, one attempt + one plumbing retry. Tests 58/58 from the zips.
 - Flags: governance (owner pick Q7 put the claim on human English; the coordinator moved the primary word; the owner may reverse). Custody slip named: real_heldout_unparseables_98.jsonl (sealed 98, commit ec780a34), first 400 characters of row 1, gold not printed; E-NOTATION reported only.
 - Backup D:/tksCAS-archive/cas_token_transformer_20261019/ re-copied, three sha256 passes MATCH.
+## 2026-10-19 PDT - English reader stock-frame fix BUILT after X-REAL c42 (spec sheet 7.81 follow-up); NOT re-tested on a sealed exam; no status change
+
+- What broke: on real sentences HELM saved stock facts the sentence never stated (an ingredient word was read as a stock statement).
+- Fix (rule 6 `STOCK_FRAME_REQUIRED`, `helm_english_in.py` v1.1): stock or "none on hand" is saved only when a stock frame holds the ingredient ("we have", "there is/are", "our pantry has", "we're out of", "we don't have any", or a plain inventory list). Otherwise HELM asks one question (`NO_STOCK_FRAME`) or, when the sentence is not about our kitchen, says "I don't have anything to save from that. Nothing was saved." (`NOTHING_TO_SAVE`, zero cubes). Frames ride beside the checked form, render back, and the loop re-checks them before writing.
+- Built from the failure class only; no sealed exam item opened. Builder-written practice: 56 negatives (old reader wrote on 25, new 0), 47 positives (all still written), 16 ask cases (old wrote on 13, new 0).
+- Tests: 102 -> 119 unittest OK (17 new in `test_helm_english_in_stock_frame.py`); chat nuance script 21 PASS lines before and after; wave-5 TestLiveHook OK; practice English-64/Faces-64 (wave 5 and wave 3b) identical counts and records with the new reader swapped in.
+- Failed approach logged: the first frame rule missed labeled lists ("Stock check: ...") and dropped 3 practice English-64 answers; fixed with a list-label rule, then counts matched.
+- Status: English reader stays ENGINEERED-NOT-VALIDATED; S_UNSAFE_ON_REAL stays. Re-test needs a fresh custodian draw (~0.03 USD) and an owner word.
 
 ## 2026-10-19 PDT - CTT-1 CAS-token transformer ("ears first") PACKET SEALED, NOT LAUNCHED (spec sheet 7.82): separate from-scratch translator, reader first, HELM's checker decides; main 9,585,566 / twin 2,482,718 parameters; cap 8.00 USD pre-approved; waits for the human exam
 
