@@ -1,0 +1,58 @@
+{
+ "schema": "ctt2r.run-limits/1",
+ "test": "CTT-2R: ACCEPT-2 (three-copy vote, read back everything, session cap) on the c45 weights; no training",
+ "approval": "owner pinned bytes 'CTT RULE TEST at 1.50 USD' (OWNER_APPROVALS_20261018.md, 2026-10-19 night) + the sealed zip sha256, quoted by program in APPROVAL_RECORD_CTT2R.json",
+ "cost_cap_usd": "1.50",
+ "cost_cap_status": "OWNER PRE-APPROVED 1.50 USD",
+ "attempts": {
+  "scored": 1,
+  "plumbing_retry": 1,
+  "plumbing_retry_rule": "only if no part was scored (the run stopped in refusals, overlay, preflight, C2 inits or before DECISIONS_CTT2R.json was written, for a plumbing reason); same zip, same carriers, same settings; any package change is a reseal and needs a new owner word",
+  "anti_tuning": "no rerun with another rule, threshold, seed or exam to coax a pass; a miss is a result"
+ },
+ "host": {
+  "cloud": "AWS",
+  "region": "us-west-2",
+  "instance": "g5.xlarge (1 x NVIDIA A10G 24 GB, 4 vCPU, 16 GiB RAM): the design's 'one small GPU instance'",
+  "fallback_instance": "g4dn.xlarge (1 x T4 16 GB) only if g5 capacity is refused",
+  "why_gpu": "the translator process refuses to run without CUDA (GPU_REQUIRED); neural work never runs on a CPU, and never on the laptop",
+  "price_usd_per_hour_on_demand": {"g5.xlarge": "1.006", "g4dn.xlarge": "0.526", "note": "list prices; the controller checks the price page on the day"},
+  "image": "an AWS Deep Learning AMI with PyTorch 2.x and CUDA (c45 used ami-0dddfa1ffa6b87af7, PyTorch 2.9, Ubuntu 24.04)",
+  "hosts": 1,
+  "automatic_retry": false,
+  "instance_life_cap_hours": 2,
+  "self_terminate": "shutdown -h +120 set at boot, instance-initiated shutdown behaviour = terminate",
+  "disk_gib": 40
+ },
+ "deadlines": {
+  "job_wall_cap_minutes": 90,
+  "runner_deadline": "kit/run_2r.py stops every stage at min(--deadline-epoch, start + 90 min)",
+  "preflight_cap_minutes": 10,
+  "decide_cap_minutes": 40,
+  "noharm_cap_minutes": 50
+ },
+ "estimate": {
+  "boot_and_staging_minutes": "about 8-12 (payload about 400 MB: weights 230 MB + train rows 91 MB + packages)",
+  "overlay_tests_smoke_minutes": "about 2-3",
+  "c2_inits_minutes": "under 1",
+  "decide_minutes": "about 5-10 (retrieval index over 227,497 rows; 8 translator processes on at most about 300 handed-over turns)",
+  "noharm_minutes": "about 3-6 (OFF, OFF-removed, ON with three voting processes)",
+  "total_host_minutes": "about 20-35",
+  "expected_usd": "about 0.35-0.60 on g5 including boot, disk, IPv4 and cleanup",
+  "cautious_usd": "0.80",
+  "worst_case_usd": "1.50 (the controller stops at the cap across both attempts)"
+ },
+ "stages_in_order": ["refusals", "overlay", "preflight (unit tests, separation, GPU smoke)", "C2-s2 / C2-s3 init", "decide (Part R if drawn, Part K)", "NO-HARM off", "NO-HARM off, translator folder deleted", "NO-HARM on (ACCEPT-2)", "merge input draft"],
+ "record_per_job": [
+  "source: this zip sha256, PACKAGE_FREEZE sha256, the payload manifest",
+  "purpose: CTT-2R rule-only scoring of the c45 weights",
+  "instance id, type, region, AMI",
+  "start / stop UTC (and Pacific for the owner)",
+  "time and cost limits (this file)",
+  "actual cost (list price x host seconds + disk + IPv4; the bill when posted)",
+  "cleanup VERIFIED three ways as c45: controller (terminated, volume deleted, deliverable downloaded and verified BEFORE the S3 prefix purge, prefix empty, 0 multipart), an independent read-only check within an hour, a direct read-only look",
+  "ledger hold placed before launch and closed after",
+  "backup: deliverable to D:/tksCAS-archive/ with three sha256 passes"
+ ],
+ "laptop": "no torch on the laptop; the laptop runs only the custodian steps (census, draws, seal) and the frozen reader, each under 300 s and 300 MiB"
+}

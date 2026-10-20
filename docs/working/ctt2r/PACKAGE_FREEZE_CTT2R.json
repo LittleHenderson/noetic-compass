@@ -1,0 +1,10 @@
+{
+ "members": 35,
+ "package_freeze_sha256": "7cccf18eca4d1b656de9c4b9a5ef38a5d7301f9ad67d11ffd1de19e221c75382",
+ "package_zip": "HELM_CTT2R_20261019_SOURCE_CTT2R.zip",
+ "package_zip_bytes": 181203,
+ "package_zip_sha256": "d97a16d6683b41037b51d028bcc4776be86ae1db66b117bd2af0126bab6159b6",
+ "preregistration_precode_sha256": "23c0ae7c19dfbe3661aa107c0a58e6cb1ee31ea5cd362e435cd8c5bf0e82fcba",
+ "preregistration_sha256": "26843f328ac529e721cf6ed3d047f69394ee284799726461f5e5a8238667f81c",
+ "schema": "ctt2r.package-freeze-outside/1"
+}

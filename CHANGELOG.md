@@ -6,7 +6,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 
 ## 2026-10-20 PDT - HELM Hub: "wave" and "pair wave" defined (owner: "What is a pair wave?"): dictionary entries Wave (HELM-R1 wave) and Pair wave (HELM-R1 wave 6) (454 -> 456); both added to the jargon lint, so every page explains them on first use; scorecard row for 7.91; 21 tests OK; site rebuilt; docs only, no status changed; 0 USD
 
+## 2026-10-19 PDT - CTT-2R packet SEALED, NOT LAUNCHED (spec sheet 7.92): the ACCEPT-2 acceptance rule on the unchanged c45 weights; owner pre-approved "CTT RULE TEST at 1.50 USD"; 0 USD
+
+- Rule: reader v1.1 first; where it would ask, a translator reading is OFFERED only when all three c45 copies give the identical checked reading, read back as a question (topics too), used only after a yes; at most 2 offers per dialogue, silent after a no. Confident-wrong cap stays 2 / 0 saved.
+- Arms: A0 reader v1.1, A4E (vote), A2E copy-closest under the same rule (mechanism-free baseline), A4 as run (no rule), C2E (untrained, free); C1E not run (rule-only).
+- Exams (custodian, builder blind): Part R 128 real public sentences (R1 = 48 stock-dense the reader gives up on), Part K 128 LLM-written singles (32 trap sentences, keys frozen first) + 16 dialogues from a NEW custodian-only pool; I-REACH turns a no-room part into INCONCLUSIVE.
+- Zip d97a16d6683b41037b51d028bcc4776be86ae1db66b117bd2af0126bab6159b6, freeze 7cccf18e..., approval record 37f8c601... (by program); 56 tests OK from the sealed extract.
+- Practice census (builder-allowed): R1 likely below 24 on the exam frame, so the custodian census is expected to STOP Part R before any spend; the coordinator chooses widen-frame (new design) or Part K only.
+- Files: Documents/Codex/2026-10-19/ctt2r/; copies docs/working/ctt2r/; backup D:/tksCAS-archive/ctt2r_20261019/.
+
 ## 2026-10-20 PDT - HELM Hub additions (owner): glossary gains CTT, CTT-1, CTT-2R, the CTT exams and Ears / mouth (dictionary 449 -> 454 entries; CTT added to the jargon lint); new pages build.html (the build, animated: today vs intended, colored by recorded status, still without scripts or with reduced motion) and files.html (every key path with exists check, size and sha256; sealed exams named, never opened; key files by path only); 20 tests OK; site rebuilt; docs only, no status changed; 0 USD
+
+## 2026-10-20 PDT - HELM-R1 wave 6 RESEALED v2 after FIX FIRST (spec sheet 7.91 amendment A-R1W6-1); NOT LAUNCHED; 0 USD
+
+- HELM fixed first (PR #400, merge 221cab70, RB-W1 v4): face / purpose clauses in wide stock sentences asked about; triad faces on wide ingredients respected (ask); restated units converted or asked; stale amounts withdrawn; helm_chat crash on a wide teaching turn fixed (helm_english_in.quantities_said) with a regression test; test_helm_wide_alongside.py 10 tests (9 fail on v3); HELM suites 187 OK.
+- Package v2: own HELM cut (helm_now/, 159 files); harness workaround removed; WIDE x VOICE / EYE_SCAN NOT_EXERCISED_BY_CONSTRUCTION; K5 adaptation recorded as A-R1W6-1.
+- Zip 729623429832c5fa99141d96876434d9ebed7417055c87173e7a582b3677be0a, freeze 83983cd4..., FROZEN afe9600d...; approval record 5187cb7c... (same pinned line PAIR WAVE at 1 USD, cap 1.00 USD); suites 27 + 187 OK from the sealed extract. v1 f307bdbc VOID (never launched).
+- Practice before -> after: conversation wrong answers 23 -> 0 (RIGHT_AND_PLAIN 32 -> 38); English-64 / Faces-64 switch ON = OFF 64/64; real recipes 100/106 learned, 0 wrong; every mark met on practice.
 
 ## 2026-10-19 PDT - HELM-R1 wave 6 "PAIR WAVE" packet SEALED, NOT LAUNCHED (spec sheet 7.91); owner pre-approved "PAIR WAVE at 1 USD"; 0 USD
 
