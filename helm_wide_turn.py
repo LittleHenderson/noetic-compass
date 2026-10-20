@@ -35,7 +35,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import helm_brain_wide as W
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v4 (2026-10-20)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v5 (2026-10-20)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -133,6 +133,60 @@ def _ask(code: str, **slots: Any) -> Dict[str, Any]:
 _AMT_START = r"(?:\d|[" + "".join(W.VULGAR) + r"])"
 ALTERNATIVE_RX = re.compile(r"\bplus\s+" + _AMT_START + r"|^(?:[A-Za-z-]+\s+)?or\s+" + _AMT_START, re.IGNORECASE)
 
+#: v5 (2026-10-20, from the K4 diagnosis of HELM-R1 wave 6 c48; tested on our own practice recipes): a RELATIVE amount
+#: ("1 teaspoon cream tartar, and half as much soda", "twice as much butter", "as much salt", "the same amount of
+#: sugar") is said relative to the line BEFORE it. v4 read "half" as an amount of 1/2 with no unit and bound a made-up
+#: ingredient named "as much soda"; that ingredient never ran out in any batch, so the brain asked even when every real
+#: line was learned. ("twice as much X" and "as much X" were instead dropped silently as notes.) v5 keeps the pair as
+#: ONE bundled line, named "cream tartar and half as much soda", amount 1 teaspoon. This is exact, not a guess: the
+#: bundle always holds its two parts in the stated proportion r, so a batch where either part ran out first teaches
+#: max(a_Y, a_X / r) per unit (in Y's unit), and stock of the same bundle gives Y_stock / that, which is exactly the
+#: smaller of the two parts' own limits. Stock or a batch that names the parts any other way (Y alone, X on its own
+#: line, another proportion) is a different line, so the brain asks. A proportion outside the table below, a relative
+#: amount with no line before it, "... as much X as Y", or two relative amounts on one line -> ONE question
+#: (AMOUNT_RELATIVE), nothing saved.
+RELATIVE_WORDS_RX = re.compile(r"\bas\s+(?:much|many)\b|\b(?:same|equal)\s+(?:amount|quantity|measure)\b",
+                               re.IGNORECASE)
+RELATIVE_RX = re.compile(r"^(?:(?P<times>.+?)\s+)?as\s+(?:much|many)\s+(?:of\s+)?(?:the\s+)?(?P<name>[a-z].*)$"
+                         r"|^(?:the\s+same|an?\s+equal)\s+(?:amount|quantity|measure)\s+of\s+(?:the\s+)?"
+                         r"(?P<name2>[a-z].*)$", re.IGNORECASE)
+#: the proportions v5 reads, and the one way each is said inside a bundled name (OUR_CONVENTION)
+RELATIVE_SAID = {Fraction(1): "as much", Fraction(1, 2): "half as much", Fraction(2): "twice as much",
+                 Fraction(1, 3): "a third as much", Fraction(1, 4): "a quarter as much",
+                 Fraction(2, 3): "two thirds as much", Fraction(3, 4): "three quarters as much",
+                 Fraction(3, 2): "one and a half times as much"}
+RELATIVE_SAID.update({Fraction(v): f"{w} times as much" for w, v in W.NUMBER_WORDS.items() if v >= 3})
+
+
+def read_relative(piece: str) -> Optional[Tuple[Fraction, str]]:
+    """v5: "half as much soda" -> (1/2, "soda"); "twice as much butter" -> (2, "butter"); "the same amount of sugar"
+    -> (1, "sugar"). None when the piece is not one clean relative amount that RELATIVE_SAID can say exactly."""
+    s = piece.strip().strip(".").strip()
+    m = RELATIVE_RX.match(s)
+    if not m:
+        return None
+    phrase = m.group("name") or m.group("name2")
+    if re.search(r"\bas\b", phrase, re.IGNORECASE):           # "... as much butter as flour": names another line
+        return None
+    times = re.sub(r"\s*\btimes$", "", (m.group("times") or "").strip().lower()).strip()
+    r: Optional[Fraction]
+    if not times:
+        r = Fraction(1)
+    elif times in ("twice", "double"):
+        r = Fraction(2)
+    elif times == "thrice":
+        r = Fraction(3)
+    else:
+        try:
+            got = W.match_amount(times, 0)
+        except W.WideRefused:
+            return None
+        r = got[0] if got is not None and got[1] == len(times) else None
+    name = bind_name(phrase)
+    if r is None or r not in RELATIVE_SAID or not name:
+        return None
+    return r, name
+
 
 def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
     """One ingredient line -> {"name", "amount" (Fraction), "unit", "said"} or {"clarify": {...}}.
@@ -140,6 +194,16 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
     rice", "squash, steamed and strained"). The name comes from the line's own words; the notes are used only when
     those words alone bind to nothing ("1 cup cold, cooked rice" -> "cooked rice")."""
     s = line.strip().strip(".").strip()
+    if RELATIVE_WORDS_RX.search(s):                # v5: a relative amount with no line before it to be relative to
+        return {"clarify": _ask("AMOUNT_RELATIVE", words=s)}
+    companion: Optional[Tuple[Fraction, str]] = None
+    if RELATIVE_WORDS_RX.search(notes):            # v5: "1 teaspoon cream tartar, and half as much soda"
+        pieces = [x for x in SEP_RX.split(notes) if x.strip()]
+        rel = [x for x in pieces if RELATIVE_WORDS_RX.search(x)]
+        companion = read_relative(rel[0]) if len(rel) == 1 else None
+        if companion is None:
+            return {"clarify": _ask("AMOUNT_RELATIVE", words=(rel[0] if rel else notes).strip().strip("."))}
+        notes = ", ".join(x.strip() for x in pieces if x is not rel[0])
     if APPROX_RX.match(s):
         return {"clarify": _ask("AMOUNT_APPROXIMATE", words=s)}
     try:
@@ -179,7 +243,14 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
         name = bind_name(rest, drop_leading=False)
     if not name:
         return {"clarify": _ask("NO_NAME", words=s)}
-    return {"name": name, "amount": amount, "unit": unit, "said": s + (", " + note if note else "")}
+    said = s + (", " + note if note else "")
+    if companion is not None:                      # v5: one bundled line; its proportion is part of its name
+        r, other = companion
+        if other == name:
+            return {"clarify": _ask("AMOUNT_RELATIVE", words=s)}
+        name = f"{name} and {RELATIVE_SAID[r]} {other}"
+        said = f"{said}, {RELATIVE_SAID[r]} {other}"
+    return {"name": name, "amount": amount, "unit": unit, "said": said}
 
 
 def _is_note(segment: str) -> bool:
@@ -200,6 +271,8 @@ def starts_line(seg: str) -> bool:
     or range amount, or "no X" (the line reader then asks about those). Anything else ("cooked rice", "steamed and
     strained", "whites and yolks separately", "a little salt") is the rest of the line before it."""
     s = seg.strip()
+    if RELATIVE_WORDS_RX.search(s):                # v5: "half as much soda" belongs to the line before it
+        return False
     if re.match(r"no\s+[a-z]", s, re.IGNORECASE):
         return True
     m = APPROX_RX.match(s.lower())
@@ -614,6 +687,9 @@ def say_reader_question(c: Dict[str, Any]) -> str:
     if code == "NO_PRODUCT":
         return ("I got the batch, but not what it made. What's the dish called? Tell me its name and I'll learn "
                 "from that batch. Nothing is saved until then.")
+    if code == "AMOUNT_RELATIVE":
+        return (f"You said \"{s.get('words', '')}\". I can only use an amount like that when it is half, twice or "
+                f"the same as the line right before it. How much is it exactly, on its own?")
     if code == "NO_INGREDIENTS":
         return "What went into that batch, and how much of each?"
     return "Could you say that another way? Nothing was saved."

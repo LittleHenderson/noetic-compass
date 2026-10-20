@@ -136,6 +136,106 @@ class B_LiveLoop(unittest.TestCase):
         self.assertNotEqual(q["loop_status"], "SUCCESS_EVALUATED")
 
 
+#: v5 (2026-10-20): our own practice recipes with a RELATIVE amount ("and half as much salt"). Built for the K4
+#: diagnosis of HELM-R1 wave 6 c48; no sealed exam item is used here.
+SCONE = ["We made 2 scones from 2 cups flour, 1 cup butter, 1 cup milk and 1 teaspoon baking powder, and half as much "
+         "salt and ran out of flour.",
+         "We made 2 scones from 4 cups flour, 1/2 cup butter, 1 cup milk and 1 teaspoon baking powder, and half as much "
+         "salt and ran out of butter.",
+         "We made 1 scone from 4 cups flour, 1 cup butter, 1/3 cup milk and 1 teaspoon baking powder, and half as much "
+         "salt and ran out of milk.",
+         "We made 2 scones from 4 cups flour, 1 cup butter, 1 cup milk and 1/2 teaspoon baking powder, and half as much "
+         "salt and ran out of baking powder."]
+SCONE_BUNDLE = "baking powder and half as much salt"
+#: here the SECOND part of the bundle (sugar) runs out first, and the bundle is what limits the stock
+BISCUIT = ["We made 2 biscuits from 2 cups flour, 1 cup milk and 2 teaspoons baking powder, and twice as much sugar "
+           "and ran out of flour.",
+           "We made 3 biscuits from 6 cups flour, 1 cup milk and 2 teaspoons baking powder, and twice as much sugar "
+           "and ran out of milk.",
+           "We made 4 biscuits from 8 cups flour, 2 cups milk and 2 teaspoons baking powder, and twice as much sugar "
+           "and ran out of sugar."]
+
+
+class D_RelativeAmountIsOneBundledLine(unittest.TestCase):
+    """v4 read "and half as much salt" as 1/2 (no unit) of a made-up ingredient named "as much salt"; it never ran out,
+    so the brain asked on a recipe whose every real line it had learned. v5 keeps "1 teaspoon baking powder, and half
+    as much salt" as ONE bundled line (exact: see helm_wide_turn.RELATIVE_SAID's comment)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import helm_end_to_end_loop as E2E
+        cls.E2E = E2E
+
+    def teach(self, lessons):
+        loop = self.E2E.HELMEndToEndLoop(wide_brain=True)
+        for t, s in enumerate(lessons, 1):
+            self.assertEqual(loop.process_turn(s, tick=t)["loop_status"], "WITNESS_ADMITTED", s)
+        return loop
+
+    def ask(self, loop, stock, product, tick=20, recorded=True):
+        status = loop.process_turn(stock, tick=tick)["loop_status"]
+        if recorded:
+            self.assertEqual(status, "STOCK_RECORDED", stock)
+        return loop.process_turn(f"How many {product} can we make?", tick=tick + 1)
+
+    def test_reader_bundles_each_relative_form(self):
+        for text, stock in (
+                ("We have 2 cups flour, 1 teaspoon baking powder, and half as much salt.",
+                 {"flour": (Fraction(2), "cup"), SCONE_BUNDLE: (Fraction(1), "teaspoon")}),
+                ("We have 1 teaspoon baking powder and 1/2 as much salt.", {SCONE_BUNDLE: (Fraction(1), "teaspoon")}),
+                ("We have 2 cups flour and twice as much sugar.", {"flour and twice as much sugar": (Fraction(2), "cup")}),
+                ("We have 1 cup milk, and as much water.", {"milk and as much water": (Fraction(1), "cup")}),
+                ("We have 1 cup milk and the same amount of cream.", {"milk and as much cream": (Fraction(1), "cup")}),
+                ("We have 3 eggs and three times as many yolks.", {"egg and three times as much yolk": (Fraction(3), "")})):
+            r = WT.read_wide(text)
+            self.assertEqual(r["status"], "STOCK", text)
+            self.assertEqual(r["stock"], stock, text)
+            self.assertFalse(any(n.startswith("as much") for n in r["stock"]), text)    # the v4 made-up name
+
+    def test_reader_asks_on_relative_amounts_it_cannot_hold(self):
+        for text in ("We have half as much salt.",                                     # nothing before it
+                     "We have 2 cups flour and half as much butter as sugar.",          # names another line
+                     "We have 2 cups flour, half as much butter and twice as much milk.",   # two on one line
+                     "We have 1 cup sugar, and half as much sugar.",                    # relative to itself
+                     "We have 1 cup sugar and 0.3 as much salt.",                       # proportion not in the table
+                     "We have 1 cup sugar and a bit more than half as much salt."):
+            r = WT.read_wide(text)
+            self.assertEqual((r["status"], (r["clarify"] or {}).get("code")), ("CLARIFY", "AMOUNT_RELATIVE"), text)
+            self.assertIn("exactly", WT.say_reader_question(r["clarify"]))
+
+    def test_fully_taught_recipe_with_a_relative_line_is_answered(self):
+        loop = self.teach(SCONE)
+        self.assertEqual(loop.wide_book.unlearned("scone"), [])
+        self.assertIn(SCONE_BUNDLE, loop.wide_book.support_of("scone"))
+        # flour 3/1 = 3, butter 2/(1/4) = 8, milk 2/(1/3) = 6, bundle 1/(1/4) = 4 -> 3 scones, flour runs out first
+        q = self.ask(loop, "We have 3 cups flour, 2 cups butter, 2 cups milk and 1 teaspoon baking powder, and half "
+                           "as much salt.", "scones")
+        self.assertEqual(q["loop_status"], "SUCCESS_EVALUATED")
+        self.assertEqual(Fraction(str(q["output_value"])), Fraction(3))
+        self.assertEqual(q["limiting_reagent"], "flour")
+
+    def test_bundle_taught_by_its_second_part_running_out_and_limiting(self):
+        """Truth: sugar ran out in batch 3, so sugar is 4 tsp / 4 = 1 tsp per biscuit and baking powder is at most
+        1/2 tsp; stock 1 tsp baking powder + 2 tsp sugar makes exactly 2 biscuits (sugar first)."""
+        loop = self.teach(BISCUIT)
+        q = self.ask(loop, "We have 10 cups flour, 10 cups milk and 1 teaspoon baking powder, and twice as much sugar.",
+                     "biscuits")
+        self.assertEqual(q["loop_status"], "SUCCESS_EVALUATED")
+        self.assertEqual(Fraction(str(q["output_value"])), Fraction(2))
+        self.assertEqual(q["limiting_reagent"], "baking powder and twice as much sugar")
+
+    def test_stock_that_names_the_parts_another_way_is_never_answered(self):
+        for stock in ("We have 3 cups flour, 2 cups butter, 2 cups milk and 1 teaspoon baking powder.",
+                      "We have 3 cups flour, 2 cups butter, 2 cups milk and 1 teaspoon baking powder, and twice as "
+                      "much salt.",
+                      "We have 3 cups flour, 2 cups butter, 2 cups milk, 1 teaspoon baking powder and 1/2 teaspoon "
+                      "salt."):
+            loop = self.teach(SCONE)
+            q = self.ask(loop, stock, "scones", recorded=False)
+            self.assertNotEqual(q["loop_status"], "SUCCESS_EVALUATED", stock)
+            self.assertIsNone(q.get("output_value"), stock)
+
+
 class C_ChatDoesNotCrash(unittest.TestCase):
     def test_quantities_said_on_a_wide_reading(self):
         r = WT.public(WT.read_wide(LESSONS[0]))
