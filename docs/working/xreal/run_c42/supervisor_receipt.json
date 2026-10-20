@@ -1,0 +1,83 @@
+{
+  "deadline_epoch": 1792461476.0,
+  "exit_code": 0,
+  "finished_utc": "2026-10-20T00:14:01.875845+00:00",
+  "global_promotion": false,
+  "instance": "i-0decaa7956027896c",
+  "job": "helm-claude-xreal-20261019-c42",
+  "no_automatic_retry": true,
+  "plan_sha256": "d65bfbf85f25b4847bf9601f51674a2eb7705ca57e290dd3001920865ff04821",
+  "post_run_source_check": {
+    "changed_or_missing": [],
+    "changed_or_missing_count": 0,
+    "extra_files": [],
+    "extra_files_count": 0,
+    "members_checked": 617
+  },
+  "receipt_reserve_seconds": 30,
+  "scientific_success_claimed": false,
+  "scope": "XREAL_NAMED_CORPORA_HOST_WRITES_RAW_DATA_ONLY_READING_IS_ON_THE_LAPTOP",
+  "stages": [
+    {
+      "command": [
+        "/opt/pytorch/bin/python",
+        "-B",
+        "-u",
+        "kit/run_xreal.py",
+        "--package",
+        ".",
+        "--w4-package",
+        "../../r1w4/HELM_R1_W4_20261019",
+        "--w3b-package",
+        "../../r1w3b/HELM_R1_W3B_20261019",
+        "--w3-package",
+        "../../r1w3/HELM_R1_W3_20261019",
+        "--w2-package",
+        "../../r1w2/HELM_R1_W2_20261018",
+        "--w1-package",
+        "../../w1/HELM_R1_W1_20261015",
+        "--xr-dir",
+        "../../xr/xr",
+        "--spent-dir",
+        "../../x5spent/x5spent",
+        "--scratch",
+        "/opt/helm-shared-r2/xreal_scratch",
+        "--output",
+        "/opt/helm-shared-r2/results/xreal_host_run/out",
+        "--expected-freeze-sha256",
+        "67b485415078ca11c5c3d984cd3f82a6a1ab1f111efc9ce2a619d3c136c8006d",
+        "--deadline-epoch",
+        "1792458071.703416"
+      ],
+      "elapsed_seconds": 150.09223222732544,
+      "errors": null,
+      "exit_code": 0,
+      "failures": null,
+      "guard_environment": {},
+      "missing_outputs": [],
+      "name": "xreal_host_run",
+      "output_files": 77,
+      "pid": 1742,
+      "ran": null,
+      "required_outputs_found": {
+        "xreal_out/XREAL_HOST.json": {
+          "bytes": 14208083,
+          "sha256": "1aa60025cb9a686523b766610278c514c3488af1f2aaca426459ea07cedac84d"
+        },
+        "xreal_out/XREAL_HOST.json.sha256": {
+          "bytes": 82,
+          "sha256": "8e43eba7d351c70068e94831777069606842809af77abebb8411ab2446f14ba7"
+        }
+      },
+      "required_outputs_found_elsewhere": {},
+      "skipped": null,
+      "source": "xreal",
+      "started_epoch": 1792455091.7034533,
+      "status": "PASS",
+      "stderr_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout_seconds": 3000,
+      "type": "command"
+    }
+  ],
+  "status": "ALL_STAGES_PASS"
+}

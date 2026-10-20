@@ -2918,6 +2918,60 @@ All READ (EYE_PAIRING earned its keep; all four partners `EARNED_KEEP` in c37). 
 - **`NOT LICENSED`:** "the Scribe reads real English"; any meaning claim; using a round-trip check alone as a correctness gate.
 - **Artifacts:** `Documents\Codex\2026-10-19\scribe_l4_score\run_c41\RUN_RESULT_SCRIBE_L4_C41.md`; repo copies in `docs/working/scribe_l4_eval/` (receipt, run result, approval record, `c41_controller/`); controller folder `Documents\Codex\2026-10-01\task-2\helm_operator_preparation\controller_claude_scribe_l4_c41\`; backup `D:\tksCAS-archive\scribe_l4_score_c41_20261019\`.
 
+### 7.81 HELM-R1 X-REAL SCORED (job c42, AWS): the frozen reader returns `PASS`; words S `S_UNSAFE_ON_REAL` (8 wrong writes on 128 real sentences), R-REBOUND `R_SAFE_NOT_CORRECT` (0 wrong, 3 of 64 answered), R-ASIS `R_ASIS_SAFE`, F: D1 and E1 `KIND_CAUGHT`, T1 T2 E2a S1 `KIND_SAFE_NOT_CAUGHT`, E2b and C1 `KIND_BENIGN_KEPT`; no kind beyond the plain checksum; ceiling `NAMED_CORPORA_ONLY` (2026-10-19 PDT, one m6i.xlarge, 0.03 USD)
+
+**Said plainly first.** X-REAL (§7.79) is the first HELM exam made from text other people wrote. It ran once on AWS. The instruments held and no hard rule broke, so the result is readable (`PASS`). On 128 real food sentences HELM wrote 8 wrong stock facts; the frozen limit was 2, and always-ask got 0 wrong. So HELM's English reader is not safe on real sentences — a negative. On 64 real renamed recipes HELM never answered wrong, but it answered only 3 (all 3 exact) and asked on 61. On 192 restart worlds the Unity Eye's scan caught duplicated lines and wrong-code-page text 16 of 16 each, with 0 false alarms; a plain file checksum caught those two plus the lost tail and the stale backup. The scan caught nothing the checksum missed — as the designer predicted.
+
+| Item | Value |
+|---|---|
+| Package | `HELM_XREAL_20261019_SOURCE_XREAL.zip` `a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249`, freeze `67b485415078ca11c5c3d984cd3f82a6a1ab1f111efc9ce2a619d3c136c8006d` (53 of 53 members re-hashed; no reseal) |
+| Owner line (verbatim, 121 bytes, `2a8a6f86…`) | "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." — bound by `APPROVAL_RECORD_XREAL.md`; only the X-REAL line used |
+| Seed source (A-XR-18) | sha256(line + ":" + zip sha256) = `2af8c199fb322b5c0970047fc0662f8b4e995d6e9b48e3eb8df10c8aeb37f80b` = custodian derivation; overlap_check PASS |
+| Sealed exam | `MANIFEST_XREAL.json` `1e535511a6e802a727a9a49cf6b4a317037f46fadd7b92271aac4376604a541e`; carrier `xr` = `INPUTS_XREAL.json` `37312a31…` + `XREAL_PINS.json` `4cb97a82…`; operator never opened an exam file |
+| Reading | `XREAL_READING.json` `79b6ea3034d441ffd455776755847247e5fe18e66bf0c896a8db2cb092020dcd`; host `XREAL_HOST.json` `1aa60025cb9a686523b766610278c514c3488af1f2aaca426459ea07cedac84d`; run record `240c87a9…` |
+| Verdict | `PASS`: I1, I2 (256/256), I3 (E64 64/64, F64 64/64 equal c40), I4, I6, I7, I9, I10, I11, I12, I13 all true; H1, H3, H8, H11, HK, HN, HS, HB all true |
+
+**Part S (128 sentences, 109 scored):**
+
+| Arm | RIGHT | WRONG | UNDETERMINED |
+|---|---|---|---|
+| FULL (= +EYE_SCAN = REPLAY) | 101 | **8** | 0 |
+| -ENGLISH_IN | 102 | 0 | 7 |
+| -VOICE | 8 | 101 | 0 |
+| B-ASK | 102 | 0 | 7 |
+| B-KEYCALC | 95 | 5 | 9 |
+| B-ECHO | 99 | 0 | 10 |
+
+FULL by key kind (operator count): EMPTY 99 → 91 RIGHT, 8 WRONG (stock written that the sentence did not state); FACTS 7 → 7 RIGHT; ASK 3 → 3 RIGHT; asks 110; 0 invented numbers; PLAIN 128/128; Eye 0 findings, 0 held, 0 writes. -VOICE's WRONG are invented numbers in the old adapter text (H8 true: same writes and statuses). Marks S-a, S-b, S-c missed → **`S_UNSAFE_ON_REAL`** 🟥.
+
+**Parts R:** R-REBOUND FULL 64 scored: RIGHT 3, WRONG 0, asked 61; answerable keys 64, right 3; every answer exact in value and limiting ingredient (3 of 3). B-KEYCALC RIGHT 2, WRONG 25. R-b missed → **`R_SAFE_NOT_CORRECT`** 🟧 (`R_VACUOUS` guard not tripped: 64 scored, 64 answerable). R-ASIS FULL 38 scored: RIGHT 25, WRONG 0, UNDETERMINED 13 (answerable 13, right 0); B-KEYCALC WRONG 9 → **`R_ASIS_SAFE`** 🟩. Census: 1 of 13,686 recipes fits a fixed shape 🟥.
+
+**Sensitivity (coordinator instruction; reader not altered; custodian `FLAG_FOR_HUMAN_REVIEW` carried forward):** 3 R-REBOUND (`RB:pg:42450@473032`, `RB:pg:48804@264612`, `RB:pg:51542@58562`) and 1 R-ASIS (`RA:pg:8501@55936`) exam items also fall in the published answerability draw (chance about 3.6; no tuning). Without them: R-REBOUND 61 scored, RIGHT 3, WRONG 0, asked 58; R-ASIS 37 scored, RIGHT 25, WRONG 0, UNDETERMINED 12. Same words.
+
+**Part F (16 worlds per kind + 64 clean):**
+
+| Kind | Eye scan (candidate) | Plain checksum (WATCHDOG) | Candidate word |
+|---|---|---|---|
+| T1 tail lost | 16 SILENT_HARMLESS | 16 CAUGHT | `KIND_SAFE_NOT_CAUGHT` |
+| T2 torn record | 11 FAILED_LOUD, 5 SILENT_HARMLESS | same | `KIND_SAFE_NOT_CAUGHT` |
+| E1 wrong code page | 16 CAUGHT | 16 CAUGHT | `KIND_CAUGHT` |
+| E2a byte-order mark | 16 FAILED_LOUD | 16 FAILED_LOUD | `KIND_SAFE_NOT_CAUGHT` |
+| E2b CRLF (benign) | 16 KEPT | 16 OVER_CAUTIOUS | `KIND_BENIGN_KEPT` |
+| D1 duplicated line | 16 CAUGHT | 16 CAUGHT | `KIND_CAUGHT` |
+| S1 stale backup | 16 SILENT_HARMLESS | 16 CAUGHT | `KIND_SAFE_NOT_CAUGHT` |
+| C1 clock reset (benign) | 16 KEPT | 16 KEPT | `KIND_BENIGN_KEPT` |
+| Clean | 64 CLEAN_OK | 64 CLEAN_OK | — |
+
+0 SILENT_HARMFUL and 0 false alarms in every arm. CHECKLIST and FULL caught nothing; REPORT_ONLY = candidate. No `KIND_CAUGHT_BEYOND_WATCHDOG`. **`FLAG_FOR_HUMAN_REVIEW` (operator):** F-b ACTED is true only vacuously — 0 of the 32 caught worlds had the probe touch the damaged object, and 0 were held; X-REAL did not test whether the Eye acts on real damage.
+
+- **Designer's predictions:** headline "the plain checksum matches or beats the scan on every damaging fault; the scan misses the stale backup" ✅ held. E1, D1 `KIND_CAUGHT` ✅; T2, E2a `KIND_SAFE_NOT_CAUGHT` ✅; E2b benign with checksum over-cautious ✅; T1 and S1 predicted `KIND_HARMFUL_MISS` ❌ (HELM asked instead; the builder's 0.6 held); S: 109 scored ✅, 7 FACTS keys ✅, WRONG 0-4 ❌ (8), "B-KEYCALC many WRONG" ❌ (5); census below 5% ✅; R-REBOUND `R_SAFE_NOT_CORRECT` (builder 0.6) ✅.
+- **Claim status (frozen §11 table, verdict PASS, ceiling `NAMED_CORPORA_ONLY`, artifact `XREAL_READING.json` `79b6ea30…`):** Eye self-scan → `VALIDATED` that it catches D1 and E1 only (not that the Eye is needed: the checksum caught both), and that it does not halt on E2b and C1. T1, T2, E2a, S1: no move, negative results for the scan. English reader stays `ENGINEERED-NOT-VALIDATED` (negative recorded). Recipe brain stays `LICENSED` within `SYNTHETIC_ONLY`. R-ASIS and the census: recorded facts.
+- **`NOT LICENSED`:** "HELM reads everyday English"; that the brain covers real cooking; that the Eye beats a file checksum on any kind; that the Eye acts on real damage; real users or kitchens; faults in the wild; any wave 1-5 word lifted out of `SYNTHETIC_ONLY`.
+- **Job:** `helm-claude-xreal-20261019-c42`, one m6i.xlarge `i-0decaa7956027896c` (us-west-2, `ami-0dddfa1ffa6b87af7`, 2-CPU slice, 14 GiB), 5:06-5:14 PM Pacific; host 462.1 s; runner 149.90 s; pool 31.95 s, 23 of 23 units exit 0; host tests w1 128, w2 34, w3 41, w3b 23, w4 31, X-REAL 102, all OK; one scored attempt, 0 plumbing retries.
+- **Money:** charge 0.03 USD (list 0.026815; cautious 0.06); cap 1.00. Ledger 111.30 → hold 112.30 → closed **111.33** of 200.00. Addendum `BUDGET_RECONCILIATION_ADDENDUM_CLAUDE_XREAL_C42_20261020T001533Z.json` (`c65b6714…`).
+- **Cleanup VERIFIED three ways:** controller (terminated; volume `vol-0b0ff33a43cd142d3` deleted; prefix purged, empty), independent read-only check `VERIFIED` (`b2537788…`), direct read-only look (`e3d1331c…`). Proof `CLEANUP_PROOF_XREAL_C42.json` (`314af7ec…`). Previous slot user c41 VERIFIED and re-checked live; the controller's previous-gate pinned c40 (c41 used another controller schema) — recorded, not a package change.
+- **Artifacts:** `Documents\Codex\2026-10-19\x_real\run_c42_xreal_20261019\RUN_RESULT_XREAL_C42.md` (full tables) and its folder; repo copies in `docs/working/xreal/run_c42/`; controller `controller_claude_xreal_c42\`; backup `D:\tksCAS-archive\x_real_c42_20261019\`.
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -3210,6 +3264,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-19 | **HELM-R1 X-REAL SCORED (new §7.81) — reader `PASS`; S `S_UNSAFE_ON_REAL` (FULL 101 RIGHT / 8 WRONG of 109; B-ASK 102 / 0; B-KEYCALC 95 / 5), R-REBOUND `R_SAFE_NOT_CORRECT` (3 RIGHT / 0 WRONG / 61 asked of 64), R-ASIS `R_ASIS_SAFE` (25 / 0 / 13 of 38; census 1 of 13,686), F: D1 E1 `KIND_CAUGHT`, T1 T2 E2a S1 `KIND_SAFE_NOT_CAUGHT`, E2b C1 `KIND_BENIGN_KEPT`; checksum caught T1 S1 D1 E1, no kind beyond it; 0 false alarms; F-b vacuous (flagged); answerability-overlap sensitivity: same words without the 4 flagged items.** Job c42, one m6i.xlarge `i-0decaa7956027896c`, 462.1 s host, 0 retries; charge 0.03 USD; ledger 111.33 of 200; cleanup VERIFIED three ways. Eye scan `VALIDATED` for D1/E1 catch and E2b/C1 no-halt only, ceiling `NAMED_CORPORA_ONLY`; English reader stays `ENGINEERED-NOT-VALIDATED` (negative recorded). | `XREAL_READING.json` (sha256 `79b6ea30…`); `Documents\Codex\2026-10-19\x_real\run_c42_xreal_20261019\RUN_RESULT_XREAL_C42.md`; `docs/working/xreal/run_c42/`; this commit |
 | 2026-10-19 | **§7.79 amended — X-REAL RESEALED as v2 (coordinator decision, operational); v1 `c275daed…` `VOID_SUPERSEDED_BY_V2` (never signed).** Recipe parts rebuilt: B must hold ALL of A's ingredients in the same units (R-REBOUND frame 1,122); one witnessed lesson per ingredient with the others in surplus (2x), so the tie limit no longer blocks learning (practice: 15 of 16 recipes every ingredient learned, 30/30 right). Answerability on the published practice seed: 64 of 64 (need 48); R_VACUOUS guard kept. Sentence and fault parts unchanged. Owner pre-approval line bound by `APPROVAL_RECORD_XREAL.md`; seed source = sha256(line + ":" + full zip sha256). Slips recorded (e-mail in the first request header; refused worktree prune). 359 tests OK from the seal. Nothing launched, no claim. | zip `a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249`, freeze `67b485415078ca11c5c3d984cd3f82a6a1ab1f111efc9ce2a619d3c136c8006d`; `docs/working/xreal/`; this commit |
 | 2026-10-19 | **SCRIBE L4 SCORED ON THE SEALED 98 (new §7.80) — exact 0 of 98 (as predicted), CLARIFY 77, answered 21, real-CCE round trip OK 21, `answered_round_trip_ok_but_not_gold` 21; claim status stays `ENGINEERED-NOT-VALIDATED`.** Owner words "SCORE L4" mapped by the coordinator to the plan line. Job c41, one t3.medium `i-085092855ef75f1b8`, AL2023, CPU torch 2.14.1+cpu, host 149.6 s, 1 attempt, 0 retries; shim round trip 16 of 21; 97 of 98 inputs truncated; 1,571 of 4,899 input words in its vocabulary; sealed file unchanged. Charge 0.01 USD (cautious 0.01); ledger 111.29 → 111.39 → 111.30 of 200; cleanup VERIFIED three ways. | receipt `f283d383…`; `docs/working/scribe_l4_eval/RUN_RESULT_SCRIBE_L4_C41.md`; cleanup proof `1eec80c6…`; backup `D:\tksCAS-archive\scribe_l4_score_c41_20261019\` |
 | 2026-10-19 | **HELM-R1 X-REAL PACKET SEALED, NOT LAUNCHED (new §7.79) — the first exam from other people's text; nothing scored, no claim.** Owner word "FETCH X-REAL": PG cookery (281 eBooks, 1 excluded as copyrighted), Wikibooks dump 20261001, Tatoeba, Taskmaster d92cb6af fetched and pinned; USDA list, ftfy and Tatoeba CC0 SKIPPED (no exact URL). Parts S 128 / R-ASIS 64 / R-REBOUND 64 / F 192; two keys (key B by a separate session); rivals always-ask, keyword reader, echo, WATCHDOG checksum. Measured at build, practice only: the frame teaches one ingredient per real recipe (I11 15 of 16 reach a lesson; 0 of 16 every line — exact-amount batches tie and the receipt needs one limiting ingredient); the designed pairing gives ~0 answerable R items (guard A-XR-5 -> `R_VACUOUS`); census 1 of 13,686 recipes fits a brain shape. Tests from the seal 354 OK. Proposed cap 1.00 USD. | zip `c275daed5ed26c6759543e8e89ebe2d54d7d750fe8b8f9bc957efe82ffa7bb6e`, freeze `7c92a5891ae25d318245743c9310cba58fc4f42468b597a188eeb04c51e3506b`, `SOURCES_PINNED.json` `24cfb0d1…`; `docs/working/xreal/`; this commit |

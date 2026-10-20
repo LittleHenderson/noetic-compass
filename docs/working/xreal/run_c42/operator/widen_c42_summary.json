@@ -1,0 +1,433 @@
+{
+ "status": "WIDENED_120_116_111_XR_PACKAGE_SUPERVISOR_HOLD_ALREADY_IN_POINTER",
+ "folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42",
+ "job": "helm-claude-xreal-20261019-c42",
+ "python": "3.14.0",
+ "payload_rebuild_reproducible_before_change": true,
+ "pins_sha256": "5911b409d3971d00969de9a4b2be1c67f5c7e486078c83e0b034df237859fd17",
+ "payload_sha256": "d99f33d61a8c26fbae560f392139f0b840c3fb9042da695531e7715ee0f18c28",
+ "combined_allocation_usd": 112.3,
+ "ledger_pointer_now_usd": 112.3,
+ "ceiling_usd": 200.0,
+ "all_services_upper_usd": 0.783285714286,
+ "files_changed": [
+  {
+   "file": "CONTROLLER_SOURCE_PINS.json",
+   "old_sha256": "fb5d978e6763e5c68eaa2f349f8d2b70a01b7a7a68c2acd27894ffbe565342c9",
+   "new_sha256": "5911b409d3971d00969de9a4b2be1c67f5c7e486078c83e0b034df237859fd17",
+   "old_bytes": 2386,
+   "new_bytes": 2386
+  },
+  {
+   "file": "COST_POLICY.json",
+   "old_sha256": "0fc6bc1edcb44d4470bdd092c115fdff8ef46219a4ac579b26bfbcce2237bf76",
+   "new_sha256": "e7da92664f40da0fb31c925344006c105c143d674e641c35b77437adc3b0af7a",
+   "old_bytes": 4201,
+   "new_bytes": 4231
+  },
+  {
+   "file": "PACKAGING_RECEIPT.json",
+   "old_sha256": "27b3e7311e4207b41cceaff00a5393b718b03ccefa51382a13e401caa8ac0724",
+   "new_sha256": "5a498593305924254beb62cdf3fa943a0b876b818b18331e5bf2565b7325c96e",
+   "old_bytes": 554,
+   "new_bytes": 554
+  },
+  {
+   "file": "aws_control.py",
+   "old_sha256": "1a59ae714df486ea6da6e20542266f71056177a73d820c460aca08cf1db81ca8",
+   "new_sha256": "12d168c30349e0e5d7b4b35be7eb476df73476df69dd07b6b128ca1b3e3a88e4",
+   "old_bytes": 49828,
+   "new_bytes": 49917
+  },
+  {
+   "file": "claude-xreal-c42-payload.zip",
+   "old_sha256": "cc030a6f90c3d22962027ae4adf2d3f373022d284b86fa1ce2d5265d1b744873",
+   "new_sha256": "d99f33d61a8c26fbae560f392139f0b840c3fb9042da695531e7715ee0f18c28",
+   "old_bytes": 2926497,
+   "new_bytes": 2927197
+  },
+  {
+   "file": "job_supervisor.py",
+   "old_sha256": "5088f4fbe543b5e1e69123bae589435b81fe484d13d2477bdca56e6bfdf45c24",
+   "new_sha256": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01",
+   "old_bytes": 17695,
+   "new_bytes": 19550
+  },
+  {
+   "file": "payload_inventory.json",
+   "old_sha256": "e0e590b064f00670d6493253f012419a9c0046de947ae4f7bc94956af12ad571",
+   "new_sha256": "0c57d2ebe841ffc13aaad9e3005bf2734a1b058854ca68272dd77a3b25647c3e",
+   "old_bytes": 115162,
+   "new_bytes": 115162
+  },
+  {
+   "file": "worker.sh",
+   "old_sha256": "d694dceef45b3bb4da1d8c4062802c583bae3ef43abe2d4c8d937bcbfc900ab8",
+   "new_sha256": "27280e7697e6891e8e2edf8ec57d172feac6e7c4850922df825f0c777af33da8",
+   "old_bytes": 25021,
+   "new_bytes": 25024
+  }
+ ],
+ "replacements": [
+  {
+   "file": "aws_control.py",
+   "label": "cap",
+   "count": 1,
+   "old": "\nPROPOSED_CAP_USD=1.00\n",
+   "new": "\nPROPOSED_CAP_USD=1.00\n"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "existing allocation (hold already in pointer)",
+   "count": 1,
+   "old": "\nEXISTING_ALLOCATION_USD=112.3\n",
+   "new": "\nEXISTING_ALLOCATION_USD=111.3\n"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "policy time scope",
+   "count": 1,
+   "old": "assert policy['maximum_host_minutes']==60 and policy['maximum_workload_seconds']==3000,'NATIVE_TIME_SCOPE'",
+   "new": "assert policy['maximum_host_minutes']==120 and policy['maximum_workload_seconds']==6660,'NATIVE_TIME_SCOPE'"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "policy cutoffs",
+   "count": 1,
+   "old": "assert policy['work_cutoff_minutes']==50 and policy['force_cutoff_minutes']==55 and policy['finalization_reserve_seconds']==300,'NATIVE_FINALIZATION_SCOPE'",
+   "new": "assert policy['work_cutoff_minutes']==111 and policy['force_cutoff_minutes']==116 and policy['finalization_reserve_seconds']==300,'NATIVE_FINALIZATION_SCOPE'"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "cost components: compute, root disk and IPv4 for 120 min",
+   "count": 1,
+   "old": "components={'compute_60min':rates[0],**live_components,'retention_storage_8_billable_days'",
+   "new": "components={'compute_120min':rates[0]*2.0,**{k:(v*2.0 if k in ('root_storage','public_ipv4') else v) for k,v in live_components.items()},'retention_storage_8_billable_days'"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "ledger numbers (hold already in pointer)",
+   "count": 1,
+   "old": "authority.get('combined_existing_allocation_usd')==112.3 and authority.get('combined_allocation_usd')==113.3",
+   "new": "authority.get('combined_existing_allocation_usd')==111.3 and authority.get('combined_allocation_usd')==112.3"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "launch cutoffs",
+   "count": 1,
+   "old": "\n cut=started+datetime.timedelta(minutes=55)\n work_cut=started+datetime.timedelta(minutes=50)\n",
+   "new": "\n cut=started+datetime.timedelta(minutes=116)\n work_cut=started+datetime.timedelta(minutes=111)\n"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "hard deadline",
+   "count": 1,
+   "old": "'hard_deadline_utc':(started+datetime.timedelta(minutes=60)).isoformat()",
+   "new": "'hard_deadline_utc':(started+datetime.timedelta(minutes=120)).isoformat()"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "shutdown rounding text",
+   "count": 1,
+   "old": "'os_shutdown_rounding':'CEILING_MINUTE; API_FORCE_CUTOFF_REMAINS_EXACT_55_MINUTES'",
+   "new": "'os_shutdown_rounding':'CEILING_MINUTE; API_FORCE_CUTOFF_REMAINS_EXACT_116_MINUTES'"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "intent workload",
+   "count": 1,
+   "old": "'worker_finalization_bound_seconds':297,'finalization_reserve_seconds':300,'maximum_workload_seconds':3000,",
+   "new": "'worker_finalization_bound_seconds':297,'finalization_reserve_seconds':300,'maximum_workload_seconds':6660,"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "dispatch admission",
+   "count": 2,
+   "old": "(work_cut-now()).total_seconds()<2400:",
+   "new": "(work_cut-now()).total_seconds()<6060:"
+  },
+  {
+   "file": "aws_control.py",
+   "label": "dispatch refusal text",
+   "count": 1,
+   "old": "'reason':'SSM_NOT_READY_WITHIN_EIGHT_MINUTES_OR_INSUFFICIENT_2400_SECOND_WORK_WINDOW'",
+   "new": "'reason':'SSM_NOT_READY_WITHIN_EIGHT_MINUTES_OR_INSUFFICIENT_6060_SECOND_WORK_WINDOW'"
+  },
+  {
+   "file": "worker.sh",
+   "label": "comment window",
+   "count": 1,
+   "old": "# The controller sets the work cutoff 3000 seconds after launch; bootstrap\n",
+   "new": "# The controller sets the work cutoff 6660 seconds after launch; bootstrap\n"
+  },
+  {
+   "file": "worker.sh",
+   "label": "comment admission",
+   "count": 1,
+   "old": "# consumes that window. Admit at least 2400 seconds remaining, never restart\n",
+   "new": "# consumes that window. Admit at least 6060 seconds remaining, never restart\n"
+  },
+  {
+   "file": "worker.sh",
+   "label": "comment reserve",
+   "count": 1,
+   "old": "# a fresh 3000-second allowance. The 50-to-55-minute finalization reserve covers\n",
+   "new": "# a fresh 6660-second allowance. The 111-to-116-minute finalization reserve covers\n"
+  },
+  {
+   "file": "worker.sh",
+   "label": "comment hard cap",
+   "count": 1,
+   "old": "# verification (297seconds total); the controller owns the60minute hard cap.\n",
+   "new": "# verification (297seconds total); the controller owns the120minute hard cap.\n"
+  },
+  {
+   "file": "worker.sh",
+   "label": "worker admission",
+   "count": 1,
+   "old": "if [ \"$remaining\" -lt 2400 ]; then phase INSUFFICIENT_SHARED_WINDOW; exit 4; fi\n",
+   "new": "if [ \"$remaining\" -lt 6060 ]; then phase INSUFFICIENT_SHARED_WINDOW; exit 4; fi\n"
+  },
+  {
+   "file": "worker.sh",
+   "label": "worker RuntimeMaxSec clamp",
+   "count": 1,
+   "old": "if [ \"$remaining\" -gt 3000 ]; then remaining=3000; fi\n",
+   "new": "if [ \"$remaining\" -gt 6660 ]; then remaining=6660; fi\n"
+  },
+  {
+   "file": "job_supervisor.py",
+   "label": "replaced by the sealed package kit/job_supervisor.py",
+   "count": 1,
+   "old": "5088f4fbe543b5e1e69123bae589435b81fe484d13d2477bdca56e6bfdf45c24",
+   "new": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01"
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field maximum_all_services_usd",
+   "count": 1,
+   "old": 1.0,
+   "new": 1.0
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field proposed_allocation_usd",
+   "count": 1,
+   "old": 1.0,
+   "new": 1.0
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field new_allocation_usd",
+   "count": 1,
+   "old": 1.0,
+   "new": 1.0
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field combined_existing_allocation_usd",
+   "count": 1,
+   "old": 112.3,
+   "new": 111.3
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field combined_allocation_usd",
+   "count": 1,
+   "old": 113.3,
+   "new": 112.3
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field prospective_combined_allocation_usd",
+   "count": 1,
+   "old": 113.3,
+   "new": 112.3
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field maximum_host_minutes",
+   "count": 1,
+   "old": 60,
+   "new": 120
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field maximum_workload_seconds",
+   "count": 1,
+   "old": 3000,
+   "new": 6660
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field minimum_worker_admission_seconds",
+   "count": 1,
+   "old": 2400,
+   "new": 6060
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field work_cutoff_minutes",
+   "count": 1,
+   "old": 50,
+   "new": 111
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field force_cutoff_minutes",
+   "count": 1,
+   "old": 55,
+   "new": 116
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field deadline_contract",
+   "count": 1,
+   "old": "One launch-derived 3000 second window covers bootstrap, preflight and every plan stage, each run at most once. No retry or second host. Finalization 300 seconds, force 55 min, host 60 min.",
+   "new": "One launch-derived 6660 second window covers bootstrap, preflight and every plan stage, each run at most once. No automatic retry or second host. Finalization 300 seconds, force 116 min, host 120 min."
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field current_components_at_admitted_maximum",
+   "count": 1,
+   "old": {
+    "compute_60min_at_0_20_per_hour": 0.2,
+    "root_storage": 0.03,
+    "public_ipv4": 0.01,
+    "bounded_transfer_and_requests": 0.15,
+    "retention_storage_8_days_at_0_023_per_gb_month": 0.003285714286,
+    "contingency": 0.15,
+    "sum_upper": 0.543285714286
+   },
+   "new": {
+    "compute_120min_at_0_20_per_hour": 0.4,
+    "root_storage_120min": 0.06,
+    "public_ipv4_120min": 0.02,
+    "bounded_transfer_and_requests": 0.15,
+    "retention_storage_8_days_at_0_023_per_gb_month": 0.003285714286,
+    "contingency": 0.15,
+    "sum_upper": 0.783285714286
+   }
+  },
+  {
+   "file": "COST_POLICY.json",
+   "label": "field all_services_upper_usd",
+   "count": 1,
+   "old": 0.543285714286,
+   "new": 0.783285714286
+  },
+  {
+   "file": "payload_inventory.json",
+   "label": "members/execution/job_supervisor.py",
+   "count": 1,
+   "old": {
+    "bytes": 17695,
+    "sha256": "5088f4fbe543b5e1e69123bae589435b81fe484d13d2477bdca56e6bfdf45c24"
+   },
+   "new": {
+    "bytes": 19550,
+    "sha256": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01"
+   }
+  },
+  {
+   "file": "CONTROLLER_SOURCE_PINS.json",
+   "label": "files/aws_control.py",
+   "count": 1,
+   "old": {
+    "sha256": "1a59ae714df486ea6da6e20542266f71056177a73d820c460aca08cf1db81ca8",
+    "bytes": 49828
+   },
+   "new": {
+    "sha256": "12d168c30349e0e5d7b4b35be7eb476df73476df69dd07b6b128ca1b3e3a88e4",
+    "bytes": 49917
+   }
+  },
+  {
+   "file": "CONTROLLER_SOURCE_PINS.json",
+   "label": "files/worker.sh",
+   "count": 1,
+   "old": {
+    "sha256": "d694dceef45b3bb4da1d8c4062802c583bae3ef43abe2d4c8d937bcbfc900ab8",
+    "bytes": 25021
+   },
+   "new": {
+    "sha256": "27280e7697e6891e8e2edf8ec57d172feac6e7c4850922df825f0c777af33da8",
+    "bytes": 25024
+   }
+  },
+  {
+   "file": "CONTROLLER_SOURCE_PINS.json",
+   "label": "files/COST_POLICY.json",
+   "count": 1,
+   "old": {
+    "sha256": "0fc6bc1edcb44d4470bdd092c115fdff8ef46219a4ac579b26bfbcce2237bf76",
+    "bytes": 4201
+   },
+   "new": {
+    "sha256": "e7da92664f40da0fb31c925344006c105c143d674e641c35b77437adc3b0af7a",
+    "bytes": 4231
+   }
+  },
+  {
+   "file": "CONTROLLER_SOURCE_PINS.json",
+   "label": "files/job_supervisor.py",
+   "count": 1,
+   "old": {
+    "sha256": "5088f4fbe543b5e1e69123bae589435b81fe484d13d2477bdca56e6bfdf45c24",
+    "bytes": 17695
+   },
+   "new": {
+    "sha256": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01",
+    "bytes": 19550
+   }
+  },
+  {
+   "file": "CONTROLLER_SOURCE_PINS.json",
+   "label": "files/claude-xreal-c42-payload.zip",
+   "count": 1,
+   "old": {
+    "sha256": "cc030a6f90c3d22962027ae4adf2d3f373022d284b86fa1ce2d5265d1b744873",
+    "bytes": 2926497
+   },
+   "new": {
+    "sha256": "d99f33d61a8c26fbae560f392139f0b840c3fb9042da695531e7715ee0f18c28",
+    "bytes": 2927197
+   }
+  },
+  {
+   "file": "CONTROLLER_SOURCE_PINS.json",
+   "label": "files/payload_inventory.json",
+   "count": 1,
+   "old": {
+    "sha256": "e0e590b064f00670d6493253f012419a9c0046de947ae4f7bc94956af12ad571",
+    "bytes": 115162
+   },
+   "new": {
+    "sha256": "0c57d2ebe841ffc13aaad9e3005bf2734a1b058854ca68272dd77a3b25647c3e",
+    "bytes": 115162
+   }
+  },
+  {
+   "file": "PACKAGING_RECEIPT.json",
+   "label": "payload_sha256",
+   "count": 1,
+   "old": "cc030a6f90c3d22962027ae4adf2d3f373022d284b86fa1ce2d5265d1b744873",
+   "new": "d99f33d61a8c26fbae560f392139f0b840c3fb9042da695531e7715ee0f18c28"
+  },
+  {
+   "file": "PACKAGING_RECEIPT.json",
+   "label": "payload_bytes",
+   "count": 1,
+   "old": 2926497,
+   "new": 2927197
+  },
+  {
+   "file": "PACKAGING_RECEIPT.json",
+   "label": "expanded_bytes",
+   "count": 1,
+   "old": 11750941,
+   "new": 11752796
+  }
+ ],
+ "next": "do NOT run verify_build.py now (it compares with a 60-minute folder and the kit job_supervisor.py); run raise_memory_14g.py, then the review, then xrealkit/write_authority_job_cap100_120_held_xr.py"
+}

@@ -1,0 +1,28 @@
+{
+ "all_accept": true,
+ "open_blockers": [],
+ "open_majors": [],
+ "reviewer": "Claude Code launch-operator sub-agent (laptop MSI), X-REAL scored job c42. Built per LAUNCH_BRIEF_XREAL_20261019.md step 4: xrealkit/make_xreal_config.py (eight sources pinned by sha256: xreal a9b4c954 (every member re-hashed against PACKAGE_FREEZE 67b48541, 53 of 53, 0 bad), r1w4 4bd0d740, r1w3b a4f82556, r1w3 v3 152bca2a, r1w2 21ad185d, w1 v3 31f97d67, xr carrier XR_CARRIER_V1 60c2ade6 = exactly xr/INPUTS_XREAL.json 37312a31 + xr/XREAL_PINS.json 4cb97a82, each re-hashed against the custodian handoff XREAL_SEALED_20261019T235639Z.json (MANIFEST_XREAL 1e535511 by hash only), never opened; x5spent carrier X5SPENT_CARRIER_V1 653372b4 = ENGLISH64_X5 1eb17c91 + FACES64_X5 2c7cac21 by sha256 against the runner's SPENT pins; no source corpus ships; stage = kit/STAGE_XREAL.json with --expected-freeze-sha256 67b48541 filled in, layout_note dropped, nothing else changed) -> build_job.py -> package kit/plan_check.py on job_plan.json: PASS, problems [] -> xrealkit/widen_window_120_held_xr.py (derived from the run-proven c40 script by exact substitution: 120/116/111 min, cap 1.00 = the 1.00 total hold, hold record BUDGET_RESERVATION_XREAL_C42.json 7fb27c7e; job_supervisor.py REPLACED by the sealed package copy 3b2337ca = wave 2's byte for byte) -> raise_memory_14g.py. Operator diff vs run-proven controller_claude_r1w5_c40 (xrealkit/c42_diff_vs_c40.json): only the previous-slot block (c40, independent cleanup VERIFIED 3d131b6d), the source table, the stage name; job_supervisor.py, worker window numbers, cap and runtime_preflight.py identical; problems []. Payload 623 members: no KEYS_XREAL, SAMPLE_RECORD_XREAL, MANIFEST_XREAL or SEED_DERIVATION file (only the package's own published practice files).",
+ "scope": "X-REAL (HELM_XREAL_20261019, sealed a9b4c954, freeze 67b48541): LAUNCH_BRIEF_XREAL_20261019.md step 4, the one supervisor stage xreal_host_run via kit/run_xreal.py on one m6i.xlarge, 2-CPU slice with 14 GiB, XREAL_WORKERS=2, command deadline 2400 s, stage limit 3000 s, host 120 min. Raw data only; the verdict and the part words come from the laptop reader xreal/merge_xreal.py.",
+ "verdicts": {
+  "plan_check-package": "PASS",
+  "operator-diff-c42-vs-c40": "ONLY_PREVIOUS_SLOT_SOURCES_STAGE_NAME",
+  "payload-sources-vs-pinned-archives": "BYTE_EQUAL",
+  "xreal-members-vs-freeze": "53 of 53",
+  "xr-carrier-files-vs-handoff": "2 of 2 EQUAL (INPUTS_XREAL, XREAL_PINS); no key file",
+  "x5spent-files-vs-runner-pins": "2 of 2 EQUAL",
+  "pinned-public-sources-on-laptop": "299 of 299 EQUAL to SOURCES_PINNED.json 24cfb0d1; none ship (RUN_LIMITS sources_on_host: none)",
+  "stage-argv-vs-STAGE_XREAL": "EXACT (freeze placeholder filled with 67b48541)",
+  "ledger-hold": "1.00 USD hold placed after c41's closeout (111.30 -> 112.30 of 200; reservation 7fb27c7e); no torch work (the kit's runtime preflight imports torch only as its CPU dependency probe, as at c38-c40)",
+  "previous-slot-user": "c41 (custom controller) independent cleanup VERIFIED e6d6cf07; controller previous-gate pins c40 (last c01-family controller) VERIFIED 3d131b6d"
+ },
+ "fixes_applied": [],
+ "notes": [
+  "Owner record OWNER_APPROVAL_XREAL_20261020T000138Z.json (6b4799b2): owner pre-approval line sha256 2a8a6f86 (121 bytes) bound to a9b4c954 by APPROVAL_RECORD_XREAL.md, cap 1.00 USD, one attempt + one plumbing retry; it is also the exam seed source with the zip hash (seed input 2af8c199, equal to the custodian's derivation).",
+  "X-REAL exam sealed 2026-10-19T23:56:39Z by a separate custodian; receiver check all_pass true (b6be46c0); custodian FLAG_FOR_HUMAN_REVIEW on the published answerability draw overlap (3 R-REBOUND + 1 R-ASIS) is carried forward to the result; the frozen reader is not altered.",
+  "A scored result of any kind ends the run; a plumbing retry only if no unit of the scored pool started.",
+  "The controller's previous gate names c40, not c41, because c41 used a custom controller with another record schema; c41 is checked in finalize_config_c42.py and re-checked live before launch.",
+  "Same-family review (Claude checking Claude); no Codex round (one-review-round rule)."
+ ],
+ "slot_note": "Last slot user helm-claude-scribe-l4-score-20261019-c41 (custom controller; independent cleanup VERIFIED e6d6cf07; host i-085092855ef75f1b8 terminated, volume vol-09ed9ed5cfe971512 absent). Controller previous-gate: helm-claude-r1w5-20261019-c40 (VERIFIED 3d131b6d; host i-0a0a23d11e2a94442, volume vol-0760d931c971a98cd)."
+}

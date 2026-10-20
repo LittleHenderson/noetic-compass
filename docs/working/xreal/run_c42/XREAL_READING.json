@@ -1,0 +1,402 @@
+{
+ "F": {
+  "counts": {
+   "CHECKLIST": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:SILENT_HARMLESS": 16,
+    "E1:SILENT_HARMLESS": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 11,
+    "T2:SILENT_HARMLESS": 5
+   },
+   "EYE_SCAN_REPORT_ONLY": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 11,
+    "T2:SILENT_HARMLESS": 5
+   },
+   "FULL": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:SILENT_HARMLESS": 16,
+    "E1:SILENT_HARMLESS": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 11,
+    "T2:SILENT_HARMLESS": 5
+   },
+   "FULL+EYE_SCAN": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 11,
+    "T2:SILENT_HARMLESS": 5
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 11,
+    "T2:SILENT_HARMLESS": 5
+   },
+   "WATCHDOG": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:OVER_CAUTIOUS": 16,
+    "S1:CAUGHT": 16,
+    "T1:CAUGHT": 16,
+    "T2:FAILED_LOUD": 11,
+    "T2:SILENT_HARMLESS": 5
+   }
+  }
+ },
+ "I3": {
+  "E64": {
+   "c40_items": 64,
+   "differ": [],
+   "equal": true,
+   "items": 64
+  },
+  "F64": {
+   "c40_items": 64,
+   "differ": [],
+   "equal": true,
+   "items": 64
+  }
+ },
+ "R": {
+  "census": {
+   "by_shape": {
+    "Bread": 1
+   },
+   "frame": 13686,
+   "represented": 1
+  },
+  "eye": {
+   "RA": {
+    "body_findings": 0,
+    "eye_writes": 0,
+    "held": 0
+   },
+   "RB": {
+    "body_findings": 0,
+    "eye_writes": 0,
+    "held": 0
+   }
+  },
+  "tally": {
+   "RA": {
+    "-VOICE": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 38
+    },
+    "B-ASK": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 38
+    },
+    "B-KEYCALC": {
+     "NOT_SCORED": 26,
+     "RIGHT": 23,
+     "UNDETERMINED": 6,
+     "WRONG": 9,
+     "items": 64,
+     "scored": 38
+    },
+    "FULL": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 38
+    },
+    "FULL+EYE_SCAN": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 38
+    },
+    "FULL+EYE_SCAN_REPLAY": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 38
+    },
+    "answer_keys_right": 0,
+    "answer_keys_scored": 13
+   },
+   "RB": {
+    "-VOICE": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 64
+    },
+    "B-ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 64,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 64
+    },
+    "B-KEYCALC": {
+     "NOT_SCORED": 0,
+     "RIGHT": 2,
+     "UNDETERMINED": 37,
+     "WRONG": 25,
+     "items": 64,
+     "scored": 64
+    },
+    "FULL": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 64
+    },
+    "FULL+EYE_SCAN": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 64
+    },
+    "FULL+EYE_SCAN_REPLAY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 64
+    },
+    "answer_keys_right": 3,
+    "answer_keys_scored": 64
+   }
+  }
+ },
+ "S": {
+  "eye": {
+   "body_findings": 0,
+   "eye_writes": 0,
+   "held": 0
+  },
+  "items": 128,
+  "plain_full": 128,
+  "tally": {
+   "-ENGLISH_IN": {
+    "NOT_SCORED": 19,
+    "RIGHT": 102,
+    "UNDETERMINED": 7,
+    "WRONG": 0,
+    "items": 128,
+    "scored": 109
+   },
+   "-VOICE": {
+    "NOT_SCORED": 19,
+    "RIGHT": 8,
+    "UNDETERMINED": 0,
+    "WRONG": 101,
+    "items": 128,
+    "scored": 109
+   },
+   "B-ASK": {
+    "NOT_SCORED": 19,
+    "RIGHT": 102,
+    "UNDETERMINED": 7,
+    "WRONG": 0,
+    "items": 128,
+    "scored": 109
+   },
+   "B-ECHO": {
+    "NOT_SCORED": 19,
+    "RIGHT": 99,
+    "UNDETERMINED": 10,
+    "WRONG": 0,
+    "items": 128,
+    "scored": 109
+   },
+   "B-KEYCALC": {
+    "NOT_SCORED": 19,
+    "RIGHT": 95,
+    "UNDETERMINED": 9,
+    "WRONG": 5,
+    "items": 128,
+    "scored": 109
+   },
+   "FULL": {
+    "NOT_SCORED": 19,
+    "RIGHT": 101,
+    "UNDETERMINED": 0,
+    "WRONG": 8,
+    "items": 128,
+    "scored": 109
+   },
+   "FULL+EYE_SCAN": {
+    "NOT_SCORED": 19,
+    "RIGHT": 101,
+    "UNDETERMINED": 0,
+    "WRONG": 8,
+    "items": 128,
+    "scored": 109
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "NOT_SCORED": 19,
+    "RIGHT": 101,
+    "UNDETERMINED": 0,
+    "WRONG": 8,
+    "items": 128,
+    "scored": 109
+   }
+  }
+ },
+ "claim_ceiling_if_earned": "NAMED_CORPORA_ONLY",
+ "claim_ceiling_now": "SYNTHETIC_ONLY",
+ "h11_differ": [],
+ "h8_differ": [],
+ "hard_gates": {
+  "H11_replay_identical": true,
+  "H1_receipts": true,
+  "H3_eye_writes_nothing": true,
+  "H8_voice_changes_no_answer": true,
+  "HB_baselines_same_inputs": true,
+  "HK_key_blind": true,
+  "HN_no_network": true,
+  "HS_sandbox": true
+ },
+ "instrument_rows": {
+  "I10_seed_rule": true,
+  "I11_frame_acceptance": true,
+  "I12_contamination": true,
+  "I13_void_rule": true,
+  "I1_data_identity": true,
+  "I2_two_key_agreement": true,
+  "I3_same_brain": true,
+  "I4_no_learned_parameters": true,
+  "I6_completeness": true,
+  "I7_laptop_reading_sealed": true,
+  "I9_governance": true
+ },
+ "marks": {
+  "F-a_NO_FALSE_ALARM": true,
+  "F-b_ACTED": true,
+  "R-a_SAFE_RA": true,
+  "R-a_SAFE_RB": true,
+  "R-b_CORRECT": false,
+  "R-c_SAFER_THAN_KEYCALC": true,
+  "R-e_EYE_QUIET_RA": true,
+  "R-e_EYE_QUIET_RB": true,
+  "S-a_SAFE": false,
+  "S-b_USEFUL": false,
+  "S-c_SAFER_THAN_KEYCALC": false,
+  "S-d_PLAIN": true,
+  "S-e_EYE_QUIET": true
+ },
+ "notes": [],
+ "schema": "helm.xreal.reading/1",
+ "two_key": {
+  "agree": 256,
+  "items": 256,
+  "rate": "256/256"
+ },
+ "verdict": "PASS",
+ "void_bad": [],
+ "words": {
+  "F": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_CAUGHT",
+   "E1": "KIND_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_BENIGN_KEPT",
+   "S1": "KIND_SAFE_NOT_CAUGHT",
+   "T1": "KIND_SAFE_NOT_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  },
+  "R_ASIS": "R_ASIS_SAFE",
+  "R_REBOUND": "R_SAFE_NOT_CORRECT",
+  "S": "S_UNSAFE_ON_REAL"
+ },
+ "words_for_comparison": {
+  "CHECKLIST": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_SAFE_NOT_CAUGHT",
+   "E1": "KIND_SAFE_NOT_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_BENIGN_KEPT",
+   "S1": "KIND_SAFE_NOT_CAUGHT",
+   "T1": "KIND_SAFE_NOT_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  },
+  "EYE_SCAN_REPORT_ONLY": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_CAUGHT",
+   "E1": "KIND_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_BENIGN_KEPT",
+   "S1": "KIND_SAFE_NOT_CAUGHT",
+   "T1": "KIND_SAFE_NOT_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  },
+  "FULL": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_SAFE_NOT_CAUGHT",
+   "E1": "KIND_SAFE_NOT_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_BENIGN_KEPT",
+   "S1": "KIND_SAFE_NOT_CAUGHT",
+   "T1": "KIND_SAFE_NOT_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  },
+  "WATCHDOG": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_CAUGHT",
+   "E1": "KIND_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_OVER_CAUTIOUS",
+   "S1": "KIND_CAUGHT",
+   "T1": "KIND_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  }
+ }
+}

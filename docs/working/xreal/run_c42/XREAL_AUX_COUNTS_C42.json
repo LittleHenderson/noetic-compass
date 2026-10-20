@@ -1,0 +1,1330 @@
+{
+ "F": {
+  "CHECKLIST": {
+   "C1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "CLEAN": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CLEAN_OK": 64
+    },
+    "false_alarm": 0,
+    "worlds": 64
+   },
+   "D1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2a": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2b": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "S1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T2": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 11,
+     "SILENT_HARMLESS": 5
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   }
+  },
+  "EYE_SCAN_REPORT_ONLY": {
+   "C1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "CLEAN": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CLEAN_OK": 64
+    },
+    "false_alarm": 0,
+    "worlds": 64
+   },
+   "D1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2a": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2b": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "S1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T2": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 11,
+     "SILENT_HARMLESS": 5
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   }
+  },
+  "FULL": {
+   "C1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "CLEAN": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CLEAN_OK": 64
+    },
+    "false_alarm": 0,
+    "worlds": 64
+   },
+   "D1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2a": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2b": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "S1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T2": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 11,
+     "SILENT_HARMLESS": 5
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   }
+  },
+  "FULL+EYE_SCAN": {
+   "C1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "CLEAN": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CLEAN_OK": 64
+    },
+    "false_alarm": 0,
+    "worlds": 64
+   },
+   "D1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2a": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2b": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "S1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T2": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 11,
+     "SILENT_HARMLESS": 5
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   }
+  },
+  "FULL+EYE_SCAN_REPLAY": {
+   "C1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "CLEAN": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CLEAN_OK": 64
+    },
+    "false_alarm": 0,
+    "worlds": 64
+   },
+   "D1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2a": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2b": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "S1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "SILENT_HARMLESS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T2": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 11,
+     "SILENT_HARMLESS": 5
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   }
+  },
+  "WATCHDOG": {
+   "C1": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "KEPT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "CLEAN": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CLEAN_OK": 64
+    },
+    "false_alarm": 0,
+    "worlds": 64
+   },
+   "D1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2a": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "E2b": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "OVER_CAUTIOUS": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "S1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T1": {
+    "caught": 16,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "CAUGHT": 16
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   },
+   "T2": {
+    "caught": 0,
+    "caught_held": 0,
+    "caught_touched": 0,
+    "caught_touched_held": 0,
+    "classes": {
+     "FAILED_LOUD": 11,
+     "SILENT_HARMLESS": 5
+    },
+    "false_alarm": 0,
+    "worlds": 16
+   }
+  }
+ },
+ "R": {
+  "R_ASIS": {
+   "-VOICE": {
+    "all_items": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "answer_keys": 13,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 64,
+     "items": 64,
+     "scored": 38
+    },
+    "without_overlap": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 12,
+     "WRONG": 0,
+     "answer_keys": 12,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 63,
+     "items": 63,
+     "scored": 37
+    }
+   },
+   "B-ASK": {
+    "all_items": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "answer_keys": 13,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 64,
+     "items": 64,
+     "scored": 38
+    },
+    "without_overlap": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 12,
+     "WRONG": 0,
+     "answer_keys": 12,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 63,
+     "items": 63,
+     "scored": 37
+    }
+   },
+   "B-KEYCALC": {
+    "all_items": {
+     "NOT_SCORED": 26,
+     "RIGHT": 23,
+     "UNDETERMINED": 6,
+     "WRONG": 9,
+     "answer_keys": 13,
+     "answer_keys_right": 0,
+     "answered": 7,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 1,
+     "asks": 50,
+     "items": 64,
+     "scored": 38
+    },
+    "without_overlap": {
+     "NOT_SCORED": 26,
+     "RIGHT": 23,
+     "UNDETERMINED": 6,
+     "WRONG": 8,
+     "answer_keys": 12,
+     "answer_keys_right": 0,
+     "answered": 6,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 1,
+     "asks": 50,
+     "items": 63,
+     "scored": 37
+    }
+   },
+   "FULL": {
+    "all_items": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "answer_keys": 13,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 64,
+     "items": 64,
+     "scored": 38
+    },
+    "without_overlap": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 12,
+     "WRONG": 0,
+     "answer_keys": 12,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 63,
+     "items": 63,
+     "scored": 37
+    }
+   },
+   "FULL+EYE_SCAN": {
+    "all_items": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "answer_keys": 13,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 64,
+     "items": 64,
+     "scored": 38
+    },
+    "without_overlap": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 12,
+     "WRONG": 0,
+     "answer_keys": 12,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 63,
+     "items": 63,
+     "scored": 37
+    }
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "all_items": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 13,
+     "WRONG": 0,
+     "answer_keys": 13,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 64,
+     "items": 64,
+     "scored": 38
+    },
+    "without_overlap": {
+     "NOT_SCORED": 26,
+     "RIGHT": 25,
+     "UNDETERMINED": 12,
+     "WRONG": 0,
+     "answer_keys": 12,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 63,
+     "items": 63,
+     "scored": 37
+    }
+   }
+  },
+  "R_REBOUND": {
+   "-VOICE": {
+    "all_items": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "answer_keys": 64,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 61,
+     "items": 64,
+     "scored": 64
+    },
+    "without_overlap": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 58,
+     "WRONG": 0,
+     "answer_keys": 61,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 58,
+     "items": 61,
+     "scored": 61
+    }
+   },
+   "B-ASK": {
+    "all_items": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 64,
+     "WRONG": 0,
+     "answer_keys": 64,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 64,
+     "items": 64,
+     "scored": 64
+    },
+    "without_overlap": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "answer_keys": 61,
+     "answer_keys_right": 0,
+     "answered": 0,
+     "answered_value_and_limiting_exact": 0,
+     "answered_value_exact": 0,
+     "asks": 61,
+     "items": 61,
+     "scored": 61
+    }
+   },
+   "B-KEYCALC": {
+    "all_items": {
+     "NOT_SCORED": 0,
+     "RIGHT": 2,
+     "UNDETERMINED": 37,
+     "WRONG": 25,
+     "answer_keys": 64,
+     "answer_keys_right": 2,
+     "answered": 27,
+     "answered_value_and_limiting_exact": 2,
+     "answered_value_exact": 5,
+     "asks": 37,
+     "items": 64,
+     "scored": 64
+    },
+    "without_overlap": {
+     "NOT_SCORED": 0,
+     "RIGHT": 2,
+     "UNDETERMINED": 35,
+     "WRONG": 24,
+     "answer_keys": 61,
+     "answer_keys_right": 2,
+     "answered": 26,
+     "answered_value_and_limiting_exact": 2,
+     "answered_value_exact": 5,
+     "asks": 35,
+     "items": 61,
+     "scored": 61
+    }
+   },
+   "FULL": {
+    "all_items": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "answer_keys": 64,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 61,
+     "items": 64,
+     "scored": 64
+    },
+    "without_overlap": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 58,
+     "WRONG": 0,
+     "answer_keys": 61,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 58,
+     "items": 61,
+     "scored": 61
+    }
+   },
+   "FULL+EYE_SCAN": {
+    "all_items": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "answer_keys": 64,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 61,
+     "items": 64,
+     "scored": 64
+    },
+    "without_overlap": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 58,
+     "WRONG": 0,
+     "answer_keys": 61,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 58,
+     "items": 61,
+     "scored": 61
+    }
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "all_items": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 61,
+     "WRONG": 0,
+     "answer_keys": 64,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 61,
+     "items": 64,
+     "scored": 64
+    },
+    "without_overlap": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 58,
+     "WRONG": 0,
+     "answer_keys": 61,
+     "answer_keys_right": 3,
+     "answered": 3,
+     "answered_value_and_limiting_exact": 3,
+     "answered_value_exact": 3,
+     "asks": 58,
+     "items": 61,
+     "scored": 61
+    }
+   }
+  }
+ },
+ "S": {
+  "-ENGLISH_IN": {
+   "NOT_SCORED": 19,
+   "RIGHT": 102,
+   "UNDETERMINED": 7,
+   "WRONG": 0,
+   "asks": 123,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 99,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 7,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 0,
+   "items": 128,
+   "writes_total": 0
+  },
+  "-VOICE": {
+   "NOT_SCORED": 19,
+   "RIGHT": 8,
+   "UNDETERMINED": 0,
+   "WRONG": 101,
+   "asks": 110,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 3,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 1,
+     "UNDETERMINED": 0,
+     "WRONG": 98,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 7,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 110,
+   "items": 128,
+   "writes_total": 17
+  },
+  "B-ASK": {
+   "NOT_SCORED": 19,
+   "RIGHT": 102,
+   "UNDETERMINED": 7,
+   "WRONG": 0,
+   "asks": 128,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 99,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 7,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 0,
+   "items": 128,
+   "writes_total": 0
+  },
+  "B-ECHO": {
+   "NOT_SCORED": 19,
+   "RIGHT": 99,
+   "UNDETERMINED": 10,
+   "WRONG": 0,
+   "asks": 0,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 3,
+     "WRONG": 0,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 99,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 7,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 0,
+   "items": 128,
+   "writes_total": 0
+  },
+  "B-KEYCALC": {
+   "NOT_SCORED": 19,
+   "RIGHT": 95,
+   "UNDETERMINED": 9,
+   "WRONG": 5,
+   "asks": 0,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 3,
+     "WRONG": 0,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 94,
+     "UNDETERMINED": 0,
+     "WRONG": 5,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 1,
+     "UNDETERMINED": 6,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 0,
+   "items": 128,
+   "writes_total": 6
+  },
+  "FULL": {
+   "NOT_SCORED": 19,
+   "RIGHT": 101,
+   "UNDETERMINED": 0,
+   "WRONG": 8,
+   "asks": 110,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 91,
+     "UNDETERMINED": 0,
+     "WRONG": 8,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 7,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 0,
+   "items": 128,
+   "writes_total": 17
+  },
+  "FULL+EYE_SCAN": {
+   "NOT_SCORED": 19,
+   "RIGHT": 101,
+   "UNDETERMINED": 0,
+   "WRONG": 8,
+   "asks": 110,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 91,
+     "UNDETERMINED": 0,
+     "WRONG": 8,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 7,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 0,
+   "items": 128,
+   "writes_total": 17
+  },
+  "FULL+EYE_SCAN_REPLAY": {
+   "NOT_SCORED": 19,
+   "RIGHT": 101,
+   "UNDETERMINED": 0,
+   "WRONG": 8,
+   "asks": 110,
+   "by_key": {
+    "ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 3,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 3
+    },
+    "EMPTY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 91,
+     "UNDETERMINED": 0,
+     "WRONG": 8,
+     "items": 99
+    },
+    "FACTS": {
+     "NOT_SCORED": 0,
+     "RIGHT": 7,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 7
+    },
+    "UNDETERMINED": {
+     "NOT_SCORED": 19,
+     "RIGHT": 0,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 19
+    }
+   },
+   "invented_number": 0,
+   "items": 128,
+   "writes_total": 17
+  }
+ },
+ "answerability_draw": {
+  "drawn": 64,
+  "frame": 1122,
+  "seed_text": "XREAL-ANSWERABILITY-20261019-published-practice-seed"
+ },
+ "frames_sha256": {
+  "FRAME_R_PG.jsonl": "c983e065bc1783ea9a4807612edafe8168ebb8c09b56a264dfea5ca53cb3aa5e",
+  "FRAME_R_WB.jsonl": "6a0d7cc12d0133991bf44c666ecae80ff1239760d0fcbd9aad62b11842563ddc"
+ },
+ "not_the_reading": true,
+ "overlap_counts": {
+  "R_ASIS": 1,
+  "R_REBOUND": 3
+ },
+ "overlap_item_ids": {
+  "R_ASIS": [
+   "RA:pg:8501@55936"
+  ],
+  "R_REBOUND": [
+   "RB:pg:42450@473032",
+   "RB:pg:48804@264612",
+   "RB:pg:51542@58562"
+  ]
+ },
+ "reading_sha256": "79b6ea3034d441ffd455776755847247e5fe18e66bf0c896a8db2cb092020dcd",
+ "schema": "helm.xreal.operator-aux-counts/1"
+}

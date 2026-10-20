@@ -1,0 +1,26 @@
+{
+ "schema": "helm.xreal.merge-input/1",
+ "host": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\run_c42_xreal_20261019\\XREAL_HOST.json",
+ "host_sha256": "1aa60025cb9a686523b766610278c514c3488af1f2aaca426459ea07cedac84d",
+ "run_record": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\run_c42_xreal_20261019\\RUN_RECORD.json",
+ "run_record_sha256": "240c87a93007245bb901a9c527e83f29e82ab37c83bfd849795b63b5f15acfb2",
+ "exam_dir": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\xr_custody\\exam",
+ "approval": {
+  "owner_line_verbatim": "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD.",
+  "owner_line_sha256": "2a8a6f864a9e6d5349a048232813506c8efd51c50fdfde0f70af1e396fe56e00",
+  "package_zip_sha256": "a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249",
+  "package_freeze_sha256": "67b485415078ca11c5c3d984cd3f82a6a1ab1f111efc9ce2a619d3c136c8006d",
+  "cap_usd": 1.0,
+  "attempts": "one scored + one plumbing retry",
+  "superseded_by": null
+ },
+ "approval_record": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\OWNER_APPROVAL_XREAL_20261020T000138Z.json",
+ "approval_record_sha256": "6b4799b22750ca1c0c3050588f2364a66fc743c9ba0cd2245e9dc627399c4d6e",
+ "derivation": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\xr_custody\\work\\SEED_DERIVATION_XREAL.json",
+ "derivation_sha256": "3a8e222b7ae49c6ca4683489cc82b57686c0d6da86d9620ec1338ba813398f24",
+ "receiver_check": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\xr_custody\\work\\RECEIVER_CHECK_XREAL.json",
+ "receiver_check_sha256": "b6be46c06131d05673831d87d44baa7a74781dbfae8f51ce71ac78509e06431c",
+ "c40_full_dir": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave5\\run_c40_r1w5_20261019\\deliverable_unpacked\\runs\\helm-claude-r1w5-20261019-c40\\results\\r1_w5_host_run\\out\\r1w5_out",
+ "package_zip_sha256": "a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249",
+ "package_freeze_sha256": "67b485415078ca11c5c3d984cd3f82a6a1ab1f111efc9ce2a619d3c136c8006d"
+}

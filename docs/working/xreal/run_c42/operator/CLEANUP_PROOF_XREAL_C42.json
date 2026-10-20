@@ -1,0 +1,28 @@
+{
+  "schema": "helm.claude-job.cleanup-proof/1",
+  "utc": "2026-10-20T00:15:33.355028+00:00",
+  "job": "helm-claude-xreal-20261019-c42",
+  "instance": "i-0decaa7956027896c",
+  "instance_state": "terminated",
+  "controller_cleanup": {
+    "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42\\aws-claude-xreal-c42-cleanup.json",
+    "sha256": "28e5e7daa0b557055a01f2cedef687cce8952445442fe6711a4305c77fabca6a",
+    "status": "PRESERVED_AND_PREFIX_PURGE_VERIFIED"
+  },
+  "independent_cleanup": {
+    "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42\\aws-claude-xreal-c42-independent-cleanup.json",
+    "sha256": "b25377886404a4260d4c25553855a7aff4bb3ec19c760ccdf797963b3bc25202",
+    "status": "VERIFIED",
+    "utc": "2026-10-20T00:14:48.174947+00:00"
+  },
+  "direct_read_only_observation": {
+    "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42\\aws-claude-xreal-c42-direct-observation.json",
+    "sha256": "e3d1331c613b9061be29b48a2a64ba6830f4f589c95f2297cb722d7fbdce14a7",
+    "utc": "2026-10-20T00:14:53.197667+00:00",
+    "terminated_reason": "User initiated"
+  },
+  "observation": "instance terminated; volume deleted; no live project instances, no volumes, no prefix versions or delete markers, no multipart uploads",
+  "temporary_role_profile_bucket": "none created: standing instance profile cas-aws-gpu-standby-v1-us-west-2 and the standing shared bucket/prefix (purged, verified empty)",
+  "helper_cleanup_proof": "none: no helper job ran (the X-REAL exam was built on the laptop by the custodian, 0 USD; no torch)",
+  "status": "VERIFIED"
+}
