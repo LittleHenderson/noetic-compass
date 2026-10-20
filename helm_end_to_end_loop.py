@@ -226,17 +226,22 @@ class HELMEndToEndLoop:
                  default_aperture: Any = "0.75", trace_path: Optional[str] = None,
                  brain_dir: Optional[str] = None, wide_brain: Optional[bool] = None, wide_book: Optional[Any] = None,
                  **_ignored: Any):
-        # RB-W1 switch WIDE_BRAIN (default OFF). OFF: nothing below changes and the wide modules are never imported.
-        # ON (v2): the licensed brain stays S0's brain and takes every turn first; the wide book (`self.wide_book`)
-        # takes only the turns the licensed path cannot bind (helm_wide_turn.extended_turn).
+        # RB-W1 switch WIDE_BRAIN: ON by default since the owner's ruling of 2026-10-20 ("YES TO WIDE BRAIN", SPEC 7.56).
+        # OFF (explicit wide_brain=False, or HELM_WIDE_BRAIN set to 0 / OFF / FALSE / NO): nothing below changes and the
+        # wide modules are never imported, so the licensed reference brain is the only brain. ON: the licensed brain stays
+        # S0's brain and takes every turn first; the wide book (`self.wide_book`) takes only the turns the licensed path
+        # cannot bind (helm_wide_turn.extended_turn). The off-words are repeated here (not imported) so that an OFF loop
+        # never imports helm_brain_wide; helm_brain_wide.WIDE_BRAIN_OFF_WORDS is the same tuple, and a test checks that.
         self.wide_on = False
         self.wide_book = None
-        if wide_brain is not None or os.environ.get("HELM_WIDE_BRAIN"):
+        env_off = os.environ.get("HELM_WIDE_BRAIN", "").strip().upper() in ("0", "OFF", "FALSE", "NO")
+        if wide_brain is True or (wide_brain is None and not env_off):
             import helm_brain_wide
             self.wide_on = helm_brain_wide.wide_brain_on(wide_brain)
             if self.wide_on:
                 self.wide_book = wide_book if wide_book is not None else helm_brain_wide.WideRecipeBook()
-        # Station S0's brain: the canonical recipe brain. The 22x40 cookie brain is never constructed here.
+        # Station S0's brain: the licensed reference brain (the wave-1 recipe brain), which reads every turn first; with the
+        # switch ON it is the licensed path inside HELM's canonical wide brain. The 22x40 cookie brain is never constructed here.
         self.brain = brain if brain is not None else CanonicalRecipeBrain(brain_dir=brain_dir)
         self.valve = TKSMetaValveController(default_aperture=Decimal(str(default_aperture)))
         self.agentic_engine = AgenticExecutionEngine(workspace_root=HERE)

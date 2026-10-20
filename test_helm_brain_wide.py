@@ -631,27 +631,57 @@ class K_V3DishNamesAndLines(unittest.TestCase):
 
 
 class H_SwitchOff(unittest.TestCase):
-    def test_switch_default_off(self):
+    """The WIDE_BRAIN switch. Default ON since the owner's ruling of 2026-10-20 ("YES TO WIDE BRAIN", SPEC 7.56);
+    before that the default was OFF (the first two tests here pinned it)."""
+
+    def test_switch_default_on_since_the_owner_ruling(self):
         old = os.environ.pop(W.WIDE_BRAIN_ENV, None)
         try:
-            self.assertFalse(W.wide_brain_on())
+            self.assertTrue(W.wide_brain_on())                    # no variable: ON
             self.assertTrue(W.wide_brain_on(True))
-            os.environ[W.WIDE_BRAIN_ENV] = "1"
-            self.assertTrue(W.wide_brain_on())
-            self.assertFalse(W.wide_brain_on(False))
+            self.assertFalse(W.wide_brain_on(False))              # an explicit argument wins
+            for word in ("1", "ON", "TRUE", "YES", "anything"):
+                os.environ[W.WIDE_BRAIN_ENV] = word
+                self.assertTrue(W.wide_brain_on(), word)
+            for word in W.WIDE_BRAIN_OFF_WORDS + ("off", " 0 ", "false"):
+                os.environ[W.WIDE_BRAIN_ENV] = word
+                self.assertFalse(W.wide_brain_on(), word)        # only these words switch it off
+                self.assertTrue(W.wide_brain_on(True), word)
+            self.assertEqual(W.WIDE_BRAIN_OFF_WORDS, ("0", "OFF", "FALSE", "NO"))
         finally:
             os.environ.pop(W.WIDE_BRAIN_ENV, None)
             if old is not None:
                 os.environ[W.WIDE_BRAIN_ENV] = old
 
-    def test_off_loop_uses_the_licensed_brain_and_never_loads_the_wide_modules(self):
+    def test_default_loop_runs_the_wide_brain_with_the_licensed_brain_reading_first(self):
         code = ("import sys, os; sys.path.insert(0, %r); os.environ.pop(%r, None); import helm_end_to_end_loop as E;"
                 "l = E.HELMEndToEndLoop(); from helm_brain_canonical import CanonicalRecipeBrain as C;"
-                "print(isinstance(l.brain, C), 'helm_brain_wide' in sys.modules, 'helm_wide_turn' in sys.modules,"
-                "len(l.brain.ingredients), sorted(l.brain.products))") % (HERE, W.WIDE_BRAIN_ENV)
+                "import helm_brain_wide as W; print(l.wide_on, isinstance(l.brain, C), isinstance(l.wide_book, W.WideRecipeBook),"
+                "'helm_brain_wide' in sys.modules, len(l.brain.ingredients), sorted(l.brain.products))") % (HERE, W.WIDE_BRAIN_ENV)
         out = subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True, timeout=120)
         self.assertEqual(out.returncode, 0, out.stderr)
-        self.assertEqual(out.stdout.strip(), "True False False 8 ['Bread', 'Frosting', 'Meringue', 'Starter']")
+        self.assertEqual(out.stdout.strip(), "True True True True 8 ['Bread', 'Frosting', 'Meringue', 'Starter']")
+
+    def test_off_loop_uses_the_licensed_brain_and_never_loads_the_wide_modules(self):
+        for word in ("0", "OFF"):
+            code = ("import sys, os; sys.path.insert(0, %r); os.environ[%r] = %r; import helm_end_to_end_loop as E;"
+                    "l = E.HELMEndToEndLoop(); from helm_brain_canonical import CanonicalRecipeBrain as C;"
+                    "print(l.wide_on, isinstance(l.brain, C), 'helm_brain_wide' in sys.modules, 'helm_wide_turn' in sys.modules,"
+                    "len(l.brain.ingredients), sorted(l.brain.products))") % (HERE, W.WIDE_BRAIN_ENV, word)
+            out = subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True, timeout=120)
+            self.assertEqual(out.returncode, 0, out.stderr)
+            self.assertEqual(out.stdout.strip(), "False True False False 8 ['Bread', 'Frosting', 'Meringue', 'Starter']", word)
+
+    def test_explicit_false_wins_over_the_default(self):
+        old = os.environ.pop(W.WIDE_BRAIN_ENV, None)
+        try:
+            import helm_end_to_end_loop as E
+            loop = E.HELMEndToEndLoop(wide_brain=False)
+            self.assertFalse(loop.wide_on)
+            self.assertIsNone(loop.wide_book)
+        finally:
+            if old is not None:
+                os.environ[W.WIDE_BRAIN_ENV] = old
 
     def test_licensed_files_untouched(self):
         """helm_brain_canonical.py and the reader are byte-identical to the thread branch this build started from."""

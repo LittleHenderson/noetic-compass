@@ -913,7 +913,7 @@ system; it reports and {T('whisper', 'whispers')}, and it never writes.</p>
 68 learned values ({T('parameter', 'parameters')}): 32 requirements, 32 ceilings and 4 bindings ({slink('7.24')}). The licensed brain's run log
 printed 32 learned slots, against 97 for the {T('transformer')} it replaced ({slink('7.47')}). A separate small transformer
 (9,585,566 parameters) exists only as an optional "ear" that may propose a reading; it never writes ({slink('7.82')}). A second brain, the {T('wide brain')}, reads any ingredient name; after two {T('sealed')} tests and the {T('pair wave')} it is HELM's
-canonical-brain candidate across the switches ({slink('7.96')}), and on the owner's word of 2026-10-20 it is now HELM's canonical brain ({slink('7.56')}). Wiring it on by default in the live chat is the next build.</p>
+canonical-brain candidate across the switches ({slink('7.96')}), and on the owner's word of 2026-10-20 it is now HELM's canonical brain ({slink('7.56')}). Since 2026-10-20 the live loop and the chat run it by default; setting <code>HELM_WIDE_BRAIN=0</code> runs the licensed reference brain alone.</p>
 </div>
 
 <h2>Today's status</h2>
@@ -1076,7 +1076,7 @@ Each part below sits behind a switch, so tests can turn one part off and see wha
 <td>{T('LICENSED')}, one sentence, {T('SYNTHETIC_ONLY')} ({slink('7.56')}). Wired into HELM's live loop by fixes C and D on 2026-10-18.</td></tr>
 <tr><td><strong>{T('wide brain', 'Wide recipe brain')}</strong> (RB-W1, reader v5)<br><code>helm_brain_wide.py</code></td><td>The same learning and answering rules, for real recipes: open ingredient names, exact fractions, up to 10 ingredients, 20 kitchen units.</td>
 <td>One requirement coefficient per (recipe, ingredient), learned from one witnessed batch each. Survey estimate, not a measurement: "49,493 coefficients for 9,495 recipes". 9 unit factors are programmed, not learned ({slink('7.83')}).</td>
-<td>Canonical-brain candidate, {T('VALIDATED')} for one sentence, {T('NAMED_CORPORA_ONLY')} ({slink('7.89')}). With every part on it first read WIDE_WAVE_NO_GAIN ({slink('7.93')}); after the reader fix the re-run read WIDE_WAVE_EARNED_KEEP ({slink('7.96')}). <strong>HELM's canonical brain since 2026-10-20</strong>, on the owner's word ({slink('7.56')}); the switch is still off by default in the code until the next build.</td></tr>
+<td>Canonical-brain candidate, {T('VALIDATED')} for one sentence, {T('NAMED_CORPORA_ONLY')} ({slink('7.89')}). With every part on it first read WIDE_WAVE_NO_GAIN ({slink('7.93')}); after the reader fix the re-run read WIDE_WAVE_EARNED_KEEP ({slink('7.96')}). <strong>HELM's canonical brain since 2026-10-20</strong>, on the owner's word ({slink('7.56')}); on by default in the live loop and the chat since 2026-10-20 (<code>HELM_WIDE_BRAIN=0</code> runs the licensed reference brain alone).</td></tr>
 <tr><td><strong>{T('RPM Gate')}</strong></td><td>Lets a step go ahead, sends it to repair, or refuses; lets the brain answer {T('UNDETERMINED')}.</td><td>0 (a written rule)</td><td>EARNED_KEEP in waves 1, 2 and 3. Switched off in wave 1, wrong answers rose from 32 to 768 ({slink('7.47')}).</td></tr>
 <tr><td><strong>{T('lacuna', 'Lacuna')} cadence</strong></td><td>Keeps track of what HELM could know but was never taught, and when to look again.</td><td>0 (a written rule)</td><td>EARNED_KEEP in waves 2 and 3 ({slink('7.64')}, {slink('7.69')}).</td></tr>
 <tr><td><strong>{T('restart fallback', 'Restart fallback')}</strong></td><td>The one place chance is allowed: a few saved random restarts, and the checker decides.</td><td>0 (seeds are saved, not learned)</td><td>EARNED_KEEP in waves 2 and 3.</td></tr>
@@ -1712,7 +1712,7 @@ def _scene_intended() -> str:
     P.append(_box("i-rt", 210, 282, 240, 50, "env", ["Round-trip check"]))
     P.append(_box("i-gate", 210, 360, 240, 56, "keep", ["RPM Gate", "go / repair / ask"]))
     P.append(_box("i-ask", 476, 360, 122, 56, "keep", ["Ask", "read-back question"]))
-    P.append(_box("i-brain", 210, 452, 240, 72, "plan", ["Wide recipe brain", "canonical since 2026-10-20", "switch-on by default: next build"]))
+    P.append(_box("i-brain", 210, 452, 240, 72, "plan", ["Wide recipe brain", "canonical since 2026-10-20", "on by default in the loop"]))
     P.append(_box("i-ref", 476, 452, 122, 72, "lic", ["Licensed brain", "kept as the", "reference"]))
     P.append(_box("i-cube", 22, 452, 146, 40, "keep", ["Cube store"]))
     P.append(_box("i-triad", 22, 500, 146, 40, "keep", ["Triad"]))
@@ -1866,7 +1866,7 @@ def p_build(S: dict) -> str:
         ("t-reader", 1, "The hand-written reader restates it in HELM's checked form. Its stock-frame rule saves a stock fact only when the sentence really states one (earned its keep; on fresh real sentences safe but not yet useful, §7.87)."),
         ("t-rt", 1, "The round-trip check turns the checked form back into English and reads it again; it must come back identical. It proves the form, not the truth."),
         ("t-gate", 1, "The RPM Gate is HELM's one gate. It picks one of three exits: go ahead, repair (back to the reader), or ask."),
-        ("t-brain t-wide", 1, "Go: the licensed recipe brain divides what is on hand by what one unit needs and names the ingredient that runs out first. It knows 8 ingredients and 4 recipe shapes, with 32 learned slots. Beside it, the wide brain waits behind a switch that is OFF: a candidate, validated for one sentence on real recipes; the first pair wave (§7.93) left it a candidate and the re-run (§7.96) made it the candidate across the switches; the owner's word of 2026-10-20 made it canonical (§7.56). The code switch is still off by default until the next build."),
+        ("t-brain t-wide", 1, "Go: the licensed recipe brain divides what is on hand by what one unit needs and names the ingredient that runs out first. It knows 8 ingredients and 4 recipe shapes, with 32 learned slots. Beside it, the wide brain waits behind a switch that is OFF: a candidate, validated for one sentence on real recipes; the first pair wave (§7.93) left it a candidate and the re-run (§7.96) made it the candidate across the switches; the owner's word of 2026-10-20 made it canonical (§7.56), and the live loop now runs it by default."),
         ("t-cube t-triad t-casc", 1, "Side rails: the cube store keeps facts and never fills in an unknown; the triad weighs Purpose, Wisdom and Power on each ingredient; the cascade breaks a problem into smaller ones, with a stop rule and a depth limit."),
         ("t-rcpt", 1, "Receipt: nothing is saved until it is read back and checked; then it leaves a receipt, a fingerprinted record anyone can check later."),
         ("t-voice", 1, "Voice: HELM writes one to three plain sentences and reads its own numbers and names back against the receipt."),
@@ -1878,7 +1878,7 @@ def p_build(S: dict) -> str:
     ]
     intended_steps = [
         ("i-in i-reader i-rt i-gate", 1, "Same turn, same checks: the reader goes first, then the round-trip check, then the RPM Gate."),
-        ("i-brain", 1, "The main slot is where the wide recipe brain is meant to go. The pair wave (HELM's sixth test wave) ran twice: the first run (§7.93) read WIDE_WAVE_NO_GAIN on one unexplained ask, a reader defect that was then fixed; the re-run (§7.96) read WIDE_WAVE_EARNED_KEEP: no harm where the marks look, 93 of 94 real recipes learned, 0 wrong, 0 unexplained asks. The wide brain became the candidate across the switches, and on the owner's word of 2026-10-20 it is HELM's canonical brain (§7.56). Switching it on by default in the live loop is the next build."),
+        ("i-brain", 1, "The main slot is where the wide recipe brain is meant to go. The pair wave (HELM's sixth test wave) ran twice: the first run (§7.93) read WIDE_WAVE_NO_GAIN on one unexplained ask, a reader defect that was then fixed; the re-run (§7.96) read WIDE_WAVE_EARNED_KEEP: no harm where the marks look, 93 of 94 real recipes learned, 0 wrong, 0 unexplained asks. The wide brain became the candidate across the switches, and on the owner's word of 2026-10-20 it is HELM's canonical brain (§7.56). The live loop and the chat now run it by default (HELM_WIDE_BRAIN=0 runs the licensed reference brain alone)."),
         ("i-ref", 1, "The licensed brain stays beside it as the reference; its one licensed sentence does not change."),
         ("i-ear i-agree", 1, "The CTT ear is admitted only through a stricter rule: all three trained copies must agree exactly, and HELM asks by default (CTT-2R, preregistered, nothing scored). Planned."),
         ("i-ask", 1, "Anything the ear proposes is still read back to you as a question before it counts; nothing is saved without your yes."),

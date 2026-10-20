@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - WIDE BRAIN ON BY DEFAULT in the live loop and the chat (owner order after the ruling; spec sheet 7.56 follow-up); HELM suites 194 OK; 0 USD, no paid run
+
+- helm_brain_wide.wide_brain_on(): default ON. Off only when HELM_WIDE_BRAIN is 0 / OFF / FALSE / NO (WIDE_BRAIN_OFF_WORDS) or the loop is built with wide_brain=False. helm_end_to_end_loop.HELMEndToEndLoop() therefore runs HELM's canonical wide brain by default: the licensed path still reads every turn first; the wide book takes only the turns it cannot bind. helm_chat.py builds that loop, so the chat follows. An OFF loop still never imports helm_brain_wide / helm_wide_turn (checked in a fresh process).
+- Headers updated in helm_brain_wide.py (switch, claim status VALIDATED for the 7.89 / 7.96 sentences only, canonical since 2026-10-20), helm_wide_turn.py and helm_chat.py. helm_brain_canonical.py is NOT changed: test_licensed_files_untouched pins the licensed loader byte-for-byte to its scored base, and that pin is kept; its header still carries the 2026-10-18 wording.
+- Tests: the two tests that pinned OFF are rewritten (default ON; OFF by 0 / OFF in a fresh process), plus a default-loop test and an explicit-False test. All HELM suites on the laptop: Ran 194, OK (baseline before the change: OK).
+- Not changed: any claim status; any sealed package (each pins its own HELM cut). Not done: a sealed exam of the live chat with the wide brain on (needs a new owner line with a hash and a cap).
+- Dictionary (Canonical brain, Wide brain) and hub (home, architecture, build pages) updated; site rebuilt.
+
 ## 2026-10-20 PDT - OWNER RULING: the wide brain is HELM's canonical brain ("YES TO WIDE BRAIN: Wide brain becomes HELM’s canonical brain"); spec sheet 7.56 pointer moved on the 7.96 reading; claim statuses unchanged; 0 USD
 
 - The owner's words (about 3:38 PM Pacific), verbatim, are recorded in Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md with the executable mapping: the canonical-brain pointer (spec sheet 7.56) moves to RB-W1 (helm_brain_wide.py + helm_wide_turn.py, reader v5, as cut at fdf68e0c inside the sealed wave-6 v3 package f1b64a5e), on the reading R1_W6_READING.json d6a855f1 (7.96, WIDE_WAVE_EARNED_KEEP).
