@@ -1,0 +1,654 @@
+{
+ "claim_ceiling_if_earned": "NAMED_CORPORA_ONLY",
+ "hard_gates": {
+  "HB_same_inputs": true,
+  "HC_control": true,
+  "HK_key_blind": true,
+  "HN_no_network": true,
+  "HP_parameter_audit": true,
+  "HR_replay": true,
+  "HSW_switch_hygiene": true,
+  "HS_sandbox": true
+ },
+ "instrument_rows": {
+  "I10_seed_rule": true,
+  "I14_not_vacuous": true,
+  "I1_data_identity": true,
+  "I6_completeness": true,
+  "I7_reading_from_sealed_package": true,
+  "I9_governance": true
+ },
+ "main": {
+  "ALWAYS_ASK": {
+   "ASKS": 118,
+   "NOT_SCORED": 10,
+   "RIGHT": 0,
+   "WRONG": 0,
+   "commitments_on_unsettled": 0,
+   "fully_learned_rep": 0,
+   "lessons_LEARNED": 0,
+   "lessons_NOT_LEARNED": 651,
+   "lessons_WRONG": 0,
+   "plain": 0,
+   "rep_answer": 110,
+   "right_rep": 0,
+   "unexplained_asks": 0
+  },
+  "LICENSED": {
+   "ASKS": 118,
+   "NOT_SCORED": 10,
+   "RIGHT": 0,
+   "WRONG": 0,
+   "commitments_on_unsettled": 0,
+   "fully_learned_rep": 0,
+   "lessons_LEARNED": 0,
+   "lessons_NOT_LEARNED": 651,
+   "lessons_WRONG": 0,
+   "plain": 124,
+   "rep_answer": 110,
+   "right_rep": 0,
+   "unexplained_asks": 0
+  },
+  "WIDE": {
+   "ASKS": 29,
+   "NOT_SCORED": 10,
+   "RIGHT": 89,
+   "WRONG": 0,
+   "commitments_on_unsettled": 7,
+   "fully_learned_rep": 90,
+   "lessons_LEARNED": 483,
+   "lessons_NOT_LEARNED": 168,
+   "lessons_WRONG": 0,
+   "plain": 125,
+   "rep_answer": 110,
+   "right_rep": 89,
+   "unexplained_asks": 0
+  },
+  "WIDE_NO_LEARNING": {
+   "ASKS": 118,
+   "NOT_SCORED": 10,
+   "RIGHT": 0,
+   "WRONG": 0,
+   "commitments_on_unsettled": 0,
+   "fully_learned_rep": 0,
+   "lessons_LEARNED": 0,
+   "lessons_NOT_LEARNED": 651,
+   "lessons_WRONG": 0,
+   "plain": 124,
+   "rep_answer": 110,
+   "right_rep": 0,
+   "unexplained_asks": 0
+  },
+  "WIDE_REPLAY": {
+   "ASKS": 29,
+   "NOT_SCORED": 10,
+   "RIGHT": 89,
+   "WRONG": 0,
+   "commitments_on_unsettled": 7,
+   "fully_learned_rep": 90,
+   "lessons_LEARNED": 483,
+   "lessons_NOT_LEARNED": 168,
+   "lessons_WRONG": 0,
+   "plain": 125,
+   "rep_answer": 110,
+   "right_rep": 89,
+   "unexplained_asks": 0
+  }
+ },
+ "main_by_cell": {
+  "ALWAYS_ASK": {
+   "C23:FRACTION": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 13
+   },
+   "C23:INTEGER": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C23:MIXED": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 14
+   },
+   "C46:FRACTION": {
+    "ASKS": 15,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 15
+   },
+   "C46:INTEGER": {
+    "ASKS": 13,
+    "NOT_SCORED": 1,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C46:MIXED": {
+    "ASKS": 13,
+    "NOT_SCORED": 1,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 13
+   },
+   "C710:FRACTION": {
+    "ASKS": 13,
+    "NOT_SCORED": 2,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C710:INTEGER": {
+    "ASKS": 12,
+    "NOT_SCORED": 2,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 10
+   },
+   "C710:MIXED": {
+    "ASKS": 10,
+    "NOT_SCORED": 4,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 9
+   }
+  },
+  "LICENSED": {
+   "C23:FRACTION": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 13
+   },
+   "C23:INTEGER": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C23:MIXED": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 14
+   },
+   "C46:FRACTION": {
+    "ASKS": 15,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 15
+   },
+   "C46:INTEGER": {
+    "ASKS": 13,
+    "NOT_SCORED": 1,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C46:MIXED": {
+    "ASKS": 13,
+    "NOT_SCORED": 1,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 13
+   },
+   "C710:FRACTION": {
+    "ASKS": 13,
+    "NOT_SCORED": 2,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C710:INTEGER": {
+    "ASKS": 12,
+    "NOT_SCORED": 2,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 10
+   },
+   "C710:MIXED": {
+    "ASKS": 10,
+    "NOT_SCORED": 4,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 9
+   }
+  },
+  "WIDE": {
+   "C23:FRACTION": {
+    "ASKS": 2,
+    "NOT_SCORED": 0,
+    "RIGHT": 12,
+    "WRONG": 0,
+    "fully_learned_rep": 12,
+    "rep_answer": 13
+   },
+   "C23:INTEGER": {
+    "ASKS": 3,
+    "NOT_SCORED": 0,
+    "RIGHT": 11,
+    "WRONG": 0,
+    "fully_learned_rep": 11,
+    "rep_answer": 12
+   },
+   "C23:MIXED": {
+    "ASKS": 4,
+    "NOT_SCORED": 0,
+    "RIGHT": 10,
+    "WRONG": 0,
+    "fully_learned_rep": 11,
+    "rep_answer": 14
+   },
+   "C46:FRACTION": {
+    "ASKS": 4,
+    "NOT_SCORED": 0,
+    "RIGHT": 11,
+    "WRONG": 0,
+    "fully_learned_rep": 11,
+    "rep_answer": 15
+   },
+   "C46:INTEGER": {
+    "ASKS": 1,
+    "NOT_SCORED": 1,
+    "RIGHT": 12,
+    "WRONG": 0,
+    "fully_learned_rep": 12,
+    "rep_answer": 12
+   },
+   "C46:MIXED": {
+    "ASKS": 0,
+    "NOT_SCORED": 1,
+    "RIGHT": 13,
+    "WRONG": 0,
+    "fully_learned_rep": 13,
+    "rep_answer": 13
+   },
+   "C710:FRACTION": {
+    "ASKS": 3,
+    "NOT_SCORED": 2,
+    "RIGHT": 10,
+    "WRONG": 0,
+    "fully_learned_rep": 10,
+    "rep_answer": 12
+   },
+   "C710:INTEGER": {
+    "ASKS": 9,
+    "NOT_SCORED": 2,
+    "RIGHT": 3,
+    "WRONG": 0,
+    "fully_learned_rep": 3,
+    "rep_answer": 10
+   },
+   "C710:MIXED": {
+    "ASKS": 3,
+    "NOT_SCORED": 4,
+    "RIGHT": 7,
+    "WRONG": 0,
+    "fully_learned_rep": 7,
+    "rep_answer": 9
+   }
+  },
+  "WIDE_NO_LEARNING": {
+   "C23:FRACTION": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 13
+   },
+   "C23:INTEGER": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C23:MIXED": {
+    "ASKS": 14,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 14
+   },
+   "C46:FRACTION": {
+    "ASKS": 15,
+    "NOT_SCORED": 0,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 15
+   },
+   "C46:INTEGER": {
+    "ASKS": 13,
+    "NOT_SCORED": 1,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C46:MIXED": {
+    "ASKS": 13,
+    "NOT_SCORED": 1,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 13
+   },
+   "C710:FRACTION": {
+    "ASKS": 13,
+    "NOT_SCORED": 2,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 12
+   },
+   "C710:INTEGER": {
+    "ASKS": 12,
+    "NOT_SCORED": 2,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 10
+   },
+   "C710:MIXED": {
+    "ASKS": 10,
+    "NOT_SCORED": 4,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "fully_learned_rep": 0,
+    "rep_answer": 9
+   }
+  },
+  "WIDE_REPLAY": {
+   "C23:FRACTION": {
+    "ASKS": 2,
+    "NOT_SCORED": 0,
+    "RIGHT": 12,
+    "WRONG": 0,
+    "fully_learned_rep": 12,
+    "rep_answer": 13
+   },
+   "C23:INTEGER": {
+    "ASKS": 3,
+    "NOT_SCORED": 0,
+    "RIGHT": 11,
+    "WRONG": 0,
+    "fully_learned_rep": 11,
+    "rep_answer": 12
+   },
+   "C23:MIXED": {
+    "ASKS": 4,
+    "NOT_SCORED": 0,
+    "RIGHT": 10,
+    "WRONG": 0,
+    "fully_learned_rep": 11,
+    "rep_answer": 14
+   },
+   "C46:FRACTION": {
+    "ASKS": 4,
+    "NOT_SCORED": 0,
+    "RIGHT": 11,
+    "WRONG": 0,
+    "fully_learned_rep": 11,
+    "rep_answer": 15
+   },
+   "C46:INTEGER": {
+    "ASKS": 1,
+    "NOT_SCORED": 1,
+    "RIGHT": 12,
+    "WRONG": 0,
+    "fully_learned_rep": 12,
+    "rep_answer": 12
+   },
+   "C46:MIXED": {
+    "ASKS": 0,
+    "NOT_SCORED": 1,
+    "RIGHT": 13,
+    "WRONG": 0,
+    "fully_learned_rep": 13,
+    "rep_answer": 13
+   },
+   "C710:FRACTION": {
+    "ASKS": 3,
+    "NOT_SCORED": 2,
+    "RIGHT": 10,
+    "WRONG": 0,
+    "fully_learned_rep": 10,
+    "rep_answer": 12
+   },
+   "C710:INTEGER": {
+    "ASKS": 9,
+    "NOT_SCORED": 2,
+    "RIGHT": 3,
+    "WRONG": 0,
+    "fully_learned_rep": 3,
+    "rep_answer": 10
+   },
+   "C710:MIXED": {
+    "ASKS": 3,
+    "NOT_SCORED": 4,
+    "RIGHT": 7,
+    "WRONG": 0,
+    "fully_learned_rep": 7,
+    "rep_answer": 9
+   }
+  }
+ },
+ "marks": {
+  "K1_LEARNS": false,
+  "K3_SAFE": true,
+  "K4_HONEST": true,
+  "NH_OFF": true,
+  "NH_ON": true
+ },
+ "nh": {
+  "W5P_E64": {
+   "complete": true,
+   "identical_off_now_vs_base": 64,
+   "items": 64,
+   "lost_by_wide": 0,
+   "lost_ids": [],
+   "replay_identical": true,
+   "restored": true,
+   "totals": {
+    "OFF_BASE": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    },
+    "OFF_NOW": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    },
+    "OFF_NOW_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    },
+    "WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    }
+   },
+   "wide_audit_ok": true
+  },
+  "W5P_F64": {
+   "complete": true,
+   "identical_off_now_vs_base": 64,
+   "items": 64,
+   "lost_by_wide": 0,
+   "lost_ids": [],
+   "replay_identical": true,
+   "restored": true,
+   "totals": {
+    "OFF_BASE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "OFF_NOW": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "OFF_NOW_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    }
+   },
+   "wide_audit_ok": true
+  },
+  "X5_E64": {
+   "complete": true,
+   "identical_off_now_vs_base": 64,
+   "items": 64,
+   "lost_by_wide": 0,
+   "lost_ids": [],
+   "replay_identical": true,
+   "restored": true,
+   "totals": {
+    "OFF_BASE": {
+     "CRASHED": 0,
+     "RIGHT": 62,
+     "UNDETERMINED": 2,
+     "WRONG": 0
+    },
+    "OFF_NOW": {
+     "CRASHED": 0,
+     "RIGHT": 62,
+     "UNDETERMINED": 2,
+     "WRONG": 0
+    },
+    "OFF_NOW_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 62,
+     "UNDETERMINED": 2,
+     "WRONG": 0
+    },
+    "WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 62,
+     "UNDETERMINED": 2,
+     "WRONG": 0
+    }
+   },
+   "wide_audit_ok": true
+  },
+  "X5_F64": {
+   "complete": true,
+   "identical_off_now_vs_base": 64,
+   "items": 64,
+   "lost_by_wide": 0,
+   "lost_ids": [],
+   "replay_identical": true,
+   "restored": true,
+   "totals": {
+    "OFF_BASE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "OFF_NOW": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "OFF_NOW_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    }
+   },
+   "wide_audit_ok": true
+  }
+ },
+ "notes": {
+  "K1_need": 99,
+  "bad_units": [],
+  "receiver_check": {
+   "approval_binds_zip": true,
+   "carrier_files_exact": true,
+   "carrier_holds_no_key": true,
+   "carrier_inputs_pinned": true,
+   "frames_pinned": true,
+   "host_view_has_no_key_fields": true,
+   "ids_unique": true,
+   "inputs_recomputed": true,
+   "keys_recomputed": true,
+   "no_excluded_item": true,
+   "no_excluded_text": true,
+   "no_float_in_keys": true,
+   "owner_line_frozen": true,
+   "quotas_or_recorded_shortfall": true,
+   "sample_recomputed": true,
+   "seed_rule": true,
+   "turns_rederive": true
+  },
+  "representable_and_answer_keyed": 110
+ },
+ "package_freeze_sha256": "b22690ced5a257ec964160103a28c03cea1d5730a0d006fb22c758a1be3d5ed9",
+ "package_zip_sha256": "7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e",
+ "practice_mock": false,
+ "reader": "rbw1t.merge_rbw1t v1 (2026-10-19)",
+ "schema": "helm.rbw1t.reading/1",
+ "status_word": "WIDE_LEARNING_DID_NOT_EARN_KEEP",
+ "verdict": "PASS"
+}

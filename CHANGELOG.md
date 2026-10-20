@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RB-W1T SCORED (job c46, one m6i.large; spec sheet 7.88): reader PASS; status word WIDE_LEARNING_DID_NOT_EARN_KEEP; RB-W1 stays ENGINEERED-NOT-VALIDATED; 0.01 USD
+
+Owner pre-approval (verbatim, pinned 18 bytes, sha256 75904654...): "WIDE TEST at 1 USD"; cap 1.00 USD, one attempt + one plumbing retry.
+
+- Package 7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e (freeze b22690ce...) verified; manifest 9895fd95...; seed source sha256(line + ":" + zip) = 07b27cdd... = the derivation's input_sha256; exam never opened by the operator.
+- Host i-024d15d881ce9982e m6i.large, ami-0dddfa1ffa6b87af7, 02:20:18 -> 02:22:25 UTC; host 148.95 s; HELM suites 170 OK (2 skipped), RB-W1T 24 OK, 21 of 21 units exit 0; one attempt, no retry.
+- Reading (frozen rbw1t/merge_rbw1t.py, RBW1T_READING.json 698c2faf...): verdict PASS, every row and gate true; marks K1 false (90 < 99), K3, K4, NH-OFF, NH-ON true.
+- WIDE: fully learned 90 / 110; RIGHT 89, WRONG 0; lessons 483 learned, 0 wrong, 168 not learned; unexplained asks 0. LICENSED, ALWAYS_ASK, learning-off control: 0 RIGHT, 0 WRONG.
+- Weakest cell: 7-10 ingredients, whole-number amounts, 3 of 10. Largest miss by HELM code: dish name not recognised (CLARIFY_ENGLISH_UNKNOWN_PRODUCT) in 22 recipes, every lesson refused. Failed approach logged: the practice-draw reader fixes (product name 2 -> 0 on practice) did not carry over to fresh recipes.
+- No harm: 0 items lost on all 4 files; OFF = base 64/64 each; ON records = OFF records 64/64 each.
+- Transport: c45 held the shared prefix, so c46 used its own prefix helm-rbw1t-c46-20261020/ with presigned URLs (recorded deviation; no package change).
+- Charge 0.01 USD (cautious 0.02); ledger 119.34 -> 120.34 (hold) -> 119.35 of 200; cleanup VERIFIED three ways; backup D:\tksCAS-archive\rbw1t_c46_20261020\ (three hash passes).
+
 ## 2026-10-19 PDT - RB-W1T RESEALED as v2 after "FIX FIRST" (spec sheet 7.86 amended; 7.83 follow-up); RB-W1 v2 built (PR #389); nothing scored; 0 USD
 
 Coordinator decision (operational; owner's standing order "retest broken tests without asking"): do not run a sealed test that practice already shows failing on an instrument defect; fix routing and learning, reseal.
