@@ -4,6 +4,10 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - Noetic drift fix (docs + one docstring; owner: "Ok I agree with all 3 cards"); no behavior or claim change; 0 USD
+
+- `docs/INCIDENT_CATEGORIES.md` + `docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md`: 15 retired Noetic names replaced with canonical ones; 4 examples reclassified by the Colloquialism Test (hallucination `^3`->`^6` Male with `^8`->`^9` landing; Boundary Failures `^3`->`^6`), 1 re-checked and kept; full list in "Reconciliation notes 2026-10-19". `helm_chat.py` header now names helm_brain_canonical.py (HELM-R1 recipe brain) as HELM's brain and 22x40 / tks28 as demos (AST identical apart from the docstring; test_helm_chat_nuance 5/5, test_helm_english_in 31/31). Not done: HELM_DISTRIBUTION_PACKAGE/helm_chat.py (outside git and outside this agent's worktree).
+
 ## 2026-10-19 PDT - RTR-1 "RE-TEST READER" packet SEALED, NOT LAUNCHED (spec sheet 7.84); nothing scored; 0 USD
 
 Owner order (verbatim): "RE-TEST READER" (0.03 USD). Coordinator mapping: cap 0.10 USD, one attempt + one plumbing retry.

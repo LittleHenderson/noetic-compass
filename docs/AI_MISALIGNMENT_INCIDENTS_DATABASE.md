@@ -13,7 +13,7 @@
 
 Most AI "failure" catalogs treat failure as an output problem: the model said something false, refused something it should have helped with, said yes when it should have said no, leaked data it should have protected, produced content that discriminated against a class of users. These failures are real, and output-level benchmarks — truthfulness, refusal consistency, bias audits, safety classifier pass rates — have done real work documenting them.
 
-But output-level cataloging misses what produced the output. An AI system that fabricates a legal citation and an AI system that hallucinates a medical dosage can, from the outside, look like "two instances of hallucination." Inside the system, they can be structurally very different failures — one a failure of critical evaluation (CO-3) under confident projective assertion (CO-6), the other a failure of domain descent where operational fluency (O) runs without principled (P) grounding. Treating them as the same kind of error means fixing one does nothing for the other.
+But output-level cataloging misses what produced the output. An AI system that fabricates a legal citation and an AI system that hallucinates a medical dosage can, from the outside, look like "two instances of hallucination." Inside the system, they can be structurally very different failures — one a failure of decomposition-and-test (CO-6 Male — the claim never broken down to look at what's underneath) while an associatively triggered Idea lands as output (CO-8 Above/Cause → CO-9 Below/Effect), the other a failure of domain descent where operational fluency (O) runs without principled (P) grounding. Treating them as the same kind of error means fixing one does nothing for the other.
 
 This database is organized around the hypothesis that AI misalignment events have *structural signatures*, and that those signatures are more diagnostic than the surface-level behavior. The Cognitive Architecture System (CAS) provides a formal taxonomy for those signatures: 10 cognitive operators, 4 processing domains under a strict precedence (P ≻ C ≻ E ≻ O), 7 core drives with three involution pairs, 22 capability pathways organized into the Recursive Prerequisite Model (A0 → Dn → Wn → Pn), and 7 inversion axes that detect the specific ways those structures can fail. The database documents real, primary-source-verified AI failures and then, *separately and visibly*, interprets each one through this taxonomy.
 
@@ -227,7 +227,7 @@ See `docs/INCIDENT_CATEGORIES.md` for the full taxonomy with framework citations
 6. **High-Lacunarity Blind Spots** — strong activation in one operator/domain, catastrophic void in a structurally adjacent one.
 7. **Adversarial Susceptibility** — architecture flips under crafted prompts (jailbreaks, prompt injection).
 8. **Sycophancy and Self-Grading Failures** — optimization for apparent approval over truth; self-scoring bias.
-9. **Hallucination and Confabulation** — CO-6 projective assertion without CO-3 critical evaluation.
+9. **Hallucination and Confabulation** — an associatively triggered Idea lands (CO-8 Above/Cause → CO-9 Below/Effect) without CO-6 Male decomposition-and-test (reconciled 2026-10-19; see `docs/INCIDENT_CATEGORIES.md` Reconciliation notes).
 10. **Drive Corruption** — motivational architecture (F1–F7) subverted or inverted.
 11. **Cross-Domain Contamination** — Principled constraints bypassed via Operational framing or vice versa.
 12. **Compound Inversions (P-axis failures)** — multiple simultaneous structural failures with non-linear severity amplification.
