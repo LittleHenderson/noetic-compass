@@ -267,7 +267,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 **ASOM** — [CAS core]
 - *Plain:* a four-word display of how a CJT is running; it never decides anything.
 - *Definition:* "ASOM is a display of how the CJT is operating, in four words": `STARVED` ("the CJT is in cutoff"), `ALIGNED` ("active, and the result is the intended one"), `OVERSATURATED` ("saturated, and the result is still the intended one"), `MISALIGNED` ("the result is opposite or off-axis"). "What it must never do: gate anything." — LOOP3 §2.
-- *Expansion (owner, 2026-10-19):* the four operating words themselves: **A**ligned / **S**tarved / **O**versaturated / **M**isaligned. The owner gave "aligned, misaligned, oversaturated" and placed the term in the CAS PCBA Engineer book; the fourth word, Starved, is the spec sheet's and LOOP3's fourth word. Recorded as owner-given plus spec-sheet usage, not as a book quotation. Source: `Documents\Codex6-10-18\OWNER_APPROVALS_20261018.md` (2026-10-19 block).
+- *Expansion (owner, 2026-10-19):* the four operating words themselves: **A**ligned / **S**tarved / **O**versaturated / **M**isaligned. The owner gave "aligned, misaligned, oversaturated" and placed the term in the CAS PCBA Engineer book; the fourth word, Starved, is the spec sheet's and LOOP3's fourth word. Recorded as owner-given plus spec-sheet usage, not as a book quotation. Source: `Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md` (2026-10-19 block).
 
 **Authoritative verbs** — [CAS core]
 - *Plain:* the exact verbs the definitions use, which must not be swapped for emotional words.
