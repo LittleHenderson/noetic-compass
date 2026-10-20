@@ -1,0 +1,237 @@
+{
+ "agreement": "128/128",
+ "by_key": {
+  "V10": {
+   "ASK": {
+    "NOT_SCORED": 0,
+    "RIGHT": 4,
+    "UNDETERMINED": 0,
+    "WRONG": 0
+   },
+   "EMPTY": {
+    "NOT_SCORED": 0,
+    "RIGHT": 99,
+    "UNDETERMINED": 0,
+    "WRONG": 11
+   },
+   "FACTS": {
+    "NOT_SCORED": 0,
+    "RIGHT": 1,
+    "UNDETERMINED": 0,
+    "WRONG": 0
+   },
+   "UNDETERMINED": {
+    "NOT_SCORED": 13,
+    "RIGHT": 0,
+    "UNDETERMINED": 0,
+    "WRONG": 0
+   }
+  },
+  "V11": {
+   "ASK": {
+    "NOT_SCORED": 0,
+    "RIGHT": 4,
+    "UNDETERMINED": 0,
+    "WRONG": 0
+   },
+   "EMPTY": {
+    "NOT_SCORED": 0,
+    "RIGHT": 110,
+    "UNDETERMINED": 0,
+    "WRONG": 0
+   },
+   "FACTS": {
+    "NOT_SCORED": 0,
+    "RIGHT": 1,
+    "UNDETERMINED": 0,
+    "WRONG": 0
+   },
+   "UNDETERMINED": {
+    "NOT_SCORED": 13,
+    "RIGHT": 0,
+    "UNDETERMINED": 0,
+    "WRONG": 0
+   }
+  }
+ },
+ "changes_v10_to_v11": {
+  "WRONG->RIGHT": 11
+ },
+ "claim_ceiling_if_earned": "NAMED_CORPORA_ONLY",
+ "ctrl": {
+  "c42_items": 128,
+  "differ": 0,
+  "differ_ids": [],
+  "equal": true,
+  "inputs_pinned": true,
+  "items": 128
+ },
+ "gates": {
+  "H11_replay_identical": true,
+  "H1_no_receipt_inconsistent": true,
+  "HB_same_inputs": true,
+  "HK_key_blind": true,
+  "HN_no_network": true,
+  "HS_sandbox": true,
+  "H_OVERLAP_zero": true
+ },
+ "invented_numbers": {
+  "V10": 0,
+  "V11": 0
+ },
+ "key_kinds": {
+  "ASK": 4,
+  "EMPTY": 110,
+  "FACTS": 1,
+  "UNDETERMINED": 13
+ },
+ "lost_true_writes": {
+  "count": 0,
+  "ids": []
+ },
+ "marks": {
+  "V10": {
+   "S-a_SAFE": false,
+   "S-b_USEFUL": false,
+   "S-c_SAFER_THAN_KEYCALC": false,
+   "S-d_PLAIN": true,
+   "S-e_EYE_QUIET": "NOT_EXERCISED"
+  },
+  "V11": {
+   "S-a_SAFE": true,
+   "S-b_USEFUL": false,
+   "S-c_SAFER_THAN_KEYCALC": true,
+   "S-d_PLAIN": true,
+   "S-e_EYE_QUIET": "NOT_EXERCISED"
+  }
+ },
+ "overlap": {
+  "CTT_USED": {
+   "id_hash_shared": 0,
+   "set_items": 128,
+   "text_hash_shared": 0
+  },
+  "XREAL_USED": {
+   "id_hash_shared": 0,
+   "set_items": 128,
+   "text_hash_shared": 0
+  },
+  "zero": true
+ },
+ "package_freeze_sha256": "6a622106aa1a57c23ec5ad03f8f687fd20653772413404cb9eda3b57aa956cf3",
+ "package_zip_sha256": "e201feb6e5fd4eaf1d9b9060ed100a9db6150257c2d0b64d230ad81c4042f7a8",
+ "practice": false,
+ "reader_identity": {
+  "RT_CTRL_V10_ON_XREAL": {
+   "bad": [],
+   "missing": [],
+   "modules": 12,
+   "ok": true
+  },
+  "RT_S_V10": {
+   "bad": [],
+   "missing": [],
+   "modules": 12,
+   "ok": true
+  },
+  "RT_S_V11": {
+   "bad": [],
+   "missing": [],
+   "modules": 12,
+   "ok": true
+  },
+  "RT_S_V11_REPLAY": {
+   "bad": [],
+   "missing": [],
+   "modules": 12,
+   "ok": true
+  }
+ },
+ "rows": {
+  "I10_seed_rule": true,
+  "I12_contamination_recomputed": true,
+  "I1_package_and_neighbours": true,
+  "I1_sample_and_keys_recomputed": true,
+  "I2_two_key_agreement": true,
+  "I6_completeness": true,
+  "I7_reading_from_sealed_package": true,
+  "I9_governance": true,
+  "I_CTRL_same_old_reader_as_c42": true,
+  "I_READER_identity": true
+ },
+ "schema": "helm.rtr1.reading/1",
+ "tally": {
+  "B-ASK": {
+   "NOT_SCORED": 13,
+   "RIGHT": 114,
+   "UNDETERMINED": 1,
+   "WRONG": 0,
+   "asks": 128,
+   "items": 128,
+   "plain": 0,
+   "scored": 115
+  },
+  "B-ECHO": {
+   "NOT_SCORED": 13,
+   "RIGHT": 110,
+   "UNDETERMINED": 5,
+   "WRONG": 0,
+   "asks": 0,
+   "items": 128,
+   "plain": 0,
+   "scored": 115
+  },
+  "B-KEYCALC": {
+   "NOT_SCORED": 13,
+   "RIGHT": 104,
+   "UNDETERMINED": 5,
+   "WRONG": 6,
+   "asks": 0,
+   "items": 128,
+   "plain": 0,
+   "scored": 115
+  },
+  "V10": {
+   "NOT_SCORED": 13,
+   "RIGHT": 104,
+   "UNDETERMINED": 0,
+   "WRONG": 11,
+   "asks": 110,
+   "items": 128,
+   "plain": 128,
+   "scored": 115
+  },
+  "V11": {
+   "NOT_SCORED": 13,
+   "RIGHT": 115,
+   "UNDETERMINED": 0,
+   "WRONG": 0,
+   "asks": 114,
+   "items": 128,
+   "plain": 128,
+   "scored": 115
+  }
+ },
+ "verdict": "PASS",
+ "words": {
+  "FIX": "FIX_REMOVED_HARM",
+  "V10": "S_UNSAFE_ON_REAL",
+  "V11": "S_SAFE_NOT_USEFUL"
+ },
+ "wrong_ids": {
+  "V10": [
+   "S:tatoeba:11677874",
+   "S:tatoeba:11709644",
+   "S:tatoeba:11798090",
+   "S:tatoeba:12115440",
+   "S:tatoeba:12222364",
+   "S:tatoeba:2470773",
+   "S:tatoeba:2953173",
+   "S:tatoeba:5160602",
+   "S:tatoeba:6097394",
+   "S:tatoeba:6577109",
+   "S:tatoeba:7390469"
+  ],
+  "V11": []
+ }
+}

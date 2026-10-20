@@ -1,35 +1,34 @@
-# Approval record — CTT-1, the CAS-token transformer ("ears first") — v2 (amendment A-CTT-1)
+# Approval record — CTT-1, the CAS-token transformer ("ears first") — v3 (amendments A-CTT-1 and A-CTT-2)
 
-This record quotes the owner's line and names the final sealed package. The builder wrote it. It records the owner's
-words; it is not a new signature. It supersedes the v1 record of zip `3289755c…` (never launched).
+This record quotes the owner's line and names the package and the exam-seed hash. The builder wrote it; it records
+the owner's words and is not a new signature. It supersedes the v1 (`3289755c…`, never launched) and v2
+(`83bfa752…`, job c43 stopped in preflight) records.
 
 **The owner's verbatim pre-approval (2026-10-19):**
 
 `I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD.`
 
-- Source: `Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`, line 142. The coordinator's mapping there: CTT,
-  one attempt + one plumbing retry, cap 8.00 USD; any change of scope, package or cap needs a new owner word.
-- Line sha256: `2a8a6f864a9e6d5349a048232813506c8efd51c50fdfde0f70af1e396fe56e00`.
+- Source: `Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`, line 142; line sha256
+  `2a8a6f864a9e6d5349a048232813506c8efd51c50fdfde0f70af1e396fe56e00`. The coordinator's mapping there: one attempt + one plumbing retry,
+  cap 8.00 USD; any change of scope, package or cap needs a new owner word (so whether this v3 package needs one is
+  the coordinator's / owner's call).
 
-**The sealed package this approval binds to (v2):**
+| Role | Item | sha256 |
+|---|---|---|
+| **PACKAGE (the code that runs)** | `HELM_CTT_20261019_SOURCE_CTT.zip` v3 | `f280633da498466fe713b33d37fe90db221bc3dbf4ce9fe69538460be82cee31` |
+| package freeze | `PACKAGE_FREEZE.json` | `24f8971865f6d88f932a75ab400c9af593a04440e157ae67710906e3cfb5499c` |
+| deps (unchanged) | `HELM_CTT_DEPS_20261019.zip` | `fc89054a6893a149301ee8504dbd325e7b46a75b0152d80622e4096cf06acd3f` |
+| **EXAM-SEED hash** | the v2 zip the two exams were drawn from | `83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec` |
+| sealed exam (primary) | E-MACHINE-S manifest | `12061e67347e73b0753ba705a3dd7f5bd5c7bc3312d1c7b4125400550ed0ecf4` |
+| sealed exam (second pass) | manifest | `be3895ff25fa58e39f1e3aa9f0c6f10a129b4dd6667aca9b4adfe5992a22ce61` |
+| preregistration (with sections 17 and 18) | `PREREGISTRATION_CTT.md` | `00027ddfb90cdb19b017a57995de894022cc2ac0971432b443a92223f50ce3fe` |
 
-| Item | sha256 |
-|---|---|
-| `HELM_CTT_20261019_SOURCE_CTT.zip` | `83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec` |
-| its `PACKAGE_FREEZE.json` | `c07654e733f1633e90379eb91eb5c1472760402c19232c4e82829ac84de2f5af` |
-| `HELM_CTT_DEPS_20261019.zip` | `fc89054a6893a149301ee8504dbd325e7b46a75b0152d80622e4096cf06acd3f` |
-| `PREREGISTRATION_CTT.precode.md` | `05c99a7ec6ed008374caf5c97e9fb19ba0d81521c3a7b7c7f6e65ca965ff0f18` |
-| `PREREGISTRATION_CTT.md` (with section 17, amendment A-CTT-1) | `8d16adecb0334c7e99a56e33754e10f48e6d9cdfe14de63c259d4c7061417485` |
+**Exam seed:** `sha256(UTF-8(owner line + ":" + 83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec))`. Both exams were drawn blind before v3 existed and stay
+valid; the builder holds only their hashes. The frozen reader, the host runners (`--exam-seed-zip-sha256`) and the
+custody tools check the seed against this EXAM-SEED hash, not against the running zip.
 
-**Cap:** 8.00 USD in total (the main run and, if it ever happens, the later human pass). **Attempts:** one attempt +
-one plumbing retry.
+**Cap:** 8.00 USD in total; 0.21 USD spent (job c43). **Attempts:** one attempt + one plumbing retry for v3.
 
-**Amendment A-CTT-1 (coordinator, operational, before this reseal):** the primary status word is read from the
-machine-side exam E-MACHINE-S (128 real sentences from X-REAL's frame, keyed by X-REAL's frozen rule, drawn blind by
-the custodian). The human exam is an optional later pass against the same frozen weights, with its own status line;
-it never changes the primary reading. Scope, arms, caps and thresholds unchanged.
-
-**Exam seed:** `sha256(UTF-8(owner line + ":" + 83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec))`, computed by the custodian only.
-
-**Still required before the paid run (no money, no owner word, no human writer):** the custodian draws and seals
-E-MACHINE-S on the laptop (`custody/CUSTODIAN_PROCEDURE_CTT.md` section M) and stages it with the sealed-98 carrier.
+**Amendment A-CTT-2:** the translator's write-audit allows its own audit log, the null device, its own temporary
+folder and the torch / CUDA caches; any write under the brain, wave packages, store, receipts, exams, data or
+weights still fails; a missing audit still fails. No mark, arm, threshold, data or model change.

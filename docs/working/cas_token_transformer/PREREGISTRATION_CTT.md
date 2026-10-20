@@ -459,3 +459,41 @@ arm, a gate, a status word or a prediction.
    the start of its English sentence; the row's gold record was not printed. E-NOTATION stays reported only; it is
    not part of the machine-side primary exam, so the slip touches no word.
 
+## 18. Amendment A-CTT-2 (2026-10-20 UTC / 2026-10-19 PDT, coordinator ruling "instrument defect"; written BEFORE the code change)
+
+**Why.** Job c43 stopped in the GPU preflight (`run_c43_ctt1_20261020/RUN_RESULT_CTT1_C43.md`). The translator
+process's write-audit counted PyTorch's own opens of `/dev/null` (4 times) and of its temporary folder
+`/tmp/ks37dli5` (once) as writes outside the audit log, so H-WRITE's runtime check was false and the runner exited 3.
+The package's own code opens none of these; torch 2.9.1 does while it loads. Everything else in the preflight passed
+(58 tests, separation, no-foreign, 9 smoke steps, loss 3.33422, parameter count 9,585,566 asserted). Nothing was
+scored. The coordinator ruled this an instrument defect, to be fixed without changing anything scored.
+
+**What changes, and only this.** No mark, arm, threshold, status word, exam, data rule or model changes.
+
+1. **The audit allowlist (H-WRITE, runtime part).** A write-open inside the translator process is allowed only if it
+   is (a) the process's own audit log; (b) the null device (`/dev/null`, `os.devnull`); (c) under the process's own
+   temporary folder (`tempfile.gettempdir()` and `$TMPDIR`, read inside the translator process); or (d) under a
+   torch / CUDA cache folder (`$TORCH_HOME` or `~/.cache/torch`, `$XDG_CACHE_HOME/torch`, `$CUDA_CACHE_PATH` or
+   `~/.nv/ComputeCache`, `$TORCHINDUCTOR_CACHE_DIR`, `$TRITON_CACHE_DIR` or `~/.triton`). Every write-open is still
+   recorded in full. **Any write under a forbidden root is a violation even if it is also under an allowed folder:**
+   the brain and wave packages (wave-1, wave-3 helm copy, wave-3b, wave-5), the cube store and receipts they hold, the
+   deps carrier, every exam carrier (E-MACHINE-S, E-HUMAN-W, the sealed 98, the spent wave exams) and the training
+   data and weights folders. A missing audit log is still a violation. Network calls and process starts are still
+   violations. The audit hook moves into its own module `helm_cas_translator/audit.py` (imported first by
+   `serve.py`); its decision function is `ctt_ears/client.audit_clean`.
+2. **New tests.** (a) Host only (needs CUDA and torch; skipped on the laptop, where torch is above the 300 MiB
+   per-process limit): a fresh audited process imports torch, runs 2 tiny training steps on the GPU, and its audit
+   must come back clean. (b) Everywhere: a fresh audited process that writes one file into a stand-in brain folder
+   (placed inside the temporary folder on purpose) must come back NOT clean, and a write into the real wave-3 helm
+   copy's path must be judged NOT clean by the decision function (no file is written there).
+3. **Exam seed hash vs package hash.** The two sealed exams were drawn blind from the v2 zip
+   `83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec` before v3 existed: E-MACHINE-S (manifest
+   `12061e67347e73b0753ba705a3dd7f5bd5c7bc3312d1c7b4125400550ed0ecf4`) and the second-pass exam (manifest
+   `be3895ff25fa58e39f1e3aa9f0c6f10a129b4dd6667aca9b4adfe5992a22ce61`). They stay valid. The approval record now names
+   two hashes: the PACKAGE (v3, the code that runs) and the EXAM-SEED hash (v2). The frozen reader's seed-source check,
+   the host runners' refusals and the custody tools compare the exam seed source with
+   sha256(owner line + ":" + exam-seed hash from the approval record), not with the running zip's hash. The reader
+   still checks that the approval record names the running zip as the package.
+4. **Unchanged:** cap 8.00 USD (0.21 USD spent in c43); one attempt + one plumbing retry for the v3 run; the frozen
+   reading order; claim status `ENGINEERED-NOT-VALIDATED` until a PASS.
+
