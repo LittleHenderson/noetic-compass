@@ -4,7 +4,7 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
-## 2026-10-19 PDT - RB-W1T (sealed test of the wide brain) packet SEALED, NOT LAUNCHED (spec sheet 7.85); nothing scored; 0 USD
+## 2026-10-19 PDT - RB-W1T (sealed test of the wide brain) packet SEALED, NOT LAUNCHED (spec sheet 7.86); nothing scored; 0 USD
 
 Owner pre-approval (verbatim): "WIDE TEST at 1 USD" (cap 1.00 USD, one attempt + one plumbing retry; coordinator mapping in `OWNER_APPROVALS_20261018.md`).
 
@@ -14,6 +14,21 @@ Owner pre-approval (verbatim): "WIDE TEST at 1 USD" (cap 1.00 USD, one attempt +
 - Practice dry run (published seed, not an exam): WIDE 54 right, 0 wrong, fully learned 54 of 106 (mark needs 90%); switch ON lost 55 of 64 (E64) and 42 of 64 (F64). Prediction: WIDE_BRAIN_HARMED about 0.85. Finding: the switch replaces the whole English path; meeting the no-harm mark needs a routing change (new build, new seal) - owner/coordinator call.
 - Failed approach logged: matching the brain's names to the grammar's HEAD word scored right answers WRONG ("boiling water poured upon the flax-seed" has HEAD "upon"); replaced before the seal by mapping names through the brain's own lesson records (amendment A-W-1).
 - Not done: wave-1 GB/TB worlds with the switch ON (no cell-index adapter); X-REAL's pair recipes not excluded (ids only in X-REAL custody).
+
+## 2026-10-19 PDT - Noetic drift fix (docs + one docstring; owner: "Ok I agree with all 3 cards"); no behavior or claim change; 0 USD
+
+- `docs/INCIDENT_CATEGORIES.md` + `docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md`: 15 retired Noetic names replaced with canonical ones; 4 examples reclassified by the Colloquialism Test (hallucination `^3`->`^6` Male with `^8`->`^9` landing; Boundary Failures `^3`->`^6`), 1 re-checked and kept; full list in "Reconciliation notes 2026-10-19". `helm_chat.py` header now names helm_brain_canonical.py (HELM-R1 recipe brain) as HELM's brain and 22x40 / tks28 as demos (AST identical apart from the docstring; test_helm_chat_nuance 5/5, test_helm_english_in 31/31). Not done: HELM_DISTRIBUTION_PACKAGE/helm_chat.py (outside git and outside this agent's worktree).
+
+## 2026-10-19 PDT - CTT-1 LAUNCHED (job c43, one g5.xlarge GPU) and STOPPED by its own GPU smoke test (spec sheet 7.85); primary word INCONCLUSIVE; nothing scored; 0.21 USD
+
+Owner pre-approval (verbatim): "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." Cap 8.00 USD, one attempt + one plumbing retry.
+
+- Package v2 83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec verified; payload 15c8bfa0...; i-05cd406380131ee45 g5.xlarge (A10G), ami-0dddfa1ffa6b87af7, us-west-2b; 01:19:32 -> 01:25:49 UTC; host 713.8 s.
+- Preflight: 0 refusals; host unit tests Ran 58 OK (skipped=1); static separation PASS; no pretrained files; smoke build and 9-step smoke train exit 0 (loss 3.33422); A4 parameter count 9,585,566 asserted. FAILED: translator-process audit saw torch-internal write-opens (/dev/null x4, /tmp/ks37dli5) -> preflight ok false -> runner exit 3.
+- Frozen reader: primary INSTRUMENT_ERROR / INCONCLUSIVE (14 missing result files); LLM_WRITTEN pass (staged under the runner's E_HUMAN_W_* names, NAMING_NOTE bf758ce1...) NOT_RUN; real human pass NOT_RUN.
+- Classed CODE (a same-zip retry would repeat it); plumbing retry NOT used. Continuing needs a fixed audit rule, a reseal, and a new owner word.
+- Failed approach logged: the operator's controller placeholder check matched `torch.__version__` and stopped 0 s after run_instances; fixed and the same attempt re-attached to the same instance (no second launch).
+- Charge 0.21 USD (cautious 0.31); ledger 111.33 -> 119.33 (hold) -> 111.54 of 200; cleanup VERIFIED three ways; backup D:\tksCAS-archive\ctt1_c43_20261020\.
 
 ## 2026-10-19 PDT - RTR-1 "RE-TEST READER" packet SEALED, NOT LAUNCHED (spec sheet 7.84); nothing scored; 0 USD
 
