@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - HELM-R1 wave 6 K4 cause found (spec sheet 7.93 follow-up): reader defect, fix built (wide reader v5), NOT re-tested, status unchanged; 0 USD
+
+- Cause: X6_REAL recipe RW:pg:42450@476327 (cake), turn 7. The wide reader read "and half as much soda" as 1/2 (no unit) of a made-up ingredient "as much soda"; it never ran out, so its requirement stayed unlearned (gate G1) and HELM asked. Replayed on the laptop on the sealed v2 code: identical to the host record. UNSETTLED_ASK not involved.
+- X6 is spent; KEYS_REAL_X6.json (312fb350...) and INPUTS_REAL_X6.json (7017fabe...) opened after scoring for this diagnosis only.
+- Fix: helm_wide_turn.py reader v5 keeps a relative amount ("half as much X", "twice as much X", "as much X", "the same amount of X") as ONE bundled line with the line before it (exact by construction); any form it cannot hold asks AMOUNT_RELATIVE. 5 regression tests on own practice recipes (scones, biscuits) in test_helm_wide_alongside.py. HELM suites Ran 192 OK (was 187); test_helm_chat_nuance / memory / agentic_planner exit 0.
+- Status unchanged: WIDE_WAVE_NO_GAIN stands. Re-run needs a new seal v3 on a fresh custodian draw, a new owner word, cap 1 USD.
+- Files: Documents/Codex/2026-10-19/r1_wave6/run_c48_r1w6_20261020/DIAGNOSIS_K4.md (+ diagnosis_k4/); copy docs/working/r1_wave6/DIAGNOSIS_K4_C48.md.
+
 ## 2026-10-20 PDT - HELM-R1 wave 6 "PAIR WAVE" SCORED (job c48, spec sheet 7.93): verdict PASS, status word WIDE_WAVE_NO_GAIN (K4 missed: 1 unexplained ask); no move; 0.02 USD
 
 - The wide recipe brain switched on with every other HELM part (cube store, English reader, triad, voice, EYE_SCAN, EYE_PAIRING) plus UNSETTLED_ASK, on the custodian-sealed X6 exam (manifest 4d81abff...). One m6i.xlarge (i-06ac5186ff7df015c), 77 of 77 units exit 0, one attempt, 0 retries.
