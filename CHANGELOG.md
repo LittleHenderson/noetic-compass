@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - CTT-2R SCORED (job c49, one g5.xlarge GPU; spec sheet 7.95): frozen reader INSTRUMENT_ERROR, word INCONCLUSIVE by rule 1 (Part R NOT_EXERCISED); no word earned; Part K line EARS_EARNED_KEEP reported only; 0.22 USD
+
+- The sealed CTT-2R package (zip d97a16d6, section 7.92) ran as job c49 on 2026-10-19 10:43-10:51 PM PDT (i-01ee2ab9b0726fe85, g5.xlarge, A10G). No training. 8 of 8 host stages exit 0; GPU smoke 9,585,566 parameters asserted, audit clean; C2-s2 / C2-s3 made from recorded seeds.
+- Custodian first, for free: Part R census R1 = 7 stock-stating sentences the reader gives up on (floor 24) in a frame of 15,255, so Part R NOT_EXERCISED by the pre-registered STOP; coordinator ran Part K only (new LLM pool: Gemini + DeepSeek, 128 singles with 32 traps + 16 dialogues / 60 turns; overlap 0 on every rule; amendments CTT2R-A1 / A2 recorded; seed derived before A2, disclosed).
+- Frozen reader (laptop, fresh extract, 34 / 34 members ok): verdict INSTRUMENT_ERROR, word INCONCLUSIVE, rule 1, as forecast (about 0.6). Nothing moves; the translator stays ENGINEERED-NOT-VALIDATED.
+- Part K line (reported only, never the word): PASS / EARS_EARNED_KEEP. Every harm gate true. Singles RIGHT: reader 63; three-copy agreement rule (A4E) 79, CWFW 0; copy-closest under the same rule 65; untrained under the rule 63; copies without the rule 84 / 82 / 79 with CWFW 0 / 5 / 5. Dialogue turns: reader 27; A4E 40, CWFW 0; without the rule 42 / 43 / 42 with CWFW 2 / 0 / 1. Offered 16 + 13, all read back, used only after a yes; traps: 0 errors added; NO-HARM 6 / 6 identical, applied 0.
+- Negatives kept: Part R not exercisable (the design's stock-dense real sentences do not exist in that number; same rarity as USE-1); reader v1.1 itself read 5 of 128 AI-written singles wrongly and saved 3 (FLAG_FOR_HUMAN_REVIEW; a reader defect to diagnose on the spent exam by a builder or the custodian).
+- Session gap: the launching session ended after the download and controller cleanup (05:56Z); this session finished the independent and direct cleanup checks, I-checks (15 / 15), seal confirm (unchanged), reading and closeout about 15 h later. One closeout assertion widened for an instance AWS no longer lists (disclosed; original script kept).
+- Charge 0.22 USD (list 0.215577; cautious 0.27); ledger 112.99 -> 114.49 (hold) -> 113.21 of 200 (unreserved 86.79); cleanup VERIFIED three ways.
+- Files: Documents/Codex/2026-10-19/ctt2r/run_c49_ctt2r_20261020/ (RUN_RESULT_CTT2R_C49.md, CTT2R_READING.json 002ac7fb...); copies docs/working/ctt2r/; backup D:/tksCAS-archive/ctt2r_c49_20261020/ (three hash passes). Hub: scorecard row 7.95, home status strip, build page; site rebuilt.
+
 ## 2026-10-20 PDT - HELM-R1 wave 6 RESEALED v3 for the K4 re-run (spec sheet 7.93 follow-up; amendment A-R1W6-2): SEALED, NOT LAUNCHED; owner pre-approved "FIX K4 at 1 USD"; no status changed; 0 USD
 
 - Why: c48 scored v2 as WIDE_WAVE_NO_GAIN (K4: 1 unexplained ask); the cause was a reader defect ("half as much soda" read as a made-up ingredient), fixed by reader v5 (PR #406). The owner pre-approved ONE re-run: cap 1.00 USD, one attempt + one plumbing retry.
