@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - OWNER RULING: the wide brain is HELM's canonical brain ("YES TO WIDE BRAIN: Wide brain becomes HELM’s canonical brain"); spec sheet 7.56 pointer moved on the 7.96 reading; claim statuses unchanged; 0 USD
+
+- The owner's words (about 3:38 PM Pacific), verbatim, are recorded in Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md with the executable mapping: the canonical-brain pointer (spec sheet 7.56) moves to RB-W1 (helm_brain_wide.py + helm_wide_turn.py, reader v5, as cut at fdf68e0c inside the sealed wave-6 v3 package f1b64a5e), on the reading R1_W6_READING.json d6a855f1 (7.96, WIDE_WAVE_EARNED_KEEP).
+- Unchanged by the ruling (a ruling is not a result): the wide brain's claim status (VALIDATED for the 7.89 and 7.96 sentences only; NAMED_CORPORA_ONLY + SYNTHETIC_ONLY); the wave-1 brain's LICENSED claim (R1_BEATS_GB3, SYNTHETIC_ONLY), kept as the licensed reference brain; every sealed package (each pins its own HELM cut).
+- Engineering that follows, with tests, before any paid run: the live loop and the chat run with the wide brain ON by default (today HELM_WIDE_BRAIN is OFF unless set); the three module headers name the canonical brain; a frozen test is sealed before any new wave.
+- Dictionary: Canonical brain, Canonical-brain candidate and Wide brain entries updated; hub: home strip, home text, architecture, model card, roadmap and build pages; site rebuilt.
+
 ## 2026-10-20 PDT - HELM-R1 wave 6 v3 (the K4 re-run) SCORED (job c50, spec sheet 7.96): verdict PASS, status word WIDE_WAVE_EARNED_KEEP; the wide brain is now HELM's canonical-brain CANDIDATE ACROSS THE SWITCHES; making it canonical is the owner's decision; 0.02 USD
 
 - Owner pre-approval "FIX K4 at 1 USD" (one re-run after the K4 cause was found and fixed: reader v5, PR #406). Package v3 (zip f1b64a5e, freeze da1ec4d2), fresh custodian exam X6v3 (manifest 49a5d311; spent X6 excluded by id and text). One m6i.xlarge (i-079e316d784f0a821), 2:29-2:33 PM PDT, host run 135 s, one attempt, 0 retries.
