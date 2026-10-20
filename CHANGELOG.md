@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - HELM-R1 wave 6 "PAIR WAVE" SCORED (job c48, spec sheet 7.93): verdict PASS, status word WIDE_WAVE_NO_GAIN (K4 missed: 1 unexplained ask); no move; 0.02 USD
+
+- The wide recipe brain switched on with every other HELM part (cube store, English reader, triad, voice, EYE_SCAN, EYE_PAIRING) plus UNSETTLED_ASK, on the custodian-sealed X6 exam (manifest 4d81abff...). One m6i.xlarge (i-06ac5186ff7df015c), 77 of 77 units exit 0, one attempt, 0 retries.
+- Did no harm: 0 items lost on X6_E64, X6_F64, X6_PAIR A/B/C, next to each Eye, in conversation (X6_CONV) and on REPRO_X5 (= c40).
+- X6_REAL (128 fresh real recipes): FULL+WIDE fully learned 97 of 101 (bar 91), RIGHT 96, WRONG 0, wrong lessons 0; unexplained asks 1 (K4 needs 0; also 1 with the caution rule off). K5 adapted 1 of 12 same-name answered (limit 2); literal 4 of 18 UNDETERMINED (reported).
+- X6_CONV: WIDE arms 38 right / 0 wrong / 26 asks vs FULL 30 / 0 / 34; without the triad 7 wrong (reported). X6_PAIRW backlog: FULL 25.16%, FULL+WIDE 35.10%, FULL+EYE_PAIRING 59.94%, FULL+WIDE+EYE_PAIRING 67.42%.
+- Pair words (if read) WIDE x CUBE_STORE / ENGLISH_IN / TRIAD / EYE_PAIRING all ADDITIVE; WIDE x VOICE and x EYE_SCAN NOT_EXERCISED_BY_CONSTRUCTION. Eye writes 0, guard trips 0, false alarms 0.
+- No move: RB-W1 v3 stays the c47 canonical-brain candidate; the licensed brain stays canonical. Claim ceiling SYNTHETIC_ONLY.
+- Reading R1_W6_READING.json 8fa07631ae89db38cae5ea9da84ca6ebebfbeb6b282385eee74021ffb326ad97 (frozen reader from a fresh extract of zip 72962342...). Charge 0.02 USD (cautious 0.04); ledger 112.97 -> 113.97 -> 112.99 of 200; cleanup VERIFIED three ways.
+- Files: Documents/Codex/2026-10-19/r1_wave6/run_c48_r1w6_20261020/; copies docs/working/r1_wave6/RUN_RESULT_R1W6_C48.md and R1_W6_READING_C48.json; backup D:/tksCAS-archive/r1_wave6_c48_20261020/.
+
 ## 2026-10-20 PDT - HELM Hub: "wave" and "pair wave" defined (owner: "What is a pair wave?"): dictionary entries Wave (HELM-R1 wave) and Pair wave (HELM-R1 wave 6) (454 -> 456); both added to the jargon lint, so every page explains them on first use; scorecard row for 7.91; 21 tests OK; site rebuilt; docs only, no status changed; 0 USD
 
 ## 2026-10-19 PDT - CTT-2R packet SEALED, NOT LAUNCHED (spec sheet 7.92): the ACCEPT-2 acceptance rule on the unchanged c45 weights; owner pre-approved "CTT RULE TEST at 1.50 USD"; 0 USD
