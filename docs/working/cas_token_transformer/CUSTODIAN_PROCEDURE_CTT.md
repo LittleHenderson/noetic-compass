@@ -1,4 +1,32 @@
-# CTT-1 custodian procedure — the sealed human English exam (E-HUMAN-W)
+# CTT-1 custodian procedure — the machine-side exam (E-MACHINE-S, NOW) and the optional human exam (E-HUMAN-W, later)
+
+**Amendment A-CTT-1 (2026-10-19, before the reseal).** The paid run does not wait for human writers. The custodian
+seals the MACHINE-SIDE exam E-MACHINE-S now; it is the exam the primary status word is read from. The human exam
+(sections 0-7 below) is an OPTIONAL later pass, scored against the same frozen weights as a separate reading.
+
+## M. The machine-side exam E-MACHINE-S (do this now, laptop, 0 USD)
+
+```
+cd <an extracted copy of the sealed zip>/HELM_CTT_20261019
+python -X utf8 -B -m custody.draw_machine --approval <APPROVAL_RECORD_CTT.json>
+    --frame "C:/Users/wakil/Documents/Codex/2026-10-19/x_real/frames/FRAME_S.jsonl"
+    --xreal-pkg "C:/Users/wakil/Documents/Codex/2026-10-19/x_real/HELM_XREAL_20261019"
+    --xreal-inputs "C:/Users/wakil/Documents/Codex/2026-10-19/x_real/xr_custody/exam/INPUTS_XREAL.json"
+    --out <machine exam dir>
+```
+It checks four pins (frame `98c2fb8f…`, X-REAL `keys.py` `7ad232a6…` and `grammar.py` `a3cecbb3…`, X-REAL's used
+inputs `37312a31…`), derives the seed (band CM 1,924,000,001–1,925,000,000, k = seed_source characters 32–47), draws
+32 sentences per stratum by hash rank, skips every item X-REAL used and every equal text, computes X-REAL's frozen
+key K-S for each, and writes create-only `E_MACHINE_S_CTT.json` + `E_MACHINE_SEAL_RECORD.json` (raw and LF sha256,
+seed, counts per key). Stage them to the host as the carrier `emachine` (top folder `emachine`). After the run:
+`python -X utf8 -B -m custody.seal_exam confirm --record <dir>/E_MACHINE_SEAL_RECORD.json --exam
+<dir>/E_MACHINE_S_CTT.json --out <dir>/E_MACHINE_SEAL_CONFIRM.json` (the primary reading's `exam_seal`).
+The builder never runs this with the real approval record and never sees the drawn sentences or keys.
+
+## H. The human exam E-HUMAN-W (OPTIONAL, later, if the owner supplies the sentences)
+
+Sections 0-7 below are unchanged. Its carrier goes to a separate later job (`kit/run_ctt_human.py`), never to the
+primary run. Its reading (`merge_ctt --pass human`) has its own status line and never changes the primary reading.
 
 The custodian is NOT the builder. The builder (any agent that wrote this package) never sees the writer sheets, the
 writers' sentences, the drawn records, the sealed exam file or the sealed 98. Plain words throughout.

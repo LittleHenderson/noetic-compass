@@ -400,3 +400,62 @@ arm, a gate, a status word or a prediction.
   recipe) and three DEV rows (allowed).
 - **D-CTT-12 Scribe L4 slot filled** before any code from run c41 (section 5.3), with the coordinator's three
   lessons written into the gates (H-CWFW, H-LEN, answer key against the proposed record).
+
+## 17. Amendment A-CTT-1 (2026-10-19 PDT, coordinator decision, operational; written BEFORE the reseal)
+
+**Why.** The paid run must not wait for the owner and two other people to write 128 sentences and 16 dialogues.
+**What changes, and only this.** Scope, arms, caps, every threshold and every status word stay as written above.
+
+1. **Which parts depended on the human exam (as sealed at zip 3289755c…):** all four marks M-A1, M-A2, M-A3, M-A4;
+   hard gates H-CWFW (the 128 singles), H-RT (b) (the proposals' well-formed share), H-READBACK and the saved-wrong
+   part of H-WRITE (read on the ears turns), H-LEN (the exam inputs), and H-CUSTODY (the exam seal, its seed and its
+   leakage presence). The reader stopped with `INSTRUMENT_ERROR` when the human exam was missing. Not dependent:
+   H-NOHARM, H-REMOVE, H-SEP, H-NOFOREIGN, the translator-audit part of H-WRITE, and E-NOTATION.
+2. **Primary reading = the MACHINE-SIDE exam E-MACHINE-S**, sealed now by the custodian, blind, seed from
+   sha256(owner line + ":" + zip sha256), band CM 1,924,000,001–1,925,000,000 (k = seed_source characters 32–47):
+   128 real sentences other people wrote (Tatoeba English, Google Taskmaster USER turns), 32 per stratum
+   (quantity, absence, question, other), drawn from X-REAL's pinned Part S frame (`FRAME_S.jsonl`
+   `98c2fb8f…`, which already excludes the practice partition CTT trained on), never one of the 128 items X-REAL
+   used (`INPUTS_XREAL.json` `37312a31…`) and never an equal text. Answer key = X-REAL's frozen rule K-S
+   (`xreal/keys.py` `7ad232a6…`), computed by the custodian from the text alone; scoring = X-REAL's K-S table
+   (FACTS: right if the written facts equal the key, wrong if anything extra; ASK: right if HELM asks and writes
+   nothing, wrong on a write or an answer; EMPTY: right with 0 writes; UNDETERMINED: not scored). Tool:
+   `custody/draw_machine.py`. These are the design's own "public-input sentences" (DATA.md D7 / TEST_PLAN E-X-REAL-S);
+   the "SDG-held-out" part is the sealed 98, which stays reported only (unchanged).
+3. **The same gates and thresholds are read on E-MACHINE-S:** H-CWFW (≤ 2 proposed of the 128, ≤ A2's, 0 saved),
+   H-RT, H-READBACK, H-WRITE, H-LEN, H-CUSTODY (machine-side seal), plus NO-HARM, H-REMOVE, H-SEP, H-NOFOREIGN.
+   Marks M-A1, M-A2, M-A3 with the same thresholds on the scored items. **M-A4 needs dialogues; E-MACHINE-S has none,
+   so M-A4 is `NOT_EXERCISED` in the primary reading and is read only in the human pass.** The primary word
+   `EARS_EARNED_KEEP` therefore needs M-A1–M-A3.
+4. **HUMAN_EXAM_ABSENT path.** The primary reading never reads the human exam. Its human line always says
+   `NOT_RUN (HUMAN_EXAM_ABSENT)` and fails no gate.
+5. **The human exam E-HUMAN-W is an OPTIONAL later pass.** If and when the owner supplies the sentences, the custodian
+   seals them (section 12, unchanged; band CW/CD), and `kit/run_ctt_human.py` scores them against the SAME frozen
+   weights (sha256 checked against each `WEIGHTS_MANIFEST.json`), with all four marks and the ears gates, read by
+   `merge_ctt --pass human` as a SEPARATE reading with its own status line. It pins the primary reading by sha256 and
+   never changes it. Because training is already done, exam turns that equal or share an 8-word sequence with a
+   training input are left out of the human scoring and counted (the training data is never redone). It runs inside
+   the same 8.00 USD cap; it trains nothing.
+6. **What a PASS licenses (section 14, narrowed for the primary):** "On HELM's eight-ingredient, four-recipe kitchen
+   world, on 128 real sentences other people wrote (Tatoeba and Google Taskmaster, X-REAL's frame, keyed by X-REAL's
+   frozen rule), a from-scratch CAS-token translator placed behind HELM's deterministic reader, round-trip check and
+   read-back raised the scored sentences HELM handled right from [A0] to [A4], beat a no-learning retrieval rival by
+   [A4 − A2], added [n] confident wrong readings (cap 2), wrote nothing without a yes, and changed none of the brain's
+   exam results." Nothing about people typing to HELM, dialogues or pronouns is licensed by the primary reading.
+7. **Predictions for E-MACHINE-S (written now, before any draw):** most keys will be EMPTY or UNDETERMINED (X-REAL's
+   own forecast and c42's result: 109 of 128 scored, few FACTS keys). A0's RIGHT will be high on EMPTY and ASK keys
+   and the room for M-A1 (+8) is small: `EARS_NO_GAIN` is the more likely primary word. The reader alone wrote 8 wrong
+   facts on X-REAL's 128 (c42); those stay READER_WRONG in every reader-first arm.
+8. **`FLAG_FOR_HUMAN_REVIEW` (the builder's honest note on governance).** Owner pick Q7 ("kitchen turns count") put the
+   claim on human English typed to HELM. This amendment, made by the coordinator, moves the primary word to
+   public-input sentences written for other reasons. The owner may reverse it; until then the human pass is where
+   the Q7 claim can be earned.
+9. **Custody slip D-CTT-11, named precisely.** The file was
+   `cas-synthetic/data/l4_split/real_heldout_unparseables_98.jsonl` (the E-NOTATION exam, "the sealed 98"; sha256
+   `e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe`), read from the builder's worktree of
+   `origin/claude/project-thread-pmbzd6` at `2615d8d7`. It was sealed by commit `ec780a34` (2026-10-18, author
+   "Little Henderson", "L4 Proposer baseline & anti-circular sealed split: tabulate 439 SDG sentences and seal held-out
+   98 rows"; spec §7.53–§7.54). The builder printed the first 400 characters of its FIRST row: the row's id fields and
+   the start of its English sentence; the row's gold record was not printed. E-NOTATION stays reported only; it is
+   not part of the machine-side primary exam, so the slip touches no word.
+

@@ -1,21 +1,24 @@
 {
+ "amendment": "A-CTT-1 (2026-10-19, coordinator, before this reseal): primary word from the machine-side exam E-MACHINE-S; the human exam E-HUMAN-W is an optional later pass against the same frozen weights with its own status line; scope, arms, caps, thresholds unchanged",
  "attempts": "one attempt + one plumbing retry",
  "cap_usd": 8.0,
  "deps_zip_sha256": "fc89054a6893a149301ee8504dbd325e7b46a75b0152d80622e4096cf06acd3f",
  "owner_line_sha256": "2a8a6f864a9e6d5349a048232813506c8efd51c50fdfde0f70af1e396fe56e00",
  "owner_line_source": "Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md line 142 (file sha256 8e96a4fae4e8698aeb8ca1d82fca0fa7822c3f289e5d36949a0422feffb40b58 at 2026-10-20T00:21Z), with the coordinator's executable mapping written there before sealing",
  "owner_line_verbatim": "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD.",
- "package_freeze_sha256": "4dd5fe867755d87836014c42a6b87083c63d48e46083b4d34e0266178ddf0ba2",
+ "package_freeze_sha256": "c07654e733f1633e90379eb91eb5c1472760402c19232c4e82829ac84de2f5af",
  "package_zip": "HELM_CTT_20261019_SOURCE_CTT.zip",
- "package_zip_sha256": "3289755c154111ce41e44bf4d17f4f6bfa14e0dff1f91d287bd5b6c74a5453ec",
+ "package_zip_sha256": "83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec",
  "preregistration_precode_sha256": "05c99a7ec6ed008374caf5c97e9fb19ba0d81521c3a7b7c7f6e65ca965ff0f18",
+ "preregistration_sha256": "8d16adecb0334c7e99a56e33754e10f48e6d9cdfe14de63c259d4c7061417485",
  "schema": "ctt.approval/1",
  "seed_source_rule": "sha256(UTF-8(owner_line_verbatim + ':' + package_zip_sha256)); computed by the custodian, never by the builder",
  "still_required_before_launch": [
-  "custodian-sealed E-HUMAN-W written by the owner + two named people (custody/CUSTODIAN_PROCEDURE_CTT.md)",
-  "the custodian's exam carrier and sealed-98 carrier staged to the host"
+  "the custodian draws and seals E-MACHINE-S (custody/CUSTODIAN_PROCEDURE_CTT.md section M; laptop, 0 USD, no human writer needed)",
+  "the custodian stages the emachine and sealed98 carriers to the host"
  ],
  "superseded_by": null,
+ "supersedes": "zip 3289755c154111ce41e44bf4d17f4f6bfa14e0dff1f91d287bd5b6c74a5453ec (v1, sealed 2026-10-19, never launched, VOID_SUPERSEDED_BY_V2)",
  "test": "CTT-1 CAS-token transformer, ears first",
- "written_by": "builder session (Claude), 2026-10-19 17:2x PDT; this record quotes the owner, it is not an owner signature"
+ "written_by": "builder session (Claude), 2026-10-19 PDT; this record quotes the owner, it is not an owner signature"
 }

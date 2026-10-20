@@ -1,7 +1,7 @@
 {
  "by_file": {
   "test_cas_vocab": 8,
-  "test_custody_build_merge": 16,
+  "test_custody_build_merge": 24,
   "test_generator_checker": 11,
   "test_notation_separation_retrieval": 6,
   "test_slots_wordpiece_params": 9
@@ -21,12 +21,13 @@
   "noharm_on_fake_always_ask_digest_equals_off": true,
   "noharm_on_fake_topic_digest_differs": true
  },
- "log_sha256": "48c048bd6ff6317187e27774efd134e85ba05cdb9aec519c08facf931698d6fe",
+ "log_sha256": "216b879361accdc1c0e6703982249c14fefab721aa7d98f007705acdc7997e84",
  "not_testable_on_the_laptop": "helm_cas_translator/model.py, serve.py, ctt_train/train.py import torch (475 MiB RAM measured > 300 MiB per-process limit): parsed only; first run = AWS preflight (50-step GPU smoke, exact parameter count assert, translator audit)",
- "passed": 50,
- "ran": 50,
+ "note_v2": "8 new tests for amendment A-CTT-1: primary needs no human exam (NOT_RUN, HUMAN_EXAM_ABSENT), primary refuses a human score as its exam, human pass absent = NOT_RUN and fails nothing, human pass has its own word and pins the primary, human pass refuses other weights, X-REAL K-S scoring x2, blind machine draw with a FAKE zip (the real draw is the custodian's)",
+ "passed": 58,
+ "ran": 58,
  "schema": "ctt.test-counts/1",
- "seconds": 16.236,
+ "seconds": 15.347,
  "skipped": 0,
- "where": "laptop, extracted copy of HELM_CTT_20261019_SOURCE_CTT.zip (3289755c...) + HELM_CTT_DEPS_20261019.zip (fc89054a...), stdlib only, no torch, one python worker"
+ "where": "laptop, extracted copy of HELM_CTT_20261019_SOURCE_CTT.zip (83bfa752...) + HELM_CTT_DEPS_20261019.zip (fc89054a...), stdlib only, no torch, one python worker"
 }

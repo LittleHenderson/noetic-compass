@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - CTT-1 RESEALED as v2 (amendment A-CTT-1, spec sheet 7.82 amended): primary word from the machine-side exam; human exam optional later pass; zip 83bfa752...; NOT LAUNCHED
+
+Coordinator decision (operational): the run must not block on human writers. v1 zip 3289755c... VOID_SUPERSEDED_BY_V2 (never launched).
+
+- Primary exam E-MACHINE-S: 128 real sentences (Tatoeba, Taskmaster user turns) from X-REAL's Part S frame, X-REAL's 128 used items excluded, drawn blind by the custodian (custody/draw_machine.py, band CM 1,924,000,001-1,925,000,000, seed from owner line + ":" + zip sha256), keyed by X-REAL's frozen K-S rule. Same gates and thresholds; marks M-A1-M-A3; M-A4 NOT_EXERCISED (no dialogues).
+- Human exam E-HUMAN-W: optional, later, same frozen weights (kit/run_ctt_human.py, merge_ctt --pass human), own status line, never changes the primary; HUMAN_EXAM_ABSENT = NOT_RUN, fails nothing.
+- What depended on the human exam in v1: M-A1-M-A4, H-CWFW, H-RT(b), H-READBACK, the saved-wrong part of H-WRITE, H-LEN, H-CUSTODY.
+- Zip 83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec, freeze c07654e7...; APPROVAL_RECORD_CTT.md v2 (owner pre-approval line + new hash); cap 8.00 USD, one attempt + one plumbing retry. Tests 58/58 from the zips.
+- Flags: governance (owner pick Q7 put the claim on human English; the coordinator moved the primary word; the owner may reverse). Custody slip named: real_heldout_unparseables_98.jsonl (sealed 98, commit ec780a34), first 400 characters of row 1, gold not printed; E-NOTATION reported only.
+- Backup D:/tksCAS-archive/cas_token_transformer_20261019/ re-copied, three sha256 passes MATCH.
 ## 2026-10-19 PDT - English reader stock-frame fix BUILT after X-REAL c42 (spec sheet 7.81 follow-up); NOT re-tested on a sealed exam; no status change
 
 - What broke: on real sentences HELM saved stock facts the sentence never stated (an ingredient word was read as a stock statement).
