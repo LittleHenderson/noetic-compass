@@ -11,7 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-# v2 cuts: helm_now = the RB-W1 v2 merge 045548b6; helm_base = the same commit with RB-W1 removed
+# v3 cuts (A-RBW1T-2): helm_now = the RB-W1 v3 merge 65b86282; helm_base = the same commit with RB-W1 removed
 TOP = ["helm_brain_canonical.py", "helm_triad.py", "helm_english_in.py", "helm_voice.py", "helm_end_to_end_loop.py",
        "helm_chat.py", "helm_memory.py", "helm_agentic_executor.py", "tks_meta_valve_controller.py",
        "helm_brain_22x40.py", "helm_creativity_dial.py", "phrasebook.json", "tks_meta_valve_weights_v0_4.json",
@@ -36,7 +36,7 @@ def sha(b):
     return hashlib.sha256(b).hexdigest()
 
 
-BASE_OVERRIDE = {"helm_end_to_end_loop.py": "d4488f2a"}   # v2: base = the now cut with RB-W1 removed
+BASE_OVERRIDE = {"helm_end_to_end_loop.py": "d4488f2a"}   # v2/v3: base = the now cut with RB-W1 removed
 
 
 def cut(wt, pkg, name, rev):
@@ -57,8 +57,8 @@ def cut(wt, pkg, name, rev):
            "rule": "every file read with git show <commit>:<path> (never the working tree)", "files": {},
            "vendor_ext": {}}
     if name == "helm_base":
-        rec["rule"] = ("v2 base: every file read with git show at the NOW commit, except helm_end_to_end_loop.py read at "
-                       "d4488f2a (the parent of the RB-W1 merge; RB-W1 v1 + v2 are the only changes to that file since), "
+        rec["rule"] = ("v3 base (same rule as v2, A-W-8): every file read with git show at the NOW commit, except helm_end_to_end_loop.py read at "
+                       "d4488f2a (the parent of the RB-W1 merge; RB-W1 v1 + v2 are the only changes to that file since; v3 does not touch it), "
                        "and without RB-W1's three files: the now cut with RB-W1 removed")
         rec["overrides"] = {f: git(wt, "rev-parse", r + "^{commit}").strip() for f, r in BASE_OVERRIDE.items()}
     for f in files:
@@ -87,7 +87,7 @@ def cut(wt, pkg, name, rev):
 
 def main():
     wt, pkg = Path(sys.argv[1]), Path(sys.argv[2])
-    now = sys.argv[3] if len(sys.argv) > 3 else "045548b6"
+    now = sys.argv[3] if len(sys.argv) > 3 else "65b86282"
     out = [cut(wt, pkg, "helm_now", now), cut(wt, pkg, "helm_base", now)]
     assert out[0]["commit"] == out[1]["commit"], out
     print(json.dumps(out, indent=1))

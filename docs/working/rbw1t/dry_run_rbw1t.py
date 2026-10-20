@@ -76,7 +76,7 @@ def main():
     timing["custody_seal"] = s
     assert code == 0, (OUT / "logs" / "custody.log").read_text()
     carrier_inputs = json.loads((OUT / "custody" / "carrier" / "rw" / "INPUTS_RBW1T.json").read_text(encoding="utf-8"))
-    practice_inputs = json.loads((PKG / "practice" / "INPUTS_PRACTICE_RBW1T.json").read_text(encoding="utf-8"))
+    practice_inputs = json.loads((PKG / "practice" / "INPUTS_PRACTICE_V2.json").read_text(encoding="utf-8"))
     same_as_published = carrier_inputs["items"] == practice_inputs["items"]
     # 3. host pool, dry
     isha = sha(OUT / "custody" / "carrier" / "rw" / "INPUTS_RBW1T.json")
@@ -125,7 +125,7 @@ def main():
     timing["merge"] = s
     assert code == 0, (OUT / "logs" / "merge.log").read_text()
     # 6. D-W-1 sensitivity: HEAD-only ran-out names
-    pr = json.loads((PKG / "practice" / "PRACTICE_DRAW_RBW1T.json").read_text(encoding="utf-8"))
+    pr = json.loads((PKG / "practice" / "PRACTICE_DRAW_V2.json").read_text(encoding="utf-8"))
     from rbw1t import exam_rbw1t as X
     alt = []
     for it in pr["items"]:

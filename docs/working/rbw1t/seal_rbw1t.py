@@ -47,10 +47,10 @@ def main():
     files = sorted(p for p in PKG.rglob("*") if p.is_file() and p.name != "PACKAGE_FREEZE.json")
     members = {p.relative_to(PKG).as_posix(): {"sha256": sha(p), "bytes": p.stat().st_size} for p in files}
     freeze = {"schema": "helm.rbw1t.package-freeze/1", "package": "HELM_RBW1T_20261019", "members": members,
-              "member_count": len(members), "package_version": "v2",
-              "commit_now": "045548b6a89205f65b419ac95753938ad738f037",
-              "commit_base": "045548b6a89205f65b419ac95753938ad738f037 with RB-W1 removed (helm_end_to_end_loop.py at d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7)",
-              "supersedes": "v1 zip b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809 (VOID_SUPERSEDED_BY_V2, never launched)",
+              "member_count": len(members), "package_version": "v3",
+              "commit_now": "65b862828399e59d6886df128aebb31bf4704d93",
+              "commit_base": "65b862828399e59d6886df128aebb31bf4704d93 with RB-W1 removed (helm_end_to_end_loop.py at d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7)",
+              "supersedes": {"v2": "zip 7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e SPENT_BY_C46 (scored once; result stands)", "v1": "zip b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809 VOID_SUPERSEDED_BY_V2 (never launched)"}, "amendment": "A-RBW1T-2 (PREREGISTRATION section 19)",
               "precode_preregistration_sha256": (WS / "PREREGISTRATION_RBW1T.precode.sha256").read_text().split()[0],
               "status": "SEALED, NOT LAUNCHED"}
     raw = (json.dumps(freeze, indent=1, sort_keys=True) + "\n").encode("ascii")
@@ -95,7 +95,7 @@ def main():
               "plan_check": json.loads(r3.stdout)["verdict"] if r3.stdout.strip().startswith("{") else r3.stdout[:200],
               "sealed_helm_now_not_written": sealed_untouched,
               "dry_run_summary_sha256": sha(WS / "dry_run" / "DRY_RUN_SUMMARY_RBW1T.json"),
-              "reader_classes_sha256": sha(WS / "dry_run_v2_reader_classes.json"),
+              "fix_v3_practice_counts_sha256": sha(WS / "FIX_V3_PRACTICE_COUNTS.json"),
               "dry_reading_sha256": sha(WS / "dry_run" / "DRY_READING_RBW1T.json")}
     (WS / "TEST_COUNTS_RBW1T.json").write_text(json.dumps(counts, indent=1, sort_keys=True) + "\n", encoding="ascii",
                                                newline="\n")
