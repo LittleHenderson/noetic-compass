@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - RB-W1T RESEALED as v3 (amendment A-RBW1T-2; spec sheet 7.88 note); SEALED, NOT LAUNCHED; nothing scored; 0 USD
+
+Owner pre-approval (verbatim, pinned 20 bytes, sha256 fd82691e...): "WIDE TEST 2 at 1 USD"; cap 1.00 USD, one attempt + one plumbing retry.
+
+- v3 zip 3a8ae37eb51c18414bfa83a71b9079dd7ec2282bec6ba3952d86ac0454f0e967, freeze 04eef886...; APPROVAL_RECORD_RBW1T.json (v3) 954c7364...; seed source sha256(line + ":" + v3 zip); band RW2 1,952,000,001-1,953,000,000.
+- Amendment A-RBW1T-2 written before the reseal: c46 exam SPENT (v2 zip 7c04a408... kept as v2_spent_*); only HELM change = PR #392 merge 65b86282 (three wide files); same preregistration, marks, arms, thresholds.
+- Exclusions: X-REAL 128, v2 practice 128, the c46 exam 128 (ids only, from the c46 host output id field; not in the manifest), practice draw v2 128. Practice v2 shares 3 recipes with c46 (noted; c46 is spent).
+- Tests from the sealed zip: 0 bad members of 395; RB-W1T 26 OK; HELM 177 OK (1 skipped); plan check PASS. Dry run (practice mock): WIDE 100/106, RIGHT 101, WRONG 0; NH practice 0 lost.
+- Custodian next (separate session): CUSTODIAN_PROCEDURE_RBW1T.md v3 -> rbw1t_custody_v3/; then the operator per LAUNCH_BRIEF v3. Backup D:/tksCAS-archive/rbw1t_v3_20261019/ (three hash passes).
+
 ## 2026-10-20 PDT - RB-W1 v3 fix built (dish names, line splitting, ran-out binding, ties); NOT re-tested on a sealed exam; status unchanged (spec sheet 7.88 note); 0 USD
 
 - Diagnosis on a NEW published practice draw (seed text RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published, PRACTICE_DRAW_V2.json 808cfa2f...): the c46 miss label CLARIFY_ENGLISH_UNKNOWN_PRODUCT is the licensed path's code; the wide reader's own codes showed line splitting (no amount, 18 recipes), units (8), names, ran-out names. Failed approach logged: reading HELM's licensed code as the cause of a wide-path miss.

@@ -1,35 +1,40 @@
 {
- "commit_base": "045548b6a89205f65b419ac95753938ad738f037 with RB-W1 removed (helm_end_to_end_loop.py at d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7)",
- "commit_now": "045548b6a89205f65b419ac95753938ad738f037",
- "member_count": 391,
+ "amendment": "A-RBW1T-2 (PREREGISTRATION section 19)",
+ "commit_base": "65b862828399e59d6886df128aebb31bf4704d93 with RB-W1 removed (helm_end_to_end_loop.py at d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7)",
+ "commit_now": "65b862828399e59d6886df128aebb31bf4704d93",
+ "member_count": 394,
  "members": {
   "FROZEN_RBW1T.json": {
-   "bytes": 5002,
-   "sha256": "4bbd41671a89502e594197df1149dcaefd7a3562d8e3500ba4d15c653846be49"
+   "bytes": 5104,
+   "sha256": "808d22d3253ad25b3c32e9fe993a1ae8e27ee8590baa45272364d91b8bef800a"
   },
   "PREREGISTRATION_RBW1T.md": {
-   "bytes": 35537,
-   "sha256": "8f51a45df5a30fd7e24f9f23c9d0427df1c0039c483ae6aea946d6d93c48485c"
+   "bytes": 40253,
+   "sha256": "1070e422a0ca058cc50e62b5fc5be74699c7196a8c7209c516be65be1ba274ad"
   },
   "README_RBW1T.md": {
-   "bytes": 3639,
-   "sha256": "0375a3160068cbe48594ad7adfe37002194d85bb2a110a6d6760e97422f10970"
+   "bytes": 4158,
+   "sha256": "9c730a9a1f90c2f89e8bbdd10b4d1edae4065082ef68a96c1c98435a3bdd722c"
   },
   "RUN_LIMITS_RBW1T.json": {
    "bytes": 3651,
    "sha256": "70e9854d2825a19b305001a464568c625d52cc0a0c25e0e264b1f0900a033e3e"
   },
   "contract/CUSTODIAN_PROCEDURE_RBW1T.md": {
-   "bytes": 3165,
-   "sha256": "622cc86d2daf73844a05da3198747c24c1e1b6508b2351f63c5a20568641545f"
+   "bytes": 4375,
+   "sha256": "34af8bd36ab11f2db2f2f19ad94dc7900c54840af65d6f66100ebf680ac07701"
+  },
+  "contract/EXCLUDE_RBW1T_C46_USED.json": {
+   "bytes": 3456,
+   "sha256": "d818fb3d659b4b1aef512ac655b174fcf04bc2a0ffb9bb2519bd8bef496512f3"
   },
   "contract/EXCLUDE_XREAL_USED.json": {
    "bytes": 3246,
    "sha256": "987936a74e14409eee43cc3a8016805a9e96938f7b300e18799f341b3b87a6cc"
   },
   "helm_base/SOURCE_CUT.json": {
-   "bytes": 28991,
-   "sha256": "6517b8cd9a1549b65509f35ccafde73205e8c82266b87d8e06603b4ba818a052"
+   "bytes": 29038,
+   "sha256": "266d9118574e9c2421f3ed2e2bf60be9584e5ab28f37610ef940b6951b7c8227"
   },
   "helm_base/cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
    "bytes": 92461,
@@ -733,7 +738,7 @@
   },
   "helm_now/SOURCE_CUT.json": {
    "bytes": 29106,
-   "sha256": "d9f41c1202f54f689bab5a999d2893c1b714015110c699de14a247aa37bfdee6"
+   "sha256": "0b70ad01c36017be324ed7ad63d11424de0d2e7ec14a682ba4bea46da4c74728"
   },
   "helm_now/cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
    "bytes": 92461,
@@ -1280,8 +1285,8 @@
    "sha256": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a"
   },
   "helm_now/helm_brain_wide.py": {
-   "bytes": 36959,
-   "sha256": "6b074543a7fd314aa5869fc7511f295510a9564f4152d6166945e54f1cc455bc"
+   "bytes": 37746,
+   "sha256": "a0c60162f01a610ab6156e0806be41435bc40a9c7cbbed956b085610ca2969f4"
   },
   "helm_now/helm_chat.py": {
    "bytes": 37263,
@@ -1400,16 +1405,16 @@
    "sha256": "a47726db6c978c357d105f7c1ae4402018764fc2c22c9184f2e1e54746fc094d"
   },
   "helm_now/helm_wide_turn.py": {
-   "bytes": 37970,
-   "sha256": "6ad3eb1ae8e2492ae1c8310194e3d7292f4214e82481bda743941ca7248bd04c"
+   "bytes": 49517,
+   "sha256": "a15fb084649a05af07aed89496d5ece9e6cb996b891a07d738f4c376c54709f7"
   },
   "helm_now/phrasebook.json": {
    "bytes": 39980,
    "sha256": "f92d5e19e4cf3083e2d01226724beb9a1faf11dd849881bafbe88b81ca953a28"
   },
   "helm_now/test_helm_brain_wide.py": {
-   "bytes": 30653,
-   "sha256": "0018671505e93d346b0927ff74e5a5b1f9d7aae1c2c597d7b605d2635bfdaf18"
+   "bytes": 38305,
+   "sha256": "8f6c157e88d6910ac3dc41d2ff9d8a514fccb7985eb5fd84c92154d3abf79003"
   },
   "helm_now/test_helm_chat_nuance.py": {
    "bytes": 14813,
@@ -1475,9 +1480,17 @@
    "bytes": 173670,
    "sha256": "304ce8815750b89a2ee5d38fb6e9ea0cb5b5ca98976e13015ba299f4cb12afbc"
   },
+  "practice/INPUTS_PRACTICE_V2.json": {
+   "bytes": 178354,
+   "sha256": "cba5f84e6c50f18a63532a482ae538d00a890cb71537ecb322fda38139a0b677"
+  },
   "practice/PRACTICE_DRAW_RBW1T.json": {
    "bytes": 383912,
    "sha256": "34e1eb4089ac6506ad110efbdad9420c400cc2e41c48520f1761efd7d844b3aa"
+  },
+  "practice/PRACTICE_DRAW_V2.json": {
+   "bytes": 394787,
+   "sha256": "808cfa2fa13af801290cd5d9a59cd3cbabcf3c36ec2c2868e2696a352a9ff45c"
   },
   "rbw1t/__init__.py": {
    "bytes": 0,
@@ -1492,12 +1505,12 @@
    "sha256": "a573f9556d6b1247512a7610ac3127221c735ebe2a977904efaa1211a1763118"
   },
   "rbw1t/common_rbw1t.py": {
-   "bytes": 11566,
-   "sha256": "bcc317b0eac8eef8de554cece13c89471f077bf4d66d6b5f9fca8473c61fd620"
+   "bytes": 11970,
+   "sha256": "0381d65bd6bf3818b3dabcf3f389c73c9de62bfe96cc781047cda9577187bd1a"
   },
   "rbw1t/custody_rbw1t.py": {
-   "bytes": 7886,
-   "sha256": "65765b5a79ce080eb224283a5b280743ab00dc174795e6ebe761b58bba60b4f8"
+   "bytes": 8644,
+   "sha256": "d1c436043ece438f6d142c67d0d7bc21043c2eb965cb366feb9971466393baf4"
   },
   "rbw1t/exam_rbw1t.py": {
    "bytes": 9036,
@@ -1532,8 +1545,8 @@
    "sha256": "220ba0bc368f48e798d01b737d9106a9d02a5f5ecd01406c52ca66711c618f63"
   },
   "tests_rbw1t/test_units_rbw1t.py": {
-   "bytes": 12228,
-   "sha256": "27468d1f7da10ae772dd16c4091684d75b520f7ca232d003e5d1cc97e8eff015"
+   "bytes": 13932,
+   "sha256": "8d503e2f57e8c945cbbd5650ee4ae03b7e5320680f7f3828ab54737721dacbc0"
   },
   "vendor/survey_v1/__init__.py": {
    "bytes": 0,
@@ -1569,9 +1582,12 @@
   }
  },
  "package": "HELM_RBW1T_20261019",
- "package_version": "v2",
+ "package_version": "v3",
  "precode_preregistration_sha256": "c0902a4fb83fd77670085938414ed160b71fd119ba5e8a77e203aab5b45ad424",
  "schema": "helm.rbw1t.package-freeze/1",
  "status": "SEALED, NOT LAUNCHED",
- "supersedes": "v1 zip b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809 (VOID_SUPERSEDED_BY_V2, never launched)"
+ "supersedes": {
+  "v1": "zip b50f4ca42178d4c43e43945267cc980aebd05a10f8e0d932d00e3eabd4495809 VOID_SUPERSEDED_BY_V2 (never launched)",
+  "v2": "zip 7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e SPENT_BY_C46 (scored once; result stands)"
+ }
 }

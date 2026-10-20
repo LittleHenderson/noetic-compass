@@ -414,3 +414,55 @@ English-64 / Faces-64 were not run by the builder.
 0.8; NH-OFF met about 0.95; NH-ON met about 0.85 (0 lost on practice; X5 uses the same families). **Word:
 `WIDE_BRAIN_EARNED_KEEP` about 0.35, `WIDE_LEARNING_DID_NOT_EARN_KEEP` about 0.3, `WIDE_BRAIN_HARMED` about 0.2,
 `INCONCLUSIVE` about 0.15.**
+
+## 19. v3 — amendment A-RBW1T-2 (written 2026-10-20, BEFORE the v3 reseal; no v3 exam exists yet)
+
+**Why.** The v2 sealed test ran once (job c46, 2026-10-19 PDT; reading `698c2faf…`, verdict `PASS`, status word
+`WIDE_LEARNING_DID_NOT_EARN_KEEP`). The c46 exam is **SPENT**: its 128 recipes are never used again, and the v2 zip
+`7c04a40855b81c6bfc5c1a44fc4486e112fcc4bf16bc37b1e84d7b457c6b009e` is `SPENT_BY_C46` (kept as
+`v2_spent_HELM_RBW1T_20261019_SOURCE_RBW1T.zip`; not void — it ran and its result stands). The owner pre-approved a
+second sealed run with the verbatim line `WIDE TEST 2 at 1 USD` (recorded in
+`Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md`, heading "Owner pre-approval (2026-10-19 evening, verbatim)";
+pinned form 20 UTF-8 bytes; cap 1.00 USD, one attempt + one plumbing retry; a fresh custodian draw excluding the c46
+128 by id).
+
+**A-RBW1T-2. What changes, and only this.**
+
+1. **The build under test is RB-W1 v3** (PR #392, merge `65b862828399e59d6886df128aebb31bf4704d93`), cut by `git show`
+   into `helm_now/`. The ONLY HELM change from the v2 cut is the merged fix: `helm_wide_turn.py`,
+   `helm_brain_wide.py`, `test_helm_brain_wide.py` (every other cut file is byte-identical to v2's; no other HELM file
+   changed on the thread between `045548b6` and `65b86282`). `helm_base/` is built by the same rule as v2 (A-W-8): the
+   now commit with RB-W1 removed and `helm_end_to_end_loop.py` read at `d4488f2a`.
+2. **Approval and seed source.** Owner line `WIDE TEST 2 at 1 USD` (20 bytes). H = sha256 of the UTF-8 bytes of
+   (`WIDE TEST 2 at 1 USD` + ":" + the full sha256 of the final v3 zip, 64 lower-case hex), no trailing newline.
+   k = int(H[0:16], 16); first slot = k mod 1,000,000.
+3. **Band RW2 1,952,000,001-1,953,000,000** (above RW). The used table adds RW 1,950,000,001-1,951,000,000 (spent by
+   c46) as a whole range; the gap rule (1,000,000 each side) and the step and stop rules are unchanged.
+4. **Exclusions (by id and, as before, by equal text):** X-REAL's 128 used recipes (unchanged), the v2 published
+   practice draw's 128 (unchanged), **the c46 exam's 128** (`contract/EXCLUDE_RBW1T_C46_USED.json`; ids only — they are
+   not listed in `MANIFEST_RBW1T.json` or the sealed handoff, so they were read by program from the `id` field of the
+   c46 host output `MAIN_ALWAYS_ASK.json` (sha256 `8d3e6be9305d0a0dce355a299c83c3298f7a44116c1cc9f216336311c4bb52bb`), whose records hold ids and canned replies
+   only; inputs sha256 `8d3ff26b…` = the c46 exam's), and **the builder's practice draw v2's 128**
+   (`practice/PRACTICE_DRAW_V2.json`, seed text `RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published`).
+5. **Practice-mock (dry run only)** uses the practice draw v2's seed text and exclusions (X-REAL + v2 practice), so the
+   dry run reproduces the published practice draw v2 exactly. The custodian never passes `--practice-mock`.
+6. **Custody** writes to a NEW folder `rbw1t_custody_v3/`; the c46 custody folder `rbw1t_custody/` is never touched.
+
+**Unchanged (frozen as in v2):** the frame and its pins, strata, quotas, multipliers, templates, the mapping, keys and
+representability, the five main arms and four NH arms (practice E64 / F64 and the spent X5 E64 / F64, as in c46),
+scoring, instrument rows, hard gates, marks (K1 = 9/10 of representable ANSWER-keyed items fully learned; K3 0 wrong
+answers and lessons; K4 0 unexplained asks; NH-OFF byte-identical; NH-ON at most 2 lost per file), the status words and
+their order, run limits and the cap. No threshold moved.
+
+**Honest notes.** (a) The v3 fixes were found on the builder's practice draw v2, never on an exam; the c46 exam was
+never opened (only RUN_RESULT codes and strata were used). (b) The practice draw v2 was drawn before the c46 ids were
+known to the builder and shares **3** recipes with the spent c46 exam (by id; checked after the fact). c46 is spent and
+v3 excludes both sets, so this cannot touch the v3 exam; practice numbers are optimistic for the reader. (c) The c46
+miss label `CLARIFY_ENGLISH_UNKNOWN_PRODUCT` was the licensed path's code; on practice the wide reader's own codes
+showed line splitting, units and names, not the dish name.
+
+**Predictions v3 (builder, before any v3 exam; not read by any program):** practice v2 with the v3 build: fully learned
+100 / 106 (94.34%), RIGHT 101, WRONG 0, unexplained asks 0. c46 showed fresh draws run several points below practice
+(v2: practice 93.40% -> exam 81.82%). K1 met about 0.45; K3 met about 0.8; K4 met about 0.85; NH-OFF about 0.95; NH-ON
+about 0.85. **Word: `WIDE_BRAIN_EARNED_KEEP` about 0.35, `WIDE_LEARNING_DID_NOT_EARN_KEEP` about 0.4,
+`WIDE_BRAIN_HARMED` about 0.15, `INCONCLUSIVE` about 0.1.**
