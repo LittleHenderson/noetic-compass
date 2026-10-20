@@ -1,0 +1,17 @@
+{
+ "attempts": "one scored + one plumbing retry",
+ "cap_usd": "0.10",
+ "coordinator_mapping": "RE-TEST READER: approved; fresh custodian draw from the X-REAL pool excluding the X-REAL 128 and the CTT primary 128; same fixed answer rule; one small AWS CPU job; cap 0.10 USD (expected ~0.03); one attempt + one plumbing retry; seed source = sha256(this verbatim owner line + ':' + the reseal's zip sha256)",
+ "owner_line_bytes": 68,
+ "owner_line_sha256": "b645e4f482e10e3caa1f6e497f304ebc13faf481ff1345b2099c3f1358bc60e4",
+ "owner_line_source": "Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md, the line starting '## Owner order (2026-10-19, verbatim): \"RE-TEST READER\"', text after 'verbatim): ' to end of line",
+ "owner_line_verbatim": "\"RE-TEST READER\" (0.03 USD) and \"WIDEN THE BRAIN\" (0 USD to build).\"",
+ "package_freeze_sha256": "6a622106aa1a57c23ec5ad03f8f687fd20653772413404cb9eda3b57aa956cf3",
+ "package_zip": "HELM_RTR1_20261019_SOURCE_RTR1.zip",
+ "package_zip_sha256": "e201feb6e5fd4eaf1d9b9060ed100a9db6150257c2d0b64d230ad81c4042f7a8",
+ "schema": "helm.rtr1.approval/1",
+ "seed_source_rule": "sha256(UTF-8(owner_line_verbatim + ':' + package_zip_sha256)); computed by the custodian, never by the builder",
+ "superseded_by": null,
+ "test": "RTR-1 RE-TEST READER (reader v1.1, PR #378, on a fresh draw of X-REAL's Part S frame)",
+ "written_by": "RTR-1 builder session (Claude), 2026-10-19 PDT; this record quotes the owner, it is not an owner signature"
+}
