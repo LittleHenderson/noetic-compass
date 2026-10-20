@@ -1,10 +1,10 @@
 {
  "attempts": {
   "plumbing_retry": 1,
-  "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same X6 and x5spent carriers; any package change is a reseal and a new owner word",
+  "plumbing_retry_rule": "only if no unit of the scored pool started; same v3 zip, same X6v3 and x5spent carriers; any package change is a reseal and a new owner word",
   "scored": 1
  },
- "cost_cap_status": "OWNER PRE-APPROVED: 'PAIR WAVE at 1 USD'",
+ "cost_cap_status": "OWNER PRE-APPROVED (v3, A-R1W6-2): 'FIX K4 at 1 USD' (v2's 'PAIR WAVE at 1 USD' was spent by c48)",
  "cost_cap_usd": "1.00",
  "deadline_seconds_whole_command": 2400,
  "enforced_by_launch_controller": [
@@ -21,7 +21,7 @@
   "HELM's own suites run on a scratch copy of RB-W1T's helm_now/ (the sealed folder is never written)"
  ],
  "estimate": {
-  "custodian": "laptop, 0 USD, no network, one process (about 20 s for seal + check)",
+  "custodian": "laptop, 0 USD, no network, one process (about 20 s for seal + check); eleven spent language files passed by path",
   "expected_usd_per_attempt": "about 0.03-0.10",
   "host_seconds": "about 400-700 (boot and checks most of it; suites about 30 s; the pool about 150-300 s at 2 workers)",
   "host_units": "77 (13 X6_E64, 13 X6_F64, 16 X6_CONV, 8 X6_REAL, 12 X6_PAIR incl. job map, 11 X6_PAIRW incl. job map, 4 REPRO_X5)",
@@ -49,7 +49,8 @@
  },
  "ledger": "Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json is the operator's; NO hold placed by the builder.",
  "package": "HELM_R1_W6_20261019",
+ "package_version": "v3",
  "schema": "helm.run-limits/1",
- "sources_on_host": "none of the public sources: the host gets the custodian's X6 carrier and the existing x5spent carrier",
- "status": "PRE-APPROVED by the owner's line 'PAIR WAVE at 1 USD' (APPROVAL_RECORD_R1W6.json); the operator launches; nothing is held or launched by the builder"
+ "sources_on_host": "none of the public sources: the host gets the custodian's fresh X6v3 carrier (top folder x6) and the existing x5spent carrier; the spent X6 carrier 6de3d782 is never shipped again",
+ "status": "PRE-APPROVED by the owner's line 'FIX K4 at 1 USD' (APPROVAL_RECORD_R1W6.json v3): ONE re-run of the pair wave after the K4 fix; the operator launches; nothing is held or launched by the builder"
 }

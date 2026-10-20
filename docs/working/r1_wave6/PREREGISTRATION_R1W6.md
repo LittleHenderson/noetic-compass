@@ -532,3 +532,71 @@ line `PAIR WAVE at 1 USD`, the cap 1.00 USD and the attempts; the seed source (n
   **Forecast after v2 practice (not read by any program):** `WIDE_WAVE_EARNED_KEEP` about 0.5 (a fresh draw may hold
   face or unit phrasings the guard does not cover, or a K4 / K5 miss), `WIDE_WAVE_HARMED` about 0.2,
   `WIDE_WAVE_NO_GAIN` about 0.15, `INCONCLUSIVE` about 0.15.
+
+## 17. Amendment A-R1W6-2 (v3, written 2026-10-20 BEFORE the v3 reseal; owner pre-approval "FIX K4 at 1 USD")
+
+**Why.** The v2 package (zip `729623429832c5fa99141d96876434d9ebed7417055c87173e7a582b3677be0a`) was scored once by
+job c48 on the sealed exam X6. The frozen reader said `PASS` / `WIDE_WAVE_NO_GAIN`: every mark held except K4 (one
+unexplained ask on a fully learned, answerable recipe). That reading stands and is never re-read. The post-run
+diagnosis (`run_c48_r1w6_20261020/DIAGNOSIS_K4.md`, X6 keys opened after scoring for diagnosis only) found an
+engineering defect, not a design limit: the v4 wide reader split "1 teaspoon of cream tartar, and half as much soda"
+into a made-up sixth ingredient "as much soda" (1/2, no unit), which never ran out in teaching, so the brain asked.
+The fix (reader v5: a relative-amount phrase joins the line before it as one bundled line; any form it cannot hold asks
+`AMOUNT_RELATIVE`) was merged as PR #406 (`fdf68e0c524298140e663ddda3cf76e34350ef0f` on `claude/project-thread-pmbzd6`,
+HELM suites Ran 192 OK). It was built and tested on the builder's own practice recipes only; no X6 item was used to
+tune or check it. The owner pre-approved ONE re-run for exactly this case: `FIX K4 at 1 USD` (recorded in
+`Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md`): cap 1.00 USD, one attempt + one plumbing retry, approval =
+that line + the v3 zip sha256, seed source = sha256(UTF-8 of the pinned line + ":" + the v3 zip sha256), a fresh
+custodian draw excluding the X6 exam.
+
+**Status of the earlier packages.** v1 `f307bdbc…` stays `VOID_SUPERSEDED_BY_V2`. **v2 `72962342…` is
+`VOID_SPENT`**: it was scored once (c48); it must never be shipped or scored again (kept as
+`v2_spent_HELM_R1_W6_20261019_SOURCE_R1W6_72962342.zip`). **The exam X6 is SPENT** (manifest `4d81abff…`, carrier
+`6de3d782…`); it is never re-used, and its items are excluded below.
+
+**What changes, and only this.**
+1. **HELM under test = the thread-branch head `fdf68e0c524298140e663ddda3cf76e34350ef0f`** (PR #406 merge), cut by
+   `git show` into `helm_now/` with the same 159-file list (`helm_now/SOURCE_CUT.json`). Against v2's cut `221cab70`
+   exactly two of the 159 files differ: `helm_wide_turn.py` (reader v5) and `test_helm_wide_alongside.py` (class
+   `D_RelativeAmountIsOneBundledLine`, 5 regression tests). No other HELM file changes.
+2. **The owner line is the new pre-approval**: pinned bytes `FIX K4 at 1 USD` (15 UTF-8 bytes; the approvals file shows
+   it inside the owner's quote marks; the inner text is the pinned form, RB-W1T precedent). Cap 1.00 USD and the
+   attempts (one + one plumbing retry) are unchanged.
+3. **Seed bands move above everything used or reserved** (the rule is otherwise unchanged): X6 used 1,954-1,963 M;
+   CTT-2R holds 1,964-1,969 M; USE-1 (real_stock_source_design_v1) reserves 1,972-1,977 M. New bands: E64
+   1,980,000,001-1,981,000,000; F64 1,982,000,001-1,983,000,000; REAL 1,984,000,001-1,985,000,000; CONV
+   1,986,000,001-1,987,000,000; PAIRW 1,988,000,001-1,989,000,000. Used table = 1-1,979,000,000 as one whole range.
+   Gap, slot rule, step rule and drive-loop life-seed rule unchanged (the life seeds change only because H changes).
+4. **The X6 exam is excluded from the v3 draw**, in addition to X-REAL's 128, c46's 128, c47's 128, RB-W1T's two
+   practice draws and wave 6's practice pools: `contract/EXCLUDE_R1W6_X6_USED.json` holds X6's 128 REAL frame ids, 64
+   CONV pool ids and 64 PAIRW pool ids (ids only, copied by program from `MANIFEST_X6.json` sha256
+   `4d81abff31238559c69a646faad33e74e70a413c8acd96794292e81d41741d78`). They are excluded from the REAL draw (by id and
+   equal text, RB-W1T's own frame rule) and from both pools (by id and equal text). The two spent X6 language files
+   (`ENGLISH64_X6.json` `c5d496fc…`, `FACES64_X6.json` `fd26f63e…`) join the E64 / F64 text rule's forbidden set, so
+   the custodian (and the reader's receiver check) passes eleven spent language files instead of nine. The practice
+   draw and practice pools are unchanged (they never used X6).
+5. Labels only: package version `v3`; the reader string `r1w6.merge_r1w6 v3 (2026-10-20)`; the approval record's
+   heading names the new line.
+
+**Unchanged:** every exam kind and size (E64 64, F64 64, PAIR 13 lives, PAIRW 3 lives, REAL 128, CONV 64), frame,
+quota, generator, key rule; every arm and unit (77); every instrument row, hard gate, mark threshold, status word and
+their order (K4 still allows 0 unexplained asks; P over four pairs; A-R1W6-1's K5 adaptation and D-W6-12 stand);
+REPRO_X5 (the spent X5 files against c40) unchanged; the neighbours (seven zips, same hashes); the run limits except
+the owner line they cite.
+- D-W6-17 (v3 seal and v3 practice; facts, not claims; written AFTER the seal, so only in this copy beside the zip)
+  **Sealed v3.** `HELM_R1_W6_20261019_SOURCE_R1W6.zip` sha256
+  `f1b64a5edf0df2b152c867f328c71b3df8640a759836108079590e7959c31b47` (939,259 bytes, 194 members + the freeze;
+  resealed byte-identical); `PACKAGE_FREEZE.json` `da1ec4d2e144a8921d27231e99ff277de0e915b61e2de205cc94646a4723c8a8`;
+  `FROZEN_R1W6.json` `94ecafcaecb08203ca331f77d1eb8219bd19418b6b8accda20dc0d1c703a24ca`; HELM cut at `fdf68e0c` (159
+  of 159 equal to the thread head). `APPROVAL_RECORD_R1W6.json` v3
+  `4054cfd682bdda66ad1e1fb1d640d9afb56a50c42fa43089730e00d4aeded8c4` (`.md` `c14a5f8c…`): line `FIX K4 at 1 USD`, 15
+  bytes, sha256 `083d4c3f…`; seed source `430df5a9b41b073d30f78957a12b2117bc8254058be413be06a87c7ce60972bb`. From the
+  sealed extract: wave-6 suites Ran 28 OK (3 host-only skipped); HELM's suites on a scratch copy Ran 192 OK (1
+  skipped). **v3 practice dry run** (`dry_run/run4_v3/`, 73 units, 278.6 s) vs v2 (`run3`): K4 unexplained asks 0 ->
+  0; X6_CONV FULL+WIDE wrong 0 -> 0 (NH-CONV lost 0, new wrong 0); X6_E64 / X6_F64 FULL vs FULL+WIDE score for score
+  64 / 64 each, before and after; X6_REAL FULL+WIDE fully learned 100 -> 99 of 106 (bar 96), RIGHT 100 -> 99, WRONG
+  0 -> 0, asks 13 -> 14: one practice recipe ("1 pint cream and same quantity of milk") is now asked
+  (`AMOUNT_RELATIVE`, a form reader v5 does not hold) instead of learned — a cost of the fix, kept as a negative, not
+  tuned. Every mark met on practice; reader `INSTRUMENT_ERROR` / `INCONCLUSIVE` as designed for a practice mock.
+  **Forecast after v3 practice (not read by any program):** `WIDE_WAVE_EARNED_KEEP` about 0.55, `WIDE_WAVE_NO_GAIN`
+  about 0.2, `WIDE_WAVE_HARMED` about 0.1, `INCONCLUSIVE` about 0.15.
