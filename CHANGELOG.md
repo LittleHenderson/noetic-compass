@@ -4,6 +4,8 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - HELM Hub additions (owner): glossary gains CTT, CTT-1, CTT-2R, the CTT exams and Ears / mouth (dictionary 449 -> 454 entries; CTT added to the jargon lint); new pages build.html (the build, animated: today vs intended, colored by recorded status, still without scripts or with reduced motion) and files.html (every key path with exists check, size and sha256; sealed exams named, never opened; key files by path only); 20 tests OK; site rebuilt; docs only, no status changed; 0 USD
+
 ## 2026-10-19 PDT - HELM-R1 wave 6 "PAIR WAVE" packet SEALED, NOT LAUNCHED (spec sheet 7.91); owner pre-approved "PAIR WAVE at 1 USD"; 0 USD
 
 - The wide recipe brain (WIDE_BRAIN switch, licensed reader first) with every wave-5 part on (cube store, English reader, triad, voice, EYE_SCAN, EYE_PAIRING) plus the new UNSETTLED_ASK caution rule (ask when a recipe names one ingredient on two lines).
