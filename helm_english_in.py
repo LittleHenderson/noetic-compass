@@ -25,6 +25,15 @@ Rules it keeps
    the reading is used only if parse(render(C)) == C. The loop then checks it again, exactly as a checked-form turn.
 5. Units: the number and the unit words are kept as said, in the receipt, so the voice can quote them.
    The same ingredient in two different units is a question, not a conversion.
+6. STOCK_FRAME_REQUIRED (2026-10-19, after X-REAL c42, spec sheet 7.81). Naming an ingredient is not a stock
+   statement. A stock or "none on hand" record is read ONLY when a stock frame holds the ingredient as its object:
+   a possession frame ("we have", "we've got", "our pantry has"), an existential frame ("there is / there are"),
+   a "we're out of / we ran out of / we don't have any" frame, or a sentence that is nothing but an inventory list
+   ("50 flour, 30 sugar", "no water", "3 eggs left", "12 cups of flour on hand"). "Tom pulled Mary out of the
+   water", "she ate 3 eggs" or "we used 2 cups of sugar" have no stock frame: the reader asks (NO_STOCK_FRAME) when
+   the sentence is about our kitchen, and otherwise says there is nothing to save (status NOTHING_TO_SAVE).
+   Every kept record carries its frame; the frames are rendered to a frame form and parsed back
+   (render_frames / parse_frames), and the loop checks that form again before it writes a cube.
 
 Word lists borrowed from the language line: the number words, hedge words and polarity words are the frozen
 ALIAS-WIDE lists (ALIAS_WIDE_LEXICON_v0_1.json, which lexicon_v2 keeps unchanged; `lexicon_v2_agrees()` checks
@@ -53,7 +62,7 @@ try:
 except ImportError:  # pragma: no cover - the loop refuses every turn without it anyway
     cce = None
 
-READER_VERSION = "helm_english_in v1 (2026-10-18)"
+READER_VERSION = "helm_english_in v1.1 (2026-10-19, stock-frame rule)"
 CLAIM_STATUS = "ENGINEERED-NOT-VALIDATED"
 
 # ------------------------------------------------------------------------------------------------ frozen word lists
@@ -184,6 +193,179 @@ CONVERT_RX = re.compile(r"\b(?:convert|conversion)\b|\bhow many (?:%s)\b|\b(?:in
                         % (_UNIT_ALT, _UNIT_ALT))
 SEP_RX = re.compile(r",|;|\band\b|\bbut\b|\bplus\b|&|\bwith\b|\bfrom\b|\busing\b")
 
+# ------------------------------------------------------------------------------------------------ stock frames (rule 6)
+#: Words that may stand around the amounts of an inventory list without changing what it says.
+LIST_WORDS = {"and", "plus", "also", "now", "still", "only", "just", "exactly", "currently", "ok", "okay", "so",
+              "oh", "well", "update", "stock", "inventory", "pantry", "total", "in", "all", "together", "then",
+              "here", "right", "yes", "yeah", "yep", "the", "of", "our", "my", "some", "any", "no", "more", "both",
+              "about", "too", "as", "at", "moment", "today", "&", "anymore"}
+#: A label in front of a list ("Stock check: 4 cups of sugar", "Pantry update: no milk") is part of the list frame.
+LABEL_RX = re.compile(r"^\s*(?:(?:stock|inventory|pantry|kitchen|fridge|check|update|count|tally|supplies|current|"
+                      r"today's|our|the|list|of)\s*)+:")
+#: State phrases that make a bare list a stock list ("3 eggs left", "12 cups of flour on hand").
+STATE_RX = re.compile(r"\b(?:on hand|in stock|left|remaining|available|in the (?:pantry|cupboard|fridge|kitchen)|"
+                      r"right now|at the moment|at all|any ?more|for now)\b")
+#: Possession and existential heads. The subject comes first (a statement, never "do we have" / "have we got").
+HEAD_RX = re.compile(
+    r"\b(?P<head>(?:(?:we|i)|(?:our|the|my)\s+(?:pantry|kitchen|fridge|cupboard|stock|inventory|shelf))"
+    r"(?:\s+(?:now|still|also|only|just|currently|already|actually|really|all))*"
+    r"\s+(?:have got|have|has|got)(?:\s+(?:still|only|just|now|got))*"
+    r"|there\s+(?:is|are)(?:\s+(?:still|now|only|just|currently|also))*)\b"
+    r"(?!\s+(?:to|made|baked|produced|been|used|added|bought|eaten|had)\b)")
+#: Words that, right before a head, turn it into a question, a condition or someone else's report.
+HEAD_BLOCKERS = {"do", "does", "did", "have", "has", "had", "can", "could", "will", "would", "should", "shall", "may",
+                 "might", "must", "if", "when", "whenever", "once", "after", "before", "until", "unless", "since",
+                 "because", "what", "how", "is", "are", "was", "were", "wish", "hope", "think", "guess", "suppose",
+                 "imagine", "said", "says", "thought", "told", "tells", "know", "knew", "whether", "that", "where",
+                 "why", "who", "not", "never"}
+#: "we're out of", "we ran out of", "we've run out of", "I'm fresh out of", "the pantry is out of", "we're without".
+OUT_HEAD_RX = re.compile(r"(?:^|\s)(?:we|i|(?:our|the)\s+(?:pantry|kitchen|fridge|cupboard))"
+                         r"(?:\s+(?:are|am|is|have|has))?(?:\s+(?:now|all|completely|totally|clean|fresh|just|"
+                         r"already|still|been|run|ran|running|gone|basically|pretty much))*\s*$")
+NEG_HEAD_RX = re.compile(r"(?:^|\s)(?:we|i|(?:our|the)\s+(?:pantry|kitchen|fridge|cupboard))\s*$")
+#: Clues that a sentence is about our own kitchen (then an unframed amount is a question, not nothing).
+KITCHEN_CUE_RX = re.compile(
+    r"\b(?:we|i|us|our|ours|my|me|you|your|pantry|in stock|on hand|ingredients?|recipes?|oven|kitchen|batch|"
+    r"bake|baked|baking|cook|cooked|cooking|whip|whipped)\b|^(?:let us|add|mix|use|put|pour|stir|combine|whisk|"
+    r"beat|melt|heat|knead|sift|measure|fold|buy|get|grab|take|need|bring|pass|give)\b")
+FRAME_FORM_RX = re.compile(r'(Stock|Absent) frame ([A-Z_]+) "([^"]*)": Ω_([A-Za-z]+)\.')
+
+
+def _residue_ok(text: str) -> bool:
+    """True when `text` holds only list words and punctuation (amounts and frames already blanked out)."""
+    return all(w in LIST_WORDS for w in re.findall(r"[a-z][\w'-]*|\d+", text))
+
+
+def _blank(text: str, spans: Sequence[Tuple[int, int]], lo: int = 0) -> str:
+    """`text` (starting at clause offset lo) with the given clause spans replaced by spaces."""
+    chars = list(text)
+    for a, b in spans:
+        for i in range(max(a, lo), min(b, lo + len(chars))):
+            chars[i - lo] = " "
+    return "".join(chars)
+
+
+def _segment_start(clause: str, pos: int) -> int:
+    last = 0
+    for m in SEP_RX.finditer(clause, 0, pos):
+        last = m.end()
+    return last
+
+
+def _segment_end(clause: str, pos: int) -> int:
+    m = SEP_RX.search(clause, pos)
+    return m.start() if m else len(clause)
+
+
+def _list_frame(clause: str, spans: Sequence[Tuple[int, int]], is_q: bool) -> Optional[Dict[str, str]]:
+    """The whole clause is an inventory list: amounts, 'no X', state words and list words only."""
+    if is_q:
+        return None
+    blanked = _blank(clause, spans)
+    label = LABEL_RX.match(blanked)
+    if label:
+        blanked = " " * label.end() + blanked[label.end():]
+    state = STATE_RX.search(blanked)
+    blanked = STATE_RX.sub(" ", blanked)
+    if _residue_ok(blanked):
+        return {"rule": "LIST", "words": (state.group(0) if state else
+                                          (label.group(0).rstrip(":").strip() if label else ""))}
+    return None
+
+
+def _head_frame(clause: str, pos: int, spans: Sequence[Tuple[int, int]]) -> Optional[Dict[str, str]]:
+    """A possession / existential head before clause position `pos` that holds the thing at `pos` as its object:
+    the words between the head and `pos` are list words, amounts or other list items only."""
+    best = None
+    for m in HEAD_RX.finditer(clause, 0, pos):
+        before = re.findall(r"[a-z][\w'-]*", clause[_segment_start(clause, m.start()):m.start()])
+        if before and before[-1] in HEAD_BLOCKERS:
+            continue
+        if any(w not in LIST_WORDS for w in before):
+            continue                                   # "Tom said we have ...": someone else's report
+        gap = _blank(clause[m.end():pos], spans, m.end())
+        gap = STATE_RX.sub(" ", gap)
+        if _residue_ok(gap):
+            best = m
+    if best is None:
+        return None
+    head = re.sub(r"\s+", " ", best.group("head")).strip()
+    return {"rule": "EXISTENTIAL" if head.startswith("there") else "POSSESSION", "words": head}
+
+
+def stock_frame(clause: str, start: int, spans: Sequence[Tuple[int, int]], is_q: bool) -> Optional[Dict[str, str]]:
+    """The stock frame for an amount at `start` in `clause`, or None. A question only keeps a statement-order head."""
+    return _head_frame(clause, start, spans) or _list_frame(clause, spans, is_q)
+
+
+def absent_frame(clause: str, start: int, end: int, shape: int, spans: Sequence[Tuple[int, int]],
+                 is_q: bool) -> Optional[Dict[str, str]]:
+    """The frame that makes an absence hit (ABSENT_RXS[shape] at start..end) a 'none on hand' statement, or None."""
+    seg_lo = _segment_start(clause, start)
+    lead = clause[seg_lo:start]
+    hit = clause[start:end]
+    if shape == 0 and (hit.startswith("out of") or hit.startswith("without")):
+        m = OUT_HEAD_RX.search(lead)
+        if m and _residue_ok(lead[:m.start()]):
+            return {"rule": "OUT_OF", "words": (lead[m.start():] + hit.split()[0] + " " + hit.split()[1]).strip()
+                    if hit.startswith("out of") else (lead[m.start():] + "without").strip()}
+        if hit.startswith("without"):
+            return None
+    if shape in (2, 3):                                # "we don't have any X", "we haven't got any X"
+        m = NEG_HEAD_RX.search(lead)
+        if m and _residue_ok(lead[:m.start()]) and not is_q:
+            return {"rule": "NONE_HELD", "words": (lead[m.start():] + hit.rsplit(" ", 1)[0]).strip()}
+        return None
+    if shape in (4, 5):                                # "the water is all gone", "the water ran out"
+        tail = clause[end:_segment_end(clause, end)]
+        if _residue_ok(lead) and _residue_ok(STATE_RX.sub(" ", tail)) and not is_q:
+            return {"rule": "GONE", "words": hit.split(" ", 1)[1] if hit.startswith(("the ", "our ")) else hit}
+        return None
+    if not hit.startswith("out of"):                   # "no X", "no more X", "zero X", "none of the X"
+        f = _head_frame(clause, start, spans)
+        if f:
+            return f
+    return _list_frame(clause, spans, is_q)
+
+
+def render_frames(frames: Sequence[Dict[str, str]]) -> str:
+    """The frame form: one sentence per kept record, e.g. 'Stock frame POSSESSION "we have": Ω_Flour.'"""
+    return " ".join('%s frame %s "%s": Ω_%s.' % ("Absent" if f["kind"] == "absent" else "Stock", f["rule"],
+                                                f["words"], f["name"]) for f in frames)
+
+
+def parse_frames(text: str) -> List[Dict[str, str]]:
+    out = []
+    for m in FRAME_FORM_RX.finditer(text or ""):
+        out.append({"kind": "absent" if m.group(1) == "Absent" else "stock", "rule": m.group(2),
+                    "words": m.group(3), "name": m.group(4)})
+    if FRAME_FORM_RX.sub("", text or "").strip():
+        raise ValueError("frame form has text that is not a frame sentence")
+    return out
+
+
+def check_frame_form(reading: Dict[str, Any]) -> Tuple[bool, str]:
+    """Rule 6, checked again from the reading alone (the loop calls this before any cube is written): the frame
+    form parses back to the reading's frames, every stock and absence has exactly one frame, and every frame's words
+    are the user's own words."""
+    frames = reading.get("frames") or []
+    try:
+        back = parse_frames(reading.get("frame_form") or "")
+    except ValueError as exc:
+        return False, str(exc)
+    if [dict(f) for f in back] != [{k: f[k] for k in ("kind", "rule", "words", "name")} for f in frames]:
+        return False, "frame form does not round-trip"
+    want = sorted([("stock", s["name"]) for s in reading.get("stocks") or []] +
+                  [("absent", a["name"]) for a in reading.get("absent") or []])
+    have = sorted((f["kind"], f["name"]) for f in frames)
+    if want != have:
+        return False, "a stock or absence has no stock frame"
+    norm = reading.get("normalized") or ""
+    for f in frames:
+        if f["words"] and f["words"] not in re.sub(r"\s+", " ", norm):
+            return False, "frame words %r are not the user's words" % f["words"]
+    return True, "ok"
+
 
 # ------------------------------------------------------------------------------------------------ small helpers
 def normalize_text(text: str) -> str:
@@ -261,6 +443,8 @@ class _Reading:
         self.ignored: List[str] = []
         self.rules: List[str] = []
         self.clarifications: List[Dict[str, Any]] = []
+        self.frames: List[Dict[str, str]] = []          # rule 6: the stock frame of every kept record
+        self.unframed: List[Dict[str, Any]] = []        # rule 6: amounts / absences said with no stock frame
 
     def ask(self, code: str, **slots: Any) -> None:
         if slots.get("item") in {say_name(n) for n in COUNTABLE}:
@@ -472,6 +656,10 @@ def _read_clause(rd: _Reading, clause: str, is_q: bool, last_topic: Optional[str
     product_words_here = [(m.start(), m.group(0)) for w in rd.product_words
                           for m in re.finditer(r"\b%s\b" % re.escape(w), clause)]
     consumed = [(q["start"], q["end"]) for q in qs]
+    hits = sorted((m.start(), m.end(), m.group("w"), strong, m.groupdict().get("kind"), shape)
+                  for shape, (rx, strong) in enumerate(ABSENT_RXS) for m in rx.finditer(clause))
+    # rule 6: the spans a list frame may skip over -- every amount and every 'none of X' said about an ingredient
+    list_spans = list(consumed) + [(h[0], h[1]) for h in hits if rd.known(h[2])[0] == "ingredient"]
 
     # stated recipe: "bread needs 2 flour", "to make bread, use 2 flour and 1 water"
     if product_words_here and qs and STATED_RECIPE_RX.search(clause) and any(q["kind"] == "ingredient" for q in qs):
@@ -519,17 +707,25 @@ def _read_clause(rd: _Reading, clause: str, is_q: bool, last_topic: Optional[str
         if amount is None:
             rd.ask("ROUND_TRIP_FAILED")
             continue
+        frame = stock_frame(clause, q["start"], list_spans, is_q)
+        if frame is None:                               # rule 6: an amount said, but not as what we have
+            if is_q:
+                rd.ask("WHAT_IF", words=q["words"], item=item)
+            else:
+                rd.unframed.append({"kind": "absent" if amount == "0" else "stock", "name": q["name"],
+                                    "words": q["words"], "amount": amount, "unit": q["unit"]})
+            continue
         if amount == "0":
             rd.absent.append({"name": q["name"], "words": q["words"], "rule": "ZERO_SAID_AS_NONE"})
+            rd.frames.append(dict(frame, kind="absent", name=q["name"]))
             continue
         rd.stocks.append({"name": q["name"], "amount": amount, "said": q["said"], "unit": q["unit"],
                           "words": q["words"], "rule": "STOCK_STATED"})
+        rd.frames.append(dict(frame, kind="stock", name=q["name"]))
 
     # 2. absences
-    hits = sorted((m.start(), m.end(), m.group("w"), strong, m.groupdict().get("kind"))
-                  for rx, strong in ABSENT_RXS for m in rx.finditer(clause))
     absent_here = set()
-    for start, end, word, strong, kind_word in hits:
+    for start, end, word, strong, kind_word, shape in hits:
         if any(a <= start < b for a, b in consumed):
             continue
         kind, name = rd.known(word)
@@ -541,7 +737,12 @@ def _read_clause(rd: _Reading, clause: str, is_q: bool, last_topic: Optional[str
             if is_q or hedge:
                 rd.ask("WHAT_IF_ABSENT", item=say_name(name))
                 continue
+            frame = absent_frame(clause, start, end, shape, list_spans, is_q)
+            if frame is None:                           # rule 6: "out of the water" is not "we're out of water"
+                rd.unframed.append({"kind": "absent", "name": name, "words": clause[start:end].strip()})
+                continue
             rd.absent.append({"name": name, "words": clause[start:end].strip(), "rule": "ABSENT_STATED"})
+            rd.frames.append(dict(frame, kind="absent", name=name))
         elif kind is None and strong and kind_word in ("out of", "no more", "none of the", "zero") \
                 and word not in FUNCTION_WORDS and word not in IGNORED_COUNT_NOUNS and word not in UNIT_FORMS:
             rd.ask("UNKNOWN_INGREDIENT", name=word, known=say_list_and(rd.ingredients))
@@ -594,7 +795,8 @@ def _read_clause(rd: _Reading, clause: str, is_q: bool, last_topic: Optional[str
 
 def read(text: str, ingredients: Sequence[str], products: Sequence[str], last_topic: Optional[str] = None,
          known_units: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
-    """Read one everyday sentence. Returns a reading dict with status CONTENT, WITNESS, CLARIFY or NOT_MINE."""
+    """Read one everyday sentence. Returns a reading dict with status CONTENT, WITNESS, CLARIFY, NOTHING_TO_SAVE
+    (rule 6: an ingredient was named, but not as stock, in a sentence that is not about our kitchen) or NOT_MINE."""
     t = normalize_text(text)
     rd = _Reading(t, ingredients, products)
     out: Dict[str, Any] = {"reader": READER_VERSION, "claim_status": CLAIM_STATUS, "status": "NOT_MINE",
@@ -602,7 +804,8 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str], last_to
                                                          "sha256": LEXICON_SHA256, "lists": list(BORROWED_LISTS)},
                            "names_table": EVERYDAY_NAMES["label"], "stocks": [], "absent": [], "topic": None,
                            "witness": None, "ignored": [], "rules": [], "clarify": None, "content": None,
-                           "checked_form": None, "round_trip_ok": None}
+                           "checked_form": None, "round_trip_ok": None, "frames": [], "frame_form": None,
+                           "frame_round_trip_ok": None, "unframed": []}
     if not t or not _claimed(rd, t):
         return out
     if cce is None:
@@ -625,7 +828,9 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str], last_to
     # one turn, one consistent story: the same ingredient twice, or stated both present and absent, is a question
     if not rd.clarifications:
         seen: Dict[str, Dict[str, Any]] = {}
-        for s in rd.stocks:
+        # an unframed amount of an ingredient also stated as stock: two amounts are a question first (rules 5, 6)
+        framed_names = {s["name"] for s in rd.stocks}
+        for s in rd.stocks + [u for u in rd.unframed if u["kind"] == "stock" and u["name"] in framed_names]:
             prev = seen.get(s["name"])
             if prev is not None:
                 if not same_unit(prev["unit"], s["unit"]):
@@ -656,7 +861,26 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str], last_to
                 rd.ask("UNIT_MISMATCH", item=say_name(s["name"]), old_unit=old, new_unit=s["unit"])
                 break
 
-    out.update(stocks=rd.stocks, absent=rd.absent, ignored=rd.ignored, rules=sorted(set(rd.rules)))
+    # rule 6 (STOCK_FRAME_REQUIRED): an ingredient amount or absence said without a stock frame is never written.
+    # About our kitchen -> one plain question; anything else -> nothing to save. All or nothing, as rule 3.
+    nothing_to_save = False
+    if rd.unframed and not rd.clarifications:
+        rd.rules.append("STOCK_FRAME_REQUIRED")
+        first = rd.unframed[0]
+        kitchen = bool(rd.stocks or rd.absent or rd.topics or rd.witness or KITCHEN_CUE_RX.search(t)
+                       or any(re.search(r"%s" % re.escape(w), t) for w in rd.product_words))
+        if not kitchen:
+            nothing_to_save = True
+        elif first["kind"] == "absent":
+            rd.ask("NO_STOCK_FRAME_ABSENT", item=say_name(first["name"]))
+        else:
+            rd.ask("NO_STOCK_FRAME", words=first["words"], item=say_name(first["name"]))
+
+    out.update(stocks=rd.stocks, absent=rd.absent, ignored=rd.ignored, rules=sorted(set(rd.rules)),
+               unframed=rd.unframed)
+    if nothing_to_save:
+        out.update(status="NOTHING_TO_SAVE", stocks=[], absent=[], ignored=rd.ignored)
+        return out
     if rd.clarifications:
         out.update(status="CLARIFY", clarify=rd.clarifications[0], all_clarify=rd.clarifications)
         return out
@@ -679,6 +903,11 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str], last_to
         content["topic"] = "Ω_" + rd.topics[0]["name"]
         out["topic"] = rd.topics[0]
     ok, checked = _round_trip(content)
+    # rule 6: the frames ride beside the checked form and must render back exactly, like the checked form itself
+    out.update(frames=rd.frames, frame_form=render_frames(rd.frames))
+    frame_ok, _why = check_frame_form(out)
+    out["frame_round_trip_ok"] = frame_ok
+    ok = ok and frame_ok
     out.update(content=content, checked_form=checked, round_trip_ok=ok, status="CONTENT" if ok else "CLARIFY",
                clarify=None if ok else {"code": "ROUND_TRIP_FAILED", "slots": {}})
     return out
