@@ -1,0 +1,17 @@
+{
+ "errors": 0,
+ "failures": 0,
+ "from": "a fresh extract of the sealed zip",
+ "host_note": "tests that need a laptop-only neighbour (approvals file, X-REAL practice, c45 brief/vocab) skip on the GPU host",
+ "laptop_rules": "one process, under 300 s, under 300 MiB, no torch, no network",
+ "log_sha256": "57e9801380111a40391fc86d58aab9060480e26caf72795087602a257df7bcfe",
+ "members_bad": [],
+ "members_rehashed": 34,
+ "peak_mb": 269,
+ "python": "3.14.0",
+ "ran": 56,
+ "schema": "ctt2r.test-counts/1",
+ "seconds": 8,
+ "skipped": [],
+ "zip_sha256": "d97a16d6683b41037b51d028bcc4776be86ae1db66b117bd2af0126bab6159b6"
+}

@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - CTT-2R packet SEALED, NOT LAUNCHED (spec sheet 7.92): the ACCEPT-2 acceptance rule on the unchanged c45 weights; owner pre-approved "CTT RULE TEST at 1.50 USD"; 0 USD
+
+- Rule: reader v1.1 first; where it would ask, a translator reading is OFFERED only when all three c45 copies give the identical checked reading, read back as a question (topics too), used only after a yes; at most 2 offers per dialogue, silent after a no. Confident-wrong cap stays 2 / 0 saved.
+- Arms: A0 reader v1.1, A4E (vote), A2E copy-closest under the same rule (mechanism-free baseline), A4 as run (no rule), C2E (untrained, free); C1E not run (rule-only).
+- Exams (custodian, builder blind): Part R 128 real public sentences (R1 = 48 stock-dense the reader gives up on), Part K 128 LLM-written singles (32 trap sentences, keys frozen first) + 16 dialogues from a NEW custodian-only pool; I-REACH turns a no-room part into INCONCLUSIVE.
+- Zip d97a16d6683b41037b51d028bcc4776be86ae1db66b117bd2af0126bab6159b6, freeze 7cccf18e..., approval record 37f8c601... (by program); 56 tests OK from the sealed extract.
+- Practice census (builder-allowed): R1 likely below 24 on the exam frame, so the custodian census is expected to STOP Part R before any spend; the coordinator chooses widen-frame (new design) or Part K only.
+- Files: Documents/Codex/2026-10-19/ctt2r/; copies docs/working/ctt2r/; backup D:/tksCAS-archive/ctt2r_20261019/.
+
 ## 2026-10-20 PDT - HELM Hub additions (owner): glossary gains CTT, CTT-1, CTT-2R, the CTT exams and Ears / mouth (dictionary 449 -> 454 entries; CTT added to the jargon lint); new pages build.html (the build, animated: today vs intended, colored by recorded status, still without scripts or with reduced motion) and files.html (every key path with exists check, size and sha256; sealed exams named, never opened; key files by path only); 20 tests OK; site rebuilt; docs only, no status changed; 0 USD
 
 ## 2026-10-19 PDT - HELM-R1 wave 6 "PAIR WAVE" packet SEALED, NOT LAUNCHED (spec sheet 7.91); owner pre-approved "PAIR WAVE at 1 USD"; 0 USD
