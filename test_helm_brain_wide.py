@@ -656,7 +656,11 @@ class H_SwitchOff(unittest.TestCase):
     def test_licensed_files_untouched(self):
         """helm_brain_canonical.py and the reader are byte-identical to the thread branch this build started from."""
         base = "d4488f2a"
-        for rel in ("helm_brain_canonical.py", "helm_english_in.py", "helm_voice.py"):
+        # 2026-10-20: helm_english_in.py left this list. It changed on purpose after the base, outside RB-W1: lexicon v3
+        # (PR #386, a7b1650a) and the wave-6 FIX FIRST crash fix (quantities_said on a wide reading); since #386 this
+        # check failed in every git checkout and was skipped only on scratch copies. The licensed brain and the voice
+        # stay pinned to the base.
+        for rel in ("helm_brain_canonical.py", "helm_voice.py"):
             git = subprocess.run(["git", "-C", HERE, "show", f"{base}:{rel}"], capture_output=True, timeout=60)
             if git.returncode != 0:
                 self.skipTest("base commit not reachable in this checkout")

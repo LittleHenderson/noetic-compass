@@ -27,6 +27,7 @@ CLAIM STATUS: ENGINEERED-NOT-VALIDATED. Not tested on a sealed exam.
 """
 from __future__ import annotations
 
+import json
 import re
 import unicodedata
 from fractions import Fraction
@@ -34,7 +35,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import helm_brain_wide as W
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v3 (2026-10-20)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v4 (2026-10-20)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -56,6 +57,16 @@ SINGULAR_EXCEPTIONS = {"molasses": "molasses", "hummus": "hummus", "couscous": "
                        "cookies": "cookie", "pies": "pie", "brownies": "brownie", "smoothies": "smoothie",
                        "veggies": "veggie", "calories": "calorie"}
 APPROX_RX = re.compile(r"^(?:about|around|roughly|approximately|approx\.?|nearly|almost|over|under|at least|up to)\b")
+#: v4 (2026-10-20, wave-6 FIX FIRST): a piece of a stock or batch sentence that is a CLAUSE about the ingredients
+#: ("..., but the butter is past its best", "and nobody needs sauce today", "but I'm saving the egg for something
+#: else") is something this reader cannot hold: the faces (Purpose / Wisdom / Power) live in the triad, which wraps
+#: only the licensed brain. All or nothing: the whole sentence becomes one question and nothing is saved. Before v4
+#: such a clause was kept as a "note" of the line before it and silently ignored (23 wrong answers on wave 6's practice
+#: conversations).
+CLAUSE_RX = re.compile(
+    r"^(?:but|except|although|though|however|yet|unless|whereas)\b"
+    r"|^(?:i|i'm|i've|i'd|we're|we've|we don't|we do not|nobody|no one|there's|there is|my|our)\b"
+    r"|^the\b[^,]*?\b(?:is|are|was|were|isn't|aren't|wasn't|has|hasn't|have|haven't)\b", re.IGNORECASE)
 
 
 def singular(word: str) -> str:
@@ -229,6 +240,10 @@ def split_lines(text: str) -> List[Tuple[str, str]]:
 def parse_lines(text: str) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """A list of ingredient lines ('a, b and c'). Notes after a comma stay with their line. All or nothing."""
     lines: List[Dict[str, Any]] = []
+    for m in SEP_RX.finditer(text):                                # v4: a clause after a separator -> one question
+        piece = text[m.end():].strip()
+        if CLAUSE_RX.match(piece):
+            return [], _ask("UNREAD_CLAUSE", words=piece.split(",")[0].strip().rstrip("."))
     for seg, notes in split_lines(text):
         rec = parse_line(seg, notes)
         if "clarify" in rec:
@@ -260,8 +275,11 @@ END_RX = re.compile(r"^(?P<lines>.+?),?\s+and\s+(?:then\s+)?(?:(?:we|i)\s+)?(?:"
                     r"ran out of\s+(?P<out>.+)"
                     r"|(?P<none>nothing ran out|(?:we\s+|i\s+)?(?:did not|didn't) run out of anything|"
                     r"(?:we\s+|i\s+)?ran out of nothing))$", re.IGNORECASE)
-STOCK_RX = re.compile(r"^(?:we(?:'ve| have)? got|we (?:still )?have|there (?:is|are)|there's|our pantry has|"
-                      r"in the pantry we have)\s+(?P<lines>.+?)(?:\s+(?:on hand|left|in stock))?\s*[.!]?$",
+#: v4: a restatement ("Actually, we have 4 pounds of sugar now.") is stock too, so the new amount replaces the old one:
+#: the brain then converts it through its unit table or asks (UNIT_KIND_MISMATCH); it never answers from the old one
+STOCK_RX = re.compile(r"^(?:(?:actually|now|ok(?:ay)?|so|sorry|correction|update)\s*,?\s+)?"
+                      r"(?:we(?:'ve| have)? got|we (?:still |now )?have|there (?:is|are)|there's|our pantry has|"
+                      r"in the pantry we have)\s+(?P<lines>.+?)(?:\s+(?:on hand|left|in stock|now|instead))?\s*[.!]?$",
                       re.IGNORECASE)
 QUESTION_RX = re.compile(r"^(?:how\s+(?:much|many)\s+(?P<p1>.+?)\s+(?:can|could)\s+(?:we|i)\s+(?:make|bake|cook)"
                          r"(?:\s+now)?(?:\s+with what we have)?|(?:can|could)\s+(?:we|i)\s+(?:make|bake|cook)\s+"
@@ -685,9 +703,13 @@ def extended_turn(loop: Any, user_english: str, tick: int, current_inventory: An
         answered["path"] = "wide"
         answered["licensed_first"] = {"loop_status": res.get("loop_status")}
         return answered
-    if res.get("loop_status") in STOCK_DONE and reading["status"] == "STOCK":
+    recorded = res.get("loop_status") in STOCK_DONE and reading["status"] == "STOCK"
+    if recorded:
         _stock_of(loop).update(reading["stock"])          # one stock on hand; the wide brain reads it too (no write)
-    if take_over(loop, res, reading):
+    taken = take_over(loop, res, reading)
+    if not taken and not recorded and reading["status"] != "QUESTION":
+        _withdraw_mentioned_stock(loop, user_english, tick)   # v4: never answer from stock the person just restated
+    if taken:
         wres = wide_turn(loop, user_english, tick)
         wres["path"] = "wide"
         wres["licensed_first"] = {"loop_status": res.get("loop_status")}
@@ -742,6 +764,53 @@ def wide_turn(loop: Any, user_english: str, tick: int) -> Dict[str, Any]:
     return _wide_question(loop, reading["topic"], tick, result, writes_before)
 
 
+def faces_said_about(loop: Any, product: str, support: List[str]) -> List[Dict[str, str]]:
+    """v4 (wave-6 FIX FIRST): faces the person stated (held by the licensed triad, helm_triad.TriadTable) that touch
+    this wide recipe: a face on an ingredient whose name is a wide ingredient's name or its last word ("the butter is
+    past its best" touches "butter" and "melted butter"), or a recipe Purpose on this dish, at any stage but Peak. The
+    wide brain does not apply faces (the triad wraps only the licensed brain), so the question is asked instead."""
+    table = getattr(getattr(loop, "brain", None), "table", None)
+    records = getattr(table, "records", None)
+    if not records:
+        return []
+    names = {n.lower() for n in support} | {singular(n.split()[-1]).lower() for n in support if n.split()}
+    out = []
+    for key in sorted(records):
+        try:
+            rec = json.loads(records[key])
+        except (TypeError, ValueError):
+            continue
+        if rec.get("stage") == "PEAK":
+            continue
+        nm = str(rec.get("name", "")).lower()
+        if (rec.get("scope") == "ingredient" and (nm in names or singular(nm) in names)) or \
+                (rec.get("scope") == "recipe" and product_key(nm) == product_key(product)):
+            out.append({"scope": rec.get("scope"), "name": rec.get("name"), "face": rec.get("face"),
+                        "stage": rec.get("stage")})
+    return out
+
+
+def _withdraw_mentioned_stock(loop: Any, user_english: str, tick: int) -> List[str]:
+    """v4 (wave-6 FIX FIRST): a turn the wide path could not take that names an ingredient whose stock the wide brain
+    holds (a restatement it could not read, an amount in a unit it does not know, a face or purpose clause) makes that
+    held amount stale: it is withdrawn, so the next question asks instead of answering from the old amount. Nothing is
+    written to the store; the withdrawal is traced."""
+    held = _stock_of(loop)
+    if not held:
+        return []
+    words = normalize_text(user_english).lower()
+    gone = []
+    for n in list(held):
+        forms = {n.lower(), plural(n).lower()}
+        if any(re.search(r"(?<![a-z])%s(?![a-z])" % re.escape(f), words) for f in forms if f):
+            held.pop(n)
+            gone.append(n)
+    if gone:
+        loop._emit(tick, "S2 Bias ^5", what="stock_withdrawn (wide)", reason="restated but not read",
+                   withdrawn=sorted(gone))
+    return gone
+
+
 def _stock_of(loop: Any) -> Dict[str, Tuple[Fraction, str]]:
     if not hasattr(loop, "wide_stock"):
         loop.wide_stock = {}
@@ -785,6 +854,15 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
                             "WAIT_FOR_USER: a witnessed batch")
     loop.last_topic = product
     support = brain.support_of(product)
+    faced = faces_said_about(loop, product, support)
+    if faced:                                      # v4: a stated face this brain cannot apply -> ask, never ignore it
+        loop._emit(tick, "S1 trigger ^8", product=product, faces_not_held=faced)
+        result["faces_not_held"] = faced
+        what = "the " + faced[0]["name"].lower() if faced[0]["scope"] == "ingredient" else "whether it's needed"
+        return loop._finish(result, tick, "CLARIFY_WIDE_FACE_NOT_HELD",
+                            f"You told me something about {what}, and I can't use that for {product} yet, so I won't "
+                            f"guess how much we can make. Can you tell me the amounts to count on instead?",
+                            writes_before, "WAIT_FOR_USER: amounts that already allow for it")
     loop._emit(tick, "S1 trigger ^8", product=product, prerequisites=support,
                requirements=brain.requirements(product))
     loop._emit(tick, "S2 Bias ^5", what="stock_on_hand (wide)", bias_version=loop.bias_version,
