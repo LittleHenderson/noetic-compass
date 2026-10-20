@@ -1,0 +1,90 @@
+{
+ "freeze_sha256": "6a622106aa1a57c23ec5ad03f8f687fd20653772413404cb9eda3b57aa956cf3",
+ "laptop_pool_seconds_practice": 9.05,
+ "members": 27,
+ "mock_end_to_end": {
+  "reader": "verdict PASS, every instrument row and hard gate true; words (mock only) V11 S_SAFE_NOT_USEFUL, V10 S_UNSAFE_ON_REAL, FIX_REMOVED_HARM; V11 0 WRONG / V10 4 WRONG of 108 scored; 0 lost true writes; I-CTRL 128/128 equal",
+  "receiver_check": "all_pass true",
+  "what": "custody (line, derivation on a DUMMY seeding zip, draw, receiver check, seal, carriers) -> pool -> reader, on practice-partition sentences with patched frame/X-REAL/CTT/c42 pins"
+ },
+ "owner_line_extracted_by_program": {
+  "bytes": 68,
+  "sha256": "b645e4f482e10e3caa1f6e497f304ebc13faf481ff1345b2099c3f1358bc60e4"
+ },
+ "practice_numbers": {
+  "pr378_builder_practice": {
+   "ask_16": {
+    "v10_wrote": 13,
+    "v11_wrote": 0
+   },
+   "negatives_56": {
+    "v10_wrote": 25,
+    "v11_wrote": 0
+   },
+   "positives_47": {
+    "v10_wrote": 47,
+    "v11_wrote": 47
+   }
+  },
+  "rtr_practice_draw_99": {
+   "B-ASK": {
+    "RIGHT": 85,
+    "WRONG": 0
+   },
+   "B-KEYCALC": {
+    "RIGHT": 81,
+    "WRONG": 3
+   },
+   "V10": {
+    "RIGHT": 84,
+    "WRONG": 1
+   },
+   "V11": {
+    "RIGHT": 85,
+    "WRONG": 0
+   }
+  },
+  "xreal_published_practice_128": {
+   "V10": {
+    "NOT_SCORED": 22,
+    "RIGHT": 99,
+    "UNDETERMINED": 0,
+    "WRONG": 7
+   },
+   "V11": {
+    "NOT_SCORED": 22,
+    "RIGHT": 103,
+    "UNDETERMINED": 3,
+    "WRONG": 0
+   }
+  }
+ },
+ "python_laptop": "3.14.0",
+ "ran_from": "a fresh extract of the final zip bytes (dry/mock/pkg), the neighbours extracted from their pinned zips",
+ "schema": "helm.rtr1.test-counts/1",
+ "seed_rule_dummy_zip_real_used_table": {
+  "note": "X-REAL's 152 ranges + 9 fixed bands; dummy zip only, never the final zip",
+  "overlap_check": "PASS",
+  "used_ranges": 161
+ },
+ "stage_runner_local": {
+  "declared_outputs_present": true,
+  "pool": "4 of 5 units exit 0; RT_CTRL_V10_ON_XREAL refused the mock spent file by its pin (as designed)",
+  "seconds": 24.8,
+  "tests": "29 OK + 119 OK",
+  "w1_tree_unchanged": true,
+  "what": "kit/run_rtr.py on the laptop with mock carriers; SPENT constant patched in a scratch copy only"
+ },
+ "suites": {
+  "reader tests on the v1.1 overlay (PR #378 test 17 + wave-3 english_in 31, loop 18, voice 22, faces 16, triad 15)": {
+   "ran": 119,
+   "verdict": "OK"
+  },
+  "tests_rtr (unit + kit; neighbours present, 0 skipped)": {
+   "ran": 29,
+   "verdict": "OK"
+  }
+ },
+ "zip": "HELM_RTR1_20261019_SOURCE_RTR1.zip",
+ "zip_sha256": "e201feb6e5fd4eaf1d9b9060ed100a9db6150257c2d0b64d230ad81c4042f7a8"
+}

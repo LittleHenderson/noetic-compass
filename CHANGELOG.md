@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - RTR-1 "RE-TEST READER" packet SEALED, NOT LAUNCHED (spec sheet 7.84); nothing scored; 0 USD
+
+Owner order (verbatim): "RE-TEST READER" (0.03 USD). Coordinator mapping: cap 0.10 USD, one attempt + one plumbing retry.
+
+- Question: does the fixed English reader (v1.1, PR #378, rule 6 STOCK_FRAME_REQUIRED) write only what 128 fresh real sentences say? Old reader v1.0 (X-REAL c42's copy) runs on the same draw as a control; rivals always-ask and keyword reader.
+- Exam: custodian draw of 128 (32 per stratum) from X-REAL's Part S frame 98c2fb8f..., excluding X-REAL's 128 and CTT's primary 128 (0 overlap gate by id and text hash); X-REAL's key rule K-S (keys A and B) and Part S marks/words unchanged; S-e NOT_EXERCISED.
+- Seed: sha256(owner line + ":" + zip sha256); band RS 1,940,000,001-1,941,000,000 above X-REAL and all CTT bands (incl. LLM_WRITTEN LW-S/LW-D).
+- Package: HELM_RTR1_20261019_SOURCE_RTR1.zip e201feb6e5fd4eaf1d9b9060ed100a9db6150257c2d0b64d230ad81c4042f7a8, freeze 6a622106...; X-REAL and waves 4/3b/3/1 imported as sealed neighbours, never edited. Reader v1.1 runs from a pinned overlay copy of wave 3's helm/ with only the 4 PR files swapped.
+- Tests from the zip: tests_rtr 29/29, reader tests on the overlay 119/119; stage runner exercised locally on mock carriers; mock end-to-end custody -> pool -> reader PASS on practice-partition sentences with patched pins.
+- Failed approaches logged: (1) a seed-rule test assumed one used seed inside the band only blocks one slot; with the 1,000,000 gap it blocks the whole band (correct STOP); test rewritten. (2) The first identity check matched the substring '/overlay/helm/'; replaced by the unit's recorded overlay folder.
+- Builder exposure recorded: 3 public frame rows printed (excluded as BUILDER_SEEN); no X-REAL or CTT exam file opened.
+- Next: custodian draw (needs CTT's primary exam sealed), then one t3.medium run.
+
 ## 2026-10-19 PDT - RB-W1 WIDE BRAIN BUILT behind switch WIDE_BRAIN (default OFF), NOT tested on a sealed exam (spec sheet 7.83); claim status ENGINEERED-NOT-VALIDATED; licensed brain unchanged; 0 USD
 
 Owner order (verbatim): "WIDEN THE BRAIN" (0 USD to build). Input: recipe shape survey v1 (1 of 13,686 real recipes fit the licensed brain).
