@@ -1,0 +1,15 @@
+{
+ "utc": "2026-10-20T00:06:04.352047+00:00",
+ "remote_actions": "READ_ONLY",
+ "job": "helm-claude-scribe-l4-score-20261019-c41",
+ "instance": "i-085092855ef75f1b8",
+ "instance_states": [
+  "terminated"
+ ],
+ "live_tagged_instances": [],
+ "volume_rows": 0,
+ "prefix_versions": 0,
+ "prefix_delete_markers": 0,
+ "multipart_uploads": 0,
+ "verdict": "C41_CLEAN_SLOT_FREE"
+}

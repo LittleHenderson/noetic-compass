@@ -4,6 +4,18 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - HELM-R1 X-REAL SCORED (job c42, AWS, spec sheet 7.81): reader PASS; S_UNSAFE_ON_REAL (8 wrong writes on real sentences), R-REBOUND R_SAFE_NOT_CORRECT (0 wrong, 3 of 64 answered), R-ASIS R_ASIS_SAFE; Eye scan caught D1 and E1 only, the plain checksum caught more
+
+Owner pre-approval (verbatim): "I PRE-APPROVE BOTH OF THE FOLLOWING:   Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD." Only the X-REAL line used. Launch operator: Claude Code sub-agent.
+
+- Package a9b4c954... (freeze 67b48541..., 53 of 53 re-hashed); seed source sha256(line + ":" + zip sha256) = 2af8c199... = custodian derivation; manifest 1e535511...; exam files never opened by the operator.
+- Job helm-claude-xreal-20261019-c42: one m6i.xlarge i-0decaa7956027896c, 5:06-5:14 PM Pacific, host 462.1 s, pool 23/23 exit 0, host tests 359 OK; one attempt, 0 plumbing retries.
+- Reading 79b6ea30...: every instrument row and hard gate true. S FULL 101 RIGHT / 8 WRONG of 109 (B-ASK 102/0, B-KEYCALC 95/5). R-REBOUND 3/0/61 asked of 64 (3 of 3 answers exact). R-ASIS 25/0/13 of 38; census 1 of 13,686.
+- Part F: Eye scan CAUGHT D1 16/16, E1 16/16; T1, S1 silent-harmless; T2, E2a failed loud; E2b, C1 kept. Checksum CAUGHT T1, S1, D1, E1 and was over-cautious on E2b. 0 false alarms. No kind beyond the checksum (the designer's headline held).
+- Sensitivity (coordinator): without the 4 items also in the published answerability draw, R-REBOUND 3/0/58 of 61 and R-ASIS 25/0/12 of 37; same words. Custodian flag carried forward. Operator flag: F-b ACTED holds vacuously (0 caught worlds touched by the probe).
+- Charge 0.03 USD (cautious 0.06; cap 1.00). Ledger 111.30 -> 112.30 (hold) -> 111.33 of 200. Cleanup VERIFIED three ways (proof 314af7ec...). Backup D:/tksCAS-archive/x_real_c42_20261019/.
+- Failed approaches: none this run. Negative results recorded: English reader unsafe on real sentences; recipe brain answers almost nothing on real recipes; Eye scan misses tail loss and stale backups a checksum catches.
+
 ## 2026-10-19 PDT - HELM-R1 X-REAL RESEALED as v2 (spec sheet 7.79 amended): recipe parts rebuilt so they are not vacuous; zip a9b4c954...; owner pre-approval bound; NOT LAUNCHED
 
 Coordinator decision (operational, not the owner's): do not ship a part known to be vacuous. v1 c275daed (never signed) is VOID_SUPERSEDED_BY_V2.

@@ -1,0 +1,56 @@
+{
+ "new": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42",
+ "ref": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_r1w5_c40",
+ "remaining": {
+  "aws_control.py": [
+   "-PREVIOUS_JOB='helm-claude-r1w4-20261019-c39'",
+   "+PREVIOUS_JOB='helm-claude-r1w5-20261019-c40'",
+   "-PREVIOUS_WORK=PACKAGE.parent/'controller_claude_r1w4_c39'",
+   "+PREVIOUS_WORK=PACKAGE.parent/'controller_claude_r1w5_c40'",
+   "-PREVIOUS_CLEANUP_SHA256='7cc9e0aee84d644b04220110232b926024b78b118735e719ac881093212cda3b'",
+   "+PREVIOUS_CLEANUP_SHA256='3d131b6d4697319670eaae66f9b75bf210a56d251396aa050ee9b54af35da9da'",
+   "-SOURCE_ARCHIVES={'r1w5':('b6598687190bc9e41f52695144eeeac5428913ab804f8bec64841093ea825d6c','b6598687190bc9e41f52695144eeeac5428913ab804f8bec64841093ea825d6c'),'r1w3b':('a4f82556bf0fc26de5635a7c81ec8f5053951d4c64a3906c8e5dd474e3814d26','a4f82556bf0fc26de5635a",
+   "+SOURCE_ARCHIVES={'xreal':('a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249','a9b4c9547e7276412a95141d24eb38d7d44ca3d539e8ff095abe727cf4e1c249'),'r1w4':('4bd0d740a70852c8d59091494ad88c69ac472f3a0f207a33fc44789b8e3df14c','4bd0d740a70852c8d59091",
+   "- previous_path=PREVIOUS_WORK/'aws-claude-r1w4-c39-independent-cleanup.json'",
+   "+ previous_path=PREVIOUS_WORK/'aws-claude-r1w5-c40-independent-cleanup.json'",
+   "- assert previous['instance']=='i-0928ef496d024573b' and previous['all_job_volumes']==['vol-0f9e9522bac1da3f3'],'PREVIOUS_RESOURCE_IDENTITIES'",
+   "+ assert previous['instance']=='i-0a0a23d11e2a94442' and previous['all_job_volumes']==['vol-0760d931c971a98cd'],'PREVIOUS_RESOURCE_IDENTITIES'"
+  ],
+  "worker.sh": [
+   "-assert [(s['name'],s['status']) for s in receipt['stages']]==[('r1_w5_host_run','PASS')]",
+   "+assert [(s['name'],s['status']) for s in receipt['stages']]==[('xreal_host_run','PASS')]"
+  ]
+ },
+ "cost_policy_differences": [
+  "combined_allocation_usd",
+  "combined_existing_allocation_usd",
+  "job",
+  "job_plan_sha256",
+  "prospective_combined_allocation_usd",
+  "stage_maximum_seconds",
+  "throughput_evidence"
+ ],
+ "cost_policy_window": {
+  "maximum_all_services_usd": 1.0,
+  "maximum_host_minutes": 120,
+  "maximum_workload_seconds": 6660,
+  "work_cutoff_minutes": 111,
+  "force_cutoff_minutes": 116,
+  "minimum_worker_admission_seconds": 6060,
+  "cgroup": {
+   "cpus": 2,
+   "memory_bytes": 15032385536,
+   "swap_bytes": 0,
+   "tasks": 128
+  },
+  "all_services_upper_usd": 0.783285714286,
+  "combined_existing_allocation_usd": 111.3,
+  "combined_allocation_usd": 112.3,
+  "instance_type": null
+ },
+ "payload_members": 623,
+ "payload_sha256": "d99f33d61a8c26fbae560f392139f0b840c3fb9042da695531e7715ee0f18c28",
+ "plan_sha256": "d65bfbf85f25b4847bf9601f51674a2eb7705ca57e290dd3001920865ff04821",
+ "pins_sha256": "a2b2dcdc977de8f8df8a2dc5a4bf9324368e83df3b7516998d1e14a4112583f3",
+ "problems": []
+}

@@ -1,0 +1,32 @@
+{
+ "utc": "2026-10-20T00:01:42.251490+00:00",
+ "remote_actions": "READ_ONLY",
+ "quota_L-1216C47A_vcpus": 64.0,
+ "running_instances": [
+  {
+   "id": "i-0bd0a082507a51ae3",
+   "type": "t3.small",
+   "vcpus": 2,
+   "state": "running",
+   "standard_on_demand": true
+  },
+  {
+   "id": "i-02137d196e671b5c1",
+   "type": "t3.small",
+   "vcpus": 2,
+   "state": "running",
+   "standard_on_demand": true
+  }
+ ],
+ "standard_on_demand_vcpus_in_use": 4,
+ "headroom_vcpus": 60.0,
+ "offered_us_west_2b": true,
+ "shape": {
+  "vcpus": 4,
+  "memory_mib": 16384
+ },
+ "hourly_usd": [
+  0.192
+ ],
+ "verdict": "QUOTA_OK"
+}
