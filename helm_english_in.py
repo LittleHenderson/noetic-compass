@@ -40,6 +40,12 @@ ALIAS-WIDE lists (ALIAS_WIDE_LEXICON_v0_1.json, which lexicon_v2 keeps unchanged
 that when lexicon_v2 can be imported). The ingredient and product words are NOT from the lexicon: they are the
 brain's own names plus the labeled everyday table below.
 
+Noetic words (2026-10-19): the reader itself writes no Noetic. When the live English path asks which Noetic a
+sentence binds (`noetic_reading`, and the cube-store turn's valence), it uses lexicon_v3 (language_v3/lexicon_v3.py),
+switch HELM_LEXICON_V3, default ON: only canonical colloquialisms and definition verbs select a Noetic; bare
+"female" / "male" / "negative" / "positive" / "vibration" / "rhythm" / "idea" / "mind" bind nothing (UNDETERMINED).
+The frozen ALIAS-WIDE file and lexicon_v2 are not changed (sealed wave packages pin them by hash).
+
 Claim status: ENGINEERED-NOT-VALIDATED. It reads a closed set of sentence shapes about the brain's 8 ingredients
 and 4 recipes. It is not a general English reader and makes no meaning claim beyond restating the user.
 """
@@ -62,7 +68,7 @@ try:
 except ImportError:  # pragma: no cover - the loop refuses every turn without it anyway
     cce = None
 
-READER_VERSION = "helm_english_in v1.1 (2026-10-19, stock-frame rule)"
+READER_VERSION = "helm_english_in v1.2 (2026-10-19, stock-frame rule; Noetic words via lexicon_v3)"
 CLAIM_STATUS = "ENGINEERED-NOT-VALIDATED"
 
 # ------------------------------------------------------------------------------------------------ frozen word lists
@@ -86,6 +92,30 @@ def lexicon_v2_agrees() -> Optional[bool]:
         return None
     merged = lexicon_v2.merged_lexicon()
     return all(merged[k] == _LEX[k] for k in BORROWED_LISTS)
+
+
+# ------------------------------------------------------------------------------------------------ Noetic words (v3)
+try:
+    import importlib.util as _ilu
+    _lv3_spec = _ilu.spec_from_file_location("lexicon_v3", os.path.join(LANG_V3, "lexicon_v3.py"))
+    lexicon_v3 = _ilu.module_from_spec(_lv3_spec)
+    _lv3_spec.loader.exec_module(lexicon_v3)
+except Exception:  # pragma: no cover - noetic_reading then refuses to bind anything
+    lexicon_v3 = None
+
+
+def noetic_lexicon() -> str:
+    """Which word list the live English path uses for Noetic words: 'v3' (default ON) or 'v1' (the frozen file)."""
+    return "v3" if (lexicon_v3 is not None and lexicon_v3.switch_on()) else "v1"
+
+
+def noetic_reading(text: str) -> Dict[str, Any]:
+    """Which Noetic, if any, this sentence binds in the live path (lexicon_v3 when the switch is ON).
+    Status BOUND / AMBIGUOUS / UNDETERMINED; polarity 'DENIED' is the F14 flag only. Not used to write a cube."""
+    if lexicon_v3 is None:
+        return {"noetic": None, "status": "UNDETERMINED", "reason": "LEXICON_V3_MISSING", "hits": [],
+                "polarity": None, "no_map_words": [], "lexicon": None}
+    return lexicon_v3.read_noetic(text, noetic_lexicon())
 
 
 # ------------------------------------------------------------------------------------------------ the labeled names

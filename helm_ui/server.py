@@ -189,8 +189,7 @@ class HelmBridge:
             with contextlib.redirect_stdout(io.StringIO()):
                 self.session = helm_chat.HELMConversationalSession(
                     mode="everyday", session_id=f"helm-ui-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}")
-            self.session_dir.mkdir(parents=True, exist_ok=True)
-            mem = self.session.memory
+            mem = self.session.memory  # helm_memory makes the folder on the first logged turn
             mem.storage_dir = str(self.session_dir)
             mem.session_file = str(self.session_dir / f"{mem.session_id}.jsonl")
             self.wiring["chat"] = "wired"
@@ -226,7 +225,7 @@ class HelmBridge:
                 try:
                     with contextlib.redirect_stdout(buf):
                         s.handle_turn(text)
-                except Exception as exc:  # e.g. helm_chat's 'dials' reads an attribute the Eye does not have
+                except Exception as exc:  # a terminal command that fails inside helm_chat is reported, not raised
                     return {"ok": False, "kind": "note", "recorded": False,
                             "reply": f"The terminal command '{low}' failed inside helm_chat: {type(exc).__name__}: {exc}"}
                 return {"ok": True, "kind": "note", "reply": buf.getvalue().strip(), "recorded": False}

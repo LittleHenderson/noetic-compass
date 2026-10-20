@@ -8,12 +8,12 @@ E-MACHINE-S and (reported only) on the sealed 98, and runs the six spent wave ex
 translator OFF, OFF-with-its-folder-deleted, and ON (each seed). The frozen reader runs later on the laptop.
 
 ## Preconditions (all must hold; the runner refuses otherwise)
-1. `APPROVAL_RECORD_CTT.json` (owner's verbatim pre-approval + zip `83bfa752...`, cap 8.00 USD).
+1. `APPROVAL_RECORD_CTT.json` (owner's verbatim pre-approval + zip `f280633d...` (exam-seed hash v2 `83bfa752...`), cap 8.00 USD).
 2. The custodian has drawn and sealed the MACHINE-SIDE exam E-MACHINE-S per `custody/CUSTODIAN_PROCEDURE_CTT.md`
    section M (laptop, 0 USD, no human writer; seed from the approval record). The builder never handles it.
    (Amendment A-CTT-1: the human exam E-HUMAN-W is an optional later pass, `kit/run_ctt_human.py`.)
 3. Sources staged exactly as `HELM_CTT_20261019/kit/STAGE_CTT.json` says:
-   `ctt` = `HELM_CTT_20261019_SOURCE_CTT.zip` (`83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec`);
+   `ctt` = `HELM_CTT_20261019_SOURCE_CTT.zip` (`f280633da498466fe713b33d37fe90db221bc3dbf4ce9fe69538460be82cee31`);
    `deps` = `HELM_CTT_DEPS_20261019.zip` (`fc89054a6893a149301ee8504dbd325e7b46a75b0152d80622e4096cf06acd3f`);
    `r1w5` (`b6598687...`), `r1w3b` (`a4f82556...`), `r1w3` (`152bca2a...`), `w1` (`31f97d67...`);
    `spent` = a carrier of ENGLISH64/FACES64 `_X3` (`a5a4286a...`, `8c1ff66a...`), `_X4` (`d47c293d...`, `758f5cba...`),
@@ -21,7 +21,8 @@ translator OFF, OFF-with-its-folder-deleted, and ON (each seed). The frozen read
    R1_W5_HOST.json (`c243a4cd...`);
    `emachine` = the custodian's carrier (E_MACHINE_S_CTT.json + E_MACHINE_SEAL_RECORD.json); `sealed98` = the custodian's carrier of `real_heldout_unparseables_98.jsonl`
    (`e269a448...`).
-4. Image: an AWS Deep Learning AMI with PyTorch 2.x + CUDA; `HELM_CTT_AWS=1`; `--expected-zip-sha256` = the value in
+4. Pass `--exam-seed-zip-sha256 83bfa752cb109383783614fdb9341b9b4c87349baa40c436141927485f92f7ec` (amendment A-CTT-2).
+5. Image: an AWS Deep Learning AMI with PyTorch 2.x + CUDA; `HELM_CTT_AWS=1`; `--expected-zip-sha256` = the value in
    the approval record; `--deadline-epoch` = launch + 5 h.
 
 ## Limits (RUN_LIMITS_CTT.json)

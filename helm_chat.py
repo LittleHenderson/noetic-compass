@@ -73,7 +73,7 @@ class HELMConversationalSession:
         print("    'help'    - Show example conversation prompts and tasks")
         print("    'history' - View multi-turn session history and tracked state")
         print("    'mode'    - Toggle between Everyday English and CAS Diagnostic logs")
-        print("    'dials'   - Inspect and set the Unity Eye supervisory dials")
+        print("    'dials'   - Show the Unity Eye supervisory dials")
         print("    'exit'    - Quit session")
         print("=" * 76 + "\n")
 
@@ -97,14 +97,20 @@ class HELMConversationalSession:
         print("-" * 50 + "\n")
 
     def show_dials(self):
-        eye = self.engine.eye
-        p = eye.dial_params
-        print(f"\n--- Unity Eye F1 Supervisory Dials (Mode: {eye.dial}) ---")
-        print(f"  Candidate Breadth (K)     : {p['K']}  [1: Conservative .. 32: Wild]")
-        print(f"  Substitution Curvature (ρ): {p['rho']}  [-4: Strict .. 1: Perfect Sub]")
-        print(f"  RPA Search Radius (R)     : {p['R']}  [1, 2, 4, 8 bounded horizon]")
-        print(f"  Idle Pondering Budget     : {p['ponder']} cycles")
-        print(f"  Phase 3 Valve Saliency (σ): {p['sigma']}  [0.0: Closed .. 1.0: Wide Open]")
+        """Print the Unity Eye's real dial values (helm_agentic_executor.UnityEyeSupervisor.dial, a
+        helm_creativity_dial.CreativityDial). Says "not wired" instead of crashing when they are absent."""
+        eye = getattr(self.engine, "eye", None)
+        d = getattr(eye, "dial", None)
+        fields = ("breadth_K", "curvature_rho", "search_radius_R", "idle_ponder_budget", "valve_novelty_sigma")
+        if d is None or not all(hasattr(d, f) for f in fields):
+            print("\n--- Unity Eye dials: not wired (this session has no Unity Eye with a creativity dial) ---\n")
+            return
+        print(f"\n--- Unity Eye F1 Supervisory Dials (Mode: {getattr(eye, 'current_mode', 'unknown')}) ---")
+        print(f"  Candidate Breadth (K)     : {d.breadth_K}  [1: Conservative .. 32: Wild]")
+        print(f"  Substitution Curvature (ρ): {d.curvature_rho}  [-4: Strict .. 1: Perfect Sub]")
+        print(f"  RPA Search Radius (R)     : {d.search_radius_R}  [1, 2, 4, 8 bounded horizon]")
+        print(f"  Idle Pondering Budget     : {d.idle_ponder_budget} cycles")
+        print(f"  Phase 3 Valve Saliency (σ): {d.valve_novelty_sigma}  [0.0: Closed .. 1.0: Wide Open]")
         print(f"  Safety Invariant          : RPM Gate (G-ABSENT) enforces 0 hallucination regardless of dials.\n")
 
     def handle_turn(self, user_input: str):
@@ -226,14 +232,10 @@ class HELMConversationalSession:
             last_goal = self.memory.context.last_goal
             if last_goal:
                 last_goal_clean = last_goal.strip().rstrip(".").strip()
-                if any(k in last_goal.lower() for k in ["hive", "bee", "count"]):
-                    speech = (
-                        f"Here's what I did in my own words:\n"
-                        f"For your goal ('{last_goal_clean}'), I structured a Python program to track and tally beehive counts, "
-                        f"verified the code syntax through our pre-flight AST verifier, and confirmed it operates within our 354 MB memory budget.\n"
-                        f"Let me know if you'd like me to add specific hive-counting logic, simulate sample data, or verify it with tests!"
-                    )
-                elif any(k in last_goal.lower() for k in ["git", "diff", "status", "log"]):
+                # (A hard-coded "beehive counts" branch used to fire on any goal with "hive", "bee" or "count"
+                # and claimed a hive-tallying program HELM never wrote. Removed: the general reply below
+                # repeats the user's own goal words and claims only the planning steps that actually ran.)
+                if any(k in last_goal.lower() for k in ["git", "diff", "status", "log"]):
                     speech = (
                         f"Here's what I did in my own words:\n"
                         f"For your goal ('{last_goal_clean}'), I inspected the local git version control state, "
@@ -346,10 +348,10 @@ class HELMConversationalSession:
         if is_personal_narrative:
             cube_rec = self.memory.process_turn_with_cube_store(prompt)
             self.memory.context.add_user_fact(prompt, turn_index=self.turn_count)
-            if "bee" in lower_prompt:
-                speech = "That's wonderful -- beekeeping in the south of France sounds like incredible, skilled work! I've noted that in our conversation context. What would you like to build or work on together?"
-            else:
-                speech = f"Thanks for sharing that! I've noted it in our session context. How can I help you today?"
+            # Repeat back only the user's own words, exactly as stored in user_facts. No added detail:
+            # a hard-coded "beekeeping in the south of France" reply used to answer ANY message about bees.
+            said = prompt.strip().rstrip(".").strip()
+            speech = f'Noted. You told me: "{said}". I\'ve added that to what I know about you in this session.'
             print(f"\nHELM: {speech}\n")
             rec_hash = cube_rec.receipt_hash if cube_rec else None
             self.memory.record_turn(

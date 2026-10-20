@@ -1,0 +1,33 @@
+{
+ "by_file": {
+  "test_cas_vocab": 8,
+  "test_custody_build_merge": 24,
+  "test_generator_checker": 11,
+  "test_notation_separation_retrieval": 6,
+  "test_slots_wordpiece_params": 9
+ },
+ "command": "python -X utf8 -B -W ignore -m unittest discover -s tests_ctt -p test_*.py (CTT_DEPS_DIR = the extracted deps)",
+ "errors": 0,
+ "failed": 0,
+ "laptop_harness_dry_runs_0_usd": {
+  "data_build_10pct": {
+   "peak_MiB": 85.2,
+   "seconds": 10.3,
+   "train_rows": 22952,
+   "val_rows": 1098
+  },
+  "noharm_off_X3_F64_same_brain_as_c38": true,
+  "noharm_off_X5_E64_same_brain_as_c40": true,
+  "noharm_on_fake_always_ask_digest_equals_off": true,
+  "noharm_on_fake_topic_digest_differs": true
+ },
+ "log_sha256": "216b879361accdc1c0e6703982249c14fefab721aa7d98f007705acdc7997e84",
+ "not_testable_on_the_laptop": "helm_cas_translator/model.py, serve.py, ctt_train/train.py import torch (475 MiB RAM measured > 300 MiB per-process limit): parsed only; first run = AWS preflight (50-step GPU smoke, exact parameter count assert, translator audit)",
+ "note_v2": "8 new tests for amendment A-CTT-1: primary needs no human exam (NOT_RUN, HUMAN_EXAM_ABSENT), primary refuses a human score as its exam, human pass absent = NOT_RUN and fails nothing, human pass has its own word and pins the primary, human pass refuses other weights, X-REAL K-S scoring x2, blind machine draw with a FAKE zip (the real draw is the custodian's)",
+ "passed": 58,
+ "ran": 58,
+ "schema": "ctt.test-counts/1",
+ "seconds": 15.347,
+ "skipped": 0,
+ "where": "laptop, extracted copy of HELM_CTT_20261019_SOURCE_CTT.zip (83bfa752...) + HELM_CTT_DEPS_20261019.zip (fc89054a...), stdlib only, no torch, one python worker"
+}
