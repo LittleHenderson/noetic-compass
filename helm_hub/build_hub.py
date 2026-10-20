@@ -104,9 +104,9 @@ def md(s: str) -> str:
             out.append("<code>" + esc(part[1:-1]) + "</code>")
             continue
         t = esc(part)
-        t = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", t)
-        t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
-        t = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", t)
+        t = re.sub(r"\[([^\]]+)\]\([^)]+\)", lambda m: m.group(1), t)
+        t = re.sub(r"\*\*(.+?)\*\*", lambda m: "<strong>" + m.group(1) + "</strong>", t)
+        t = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", lambda m: "<em>" + m.group(1) + "</em>", t)
         out.append(t)
     return "".join(out)
 
@@ -1735,6 +1735,9 @@ def check_site(site: Path = SITE) -> dict:
         for need_s in (':root:not([data-theme="light"])', ':root[data-theme="dark"]', "prefers-color-scheme: dark", "body{margin:0;background:"):
             if need_s not in t:
                 report["contract"].append(f"{p.name}: style contract missing {need_s}")
+        c1 = re.search("[\x80-\x9f]", t)
+        if c1:
+            report["contract"].append(f"{p.name}: C1 control character U+{ord(c1.group(0)):04X} (a lost backslash escape?) near {t[max(0, c1.start() - 30):c1.start()]!r}")
         if EMOJI_RE.search(re.sub(r"<script>.*?</script>", "", t, flags=re.S)):
             report["emoji"].append(p.name)
         if p.name != "glossary.html":

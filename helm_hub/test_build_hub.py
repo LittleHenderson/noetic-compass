@@ -50,6 +50,17 @@ class BuildTests(unittest.TestCase):
         for k in b.TERMS:
             self.assertRegex(g, b.TERM_RES[k], k)
 
+    def test_backslash_path_survives_the_build_byte_for_byte(self):
+        g = (b.SITE / "glossary.html").read_text(encoding="utf-8")
+        self.assertIn(r"Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md", g)
+
+    def test_backslash_digits_survive_every_text_path(self):
+        path = r"C:\Users\wakil\Documents\Codex\2026-10-18\x\1\0.md"
+        for s in (path, "**" + path + "**", "*" + path + "*", "`" + path + "`", "[" + path + "](u)"):
+            self.assertIn(path, b.md(s))
+        tbl = b.cardify(b.html_table([["Head"], [path]]))
+        self.assertIn(path, tbl)
+
     def test_negatives_are_on_the_scorecard(self):
         r = (b.SITE / "results.html").read_text(encoding="utf-8")
         for w in ("S_UNSAFE_ON_REAL", "EARS_HARMED", "GREW_WRONG_KIND", "WIDE_LEARNING_DID_NOT_EARN_KEEP"):
@@ -80,6 +91,10 @@ class CheckerCanTripTests(unittest.TestCase):
         kinds = " ".join(rep["secrets"])
         self.assertIn("e-mail", kinds)
         self.assertIn("AWS access key id", kinds)
+
+    def test_contract_flags_c1_control_character(self):
+        p = self._page("<p>Codex\x826-10-18</p>")
+        self.assertTrue(any("C1 control character" in c for c in b.check_site(p.parent)["contract"]))
 
     def test_link_check_flags_broken_link(self):
         p = self._page('<p><a href="nowhere.html">x</a></p>')
