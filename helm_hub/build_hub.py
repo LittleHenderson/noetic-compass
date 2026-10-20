@@ -490,7 +490,7 @@ CUR: dict[str, tuple[str, str, str, str]] = {
     "7.93": ("scored", "weak", "Wave 6, the pair wave, ran. With every other part on, the wide brain did no harm (0 items lost on every exam), fully learned 97 of 101 real recipes with 96 right and 0 wrong, and the Eyes stayed quiet. But it asked once, without a reason, on a recipe it had fully learned; the frozen mark allows 0 such asks, so the word is WIDE_WAVE_NO_GAIN. No move: the wide brain stays a candidate and the licensed brain stays canonical.", "Nothing new. Negative kept: one unexplained ask (mark K4 missed)."),
     "7.90": ("scored", "failed", "The transformer ear trained fully. No gain on real sentences (106 / 106 / 105 against the reader's 107). On LLM-written kitchen English it lifted right answers, but broke the cap on confident wrong proposals: FAILURE, EARS_HARMED.", "A narrow negative sentence only. Not 'the ears help'."),
     "7.92": ("packet", "null", "The ear's agreement-rule test, sealed: the ear's three trained copies must all give the identical checked reading before HELM offers it, and then only as a question the user confirms. No retraining. It then ran as job c49 (see 7.95).", "No claim from the packet itself."),
-    "7.96": ("scored", "win", "The pair wave re-run (job c50), after the reader defect was fixed. With every other part on, the wide brain did no harm where the marks look (0 items lost on English-64, Faces-64 and the three made-up-world families; 1 of 64 conversation items lost, limit 2), fully learned 93 of 94 real recipes with 94 right, 0 wrong and 0 unexplained asks, answered 0 of 13 same-name recipes, and the Eyes stayed quiet. Four pair words read ADDITIVE. The wide brain is now HELM's canonical-brain candidate across the switches; making it canonical is the owner's decision.", "VALIDATED for one sentence only (named corpora for real recipes; made-up worlds for the rest). Not canonical until the owner says so. Negatives kept: one conversation item wrong; 16 answerable recipes still asked."),
+    "7.96": ("scored", "win", "The pair wave re-run (job c50), after the reader defect was fixed. With every other part on, the wide brain did no harm where the marks look (0 items lost on English-64, Faces-64 and the three made-up-world families; 1 of 64 conversation items lost, limit 2), fully learned 93 of 94 real recipes with 94 right, 0 wrong and 0 unexplained asks, answered 0 of 13 same-name recipes, and the Eyes stayed quiet. Four pair words read ADDITIVE. The wide brain became HELM's canonical-brain candidate across the switches, and on the owner's word of 2026-10-20 (\"YES TO WIDE BRAIN\") it is now HELM's canonical brain.", "VALIDATED for one sentence only (named corpora for real recipes; made-up worlds for the rest). Canonical by the owner's ruling, not by this result; the claim status did not change. Negatives kept: one conversation item wrong; 16 answerable recipes still asked."),
     "7.95": ("scored", "null", "The ear's agreement-rule test ran (job c49). The real-sentence half (Part R) could not be exercised: the census found 7 stock-stating sentences the reader gives up on, against a floor of 24, so by the pre-registered rule the word is INCONCLUSIVE and nothing moves. The AI-written half (Part K) is reported only: with the agreement rule the ear read 79 of 128 singles right against the reader's 63 and 40 of 60 dialogue turns against 27, with 0 confident wrong proposals; the reader itself saved 3 wrong readings there.", "Nothing. The Part K line EARS_EARNED_KEEP is reported, never the word. Negatives kept: Part R not exercisable; reader v1.1 wrong 5 times on AI-written singles."),
 }
 
@@ -869,6 +869,7 @@ def p_home(S: dict) -> str:
     need(S, "7.65", "INCONCLUSIVE")
     need(S, "7.93", "WIDE_WAVE_NO_GAIN", "stays canonical", "97 of 101")
     need(S, "7.96", "WIDE_WAVE_EARNED_KEEP", "93 of 94", "owner's decision")
+    need(S, "7.56", "YES TO WIDE BRAIN", "canonical brain is the WIDE recipe brain")
     need(S, "7.81", "S_UNSAFE_ON_REAL")
     L = S["ledger"]
     ledger = (f"{L.get('combined_allocation_usd')} of {L.get('ceiling_usd')} USD allocated; "
@@ -885,9 +886,9 @@ def p_home(S: dict) -> str:
                 f'<div>{ws}</div><div class="small muted">Record: {slink(sec)}</div></div>')
 
     strip = "".join([
-        pill("strong", "The licensed brain", "Beat the old transformer brain on a sealed made-up exam.", ["LICENSED", "SYNTHETIC_ONLY"], "7.47"),
+        pill("strong", "The licensed reference brain", "Beat the old transformer brain on a sealed made-up exam. Canonical until 2026-10-20; keeps its license.", ["LICENSED", "SYNTHETIC_ONLY"], "7.47"),
         pill("win", "The wide brain (candidate)", "Learned real cookbook recipes on a sealed test, 0 wrong answers.", ["VALIDATED (one sentence)", "NAMED_CORPORA_ONLY"], "7.89"),
-        pill("win", "The pair wave re-run (wave 6 v3)", "With every part on: no harm where the marks look, 93 of 94 real recipes learned, 0 wrong, 0 unexplained asks. The wide brain is now the candidate across the switches; making it canonical is the owner's call.", ["PASS", "WIDE_WAVE_EARNED_KEEP", "NAMED_CORPORA_ONLY"], "7.96"),
+        pill("win", "The pair wave re-run (wave 6 v3)", "With every part on: no harm where the marks look, 93 of 94 real recipes learned, 0 wrong, 0 unexplained asks. On the owner's word of 2026-10-20 the wide brain is now HELM's canonical brain.", ["PASS", "WIDE_WAVE_EARNED_KEEP", "NAMED_CORPORA_ONLY"], "7.96"),
         pill("weak", "The first pair wave (wave 6)", "With every part on: no harm and 0 wrong, but one unexplained ask (a reader defect, since fixed). No move from that run.", ["PASS", "WIDE_WAVE_NO_GAIN", "SYNTHETIC_ONLY"], "7.93"),
         pill("partial", "The English reader", "Safe on fresh real sentences after a fix; not yet useful.", ["ENGINEERED-NOT-VALIDATED", "S_SAFE_NOT_USEFUL"], "7.87"),
         pill("failed", "The reader before the fix", "Wrote 8 wrong facts on 128 real sentences.", ["S_UNSAFE_ON_REAL"], "7.81"),
@@ -912,7 +913,7 @@ system; it reports and {T('whisper', 'whispers')}, and it never writes.</p>
 68 learned values ({T('parameter', 'parameters')}): 32 requirements, 32 ceilings and 4 bindings ({slink('7.24')}). The licensed brain's run log
 printed 32 learned slots, against 97 for the {T('transformer')} it replaced ({slink('7.47')}). A separate small transformer
 (9,585,566 parameters) exists only as an optional "ear" that may propose a reading; it never writes ({slink('7.82')}). A second brain, the {T('wide brain')}, reads any ingredient name; after two {T('sealed')} tests and the {T('pair wave')} it is HELM's
-canonical-brain candidate across the switches ({slink('7.96')}). Making it the main brain is the owner's decision.</p>
+canonical-brain candidate across the switches ({slink('7.96')}), and on the owner's word of 2026-10-20 it is now HELM's canonical brain ({slink('7.56')}). Wiring it on by default in the live chat is the next build.</p>
 </div>
 
 <h2>Today's status</h2>
@@ -1075,7 +1076,7 @@ Each part below sits behind a switch, so tests can turn one part off and see wha
 <td>{T('LICENSED')}, one sentence, {T('SYNTHETIC_ONLY')} ({slink('7.56')}). Wired into HELM's live loop by fixes C and D on 2026-10-18.</td></tr>
 <tr><td><strong>{T('wide brain', 'Wide recipe brain')}</strong> (RB-W1, reader v5)<br><code>helm_brain_wide.py</code></td><td>The same learning and answering rules, for real recipes: open ingredient names, exact fractions, up to 10 ingredients, 20 kitchen units.</td>
 <td>One requirement coefficient per (recipe, ingredient), learned from one witnessed batch each. Survey estimate, not a measurement: "49,493 coefficients for 9,495 recipes". 9 unit factors are programmed, not learned ({slink('7.83')}).</td>
-<td>Canonical-brain candidate, {T('VALIDATED')} for one sentence, {T('NAMED_CORPORA_ONLY')} ({slink('7.89')}). Switch off by default. With every part on it first read WIDE_WAVE_NO_GAIN ({slink('7.93')}); after the reader fix the re-run read WIDE_WAVE_EARNED_KEEP, so it is now the candidate across the switches; making it canonical is the owner's decision ({slink('7.96')}).</td></tr>
+<td>Canonical-brain candidate, {T('VALIDATED')} for one sentence, {T('NAMED_CORPORA_ONLY')} ({slink('7.89')}). With every part on it first read WIDE_WAVE_NO_GAIN ({slink('7.93')}); after the reader fix the re-run read WIDE_WAVE_EARNED_KEEP ({slink('7.96')}). <strong>HELM's canonical brain since 2026-10-20</strong>, on the owner's word ({slink('7.56')}); the switch is still off by default in the code until the next build.</td></tr>
 <tr><td><strong>{T('RPM Gate')}</strong></td><td>Lets a step go ahead, sends it to repair, or refuses; lets the brain answer {T('UNDETERMINED')}.</td><td>0 (a written rule)</td><td>EARNED_KEEP in waves 1, 2 and 3. Switched off in wave 1, wrong answers rose from 32 to 768 ({slink('7.47')}).</td></tr>
 <tr><td><strong>{T('lacuna', 'Lacuna')} cadence</strong></td><td>Keeps track of what HELM could know but was never taught, and when to look again.</td><td>0 (a written rule)</td><td>EARNED_KEEP in waves 2 and 3 ({slink('7.64')}, {slink('7.69')}).</td></tr>
 <tr><td><strong>{T('restart fallback', 'Restart fallback')}</strong></td><td>The one place chance is allowed: a few saved random restarts, and the checker decides.</td><td>0 (seeds are saved, not learned)</td><td>EARNED_KEEP in waves 2 and 3.</td></tr>
@@ -1332,7 +1333,7 @@ def p_model_card(S: dict) -> str:
 <dt>Package</dt><dd><code>HELM_R1_W1_20261015_v3</code>, freeze sha256 <code>8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b</code> ({slink('7.56')})</dd>
 <dt>Type</dt><dd>Written recipes plus exact arithmetic; learned requirement values; no neural network in the brain. Built on {T('CAS')}.</dd>
 <dt>Size</dt><dd>Run log: 32 learned slots. The {T('transformer')} it replaced ({T('GB3')}): 97 {T('parameter', 'parameters')} ({slink('7.47')}).</dd>
-<dt>Candidate</dt><dd>The wide recipe brain RB-W1 v3 ({slink('7.89')}); the licensed brain stays canonical until a later wave says otherwise.</dd>
+<dt>Canonical brain</dt><dd>The wide recipe brain RB-W1 (reader v5), on the owner's word of 2026-10-20 after {slink('7.89')} and {slink('7.96')}; the wave-1 brain keeps its license as the reference brain ({slink('7.56')}).</dd>
 <dt>Owner</dt><dd>Little Henderson (Wakil). Confidential.</dd>
 </dl>
 
@@ -1433,7 +1434,7 @@ an AI model is not the research governor; only the owner's signed line starts a 
 
 <h2>Who decides: the owner's words on record</h2>
 <p>Every paid run and every ruling traces to the owner's own words. This table lists the headings of the owner-approvals record
-for 2026-10-18 to 2026-10-19 (headings only; dates are Pacific). They name parts of {T('CAS')}, the {T('SDG')}, the {T('CTT')}, the {T('pair wave')} and the idle {T('drive loop')}.</p>
+for 2026-10-18 to 2026-10-20 (headings only; dates are Pacific). They name parts of {T('CAS')}, the {T('SDG')}, the {T('CTT')}, the {T('pair wave')}, the {T('wide brain')} and the idle {T('drive loop')}.</p>
 <div class="tablewrap verbatim"><table><thead><tr><th>When</th><th>Heading</th></tr></thead><tbody>{arows or '<tr><td colspan="2">Owner-approvals record not available on this machine.</td></tr>'}</tbody></table></div>
 """
     return page("safety.html", "HELM Safety Record", "Safety and honesty", lede, body, [
@@ -1450,7 +1451,7 @@ def p_roadmap(S: dict) -> str:
     need(S, "7.87", "115")
     lede = "Where HELM is meant to go, with an honest status on every line. Kitchen first, as a test world; everything after it is a plan until a test says otherwise."
     domains = [
-        ("Kitchen (the test world)", "strong", "Real today, inside limits. The licensed brain is LICENSED on made-up worlds; the wide brain is a candidate, VALIDATED for one sentence on real cookbook recipes; the pair wave first read WIDE_WAVE_NO_GAIN (one unexplained ask, a reader defect since fixed) and its re-run read WIDE_WAVE_EARNED_KEEP, so the wide brain is now the candidate across the switches; making it canonical is the owner's decision, and the licensed brain stays canonical until then. The licensed brain's fixed shapes fit 1 of 13,686 real recipes, which is why the wide brain exists.", "§7.56, §7.83, §7.89, §7.91, §7.93, §7.96"),
+        ("Kitchen (the test world)", "strong", "Real today, inside limits. The licensed brain is LICENSED on made-up worlds; the wide brain is a candidate, VALIDATED for one sentence on real cookbook recipes; the pair wave first read WIDE_WAVE_NO_GAIN (one unexplained ask, a reader defect since fixed) and its re-run read WIDE_WAVE_EARNED_KEEP, so the wide brain became the candidate across the switches, and on the owner's word of 2026-10-20 it is HELM's canonical brain; the wave-1 brain keeps its license as the reference brain. The licensed brain's fixed shapes fit 1 of 13,686 real recipes, which is why the wide brain exists.", "§7.56, §7.83, §7.89, §7.91, §7.93, §7.96"),
         ("Software work", "null", "Authored only. A tool-planning file exists with no recorded output; in the UI, tools are switched off by default.", "Roadmap §2.5 and §2.7; status correction row v0.6"),
         ("Everyday planning", "null", "Partly backed. A prerequisite planner orders steps and refuses loops; one worked plan is recorded; not scored on a sealed exam.", "§7.48; status correction row v0.7"),
         ("Research governance", "rule", "In force as a way of working (custodians, sealed exams, frozen readers, owner sign lines), not as something HELM does by itself.", "§7.55, §9.9 of the spec sheet"),
@@ -1711,7 +1712,7 @@ def _scene_intended() -> str:
     P.append(_box("i-rt", 210, 282, 240, 50, "env", ["Round-trip check"]))
     P.append(_box("i-gate", 210, 360, 240, 56, "keep", ["RPM Gate", "go / repair / ask"]))
     P.append(_box("i-ask", 476, 360, 122, 56, "keep", ["Ask", "read-back question"]))
-    P.append(_box("i-brain", 210, 452, 240, 72, "plan", ["Wide recipe brain", "main slot: candidate", "re-run: EARNED_KEEP; owner decides"]))
+    P.append(_box("i-brain", 210, 452, 240, 72, "plan", ["Wide recipe brain", "canonical since 2026-10-20", "switch-on by default: next build"]))
     P.append(_box("i-ref", 476, 452, 122, 72, "lic", ["Licensed brain", "kept as the", "reference"]))
     P.append(_box("i-cube", 22, 452, 146, 40, "keep", ["Cube store"]))
     P.append(_box("i-triad", 22, 500, 146, 40, "keep", ["Triad"]))
@@ -1865,7 +1866,7 @@ def p_build(S: dict) -> str:
         ("t-reader", 1, "The hand-written reader restates it in HELM's checked form. Its stock-frame rule saves a stock fact only when the sentence really states one (earned its keep; on fresh real sentences safe but not yet useful, §7.87)."),
         ("t-rt", 1, "The round-trip check turns the checked form back into English and reads it again; it must come back identical. It proves the form, not the truth."),
         ("t-gate", 1, "The RPM Gate is HELM's one gate. It picks one of three exits: go ahead, repair (back to the reader), or ask."),
-        ("t-brain t-wide", 1, "Go: the licensed recipe brain divides what is on hand by what one unit needs and names the ingredient that runs out first. It knows 8 ingredients and 4 recipe shapes, with 32 learned slots. Beside it, the wide brain waits behind a switch that is OFF: a candidate, validated for one sentence on real recipes; the first pair wave (§7.93) left it a candidate and the re-run (§7.96) made it the candidate across the switches. It stays behind the switch until the owner's word."),
+        ("t-brain t-wide", 1, "Go: the licensed recipe brain divides what is on hand by what one unit needs and names the ingredient that runs out first. It knows 8 ingredients and 4 recipe shapes, with 32 learned slots. Beside it, the wide brain waits behind a switch that is OFF: a candidate, validated for one sentence on real recipes; the first pair wave (§7.93) left it a candidate and the re-run (§7.96) made it the candidate across the switches; the owner's word of 2026-10-20 made it canonical (§7.56). The code switch is still off by default until the next build."),
         ("t-cube t-triad t-casc", 1, "Side rails: the cube store keeps facts and never fills in an unknown; the triad weighs Purpose, Wisdom and Power on each ingredient; the cascade breaks a problem into smaller ones, with a stop rule and a depth limit."),
         ("t-rcpt", 1, "Receipt: nothing is saved until it is read back and checked; then it leaves a receipt, a fingerprinted record anyone can check later."),
         ("t-voice", 1, "Voice: HELM writes one to three plain sentences and reads its own numbers and names back against the receipt."),
@@ -1877,7 +1878,7 @@ def p_build(S: dict) -> str:
     ]
     intended_steps = [
         ("i-in i-reader i-rt i-gate", 1, "Same turn, same checks: the reader goes first, then the round-trip check, then the RPM Gate."),
-        ("i-brain", 1, "The main slot is where the wide recipe brain is meant to go. The pair wave (HELM's sixth test wave) ran twice: the first run (§7.93) read WIDE_WAVE_NO_GAIN on one unexplained ask, a reader defect that was then fixed; the re-run (§7.96) read WIDE_WAVE_EARNED_KEEP: no harm where the marks look, 93 of 94 real recipes learned, 0 wrong, 0 unexplained asks. The wide brain is now the candidate across the switches. Moving it into this slot is the owner's decision."),
+        ("i-brain", 1, "The main slot is where the wide recipe brain is meant to go. The pair wave (HELM's sixth test wave) ran twice: the first run (§7.93) read WIDE_WAVE_NO_GAIN on one unexplained ask, a reader defect that was then fixed; the re-run (§7.96) read WIDE_WAVE_EARNED_KEEP: no harm where the marks look, 93 of 94 real recipes learned, 0 wrong, 0 unexplained asks. The wide brain became the candidate across the switches, and on the owner's word of 2026-10-20 it is HELM's canonical brain (§7.56). Switching it on by default in the live loop is the next build."),
         ("i-ref", 1, "The licensed brain stays beside it as the reference; its one licensed sentence does not change."),
         ("i-ear i-agree", 1, "The CTT ear is admitted only through a stricter rule: all three trained copies must agree exactly, and HELM asks by default (CTT-2R, preregistered, nothing scored). Planned."),
         ("i-ask", 1, "Anything the ear proposes is still read back to you as a question before it counts; nothing is saved without your yes."),
