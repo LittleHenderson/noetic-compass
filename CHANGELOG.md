@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - CTT-1 RESEALED as v3 (amendment A-CTT-2 after c43's preflight stop; spec sheet 7.82 / 7.85 amended): zip f280633d...; NOT LAUNCHED
+
+Coordinator ruling: instrument defect, fix without changing anything scored. Section 18 of PREREGISTRATION_CTT.md was written before the code change.
+
+- c43 stopped because the translator's write-audit counted torch 2.9.1's own opens of /dev/null (x4) and a temp file as forbidden writes.
+- v3 audit rule: the audit log, the null device, the process's own temp folder and torch / CUDA caches are allowed; any write under brain, wave packages, store, receipts, exams, data or weights still fails (even inside temp); network calls, process starts and a missing audit still fail. NO-HARM translator audits are now judged too.
+- Exam seed: approval record names PACKAGE v3 f280633da498466fe713b33d37fe90db221bc3dbf4ce9fe69538460be82cee31 and EXAM-SEED v2 83bfa752...; the two sealed exams (manifests 12061e67..., be3895ff...) stay valid; reader, runners and custody tools check the seed against the exam-seed hash.
+- Tests from the v3 zip: 66 (65 pass on the laptop, 1 host-only torch audit test skipped there). Freeze 24f89718...; cap 8.00 USD (0.21 spent).
+- Backup D:/tksCAS-archive/cas_token_transformer_20261019/ re-copied, three sha256 passes MATCH.
+
 ## 2026-10-19 PDT - HELM chat: 4 defects found by HELM UI v0 fixed (owner: "Ok I agree with all 3 cards"): bee reply no longer invents "south of France" (repeats only the user's words; hive-walkthrough branch removed too); `dials` reads the real UnityEyeSupervisor.dial or says "not wired"; session log folder made on first write under helm_ui/sessions or $HELM_SESSION_DIR, never the repo root; two "Before X, Y." sentences now plan synthesize -> verify -> git in both planners (prereq_planner plan_graph.py and helm_agentic_executor.py); tests 43 -> 63 pass on the named suites; 0 USD
 
 ## 2026-10-19 PDT - RB-W1T (sealed test of the wide brain) packet SEALED, NOT LAUNCHED (spec sheet 7.86); nothing scored; 0 USD
