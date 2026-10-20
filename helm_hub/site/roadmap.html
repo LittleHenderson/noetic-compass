@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM Roadmap</title>
+<meta name="description" content="Intended domains with honest status, and the chat question answered plainly.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="data.html">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html">Model card</a></li><li><a href="safety.html">Safety and honesty</a></li><li><a href="roadmap.html" aria-current="page">Roadmap</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html">How to run HELM</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>Roadmap</h1>
+<div class="lede">Where HELM is meant to go, with an honest status on every line. Kitchen first, as a test world; everything after it is a plan until a test says otherwise.</div>
+<details class="words" open><summary>Words used on this page, in plain English</summary><dl><div class="w"><dt><dfn data-term="CAS" title="the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works">CAS</dfn></dt><dd class="gloss">the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works</dd></div><div class="w"><dt><dfn data-term="Drive" title="one of seven core motivations, F1 Unity to F7 Purpose">Drive</dfn></dt><dd class="gloss">one of seven core motivations, F1 Unity to F7 Purpose</dd></div><div class="w"><dt><dfn data-term="Domain" title="one of four levels a thought works at: Principled, Cognitive, Evaluative, Operational">Domain</dfn></dt><dd class="gloss">one of four levels a thought works at: Principled, Cognitive, Evaluative, Operational</dd></div><div class="w"><dt><dfn data-term="recipe" title="a written rule saying how much of each ingredient one unit of an outcome needs">recipe</dfn></dt><dd class="gloss">a written rule saying how much of each ingredient one unit of an outcome needs</dd></div><div class="w"><dt><dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn></dt><dd class="gloss">HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell</dd></div><div class="w"><dt><dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn></dt><dd class="gloss">the record a saved fact leaves behind, with a fingerprint, so it can be checked later</dd></div><div class="w"><dt><dfn data-term="round trip" title="turning a checked statement into English and back; the result must equal the start">round trip</dfn></dt><dd class="gloss">turning a checked statement into English and back; the result must equal the start</dd></div><div class="w"><dt><dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn></dt><dd class="gloss">a small watcher that looks over HELM, reports and whispers, and never writes</dd></div><div class="w"><dt><dfn data-term="custodian" title="a separate session that builds and seals each exam so the builder never sees it">custodian</dfn></dt><dd class="gloss">a separate session that builds and seals each exam so the builder never sees it</dd></div><div class="w"><dt><dfn data-term="sealed" title="frozen and fingerprinted before the run, so nothing can be changed after the fact">sealed</dfn></dt><dd class="gloss">frozen and fingerprinted before the run, so nothing can be changed after the fact</dd></div><div class="w"><dt><dfn data-term="frozen reader" title="the scoring program, sealed before the run, that alone writes the verdict">frozen reader</dfn></dt><dd class="gloss">the scoring program, sealed before the run, that alone writes the verdict</dd></div><div class="w"><dt><dfn data-term="hard gate" title="a must-hold check; if one fails, the whole run counts as a failure">hard gate</dfn></dt><dd class="gloss">a must-hold check; if one fails, the whole run counts as a failure</dd></div><div class="w"><dt><dfn data-term="status word" title="the frozen reader&#x27;s one-word verdict for a part, such as EARNED_KEEP">status word</dfn></dt><dd class="gloss">the frozen reader&#x27;s one-word verdict for a part, such as EARNED_KEEP</dd></div><div class="w"><dt><dfn data-term="SYNTHETIC_ONLY" title="a claim ceiling: the result holds on made-up test worlds only">SYNTHETIC_ONLY</dfn></dt><dd class="gloss">a claim ceiling: the result holds on made-up test worlds only</dd></div><div class="w"><dt><dfn data-term="LICENSED" title="a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)">LICENSED</dfn></dt><dd class="gloss">a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)</dd></div><div class="w"><dt><dfn data-term="VALIDATED" title="a claim-status word: it passed its own pre-set test against controls, on the data it was measured on">VALIDATED</dfn></dt><dd class="gloss">a claim-status word: it passed its own pre-set test against controls, on the data it was measured on</dd></div><div class="w"><dt><dfn data-term="ENGINEERED-NOT-VALIDATED" title="a claim-status word: built and working, with no validated result yet">ENGINEERED-NOT-VALIDATED</dfn></dt><dd class="gloss">a claim-status word: built and working, with no validated result yet</dd></div><div class="w"><dt><dfn data-term="transformer" title="the kind of neural network behind most modern AI chat assistants">transformer</dfn></dt><dd class="gloss">the kind of neural network behind most modern AI chat assistants</dd></div><div class="w"><dt><dfn data-term="AWS" title="Amazon Web Services, the rented cloud computers used for heavy runs">AWS</dfn></dt><dd class="gloss">Amazon Web Services, the rented cloud computers used for heavy runs</dd></div><div class="w"><dt><dfn data-term="GPU" title="a graphics chip used to train neural networks quickly">GPU</dfn></dt><dd class="gloss">a graphics chip used to train neural networks quickly</dd></div><div class="w"><dt><dfn data-term="cube store" title="where HELM keeps facts; an unknown side stays marked unknown and is never filled in">cube store</dfn></dt><dd class="gloss">where HELM keeps facts; an unknown side stays marked unknown and is never filled in</dd></div><div class="w"><dt><dfn data-term="drive loop" title="HELM&#x27;s idle attention moving among the seven Drives toward unfinished work">drive loop</dfn></dt><dd class="gloss">HELM&#x27;s idle attention moving among the seven Drives toward unfinished work</dd></div></dl></details>
+
+<h2>The intended domains</h2>
+<p>The colors are the owner's scale, as a reading aid; the words are this hub's summary of the records named on the right.
+Anything marked "not built" is a plan, and a plan is not a capability.</p>
+<div class="tablewrap"><table class="cards"><thead><tr><th>Domain</th><th>Color</th><th>Honest status</th><th>Records</th></tr></thead><tbody><tr><td data-label="Domain"><strong>Kitchen (the test world)</strong></td><td data-label="Color"><span class="dot c-strong" aria-hidden="true"></span><span class="clabel">Strong</span></td><td data-label="Honest status">Real today, inside limits. The licensed brain is LICENSED on made-up worlds; the wide brain is a candidate, VALIDATED for one sentence on real cookbook recipes. The licensed brain&#x27;s fixed shapes fit 1 of 13,686 real recipes, which is why the wide brain exists.</td><td data-label="Records">§7.56, §7.83, §7.89</td></tr><tr><td data-label="Domain"><strong>Software work</strong></td><td data-label="Color"><span class="dot c-null" aria-hidden="true"></span><span class="clabel">Null, inconclusive or not run</span></td><td data-label="Honest status">Authored only. A tool-planning file exists with no recorded output; in the UI, tools are switched off by default.</td><td data-label="Records">Roadmap §2.5 and §2.7; status correction row v0.6</td></tr><tr><td data-label="Domain"><strong>Everyday planning</strong></td><td data-label="Color"><span class="dot c-null" aria-hidden="true"></span><span class="clabel">Null, inconclusive or not run</span></td><td data-label="Honest status">Partly backed. A prerequisite planner orders steps and refuses loops; one worked plan is recorded; not scored on a sealed exam.</td><td data-label="Records">§7.48; status correction row v0.7</td></tr><tr><td data-label="Domain"><strong>Research governance</strong></td><td data-label="Color"><span class="dot c-rule" aria-hidden="true"></span><span class="clabel">Rule, not a result</span></td><td data-label="Honest status">In force as a way of working (custodians, sealed exams, frozen readers, owner sign lines), not as something HELM does by itself.</td><td data-label="Records">§7.55, §9.9 of the spec sheet</td></tr><tr><td data-label="Domain"><strong>Safety as a recipe</strong></td><td data-label="Color"><span class="dot c-partial" aria-hidden="true"></span><span class="clabel">Partial</span></td><td data-label="Honest status">The pieces exist and earned their keep on made-up worlds (the gate, the Eye&#x27;s scan, refusal). Treating safety itself as a recipe HELM reasons about is not built.</td><td data-label="Records">§7.64, §7.69, §7.77</td></tr><tr><td data-label="Domain"><strong>Physical systems (simulated flight, drones, robots)</strong></td><td data-label="Color"><span class="dot c-null" aria-hidden="true"></span><span class="clabel">Null, inconclusive or not run</span></td><td data-label="Honest status">Not built. Plans only.</td><td data-label="Records">Roadmap §2.8, §2.9; status correction rows v1.1 to v2.0</td></tr><tr><td data-label="Domain"><strong>Science</strong></td><td data-label="Color"><span class="dot c-null" aria-hidden="true"></span><span class="clabel">Null, inconclusive or not run</span></td><td data-label="Honest status">Not built. No test exists.</td><td data-label="Records">Roadmap §2.4 (frontier plans)</td></tr><tr><td data-label="Domain"><strong>Outputs with checkable receipts</strong></td><td data-label="Color"><span class="dot c-partial" aria-hidden="true"></span><span class="clabel">Partial</span></td><td data-label="Honest status">Every write in the scored waves is receipted and the receipts held as hard gates; a product that hands receipts to outside users is not built.</td><td data-label="Records">§7.47, §7.64</td></tr></tbody></table></div>
+
+<h2 id="chat">"Can I chat with it?"</h2>
+<div class="card">
+<p><strong>Yes, on one computer, about a kitchen, and it will often ask you questions back.</strong> The HELM UI is a local page where you type
+everyday sentences ("we have 50 flour and 30 sugar", "how much bread can we make?") and every reply opens to the record it rests on
+(<a href="run.html">How to run HELM</a>). It is not a general chatbot. Three gaps stand between HELM and one (this hub's summary of the records):</p>
+<ol>
+<li><strong>Reading.</strong> Its English reader is safe on fresh real sentences but not yet useful: right 115 times against 114 for a reader that always asks (<a href="results.html#s7-87">§7.87</a>). It reads kitchen sentences only, and none of the ten sentence shapes of the CAS language map (<a href="architecture.html">Architecture</a>).</li>
+<li><strong>Knowing.</strong> Its brain knows recipes and nothing else. The licensed brain's shapes fit 1 of 13,686 real recipes; the wide candidate learns real recipes, one witnessed batch per ingredient (<a href="results.html#s7-83">§7.83</a>, <a href="results.html#s7-89">§7.89</a>).</li>
+<li><strong>Hearing more.</strong> The transformer ear that might widen what it can read gave no gain on real sentences and failed a safety gate on a second exam (<a href="results.html#s7-90">§7.90</a>). The Eye and the idle <dfn data-term="drive loop" title="HELM&#x27;s idle attention moving among the seven Drives toward unfinished work">drive loop</dfn><span class="gloss"> (HELM&#x27;s idle attention moving among the seven Drives toward unfinished work)</span> are not wired to the live chat window (<code>helm_ui/README.md</code>).</li>
+</ol></div>
+
+<h2>The roadmap's milestone table, with an honest status column</h2>
+<p>The project's roadmap lists version milestones with its own status words. Those words are not spec-sheet words and carry no evidential weight.
+The status correction of 2026-10-18 added an honest column, copied here.</p>
+<div class="tablewrap verbatim"><table class="cards"><thead><tr><th>v0.1</th><th>Spark</th><th>40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate <code>G-ABSENT</code></th><th><code>SYNTHETIC_ONLY</code></th><th><strong>Authored only</strong></th><th><code>helm_brain_22x40.py</code> (spec sheet §7.51)</th><th>The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).</th></tr></thead><tbody><tr><td data-label="v0.1">v0.2</td><td data-label="Spark">Compass</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">&quot;Seven canonical packages (<code>288/288</code> tests)&quot;, <code>language_v3</code>, <code>repair_performer</code></td><td data-label="SYNTHETIC_ONLY"><code>ENGINEERED-NOT-VALIDATED</code></td><td data-label="Authored only"><strong>Mostly backed</strong> (the count is wrong)</td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>docs/working/noetic_council/continuity_build_v4/TEST_OUTPUT.txt</code> (§7.48)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">There are <strong>nine</strong> packages and <strong>308</strong> written tests; no file produces 288. Recorded passes exist for cube store (19/19), continuity (50/50) and the language marks; the other suites are authored, output not recorded. <code>ENGINEERED-NOT-VALIDATED</code> is the right ceiling. Codex: &quot;mechanisms built; brain integration missing&quot;.</td></tr><tr><td data-label="v0.1">v0.3</td><td data-label="Spark">Prism</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT"><code>faculties_v2</code>, Real RPA Searchlight, 5 Creativity Dials</td><td data-label="SYNTHETIC_ONLY"><code>ENGINEERED-NOT-VALIDATED</code></td><td data-label="Authored only"><strong>Partly backed</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>docs/working/noetic_council/faculties_v2/REAL_FIT_RESULT.txt</code> (§7.48)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">One real fitter run is recorded (start 1 kept, held-out 32/32). The 49-test suite, <code>rpa_creative_searchlight.py</code> (side branch only) and <code>helm_creativity_dial.py</code> have no recorded output.</td></tr><tr><td data-label="v0.1">v0.4</td><td data-label="Spark">Valve</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Phase 3 valve, &quot;AWS GPU trained dynamic aperture weights&quot;, 0-leak interlock</td><td data-label="SYNTHETIC_ONLY"><code>SYNTHETIC_TRAINED</code></td><td data-label="Authored only"><strong>FALSE claim</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>tks_meta_valve_weights_v0_4.json</code> → <code>&quot;training_environment&quot;: &quot;LOCAL_CPU_DRYRUN_FAST&quot;</code> (§7.50)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">The weights were trained on the laptop, not on AWS. The zero-leak result comes from the plain <code>G-ABSENT</code> rule; the learned part alone leaks 83 of 250. The owner ruled a plain-rule valve on 2026-10-18.</td></tr><tr><td data-label="v0.1">v0.5</td><td data-label="Spark">Scribe</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">L4 neural proposer &quot;trained on AWS Tesla T4&quot;, end-to-end loop, voice adapter</td><td data-label="SYNTHETIC_ONLY"><code>BOUNDED_ENGLISH_PROPOSER</code></td><td data-label="Authored only"><strong>Unrecorded spend</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>helm/creativity-rpa-valve-v1:scribe_l4_aws_gpu_training/outputs/RUN_SUMMARY.json</code> (§7.53)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">It did run on a Tesla T4 (30.95 s; exact 90.0 %, round trip <strong>64.0 %</strong>), but with no ledger line and no owner sign line → <code>FLAG_FOR_HUMAN_REVIEW</code>. Never scored on the sealed 98. The end-to-end loop computes the round trip and never checks it (§7.49).</td></tr><tr><td data-label="v0.1">v0.6</td><td data-label="Spark">Agentic</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">A1 DAG planner, A2 pre-flight tool executor, software suite</td><td data-label="SYNTHETIC_ONLY"><code>GOVERNED_AGENTIC_AUTONOMY</code></td><td data-label="Authored only"><strong>Authored only</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>helm_agentic_executor.py</code> (§7.49)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">No recorded output. Cloud dispatch is a dry-run receipt (no <code>boto3</code>); <code>execute_command</code> runs <code>shell=True</code> behind a pattern filter.</td></tr><tr><td data-label="v0.1">v0.7</td><td data-label="Spark">Topological</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Prerequisite-graph planner, Kahn sort, temporal markers</td><td data-label="SYNTHETIC_ONLY"><code>TOPOLOGICAL_CAUSAL_PLANNER</code></td><td data-label="Authored only"><strong>Partly backed</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>docs/working/noetic_council/prereq_planner/PLAN_EXAMPLE.txt</code> (§7.48)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">One worked plan is recorded; the 11-test suite is authored, output not recorded. Separately, commit <code>5a7d02f3</code> claims a &quot;Stage v0.7 Lexicon Expansion&quot; GPU training with <strong>no artifact at all</strong> — <strong>unrecorded spend, if it ran</strong> (§7.53).</td></tr><tr><td data-label="v0.1">v0.8</td><td data-label="Spark">Memory</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Bounded working memory, pronoun resolution, JSONL session log</td><td data-label="SYNTHETIC_ONLY"><code>CONVERSATIONAL_WORKING_MEMORY</code></td><td data-label="Authored only"><strong>Authored only</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>helm_memory.py</code> (§7.49)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56)."><code>test_helm_memory.py</code> (6 test functions) exists on the side branch only; &quot;5/5&quot; appears only in a commit message.</td></tr><tr><td data-label="v0.1">v0.8.1</td><td data-label="Spark">Grounding</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Statement-vs-command disambiguation, grounded explanations, user facts</td><td data-label="SYNTHETIC_ONLY"><code>DIALOGIC_GROUNDED_CORE</code></td><td data-label="Authored only"><strong>Authored only</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>helm_chat.py</code>, <code>test_helm_chat_nuance.py</code> (§7.49)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">5 test functions written; the handoff&#x27;s &quot;10/10 PASS&quot; has no output file.</td></tr><tr><td data-label="v0.1">v1.0</td><td data-label="Spark">Atlas</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Full recipe atlas, idle pondering, closed-loop repair</td><td data-label="SYNTHETIC_ONLY"><code>AUTONOMOUS_RECIPE_MACHINE</code></td><td data-label="Authored only"><strong>Not built</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)"><code>docs/working/noetic_council/EXECUTION_QUEUE.md</code> rows 15 and 17</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">The one live end-to-end trace and a real (not planted) failure are both TODO.</td></tr><tr><td data-label="v0.1">v1.1</td><td data-label="Spark">AeroVE</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Virtual drone flight simulator</td><td data-label="SYNTHETIC_ONLY"><code>VIRTUAL_EMBODIED_SIMULATION</code></td><td data-label="Authored only"><strong>Not built</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)">roadmap §2.8 (text only)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">Plan only.</td></tr><tr><td data-label="v0.1">v1.2</td><td data-label="Spark">SwarmSim</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Multi-drone swarms, subterranean / orbital simulators</td><td data-label="SYNTHETIC_ONLY"><code>MULTI_DOMAIN_SIM_SWARMS</code></td><td data-label="Authored only"><strong>Not built</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)">roadmap §2.9 (text only)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">Plan only.</td></tr><tr><td data-label="v0.1">v2.0</td><td data-label="Spark">Sovereign</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Physical drone hardware, live outdoor flight</td><td data-label="SYNTHETIC_ONLY"><code>EMBODIED_VERIFIED_FLIGHT</code></td><td data-label="Authored only"><strong>Not built</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)">roadmap §3 (text only)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">Plan only. The timeline&#x27;s &quot;Zero-Crash Warranty&quot; is a guarantee, a word the spec sheet prohibits.</td></tr><tr><td data-label="v0.1">v3.0</td><td data-label="Spark">Frontier</td><td data-label="40-digit Decimal CES core, Gauss-Jordan solver, RPM Gate G-ABSENT">Planetary-scale atlas, sub-watt edge core</td><td data-label="SYNTHETIC_ONLY"><code>UNIVERSAL_GENERAL_INTELLIGENCE</code></td><td data-label="Authored only"><strong>Not built</strong></td><td data-label="helm_brain_22x40.py (spec sheet §7.51)">roadmap §3 (text only)</td><td data-label="The code runs, but no run id, no exam and no recorded result exist. It is a stand-in brain over 22 baking ingredients, not the licensed brain (§7.56).">Plan only.</td></tr></tbody></table></div>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li><code>docs/working/HELM_CAPABILITIES_ROADMAP_STATUS_CORRECTION_20261018.md</code> (milestone table, copied)</li><li><code>docs/working/HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md</code> §2.4, §2.5, §2.7, §2.8, §2.9 (plans)</li><li><code>docs/CAS_HARNESS_SPEC_SHEET.md</code> §7.47, §7.48, §7.55, §7.56, §7.64, §7.69, §7.77, §7.83, §7.87, §7.89, §7.90, §9.9</li><li><code>helm_ui/README.md</code> (&#x27;Wired vs not wired&#x27;)</li><li>Domain list: the owner&#x27;s brief for this hub (2026-10-19), statuses from the records above</li></ul>
+<div>Generated 2026-10-19 20:58 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>29ae64db</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>

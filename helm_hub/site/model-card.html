@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM Model Card</title>
+<meta name="description" content="Intended use, limits, claim ceilings, licensed sentences and known defects.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="data.html">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html" aria-current="page">Model card</a></li><li><a href="safety.html">Safety and honesty</a></li><li><a href="roadmap.html">Roadmap</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html">How to run HELM</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>Model card</h1>
+<div class="lede">The standard facts sheet for a model, adapted to what HELM is: a small brain of written rules, with checks around it.</div>
+<details class="words" open><summary>Words used on this page, in plain English</summary><dl><div class="w"><dt><dfn data-term="CAS" title="the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works">CAS</dfn></dt><dd class="gloss">the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works</dd></div><div class="w"><dt><dfn data-term="recipe" title="a written rule saying how much of each ingredient one unit of an outcome needs">recipe</dfn></dt><dd class="gloss">a written rule saying how much of each ingredient one unit of an outcome needs</dd></div><div class="w"><dt><dfn data-term="recipe brain" title="HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network">recipe brain</dfn></dt><dd class="gloss">HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network</dd></div><div class="w"><dt><dfn data-term="limiting reagent" title="the ingredient that runs out first and so caps how much can be made">limiting reagent</dfn></dt><dd class="gloss">the ingredient that runs out first and so caps how much can be made</dd></div><div class="w"><dt><dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn></dt><dd class="gloss">HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell</dd></div><div class="w"><dt><dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn></dt><dd class="gloss">the record a saved fact leaves behind, with a fingerprint, so it can be checked later</dd></div><div class="w"><dt><dfn data-term="round trip" title="turning a checked statement into English and back; the result must equal the start">round trip</dfn></dt><dd class="gloss">turning a checked statement into English and back; the result must equal the start</dd></div><div class="w"><dt><dfn data-term="sealed" title="frozen and fingerprinted before the run, so nothing can be changed after the fact">sealed</dfn></dt><dd class="gloss">frozen and fingerprinted before the run, so nothing can be changed after the fact</dd></div><div class="w"><dt><dfn data-term="status word" title="the frozen reader&#x27;s one-word verdict for a part, such as EARNED_KEEP">status word</dfn></dt><dd class="gloss">the frozen reader&#x27;s one-word verdict for a part, such as EARNED_KEEP</dd></div><div class="w"><dt><dfn data-term="claim ceiling" title="the widest world a claim covers; nothing outside it is claimed">claim ceiling</dfn></dt><dd class="gloss">the widest world a claim covers; nothing outside it is claimed</dd></div><div class="w"><dt><dfn data-term="SYNTHETIC_ONLY" title="a claim ceiling: the result holds on made-up test worlds only">SYNTHETIC_ONLY</dfn></dt><dd class="gloss">a claim ceiling: the result holds on made-up test worlds only</dd></div><div class="w"><dt><dfn data-term="NAMED_CORPORA_ONLY" title="a claim ceiling: the result holds on the named public text collections only">NAMED_CORPORA_ONLY</dfn></dt><dd class="gloss">a claim ceiling: the result holds on the named public text collections only</dd></div><div class="w"><dt><dfn data-term="synthetic world" title="a made-up test world built by a program, with known right answers">synthetic world</dfn></dt><dd class="gloss">a made-up test world built by a program, with known right answers</dd></div><div class="w"><dt><dfn data-term="LICENSED" title="a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)">LICENSED</dfn></dt><dd class="gloss">a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)</dd></div><div class="w"><dt><dfn data-term="VALIDATED" title="a claim-status word: it passed its own pre-set test against controls, on the data it was measured on">VALIDATED</dfn></dt><dd class="gloss">a claim-status word: it passed its own pre-set test against controls, on the data it was measured on</dd></div><div class="w"><dt><dfn data-term="transformer" title="the kind of neural network behind most modern AI chat assistants">transformer</dfn></dt><dd class="gloss">the kind of neural network behind most modern AI chat assistants</dd></div><div class="w"><dt><dfn data-term="parameter" title="an adjustable number a model learns">parameter</dfn></dt><dd class="gloss">an adjustable number a model learns</dd></div><div class="w"><dt><dfn data-term="GB3" title="the small transformer that used to be HELM&#x27;s brain and is the bar to beat">GB3</dfn></dt><dd class="gloss">the small transformer that used to be HELM&#x27;s brain and is the bar to beat</dd></div><div class="w"><dt><dfn data-term="AWS" title="Amazon Web Services, the rented cloud computers used for heavy runs">AWS</dfn></dt><dd class="gloss">Amazon Web Services, the rented cloud computers used for heavy runs</dd></div><div class="w"><dt><dfn data-term="GPU" title="a graphics chip used to train neural networks quickly">GPU</dfn></dt><dd class="gloss">a graphics chip used to train neural networks quickly</dd></div><div class="w"><dt><dfn data-term="hash" title="a fingerprint of a file; change one byte and the fingerprint changes">hash</dfn></dt><dd class="gloss">a fingerprint of a file; change one byte and the fingerprint changes</dd></div><div class="w"><dt><dfn data-term="lacuna" title="something HELM could know but was never taught">lacuna</dfn></dt><dd class="gloss">something HELM could know but was never taught</dd></div><div class="w"><dt><dfn data-term="restart fallback" title="if the exact first try leaves something unexplained, a few saved random restarts are tried and the checker decides">restart fallback</dfn></dt><dd class="gloss">if the exact first try leaves something unexplained, a few saved random restarts are tried and the checker decides</dd></div></dl></details>
+
+<h2>Model details</h2>
+<dl class="kv">
+<dt>Name</dt><dd>HELM (its licensed brain: the HELM-R1 wave-1 <dfn data-term="recipe brain" title="HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network">recipe brain</dfn><span class="gloss"> (HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network)</span>)</dd>
+<dt>Package</dt><dd><code>HELM_R1_W1_20261015_v3</code>, freeze sha256 <code>8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b</code> (<a href="results.html#s7-56">§7.56</a>)</dd>
+<dt>Type</dt><dd>Written recipes plus exact arithmetic; learned requirement values; no neural network in the brain. Built on <dfn data-term="CAS" title="the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works">CAS</dfn><span class="gloss"> (the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works)</span>.</dd>
+<dt>Size</dt><dd>Run log: 32 learned slots. The <dfn data-term="transformer" title="the kind of neural network behind most modern AI chat assistants">transformer</dfn><span class="gloss"> (the kind of neural network behind most modern AI chat assistants)</span> it replaced (<dfn data-term="GB3" title="the small transformer that used to be HELM&#x27;s brain and is the bar to beat">GB3</dfn><span class="gloss"> (the small transformer that used to be HELM&#x27;s brain and is the bar to beat)</span>): 97 <dfn data-term="parameter" title="an adjustable number a model learns">parameters</dfn><span class="gloss"> (an adjustable number a model learns)</span> (<a href="results.html#s7-47">§7.47</a>).</dd>
+<dt>Candidate</dt><dd>The wide recipe brain RB-W1 v3 (<a href="results.html#s7-89">§7.89</a>); the licensed brain stays canonical until a later wave says otherwise.</dd>
+<dt>Owner</dt><dd>Little Henderson (Wakil). Confidential.</dd>
+</dl>
+
+<h2>What may be said, word for word</h2>
+<p>Each sentence below is <dfn data-term="LICENSED" title="a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)">LICENSED</dfn><span class="gloss"> (a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said))</span>: it may be said exactly as written, and nothing wider. Widening the sentence voids it.</p>
+<h3>The licensed brain (<dfn data-term="SYNTHETIC_ONLY" title="a claim ceiling: the result holds on made-up test worlds only">SYNTHETIC_ONLY</dfn><span class="gloss"> (a claim ceiling: the result holds on made-up test worlds only)</span>)</h3><blockquote class="verbatim">On synthetic worlds only: placed in GB3&#x27;s slot, at GB3&#x27;s interface and marks, a CAS recipe brain (programmed carry and composition, learned requirements, the RPM Gate, the Lacunarity cadence, the restart fallback and a form-only language skin, each on its own switch) held GB3&#x27;s continuity marks on fresh worlds and named the Limiting Reagent of fresh held-out compositions at least 4 of 32 above GB3, both as built (97 parameters) and widened (385 parameters), with every write receipted; each part is credited only where switching it off lost.</blockquote>
+<p class="small"><strong>Not licensed (record):</strong> (from §7.47): recipes beating transformers in general; learned carry; learned composition; statistical superiority; <strong>operation inside HELM&#x27;s runtime</strong>; anything on real data; growth, the eye, the atlas, heads or memory fading. As of this commit the licensed brain is <strong>not</strong> inside HELM&#x27;s live loop: <code>helm_end_to_end_loop.py</code> uses the 22x40 stand-in (§7.49). Putting it there is the owner&#x27;s fix C.</p>
+<h3>The wide brain candidate (<dfn data-term="VALIDATED" title="a claim-status word: it passed its own pre-set test against controls, on the data it was measured on">VALIDATED</dfn><span class="gloss"> (a claim-status word: it passed its own pre-set test against controls, on the data it was measured on)</span> for this sentence only, <dfn data-term="NAMED_CORPORA_ONLY" title="a claim ceiling: the result holds on the named public text collections only">NAMED_CORPORA_ONLY</dfn><span class="gloss"> (a claim ceiling: the result holds on the named public text collections only)</span>)</h3><blockquote class="verbatim">On 128 real recipes drawn blind from the named corpora, taught by one witnessed run-out batch per ingredient, the wide brain learned every amount exactly on at least 90% of the representable recipes, gave 0 wrong answers, asked only where the source did not settle the answer or a lesson was not learned, and with its switch OFF left HELM byte-identical.</blockquote>
+<p class="small"><strong>Not licensed (record):</strong> that the wide brain is HELM&#x27;s canonical brain (candidate only); real kitchens or cooks; typed English (every turn is a fixed template around source text); anything about CTT or any transformer; coverage beyond these counts; &quot;better than the licensed brain&quot; outside these items; that the wide brain asks whenever the source does not settle the answer; the 28 drive cells or 22 pathways; statistical claims (one run, one draw).</p>
+<h3>The transformer ear (a narrow negative)</h3><blockquote class="verbatim">on HELM&#x27;s kitchen world, on 128 real sentences other people wrote (X-REAL&#x27;s frame and frozen key), the from-scratch translator behind HELM&#x27;s reader, round-trip check and read-back gave no gain over the reader alone, added at most 2 confident wrong proposals, saved nothing wrong, and changed none of the brain&#x27;s exam results.</blockquote>
+
+<h2>Intended use</h2>
+<ul class="tight">
+<li>A research instrument: showing that a brain made of recipes can be checked line by line, refuse when unsure, and beat a small transformer on its own exams.</li>
+<li>A kitchen test world: stock on hand, recipes, how much can be made, and what runs out first.</li>
+<li>Local demonstration through the HELM UI on one machine (<a href="run.html">How to run HELM</a>).</li>
+</ul>
+<h2>Out of scope</h2>
+<ul class="tight">
+<li>Real kitchens, real cooks, food safety, nutrition, allergies.</li>
+<li>Medical, legal, financial or safety-critical advice of any kind.</li>
+<li>General conversation, general knowledge, open-ended English (the reader is kitchen-only; see <a href="roadmap.html#chat">the chat question</a>).</li>
+<li>Controlling machines or running tools. In the UI, tool actions are switched off by default.</li>
+</ul>
+
+<h2>Claim ceilings</h2>
+<p>A <dfn data-term="claim ceiling" title="the widest world a claim covers; nothing outside it is claimed">claim ceiling</dfn><span class="gloss"> (the widest world a claim covers; nothing outside it is claimed)</span> is the widest world a claim covers. Today there are two. <dfn data-term="synthetic world" title="a made-up test world built by a program, with known right answers">Synthetic worlds</dfn><span class="gloss"> (a made-up test world built by a program, with known right answers)</span> only, for most results;
+the named public text collections only, for the real-text tests (listed on <a href="data.html">Data lineage</a>). No HELM claim covers real users.</p>
+
+<h2>Known defects, and what was done</h2>
+<div class="tablewrap"><table class="cards"><thead><tr><th>Defect</th><th>What happened next</th><th>Record</th></tr></thead><tbody>
+<tr><td data-label="Defect">The pipeline ignored its own <dfn data-term="round trip" title="turning a checked statement into English and back; the result must equal the start">round trip</dfn><span class="gloss"> (turning a checked statement into English and back; the result must equal the start)</span> result, filled missing amounts with an invented 10, and skipped the gate.</td><td data-label="What happened next">Fixes C and D rewired the licensed brain into the live loop through the gate, with read-back before every write (2026-10-18). Built, not validated.</td><td data-label="Record"><a href="results.html#s7-49">§7.49</a></td></tr>
+<tr><td data-label="Defect">The English reader wrote 8 wrong stock facts on 128 real sentences.</td><td data-label="What happened next">Reader v1.1 added a stock-frame rule: 0 wrong of 115 scored on a fresh draw. Safe, not yet useful.</td><td data-label="Record"><a href="results.html#s7-81">§7.81</a>, <a href="results.html#s7-87">§7.87</a></td></tr>
+<tr><td data-label="Defect">The wide brain did not recognise 22 dish names and refused their lessons.</td><td data-label="What happened next">v3 fixed names, line splitting, ran-out binding and ties; the second sealed test passed (92 of 96 fully learned).</td><td data-label="Record"><a href="results.html#s7-88">§7.88</a>, <a href="results.html#s7-89">§7.89</a></td></tr>
+<tr><td data-label="Defect">The transformer ear's first run stopped: its write watcher caught library writes.</td><td data-label="What happened next">The audit rule was fixed and the package resealed; the second run trained and scored (no gain; a failed gate on the second exam).</td><td data-label="Record"><a href="results.html#s7-85">§7.85</a>, <a href="results.html#s7-90">§7.90</a></td></tr>
+<tr><td data-label="Defect">Wave 1's job supervisor marked a clean run FAIL (it looked for outputs one folder too high).</td><td data-label="What happened next">Recorded as an instrument defect; kept as recorded, not overwritten.</td><td data-label="Record"><a href="results.html#s7-47">§7.47</a></td></tr>
+<tr><td data-label="Defect">A wave-3 rival arm called "round-robin" also had a lookup table.</td><td data-label="What happened next">Erratum published; true round-robin scored 31; no word changed.</td><td data-label="Record"><a href="results.html#s7-69">§7.69</a></td></tr>
+<tr><td data-label="Defect">The roadmap said the valve was trained on AWS; it was trained on the laptop.</td><td data-label="What happened next">Marked a false claim; the valve is now a written rule.</td><td data-label="Record"><a href="results.html#s7-50">§7.50</a></td></tr>
+<tr><td data-label="Defect">Two GPU jobs ran without a ledger line or an owner sign line.</td><td data-label="What happened next">Flagged for human review; the owner accepted the 2.06 USD after the fact.</td><td data-label="Record"><a href="results.html#s7-53">§7.53</a>, <a href="results.html#s7-59">§7.59</a></td></tr>
+</tbody></table></div>
+
+<h2 id="not-here">What this hub does not have, and why</h2>
+<p>The usual documents for a large AI language model include sections that do not apply to HELM. They are left out on purpose:</p>
+<ul>
+<li><strong>Fine-tuning and preference training</strong> (SFT, RLHF, DPO: ways of training a big model on example answers or on people's preferences). HELM's brain learns amounts from witnessed batches by exact arithmetic, with no gradients; there is nothing of this kind to report.</li>
+<li><strong>Standard benchmark tables</strong> (such as MMLU or GSM8K, general-knowledge and math-word-problem tests for big models). HELM does not answer general questions. Its scores come from sealed exams built for each part; they are all on the <a href="results.html">Results scorecard</a>.</li>
+<li><strong>Compression and serving</strong> (quantization, vLLM: ways to run a huge model cheaply). The brain is tiny and the transformer ear has 9,585,566 parameters; nothing is served to the public.</li>
+<li><strong>Training-log dashboards.</strong> The brain has no training curve. The ear's training runs are summarised in their run records (<a href="compute.html">Compute and cost</a>).</li>
+<li><strong>A data flywheel</strong> (collecting users' conversations to train on). HELM collects none; session logs stay on the local machine.</li>
+<li><strong>A public deployment or API.</strong> There is a local page and local endpoints only (<a href="run.html">How to run HELM</a>). Public hosting is an owner and IP-attorney decision; much of this work is new matter not covered by the provisional patent filing.</li>
+</ul>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li><code>docs/CAS_HARNESS_SPEC_SHEET.md</code> §7.47, §7.49, §7.50, §7.53, §7.56 (licensed sentence, quoted by the build), §7.59, §7.69, §7.81, §7.85, §7.87, §7.88, §7.89 (§12 sentence, quoted), §7.90 (narrow negative, quoted)</li><li><code>CHANGELOG.md</code> entry &#x27;2026-10-18 PDT - FIXES C AND D&#x27;</li><li><code>CLAUDE.md</code> (Confidential; patent filing status and new-matter caveat)</li><li><code>helm_ui/README.md</code> (tools off; local only)</li></ul>
+<div>Generated 2026-10-19 20:58 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>29ae64db</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>
