@@ -13,7 +13,7 @@ python helm_hub/build_hub.py
 ```
 
 Standard library only, no network. It writes `helm_hub/site/` and then runs its checks. On the laptop:
-about 8-12 s (most of it is the files inventory walk), peak about 65 MiB. Tests: `python -m unittest helm_hub/test_build_hub.py -v` (20 tests, about 10 s).
+about 8-12 s (most of it is the files inventory walk), peak about 65 MiB. Tests: `python -m unittest helm_hub/test_build_hub.py -v` (21 tests, about 10 s).
 
 ## Pages
 
@@ -48,7 +48,7 @@ Off the repo (folder set by `HELM_HUB_CODEX`, default `C:\Users\wakil\Documents\
 ## What the build checks (it exits 1 if any fails)
 
 - **Jargon lint.** `TERMS` in `build_hub.py` lists the words that must be explained on first use (Noetic, Drive, recipe brain,
-  limiting reagent, RPM Gate, custodian, status word, claim ceiling, Unity Eye, round trip, receipt, synthetic world, CTT and 34 more).
+  limiting reagent, RPM Gate, custodian, status word, claim ceiling, Unity Eye, round trip, receipt, synthetic world, CTT, wave, pair wave and 34 more).
   On every page except the glossary, the first time a listed word appears it must sit inside a `<dfn>` with a plain explanation.
   Hand-written pages explain words inline (`T()` adds the explanation in brackets). Pages made mostly of copied records
   (results, compute, roadmap, model card, changelog) open with a "Words used on this page" box. The text of the explanations

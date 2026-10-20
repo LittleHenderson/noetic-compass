@@ -158,7 +158,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 
 ## A–Z entries
 
-**454 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
+**456 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
 
 ### 0-9
 
@@ -1429,6 +1429,12 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 - *Plain:* letting the language layer write exact fractions like 17/2.
 - *Definition:* "the p/q number form. The owner's ruling on Q13." — `language/numbers.py`. Council decision Q13: "admit a `p/q` number form to CCE" — SPEC §7.55.
 
+**Pair wave** (HELM-R1 wave 6, "PAIR WAVE") — [HELM test/governance]
+- *Plain:* the wave that runs the wide recipe brain alongside HELM's other parts (cube store, English reader, triad, voice, EYE_SCAN, EYE_PAIRING), switching the wide brain off together with each one to read the pair words (see **Pair words**: `SYNERGY` / `ADDITIVE` / `INTERFERENCE` / `CEILING_NOT_READABLE`), plus a no-harm check and the new `UNSETTLED_ASK` caution rule. It is the step that decides whether the wide brain can become HELM's main brain.
+- *Definition:* "HELM-R1 wave 6 "PAIR WAVE": packet sealed, NOT LAUNCHED — the wide recipe brain (RB-W1 v3, HELM's `WIDE_BRAIN` switch, licensed reader first) tested ALONGSIDE HELM's other parts (cube store, English reader, triad, voice, the Unity Eye's self-scan and its pairing drive loop), plus one new caution rule `UNSETTLED_ASK`" — SPEC §7.91 (heading). "RB-W1T v3 (§7.89) made the wide brain a candidate main brain, "pending a wave with the switches". This is that wave." — SPEC §7.91. `UNSETTLED_ASK`: "ask when a recipe names one ingredient on two lines" — CHANGELOG, 2026-10-19 wave-6 entry.
+- *Owner's word:* "PAIR WAVE at 1 USD" (2026-10-19) — `Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`; cap 1.00 USD, one attempt + one plumbing retry.
+- *Status:* packet sealed, NOT LAUNCHED; nothing scored, no claim — SPEC §7.91. Its practice dry run (practice data only, not a result) forecast `WIDE_WAVE_HARMED` (23 WRONG on practice conversations with the wide brain on, against 0 without) — SPEC §7.91, CHANGELOG. The defects found on those practice conversations (unread face and purpose clauses, an amount restated in another unit, a chat crash on a wide teaching turn) were fixed first in RB-W1 v4 (commit `cb3db850`, PR #400), before any spending; the packet is to be resealed on that build (coordinator record, 2026-10-20).
+
 **Pair words** (`SYNERGY` / `ADDITIVE` / `INTERFERENCE` / `CEILING_NOT_READABLE`) — [HELM test/governance]
 - *Plain:* what happens when two kept parts are switched off together: worse than both alone, about the same, less, or the exam has no room to tell.
 - *Definition:* a pair is "two earned parts off together. If losing both costs more than the two single losses added, the pair works together." — SPEC §7.66. `SYNERGY`: "losing both parts cost more than the two losses added"; `ADDITIVE`: "about the same"; `INTERFERENCE`: "or less"; `CEILING_NOT_READABLE`: "(the two losses exceed the exam's room)", "if and only if L(a) + L(b) > M(FULL) − 8" — SPEC §7.69, §7.70. Margin: "1/8 of the denominator" — SPEC §7.66.
@@ -2095,6 +2101,12 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 
 ### W
 
+**Wave** (HELM-R1 wave) — [HELM test/governance]
+- *Plain:* one sealed test round in the HELM-R1 series. Parts that already passed their own test are put into HELM's brain slot, each on an on-off switch, and scored on custodian-sealed exams. Waves 1 to 6 so far (wave 3 has a roomier follow-up, 3b).
+- *Definition:* "**Only passing parts.** A part enters a wave only when its own test's program reading shows its pass word" and "**One switch per part.** Every part has a named on/off switch in a frozen config file." — `Documents\Codex\2026-10-15\helm_r1_integration_plan_v1\WAVES.md` §1 (design; the wave numbering comes from this file).
+- *The waves on record:* wave 1 — SPEC §7.47; wave 2 — §7.63, §7.64; wave 3 and 3b — §7.66, §7.69, §7.70, §7.72; wave 4 — §7.75, §7.77; wave 5 — §7.76, §7.78; wave 6, the **Pair wave** — §7.91. One entry per scored wave follows (**HELM-R1 wave 1** to **HELM-R1 wave 5**).
+- *Status:* each wave has its own reading and words; see the spec sheet sections above. A wave's words carry the claim ceiling of its exams (`SYNTHETIC_ONLY` for waves 1 to 5).
+
 **HELM-R1 wave 1** (W1; job c34-g) — [HELM test/governance]
 - *Plain:* the recipe brain put in GB3's slot on a fresh sealed exam — and it won.
 - *Definition:* "on the freshly sealed synthetic exam the CAS recipe brain was placed in GB3's slot and beat it — 32 against 9, and 32 against 17/2 widened" — SPEC §7.47. Five switches: `RECIPE_MATH`, `RPM_GATE`, `LACUNA_CADENCE`, `RESTART_FALLBACK`, `CCE_SKIN` — CSK §7.
@@ -2226,3 +2238,4 @@ These are recorded so nobody fills the gap with a guess.
 |---|---|
 | 2026-10-19 | First version. Built from the thread branch at `47405484` and the off-repo design packets named in the source table. No definition invented; no status changed. |
 | 2026-10-20 | Five entries added at the owner's request ("CTT is mentioned but meaning is nowhere in glossary"): CTT, CTT-1, CTT-2R, E-MACHINE-S / LLM_WRITTEN / E-HUMAN-W, Ears / mouth. Quoted from SPEC §7.82, §7.85, §7.90 and the CTT design and CTT-2R files named in each entry. Count 449 -> 454 (the earlier ASOM / SDG / CES expansions added no new entries). No definition invented; no status changed. |
+| 2026-10-20 | Two entries added at the owner's request ("What is a pair wave?"): Wave (HELM-R1 wave) and Pair wave (HELM-R1 wave 6), quoted from SPEC §7.91, WAVES.md §1, the CHANGELOG wave-6 entry and commit cb3db850. Count 454 -> 456. No definition invented; no status changed. |
