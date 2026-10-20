@@ -61,6 +61,51 @@ class BuildTests(unittest.TestCase):
         tbl = b.cardify(b.html_table([["Head"], [path]]))
         self.assertIn(path, tbl)
 
+    def test_ctt_is_in_the_glossary_and_the_lint(self):
+        g = (b.SITE / "glossary.html").read_text(encoding="utf-8")
+        for t in ("CTT-1", "CTT-2R", "E-MACHINE-S", "Ears / mouth", "9,585,566", "2,482,718"):
+            self.assertIn(t, g)
+        self.assertIn("CTT", b.TERMS)
+
+    def test_build_page_static_fallback_without_js(self):
+        t = (b.SITE / "build.html").read_text(encoding="utf-8")
+        # both scenes are in the HTML and not hidden; only scripts hide the inactive one
+        self.assertIn('<section class="scene" id="scene-today">', t)
+        self.assertIn('<section class="scene" id="scene-intended">', t)
+        self.assertIn("html.js .scene[hidden]{display:none}", t)
+        self.assertIn('id="scene-toggle" role="group" aria-label="Choose a scene" hidden>', t)
+        # the moving dot is invisible without JS, and reduced motion is respected
+        self.assertIn(".token{fill:var(--accent);opacity:0}", t)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", t)
+        self.assertIn("matchMedia('(prefers-reduced-motion: reduce)')", t)
+        # every step caption is static text, and the Eye's write arrow is crossed out
+        self.assertGreaterEqual(t.count('<li data-parts='), 20)
+        self.assertIn('class="xmark"', t)
+        self.assertIn("shares nothing with the brain", t)
+        self.assertIn("What this animation does not claim.", t)
+
+    def test_new_pages_are_linked(self):
+        for name in ("index.html", "results.html"):
+            t = (b.SITE / name).read_text(encoding="utf-8")
+            self.assertIn('href="build.html"', t)
+            self.assertIn('href="files.html"', t)
+        self.assertIn('href="files.html#start"', (b.SITE / "index.html").read_text(encoding="utf-8"))
+        self.assertIn('href="build.html"', (b.SITE / "architecture.html").read_text(encoding="utf-8"))
+
+    def test_every_listed_path_exists_or_is_marked_missing(self):
+        import html as _h
+        import os
+        import re
+        t = (b.SITE / "files.html").read_text(encoding="utf-8")
+        rows = re.findall(r'<tr data-path="([^"]*)" data-exists="(\d)"><td[^>]*>(.*?)</td><td[^>]*>.*?</td><td[^>]*>(.*?)</td>', t, re.S)
+        self.assertGreater(len(rows), 50)
+        for path, ex, first, info in rows:
+            on_disk = os.path.exists(_h.unescape(path))
+            self.assertEqual(ex == "1", on_disk, path)
+            if not on_disk:
+                self.assertIn("MISSING", first + info, path)
+        self.assertIn("do not open", t)
+
     def test_negatives_are_on_the_scorecard(self):
         r = (b.SITE / "results.html").read_text(encoding="utf-8")
         for w in ("S_UNSAFE_ON_REAL", "EARS_HARMED", "GREW_WRONG_KIND", "WIDE_LEARNING_DID_NOT_EARN_KEEP"):

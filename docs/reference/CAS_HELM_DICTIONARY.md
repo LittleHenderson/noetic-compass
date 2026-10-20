@@ -158,7 +158,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 
 ## A–Z entries
 
-**449 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
+**454 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
 
 ### 0-9
 
@@ -587,6 +587,26 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 - *Plain:* one move of a thought from one node to another.
 - *Definition:* "a `Crossing` is what happens when a thought travels from one node to another along one edge." Owner ruling: "a CJT is the crossing, not the node" — `continuity_build_v4/crossings.py`.
 
+**CTT** (CAS-token transformer; `helm_cas_translator`) — [HELM part]
+- *Plain:* a small translator, trained from scratch, whose words are CAS symbols on one side and English word pieces on the other. It proposes a reading only when HELM's hand-written reader would otherwise ask a question. HELM's own checks decide. It runs in its own process and never writes to the brain, the store or the receipts.
+- *Definition:* "The model is a translator, not a brain. It is called only when HELM's hand-written reader would ask a question. It points at the user's own numbers and words; it never writes a number or a name. HELM's own name table, exact-number rule and round trip decide. Anything that would be saved is read back first. It runs in its own process and shares nothing with the recipe brain (owner ruling 2026-10-19)." — SPEC §7.82.
+- *Owner's words (verbatim, 2026-10-19):* "what if we made a tranformer for and of recipes or basically a transformer for CAS Syntax the HELM uses to communicate in like make them tokens then translate them into normal english" — `Documents\Codex\2026-10-19\cas_token_transformer_design_v1\ARCHITECTURE.md` lines 7-8. Separation ruling: "and if interpretablity is an issue let's just separate the cas transformer  from the brain we already built and have" — `Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md`, heading "Owner ruling (2026-10-19, verbatim)".
+- *Sizes:* "main model **9,585,566** parameters (width 256, 4 + 4 layers); twin **2,482,718** (width 128, 3 + 3 ...); vocabulary 8,349 = 8 specials + **341 CAS tokens** ... + 8,000 English word-pieces learned from scratch" — SPEC §7.82.
+- *Status:* `ENGINEERED-NOT-VALIDATED`. Status words on record: `EARS_NO_GAIN` on real sentences (E-MACHINE-S) and `EARS_HARMED` (verdict `FAILURE`, hard gate H-CWFW) on LLM-written sentences — SPEC §7.90. The first launch stopped itself: `INSTRUMENT_ERROR` — SPEC §7.85.
+- *Design:* `Documents\Codex\2026-10-19\cas_token_transformer_design_v1\` (ARCHITECTURE.md, DATA.md, TEST_PLAN.md, OPEN_QUESTIONS.md).
+
+**CTT-1** (the first CTT package and its runs c43 and c45) — [HELM test/governance]
+- *Plain:* the first sealed test packet of the CAS-token transformer, "ears first", and its two AWS GPU runs.
+- *Definition:* "CTT-1, the CAS-token transformer ("ears first"): packet sealed, NOT LAUNCHED — a from-scratch translator that reads everyday English and PROPOSES a CAS record only when HELM's reader would ask; HELM's own checker decides; separate from the brain" — SPEC §7.82 (heading). Resealed as v2 and v3 (amendments A-CTT-1, A-CTT-2) — SPEC §7.82.
+- *Runs:* job c43 "STOPPED BY ITS OWN GPU SMOKE TEST", frozen reader `INSTRUMENT_ERROR`, 0.21 USD — SPEC §7.85. Job c45 (v3) "primary verdict `PASS`, status word **`EARS_NO_GAIN`** ... LLM_WRITTEN second pass verdict `FAILURE`, word **`EARS_HARMED`**", 1.40 USD — SPEC §7.90.
+- *Status:* the translator stays `ENGINEERED-NOT-VALIDATED` — SPEC §7.90.
+
+**CTT-2R** (the CTT rule-only test; acceptance rule ACCEPT-2) — [HELM test/governance]
+- *Plain:* a test of a stricter rule for when a translator reading may be used at all, on the existing c45 weights, with no retraining: all three trained seeds must agree exactly, and HELM asks by default.
+- *Definition:* "CTT-2R PREREGISTRATION — the acceptance rule ACCEPT-2 on the EXISTING c45 weights ("RULE FIRST")" — `Documents\Codex\2026-10-19\ctt2r\PREREGISTRATION_CTT2R.md` (title). The rule: "**Ask is the default.** If any later step fails, HELM asks the reader's own question." and "**Unanimous vote of three.** ... A reading is a candidate only if **all three** produce a reading, **each** passes every check, and the three records are **byte-identical after `cce.normalize`**." — `Documents\Codex\2026-10-19\ctt2_design_v1\ACCEPTANCE_RULE.md` §2, steps 1 and 2.
+- *Approval:* owner pre-approval, pinned bytes `CTT RULE TEST at 1.50 USD`; "Cap 1.50 USD ... one attempt + one plumbing retry" and "The confident-wrong cap is NOT raised." — PREREGISTRATION_CTT2R.md §0.
+- *Status:* preregistered; nothing scored at the time of this entry. No claim.
+
 **Cube store** (Unified Cube Store; switch `CUBE_STORE`) — [HELM part]
 - *Plain:* where HELM keeps facts as small "cubes"; an unknown side stays marked unknown, never filled in.
 - *Definition:* "KNOWLEDGE IS STORED AS CUBES; ANSWERS COME FROM THREE OPERATIONS OVER THAT STORE. AN UNKNOWN FACE IS REPORTED AS UNKNOWN AND IS NEVER FILLED." — SPEC §7.48. Operations `LIST_PARTS`, `FIND_SHARED_PART`, `REACHED_VIA` — `cube_store/operations.py`. "provenance.source must be USER_SAID, AUTHORED, or CHECKED. Never NONE." — `cube_store/store.py`.
@@ -748,6 +768,17 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 - *Plain:* turning this part off made HELM worse, so the part stays.
 - *Definition:* switching the part "off lost (EARNED_KEEP)" — SPEC §7.63. Specific forms: `RECIPE_MATH_EARNED_KEEP`, `GATE_EARNED_KEEP`, `RESTART_FALLBACK_EARNED_KEEP`, `TRIAD_EARNED_KEEP`, `C_EARNED_KEEP`, `EYE_SCAN_EARNED_KEEP`, `EYE_PAIRING_EARNED_KEEP`, etc.
 - *Caution:* "`TRIAD_EARNED_KEEP` means only 'kept in the synthetic design for the next step'. It is not a legend word, not `VALIDATED`, not `LICENSED`, and not a promotion." — SPEC §7.58 (inner quotes changed).
+
+**E-MACHINE-S / LLM_WRITTEN / E-HUMAN-W** (the CTT exams) — [HELM test/governance]
+- *Plain:* the three exams for the CAS-token transformer: real sentences other people wrote (E-MACHINE-S); kitchen sentences written by outside AI models (LLM_WRITTEN); and sentences written by people for HELM (E-HUMAN-W), the only route to a claim about people typing to HELM.
+- *Definition:* E-MACHINE-S: "128 real sentences other people wrote (Tatoeba, Google Taskmaster user turns), 32 per stratum from X-REAL's Part S frame" — SPEC §7.82 (v2 amendment). E-HUMAN-W: "128 single turns + 16 short dialogues, content drawn first by the custodian, sentences written by the owner (64) and two other people (32 + 8 dialogues each); builder blind" — SPEC §7.82; after amendment A-CTT-1 it is an "optional, later" human pass — SPEC §7.82. LLM_WRITTEN: "kitchen English written by two LLMs; 128 singles + 16 dialogues" — SPEC §7.90; "for writing exam INPUT sentences only (project rule: foreign questions OK, foreign answers never) ... answer keys from HELM's fixed rule" — `OWNER_APPROVALS_20261018.md`, coordinator answer of 2026-10-19.
+- *Results:* E-MACHINE-S `EARS_NO_GAIN`; LLM_WRITTEN `FAILURE` / `EARS_HARMED`; E-HUMAN-W not run — SPEC §7.90, §7.82.
+- *Not licensed:* "anything about people typing to HELM" — SPEC §7.90.
+
+**Ears / mouth** (the two CTT directions) — [HELM part]
+- *Plain:* the ears turn everyday English into a proposed CAS record; the mouth would turn a brain receipt into a proposed English sentence. The ears were built first; the mouth is parked.
+- *Definition:* "**Direction A, the ears:** open English in, a PROPOSED CAS record out. The reader's checker decides." and "**Direction B, the mouth:** a brain receipt in, a PROPOSED English sentence out. The voice's read-back decides." — `Documents\Codex\2026-10-19\cas_token_transformer_design_v1\ARCHITECTURE.md` §0. Pick: "**"ears first"** — the mouth can only learn from HELM's own phrasebook ... so the mouth is predicted NEUTRAL; build it only if the ears earn" — same folder, OPEN_QUESTIONS.md Q1.
+- *Status:* ears = CTT-1 (`ENGINEERED-NOT-VALIDATED`, SPEC §7.90); mouth not built.
 
 **Embodied Register** (`|E`) — [CAS v7.5 Register]
 - *Plain:* the hands-on, bodily tone.
@@ -2194,3 +2225,4 @@ These are recorded so nobody fills the gap with a guess.
 | date | change |
 |---|---|
 | 2026-10-19 | First version. Built from the thread branch at `47405484` and the off-repo design packets named in the source table. No definition invented; no status changed. |
+| 2026-10-20 | Five entries added at the owner's request ("CTT is mentioned but meaning is nowhere in glossary"): CTT, CTT-1, CTT-2R, E-MACHINE-S / LLM_WRITTEN / E-HUMAN-W, Ears / mouth. Quoted from SPEC §7.82, §7.85, §7.90 and the CTT design and CTT-2R files named in each entry. Count 449 -> 454 (the earlier ASOM / SDG / CES expansions added no new entries). No definition invented; no status changed. |

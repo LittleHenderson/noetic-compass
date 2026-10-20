@@ -345,6 +345,7 @@ TERMS: dict[str, tuple[str, int, str]] = {
     "LICENSED": (r"\bLICENSED\b", 0, "a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)"),
     "VALIDATED": (r"(?<!NOT-)\bVALIDATED\b", 0, "a claim-status word: it passed its own pre-set test against controls, on the data it was measured on"),
     "ENGINEERED-NOT-VALIDATED": (r"ENGINEERED-NOT-VALIDATED", 0, "a claim-status word: built and working, with no validated result yet"),
+    "CTT": (r"\bCTT(?:-[0-9A-Z]+)?\b", 0, "the CAS-token transformer, HELM's optional 'ear': a small translator that proposes a reading only when HELM's own reader would ask, and never writes"),
     "transformer": (r"\btransformers?\b", re.I, "the kind of neural network behind most modern AI chat assistants"),
     "parameter": (r"\bparameters?\b", re.I, "an adjustable number a model learns"),
     "LLM": (r"\bLLMs?\b", 0, "large language model, a big pretrained text-predicting neural network like those behind chat assistants"),
@@ -375,7 +376,7 @@ def T(key: str, shown: str | None = None, gloss: str | None = None, also: tuple[
             f'<span class="gloss"> ({esc(plain)})</span>')
 
 
-def words_box(body_html: str) -> str:
+def words_box(body_html: str, open_: bool = True) -> str:
     """For generated pages: a box that explains every listed term used on the page, placed first."""
     text = re.sub(r"<[^>]+>", " ", body_html)
     text = html.unescape(text)
@@ -385,7 +386,7 @@ def words_box(body_html: str) -> str:
     items = "".join(
         f'<div class="w"><dt><dfn data-term="{esc(k)}" title="{esc(TERMS[k][2])}">{esc(k)}</dfn></dt>'
         f'<dd class="gloss">{esc(TERMS[k][2])}</dd></div>' for k in used)
-    return (f'<details class="words" open><summary>Words used on this page, in plain English</summary>'
+    return (f'<details class="words"{" open" if open_ else ""}><summary>Words used on this page, in plain English</summary>'
             f'<dl>{items}</dl></details>')
 
 
@@ -549,6 +550,7 @@ NAV = [
     ("index.html", "Home"),
     ("thinking.html", "How HELM thinks"),
     ("architecture.html", "Architecture"),
+    ("build.html", "The build, animated"),
     ("data.html", "Data lineage"),
     ("compute.html", "Compute and cost"),
     ("results.html", "Results scorecard"),
@@ -558,6 +560,7 @@ NAV = [
     ("glossary.html", "Glossary"),
     ("changelog.html", "Changelog"),
     ("run.html", "How to run HELM"),
+    ("files.html", "Files and paths"),
 ]
 
 CSS = r"""
@@ -762,10 +765,10 @@ def cardify(body: str) -> str:
 
 
 def page(slug: str, title: str, h1: str, lede_html: str, body: str, sources: list[str], words: bool = False,
-         description: str = "") -> str:
+         description: str = "", words_open: bool = True) -> str:
     navs = "".join(
         f'<li><a href="{s}"{" aria-current=\"page\"" if s == slug else ""}>{esc(n)}</a></li>' for s, n in NAV)
-    box = words_box(lede_html + body) if words else ""
+    box = words_box(lede_html + body, words_open) if words else ""
     body = cardify(body)
     src = "".join(f"<li>{md(s)}</li>" for s in sources)
     desc = esc(description or f"HELM Hub: {h1}")
@@ -918,6 +921,8 @@ are a reading aid only. The words in grey boxes are the record's own words. {T('
 <h2>Where to go next</h2>
 <div class="grid">
 <div class="card"><a href="thinking.html">How HELM thinks</a><br><span class="muted small">Recipes, asking, receipts and the Eye, with the precise definitions.</span></div>
+<div class="card"><a href="files.html#start">Next agent: start here</a><br><span class="muted small">Every file and folder with its full path, and the rules to read first.</span></div>
+<div class="card"><a href="build.html">The build, animated</a><br><span class="muted small">One turn as wired today, and the intended next wiring.</span></div>
 <div class="card"><a href="architecture.html">Architecture</a><br><span class="muted small">Every part, its parameter count, and what HELM is not.</span></div>
 <div class="card"><a href="results.html">Results scorecard</a><br><span class="muted small">Every result, negatives included.</span></div>
 <div class="card"><a href="roadmap.html">Roadmap</a><br><span class="muted small">What is real, what is planned, and "can I chat with it?"</span></div>
@@ -1069,10 +1074,12 @@ Each part below sits behind a switch, so tests can turn one part off and see wha
 <tr><td><strong>Unity Eye: pairing</strong></td><td>Counts which mental job works for which motive, and {T('whisper', 'whispers')} the best pair.</td><td>A 7 x 7 table of counts of checked tries; counts, not trained weights</td><td>EYE_PAIRING_EARNED_KEEP, built not validated ({slink('7.78')}).</td></tr>
 <tr><td><strong>{T('drive loop', 'Drive loop')}</strong></td><td>Where idle attention goes among the seven {T('Drive', 'Drives')}; paused during conversation.</td><td>0</td><td>NEUTRAL alone in wave 3; with the Eye's pairing, earned its keep in wave 5.</td></tr>
 <tr><td><strong>{T('faculty', 'Faculties')}</strong></td><td>Mental jobs such as asking, verifying, pondering, curiosity.</td><td>0</td><td>No faculty word earned on the brain itself ({slink('7.65')}).</td></tr>
-<tr><td><strong>Transformer ear</strong> (CTT-1)</td><td>A from-scratch translator, called only when the reader would ask. It may point at your own words and numbers; HELM's own checks decide.</td>
+<tr><td><strong>Transformer ear</strong> ({T('CTT', 'CTT-1')})</td><td>A from-scratch translator, called only when the reader would ask. It may point at your own words and numbers; HELM's own checks decide.</td>
 <td>9,585,566 (width 256, 4 + 4 layers); twin 2,482,718; vocabulary 8,349 = 8 specials + 341 CAS tokens + 8,000 English word pieces learned from scratch ({slink('7.82')})</td>
 <td>ENGINEERED-NOT-VALIDATED. EARS_NO_GAIN; second exam FAILURE, EARS_HARMED ({slink('7.90')}).</td></tr>
 </tbody></table></div>
+
+<p>See every part move through one conversation turn on <a href="build.html">The build, animated</a>.</p>
 
 <h2>Retired and stand-in parts</h2>
 <ul class="tight">
@@ -1411,7 +1418,7 @@ an AI model is not the research governor; only the owner's signed line starts a 
 
 <h2>Who decides: the owner's words on record</h2>
 <p>Every paid run and every ruling traces to the owner's own words. This table lists the headings of the owner-approvals record
-for 2026-10-18 to 2026-10-19 (headings only; dates are Pacific). They name parts of {T('CAS')}, the {T('SDG')} and the idle {T('drive loop')}.</p>
+for 2026-10-18 to 2026-10-19 (headings only; dates are Pacific). They name parts of {T('CAS')}, the {T('SDG')}, the {T('CTT')} and the idle {T('drive loop')}.</p>
 <div class="tablewrap verbatim"><table><thead><tr><th>When</th><th>Heading</th></tr></thead><tbody>{arows or '<tr><td colspan="2">Owner-approvals record not available on this machine.</td></tr>'}</tbody></table></div>
 """
     return page("safety.html", "HELM Safety Record", "Safety and honesty", lede, body, [
@@ -1585,6 +1592,601 @@ e-mail address, and fails if it finds one. It runs on the laptop in seconds.</p>
         "`helm_ui/demo/index.html` (copied to `demo.html`)",
         "`CLAUDE.md` (compute rules)",
     ], description="Start the HELM UI, open the demo, and rebuild the hub.")
+
+
+# --------------------------------------------------------------------------------------------
+# The build, animated (pure SVG + CSS + a small inline script; static without JS or with reduced motion)
+# --------------------------------------------------------------------------------------------
+STATUS_KEYS = [
+    ("lic", "Licensed", "may be said in one exact sentence, on made-up worlds only"),
+    ("val", "Validated, one sentence", "passed its own sealed test on named real texts; a candidate only"),
+    ("keep", "Earned its keep", "switching it off made results worse (status word EARNED_KEEP), on made-up worlds"),
+    ("env", "Engineered, not validated", "built and working; no validated result yet"),
+    ("fail", "Failed, kept on record", "its latest scored test failed a must-hold check; the result stays on the record"),
+    ("plan", "Planned / partly backed", "a plan, or only partly backed by recorded output; not a capability"),
+    ("plain", "Plain step", "input or output; no claim"),
+]
+
+
+def _wrap_svg_text(x: float, y: float, lines: list[str], size: int = 15, weight: str = "", cls: str = "") -> str:
+    out = []
+    for i, ln in enumerate(lines):
+        w = ' font-weight="600"' if (weight and i == 0) else ""
+        out.append(f'<text x="{x}" y="{y + i * (size + 4)}" font-size="{size if i == 0 else size - 2}"{w} class="{cls}" text-anchor="middle">{esc(ln)}</text>')
+    return "".join(out)
+
+
+def _box(bid: str, x: int, y: int, w: int, h: int, status: str, lines: list[str], extra: str = "") -> str:
+    ty = y + h / 2 - (len(lines) - 1) * 9 + 5
+    return (f'<g class="part s-{status}" id="{bid}" data-cx="{x + w / 2}" data-cy="{y + h / 2}">'
+            f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10"{extra}/>'
+            + _wrap_svg_text(x + w / 2, ty, lines, 15, "b") + "</g>")
+
+
+def _arrow(d: str, cls: str = "flow", label: str = "", lx: float = 0, ly: float = 0, anchor: str = "middle") -> str:
+    lab = f'<text x="{lx}" y="{ly}" font-size="12" class="alabel" text-anchor="{anchor}">{esc(label)}</text>' if label else ""
+    return f'<path d="{d}" class="{cls}" marker-end="url(#ah)"/>' + lab
+
+
+def _simplex(cx: int, cy: int, r: int, pid: str, label: str) -> str:
+    import math
+    pts = [(cx + r * math.sin(2 * math.pi * k / 7), cy - r * math.cos(2 * math.pi * k / 7)) for k in range(7)]
+    spokes = "".join(f'<line x1="{cx}" y1="{cy}" x2="{px:.1f}" y2="{py:.1f}" class="spoke"/>' for px, py in pts)
+    poly = " ".join(f"{px:.1f},{py:.1f}" for px, py in pts)
+    labs = "".join(f'<text x="{cx + (r + 13) * math.sin(2 * math.pi * k / 7):.1f}" y="{cy - (r + 13) * math.cos(2 * math.pi * k / 7) + 4:.1f}" '
+                   f'font-size="11" text-anchor="middle" class="alabel">F{k + 1}</text>' for k in range(7))
+    return (f'<g class="part s-env" id="{pid}-g" data-cx="{cx}" data-cy="{cy}"><polygon points="{poly}" class="simplex"/>{spokes}{labs}'
+            f'<circle id="{pid}" cx="{cx}" cy="{cy}" r="7" class="attn" data-cx="{cx}" data-cy="{cy}" data-r="{r}"/>'
+            f'<text x="{cx}" y="{cy + r + 32}" font-size="13" text-anchor="middle" class="alabel" id="{pid}-lab">{esc(label)}</text></g>')
+
+
+def _scene_today() -> str:
+    P = []
+    P.append(_box("t-eye", 210, 18, 240, 56, "env", ["Unity Eye", "scan + pairing"]))
+    # crossed-out write arrow
+    P.append('<g class="nowrite"><path d="M330 76 L330 118" class="flow wr" marker-end="url(#ah)"/>'
+             '<line x1="316" y1="88" x2="344" y2="108" class="xmark"/><line x1="344" y1="88" x2="316" y2="108" class="xmark"/>'
+             '<text x="352" y="104" font-size="12" class="alabel" text-anchor="start">write: never</text></g>')
+    P.append('<path d="M212 50 L182 50 L182 662 L208 662" class="whisper" marker-end="url(#ah)"/>'
+             '<text x="174" y="300" font-size="12" class="alabel" text-anchor="middle" transform="rotate(-90 174 300)">report + whisper (never a write)</text>')
+    P.append(_simplex(655, 82, 46, "t-attn", "idle drive loop"))
+    P.append(_box("t-in", 210, 128, 240, 42, "plain", ["English in"]))
+    P.append(_box("t-reader", 210, 198, 240, 56, "keep", ["Hand-written reader", "stock-frame rule"]))
+    P.append(_box("t-rt", 210, 282, 240, 50, "env", ["Round-trip check", "English -> CAS -> English"]))
+    P.append('<path d="M450 296 C 488 296, 488 322, 452 322" class="flow loop" marker-end="url(#ah)"/>'
+             '<text x="492" y="313" font-size="12" class="alabel" text-anchor="start">must match</text>')
+    P.append(_box("t-gate", 210, 360, 240, 56, "keep", ["RPM Gate", "go / repair / ask"]))
+    P.append(_box("t-ask", 476, 360, 122, 56, "keep", ["Ask", "nothing saved"]))
+    P.append(_box("t-brain", 210, 452, 240, 72, "lic", ["Licensed recipe brain", "8 ingredients, 4 shapes", "32 learned slots"]))
+    P.append(_box("t-wide", 476, 452, 122, 72, "val", ["Wide brain", "candidate", "switch OFF"]))
+    P.append('<g class="switch"><rect x="452" y="482" width="22" height="12" rx="6" class="sw"/><circle x="0" cx="458" cy="488" r="4" class="swk"/></g>')
+    P.append(_box("t-cube", 22, 452, 146, 40, "keep", ["Cube store"]))
+    P.append(_box("t-triad", 22, 500, 146, 40, "keep", ["Triad"]))
+    P.append(_box("t-casc", 22, 548, 146, 40, "keep", ["Cascade"]))
+    P.append('<path d="M168 472 L208 480" class="rail"/><path d="M168 520 L208 494" class="rail"/><path d="M168 568 L208 510" class="rail"/>')
+    P.append(_box("t-rcpt", 210, 556, 240, 52, "lic", ["Receipt", "read back, then saved"]))
+    P.append(_box("t-voice", 210, 636, 240, 52, "keep", ["Voice", "reads its own numbers back"]))
+    P.append(_box("t-out", 210, 716, 240, 42, "plain", ["English out"]))
+    # main flow arrows
+    for y1, y2 in ((170, 196), (254, 280), (332, 358), (416, 450), (524, 554), (608, 634), (688, 714)):
+        P.append(_arrow(f"M330 {y1} L330 {y2}"))
+    P.append(_arrow("M450 380 L474 380", label="ask", lx=462, ly=374))
+    P.append(_arrow("M210 400 C 196 400, 196 226, 208 226", cls="flow loop", label="repair", lx=214, ly=348, anchor="start"))
+    P.append(_arrow("M537 416 L537 430 L604 430 L604 737 L452 737", cls="flow", label="a question", lx=560, ly=600, anchor="end"))
+    P.append('<text x="335" y="442" font-size="12" class="alabel" text-anchor="start">go</text>')
+    # boundary and the ear
+    P.append('<line x1="614" y1="170" x2="614" y2="770" class="boundary"/>'
+             '<text x="623" y="520" font-size="12" class="alabel" transform="rotate(90 623 520)" text-anchor="middle">shares nothing with the brain</text>')
+    P.append(_box("t-ear", 636, 330, 118, 84, "fail", ["CTT ear", "9,585,566", "parameters"]))
+    P.append(_arrow("M636 388 L600 388", cls="flow ear", label="proposes", lx=630, ly=430, anchor="end"))
+    return P
+
+
+def _scene_intended() -> str:
+    P = []
+    P.append(_box("i-eye", 210, 18, 240, 56, "plan", ["Unity Eye", "wired to the live chat"]))
+    P.append('<g class="nowrite"><path d="M330 76 L330 118" class="flow wr" marker-end="url(#ah)"/>'
+             '<line x1="316" y1="88" x2="344" y2="108" class="xmark"/><line x1="344" y1="88" x2="316" y2="108" class="xmark"/>'
+             '<text x="352" y="104" font-size="12" class="alabel" text-anchor="start">write: never</text></g>')
+    P.append('<path d="M212 50 L182 50 L182 662 L208 662" class="whisper live" marker-end="url(#ah)"/>'
+             '<text x="174" y="300" font-size="12" class="alabel" text-anchor="middle" transform="rotate(-90 174 300)">report + whisper, live (never a write)</text>')
+    P.append(_simplex(655, 82, 46, "i-attn", "drive loop, live"))
+    P.append(_box("i-in", 210, 128, 240, 42, "plain", ["English in"]))
+    P.append(_box("i-reader", 210, 198, 240, 56, "keep", ["Hand-written reader", "first, as today"]))
+    P.append(_box("i-rt", 210, 282, 240, 50, "env", ["Round-trip check"]))
+    P.append(_box("i-gate", 210, 360, 240, 56, "keep", ["RPM Gate", "go / repair / ask"]))
+    P.append(_box("i-ask", 476, 360, 122, 56, "keep", ["Ask", "read-back question"]))
+    P.append(_box("i-brain", 210, 452, 240, 72, "plan", ["Wide recipe brain", "main slot after", "a pair wave passes"]))
+    P.append(_box("i-ref", 476, 452, 122, 72, "lic", ["Licensed brain", "kept as the", "reference"]))
+    P.append(_box("i-cube", 22, 452, 146, 40, "keep", ["Cube store"]))
+    P.append(_box("i-triad", 22, 500, 146, 40, "keep", ["Triad"]))
+    P.append(_box("i-casc", 22, 548, 146, 40, "keep", ["Cascade"]))
+    P.append('<path d="M168 472 L208 480" class="rail"/><path d="M168 520 L208 494" class="rail"/><path d="M168 568 L208 510" class="rail"/>')
+    P.append(_box("i-rcpt", 210, 556, 240, 52, "lic", ["Receipt", "read back, then saved"]))
+    P.append(_box("i-voice", 210, 636, 240, 52, "keep", ["Voice"]))
+    P.append(_box("i-out", 210, 716, 240, 42, "plain", ["English out"]))
+    for y1, y2 in ((170, 196), (254, 280), (332, 358), (416, 450), (524, 554), (608, 634), (688, 714)):
+        P.append(_arrow(f"M330 {y1} L330 {y2}"))
+    P.append(_arrow("M450 380 L474 380", label="ask", lx=462, ly=374))
+    P.append(_arrow("M537 416 L537 430 L604 430 L604 737 L452 737", cls="flow", label="a question", lx=560, ly=600, anchor="end"))
+    P.append('<line x1="614" y1="170" x2="614" y2="770" class="boundary"/>'
+             '<text x="623" y="560" font-size="12" class="alabel" transform="rotate(90 623 560)" text-anchor="middle">shares nothing with the brain</text>')
+    P.append(_box("i-ear", 636, 250, 118, 64, "plan", ["CTT ear", "proposes"]))
+    P.append(_box("i-agree", 636, 340, 118, 64, "plan", ["3 seeds", "must agree"]))
+    P.append(_arrow("M695 314 L695 338", cls="flow ear"))
+    P.append(_arrow("M636 384 L600 384", cls="flow ear", label="admitted", lx=632, ly=420, anchor="end"))
+    P.append(_box("i-human", 636, 452, 118, 96, "plan", ["Exam written", "by people", "(E-HUMAN-W)"]))
+    P.append('<text x="695" y="566" font-size="12" class="alabel" text-anchor="middle">route to any claim</text>'
+             '<text x="695" y="581" font-size="12" class="alabel" text-anchor="middle">about people</text>')
+    # domain ring
+    import math
+    doms = [("Kitchen", "now, test world", "keep"), ("Software work", "planned", "plan"), ("Everyday planning", "partly backed", "plan"),
+            ("Research governance", "planned", "plan"), ("Safety as a recipe", "planned", "plan"), ("Physical systems", "planned", "plan"),
+            ("Science", "planned", "plan"), ("Receipts for outputs", "partly backed", "plan")]
+    cx, cy, rx, ry = 380, 905, 300, 82
+    P.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" class="ring" id="i-ring"/>'
+             f'<text x="{cx}" y="{cy + 5}" font-size="14" text-anchor="middle" class="alabel">domains widen, one sealed test at a time</text>')
+    for k, (n, st, c) in enumerate(doms):
+        a = -math.pi / 2 + 2 * math.pi * k / len(doms)
+        x, y = cx + rx * math.cos(a), cy + ry * math.sin(a)
+        P.append(f'<g class="part s-{c} dom" id="i-dom{k}" data-cx="{x:.0f}" data-cy="{y:.0f}"><rect x="{x - 78:.0f}" y="{y - 21:.0f}" width="156" height="42" rx="21"/>'
+                 + _wrap_svg_text(round(x), round(y) - 3, [n, st], 13, "b") + "</g>")
+    P.append(_arrow("M330 758 L330 815", cls="flow"))
+    return P
+
+
+def _svg(scene_id: str, parts: list[str], h: int, title: str) -> str:
+    return (f'<svg viewBox="0 0 760 {h}" class="buildsvg" role="img" aria-labelledby="{scene_id}-t" id="{scene_id}-svg">'
+            f'<title id="{scene_id}-t">{esc(title)}</title>'
+            '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
+            '<path d="M0 0 L10 5 L0 10 z" class="ahead"/></marker></defs>'
+            + "".join(parts) + f'<circle r="8" class="token" id="{scene_id}-token" cx="-50" cy="-50"/></svg>')
+
+
+BUILD_CSS = r"""
+.scenes{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.figwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:8px}
+.buildsvg{display:block;width:100%;min-width:600px;height:auto;font-family:var(--sans)}
+.buildsvg text{fill:var(--ink)}
+.buildsvg .alabel{fill:var(--ink-2)}
+.part rect,.part polygon{stroke-width:2}
+.s-lic rect{fill:color-mix(in srgb,var(--c-strong) 20%,var(--surface));stroke:var(--c-strong)}
+.s-val rect{fill:color-mix(in srgb,#1f8a8a 20%,var(--surface));stroke:#1f8a8a}
+.s-keep rect{fill:color-mix(in srgb,var(--c-method) 16%,var(--surface));stroke:var(--c-method)}
+.s-env rect{fill:color-mix(in srgb,var(--c-null) 16%,var(--surface));stroke:var(--c-null)}
+.s-env polygon{fill:color-mix(in srgb,var(--c-null) 10%,var(--surface));stroke:var(--c-null)}
+.s-fail rect{fill:color-mix(in srgb,var(--c-failed) 16%,var(--surface));stroke:var(--c-failed)}
+.s-plan rect{fill:var(--surface);stroke:var(--accent);stroke-dasharray:6 4}
+.s-plain rect{fill:var(--surface-2);stroke:var(--line-strong)}
+.part.on rect,.part.on polygon{stroke-width:4;filter:drop-shadow(0 0 6px color-mix(in srgb,var(--accent) 55%,transparent))}
+.flow{fill:none;stroke:var(--ink-3);stroke-width:2}
+.flow.ear{stroke:var(--c-failed)}
+.flow.wr{stroke:var(--c-failed);stroke-dasharray:3 3}
+.xmark{stroke:var(--c-failed);stroke-width:3}
+.whisper{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:7 5}
+.whisper.live{stroke-dasharray:none}
+.rail{stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:2 3;fill:none}
+.boundary{stroke:var(--ink);stroke-width:3}
+.ahead{fill:var(--ink-3)}
+.spoke{stroke:var(--line-strong);stroke-width:1.2}
+.simplex{stroke-width:1.5}
+.attn{fill:var(--accent)}
+.ring{fill:none;stroke:var(--line-strong);stroke-width:2;stroke-dasharray:4 6}
+.sw{fill:var(--surface-2);stroke:var(--ink-3)} .swk{fill:var(--ink-3)}
+.token{fill:var(--accent);opacity:0}
+html.js .token{opacity:.95}
+.dom rect{stroke-width:1.5}
+ol.steps{padding-left:22px} ol.steps li{margin:6px 0;padding:4px 8px;border-radius:8px}
+ol.steps li.on{background:var(--accent-soft)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:8px;margin:12px 0}
+.legend div{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+.legend svg{flex:none}
+html.js .scene[hidden]{display:none}
+@media (prefers-reduced-motion: reduce){.token{display:none}.part.on rect{filter:none}}
+"""
+
+BUILD_JS = r"""
+(function(){
+  var d=document.documentElement;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var scenes=[].slice.call(document.querySelectorAll('.scene'));
+  var btns=[].slice.call(document.querySelectorAll('[data-scene]'));
+  var cur='today';
+  function show(id){cur=id;scenes.forEach(function(s){s.hidden=(s.id!=='scene-'+id)});
+    btns.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-scene')===id?'true':'false')});restart()}
+  btns.forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-scene'))})});
+  var bar=document.getElementById('scene-toggle'); if(bar){bar.hidden=false}
+  var mb=document.getElementById('motion-note'); if(mb&&reduce){mb.textContent='Reduced motion is on: the picture is shown still, with every step listed below.'}
+  var timer=null, raf=null;
+  function el(id){return document.getElementById(id)}
+  function center(id){var g=el(id);return g?[+g.getAttribute('data-cx'),+g.getAttribute('data-cy')]:null}
+  function clear(scope){[].slice.call(scope.querySelectorAll('.on')).forEach(function(x){x.classList.remove('on')})}
+  function restart(){if(timer)clearTimeout(timer);if(raf)cancelAnimationFrame(raf);
+    var sc=el('scene-'+cur); if(!sc)return; clear(sc); if(reduce)return;
+    var steps=[].slice.call(sc.querySelectorAll('ol.steps li'));
+    var tok=el(cur+'-token'), attn=el(cur==='today'?'t-attn':'i-attn'), lab=el((cur==='today'?'t-attn':'i-attn')+'-lab');
+    var i=0, pos=null, phase=0;
+    function moveAttn(t){if(!attn)return;var cx=+attn.getAttribute('data-cx'),cy=+attn.getAttribute('data-cy'),r=+attn.getAttribute('data-r');
+      var a=t/900, k=Math.floor(a)%7, f=a-Math.floor(a), a1=2*Math.PI*k/7, a2=2*Math.PI*((k+3)%7)/7, rr=r*0.75;
+      var x1=cx+rr*Math.sin(a1),y1=cy-rr*Math.cos(a1),x2=cx+rr*Math.sin(a2),y2=cy-rr*Math.cos(a2);
+      attn.setAttribute('cx',x1+(x2-x1)*f);attn.setAttribute('cy',y1+(y2-y1)*f)}
+    var t0=performance.now(), frozen=false;
+    function loop(t){if(!frozen)moveAttn(t-t0);raf=requestAnimationFrame(loop)}
+    raf=requestAnimationFrame(loop);
+    function step(){clear(sc);
+      if(i>=steps.length){i=0;frozen=false;if(lab)lab.textContent=cur==='today'?'idle drive loop: moving':'drive loop, live: moving';
+        if(tok)tok.setAttribute('cx',-50);timer=setTimeout(step,2600);return}
+      var li=steps[i];li.classList.add('on');
+      var ids=(li.getAttribute('data-parts')||'').split(' ').filter(Boolean);
+      var turn=li.getAttribute('data-turn')==='1'; frozen=turn;
+      if(lab)lab.textContent=turn?'paused: a conversation turn is passing':(cur==='today'?'idle drive loop: moving':'drive loop, live: moving');
+      ids.forEach(function(id){var g=el(id);if(g)g.classList.add('on')});
+      var c=ids.length?center(ids[0]):null;
+      if(tok&&c){var from=pos||c,s0=performance.now();
+        (function glide(t){var f=Math.min(1,(t-s0)/600);tok.setAttribute('cx',from[0]+(c[0]-from[0])*f);tok.setAttribute('cy',from[1]+(c[1]-from[1])*f);if(f<1)requestAnimationFrame(glide)})(s0);
+        pos=c}
+      i++;timer=setTimeout(step,1900)}
+    step()}
+  document.addEventListener('DOMContentLoaded',function(){show('today')});
+  if(document.readyState!=='loading'){show('today')}
+})();
+"""
+
+
+def p_build(S: dict) -> str:
+    need(S, "7.47", "RB-B 32 learned slots")
+    need(S, "7.82", "9,585,566", "shares nothing with the recipe brain")
+    need(S, "7.89", "WIDE_BRAIN_EARNED_KEEP", "candidate")
+    need(S, "7.90", "EARS_HARMED", "EARS_NO_GAIN")
+    need(S, "7.91", "NOT LAUNCHED")
+    legend = "".join(
+        f'<div><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><g class="s-{k}"><rect x="1" y="1" width="32" height="18" rx="5" style="stroke-width:2"/></g></svg>'
+        f'<span><strong>{esc(n)}</strong>: {esc(t)}</span></div>' for k, n, t in STATUS_KEYS)
+    today_steps = [
+        ("t-in", 1, "English in: you type an everyday sentence, such as 'we have 12 flour and 20 water'."),
+        ("t-reader", 1, "The hand-written reader restates it in HELM's checked form. Its stock-frame rule saves a stock fact only when the sentence really states one (earned its keep; on fresh real sentences safe but not yet useful, §7.87)."),
+        ("t-rt", 1, "The round-trip check turns the checked form back into English and reads it again; it must come back identical. It proves the form, not the truth."),
+        ("t-gate", 1, "The RPM Gate is HELM's one gate. It picks one of three exits: go ahead, repair (back to the reader), or ask."),
+        ("t-brain t-wide", 1, "Go: the licensed recipe brain divides what is on hand by what one unit needs and names the ingredient that runs out first. It knows 8 ingredients and 4 recipe shapes, with 32 learned slots. Beside it, the wide brain waits behind a switch that is OFF: a candidate, validated for one sentence on real recipes."),
+        ("t-cube t-triad t-casc", 1, "Side rails: the cube store keeps facts and never fills in an unknown; the triad weighs Purpose, Wisdom and Power on each ingredient; the cascade breaks a problem into smaller ones, with a stop rule and a depth limit."),
+        ("t-rcpt", 1, "Receipt: nothing is saved until it is read back and checked; then it leaves a receipt, a fingerprinted record anyone can check later."),
+        ("t-voice", 1, "Voice: HELM writes one to three plain sentences and reads its own numbers and names back against the receipt."),
+        ("t-out", 1, "English out: you get the answer in everyday words."),
+        ("t-ask", 1, "Ask: if HELM cannot read the sentence or cannot tell, the ask exit sends one question and saves nothing."),
+        ("t-ear", 1, "Outside the solid line, the CTT ear (a small translator, 9,585,566 parameters) may propose a reading, but only on the ask path, and only as a question you confirm. It shares nothing with the brain. On record: no gain on real sentences (EARS_NO_GAIN) and a failed safety check on AI-written ones (EARS_HARMED), §7.90."),
+        ("t-eye", 0, "Above it all, the Unity Eye scans HELM's records for damage and whispers suggestions. The crossed-out arrow is the rule: it never writes. Today it is not wired to the live chat window."),
+        ("t-attn-g", 0, "Between turns, the idle drive loop moves HELM's attention among the seven Drives (F1 to F7) toward unfinished work. It freezes while a conversation turn passes."),
+    ]
+    intended_steps = [
+        ("i-in i-reader i-rt i-gate", 1, "Same turn, same checks: the reader goes first, then the round-trip check, then the RPM Gate."),
+        ("i-brain", 1, "The wide recipe brain moves into the main slot, but only if HELM's next sealed test with all parts switched on (the pair wave, §7.91: sealed, not yet run) says so. Planned."),
+        ("i-ref", 1, "The licensed brain stays beside it as the reference; its one licensed sentence does not change."),
+        ("i-ear i-agree", 1, "The CTT ear is admitted only through a stricter rule: all three trained copies must agree exactly, and HELM asks by default (CTT-2R, preregistered, nothing scored). Planned."),
+        ("i-ask", 1, "Anything the ear proposes is still read back to you as a question before it counts; nothing is saved without your yes."),
+        ("i-rcpt i-voice i-out", 1, "Receipt, voice and English out work as today."),
+        ("i-eye", 0, "The Unity Eye's scan and pairing are wired to the live chat. It still only reports and whispers, and never writes. Planned."),
+        ("i-attn-g", 0, "The idle drive loop runs live between turns, and still pauses during a conversation turn. Planned."),
+        ("i-ring i-dom0 i-dom1 i-dom2 i-dom3 i-dom4 i-dom5 i-dom6 i-dom7", 0, "The domain ring widens beyond the kitchen, one sealed test at a time: software work (planned), everyday planning (partly backed), research governance (planned), safety as a recipe (planned), physical systems (planned), science (planned), receipts for outputs (partly backed)."),
+        ("i-human", 0, "Any claim about real people typing to HELM must come from an exam that people write (E-HUMAN-W). None has run. Planned."),
+    ]
+
+    def steps_html(steps):
+        return '<ol class="steps">' + "".join(
+            f'<li data-parts="{esc(p)}" data-turn="{t}">{esc(c)}</li>' for p, t, c in steps) + "</ol>"
+
+    lede = "One HELM turn, drawn as it is wired today and as it is meant to be wired next. Every part is colored by its status in the records."
+    body = f"""
+<style>{BUILD_CSS}</style>
+<p id="motion-note" class="small muted">The picture animates one conversation turn step by step. Without scripts, or with reduced motion switched on, it is shown still, with every step listed under it.</p>
+<div class="scenes" id="scene-toggle" role="group" aria-label="Choose a scene" hidden>
+<button class="btn" type="button" data-scene="today" aria-pressed="true">Today</button>
+<button class="btn" type="button" data-scene="intended" aria-pressed="false">Intended</button></div>
+<h2>Legend</h2>
+<div class="legend">{legend}</div>
+<p class="small"><strong>What this animation does not claim.</strong> It shows how the parts are wired and the recorded status of each.
+It does not claim that any part works for real users, that the intended scene will happen, or anything wider than each part's own record.
+The moving dot is an illustration, not a measurement.</p>
+
+<section class="scene" id="scene-today">
+<h2>Today</h2>
+<div class="figwrap">{_svg('today', _scene_today(), 790, 'HELM today: one conversation turn')}</div>
+{steps_html(today_steps)}
+</section>
+
+<section class="scene" id="scene-intended">
+<h2>Intended</h2>
+<div class="figwrap">{_svg('intended', _scene_intended(), 1010, 'HELM intended: the next wiring')}</div>
+{steps_html(intended_steps)}
+</section>
+<script>{BUILD_JS}</script>
+"""
+    return page("build.html", "HELM Build Animated", "The build, animated", lede, body, [
+        "`docs/CAS_HARNESS_SPEC_SHEET.md` §7.47, §7.56, §7.64, §7.69, §7.72, §7.77, §7.78, §7.82, §7.87, §7.89, §7.90, §7.91 (statuses and numbers)",
+        "`docs/working/HELM_CAPABILITIES_ROADMAP_STATUS_CORRECTION_20261018.md` (planned / partly backed labels for the domains)",
+        f"`{rel(CODEX / '2026-10-19' / 'ctt2_design_v1' / 'ACCEPTANCE_RULE.md')}` and `{rel(CODEX / '2026-10-19' / 'ctt2r' / 'PREREGISTRATION_CTT2R.md')}` (three seeds must agree; ask by default)",
+        f"`{rel(CODEX / '2026-10-19' / 'cas_token_transformer_design_v1' / 'ARCHITECTURE.md')}` (the ear and the hard boundary)",
+        "`helm_ui/README.md` ('Wired vs not wired': the Eye and the drive loop are not wired to the live chat)",
+    ], words=True, description="One HELM turn, animated: today's wiring and the intended next wiring, colored by recorded status.")
+
+
+# --------------------------------------------------------------------------------------------
+# Files and paths: an inventory for the next agent (paths, sizes, hashes; sealed exams never opened)
+# --------------------------------------------------------------------------------------------
+DISPLAY_REPO = os.environ.get("HELM_HUB_REPO_DISPLAY", r"C:\Users\wakil\OneDrive\Desktop\tksCAS")
+HOME = Path(os.environ.get("HELM_HUB_HOME", r"C:\Users\wakil"))
+ARCHIVE = Path(os.environ.get("HELM_HUB_ARCHIVE", r"D:\tksCAS-archive"))
+SEALED_RE = re.compile(r"custod|^exam$|^sealed|sealed98|sealed_extract", re.I)
+HASH_LIMIT = 50 * 1024 * 1024
+ARCHIVE_ALIAS = {
+    "r1_wave1": ["helm_r1_w1_c34g"], "r1_wave2": ["helm_r1w2_"], "r1_wave3": ["helm_r1w3_"], "r1_wave3b": ["helm_r1w3b_"],
+    "rb_i1c": ["helm_rb_i1c_"], "rb_i1b": ["helm_rb_i1b_"], "cas_token_transformer": ["cas_token_transformer_", "ctt1_"],
+    "scribe_l4_score": ["scribe_l4_score_"], "noetic_council": ["noetic_council_"],
+}
+
+
+def _dir_stats(p: Path) -> tuple[int, int, int]:
+    """(files, bytes, sealed folders skipped). Never enters a sealed or custody folder."""
+    files = size = skipped = 0
+    for root, dirs, fs in os.walk(p):
+        keep = []
+        for d in dirs:
+            if SEALED_RE.search(d):
+                skipped += 1
+            else:
+                keep.append(d)
+        dirs[:] = keep
+        for f in fs:
+            files += 1
+            try:
+                size += os.path.getsize(os.path.join(root, f))
+            except OSError:
+                pass
+    return files, size, skipped
+
+
+def _sealed_dirs(p: Path, depth: int = 3) -> list[Path]:
+    out = []
+    base = len(p.parts)
+    for root, dirs, _ in os.walk(p):
+        rp = Path(root)
+        keep = []
+        for d in dirs:
+            if SEALED_RE.search(d):
+                out.append(rp / d)
+            elif len(rp.parts) - base < depth:
+                keep.append(d)
+        dirs[:] = keep
+    return sorted(out)
+
+
+def _human(n: int) -> str:
+    for unit in ("bytes", "KB", "MB", "GB"):
+        if n < 1024 or unit == "GB":
+            return f"{n:,} {unit}" if unit == "bytes" else f"{n:.1f} {unit}"
+        n /= 1024
+    return str(n)
+
+
+def _first_heading(p: Path) -> str:
+    try:
+        with open(p, encoding="utf-8", errors="replace") as fh:
+            for _ in range(40):
+                ln = fh.readline()
+                if not ln:
+                    break
+                if ln.startswith("#"):
+                    return noemoji(EMAIL_RE.sub("[e-mail removed]", ln.lstrip("# ").strip()))[:220]
+    except OSError:
+        pass
+    return ""
+
+
+def _doc_line(p: Path) -> str:
+    try:
+        t = p.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    m = re.search(r'^\s*(?:"""|\'\'\')\s*(.+?)$', t, re.M)
+    return noemoji(EMAIL_RE.sub("[e-mail removed]", m.group(1).strip().strip('"')))[:220] if m else ""
+
+
+def _purpose_of_dir(p: Path) -> str:
+    pats = ["README*.md", "RESULTS*.md", "RUN_RESULT_*.md", "PREREGISTRATION*.md", "DESIGN*.md", "ARCHITECTURE*.md",
+            "SURVEY*.md", "COVERAGE*.md", "*.md"]
+    for pat in pats:
+        for f in sorted(p.glob(pat)):
+            if not SEALED_RE.search(f.name):
+                h = _first_heading(f)
+                if h:
+                    return h + f" (from {f.name})"
+    return ""
+
+
+class Inv:
+    def __init__(self):
+        self.rows: list[dict] = []
+
+    def add(self, sec: str, shown: str, checked: Path | None, what: str, kind: str = "auto", sealed: bool = False,
+            paths_only: bool = False, extra: str = ""):
+        exists = bool(checked) and checked.exists()
+        info, digest = "", ""
+        if exists and not sealed and not paths_only:
+            if checked.is_dir():
+                n, b, sk = _dir_stats(checked)
+                info = f"{n:,} files, {_human(b)}" + (f"; {sk} sealed folder(s) not entered" if sk else "")
+            else:
+                sz = checked.stat().st_size
+                info = _human(sz)
+                digest = sha256_file(checked) if sz < HASH_LIMIT else "over 50 MB, not hashed"
+        elif exists and paths_only:
+            info = "present (path only)"
+        self.rows.append({"sec": sec, "shown": shown, "checked": str(checked) if checked else "", "what": what,
+                          "exists": exists, "info": info, "sha": digest, "sealed": sealed, "extra": extra})
+
+
+def _repo_shown(relpath: str) -> str:
+    return DISPLAY_REPO.rstrip("\\") + "\\" + relpath.replace("/", "\\")
+
+
+def files_inventory() -> Inv:
+    I = Inv()
+    R = lambda rp: (_repo_shown(rp), REPO / rp)
+    # A. start here
+    for shown, chk, what in [
+        (_repo_shown("CLAUDE.md"), REPO / "CLAUDE.md", "Project rules. Read first: plain English always, AWS for heavy work, Claude is not the research governor, the spec-sheet rule, the canonical Noetic definitions."),
+        (str(HOME / ".claude" / "CLAUDE.md"), HOME / ".claude" / "CLAUDE.md", "The owner's global rules for every agent (AWS execution preference, laptop memory)."),
+        (*R("docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md"), "The authoritative CAS definitions; read before writing any CAS description."),
+        (*R("docs/CAS_HARNESS_SPEC_SHEET.md"), "The living master record of every result. On branch claude/project-thread-pmbzd6, never master. Update it in the same commit as any result; never delete a negative."),
+        (*R("CHANGELOG.md"), "Read at session start; add a line after every unit of work."),
+        (*R("docs/reference/CAS_HELM_DICTIONARY.md"), "Every CAS and HELM term, plain meaning first."),
+        (str(APPROVALS), APPROVALS, "The owner's words on record: every approval, ruling and sign line, verbatim, with Pacific times."),
+        (str(LEDGER), LEDGER, "The AWS money ledger, current totals. Read before any paid run; add each job's hold once."),
+        (str(CODEX / "AWS_COMBINED_ALLOCATION_HISTORY.jsonl"), CODEX / "AWS_COMBINED_ALLOCATION_HISTORY.jsonl", "The ledger's history, one line per change."),
+    ]:
+        I.add("A", shown, chk, what)
+    # B. repo map
+    for p in sorted(REPO.glob("helm_*.py")):
+        I.add("B1", _repo_shown(p.name), p, _doc_line(p) or "HELM module.")
+    for p in sorted(list(REPO.glob("test_helm_*.py")) + list(REPO.glob("tks_meta_valve_*"))):
+        I.add("B1", _repo_shown(p.name), p, _doc_line(p) or ("Test file." if p.name.startswith("test_") else "Valve file."))
+    for rp, what in [("helm_ui", "HELM UI v0: the calm local chat page (python helm_ui/server.py)."),
+                     ("helm_hub", "This hub: build_hub.py writes site/."),
+                     ("cas-synthetic", "The CAS Synthetic Data Generator and its data (seeds, the L4 split)."),
+                     ("noetic-compass-scaffold/noetic-compass/api/notation/compiler.py", "The CAS compiler, repo copy (older)."),
+                     ("dist/cas-offline/api/notation/compiler.py", "The CAS compiler, offline bundle copy.")]:
+        I.add("B2", *R(rp), what)
+    site_comp = CODEX / "2026-10-08" / "task-4" / "cas-online" / "dist" / "compiler" / "api" / "notation" / "compiler.py"
+    I.add("B2", str(site_comp), site_comp, "The NEWEST CAS compiler (site bundle; adds fractal nesting analysis and CAS-Ohm). Use it for nesting and meta-logic.")
+    nc = REPO / "docs" / "working" / "noetic_council"
+    for d in sorted(x for x in nc.iterdir() if x.is_dir()) if nc.exists() else []:
+        I.add("B3", _repo_shown(f"docs/working/noetic_council/{d.name}"), d, _purpose_of_dir(d) or "A noetic_council package.")
+    wk = REPO / "docs" / "working"
+    for d in sorted(x for x in wk.iterdir() if x.is_dir() and x.name != "noetic_council") if wk.exists() else []:
+        I.add("B4", _repo_shown(f"docs/working/{d.name}"), d, _purpose_of_dir(d) or "A working folder (often a repo copy of an off-repo packet).")
+    bk = REPO / "book"
+    for d in sorted(x for x in bk.iterdir() if x.is_dir()) if bk.exists() else []:
+        I.add("B5", _repo_shown(f"book/{d.name}"), d, _purpose_of_dir(d) or "A book project.")
+    # C. off-repo evidence
+    arch = sorted(x.name for x in ARCHIVE.iterdir() if x.is_dir()) if ARCHIVE.exists() else []
+    for day in ("2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19"):
+        dd = CODEX / day
+        if not dd.exists():
+            I.add("C", str(dd), dd, "Dated evidence folder.")
+            continue
+        items = sorted(dd.iterdir())
+        scratch = [x for x in items if x.name.startswith("_") or x.suffix in (".txt", ".py") and x.is_file()]
+        if not items:
+            I.add("C", str(dd), dd, "Dated evidence folder (empty).")
+        for x in items:
+            if x in scratch:
+                continue
+            if x.is_dir():
+                runs = sorted(r for r in x.rglob("RUN_RESULT_*.md") if not any(SEALED_RE.search(part) for part in r.relative_to(x).parts))
+                prefixes = ARCHIVE_ALIAS.get(x.name, []) + [x.name + "_"]
+                backs = [a for a in arch if any(a.startswith(pf) for pf in prefixes)]
+                extra = ""
+                if runs:
+                    extra += "Run record: " + "; ".join(str(r) for r in runs) + ". "
+                if backs:
+                    extra += "Backup: " + "; ".join(str(ARCHIVE / b) for b in backs) + "."
+                I.add("C", str(x), x, _purpose_of_dir(x) or "Evidence folder.", extra=extra)
+                for s in _sealed_dirs(x):
+                    I.add("C", str(s), s, "SEALED EXAM: never open; hashes only.", sealed=True)
+            else:
+                I.add("C", str(x), x, _first_heading(x) if x.suffix == ".md" else "Evidence file.")
+        if scratch:
+            I.rows.append({"sec": "C", "shown": str(dd), "checked": str(dd), "what": f"{len(scratch)} scratch items (names starting with _ , .txt, .py) not listed one by one.",
+                           "exists": True, "info": "", "sha": "", "sealed": False, "extra": ""})
+    # D. backups
+    for a in arch:
+        if re.search(r"202610(1[4-9]|2\d)", a):
+            I.add("D", str(ARCHIVE / a), ARCHIVE / a, "Backup of a run or packet. Standing rule: three sha256 passes (source, destination re-read, whole-tree digest); the run record names its manifest.")
+    # E. machines and places
+    jk = CODEX / "2026-10-01" / "task-2" / "helm_operator_preparation"
+    I.add("E", str(jk), jk, "The AWS job kit: controllers, reservations, closeouts, cleanup records for every paid run.", paths_only=True)
+    I.add("E", str(HOME / "venvs" / "cas-gpu"), HOME / "venvs" / "cas-gpu", "Local GPU Python environment (RTX 4070; smoke tests only).", paths_only=True)
+    # F. keys (paths only)
+    I.add("F", str(HOME / ".cas_llm_keys.env"), HOME / ".cas_llm_keys.env", "Model API keys. Never print, never commit, never copy.", paths_only=True)
+    I.add("F", str(HOME / ".aws") + "\\", HOME / ".aws", "AWS credentials. Never print, never commit, never copy.", paths_only=True)
+    # G. memory (paths only)
+    mem = HOME / ".claude" / "projects" / "C--Users-wakil-OneDrive-Desktop-tksCAS" / "memory"
+    I.add("G", str(mem) + "\\", mem, "Claude's memory folder for this project.", paths_only=True)
+    I.add("G", str(mem / "MEMORY.md"), mem / "MEMORY.md", "The memory index: one line per memory file.", paths_only=True)
+    return I
+
+
+def p_files(S: dict) -> str:
+    I = files_inventory()
+
+    def table(sec_prefix: str) -> str:
+        rows = [r for r in I.rows if r["sec"].startswith(sec_prefix)]
+        tr = []
+        for r in rows:
+            mark = '<span class="sealed">do not open</span>' if r["sealed"] else ("" if r["exists"] else '<span class="missing">MISSING</span>')
+            sha = f'<code>{esc(r["sha"])}</code>' if r["sha"] and len(r["sha"]) == 64 else esc(r["sha"])
+            ex = f'<div class="small muted">{esc(r["extra"])}</div>' if r["extra"] else ""
+            tr.append(f'<tr data-path="{esc(r["checked"])}" data-exists="{1 if r["exists"] else 0}"><td><code>{esc(r["shown"])}</code> {mark}</td>'
+                      f'<td>{esc(r["what"])}{ex}</td><td>{esc(r["info"]) if r["exists"] else "MISSING"}</td><td>{sha}</td></tr>')
+        return ('<div class="tablewrap"><table><thead><tr><th>Full path</th><th>What it is</th><th>Size or count</th><th>sha256 (files under 50 MB)</th></tr></thead><tbody>'
+                + "".join(tr) + "</tbody></table></div>")
+
+    nmiss = sum(1 for r in I.rows if not r["exists"])
+    nseal = sum(1 for r in I.rows if r["sealed"])
+    lede = ("Where everything lives, with full addresses, for the next person or agent who picks up this project. "
+            "Each path was checked on disk when this page was built.")
+    body = f"""
+<style>.sealed{{color:var(--c-failed);font-weight:600}} .missing{{color:var(--c-weak);font-weight:600}}</style>
+<p class="small">{len(I.rows)} paths listed; {nmiss} marked MISSING; {nseal} sealed exam folders marked "do not open" (listed by name only, never entered).
+Repo paths are shown under the main checkout <code>{esc(DISPLAY_REPO)}</code>; they were checked in the checkout that ran this build, on branch
+<code>claude/project-thread-pmbzd6</code> at commit <code>{esc(HEAD)}</code>. The main checkout folder may be on another branch; use the thread branch or a worktree from it.</p>
+
+<h2 id="start">A. Start here if you are the next agent</h2>
+<ol>
+<li>Read the rules: both CLAUDE.md files below. Plain English in every report: meaning first, then the precise term; define every term; keep every number exact.</li>
+<li>Read the spec sheet on branch <code>claude/project-thread-pmbzd6</code> (never master) and the CHANGELOG before doing anything.</li>
+<li>The owner's word is the approvals record below. Only the owner's own words approve money, irreversible steps and claims. Claude is not the research governor; a failed {T('hard gate')} is a failure.</li>
+<li>Commit as the owner's GitHub name, <code>LittleHenderson</code>, with the owner's GitHub e-mail (see the approvals record; it is not printed here). Docs PRs go to <code>claude/project-thread-pmbzd6</code>; on conflict merge the base, never rebase or force-push.</li>
+<li>Custody: the builder never opens a {T('sealed')} exam; a {T('custodian')} builds it and only fingerprints cross. One attempt plus one plumbing retry per sealed package. The owner's sign line is the {T('seed')} source.</li>
+<li>Update the spec sheet in the same commit as any result. Never delete a negative. Use only the legend's {T('claim status')} words.</li>
+<li>Heavy work goes to {T('AWS')}; record each job's source, purpose, machine, limits and cleanup in the ledger and job kit. Back up every run to <code>D:\\tksCAS-archive\\</code> with three hash passes.</li>
+<li>End every owner update with the owner's three headings, in order: WHAT IS CURRENTLY HAPPENING, FOR WAKIL TO DO, NEXT (each with the owner's chosen marker; standing format order in the approvals record).</li>
+</ol>
+{table("A")}
+
+<h2 id="repo">B. Repo map (thread branch)</h2>
+<h3>HELM modules, tests and the valve</h3>{table("B1")}
+<h3>Tools, data and the CAS compiler</h3>{table("B2")}
+<h3>noetic_council packages (<code>docs/working/noetic_council/</code>)</h3>{table("B3")}
+<h3>Working folders and packet copies (<code>docs/working/</code>)</h3>{table("B4")}
+<h3>Books (<code>book/</code>)</h3>{table("B5")}
+
+<h2 id="evidence">C. Off-repo evidence (<code>{esc(str(CODEX))}</code>, 2026-10-14 to 2026-10-19)</h2>
+<p>Designs (<code>*_design_v1</code>), packets and runs, each with its first heading as its purpose, its run record and its backup.
+Rows in red are sealed exam folders: do not open them; work with their hashes only.</p>
+{table("C")}
+
+<h2 id="backups">D. Backups (<code>{esc(str(ARCHIVE))}</code>, 2026-10-14 onward)</h2>
+{table("D")}
+
+<h2 id="machines">E. Machines and places</h2>
+<ul class="tight">
+<li>AWS region <code>us-west-2</code>. Budget ceiling and spend: the ledger in section A.</li>
+<li>Laptop: light editing, launching and downloading only; local runs one process, a time cap such as 300 s, no spend. Neural training never on the laptop processor.</li>
+</ul>
+{table("E")}
+
+<h2 id="keys">F. Keys and secrets (path names only)</h2>
+<p><strong>Never print, never commit, never copy these files.</strong> This page shows only whether each path exists.</p>
+{table("F")}
+
+<h2 id="memory">G. Claude's memory (paths only)</h2>
+{table("G")}
+"""
+    return page("files.html", "HELM Files Map", "Files and paths: where everything lives", lede, body, [
+        "A walk of the repo checkout, the Codex evidence folders 2026-10-14 to 2026-10-19 and the backup drive, done by `helm_hub/build_hub.py` at build time (sizes and sha256 computed; sealed and custody folders never entered)",
+        "`CLAUDE.md` and the owner's global rules (the start-here list)",
+        f"`{rel(APPROVALS)}` (standing format order; commit identity)",
+    ], words=True, words_open=False, description="Every important file and folder with its full path, size and hash, for the next agent.")
 
 
 # --------------------------------------------------------------------------------------------
@@ -1771,8 +2373,8 @@ def build() -> dict:
     pages = {
         "index.html": p_home(S), "thinking.html": p_thinking(S), "architecture.html": p_architecture(S),
         "data.html": p_data(S), "compute.html": p_compute(S), "results.html": p_results(S),
-        "model-card.html": p_model_card(S), "safety.html": p_safety(S), "roadmap.html": p_roadmap(S),
-        "glossary.html": p_glossary(S), "changelog.html": p_changelog(S), "run.html": p_run(S),
+        "build.html": p_build(S), "model-card.html": p_model_card(S), "safety.html": p_safety(S), "roadmap.html": p_roadmap(S),
+        "glossary.html": p_glossary(S), "changelog.html": p_changelog(S), "run.html": p_run(S), "files.html": p_files(S),
     }
     for name, content in pages.items():
         content = EMAIL_RE.sub("[e-mail removed]", content)
