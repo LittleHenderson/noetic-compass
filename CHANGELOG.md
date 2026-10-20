@@ -4,6 +4,8 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - lexicon_v3 (live, switch HELM_LEXICON_V3 default ON): bare female/male/negative/positive/vibration/rhythm and the bare-noun tier (idea, thought, mind, attention, practice, repetition, groove, realization) no longer pick a Noetic; frozen ALIAS-WIDE v1 / lexicon_v2 untouched; tests reader 31->37, new lexicon_v3 15/15, loop 18, stock-frame 17, faces 16, voice 22, cube store 21/21, chat script PASS; practice E64 61/0/3, F64 60/2/2 unchanged item by item; spec sheet 7.81 note, no status change; 0 USD
+
 ## 2026-10-19 PDT - RTR-1 "RE-TEST READER" packet SEALED, NOT LAUNCHED (spec sheet 7.84); nothing scored; 0 USD
 
 Owner order (verbatim): "RE-TEST READER" (0.03 USD). Coordinator mapping: cap 0.10 USD, one attempt + one plumbing retry.
