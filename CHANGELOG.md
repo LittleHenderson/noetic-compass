@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - Two design packets (owner: "Yes, write both design packets at 0 USD ... Design only, no run"): the recipe-shape proposer ear and receipt tags + the Unity Eye pairing over the 28 cells; DESIGN ONLY, nothing built or run, no claim changed, 0 USD
+
+- helm_recipe_shape_ear_design_v1: the ear (CTT shell, 9,585,566 parameters) proposes only the SHAPE of a recipe sentence (line roles, span pointers into the user's words, which dish) when wide reader v5 would ask; no digits, no names in its vocabulary; three-copy agreement rule and read-back kept from CTT-2R; the brain's receipt and memory check unchanged. Census first (gap stratum floor 256), then build, then seal + owner line. Whole-CAS-expression ear parked: SDG text is a settled negative corpus (spec 10.1) and human CAS labels agree at ^1 only (7.23).
+- helm_eye_pairing_28_cells_design_v1: stage 1 = a deterministic CAS address on every receipt and filed item (Foundation, Domain, cell of 28, Register, pathway of 22, element of 40; UNTAGGED never guessed) = the owner's fix G ("redeem 22x40"); stage 2 = the Eye's table over 196 (cell, faculty) pairs with back-off to the 7 x 7 table on untagged items, so it cannot do worse by construction; the 7 x 7 Eye is the baseline to beat; random-tag control; tag census floor 20 of 28 cells. Stages 3 (22 pathways) and 4 (40 elements) named, not designed.
+- Files: Documents/Codex/2026-10-20/helm_recipe_shape_ear_design_v1/ and helm_eye_pairing_28_cells_design_v1/ (README, DESIGN, TEST_PLAN, OPEN_QUESTIONS each); copies docs/working/.
+
 ## 2026-10-20 PDT - WIDE BRAIN ON BY DEFAULT in the live loop and the chat (owner order after the ruling; spec sheet 7.56 follow-up); HELM suites 194 OK; 0 USD, no paid run
 
 - helm_brain_wide.wide_brain_on(): default ON. Off only when HELM_WIDE_BRAIN is 0 / OFF / FALSE / NO (WIDE_BRAIN_OFF_WORDS) or the loop is built with wide_brain=False. helm_end_to_end_loop.HELMEndToEndLoop() therefore runs HELM's canonical wide brain by default: the licensed path still reads every turn first; the wide book takes only the turns it cannot bind. helm_chat.py builds that loop, so the chat follows. An OFF loop still never imports helm_brain_wide / helm_wide_turn (checked in a fresh process).
