@@ -956,10 +956,17 @@ def _round_trip(content: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
 def quantities_said(reading: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
     """The user's own words for each amount in a reading: {name: {qty, unit, words}} (for the voice to quote)."""
     out = {}
+    keys = ("amount", "said", "unit", "words")
+    # 2026-10-20 (wave-6 FIX FIRST): a reading made by another reader (the WIDE reader, helm_wide_turn) has another
+    # shape (its witness holds "stock" and "said", no "stock_words"). It used to raise KeyError('stock_words'), which
+    # crashed helm_chat's recipe turn on any wide teaching sentence. Only entries in this reader's own shape are used.
     for s in reading.get("stocks") or []:
-        out[s["name"]] = {"qty": s["amount"], "said": s["said"], "unit": s["unit"], "words": s["words"]}
+        if isinstance(s, dict) and "name" in s and all(k in s for k in keys):
+            out[s["name"]] = {"qty": s["amount"], "said": s["said"], "unit": s["unit"], "words": s["words"]}
     w = reading.get("witness")
-    if w:
-        for k, v in w["stock_words"].items():
-            out[k] = {"qty": v["amount"], "said": v["said"], "unit": v["unit"], "words": v["words"]}
+    sw = w.get("stock_words") if isinstance(w, dict) else None
+    if isinstance(sw, dict):
+        for k, v in sw.items():
+            if isinstance(v, dict) and all(x in v for x in keys):
+                out[k] = {"qty": v["amount"], "said": v["said"], "unit": v["unit"], "words": v["words"]}
     return out
