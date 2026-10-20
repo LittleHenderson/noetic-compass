@@ -224,14 +224,18 @@ class HELMEndToEndLoop:
 
     def __init__(self, cube_store: Optional[Any] = None, brain: Optional[CanonicalRecipeBrain] = None,
                  default_aperture: Any = "0.75", trace_path: Optional[str] = None,
-                 brain_dir: Optional[str] = None, wide_brain: Optional[bool] = None, **_ignored: Any):
+                 brain_dir: Optional[str] = None, wide_brain: Optional[bool] = None, wide_book: Optional[Any] = None,
+                 **_ignored: Any):
         # RB-W1 switch WIDE_BRAIN (default OFF). OFF: nothing below changes and the wide modules are never imported.
+        # ON (v2): the licensed brain stays S0's brain and takes every turn first; the wide book (`self.wide_book`)
+        # takes only the turns the licensed path cannot bind (helm_wide_turn.extended_turn).
         self.wide_on = False
+        self.wide_book = None
         if wide_brain is not None or os.environ.get("HELM_WIDE_BRAIN"):
             import helm_brain_wide
             self.wide_on = helm_brain_wide.wide_brain_on(wide_brain)
-            if self.wide_on and brain is None:
-                brain = helm_brain_wide.WideRecipeBook()
+            if self.wide_on:
+                self.wide_book = wide_book if wide_book is not None else helm_brain_wide.WideRecipeBook()
         # Station S0's brain: the canonical recipe brain. The 22x40 cookie brain is never constructed here.
         self.brain = brain if brain is not None else CanonicalRecipeBrain(brain_dir=brain_dir)
         self.valve = TKSMetaValveController(default_aperture=Decimal(str(default_aperture)))
@@ -453,9 +457,14 @@ class HELMEndToEndLoop:
                      current_inventory: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """One user turn through the circuit. `current_inventory`, if given, is rendered as checked-form stock
         sentences and goes through the same parse and round trip as the text; it is never trusted on its own."""
-        if self.wide_on:                       # RB-W1 switch ON: the wide reader, brain and voice (helm_wide_turn)
+        if self.wide_on:                       # RB-W1 switch ON: licensed first, the wide path where it cannot bind
             import helm_wide_turn
-            return helm_wide_turn.wide_turn(self, user_english, tick)
+            return helm_wide_turn.extended_turn(self, user_english, tick, current_inventory)
+        return self._process_turn_licensed(user_english, tick, current_inventory)
+
+    def _process_turn_licensed(self, user_english: str, tick: int = 1,
+                               current_inventory: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """The licensed path of one turn (the whole turn when WIDE_BRAIN is OFF)."""
         result = self._new_result(user_english, tick)
         writes_before = self._store_writes()
         text = user_english.strip()
@@ -561,7 +570,7 @@ class HELMEndToEndLoop:
                                 f"WAIT_FOR_USER: {code}")
         if reading["status"] == "WITNESS":
             w = reading["witness"]
-            res = self.witness_batch(w["product"], w["stock_before"], w["made"], w["ran_out"], tick=tick)
+            res = self._witness_batch_licensed(w["product"], w["stock_before"], w["made"], w["ran_out"], tick=tick)
             res["user_prompt"] = text
             res["english_in"] = reading
             if res["loop_status"] == "WITNESS_ADMITTED":
@@ -839,9 +848,14 @@ class HELMEndToEndLoop:
                       tick: int = 1) -> Dict[str, Any]:
         """One batch the user actually made. Through: CCE form receipt -> gate -> the brain's own writer ->
         (admitted) store write with read-back, or (refused) a DETECTED failure -> gate REPAIR -> repair child."""
-        if self.wide_on:                       # RB-W1 switch ON: the wide brain's teaching channel
+        if self.wide_on:                       # RB-W1 switch ON: licensed first, the wide brain where it cannot bind
             import helm_wide_turn
-            return helm_wide_turn.wide_witness(self, product, stock_before, made, ran_out, tick)
+            return helm_wide_turn.extended_witness(self, product, stock_before, made, ran_out, tick)
+        return self._witness_batch_licensed(product, stock_before, made, ran_out, tick)
+
+    def _witness_batch_licensed(self, product: str, stock_before: Dict[str, Any], made: Any, ran_out: str,
+                                tick: int = 1) -> Dict[str, Any]:
+        """The licensed teaching channel (the whole channel when WIDE_BRAIN is OFF)."""
         result = self._new_result(f"[witnessed batch] {product}", tick)
         writes_before = self._store_writes()
         prod = self.brain.product_of(product)
