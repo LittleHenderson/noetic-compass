@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM Architecture</title>
+<meta name="description" content="Every HELM part, its learned parameter count, and what HELM is not.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="architecture.html" aria-current="page">Architecture</a></li><li><a href="data.html">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html">Model card</a></li><li><a href="safety.html">Safety and honesty</a></li><li><a href="roadmap.html">Roadmap</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html">How to run HELM</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>Architecture</h1>
+<div class="lede">HELM is a set of small parts, each on its own switch, around one brain that does exact arithmetic. Here is every part, how many learned numbers it has, and what each one is for.</div>
+
+
+<h2>The parts</h2>
+<p>HELM is built on <dfn data-term="CAS" title="the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works">CAS</dfn><span class="gloss"> (the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works)</span>. Its brain holds <dfn data-term="recipe" title="a written rule saying how much of each ingredient one unit of an outcome needs">recipes</dfn><span class="gloss"> (a written rule saying how much of each ingredient one unit of an outcome needs)</span>, answers with exact arithmetic, and names the <dfn data-term="limiting reagent" title="the ingredient that runs out first and so caps how much can be made">limiting reagent</dfn><span class="gloss"> (the ingredient that runs out first and so caps how much can be made)</span>.
+Every saved fact leaves a <dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn><span class="gloss"> (the record a saved fact leaves behind, with a fingerprint, so it can be checked later)</span>; every sentence it says must pass the <dfn data-term="round trip" title="turning a checked statement into English and back; the result must equal the start">round trip</dfn><span class="gloss"> (turning a checked statement into English and back; the result must equal the start)</span>. Scored tests use <dfn data-term="sealed" title="frozen and fingerprinted before the run, so nothing can be changed after the fact">sealed</dfn><span class="gloss"> (frozen and fingerprinted before the run, so nothing can be changed after the fact)</span> exams.
+The one place chance is allowed uses saved <dfn data-term="seed" title="a starting number that fixes which random choices a program makes">seeds</dfn><span class="gloss"> (a starting number that fixes which random choices a program makes)</span>.</p>
+<p>A <dfn data-term="parameter" title="an adjustable number a model learns">parameter</dfn><span class="gloss"> (an adjustable number a model learns)</span> is an adjustable number a model learns. Big AI chat assistants have billions. HELM's licensed brain has dozens.
+Each part below sits behind a switch, so tests can turn one part off and see what is lost. A part that loses something when switched off earns the
+<dfn data-term="status word" title="the frozen reader&#x27;s one-word verdict for a part, such as EARNED_KEEP">status word</dfn><span class="gloss"> (the frozen reader&#x27;s one-word verdict for a part, such as EARNED_KEEP)</span> <dfn data-term="EARNED_KEEP" title="a status word meaning that switching the part off made results worse, so it stays">EARNED_KEEP</dfn><span class="gloss"> (a status word meaning that switching the part off made results worse, so it stays)</span>. Tests run on <dfn data-term="synthetic world" title="a made-up test world built by a program, with known right answers">synthetic worlds</dfn><span class="gloss"> (a made-up test world built by a program, with known right answers)</span> unless they say otherwise.</p>
+<div class="tablewrap"><table class="cards"><thead><tr><th>Part</th><th>What it does, plainly</th><th>Learned parameters (exact, from the record)</th><th>Standing</th></tr></thead><tbody>
+<tr><td data-label="Part"><strong>Licensed <dfn data-term="recipe brain" title="HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network">recipe brain</dfn><span class="gloss"> (HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network)</span></strong><br><code>helm_brain_canonical.py</code></td><td data-label="What it does, plainly">Holds recipes; answers by exact yield; names the limiting ingredient. The way recipes combine is programmed; only the requirement amounts are learned.</td>
+<td data-label="Learned parameters (exact, from the record)">Run log: "RB-B 32 learned slots" (<a href="results.html#s7-47">§7.47</a>). The first recipe brain had "68 learned values (requirements 32, ceilings 32, bindings 4)" (<a href="results.html#s7-24">§7.24</a>). For comparison, the <dfn data-term="GB3" title="the small transformer that used to be HELM&#x27;s brain and is the bar to beat">GB3</dfn><span class="gloss"> (the small transformer that used to be HELM&#x27;s brain and is the bar to beat)</span> <dfn data-term="transformer" title="the kind of neural network behind most modern AI chat assistants">transformer</dfn><span class="gloss"> (the kind of neural network behind most modern AI chat assistants)</span> it replaced: 97; widened: 385.</td>
+<td data-label="Standing"><dfn data-term="LICENSED" title="a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)">LICENSED</dfn><span class="gloss"> (a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said))</span>, one sentence, <dfn data-term="SYNTHETIC_ONLY" title="a claim ceiling: the result holds on made-up test worlds only">SYNTHETIC_ONLY</dfn><span class="gloss"> (a claim ceiling: the result holds on made-up test worlds only)</span> (<a href="results.html#s7-56">§7.56</a>). Wired into HELM's live loop by fixes C and D on 2026-10-18.</td></tr>
+<tr><td data-label="Part"><strong>Wide recipe brain</strong> (RB-W1 v3)<br><code>helm_brain_wide.py</code></td><td data-label="What it does, plainly">The same learning and answering rules, for real recipes: open ingredient names, exact fractions, up to 10 ingredients, 20 kitchen units.</td>
+<td data-label="Learned parameters (exact, from the record)">One requirement coefficient per (recipe, ingredient), learned from one witnessed batch each. Survey estimate, not a measurement: "49,493 coefficients for 9,495 recipes". 9 unit factors are programmed, not learned (<a href="results.html#s7-83">§7.83</a>).</td>
+<td data-label="Standing">Canonical-brain candidate, <dfn data-term="VALIDATED" title="a claim-status word: it passed its own pre-set test against controls, on the data it was measured on">VALIDATED</dfn><span class="gloss"> (a claim-status word: it passed its own pre-set test against controls, on the data it was measured on)</span> for one sentence, <dfn data-term="NAMED_CORPORA_ONLY" title="a claim ceiling: the result holds on the named public text collections only">NAMED_CORPORA_ONLY</dfn><span class="gloss"> (a claim ceiling: the result holds on the named public text collections only)</span> (<a href="results.html#s7-89">§7.89</a>). Switch off by default.</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn><span class="gloss"> (HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell)</span></strong></td><td data-label="What it does, plainly">Lets a step go ahead, sends it to repair, or refuses; lets the brain answer <dfn data-term="UNDETERMINED" title="HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing">UNDETERMINED</dfn><span class="gloss"> (HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing)</span>.</td><td data-label="Learned parameters (exact, from the record)">0 (a written rule)</td><td data-label="Standing">EARNED_KEEP in waves 1, 2 and 3. Switched off in wave 1, wrong answers rose from 32 to 768 (<a href="results.html#s7-47">§7.47</a>).</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="lacuna" title="something HELM could know but was never taught">Lacuna</dfn><span class="gloss"> (something HELM could know but was never taught)</span> cadence</strong></td><td data-label="What it does, plainly">Keeps track of what HELM could know but was never taught, and when to look again.</td><td data-label="Learned parameters (exact, from the record)">0 (a written rule)</td><td data-label="Standing">EARNED_KEEP in waves 2 and 3 (<a href="results.html#s7-64">§7.64</a>, <a href="results.html#s7-69">§7.69</a>).</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="restart fallback" title="if the exact first try leaves something unexplained, a few saved random restarts are tried and the checker decides">Restart fallback</dfn><span class="gloss"> (if the exact first try leaves something unexplained, a few saved random restarts are tried and the checker decides)</span></strong></td><td data-label="What it does, plainly">The one place chance is allowed: a few saved random restarts, and the checker decides.</td><td data-label="Learned parameters (exact, from the record)">0 (seeds are saved, not learned)</td><td data-label="Standing">EARNED_KEEP in waves 2 and 3.</td></tr>
+<tr><td data-label="Part"><strong>English reader</strong><br><code>helm_english_in.py</code></td><td data-label="What it does, plainly">Restates plain kitchen sentences in the checked form, or asks.</td><td data-label="Learned parameters (exact, from the record)">0 (a written program with word lists)</td><td data-label="Standing"><dfn data-term="ENGINEERED-NOT-VALIDATED" title="a claim-status word: built and working, with no validated result yet">ENGINEERED-NOT-VALIDATED</dfn><span class="gloss"> (a claim-status word: built and working, with no validated result yet)</span>. On fresh real sentences: 0 wrong facts after the fix, but not yet useful (<a href="results.html#s7-87">§7.87</a>).</td></tr>
+<tr><td data-label="Part"><strong>Voice</strong><br><code>helm_voice.py</code></td><td data-label="What it does, plainly">Turns the brain's receipt into one to three plain sentences, then reads its own numbers back.</td><td data-label="Learned parameters (exact, from the record)">0</td><td data-label="Standing">EARNED_KEEP; works together with the reader (SYNERGY) (<a href="results.html#s7-72">§7.72</a>).</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="CCE" title="Controlled Core English, a strict small form of English that converts to CAS and back exactly">CCE</dfn><span class="gloss"> (Controlled Core English, a strict small form of English that converts to CAS and back exactly)</span> skin</strong></td><td data-label="What it does, plainly">The strict English form that converts to CAS and back exactly.</td><td data-label="Learned parameters (exact, from the record)">0 (deterministic parser and renderer)</td><td data-label="Standing">NEUTRAL by construction: switching it off changes no answer.</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="cube store" title="where HELM keeps facts; an unknown side stays marked unknown and is never filled in">Cube store</dfn><span class="gloss"> (where HELM keeps facts; an unknown side stays marked unknown and is never filled in)</span></strong></td><td data-label="What it does, plainly">Where facts live; an unknown side is reported unknown, never filled.</td><td data-label="Learned parameters (exact, from the record)">0</td><td data-label="Standing">EARNED_KEEP in wave 3.</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="triad" title="three stages on each ingredient: Purpose, Wisdom and Power">Triad</dfn><span class="gloss"> (three stages on each ingredient: Purpose, Wisdom and Power)</span></strong><br><code>helm_triad.py</code></td><td data-label="What it does, plainly">Purpose, Wisdom and Power on each ingredient; the weakest face sets how much counts.</td><td data-label="Learned parameters (exact, from the record)">"0 learned parameters"; stored values ceiling 28 (<a href="results.html#s7-62">§7.62</a>)</td><td data-label="Standing">Built, default off; EARNED_KEEP in wave 3.</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="cascade" title="going down into sub-problems, with a stop rule and a depth limit">Cascade</dfn><span class="gloss"> (going down into sub-problems, with a stop rule and a depth limit)</span></strong></td><td data-label="What it does, plainly">Goes down into sub-problems. The owner's decoupling stop decides when to stop; a fuse at depth 12 is the hard limit.</td><td data-label="Learned parameters (exact, from the record)">0</td><td data-label="Standing">DECOUPLING_EARNED: 203 descents against 609 for the old fixed cap (<a href="results.html#s7-69">§7.69</a>).</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn><span class="gloss"> (a small watcher that looks over HELM, reports and whispers, and never writes)</span>: scan</strong></td><td data-label="What it does, plainly">Read-only self-check of memory and records; holds back an answer that would use a damaged record.</td><td data-label="Learned parameters (exact, from the record)">0</td><td data-label="Standing">EYE_SCAN_EARNED_KEEP, built not validated (<a href="results.html#s7-77">§7.77</a>).</td></tr>
+<tr><td data-label="Part"><strong>Unity Eye: pairing</strong></td><td data-label="What it does, plainly">Counts which mental job works for which motive, and <dfn data-term="whisper" title="a typed nudge from the Eye that HELM may ignore; it never changes a stored fact">whispers</dfn><span class="gloss"> (a typed nudge from the Eye that HELM may ignore; it never changes a stored fact)</span> the best pair.</td><td data-label="Learned parameters (exact, from the record)">A 7 x 7 table of counts of checked tries; counts, not trained weights</td><td data-label="Standing">EYE_PAIRING_EARNED_KEEP, built not validated (<a href="results.html#s7-78">§7.78</a>).</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="drive loop" title="HELM&#x27;s idle attention moving among the seven Drives toward unfinished work">Drive loop</dfn><span class="gloss"> (HELM&#x27;s idle attention moving among the seven Drives toward unfinished work)</span></strong></td><td data-label="What it does, plainly">Where idle attention goes among the seven <dfn data-term="Drive" title="one of seven core motivations, F1 Unity to F7 Purpose">Drives</dfn><span class="gloss"> (one of seven core motivations, F1 Unity to F7 Purpose)</span>; paused during conversation.</td><td data-label="Learned parameters (exact, from the record)">0</td><td data-label="Standing">NEUTRAL alone in wave 3; with the Eye's pairing, earned its keep in wave 5.</td></tr>
+<tr><td data-label="Part"><strong><dfn data-term="faculty" title="a mental job HELM can run on an open item, such as asking or verifying">Faculties</dfn><span class="gloss"> (a mental job HELM can run on an open item, such as asking or verifying)</span></strong></td><td data-label="What it does, plainly">Mental jobs such as asking, verifying, pondering, curiosity.</td><td data-label="Learned parameters (exact, from the record)">0</td><td data-label="Standing">No faculty word earned on the brain itself (<a href="results.html#s7-65">§7.65</a>).</td></tr>
+<tr><td data-label="Part"><strong>Transformer ear</strong> (CTT-1)</td><td data-label="What it does, plainly">A from-scratch translator, called only when the reader would ask. It may point at your own words and numbers; HELM's own checks decide.</td>
+<td data-label="Learned parameters (exact, from the record)">9,585,566 (width 256, 4 + 4 layers); twin 2,482,718; vocabulary 8,349 = 8 specials + 341 CAS tokens + 8,000 English word pieces learned from scratch (<a href="results.html#s7-82">§7.82</a>)</td>
+<td data-label="Standing">ENGINEERED-NOT-VALIDATED. EARS_NO_GAIN; second exam FAILURE, EARS_HARMED (<a href="results.html#s7-90">§7.90</a>).</td></tr>
+</tbody></table></div>
+
+<h2>Retired and stand-in parts</h2>
+<ul class="tight">
+<li><code>helm_brain_22x40.py</code>: a demonstration brain. "22" is 22 baking ingredients and "40" is a parameter count, not CAS's 22 pathways or 40 states. No score (<a href="results.html#s7-51">§7.51</a>).</li>
+<li>The old valve: a learned rule with five weights and one bias, trained on the laptop. The owner ruled it be replaced by a plain written rule (<a href="results.html#s7-50">§7.50</a>).</li>
+<li>Scribe L4, an old small English model: 0 of 98 exact on the sealed set (<a href="results.html#s7-80">§7.80</a>).</li>
+</ul>
+
+<h2>What HELM is not</h2>
+<ul class="tight">
+<li><strong>No foreign pretrained model.</strong> Nothing in HELM was downloaded already trained. The transformer ear was trained from scratch; its run checked "0 pretrained files" (<a href="results.html#s7-90">§7.90</a>).</li>
+<li><strong>The transformer never writes.</strong> It runs in its own process and shares nothing with the brain. It never writes a number or a name; HELM's name table, exact-number rule and round trip decide, and anything saved is read back first (<a href="results.html#s7-82">§7.82</a>).</li>
+<li><strong>Not a general chatbot.</strong> Its world is a kitchen, by design, as a test bed. See the <a href="roadmap.html#chat">chat question</a>.</li>
+<li><strong>Not a large language model,</strong> and not trained by preference tuning. See <a href="model-card.html#not-here">what this hub does not have</a>.</li>
+</ul>
+
+<h2>How far the language reaches today</h2>
+<p>An analyst report measured where each piece of the CAS language map really exists. "Ten frames" are the sentence shapes of the ten
+<dfn data-term="Noetic" title="one of ten basic moves a mind makes with Ideas, written ^0 to ^9">Noetics</dfn><span class="gloss"> (one of ten basic moves a mind makes with Ideas, written ^0 to ^9)</span>; "23 fundamentals" are jobs language does, such as saying how much or saying no. The ledger cells cross each fundamental
+with each Noetic, <dfn data-term="Domain" title="one of four levels a thought works at: Principled, Cognitive, Evaluative, Operational">Domain</dfn><span class="gloss"> (one of four levels a thought works at: Principled, Cognitive, Evaluative, Operational)</span> and <dfn data-term="Register" title="the tone of an operation: Transcendent, Analytical, Affective or Embodied">Register</dfn><span class="gloss"> (the tone of an operation: Transcendent, Analytical, Affective or Embodied)</span>. "CTT" is the transformer ear; "D4" rows come from the <dfn data-term="SDG" title="the CAS Synthetic Data Generator, the project&#x27;s program for making practice English">SDG</dfn><span class="gloss"> (the CAS Synthetic Data Generator, the project&#x27;s program for making practice English)</span>. The table is copied from the report.</p>
+<div class="tablewrap verbatim"><table class="cards"><thead><tr><th>READER</th><th><strong>0 of 10</strong></th><th>1 full (F15, kitchen amounts); <strong>10 partial</strong> (all kitchen-only); 11 absent; F18 not mapped (by design)</th><th>0 cells: the reader writes no Noetic, Domain or Register at all</th></tr></thead><tbody><tr><td data-label="READER">CCE grammar</td><td data-label="0 of 10"><strong>10 of 10</strong> (CANON + ALIAS wording)</td><td data-label="1 full (F15, kitchen amounts); 10 partial (all kitchen-only); 11 absent; F18 not mapped (by design)"><strong>22 of 23</strong> have a form; F18 none (by design)</td><td data-label="0 cells: the reader writes no Noetic, Domain or Register at all"><strong>COVERED 2,600</strong> of 2,600 (LM-T1 M6, <code>language_v3/RESULTS.md</code>). Caveat from that file: the probes were built by the grammar&#x27;s own builder</td></tr><tr><td data-label="READER">CTT-TOK</td><td data-label="0 of 10">Noetic tokens for all 10; <strong>frame slots for 0 of 10</strong> (no Mind slot, no degree, no rate/pattern, no polarity)</td><td data-label="1 full (F15, kitchen amounts); 10 partial (all kitchen-only); 11 absent; F18 not mapped (by design)">15 Y, 6 P, 1 N (F17), F18 none (by design)</td><td data-label="0 cells: the reader writes no Noetic, Domain or Register at all"><strong>2,040 of 2,600 cells writable</strong> by the notation output grammar; F12, F14, F17 cells (560) cannot be written</td></tr><tr><td data-label="READER">CTT-DATA (SDG notation rows, D4)</td><td data-label="0 of 10">Noetic states for all 10 (890-1,260 rows each); frames 0</td><td data-label="1 full (F15, kitchen amounts); 10 partial (all kitchen-only); 11 absent; F18 not mapped (by design)">12 Y, 10 P, F18 none (by design)</td><td data-label="0 cells: the reader writes no Noetic, Domain or Register at all"><strong>COVERED 1,383 / FADED 46 / LACUNA 1,171 / NO_EVIDENCE 0</strong> (53.2% / 1.8% / 45.0% / 0%)</td></tr><tr><td data-label="READER">CTT-EXAM</td><td data-label="0 of 10"><strong>0 of 10</strong> in the scored exams</td><td data-label="1 full (F15, kitchen amounts); 10 partial (all kitchen-only); 11 absent; F18 not mapped (by design)">9 touched (F1, F3, F7, F12, F13, F14, F15, F21; F17 only in the optional human pass), all kitchen-only</td><td data-label="0 cells: the reader writes no Noetic, Domain or Register at all">0 cells in E-MACHINE-S and E-HUMAN-W; E-NOTATION (reported only, not opened) = NO_EVIDENCE</td></tr></tbody></table></div>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li><code>docs/CAS_HARNESS_SPEC_SHEET.md</code> §7.24, §7.47, §7.50, §7.51, §7.56, §7.62, §7.64, §7.65, §7.69, §7.72, §7.77, §7.78, §7.80, §7.82, §7.83, §7.87, §7.89, §7.90</li><li><code>docs/reference/CAS_HELM_DICTIONARY.md</code> (Cube store, Cascade, Voice, Drive loop, Triad, CCE, Restart fallback)</li><li><code>CHANGELOG.md</code> entry &#x27;2026-10-18 PDT - FIXES C AND D&#x27;</li><li><code>C:\Users\wakil\Documents\Codex\2026-10-19\language_map_coverage_v1\COVERAGE.md</code> section 1, &#x27;Headline numbers&#x27; (copied)</li></ul>
+<div>Generated 2026-10-19 20:58 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>29ae64db</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>

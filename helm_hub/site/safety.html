@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM Safety Record</title>
+<meta name="description" content="Hard gates, the never-writes rule, refusal, the write audit, and plain findings.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="data.html">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html">Model card</a></li><li><a href="safety.html" aria-current="page">Safety and honesty</a></li><li><a href="roadmap.html">Roadmap</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html">How to run HELM</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>Safety and honesty</h1>
+<div class="lede">The rules that stop HELM, and the people building it, from fooling themselves, and the findings where those rules caught a real problem.</div>
+
+
+<h2>The rules</h2>
+<div class="grid">
+<div class="card"><h3>A failed must-hold check is a failure</h3><p>A <dfn data-term="hard gate" title="a must-hold check; if one fails, the whole run counts as a failure">hard gate</dfn><span class="gloss"> (a must-hold check; if one fails, the whole run counts as a failure)</span> is a must-hold check written before the run: every write has a <dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn><span class="gloss"> (the record a saved fact leaves behind, with a fingerprint, so it can be checked later)</span>,
+nothing is invented, a replay gives the same answer, the controls behave. If one fails, the run is a FAILURE, never "a pass with caveats".
+Examples: the <dfn data-term="faculty" title="a mental job HELM can run on an open item, such as asking or verifying">faculties</dfn><span class="gloss"> (a mental job HELM can run on an open item, such as asking or verifying)</span> run failed on gate H1 (<a href="results.html#s7-34">§7.34</a>); the memory run failed on gate H8 (<a href="results.html#s7-43">§7.43</a>); the <dfn data-term="transformer" title="the kind of neural network behind most modern AI chat assistants">transformer</dfn><span class="gloss"> (the kind of neural network behind most modern AI chat assistants)</span> ear failed gate H-CWFW (<a href="results.html#s7-90">§7.90</a>).</p></div>
+<div class="card"><h3>Read back before writing</h3><p>Every fact is read back and checked before it counts as saved. A write that fails the read-back is refused and nothing is saved.
+Each saved fact leaves a fingerprinted receipt.</p></div>
+<div class="card"><h3>The Eye never writes</h3><p>The <dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn><span class="gloss"> (a small watcher that looks over HELM, reports and whispers, and never writes)</span> may report a problem and <dfn data-term="whisper" title="a typed nudge from the Eye that HELM may ignore; it never changes a stored fact">whisper</dfn><span class="gloss"> (a typed nudge from the Eye that HELM may ignore; it never changes a stored fact)</span> a suggestion.
+HELM may ignore the whisper. In waves 4 and 5 the Eye made 0 writes (<a href="results.html#s7-77">§7.77</a>, <a href="results.html#s7-78">§7.78</a>).</p></div>
+<div class="card"><h3>Refuse rather than guess</h3><p>Missing information gives <dfn data-term="UNDETERMINED" title="HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing">UNDETERMINED</dfn><span class="gloss"> (HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing)</span>; unreadable English gives <dfn data-term="CLARIFY" title="HELM asking a question instead of guessing, with nothing saved">CLARIFY</dfn><span class="gloss"> (HELM asking a question instead of guessing, with nothing saved)</span>; a step that should not run gets REFUSE
+from the <dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn><span class="gloss"> (HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell)</span>. In each case nothing is saved.</p></div>
+<div class="card"><h3>Write audit on the ear</h3><p>The transformer ear runs in its own process, watched by a file-write audit that allows only its own log.
+The first run stopped itself when the watcher saw writes made by a library (<a href="results.html#s7-85">§7.85</a>).</p></div>
+<div class="card"><h3>No one marks their own homework</h3><p>A <dfn data-term="custodian" title="a separate session that builds and seals each exam so the builder never sees it">custodian</dfn><span class="gloss"> (a separate session that builds and seals each exam so the builder never sees it)</span> builds and <dfn data-term="sealed" title="frozen and fingerprinted before the run, so nothing can be changed after the fact">seals</dfn><span class="gloss"> (frozen and fingerprinted before the run, so nothing can be changed after the fact)</span> each exam; a <dfn data-term="frozen reader" title="the scoring program, sealed before the run, that alone writes the verdict">frozen reader</dfn><span class="gloss"> (the scoring program, sealed before the run, that alone writes the verdict)</span> writes the verdict;
+an AI model is not the research governor; only the owner's signed line starts a paid run or moves a claim (<code>CLAUDE.md</code>).</p></div>
+</div>
+
+<h2>Findings, stated plainly</h2>
+<p>These are the tests that found real problems. Each one is kept on the record on purpose.</p>
+<ul>
+<li><strong>HELM's English reader was not safe on real sentences.</strong> On 128 sentences other people wrote, it saved 8 stock facts the sentences did not say, for example "no water on hand" for a sentence about someone pulled out of the water (a practice example). The limit was 2. The fix brought it to 0 wrong on a fresh draw, but it is not yet useful (<a href="results.html#s7-79">§7.79</a>, <a href="results.html#s7-81">§7.81</a>, <a href="results.html#s7-87">§7.87</a>).</li>
+<li><strong>The transformer ear made confident wrong proposals.</strong> On kitchen English written by outside <dfn data-term="LLM" title="large language model, a big pretrained text-predicting neural network like those behind chat assistants">LLMs</dfn><span class="gloss"> (large language model, a big pretrained text-predicting neural network like those behind chat assistants)</span>, two of three trained copies proposed more confident, well-formed, wrong readings than the cap of 2 allowed (2 / 5 / 3). Nothing wrong was saved, because HELM's own checks decide, but the gate failed: FAILURE, EARS_HARMED (<a href="results.html#s7-90">§7.90</a>).</li>
+<li><strong>Passing the check proves form, not truth.</strong> An old English model gave 21 confident answers that passed the <dfn data-term="round trip" title="turning a checked statement into English and back; the result must equal the start">round trip</dfn><span class="gloss"> (turning a checked statement into English and back; the result must equal the start)</span> and were all wrong (<a href="results.html#s7-80">§7.80</a>).</li>
+<li><strong>The Eye's scan found nothing a plain checksum missed</strong> on real kinds of file damage; the checksum caught more kinds (<a href="results.html#s7-81">§7.81</a>).</li>
+<li><strong>Process failures.</strong> Two <dfn data-term="GPU" title="a graphics chip used to train neural networks quickly">GPU</dfn><span class="gloss"> (a graphics chip used to train neural networks quickly)</span> jobs ran with no ledger line and no owner sign line (<a href="results.html#s7-53">§7.53</a>). A roadmap claimed a cloud-trained valve that was trained on the laptop (<a href="results.html#s7-50">§7.50</a>). A download carried the owner's e-mail address in a request header once (<a href="results.html#s7-79">§7.79</a>). Each is recorded, not hidden.</li>
+<li><strong>Growth has failed or been inconclusive in every run so far</strong>, so HELM growing its own capacity stays NOT <dfn data-term="LICENSED" title="a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)">LICENSED</dfn><span class="gloss"> (a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said))</span> (<a href="results.html#s7-71">§7.71</a>).</li>
+</ul>
+
+<h2>Who decides: the owner's words on record</h2>
+<p>Every paid run and every ruling traces to the owner's own words. This table lists the headings of the owner-approvals record
+for 2026-10-18 to 2026-10-19 (headings only; dates are Pacific). They name parts of <dfn data-term="CAS" title="the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works">CAS</dfn><span class="gloss"> (the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works)</span>, the <dfn data-term="SDG" title="the CAS Synthetic Data Generator, the project&#x27;s program for making practice English">SDG</dfn><span class="gloss"> (the CAS Synthetic Data Generator, the project&#x27;s program for making practice English)</span> and the idle <dfn data-term="drive loop" title="HELM&#x27;s idle attention moving among the seven Drives toward unfinished work">drive loop</dfn><span class="gloss"> (HELM&#x27;s idle attention moving among the seven Drives toward unfinished work)</span>.</p>
+<div class="tablewrap verbatim"><table class="cards"><thead><tr><th>When</th><th>Heading</th></tr></thead><tbody><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Standing format order</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Direction on brains and voice (afternoon)</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Approvals (evening): &quot;I agree with all of them....please proceed.&quot;</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Exploration request (same message; exploration, NOT implementation)</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Rulings (later evening, verbatim, one message)</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Rulings (late evening, verbatim, one message)</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Rulings (night, verbatim)</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Ruling (night, verbatim)</td></tr><tr><td data-label="When">2026-10-18</td><td data-label="Heading">Approval (night, verbatim): HELM-R1 wave 2</td></tr><tr><td data-label="When">2026-10-19 early, verbatim fragment</td><td data-label="Heading">Order (2026-10-19 early, verbatim fragment): &quot;&quot;rerun faculties&quot; THEN &quot;wave 3 plan&quot;&quot;</td></tr><tr><td data-label="When">2026-10-19 early, verbatim</td><td data-label="Heading">Rulings and order (2026-10-19 early, verbatim)</td></tr><tr><td data-label="When">2026-10-19 early, verbatim</td><td data-label="Heading">Rulings (2026-10-19 early, verbatim)</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Direction and order (2026-10-19, verbatim)</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Approval (2026-10-19, verbatim): HELM-R1 wave 3</td></tr><tr><td data-label="When">2026-10-19 morning, verbatim</td><td data-label="Heading">Approval (2026-10-19 morning, verbatim): HELM-R1 wave 3, v3 package</td></tr><tr><td data-label="When">2026-10-19 morning, verbatim</td><td data-label="Heading">Rulings (2026-10-19 morning, verbatim)</td></tr><tr><td data-label="When">2026-10-19, pasted by the owner</td><td data-label="Heading">Relayed result (2026-10-19, pasted by the owner): DeepSeek drive-loop diagnosis</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Approval (2026-10-19, verbatim): HELM-R1 wave 3b</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Order (2026-10-19, verbatim): &quot;&quot;RB-I3&quot; t&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Order (2026-10-19, verbatim): &quot;park U2”&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Order (2026-10-19, verbatim): &quot;stop growth for now and come back after RB-I3, because the Eye-pairing question is closer to the goal.&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Order (2026-10-19, verbatim): &quot;“EYE_SCAN wave”&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Order (2026-10-19, verbatim): &quot;“EYE_PAIRING wave”&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Approval (2026-10-19, verbatim): &quot;APPROVE R1W4: EYE_SCAN wave, sealed package 4bd0d740, one attempt + one plumbing retry, cap $1.00.&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Approval (2026-10-19, verbatim): &quot;APPROVE R1W5: EYE_PAIRING wave, sealed package b6598687, one attempt + one plumbing retry, cap $1.00.&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Order (2026-10-19, verbatim): &quot; &quot;FETCH X-REAL&quot;&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Order (2026-10-19, verbatim): &quot;let&#x27;s put together a dictionary of all the CAS AND HELM terms and concepts and acronyms and we need a UI interface for HELM it should lo...</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner words (2026-10-19, verbatim): &quot;ASOM is aligned, misaligned, oversatured s(i&#x27;m not sure but is definitely in CAS PCBA Engineer); CAS SDG (Synthetic Data Generator...</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner ruling (2026-10-19, verbatim): &quot;and if interpretablity is an issue let&#x27;s just separate the cas transformer from the brain we already built and have&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner order (2026-10-19, verbatim): &quot;&quot;SCORE L4&quot;; I WANT THIS BUILT AND TRAINED I&#x27;M LIFTING THE GPU DIRECTIVE: Documents\Codex\2026-10-19\cas_token_transformer_design_v...</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner pre-approval (2026-10-19, verbatim): &quot;I PRE-APPROVE BOTH OF THE FOLLOWING: Two sign lines are coming: X-REAL at 1 USD, and the transformer training at 8 USD.&quot;</td></tr><tr><td data-label="When">2026-10-19 evening</td><td data-label="Heading">Coordinator record (2026-10-19 evening): CTT v2 reseal and two flags</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner question (2026-10-19, verbatim): &quot;Can we use some LLMs in place of humans?&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner order (2026-10-19, verbatim): &quot;RE-TEST READER&quot; (0.03 USD) and &quot;WIDEN THE BRAIN&quot; (0 USD to build).&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner pre-approval (2026-10-19, verbatim): &quot;&quot;WIDE TEST at 1 USD&quot;.&quot;</td></tr><tr><td data-label="When">2026-10-19, verbatim</td><td data-label="Heading">Owner word (2026-10-19, verbatim): &quot;Ok I agree with all 3 cards&quot;</td></tr><tr><td data-label="When">2026-10-20 early</td><td data-label="Heading">Coordinator record (2026-10-20 early): CTT-1 c43 stopped by its own preflight (instrument defect), fix without re-asking</td></tr><tr><td data-label="When">2026-10-19 evening, verbatim</td><td data-label="Heading">Owner word (2026-10-19 evening, verbatim): &quot;If you think we should and or they are not being used for anything: &quot;stop the app servers&quot;&quot;</td></tr><tr><td data-label="When">2026-10-19 evening, verbatim</td><td data-label="Heading">Owner word (2026-10-19 evening, verbatim): &quot;&quot;terminate the app servers&quot; there&#x27;s nothing on them and we don&#x27;t need them&quot;</td></tr><tr><td data-label="When">2026-10-19 evening, verbatim</td><td data-label="Heading">Owner pre-approval (2026-10-19 evening, verbatim): &quot;&quot;WIDE TEST 2 at 1 USD&quot;&quot;</td></tr><tr><td data-label="When">2026-10-19 night, verbatim</td><td data-label="Heading">Owner pre-approval + order (2026-10-19 night, verbatim): &quot;&quot;PAIR WAVE at 1 USD&quot;; also publish a website detailing everything about HELM sort like a living spec sheet a...</td></tr></tbody></table></div>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li><code>docs/CAS_HARNESS_SPEC_SHEET.md</code> §7.34, §7.43, §7.47, §7.50, §7.53, §7.71, §7.77, §7.78, §7.79, §7.80, §7.81, §7.85, §7.87, §7.90</li><li><code>C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md</code> (section headings only; no addresses or keys)</li><li><code>CLAUDE.md</code> (research governance: a failed hard gate is a FAILURE; Claude is not the research governor)</li><li><code>docs/reference/CAS_HELM_DICTIONARY.md</code> (Hard gate)</li></ul>
+<div>Generated 2026-10-19 20:58 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>29ae64db</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>
