@@ -13,6 +13,17 @@ Coordinator ruling: instrument defect, fix without changing anything scored. Sec
 - Exam seed: approval record names PACKAGE v3 f280633da498466fe713b33d37fe90db221bc3dbf4ce9fe69538460be82cee31 and EXAM-SEED v2 83bfa752...; the two sealed exams (manifests 12061e67..., be3895ff...) stay valid; reader, runners and custody tools check the seed against the exam-seed hash.
 - Tests from the v3 zip: 66 (65 pass on the laptop, 1 host-only torch audit test skipped there). Freeze 24f89718...; cap 8.00 USD (0.21 spent).
 - Backup D:/tksCAS-archive/cas_token_transformer_20261019/ re-copied, three sha256 passes MATCH.
+## 2026-10-19 PDT - RTR-1 "RE-TEST READER" SCORED (job c44, one t3.medium; spec sheet 7.87): reader PASS; v1.1 S_SAFE_NOT_USEFUL, v1.0 S_UNSAFE_ON_REAL, FIX_REMOVED_HARM; 0.01 USD
+
+Owner order (verbatim, 68 bytes, sha256 b645e4f4...): "RE-TEST READER" (0.03 USD) and "WIDEN THE BRAIN" (0 USD to build)." Only the RE-TEST READER part; cap 0.10 USD, one attempt + one plumbing retry.
+
+- Package e201feb6e5fd4eaf1d9b9060ed100a9db6150257c2d0b64d230ad81c4042f7a8 (freeze 6a622106...) verified; sealed exam manifest 562dd6ab..., amendment RTR-A1 dceedd34... cited; seed source sha256(line + ":" + zip) = 6f9cb0fd... = the derivation's input_sha256.
+- Host i-0d443520810f62063 t3.medium, ami-0dddfa1ffa6b87af7, 01:37:04 -> 01:39:02 UTC; host 151.7 s; tests_rtr 29 OK; reader tests on the v1.1 overlay 119 OK (1 skipped); one attempt, no retry.
+- Reading (frozen rtr/merge_rtr.py, RTR_READING.json 6a28751f...): verdict PASS, every row and gate true; I-CTRL 128/128 equal to c42.
+- V11 RIGHT 115 / WRONG 0 (of 115 scored); V10 104 / 11 (all EMPTY keys); B-ASK 114 / 0; B-KEYCALC 104 / 6. V11 misses S-b USEFUL (115 < 118).
+- Licensed: the English reader's Part-S word moves to S_SAFE_NOT_USEFUL (v1.1), safety half only, NAMED_CORPORA_ONLY; legend status stays ENGINEERED-NOT-VALIDATED. Only 1 FACTS item in the draw, so keeping true facts is not tested.
+- Transport: c43 held the shared four-key prefix, so c44 used its own prefix helm-rtr1-c44-20261020/, no instance profile, no SSM, four presigned URLs (recorded deviation; no package change).
+- Charge 0.01 USD (cautious 0.01); ledger 111.54 -> 111.64 (hold) -> 111.55 of 200; cleanup VERIFIED three ways; backup D:\tksCAS-archive\rtr1_c44_20261020\ (417 files, three hash passes).
 
 ## 2026-10-19 PDT - HELM chat: 4 defects found by HELM UI v0 fixed (owner: "Ok I agree with all 3 cards"): bee reply no longer invents "south of France" (repeats only the user's words; hive-walkthrough branch removed too); `dials` reads the real UnityEyeSupervisor.dial or says "not wired"; session log folder made on first write under helm_ui/sessions or $HELM_SESSION_DIR, never the repo root; two "Before X, Y." sentences now plan synthesize -> verify -> git in both planners (prereq_planner plan_graph.py and helm_agentic_executor.py); tests 43 -> 63 pass on the named suites; 0 USD
 
