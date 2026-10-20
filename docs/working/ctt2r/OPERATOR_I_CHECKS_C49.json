@@ -1,0 +1,22 @@
+{
+ "all_pass": true,
+ "checks": {
+  "approval_names_zip": true,
+  "carrier_files_eq_sealed_record": true,
+  "derivation_sha256_eq_sealed_record": true,
+  "keys_k_eq_sealed_record": true,
+  "manifest_eq_sealed_record": true,
+  "manifest_sha256": true,
+  "owner_line_25_bytes": true,
+  "owner_line_file_bytes": true,
+  "owner_line_sha256": true,
+  "seal_record_names_zip": true,
+  "seal_record_part_r_not_exercised": true,
+  "seed_source_eq_derivation": true,
+  "seed_source_eq_seal_record": true,
+  "seed_source_recomputed_eq_approval": true,
+  "zip_sha256": true
+ },
+ "schema": "claude.c49.operator-i-checks/1",
+ "seed_source_sha256": "c0230aa3e579536d03f9ba25d618c8dc61398963a30b986ea560f80284c1dc8c"
+}

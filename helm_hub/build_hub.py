@@ -488,6 +488,8 @@ CUR: dict[str, tuple[str, str, str, str]] = {
     "7.91": ("packet", "null", "Wave 6, the pair wave: the wide brain run alongside HELM's other parts, switched off together with each one, to read how each pair behaves; the step that decides whether the wide brain can become HELM's main brain. Practice runs found reading defects, fixed first in RB-W1 v4 (commit cb3db850). It then ran as job c48 (see §7.93).", "No claim from the packet itself."),
     "7.93": ("scored", "weak", "Wave 6, the pair wave, ran. With every other part on, the wide brain did no harm (0 items lost on every exam), fully learned 97 of 101 real recipes with 96 right and 0 wrong, and the Eyes stayed quiet. But it asked once, without a reason, on a recipe it had fully learned; the frozen mark allows 0 such asks, so the word is WIDE_WAVE_NO_GAIN. No move: the wide brain stays a candidate and the licensed brain stays canonical.", "Nothing new. Negative kept: one unexplained ask (mark K4 missed)."),
     "7.90": ("scored", "failed", "The transformer ear trained fully. No gain on real sentences (106 / 106 / 105 against the reader's 107). On LLM-written kitchen English it lifted right answers, but broke the cap on confident wrong proposals: FAILURE, EARS_HARMED.", "A narrow negative sentence only. Not 'the ears help'."),
+    "7.92": ("packet", "null", "The ear's agreement-rule test, sealed: the ear's three trained copies must all give the identical checked reading before HELM offers it, and then only as a question the user confirms. No retraining. It then ran as job c49 (see 7.95).", "No claim from the packet itself."),
+    "7.95": ("scored", "null", "The ear's agreement-rule test ran (job c49). The real-sentence half (Part R) could not be exercised: the census found 7 stock-stating sentences the reader gives up on, against a floor of 24, so by the pre-registered rule the word is INCONCLUSIVE and nothing moves. The AI-written half (Part K) is reported only: with the agreement rule the ear read 79 of 128 singles right against the reader's 63 and 40 of 60 dialogue turns against 27, with 0 confident wrong proposals; the reader itself saved 3 wrong readings there.", "Nothing. The Part K line EARS_EARNED_KEEP is reported, never the word. Negatives kept: Part R not exercisable; reader v1.1 wrong 5 times on AI-written singles."),
 }
 
 
@@ -860,6 +862,7 @@ def p_home(S: dict) -> str:
     need(S, "7.77", "EYE_SCAN_EARNED_KEEP", "ENGINEERED-NOT-VALIDATED")
     need(S, "7.78", "EYE_PAIRING_EARNED_KEEP")
     need(S, "7.90", "EARS_NO_GAIN", "EARS_HARMED", "FAILURE")
+    need(S, "7.95", "INCONCLUSIVE", "NOT_EXERCISED", "EARS_EARNED_KEEP", "79")
     need(S, "7.71", "NOT LICENSED", "nine runs")
     need(S, "7.65", "INCONCLUSIVE")
     need(S, "7.93", "WIDE_WAVE_NO_GAIN", "stays canonical", "97 of 101")
@@ -886,6 +889,7 @@ def p_home(S: dict) -> str:
         pill("failed", "The reader before the fix", "Wrote 8 wrong facts on 128 real sentences.", ["S_UNSAFE_ON_REAL"], "7.81"),
         pill("partial", "The Unity Eye", "Found planted faults and paired jobs well, on made-up worlds.", ["EYE_SCAN_EARNED_KEEP", "EYE_PAIRING_EARNED_KEEP", "ENGINEERED-NOT-VALIDATED"], "7.78"),
         pill("failed", "The transformer ear", "No gain on real sentences; too many confident wrong guesses on a second exam.", ["EARS_NO_GAIN", "EARS_HARMED", "FAILURE"], "7.90"),
+        pill("null", "The ear under an agreement rule", "Its real-sentence half could not be run (7 usable sentences, floor 24), so the word is INCONCLUSIVE. On AI-written kitchen turns only, reported: 79 vs 63 right, 0 confident wrong.", ["INSTRUMENT_ERROR", "INCONCLUSIVE", "ENGINEERED-NOT-VALIDATED"], "7.95"),
         pill("failed", "Self-growth", "Growing its own capacity has not earned a claim.", ["NOT LICENSED"], "7.71"),
         pill("null", "Faculties", "The mental jobs earned no word on the brain itself.", ["INCONCLUSIVE"], "7.65"),
     ])
@@ -1846,6 +1850,7 @@ def p_build(S: dict) -> str:
     need(S, "7.90", "EARS_HARMED", "EARS_NO_GAIN")
     need(S, "7.91", "NOT LAUNCHED")
     need(S, "7.93", "WIDE_WAVE_NO_GAIN", "no move")
+    need(S, "7.95", "INCONCLUSIVE")
     legend = "".join(
         f'<div><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><g class="s-{k}"><rect x="1" y="1" width="32" height="18" rx="5" style="stroke-width:2"/></g></svg>'
         f'<span><strong>{esc(n)}</strong>: {esc(t)}</span></div>' for k, n, t in STATUS_KEYS)
@@ -1860,7 +1865,7 @@ def p_build(S: dict) -> str:
         ("t-voice", 1, "Voice: HELM writes one to three plain sentences and reads its own numbers and names back against the receipt."),
         ("t-out", 1, "English out: you get the answer in everyday words."),
         ("t-ask", 1, "Ask: if HELM cannot read the sentence or cannot tell, the ask exit sends one question and saves nothing."),
-        ("t-ear", 1, "Outside the solid line, the CTT ear (a small translator, 9,585,566 parameters) may propose a reading, but only on the ask path, and only as a question you confirm. It shares nothing with the brain. On record: no gain on real sentences (EARS_NO_GAIN) and a failed safety check on AI-written ones (EARS_HARMED), §7.90."),
+        ("t-ear", 1, "Outside the solid line, the CTT ear (a small translator, 9,585,566 parameters) may propose a reading, but only on the ask path, and only as a question you confirm. It shares nothing with the brain. On record: no gain on real sentences (EARS_NO_GAIN) and a failed safety check on AI-written ones (EARS_HARMED), §7.90. A follow-up that lets it speak only when its three copies agree could not read its real-sentence half (INCONCLUSIVE, §7.95); its AI-written half is reported only."),
         ("t-eye", 0, "Above it all, the Unity Eye scans HELM's records for damage and whispers suggestions. The crossed-out arrow is the rule: it never writes. Today it is not wired to the live chat window."),
         ("t-attn-g", 0, "Between turns, the idle drive loop moves HELM's attention among the seven Drives (F1 to F7) toward unfinished work. It freezes while a conversation turn passes."),
     ]
