@@ -34,7 +34,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import helm_brain_wide as W
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v1 (2026-10-19)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v2 (2026-10-19)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -45,7 +45,10 @@ LEADING_DROPPED = {"fresh", "large", "big", "small", "whole", "plain", "cold", "
 NOTE_WORDS = set("""sifted chopped melted softened beaten divided diced minced sliced packed grated shredded peeled cored
 crushed ground halved quartered cubed drained rinsed toasted optional finely coarsely lightly freshly roughly thinly
 well firmly room temperature at cut into pieces to taste or more less if needed as needed for garnish serving and
-separated whisked cooled warmed scalded heaping level rounded""".split())
+separated whisked cooled warmed scalded heaping level rounded
+very fine thin thick coarse whole small large medium generous scant heaped piece cubes strips rings dice dices diced
+seeded stoned pitted skinned boned cleaned washed trimmed shelled blanched mashed strained scraped soaked cooked boiled
+picked stemmed hulled crumbled lengthwise crosswise inch inches the a of in smashed bruised pounded torn""".split())
 SINGULAR_EXCEPTIONS = {"molasses": "molasses", "hummus": "hummus", "couscous": "couscous", "asparagus": "asparagus",
                        "swiss": "swiss", "loaves": "loaf", "leaves": "leaf", "halves": "half", "knives": "knife",
                        "cheeses": "cheese", "glasses": "glass", "grits": "grits", "oats": "oats", "greens": "greens"}
@@ -123,14 +126,22 @@ def parse_line(line: str) -> Dict[str, Any]:
     amount, end = got
     rest = s[end:].strip()
     unit = ""
-    m = re.match(r"([A-Za-z]+)\.?(?=\s|$)", rest)
+    q = re.match(r"(?:level|heaping|heaped|rounded|scant|good|generous|large|small)\s+(?=[A-Za-z])", rest, re.IGNORECASE)
+    if q:                                          # "1 heaping teaspoon": a size word before a unit word
+        m2 = re.match(r"([A-Za-z]+(?:-[A-Za-z]+)*)\.?(?=\s|$)", rest[q.end():])
+        if m2 and W.unit_of(m2.group(1).replace("-", "")) is not None:
+            rest = rest[q.end():]
+    m = re.match(r"([A-Za-z]+(?:-[A-Za-z]+)*)\.?(?=\s|$)", rest)
     if m:
-        u = W.unit_of(m.group(1))
+        word = m.group(1).replace("-", "")
+        u = W.unit_of(word)
         if u is not None:
             unit, rest = u, rest[m.end():].strip()
-        elif m.group(1).lower() in W.OTHER_UNIT_WORDS:
-            return {"clarify": _ask("UNIT_NOT_IN_TABLE", unit=m.group(1).lower(), words=s)}
+        elif word.lower() in W.OTHER_UNIT_WORDS:
+            return {"clarify": _ask("UNIT_NOT_IN_TABLE", unit=word.lower(), words=s)}
     rest = re.sub(r"^of\s+", "", rest)
+    if unit and not bind_name(rest) and m is not None:
+        unit, rest = "", m.group(1)
     if re.search(r"\bto taste\b|\bas needed\b", rest) and not unit and amount is None:
         return {"clarify": _ask("NO_AMOUNT", words=s)}
     name = bind_name(rest)
@@ -146,7 +157,8 @@ def _is_note(segment: str) -> bool:
 
 def parse_lines(text: str) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """A list of ingredient lines ('a, b and c'). Notes after a comma stay with their line. All or nothing."""
-    segments = [x for x in re.split(r",\s*|;\s*|\s+and\s+(?!an?\s+(?:half|third|quarter)\b)|\s+&\s+|\s+plus\s+", text)
+    segments = [x for x in re.split(r",\s*(?:and\s+(?!an?\s+(?:half|third|quarter)\b))?|;\s*(?:and\s+)?"
+                                    r"|\s+and\s+(?!an?\s+(?:half|third|quarter)\b)|\s+&\s+|\s+plus\s+", text)
                 if x and x.strip()]
     lines: List[Dict[str, Any]] = []
     for seg in segments:
@@ -167,6 +179,12 @@ def parse_lines(text: str) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any
 
 def normalize_text(text: str) -> str:
     t = text.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+    t = t.replace("_", "")
+    while True:                                   # remove (asides), innermost first; numbers inside are not amounts
+        t2 = re.sub(r"\s*\([^()]*\)", "", t)
+        if t2 == t:
+            break
+        t = t2
     return re.sub(r"\s+", " ", t).strip()
 
 
@@ -184,9 +202,38 @@ QUESTION_RX = re.compile(r"^(?:how\s+(?:much|many)\s+(?P<p1>.+?)\s+(?:can|could)
                          r"(?:any\s+|some\s+)?(?P<p2>.+?))\s*\??$", re.IGNORECASE)
 
 
+def resolve_ran_out(name: str, batch: List[str]) -> str:
+    """The batch ingredient a ran-out name means: itself if in the batch; else with leading unit words and "of" dropped
+    ("cupfuls of stock" -> "stock"); else the ONE batch name it begins ("granulated" -> "granulated or powdered sugar")
+    or the ONE batch name that ends with it ("sugar" -> "brown sugar"). Two candidates -> unchanged (the brain refuses:
+    the ingredient is not in the batch). OUR_CONVENTION."""
+    if name in batch:
+        return name
+    words = name.split()
+    while words:
+        if len(words) > 1 and W.unit_of(words[0] + words[1]) is not None:      # "table spoons"
+            words = words[2:]
+        elif (W.unit_of(words[0]) is not None or words[0] in W.OTHER_UNIT_WORDS or words[0] in LEADING_DROPPED
+              or words[0] in ("level", "heaping", "heaped", "rounded", "good", "scant", "generous")):
+            words = words[1:]
+        else:
+            break
+    stripped = bind_name(" ".join(words)) if words else None
+    if stripped and stripped in batch:
+        return stripped
+    name2 = stripped or name
+    for test in (lambda b: b.startswith(name2 + " "), lambda b: b.endswith(" " + name2)):
+        hits = [b for b in batch if test(b)]
+        if len(hits) == 1:
+            return hits[0]
+        if len(hits) > 1:
+            return name
+    return name
+
+
 def bind_product(phrase: str) -> Optional[str]:
     s = re.sub(r"^(?:batch(?:es)? of|a batch of|loaf of|loaves of)\s+", "", phrase.strip().lower())
-    return bind_name(s)
+    return bind_name(s) or bind_name(s, drop_leading=False)
 
 
 def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
@@ -230,6 +277,8 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
                     ran_out.append(n)
         if not product:
             return clarify(_ask("NO_PRODUCT"))
+        names = [x["name"] for x in lines]
+        ran_out = [resolve_ran_out(n, names) for n in ran_out]
         out.update(status="WITNESS", witness={"product": product, "made": made, "ran_out": ran_out,
                                               "stock": {x["name"]: (x["amount"], x["unit"]) for x in lines},
                                               "said": {x["name"]: x["said"] for x in lines}})
@@ -416,6 +465,68 @@ def _cce_amount(cce: Any, q: Fraction) -> str:
     return cce.num(W.frac_text(q))
 
 
+#: licensed loop statuses meaning "the licensed reader or brain could not bind this turn" (and nothing was written)
+CANNOT_BIND = {"CLARIFY_ENGLISH_UNKNOWN_INGREDIENT", "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+               "CLARIFY_ENGLISH_BATCH_NEEDS_PRODUCT", "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED",
+               "CLARIFY_ENGLISH_NO_NUMBER", "CLARIFY_ENGLISH_CONVERSION_REFUSED", "CLARIFY_ENGLISH_UNIT_MISMATCH",
+               "CLARIFY_NOT_CCE", "CLARIFY_BATCH_NOT_USABLE", "CLARIFY_UNKNOWN_PRODUCT", "NOTHING_TO_SAVE",
+               "CLARIFY_STOCK_NOT_RECORDED", "CLARIFY_ENGLISH_PRODUCT_AS_STOCK"}
+#: for a QUESTION about a product the wide book holds, the licensed path also "cannot" when it only asked
+QUESTION_NOT_ANSWERED = CANNOT_BIND | {"UNDETERMINED_CLARIFY", "BRAIN_UNDETERMINED"}
+STOCK_DONE = {"INVENTORY_RECORDED"}
+
+
+def take_over(loop: Any, licensed: Dict[str, Any], reading: Dict[str, Any]) -> bool:
+    """Should the wide path take this turn? Only if the licensed path could not bind it and wrote nothing, AND the
+    wide reader reads it as something the wide brain can use: a witnessed batch; stock whose every ingredient is in a
+    recipe the wide brain holds; a question about a product the wide brain holds."""
+    if licensed.get("cubes_written"):
+        return False
+    status = licensed.get("loop_status")
+    book = loop.wide_book
+    if reading["status"] == "QUESTION":
+        return status in QUESTION_NOT_ANSWERED and book.product_of(reading["topic"]) is not None
+    if status not in CANNOT_BIND:
+        return False
+    if reading["status"] == "WITNESS":
+        return True
+    if reading["status"] == "STOCK":
+        known = set(book.ingredients)
+        return bool(reading["stock"]) and all(n in known for n in reading["stock"])
+    if reading["status"] == "QUESTION":
+        return book.product_of(reading["topic"]) is not None
+    return False
+
+
+def extended_turn(loop: Any, user_english: str, tick: int, current_inventory: Any = None) -> Dict[str, Any]:
+    """WIDE_BRAIN ON: the licensed path first, unchanged; the wide path only where the licensed one cannot bind."""
+    res = loop._process_turn_licensed(user_english, tick, current_inventory)
+    reading = read_wide(user_english.strip(), last_topic=loop.last_topic)
+    if res.get("loop_status") in STOCK_DONE and reading["status"] == "STOCK":
+        _stock_of(loop).update(reading["stock"])          # one stock on hand; the wide brain reads it too (no write)
+    if take_over(loop, res, reading):
+        wres = wide_turn(loop, user_english, tick)
+        wres["path"] = "wide"
+        wres["licensed_first"] = {"loop_status": res.get("loop_status")}
+        return wres
+    res["path"] = "licensed"
+    return res
+
+
+def extended_witness(loop: Any, product: str, stock_before: Dict[str, Any], made: Any, ran_out: Any,
+                     tick: int) -> Dict[str, Any]:
+    """WIDE_BRAIN ON, the structured teaching channel: licensed first; the wide brain only for a product or ingredient
+    the licensed brain cannot bind."""
+    res = loop._witness_batch_licensed(product, stock_before, made, ran_out, tick)
+    if not res.get("cubes_written") and res.get("loop_status") in CANNOT_BIND:
+        wres = wide_witness(loop, product, stock_before, made, ran_out, tick)
+        wres["path"] = "wide"
+        wres["licensed_first"] = {"loop_status": res.get("loop_status")}
+        return wres
+    res["path"] = "licensed"
+    return res
+
+
 def wide_turn(loop: Any, user_english: str, tick: int) -> Dict[str, Any]:
     """One user turn with WIDE_BRAIN ON. `loop` is a helm_end_to_end_loop.HELMEndToEndLoop."""
     import helm_end_to_end_loop as E
@@ -478,7 +589,7 @@ def _wide_stock(loop: Any, stock: Dict[str, Tuple[Fraction, str]], tick: int, re
 
 def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], writes_before: int) -> Dict[str, Any]:
     import helm_end_to_end_loop as E
-    brain = loop.brain
+    brain = loop.wide_book
     held = _stock_of(loop)
     product = brain.product_of(topic)
     loop._emit(tick, "S0 atlas head", topic=topic, product=product, brain=brain.provenance())
@@ -543,7 +654,7 @@ def wide_witness(loop: Any, product: str, stock_before: Dict[str, Any], made: An
                  result: Optional[Dict[str, Any]] = None, writes_before: Optional[int] = None) -> Dict[str, Any]:
     """The teaching channel with WIDE_BRAIN ON: CCE form receipt -> gate -> the wide brain's own checks -> store."""
     import helm_end_to_end_loop as E
-    brain = loop.brain
+    brain = loop.wide_book
     if result is None:
         result = loop._new_result(f"[witnessed batch] {product}", tick)
     if writes_before is None:

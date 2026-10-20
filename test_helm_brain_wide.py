@@ -383,14 +383,17 @@ class G_EndToEnd(unittest.TestCase):
 
     def test_live_loop_learns_six_and_answers_in_thirds(self):
         loop = self.E2E.HELMEndToEndLoop(wide_brain=True)
-        self.assertIsInstance(loop.brain, W.WideRecipeBook)
+        self.assertIsInstance(loop.wide_book, W.WideRecipeBook)
+        self.assertNotIsInstance(loop.brain, W.WideRecipeBook)          # v2: the licensed brain stays S0's brain
         out = loop.process_turn("How much gingerbread can we make?", tick=1)
-        self.assertEqual(out["loop_status"], "UNDETERMINED_UNKNOWN_PRODUCT")
+        self.assertEqual(out["path"], "licensed")                        # the wide book does not hold it yet
+        self.assertTrue(out["loop_status"].startswith("CLARIFY"), out["loop_status"])
         self.assertEqual(out["cubes_written"], [])
         for j in range(6):
             sentence = self.lesson_sentence(j)
             out = loop.process_turn(sentence, tick=2 + j)
             self.assertEqual(out["loop_status"], "WITNESS_ADMITTED", (sentence, out["response"]))
+            self.assertEqual(out["path"], "wide")
             self.assertTrue(out["cube_receipt"]["read_back_ok"])
             if j == 1:
                 self.assertIn("1/3 cup of brown sugar", out["response"])
@@ -417,6 +420,105 @@ class G_EndToEnd(unittest.TestCase):
         self.assertIn("didn't guess", out["response"])
         self.assertIn("brown sugar", out["response"])
         self.assertEqual(out["cubes_written"], [])
+
+
+class I_V2ReaderFixes(unittest.TestCase):
+    """RB-W1 v2 reader fixes (each a failure class found on RB-W1T's PUBLISHED practice draw, never an exam)."""
+
+    def test_parenthetical_asides_are_not_names_or_amounts(self):
+        self.assertEqual(WT.parse_line(WT.normalize_text("1 cup (250 ml or 8.5 fl oz) dry rice")),
+                         {"name": "dry rice", "amount": Fraction(1), "unit": "cup", "said": "1 cup dry rice"})
+
+    def test_comma_and_is_one_separator(self):
+        lines, c = WT.parse_lines("One egg,, Four tablespoons of potato water, and 8 tablespoons of cornstarch")
+        self.assertIsNone(c)
+        self.assertEqual([x["name"] for x in lines], ["egg", "potato water", "cornstarch"])
+
+    def test_more_note_words_and_emphasis(self):
+        lines, c = WT.parse_lines(WT.normalize_text("1 cup of minced chicken, _very_ fine and 2 eggs"))
+        self.assertIsNone(c)
+        self.assertEqual([x["name"] for x in lines], ["minced chicken", "egg"])
+
+    def test_hyphenated_and_qualified_units(self):
+        self.assertEqual(WT.parse_line("2 table-spoons milk")["unit"], "tablespoon")
+        r = WT.parse_line("1 heaping teaspoon salt")
+        self.assertEqual((r["name"], r["unit"]), ("salt", "teaspoon"))
+
+    def test_unit_word_alone_is_the_name(self):
+        r = WT.parse_line("3 cloves")
+        self.assertEqual((r["name"], r["amount"], r["unit"]), ("clove", Fraction(3), ""))
+
+    def test_ran_out_name_resolved_against_the_batch(self):
+        self.assertEqual(WT.resolve_ran_out("cupfuls of stock", ["stock", "chopped onion"]), "stock")
+        self.assertEqual(WT.resolve_ran_out("table spoons milk", ["powdered sugar", "milk"]), "milk")
+        self.assertEqual(WT.resolve_ran_out("granulated", ["shortening", "granulated or powdered sugar"]),
+                         "granulated or powdered sugar")
+        self.assertEqual(WT.resolve_ran_out("sugar", ["flour", "brown sugar"]), "brown sugar")
+        self.assertEqual(WT.resolve_ran_out("sugar", ["white sugar", "brown sugar"]), "sugar")   # two: no guess
+        r = WT.read_wide("We made 1 pie from 2 cupfuls of stock and 2 onions and ran out of cupfuls of stock.")
+        self.assertEqual(r["witness"]["ran_out"], ["stock"])
+
+    def test_product_made_of_a_size_word(self):
+        r = WT.read_wide("We made 1 fine from 2 soaked rolls and 6 eggs and ran out of soaked rolls.")
+        self.assertEqual(r["witness"]["product"], "fine")
+
+
+class J_V2Routing(unittest.TestCase):
+    """v2: the switch EXTENDS the licensed path; the wide path takes only turns the licensed path cannot bind."""
+
+    @classmethod
+    def setUpClass(cls):
+        import helm_end_to_end_loop as E2E
+        cls.E2E = E2E
+
+    def turns(self):
+        return [("w", "Bread", {"Flour": 10, "Water": 8}, 5, "Flour"), ("w", "Bread", {"Flour": 10, "Water": 2}, 2, "Water"),
+                ("t", "There is 12 of Ω_Flour."), ("t", "Topic: Ω_Bread."),
+                ("t", "How much bread could we bake with whatever is around?"), ("t", "There is 9 of Ω_Water."),
+                ("t", "Topic: Ω_Bread."), ("t", "We have 12 cups of flour and no water. Can we bake bread?"),
+                ("t", "Now we've got 9 cups of water — how much bread can we make?"),
+                ("t", "We have 3 cups of saffron."), ("t", "What do we have on hand?"), ("t", "We're out of milk.")]
+
+    def run_turns(self, on):
+        loop = self.E2E.HELMEndToEndLoop(wide_brain=on) if on else self.E2E.HELMEndToEndLoop()
+        out = []
+        for i, t in enumerate(self.turns(), 1):
+            r = loop.witness_batch(*t[1:], tick=i) if t[0] == "w" else loop.process_turn(t[1], tick=i)
+            out.append((r["loop_status"], r.get("output_value"), r.get("limiting_reagent"), r["response"],
+                        len(r["cubes_written"])))
+            if on:
+                self.assertEqual(r["path"], "licensed", t)
+        return out
+
+    def test_licensed_turns_identical_with_the_switch_on(self):
+        old = os.environ.pop(W.WIDE_BRAIN_ENV, None)
+        try:
+            self.assertEqual(self.run_turns(True), self.run_turns(False))
+        finally:
+            if old is not None:
+                os.environ[W.WIDE_BRAIN_ENV] = old
+
+    def test_unknown_ingredient_stock_stays_a_question_when_the_wide_book_does_not_hold_it(self):
+        loop = self.E2E.HELMEndToEndLoop(wide_brain=True)
+        out = loop.process_turn("We have 3 cups of saffron.", tick=1)
+        self.assertEqual(out["path"], "licensed")
+        self.assertEqual(out["cubes_written"], [])
+        self.assertEqual(loop.wide_book.recipes, {})
+
+    def test_a_bread_the_licensed_brain_cannot_answer_goes_to_the_wide_book(self):
+        loop = self.E2E.HELMEndToEndLoop(wide_brain=True)
+        lines = ["1 cup sweet milk", "1/2 cup brown sugar", "1 teaspoon salt"]
+        doubled = ["2 cup sweet milk", "1 cup brown sugar", "2 teaspoon salt"]
+        for j, name in enumerate(["sweet milk", "brown sugar", "salt"]):
+            parts = [lines[i] if i == j else doubled[i] for i in range(3)]
+            r = loop.process_turn(f"We made 1 bread from {parts[0]}, {parts[1]} and {parts[2]} and ran out of {name}.",
+                                  tick=1 + j)
+            self.assertEqual((r["loop_status"], r["path"]), ("WITNESS_ADMITTED", "wide"), r["response"])
+        r = loop.process_turn("We have 2 cups sweet milk, 1 cup brown sugar and 1 teaspoon salt.", tick=4)
+        self.assertEqual((r["loop_status"], r["path"]), ("STOCK_RECORDED", "wide"), r["response"])
+        r = loop.process_turn("How much bread can we make?", tick=5)
+        self.assertEqual((r["loop_status"], r["path"], r["output_value"], r["limiting_reagent"]),
+                         ("SUCCESS_EVALUATED", "wide", "1", "salt"), r["response"])
 
 
 class H_SwitchOff(unittest.TestCase):
