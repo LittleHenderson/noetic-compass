@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - RB-W1T v3 SCORED (job c47, AWS; spec sheet 7.89): reader PASS, status word WIDE_BRAIN_EARNED_KEEP; RB-W1 v3 = canonical-brain CANDIDATE (licensed brain stays canonical); 0.01 USD
+
+- Frozen reader rbw1t/merge_rbw1t.py on the c47 host output: RBW1T_READING.json cea8b111...; every instrument row and hard gate true; K1 met (fully learned 92 of 96, bar 87), K3, K4, NH-OFF, NH-ON met.
+- WIDE: RIGHT 93, WRONG 0; lessons 576 learned / 0 wrong / 96 not learned (of 672); unexplained asks 0; answered 19 of the 23 UNDETERMINED-keyed recipes (reported only, a caution). LICENSED, ALWAYS_ASK, learning-off control: 0 RIGHT, 0 WRONG.
+- No harm: 0 lost on English-64 / Faces-64 (practice and spent X5); OFF = base and ON = OFF 64/64 each.
+- Licensed (PREREGISTRATION_RBW1T section 12): RB-W1 v3 is HELM's canonical-brain CANDIDATE, VALIDATED for the section 12 sentence only, ceiling NAMED_CORPORA_ONLY; stays a candidate pending a wave with the switches. The c46 negative (v2 build, 90/110) stands.
+- Job: i-05c1537e90f0636d3 m6i.large us-west-2b, 03:00:44 -> 03:03:02 UTC, host 149.46 s, one attempt; own prefix (c45 holds the shared one, never touched). Charge 0.01 USD (cautious 0.02); ledger 119.35 -> 120.35 -> 119.36 of 200; cleanup VERIFIED three ways (controller, independent, direct look).
+- Files: Documents/Codex/2026-10-19/rbw1t/run_c47_rbw1t_v3_20261020/ (RUN_RESULT_RBW1T_V3_C47.md); repo copies docs/working/rbw1t/RUN_RESULT_RBW1T_V3_C47.md, RBW1T_READING_C47.json; backup D:/tksCAS-archive/rbw1t_v3_c47_20261020/ (922 files, three hash passes).
+
 ## 2026-10-20 PDT - RB-W1T RESEALED as v3 (amendment A-RBW1T-2; spec sheet 7.88 note); SEALED, NOT LAUNCHED; nothing scored; 0 USD
 
 Owner pre-approval (verbatim, pinned 20 bytes, sha256 fd82691e...): "WIDE TEST 2 at 1 USD"; cap 1.00 USD, one attempt + one plumbing retry.
