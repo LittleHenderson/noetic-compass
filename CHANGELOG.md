@@ -4,6 +4,8 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - lexicon_v3 (live, switch HELM_LEXICON_V3 default ON): bare female/male/negative/positive/vibration/rhythm and the bare-noun tier (idea, thought, mind, attention, practice, repetition, groove, realization) no longer pick a Noetic; frozen ALIAS-WIDE v1 / lexicon_v2 untouched; tests reader 31->37, new lexicon_v3 15/15, loop 18, stock-frame 17, faces 16, voice 22, cube store 21/21, chat script PASS; practice E64 61/0/3, F64 60/2/2 unchanged item by item; spec sheet 7.81 note, no status change; 0 USD
+
 ## 2026-10-19 PDT - CTT-1 RESEALED as v3 (amendment A-CTT-2 after c43's preflight stop; spec sheet 7.82 / 7.85 amended): zip f280633d...; NOT LAUNCHED
 
 Coordinator ruling: instrument defect, fix without changing anything scored. Section 18 of PREREGISTRATION_CTT.md was written before the code change.

@@ -403,5 +403,62 @@ class TestMoodFactClash(unittest.TestCase):
         self.assertEqual(s.loop.trace[-1]["loop_status"], "UNDETERMINED_CLARIFY")   # facts unchanged
 
 
+class TestNoeticWordsLexiconV3(unittest.TestCase):
+    """lexicon_v3 (2026-10-19, owner: "Ok I agree with all 3 cards"): bare gender words and "negative" / "positive"
+    bind no Noetic in the live English path; canonical colloquialisms still do. Switch HELM_LEXICON_V3, default ON."""
+
+    FORBIDDEN = ["the female chef", "a male voice", "the test came back negative", "he said no"]
+    CANON = {5: ["We are the sum of our experiences.", "It's who I am.", "That is part of what makes me me."],
+             6: ["I am unpacking the plan.", "Let's try breaking it down.", "I'm looking at what's underneath."],
+             3: ["I can't stomach it.", "It rubs me the wrong way.", "I wouldn't touch it with a ten-foot pole."]}
+
+    @staticmethod
+    def _turn():
+        cube_dir = os.path.join(HERE, "docs", "working", "noetic_council", "cube_store")
+        if cube_dir not in sys.path:
+            sys.path.insert(0, cube_dir)
+        import turn  # noqa: WPS433
+        return turn
+
+    def test_switch_default_on(self):
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("HELM_LEXICON_V3", None)
+            self.assertEqual(R.noetic_lexicon(), "v3")
+
+    def test_forbidden_sentences_bind_no_noetic(self):
+        for s in self.FORBIDDEN:
+            r = R.noetic_reading(s)
+            self.assertIsNone(r["noetic"], s)
+            self.assertEqual(r["status"], "UNDETERMINED", s)
+            self.assertFalse({h[1] for h in r["hits"]} & {3, 5, 6}, s)
+        self.assertEqual(R.noetic_reading("he said no")["polarity"], "DENIED")   # F14 flag only
+
+    def test_canonical_colloquialisms_still_bind(self):
+        for n, sentences in self.CANON.items():
+            for s in sentences:
+                self.assertEqual(R.noetic_reading(s)["noetic"], n, s)
+
+    def test_forbidden_sentences_are_not_stock_facts_either(self):
+        for s in self.FORBIDDEN:
+            self.assertNotIn(read(s)["status"], ("CONTENT", "WITNESS"), s)
+
+    def test_cube_store_turn_valence(self):
+        T = self._turn()
+        self.assertEqual(T.extract_assertion_and_valence("the test came back negative"), ("ASSERTED", "NEUTRAL"))
+        self.assertEqual(T.extract_assertion_and_valence("the result was positive"), ("ASSERTED", "NEUTRAL"))
+        self.assertEqual(T.extract_assertion_and_valence("he said no"), ("DENIED", "NEUTRAL"))
+        for s in ("the female chef", "a male voice"):
+            self.assertEqual(T.extract_assertion_and_valence(s)[1], "NEUTRAL", s)
+        for s in ("It rubs me the wrong way.", "I wouldn't touch it with a ten-foot pole."):
+            self.assertEqual(T.extract_assertion_and_valence(s), ("ASSERTED", "NEGATIVE"), s)
+
+    def test_switch_off_restores_the_frozen_path(self):
+        T = self._turn()
+        with mock.patch.dict(os.environ, {"HELM_LEXICON_V3": "off"}):
+            self.assertEqual(R.noetic_lexicon(), "v1")
+            self.assertEqual(R.noetic_reading("the female chef")["noetic"], 5)
+            self.assertEqual(T.extract_assertion_and_valence("the test came back negative")[1], "NEGATIVE")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

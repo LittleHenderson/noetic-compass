@@ -64,6 +64,31 @@ try:
 except ImportError:
     aliaswide = None
 
+# lexicon_v3 (2026-10-19): the live word list without the forbidden bare-word mappings ("female" -> ^5,
+# "male" -> ^6, "negative" -> ^3, ...). Loaded by path from this repo's language_v3 folder. Switch HELM_LEXICON_V3,
+# default ON; "off" restores the frozen aliaswide v1 path and the old valence words exactly.
+try:
+    import importlib.util as _ilu
+    _LV3_PATH = os.path.join(COUNCIL, "language_v3", "lexicon_v3.py")
+    _lv3_spec = _ilu.spec_from_file_location("lexicon_v3", _LV3_PATH)
+    lexicon_v3 = _ilu.module_from_spec(_lv3_spec)
+    _lv3_spec.loader.exec_module(lexicon_v3)
+except Exception:  # pragma: no cover - the frozen path is used when v3 cannot load
+    lexicon_v3 = None
+
+
+def _lexicon_v3_on() -> bool:
+    return lexicon_v3 is not None and lexicon_v3.switch_on()
+
+
+def _noetic_phrase_hits(lower: str):
+    """Noetic phrase hits for the live turn: lexicon_v3 when its switch is ON, else frozen aliaswide (v1)."""
+    if _lexicon_v3_on():
+        return lexicon_v3.phrase_hits(lower, "v3")
+    if aliaswide is not None:
+        return aliaswide.phrase_hits(lower)
+    return None
+
 from cube import (
     ALLOWED_ASSERTIONS,
     ALLOWED_KINDS,
@@ -139,10 +164,10 @@ def extract_assertion_and_valence(text: str) -> Tuple[str, str]:
         except Exception:
             pass
 
-    # 2. Check aliaswide phrase hits for Noetic 2 / 3
-    if aliaswide is not None:
+    # 2. Check Noetic phrase hits for 2 / 3 (lexicon_v3 when ON: colloquialisms and definition verbs only)
+    if _lexicon_v3_on() or aliaswide is not None:
         try:
-            hits = aliaswide.phrase_hits(lower)
+            hits = _noetic_phrase_hits(lower) or []
             for start, end, noetic, rank in hits:
                 is_denied = bool(re.search(r"\b(?:not|never|no|without|don't|doesn't|didn't|cannot|can't)\b", lower))
                 if noetic == 2:
@@ -163,6 +188,8 @@ def extract_assertion_and_valence(text: str) -> Tuple[str, str]:
 
     # 4. Check affective vocabulary
     words = set(re.findall(r"\b[a-z]+\b", lower))
+    if _lexicon_v3_on():  # bare "negative" / "positive" are everyday adjectives, never ^3 / ^2 (lexicon_v3)
+        words -= set(lexicon_v3.VALENCE_WORDS_REMOVED)
     has_pos = bool(words & POSITIVE_VALENCE_WORDS)
     has_neg = bool(words & NEGATIVE_VALENCE_WORDS)
 
