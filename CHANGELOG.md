@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-19 PDT - USE-1 StackExchange Cooking fetched, pinned and counted (owner word "FETCH STACKEXCHANGE"; spec sheet 7.94): verdict SHORT; USE-1 stops at the census; 0 USD
+
+- Dump: archive.org cooking.stackexchange.com.7z, 87,555,311 bytes, sha256 de98b85f9807a23dfc8c91006f8b59b2149089e94ea9d54676d215ea156a9ac6, sha1 matches the publisher's list; CC BY-SA (4.0 / 3.0 / 2.5 by item date), attribution kept per item.
+- Counted with the frozen rules (K-S two keys from the sealed X-REAL zip, reader v1.1, first-person stock shape, no recipe talk, no instructions): 899,195 sentences; 15 first-person stock statements (0.174 per 10,000); reader gives up on 9 (0.104), reads 6 (0.069). "Made / baked" + food 1,139 (13.189 per 10,000), reported only.
+- Floor 256 (4 x 64 stock cells): SHORT. With the X-REAL frame, at most 31 stock / 11 reader-gives-up vs the design's STOP rules 32 / 12. No package, no seed, no sign request.
+- Next per the owner's picks: the stock stratum goes to human-written sentences; never a looser key; no WildChat.
+- Pins: use1/SOURCES_PINNED_C1.json; x_real/SOURCES_PINNED.json created new as an index (sealed pins unchanged, group C1 appended).
+- Files: Documents/Codex/2026-10-19/use1/ (COUNT_REPORT_C1.md); copies docs/working/use1/ (counts and ids only); backup D:/tksCAS-archive/use1_20261019/.
+
 ## 2026-10-20 PDT - HELM-R1 wave 6 K4 cause found (spec sheet 7.93 follow-up): reader defect, fix built (wide reader v5), NOT re-tested, status unchanged; 0 USD
 
 - Cause: X6_REAL recipe RW:pg:42450@476327 (cake), turn 7. The wide reader read "and half as much soda" as 1/2 (no unit) of a made-up ingredient "as much soda"; it never ran out, so its requirement stayed unlearned (gate G1) and HELM asked. Replayed on the laptop on the sealed v2 code: identical to the host record. UNSETTLED_ASK not involved.

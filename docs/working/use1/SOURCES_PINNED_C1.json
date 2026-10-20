@@ -1,0 +1,81 @@
+{
+ "schema": "use1.sources-pinned-c1/1",
+ "group": "C1_stackexchange_cooking",
+ "design": "real_stock_source_design_v1/SOURCES.md row 5",
+ "files": [
+  {
+   "file": "C1_stackexchange_cooking/stackexchange_files.xml",
+   "url": "https://archive.org/download/stackexchange/stackexchange_files.xml",
+   "served_from": "https://ia800508.us.archive.org/30/items/stackexchange/stackexchange_files.xml",
+   "fetch_utc": "2026-10-20T05:26:08Z",
+   "http": 200,
+   "bytes": 122331,
+   "sha256": "c24194c810f97400fd9d55c02407ba01ec12ee8282a67c1ae736245f91b84eee",
+   "sha1": "c0567e92189c9dc8f8dd62a6aff3d9bde5e503b7",
+   "last_modified_header": "Tue, 24 Jun 2025 09:44:33 GMT",
+   "user_agent": "HELM-USE1-fetch/1 (one-time research download)",
+   "role": "publisher checksum list (archive.org item 'stackexchange')"
+  },
+  {
+   "file": "C1_stackexchange_cooking/cooking.stackexchange.com.7z",
+   "url": "https://archive.org/download/stackexchange/cooking.stackexchange.com.7z",
+   "served_from": "https://dn720201.ca.archive.org/0/items/stackexchange/cooking.stackexchange.com.7z",
+   "fetch_utc": "2026-10-20T05:26:17Z",
+   "http": 200,
+   "bytes": 87555311,
+   "sha256": "de98b85f9807a23dfc8c91006f8b59b2149089e94ea9d54676d215ea156a9ac6",
+   "sha1": "c9f780daa9a58cc81a698ce8ae9402e964670d22",
+   "last_modified_header": "Sat, 06 Apr 2024 22:38:18 GMT",
+   "user_agent": "HELM-USE1-fetch/1 (one-time research download)",
+   "role": "C1 dump archive (Stack Exchange data dump, cooking.stackexchange.com)"
+  },
+  {
+   "file": "C1_stackexchange_cooking/extracted/Posts.xml",
+   "extracted_from": "cooking.stackexchange.com.7z",
+   "extractor": "C:/Windows/System32/tar.exe (bsdtar 3.8.9, libarchive 3.8.9, liblzma 5.8.3)",
+   "bytes": 102222077,
+   "sha256": "ce28c9240a878ea0d77d8dc832ded68a4e63f629205313498dbfbbeba8ec7a76",
+   "role": "frame U-SE units (questions PostTypeId 1, answers PostTypeId 2)"
+  },
+  {
+   "file": "C1_stackexchange_cooking/extracted/Comments.xml",
+   "extracted_from": "cooking.stackexchange.com.7z",
+   "extractor": "C:/Windows/System32/tar.exe (bsdtar 3.8.9, libarchive 3.8.9, liblzma 5.8.3)",
+   "bytes": 44408160,
+   "sha256": "43af4a9bc3ed16407ec4c6cca8267689bcd39c3b0fa2124b614c360eb6cfa1d4",
+   "role": "frame U-SE units (comments)"
+  },
+  {
+   "file": "C1_stackexchange_cooking/extracted/Users.xml",
+   "extracted_from": "cooking.stackexchange.com.7z",
+   "extractor": "C:/Windows/System32/tar.exe (bsdtar 3.8.9, libarchive 3.8.9, liblzma 5.8.3)",
+   "bytes": 25021464,
+   "sha256": "8735062ff44746b942c0babf1e46418a43b7725687f59b8f373894a3ee6ea6f0",
+   "role": "attribution (author display names), never a frame unit"
+  }
+ ],
+ "publisher_checksum": {
+  "name": "cooking.stackexchange.com.7z",
+  "size": 87555311,
+  "md5": "f6ffe54c3783c8faebc33b30f8ff61d1",
+  "crc32": "cc994830",
+  "sha1": "c9f780daa9a58cc81a698ce8ae9402e964670d22",
+  "mtime_unix": 1712443098,
+  "mtime_utc": "2024-04-06T22:38:18Z"
+ },
+ "publisher_checksum_match": "sha1 and size equal",
+ "licence": {
+  "licence": "CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/) for posts and comments created on or after 2018-05-02; CC BY-SA 3.0 for 2011-04-08 to 2018-05-01; CC BY-SA 2.5 before 2011-04-08 (licence chosen per item by its CreationDate, as SOURCES.md row 5 says)",
+  "attribution_requirements": [
+   "name the author (display name) of each item used",
+   "link to the item on cooking.stackexchange.com (question / answer: /q/<PostId> or /a/<PostId>; comment: the post link)",
+   "name the source: Seasoned Advice (cooking.stackexchange.com), Stack Exchange network",
+   "state the licence (CC BY-SA, version by item date) and indicate changes (sentence split, HTML stripped)",
+   "share-alike: any derivative text published carries the same licence"
+  ],
+  "kept_per_item": "id, post id, author user id / display name, creation date (licence version); files stay internal",
+  "note": "archive.org also holds license.txt in the same item; not fetched (not a URL SOURCES.md names)"
+ },
+ "network_rule": "only the two URLs SOURCES.md row 5 names; neutral User-Agent, no '@' (test_fetch_no_email.py PASS)",
+ "untrusted": "never executed; read only by use1 scripts with python -I"
+}
