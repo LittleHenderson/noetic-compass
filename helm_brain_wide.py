@@ -44,12 +44,19 @@ PARAMETERS (Capacity Rules v0.1: every parameter has a job). `parameter_table()`
                batches), MAX_INGREDIENTS = 10 (the owner's design limit). Not numbers the brain learns.
 Nothing else is learned. The witness log is a record of what the user said; the answer path never reads it.
 
-SWITCH: WIDE_BRAIN, default OFF. `wide_brain_on()` reads an explicit argument, else the environment variable
-HELM_WIDE_BRAIN ("1" / "ON" / "TRUE"). With it OFF the live loop never imports this module and the licensed brain is
-the only brain (helm_end_to_end_loop.HELMEndToEndLoop).
+SWITCH: WIDE_BRAIN, default ON since the owner's ruling of 2026-10-20 ("YES TO WIDE BRAIN: Wide brain becomes HELM's
+canonical brain", SPEC 7.56). `wide_brain_on()` reads an explicit argument, else the environment variable
+HELM_WIDE_BRAIN: "0" / "OFF" / "FALSE" / "NO" turn it off; anything else, or no variable at all, leaves it on. With it
+OFF the live loop never imports this module and the licensed reference brain is the only brain
+(helm_end_to_end_loop.HELMEndToEndLoop). Before 2026-10-20 the default was OFF; every sealed test package pins its own
+copy of HELM, so none is changed by this default.
 
-CLAIM STATUS: ENGINEERED-NOT-VALIDATED. Built and unit-tested on the laptop only (0 USD). NOT tested on a sealed exam.
-The licensed brain is unchanged and stays HELM's canonical brain. Standard library only.
+CLAIM STATUS: VALIDATED for two sentences only (SPEC 7.89: 128 real recipes, no other parts, job c47; SPEC 7.96: with every
+other part on, job c50), ceiling NAMED_CORPORA_ONLY for real recipes + SYNTHETIC_ONLY for the rest. HELM's canonical brain
+since the owner's ruling of 2026-10-20 (SPEC 7.56); a ruling is not a result and did not change the claim. NOT licensed:
+"better than the licensed brain" outside those sentences; real kitchens or cooks; typed English in general. The licensed
+wave-1 brain keeps its own LICENSED claim as the reference brain and still reads every live-loop turn first.
+Standard library only.
 """
 from __future__ import annotations
 
@@ -62,9 +69,12 @@ from decimal import Decimal
 from fractions import Fraction
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-CLAIM_STATUS = "ENGINEERED-NOT-VALIDATED"
+CLAIM_STATUS = "VALIDATED"                 # for the SPEC 7.89 / 7.96 sentences only; see the header
+CLAIM_CEILING = "NAMED_CORPORA_ONLY (real recipes) + SYNTHETIC_ONLY (drive loop, English-64 / Faces-64, conversation)"
+CANONICAL_SINCE = "2026-10-20 (owner ruling \"YES TO WIDE BRAIN\", SPEC 7.56)"
 BRAIN_VERSION = "helm_brain_wide RB-W1 v1 (2026-10-19)"
 WIDE_BRAIN_ENV = "HELM_WIDE_BRAIN"
+WIDE_BRAIN_OFF_WORDS = ("0", "OFF", "FALSE", "NO")   # the only values that switch the canonical brain off
 MAX_INGREDIENTS = 10                     # owner order: "up to 10 ingredients per recipe"
 EVALUATED = "EVALUATED"
 UNDETERMINED = "UNDETERMINED"
@@ -83,10 +93,11 @@ class WideRefused(ValueError):
 
 
 def wide_brain_on(value: Optional[bool] = None) -> bool:
-    """The WIDE_BRAIN switch. Default OFF."""
+    """The WIDE_BRAIN switch. Default ON since the owner's ruling of 2026-10-20 (SPEC 7.56): an explicit argument wins;
+    else the environment variable HELM_WIDE_BRAIN set to 0 / OFF / FALSE / NO switches it off; anything else is on."""
     if value is not None:
         return bool(value)
-    return os.environ.get(WIDE_BRAIN_ENV, "").strip().upper() in ("1", "ON", "TRUE", "YES")
+    return os.environ.get(WIDE_BRAIN_ENV, "").strip().upper() not in WIDE_BRAIN_OFF_WORDS
 
 
 # =====================================================================================================================

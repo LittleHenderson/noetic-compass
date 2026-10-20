@@ -9,8 +9,10 @@ Integrates:
   Owner approval 2026-10-18: "recipe brain is canonical". Its license is synthetic-world only.
   The 22x40 brain (helm_brain_22x40.py, 40-digit Decimal) and the tks28 brain (brains/helm_brain_tks28.py
   in the local HELM_DISTRIBUTION_PACKAGE copy) are demos / stand-ins only, not HELM's brain; this
-  interface never constructs either. The RB-W1 wide brain (helm_brain_wide.py) sits behind the
-  HELM_WIDE_BRAIN switch (default OFF) and is not the canonical brain.
+  interface never constructs either. The RB-W1 wide brain (helm_brain_wide.py, helm_wide_turn.py) is HELM's
+  canonical brain since the owner's ruling of 2026-10-20 ("YES TO WIDE BRAIN", SPEC 7.56): the HELM_WIDE_BRAIN
+  switch is ON by default (set it to 0 / OFF to run the licensed reference brain alone); the licensed path still
+  reads every turn first and the wide book takes only the turns it cannot bind.
 - Phase 3 Meta Valve Controller (tks_meta_valve_controller)
 - Immutable RPM Safety Gate (Zero-Hallucination Invariant)
 - Level A1/A2 Stoichiometric Agentic Tool Executor

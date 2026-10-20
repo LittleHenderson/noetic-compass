@@ -1,7 +1,9 @@
-"""helm_wide_turn.py -- the reader, the voice and the live-loop turn for RB-W1, the WIDE recipe brain. Behind a switch.
+"""helm_wide_turn.py -- the reader, the voice and the live-loop turn for RB-W1, the WIDE recipe brain: HELM's canonical
+brain since the owner's ruling of 2026-10-20 ("YES TO WIDE BRAIN", SPEC 7.56).
 
-Used ONLY when the WIDE_BRAIN switch is ON (helm_brain_wide.wide_brain_on). With it OFF the live loop never imports
-this module, and helm_english_in.py / helm_voice.py / the licensed brain behave exactly as before.
+Used when the WIDE_BRAIN switch is ON, which is the default since 2026-10-20 (helm_brain_wide.wide_brain_on;
+HELM_WIDE_BRAIN set to 0 / OFF / FALSE / NO turns it off). With it OFF the live loop never imports this module, and
+helm_english_in.py / helm_voice.py / the licensed reference brain behave exactly as before.
 
 READER (deterministic, stdlib, no model). Three sentence shapes, all or nothing (one doubtful part -> one question,
 nothing saved):
@@ -23,7 +25,8 @@ TURN. The same stations as the licensed path: CCE skin (render -> parse round tr
 names), S0 atlas head, S1 trigger, S2 Bias (stock), S3 arrival (absent / unlearned), S4 valve, S5 RPM gate, brain,
 store (a cube write only after the gate and the brain's receipt passed, then read back), S6 next.
 
-CLAIM STATUS: ENGINEERED-NOT-VALIDATED. Not tested on a sealed exam.
+CLAIM STATUS: see helm_brain_wide: VALIDATED for the SPEC 7.89 / 7.96 sentences only (NAMED_CORPORA_ONLY + SYNTHETIC_ONLY).
+This reader is v5 (relative amounts bundled with their line), the version scored in job c50 (SPEC 7.96).
 """
 from __future__ import annotations
 
