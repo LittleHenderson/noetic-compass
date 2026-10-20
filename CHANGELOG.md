@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-20 PDT - CTT-1 SCORED (job c45, one g5.xlarge GPU, v3 package; spec sheet 7.90): primary PASS / EARS_NO_GAIN; LLM_WRITTEN pass FAILURE / EARS_HARMED (H-CWFW); 1.40 USD
+
+- The A-CTT-2 fix worked: the GPU smoke test that stopped c43 passed (66 tests OK, translator audit clean); all six models trained (9,585,566 x5 incl. controls, 2,482,718 twin; asserted).
+- Primary (E-MACHINE-S, 128 real public sentences, 119 scored): RIGHT reader alone 107, reader + translator 106 / 106 / 105, retrieval 105, shuffled 106, frozen 106. All hard gates true; marks missed -> EARS_NO_GAIN.
+- LLM_WRITTEN (gemini-3.5-flash served as gemini-3.6-flash + deepseek-chat; no human, no Claude writer): singles reader 72 -> translator 94 / 87 / 86; dialogues 34 -> 44 / 43 / 39; marks held, but confident well-formed wrong proposals 2 / 5 / 3 vs cap 2 -> FAILURE, EARS_HARMED. Saved wrong 0 in every arm.
+- NO-HARM: six old wave exams identical OFF / OFF-removed / ON per seed (6 of 6). Separation and no-foreign gates pass.
+- Instance i-0e8770f343f394444, 01:52-03:09 UTC; charge 1.40 (cautious 1.50); ledger 111.55 -> 112.97 / 200 (c46/c47 +0.02 in between); cleanup VERIFIED three ways; backup D:\tksCAS-archive\ctt1_c45_20261020\ (three passes match, weights included).
+- Claim status stays ENGINEERED-NOT-VALIDATED. Artifacts: Documents\Codex\2026-10-19\cas_token_transformer\run_c45_ctt1_20261020\RUN_RESULT_CTT1_C45.md.
+
 ## 2026-10-20 PDT - RB-W1T v3 SCORED (job c47, AWS; spec sheet 7.89): reader PASS, status word WIDE_BRAIN_EARNED_KEEP; RB-W1 v3 = canonical-brain CANDIDATE (licensed brain stays canonical); 0.01 USD
 
 - Frozen reader rbw1t/merge_rbw1t.py on the c47 host output: RBW1T_READING.json cea8b111...; every instrument row and hard gate true; K1 met (fully learned 92 of 96, bar 87), K3, K4, NH-OFF, NH-ON met.
