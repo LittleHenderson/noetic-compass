@@ -1,0 +1,3607 @@
+{
+ "claim_ceiling_if_earned": "NAMED_CORPORA_ONLY (real-recipe sentences) + SYNTHETIC_ONLY (drive-loop, English-64, Faces-64, conversation sentences)",
+ "claim_ceiling_now": "SYNTHETIC_ONLY",
+ "failing_gates": [],
+ "failing_instruments": [],
+ "hard_gates": {
+  "HG10_wide_control": {
+   "always_ask_right": 0,
+   "holds": true,
+   "no_learning_right": 0
+  },
+  "HG11_parameter_audit": {
+   "holds": true,
+   "units_audited": 37,
+   "units_bad": 0
+  },
+  "HG12_switch_hygiene": {
+   "holds": true,
+   "problems": []
+  },
+  "HG13_key_blind": {
+   "carrier_files": [
+    "ENGLISH64_X6.json",
+    "FACES64_X6.json",
+    "INPUTS_CONV_X6.json",
+    "INPUTS_REAL_X6.json",
+    "X6PAIRW_WORLDS.json",
+    "X6PAIR_WORLDS.json",
+    "X6_PINS.json"
+   ],
+   "holds": true
+  },
+  "HG14_no_network": {
+   "holds": true
+  },
+  "HG15_sandbox": {
+   "holds": true
+  },
+  "HG16_same_inputs": {
+   "holds": true
+  },
+  "HG17_eye_budget": {
+   "holds": true
+  },
+  "HG18_voice_changes_no_answer": {
+   "holds": true,
+   "parts": {
+    "X6_CONV:FULL": true,
+    "X6_CONV:FULL+WIDE": true,
+    "X6_E64:FULL": true,
+    "X6_E64:FULL+WIDE": true,
+    "X6_F64:FULL": true,
+    "X6_F64:FULL+WIDE": true
+   }
+  },
+  "HG1_receipts": {
+   "holds": true,
+   "live_receipt_inconsistent": 0,
+   "lives_rechecked": 63,
+   "world_mismatches": 0,
+   "world_rebuild_mismatches": 0
+  },
+  "HG2_no_invention_in_worlds": {
+   "holds": true,
+   "wrong": 0
+  },
+  "HG3_replay": {
+   "holds": true,
+   "parts": {
+    "X6_CONV": true,
+    "X6_E64": true,
+    "X6_F64": true,
+    "X6_PAIR": true,
+    "X6_REAL": true
+   }
+  },
+  "HG4_equal_budgets": {
+   "holds": true,
+   "over_budget": 0,
+   "sessions_differing": 0
+  },
+  "HG5_cut": {
+   "holds": true,
+   "honest_calls_in_conversation": 0,
+   "honest_steps_in_conversation": 0,
+   "live_drives_ok": true
+  },
+  "HG6_eye_writes_0": {
+   "eye_pairing_non_brain_writes": 0,
+   "eye_scan_writes": 0,
+   "holds": true,
+   "whisper_authors_eye_only": true,
+   "wide_book_changed_by_an_eye": 0
+  },
+  "HG7_keys_and_learning_audit": {
+   "holds": true,
+   "key_reads_refused": 0,
+   "tables_rebuilt": true,
+   "tables_zero_at_start": true
+  },
+  "HG8_open_simplex": {
+   "holds": true,
+   "targets_bad": 0
+  },
+  "HG9_guard_trips_0": {
+   "guard_trips_on_clean_arms": 0,
+   "holds": true
+  },
+  "all_hold": true
+ },
+ "instrument_rows": {
+  "I0_not_a_practice_mock": {
+   "holds": true
+  },
+  "I10_seed_rule": {
+   "holds": true,
+   "parts": {
+    "derivation_pass": true,
+    "pins_carry_the_seed_source": true,
+    "seed_source_is_owner_line_plus_zip": true
+   }
+  },
+  "I11_cut_can_fire": {
+   "calls": [
+    220,
+    217,
+    180
+   ],
+   "holds": true,
+   "steps": [
+    250,
+    252,
+    220
+   ]
+  },
+  "I12_guard_and_canary_can_fire": {
+   "canary_every_life": true,
+   "canary_live": true,
+   "guard_violator_trips": [
+    1000,
+    1040,
+    1004
+   ],
+   "holds": true
+  },
+  "I13_job_maps": {
+   "X6_PAIR": {
+    "holds": true,
+    "items": 4551,
+    "per_part": {
+     "CASCADE": {
+      "dependent_failed": 655,
+      "dependent_items": 655,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     },
+     "CUBE_STORE": {
+      "dependent_failed": 725,
+      "dependent_items": 725,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     },
+     "ENGLISH_IN": {
+      "dependent_failed": 536,
+      "dependent_items": 536,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     },
+     "TRIAD": {
+      "dependent_failed": 618,
+      "dependent_items": 618,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     }
+    },
+    "unsolvable_with_all_on": {
+     "K3/t2": 112
+    }
+   },
+   "X6_PAIRW": {
+    "holds": true,
+    "items": 1536,
+    "per_part": {
+     "CASCADE": {
+      "dependent_failed": 235,
+      "dependent_items": 235,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     },
+     "CUBE_STORE": {
+      "dependent_failed": 242,
+      "dependent_items": 242,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     },
+     "ENGLISH_IN": {
+      "dependent_failed": 166,
+      "dependent_items": 166,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     },
+     "TRIAD": {
+      "dependent_failed": 215,
+      "dependent_items": 215,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     },
+     "WIDE": {
+      "dependent_failed": 232,
+      "dependent_items": 232,
+      "holds": true,
+      "k7_changed_reported": 0,
+      "other_non_k7_changed": 0
+     }
+    },
+    "unsolvable_with_all_on": {
+     "K3/t2": 48,
+     "K7": 4
+    }
+   },
+   "holds": true
+  },
+  "I14_not_vacuous": {
+   "holds": true,
+   "pairw_k7": [
+    77,
+    79,
+    80
+   ],
+   "real_rep_answer": 94
+  },
+  "I1_data_identity": {
+   "holds": true,
+   "parts": {
+    "host_instrument_problems_none": true,
+    "host_neighbours_sealed": true,
+    "host_pins_equal_custodian_pins": true,
+    "laptop_neighbours_sealed": true,
+    "receiver_check_all_pass": true,
+    "spent_x5_by_hash": true,
+    "unit_files_by_hash": true
+   },
+   "units_not_by_hash": []
+  },
+  "I4_parameter_counts": {
+   "eye_tables_whole_counts": true,
+   "holds": true,
+   "static": {
+    "EYE_SCAN": 0,
+    "FACES_READER": 0,
+    "RECEIVER": 0,
+    "TRIAD": 0
+   }
+  },
+  "I6_completeness": {
+   "holds": true,
+   "not_ok": [],
+   "parts": {
+    "all_planned_units_exit_0": true,
+    "deadline_not_hit": true,
+    "every_arm_every_item": true,
+    "every_unit_file_present": true,
+    "no_crash": true,
+    "planned_is_the_frozen_list": true,
+    "suites_ok": true
+   }
+  },
+  "I7_laptop_reading": {
+   "holds": true,
+   "parts": {
+    "host_ran_this_freeze": true,
+    "own_freeze_is_the_approved": true,
+    "own_members_ok": true
+   }
+  },
+  "I9_governance": {
+   "holds": true,
+   "parts": {
+    "attempts": true,
+    "binds_this_freeze": true,
+    "binds_this_zip": true,
+    "cap": true,
+    "line_bytes": true,
+    "line_is_the_pinned_line": true,
+    "line_sha256_matches": true
+   }
+  },
+  "all_hold": true,
+  "receiver_check": {
+   "approval_binds_zip": true,
+   "carrier_files_exact": true,
+   "carrier_holds_no_key": true,
+   "carrier_matches_pins": true,
+   "extras_pinned": true,
+   "files_recomputed": true,
+   "frames_pinned": true,
+   "ids_unique": true,
+   "live64_text_rule_clean": true,
+   "no_excluded_item": true,
+   "no_float_in_keys": true,
+   "owner_line_pinned": true,
+   "pins_recomputed": true,
+   "pools_disjoint": true,
+   "pools_full": true,
+   "quotas_or_recorded_shortfall": true,
+   "seed_rule": true,
+   "turns_rederive": true,
+   "worlds_practice_flag": true
+  }
+ },
+ "marks": {
+  "K1_LEARNS": {
+   "fully_learned": 93,
+   "need": 85,
+   "of": 94,
+   "value": true
+  },
+  "K3_SAFE": {
+   "value": true,
+   "wrong_answers": 0,
+   "wrong_lessons": 0
+  },
+  "K4_HONEST": {
+   "caution_on_artifact_items": 0,
+   "deviation": "D-W6-12",
+   "strict_reported": 0,
+   "unexplained_asks": 0,
+   "value": true
+  },
+  "K5_CAUTION": {
+   "K5_ALL_reported": {
+    "U": 18,
+    "commitments": 3,
+    "limit_if_it_were_the_mark": 3
+   },
+   "U_same_name": 13,
+   "commitments": 0,
+   "deviation": "D-W6-6",
+   "limit": 2,
+   "readable": true,
+   "value": true
+  },
+  "NH": {
+   "parts": {
+    "X6_E64": {
+     "holds": true,
+     "lost": 0,
+     "lost_ids": []
+    },
+    "X6_F64": {
+     "holds": true,
+     "lost": 0,
+     "lost_ids": []
+    },
+    "X6_PAIR_A_STATIONARY": {
+     "FULL": 547,
+     "FULL+WIDE": 547,
+     "holds": true
+    },
+    "X6_PAIR_B_DRIFT": {
+     "FULL": 495,
+     "FULL+WIDE": 495,
+     "holds": true
+    },
+    "X6_PAIR_C_NULL": {
+     "FULL": 648,
+     "FULL+WIDE": 648,
+     "holds": true
+    }
+   },
+   "value": true
+  },
+  "NH_CONV": {
+   "deviation": "D-W6-13",
+   "lost": 1,
+   "lost_ids": [
+    "CV53:pg:42450@58358"
+   ],
+   "new_wrong": 1,
+   "value": true,
+   "wrong_full": 0,
+   "wrong_wide": 1
+  },
+  "NH_EYE": {
+   "parts": {
+    "X6_E64_EYE_PAIRING": {
+     "holds": true,
+     "lost": 0
+    },
+    "X6_E64_EYE_SCAN": {
+     "holds": true,
+     "lost": 0
+    },
+    "X6_F64_EYE_PAIRING": {
+     "holds": true,
+     "lost": 0
+    },
+    "X6_F64_EYE_SCAN": {
+     "holds": true,
+     "lost": 0
+    },
+    "X6_PAIR_A_EYE_PAIRING": {
+     "FULL+EYE_PAIRING": 1098,
+     "FULL+WIDE+EYE_PAIRING": 1098,
+     "holds": true
+    },
+    "X6_REAL_EYE_PAIRING": {
+     "RIGHT_WIDE": 94,
+     "RIGHT_WIDE_EYE": 94,
+     "holds": true
+    },
+    "X6_REAL_EYE_SCAN": {
+     "RIGHT_WIDE": 94,
+     "RIGHT_WIDE_EYE": 94,
+     "holds": true
+    }
+   },
+   "value": true
+  },
+  "P_READABLE": {
+   "both_active_on": {
+    "WIDE x CUBE_STORE": [
+     "X6_PAIRW"
+    ],
+    "WIDE x ENGLISH_IN": [
+     "X6_PAIRW"
+    ],
+    "WIDE x EYE_PAIRING": [
+     "X6_PAIRW"
+    ],
+    "WIDE x EYE_SCAN": [],
+    "WIDE x TRIAD": [
+     "X6_PAIRW"
+    ],
+    "WIDE x VOICE": [
+     "X6_CONV"
+    ]
+   },
+   "pairs_in_mark": [
+    "WIDE x CUBE_STORE",
+    "WIDE x ENGLISH_IN",
+    "WIDE x TRIAD",
+    "WIDE x EYE_PAIRING"
+   ],
+   "reported_not_exercised": [
+    "WIDE x VOICE",
+    "WIDE x EYE_SCAN"
+   ],
+   "value": true,
+   "words_if_read": {
+    "WIDE x CUBE_STORE": "ADDITIVE",
+    "WIDE x ENGLISH_IN": "ADDITIVE",
+    "WIDE x EYE_PAIRING": "ADDITIVE",
+    "WIDE x EYE_SCAN": "ADDITIVE",
+    "WIDE x TRIAD": "ADDITIVE",
+    "WIDE x VOICE": "ADDITIVE"
+   }
+  },
+  "QUIET": {
+   "body_findings": 0,
+   "value": true,
+   "whispers_admitted": 0
+  }
+ },
+ "package_freeze_sha256": "da1ec4d2e144a8921d27231e99ff277de0e915b61e2de205cc94646a4723c8a8",
+ "pair_words": {
+  "WIDE x CUBE_STORE": {
+   "both_active_on": [
+    "X6_PAIRW"
+   ],
+   "not_exercised_by_construction": false,
+   "per_exam": {
+    "X6_CONV": {
+     "M": {
+      "all": 37,
+      "no_wide": 30,
+      "no_x": 37,
+      "none": 30
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "7",
+      "L_a": "7",
+      "L_ab": "7",
+      "L_b": "0",
+      "margin": "8",
+      "room": "37"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_E64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 52,
+      "none": 52
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "8",
+      "L_a": "0",
+      "L_ab": "8",
+      "L_b": "8",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_PAIRW": {
+     "M": {
+      "all": 515,
+      "no_wide": 364,
+      "no_x": 346,
+      "none": 235
+     },
+     "both_active": true,
+     "denominator": 1536,
+     "numbers": {
+      "E_sum": "320",
+      "L_a": "151",
+      "L_ab": "280",
+      "L_b": "169",
+      "margin": "192",
+      "room": "515"
+     },
+     "word": "ADDITIVE"
+    }
+   },
+   "word": "ADDITIVE",
+   "word_if_read": "ADDITIVE"
+  },
+  "WIDE x ENGLISH_IN": {
+   "both_active_on": [
+    "X6_PAIRW"
+   ],
+   "not_exercised_by_construction": false,
+   "per_exam": {
+    "X6_CONV": {
+     "M": {
+      "all": 37,
+      "no_wide": 30,
+      "no_x": 38,
+      "none": 30
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "6",
+      "L_a": "7",
+      "L_ab": "7",
+      "L_b": "-1",
+      "margin": "8",
+      "room": "37"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_E64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 32,
+      "none": 32
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "28",
+      "L_a": "0",
+      "L_ab": "28",
+      "L_b": "28",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_F64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 40,
+      "none": 40
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "20",
+      "L_a": "0",
+      "L_ab": "20",
+      "L_b": "20",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_PAIRW": {
+     "M": {
+      "all": 515,
+      "no_wide": 364,
+      "no_x": 407,
+      "none": 263
+     },
+     "both_active": true,
+     "denominator": 1536,
+     "numbers": {
+      "E_sum": "259",
+      "L_a": "151",
+      "L_ab": "252",
+      "L_b": "108",
+      "margin": "192",
+      "room": "515"
+     },
+     "word": "ADDITIVE"
+    }
+   },
+   "word": "ADDITIVE",
+   "word_if_read": "ADDITIVE"
+  },
+  "WIDE x EYE_PAIRING": {
+   "both_active_on": [
+    "X6_PAIRW"
+   ],
+   "not_exercised_by_construction": false,
+   "per_exam": {
+    "X6_CONV": {
+     "M": {
+      "all": 37,
+      "no_wide": 30,
+      "no_x": 37,
+      "none": 30
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "7",
+      "L_a": "7",
+      "L_ab": "7",
+      "L_b": "0",
+      "margin": "8",
+      "room": "37"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_E64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 60,
+      "none": 60
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "0",
+      "L_a": "0",
+      "L_ab": "0",
+      "L_b": "0",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_F64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 60,
+      "none": 60
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "0",
+      "L_a": "0",
+      "L_ab": "0",
+      "L_b": "0",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_PAIRW": {
+     "M": {
+      "all": 1045,
+      "no_wide": 806,
+      "no_x": 515,
+      "none": 364
+     },
+     "both_active": true,
+     "denominator": 1536,
+     "numbers": {
+      "E_sum": "769",
+      "L_a": "239",
+      "L_ab": "681",
+      "L_b": "530",
+      "margin": "192",
+      "room": "1045"
+     },
+     "word": "ADDITIVE"
+    }
+   },
+   "word": "ADDITIVE",
+   "word_if_read": "ADDITIVE"
+  },
+  "WIDE x EYE_SCAN": {
+   "both_active_on": [],
+   "not_exercised_by_construction": true,
+   "per_exam": {
+    "X6_CONV": {
+     "M": {
+      "all": 37,
+      "no_wide": 30,
+      "no_x": 37,
+      "none": 30
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "7",
+      "L_a": "7",
+      "L_ab": "7",
+      "L_b": "0",
+      "margin": "8",
+      "room": "37"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_E64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 60,
+      "none": 60
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "0",
+      "L_a": "0",
+      "L_ab": "0",
+      "L_b": "0",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_F64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 60,
+      "none": 60
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "0",
+      "L_a": "0",
+      "L_ab": "0",
+      "L_b": "0",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    }
+   },
+   "word": "NOT_EXERCISED_BY_CONSTRUCTION",
+   "word_if_read": "ADDITIVE"
+  },
+  "WIDE x TRIAD": {
+   "both_active_on": [
+    "X6_PAIRW"
+   ],
+   "not_exercised_by_construction": false,
+   "per_exam": {
+    "X6_CONV": {
+     "M": {
+      "all": 37,
+      "no_wide": 30,
+      "no_x": 37,
+      "none": 30
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "7",
+      "L_a": "7",
+      "L_ab": "7",
+      "L_b": "0",
+      "margin": "8",
+      "room": "37"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_F64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 36,
+      "none": 36
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "24",
+      "L_a": "0",
+      "L_ab": "24",
+      "L_b": "24",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_PAIRW": {
+     "M": {
+      "all": 515,
+      "no_wide": 364,
+      "no_x": 401,
+      "none": 277
+     },
+     "both_active": true,
+     "denominator": 1536,
+     "numbers": {
+      "E_sum": "265",
+      "L_a": "151",
+      "L_ab": "238",
+      "L_b": "114",
+      "margin": "192",
+      "room": "515"
+     },
+     "word": "ADDITIVE"
+    }
+   },
+   "word": "ADDITIVE",
+   "word_if_read": "ADDITIVE"
+  },
+  "WIDE x VOICE": {
+   "both_active_on": [
+    "X6_CONV"
+   ],
+   "not_exercised_by_construction": true,
+   "per_exam": {
+    "X6_CONV": {
+     "M": {
+      "all": 37,
+      "no_wide": 30,
+      "no_x": 36,
+      "none": 27
+     },
+     "both_active": true,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "8",
+      "L_a": "7",
+      "L_ab": "10",
+      "L_b": "1",
+      "margin": "8",
+      "room": "37"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_E64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 44,
+      "none": 44
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "16",
+      "L_a": "0",
+      "L_ab": "16",
+      "L_b": "16",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    },
+    "X6_F64": {
+     "M": {
+      "all": 60,
+      "no_wide": 60,
+      "no_x": 40,
+      "none": 40
+     },
+     "both_active": false,
+     "denominator": 64,
+     "numbers": {
+      "E_sum": "20",
+      "L_a": "0",
+      "L_ab": "20",
+      "L_b": "20",
+      "margin": "8",
+      "room": "60"
+     },
+     "word": "ADDITIVE"
+    }
+   },
+   "word": "NOT_EXERCISED_BY_CONSTRUCTION",
+   "word_if_read": "ADDITIVE"
+  }
+ },
+ "practice_mock": false,
+ "reader": "r1w6.merge_r1w6 v3 (2026-10-20)",
+ "reported": {
+  "conv": {
+   "FULL": {
+    "RIGHT": 30,
+    "RIGHT_AND_PLAIN": 30,
+    "UNDETERMINED": 34,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+EYE_PAIRING": {
+    "RIGHT": 30,
+    "RIGHT_AND_PLAIN": 30,
+    "UNDETERMINED": 34,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+EYE_SCAN": {
+    "RIGHT": 30,
+    "RIGHT_AND_PLAIN": 30,
+    "UNDETERMINED": 34,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 37,
+    "UNDETERMINED": 26,
+    "WRONG": 1,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE+EYE_PAIRING": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 37,
+    "UNDETERMINED": 26,
+    "WRONG": 1,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE+EYE_SCAN": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 37,
+    "UNDETERMINED": 26,
+    "WRONG": 1,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE-CUBE_STORE": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 37,
+    "UNDETERMINED": 26,
+    "WRONG": 1,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE-ENGLISH_IN": {
+    "RIGHT": 38,
+    "RIGHT_AND_PLAIN": 38,
+    "UNDETERMINED": 26,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE-TRIAD": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 37,
+    "UNDETERMINED": 22,
+    "WRONG": 5,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE-VOICE": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 36,
+    "UNDETERMINED": 26,
+    "WRONG": 1,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE_NOASK": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 37,
+    "UNDETERMINED": 26,
+    "WRONG": 1,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL+WIDE_REPLAY": {
+    "RIGHT": 37,
+    "RIGHT_AND_PLAIN": 37,
+    "UNDETERMINED": 26,
+    "WRONG": 1,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL-CUBE_STORE": {
+    "RIGHT": 30,
+    "RIGHT_AND_PLAIN": 30,
+    "UNDETERMINED": 34,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL-ENGLISH_IN": {
+    "RIGHT": 30,
+    "RIGHT_AND_PLAIN": 30,
+    "UNDETERMINED": 34,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL-TRIAD": {
+    "RIGHT": 30,
+    "RIGHT_AND_PLAIN": 30,
+    "UNDETERMINED": 34,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "FULL-VOICE": {
+    "RIGHT": 30,
+    "RIGHT_AND_PLAIN": 27,
+    "UNDETERMINED": 34,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   }
+  },
+  "conv_wide_by_family": {
+   "R1_STOCK_THEN_ASK/PLAIN": {
+    "RIGHT": 6
+   },
+   "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+    "RIGHT": 4
+   },
+   "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+    "RIGHT": 4
+   },
+   "R2_ABSENT_THEN_ASK/PLAIN": {
+    "RIGHT": 4
+   },
+   "R3_QUESTION_FORMS/PLAIN": {
+    "UNDETERMINED": 4
+   },
+   "R4_WITNESS_IN_ENGLISH/PLAIN": {
+    "RIGHT": 2,
+    "UNDETERMINED": 2
+   },
+   "R5_MUST_ASK/PLAIN": {
+    "RIGHT": 4
+   },
+   "R7_NEXT_SESSION/PLAIN": {
+    "UNDETERMINED": 2
+   },
+   "S1_WISDOM_STATED/FACE_STATED": {
+    "UNDETERMINED": 6
+   },
+   "S2_POWER_STATED/FACE_STATED": {
+    "UNDETERMINED": 6
+   },
+   "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+    "RIGHT": 6
+   },
+   "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+    "RIGHT": 3,
+    "WRONG": 1
+   },
+   "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+    "RIGHT": 4
+   },
+   "S6_TWO_FACES/TWO_INGREDIENT": {
+    "UNDETERMINED": 2
+   },
+   "S7_NOT_A_FACE/PLAIN": {
+    "UNDETERMINED": 4
+   }
+  },
+  "eye_scan": {
+   "X6_CONV": {
+    "admitted": 0,
+    "findings_complete": 0,
+    "h5_awake_starts": 0,
+    "live_violations": 0,
+    "over_allowance": 0,
+    "presentation_writes": 0,
+    "records_with_eye": 64,
+    "scans": 452,
+    "wasted": 0,
+    "whisper_writes": 0,
+    "windows_over": 0
+   },
+   "X6_E64": {
+    "admitted": 0,
+    "findings_complete": 0,
+    "h5_awake_starts": 0,
+    "live_violations": 0,
+    "over_allowance": 0,
+    "presentation_writes": 0,
+    "records_with_eye": 64,
+    "scans": 192,
+    "wasted": 0,
+    "whisper_writes": 0,
+    "windows_over": 0
+   },
+   "X6_F64": {
+    "admitted": 0,
+    "findings_complete": 0,
+    "h5_awake_starts": 0,
+    "live_violations": 0,
+    "over_allowance": 0,
+    "presentation_writes": 0,
+    "records_with_eye": 64,
+    "scans": 240,
+    "wasted": 0,
+    "whisper_writes": 0,
+    "windows_over": 0
+   },
+   "X6_REAL": {
+    "admitted": 0,
+    "findings_complete": 0,
+    "h5_awake_starts": 0,
+    "live_violations": 0,
+    "over_allowance": 0,
+    "presentation_writes": 0,
+    "records_with_eye": 128,
+    "scans": 951,
+    "wasted": 0,
+    "whisper_writes": 0,
+    "windows_over": 0
+   }
+  },
+  "live_totals": {
+   "REPRO_X5_E64": {
+    "FULL": {
+     "CRASHED": 0,
+     "RIGHT": 62,
+     "RIGHT_AND_PLAIN": 62,
+     "WRONG": 0
+    },
+    "FULL+WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 62,
+     "RIGHT_AND_PLAIN": 62,
+     "WRONG": 0
+    }
+   },
+   "REPRO_X5_F64": {
+    "FULL": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL+WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    }
+   },
+   "X6_E64": {
+    "FULL": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 0
+    },
+    "FULL+EYE_PAIRING": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 0
+    },
+    "FULL+EYE_SCAN": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 0
+    },
+    "FULL+WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 0
+    },
+    "FULL+WIDE+EYE_PAIRING": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 0
+    },
+    "FULL+WIDE+EYE_SCAN": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 0
+    },
+    "FULL+WIDE-CUBE_STORE": {
+     "CRASHED": 0,
+     "RIGHT": 52,
+     "RIGHT_AND_PLAIN": 52,
+     "WRONG": 0
+    },
+    "FULL+WIDE-ENGLISH_IN": {
+     "CRASHED": 0,
+     "RIGHT": 32,
+     "RIGHT_AND_PLAIN": 32,
+     "WRONG": 0
+    },
+    "FULL+WIDE-VOICE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 44,
+     "WRONG": 0
+    },
+    "FULL+WIDE_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 0
+    },
+    "FULL-CUBE_STORE": {
+     "CRASHED": 0,
+     "RIGHT": 52,
+     "RIGHT_AND_PLAIN": 52,
+     "WRONG": 0
+    },
+    "FULL-ENGLISH_IN": {
+     "CRASHED": 0,
+     "RIGHT": 32,
+     "RIGHT_AND_PLAIN": 32,
+     "WRONG": 0
+    },
+    "FULL-VOICE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 44,
+     "WRONG": 0
+    }
+   },
+   "X6_F64": {
+    "FULL": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL+EYE_PAIRING": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL+EYE_SCAN": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL+WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL+WIDE+EYE_PAIRING": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL+WIDE+EYE_SCAN": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL+WIDE-ENGLISH_IN": {
+     "CRASHED": 0,
+     "RIGHT": 40,
+     "RIGHT_AND_PLAIN": 40,
+     "WRONG": 0
+    },
+    "FULL+WIDE-TRIAD": {
+     "CRASHED": 0,
+     "RIGHT": 36,
+     "RIGHT_AND_PLAIN": 36,
+     "WRONG": 25
+    },
+    "FULL+WIDE-VOICE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 40,
+     "WRONG": 2
+    },
+    "FULL+WIDE_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 60,
+     "WRONG": 2
+    },
+    "FULL-ENGLISH_IN": {
+     "CRASHED": 0,
+     "RIGHT": 40,
+     "RIGHT_AND_PLAIN": 40,
+     "WRONG": 0
+    },
+    "FULL-TRIAD": {
+     "CRASHED": 0,
+     "RIGHT": 36,
+     "RIGHT_AND_PLAIN": 36,
+     "WRONG": 25
+    },
+    "FULL-VOICE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "RIGHT_AND_PLAIN": 40,
+     "WRONG": 2
+    }
+   }
+  },
+  "real": {
+   "ALWAYS_ASK": {
+    "ASKS": 110,
+    "NOT_SCORED": 18,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 0,
+    "fully_learned_rep": 0,
+    "lessons_LEARNED": 0,
+    "lessons_NOT_LEARNED": 662,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "FULL": {
+    "ASKS": 110,
+    "NOT_SCORED": 18,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 0,
+    "fully_learned_rep": 0,
+    "lessons_LEARNED": 0,
+    "lessons_NOT_LEARNED": 662,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "FULL+WIDE": {
+    "ASKS": 16,
+    "NOT_SCORED": 18,
+    "RIGHT": 94,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 3,
+    "fully_learned_rep": 93,
+    "lessons_LEARNED": 548,
+    "lessons_NOT_LEARNED": 114,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 11,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "FULL+WIDE+EYE_PAIRING": {
+    "ASKS": 16,
+    "NOT_SCORED": 18,
+    "RIGHT": 94,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 3,
+    "fully_learned_rep": 93,
+    "lessons_LEARNED": 548,
+    "lessons_NOT_LEARNED": 114,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 11,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "FULL+WIDE+EYE_SCAN": {
+    "ASKS": 16,
+    "NOT_SCORED": 18,
+    "RIGHT": 94,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 3,
+    "fully_learned_rep": 93,
+    "lessons_LEARNED": 548,
+    "lessons_NOT_LEARNED": 114,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 11,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "FULL+WIDE_NOASK": {
+    "ASKS": 16,
+    "NOT_SCORED": 18,
+    "RIGHT": 94,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 10,
+    "commitments_on_unsettled": 14,
+    "fully_learned_rep": 93,
+    "lessons_LEARNED": 548,
+    "lessons_NOT_LEARNED": 114,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "FULL+WIDE_REPLAY": {
+    "ASKS": 16,
+    "NOT_SCORED": 18,
+    "RIGHT": 94,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 3,
+    "fully_learned_rep": 93,
+    "lessons_LEARNED": 548,
+    "lessons_NOT_LEARNED": 114,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 11,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "WIDE_NO_LEARNING": {
+    "ASKS": 110,
+    "NOT_SCORED": 18,
+    "RIGHT": 0,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 0,
+    "fully_learned_rep": 0,
+    "lessons_LEARNED": 0,
+    "lessons_NOT_LEARNED": 662,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 13,
+    "undetermined_items": 18,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   }
+  },
+  "real_wide_by_cell": {
+   "C23:FRACTION": {
+    "ASKS": 1,
+    "NOT_SCORED": 2,
+    "RIGHT": 11,
+    "WRONG": 0,
+    "full_rep": 11,
+    "items": 14,
+    "rep_answer": 11
+   },
+   "C23:INTEGER": {
+    "ASKS": 2,
+    "RIGHT": 12,
+    "WRONG": 0,
+    "full_rep": 12,
+    "items": 14,
+    "rep_answer": 12
+   },
+   "C23:MIXED": {
+    "ASKS": 2,
+    "RIGHT": 12,
+    "WRONG": 0,
+    "full_rep": 12,
+    "items": 14,
+    "rep_answer": 12
+   },
+   "C46:FRACTION": {
+    "ASKS": 1,
+    "NOT_SCORED": 3,
+    "RIGHT": 11,
+    "WRONG": 0,
+    "full_rep": 11,
+    "items": 15,
+    "rep_answer": 11
+   },
+   "C46:INTEGER": {
+    "ASKS": 3,
+    "NOT_SCORED": 1,
+    "RIGHT": 10,
+    "WRONG": 0,
+    "full_rep": 10,
+    "items": 14,
+    "rep_answer": 11
+   },
+   "C46:MIXED": {
+    "NOT_SCORED": 2,
+    "RIGHT": 12,
+    "WRONG": 0,
+    "full_rep": 12,
+    "items": 14,
+    "rep_answer": 12
+   },
+   "C710:FRACTION": {
+    "ASKS": 2,
+    "NOT_SCORED": 6,
+    "RIGHT": 7,
+    "WRONG": 0,
+    "full_rep": 7,
+    "items": 15,
+    "rep_answer": 7
+   },
+   "C710:INTEGER": {
+    "ASKS": 4,
+    "NOT_SCORED": 2,
+    "RIGHT": 8,
+    "WRONG": 0,
+    "full_rep": 7,
+    "items": 14,
+    "rep_answer": 7
+   },
+   "C710:MIXED": {
+    "ASKS": 1,
+    "NOT_SCORED": 2,
+    "RIGHT": 11,
+    "WRONG": 0,
+    "full_rep": 11,
+    "items": 14,
+    "rep_answer": 11
+   }
+  },
+  "unit_fields": {
+   "W6_REPRO_X5_E64_FULL": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.902,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_REPRO_X5_E64_FULLP_WIDE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.937,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_REPRO_X5_F64_FULL": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.972,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_REPRO_X5_F64_FULLP_WIDE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.002,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULL": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.819,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_CONV_FULLM_CUBE_STORE": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.807,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_CONV_FULLM_ENGLISH_IN": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.867,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_CONV_FULLM_TRIAD": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.82,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_CONV_FULLM_VOICE": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.824,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_CONV_FULLP_EYE_PAIRING": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.082,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_CONV_FULLP_EYE_SCAN": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.999,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_CONV_FULLP_WIDE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.434,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDEM_CUBE_STORE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.38,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDEM_ENGLISH_IN": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.452,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDEM_TRIAD": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.459,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDEM_VOICE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.446,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDEP_EYE_PAIRING": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 487,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.763,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDEP_EYE_SCAN": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 59440,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 4.957,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDE_NOASK": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.445,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_CONV_FULLP_WIDE_REPLAY": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.449,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_E64_FULL": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.895,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_E64_FULLM_CUBE_STORE": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.847,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_E64_FULLM_ENGLISH_IN": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.784,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_E64_FULLM_VOICE": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.891,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_E64_FULLP_EYE_PAIRING": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.264,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_E64_FULLP_EYE_SCAN": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.723,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_E64_FULLP_WIDE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.929,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_E64_FULLP_WIDEM_CUBE_STORE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.879,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_E64_FULLP_WIDEM_ENGLISH_IN": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.817,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_E64_FULLP_WIDEM_VOICE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.928,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_E64_FULLP_WIDEP_EYE_PAIRING": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 300,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.289,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_E64_FULLP_WIDEP_EYE_SCAN": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 27792,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 2.254,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_E64_FULLP_WIDE_REPLAY": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 68
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.923,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_F64_FULL": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.969,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_F64_FULLM_ENGLISH_IN": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.863,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_F64_FULLM_TRIAD": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.968,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_F64_FULLM_VOICE": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.979,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_F64_FULLP_EYE_PAIRING": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.291,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_F64_FULLP_EYE_SCAN": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 2.023,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_F64_FULLP_WIDE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.012,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_F64_FULLP_WIDEM_ENGLISH_IN": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.906,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_F64_FULLP_WIDEM_TRIAD": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.001,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_F64_FULLP_WIDEM_VOICE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.016,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_F64_FULLP_WIDEP_EYE_PAIRING": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 338,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.344,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_F64_FULLP_WIDEP_EYE_SCAN": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 34256,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 2.686,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_F64_FULLP_WIDE_REPLAY": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 64
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 1.016,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULL": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": null,
+      "bad": 0,
+      "books": 0
+     },
+     "calls": 162,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 2.538,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLM_CUBE_STORE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": null,
+      "bad": 0,
+      "books": 0
+     },
+     "calls": 134,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 1.803,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLM_ENGLISH_IN": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": null,
+      "bad": 0,
+      "books": 0
+     },
+     "calls": 151,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 2.319,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLM_TRIAD": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": null,
+      "bad": 0,
+      "books": 0
+     },
+     "calls": 153,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 2.493,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLP_EYE_PAIRING": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": null,
+      "bad": 0,
+      "books": 0
+     },
+     "calls": 44,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 3.044,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLP_WIDE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": true,
+      "bad": 0,
+      "books": 92
+     },
+     "calls": 92,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 3.319,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLP_WIDEM_CUBE_STORE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": true,
+      "bad": 0,
+      "books": 79
+     },
+     "calls": 79,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 2.35,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLP_WIDEM_ENGLISH_IN": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": true,
+      "bad": 0,
+      "books": 91
+     },
+     "calls": 91,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 3.226,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLP_WIDEM_TRIAD": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": true,
+      "bad": 0,
+      "books": 89
+     },
+     "calls": 89,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 3.197,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIRW_A_STATIONARY_FULLP_WIDEP_EYE_PAIRING": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": true,
+      "bad": 0,
+      "books": 200
+     },
+     "calls": 200,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 6.002,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIRW_JOBMAP": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": {
+     "audit": {
+      "all_ok": true,
+      "bad": 0,
+      "books": 1180
+     },
+     "calls": 1416,
+     "crashes": 0
+    },
+    "restored": null,
+    "seconds": 34.824,
+    "unsettled_fired": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_A_STATIONARY_CUT_VIOLATORP_WIDE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 3.456,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_A_STATIONARY_FULL": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 2.361,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIR_A_STATIONARY_FULLP_EYE_PAIRING": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 3.48,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIR_A_STATIONARY_FULLP_WIDE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 2.387,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_A_STATIONARY_FULLP_WIDEP_EYE_PAIRING": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 3.515,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_A_STATIONARY_FULLP_WIDEP_EYE_PAIRING_REPLAY": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 3.499,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_A_STATIONARY_GUARD_VIOLATORP_WIDE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 0.74,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_B_DRIFT_FULL": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 2.053,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIR_B_DRIFT_FULLP_WIDE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 2.071,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_C_NULL_FULL": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 2.357,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_PAIR_C_NULL_FULLP_WIDE": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 2.388,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_PAIR_JOBMAP": {
+    "audit": null,
+    "eye_wide_checks": null,
+    "eye_wide_violations": null,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": null,
+    "seconds": 38.319,
+    "unsettled_fired": null,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_REAL_ALWAYS_ASK": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 0.356,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_REAL_FULL": {
+    "audit": null,
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "seconds": 2.178,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W6_X6_REAL_FULLP_WIDE": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 128
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 4.374,
+    "unsettled_fired": 11,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_REAL_FULLP_WIDEP_EYE_PAIRING": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 128
+    },
+    "eye_wide_checks": 1041,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 4.905,
+    "unsettled_fired": 11,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_REAL_FULLP_WIDEP_EYE_SCAN": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 128
+    },
+    "eye_wide_checks": 128269,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 12.983,
+    "unsettled_fired": 11,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_REAL_FULLP_WIDE_NOASK": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 128
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 4.39,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_REAL_FULLP_WIDE_REPLAY": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 128
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 4.371,
+    "unsettled_fired": 11,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W6_X6_REAL_WIDE_NO_LEARNING": {
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 128
+    },
+    "eye_wide_checks": 0,
+    "eye_wide_violations": 0,
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "quote_bypassed": null,
+    "real_job": null,
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "seconds": 3.532,
+    "unsettled_fired": 0,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   }
+  },
+  "worlds": {
+   "X6_PAIR": {
+    "A_STATIONARY": {
+     "CUT_VIOLATOR+WIDE": {
+      "items": 1522,
+      "resolved": 1066,
+      "undetermined": 456,
+      "wrong": 0
+     },
+     "FULL": {
+      "items": 1522,
+      "resolved": 547,
+      "undetermined": 975,
+      "wrong": 0
+     },
+     "FULL+EYE_PAIRING": {
+      "items": 1522,
+      "resolved": 1098,
+      "undetermined": 424,
+      "wrong": 0
+     },
+     "FULL+WIDE": {
+      "items": 1522,
+      "resolved": 547,
+      "undetermined": 975,
+      "wrong": 0
+     },
+     "FULL+WIDE+EYE_PAIRING": {
+      "items": 1522,
+      "resolved": 1098,
+      "undetermined": 424,
+      "wrong": 0
+     },
+     "FULL+WIDE+EYE_PAIRING_REPLAY": {
+      "items": 1522,
+      "resolved": 1098,
+      "undetermined": 424,
+      "wrong": 0
+     },
+     "GUARD_VIOLATOR+WIDE": {
+      "items": 1522,
+      "resolved": 0,
+      "undetermined": 1522,
+      "wrong": 0
+     }
+    },
+    "B_DRIFT": {
+     "FULL": {
+      "items": 1491,
+      "resolved": 495,
+      "undetermined": 996,
+      "wrong": 0
+     },
+     "FULL+WIDE": {
+      "items": 1491,
+      "resolved": 495,
+      "undetermined": 996,
+      "wrong": 0
+     }
+    },
+    "C_NULL": {
+     "FULL": {
+      "items": 1538,
+      "resolved": 648,
+      "undetermined": 890,
+      "wrong": 0
+     },
+     "FULL+WIDE": {
+      "items": 1538,
+      "resolved": 648,
+      "undetermined": 890,
+      "wrong": 0
+     }
+    }
+   },
+   "X6_PAIRW": {
+    "A_STATIONARY": {
+     "FULL": {
+      "items": 1536,
+      "resolved": 364,
+      "undetermined": 1172,
+      "wrong": 0
+     },
+     "FULL+EYE_PAIRING": {
+      "items": 1536,
+      "resolved": 806,
+      "undetermined": 730,
+      "wrong": 0
+     },
+     "FULL+WIDE": {
+      "items": 1536,
+      "resolved": 515,
+      "undetermined": 1021,
+      "wrong": 0
+     },
+     "FULL+WIDE+EYE_PAIRING": {
+      "items": 1536,
+      "resolved": 1045,
+      "undetermined": 491,
+      "wrong": 0
+     },
+     "FULL+WIDE-CUBE_STORE": {
+      "items": 1536,
+      "resolved": 346,
+      "undetermined": 1190,
+      "wrong": 0
+     },
+     "FULL+WIDE-ENGLISH_IN": {
+      "items": 1536,
+      "resolved": 407,
+      "undetermined": 1129,
+      "wrong": 0
+     },
+     "FULL+WIDE-TRIAD": {
+      "items": 1536,
+      "resolved": 401,
+      "undetermined": 1135,
+      "wrong": 0
+     },
+     "FULL-CUBE_STORE": {
+      "items": 1536,
+      "resolved": 235,
+      "undetermined": 1301,
+      "wrong": 0
+     },
+     "FULL-ENGLISH_IN": {
+      "items": 1536,
+      "resolved": 263,
+      "undetermined": 1273,
+      "wrong": 0
+     },
+     "FULL-TRIAD": {
+      "items": 1536,
+      "resolved": 277,
+      "undetermined": 1259,
+      "wrong": 0
+     }
+    }
+   }
+  }
+ },
+ "repro_x5": {
+  "REPRO_X5_E64": {
+   "FULL+WIDE_now": 62,
+   "FULL_now": 62,
+   "c40_FULL_RIGHT_AND_PLAIN": 62,
+   "items_whose_right_and_plain_changed_since_c40": 0,
+   "lost_by_wide": 0
+  },
+  "REPRO_X5_F64": {
+   "FULL+WIDE_now": 60,
+   "FULL_now": 60,
+   "c40_FULL_RIGHT_AND_PLAIN": 60,
+   "items_whose_right_and_plain_changed_since_c40": 0,
+   "lost_by_wide": 0
+  }
+ },
+ "schema": "helm.r1w6.reading/1",
+ "status_reason": "verdict PASS and every mark met",
+ "status_word": "WIDE_WAVE_EARNED_KEEP",
+ "verdict": "PASS"
+}
