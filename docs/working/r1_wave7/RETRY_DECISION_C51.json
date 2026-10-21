@@ -1,0 +1,26 @@
+{
+ "schema": "claude.plumbing-retry-decision/1",
+ "job": "helm-claude-r1w7-20261020-c51",
+ "attempt_failed": 1,
+ "attempt_next": 2,
+ "utc": "2026-10-21T03:00:04.858456+00:00",
+ "failure": {
+  "status": "SUPERVISOR_NONZERO",
+  "supervisor_exit": 1,
+  "error": "ValueError: PLAN_INVALID:r1w7_host_run:pythonpath",
+  "where": "execution/job_supervisor.py validate_plan, before any stage ran",
+  "host_seconds": "about 85 (launch 02:55:10Z, terminated 02:56:34Z)",
+  "deliverable_sha256": "a98b81405c1942e5de243eddd487d1f3d451d0d46eed3c09839186ac81bf69ce",
+  "deliverable_bytes": 1819,
+  "scored_units_started": 0,
+  "exam_opened_on_host": false
+ },
+ "cause": "the sealed kit/STAGE_R1W7.json carries pythonpath [] (every wave-7 process is `python -I`), and tests_r1w7/test_kit_w7.py pins []; the run-proven supervisor (byte copy) requires a non-empty list (it only exports PYTHONPATH). Builder defect in the kit plan; the sealed package, HELM cut, exam and carrier are not involved.",
+ "fix": "D-OP-C51-1: the operator's job plan (execution/job_plan.json, built by build_payload_c51.py) sets stage pythonpath = ['HELM_R1_W7_20261020'] (the stage's own package folder), exactly the shape of wave 6's run-proven plan. The sealed zip 5063baba, the carrier 51eb15db and every other byte of the payload are unchanged (members 1136 -> 1136; only execution/job_plan.json and payload_inventory.json differ).",
+ "rule": "APPROVAL_RECORD_R1W7.json: one plumbing retry only if no unit of the scored pool started; same zip, same carrier. Both hold.",
+ "payload_attempt1_sha256": "7268c6f1743b345755f47a11954f8adf7f96a6a8bc5090194832be0b370e2d4b",
+ "payload_attempt2_sha256": "ed3072f5ac21af4e704b027a2f1971d9bb454278ccee5fd39606fa585507e99d",
+ "hold": "the 1.00 USD hold (BUDGET_RESERVATION_R1W7_C51.json a708d313) covers both tries; its source_manifest_sha256 names the attempt-1 payload; recorded here and in the closeout addendum rather than re-held",
+ "cleanup_attempt1": "controller PRESERVED_AND_PREFIX_PURGE_VERIFIED; independent check VERIFIED; direct look: instance terminated, 0 volumes, 0 objects",
+ "local_validation": "kit/job_supervisor.py validate_plan accepts the new plan and refuses the attempt-1 plan (run on the laptop before launch)"
+}

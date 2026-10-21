@@ -1,0 +1,68 @@
+{
+  "schema": "helm.claude-job.cleanup-proof/1",
+  "utc": "2026-10-21T03:06:08.736340+00:00",
+  "job": "helm-claude-r1w7-20261020-c51",
+  "attempts": {
+    "helm-claude-r1w7-20261020-c51#a1": {
+      "instance": "i-05ec6cdce28860185",
+      "instance_type": "m6i.xlarge",
+      "ami": "ami-0dddfa1ffa6b87af7",
+      "launch_utc": "2026-10-21T02:55:09.038803+00:00",
+      "controller_cleanup_utc": "2026-10-21T02:56:56.301386+00:00",
+      "host_seconds": 107.262583,
+      "rate_usd_per_hour": 0.2013835616438356,
+      "list_price_usage_usd": 0.006,
+      "charge_usd": 0.01,
+      "cautious_usd": 0.02,
+      "controller_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c51_r1w7_20261020\\job_record\\aws-c51-a1-cleanup.json",
+        "sha256": "1a608ab75c01a36a18fee71ec7122125293b8a14a7c2b8edf0145095ff9f0827",
+        "status": "PRESERVED_AND_PREFIX_PURGE_VERIFIED"
+      },
+      "independent_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c51_r1w7_20261020\\job_record\\aws-c51-a1-independent-cleanup.json",
+        "sha256": "9d37ff535b3859f3841ac9799d31de30b16b68fc51a0c37363900a4837bac7c1",
+        "status": "VERIFIED",
+        "utc": "2026-10-21T02:57:56.838761+00:00"
+      },
+      "direct_observation": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c51_r1w7_20261020\\job_record\\aws-c51-a1-direct-observation.json",
+        "sha256": "7cd0d71299b9d6108ad3f6135bc65ccc10b1a1e5cfaeb9a9f2d9f1cd52165bbe",
+        "utc": "2026-10-21T02:57:59.281948+00:00",
+        "terminated_reason": "User initiated (2026-10-21 02:56:34 GMT)"
+      }
+    },
+    "helm-claude-r1w7-20261020-c51#a2": {
+      "instance": "i-0a89f8a7d01f46ace",
+      "instance_type": "m6i.xlarge",
+      "ami": "ami-0dddfa1ffa6b87af7",
+      "launch_utc": "2026-10-21T03:00:23.008603+00:00",
+      "controller_cleanup_utc": "2026-10-21T03:03:03.159988+00:00",
+      "host_seconds": 160.151385,
+      "rate_usd_per_hour": 0.2013835616438356,
+      "list_price_usage_usd": 0.008959,
+      "charge_usd": 0.01,
+      "cautious_usd": 0.03,
+      "controller_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c51_r1w7_20261020\\job_record\\aws-c51-a2-cleanup.json",
+        "sha256": "3c3f3ab0e5b3880369c010baee6f41405abee797fcc4cadea21240649bd2c0df",
+        "status": "PRESERVED_AND_PREFIX_PURGE_VERIFIED"
+      },
+      "independent_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c51_r1w7_20261020\\job_record\\aws-c51-a2-independent-cleanup.json",
+        "sha256": "fe585f972bc43d5f10f6ce9186b2f4b1abf8e918937a7a2e9063ca01c7c22588",
+        "status": "VERIFIED",
+        "utc": "2026-10-21T03:03:33.331731+00:00"
+      },
+      "direct_observation": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c51_r1w7_20261020\\job_record\\aws-c51-a2-direct-observation.json",
+        "sha256": "ddd59e0cee192bc4732762ee73f427436179a603b45a8fa81828ffdbfc1b6590",
+        "utc": "2026-10-21T03:03:36.101831+00:00",
+        "terminated_reason": "User initiated (2026-10-21 03:02:41 GMT)"
+      }
+    }
+  },
+  "observation": "every attempt: instance terminated; root volume deleted; no live project instances, no job volumes, no prefix versions or delete markers, no multipart uploads",
+  "temporary_role_profile_bucket": "none created: no instance profile at all (presigned URLs), the standing bucket with the c51-only prefix helm-r1w7-c51-20261020/ (purged, verified empty); the shared four-key prefix was never touched",
+  "status": "VERIFIED"
+}

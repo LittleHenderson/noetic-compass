@@ -26,7 +26,7 @@ one plumbing retry. Expected 0.02–0.10 USD (c48 and c50 cost 0.02 each on the 
    (controller, independent read-only check, direct read-only look), closeout against the measured list price.
 5. **Reader** (laptop, fresh extract of the zip, the five neighbours beside it):
    `python -X utf8 -B -I HELM_R1_W7_20261020\r1w7\merge_r1w7.py --merge-input MERGE_INPUT_R1W7.json --out R1_W7_READING.json`.
-6. **Record:** `RUN_RESULT_R1W7_C51.md`, spec sheet §7.99 in the same commit, CHANGELOG, hub, backup to `D:\tksCAS-archive\` with three
+6. **Record:** `RUN_RESULT_R1W7_C51.md`, spec sheet §7.101 in the same commit, CHANGELOG, hub, backup to `D:\tksCAS-archive\` with three
    hash passes. Negatives kept whatever the word.
 
 **Builder's forecast after v3 practice (not read by any program):** `CHAT_WAVE_EARNED_KEEP` about 0.45; `CHAT_WAVE_HARMED` about 0.2;
