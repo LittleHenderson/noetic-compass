@@ -26,6 +26,7 @@ The honesty rule is the first hard gate: a rebuilt memory is never presented as 
 | `PREREGISTRATION_MEMORY_COMPACTION_V1.precode.md` | the exam TEACH-1: gate answer, what is under test, seven arms (COMPACT_ON, VERBATIM_ONLY, FIFO_DROP, SUMMARY_TEXT, NO_REFRESH, RANDOM_REFRESH, REPLAY), SDG worlds with keys, LLM-written teaching turns, three quizzes, the squeeze (B = 12), scoring, 14 instrument rows, 12 hard gates, marks in four families kept apart (UNDERSTOOD, RECALL, REFRESH, SOUNDED_HUMAN), status words in frozen order, ceiling, forecast, seeds, cost |
 | `PREREGISTRATION_MEMORY_COMPACTION_V1.precode.sha256` | the sha256 of the pre-code file |
 | `OPEN_QUESTIONS.md` | the fourteen decisions that are the owner's, each with a recommendation and the cost of each option |
+| `CENSUS_FIFO_DROPS_20261021.md` | the free census of DESIGN §8 step 1: does today's chat memory ever fill? 0 dropped turns of a floor of 8 → `STOP_NOT_EXERCISED`; one `user_facts` slip found, not fixed |
 
 ## The hash
 
