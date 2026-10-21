@@ -32,7 +32,7 @@ What the capsule sentence looks like (from the smoke run below): `you are compos
 
 ## 3. Every HELM suite, switch OFF (the default)
 
-`python -m pytest test_helm_*.py -q` with `HELM_MEMORY_COMPACT` unset: **322 passed** (the 294 on the thread head plus the 28 new and the 1 new memory test; counts from the run on the committed tree). One test, `test_helm_triad.py::test_15_sealed_package_untouched`, fails on any uncommitted change to `helm_chat.py` by design and passes on the committed tree. With the switch ON, `test_helm_memory_compact.py` + `test_helm_memory.py`: 33 passed.
+`python -m pytest test_helm_*.py -q` with `HELM_MEMORY_COMPACT` unset: **322 passed** (the 294 on the thread head plus the 28 new and the 1 new memory test; counts from the run on the committed tree). One test, `test_helm_triad.py::test_15_sealed_package_untouched`, fails on any uncommitted change to `helm_chat.py` by design and passes on the committed tree. With the switch ON, `test_helm_memory_compact.py` + `test_helm_memory.py`: 33 passed. After merging the thread head `55cda1e2` (reader v7.2, §7.117, 7 more tests) into the build branch: **329 passed**, switch OFF.
 
 OFF path: `compactor` is `None`; `record_turn` keeps `turn_id = len(self.turns) + 1` and the FIFO trim exactly as before; `helm_chat` never calls the compactor. The one deliberate OFF-path change is the `user_facts` cap (`[-20:]`), ordered by the owner.
 
