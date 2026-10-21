@@ -3921,6 +3921,43 @@ licensed brain, the lexicon and the K4 rule are untouched.**
 - **`NOT LICENSED`:** everything in §7.108's list, unchanged. **Open (the owner's):** the word on D6; the word on building D1–D5; G4.
 - **Artifacts:** as the table; this section's PR carries the repo copies.
 
+### 7.110 HELM-R1 wave 7 READER-GAP BUILD (SPEC 7.109 D1–D5 as code, FIX FIRST, 0 USD) and AMENDMENT A-R1W7-7 (D6, the custodian's MULTI_QTY rule): wide reader v7 reads a stock sentence's face or purpose clause, the face reader takes any bound name, the wide path stores faces and the wide question applies them as the licensed triad does, the past-tense lesson paraphrase reads; 26 new tests fail on the v6 reader and pass on v7; every HELM suite passes (271 tests) with the OFF-path pin recomputed; the amendment's 7 tests pass on a scratch copy of the v6 package with the frozen neighbours; `ENGINEERED-NOT-VALIDATED`; no claim moved (2026-10-21 PDT)
+
+**Said plainly first.** The owner typed: "Merge PR #433 into the thread branch. Build D1 to D5 with tests, FIX FIRST, at 0 USD. Yes to D6,
+the custodian MULTI_QTY rule, as amendment A-R1W7-7." All of it was done on the laptop at 0 USD. **The HELM side (D1–D5):** the tests were
+written first (`test_helm_reader_gap.py`, 26 tests on the author's own sentences; 20 of 23 of the first cut failed on the v6 reader), then the
+code. D1: `read_wide` splits a trailing clause off a stock sentence (`split_clause`) and carries it as `clause`; the stock is read, never
+refused for the clause, and a clause is never a note. D2: `helm_faces_in.read(..., names_as_given=True)` builds its name forms from the names
+it is given (the wide book's own ingredient and product names: as given, singular, plural, last word; longest wins); the default mode is byte
+for byte v1. D3: the wide path records the stock, then reads the clause with the wide names: a face goes into the wide path's own
+`helm_triad.TriadTable` (receipted) under the wide name; a clause that is not a face is ignored with a `CLAUSE_IGNORED` trace; one the reader
+cannot read ends in a `CLARIFY_WIDE_FACE_UNREAD` ask with the stock kept; on the licensed-recorded path (everyday names) the licensed status,
+message and receipt stand and an unreadable clause is asked at the next wide question. D4: the wide question applies η = the smallest of the
+three face values per ingredient (Rising 1/4, Waning 1/2, Peak 1, Absent 0, `helm_triad`), reading the wide table and the licensed table;
+recipe Purpose absent → `CLARIFY_WIDE_PURPOSE_ABSENT`; ingredient Purpose absent → `CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT`; the receipt carries
+η per ingredient and the voice says what was counted ("Because the spelt flour has lost some strength, I counted 1/2 of the spelt flour.");
+`CLARIFY_WIDE_FACE_NOT_HELD` (v4) is retired. D5: a lesson may begin with a time phrase and end ", and the X ran out first". **The instrument
+side (D6, A-R1W7-7):** `r1w7/multi_qty_w7.py` tags a raw book line that carries a second amount after a separator (", 12 peppercorns",
+"and 1/2 cup water"; parentheses removed first; "1-1/2" and "one and a half" are one amount; a line the survey already refuses keeps its own
+reason) with `line<i>:MULTI_QTY` in the key's `representable.why_not`, so such recipes score `NOT_SCORED`; one import and one hook in
+`custody_w7.make_all`; the frozen key package is untouched. The forked session applies it with `apply_amendment_7.py` when it builds v7.
+**Claim states:** the code is `ENGINEERED-NOT-VALIDATED` until a sealed draw; nothing is licensed; §7.56 unchanged.
+
+| Item | Value |
+|---|---|
+| HELM files (branch `claude/helm-reader-gap-build-20261021`) | `helm_wide_turn.py` `05dcc16e62eb0f40…` (reader `RB-W1 v7 (2026-10-21)`); `helm_faces_in.py` `c034bb6608b9a89d…` (`v2 … names as given`); `test_helm_reader_gap.py` `d92d61ec5d546616…` (26 tests: A reader split 5, B face names 4, C wide path 3, D question 7, E paraphrase 3, F licensed default 1, G everyday-name path 3); `test_helm_wide_alongside.py` (3 expectations updated from "ask" to "apply", `b5e06868d86b30f9…`); `test_helm_cas_address.py` OFF-path pin `312ddfd6…` → `83f96a4a3e64256f0cae1c5567285463f442f92f1c4759e6b2c7bdd397502c35` (same machine-neutral canon; `offending` empty) |
+| FIX FIRST | first cut of the new tests on the v6 reader: 20 of 23 failed (3 passed by construction); on v7: 26 of 26 pass |
+| Every HELM suite (laptop) | 15 `test_helm_*.py` files: Ran 271, OK (incl. `test_helm_pin_hygiene`); the host's list must grow by `test_helm_reader_gap` (12 names) at the v7 seal |
+| Amendment files | `amendment_7/` in the Codex run tree; repo copies `docs/working/r1_wave7/a_r1w7_7/`: `AMENDMENT_A_R1W7_7.md` `f1d885386b1fe89c…`, `multi_qty_w7.py` `04d2df7e7cd75a34…`, `test_multi_qty_w7.py` `3c58d323be3c9018…`, `apply_amendment_7.py` `c022b29ad3f75bf9…` |
+| Amendment proof | applied to a scratch copy of the sealed v6 tree with the five frozen neighbours (env `R1W7_*_DIR`): 7 of 7 tests OK (comma, semicolon, "and", "or" second amounts tagged; "1-1/2", "2 1/2", "one and a half", "(about 240 ml)", "1/2 to 1" not; a range line keeps `FORM_range` and is not re-tagged; idempotent); the package's own suite: 34 of 34 OK on the unmodified tree, 33 of 34 on the scratch tree where `test_runner_refuses_a_key_file_in_the_carrier` meets `R1W7_MEMBER_SHA256_MISMATCH` first — the member freeze is recomputed at the reseal, so that one is expected there and must read OK on v7 |
+| Not changed | `helm_brain_canonical.py`; `helm_faces_lexicon.json`; the K4 rule; the frozen key package; the 40/4/7 primitives; the licensed path's answers (test F; the alongside suite) |
+| Cost | 0 USD; laptop only |
+
+- **Open (the forked session, on its own process):** build v7 from the merged thread head with the host list of 12, apply A-R1W7-7, re-freeze,
+  record 7.111; then the custodian, the owner's own typed line, one machine run (≈0.02 USD). **Open (the owner):** that line, when the seal is
+  verified here.
+- **`NOT LICENSED`:** everything in §7.108's list, unchanged; the v7 reader on any exam.
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -4213,6 +4250,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-21 | **HELM-R1 WAVE 7 READER-GAP BUILD + AMENDMENT A-R1W7-7 (new §7.110), 0 USD.** D1–D5 as code, FIX FIRST: wide reader v7 carries a stock sentence's clause, the face reader takes any bound name, the wide path stores faces and the wide question applies η (helm_triad), the past-tense lesson reads; 26 new tests (20 of 23 failed on v6); 271 HELM tests OK; OFF-path pin recomputed `83f96a4a…`. D6: `multi_qty_w7.py` + custody hook + 7 tests, proven on a scratch v6 tree with the frozen neighbours. `ENGINEERED-NOT-VALIDATED`; nothing licensed. | branch `claude/helm-reader-gap-build-20261021`; `docs/working/r1_wave7/a_r1w7_7/` |
 | 2026-10-21 | **HELM-R1 WAVE 7 READER-GAP DIAGNOSIS + DESIGN PACKET (new §7.109), 0 USD.** c54's two asks = a book line with two amounts (key keeps one lesson, reader reads two; HELM's ask honest; fix = custodian `MULTI_QTY` rule, PROPOSED, A-R1W7-7). The 32 clause-bearing dialogue items fail at the face reader's 8-word name table, not its lexicon (28 of 28 face clauses fit a row with the name slot open; S7 0 of 4). R4 paraphrase: no time phrase / subject form in the regexes. G4 sized: 15 of 128 recipes lost to units outside the table. Design D1–D7 hashed before code; nothing changed in code; no claim moved. | `docs/working/r1_wave7/K4_ITEM_DIAGNOSIS_C54.md` `368cc65d…`; `docs/working/r1_wave7/READER_GAP_DESIGN_PACKET_R1W7_20261021.md` `26b17c49…` |
 | 2026-10-21 | **HELM-R1 WAVE 7 ROUND 4 — platform-safe OFF pin test + v6 RESEAL with the host's exact suite list run from the seal, NOT LAUNCHED (new §7.107; owner order "Fourth chat round: fix the platform-bound pin test, run the host's exact test list from the seal, reseal v6 at 0 USD, then give me the line"; laptop, 0 USD; no claim moved).** c53's one false row = a test fingerprint carrying the licensed brain's folder path (host `6bf323ad…` reproduced exactly on the laptop by reporting the host's path, on base `159c7d2b` too); fixed by PR #429 commit `ad4fde73` (`helm_test_pins` strips `brain_dir` / `receipt_hash`, pin `312ddfd6…`, 9 hygiene tests; first pass `3dae274f` insufficient by diff, superseded; builder's own `62d559a8` / PR #427 withdrawn). v6 zip `387577de…`, freeze `3c7a9f3d…`, cut 166 files, host list 11 names run from the seal `Ran 245, OK (skipped=1)`, block `X7v5_c53` (20 lists, 1,850 ids), bands 2,012 / 2,014 / 2,016 M, line `CHAT WAVE 4 at 1 USD`; practice run8 = run7 (0 differing keys). v5 `VOID_SUPERSEDED_BY_V6`. | `docs/working/r1_wave7/` (v6 records, `PIN_TEST_DIAGNOSIS.md`, `TEST_RECORD_R1W7.md` §11) |
 | 2026-10-21 | **HELM-R1 WAVE 7 v6 "CHAT WAVE" FOURTH ROUND — job c54 (new §7.108): verdict `PASS`, word `CHAT_WAVE_NO_GAIN` 🟧; 0.02 USD.** Owner line `CHAT WAVE 4 at 1 USD`; v6 zip `387577de…` (cut `ad4fde73`); fresh exam (23 of 23, 0 overlap with three spent exams). One attempt, 14 of 14 units, 245 + 34 tests OK ON THE HOST. Frozen reader: 8 of 8 instrument rows, 10 of 10 hard gates — the first fully clean instrument of the four runs — marks K1 91/94, K3 0 wrong, NH-CHAT lost 0/0, P 0, N 0 true; **K4 missed by 2 unexplained asks** (same in LOOP_ON: brain-side, the §7.105 class on other lines). Nothing licensed. Cleanup three ways; ledger 113.30 / 86.70 unreserved. | `Documents\Codex\2026-10-20\r1_wave7\run_c54_r1w7v6_20261021\RUN_RESULT_R1W7V6_C54.md`; `R1_W7_READING.json` `9bf8a2b6…`; `docs/working/r1_wave7/` |

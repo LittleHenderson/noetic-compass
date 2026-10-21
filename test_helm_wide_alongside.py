@@ -40,7 +40,9 @@ class wide_on:
 
 
 class A_ClauseIsNotANote(unittest.TestCase):
-    def test_face_and_purpose_clauses_ask(self):
+    def test_face_and_purpose_clauses_are_carried_never_noted(self):
+        """v4: the whole sentence was one question. v7 (SPEC 7.109 D1): the stock is read and the clause is carried
+        beside it, never folded into an ingredient's note; the wide path then reads it as a face or says why not."""
         for text in ("We have 2 cups flour and 3 cups heavy cream, but the heavy cream is past its best.",
                      "We have 2 cups flour, but I'm a bit rusty with the flour.",
                      "We have 2 cups flour and 3 cups heavy cream, but there's no reason to bake shortcake today.",
@@ -49,7 +51,10 @@ class A_ClauseIsNotANote(unittest.TestCase):
                      "We have 2 cups flour and 3 cups heavy cream, but I'm saving the flour for something else.",
                      "We have 2 cups flour and the flour is getting old."):
             r = WT.read_wide(text)
-            self.assertEqual((r["status"], (r["clarify"] or {}).get("code")), ("CLARIFY", "UNREAD_CLAUSE"), text)
+            self.assertEqual(r["status"], "STOCK", text)
+            self.assertTrue(r.get("clause"), text)
+            self.assertTrue(set(r["stock"]) <= {"flour", "heavy cream"}, text)
+            self.assertNotIn(r["clause"], " ".join(str(v) for v in r["stock"].values()), text)
 
     def test_plain_lines_and_real_notes_still_read(self):
         for text, names in (("We have 2 cups flour and 3 cups heavy cream.", {"flour", "heavy cream"}),
@@ -80,14 +85,19 @@ class B_LiveLoop(unittest.TestCase):
             self.assertEqual(loop.process_turn(s, tick=t)["loop_status"], "WITNESS_ADMITTED")
         return loop
 
-    def test_face_clause_never_answered(self):
+    def test_face_clause_never_answered_as_if_unsaid(self):
+        """v4: asked, nothing saved. v7 (SPEC 7.109 D3/D4): the stock is recorded, the face is stored under the wide
+        name, and the answer COUNTS it (flour at half strength: 6 * 1/2 = 3 cups -> 3/2 shortcake, flour limits),
+        never the raw-stock answer (3, flour)."""
         loop = self.taught()
         r = loop.process_turn("We have 6 cups flour and 6 cups heavy cream, but the flour is past its best.", tick=3)
-        self.assertTrue(r["loop_status"].startswith("CLARIFY"), r["loop_status"])     # asked, nothing saved
-        self.assertFalse(r.get("cubes_written"))
-        self.assertEqual(loop.wide_stock if hasattr(loop, "wide_stock") else {}, {})
+        self.assertEqual(r["loop_status"], "STOCK_RECORDED")
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in r["clause_read"]["faces"]],
+                         [("flour", "POWER", "WANING")])
         q = loop.process_turn("How much shortcake can we make?", tick=4)
-        self.assertNotEqual(q["loop_status"], "SUCCESS_EVALUATED")
+        self.assertEqual(q["loop_status"], "SUCCESS_EVALUATED")
+        self.assertEqual(Fraction(str(q["output_value"])), Fraction(3, 2))
+        self.assertEqual(q["limiting_reagent"], "flour")
 
     def test_face_held_by_the_triad_is_never_ignored(self):
         """The licensed faces reader took "the flour is past its best" into the triad (Flour, Power Waning); the wide
@@ -105,8 +115,11 @@ class B_LiveLoop(unittest.TestCase):
                          "SUCCESS_EVALUATED")
         tb.table.set_face("ingredient", "Flour", "POWER", "WANING", "USER_SAID", "test-evidence")
         q = loop.process_turn("How much shortcake can we make?", tick=5)
-        self.assertEqual(q["loop_status"], "CLARIFY_WIDE_FACE_NOT_HELD")
-        self.assertFalse(q.get("cubes_written"))
+        # v7 (SPEC 7.109 D4): the face held by the licensed triad is applied, not refused: flour 6 * 1/2 -> 3/2
+        self.assertEqual(q["loop_status"], "SUCCESS_EVALUATED")
+        self.assertEqual(Fraction(str(q["output_value"])), Fraction(3, 2))
+        self.assertEqual(q["limiting_reagent"], "flour")
+        self.assertEqual(q["recipe_receipt"]["eta_ingredient"]["flour"], "1/2")
 
     def test_restated_in_another_kind_of_unit_asks(self):
         loop = self.taught()

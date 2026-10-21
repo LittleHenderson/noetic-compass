@@ -28,6 +28,15 @@ store (a cube write only after the gate and the brain's receipt passed, then rea
 CLAIM STATUS: see helm_brain_wide: VALIDATED for the SPEC 7.89 / 7.96 sentences only (NAMED_CORPORA_ONLY + SYNTHETIC_ONLY).
 This reader is v5 (relative amounts bundled with their line), the version scored in job c50 (SPEC 7.96).
 
+v7 (2026-10-21, SPEC 7.109 design packet D1-D5, FIX FIRST): a STOCK sentence may end in a clause ("..., but the flour
+is getting old"): the stock is read and the clause is carried beside it (never a note, never a refusal of the stock); the
+wide path reads the clause with the face reader using the wide book's own names (helm_faces_in, names_as_given), stores
+a face in its own triad table (helm_triad.TriadTable, receipted), ignores a clause that is not a face with a trace, and
+asks on one it cannot read; the wide question applies stated faces as the licensed triad does (eta = the smallest of the
+three face values per ingredient; recipe Purpose absent -> ask; ingredient Purpose absent -> ask). A lesson may begin
+with a time phrase ("Yesterday we made ...") and end "..., and the flour ran out first". ENGINEERED-NOT-VALIDATED until
+a sealed draw; no claim moved.
+
 STAGE 1c (2026-10-20, switch WIDE_UNITS_NOTE, default OFF; see helm_brain_wide's header): with the switch ON this same
 reader also reads the 6 widened units (liter, deciliter, centiliter, gallon, fluid ounce, dozen) and reads a line with no
 exact amount, or with a unit nobody can size, as a NOTE line {"name", "amount": None, "unit": "", "note": True}: present,
@@ -42,8 +51,10 @@ from fractions import Fraction
 from typing import Any, Dict, List, Optional, Tuple
 
 import helm_brain_wide as W
+import helm_faces_in as FI          # v7 (SPEC 7.109 D2/D3): the face reader, names as given
+import helm_triad as HT             # v7 (SPEC 7.109 D4): the one scale and the triad table (stdlib only)
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v5 (2026-10-20)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v7 (2026-10-21)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -425,6 +436,19 @@ def split_lines(text: str) -> List[Tuple[str, str]]:
     return [(a, b) for a, b in out]
 
 
+def split_clause(text: str) -> Tuple[str, Optional[str]]:
+    """v7 (SPEC 7.109 D1): a STOCK list that ends in a clause ("..., but the flour is getting old", "... and the
+    flour is getting old") -> (the list, the clause without its joining word). Before v7 the whole sentence was one
+    question (UNREAD_CLAUSE) and no stock was recorded on 32 of 64 dialogue items per draw. The clause is never a
+    note: the wide path reads it as a face or says why it did not (helm_wide_turn._read_clause)."""
+    for m in SEP_RX.finditer(text):
+        piece = text[m.end():].strip()
+        if piece and CLAUSE_RX.match(piece):
+            clause = re.sub(r"^(?:but|and|yet)\s+", "", piece, flags=re.IGNORECASE).strip().rstrip(".").strip()
+            return text[:m.start()].strip(), clause
+    return text, None
+
+
 def parse_lines(text: str) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """A list of ingredient lines ('a, b and c'). Notes after a comma stay with their line. All or nothing."""
     lines: List[Dict[str, Any]] = []
@@ -465,12 +489,17 @@ def normalize_text(text: str) -> str:
     return GREETING_RX.sub("", t)
 
 
-WITNESS_RX = re.compile(r"^(?:so\s+|ok(?:ay)?,?\s+)?(?:we|i)\s+(?:just\s+)?(?:made|baked|cooked|produced|whipped up)\s+"
-                        r"(?P<rest>.+?)\s*[.!]?$", re.IGNORECASE)
+#: v7 (SPEC 7.109 D5): a leading time phrase on a lesson ("Yesterday we made ...") is dropped; a small closed list
+TIME_PHRASE = (r"(?:(?:yesterday|last night|this morning|this afternoon|this evening|earlier today|earlier|"
+               r"a while ago|on (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)),?\s+)?")
+WITNESS_RX = re.compile(r"^" + TIME_PHRASE + r"(?:so\s+|ok(?:ay)?,?\s+)?(?:we|i)\s+(?:just\s+)?"
+                        r"(?:made|baked|cooked|produced|whipped up)\s+(?P<rest>.+?)\s*[.!]?$", re.IGNORECASE)
 END_RX = re.compile(r"^(?P<lines>.+?),?\s+and\s+(?:then\s+)?(?:(?:we|i)\s+)?(?:"
                     r"ran out of\s+(?P<out>.+)"
                     r"|(?P<none>nothing ran out|(?:we\s+|i\s+)?(?:did not|didn't) run out of anything|"
-                    r"(?:we\s+|i\s+)?ran out of nothing))$", re.IGNORECASE)
+                    r"(?:we\s+|i\s+)?ran out of nothing)"
+                    # v7 (SPEC 7.109 D5): the subject form ", and the flour ran out first"
+                    r"|(?:the\s+)?(?P<subj>[a-z][a-z' -]*?)\s+ran out(?:\s+first)?)$", re.IGNORECASE)
 #: v4: a restatement ("Actually, we have 4 pounds of sugar now.") is stock too, so the new amount replaces the old one:
 #: the brain then converts it through its unit table or asks (UNIT_KIND_MISMATCH); it never answers from the old one
 STOCK_RX = re.compile(r"^(?:(?:actually|now|ok(?:ay)?|so|sorry|correction|update)\s*,?\s+)?"
@@ -595,7 +624,8 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
     """Read one sentence. Status WITNESS, STOCK, QUESTION, CLARIFY or NOT_MINE. Never invents an amount."""
     t = normalize_text(text)
     out: Dict[str, Any] = {"reader": READER_VERSION, "claim_status": CLAIM_STATUS, "status": "NOT_MINE",
-                           "normalized": t, "witness": None, "stock": None, "topic": None, "clarify": None}
+                           "normalized": t, "witness": None, "stock": None, "topic": None, "clarify": None,
+                           "clause": None}
 
     def clarify(c: Dict[str, Any]) -> Dict[str, Any]:
         out.update(status="CLARIFY", clarify=c)
@@ -632,8 +662,9 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
             return clarify(first_problem or _ask("NO_INGREDIENTS"))
         product = bind_product(rest[:sep.start()])
         ran_out: List[str] = []
-        if e.group("out"):
-            words = re.sub(r"\b(?:at the same time|at once|first|both|the|too)\b", " ", e.group("out").lower())
+        if e.group("out") or e.group("subj"):
+            words = re.sub(r"\b(?:at the same time|at once|first|both|the|too)\b", " ",
+                           (e.group("out") or e.group("subj")).lower())
             for part in re.split(r",\s*|\s+and\s+|\s+&\s+", words):
                 n = bind_name(part) or bind_name(part, drop_leading=False)     # v3: "ran out of large" -> "large"
                 if n and n not in ran_out:
@@ -654,10 +685,11 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
         if a:                                      # v6: "..., but we've run out of sugar" -> a question, never a name
             return clarify(_ask("ABSENT_STATED", item=bind_name(a.group("absent")) or a.group("absent").strip(),
                                 words=a.group("lines")))
-        lines, c = parse_lines(m.group("lines"))
+        body, clause = split_clause(m.group("lines"))     # v7 (SPEC 7.109 D1): the clause rides along
+        lines, c = parse_lines(body)
         if c:
             return clarify(c)
-        out.update(status="STOCK", stock={x["name"]: (x["amount"], x["unit"]) for x in lines})
+        out.update(status="STOCK", stock={x["name"]: (x["amount"], x["unit"]) for x in lines}, clause=clause)
         return out
     m = QUESTION_RX.match(t)
     if m:
@@ -941,6 +973,11 @@ def extended_turn(loop: Any, user_english: str, tick: int, current_inventory: An
     recorded = res.get("loop_status") in STOCK_DONE and reading["status"] == "STOCK"
     if recorded:
         _stock_of(loop).update(reading["stock"])          # one stock on hand; the wide brain reads it too (no write)
+        if reading.get("clause"):                          # v7 (D3): the clause is read into the wide faces too
+            cr = _read_clause(loop, reading["clause"], tick, res)
+            # the licensed result (status, message, receipt) stands; a clause the face reader could not read is
+            # asked at the next wide question, never dropped (loop.wide_clause_pending)
+            loop.wide_clause_pending = {"clause": reading["clause"], "read": cr} if cr["status"] == "CLARIFY" else None
     taken = take_over(loop, res, reading)
     if not taken and not recorded and reading["status"] != "QUESTION":
         _withdraw_mentioned_stock(loop, user_english, tick)   # v4: never answer from stock the person just restated
@@ -995,7 +1032,7 @@ def wide_turn(loop: Any, user_english: str, tick: int) -> Dict[str, Any]:
         return wide_witness(loop, w["product"], w["stock"], w["made"], w["ran_out"], tick, result=result,
                             writes_before=writes_before)
     if reading["status"] == "STOCK":
-        return _wide_stock(loop, reading["stock"], tick, result, writes_before)
+        return _wide_stock(loop, reading["stock"], tick, result, writes_before, clause=reading.get("clause"))
     return _wide_question(loop, reading["topic"], tick, result, writes_before)
 
 
@@ -1052,8 +1089,100 @@ def _stock_of(loop: Any) -> Dict[str, Tuple[Fraction, str]]:
     return loop.wide_stock
 
 
+def _faces_of(loop: Any) -> "HT.TriadTable":
+    """v7 (SPEC 7.109 D3): the wide path's own triad table (stated faces, receipted; helm_triad.TriadTable). Faces
+    the LICENSED path holds in `loop.brain.table` are read as well (_face_stages); nothing is written there."""
+    if not hasattr(loop, "wide_faces"):
+        loop.wide_faces = HT.TriadTable()
+    return loop.wide_faces
+
+
+def _read_clause(loop: Any, clause: str, tick: int, result: Dict[str, Any]) -> Dict[str, Any]:
+    """v7 (SPEC 7.109 D3): the clause of a stock sentence, read by the face reader with the wide book's own names.
+    FACES -> stored in the wide triad table under the wide name (receipted; a refusal becomes a question, never a
+    silent drop); NONE -> ignored with a trace (not a face: "I love baking with milk"); CLARIFY -> a question."""
+    book = loop.wide_book
+    names = list(dict.fromkeys(list(book.ingredients) + list(_stock_of(loop))))
+    products = list(book.recipes)
+    fr = FI.read(clause, names, products, names_as_given=True)
+    rec: Dict[str, Any] = {"reader": fr["reader"], "lexicon": fr["lexicon"], "status": fr["status"], "faces": [],
+                           "clarify": fr.get("clarify"), "clause_digest": FI.evidence_digest(clause)}
+    if fr["status"] == "FACES":
+        table = _faces_of(loop)
+        for f in fr["faces"]:
+            name = f["name"] if f["scope"] == "ingredient" else (match_product(book, f["name"]) or f["name"])
+            try:
+                receipt = table.set_face(f["scope"], name, f["face"], f["stage"], f["source"], rec["clause_digest"])
+            except HT.TriadRefused as exc:
+                rec.update(status="CLARIFY", clarify={"code": "FACE_REFUSED",
+                                                       "slots": {"refusal": exc.code, "detail": exc.detail,
+                                                                 "name": name, "face": f["face"]}})
+                break
+            rec["faces"].append({"scope": f["scope"], "name": name, "face": f["face"], "stage": f["stage"],
+                                 "row": f["row"], "source": f["source"], "receipt": receipt})
+    elif fr["status"] == "NONE":
+        rec["ignored"] = "CLAUSE_IGNORED"
+    result["clause_read"] = rec
+    loop._emit(tick, "clause (wide)", **{k: v for k, v in rec.items() if k != "lexicon"})
+    return rec
+
+
+def say_clause_question(rec: Dict[str, Any], clause: str) -> str:
+    code, s = rec["clarify"]["code"], rec["clarify"].get("slots") or {}
+    if code == "FACE_WHICH_INGREDIENT":
+        return (f"You also said \"{clause}\", and I can't tell which ingredient you meant, so I didn't take it as a "
+                f"fact. Which one is it?")
+    if code == "FACE_NEGATED":
+        return (f"You also said \"{clause}\". I don't read a \"not\" like that into a fact about an ingredient, so I "
+                f"didn't take it. Could you say it the plain way?")
+    if code == "FACE_REFUSED":
+        return (f"You also said \"{clause}\", but I can't lower what I hold about the {s.get('name', 'ingredient')} "
+                f"without knowing what happened ({s.get('refusal', 'refused')}). I didn't take it. What changed?")
+    return (f"You also said \"{clause}\", and I couldn't quite read it, so I didn't take it as a fact. Could you say "
+            f"that part another way?")
+
+
+def _face_stages(loop: Any, name: str) -> Tuple[str, str, str]:
+    """v7 (D4): the three faces of a wide ingredient: the wide table first, then the licensed table (by the name, its
+    capitalised form, or its last word), PEAK when unstated, UNKNOWN when a stored record failed its receipt."""
+    tables = [_faces_of(loop)]
+    lic = getattr(getattr(loop, "brain", None), "table", None)
+    if lic is not None and getattr(lic, "records", None) is not None:
+        tables.append(lic)
+    forms = [name, name.capitalize(), name.title()]
+    if name.split():
+        last = singular(name.split()[-1])
+        forms += [last, last.capitalize()]
+    stages: List[str] = []
+    for face in HT.RPM_ORDER:
+        got = HT.PEAK
+        for tb in tables:
+            for cand in dict.fromkeys(forms):
+                s = tb.stage(cand, face)
+                if s != HT.PEAK:
+                    got = s
+                    break
+            if got != HT.PEAK:
+                break
+        stages.append(got)
+    return (stages[0], stages[1], stages[2])
+
+
+def _recipe_purpose(loop: Any, product: str) -> Tuple[str, str]:
+    tables = [_faces_of(loop)]
+    lic = getattr(getattr(loop, "brain", None), "table", None)
+    if lic is not None and getattr(lic, "records", None) is not None:
+        tables.append(lic)
+    for tb in tables:
+        for cand in dict.fromkeys([product, product.capitalize(), product.title()]):
+            stage, source = tb.recipe_purpose(cand)
+            if stage != HT.PEAK:
+                return stage, source
+    return HT.PEAK, HT.UNSTATED_NEUTRAL
+
+
 def _wide_stock(loop: Any, stock: Dict[str, Tuple[Fraction, str]], tick: int, result: Dict[str, Any],
-                writes_before: int) -> Dict[str, Any]:
+                writes_before: int, clause: Optional[str] = None) -> Dict[str, Any]:
     import helm_end_to_end_loop as E
     amounts = {n: (q, u) for n, (q, u) in stock.items() if q is not None}
     if amounts:
@@ -1078,7 +1207,16 @@ def _wide_stock(loop: Any, stock: Dict[str, Tuple[Fraction, str]], tick: int, re
     write = loop._write_event_cube(f"wide_stock_t{tick}", "Stock on hand", statement, "USER_SAID", tick)
     loop._emit(tick, "store", what="cube_write", **write)
     result["cube_receipt"] = write
-    return loop._finish(result, tick, "STOCK_RECORDED", f"Noted: we have {say_and(said)}.", writes_before, "DONE")
+    reply = f"Noted: we have {say_and(said)}."
+    if clause:                                     # v7 (SPEC 7.109 D3): the stock is recorded, THEN the clause is read
+        cr = _read_clause(loop, clause, tick, result)
+        if cr["status"] == "CLARIFY":
+            code = cr["clarify"]["code"]
+            return loop._finish(result, tick, f"CLARIFY_WIDE_{code}", reply + " " + say_clause_question(cr, clause),
+                                writes_before, f"WAIT_FOR_USER: {code}")
+        if cr["status"] == "FACES":
+            reply += " " + " ".join(FI.say_face(f) for f in cr["faces"])
+    return loop._finish(result, tick, "STOCK_RECORDED", reply, writes_before, "DONE")
 
 
 def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], writes_before: int) -> Dict[str, Any]:
@@ -1093,18 +1231,42 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
         return loop._finish(result, tick, "UNDETERMINED_UNKNOWN_PRODUCT", say_wide(rec), writes_before,
                             "WAIT_FOR_USER: a witnessed batch")
     loop.last_topic = product
+    pending = getattr(loop, "wide_clause_pending", None)
+    if pending:                                    # v7 (D3): a clause the licensed-recorded path could not read
+        loop.wide_clause_pending = None
+        code = pending["read"]["clarify"]["code"]
+        result["clause_read"] = pending["read"]
+        return loop._finish(result, tick, f"CLARIFY_WIDE_{code}",
+                            f"Before I work out {product}: " + say_clause_question(pending["read"], pending["clause"]),
+                            writes_before, f"WAIT_FOR_USER: {code}")
     support = brain.support_of(product)
-    faced = faces_said_about(loop, product, support)
-    if faced:                                      # v4: a stated face this brain cannot apply -> ask, never ignore it
-        loop._emit(tick, "S1 trigger ^8", product=product, faces_not_held=faced)
-        result["faces_not_held"] = faced
-        what = "the " + faced[0]["name"].lower() if faced[0]["scope"] == "ingredient" else "whether it's needed"
-        return loop._finish(result, tick, "CLARIFY_WIDE_FACE_NOT_HELD",
-                            f"You told me something about {what}, and I can't use that for {product} yet, so I won't "
-                            f"guess how much we can make. Can you tell me the amounts to count on instead?",
-                            writes_before, "WAIT_FOR_USER: amounts that already allow for it")
+    # v7 (SPEC 7.109 D4): stated faces are APPLIED, as the licensed triad applies them (helm_triad: eta = the smallest
+    # of the three face values; Rising 1/4, Waning 1/2, Peak 1, Absent 0). v4 asked instead (CLARIFY_WIDE_FACE_NOT_HELD).
+    door_stage, door_source = _recipe_purpose(loop, product)
+    faces = {n: _face_stages(loop, n) for n in support}
+    etas = {n: HT.eta_ingredient(faces[n]) for n in support}
+    result["faces_applied"] = {"recipe_purpose": [door_stage, door_source],
+                               "ingredients": {n: {"stages": list(faces[n]), "eta": HT.ftext(etas[n])} for n in support}}
     loop._emit(tick, "S1 trigger ^8", product=product, prerequisites=support,
-               requirements=brain.requirements(product))
+               requirements=brain.requirements(product), faces=result["faces_applied"])
+    if door_stage == HT.ABSENT:
+        return loop._finish(result, tick, "CLARIFY_WIDE_PURPOSE_ABSENT",
+                            f"You said there's no reason to make {product} right now, so I won't work out how much "
+                            f"we could make. If you do want it, tell me what it's for and I'll count it.",
+                            writes_before, "WAIT_FOR_USER: the purpose of the recipe")
+    unknown = [n for n in support if etas[n] is None] + ([product] if door_stage == HT.UNKNOWN else [])
+    if unknown:
+        return loop._finish(result, tick, "CLARIFY_WIDE_FACE_UNKNOWN",
+                            f"Something I held about {say_and(unknown)} failed its own check, so I can't count on it. "
+                            f"Please tell me again how things stand with {say_and(unknown)}. I didn't guess.",
+                            writes_before, "WAIT_FOR_USER: a face restated")
+    zero = [n for n in support if etas[n] == 0]
+    if zero:
+        return loop._finish(result, tick, "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+                            f"You said the {say_and(zero)} {'are' if len(zero) > 1 else 'is'}n't for the {product}, so "
+                            f"I didn't count {'them' if len(zero) > 1 else 'it'}, and without "
+                            f"{'them' if len(zero) > 1 else 'it'} there's no {product}. What should I count instead?",
+                            writes_before, "WAIT_FOR_USER: what to count")
     loop._emit(tick, "S2 Bias ^5", what="stock_on_hand (wide)", bias_version=loop.bias_version,
                stock={n: [W.frac_text(q), u] for n, (q, u) in held.items()})
     absent = [n for n in support if n not in held]
@@ -1121,7 +1283,7 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
     verdict = E.RPM.rpm_gate(request)
     loop._emit(tick, "S5 RPM link", what="gate", request=request.as_dict(), verdict=verdict.as_dict())
     result["gate_verdict"] = verdict.as_dict()
-    stock = {n: held[n] for n in support if n in held}
+    stock = {n: (held[n][0] * etas[n], held[n][1]) for n in support if n in held}   # v7 (D4): x_eff = eta * stock
     if verdict.verdict != E.RPM.PROCEED:
         rec = brain.evaluate(product, stock)
         result["recipe_receipt"] = rec
@@ -1137,10 +1299,14 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
         return loop._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED", E.HELMVoiceAdapter.format_round_trip_failed(),
                             writes_before, "WAIT_FOR_USER")
     rec = brain.evaluate(product, stock)
+    rec["eta_ingredient"] = {n: HT.ftext(etas[n]) for n in support}          # v7 (D4): report only
+    rec["faces_stated"] = {n: list(faces[n]) for n in support if etas[n] != 1}
+    rec["raw_stock"] = {n: [W.frac_text(q), u] for n, (q, u) in held.items() if n in support}
     result["recipe_receipt"] = rec
     loop._emit(tick, "brain", **rec)
     if rec["status"] != W.EVALUATED:
-        return loop._finish(result, tick, "BRAIN_UNDETERMINED", say_wide(rec), writes_before, "WAIT_FOR_USER")
+        return loop._finish(result, tick, "BRAIN_UNDETERMINED", say_wide(rec) + say_faces_counted(rec), writes_before,
+                            "WAIT_FOR_USER")
     y, lim = rec["yield"], rec["limiting_reagent"]
     result.update({"output_value": y, "total_output": y, "output": y, "limiting_reagent": lim})
     statement = (f"Theoretical yield {y} of {product} from stock "
@@ -1151,7 +1317,32 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
                                    "CHECKED", tick, kind="instance")
     loop._emit(tick, "store", what="cube_write", **write)
     result["cube_receipt"] = write
-    return loop._finish(result, tick, "SUCCESS_EVALUATED", say_wide(rec), writes_before, "DONE")
+    return loop._finish(result, tick, "SUCCESS_EVALUATED", say_wide(rec) + say_faces_counted(rec), writes_before,
+                        "DONE")
+
+
+def say_faces_counted(rec: Dict[str, Any]) -> str:
+    """v7 (D4): one plain sentence per ingredient whose stated face changed how much of it was counted."""
+    out = []
+    for n, stages in (rec.get("faces_stated") or {}).items():
+        eta = rec.get("eta_ingredient", {}).get(n)
+        if eta in (None, "1"):
+            continue
+        why = []
+        for face, stage in zip(HT.RPM_ORDER, stages):
+            if stage == HT.PEAK:
+                continue
+            why.append({"WISDOM": {"RISING": f"you're still getting the hang of the {n}",
+                                   "WANING": f"you're out of practice with the {n}",
+                                   "ABSENT": f"you don't know how to use the {n}"},
+                        "POWER": {"RISING": f"the {n} is only just getting going",
+                                  "WANING": f"the {n} has lost some strength",
+                                  "ABSENT": f"the {n} won't do its job"},
+                        "PURPOSE": {"RISING": f"the {n} is only a maybe for this",
+                                    "WANING": f"the {n} is less meant for this",
+                                    "ABSENT": f"the {n} isn't for this"}}[face].get(stage, f"what you said about the {n}"))
+        out.append(f"Because {say_and(why)}, I counted {W.say_quantity(Fraction(eta))} of the {n}.")
+    return (" " + " ".join(out)) if out else ""
 
 
 def wide_witness(loop: Any, product: str, stock_before: Dict[str, Any], made: Any, ran_out: Any, tick: int,

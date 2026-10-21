@@ -32,7 +32,11 @@ except ImportError:                                   # the fixture below also r
 #: receipt_hash over the raw path before any canon runs; measured 2026-10-21, six differing leaves). Receipt coverage stays in
 #: test_receipt_hash_identical_on_and_off. test_helm_pin_hygiene.py enforces this for every record pin. Recompute (OFF code
 #: unchanged since base 159c7d2b): python -c "import test_helm_cas_address as T; print(T.fixture_sha256())"
-PINNED_OFF_SHA256 = "312ddfd687f73182be524acc64f0829d67d11c29ba9546915f344998927abf64"
+#: 2026-10-21 (SPEC 7.109 D1-D5, wide reader v7): the fixture's wide turns now carry the reader's "clause" field, the
+#: question's faces_applied / eta_ingredient fields and the v7 reader version, with the address OFF and ON alike; the
+#: pin is recomputed over the same machine-neutral canon (312ddfd6... was the v6 reader). The ON/OFF equality tests are
+#: unchanged and still hold.
+PINNED_OFF_SHA256 = "83f96a4a3e64256f0cae1c5567285463f442f92f1c4759e6b2c7bdd397502c35"
 
 FIXTURE_TURNS = [
     ("batch", ("Bread", {"Flour": 10, "Water": 8}, 5, "Flour")),
