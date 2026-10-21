@@ -1,0 +1,303 @@
+{
+ "arm_specs": {
+  "ALWAYS_ASK": {
+   "kind": "always_ask",
+   "mode": null,
+   "wide": false
+  },
+  "CHAT_DIAG": {
+   "kind": "chat",
+   "mode": "cas_diagnostic",
+   "wide": true
+  },
+  "CHAT_OFF": {
+   "kind": "chat",
+   "mode": "everyday",
+   "wide": false
+  },
+  "CHAT_ON": {
+   "kind": "chat",
+   "mode": "everyday",
+   "wide": true
+  },
+  "CHAT_ON_REPLAY": {
+   "kind": "chat",
+   "mode": "everyday",
+   "wide": true
+  },
+  "LOOP_ON": {
+   "kind": "loop",
+   "mode": null,
+   "w6_arm": "FULL+WIDE_NOASK",
+   "wide": true
+  }
+ },
+ "arms": {
+  "X7_CONV": [
+   "CHAT_ON",
+   "CHAT_OFF",
+   "CHAT_ON_REPLAY",
+   "CHAT_DIAG",
+   "LOOP_ON"
+  ],
+  "X7_NOISE": [
+   "CHAT_ON",
+   "CHAT_OFF"
+  ],
+  "X7_REAL": [
+   "CHAT_ON",
+   "CHAT_OFF",
+   "CHAT_ON_REPLAY",
+   "CHAT_DIAG",
+   "LOOP_ON",
+   "ALWAYS_ASK"
+  ]
+ },
+ "attempts": "one attempt + one plumbing retry",
+ "c47_reading_sha256": "cea8b111485fa70775982432ce832c81ad7db74d77dc44071f6c4ae95733e539",
+ "c50_reading_sha256": "d6a855f179bfba3b39b1cf75e431b169aa63b0b0fd6b788a5570bd8f444ff055",
+ "candidate": "CHAT_ON",
+ "cap_usd": "1.00",
+ "carrier_slots": {
+  "X7_CONV": "CONV_INPUTS",
+  "X7_NOISE": "NOISE_INPUTS",
+  "X7_REAL": "REAL_INPUTS"
+ },
+ "exam_sizes": {
+  "X7_CONV": 64,
+  "X7_NOISE": 64,
+  "X7_REAL": 128,
+  "conv_pool": 64
+ },
+ "exams": [
+  "X7_REAL",
+  "X7_CONV",
+  "X7_NOISE"
+ ],
+ "frames": {
+  "FRAME_R_PG.jsonl": "c983e065bc1783ea9a4807612edafe8168ebb8c09b56a264dfea5ca53cb3aa5e",
+  "FRAME_R_WB.jsonl": "6a0d7cc12d0133991bf44c666ecae80ff1239760d0fcbd9aad62b11842563ddc"
+ },
+ "helm_brain_canonical_base": {
+  "commit": "d4488f2a4a32992f6d8f80f24ea8cefe045ac9d7",
+  "sha256": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a"
+ },
+ "helm_cut_commit": "55cda1e21f7e6ea0048fe2faf7e90f23e4ec9525",
+ "helm_thread_branch": "claude/project-thread-pmbzd6 (thread head 55cda1e2 = merge of PR #447, the reader v7.2 fix)",
+ "input_schemas": {
+  "X7_CONV": "helm.r1w7.conv-inputs/1",
+  "X7_NOISE": "helm.r1w7.noise-inputs/1",
+  "X7_REAL": "helm.r1w7.real-inputs/1"
+ },
+ "label": "R1W7",
+ "marks": {
+  "k1_learn_ratio": "9/10",
+  "n_max_lost": 2,
+  "n_max_misrouted_scored": 0,
+  "nh_chat_max_lost": 2,
+  "p_max_not_plain": 2,
+  "vacuity_real_min": 16
+ },
+ "neighbours": {
+  "rbw1t": {
+   "dir": "HELM_RBW1T_20261019",
+   "freeze_sha256": "04eef88645acbd0c89de9e6e914d8faf2896939769e11f4d4c93f2dfc12e84f4",
+   "zip": "HELM_RBW1T_20261019_SOURCE_RBW1T.zip",
+   "zip_sha256": "3a8ae37eb51c18414bfa83a71b9079dd7ec2282bec6ba3952d86ac0454f0e967"
+  },
+  "w1": {
+   "dir": "HELM_R1_W1_20261015",
+   "freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+   "zip": "HELM_R1_W1_20261015_V3_SOURCE_R1W1.zip",
+   "zip_sha256": "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9"
+  },
+  "w3": {
+   "dir": "HELM_R1_W3_20261019",
+   "freeze_sha256": "bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310",
+   "zip": "HELM_R1_W3_20261019_SOURCE_R1W3_v3.zip",
+   "zip_sha256": "152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362"
+  },
+  "w3b": {
+   "dir": "HELM_R1_W3B_20261019",
+   "freeze_sha256": "a6d9dbc78d3f720941c5a358be9a4d514617f8de226811c55938f807833dfbba",
+   "zip": "HELM_R1_W3B_20261019_SOURCE_R1W3B.zip",
+   "zip_sha256": "a4f82556bf0fc26de5635a7c81ec8f5053951d4c64a3906c8e5dd474e3814d26"
+  },
+  "w6": {
+   "dir": "HELM_R1_W6_20261019",
+   "freeze_sha256": "da1ec4d2e144a8921d27231e99ff277de0e915b61e2de205cc94646a4723c8a8",
+   "zip": "HELM_R1_W6_20261019_SOURCE_R1W6.zip",
+   "zip_sha256": "f1b64a5edf0df2b152c867f328c71b3df8640a759836108079590e7959c31b47"
+  }
+ },
+ "never_sent": [
+  "exit",
+  "quit",
+  "q",
+  "help",
+  "dials",
+  "history",
+  "mode"
+ ],
+ "noise_sentences": [
+  "Hello there!",
+  "My grandfather kept bees in the south of France.",
+  "Remember that I prefer short answers.",
+  "I'm feeling tired today.",
+  "Tell me a joke.",
+  "What do you know about me so far?",
+  "What did we just do?",
+  "I live in Oakland and I like hiking.",
+  "Thanks, that's helpful.",
+  "How are you?",
+  "Do you remember what I said about my answers?",
+  "I love this recipe book."
+ ],
+ "noise_turns_per_dialogue": 2,
+ "owner_line": "CHAT WAVE 6 at 1 USD",
+ "owner_line_sha256": "35620d581402bf19942829e85a8c70b15bf4bdaf853f0ff4775e0de597168ccb",
+ "owner_line_status": "PROPOSED (PREREGISTRATION_R1W7.md section 8 as superseded by amendment A-R1W7-10, section 22; the v8 line CHAT WAVE 5 at 1 USD was consumed by job c55); the approval record is written only after the owner signs",
+ "owner_line_utf8_bytes": 20,
+ "package_dir": "HELM_R1_W7_20261020",
+ "package_version": "v9",
+ "practice": {
+  "conv_seed_text": "R1W7-PRACTICE-CONV:777701",
+  "convpool_prefix": "R1W6-CONVPOOL",
+  "convpool_text": "R1W6-CONVPOOL-PRACTICE-20261019-builder-published",
+  "noise_seed_text": "R1W7-PRACTICE-NOISE:777702",
+  "real_seed_text": "RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published"
+ },
+ "preregistration_precode_sha256": "efe94ed635f08ceab01e6268bd92832181f8164926717e4e8e035767d5a6d982",
+ "recipe_intents": [
+  "RECIPE_FOUNDATION_LOOP",
+  "INVENTORY_DECLARATION"
+ ],
+ "recorder_unit": "W7_RECORDER_EQUALITY",
+ "replay": [
+  "CHAT_ON",
+  "CHAT_ON_REPLAY"
+ ],
+ "schema": "helm.r1w7.frozen/1",
+ "seed_rule": {
+  "bands": {
+   "CONV": [
+    2038000001,
+    2039000000
+   ],
+   "NOISE": [
+    2040000001,
+    2041000000
+   ],
+   "REAL": [
+    2036000001,
+    2037000000
+   ]
+  },
+  "conv_pool_prefix": "R1W7-CONVPOOL",
+  "gap": 1000000,
+  "hex_slices": {
+   "CONV": [
+    16,
+    32
+   ],
+   "NOISE": [
+    32,
+    48
+   ],
+   "REAL": [
+    0,
+    16
+   ]
+  },
+  "slots": 1000000,
+  "used_ranges": [
+   [
+    "every earlier band, derivation and reservation (wave 6 v3 up to 1,989,000,000; wave 7 v3 / c51 bands 1,990,000,001-1,995,000,000; the continuity packet's proposed 1,996,000,001-1,999,000,000; wave 7 v4 / c52 bands 2,000,000,001-2,005,000,000; wave 7 v5 / c53 bands 2,006,000,001-2,011,000,000; wave 7 v6 / c54 bands 2,012,000,001-2,017,000,000; the talk packet's proposed 2,018,000,001-2,022,000,000; wave 7 v7 bands 2,024,000,001-2,029,000,000 (reserved by the void v7 seal, never drawn); wave 7 v8 / c55 bands 2,030,000,001-2,035,000,000; whole range)",
+    1,
+    2035000000
+   ]
+  ]
+ },
+ "session_dir_env": "HELM_SESSION_DIR",
+ "units": [
+  [
+   "W7_X7_REAL_CHAT_ON",
+   "X7_REAL",
+   "CHAT_ON"
+  ],
+  [
+   "W7_X7_REAL_CHAT_OFF",
+   "X7_REAL",
+   "CHAT_OFF"
+  ],
+  [
+   "W7_X7_REAL_CHAT_ON_REPLAY",
+   "X7_REAL",
+   "CHAT_ON_REPLAY"
+  ],
+  [
+   "W7_X7_REAL_CHAT_DIAG",
+   "X7_REAL",
+   "CHAT_DIAG"
+  ],
+  [
+   "W7_X7_REAL_LOOP_ON",
+   "X7_REAL",
+   "LOOP_ON"
+  ],
+  [
+   "W7_X7_REAL_ALWAYS_ASK",
+   "X7_REAL",
+   "ALWAYS_ASK"
+  ],
+  [
+   "W7_X7_CONV_CHAT_ON",
+   "X7_CONV",
+   "CHAT_ON"
+  ],
+  [
+   "W7_X7_CONV_CHAT_OFF",
+   "X7_CONV",
+   "CHAT_OFF"
+  ],
+  [
+   "W7_X7_CONV_CHAT_ON_REPLAY",
+   "X7_CONV",
+   "CHAT_ON_REPLAY"
+  ],
+  [
+   "W7_X7_CONV_CHAT_DIAG",
+   "X7_CONV",
+   "CHAT_DIAG"
+  ],
+  [
+   "W7_X7_CONV_LOOP_ON",
+   "X7_CONV",
+   "LOOP_ON"
+  ],
+  [
+   "W7_X7_NOISE_CHAT_ON",
+   "X7_NOISE",
+   "CHAT_ON"
+  ],
+  [
+   "W7_X7_NOISE_CHAT_OFF",
+   "X7_NOISE",
+   "CHAT_OFF"
+  ],
+  [
+   "W7_RECORDER_EQUALITY",
+   "RECORDER",
+   "EQUALITY"
+  ]
+ ],
+ "wide_env": "HELM_WIDE_BRAIN",
+ "wide_off_word": "0",
+ "words": [
+  "CHAT_WAVE_EARNED_KEEP",
+  "CHAT_WAVE_HARMED",
+  "CHAT_WAVE_NO_GAIN",
+  "INCONCLUSIVE"
+ ],
+ "yardstick": "CHAT_OFF"
+}

@@ -1,0 +1,140 @@
+{
+ "added_by_v7_2": [
+  "CLARIFY_WIDE_FACE_UNKNOWN_INGREDIENT",
+  "CLARIFY_WIDE_FACE_UNKNOWN_PRODUCT"
+ ],
+ "all_new_statuses_count_as_asks": true,
+ "asking_exact": [
+  "UNDETERMINED_CLARIFY",
+  "BRAIN_UNDETERMINED",
+  "CONFLICT_UNDETERMINED",
+  "REPAIRED_RETEACH_NEEDED",
+  "VERIFIED_NO_RECIPE_CONTENT",
+  "STATED_RECIPE_NOT_TAKEN",
+  "UNDETERMINED_UNKNOWN_PRODUCT"
+ ],
+ "asking_prefix": [
+  "CLARIFY",
+  "TEACH_REFUSED_",
+  "VALVE_HALT_",
+  "REFUSE_",
+  "FACE_REFUSED_"
+ ],
+ "code_forms_read": [
+  "\"code\":\\s*\"([A-Z_]+)\"",
+  "code=\"([A-Z_]+)\"",
+  "code\\s*=\\s*\"([A-Z_]+)\"",
+  "\"([A-Z_]+)\"\\s+if\\s",
+  "\\selse\\s+\"([A-Z_]+)\""
+ ],
+ "every_v9_wide_status_is_an_ask": {
+  "CLARIFY_WIDE_DISH_NAME_NOT_BOUND": true,
+  "CLARIFY_WIDE_FACE_NEGATED": true,
+  "CLARIFY_WIDE_FACE_NOT_HELD": true,
+  "CLARIFY_WIDE_FACE_REFUSED": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN_INGREDIENT": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN_PRODUCT": true,
+  "CLARIFY_WIDE_FACE_UNREAD": true,
+  "CLARIFY_WIDE_FACE_WHICH_INGREDIENT": true,
+  "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT": true,
+  "CLARIFY_WIDE_PURPOSE_ABSENT": true
+ },
+ "non_ask_controls": {
+  "COMMITTED": false,
+  "INVENTORY_RECORDED": false,
+  "LEARNED": false,
+  "STOCK_RECORDED": false
+ },
+ "reader_files_byte_identical_v8_v9": {
+  "merge_r1w7.py": true,
+  "score_w7.py": true
+ },
+ "reader_sha256_v9": {
+  "merge_r1w7.py": "3dcb07fa25fa6627049df68391536f8fad55aae3be02178e5ce25a2885f1744a",
+  "score_w7.py": "01fef9272e1d9d0dc5055de7b8b7779c53cc7703803d81134e1f3cb1a0a06af9"
+ },
+ "removed_by_v7_2": [],
+ "v8_cut_statuses": {
+  "all_possible": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NEGATED",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_REFUSED",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_FACE_UNREAD",
+   "CLARIFY_WIDE_FACE_WHICH_INGREDIENT",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "face_reader_codes": [
+   "FACE_NEGATED",
+   "FACE_UNREAD",
+   "FACE_WHICH_INGREDIENT"
+  ],
+  "literal_in_wide_turn": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "wide_reader_codes": [
+   "FACE_REFUSED"
+  ]
+ },
+ "v8_list_of_nine_are_asks": {
+  "CLARIFY_WIDE_DISH_NAME_NOT_BOUND": true,
+  "CLARIFY_WIDE_FACE_NEGATED": true,
+  "CLARIFY_WIDE_FACE_NOT_HELD": true,
+  "CLARIFY_WIDE_FACE_REFUSED": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN": true,
+  "CLARIFY_WIDE_FACE_UNREAD": true,
+  "CLARIFY_WIDE_FACE_WHICH_INGREDIENT": true,
+  "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT": true,
+  "CLARIFY_WIDE_PURPOSE_ABSENT": true
+ },
+ "v8_list_of_nine_still_in_v9": {
+  "CLARIFY_WIDE_DISH_NAME_NOT_BOUND": true,
+  "CLARIFY_WIDE_FACE_NEGATED": true,
+  "CLARIFY_WIDE_FACE_NOT_HELD": true,
+  "CLARIFY_WIDE_FACE_REFUSED": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN": true,
+  "CLARIFY_WIDE_FACE_UNREAD": true,
+  "CLARIFY_WIDE_FACE_WHICH_INGREDIENT": true,
+  "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT": true,
+  "CLARIFY_WIDE_PURPOSE_ABSENT": true
+ },
+ "v9_cut_statuses": {
+  "all_possible": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NEGATED",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_REFUSED",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_FACE_UNKNOWN_INGREDIENT",
+   "CLARIFY_WIDE_FACE_UNKNOWN_PRODUCT",
+   "CLARIFY_WIDE_FACE_UNREAD",
+   "CLARIFY_WIDE_FACE_WHICH_INGREDIENT",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "face_reader_codes": [
+   "FACE_NEGATED",
+   "FACE_UNKNOWN_INGREDIENT",
+   "FACE_UNKNOWN_PRODUCT",
+   "FACE_UNREAD",
+   "FACE_WHICH_INGREDIENT"
+  ],
+  "literal_in_wide_turn": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "wide_reader_codes": [
+   "FACE_REFUSED"
+  ]
+ }
+}
