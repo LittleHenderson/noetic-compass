@@ -1,0 +1,6 @@
+{
+ "utc": "2026-10-21T05:09:45.961403+00:00",
+ "what": "aws_control_c52.py ledger_hold_present(): the kit generator renamed the dated reservation folder to r1w7v4_c52_reservation_<date> but left the controller's undated substring check as r1w7_c52_reservation; the controller refused LEDGER_HOLD_REQUIRED before any AWS call. Fixed the substring to r1w7v4_c52_reservation here and added the undated pair to make_c52_kit.py COMPOSITE for future kits.",
+ "aws_calls_made_by_the_refused_launch": 0,
+ "logs": "launch_a1_refused_ledger_hold_check.*"
+}
