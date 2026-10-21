@@ -18,14 +18,19 @@ import unittest
 from contextlib import contextmanager
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+import helm_test_pins as PINS                 # the one machine-neutral canonicalizer for record pins (SPEC 7.106 lesson)
 try:
     import helm_cas_address as A
 except ImportError:                                   # the fixture below also runs on the pre-change code
     A = None
 
-#: sha256 of fixture_records() with CAS_ADDRESS OFF and WIDE_UNITS_NOTE OFF, computed on base commit 159c7d2b (the code
-#: before helm_cas_address.py existed) with this same fixture: python -c "import test_helm_cas_address as T; print(T.fixture_sha256())"
-PINNED_OFF_SHA256 = "56f356ea7302a80fd7073c6b76335fb7453ee32ac2950e1c2e4a1cf18b64acc8"
+#: sha256 of the MACHINE-NEUTRAL canon (helm_test_pins.canon) of fixture_records() with CAS_ADDRESS OFF and WIDE_UNITS_NOTE OFF.
+#: History: the first pin (56f356ea...) hashed the raw records, which carry the licensed brain folder as an ABSOLUTE PATH
+#: (trace[].brain.brain_dir); it held on the laptop (Windows) and failed on the Linux host in job c53 (SPEC 7.106). Since
+#: 2026-10-21 the pin is taken over helm_test_pins.canon, which replaces absolute paths by their last component, so the same
+#: records hash alike on every machine; test_helm_pin_hygiene.py enforces this for every record pin. Recompute (OFF code
+#: unchanged since base 159c7d2b): python -c "import test_helm_cas_address as T; print(T.fixture_sha256())"
+PINNED_OFF_SHA256 = "632bffc062804840c1c5d2699e81cd365d751799359ee5828efe46593ae51955"
 
 FIXTURE_TURNS = [
     ("batch", ("Bread", {"Flour": 10, "Water": 8}, 5, "Flour")),
@@ -45,7 +50,7 @@ FIXTURE_TURNS = [
 
 
 def _canon(obj):
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+    return PINS.canon(obj)                    # sorted, compact, machine-neutral (absolute paths -> last component)
 
 
 def fixture_records():
@@ -65,7 +70,7 @@ def fixture_records():
 
 
 def fixture_sha256(records=None):
-    return hashlib.sha256(_canon(records if records is not None else fixture_records()).encode("utf-8")).hexdigest()
+    return PINS.canon_sha256(records if records is not None else fixture_records())
 
 
 @contextmanager
