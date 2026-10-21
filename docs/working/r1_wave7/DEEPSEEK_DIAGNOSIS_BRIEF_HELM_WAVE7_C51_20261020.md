@@ -51,7 +51,7 @@ I12, I14.
 
 **Where everything lives (Windows laptop):** package and run under `C:\Users\wakil\Documents\Codex\2026-10-20\r1_wave7\`; the repository
 `noetic-compass` (branch `claude/project-thread-pmbzd6`; record PR #418 from `claude/helm-r1w7-c51-result-20261020`); spec sheet
-`docs/CAS_HARNESS_SPEC_SHEET.md` sections 7.98 (packet) and 7.99 (c51); repo copies `docs/working/r1_wave7/`; backup
+`docs/CAS_HARNESS_SPEC_SHEET.md` sections 7.98 (packet) and 7.101 (c51; first numbered 7.99, renumbered because another session took 7.99 and 7.100 the same hour); repo copies `docs/working/r1_wave7/`; backup
 `D:\tksCAS-archive\r1_wave7_c51_20261020\` (162 files, three sha256 passes, tree `d4d8151f…`).
 
 ## 2. Timeline of the session, with every red square

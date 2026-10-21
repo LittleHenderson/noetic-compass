@@ -1,0 +1,481 @@
+{
+ "version": "lm-t4b-sealed-reader-rerun-v1",
+ "status": "FROZEN_BEFORE_ANY_LMT4B_PART",
+ "written_utc": "2026-10-21T03:19:07.441025+00:00",
+ "owner_order_verbatim_2026_10_20": "the LM-T4 corrected reading. rerun under a sealed reader with the bug fix",
+ "one_change": {
+  "reader": "merge_t4b.py",
+  "reader_sha256": "382033ca52735f9b3a6dfedfd1316a716bc01360e8c794d8681328470a0d0db5",
+  "built_from": "merge_t4.sealed.py (LM-T4 original sealed reader, sha256 37f4a0e09fe325ec80c4e0993431a9486c26fa29649cd83c21c56eb8b064e6b2)",
+  "fixes": [
+   "H2 / H10: a digit inside a copied outcome name (Omega_zz0, Omega_decision_11) is not a value; only a number token outside an Omega_<name> identifier counts",
+   "EYE-R1: the twin brain's eye events, whose rows are not stored, count when their eta/epsilon receipt passed"
+  ],
+  "not_taken": "the post-run reader's mismatch_by_brain report inside CONT-3 (reporting, not a defect)",
+  "run_code": "byte-identical to LM-T4 (manifest 3390ebbd); the CONT-3 run-time key defect (CREATED vs ATTEMPTED on the untaught twin's asking crossings) is NOT fixed: outside the owner's order"
+ },
+ "seeds": "unchanged from LM-T4 (fixed in FROZEN.json; none derived from a package hash)",
+ "parts": "P11-P18 as PLAN.json lm-t4-plan-2, one at a time, same walls (300 s hard, 280 s guard, 300 MiB cap)",
+ "old_readings_note_only": {
+  "sealed_reader_reading_INCONCLUSIVE": "7423922310b81ecad2e2d5238d1a9e5237d535d880df45188ef07a9b6993d378",
+  "corrected_reading_LMT4_A3_never_counts": "8606c5aa4ef45a6dccb4fc40337e3f967ff88f079a386424b6d9520a1c416bc8"
+ },
+ "not_licensed_whatever_the_reading": [
+  "any claim of carrying language across an RPA (owner ruling 2026-10-15: RPA IS ATLAS)",
+  "any meaning claim (FORM-only); any HELM claim; anything beyond SYNTHETIC_ONLY",
+  "better answers from the circuit; the LSR-family half (NOT_EVALUATED, PRC-1); the eye's judgement (report-only)"
+ ],
+ "forecast": "every instrument number repeats exactly; all 14 hard gates true; words LANGUAGE_RODE_THE_PATH, INJECT_ROUTED, CIRCUIT_EARLIER_NOT_BETTER (ANSWER_2 NOT_EVALUATED), EYE_REPORTED; CONT-3 FAIL at 106,320 of 106,400 (99.92%)",
+ "lm_t4_frozen_verbatim": {
+  "version": "lm-t4-rb-i2-circuit-v1",
+  "status": "FROZEN_BEFORE_CODE_AND_BEFORE_ANY_RUN",
+  "frozen_note": "Written by the builder-operator at laptop clock 05:30 PDT 2026-10-15 (the relay clock the owner sees reads about one hour later), BEFORE any LM-T4 code, test, dry count or run. Design packet: C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_language_faculties_circuit_design_v1\\ (README.md, STATIONS.md, TAP_AND_INJECT.md, CONTINUITY.md, TEST_PLAN_LM_T4_RB_I2.md, OPEN_QUESTIONS.md, CAS_MAPPING.md, UNITY_EYE.md, OWNER_RULING_UNITY_EYE_20261015.md). Every PROPOSED default of the packet is taken as written. Where the packet is silent this file names the smallest honest implementation and marks it BUILDER (disclosed). Where this file is more exact than the packet, this file governs for the run and every such place is listed under builder_readings or pre_run_changes. Claude is not the research governor: merge_t4.py reads the verdict from counts; a failed mark is a failure.",
+  "claim_ceiling": "SYNTHETIC_ONLY. No HELM claim. FORM-only language claims (Controlled CAS English, CCE v0.1c-R; the parser is a grammar, not a learned parser). Noetic labels unscored. Faculty names are names for counted procedures. 'parameters' is the word for learned values; LM-T4 adds 0 learned parameters.",
+  "owner_authorization": {
+   "words": [
+    {
+     "when": "relay clock about 4:40 AM Pacific 2026-10-15 (direction)",
+     "verbatim": "THE LANGUAGE PORTION SHOULD MOVE ACROSS THE a RPA's CJTs it's bias, the bias asom, the RPM AND THE NEXT RPA AND OR CJT or the next RPA and soon on to create a continuity of thought or follow a continuity of thought AND THE CAS FACULTIES SHOULD ALSO ALL START AT AN RPA > CJT JOURNEY MEANING FACULTIES SHOULD FLOW RIGHT INTO SPEECH AS SPEECH SHOULD FLOW RIGHT INTO FACULTIES...LIKE INTERRUPTING A PERSON WHILE THEY DEEP IN THOUGHT OR ASKING SOMEONE TO THINK ABOUT SOMETHING"
+    },
+    {
+     "when": "relay about 5:00 AM Pacific 2026-10-15; laptop about 04:45 PDT (approval, one message)",
+     "verbatim": "RB-G4LM-T5LM-T4 defaults",
+     "reading": "three approvals run together; 'LM-T4 defaults' is this run: freeze the test exactly as the design packet proposes, every PROPOSED default taken as written, and run it"
+    },
+    {
+     "when": "relay about 5:10 AM Pacific 2026-10-15 (eye direction)",
+     "verbatim": "THERE SHOULD STILL BE AND ALL SEEING EYE THAT SCANS AND WATCHES OVER THE ENTIRE SYSTEM/BRAIN READY TO FIX, OR HELP IT'S MAIN PURPOSE MUST BE AND ONLY BE THE FIRST FOUNDATION /DESIRE UNITY SO IT MAY HAVE TO BE EITHER A COPY OR A MINI-VERSION OR AN EXTREMELY STRIPPED DOWN VERSION  OF THE BRAIN WE ALREADY GOT"
+    },
+    {
+     "when": "relay about 5:20 AM Pacific 2026-10-15 (eye ruling)",
+     "verbatim": "LET'S GO WITH YOUR RECOMMENDATION",
+     "reading": "eye form MINI-VERSION and LM-T4 eye mode REPORT-ONLY are ACCEPTED_BY_OWNER; record C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\helm_language_faculties_circuit_design_v1\\OWNER_RULING_UNITY_EYE_20261015.md (its sha256 is in SOURCE_MANIFEST.json); every other eye default stays PROPOSED and is taken as a default with that word beside it"
+    }
+   ],
+   "standing_words": [
+    "Run it locally as long as it Quick if long use aws",
+    "PLEASE JUST USE PARAMETERS",
+    "owner ruling N1: nesting outer last for both . and :",
+    "facts never come from the language layer; ask, never guess"
+   ],
+   "operator_interpretation": "MSI only, LOCAL_CPU_ONCE, adaptive parts of at most 300 s wall and 300 MiB working set each, worker guard 280 s, sockets blocked, no spend, no network, no AWS, no LLM call, one worker process at a time; free RAM >= 150 MB at launch (wait up to 10 min). RB-I1, RB-G4 and LM-T5 share the laptop (expected). Launch waits for LM-T5's single run to finish (it had finished before this freeze: runs\\LM_T5_MSI_ONCE END.json COMPLETED at 12:13:34 UTC). The sign line is composed by the builder-operator from these words under the relayed delegation; it is NOT an owner signature and promotes no claim.",
+   "sign_line_form": "APPROVE lm_t4, source <manifest sha256 first 8>, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend."
+  },
+  "defaults_taken": {
+   "Q1_stations_tapped": "all seven S0-S6; S4 tapped as two axes (region, outcome); the ASOM word only as a derived display beside its axes (quantifiers.py rule), never alone",
+   "Q2_tap_never_changes_thought": "D(brain) before == after on every tap (H9); answer records with and without taps byte-identical (H3); a violation reads FAILURE",
+   "Q3_faculties_speech_may_start": "asking (F4), fit / pondering on a named Omega (F7), wondering on the think-about form (F5 retrieval), integration as a witness (eta with receipt), user refusal of a named candidate (USER_DENIED). Only the loop starts curiosity (F2), imagination draws (F5), consolidation (F3), growth (OFF). Always on: self-notice (receipts), path memory",
+   "Q4_interrupt_priority_and_register": "station-boundary queueing; P1 contradiction preempts at the next boundary; P2 question = tap; P3 new content waits for the loop's guards (dwell 2, pair cap 4, max neglect 24); P4 subject change after the chain closes; wait cap 24 ticks (answered by a tap or CLARIFY, never dropped); register recorded as a set, NOT used for priority",
+   "Q5_transformer_brain": "not in LM-T4 (no torch on the laptop)",
+   "Q6_depth_cap": 5,
+   "Q7_created_continuity": "a next-station pointer written this tick by a faculty or an injection AND later admitted or answered = CREATED; refused or still open at the end = ATTEMPTED; existed before this tick = FOLLOWED; shuffled injections must create 0",
+   "Q8_RPA": "for LM-T4 the head of the chain (S0), read as the RPM chain per CJT (RB-I1 Q6); the atlas reading recorded as the alternative; no atlas is built",
+   "Q9_RPM": "the word RPM only, with Definition 27.1's mathematics; the four expansions listed in the packet, none chosen",
+   "Q10_asom_region_labels": "the packet's PROPOSED S4 mapping for the recipe brain: CUTOFF on G1 / G2; ACTIVE when the gate is open and Y_T > 0; SATURATION never (RB-B has no ceiling h); BREAKDOWN never; UNASSESSED otherwise (G3, G4, G5, DEPTH_CAP, NO_SINGLE_LR, TOO_MANY_INPUTS). Outcome: INTENDED when label == gold; OFF_AXIS when a label differs from gold (OPPOSITE is undefined for four labels: never emitted, BUILDER); UNKNOWN when UNDETERMINED with gold; UNASSESSED when no gold. Reported, never scored",
+   "Q11_tap_wording": "fixed twin wording only (cce render with rng=None); no draws",
+   "Q12_form_gaps": "counted as LACUNA cells in the coverage ledger; never closed in LM-T4 (the L3 loop is a separate run)",
+   "Q13_fractions": "a coefficient or yield whose exact Fraction has a denominator with a prime factor other than 2 or 5 is a FORM gap (S2_NONTERMINATING_COEFFICIENT / S3_NONTERMINATING_YIELD); the tap says nothing for that term; terminating Fractions are said as exact decimals",
+   "Q14_user_said_witness": "USER_SAID counted apart from world-released (REAL) rows; may charge a cell of a subject the Bias already holds in dialogue worlds; never in Task B worlds (whose gold is the generator's); a USER_SAID statement about a subject the Bias does not hold is KNOWLEDGE_MISSING (a question), never a write (BUILDER reading of Q14 + the routing table's 'no Bias holds Omega_x -> asking')",
+   "Q15_arbitration": "GREEDY (RB-I1 A3), one tick per station crossing",
+   "Q16_wait_for_RB_I1": "no wait; RB-I1's FROZEN defaults carried (drive loop constants, gains, guards, Q5 world release of the planted LAC_ASK slot one tick after a correct exact-slot question); RB-I1's results not read",
+   "Q17_task_b_questions": "nobody answers questions in Task B worlds; they stay open and are counted",
+   "Q18_eye_form": "MINI-VERSION (ACCEPTED_BY_OWNER): one recipe over nine measured health signals, Limiting Reagent readout, Lacunarity ledger states, RPM Gate words G1-G4, receipts",
+   "Q19_eye_mode": "REPORT_ONLY (ACCEPTED_BY_OWNER); the only other value ACTING is refused by the driver (unit-tested)",
+   "Q20_eye_budget": "1 FIX + 2 HELP per 16-tick stage (PROPOSED; report-only: logged, never applied; a proposal past the budget is logged BUDGET_EXCEEDED_NOT_PROPOSED)",
+   "Q21_eye_growth": "never (PROPOSED; growth is OFF in LM-T4 anyway)",
+   "Q22_eye_transformer": "no transformer arm in LM-T4 (PROPOSED default would be read-only)",
+   "Q23_naming": "internal 'Unity Eye (F1 watcher)'; public 'F1 Unity Monitor'; the metaphor phrase never in product text",
+   "Q24_eye_requirements": "all a_i = 1, signals normalized to [0, 1] (PROPOSED); nothing learned",
+   "Q25_eye_attention_proposal": "advisory only; NOT in the guard order in LM-T4 (report-only); logged as a would-HELP"
+  },
+  "imports_read_only": {
+   "recipe_brain_rb2c": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\HELM_RECIPE_BRAIN_20261014_RB2C\\ (rb/, rb2/, vendor/lsr_t1..t4, sdg_source/SDG_ROUTING.json, c25_reference/C25_TASKB_WORLDS.json): RecipeBookBrain, compose, worlds_b, sdg_select, writer_b, rb.policy (det), rb.driver (block, brief_block, nested_frame), rb2.driver_rb2 (teach_b_draw, score_b_draw, b_world, b_draw_doc) as the REFERENCE run and for the panel scoring helpers",
+   "c26_reference": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-06\\helm_thread_claude\\gate_b\\rb2c\\run_c26_rb2c_20261014\\RB2C_RUNS.json (rb_det per-draw b_chain / b_alt labels, taught digests) and RB2C_READING.json (medians 16 / 16): read only by merge_t4.py for H7",
+   "rb_i1": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_i1\\drives.py (DriveState, choose_focus, record_choice, after_tick, stage_end, fr_distance, summary) and the dialogue faculty definitions of dialogue.py / FROZEN.json as read; rb_i1's run results are NOT read",
+   "lm_t1": "cce.py, cce_v01b.py, cce_v01c.py (CCE v0.1c-R: the grammar for every tap and injection), aliaswide.py (the ALIAS-WIDE reader, imported for the lexicon only), scoring.py (load_recipes), cas_ast.py (recipe_cas, compile_view: the site compiler cross-check), ALIAS_WIDE_LEXICON_v0_1.json",
+   "lm_t2": "t2.py (make_dialogue, pool_from, masses, point, fr, Derived, brain_reply, evaluate, slot_words, run_arm, limiting), score_t2.py (dialogues, calibrate, score_arm)",
+   "lm_t3": "l3.py (the admitted wordings table is read for the record only; no L3 rule is used)",
+   "lacunarity_machine": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\ (Universe, Cell, Ledger, deterministic_read, state names) for the FORM-gap coverage ledger and the eye's lacuna states",
+   "site_compiler": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-08\\task-4\\cas-online\\dist\\compiler\\api\\notation\\compiler.py sha256 464fd4adfae90a35ba54aa794829da1fe713b9b9cccd68b630ecccfdfbca2f56 (through lm_t1/cas_ast.py)",
+   "supervisor_pattern": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\rb_g3\\ (supervisor.ps1, run_all_parts.ps1, worker.py, static_check.py) copied with lm_t4 names; rb_g3/operator_g3.py growth-ledger event fields for eye_event",
+   "sdg_bridge": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\ (sdg_bridge_v2, fair_data_experiment_v2_sdg) through lm_t1 scoring.load_recipes"
+  },
+  "worlds": {
+   "W1_task_b": {
+    "source": "rb2.worlds_b.draw(d, sdg_select.true_book()) for d in 0..19 (RB2c = RB2b seeds, c25's worlds)",
+    "check": "rb2.worlds_b.check_draw PASS on every draw AND every draw document (rb2.driver_rb2.b_draw_doc) digest equals c25_reference/C25_TASKB_WORLDS.json b_draw_digests AND the selection record digest equals; a miss = INSTRUMENT_ERROR, no arm runs",
+    "written_by": "unit W01 to runs/<W01>/WORLDS_B.json (sha256 recorded; later parts re-verify the sha256)",
+    "thoughts_per_draw": "every presentation of the RB2c Task B teaching loop (512 keyed + the distractions at positions 10, 20, 30, 40 of every 46-block) and every panel world (twin b_chain + shuffled; b_chain, b_chain_shuffled, repair x4, b_alt, b_alt_shuffled, b_plain, b_seen, b_sum)",
+    "planted_utterances": "none (Q17; Q14; BUILDER: the INJECT marks are defined on the dialogue worlds, 16 x 3 x 5 = 240); the recipe brain's own faculties on W1 are asking at S5 on G1 (one question per absent support slot, deduplicated by (recipe, cell), answered when the slot is later admitted), refusal at S3 (the gate word), self-notice (receipts) at S5, path memory"
+   },
+   "W2_sdg_pool": "t2.pool_from(scoring.load_recipes()) (576 seeds; the dialogue pool)",
+   "W3_dialogues": "score_t2.dialogues(pool, seed) for seeds 11, 29, 47 (16 dialogues each, 24 turns each, as generated by lm_t2 t2.make_dialogue) and the calibration seed 5",
+   "W4_planted_utterances": {
+    "rule": "7 per dialogue world, generated from the world's own content (Omega names and states copied byte for byte); every utterance arrives at the S0 boundary of the named thought (turn index) and carries its key (station, faculty, expected provenance); CCE v0.1c-R forms only",
+    "kinds": {
+     "1_QUESTION": {
+      "form": "To make Ω_q<d>, use 2 of Ω_A; plus 1 of Ω_B.",
+      "arrives": "thought 8 S0",
+      "key": [
+       "S0",
+       "fit_F7",
+       "CREATED"
+      ],
+      "expected_response": "ANSWER with the composed yield min(y_A / 2, y_B / 1) (the LAC_COMPOSE mechanism of lm_t2)",
+      "note": "BUILDER: the packet's 'How much Ω_x can be made?' has no CCE form; a composition question over two known subjects is the CCE question about an outcome that the Bias can answer"
+     },
+     "2_THINK": {
+      "form": "Topic: Ω_A.",
+      "arrives": "thought 9 S0",
+      "key": [
+       "S2",
+       "wondering_F5",
+       "ATTEMPTED"
+      ],
+      "expected_effect": "HELD candidates = known subjects (Bias) sharing at least one cell with Ω_A's recipe (B by construction), origin wonder, Φ<8:9>",
+      "note": "BUILDER: the packet's 'Think about Ω_x.' is PROPOSED and not CCE; 'Topic: Ω_x.' is the CCE turn that names a subject without new content"
+     },
+     "3_NO": {
+      "form": "You said: I am not attracted toward Ω_B.",
+      "arrives": "thought 10 S0",
+      "key": [
+       "S3",
+       "user_refusal",
+       "ATTEMPTED"
+      ],
+      "expected_effect": "the HELD candidate named Ω_B goes REFUSED with reason USER_DENIED; polarity DENIED on the user's own term; never ^3",
+      "no_target": "CLARIFY 'I need the candidate for Ω_B. What is it?' (BUILDER: the packet's 'Which one?' has no CCE form)"
+     },
+     "4_FACT": {
+      "form": "There is 6 of Ω_A.",
+      "arrives": "thought 12 S0",
+      "key": [
+       "S5",
+       "integration",
+       "CREATED"
+      ],
+      "expected_effect": "a USER_SAID stock of a subject the Bias holds enters the fact ledger through the writer with its English-first receipt; the readout never reads the ledger (H5 counter); '+' bundle, F1 gain 0"
+     },
+     "5_CONTRADICTION": {
+      "form": "You said: To make Ω_A, use <3 x coefficient> of <A's first state>; plus <A's other terms unchanged>.",
+      "arrives": "thought 13 S0",
+      "key": [
+       "S5",
+       "self_notice",
+       "ATTEMPTED"
+      ],
+      "expected_effect": "the writer refuses (REFUSED_CONFLICT: the witnessed coefficient differs); a conflict record names both values with their evidence tags (REAL / USER_SAID); CLARIFY 'I need the requirement of noetic <n> <domain> for Ω_A. What is it?' naming the conflicting slot (BUILDER: the packet's 'Which holds?' has no CCE form); P1 preempts at the next boundary"
+     },
+     "6_UNPARSEABLE": {
+      "form": "I think Ω_A might be about 3.",
+      "arrives": "thought 4 S0",
+      "key": [
+       "current",
+       "none",
+       "FOLLOWED"
+      ],
+      "expected_response": "CLARIFY_RESTATE with the refusal code (HEDGE) and one rendered CCE example sentence (the current station's tap)"
+     },
+     "7_MISSING_FACT": {
+      "form": "To make Ω_m<d>, use 1 of Ω_A; plus 1 of Ω_zz<d>.",
+      "arrives": "thought 5 S0",
+      "key": [
+       "current",
+       "none",
+       "ATTEMPTED"
+      ],
+      "expected_response": "KNOWLEDGE_MISSING: CLARIFY 'I need the stock of Ω_zz<d> for Ω_m<d>. What is it?' naming the slot; a question record; never a filled slot"
+     }
+    },
+    "inserted_thoughts": "kinds 1 and 7 are production problems posed by speech: when routed at S0 they run as an inserted thought S0..S6 of their own (head Ω_q / Ω_m), then the dialogue's turn proceeds; inserted thoughts are logged on branch INJECT and never update the dialogue tracker's subject or anchor (two heads held with '+', never averaged)",
+    "counts": "48 worlds x 5 keyed kinds = 240 (INJECT-1, INJECT-2, INJECT-4); 48 unparseable + 48 missing-fact (INJECT-3)"
+   },
+   "W4s_shuffled": "W4 with the 5 keyed kinds deranged across the 48 dialogue worlds (random.Random(11), Sattolo cycle, plus the lm_t1 M5b deterministic repair so that no world receives utterances from a world that shares any of its three subject names A, B, C); each utterance keeps its arrival thought and key; kinds 6 and 7 are world-independent and are delivered unchanged (reported)",
+   "W5_controls": "Task B: the untaught twin on b_chain (plain and shuffled) and the taught brain's shuffled panels (RB2c's own controls, chance band 6); dialogues: A5 (shuffled injections); the clean / shuffled LSR families of RB-I1 are NOT in LM-T4 (pre_run_changes PRC-1)"
+  },
+  "stations": {
+   "tick": "one tick per station crossing; a thought = S0, S1, S2, S3, S4, S5, S6 (7 crossings) plus nested levels recorded inside S5 (depth <= 5)",
+   "record": "every crossing writes a station record {thought_id, station, level, tick, cas (the full CAS content as a dict, exact Fractions as 'p/q' strings), cce (the CCE-sayable projection), form_gaps (LACUNA cell names for content with no CCE form), content_digest (sha256 of cas), provenance (FOLLOWED / CREATED / ATTEMPTED), drive (focus k_t, pi_t)}",
+   "task_b": {
+    "head_omega": "a fixed table from the generator's order name: 'R2' -> Ω_R2; 'R0->R3' -> Ω_R0_to_R3; 'R0+R1' -> Ω_R0_or_R1; 'SUM(R0,R1)' -> Ω_sum_R0_R1; a keyless distraction has no head (S0 says nothing, NO_EVIDENCE)",
+    "cell_names": "memory cell i (OUR_CONVENTION) is said as Ω_cell_<i> (BUILDER: the SDG CAS cell names conflict on the shared cells 2 and 5, so they are provenance only, never cell names)",
+    "S0": "cas: head Ω, order, expression tree, leaves, depth, π_t, k_t, open questions; cce: 'Topic: Ω_x.'; form gaps: S0_ORDER_SHAPE, S0_DRIVE_STATE",
+    "S1": "cas: the stock vector M (8 binary64 values exact), charged, memory_version; cce: 'There is <exact decimal> of Ω_cell_i.' x 8; form gaps: none",
+    "S2": "cas: per recipe k in the expression's leaves: the learned requirement slots (exact Fractions or ABSENT), dirty flag, support; cce: one part per recipe 'To make Ω_Rk, use a of Ω_cell_i; plus ...' over learned cells (a recipe with no learned cell says nothing: NO_EVIDENCE part); form gaps: S2_ABSENT_SLOT per absent support cell, S2_DIRTY_FLAG when dirty, S2_NONTERMINATING_COEFFICIENT (Q13); cross-check: cas_ast.recipe_cas(recipe) compiles in the site compiler (cached by content digest; counted)",
+    "S3": "cas: label, gate, Y_T, limiting cell, detail; cce: gate -> 'I cannot tell.'; else 'I checked: There is <Y_T> of Ω_head.' when Y_T is terminating; form gaps: S3_LIMITING_REAGENT (always), S3_NONTERMINATING_YIELD (Q13)",
+    "S4": "cas: region, semantic outcome, asom_display (quantifiers.py rule); cce: none; form gap: S4_REGION_OUTCOME",
+    "S5": "cas: level n = expression depth; chain edge; per-leaf level receipts (ε^(n) = partial_read over the leaf's learned cells equals the leaf's evaluated yield and limiting cell when the leaf fired; cached per thought, never recomputed); the teach step record when keyed (candidate, eta_eps receipt, memory check, admitted / reason); question records (asking) for absent slots on G1; cce: 'Ω_Rb needs Ω_Ra first.' for a chain (CHAIN a, b); the asking CLARIFY 'I need the requirement of Ω_cell_i for Ω_Rk. What is it?' is said by the brain with its own receipt; form gaps: S5_RECEIPT_SENTENCE (always), S5_LEVEL",
+    "S6": "crossed at the boundary with the next thought (or END); cas: next head, chain step; cce: 'New subject: Ω_next.' when the next head differs; same head or END: nothing said (SAME_HEAD / END, not a lacuna); form gap: S6_CHAIN_STEP for chains"
+   },
+   "dialogues": {
+    "S0": "cas: head Ω (the turn's recipe omega; a stock-only turn attaches to the tracker's current subject), turn kind, π_t, k_t, open questions; cce: 'Topic: Ω.'",
+    "S1": "cas: the turn's stated stocks; cce: the stock statements; a turn with no stock says nothing (NO_EVIDENCE)",
+    "S2": "cas: the recipe Θ(Ω) the turn states (REAL witness) and the Bias held for Ω (lm_t2 full_turns); cce: 'To make Ω, use ...'; cross-check: recipe_cas compiles; the tracker point p = point(masses) is taken here (the only station kind with Noetic mass)",
+    "S3": "cas: lm_t2 brain_reply (ANSWER with yield / CLARIFY naming the slot / CANNOT_TELL / none); cce: the reply sentence; form gap S3_NONTERMINATING_YIELD when a yield is not terminating",
+    "S4": "outcome INTENDED when the reply kind equals the kind the turn layout expects (recipe turns ANSWER; LAC_CANNOT CANNOT_TELL; LAC_ASK CLARIFY; LAC_COMPOSE ANSWER; stock-only turns UNASSESSED), OFF_AXIS otherwise; region ACTIVE when a yield > 0 was computed, CUTOFF when a slot was missing, UNASSESSED otherwise; cce: none",
+    "S5": "cas: composition edges needs_first(Ω_comp, Ω_part) with nested level receipts (level 1 = each part's own read-back equals its stored yield; depth <= 5); the F6 read-back receipt of the turn (cce round trip); asking records (the brain's CLARIFY); the writer door for REAL releases and USER_SAID witnesses; cce: 'Ω_comp needs Ω_A first. Ω_comp needs Ω_B first.' for compositions",
+    "S6": "'New subject: Ω_next.' when the next turn's head differs; else nothing"
+   },
+   "brain_digest_D": "sha256 of the canonical JSON of every mutable part of the brain: Task B = learned_state (32 slots, dirty), memory M, charged, memory_version, order code, buffer, question ledger, chain state, drive state (s_k, focus, last_chosen, stay_left); dialogues = full_turns (canonical contents), known stocks, buffer (HELD / REFUSED states), question ledger, fact ledger, conflict records, drive state, tracker state (subject, anchor, prev_p, prev_q, steps_ok, drift_fired, lr)",
+   "tap_log_and_eye_log": "separate files per part; never read by the readout (instrumented read counters; H5)"
+  },
+  "tap": {
+   "definition": "at a station boundary: S = render(cce projection) with the fixed twin; receipt: parse(S) normalized == projection normalized (cce_v01c digest); the CAS side of a recipe compiles in the site compiler; D(brain) before == after; the tap event goes to the tap log only",
+   "denominator_rule": "BUILDER reading (the packet's TAP-1 '100% of taps' and its TAP-4 FORM gaps cannot both hold on every crossing): a tap is ATTEMPTED at every crossing; it SAYS something when the projection is non-empty; TAP-1 = receipts passing / taps that said something; crossings whose projection is empty are counted as NO_CCE_FORM (form gaps) or NO_EVIDENCE (no content) per station kind and reported beside TAP-1",
+   "dumb_baseline": "JSON dump tap: json.loads(json.dumps(cas)) == cas and D(brain) unchanged; run on every crossing of A4 and reported beside TAP-1 / TAP-2"
+  },
+  "inject": {
+   "definition": "C = parse(U) with cce_v01c or a typed refusal code; English-first receipt parse(render(C)) == C; every slot value carries evidence USER_SAID with the utterance id; the routing table of TAP_AND_INJECT.md 2.2 decides station and faculty; a faculty starts as a state change through one door function start_faculty(caller, ...) whose per-caller counter is the EYE-R5 instrument; CLARIFY for unparseable; KNOWLEDGE_MISSING naming the slot for a missing fact; nothing is guessed",
+   "queue": "an utterance arriving at a boundary is queued with its arrival tick; it is eligible at the boundary of its keyed station; P1 (contradiction) acts at the next boundary regardless of the loop; others wait for the drive loop's guards (GREEDY among the eligible drives); after 24 ticks of waiting it is answered by a tap or a CLARIFY (never dropped)",
+   "arm_A2": "injections enter a turn-level queue serviced only at thought boundaries (after the current thought's S6): the same routing effects, station recorded as TURN_LEVEL",
+   "arm_A3": "no faculties: every utterance becomes a turn-level CLARIFY (unparseable / unknown) or ANSWER (a complete composition) through lm_t2 brain_reply; no HELD, no ledger, no question record",
+   "arm_A4_name_match": "mechanism-free injector: regex on the raw utterance (not CCE) extracts the kind by its leading words and the Ω names; a fixed kind -> (station, faculty) table fires WITHOUT checking that the named subject or candidate exists; ASK-RULE asks at every missing slot naming it"
+  },
+  "continuity": {
+   "tracker": "lm_t2 t2.Derived with thresholds calibrated on seed 5 per station kind (score_t2.calibrate's midpoint rule: seam, tone, drift); only S2 of dialogue turns carries a point (recipe with state terms); Task B stations carry no Noetic mass and contribute no point (counted NO_POINT); inserted thoughts (branch INJECT) never move the tracker",
+   "seam_rule": "unchanged from LM-T2: the parsed head Ω changed AND the step >= theta_seam; within one thought station crossings are never seams by rule",
+   "never_interpolate": "every point is recomputed from its own content; the INTERP control (lm_t2 Interp) is run and must be flagged at 96 of 96 seams",
+   "provenance": "FOLLOWED for every ordinary crossing and chain slot; CREATED / ATTEMPTED per Q7 for crossings where an injection, a question, a release or a HELD candidate wrote the next pointer; the planted key names the expected label; CONT-3 compares label to key on every crossing",
+   "restlessness": "step sizes per station kind (mean, max), reported only (CONT-4)"
+  },
+  "arms": {
+   "A1_CIRCUIT_CARRIED": "taps at every station boundary; injections routed by the table; all faculties; GREEDY; eye REPORT_ONLY",
+   "A1_NOTAP": "A1 with every tap and the eye removed (the H3 replay rule applied to taps: answer records and path logs must be byte-identical to A1's)",
+   "A1_NOEYE": "A1 with taps and without the eye (digest-neutrality check 2: answer records and path logs byte-identical to A1's)",
+   "A1_REPLAY": "a second fresh run of A1 (H3: identical state digests)",
+   "A2_SKIN_ONLY": "language at the ends only (lm_t2 brain_reply per turn; the final answer rendered per Task B thought); injections handled at turn level; all faculties; GREEDY; eye REPORT_ONLY",
+   "A3_NO_FACULTIES": "taps at stations; injections become turn-level CLARIFY / ANSWER; RB today (Task B: RB-det exactly; dialogues: lm_t2 DERIVED run_arm reproduced); eye REPORT_ONLY",
+   "A4_SLOT_CHECKER": "JSON dump tap; name-match injector; ASK-RULE; no faculties; no eye",
+   "A5_SHUFFLED_INJECTION": "A1 with W4s on the dialogue worlds; on Task B (no planted utterances) A5 equals A1 and is not run again",
+   "task_b_runs": [
+    "REF (rb2.driver_rb2 teach_b_draw + score_b_draw, imported unchanged, per draw)",
+    "A1",
+    "A1_NOTAP",
+    "A1_NOEYE",
+    "A1_REPLAY",
+    "A2",
+    "A3"
+   ],
+   "dialogue_runs": [
+    "A1",
+    "A1_NOTAP",
+    "A1_NOEYE",
+    "A1_REPLAY",
+    "A2",
+    "A3",
+    "A3_REF (t2.run_arm imported unchanged)",
+    "A4",
+    "A5"
+   ]
+  },
+  "unity_eye_report_only": {
+   "mode": "REPORT_ONLY (ACTING refused by run_t4; unit test)",
+   "arms": [
+    "A1",
+    "A2",
+    "A3",
+    "A5"
+   ],
+   "per_station_read": "eye_station_read {run_id, arm, family, seed, thought_id, station, level, tick, content_digest, signals [{name, value 'p/q' or ABSENT, counter}], brain_digest_before, brain_digest_after, eye_receipt_id}; a read happens at every crossing after the station's tap and before the next step",
+   "per_stage_event": "eye_event every 16 ticks (growth-ledger format of ARCHITECTURE_RB_G.md:183-199 extended): event_id, stage_id, time_index, sense_report_digest, x_1 .. x_8 with x_4a, x_4b as exact fractions or ABSENT, Y_T, limiting (several when tied), gate (None | G1 | G2 | G3 | G4), would_propose (FIX | HELP | NONE with kind and station), outcome REPORTED, parent_digest == child_digest, runtime_seconds, peak_memory_bytes",
+   "ingredients": {
+    "x1_receipts_passing": "receipts passing / receipts checked in the stage (tap receipts + writer receipts + level receipts); ABSENT if 0 checked",
+    "x2_lacunae_on_cadence": "LACUNA / FADED cells (Task B: the policy ledger's ASKED / EXHAUSTED cells and ABSENT support slots; dialogues: open question slots) re-presented within C_cad = 32 ticks / such cells due in the stage; ABSENT if none due",
+    "x3_stations_aligned": "S4 records with region ACTIVE and outcome INTENDED / S4 records with both axes assessed; UNASSESSED counted apart; ABSENT if none assessed",
+    "x4a_drive_pair_balance": "1 - (involution pairs with dial gap > 4 at stage end) / 3",
+    "x4b_drive_entropy": "1 if normalized focus entropy over the last 32 ticks >= 1/2 else 0 (rb_i1 drives.entropy_norm)",
+    "x5_continuity_lawful": "1 - (false seams + interpolations across a seam) / crossings in the stage",
+    "x6_memory_check_holding": "1 if previously-right answers lost per admit <= 1 in the stage else 0; ABSENT if no admit",
+    "x7_answers_determined": "1 - UNDETERMINED / answers in the stage; ABSENT if no answer; FLAG line above 2 of 16",
+    "x8_language_skin_exact": "round-trip passes / sentences said in the stage; invented facts must be 0 (an invented fact is logged FAILURE_SEEN, never fixed); ABSENT if nothing said"
+   },
+   "gate": "G1 when any ingredient is ABSENT (named; UNDETERMINED); G2 when the stage had no crossings; G3 when two or more ingredients tie at the minimum; G4 when the eye's own last reading failed its receipt",
+   "would_propose": "per the fault table of UNITY_EYE.md 3: MISALIGNED station (OFF_AXIS with gold) -> FIX re-fit (station named); CUTOFF with INTENDED -> HELP F4 asking (slot named); FADED / ASKED cell past C_cad -> HELP curiosity re-presentation; pair gap > 4 -> HELP attention (advisory); seam interpolated -> HELP seam acknowledgement; invented fact -> FAILURE_SEEN; budget 1 FIX + 2 HELP per stage; in REPORT_ONLY nothing is applied and the faculty-start door is never called by the eye",
+   "receipt": "eta = write the eye_event record to the eye log; epsilon = re-read it from the log and recompute Y_T and limiting from the stored counts; equal or EYE_RECEIPT_FAIL (counted; EYE-R3 requires 0); cached once",
+   "digest_neutrality": "(1) brain_digest_before == brain_digest_after on every eye_station_read (EYE-R2); (2) A1 vs A1_NOEYE: answer records and path logs byte-identical"
+  },
+  "hard_gates": {
+   "H1_receipts": "every admitted write carries a passing receipt (Task B eta_eps; dialogue writer receipts); nested runs one receipt per level (Theorem 27.3) all passing; every sentence said passes the CAS-first receipt; every accepted input passes the English-first receipt",
+   "H2_no_invention": "0 admitted Task B values not equal to the fed-back ratio stock / yield of a REAL row; 0 fact-ledger entries not equal to their USER_SAID content; 0 questions containing a value; 0 invented facts (lm_t2 score_arm's invented_facts on the dialogue replies of every arm)",
+   "H3_replay": "A1_REPLAY digests == A1 digests (Task B per draw: learned digest, answer records; dialogues per seed: path digest); A1_NOTAP answer records == A1 answer records byte for byte",
+   "H4_provenance": "0 writes with an INTERNAL witness (no INTERNAL rows exist in LM-T4; the door refuses evidence class INTERNAL, unit-tested); USER_SAID witnesses counted apart from REAL",
+   "H5_readout_isolation": "instrumented reads of the buffer, the fact ledger, the tap log and the eye log by the readout = 0",
+   "H6_controls": "Task B twin b_chain right <= 6 and shuffled b_chain right <= 6 on every draw (RB2c's bands); A5 starts 0 keyed faculties at keyed stations; A5 CREATED = 0",
+   "H7_rb_today_reproduced": "Task B: for every draw, A1 / A2 / A3 b_chain and b_alt labels, b_sum yields and learned taught digest equal REF's (the imported driver) AND REF's per-draw b_chain / b_alt labels and taught digests equal c26's RB2C_RUNS.json rb_det AND the medians are 16 and 16; dialogues: A3 per-turn events and responses equal A3_REF (t2.run_arm imported) and the LM-T2 counts hold (subject seams 96 of 96, tone seams 48 of 48, false seams 0, walks 24 of 24, no-walk 0 of 24, lacuna moves 144 of 144, invented 0, receipts 100%)",
+   "H8_budget": "Task B: 512 keyed teaching ticks per draw (RB2c's budget, unchanged); dialogues: <= 4096 station ticks per dialogue world; FIT evaluations: none in LM-T4 (no FIT loop)",
+   "H9_tap_digest": "D(brain) before == after on every tap in every arm",
+   "H10_questions_carry_no_value": "0 questions with an amount",
+   "H11_tests": "all code tests pass in every part",
+   "no_deadline_hit": "no part hit its guard",
+   "all_units_present": "every planned unit completed"
+  },
+  "marks": {
+   "TAP_1_round_trip": "receipts passing / taps that said something = 100% (per arm with taps; count reported: stations x thoughts; NO_CCE_FORM and NO_EVIDENCE crossings reported beside)",
+   "TAP_2_digest": "D(brain) unchanged on 100% of taps",
+   "TAP_3_answer_unchanged": "A1 answer records identical to A1_NOTAP on 100% of worlds (Task B draws and dialogue worlds)",
+   "TAP_4_form_gaps": "count of station kinds with no CCE form written as LACUNA cells (expected by the packet: S0 order shape, S4, S5 receipt sentence, non-terminating Fractions); a report",
+   "INJECT_1_right_faculty_right_station": ">= 228 of 240 planted utterances start the keyed faculty at the keyed station (A1)",
+   "INJECT_2_shuffled": "A5: 0 of 240 start the keyed faculty at the keyed station",
+   "INJECT_3_gate_behaviour": "unparseable -> CLARIFY 48 of 48; missing fact -> KNOWLEDGE_MISSING naming the slot 48 of 48; invented facts 0",
+   "INJECT_4_time_to_start": "ticks from arrival to faculty start, A1 vs A2; A1 earlier on >= 90% of the 240 (bookkeeping unless an answer differs)",
+   "CONT_1_seams": "planted subject seams at the exact turn 96 of 96; 0 false seams over all within-thought station crossings (count reported)",
+   "CONT_2_drift": "walks caught 24 of 24; no-walk false fires 0 of 24",
+   "CONT_3_provenance": "FOLLOWED / CREATED / ATTEMPTED labels agree with the planted key on 100% of crossings; A5 CREATED = 0",
+   "CONT_4_restlessness": "reported only",
+   "ANSWER_1_task_b": "RB-det medians on W1 >= 16 and >= 16 (B-chain, B-alt) in A1, A2, A3; UNDETERMINED count reported",
+   "ANSWER_2_heldout_lsr": "NOT_EVALUATED in LM-T4 (PRC-1)",
+   "RECEIPTS_1": "one receipt record per station crossing of every thought; nested <= 5 levels; count of receipts = count of crossings",
+   "EYE_R1": "one eye reading per stage end per arm with the eye (count = stages x arms), each with nine ingredients as exact fractions or ABSENT, Y_T, limiting, gate",
+   "EYE_R2": "D(brain) unchanged by the eye on 100% of its reads",
+   "EYE_R3": "the eye's own receipt on 100% of readings",
+   "EYE_R4": "the eye's would-act list on clean worlds (the no-walk dialogues and the Task B panels), reported",
+   "EYE_R5": "calls by the eye into the faculty-start door: 0"
+  },
+  "status_word_rule": {
+   "computed_by": "merge_t4.py from counts only; several words may be awarded; a failed hard gate -> test_verdict FAILURE and only INCONCLUSIVE with the failing gates named",
+   "LANGUAGE_RODE_THE_PATH": "all hard gates pass AND TAP_1, TAP_2, TAP_3, RECEIPTS_1 at 100% AND ANSWER_1 holds in A1",
+   "INJECT_ROUTED": "INJECT_1 >= 228 of 240 AND INJECT_2 = 0 AND INJECT_3 at its marks",
+   "CIRCUIT_EARLIER_NOT_BETTER": "INJECT_ROUTED AND INJECT_4 holds AND ANSWER_1 shows no difference between A1 and A2 (ANSWER_2 NOT_EVALUATED, written beside the word)",
+   "CIRCUIT_CHANGED_AN_ANSWER": "A1 and A2 differ on ANSWER_1 in either direction; worlds named; not a pass word",
+   "VERIFY_DID_THE_WORK": "NOT_EVALUATED in LM-T4 (PRC-1)",
+   "INCONCLUSIVE": "none of the first three awarded",
+   "EYE_REPORTED": "instrument word beside any of the above: EYE_R1, EYE_R2, EYE_R3 and EYE_R5 hold"
+  },
+  "run_plan": {
+   "parts": "adaptive single-use parts LM_T4_MSI_P01, P02, ... each under the 280 s guard; PLAN.json (hashed in the manifest) lists the units per part from the dry count; a unit that cannot finish before the guard is recorded DEADLINE and never silently re-run",
+   "units": [
+    "W01: Task B worlds (20 draws, checks, C25_EQUALITY) + dialogue generation (seeds 5, 11, 29, 47) + W4 / W4s + calibration per station kind",
+    "TB_<run>_<draw range>: one Task B run over a draw range",
+    "DL_<run>_<seed>: one dialogue run over one seed",
+    "the merge is a separate program run after every part"
+   ],
+   "stop_rule": "if the dry count says the whole plan needs more than about 40 parts, STOP and report (the standing AWS rule makes that the owner's call); PRC-1 is a pre-freeze scoping, not a dry-count consequence"
+  },
+  "tests": [
+   "a tap is digest-neutral",
+   "a tap's render parses back to the station's content (Task B and dialogue fixtures)",
+   "an inject starts the planted faculty at the planted station and nothing on a shuffled utterance",
+   "CLARIFY on an unparseable utterance",
+   "KNOWLEDGE_MISSING names the slot",
+   "the eye logs and never writes (door counter 0; D equal)",
+   "eye_mode ACTING is refused",
+   "seams never interpolated (INTERP control flagged)",
+   "the brain's Task B answers are unchanged by taps on fixture draw 0 (equal to the imported driver)",
+   "the dialogue path equals t2.run_arm on a dev dialogue",
+   "evidence class INTERNAL refused at the door"
+  ],
+  "predictions_before_build": {
+   "packet": {
+    "hard_gates": "pass; H7 the risk (+5)",
+    "TAP_1_3": "100% (+6)",
+    "TAP_4": ">= 3 station kinds LACUNA and non-terminating Fractions appear in W1 (+5)",
+    "INJECT_1": ">= 228 of 240 (+4)",
+    "INJECT_2": "0 of 240 (+5)",
+    "A4_ties_INJECT_1": "yes (+5)",
+    "CONT_1": "96 of 96 and 0 false (+5)",
+    "CONT_3": "100% (+6)",
+    "ANSWER_1": "unchanged, 16 and 16 (+6)",
+    "CIRCUIT_EARLIER_NOT_BETTER": "awarded (+3)",
+    "CIRCUIT_CHANGED_AN_ANSWER": "not awarded (+5)",
+    "VERIFY_DID_THE_WORK": "awarded (+4) [NOT_EVALUATED here, PRC-1]",
+    "summary": "a tie with the skin on every answer: earlier, not better; the dumb baselines tie on the tap and routing rows"
+   },
+   "builder_operator": {
+    "hard_gates": "pass (+4); the risks are H7 (my station loop must equal teach_b_draw byte for byte) and H3 on dialogues (the drive loop's float restlessness must not enter any digest)",
+    "TAP_1_2": "100% by construction (+6)",
+    "TAP_3": "100% (+6)",
+    "TAP_4": "FORM-gap cells: S0_ORDER_SHAPE, S2_ABSENT_SLOT, S3_LIMITING_REAGENT, S3_NONTERMINATING_YIELD, S4_REGION_OUTCOME, S5_RECEIPT_SENTENCE, S6_CHAIN_STEP (7 kinds); S2_NONTERMINATING_COEFFICIENT 0 on W1 because every learned value equals a true coefficient (7/10, 1/2, 1, 3/2, 2); non-terminating yields at S3 on most Task B thoughts (+5)",
+    "INJECT_1": "240 of 240 (+4); the risk is kind 3 when wondering finds more than one candidate",
+    "INJECT_2": "0 of 240 (+5)",
+    "A4": "ties INJECT_1 at 240; fails INJECT_2 (fires on every shuffled utterance) (+5)",
+    "INJECT_3": "48 / 48 and 48 / 48 (+6)",
+    "INJECT_4": "A1 earlier on 240 of 240 by construction (every utterance arrives at S0; A2 acts after the thought) (+6): bookkeeping",
+    "CONT_1_2": "96 / 96, 0 false, 24 / 24, 0 / 24 (+6): LM-T2's tracker fed at S2 is the same tracker",
+    "CONT_3": "100% (+5)",
+    "ANSWER_1": "16 and 16 in every arm (+6)",
+    "status": "LANGUAGE_RODE_THE_PATH + INJECT_ROUTED + CIRCUIT_EARLIER_NOT_BETTER (ANSWER_2 NOT_EVALUATED) + EYE_REPORTED, probability about 0.6; INCONCLUSIVE otherwise (an H7 or H3 slip)",
+    "eye": "most Task B stages read G1 UNDETERMINED (x6 ABSENT in stages without an admit, x2 ABSENT without due cells); most dialogue stages read G1 too (x6 ABSENT: no admits); would-FIX > 0 on Task B early teaching (OFF_AXIS labels); EYE_R2 / R3 / R5 100% / 100% / 0",
+    "size": "Task B about 5 to 9 s per draw with taps, about 7 runs x 20 draws = 15 to 25 min of part wall; dialogues under 60 s per run; 8 to 14 parts; peak under 120 MiB"
+   }
+  },
+  "pre_run_changes": {
+   "PRC-1": "SCOPE (decided at this freeze, before any code): the rb_c4 LSR family brain (RB-I1's FamilyBrain over a, a_approx, scale_leak, c, TaskB_d3, TaskB_d4) is NOT run in LM-T4. Reasons: (a) the packet's station map (STATIONS.md) covers the recipe brain RB2c and GB3 only; it maps no station for the LSR loop, so taps there would be a new design, not the packet; (b) RB-I1's own run of that brain is taking about 150 laptop parts, far past the packet's 10-16-part size and the 40-part stop rule. Consequences: ANSWER_2 and VERIFY_DID_THE_WORK read NOT_EVALUATED; CIRCUIT_EARLIER_NOT_BETTER is computed on ANSWER_1 and carries the note; the clean / shuffled / coin LSR families of H6 are replaced by RB2c's own controls (twin, shuffled panels) and by A5. The faculties of Q3 are realized on the dialogue brain (lm_t2 + RB-I1's dialogue faculties F7 / F4 / F6 / F3 plus wondering, integration, user refusal) and on the recipe brain (asking, refusal, self-notice). Flagged for the owner.",
+   "PRC-2": "The packet's PROPOSED forms 'How much Ω_x can be made?', 'Think about Ω_x.', 'Which one?' and 'You said: ... I checked: ... Which holds?' are not CCE and no grammar rule is added in LM-T4 (Q12); the CCE forms used instead are named in worlds.W4 (composition question; 'Topic: Ω_x.'; CLARIFY naming the candidate; CLARIFY naming the conflicting slot).",
+   "PRC-3": "Task B planted utterances: none (Q17, Q14; the INJECT marks count 16 x 3 x 5 dialogue worlds). A5 on Task B therefore equals A1 and is not run again.",
+   "PRC-4": "The drive loop on Task B records the acting drive per crossing (S0 F2 when the policy's pick was gap-driven else F7; S1-S4 F7; S5 F6 or F4 when asking; S6 F7) with RB-I1's gains, decay and guards, but never changes the teaching order (RB-det's policy is the schedule); on dialogues the loop arbitrates only among eligible queued injections (and F3); the thought's own path is never delayed by the loop."
+  },
+  "amendments": [
+   {
+    "id": "LMT4-A1",
+    "when": "laptop clock 06:04 PDT 2026-10-15, after the code and the unit tests, before static_check and before any supervised part",
+    "what": "Record of the allowed dev execution (disclosures_at_freeze item 2). No rule, mark, threshold, default or status word above was changed. Three mechanical corrections were made to the code before any scoring seed or sealed draw was touched, each found on fixture / dev data and listed here.",
+    "dev_runs": {
+     "smoke_1_task_b_fixture_draw_0": "FIXTURE_NOT_SEALED_WORLDS draw 0 (rb2.worlds_b fixture region): the station loop's answer record equalled the imported driver's (teach_b_draw + score_b_draw) on the first run; A1 and A1_NOTAP paths equal; 2,832 of 2,832 round trips; 756 compiler checks valid, 0 invalid; eye 4,676 reads digest-equal, 293 events, 0 receipt failures, 0 door calls. Timing on the fixture draw: A1 9.0 s, A1_NOTAP 2.4 s (cold), later 7.2 / 2.5 s.",
+     "smoke_2_dialogues_dev_seed_97": "t2.make_dialogue(pool, 97, d) for d = 0..2 (a dev seed; never a scoring seed): A3 equalled t2.run_arm; A1 equalled A1_NOTAP; the five keyed kinds routed to their keyed stations in A1; the shuffled set started 0.",
+     "unit_tests": "test_lm_t4.py 12 of 12 (19.2 s), run twice (before and after the result-item slimming).",
+     "dry_count_timing_only": {
+      "world_generation_20_real_draws_s": 19.73,
+      "worlds_in_20_draws": 2360,
+      "dialogue_generation_3_seeds_s": 1.01,
+      "turns": 1152,
+      "calibration_seed_5_s": 1.52,
+      "calibration_feasible": true,
+      "interp_control_s": 1.21,
+      "per_fixture_draw_s": {
+       "REF": 0.9,
+       "A1": 7.15,
+       "A1_NOTAP": 2.54,
+       "A1_NOEYE": 5.13,
+       "A1_REPLAY": 7.19,
+       "A2": 4.58,
+       "A3": 6.06,
+       "A4": 4.33
+      },
+      "per_dev_world_s_range": "about 1.2 to 1.8 per arm",
+      "result_item_bytes": {
+       "task_b_draw_A1_before_slimming": 693141,
+       "dialogue_world_A1": 42250
+      },
+      "plumbing": "a scratch W01 in fixture mode (2 fixture draws, dev seed 97), every unit kind, two fake part folders and merge_t4.merge ran end to end; its verdict was FAILURE / INCONCLUSIVE only because the scratch had 2 draws and 1 seed (missing units); no scored number of any sealed world was read",
+      "plan": "8 parts (PLAN.json), each under about 170 s of unit work; far below the 40-part stop rule"
+     },
+     "corrections_before_any_scored_run": [
+      "PRC-5 (world release): the Q5 release amount is computed for the slot that is actually missing (a_missing x ks[2 mod n]); RB-I1's dialogue.world_answer indexed the canonical (sorted) term list, which filled a different slot on the dev dialogue (the release then read CLARIFY instead of ANSWER). Found by the dev smoke; no mark changed.",
+      "routed-tick bookkeeping: an injection's routed tick is read before its inserted thought runs and at the crossing where the loop chose it (INJECT-4 waits were inflated by 1 to 8 ticks on dev data).",
+      "KNOWLEDGE_MISSING slot words for an unknown subject are 'the recipe' / 'the candidate' with the subject as the CLARIFY topic (the first form repeated the subject name); level receipts count only parts the Bias holds (an unanswerable composition records missing_parts, not a failed receipt).",
+      "the CLARIFY_RESTATE example sentence is rendered from the current head, never read from the tap log (so A1 and A1_NOTAP stay byte-identical).",
+      "result items keep compact per-stage eye rows; the full eye_event records stay in the eye's log and in the draw-0 / world-0 samples."
+     ]
+    }
+   },
+   {
+    "id": "LMT4-A2",
+    "when": "laptop clock 06:40 PDT 2026-10-15, after the first supervised attempt failed and before the second attempt's static check",
+    "what": "RECORD OF A FAILED PART AND OF TWO RUNNER REPAIRS. No rule, mark, threshold, default or status word above was changed. The first attempt (manifest 6fd51648, sign line 'APPROVE lm_t4, source 6fd51648, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.', plan version lm-t4-plan-1) launched at 13:05:43 UTC; part P01 ended WORKER_FAILED (exit code 1) after 44.1 s with the 12 code tests passing. Its folder runs/LM_T4_MSI_P01 is kept as the record; nothing in it is read by the second attempt.",
+    "what_P01_did_before_failing": "unit W01 built the worlds and dialogues: the 20 Task B draw documents all equalled c25's digests and every per-draw check passed, but the SELECTION record's digest was computed with lm_t4's own canonical JSON (ensure_ascii=False) while the c25 reference holds rb.common.sha256_obj's ASCII-escaped digest; the two differ on the record's non-ASCII characters (Θ, →, Ω), so the worlds check read INSTRUMENT_ERROR although the worlds are c25's (confirmed after the failure by recomputing both digests: the driver's function reproduces the reference). The runner then started the next unit, which tried to load W01's artifacts from RESULTS_T4.json, a file the worker writes only at the end of a part: FileNotFoundError, exit 1. No scored unit (TBREF, TB, DL) ran. P01 also wrote INTERP.json (the INTERP control count) and CALIBRATION.json; neither was opened by the operator.",
+    "repairs_in_the_runner_only": [
+     "run_t4.build_worlds compares the draw documents AND the selection record with rb.common.sha256_obj, the function the RB2c driver and c25 used (the comparison rule itself is unchanged: every draw digest and the selection digest must equal c25's).",
+     "run_t4.run_part hands the in-memory W01 record to load_w01 when W01 was built in the same part; every artifact's sha256 is still re-verified. A failed worlds check now ends the part before any arm unit starts.",
+     "load_w01 and merge_t4 locate the W01 part from PLAN.json instead of a hard-coded folder, so a later attempt never reads a failed attempt's folder; merge_t4 lists every non-COMPLETED run folder under failed_parts.",
+     "run_all_parts.ps1 / the monitor: the operator's tail -f on runs/DRIVER_LOG.txt held the file open, so the PowerShell driver could not append its END lines (IOException: file in use). The second attempt is watched by polling the run folders' END.json files; the driver log is never held open."
+    ],
+    "second_attempt": "plan version lm-t4-plan-2 with new single-use parts P11-P18 (the same units as P01-P08); a new manifest and sign line from the static check after this amendment. If the second attempt fails, it is recorded and reported; nothing is patched and silently re-run."
+   },
+   {
+    "id": "LMT4-A3",
+    "when": "laptop clock 07:00 PDT 2026-10-15, AFTER the second attempt completed (parts P11-P18 all COMPLETED, manifest 3390ebbd) and after its first merge reading",
+    "what": "RECORD OF TWO READER CORRECTIONS MADE AFTER THE RUN, AND OF ONE RUN-TIME DEFECT THAT IS NOT CORRECTED. The experiment's raw counts (runs/LM_T4_MSI_P11..P18) were not touched. No rule text, mark, threshold, default or status-word rule above was changed; what changed is how merge_t4.py computes two of them.",
+    "first_reading_kept": "runs/MERGED_MARKS.first_reading.json, sha256 436b2919f2d3d6e0d9488a26ef9a156b405037de527404ee00be6d19ea51ff87: test_verdict FAILURE, status INCONCLUSIVE, failing gates H2_no_invention and H10_questions_carry_no_value with question_values = 192; CONT-3 106,320 of 106,400; EYE-R1 events 6,716 vs complete 6,436 (A1).",
+    "reader_correction_1_H10_H2": "The rule is '0 questions with an amount'. The first reader flagged any DIGIT in a question's slot words; the 192 flags were all Ω identifiers that contain digits (the planted Ω_zz<d> and SDG names such as Ω_decision_11, Ω_judgment_89), copied byte for byte, never an amount. Checked on the stored items before the correction: 0 slot words carry a digit outside an Ω identifier and 0 question contents carry a stocks / amount field. The reader now tests for a number token outside an Ω identifier.",
+    "reader_correction_2_EYE_R1": "The rule is 'one eye reading per stage end per arm, each with its nine ingredients, Y_T, the Limiting Reagent and the gate'. The items store the compact per-stage rows of the taught brain only; the untaught twin's 280 events (14 stages x 20 draws) were counted in the event total but had no rows to check, so 'complete' fell short by exactly 280 in A1, A2 and A3. The eye's own receipt re-reads an event's ingredients, Y_T and limiting from the log, so a twin event with a passing receipt is verified; the reader now counts twin events verified by receipt (280 of 280, 0 receipt failures) beside the taught rows.",
+    "run_time_defect_NOT_corrected_CONT_3": "stations.TaskBThinker.s5 writes the provenance KEY of every asking crossing as CREATED ('the world teaches every support slot in the end'). That is right for the taught brain (its 10 questions per draw were all answered when the slot was admitted: taught CREATED 80, mismatch 0) and wrong for the untaught twin that scores the panels: nobody teaches it, its 4 asking crossings per draw stay open (label ATTEMPTED, correct), so 80 of 106,400 crossings carry a key that the program itself disagrees with. CONT-3 therefore reads 106,320 of 106,400 (99.92%), a FAILED MARK under the frozen 100% rule. It is reported as such and not re-run. The status words do not read CONT-3.",
+    "second_reading": "runs/MERGED_MARKS.json, sha256 1463a07462291280e7427d3bd68b54d51a367a05d706d4cb71a661e09ea13c52: HARD_GATES_PASS; LANGUAGE_RODE_THE_PATH, INJECT_ROUTED, CIRCUIT_EARLIER_NOT_BETTER (ANSWER_2 NOT_EVALUATED), EYE_REPORTED; CONT-3 FAIL. The owner sees both readings; the operator does not pick between them."
+   }
+  ],
+  "disclosures_at_freeze": [
+   "This folder is outside the tksCAS repo: no spec-sheet row and no CHANGELOG entry here; they belong with the first committed LM-T4 result through the thread-branch PR pattern.",
+   "Dev execution allowed before the sealed run (to be recorded as amendment A1): unit tests on fixtures; one dry count (sizes and timing only: thoughts, crossings, seconds per unit, peak bytes); no scored number (no mark, no count toward a mark) is read before the supervised parts run.",
+   "The eye's nine count rules, C_cad = 32, the budget 1 FIX + 2 HELP, the requirement constants a_i = 1 and the fault table are PROPOSED (OWNER_RULING_UNITY_EYE_20261015.md section 3)."
+  ]
+ }
+}
