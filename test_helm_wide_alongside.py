@@ -376,5 +376,75 @@ class F_SecondPracticeRound(unittest.TestCase):
                 subprocess.run = real_run
         self.assertEqual(ran, [])
 
+
+class G_ConditionPiecesAreNotIngredients(unittest.TestCase):
+    """Wave-7 round 3 FIX FIRST (2026-10-20): c52's one unexplained ask. A batch or stock sentence that carries an
+    amount of a CONDITION after an ingredient line -- a temperature ("..., 80 degrees Fahrenheit, ..."), a time, a head
+    count -- was split at that amount, and the piece became an ingredient named by the condition word ("degrees
+    fahrenheit"). The wide brain then waited for a batch where that "ingredient" ran out, never got one, and asked at
+    the question with every real lesson learned (K4 missed). The sentences below are the author's own, in the same
+    shape as the exam item (never the exam line). Each test fails on the thread head and passes on reader v6."""
+
+    LESSONS = ["We made 1 muffin from 3 cupfuls of flour, 90 degrees Fahrenheit, 2 teaspoonfuls of yeast, and 1 cupful "
+               "of milk and ran out of flour.",
+               "We made 1 muffin from 6 cupfuls of flour, 90 degrees Fahrenheit, 1 teaspoonful of yeast, and 1 cupful "
+               "of milk and ran out of yeast.",
+               "We made 1 muffin from 6 cupfuls of flour, 90 degrees Fahrenheit, 2 teaspoonfuls of yeast, and 1/2 "
+               "cupful of milk and ran out of milk."]
+    STOCK = "We have 6 cupfuls of flour, 90 degrees Fahrenheit, 1 teaspoonful of yeast, and 4 cupfuls of milk."
+    QUESTION = "How much muffin can we make?"
+
+    def test_reader_keeps_a_condition_piece_as_a_note_of_the_line_before(self):
+        r = WT.read_wide(self.LESSONS[0])
+        self.assertEqual(r["status"], "WITNESS")
+        self.assertEqual(sorted(r["witness"]["stock"]), ["flour", "milk", "yeast"])
+        self.assertEqual(r["witness"]["ran_out"], ["flour"])
+        self.assertIn("90 degrees Fahrenheit", r["witness"]["said"]["flour"])      # kept with its line, not dropped
+        s = WT.read_wide(self.STOCK)
+        self.assertEqual(s["status"], "STOCK")
+        self.assertEqual(sorted(s["stock"]), ["flour", "milk", "yeast"])
+        for text in ("We made 2 loaves from 350 F, 3 cups flour and 1 cup water and ran out of flour.",
+                     "We made 2 loaves from 3 cups flour, 20 minutes, 1 cup water and ran out of water.",
+                     "We have 3 cups flour, 4 people, and 1 cup water."):
+            r = WT.read_wide(text)
+            names = sorted((r.get("witness") or {}).get("stock") or r.get("stock") or {})
+            self.assertEqual(names, ["flour", "water"], text)
+        # a unit letter is still a unit; a line made only of a condition is a question, never a name
+        self.assertFalse(WT.condition_fragment("2 c flour"))
+        self.assertTrue(WT.condition_fragment("350 F"))
+        self.assertTrue(WT.condition_fragment("80 degrees Fahrenheit"))
+        self.assertIn("clarify", WT.parse_line("80 degrees Fahrenheit"))
+
+    def test_loop_answers_a_recipe_taught_with_a_temperature_in_every_line(self):
+        import helm_end_to_end_loop as E2E
+        loop = E2E.HELMEndToEndLoop(wide_brain=True)
+        for t, s in enumerate(self.LESSONS, 1):
+            r = loop.process_turn(s, tick=t)
+            self.assertEqual(r["loop_status"], "WITNESS_ADMITTED", s)
+            self.assertNotIn("degrees", r.get("response") or "")
+        self.assertEqual(sorted(loop.wide_book.support_of("muffin")), ["flour", "milk", "yeast"])
+        self.assertEqual(loop.wide_book.unlearned("muffin"), [])
+        self.assertEqual(loop.process_turn(self.STOCK, tick=4)["loop_status"], "STOCK_RECORDED")
+        q = loop.process_turn(self.QUESTION, tick=5)
+        # flour 6/3 = 2, yeast 1/1 = 1, milk 4/(1/2) = 8 -> 1 muffin, yeast runs out first
+        self.assertEqual(q["loop_status"], "SUCCESS_EVALUATED")
+        self.assertEqual(Fraction(str(q["output_value"])), Fraction(1))
+        self.assertEqual(q["limiting_reagent"], "yeast")
+
+    def test_chat_answers_the_same_recipe(self):
+        import helm_chat as hc
+        with wide_on():
+            s = hc.HELMConversationalSession(mode="everyday", session_id="test_condition_piece_chat")
+            for text in self.LESSONS + [self.STOCK, self.QUESTION]:
+                f = io.StringIO()
+                with redirect_stdout(f):
+                    s.handle_turn(text)
+                self.assertEqual(s.memory.turns[-1].intent, "RECIPE_FOUNDATION_LOOP", text)
+            answer = s.memory.turns[-1].helm_response or ""
+        self.assertNotIn("can't say", answer)
+        self.assertIn("1 muffin", answer)
+        self.assertIn("yeast", answer.lower())
+
+
 if __name__ == "__main__":
     unittest.main()

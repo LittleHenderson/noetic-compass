@@ -1,0 +1,25 @@
+{
+ "helm_suites_scratch_copy": {
+  "detail": "skipped=1",
+  "ran": [
+   204
+  ],
+  "seconds": 4.6,
+  "verdict": "OK"
+ },
+ "members": 198,
+ "members_rehashed_bad": [],
+ "package_freeze_sha256": "8cc543d2102951c79e897f478bc31781e87c511d0a24be54cbf92611ce2bbfd1",
+ "package_zip_sha256": "4b54a077e4b2963301451c6eb78836a32d9797460cd8143d3cf2f9efdc1a7cf8",
+ "python": "3.14.0",
+ "r1w7_suites_from_sealed_extract": {
+  "detail": "",
+  "ran": [
+   34
+  ],
+  "seconds": 66.1,
+  "verdict": "OK"
+ },
+ "schema": "helm.r1w7.test-counts/1",
+ "sealed_helm_now_unchanged_by_the_suites": true
+}
