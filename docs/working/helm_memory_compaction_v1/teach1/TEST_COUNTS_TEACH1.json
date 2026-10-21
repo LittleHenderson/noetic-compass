@@ -1,0 +1,117 @@
+{
+ "cutcheck": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "cutcheck",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\out"
+  ],
+  "exit": 0,
+  "tail": [
+   "{\"commit\": \"9f0c359a4ad6054843fd2988042616676813d6e8\", \"files\": 173, \"bad\": [], \"extra\": [], \"pinned_ok\": true, \"source_cut_equals_contract\": true, \"ok\": true}"
+  ]
+ },
+ "freeze_sha256": "02616f210cb1d2fe1dbc82188a57c2fc24fd74f52204af8fd9b35e6b3b2f7385",
+ "helm_now_unchanged_after": true,
+ "members": 195,
+ "members_rehashed_equal": true,
+ "package_tests": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "-m",
+   "unittest",
+   "discover",
+   "-s",
+   "tests_teach1",
+   "-t",
+   "."
+  ],
+  "exit": 0,
+  "tail": [
+   "----------------------------------------------------------------------",
+   "Ran 19 tests in 0.060s",
+   "",
+   "OK"
+  ]
+ },
+ "pool_from_seal_2_worlds": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "pool",
+   "--exam",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\out\\exam",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\out"
+  ],
+  "exit": 0,
+  "tail": [
+   "{\"unit\": \"RANDOM_REFRESH:W02\", \"exit\": 0, \"seconds\": 1.31}",
+   "{\"unit\": \"REPLAY:W01\", \"exit\": 0, \"seconds\": 1.21}",
+   "{\"unit\": \"REPLAY:W02\", \"exit\": 0, \"seconds\": 1.26}",
+   "{\"planned\": 14, \"all_exit_0\": true, \"elapsed\": 16.38}"
+  ]
+ },
+ "practice_exam_from_seal": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "-c",
+   "import sys; sys.path.insert(0, r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\HELM_TEACH1_20261021'); from teach1 import exam_t1 as E, seed_rule_t1 as SR; E.build_exam(SR.practice_seeds(), r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\out\\exam', practice=True, count=2)"
+  ],
+  "exit": 0,
+  "tail": []
+ },
+ "routecheck_from_seal": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "routecheck",
+   "--exam",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\out\\exam",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\out"
+  ],
+  "exit": 0,
+  "tail": [
+   "{\"route_bad\": 0, \"exam_check_all_ok\": true}"
+  ]
+ },
+ "schema": "helm.teach1.test-counts/1",
+ "suites_from_seal": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "suites",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6ke9lgqo\\out",
+   "--from-seal"
+  ],
+  "exit": 0,
+  "tail": [
+   "   \"47 passed in 1.20s\"",
+   "  ]",
+   " }",
+   "}"
+  ]
+ },
+ "zip_sha256": "e8831bfd4e62c84b4909b3dd47b7a2b3143e481fd8eeb36a504ba6cfed89ac26"
+}

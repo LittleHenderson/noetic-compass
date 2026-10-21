@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM memory compaction TEACH-1 (spec sheet 7.115 follow-up 4): the exam built and SEALED, NOT RUN, NOT SCORED; FIX FIRST on HELM's memory (5 rules, 6 tests, 335 HELM tests pass); practice word would be COMPACTION_HARMED by R4 on planted damage alone; 0 USD
+
+- Package docs/working/helm_memory_compaction_v1/teach1/: zip HELM_TEACH1_20261021_SOURCE_TEACH1_v1.zip sha256 e8831bfd4e62c84b4909b3dd47b7a2b3143e481fd8eeb36a504ba6cfed89ac26 (195 members, freeze 02616f21..., sealed twice identical); amendment A-TEACH1-1 sha256 63e5a6c8... (deviations D-TEACH1-1..19, moved seed bands 2,036/2,038/2,040/2,042 M, forecast); pre-code 7eef0edc... not edited.
+- Parts: SDG keyed worlds (16 x 24 facts, 4 unknown, two templates, disjoint from 41 brain names, cube names and wave 7 small talk); LLM-written turns plan (WRITER_BRIEF + KEY_FORMAT: three families, two keyers of two other families, owner reviews only; nothing generated); three quizzes; seven arms over handle_turn with B = 12; scripted person 0.75 / 0.25; planted damage 2 per world (Q10 b); frozen reader I1-I15, 12 hard gates, marks, words, labels; custodian approve / draw / finish; 19 package tests with planted faults.
+- FIX FIRST on HELM (commit 9f0c359a; practice round 0 had every arm at 4 right / 27 WRONG of 64): recall needs every word of the question and the newest wins; memory questions are never memories; number words are never clues; a strengthened rebuild is never EXACT; the chat passes the answer to a refresh question to the compactor. 6 tests fail on build v1, pass on the fix; every HELM suite OFF 335 passed.
+- Practice round 4 (16 practice worlds; facts, not results): every non-seal instrument row and all 12 hard gates hold; 0 WRONG in every arm; U1 256/256; R1 +183; R3 +5; R2 -2 (the forecast tie); R4 9 lost, all on planted-damage items; S1, S4 missed by the chat voice. Practice word if sealed: COMPACTION_HARMED.
+- Two seals void before use (FROZEN held a machine path; the amendment had round 3's count). Owner's line to type: COMPACT EXAM at 0 USD (the laptop holds it); owner decision on R4 with planted damage open (A-TEACH1-1 section D). Nothing licensed.
+
 ## 2026-10-21 PDT - HELM-R1 wave 7 reader v7.2 (spec sheet 7.117): the three faults c55 paid for are closed by three general rules, tests first; 280 HELM tests OK; 0 USD; nothing licensed
 
 - Rule 1: a clause shaped like a face statement ("X has no power here") about an ingredient the brain does not hold now ASKS (FACE_UNKNOWN_INGREDIENT / FACE_UNKNOWN_PRODUCT) and the wide question holds its answer ("I didn't guess") until the stock is restated; before, the face reader said "not a face" and the raw yield was answered (c55 items CV43 and CV57).

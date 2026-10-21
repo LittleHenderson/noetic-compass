@@ -1,0 +1,4326 @@
+{
+ "total_lines": 5268,
+ "rows": [
+  {
+   "seed_id": "seed_recipe_00459",
+   "line": 7,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00229",
+   "line": 12,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00060",
+   "line": 35,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00163",
+   "line": 57,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00110",
+   "line": 59,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00441",
+   "line": 60,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00195",
+   "line": 90,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00570",
+   "line": 107,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00081",
+   "line": 112,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00213",
+   "line": 115,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00236",
+   "line": 122,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00175",
+   "line": 133,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00276",
+   "line": 134,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00123",
+   "line": 155,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00045",
+   "line": 162,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00196",
+   "line": 173,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00150",
+   "line": 174,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00109",
+   "line": 203,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00014",
+   "line": 211,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00394",
+   "line": 227,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00104",
+   "line": 231,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00432",
+   "line": 232,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00287",
+   "line": 255,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00562",
+   "line": 257,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00250",
+   "line": 276,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00452",
+   "line": 307,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00116",
+   "line": 312,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00471",
+   "line": 332,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00048",
+   "line": 342,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00193",
+   "line": 348,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00243",
+   "line": 357,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00103",
+   "line": 364,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00117",
+   "line": 394,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00289",
+   "line": 403,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00285",
+   "line": 404,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00360",
+   "line": 405,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00068",
+   "line": 408,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00227",
+   "line": 409,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00428",
+   "line": 426,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00333",
+   "line": 433,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00216",
+   "line": 438,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00467",
+   "line": 475,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00549",
+   "line": 486,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00405",
+   "line": 499,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00335",
+   "line": 502,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00058",
+   "line": 506,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT",
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00546",
+   "line": 515,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00544",
+   "line": 519,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00575",
+   "line": 548,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00147",
+   "line": 549,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00018",
+   "line": 572,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00314",
+   "line": 574,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00235",
+   "line": 581,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT",
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00209",
+   "line": 591,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00168",
+   "line": 595,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00383",
+   "line": 600,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00455",
+   "line": 607,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00429",
+   "line": 613,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00069",
+   "line": 614,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00096",
+   "line": 623,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00256",
+   "line": 632,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00348",
+   "line": 649,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00356",
+   "line": 656,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00395",
+   "line": 660,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00453",
+   "line": 663,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00142",
+   "line": 692,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00262",
+   "line": 712,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00154",
+   "line": 737,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00015",
+   "line": 745,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00547",
+   "line": 767,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00524",
+   "line": 779,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00095",
+   "line": 794,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00157",
+   "line": 805,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00283",
+   "line": 812,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00217",
+   "line": 814,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00505",
+   "line": 820,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00418",
+   "line": 835,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00506",
+   "line": 868,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00252",
+   "line": 870,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00336",
+   "line": 882,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00297",
+   "line": 886,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00458",
+   "line": 887,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00031",
+   "line": 893,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00456",
+   "line": 907,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00545",
+   "line": 911,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00469",
+   "line": 918,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00551",
+   "line": 936,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00113",
+   "line": 947,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00242",
+   "line": 962,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00473",
+   "line": 976,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00127",
+   "line": 979,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00507",
+   "line": 982,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00149",
+   "line": 1003,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00349",
+   "line": 1006,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00009",
+   "line": 1026,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00483",
+   "line": 1030,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00251",
+   "line": 1036,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00066",
+   "line": 1043,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00403",
+   "line": 1053,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00371",
+   "line": 1070,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00408",
+   "line": 1083,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00201",
+   "line": 1095,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00266",
+   "line": 1100,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00412",
+   "line": 1111,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00353",
+   "line": 1121,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00003",
+   "line": 1128,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00064",
+   "line": 1132,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00327",
+   "line": 1156,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00391",
+   "line": 1177,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00386",
+   "line": 1201,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00446",
+   "line": 1207,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00135",
+   "line": 1233,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00040",
+   "line": 1277,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00158",
+   "line": 1278,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00324",
+   "line": 1282,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00277",
+   "line": 1288,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00389",
+   "line": 1296,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00143",
+   "line": 1301,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00172",
+   "line": 1305,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00554",
+   "line": 1310,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00038",
+   "line": 1318,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00474",
+   "line": 1326,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00071",
+   "line": 1336,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00413",
+   "line": 1340,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00032",
+   "line": 1361,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00082",
+   "line": 1365,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00422",
+   "line": 1367,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00254",
+   "line": 1368,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00079",
+   "line": 1373,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00331",
+   "line": 1375,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00315",
+   "line": 1379,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00313",
+   "line": 1381,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00480",
+   "line": 1387,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00385",
+   "line": 1395,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00219",
+   "line": 1414,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00476",
+   "line": 1421,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00025",
+   "line": 1425,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00043",
+   "line": 1442,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00513",
+   "line": 1449,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00118",
+   "line": 1455,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00086",
+   "line": 1465,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00538",
+   "line": 1471,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00240",
+   "line": 1482,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00105",
+   "line": 1497,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00559",
+   "line": 1519,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00406",
+   "line": 1527,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00460",
+   "line": 1563,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00090",
+   "line": 1571,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00124",
+   "line": 1579,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00097",
+   "line": 1587,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00192",
+   "line": 1595,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00176",
+   "line": 1597,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00198",
+   "line": 1601,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00280",
+   "line": 1611,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00510",
+   "line": 1612,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00072",
+   "line": 1619,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00144",
+   "line": 1627,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00419",
+   "line": 1640,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00426",
+   "line": 1674,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00380",
+   "line": 1676,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00146",
+   "line": 1677,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00322",
+   "line": 1687,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00539",
+   "line": 1690,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00265",
+   "line": 1718,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00039",
+   "line": 1723,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00323",
+   "line": 1734,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00425",
+   "line": 1744,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00159",
+   "line": 1751,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00361",
+   "line": 1768,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00284",
+   "line": 1789,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00106",
+   "line": 1791,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00435",
+   "line": 1821,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00153",
+   "line": 1836,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00519",
+   "line": 1846,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00305",
+   "line": 1850,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00307",
+   "line": 1851,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00302",
+   "line": 1859,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00342",
+   "line": 1889,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00205",
+   "line": 1894,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00332",
+   "line": 1899,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00291",
+   "line": 1913,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00337",
+   "line": 1922,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00288",
+   "line": 1923,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00384",
+   "line": 1927,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00223",
+   "line": 1937,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00552",
+   "line": 1940,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00186",
+   "line": 1947,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00024",
+   "line": 1951,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00475",
+   "line": 1972,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00180",
+   "line": 1975,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00281",
+   "line": 1991,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00033",
+   "line": 1992,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00261",
+   "line": 1998,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00271",
+   "line": 2020,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00556",
+   "line": 2032,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00301",
+   "line": 2053,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00321",
+   "line": 2078,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00138",
+   "line": 2079,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00098",
+   "line": 2136,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00571",
+   "line": 2148,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00136",
+   "line": 2153,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00517",
+   "line": 2162,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00354",
+   "line": 2198,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00523",
+   "line": 2199,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00569",
+   "line": 2213,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00002",
+   "line": 2229,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00161",
+   "line": 2234,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00006",
+   "line": 2236,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00377",
+   "line": 2246,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00074",
+   "line": 2260,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00226",
+   "line": 2264,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00362",
+   "line": 2281,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00225",
+   "line": 2283,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00424",
+   "line": 2303,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00433",
+   "line": 2307,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00502",
+   "line": 2311,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00532",
+   "line": 2315,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00346",
+   "line": 2325,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00427",
+   "line": 2339,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00495",
+   "line": 2341,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00421",
+   "line": 2363,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00355",
+   "line": 2374,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00550",
+   "line": 2389,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00465",
+   "line": 2399,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00382",
+   "line": 2440,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00187",
+   "line": 2459,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00115",
+   "line": 2461,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00120",
+   "line": 2476,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00230",
+   "line": 2505,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00293",
+   "line": 2506,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00139",
+   "line": 2507,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00437",
+   "line": 2509,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00078",
+   "line": 2522,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00092",
+   "line": 2531,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00026",
+   "line": 2549,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00329",
+   "line": 2552,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00416",
+   "line": 2581,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00499",
+   "line": 2620,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00338",
+   "line": 2644,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00125",
+   "line": 2645,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00102",
+   "line": 2662,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00522",
+   "line": 2670,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00572",
+   "line": 2677,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00030",
+   "line": 2684,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00489",
+   "line": 2698,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00274",
+   "line": 2708,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00470",
+   "line": 2717,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00448",
+   "line": 2720,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00319",
+   "line": 2722,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00576",
+   "line": 2728,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00056",
+   "line": 2733,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00151",
+   "line": 2734,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00565",
+   "line": 2744,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00563",
+   "line": 2758,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00516",
+   "line": 2759,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00414",
+   "line": 2768,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00053",
+   "line": 2774,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00560",
+   "line": 2779,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00278",
+   "line": 2792,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00247",
+   "line": 2803,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00200",
+   "line": 2829,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00112",
+   "line": 2831,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00368",
+   "line": 2846,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00049",
+   "line": 2872,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00178",
+   "line": 2885,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00107",
+   "line": 2888,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00133",
+   "line": 2895,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00411",
+   "line": 2905,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00012",
+   "line": 2914,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00304",
+   "line": 2917,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00194",
+   "line": 2923,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00152",
+   "line": 2924,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00059",
+   "line": 2938,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00379",
+   "line": 2941,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00445",
+   "line": 2943,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00295",
+   "line": 2950,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00260",
+   "line": 2952,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00279",
+   "line": 2964,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00407",
+   "line": 2979,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00512",
+   "line": 3003,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00129",
+   "line": 3012,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00447",
+   "line": 3021,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00520",
+   "line": 3023,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00011",
+   "line": 3026,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00029",
+   "line": 3041,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00007",
+   "line": 3060,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00245",
+   "line": 3086,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00137",
+   "line": 3100,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00300",
+   "line": 3101,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00199",
+   "line": 3110,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00316",
+   "line": 3117,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00084",
+   "line": 3128,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00423",
+   "line": 3162,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00350",
+   "line": 3177,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00490",
+   "line": 3181,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00054",
+   "line": 3182,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00521",
+   "line": 3185,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00076",
+   "line": 3187,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00166",
+   "line": 3208,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00203",
+   "line": 3232,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00334",
+   "line": 3241,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00487",
+   "line": 3244,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00108",
+   "line": 3248,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00464",
+   "line": 3278,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00341",
+   "line": 3285,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00375",
+   "line": 3316,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT",
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00449",
+   "line": 3322,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00093",
+   "line": 3343,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00027",
+   "line": 3356,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00185",
+   "line": 3357,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00514",
+   "line": 3368,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00363",
+   "line": 3384,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00574",
+   "line": 3393,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00504",
+   "line": 3394,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00325",
+   "line": 3410,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00170",
+   "line": 3411,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00233",
+   "line": 3414,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00531",
+   "line": 3416,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00234",
+   "line": 3421,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00443",
+   "line": 3434,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00126",
+   "line": 3441,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00051",
+   "line": 3448,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00057",
+   "line": 3457,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00358",
+   "line": 3465,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00292",
+   "line": 3469,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00140",
+   "line": 3472,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00390",
+   "line": 3478,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00491",
+   "line": 3490,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00164",
+   "line": 3493,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00202",
+   "line": 3498,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00099",
+   "line": 3500,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00041",
+   "line": 3507,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00555",
+   "line": 3510,
+   "verdict": "MISMATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00134",
+   "line": 3513,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00508",
+   "line": 3515,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00231",
+   "line": 3517,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00525",
+   "line": 3518,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00381",
+   "line": 3533,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00222",
+   "line": 3546,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00535",
+   "line": 3549,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00420",
+   "line": 3550,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00503",
+   "line": 3552,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00259",
+   "line": 3565,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00212",
+   "line": 3580,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00326",
+   "line": 3591,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00177",
+   "line": 3612,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00564",
+   "line": 3616,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00273",
+   "line": 3630,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00077",
+   "line": 3631,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00013",
+   "line": 3661,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00494",
+   "line": 3673,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00451",
+   "line": 3708,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00224",
+   "line": 3732,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00206",
+   "line": 3748,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00211",
+   "line": 3761,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00497",
+   "line": 3762,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00257",
+   "line": 3778,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00022",
+   "line": 3782,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00272",
+   "line": 3808,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00434",
+   "line": 3826,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00370",
+   "line": 3829,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00415",
+   "line": 3841,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00410",
+   "line": 3853,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00004",
+   "line": 3860,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00181",
+   "line": 3863,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00492",
+   "line": 3891,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00267",
+   "line": 3893,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00063",
+   "line": 3913,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00352",
+   "line": 3920,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00122",
+   "line": 3922,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00052",
+   "line": 3951,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00089",
+   "line": 3953,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00179",
+   "line": 3966,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00001",
+   "line": 3974,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00173",
+   "line": 3997,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00557",
+   "line": 4005,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00485",
+   "line": 4010,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00111",
+   "line": 4016,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00183",
+   "line": 4018,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00396",
+   "line": 4019,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00347",
+   "line": 4020,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00364",
+   "line": 4027,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00114",
+   "line": 4043,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00035",
+   "line": 4067,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00542",
+   "line": 4071,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00094",
+   "line": 4074,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00501",
+   "line": 4094,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00299",
+   "line": 4098,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00567",
+   "line": 4102,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00345",
+   "line": 4103,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00306",
+   "line": 4106,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00167",
+   "line": 4122,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00061",
+   "line": 4127,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00438",
+   "line": 4170,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00518",
+   "line": 4191,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00037",
+   "line": 4193,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00309",
+   "line": 4198,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00286",
+   "line": 4249,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00478",
+   "line": 4256,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00461",
+   "line": 4258,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00369",
+   "line": 4269,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00294",
+   "line": 4272,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00290",
+   "line": 4291,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00509",
+   "line": 4304,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00182",
+   "line": 4305,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00101",
+   "line": 4308,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00282",
+   "line": 4335,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00388",
+   "line": 4338,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00320",
+   "line": 4347,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00100",
+   "line": 4354,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00275",
+   "line": 4361,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00070",
+   "line": 4385,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00270",
+   "line": 4387,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00472",
+   "line": 4400,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00268",
+   "line": 4404,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00543",
+   "line": 4408,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00091",
+   "line": 4413,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00367",
+   "line": 4422,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00044",
+   "line": 4431,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00468",
+   "line": 4435,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00132",
+   "line": 4447,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00218",
+   "line": 4485,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00005",
+   "line": 4507,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00023",
+   "line": 4511,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00374",
+   "line": 4522,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00417",
+   "line": 4524,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00269",
+   "line": 4555,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00450",
+   "line": 4576,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00493",
+   "line": 4599,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00088",
+   "line": 4669,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00566",
+   "line": 4679,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00016",
+   "line": 4689,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00248",
+   "line": 4700,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00130",
+   "line": 4734,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00156",
+   "line": 4747,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00241",
+   "line": 4751,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00019",
+   "line": 4752,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00190",
+   "line": 4779,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00573",
+   "line": 4782,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00401",
+   "line": 4800,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00488",
+   "line": 4832,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00255",
+   "line": 4835,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00028",
+   "line": 4836,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00237",
+   "line": 4858,
+   "verdict": "MATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00317",
+   "line": 4860,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00228",
+   "line": 4907,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00160",
+   "line": 4917,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00131",
+   "line": 4921,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00119",
+   "line": 4931,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00340",
+   "line": 4935,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00378",
+   "line": 4939,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00430",
+   "line": 4953,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00232",
+   "line": 4955,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00010",
+   "line": 4957,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00477",
+   "line": 4960,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_STATE_IN_SEGMENT",
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00528",
+   "line": 4964,
+   "verdict": "MISMATCH",
+   "bridge_v2": "MISMATCH",
+   "second_number_agrees": null,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00021",
+   "line": 4969,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00529",
+   "line": 4974,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00155",
+   "line": 4976,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00482",
+   "line": 4993,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00238",
+   "line": 5013,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00440",
+   "line": 5023,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00444",
+   "line": 5025,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT",
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00553",
+   "line": 5052,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00344",
+   "line": 5058,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00527",
+   "line": 5062,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": false,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00530",
+   "line": 5090,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_DOMAIN_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00239",
+   "line": 5112,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00184",
+   "line": 5115,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00442",
+   "line": 5122,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00330",
+   "line": 5134,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_DOMAIN_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00366",
+   "line": 5145,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00208",
+   "line": 5155,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00328",
+   "line": 5158,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00439",
+   "line": 5163,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00376",
+   "line": 5181,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00244",
+   "line": 5202,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00210",
+   "line": 5204,
+   "verdict": "MATCH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00128",
+   "line": 5210,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT"
+   ]
+  },
+  {
+   "seed_id": "seed_recipe_00258",
+   "line": 5215,
+   "verdict": "MATCH",
+   "bridge_v2": "MATCH",
+   "second_number_agrees": true,
+   "reasons": []
+  },
+  {
+   "seed_id": "seed_recipe_00311",
+   "line": 5252,
+   "verdict": "UNPARSEABLE_ENGLISH",
+   "bridge_v2": "UNPARSEABLE_ENGLISH",
+   "second_number_agrees": null,
+   "reasons": [
+    "NO_STATE_IN_SEGMENT",
+    "NO_STATE_IN_SEGMENT"
+   ]
+  }
+ ],
+ "summary": {
+  "headline_rows": 481,
+  "alias_wide": {
+   "MISMATCH": 17,
+   "MATCH": 265,
+   "UNPARSEABLE_ENGLISH": 199
+  },
+  "alias_wide_match": 265,
+  "bridge_v2_on_same_rows": {
+   "MISMATCH": 42,
+   "UNPARSEABLE_ENGLISH": 321,
+   "MATCH": 118
+  },
+  "mark": 176,
+  "mark_met": true,
+  "second_number_register_and_drive_agree_among_match": 196,
+  "strict_cce_parses_equal": 0,
+  "lookup_equal": 0,
+  "unparseable_reason_counts": {
+   "AMBIGUOUS_DOMAIN_IN_SEGMENT": 16,
+   "NO_STATE_IN_SEGMENT": 149,
+   "NO_DOMAIN_IN_SEGMENT": 56,
+   "AMBIGUOUS_STATE_IN_SEGMENT": 28
+  }
+ }
+}
