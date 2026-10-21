@@ -1,0 +1,2780 @@
+{
+ "claim_ceiling_if_earned": "NAMED_CORPORA_ONLY (the real recipes) + SYNTHETIC_ONLY (dialogue and small-talk sentences)",
+ "claim_ceiling_now": "SYNTHETIC_ONLY",
+ "failing_gates": [],
+ "failing_instruments": [],
+ "hard_gates": {
+  "HG10_chat_never_exits": {
+   "holds": true,
+   "never_sent_words_seen": 0,
+   "system_exit": {}
+  },
+  "HG1_receipts": {
+   "chat_turns_with_receipt_problem": 0,
+   "holds": true,
+   "refuse_receipt_inconsistent_turns": 0
+  },
+  "HG2_replay": {
+   "holds": true,
+   "parts": {
+    "X7_CONV": true,
+    "X7_REAL": true
+   }
+  },
+  "HG3_key_blind": {
+   "carrier_files": [
+    "INPUTS_CONV_X7.json",
+    "INPUTS_NOISE_X7.json",
+    "INPUTS_REAL_X7.json",
+    "X7_PINS.json"
+   ],
+   "holds": true
+  },
+  "HG4_no_network": {
+   "holds": true,
+   "units": 14
+  },
+  "HG5_sandbox": {
+   "canonical_brain_equals_base": true,
+   "helm_now_files_changed": {},
+   "holds": true,
+   "session_files_under_scratch": {
+    "W7_X7_CONV_CHAT_DIAG": true,
+    "W7_X7_CONV_CHAT_OFF": true,
+    "W7_X7_CONV_CHAT_ON": true,
+    "W7_X7_CONV_CHAT_ON_REPLAY": true,
+    "W7_X7_NOISE_CHAT_OFF": true,
+    "W7_X7_NOISE_CHAT_ON": true,
+    "W7_X7_REAL_CHAT_DIAG": true,
+    "W7_X7_REAL_CHAT_OFF": true,
+    "W7_X7_REAL_CHAT_ON": true,
+    "W7_X7_REAL_CHAT_ON_REPLAY": true
+   },
+   "units_missing_helm_now_files_changed": [],
+   "units_planned": 14,
+   "units_with_the_list": 14,
+   "wave1_tree_same": true
+  },
+  "HG6_no_crash": {
+   "crashed": {},
+   "holds": true
+  },
+  "HG7_voice_changes_no_answer": {
+   "holds": true,
+   "parts": {
+    "X7_CONV": true,
+    "X7_REAL": true
+   }
+  },
+  "HG8_switch_hygiene": {
+   "holds": true,
+   "problems": []
+  },
+  "HG9_same_inputs": {
+   "holds": true,
+   "per_exam": {
+    "X7_CONV": [
+     "d38a9063de36b63e0a10236a37d348f3a1a510d05f2a3e78563b269d16fc5aff"
+    ],
+    "X7_NOISE": [
+     "0cd2c497907898b88df40f7b0b631ec76f77f92992a57c7fa340fa9187eab36e"
+    ],
+    "X7_REAL": [
+     "69a5c211deb686e6670fbe7b2373b91c59d16270f7d1cf743c7de69d4af38acf"
+    ]
+   }
+  },
+  "all_hold": true
+ },
+ "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+ "instrument_rows": {
+  "I0_not_a_practice_mock": {
+   "holds": true
+  },
+  "I10_seed_rule": {
+   "holds": true,
+   "parts": {
+    "derivation_pass": true,
+    "not_a_practice_derivation": true,
+    "pins_carry_the_seed_source": true,
+    "seed_source_is_owner_line_plus_zip": true
+   }
+  },
+  "I12_recorder_transparent": {
+   "holds": true,
+   "parts": {
+    "all_equal": true,
+    "items_at_least_one": true,
+    "ran_on_the_host": true,
+    "unit_present": true
+   },
+   "rows": [
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV00:pg:26558@74107",
+     "lines": 8,
+     "loop_calls_wrapped": 7,
+     "memory_turns": 8,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV14:pg:42868@220172",
+     "lines": 5,
+     "loop_calls_wrapped": 4,
+     "memory_turns": 5,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV18:pg:8501@91017",
+     "lines": 6,
+     "loop_calls_wrapped": 5,
+     "memory_turns": 6,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV22:pg:65706@84183",
+     "lines": 2,
+     "loop_calls_wrapped": 1,
+     "memory_turns": 2,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV26:pg:52800@103092",
+     "lines": 6,
+     "loop_calls_wrapped": 5,
+     "memory_turns": 6,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV30:pg:60598@63529",
+     "lines": 6,
+     "loop_calls_wrapped": 5,
+     "memory_turns": 6,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    }
+   ]
+  },
+  "I14_not_vacuous": {
+   "holds": true,
+   "parts": {
+    "conv_every_family_present": true,
+    "conv_items_64": true,
+    "noise_items_64": true,
+    "noise_turns_128": true,
+    "real_items_128": true,
+    "real_rep_answer_at_least_16": true
+   },
+   "real_rep_answer": 94
+  },
+  "I1_data_identity": {
+   "helm_cut": {
+    "bad": [],
+    "canonical_equals_base": true,
+    "commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "commit_is_pinned": true,
+    "extra": [],
+    "files": 166,
+    "ok": true,
+    "source_cut_equals_contract": true
+   },
+   "holds": true,
+   "parts": {
+    "host_helm_cut_ok": true,
+    "host_instrument_problems_none": true,
+    "host_neighbours_sealed": true,
+    "host_pins_equal_custodian_pins": true,
+    "laptop_helm_cut_ok": true,
+    "laptop_neighbours_sealed": true,
+    "receiver_check_all_pass": true,
+    "unit_files_by_hash": true
+   },
+   "units_not_by_hash": []
+  },
+  "I6_completeness": {
+   "holds": true,
+   "not_ok": [],
+   "parts": {
+    "all_planned_units_exit_0": true,
+    "deadline_not_hit": true,
+    "every_arm_every_item": true,
+    "every_unit_file_present": true,
+    "planned_is_the_frozen_list": true,
+    "suites_ok": true
+   }
+  },
+  "I7_reading_from_the_sealed_zip": {
+   "holds": true,
+   "parts": {
+    "host_ran_this_freeze": true,
+    "own_freeze_is_the_approved": true,
+    "own_members_ok": true
+   }
+  },
+  "I9_governance": {
+   "holds": true,
+   "parts": {
+    "attempts": true,
+    "binds_this_freeze": true,
+    "binds_this_zip": true,
+    "cap": true,
+    "line_bytes": true,
+    "line_is_the_pinned_line": true,
+    "line_sha256_matches": true
+   }
+  },
+  "all_hold": true,
+  "receiver_check": {
+   "approval_binds_zip": true,
+   "carrier_files_exact": true,
+   "carrier_holds_no_key": true,
+   "carrier_matches_pins": true,
+   "conv_count": true,
+   "conv_every_family_present": true,
+   "files_recomputed": true,
+   "frames_pinned": true,
+   "ids_unique": true,
+   "no_excluded_item": true,
+   "no_float_in_keys": true,
+   "noise_bound_to_conv_file": true,
+   "noise_format": true,
+   "noise_sentences_frozen": true,
+   "not_a_practice_derivation": true,
+   "owner_line_pinned": true,
+   "pins_practice_flag_right": true,
+   "pins_recomputed": true,
+   "pool_disjoint_from_real": true,
+   "pool_full": true,
+   "quotas_or_recorded_shortfall": true,
+   "seed_rule": true,
+   "turns_rederive": true
+  },
+  "receiver_counts": {
+   "conv_every_family_present": true,
+   "conv_expect": {
+    "ANSWER": 30,
+    "ASK": 30,
+    "LEARN": 4
+   },
+   "conv_families": {
+    "R1_STOCK_THEN_ASK": 14,
+    "R2_ABSENT_THEN_ASK": 4,
+    "R3_QUESTION_FORMS": 4,
+    "R4_WITNESS_IN_ENGLISH": 4,
+    "R5_MUST_ASK": 4,
+    "R7_NEXT_SESSION": 2,
+    "S1_WISDOM_STATED": 6,
+    "S2_POWER_STATED": 6,
+    "S3_FACE_UNKNOWN": 6,
+    "S4_RECIPE_PURPOSE_ABSENT": 4,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 4,
+    "S6_TWO_FACES": 2,
+    "S7_NOT_A_FACE": 4
+   },
+   "conv_items": 64,
+   "noise": {
+    "items": 64,
+    "noise_turns": 128,
+    "positions": {
+     "after_first_scored_turn": 10,
+     "between_stock_and_question": 54
+    },
+    "sentence_use": {
+     "1": 14,
+     "10": 13,
+     "11": 10,
+     "12": 11,
+     "2": 6,
+     "3": 9,
+     "4": 13,
+     "5": 10,
+     "6": 13,
+     "7": 11,
+     "8": 8,
+     "9": 10
+    }
+   },
+   "pool_conv": {
+    "eligible": 2811,
+    "shortfall": 0,
+    "skips": 0
+   },
+   "pool_excluded_ids": 1978,
+   "real_answer_keys": 104,
+   "real_by_cell": {
+    "C23:FRACTION": 14,
+    "C23:INTEGER": 14,
+    "C23:MIXED": 14,
+    "C46:FRACTION": 15,
+    "C46:INTEGER": 14,
+    "C46:MIXED": 14,
+    "C710:FRACTION": 15,
+    "C710:INTEGER": 14,
+    "C710:MIXED": 14
+   },
+   "real_excluded_ids": 1850,
+   "real_items": 128,
+   "real_removed": {
+    "by_id": 1827,
+    "by_text": 88
+   },
+   "real_representable_and_answer": 94,
+   "real_shortfall": {},
+   "real_skips": 0,
+   "real_undetermined_keys": 24,
+   "real_undetermined_same_name": 18
+  }
+ },
+ "marks": {
+  "K1_LEARNS": {
+   "fully_learned": 91,
+   "need": 85,
+   "of": 94,
+   "value": true
+  },
+  "K3_SAFE": {
+   "conv_wrong": 0,
+   "noise_wrong": 0,
+   "real_wrong_answers": 0,
+   "real_wrong_lessons": 0,
+   "value": true
+  },
+  "K4_HONEST": {
+   "deviation": "D-W7-9",
+   "not_routed_scored_turns": 0,
+   "unexplained_asks_strict": 2,
+   "unexplained_asks_w6_rule_reported": 2,
+   "unsettled_ask_fired": 0,
+   "value": false
+  },
+  "NH_CHAT": {
+   "deviation": "D-W7-3",
+   "max_lost": 2,
+   "parts": {
+    "X7_CONV": {
+     "CHAT_ON_right": 44,
+     "LOOP_ON_right": 41,
+     "gained_ids": [
+      "CV24:pg:65061@159488",
+      "CV30:pg:52800@132570",
+      "CV31:pg:6677@50552"
+     ],
+     "gained_reported": 3,
+     "holds": true,
+     "lost": 0,
+     "lost_ids": []
+    },
+    "X7_REAL": {
+     "CHAT_ON_right": 91,
+     "LOOP_ON_right": 89,
+     "gained_ids": [
+      "RW:pg:65061@134610",
+      "RW:pg:65061@838669"
+     ],
+     "gained_reported": 2,
+     "holds": true,
+     "lost": 0,
+     "lost_ids": []
+    }
+   },
+   "value": true
+  },
+  "N_NOISE": {
+   "CONV_right_and_plain": 44,
+   "NOISE_right_and_plain": 44,
+   "lost": 0,
+   "lost_ids": [],
+   "misrouted_scored_turns": 0,
+   "misrouted_scored_turns_without_noise_reported": 0,
+   "value": true
+  },
+  "P_PLAIN": {
+   "deviation": "D-W7-7",
+   "max_not_plain": 2,
+   "parts": {
+    "X7_CONV": {
+     "RIGHT": 44,
+     "RIGHT_AND_PLAIN": 44,
+     "holds": true,
+     "not_plain": 0
+    },
+    "X7_REAL": {
+     "RIGHT": 91,
+     "RIGHT_AND_PLAIN": 91,
+     "holds": true,
+     "not_plain": 0
+    }
+   },
+   "value": true
+  }
+ },
+ "marks_missed": [
+  "K4_HONEST"
+ ],
+ "package_freeze_sha256": "3c7a9f3d6b18f6a70c83ac2447db045ff3bafccc6ce99de39a454c45225d1933",
+ "practice_mock": false,
+ "reader": "r1w7.merge_r1w7 v2 (2026-10-20, A-R1W7-4: HG5 names the units missing helm_now_files_changed)",
+ "reported": {
+  "agentic_tool_turns": {
+   "X7_CONV": {
+    "CHAT_DIAG": {
+     "items": [],
+     "turns": 0
+    },
+    "CHAT_OFF": {
+     "items": [],
+     "turns": 0
+    },
+    "CHAT_ON": {
+     "items": [],
+     "turns": 0
+    },
+    "CHAT_ON_REPLAY": {
+     "items": [],
+     "turns": 0
+    },
+    "LOOP_ON": {
+     "items": [],
+     "turns": null
+    }
+   },
+   "X7_NOISE": {
+    "CHAT_OFF": {
+     "items": [],
+     "turns": 0
+    },
+    "CHAT_ON": {
+     "items": [],
+     "turns": 0
+    }
+   },
+   "X7_REAL": {
+    "ALWAYS_ASK": {
+     "items": [],
+     "turns": null
+    },
+    "CHAT_DIAG": {
+     "items": [],
+     "turns": 0
+    },
+    "CHAT_OFF": {
+     "items": [],
+     "turns": 0
+    },
+    "CHAT_ON": {
+     "items": [],
+     "turns": 0
+    },
+    "CHAT_ON_REPLAY": {
+     "items": [],
+     "turns": 0
+    },
+    "LOOP_ON": {
+     "items": [],
+     "turns": null
+    }
+   }
+  },
+  "c47_c50_comparison": {
+   "X7_REAL_CHAT_ON": {
+    "RIGHT": 91,
+    "WRONG": 0,
+    "fully_learned_rep": 91,
+    "rep_answer": 94,
+    "unexplained_asks": 2,
+    "unexplained_asks_strict": 2
+   },
+   "X7_REAL_LOOP_ON": {
+    "RIGHT": 89,
+    "WRONG": 0,
+    "fully_learned_rep": 89,
+    "rep_answer": 94,
+    "unexplained_asks": 2
+   },
+   "c47": {
+    "marks": {
+     "K1_LEARNS": true,
+     "K3_SAFE": true,
+     "K4_HONEST": true,
+     "NH_OFF": true,
+     "NH_ON": true
+    },
+    "status_word": "WIDE_BRAIN_EARNED_KEEP",
+    "wide_totals": {
+     "RIGHT": 93,
+     "WRONG": 0,
+     "fully_learned_rep": 92,
+     "rep_answer": 96,
+     "unexplained_asks": 0
+    }
+   },
+   "c50": {
+    "full_wide_totals": {
+     "RIGHT": 94,
+     "WRONG": 0,
+     "fully_learned_rep": 93,
+     "rep_answer": 94,
+     "unexplained_asks": 0
+    },
+    "marks": {
+     "K1_LEARNS": true,
+     "K3_SAFE": true,
+     "K4_HONEST": true,
+     "K5_CAUTION": true,
+     "NH": true,
+     "NH_CONV": true,
+     "NH_EYE": true,
+     "P_READABLE": true,
+     "QUIET": true
+    },
+    "status_word": "WIDE_WAVE_EARNED_KEEP"
+   }
+  },
+  "chat_off_yardstick": {
+   "X7_CONV": {
+    "RIGHT": 25,
+    "RIGHT_AND_PLAIN": 25,
+    "RIGHT_NOT_PLAIN": 0,
+    "UNDETERMINED": 39,
+    "WRONG": 0,
+    "items": 64,
+    "misrouted_noise_turns": 0,
+    "misrouted_scored_turns": 11,
+    "missing": 0,
+    "noise_replies_with_cas": 0,
+    "noise_turns": 0,
+    "not_routed_scored_turns": 10
+   },
+   "X7_NOISE": {
+    "RIGHT": 25,
+    "RIGHT_AND_PLAIN": 25,
+    "RIGHT_NOT_PLAIN": 0,
+    "UNDETERMINED": 39,
+    "WRONG": 0,
+    "items": 64,
+    "misrouted_noise_turns": 0,
+    "misrouted_scored_turns": 11,
+    "missing": 0,
+    "noise_replies_with_cas": 0,
+    "noise_turns": 128,
+    "not_routed_scored_turns": 10
+   },
+   "X7_REAL": {
+    "ASKS": 104,
+    "NOT_SCORED": 24,
+    "RIGHT": 0,
+    "RIGHT_AND_PLAIN": 0,
+    "RIGHT_NOT_PLAIN": 0,
+    "WRONG": 0,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 0,
+    "commitments_on_unsettled": 0,
+    "fully_learned_rep": 0,
+    "lessons_LEARNED": 0,
+    "lessons_NOT_LEARNED": 672,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "not_routed_scored_turns": 8,
+    "plain": 128,
+    "rep_answer": 94,
+    "same_name_items": 18,
+    "undetermined_items": 24,
+    "unexplained_asks": 0,
+    "unexplained_asks_strict": 0,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   }
+  },
+  "chat_on_minus_chat_off": {
+   "X7_CONV": {
+    "ASKS": null,
+    "RIGHT": 19,
+    "RIGHT_AND_PLAIN": 19,
+    "UNDETERMINED": -19,
+    "WRONG": 0,
+    "fully_learned_rep": null
+   },
+   "X7_NOISE": {
+    "ASKS": null,
+    "RIGHT": 19,
+    "RIGHT_AND_PLAIN": 19,
+    "UNDETERMINED": -19,
+    "WRONG": 0,
+    "fully_learned_rep": null
+   },
+   "X7_REAL": {
+    "ASKS": -91,
+    "RIGHT": 91,
+    "RIGHT_AND_PLAIN": 91,
+    "UNDETERMINED": null,
+    "WRONG": 0,
+    "fully_learned_rep": 91
+   }
+  },
+  "conv_by_family": {
+   "CHAT_DIAG": {
+    "R1_STOCK_THEN_ASK/PLAIN": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R2_ABSENT_THEN_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R3_QUESTION_FORMS/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R4_WITNESS_IN_ENGLISH/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2,
+     "UNDETERMINED": 2
+    },
+    "R5_MUST_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R7_NEXT_SESSION/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2
+    },
+    "S1_WISDOM_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S2_POWER_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S6_TWO_FACES/TWO_INGREDIENT": {
+     "UNDETERMINED": 2
+    },
+    "S7_NOT_A_FACE/PLAIN": {
+     "UNDETERMINED": 4
+    }
+   },
+   "CHAT_OFF": {
+    "R1_STOCK_THEN_ASK/PLAIN": {
+     "UNDETERMINED": 6
+    },
+    "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+     "RIGHT": 3,
+     "RIGHT_AND_PLAIN": 3,
+     "UNDETERMINED": 1
+    },
+    "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R2_ABSENT_THEN_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R3_QUESTION_FORMS/PLAIN": {
+     "UNDETERMINED": 4
+    },
+    "R4_WITNESS_IN_ENGLISH/PLAIN": {
+     "UNDETERMINED": 4
+    },
+    "R5_MUST_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R7_NEXT_SESSION/PLAIN": {
+     "UNDETERMINED": 2
+    },
+    "S1_WISDOM_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S2_POWER_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+     "RIGHT": 5,
+     "RIGHT_AND_PLAIN": 5,
+     "UNDETERMINED": 1
+    },
+    "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 3,
+     "RIGHT_AND_PLAIN": 3,
+     "UNDETERMINED": 1
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2,
+     "UNDETERMINED": 2
+    },
+    "S6_TWO_FACES/TWO_INGREDIENT": {
+     "UNDETERMINED": 2
+    },
+    "S7_NOT_A_FACE/PLAIN": {
+     "UNDETERMINED": 4
+    }
+   },
+   "CHAT_ON": {
+    "R1_STOCK_THEN_ASK/PLAIN": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R2_ABSENT_THEN_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R3_QUESTION_FORMS/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R4_WITNESS_IN_ENGLISH/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2,
+     "UNDETERMINED": 2
+    },
+    "R5_MUST_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R7_NEXT_SESSION/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2
+    },
+    "S1_WISDOM_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S2_POWER_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S6_TWO_FACES/TWO_INGREDIENT": {
+     "UNDETERMINED": 2
+    },
+    "S7_NOT_A_FACE/PLAIN": {
+     "UNDETERMINED": 4
+    }
+   },
+   "CHAT_ON_REPLAY": {
+    "R1_STOCK_THEN_ASK/PLAIN": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R2_ABSENT_THEN_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R3_QUESTION_FORMS/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R4_WITNESS_IN_ENGLISH/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2,
+     "UNDETERMINED": 2
+    },
+    "R5_MUST_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R7_NEXT_SESSION/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2
+    },
+    "S1_WISDOM_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S2_POWER_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S6_TWO_FACES/TWO_INGREDIENT": {
+     "UNDETERMINED": 2
+    },
+    "S7_NOT_A_FACE/PLAIN": {
+     "UNDETERMINED": 4
+    }
+   },
+   "LOOP_ON": {
+    "R1_STOCK_THEN_ASK/PLAIN": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R2_ABSENT_THEN_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R3_QUESTION_FORMS/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R4_WITNESS_IN_ENGLISH/PLAIN": {
+     "RIGHT": 1,
+     "RIGHT_AND_PLAIN": 1,
+     "UNDETERMINED": 3
+    },
+    "R5_MUST_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R7_NEXT_SESSION/PLAIN": {
+     "UNDETERMINED": 2
+    },
+    "S1_WISDOM_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S2_POWER_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S6_TWO_FACES/TWO_INGREDIENT": {
+     "UNDETERMINED": 2
+    },
+    "S7_NOT_A_FACE/PLAIN": {
+     "UNDETERMINED": 4
+    }
+   }
+  },
+  "noise": {
+   "intent_by_sentence": {
+    "1": {
+     "GENERAL_CONVERSATION": 14
+    },
+    "10": {
+     "GENERAL_CONVERSATION": 13
+    },
+    "11": {
+     "QUERY_MEMORY_RECALL": 10
+    },
+    "12": {
+     "USER_AFFECT": 11
+    },
+    "2": {
+     "USER_NARRATIVE": 6
+    },
+    "3": {
+     "USER_PREFERENCE": 9
+    },
+    "4": {
+     "USER_AFFECT": 13
+    },
+    "5": {
+     "CREATIVE_HUMOR": 10
+    },
+    "6": {
+     "USER_KNOWLEDGE_QUERY": 13
+    },
+    "7": {
+     "SESSION_SUMMARY": 11
+    },
+    "8": {
+     "USER_AFFECT": 8
+    },
+    "9": {
+     "GENERAL_KNOWLEDGE_INQUIRY": 10
+    }
+   },
+   "misrouted_noise": [],
+   "misrouted_noise_turns": 0,
+   "misrouted_scored_turns": [],
+   "noise_replies_with_cas_tokens": 0,
+   "noise_turns": 128
+  },
+  "noise_by_family": {
+   "CHAT_OFF": {
+    "R1_STOCK_THEN_ASK/PLAIN": {
+     "UNDETERMINED": 6
+    },
+    "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+     "RIGHT": 3,
+     "RIGHT_AND_PLAIN": 3,
+     "UNDETERMINED": 1
+    },
+    "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R2_ABSENT_THEN_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R3_QUESTION_FORMS/PLAIN": {
+     "UNDETERMINED": 4
+    },
+    "R4_WITNESS_IN_ENGLISH/PLAIN": {
+     "UNDETERMINED": 4
+    },
+    "R5_MUST_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R7_NEXT_SESSION/PLAIN": {
+     "UNDETERMINED": 2
+    },
+    "S1_WISDOM_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S2_POWER_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+     "RIGHT": 5,
+     "RIGHT_AND_PLAIN": 5,
+     "UNDETERMINED": 1
+    },
+    "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 3,
+     "RIGHT_AND_PLAIN": 3,
+     "UNDETERMINED": 1
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2,
+     "UNDETERMINED": 2
+    },
+    "S6_TWO_FACES/TWO_INGREDIENT": {
+     "UNDETERMINED": 2
+    },
+    "S7_NOT_A_FACE/PLAIN": {
+     "UNDETERMINED": 4
+    }
+   },
+   "CHAT_ON": {
+    "R1_STOCK_THEN_ASK/PLAIN": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "R1_STOCK_THEN_ASK/UNIT_CHANGE": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R1_STOCK_THEN_ASK/UNKNOWN_INGREDIENT": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R2_ABSENT_THEN_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R3_QUESTION_FORMS/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R4_WITNESS_IN_ENGLISH/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2,
+     "UNDETERMINED": 2
+    },
+    "R5_MUST_ASK/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "R7_NEXT_SESSION/PLAIN": {
+     "RIGHT": 2,
+     "RIGHT_AND_PLAIN": 2
+    },
+    "S1_WISDOM_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S2_POWER_STATED/FACE_STATED": {
+     "UNDETERMINED": 6
+    },
+    "S3_FACE_UNKNOWN/UNKNOWN_INGREDIENT": {
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT/PLAIN": {
+     "RIGHT": 4,
+     "RIGHT_AND_PLAIN": 4
+    },
+    "S6_TWO_FACES/TWO_INGREDIENT": {
+     "UNDETERMINED": 2
+    },
+    "S7_NOT_A_FACE/PLAIN": {
+     "UNDETERMINED": 4
+    }
+   }
+  },
+  "not_right_ids": {
+   "X7_CONV": {
+    "CHAT_DIAG": [
+     "CV23:pg:68446@98803",
+     "CV25:pg:77733@182093",
+     "CV32:pg:49958@490884",
+     "CV33:pg:16514@92489",
+     "CV34:pg:65061@1076569",
+     "CV35:pg:56540@261057",
+     "CV36:pg:8501@111160",
+     "CV37:pg:8542@71403",
+     "CV38:wb:153113:4494186",
+     "CV39:pg:52800@109147",
+     "CV40:pg:42868@591315",
+     "CV41:pg:78849@325042",
+     "CV42:pg:49958@497543",
+     "CV43:pg:42868@31021",
+     "CV58:pg:49958@405045",
+     "CV59:wb:97871:4523409",
+     "CV60:pg:65061@660873",
+     "CV61:pg:42631@27507",
+     "CV62:pg:69364@91963",
+     "CV63:pg:17438@112697"
+    ],
+    "CHAT_OFF": [
+     "CV00:wb:104758:4654716",
+     "CV01:pg:71119@39936",
+     "CV02:pg:49958@236410",
+     "CV03:pg:69364@115758",
+     "CV04:pg:65061@817055",
+     "CV05:pg:65061@809224",
+     "CV13:pg:49958@436528",
+     "CV18:pg:76573@14248",
+     "CV19:wb:457013:4524340",
+     "CV20:pg:70067@72780",
+     "CV21:pg:42868@427588",
+     "CV22:pg:78849@269777",
+     "CV23:pg:68446@98803",
+     "CV24:pg:65061@159488",
+     "CV25:pg:77733@182093",
+     "CV30:pg:52800@132570",
+     "CV31:pg:6677@50552",
+     "CV32:pg:49958@490884",
+     "CV33:pg:16514@92489",
+     "CV34:pg:65061@1076569",
+     "CV35:pg:56540@261057",
+     "CV36:pg:8501@111160",
+     "CV37:pg:8542@71403",
+     "CV38:wb:153113:4494186",
+     "CV39:pg:52800@109147",
+     "CV40:pg:42868@591315",
+     "CV41:pg:78849@325042",
+     "CV42:pg:49958@497543",
+     "CV43:pg:42868@31021",
+     "CV47:pg:52800@238497",
+     "CV53:pg:48804@432372",
+     "CV56:pg:43468@296734",
+     "CV57:pg:52800@331354",
+     "CV58:pg:49958@405045",
+     "CV59:wb:97871:4523409",
+     "CV60:pg:65061@660873",
+     "CV61:pg:42631@27507",
+     "CV62:pg:69364@91963",
+     "CV63:pg:17438@112697"
+    ],
+    "CHAT_ON": [
+     "CV23:pg:68446@98803",
+     "CV25:pg:77733@182093",
+     "CV32:pg:49958@490884",
+     "CV33:pg:16514@92489",
+     "CV34:pg:65061@1076569",
+     "CV35:pg:56540@261057",
+     "CV36:pg:8501@111160",
+     "CV37:pg:8542@71403",
+     "CV38:wb:153113:4494186",
+     "CV39:pg:52800@109147",
+     "CV40:pg:42868@591315",
+     "CV41:pg:78849@325042",
+     "CV42:pg:49958@497543",
+     "CV43:pg:42868@31021",
+     "CV58:pg:49958@405045",
+     "CV59:wb:97871:4523409",
+     "CV60:pg:65061@660873",
+     "CV61:pg:42631@27507",
+     "CV62:pg:69364@91963",
+     "CV63:pg:17438@112697"
+    ],
+    "CHAT_ON_REPLAY": [
+     "CV23:pg:68446@98803",
+     "CV25:pg:77733@182093",
+     "CV32:pg:49958@490884",
+     "CV33:pg:16514@92489",
+     "CV34:pg:65061@1076569",
+     "CV35:pg:56540@261057",
+     "CV36:pg:8501@111160",
+     "CV37:pg:8542@71403",
+     "CV38:wb:153113:4494186",
+     "CV39:pg:52800@109147",
+     "CV40:pg:42868@591315",
+     "CV41:pg:78849@325042",
+     "CV42:pg:49958@497543",
+     "CV43:pg:42868@31021",
+     "CV58:pg:49958@405045",
+     "CV59:wb:97871:4523409",
+     "CV60:pg:65061@660873",
+     "CV61:pg:42631@27507",
+     "CV62:pg:69364@91963",
+     "CV63:pg:17438@112697"
+    ],
+    "LOOP_ON": [
+     "CV23:pg:68446@98803",
+     "CV24:pg:65061@159488",
+     "CV25:pg:77733@182093",
+     "CV30:pg:52800@132570",
+     "CV31:pg:6677@50552",
+     "CV32:pg:49958@490884",
+     "CV33:pg:16514@92489",
+     "CV34:pg:65061@1076569",
+     "CV35:pg:56540@261057",
+     "CV36:pg:8501@111160",
+     "CV37:pg:8542@71403",
+     "CV38:wb:153113:4494186",
+     "CV39:pg:52800@109147",
+     "CV40:pg:42868@591315",
+     "CV41:pg:78849@325042",
+     "CV42:pg:49958@497543",
+     "CV43:pg:42868@31021",
+     "CV58:pg:49958@405045",
+     "CV59:wb:97871:4523409",
+     "CV60:pg:65061@660873",
+     "CV61:pg:42631@27507",
+     "CV62:pg:69364@91963",
+     "CV63:pg:17438@112697"
+    ]
+   },
+   "X7_NOISE": {
+    "CHAT_OFF": [
+     "CV00:wb:104758:4654716",
+     "CV01:pg:71119@39936",
+     "CV02:pg:49958@236410",
+     "CV03:pg:69364@115758",
+     "CV04:pg:65061@817055",
+     "CV05:pg:65061@809224",
+     "CV13:pg:49958@436528",
+     "CV18:pg:76573@14248",
+     "CV19:wb:457013:4524340",
+     "CV20:pg:70067@72780",
+     "CV21:pg:42868@427588",
+     "CV22:pg:78849@269777",
+     "CV23:pg:68446@98803",
+     "CV24:pg:65061@159488",
+     "CV25:pg:77733@182093",
+     "CV30:pg:52800@132570",
+     "CV31:pg:6677@50552",
+     "CV32:pg:49958@490884",
+     "CV33:pg:16514@92489",
+     "CV34:pg:65061@1076569",
+     "CV35:pg:56540@261057",
+     "CV36:pg:8501@111160",
+     "CV37:pg:8542@71403",
+     "CV38:wb:153113:4494186",
+     "CV39:pg:52800@109147",
+     "CV40:pg:42868@591315",
+     "CV41:pg:78849@325042",
+     "CV42:pg:49958@497543",
+     "CV43:pg:42868@31021",
+     "CV47:pg:52800@238497",
+     "CV53:pg:48804@432372",
+     "CV56:pg:43468@296734",
+     "CV57:pg:52800@331354",
+     "CV58:pg:49958@405045",
+     "CV59:wb:97871:4523409",
+     "CV60:pg:65061@660873",
+     "CV61:pg:42631@27507",
+     "CV62:pg:69364@91963",
+     "CV63:pg:17438@112697"
+    ],
+    "CHAT_ON": [
+     "CV23:pg:68446@98803",
+     "CV25:pg:77733@182093",
+     "CV32:pg:49958@490884",
+     "CV33:pg:16514@92489",
+     "CV34:pg:65061@1076569",
+     "CV35:pg:56540@261057",
+     "CV36:pg:8501@111160",
+     "CV37:pg:8542@71403",
+     "CV38:wb:153113:4494186",
+     "CV39:pg:52800@109147",
+     "CV40:pg:42868@591315",
+     "CV41:pg:78849@325042",
+     "CV42:pg:49958@497543",
+     "CV43:pg:42868@31021",
+     "CV58:pg:49958@405045",
+     "CV59:wb:97871:4523409",
+     "CV60:pg:65061@660873",
+     "CV61:pg:42631@27507",
+     "CV62:pg:69364@91963",
+     "CV63:pg:17438@112697"
+    ]
+   },
+   "X7_REAL": {
+    "ALWAYS_ASK": [
+     "RW:pg:42450@58630",
+     "RW:pg:52800@102023",
+     "RW:pg:38193@117339",
+     "RW:pg:52800@385728",
+     "RW:pg:34822@621072",
+     "RW:pg:48804@812912",
+     "RW:pg:77282@69458",
+     "RW:pg:65061@285147",
+     "RW:pg:13177@60129",
+     "RW:pg:13177@68516",
+     "RW:pg:42450@588434",
+     "RW:wb:455872:4504080",
+     "RW:pg:48804@775081",
+     "RW:pg:65061@983442",
+     "RW:pg:13545@577744",
+     "RW:pg:6912@187064",
+     "RW:pg:42868@153250",
+     "RW:pg:78849@234556",
+     "RW:pg:65061@1133925",
+     "RW:pg:13669@91656",
+     "RW:pg:6912@311864",
+     "RW:pg:65061@175339",
+     "RW:pg:52800@537701",
+     "RW:wb:107906:4494004",
+     "RW:pg:65507@62245",
+     "RW:pg:65061@812067",
+     "RW:pg:65061@806320",
+     "RW:pg:56540@377547",
+     "RW:pg:65398@43063",
+     "RW:pg:65061@414303",
+     "RW:pg:42631@17083",
+     "RW:pg:48804@159962",
+     "RW:pg:65061@933775",
+     "RW:pg:43468@82329",
+     "RW:pg:65061@679564",
+     "RW:pg:63883@442696",
+     "RW:pg:65501@16978",
+     "RW:pg:69364@100840",
+     "RW:pg:65061@903913",
+     "RW:pg:65501@18538",
+     "RW:pg:65061@857713",
+     "RW:pg:78849@190985",
+     "RW:pg:71670@27595",
+     "RW:pg:71119@33068",
+     "RW:pg:56540@335043",
+     "RW:wb:36170:4509954",
+     "RW:pg:49958@228785",
+     "RW:pg:60598@88266",
+     "RW:pg:52800@187291",
+     "RW:pg:65061@291642",
+     "RW:wb:469521:4630337",
+     "RW:wb:28860:4523496",
+     "RW:pg:42868@588139",
+     "RW:pg:15464@157182",
+     "RW:pg:49958@442490",
+     "RW:pg:65061@252923",
+     "RW:pg:52800@176239",
+     "RW:pg:8501@125862",
+     "RW:pg:38193@150079",
+     "RW:pg:56540@522070",
+     "RW:pg:65061@413686",
+     "RW:pg:65061@240580",
+     "RW:pg:51542@17048",
+     "RW:pg:51542@126881",
+     "RW:pg:78849@127406",
+     "RW:pg:56540@428175",
+     "RW:pg:42868@202378",
+     "RW:pg:52800@341223",
+     "RW:pg:34822@768204",
+     "RW:pg:54568@207821",
+     "RW:pg:65793@59971",
+     "RW:pg:77733@139472",
+     "RW:pg:65793@14866",
+     "RW:pg:77733@44716",
+     "RW:pg:52800@96008",
+     "RW:wb:81032:4587320",
+     "RW:pg:69364@100718",
+     "RW:pg:63883@89190",
+     "RW:pg:65061@866796",
+     "RW:wb:461743:4522201",
+     "RW:pg:65061@134610",
+     "RW:pg:77733@196909",
+     "RW:wb:132291:4517473",
+     "RW:pg:6912@477670",
+     "RW:pg:6912@364181",
+     "RW:pg:38193@45161",
+     "RW:pg:13286@297853",
+     "RW:wb:483095:4633949",
+     "RW:wb:120688:4524779",
+     "RW:wb:216017:4587408",
+     "RW:wb:441355:4587200",
+     "RW:pg:42450@428516",
+     "RW:pg:42450@453425",
+     "RW:wb:117574:4514000",
+     "RW:pg:6429@52182",
+     "RW:wb:146578:4503226",
+     "RW:wb:213438:4518829",
+     "RW:pg:42450@401335",
+     "RW:wb:178389:4599183",
+     "RW:pg:52800@283811",
+     "RW:pg:52800@311732",
+     "RW:pg:77733@114378",
+     "RW:pg:79370@57578",
+     "RW:pg:65398@41050",
+     "RW:pg:69364@58222",
+     "RW:pg:52800@512871",
+     "RW:pg:38193@129479",
+     "RW:pg:16514@58507",
+     "RW:pg:65327@17175",
+     "RW:wb:199447:4516592",
+     "RW:pg:66654@24915",
+     "RW:pg:65061@839244",
+     "RW:pg:6429@48644",
+     "RW:wb:110501:4630230",
+     "RW:wb:451733:4587471",
+     "RW:pg:65061@132507",
+     "RW:wb:5869:4523433",
+     "RW:pg:64685@48238",
+     "RW:pg:65303@3400",
+     "RW:pg:65379@16634",
+     "RW:pg:65061@170061",
+     "RW:pg:65379@23081",
+     "RW:pg:65398@64071",
+     "RW:pg:65510@10503",
+     "RW:pg:65061@184364",
+     "RW:pg:79370@249632",
+     "RW:pg:65061@838669",
+     "RW:pg:52800@379016"
+    ],
+    "CHAT_DIAG": [
+     "RW:pg:52800@102023",
+     "RW:pg:34822@621072",
+     "RW:pg:48804@812912",
+     "RW:pg:65061@983442",
+     "RW:pg:6912@187064",
+     "RW:pg:65061@933775",
+     "RW:pg:65061@291642",
+     "RW:wb:28860:4523496",
+     "RW:pg:42868@588139",
+     "RW:pg:8501@125862",
+     "RW:pg:38193@150079",
+     "RW:pg:56540@522070",
+     "RW:pg:54568@207821",
+     "RW:pg:65793@59971",
+     "RW:wb:81032:4587320",
+     "RW:pg:6912@477670",
+     "RW:wb:216017:4587408",
+     "RW:wb:441355:4587200",
+     "RW:pg:42450@428516",
+     "RW:pg:42450@453425",
+     "RW:wb:117574:4514000",
+     "RW:pg:6429@52182",
+     "RW:wb:146578:4503226",
+     "RW:wb:213438:4518829",
+     "RW:pg:42450@401335",
+     "RW:pg:52800@311732",
+     "RW:pg:79370@57578",
+     "RW:pg:16514@58507",
+     "RW:wb:199447:4516592",
+     "RW:wb:451733:4587471",
+     "RW:pg:65061@132507",
+     "RW:wb:5869:4523433",
+     "RW:pg:64685@48238",
+     "RW:pg:65061@170061",
+     "RW:pg:65398@64071",
+     "RW:pg:65510@10503",
+     "RW:pg:79370@249632"
+    ],
+    "CHAT_OFF": [
+     "RW:pg:42450@58630",
+     "RW:pg:52800@102023",
+     "RW:pg:38193@117339",
+     "RW:pg:52800@385728",
+     "RW:pg:34822@621072",
+     "RW:pg:48804@812912",
+     "RW:pg:77282@69458",
+     "RW:pg:65061@285147",
+     "RW:pg:13177@60129",
+     "RW:pg:13177@68516",
+     "RW:pg:42450@588434",
+     "RW:wb:455872:4504080",
+     "RW:pg:48804@775081",
+     "RW:pg:65061@983442",
+     "RW:pg:13545@577744",
+     "RW:pg:6912@187064",
+     "RW:pg:42868@153250",
+     "RW:pg:78849@234556",
+     "RW:pg:65061@1133925",
+     "RW:pg:13669@91656",
+     "RW:pg:6912@311864",
+     "RW:pg:65061@175339",
+     "RW:pg:52800@537701",
+     "RW:wb:107906:4494004",
+     "RW:pg:65507@62245",
+     "RW:pg:65061@812067",
+     "RW:pg:65061@806320",
+     "RW:pg:56540@377547",
+     "RW:pg:65398@43063",
+     "RW:pg:65061@414303",
+     "RW:pg:42631@17083",
+     "RW:pg:48804@159962",
+     "RW:pg:65061@933775",
+     "RW:pg:43468@82329",
+     "RW:pg:65061@679564",
+     "RW:pg:63883@442696",
+     "RW:pg:65501@16978",
+     "RW:pg:69364@100840",
+     "RW:pg:65061@903913",
+     "RW:pg:65501@18538",
+     "RW:pg:65061@857713",
+     "RW:pg:78849@190985",
+     "RW:pg:71670@27595",
+     "RW:pg:71119@33068",
+     "RW:pg:56540@335043",
+     "RW:wb:36170:4509954",
+     "RW:pg:49958@228785",
+     "RW:pg:60598@88266",
+     "RW:pg:52800@187291",
+     "RW:pg:65061@291642",
+     "RW:wb:469521:4630337",
+     "RW:wb:28860:4523496",
+     "RW:pg:42868@588139",
+     "RW:pg:15464@157182",
+     "RW:pg:49958@442490",
+     "RW:pg:65061@252923",
+     "RW:pg:52800@176239",
+     "RW:pg:8501@125862",
+     "RW:pg:38193@150079",
+     "RW:pg:56540@522070",
+     "RW:pg:65061@413686",
+     "RW:pg:65061@240580",
+     "RW:pg:51542@17048",
+     "RW:pg:51542@126881",
+     "RW:pg:78849@127406",
+     "RW:pg:56540@428175",
+     "RW:pg:42868@202378",
+     "RW:pg:52800@341223",
+     "RW:pg:34822@768204",
+     "RW:pg:54568@207821",
+     "RW:pg:65793@59971",
+     "RW:pg:77733@139472",
+     "RW:pg:65793@14866",
+     "RW:pg:77733@44716",
+     "RW:pg:52800@96008",
+     "RW:wb:81032:4587320",
+     "RW:pg:69364@100718",
+     "RW:pg:63883@89190",
+     "RW:pg:65061@866796",
+     "RW:wb:461743:4522201",
+     "RW:pg:65061@134610",
+     "RW:pg:77733@196909",
+     "RW:wb:132291:4517473",
+     "RW:pg:6912@477670",
+     "RW:pg:6912@364181",
+     "RW:pg:38193@45161",
+     "RW:pg:13286@297853",
+     "RW:wb:483095:4633949",
+     "RW:wb:120688:4524779",
+     "RW:wb:216017:4587408",
+     "RW:wb:441355:4587200",
+     "RW:pg:42450@428516",
+     "RW:pg:42450@453425",
+     "RW:wb:117574:4514000",
+     "RW:pg:6429@52182",
+     "RW:wb:146578:4503226",
+     "RW:wb:213438:4518829",
+     "RW:pg:42450@401335",
+     "RW:wb:178389:4599183",
+     "RW:pg:52800@283811",
+     "RW:pg:52800@311732",
+     "RW:pg:77733@114378",
+     "RW:pg:79370@57578",
+     "RW:pg:65398@41050",
+     "RW:pg:69364@58222",
+     "RW:pg:52800@512871",
+     "RW:pg:38193@129479",
+     "RW:pg:16514@58507",
+     "RW:pg:65327@17175",
+     "RW:wb:199447:4516592",
+     "RW:pg:66654@24915",
+     "RW:pg:65061@839244",
+     "RW:pg:6429@48644",
+     "RW:wb:110501:4630230",
+     "RW:wb:451733:4587471",
+     "RW:pg:65061@132507",
+     "RW:wb:5869:4523433",
+     "RW:pg:64685@48238",
+     "RW:pg:65303@3400",
+     "RW:pg:65379@16634",
+     "RW:pg:65061@170061",
+     "RW:pg:65379@23081",
+     "RW:pg:65398@64071",
+     "RW:pg:65510@10503",
+     "RW:pg:65061@184364",
+     "RW:pg:79370@249632",
+     "RW:pg:65061@838669",
+     "RW:pg:52800@379016"
+    ],
+    "CHAT_ON": [
+     "RW:pg:52800@102023",
+     "RW:pg:34822@621072",
+     "RW:pg:48804@812912",
+     "RW:pg:65061@983442",
+     "RW:pg:6912@187064",
+     "RW:pg:65061@933775",
+     "RW:pg:65061@291642",
+     "RW:wb:28860:4523496",
+     "RW:pg:42868@588139",
+     "RW:pg:8501@125862",
+     "RW:pg:38193@150079",
+     "RW:pg:56540@522070",
+     "RW:pg:54568@207821",
+     "RW:pg:65793@59971",
+     "RW:wb:81032:4587320",
+     "RW:pg:6912@477670",
+     "RW:wb:216017:4587408",
+     "RW:wb:441355:4587200",
+     "RW:pg:42450@428516",
+     "RW:pg:42450@453425",
+     "RW:wb:117574:4514000",
+     "RW:pg:6429@52182",
+     "RW:wb:146578:4503226",
+     "RW:wb:213438:4518829",
+     "RW:pg:42450@401335",
+     "RW:pg:52800@311732",
+     "RW:pg:79370@57578",
+     "RW:pg:16514@58507",
+     "RW:wb:199447:4516592",
+     "RW:wb:451733:4587471",
+     "RW:pg:65061@132507",
+     "RW:wb:5869:4523433",
+     "RW:pg:64685@48238",
+     "RW:pg:65061@170061",
+     "RW:pg:65398@64071",
+     "RW:pg:65510@10503",
+     "RW:pg:79370@249632"
+    ],
+    "CHAT_ON_REPLAY": [
+     "RW:pg:52800@102023",
+     "RW:pg:34822@621072",
+     "RW:pg:48804@812912",
+     "RW:pg:65061@983442",
+     "RW:pg:6912@187064",
+     "RW:pg:65061@933775",
+     "RW:pg:65061@291642",
+     "RW:wb:28860:4523496",
+     "RW:pg:42868@588139",
+     "RW:pg:8501@125862",
+     "RW:pg:38193@150079",
+     "RW:pg:56540@522070",
+     "RW:pg:54568@207821",
+     "RW:pg:65793@59971",
+     "RW:wb:81032:4587320",
+     "RW:pg:6912@477670",
+     "RW:wb:216017:4587408",
+     "RW:wb:441355:4587200",
+     "RW:pg:42450@428516",
+     "RW:pg:42450@453425",
+     "RW:wb:117574:4514000",
+     "RW:pg:6429@52182",
+     "RW:wb:146578:4503226",
+     "RW:wb:213438:4518829",
+     "RW:pg:42450@401335",
+     "RW:pg:52800@311732",
+     "RW:pg:79370@57578",
+     "RW:pg:16514@58507",
+     "RW:wb:199447:4516592",
+     "RW:wb:451733:4587471",
+     "RW:pg:65061@132507",
+     "RW:wb:5869:4523433",
+     "RW:pg:64685@48238",
+     "RW:pg:65061@170061",
+     "RW:pg:65398@64071",
+     "RW:pg:65510@10503",
+     "RW:pg:79370@249632"
+    ],
+    "LOOP_ON": [
+     "RW:pg:52800@102023",
+     "RW:pg:34822@621072",
+     "RW:pg:48804@812912",
+     "RW:pg:65061@983442",
+     "RW:pg:6912@187064",
+     "RW:pg:65061@933775",
+     "RW:pg:65061@291642",
+     "RW:wb:28860:4523496",
+     "RW:pg:42868@588139",
+     "RW:pg:8501@125862",
+     "RW:pg:38193@150079",
+     "RW:pg:56540@522070",
+     "RW:pg:54568@207821",
+     "RW:pg:65793@59971",
+     "RW:wb:81032:4587320",
+     "RW:pg:65061@134610",
+     "RW:pg:6912@477670",
+     "RW:wb:216017:4587408",
+     "RW:wb:441355:4587200",
+     "RW:pg:42450@428516",
+     "RW:pg:42450@453425",
+     "RW:wb:117574:4514000",
+     "RW:pg:6429@52182",
+     "RW:wb:146578:4503226",
+     "RW:wb:213438:4518829",
+     "RW:pg:42450@401335",
+     "RW:pg:52800@311732",
+     "RW:pg:79370@57578",
+     "RW:pg:16514@58507",
+     "RW:wb:199447:4516592",
+     "RW:wb:451733:4587471",
+     "RW:pg:65061@132507",
+     "RW:wb:5869:4523433",
+     "RW:pg:64685@48238",
+     "RW:pg:65061@170061",
+     "RW:pg:65398@64071",
+     "RW:pg:65510@10503",
+     "RW:pg:79370@249632",
+     "RW:pg:65061@838669"
+    ]
+   }
+  },
+  "real_by_cell": {
+   "CHAT_OFF": {
+    "C23:FRACTION": {
+     "ASKS": 14,
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 14,
+     "rep_answer": 14
+    },
+    "C23:INTEGER": {
+     "ASKS": 12,
+     "NOT_SCORED": 2,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 14,
+     "rep_answer": 11
+    },
+    "C23:MIXED": {
+     "ASKS": 13,
+     "NOT_SCORED": 1,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 14,
+     "rep_answer": 13
+    },
+    "C46:FRACTION": {
+     "ASKS": 13,
+     "NOT_SCORED": 2,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 15,
+     "rep_answer": 12
+    },
+    "C46:INTEGER": {
+     "ASKS": 13,
+     "NOT_SCORED": 1,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 14,
+     "rep_answer": 9
+    },
+    "C46:MIXED": {
+     "ASKS": 13,
+     "NOT_SCORED": 1,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 14,
+     "rep_answer": 12
+    },
+    "C710:FRACTION": {
+     "ASKS": 12,
+     "NOT_SCORED": 3,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 15,
+     "rep_answer": 12
+    },
+    "C710:INTEGER": {
+     "ASKS": 8,
+     "NOT_SCORED": 6,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 14,
+     "rep_answer": 5
+    },
+    "C710:MIXED": {
+     "ASKS": 6,
+     "NOT_SCORED": 8,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "WRONG": 0,
+     "full_rep": 0,
+     "items": 14,
+     "rep_answer": 6
+    }
+   },
+   "CHAT_ON": {
+    "C23:FRACTION": {
+     "ASKS": 1,
+     "NOT_SCORED": 0,
+     "RIGHT": 13,
+     "RIGHT_AND_PLAIN": 13,
+     "WRONG": 0,
+     "full_rep": 13,
+     "items": 14,
+     "rep_answer": 14
+    },
+    "C23:INTEGER": {
+     "ASKS": 2,
+     "NOT_SCORED": 2,
+     "RIGHT": 10,
+     "RIGHT_AND_PLAIN": 10,
+     "WRONG": 0,
+     "full_rep": 11,
+     "items": 14,
+     "rep_answer": 11
+    },
+    "C23:MIXED": {
+     "ASKS": 0,
+     "NOT_SCORED": 1,
+     "RIGHT": 13,
+     "RIGHT_AND_PLAIN": 13,
+     "WRONG": 0,
+     "full_rep": 13,
+     "items": 14,
+     "rep_answer": 13
+    },
+    "C46:FRACTION": {
+     "ASKS": 3,
+     "NOT_SCORED": 2,
+     "RIGHT": 10,
+     "RIGHT_AND_PLAIN": 10,
+     "WRONG": 0,
+     "full_rep": 11,
+     "items": 15,
+     "rep_answer": 12
+    },
+    "C46:INTEGER": {
+     "ASKS": 2,
+     "NOT_SCORED": 1,
+     "RIGHT": 11,
+     "RIGHT_AND_PLAIN": 11,
+     "WRONG": 0,
+     "full_rep": 9,
+     "items": 14,
+     "rep_answer": 9
+    },
+    "C46:MIXED": {
+     "ASKS": 1,
+     "NOT_SCORED": 1,
+     "RIGHT": 12,
+     "RIGHT_AND_PLAIN": 12,
+     "WRONG": 0,
+     "full_rep": 12,
+     "items": 14,
+     "rep_answer": 12
+    },
+    "C710:FRACTION": {
+     "ASKS": 1,
+     "NOT_SCORED": 3,
+     "RIGHT": 11,
+     "RIGHT_AND_PLAIN": 11,
+     "WRONG": 0,
+     "full_rep": 11,
+     "items": 15,
+     "rep_answer": 12
+    },
+    "C710:INTEGER": {
+     "ASKS": 3,
+     "NOT_SCORED": 6,
+     "RIGHT": 5,
+     "RIGHT_AND_PLAIN": 5,
+     "WRONG": 0,
+     "full_rep": 5,
+     "items": 14,
+     "rep_answer": 5
+    },
+    "C710:MIXED": {
+     "ASKS": 0,
+     "NOT_SCORED": 8,
+     "RIGHT": 6,
+     "RIGHT_AND_PLAIN": 6,
+     "WRONG": 0,
+     "full_rep": 6,
+     "items": 14,
+     "rep_answer": 6
+    }
+   },
+   "LOOP_ON": {
+    "C23:FRACTION": {
+     "ASKS": 1,
+     "NOT_SCORED": 0,
+     "RIGHT": 13,
+     "RIGHT_AND_PLAIN": 13,
+     "WRONG": 0,
+     "full_rep": 13,
+     "items": 14,
+     "rep_answer": 14
+    },
+    "C23:INTEGER": {
+     "ASKS": 2,
+     "NOT_SCORED": 2,
+     "RIGHT": 10,
+     "RIGHT_AND_PLAIN": 10,
+     "WRONG": 0,
+     "full_rep": 11,
+     "items": 14,
+     "rep_answer": 11
+    },
+    "C23:MIXED": {
+     "ASKS": 0,
+     "NOT_SCORED": 1,
+     "RIGHT": 13,
+     "RIGHT_AND_PLAIN": 13,
+     "WRONG": 0,
+     "full_rep": 13,
+     "items": 14,
+     "rep_answer": 13
+    },
+    "C46:FRACTION": {
+     "ASKS": 3,
+     "NOT_SCORED": 2,
+     "RIGHT": 10,
+     "RIGHT_AND_PLAIN": 10,
+     "WRONG": 0,
+     "full_rep": 11,
+     "items": 15,
+     "rep_answer": 12
+    },
+    "C46:INTEGER": {
+     "ASKS": 2,
+     "NOT_SCORED": 1,
+     "RIGHT": 11,
+     "RIGHT_AND_PLAIN": 11,
+     "WRONG": 0,
+     "full_rep": 9,
+     "items": 14,
+     "rep_answer": 9
+    },
+    "C46:MIXED": {
+     "ASKS": 2,
+     "NOT_SCORED": 1,
+     "RIGHT": 11,
+     "RIGHT_AND_PLAIN": 11,
+     "WRONG": 0,
+     "full_rep": 11,
+     "items": 14,
+     "rep_answer": 12
+    },
+    "C710:FRACTION": {
+     "ASKS": 1,
+     "NOT_SCORED": 3,
+     "RIGHT": 11,
+     "RIGHT_AND_PLAIN": 11,
+     "WRONG": 0,
+     "full_rep": 11,
+     "items": 15,
+     "rep_answer": 12
+    },
+    "C710:INTEGER": {
+     "ASKS": 3,
+     "NOT_SCORED": 6,
+     "RIGHT": 5,
+     "RIGHT_AND_PLAIN": 5,
+     "WRONG": 0,
+     "full_rep": 5,
+     "items": 14,
+     "rep_answer": 5
+    },
+    "C710:MIXED": {
+     "ASKS": 1,
+     "NOT_SCORED": 8,
+     "RIGHT": 5,
+     "RIGHT_AND_PLAIN": 5,
+     "WRONG": 0,
+     "full_rep": 5,
+     "items": 14,
+     "rep_answer": 6
+    }
+   }
+  },
+  "recorder": {
+   "all_equal": true,
+   "arm": "EQUALITY",
+   "crashed": 0,
+   "exam": "RECORDER",
+   "items": 6,
+   "items_sha256": "53db177af891a5281f8d30560541f09376bd5c89089a572f1b479b2c1f1362a0",
+   "present": true,
+   "rows": [
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV00:pg:26558@74107",
+     "lines": 8,
+     "loop_calls_wrapped": 7,
+     "memory_turns": 8,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV14:pg:42868@220172",
+     "lines": 5,
+     "loop_calls_wrapped": 4,
+     "memory_turns": 5,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV18:pg:8501@91017",
+     "lines": 6,
+     "loop_calls_wrapped": 5,
+     "memory_turns": 6,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV22:pg:65706@84183",
+     "lines": 2,
+     "loop_calls_wrapped": 1,
+     "memory_turns": 2,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV26:pg:52800@103092",
+     "lines": 6,
+     "loop_calls_wrapped": 5,
+     "memory_turns": 6,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    },
+    {
+     "agentic_tool_turns": 0,
+     "id": "CV30:pg:60598@63529",
+     "lines": 6,
+     "loop_calls_wrapped": 5,
+     "memory_turns": 6,
+     "raw_differing_paths": [],
+     "stored_copies_equal_returned": true,
+     "two_wrapped_runs_byte_identical": true,
+     "two_wrapped_runs_byte_identical_raw": true,
+     "wrapped_equals_unwrapped_memory": true,
+     "wrapped_restored": true
+    }
+   ],
+   "system_exit": 0
+  },
+  "right_not_plain_ids": {
+   "X7_CONV": [],
+   "X7_NOISE": [],
+   "X7_REAL": []
+  },
+  "stock_turns": {
+   "CHAT_DIAG": {
+    "statuses": {
+     "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": 3,
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": 10,
+     "CLARIFY_NOT_CCE": 2,
+     "INVENTORY_RECORDED": 3,
+     "STOCK_RECORDED": 110
+    },
+    "stock_recorded_but_reply_says_dont_know": 0
+   },
+   "CHAT_OFF": {
+    "statuses": {
+     "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": 21,
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": 101,
+     "INVENTORY_RECORDED": 3,
+     "NOT_ROUTED:GENERAL_KNOWLEDGE_INQUIRY": 3
+    },
+    "stock_recorded_but_reply_says_dont_know": 0
+   },
+   "CHAT_ON": {
+    "statuses": {
+     "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": 3,
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": 10,
+     "CLARIFY_NOT_CCE": 2,
+     "INVENTORY_RECORDED": 3,
+     "STOCK_RECORDED": 110
+    },
+    "stock_recorded_but_reply_says_dont_know": 0
+   },
+   "CHAT_ON_REPLAY": {
+    "statuses": {
+     "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": 3,
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": 10,
+     "CLARIFY_NOT_CCE": 2,
+     "INVENTORY_RECORDED": 3,
+     "STOCK_RECORDED": 110
+    },
+    "stock_recorded_but_reply_says_dont_know": 0
+   }
+  },
+  "tool_engine_turns": {
+   "deviation": "D-W7-19 (reported row; not a gate)",
+   "loop_arms": "LOOP_ON and ALWAYS_ASK run through wave 3's harness, whose loop build stubs the tool engine (never called); nothing to count",
+   "per_unit": {
+    "W7_RECORDER_EQUALITY": 0,
+    "W7_X7_CONV_CHAT_DIAG": 0,
+    "W7_X7_CONV_CHAT_OFF": 0,
+    "W7_X7_CONV_CHAT_ON": 0,
+    "W7_X7_CONV_CHAT_ON_REPLAY": 0,
+    "W7_X7_NOISE_CHAT_OFF": 0,
+    "W7_X7_NOISE_CHAT_ON": 0,
+    "W7_X7_REAL_CHAT_DIAG": 0,
+    "W7_X7_REAL_CHAT_OFF": 0,
+    "W7_X7_REAL_CHAT_ON": 0,
+    "W7_X7_REAL_CHAT_ON_REPLAY": 0
+   },
+   "zero_in_every_chat_unit": true
+  },
+  "totals": {
+   "X7_CONV": {
+    "CHAT_DIAG": {
+     "RIGHT": 44,
+     "RIGHT_AND_PLAIN": 44,
+     "RIGHT_NOT_PLAIN": 0,
+     "UNDETERMINED": 20,
+     "WRONG": 0,
+     "items": 64,
+     "misrouted_noise_turns": 0,
+     "misrouted_scored_turns": 0,
+     "missing": 0,
+     "noise_replies_with_cas": 0,
+     "noise_turns": 0,
+     "not_routed_scored_turns": 0
+    },
+    "CHAT_OFF": {
+     "RIGHT": 25,
+     "RIGHT_AND_PLAIN": 25,
+     "RIGHT_NOT_PLAIN": 0,
+     "UNDETERMINED": 39,
+     "WRONG": 0,
+     "items": 64,
+     "misrouted_noise_turns": 0,
+     "misrouted_scored_turns": 11,
+     "missing": 0,
+     "noise_replies_with_cas": 0,
+     "noise_turns": 0,
+     "not_routed_scored_turns": 10
+    },
+    "CHAT_ON": {
+     "RIGHT": 44,
+     "RIGHT_AND_PLAIN": 44,
+     "RIGHT_NOT_PLAIN": 0,
+     "UNDETERMINED": 20,
+     "WRONG": 0,
+     "items": 64,
+     "misrouted_noise_turns": 0,
+     "misrouted_scored_turns": 0,
+     "missing": 0,
+     "noise_replies_with_cas": 0,
+     "noise_turns": 0,
+     "not_routed_scored_turns": 0
+    },
+    "CHAT_ON_REPLAY": {
+     "RIGHT": 44,
+     "RIGHT_AND_PLAIN": 44,
+     "RIGHT_NOT_PLAIN": 0,
+     "UNDETERMINED": 20,
+     "WRONG": 0,
+     "items": 64,
+     "misrouted_noise_turns": 0,
+     "misrouted_scored_turns": 0,
+     "missing": 0,
+     "noise_replies_with_cas": 0,
+     "noise_turns": 0,
+     "not_routed_scored_turns": 0
+    },
+    "LOOP_ON": {
+     "RIGHT": 41,
+     "RIGHT_AND_PLAIN": 41,
+     "RIGHT_NOT_PLAIN": 0,
+     "UNDETERMINED": 23,
+     "WRONG": 0,
+     "items": 64,
+     "misrouted_noise_turns": 0,
+     "misrouted_scored_turns": 0,
+     "missing": 0,
+     "noise_replies_with_cas": 0,
+     "noise_turns": 0,
+     "not_routed_scored_turns": 0
+    }
+   },
+   "X7_NOISE": {
+    "CHAT_OFF": {
+     "RIGHT": 25,
+     "RIGHT_AND_PLAIN": 25,
+     "RIGHT_NOT_PLAIN": 0,
+     "UNDETERMINED": 39,
+     "WRONG": 0,
+     "items": 64,
+     "misrouted_noise_turns": 0,
+     "misrouted_scored_turns": 11,
+     "missing": 0,
+     "noise_replies_with_cas": 0,
+     "noise_turns": 128,
+     "not_routed_scored_turns": 10
+    },
+    "CHAT_ON": {
+     "RIGHT": 44,
+     "RIGHT_AND_PLAIN": 44,
+     "RIGHT_NOT_PLAIN": 0,
+     "UNDETERMINED": 20,
+     "WRONG": 0,
+     "items": 64,
+     "misrouted_noise_turns": 0,
+     "misrouted_scored_turns": 0,
+     "missing": 0,
+     "noise_replies_with_cas": 0,
+     "noise_turns": 128,
+     "not_routed_scored_turns": 0
+    }
+   },
+   "X7_REAL": {
+    "ALWAYS_ASK": {
+     "ASKS": 104,
+     "NOT_SCORED": 24,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "RIGHT_NOT_PLAIN": 0,
+     "WRONG": 0,
+     "caution_on_artifact_items": 0,
+     "commitments_on_same_name": 0,
+     "commitments_on_unsettled": 0,
+     "fully_learned_rep": 0,
+     "lessons_LEARNED": 0,
+     "lessons_NOT_LEARNED": 672,
+     "lessons_WRONG": 0,
+     "missing": 0,
+     "not_routed_scored_turns": 0,
+     "plain": 128,
+     "rep_answer": 94,
+     "same_name_items": 18,
+     "undetermined_items": 24,
+     "unexplained_asks": 0,
+     "unexplained_asks_strict": 0,
+     "unsettled_ask_fired": 0,
+     "unsettled_ask_on_answer_keys": 0
+    },
+    "CHAT_DIAG": {
+     "ASKS": 13,
+     "NOT_SCORED": 24,
+     "RIGHT": 91,
+     "RIGHT_AND_PLAIN": 91,
+     "RIGHT_NOT_PLAIN": 0,
+     "WRONG": 0,
+     "caution_on_artifact_items": 0,
+     "commitments_on_same_name": 13,
+     "commitments_on_unsettled": 18,
+     "fully_learned_rep": 91,
+     "lessons_LEARNED": 572,
+     "lessons_NOT_LEARNED": 100,
+     "lessons_WRONG": 0,
+     "missing": 0,
+     "not_routed_scored_turns": 0,
+     "plain": 128,
+     "rep_answer": 94,
+     "same_name_items": 18,
+     "undetermined_items": 24,
+     "unexplained_asks": 2,
+     "unexplained_asks_strict": 2,
+     "unsettled_ask_fired": 0,
+     "unsettled_ask_on_answer_keys": 0
+    },
+    "CHAT_OFF": {
+     "ASKS": 104,
+     "NOT_SCORED": 24,
+     "RIGHT": 0,
+     "RIGHT_AND_PLAIN": 0,
+     "RIGHT_NOT_PLAIN": 0,
+     "WRONG": 0,
+     "caution_on_artifact_items": 0,
+     "commitments_on_same_name": 0,
+     "commitments_on_unsettled": 0,
+     "fully_learned_rep": 0,
+     "lessons_LEARNED": 0,
+     "lessons_NOT_LEARNED": 672,
+     "lessons_WRONG": 0,
+     "missing": 0,
+     "not_routed_scored_turns": 8,
+     "plain": 128,
+     "rep_answer": 94,
+     "same_name_items": 18,
+     "undetermined_items": 24,
+     "unexplained_asks": 0,
+     "unexplained_asks_strict": 0,
+     "unsettled_ask_fired": 0,
+     "unsettled_ask_on_answer_keys": 0
+    },
+    "CHAT_ON": {
+     "ASKS": 13,
+     "NOT_SCORED": 24,
+     "RIGHT": 91,
+     "RIGHT_AND_PLAIN": 91,
+     "RIGHT_NOT_PLAIN": 0,
+     "WRONG": 0,
+     "caution_on_artifact_items": 0,
+     "commitments_on_same_name": 13,
+     "commitments_on_unsettled": 18,
+     "fully_learned_rep": 91,
+     "lessons_LEARNED": 572,
+     "lessons_NOT_LEARNED": 100,
+     "lessons_WRONG": 0,
+     "missing": 0,
+     "not_routed_scored_turns": 0,
+     "plain": 128,
+     "rep_answer": 94,
+     "same_name_items": 18,
+     "undetermined_items": 24,
+     "unexplained_asks": 2,
+     "unexplained_asks_strict": 2,
+     "unsettled_ask_fired": 0,
+     "unsettled_ask_on_answer_keys": 0
+    },
+    "CHAT_ON_REPLAY": {
+     "ASKS": 13,
+     "NOT_SCORED": 24,
+     "RIGHT": 91,
+     "RIGHT_AND_PLAIN": 91,
+     "RIGHT_NOT_PLAIN": 0,
+     "WRONG": 0,
+     "caution_on_artifact_items": 0,
+     "commitments_on_same_name": 13,
+     "commitments_on_unsettled": 18,
+     "fully_learned_rep": 91,
+     "lessons_LEARNED": 572,
+     "lessons_NOT_LEARNED": 100,
+     "lessons_WRONG": 0,
+     "missing": 0,
+     "not_routed_scored_turns": 0,
+     "plain": 128,
+     "rep_answer": 94,
+     "same_name_items": 18,
+     "undetermined_items": 24,
+     "unexplained_asks": 2,
+     "unexplained_asks_strict": 2,
+     "unsettled_ask_fired": 0,
+     "unsettled_ask_on_answer_keys": 0
+    },
+    "LOOP_ON": {
+     "ASKS": 15,
+     "NOT_SCORED": 24,
+     "RIGHT": 89,
+     "RIGHT_AND_PLAIN": 89,
+     "RIGHT_NOT_PLAIN": 0,
+     "WRONG": 0,
+     "caution_on_artifact_items": 0,
+     "commitments_on_same_name": 13,
+     "commitments_on_unsettled": 17,
+     "fully_learned_rep": 89,
+     "lessons_LEARNED": 553,
+     "lessons_NOT_LEARNED": 119,
+     "lessons_WRONG": 0,
+     "missing": 0,
+     "not_routed_scored_turns": 0,
+     "plain": 128,
+     "rep_answer": 94,
+     "same_name_items": 18,
+     "undetermined_items": 24,
+     "unexplained_asks": 2,
+     "unexplained_asks_strict": 2,
+     "unsettled_ask_fired": 0,
+     "unsettled_ask_on_answer_keys": 0
+    }
+   }
+  },
+  "unit_fields": {
+   "W7_RECORDER_EQUALITY": {
+    "agentic_tool_turns": null,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 31.6,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": null,
+    "seconds": 0.49,
+    "seconds_process": 0.82,
+    "session_files_under_scratch": null,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_CONV_CHAT_DIAG": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 32.8,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 64,
+    "seconds": 1.347,
+    "seconds_process": 1.672,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_CONV_CHAT_OFF": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 31.1,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 64,
+    "seconds": 0.922,
+    "seconds_process": 1.242,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": "0",
+    "wide_env_after": "0",
+    "wide_modules_imported": []
+   },
+   "W7_X7_CONV_CHAT_ON": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 32.9,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 64,
+    "seconds": 1.636,
+    "seconds_process": 1.957,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_CONV_CHAT_ON_REPLAY": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 32.9,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 64,
+    "seconds": 1.71,
+    "seconds_process": 2.03,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_CONV_LOOP_ON": {
+    "agentic_tool_turns": null,
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 66
+    },
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 35.8,
+    "python": "3.12.3",
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "scratch_files": null,
+    "seconds": 1.259,
+    "seconds_process": 1.587,
+    "session_files_under_scratch": null,
+    "unsettled_fired": 0,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_NOISE_CHAT_OFF": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 31.4,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 64,
+    "seconds": 0.997,
+    "seconds_process": 1.324,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": "0",
+    "wide_env_after": "0",
+    "wide_modules_imported": []
+   },
+   "W7_X7_NOISE_CHAT_ON": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 32.9,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 64,
+    "seconds": 1.757,
+    "seconds_process": 2.088,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_REAL_ALWAYS_ASK": {
+    "agentic_tool_turns": null,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 28.9,
+    "python": "3.12.3",
+    "restored": {
+     "build_loop": true,
+     "wide_env_unset": true
+    },
+    "scratch_files": null,
+    "seconds": 0.033,
+    "seconds_process": 0.372,
+    "session_files_under_scratch": null,
+    "unsettled_fired": 0,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": []
+   },
+   "W7_X7_REAL_CHAT_DIAG": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 35.0,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 128,
+    "seconds": 4.199,
+    "seconds_process": 4.579,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_REAL_CHAT_OFF": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 32.6,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 128,
+    "seconds": 3.067,
+    "seconds_process": 3.486,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": "0",
+    "wide_env_after": "0",
+    "wide_modules_imported": []
+   },
+   "W7_X7_REAL_CHAT_ON": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 34.8,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 128,
+    "seconds": 5.921,
+    "seconds_process": 6.339,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_REAL_CHAT_ON_REPLAY": {
+    "agentic_tool_turns": 0,
+    "audit": null,
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 34.9,
+    "python": "3.12.3",
+    "restored": null,
+    "scratch_files": 128,
+    "seconds": 5.691,
+    "seconds_process": 6.08,
+    "session_files_under_scratch": true,
+    "unsettled_fired": null,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "W7_X7_REAL_LOOP_ON": {
+    "agentic_tool_turns": null,
+    "audit": {
+     "all_ok": true,
+     "bad": 0,
+     "books": 128
+    },
+    "helm_cut_commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+    "helm_now_files_changed": [],
+    "helm_outside": [],
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 41.0,
+    "python": "3.12.3",
+    "restored": {
+     "build_loop": true,
+     "unsettled_ask": true,
+     "wide_env_unset": true
+    },
+    "scratch_files": null,
+    "seconds": 4.382,
+    "seconds_process": 4.752,
+    "session_files_under_scratch": null,
+    "unsettled_fired": 0,
+    "wide_env": null,
+    "wide_env_after": null,
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   }
+  }
+ },
+ "schema": "helm.r1w7.reading/1",
+ "status_reason": "missed: K4_HONEST",
+ "status_word": "CHAT_WAVE_NO_GAIN",
+ "verdict": "PASS"
+}
