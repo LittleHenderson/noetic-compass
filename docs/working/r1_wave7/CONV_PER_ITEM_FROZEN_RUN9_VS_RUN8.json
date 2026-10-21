@@ -1,0 +1,827 @@
+{
+ "schema": "helm.r1w7.frozen-conv-per-item/1",
+ "units": {
+  "W7_X7_CONV_CHAT_DIAG": {
+   "moved_by_family": {
+    "R4_WITNESS_IN_ENGLISH": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S1_WISDOM_STATED": [
+     "UNDETERMINED->RIGHT",
+     "UNDETERMINED->WRONG"
+    ],
+    "S2_POWER_STATED": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S6_TWO_FACES": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S7_NOT_A_FACE": [
+     "UNDETERMINED->RIGHT"
+    ]
+   },
+   "moved_counts": {
+    "UNDETERMINED->RIGHT": 16,
+    "UNDETERMINED->WRONG": 4
+   },
+   "moved_items": {
+    "CV23:pg:56540@409316": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV25:pg:49958@415525": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV35:pg:65061@948645": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV36:pg:52800@228368": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV38:pg:42868@492311": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV39:pg:56540@255122": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV40:pg:14293@139110": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV41:pg:43912@20492": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV42:pg:56540@365488": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV43:pg:65061@174418": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV58:pg:52800@497287": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV59:pg:65061@1160385": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV60:pg:71119@42096": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV61:pg:66654@30742": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV62:pg:16514@81617": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV63:pg:42868@527231": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    }
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_wrong_items": [
+    [
+     "CV32:pg:13286@192206",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV33:pg:13286@148742",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV34:pg:48804@600651",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV37:pg:78849@222633",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ]
+   ]
+  },
+  "W7_X7_CONV_CHAT_OFF": {
+   "moved_by_family": {},
+   "moved_counts": {},
+   "moved_items": {},
+   "run8_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_wrong_items": []
+  },
+  "W7_X7_CONV_CHAT_ON": {
+   "moved_by_family": {
+    "R4_WITNESS_IN_ENGLISH": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S1_WISDOM_STATED": [
+     "UNDETERMINED->RIGHT",
+     "UNDETERMINED->WRONG"
+    ],
+    "S2_POWER_STATED": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S6_TWO_FACES": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S7_NOT_A_FACE": [
+     "UNDETERMINED->RIGHT"
+    ]
+   },
+   "moved_counts": {
+    "UNDETERMINED->RIGHT": 16,
+    "UNDETERMINED->WRONG": 4
+   },
+   "moved_items": {
+    "CV23:pg:56540@409316": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV25:pg:49958@415525": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV35:pg:65061@948645": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV36:pg:52800@228368": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV38:pg:42868@492311": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV39:pg:56540@255122": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV40:pg:14293@139110": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV41:pg:43912@20492": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV42:pg:56540@365488": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV43:pg:65061@174418": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV58:pg:52800@497287": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV59:pg:65061@1160385": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV60:pg:71119@42096": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV61:pg:66654@30742": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV62:pg:16514@81617": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV63:pg:42868@527231": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    }
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_wrong_items": [
+    [
+     "CV32:pg:13286@192206",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV33:pg:13286@148742",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV34:pg:48804@600651",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV37:pg:78849@222633",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ]
+   ]
+  },
+  "W7_X7_CONV_CHAT_ON_REPLAY": {
+   "moved_by_family": {
+    "R4_WITNESS_IN_ENGLISH": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S1_WISDOM_STATED": [
+     "UNDETERMINED->RIGHT",
+     "UNDETERMINED->WRONG"
+    ],
+    "S2_POWER_STATED": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S6_TWO_FACES": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S7_NOT_A_FACE": [
+     "UNDETERMINED->RIGHT"
+    ]
+   },
+   "moved_counts": {
+    "UNDETERMINED->RIGHT": 16,
+    "UNDETERMINED->WRONG": 4
+   },
+   "moved_items": {
+    "CV23:pg:56540@409316": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV25:pg:49958@415525": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV35:pg:65061@948645": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV36:pg:52800@228368": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV38:pg:42868@492311": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV39:pg:56540@255122": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV40:pg:14293@139110": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV41:pg:43912@20492": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV42:pg:56540@365488": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV43:pg:65061@174418": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV58:pg:52800@497287": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV59:pg:65061@1160385": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV60:pg:71119@42096": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV61:pg:66654@30742": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV62:pg:16514@81617": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV63:pg:42868@527231": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    }
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_wrong_items": [
+    [
+     "CV32:pg:13286@192206",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV33:pg:13286@148742",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV34:pg:48804@600651",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV37:pg:78849@222633",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ]
+   ]
+  },
+  "W7_X7_CONV_LOOP_ON": {
+   "moved_by_family": {
+    "R4_WITNESS_IN_ENGLISH": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S1_WISDOM_STATED": [
+     "UNDETERMINED->RIGHT",
+     "UNDETERMINED->WRONG"
+    ],
+    "S2_POWER_STATED": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S6_TWO_FACES": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S7_NOT_A_FACE": [
+     "UNDETERMINED->RIGHT"
+    ]
+   },
+   "moved_counts": {
+    "UNDETERMINED->RIGHT": 16,
+    "UNDETERMINED->WRONG": 2
+   },
+   "moved_items": {
+    "CV23:pg:56540@409316": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV25:pg:49958@415525": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV35:pg:65061@948645": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV36:pg:52800@228368": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV38:pg:42868@492311": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV39:pg:56540@255122": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV40:pg:14293@139110": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV41:pg:43912@20492": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV42:pg:56540@365488": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV43:pg:65061@174418": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV58:pg:52800@497287": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV59:pg:65061@1160385": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV60:pg:71119@42096": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV61:pg:66654@30742": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV62:pg:16514@81617": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV63:pg:42868@527231": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    }
+   },
+   "run8_totals": {
+    "RIGHT": 41,
+    "RIGHT_AND_PLAIN": 41,
+    "UNDETERMINED": 23,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 57,
+    "RIGHT_AND_PLAIN": 57,
+    "UNDETERMINED": 5,
+    "WRONG": 2,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_wrong_items": [
+    [
+     "CV34:pg:48804@600651",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV37:pg:78849@222633",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ]
+   ]
+  },
+  "W7_X7_NOISE_CHAT_ON": {
+   "moved_by_family": {
+    "R4_WITNESS_IN_ENGLISH": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S1_WISDOM_STATED": [
+     "UNDETERMINED->RIGHT",
+     "UNDETERMINED->WRONG"
+    ],
+    "S2_POWER_STATED": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S6_TWO_FACES": [
+     "UNDETERMINED->RIGHT"
+    ],
+    "S7_NOT_A_FACE": [
+     "UNDETERMINED->RIGHT"
+    ]
+   },
+   "moved_counts": {
+    "UNDETERMINED->RIGHT": 16,
+    "UNDETERMINED->WRONG": 4
+   },
+   "moved_items": {
+    "CV23:pg:56540@409316": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV25:pg:49958@415525": {
+     "family": "R4_WITNESS_IN_ENGLISH",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV35:pg:65061@948645": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV36:pg:52800@228368": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV38:pg:42868@492311": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV39:pg:56540@255122": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV40:pg:14293@139110": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV41:pg:43912@20492": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV42:pg:56540@365488": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV43:pg:65061@174418": {
+     "family": "S2_POWER_STATED",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV58:pg:52800@497287": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV59:pg:65061@1160385": {
+     "family": "S6_TWO_FACES",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV60:pg:71119@42096": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV61:pg:66654@30742": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV62:pg:16514@81617": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    },
+    "CV63:pg:42868@527231": {
+     "family": "S7_NOT_A_FACE",
+     "run8": "UNDETERMINED",
+     "run9": "RIGHT"
+    }
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_wrong_items": [
+    [
+     "CV32:pg:13286@192206",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV33:pg:13286@148742",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV34:pg:48804@600651",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ],
+    [
+     "CV37:pg:78849@222633",
+     "S1_WISDOM_STATED",
+     "UNDETERMINED"
+    ]
+   ]
+  }
+ }
+}

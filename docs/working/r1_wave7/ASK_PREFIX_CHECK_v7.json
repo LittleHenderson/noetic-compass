@@ -1,0 +1,51 @@
+{
+ "all_new_statuses_count_as_asks": true,
+ "asking_exact": [
+  "UNDETERMINED_CLARIFY",
+  "BRAIN_UNDETERMINED",
+  "CONFLICT_UNDETERMINED",
+  "REPAIRED_RETEACH_NEEDED",
+  "VERIFIED_NO_RECIPE_CONTENT",
+  "STATED_RECIPE_NOT_TAKEN",
+  "UNDETERMINED_UNKNOWN_PRODUCT"
+ ],
+ "asking_prefix": [
+  "CLARIFY",
+  "TEACH_REFUSED_",
+  "VALVE_HALT_",
+  "REFUSE_",
+  "FACE_REFUSED_"
+ ],
+ "new_statuses_are_asks": {
+  "CLARIFY_WIDE_FACE_NEGATED": true,
+  "CLARIFY_WIDE_FACE_REFUSED": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN": true,
+  "CLARIFY_WIDE_FACE_UNREAD": true,
+  "CLARIFY_WIDE_FACE_WHICH_INGREDIENT": true,
+  "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT": true,
+  "CLARIFY_WIDE_PURPOSE_ABSENT": true
+ },
+ "new_statuses_named_in_the_cut": {
+  "CLARIFY_WIDE_FACE_NEGATED": false,
+  "CLARIFY_WIDE_FACE_REFUSED": false,
+  "CLARIFY_WIDE_FACE_UNKNOWN": true,
+  "CLARIFY_WIDE_FACE_UNREAD": false,
+  "CLARIFY_WIDE_FACE_WHICH_INGREDIENT": false,
+  "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT": true,
+  "CLARIFY_WIDE_PURPOSE_ABSENT": true
+ },
+ "non_ask_controls": {
+  "COMMITTED": false,
+  "INVENTORY_RECORDED": false,
+  "LEARNED": false,
+  "STOCK_RECORDED": false
+ },
+ "reader_files_byte_identical_v6_v7": {
+  "merge_r1w7.py": true,
+  "score_w7.py": true
+ },
+ "reader_sha256_v7": {
+  "merge_r1w7.py": "3dcb07fa25fa6627049df68391536f8fad55aae3be02178e5ce25a2885f1744a",
+  "score_w7.py": "01fef9272e1d9d0dc5055de7b8b7779c53cc7703803d81134e1f3cb1a0a06af9"
+ }
+}

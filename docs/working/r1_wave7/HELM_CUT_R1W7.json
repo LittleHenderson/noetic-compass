@@ -1,5 +1,5 @@
 {
- "commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
+ "commit": "4744041503ca6feb044afa05cbb380533de2fcfe",
  "files": {
   "cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
    "bytes": 92461,
@@ -570,8 +570,8 @@
    "sha256": "af782845fa06dbc3c3be9bf1df1e691a97df97d585f8c3f1fec95fd7af5caec1"
   },
   "helm_faces_in.py": {
-   "bytes": 11652,
-   "sha256": "88b18f98e7beb6048044f570ea9b21661ccb1016015be5626c6a123cc5597af3"
+   "bytes": 14331,
+   "sha256": "c034bb6608b9a89da7133ff5688e89448c6f95037d06aa2765af261611b76062"
   },
   "helm_faces_lexicon.json": {
    "bytes": 7357,
@@ -594,8 +594,8 @@
    "sha256": "9a5d918f23092b3bf270dbfb9b3443398c5997fe98f560753a02ecb3109f60d9"
   },
   "helm_wide_turn.py": {
-   "bytes": 71009,
-   "sha256": "ba9ecf6c610d084c4a793e5e17a972d6bd9bb806d891265e50ab4fbece7817bf"
+   "bytes": 83372,
+   "sha256": "05dcc16e62eb0f40009a2ffdc6031bb7d8a3f26c513ea4ca92aa78795b12f5f0"
   },
   "phrasebook.json": {
    "bytes": 39980,
@@ -610,8 +610,8 @@
    "sha256": "598c8c075e32a68e29fcf7639f18ee5364717cb1baea5443fa2a4dff47258f2d"
   },
   "test_helm_cas_address.py": {
-   "bytes": 18630,
-   "sha256": "3870c01eec6cd66e33b3d6f5bb97d68ef705a7ea6cec4c9cc0d84de9ca6ff963"
+   "bytes": 19015,
+   "sha256": "de27375f0dfc492ccfea1e6515fb67e60ec72e03151df9628f443b51e2b6e1fe"
   },
   "test_helm_chat_nuance.py": {
    "bytes": 14813,
@@ -641,6 +641,10 @@
    "bytes": 8998,
    "sha256": "66b43b2ad4ef45d0b0591ee6260ff1e18dcf5c65496aaacad16b0e2c0e928e00"
   },
+  "test_helm_reader_gap.py": {
+   "bytes": 18270,
+   "sha256": "d92d61ec5d54661627ef8ae91118a091cd85ea7935df973d14ff1366ecca0c11"
+  },
   "test_helm_triad.py": {
    "bytes": 20265,
    "sha256": "15cb6ad25f0243a1cd7fbd492d144ed792402845e3b4e5c3a922d34d0cc3bbd2"
@@ -654,8 +658,8 @@
    "sha256": "a5edf7670b443a3b2c4624a664e48d10af0991daef64512d5daa27026bdfcd93"
   },
   "test_helm_wide_alongside.py": {
-   "bytes": 27057,
-   "sha256": "6c3d379491dbe302c1620ba75a768cfecb3c027e60a840d8809d788b204afc0c"
+   "bytes": 28140,
+   "sha256": "b5e06868d86b30f963f6c0b7c3d45e3ddde449203493542480f94d12bf5842b7"
   },
   "tks_meta_valve_controller.py": {
    "bytes": 10430,
@@ -675,6 +679,6 @@
   "helm_ui/",
   "helm_hub/"
  ],
- "rule": "git show <commit>:<path> for every file (never the working tree); list = wave 6 v3's cut (159 files) + every helm_*.py / test_helm_*.py at the commit; helm_ui/ and helm_hub/ are not cut",
+ "rule": "git show <commit>:<path> for every file (never the working tree); list = the v6 cut (166 files, itself wave 6 v3's 159 + every helm_*.py / test_helm_*.py + helm_test_pins.py named) + every helm_*.py / test_helm_*.py at the commit (v7: + test_helm_reader_gap.py); helm_ui/ and helm_hub/ are not cut",
  "schema": "helm.r1w7.source-cut/1"
 }

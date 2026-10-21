@@ -706,3 +706,144 @@ freeze; the practice pools; the scoring functions; the units and their commands;
 **What this amendment does not do.** It does not re-read c53. It does not launch. It does not draw an exam. It licenses
 nothing. Forecast: on the host HELM's suite reads `Ran 245, OK (skipped=1)` (the pin is invariant to the brain folder), so I6
 reads true; every other row as c53. A fresh draw can still miss a mark on a shape no practice run has shown.
+
+## 19. Amendment A-R1W7-7 (the custodian's MULTI_QTY rule; owner's word 2026-10-21 "Yes to D6, the custodian MULTI_QTY rule, as amendment A-R1W7-7"; written in the reader-gap session, applied to this package BEFORE the v7 reseal; package copy with the hook diff and the measured effect; 2026-10-21)
+
+**Owner's word (typed in the operator session, 2026-10-21):** "Yes to D6, the custodian MULTI_QTY rule, as amendment
+A-R1W7-7." (Same message: "Merge PR #433 into the thread branch. Build D1 to D5 with tests, FIX FIRST, at 0 USD.")
+
+### 19.1 What changes (plain English)
+
+The real-recipe exam (X7_REAL) takes recipes from old books. The frozen key (RB-W1T's `xreal.keys.key_r`, vendored byte
+for byte) treats every book line as one ingredient line, named by its first head word. A book line that holds TWO amounts
+("6 cloves, 12 peppercorns" — the author's own example, in the shape of the c54 items) therefore becomes ONE lesson about
+the first ingredient; the second amount is tail text the key ignores, the exam never makes that ingredient run out and
+never doubles it, and nothing in the lessons can teach its requirement. The wide reader reads two ingredients, is never
+taught the second, and asks — an honest ask that the K4 rule counts as unexplained (job c54, SPEC 7.108: 2 of 2 asks;
+`K4_ITEM_DIAGNOSIS_C54.md`). No general reader rule can answer it without breaking ordinary lists.
+
+Under this amendment the custodian's key marks such a recipe **not representable**: after the frozen key is computed,
+every raw line that carries a SECOND amount after a separator (a quantity start of the frozen grammar,
+`xreal.grammar.qty_starts`, after the leading amount, with ", " / "and" / "or" / ";" between them; parentheses removed
+first; one amount such as "1-1/2" or "one and a half" is never two; a line the survey already refuses for its form keeps
+its own reason) adds `line<i>:MULTI_QTY` to `representable.why_not`, and `representable.representable` becomes False. The
+item then scores `NOT_SCORED` (an undetermined key), exactly as recipes with a range, an approximate amount, an odd form or
+a unit outside the top-20 table already do (section 4 representability rule). Nothing else in the key changes: answer,
+yield, lessons, heads, limiting index are untouched. The frozen key package `HELM_RBW1T_20261019` is NOT edited; the rule
+sits in this package (`r1w7/multi_qty_w7.py`) and is applied once, in `custody_w7.make_all`, to the real keys.
+
+### 19.2 Files in this package
+
+| File | Role |
+|---|---|
+| `r1w7/multi_qty_w7.py` (sha256 `04d2df7e7cd75a3449611e159eea06649f5f5e56364f96bde5172e3ce066449b`) | the rule (`multi_qty_lines`, `apply`); stdlib only; takes the grammar module as an argument |
+| `tests_r1w7/test_multi_qty_w7.py` (sha256 `3c58d323be3c9018335b370d49c47405d0aeb9279847f9fecd8ede81b280c179`) | seven tests on the author's own lines with the frozen grammar via `common_w7.setup(helm=False)` |
+| `r1w7/custody_w7.py` | one import and one hook (the diff below) |
+
+Applied to this package's source tree by `apply_amendment_7.py` (sha256 `c022b29ad3f75bf9a4c899bc6c65b59995546eb066c4361febc5e1a439aaa1d4`,
+repo copy `docs/working/r1_wave7/a_r1w7_7/`) before the freeze; the tool refuses on a missing or doubled anchor and prints
+the sha256 of each file it wrote. The whole diff of `r1w7/custody_w7.py` against the v6 extract:
+
+    35a36
+    > from r1w7 import multi_qty_w7 as MQ      # noqa: E402  A-R1W7-7 (SPEC 7.109 D6)
+    116c117
+    <     out["real"] = {"items": real_items, "keys": [K.key_item(it) for it in real_items], "skips": drawn["skips"],
+    ---
+    >     out["real"] = {"items": real_items, "keys": [MQ.apply(K.key_item(it), it["raw_lines"], ns.XG) for it in real_items], "skips": drawn["skips"],
+
+### 19.3 What does not change
+
+The frozen key, grammar and survey classifier (vendored, freeze-checked at setup). The exam frame, the draw, the seed
+rule, the exclusion lists, the dialogue and noise exams, the arms, the instrument rows, the hard gates, the marks and the
+status words. The K4 rule and the reader's own rules (`score_w7.py`, `merge_r1w7.py`: untouched; the ask prefix rule is
+RB-W1T's `is_asking`, under which every `CLARIFY_*` status counts as an ask, so the reader-gap cut's new wide statuses
+`CLARIFY_WIDE_PURPOSE_ABSENT`, `CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT`, `CLARIFY_WIDE_FACE_UNREAD`, `_NEGATED`,
+`_WHICH_INGREDIENT`, `_REFUSED`, `_UNKNOWN` are asks without any reader change). HELM itself (this is an instrument change).
+Sealed data from c51–c54 is never re-read.
+
+### 19.4 Effect on c54, for the record only (MEASURED, no re-reading of sealed data for a claim)
+
+By program over the c54 unit files (`K4_ITEM_DIAGNOSIS_C54.md` section 3): exactly 2 of 128 lesson lists carry one more
+amount piece than the key has lines — the two unexplained asks — and no answered item does. Under this rule those two
+items would have been `NOT_SCORED`; c54's recorded word stays `CHAT_WAVE_NO_GAIN` (line 4 forbids re-reading sealed data
+with a repaired reader). A fresh draw (this package, v7) is the only way to a new word.
+
+### 19.5 Effect size, MEASURED on this package's practice draw (128 items; the same ids as RB-W1T's practice draw v2; counts only; practice data, never an exam)
+
+Measured by program on 2026-10-21 by running this package's own `custody_w7.py practice` (the amended tree) and comparing
+its keys with the v6 practice keys (`compare_practice_keys.py` beside the zip): inputs byte-identical (REAL, CONV, NOISE,
+the CONV keys, the pools); every key field other than `representable` identical on all 128 items; **6 of 128 items are
+tagged, one line each (`line0`, `line2`, `line3`, `line4`, `line5`, `line7` of their books), all six representable and
+ANSWER-keyed under the frozen key, so they become `NOT_SCORED`**: representable 120 → 114, representable-and-answer 106 →
+100 (5 percent of the 120; 4.7 percent of 128). No untagged item changes. Ids: `RW:pg:63007@34737`, `RW:wb:425075:4511682`,
+`RW:wb:202496:4494726`, `RW:wb:457675:4587499`, `RW:pg:65706@19804`, `RW:pg:65507@35986` (practice pool ids, already excluded
+from every exam draw). The broad wording of the design packet ("more than one quantity span") would have tagged 20 of 128
+(52 lines, 45 of them parenthesised equivalents such as "2 cups (250 g) flour"); the rule as written does not. The K1 bar
+scales with the representable-and-answer count (section 5), so a practice reading under this rule compares a smaller
+denominator; every such move is reported in `PRACTICE_READINGS_V7.json`.
+
+### 19.6 Claim status
+
+An instrument amendment; `PROPOSED` until the custodian draws under it. No HELM claim moves. Cost 0 USD.
+
+## 20. Amendment A-R1W7-8 (v7, written BEFORE the v7 reseal; the fifth chat round on the reader-gap cut: four changes, nothing else; 2026-10-21)
+
+**Why.** The v6 package (zip `387577deac79d8b395e1e3245cd3bb1bdddb20b0b21b86f1078e7a0cd20442f8`, freeze `3c7a9f3d…`,
+HELM cut `ad4fde73`) ran on the host as job c54 (`RUN_RESULT_R1W7V6_C54.md`; reading `R1_W7_READING.json`; SPEC 7.108).
+The frozen reader said verdict `PASS`, status word `CHAT_WAVE_NO_GAIN`: the first run of the four with a clean instrument end
+to end (8 of 8 instrument rows, 10 of 10 hard gates, HELM's 11-file suite `Ran 245, OK (skipped=1)` on the host), 5 of 6
+marks true, **K4 missed by 2 unexplained asks** on real recipes (the same 2 in the loop driven directly: the wide reader, not
+the chat). The per-item diagnosis by program (SPEC 7.109; no exam text pasted) found both asks to be one book line holding
+two amounts, which the frozen key keeps as one lesson and the wide reader reads as two; the owner said yes to the custodian's
+MULTI_QTY rule (A-R1W7-7, section 19) and ordered the reader-gap designs D1–D5 built FIX FIRST (SPEC 7.111, PR #435, merged
+as thread head `47440415`). Line 4 of this document forbids re-reading c54's data; the c54 word stands. **v6 is
+`VOID_SUPERSEDED_BY_V7`** for any further run (its c54 record stands as written; its line `CHAT WAVE 4 at 1 USD` was
+consumed by c54's approval record; its bands 2,012–2,017 M were spent by the X7v6 draw).
+
+**What changed in this package (v7). Exactly these four, nothing else.**
+
+1. **`helm_now/` recut at `4744041503ca6feb044afa05cbb380533de2fcfe`** (the thread head: PR #435 merged, the reader-gap
+   build of SPEC 7.111) by the contract's rule (the v6 cut's 166 files + every `helm_*.py` / `test_helm_*.py` at the commit;
+   `helm_test_pins.py` named explicitly as in v6; each by `git show`, never the working tree): **167 files** (v6: 166;
+   + `test_helm_reader_gap.py`, 26 tests; `helm_wide_turn.py` → reader `RB-W1 v7 (2026-10-21)` `05dcc16e…`,
+   `helm_faces_in.py` → v2 `c034bb66…`, `test_helm_wide_alongside.py` and `test_helm_cas_address.py` changed — the OFF-path
+   pin is now `83f96a4a3e64256f0cae1c5567285463f442f92f1c4759e6b2c7bdd397502c35` over the same machine-neutral canon; every
+   other file equal to v6's cut; `helm_brain_canonical.py` = base `d4488f2a` `24df53c9…`). `contract/HELM_CUT_R1W7.json`
+   carries the commit and all 167 hashes. The wide reader's new ask statuses (`CLARIFY_WIDE_PURPOSE_ABSENT`,
+   `CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT`, `CLARIFY_WIDE_FACE_UNREAD` / `_NEGATED` / `_WHICH_INGREDIENT` / `_REFUSED` /
+   `_UNKNOWN`) count as asks under RB-W1T's prefix rule (`keys_rbw1t.is_asking`: every status beginning `CLARIFY` is an
+   ask), which the reader uses through wave 6's `score_real`; the reader's rules are not changed.
+2. **The host's HELM self-check list** (`kit/run_r1w7.py` `HELM_TESTS`): the 11 names of v6 + `test_helm_reader_gap` =
+   **12 names**, one process, the same command form as c54. The A-R1W7-6 rule is kept: the seal step runs exactly that
+   list with that command form from a fresh extract and records it in `TEST_COUNTS_R1W7_v7.json` under
+   `host_exact_suite_list`, refusing unless the sealed kit's list equals the tool's typed copy. The three pytest-style
+   files stay carried but not run as unittest suites.
+3. **Amendment A-R1W7-7 applied** (section 19): `r1w7/multi_qty_w7.py`, `tests_r1w7/test_multi_qty_w7.py` (7 tests, now
+   part of the package's own suite run from the seal), one import and one hook in `custody_w7.make_all`; measured effect on
+   the practice draw 6 of 128 items `NOT_SCORED` (section 19.5).
+4. **Exclusions, bands, line.** `contract/EXCLUDE_R1W7_PRIOR_USED.json` gains block `X7v6_c54` = lists `X7v6_c54_real`
+   (X7v6's 128 REAL ids) and `X7v6_c54_conv` (64 CONV pool ids), read by program from the custodian's seal record
+   `x7v6_custody/X7_SEALED_20261021T140909Z.json` (keys `real_drawn_frame_ids_sorted` / `conv_pool_ids_sorted`; ids only; no
+   input, key or exam file opened); 0 overlap with any older list; every list applies to BOTH pools (A-R1W7-4 rule kept):
+   22 lists, 2,042 distinct ids. **Seed bands** (section 10 superseded again): REAL 2,024,000,001-2,025,000,000; CONV
+   2,026,000,001-2,027,000,000; NOISE 2,028,000,001-2,029,000,000 (each 1,000,000 wide; below INT32_MAX 2,147,483,647). Used
+   table 1-2,023,000,000 as one range (everything up to wave 7 v6 / c54's 2,012-2,017 M, spent by the X7v6 draw; the
+   continuity packet's reserved 1,996-1,999 M and the talk packet's reserved 2,018-2,022 M inside it); gap 1,000,000; slot
+   stepping and STOP as before. **The owner's line** (section 8 superseded again): **`CHAT WAVE 5 at 1 USD`** (20 UTF-8
+   bytes; `CHAT WAVE at 1 USD` was consumed by c51's approval record, `CHAT WAVE 2 at 1 USD` by c52's, `CHAT WAVE 3 at 1 USD`
+   by c53's, `CHAT WAVE 4 at 1 USD` by c54's; none may bind a second zip). Seed text
+   `H = sha256(UTF-8("CHAT WAVE 5 at 1 USD" + ":" + <v7 zip sha256, 64 lower-case hex>))`, no trailing newline. Cap 1.00
+   USD; one attempt + one plumbing retry; expected about 0.01-0.02 USD.
+
+Labels: `PACKAGE_VERSION` = `v7`; `RUN_LIMITS_R1W7.json` `package_version` and the line in `cost_cap_status`; the stage note;
+README; the custodian procedure; FROZEN re-derived from the constants (the kit test checks they agree); the tests that pin the
+bands, the line, the blocked table, the cut size and the exclusion lists.
+
+**Unchanged (checked by the tests and the freeze):** the v4 reader (`r1w7.merge_r1w7 v2`), the v4 recorder unit and fixture,
+every mark, threshold, arm, status word, exam size, instrument row and hard gate; the noise sentences; the five neighbours by
+freeze; the practice pools; the scoring functions; the units and their commands.
+
+**What this amendment does not do.** It does not re-read c54. It does not launch. It does not draw an exam. It licenses
+nothing. The reader-gap code is `ENGINEERED-NOT-VALIDATED` until a sealed draw; practice numbers under the new reader and
+the new rule may move against v6's run8, and every move is reported as a finding in `PRACTICE_READINGS_V7.json`, never
+smoothed. A fresh draw can still miss a mark on a shape no practice run has shown.
