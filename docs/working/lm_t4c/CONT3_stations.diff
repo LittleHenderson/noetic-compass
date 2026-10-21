@@ -1,0 +1,17 @@
+--- old_code_test/lm_t4/stations.py	2026-10-20 21:09:14.480564700 -0700
++++ package/lm_t4/stations.py	2026-10-20 21:09:22.859553200 -0700
+@@ -515,9 +515,11 @@
+                 asked_now.append([k, i])
+         cas5["questions_asked"] = asked_now
+         if asked_now:
+-            # key: the world teaches every support slot in the end (c26: 10 of 10 filled), so the pointer is expected
+-            # to be answered = CREATED; the label is finalized at the end of the draw (Q7)
+-            rec = record(tid, "S5", None, cas5, cce5, gaps5, "ATTEMPTED", self.ds, key="CREATED",
++            # key: the world teaches the TAUGHT brain every support slot in the end (c26: 10 of 10 filled), so its pointer
++            # is expected to be answered = CREATED; the untaught twin is never taught, so its questions stay open =
++            # ATTEMPTED (CONT-3 run-code fix, LM-T4c); the label is finalized at the end of the draw (Q7)
++            rec = record(tid, "S5", None, cas5, cce5, gaps5, "ATTEMPTED", self.ds,
++                         key="CREATED" if self.tag == "taught" else "ATTEMPTED",
+                          note="asking wrote open question pointers")
+             rec["pointer"] = {"question": len(self.questions) - 1, "questions": list(range(len(self.questions) - len(asked_now), len(self.questions)))}
+             rec["said_extra"] = [self.questions[-len(asked_now) + j]["content"] for j in range(len(asked_now))]

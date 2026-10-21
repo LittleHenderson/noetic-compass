@@ -1,0 +1,174 @@
+{
+ "zip": "LM_T4C_20261020_SOURCE.zip",
+ "zip_sha256": "ccece4ab2037a0d2de48c88cb8da64073c98f5e362bf3a8eb2b09c7d5d409807",
+ "zip_bytes": 194369,
+ "created_utc": "2026-10-21T04:14:01.239205+00:00",
+ "built_from_lm_t4b_zip_sha256": "f93ceba8601ccc579331d1a2c930ac44a857eeba87c3ff6591ac14e8e729efe2",
+ "source_manifest_sha256": "94bcf5d14d173ec71f9da9e9f2386538b898a1ae4ef8d56ab57cebc7b5fa7f93",
+ "sign_line": "APPROVE lm_t4, source 94bcf5d1, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+ "reader_sha256": "382033ca52735f9b3a6dfedfd1316a716bc01360e8c794d8681328470a0d0db5",
+ "stations_py_sha256": "f9109b9d916a893c2a0e487c65828138430e24d622c6ad02290db35e7537622d",
+ "test_lm_t4_py_sha256": "b4eae8e710d4c3ee36841bdacf194d72367fd9ac105500e4a9ef2f66d91f3af8",
+ "members": [
+  {
+   "path": "lm_t4/__init__.py",
+   "sha256": "c6095cdfaf1ddd9bf9fab258547dedea27084ec35464a2ac752483d0126f8afb",
+   "bytes": 1266
+  },
+  {
+   "path": "lm_t4/arms.py",
+   "sha256": "a295c8dc3425b24969e5c8246e4398ec63c6d020cdb9f5a8d61c0fa5a975a062",
+   "bytes": 11639
+  },
+  {
+   "path": "lm_t4/CONT3_DIAGNOSIS.md",
+   "sha256": "508e15b8989e63f472bd9f285add6566b5f1ba92b9a9319184c9497c127ce2cb",
+   "bytes": 6347
+  },
+  {
+   "path": "lm_t4/CONT3_FIX_DIFF.md",
+   "sha256": "e198dcde4dd5fdce35f9c009f4185830f28b33e707efbde73f8e619467366eb9",
+   "bytes": 5733
+  },
+  {
+   "path": "lm_t4/continuity.py",
+   "sha256": "509bd645d13f1dc2c8d9854c100ad42b44333dd1e33d6f6b5ed8adfdd7e6fdcb",
+   "bytes": 4588
+  },
+  {
+   "path": "lm_t4/eye_report_only.py",
+   "sha256": "86ca484114d0c66d172c9129b132352de868cdb34195b847ff9f0b2b0b32c045",
+   "bytes": 11519
+  },
+  {
+   "path": "lm_t4/FROZEN.json",
+   "sha256": "1817393d407a3820f1c712d233cdc6fe0de913eb4dad723fb21576e8d8ef87b2",
+   "bytes": 51768
+  },
+  {
+   "path": "lm_t4/FROZEN_LMT4B.json",
+   "sha256": "0a9a81c4718d7c8fa18081fa10528048c88a076013b9e1d433d06adef8ef4f3d",
+   "bytes": 55504
+  },
+  {
+   "path": "lm_t4/FROZEN_LMT4C.json",
+   "sha256": "30100e51c26fc12a65c1aac435fee6a7b92cc0681483510ea0485d531b41b91b",
+   "bytes": 59502
+  },
+  {
+   "path": "lm_t4/merge_t4.sealed.py",
+   "sha256": "37f4a0e09fe325ec80c4e0993431a9486c26fa29649cd83c21c56eb8b064e6b2",
+   "bytes": 41243
+  },
+  {
+   "path": "lm_t4/merge_t4b.py",
+   "sha256": "382033ca52735f9b3a6dfedfd1316a716bc01360e8c794d8681328470a0d0db5",
+   "bytes": 41919
+  },
+  {
+   "path": "lm_t4/OWNER_APPROVAL_EVIDENCE.md",
+   "sha256": "50c32554d7abc8c63c938c4f7a21e4dcfb99214b9924044a562572cf7b56a959",
+   "bytes": 2743
+  },
+  {
+   "path": "lm_t4/OWNER_APPROVAL_EVIDENCE.template.md",
+   "sha256": "cf5aac66b549a757600305b35916f434d51f5ce7a3853c2179cbda0324db0c25",
+   "bytes": 2197
+  },
+  {
+   "path": "lm_t4/PLAN.json",
+   "sha256": "203863e959da484aee2b9f2c9a4df9deaaea27491bcbd1c0c29c054ebc05e59a",
+   "bytes": 1449
+  },
+  {
+   "path": "lm_t4/PREREGISTRATION_LMT4B.md",
+   "sha256": "5bc47f3e0a3b23ad3ea38c7ba02fb806f9aee71af397120327af5b874e8b248a",
+   "bytes": 8970
+  },
+  {
+   "path": "lm_t4/PREREGISTRATION_LMT4C.md",
+   "sha256": "2f872233b9b5619cee59c0c9d4d0b075eb000a33aa88123ed055ebe7133b0e06",
+   "bytes": 10745
+  },
+  {
+   "path": "lm_t4/READER_FIX_DIFF.md",
+   "sha256": "86fc2df79544572dd233be796ffc083dd68766b413a70cb7bf4d2e0377454fc8",
+   "bytes": 6614
+  },
+  {
+   "path": "lm_t4/run_all_parts.ps1",
+   "sha256": "ce7c16ad9704515f92f305294d33cb0544e2f906c9b74888e5d3db4b5eb996c5",
+   "bytes": 1549
+  },
+  {
+   "path": "lm_t4/run_t4.py",
+   "sha256": "fe212643e1f39685d9d32d8d8dccaeb000e372046a346c0be43645826c17b783",
+   "bytes": 11012
+  },
+  {
+   "path": "lm_t4/SOURCE_MANIFEST.json",
+   "sha256": "94bcf5d14d173ec71f9da9e9f2386538b898a1ae4ef8d56ab57cebc7b5fa7f93",
+   "bytes": 35231
+  },
+  {
+   "path": "lm_t4/static_check.py",
+   "sha256": "1d0f64d07542817570085cd25dcd00f18fa54964ff213e7c316cf86039e8c6d6",
+   "bytes": 4800
+  },
+  {
+   "path": "lm_t4/stations.py",
+   "sha256": "f9109b9d916a893c2a0e487c65828138430e24d622c6ad02290db35e7537622d",
+   "bytes": 53428
+  },
+  {
+   "path": "lm_t4/supervisor.ps1",
+   "sha256": "d23d72e129809f52a3630dbb324d5216654f2bf39c8ee584adb8c3242b92a979",
+   "bytes": 7522
+  },
+  {
+   "path": "lm_t4/tap_inject.py",
+   "sha256": "e6f512e569f42deb943e0ffdf66d639b210f70446c7317fb8837c7ffc04e5c5d",
+   "bytes": 28723
+  },
+  {
+   "path": "lm_t4/test_lm_t4.py",
+   "sha256": "b4eae8e710d4c3ee36841bdacf194d72367fd9ac105500e4a9ef2f66d91f3af8",
+   "bytes": 8071
+  },
+  {
+   "path": "lm_t4/worker.py",
+   "sha256": "57a71ef5d13e6c717637e420f02d3ebeaf43d3cc7c77cbe78da3256b00ee900f",
+   "bytes": 5823
+  },
+  {
+   "path": "rb_i1/__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0
+  },
+  {
+   "path": "rb_i1/dialogue.py",
+   "sha256": "4e89aa1c960414643725f6a53b25f963b58245b4f9dd66e6bb01eb1847d3f3b6",
+   "bytes": 10975
+  },
+  {
+   "path": "rb_i1/drives.py",
+   "sha256": "c45c0ef9f3d6d603ee9e300927799947108de5a695fdcdaeddf51d0eef4a863f",
+   "bytes": 10281
+  },
+  {
+   "path": "rb_i1/faculties.py",
+   "sha256": "8493444e29d03dd2cccafb7840b51b6c57f2e2d5c912977df116486f1f408702",
+   "bytes": 34232
+  },
+  {
+   "path": "rb_i1/FROZEN.json",
+   "sha256": "49f11507310a03c10044aaf31ebae8bd292fc8c5154cd2750d203da2ceca0ae9",
+   "bytes": 22240
+  },
+  {
+   "path": "rb_i1/PLAN.json",
+   "sha256": "4bf643a7e2e34ecd3f0acb0571968a1ce46f1b684704e3d31813fd3e3b443266",
+   "bytes": 20412
+  }
+ ]
+}

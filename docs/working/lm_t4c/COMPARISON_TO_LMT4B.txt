@@ -1,0 +1,45 @@
+== vs LM-T4 corrected reading (8606c5aa, LMT4-A3; a note that never counts): 20 differences, of which 10 are timing
+  DIFF /marks/CONT_3_provenance/agree new= "106400/106400" old= "106320/106400"
+  DIFF /marks/CONT_3_provenance/pass new= true old= false
+  DIFF /parts/LM_T4_MSI_P11/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P12/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P13/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P14/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P15/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P16/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P17/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P18/tests new= 13 old= 12
+  timing /parts/LM_T4_MSI_P11/wall 94.904 126.846
+  timing /parts/LM_T4_MSI_P12/wall 151.603 191.195
+  timing /parts/LM_T4_MSI_P13/wall 165.059 181.619
+  timing /parts/LM_T4_MSI_P14/wall 198.239 248.79
+  timing /parts/LM_T4_MSI_P15/wall 124.153 192.988
+  timing /parts/LM_T4_MSI_P16/wall 170.101 200.389
+  timing /parts/LM_T4_MSI_P17/wall 65.513 85.76
+  timing /parts/LM_T4_MSI_P18/wall 65.96 88.206
+  timing /w01/seconds 21.507 29.223
+  timing /w01/unit_wall 21.53 29.268
+== vs LM-T4 sealed reading (74239223, INCONCLUSIVE): 22 differences, of which 10 are timing
+  DIFF /failed_parts/LM_T4_MSI_P01 new= "ONLY_IN_OLD" old= {"status": "WORKER_FAILED", "worker_exit_code": 1, "elapsed_wall_seconds": 44.0999914, "end_utc": "2026-10-15T13:06:28.5733820+00:00"}
+  DIFF /marks/CONT_3_provenance/agree new= "106400/106400" old= "106320/106400"
+  DIFF /marks/CONT_3_provenance/mismatch_by_brain new= "ONLY_IN_OLD" old= {"task_b_taught": 0, "task_b_twin": 80, "dialogues": 0}
+  DIFF /marks/CONT_3_provenance/pass new= true old= false
+  DIFF /parts/LM_T4_MSI_P11/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P12/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P13/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P14/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P15/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P16/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P17/tests new= 13 old= 12
+  DIFF /parts/LM_T4_MSI_P18/tests new= 13 old= 12
+  timing /parts/LM_T4_MSI_P11/wall 94.904 110.905
+  timing /parts/LM_T4_MSI_P12/wall 151.603 175.061
+  timing /parts/LM_T4_MSI_P13/wall 165.059 178.541
+  timing /parts/LM_T4_MSI_P14/wall 198.239 212.418
+  timing /parts/LM_T4_MSI_P15/wall 124.153 124.433
+  timing /parts/LM_T4_MSI_P16/wall 170.101 151.315
+  timing /parts/LM_T4_MSI_P17/wall 65.513 59.076
+  timing /parts/LM_T4_MSI_P18/wall 65.96 50.565
+  timing /w01/seconds 21.507 24.192
+  timing /w01/unit_wall 21.53 24.216
+NON_TIMING_DIFFS_VS_CORRECTED 10 NON_TIMING_DIFFS_VS_SEALED 12

@@ -1,0 +1,24 @@
+test_twin_provenance_keys_task_b (lm_t4.test_lm_t4.TestLMT4.test_twin_provenance_keys_task_b) ... FAIL
+
+======================================================================
+FAIL: test_twin_provenance_keys_task_b (lm_t4.test_lm_t4.TestLMT4.test_twin_provenance_keys_task_b)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\Documents\Codex\2026-10-20\lm_t4c_cont3_fix_rerun\old_code_test\lm_t4\test_lm_t4.py", line 169, in test_twin_provenance_keys_task_b
+    self.assertEqual(d["provenance_twin"]["key_mismatch"], 0, d["provenance_twin"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 4 != 0 : {'FOLLOWED': 220, 'CREATED': 0, 'ATTEMPTED': 4, 'key_mismatch': 4, 'crossings': 224}
+
+----------------------------------------------------------------------
+Ran 1 test in 7.782s
+
+FAILED (failures=1)
+fixture draw 0, arm A1: taught provenance {"FOLLOWED": 4672, "CREATED": 4, "ATTEMPTED": 0, "key_mismatch": 0, "crossings": 4676}
+fixture draw 0, arm A1: twin provenance   {"FOLLOWED": 220, "CREATED": 0, "ATTEMPTED": 4, "key_mismatch": 4, "crossings": 224}
+RESULT FAIL tests run 1 failures 1 errors 0
+Traceback (most recent call last):
+  File "C:\Users\wakil\Documents\Codex\2026-10-20\lm_t4c_cont3_fix_rerun\old_code_test\lm_t4\test_lm_t4.py", line 169, in test_twin_provenance_keys_task_b
+    self.assertEqual(d["provenance_twin"]["key_mismatch"], 0, d["provenance_twin"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 4 != 0 : {'FOLLOWED': 220, 'CREATED': 0, 'ATTEMPTED': 4, 'key_mismatch': 4, 'crossings': 224}
+
