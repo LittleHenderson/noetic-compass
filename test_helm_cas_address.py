@@ -38,7 +38,9 @@ except ImportError:                                   # the fixture below also r
 #: unchanged and still hold.
 #: 2026-10-21 (v7.1): the face reader resolves longer phrases and hyphenated names, and an unread clause withdraws the named
 #: stock (the v7 seal's practice finding); the fixture's clause turns change bytes again -> recomputed (83f96a4a... was v7).
-PINNED_OFF_SHA256 = "2c8ba0196921e42ab654cd850032ee5da0e5687b60b809e6cbfa337ea6a01a55"
+#: 2026-10-21 (v7.2): own-words field on parsed lines, unheld-subject face asks, article-led unit lines; recomputed again
+#: (2c8ba019... was v7.1).
+PINNED_OFF_SHA256 = "79e4914a561851d2cd19d04902f38e869787e36db0e984302bbbc6c434fa698c"
 
 FIXTURE_TURNS = [
     ("batch", ("Bread", {"Flour": 10, "Water": 8}, 5, "Flour")),
