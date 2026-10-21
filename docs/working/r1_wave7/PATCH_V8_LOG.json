@@ -1,0 +1,136 @@
+{
+ "a_r1w7_7_checked_present_not_reapplied": true,
+ "edits": [
+  {
+   "file": "r1w7/common_w7.py",
+   "new": "exactly as the code runs at commit b10da2cd (v8, the reader v7.1 fix, thread head = PR #43",
+   "old": "exactly as the code runs at commit 47440415 (v7, the reader-gap build, thread head = PR #4"
+  },
+  {
+   "file": "r1w7/common_w7.py",
+   "new": "PACKAGE_VERSION = \"v8\"",
+   "old": "PACKAGE_VERSION = \"v7\""
+  },
+  {
+   "file": "r1w7/common_w7.py",
+   "new": "HELM_CUT_COMMIT = \"b10da2cd2c78317f5983fa8460ac137c8034556b\"       # v8 (A-R1W7-9): the re",
+   "old": "HELM_CUT_COMMIT = \"4744041503ca6feb044afa05cbb380533de2fcfe\"       # v7 (A-R1W7-8): the re"
+  },
+  {
+   "file": "r1w7/common_w7.py",
+   "new": "HELM_THREAD_BRANCH = \"claude/project-thread-pmbzd6 (thread head b10da2cd = merge of PR #43",
+   "old": "HELM_THREAD_BRANCH = \"claude/project-thread-pmbzd6 (thread head 47440415 = merge of PR #43"
+  },
+  {
+   "file": "r1w7/common_w7.py",
+   "new": "OWNER_LINE_STATUS = \"PROPOSED (PREREGISTRATION_R1W7.md section 8 as superseded by amendmen",
+   "old": "OWNER_LINE_STATUS = \"PROPOSED (PREREGISTRATION_R1W7.md section 8 as superseded by amendmen"
+  },
+  {
+   "file": "r1w7/common_w7.py",
+   "new": "BANDS = {\"REAL\": (2_030_000_001, 2_031_000_000), \"CONV\": (2_032_000_001, 2_033_000_000),\n ",
+   "old": "BANDS = {\"REAL\": (2_024_000_001, 2_025_000_000), \"CONV\": (2_026_000_001, 2_027_000_000),\n "
+  },
+  {
+   "file": "r1w7/common_w7.py",
+   "new": "USED_RANGES = ((\"every earlier band, derivation and reservation (wave 6 v3 up to 1,989,000",
+   "old": "USED_RANGES = ((\"every earlier band, derivation and reservation (wave 6 v3 up to 1,989,000"
+  },
+  {
+   "file": "kit/run_r1w7.py",
+   "new": "HELM_CUT_COMMIT = 'b10da2cd2c78317f5983fa8460ac137c8034556b'   # v8 (A-R1W7-9): the reader",
+   "old": "HELM_CUT_COMMIT = '4744041503ca6feb044afa05cbb380533de2fcfe'   # v7 (A-R1W7-8): the reader"
+  },
+  {
+   "file": "kit/STAGE_R1W7.json",
+   "new": "cut at b10da2cd (v8, the reader v7.1 fix)",
+   "old": "cut at 47440415 (v7, the reader-gap build)"
+  },
+  {
+   "file": "RUN_LIMITS_R1W7.json",
+   "new": "\"package_version\": \"v8\"",
+   "old": "\"package_version\": \"v7\""
+  },
+  {
+   "file": "RUN_LIMITS_R1W7.json",
+   "new": "the owner's line to sign is 'CHAT WAVE 5 at 1 USD' (PREREGISTRATION_R1W7.md section 8 as s",
+   "old": "the owner's line to sign is 'CHAT WAVE 5 at 1 USD' (PREREGISTRATION_R1W7.md section 8 as s"
+  },
+  {
+   "file": "tests_r1w7/test_units_w7.py",
+   "new": "        self.assertEqual(C.USED_RANGES[0][2], 2_029_000_000)",
+   "old": "        self.assertEqual(C.USED_RANGES[0][2], 2_023_000_000)"
+  },
+  {
+   "file": "tests_r1w7/test_units_w7.py",
+   "new": "        self.assertEqual(C.BANDS, {\"REAL\": (2_030_000_001, 2_031_000_000), \"CONV\": (2_032_",
+   "old": "        self.assertEqual(C.BANDS, {\"REAL\": (2_024_000_001, 2_025_000_000), \"CONV\": (2_026_"
+  },
+  {
+   "file": "tests_r1w7/test_units_w7.py",
+   "new": "        self.assertEqual(hc[\"files\"], 167)                # v6: 166; v7 (A-R1W7-8): + test",
+   "old": "        self.assertEqual(hc[\"files\"], 167)                # v6: 166; v7 (A-R1W7-8): + test"
+  },
+  {
+   "file": "tests_r1w7/test_units_w7.py",
+   "new": "        self.assertTrue(SR.blocked(2_023_000_000))\n        self.assertTrue(SR.blocked(2_02",
+   "old": "        self.assertTrue(SR.blocked(2_023_000_000))\n        self.assertTrue(SR.blocked(2_02"
+  },
+  {
+   "file": "README_R1W7.md",
+   "new": "**v8 (amendment A-R1W7-9; status: SEALED, NOT LAUNCHED; waits for the owner's line `CHAT W",
+   "old": "**v7 (amendments A-R1W7-7 and A-R1W7-8; status: SEALED, NOT LAUNCHED; waits for the owner'"
+  },
+  {
+   "file": "README_R1W7.md",
+   "new": "| `helm_now/` | HELM's code under test: 167 files cut by `git show` from commit `b10da2cd`",
+   "old": "| `helm_now/` | HELM's code under test: 167 files cut by `git show` from commit `47440415`"
+  },
+  {
+   "file": "README_R1W7.md",
+   "new": "`TEST_COUNTS_R1W7_v8.json` (`host_exact_suite_list`), asserting the list equals the sealed",
+   "old": "`TEST_COUNTS_R1W7_v7.json` (`host_exact_suite_list`), asserting the list equals the sealed"
+  },
+  {
+   "file": "README_R1W7.md",
+   "new": "--zip <HELM_R1_W7_20261020_SOURCE_R1W7_v8.zip>",
+   "old": "--zip <HELM_R1_W7_20261020_SOURCE_R1W7_v7.zip>"
+  },
+  {
+   "file": "contract/CUSTODIAN_PROCEDURE_R1W7.md",
+   "new": "The line to sign is **`CHAT WAVE 5 at 1 USD`** (20 UTF-8\nbytes, the inner text without quo",
+   "old": "The line to sign is **`CHAT WAVE 5 at 1 USD`** (20 UTF-8\nbytes, the inner text without quo"
+  },
+  {
+   "file": "contract/CUSTODIAN_PROCEDURE_R1W7.md",
+   "new": "## Seed source (PREREGISTRATION_R1W7.md section 10 as superseded by A-R1W7-9, section 21)\n",
+   "old": "## Seed source (PREREGISTRATION_R1W7.md section 10 as superseded by A-R1W7-8, section 20)\n"
+  },
+  {
+   "file": "contract/CUSTODIAN_PROCEDURE_R1W7.md",
+   "new": "1,000,000; seed = band low + slot. Bands (v8): REAL 2,030,000,001-2,031,000,000; CONV 2,03",
+   "old": "1,000,000; seed = band low + slot. Bands (v7): REAL 2,024,000,001-2,025,000,000; CONV 2,02"
+  },
+  {
+   "file": "contract/CUSTODIAN_PROCEDURE_R1W7.md",
+   "new": "1. Check the zip: `sha256(HELM_R1_W7_20261020_SOURCE_R1W7_v8.zip)` equals `package_zip_sha",
+   "old": "1. Check the zip: `sha256(HELM_R1_W7_20261020_SOURCE_R1W7_v7.zip)` equals `package_zip_sha"
+  },
+  {
+   "file": "contract/CUSTODIAN_PROCEDURE_R1W7.md",
+   "new": "e.g. `Documents\\Codex\\2026-10-20\\r1_wave7\\x7v8_custody\\pkg\\` (never over the c51 / c52 / c",
+   "old": "e.g. `Documents\\Codex\\2026-10-20\\r1_wave7\\x7v7_custody\\pkg\\` (never over the c51 / c52 / c"
+  }
+ ],
+ "files_sha256": {
+  "README_R1W7.md": "d9153e22aaa713d00236a60f723578febd42294e35ce01e9c3c9da63ab9af99c",
+  "RUN_LIMITS_R1W7.json": "e6f089c50c1546a2a1a46c72eba6c16d6d9d93feac10ce13c3df00b94978987e",
+  "contract/CUSTODIAN_PROCEDURE_R1W7.md": "1b3214dfd05100070b1048ce0e875f7a273bc4c0ed80fb845c4956d30a182a6b",
+  "kit/STAGE_R1W7.json": "d7641784590f38d7cffabb6ffcf47cf81db306400e9db5e4d501ab3e71512db5",
+  "kit/run_r1w7.py": "8ee0fac30185c0ac4b01f1554e75791c39bd54e7474b65c55978cc4dbe07d42a",
+  "r1w7/common_w7.py": "c15c0aba8e16421d349d5c447b48540dd77e202af93f55a9ed87bfe4953742b2",
+  "tests_r1w7/test_units_w7.py": "23e3787eb14d4cdc923bb4793c1a97dc70ed1084de7310bfa9be68e405f910fb"
+ },
+ "schema": "helm.r1w7.patch-log/1",
+ "version": "v8"
+}
