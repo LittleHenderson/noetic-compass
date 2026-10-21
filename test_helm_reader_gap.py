@@ -121,6 +121,19 @@ class B_FaceReaderTakesTheNamesItIsGiven(unittest.TestCase):
         got = FI.read("the flour is a little weak these days", ["flour", "milk"], ["scone"], names_as_given=True)
         self.assertEqual((got["status"], got["clarify"]["code"]), ("CLARIFY", "FACE_UNREAD"))
 
+    def test_a_longer_phrase_binds_the_held_name(self):
+        """v2.1 (the v7 seal's practice finding): the clause may say "the sifted flour" for the held "flour"."""
+        got = FI.read("I'm new to using the sifted flour", ["flour", "oat milk"], ["oatcake"], names_as_given=True)
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in got["faces"]], [("flour", "WISDOM", "RISING")])
+        got = FI.read("I'm out of practice with the whole oat milk", ["flour", "oat milk"], ["oatcake"], names_as_given=True)
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in got["faces"]], [("oat milk", "WISDOM", "WANING")])
+        got = FI.read("the fresh duck eggs are getting old", ["duck egg", "flour"], ["oatcake"], names_as_given=True)
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in got["faces"]], [("duck egg", "POWER", "WANING")])
+        got = FI.read("I'm new to using the oat milk flour", ["flour", "oat milk"], ["oatcake"], names_as_given=True)
+        self.assertEqual((got["status"], got["clarify"]["code"]), ("CLARIFY", "FACE_WHICH_INGREDIENT"))
+        got = FI.read("I'm out of practice with the corn-starch", ["corn starch", "flour"], ["pudding"], names_as_given=True)
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in got["faces"]], [("corn starch", "WISDOM", "WANING")])
+
     def test_the_longest_name_wins(self):
         got = FI.read("the cream is getting old", ["heavy cream", "cream"], ["scone"], names_as_given=True)
         self.assertEqual([f["name"] for f in got["faces"]], ["cream"])
@@ -155,8 +168,17 @@ class C_WidePathRecordsTheStockThenTheClause(unittest.TestCase):
         loop = taught_loop()
         r = loop.process_turn(STOCK[:-1] + ", but the spelt flour is a little weak these days.", tick=4)
         self.assertEqual(r["loop_status"], "CLARIFY_WIDE_FACE_UNREAD")
-        self.assertEqual(WT._stock_of(loop)["spelt flour"], (Fraction(6), "cup"))
         self.assertEqual(WT._faces_of(loop).stage("spelt flour", "POWER"), "PEAK")        # nothing guessed
+        # v7.1: the named ingredient's amount is withdrawn, so the question ASKS instead of answering as if unsaid
+        self.assertNotIn("spelt flour", WT._stock_of(loop))
+        self.assertEqual(WT._stock_of(loop)["oat milk"], (Fraction(2), "cup"))
+        q = loop.process_turn(QUESTION, tick=5)
+        self.assertNotEqual(q["loop_status"], "SUCCESS_EVALUATED")
+        self.assertIsNone(q.get("output_value"))
+        self.assertEqual(loop.process_turn("We have 6 cups spelt flour.", tick=6)["loop_status"], "STOCK_RECORDED")
+        q2 = loop.process_turn(QUESTION, tick=7)
+        self.assertEqual((q2["loop_status"], Fraction(str(q2["output_value"])), q2["limiting_reagent"]),
+                         ("SUCCESS_EVALUATED", Fraction(2), "oat milk"))
 
 
 class D_WideQuestionAppliesTheFaces(unittest.TestCase):
@@ -283,10 +305,12 @@ class G_EverydayNamesTheLicensedPathRecordsFirst(unittest.TestCase):
         r = loop.process_turn(self.STOCK + ", but the flour is a little weak these days.", tick=4)
         self.assertEqual(r["loop_status"], "INVENTORY_RECORDED")
         self.assertEqual(r["clause_read"]["status"], "CLARIFY")
+        self.assertNotIn("flour", WT._stock_of(loop))                        # v7.1: withdrawn, never answered from
         q = loop.process_turn("How much scone can we make?", tick=5)
-        self.assertEqual(q["loop_status"], "CLARIFY_WIDE_FACE_UNREAD")
+        self.assertNotEqual(q["loop_status"], "SUCCESS_EVALUATED")
         self.assertIsNone(q.get("output_value"))
-        q2 = loop.process_turn("How much scone can we make?", tick=6)       # asked once; then today's answer
+        loop.process_turn("We have 6 cups flour.", tick=6)                   # restated plainly -> today's answer
+        q2 = loop.process_turn("How much scone can we make?", tick=7)
         self.assertEqual((q2["loop_status"], Fraction(str(q2["output_value"]))), ("SUCCESS_EVALUATED", Fraction(2)))
 
     def test_not_a_face_on_the_licensed_recorded_path_changes_nothing(self):
