@@ -1,0 +1,143 @@
+{
+ "items": {
+  "W7_X7_CONV_CHAT_ON/CV34:pg:48804@600651": {
+   "expect": "ANSWER",
+   "family": "S1_WISDOM_STATED",
+   "frozen_scorer_verdict": "RIGHT",
+   "helm_lesson_record_ingredients": [
+    "beef suet",
+    "cracker crumb",
+    "sugar",
+    "egg",
+    "milk"
+   ],
+   "helm_limiting_name": "cracker crumb",
+   "helm_status": "SUCCESS_EVALUATED",
+   "helm_value": "1/4",
+   "key_heads": [
+    "suet",
+    "cracker-crumbs",
+    "sugar",
+    "eggs",
+    "milk"
+   ],
+   "key_limiting_head": "cracker-crumbs",
+   "key_limiting_index": 1,
+   "key_yield": "1/4",
+   "limiting_matches_key": true,
+   "line_of_result": 1,
+   "mapped_rule": "lesson records",
+   "rule_1_lesson_records": {
+    "lines": [
+     1
+    ],
+    "name_in_records": true
+   },
+   "rule_2_plural_fold_of_last_word": {
+    "head_norm": "crumb",
+    "key_head_norms": [
+     "suet",
+     "cracker-crumb",
+     "sugar",
+     "egg",
+     "milk"
+    ],
+    "last_word": "crumb",
+    "unique_hit_lines": []
+   }
+  },
+  "W7_X7_CONV_LOOP_ON/CV34:pg:48804@600651": {
+   "expect": "ANSWER",
+   "family": "S1_WISDOM_STATED",
+   "frozen_scorer_verdict": "RIGHT",
+   "helm_lesson_record_ingredients": [
+    "beef suet",
+    "cracker crumb",
+    "sugar",
+    "egg",
+    "milk"
+   ],
+   "helm_limiting_name": "cracker crumb",
+   "helm_status": "SUCCESS_EVALUATED",
+   "helm_value": "1/4",
+   "key_heads": [
+    "suet",
+    "cracker-crumbs",
+    "sugar",
+    "eggs",
+    "milk"
+   ],
+   "key_limiting_head": "cracker-crumbs",
+   "key_limiting_index": 1,
+   "key_yield": "1/4",
+   "limiting_matches_key": true,
+   "line_of_result": 1,
+   "mapped_rule": "lesson records",
+   "rule_1_lesson_records": {
+    "lines": [
+     1
+    ],
+    "name_in_records": true
+   },
+   "rule_2_plural_fold_of_last_word": {
+    "head_norm": "crumb",
+    "key_head_norms": [
+     "suet",
+     "cracker-crumb",
+     "sugar",
+     "egg",
+     "milk"
+    ],
+    "last_word": "crumb",
+    "unique_hit_lines": []
+   }
+  },
+  "W7_X7_NOISE_CHAT_ON/CV34:pg:48804@600651": {
+   "expect": "ANSWER",
+   "family": "S1_WISDOM_STATED",
+   "frozen_scorer_verdict": "RIGHT",
+   "helm_lesson_record_ingredients": [
+    "beef suet",
+    "cracker crumb",
+    "sugar",
+    "egg",
+    "milk"
+   ],
+   "helm_limiting_name": "cracker crumb",
+   "helm_status": "SUCCESS_EVALUATED",
+   "helm_value": "1/4",
+   "key_heads": [
+    "suet",
+    "cracker-crumbs",
+    "sugar",
+    "eggs",
+    "milk"
+   ],
+   "key_limiting_head": "cracker-crumbs",
+   "key_limiting_index": 1,
+   "key_yield": "1/4",
+   "limiting_matches_key": true,
+   "line_of_result": 1,
+   "mapped_rule": "lesson records",
+   "rule_1_lesson_records": {
+    "lines": [
+     1
+    ],
+    "name_in_records": true
+   },
+   "rule_2_plural_fold_of_last_word": {
+    "head_norm": "crumb",
+    "key_head_norms": [
+     "suet",
+     "cracker-crumb",
+     "sugar",
+     "egg",
+     "milk"
+    ],
+    "last_word": "crumb",
+    "unique_hit_lines": []
+   }
+  }
+ },
+ "schema": "helm.r1w7.cv34-mapping/1"
+}
