@@ -50,3 +50,13 @@ with a repaired reader). A fresh draw (package v7, job c55) is the only way to a
 
 An instrument amendment; `PROPOSED` until the forked session seals it into v7 and the custodian draws under it. No HELM
 claim moves. Cost 0 USD.
+
+## 6. Effect size, measured on the RB-W1T practice draw (128 items; `deps/HELM_RBW1T_20261019/practice/PRACTICE_DRAW_V2.json`)
+
+Counts only, by program, 2026-10-21. The broad wording of the design packet ("more than one quantity span") would tag
+20 of 128 items (52 lines, of which 45 are parenthesised equivalents such as "2 cups (250 g) flour", 2 are ranges or
+hyphenated numbers, 5 are the two-ingredient shape). This amendment's rule, as written in `multi_qty_w7.py` (parentheses
+removed first, a separator required between the leading amount and the second, the survey's form gate), tags **6 of 128
+items, one line each**, all six ANSWER-keyed and representable under the frozen key: they would become `NOT_SCORED`
+(6 of 120 representable, 5 percent). The wave-7 package's own `test_practice_draw_rederives_the_published_pools` compares
+pool ids, not keys, so it is unaffected; the frozen RB-W1T neighbour is not edited, so its own practice fixture stands.
