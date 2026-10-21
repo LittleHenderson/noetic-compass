@@ -3877,6 +3877,50 @@ to `CHAT_WAVE_EARNED_KEEP` is HELM's reader on real recipe lines (the §7.105 cl
 - **`NOT LICENSED`:** the chat on any exam; "the chat works"; §7.98's "what a pass would license" (it needs `CHAT_WAVE_EARNED_KEEP`). **Open (the owner's):** the reader gap (the owner's next roadmap item): per-item diagnosis of the 2 asks (free), a general-rule fix in the wide reader with tests, then a fresh sealed draw and a new word if a fifth round is wanted. Not proposed here.
 - **Artifacts:** `Documents/Codex/2026-10-20/r1_wave7/run_c54_r1w7v6_20261021/` (`RUN_RESULT_R1W7V6_C54.md`, reading, checks, payload, `job_record/`), `x7v6_custody/`, `approval_v6/`, `make_c54_kit.py`, `C54_VALUES.json`; repo copies `docs/working/r1_wave7/`.
 
+### 7.109 HELM-R1 wave 7 READER-GAP DIAGNOSIS AND DESIGN PACKET (0 USD, laptop, by program, no exam text): c54's two unexplained asks are a BOOK LINE HOLDING TWO AMOUNTS that the key keeps as one lesson and the wide reader reads as two ingredients (HELM's ask honest; the fix is the custodian's representability rule, PROPOSED); the 32 clause-bearing dialogue items fail because the face reader's name table holds only 8 everyday words while its 31 lexicon rows already fit 28 of 28 face clauses with the name slot open; design D1–D7 hashed before any code; nothing changed in code; no claim moved (2026-10-21 PDT)
+
+**Said plainly first.** The owner's roadmap step 2 after c54 (§7.108): find why the chat still asks on two real recipes, then design the
+fix for the wide reader's biggest gap. Both were done by program over the c54 and c52 unit files and the sealed v6 package, with no
+exam line, pantry line, dialogue line or ingredient name copied anywhere. **Result 1 (MEASURED):** the two c54 asks
+(`RW:pg:52800@102023`, `RW:pg:38193@150079`) are NOT the c52 class. Each has one book line that carries a second amount after a comma or
+"and"; the custodian's key keeps that line as ONE lesson named by its first head (the tail is ignored, never runs out, never doubled), the
+wide reader's v3 rule (cut at a separator only where a new amount begins) reads TWO ingredients; the second is never taught, so the brain
+asks, names it, and does not guess. Across all 128 items this shape appears exactly twice — the two asks — and on no answered item. A HELM rule
+that merged the second amount would be a special case that breaks ordinary lists; the general fix is the custodian's `representable()` rule
+refusing a raw line with more than one quantity span (`MULTI_QTY`), an instrument amendment (A-R1W7-7) for a fresh draw only (the sealed c54
+data may not be re-read). **Result 2 (MEASURED):** every one of the 32 clause-bearing dialogue items of c54 ends `CLARIFY UNREAD_CLAUSE` in the
+wide reader and an ingredient refusal in the licensed one, so no stock is recorded and the question asks (S1 6, S2 6, S6 2, S7 4 scored
+UNDETERMINED; S3/S4/S5 14 RIGHT only because an ask is an ask). The face reader `helm_faces_in` v1 reads the generator's own forms when the
+name is an everyday word, but its name table is hard-wired to 8 ingredient words and 3 product words; with the name slot left open its 31
+lexicon rows match 28 of 28 S1–S6 clauses of c54 and 0 of 4 S7 clauses. Wave-6 readings c48 and c50 show the same four families undetermined:
+structural, not a draw. The R4 paraphrase (2 of 64) is `NOT_MINE` because `WITNESS_RX` admits no leading time phrase and `END_RX` no "the X ran
+out first" form. A fourth gap is sized but not designed: 15 of 128 real recipes lose every lesson to units outside the 20-unit table.
+**Design (PROPOSED, hashed before code):** D1 clause split in the wide reader (stock recorded, clause carried); D2 the face reader takes the
+names it is given (default byte-identical); D3 the wide path stores faces under wide names in the triad table, ignores a no-cue clause with a
+trace, asks on an unreadable one; D4 the wide question applies η = min of the three face values (reusing `helm_triad`), recipe Purpose absent
+→ ask, ingredient Purpose absent → yield 0 → ask; D5 the past-tense lesson paraphrase; D6 the custodian's `MULTI_QTY` rule (owner's word);
+D7 units outside the table: OPEN. Six test groups on the author's own sentences. **Nothing is licensed by this section; no code changed; the
+licensed brain, the lexicon and the K4 rule are untouched.**
+
+| Item | Value |
+|---|---|
+| Diagnosis | `run_c54_r1w7v6_20261021/K4_ITEM_DIAGNOSIS_C54.md` sha256 `368cc65d55216f13143376d836d03b12e7d2bb74f7e0428b7e0fae9f597b7cef`; repo copy `docs/working/r1_wave7/K4_ITEM_DIAGNOSIS_C54.md` |
+| Design packet | `design_reader_gap/READER_GAP_DESIGN_PACKET_R1W7_20261021.md` sha256 `26b17c499f073243f150858665e81a0a2acc1b04e1edfffc754a8fd3a8ad7108`; repo copy `docs/working/r1_wave7/READER_GAP_DESIGN_PACKET_R1W7_20261021.md`; `design_reader_gap/PACKET_HASH.txt` |
+| Inputs (read by program) | c54 units `W7_X7_REAL_CHAT_ON.json` `d3577f70…`, `W7_X7_REAL_LOOP_ON.json` `48567018…`, `W7_X7_CONV_CHAT_ON.json` `d24ef939…`; c52 `W7_X7_REAL_CHAT_ON.json` `a09b3eb4…`; sealed v6 zip `387577de…` (`helm_wide_turn.py` `ba9ecf6c…`, `helm_faces_in.py` `88b18f98…`, `helm_faces_lexicon.json` `7f51f4f8…`, 31 rows, 26 cue words); `keys_rbw1t.py`, `xreal/mapping.py`, `xreal/grammar.py`, `r1w6/gen_conv.py`, `r1w3/gen_live.py` (code only); wave-6 readings c48, c50 |
+| The two c54 asks | item A: 3 key lessons, 4 names bound (all with exact amounts), 3 ran out, 1 never; item B: 6 key lessons, 7 names bound, 6 ran out, 1 never; both `UNDETERMINED_CLARIFY`, writes 0; the same in `LOOP_ON`; the chat's last reply names the untaught ingredient, says it cannot say yet, does not guess |
+| Whole-exam check (c54, 128 items) | one more amount piece than key lines: 2 (the two asks); equal: 97 answered + 15 asked with no lesson + 2 asked with one refused lesson; 12 counted one short by the counter, all answered |
+| All 19 asks on `CHAT_ON` | `CLARIFY_ENGLISH_UNKNOWN_PRODUCT` with no lesson admitted 15 (stock refusals: `UNKNOWN_INGREDIENT` 10, `NO_INGREDIENT_NAMED` 3, `NOT_CCE` 2); `UNDETERMINED_CLARIFY` with one refused lesson 2; all-admitted 2 (the items) |
+| The 15 zero-lesson items | wide reader on 98 lesson turns: `UNIT_NOT_IN_TABLE` 96, `NO_PRODUCT` 2 → gap G4 (stage 1c OFF, `ENGINEERED-NOT-VALIDATED`) |
+| Dialogue clause check (c54, 32 S-items) | wide reader `UNREAD_CLAUSE` 32 of 32; licensed `UNKNOWN_INGREDIENT` 27 / `NO_INGREDIENT_NAMED` 5; lexicon rows with the name slot open: S1 6 (Wisdom RISING 5, WANING 1), S2 6 (Power RISING 4, WANING 2), S3 6, S4 4 (recipe Purpose ABSENT), S5 4 (ingredient Purpose ABSENT), S6 2, S7 0 of 4 (no cue) |
+| Face reader on the generator's own forms (author sentence, everyday name) | lexicon-covered forms 13 of 14 `FACES` (1 Power-PEAK form `NONE`); cue paraphrases 4 of 4 `FACE_UNREAD`; no-cue paraphrases 4 of 4 `NONE`; purpose-absent 5 of 5 `FACES`; not-a-face 4 of 4 `NONE` |
+| R4 paraphrase (author sentences) | canonical `WITNESS`; "Yesterday … , and the X ran out first." `NOT_MINE`; "Last night we baked … and ran out of X." `NOT_MINE` |
+| Cost | 0 USD; laptop only; no AWS |
+
+- **Claim states:** the diagnosis and the measurements are facts (MEASURED). The design is PROPOSED: no line of it exists in code. D6 changes the
+  instrument and needs the owner's typed word before it is written; D1–D5 change HELM and are built FIX FIRST with tests before any reseal.
+- **`NOT LICENSED`:** everything in §7.108's list, unchanged. **Open (the owner's):** the word on D6; the word on building D1–D5; G4.
+- **Artifacts:** as the table; this section's PR carries the repo copies.
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -4169,6 +4213,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-21 | **HELM-R1 WAVE 7 READER-GAP DIAGNOSIS + DESIGN PACKET (new §7.109), 0 USD.** c54's two asks = a book line with two amounts (key keeps one lesson, reader reads two; HELM's ask honest; fix = custodian `MULTI_QTY` rule, PROPOSED, A-R1W7-7). The 32 clause-bearing dialogue items fail at the face reader's 8-word name table, not its lexicon (28 of 28 face clauses fit a row with the name slot open; S7 0 of 4). R4 paraphrase: no time phrase / subject form in the regexes. G4 sized: 15 of 128 recipes lost to units outside the table. Design D1–D7 hashed before code; nothing changed in code; no claim moved. | `docs/working/r1_wave7/K4_ITEM_DIAGNOSIS_C54.md` `368cc65d…`; `docs/working/r1_wave7/READER_GAP_DESIGN_PACKET_R1W7_20261021.md` `26b17c49…` |
 | 2026-10-21 | **HELM-R1 WAVE 7 ROUND 4 — platform-safe OFF pin test + v6 RESEAL with the host's exact suite list run from the seal, NOT LAUNCHED (new §7.107; owner order "Fourth chat round: fix the platform-bound pin test, run the host's exact test list from the seal, reseal v6 at 0 USD, then give me the line"; laptop, 0 USD; no claim moved).** c53's one false row = a test fingerprint carrying the licensed brain's folder path (host `6bf323ad…` reproduced exactly on the laptop by reporting the host's path, on base `159c7d2b` too); fixed by PR #429 commit `ad4fde73` (`helm_test_pins` strips `brain_dir` / `receipt_hash`, pin `312ddfd6…`, 9 hygiene tests; first pass `3dae274f` insufficient by diff, superseded; builder's own `62d559a8` / PR #427 withdrawn). v6 zip `387577de…`, freeze `3c7a9f3d…`, cut 166 files, host list 11 names run from the seal `Ran 245, OK (skipped=1)`, block `X7v5_c53` (20 lists, 1,850 ids), bands 2,012 / 2,014 / 2,016 M, line `CHAT WAVE 4 at 1 USD`; practice run8 = run7 (0 differing keys). v5 `VOID_SUPERSEDED_BY_V6`. | `docs/working/r1_wave7/` (v6 records, `PIN_TEST_DIAGNOSIS.md`, `TEST_RECORD_R1W7.md` §11) |
 | 2026-10-21 | **HELM-R1 WAVE 7 v6 "CHAT WAVE" FOURTH ROUND — job c54 (new §7.108): verdict `PASS`, word `CHAT_WAVE_NO_GAIN` 🟧; 0.02 USD.** Owner line `CHAT WAVE 4 at 1 USD`; v6 zip `387577de…` (cut `ad4fde73`); fresh exam (23 of 23, 0 overlap with three spent exams). One attempt, 14 of 14 units, 245 + 34 tests OK ON THE HOST. Frozen reader: 8 of 8 instrument rows, 10 of 10 hard gates — the first fully clean instrument of the four runs — marks K1 91/94, K3 0 wrong, NH-CHAT lost 0/0, P 0, N 0 true; **K4 missed by 2 unexplained asks** (same in LOOP_ON: brain-side, the §7.105 class on other lines). Nothing licensed. Cleanup three ways; ledger 113.30 / 86.70 unreserved. | `Documents\Codex\2026-10-20\r1_wave7\run_c54_r1w7v6_20261021\RUN_RESULT_R1W7V6_C54.md`; `R1_W7_READING.json` `9bf8a2b6…`; `docs/working/r1_wave7/` |
 | 2026-10-20 | **HELM-R1 WAVE 7 v5 "CHAT WAVE" THIRD ROUND — job c53 (new §7.106): verdict `INSTRUMENT_ERROR`, word `INCONCLUSIVE` ⬜🟥; 0.02 USD.** Owner line `CHAT WAVE 3 at 1 USD`; v5 zip `4b54a077…` (the forked session's reseal with the c52 ask fixed, §7.105 / PR #425); fresh exam (23 of 23, 0 overlap with both spent exams). One attempt, 14 of 14 units, wave-7 suites OK; **HELM's own suites on the host Ran 236, 1 FAILED** (PR #417's byte pin of OFF records: passes on the laptop and the thread head, fails on the Ubuntu / Python 3.12 host; first time that file ran on a host) → I6 false. All 10 gates true; ALL SIX MARKS TRUE (K1 100/101, K3 0 wrong, **K4 0 unexplained asks**, NH-CHAT lost 0/0, P 0, N 0). Nothing licensed. Cleanup three ways; ledger 113.28 / 86.72 unreserved. | `Documents\Codex\2026-10-20\r1_wave7\run_c53_r1w7v5_20261020\RUN_RESULT_R1W7V5_C53.md`; `R1_W7_READING.json` `c0362a6b…`; `docs/working/r1_wave7/` |
