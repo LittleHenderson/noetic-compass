@@ -1,0 +1,25 @@
+{
+ "checks": {
+  "approval_binds_freeze": true,
+  "approval_binds_zip": true,
+  "approval_json_sha256": true,
+  "c47_c50_readings_present": true,
+  "carrier_has_no_key_file": true,
+  "carrier_pins_sha256": true,
+  "carrier_zip_sha256": true,
+  "freeze_member_count": 194,
+  "freeze_members_ok": true,
+  "freeze_sha256": true,
+  "host_index_present": true,
+  "manifest_sha256": true,
+  "neighbours_extracted_by_hash": true,
+  "owner_line_18_bytes": true,
+  "owner_line_file_bytes": true,
+  "owner_line_sha256": true,
+  "receiver_check_sha256": true,
+  "sealed_handoff_sha256": true,
+  "seed_source_recomputed": true,
+  "zip_sha256": true
+ },
+ "seed_source_sha256": "767f2f7267bce63b9898d34736909d87f03020e51f7ed53ca94bd301d2c1a49b"
+}
