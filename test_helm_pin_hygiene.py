@@ -78,6 +78,33 @@ class B_PinnedFixtureCarriesNoMachineMaterial(unittest.TestCase):
 
 
 class C_PinIsInvariantToTheMachineFolders(unittest.TestCase):
+    CODE = ("import json, test_helm_cas_address as T\n"
+            "with T.switches(cas='0', units_note=None):\n"
+            "    print(T.fixture_sha256(T.fixture_records()))\n")
+
+    def _pin(self, cwd, env):
+        out = subprocess.run([sys.executable, "-X", "utf8", "-B", "-c", self.CODE], cwd=cwd, env=env, capture_output=True, text=True, timeout=600)
+        self.assertEqual(out.returncode, 0, out.stderr[-1500:])
+        sha = out.stdout.strip().splitlines()[-1]
+        self.assertRegex(sha, r"^[0-9a-f]{64}$")
+        return sha
+
+    def test_same_hash_when_the_licensed_brain_folder_moves_and_is_renamed(self):
+        """The c53 failure, reproduced and refused: the brain folder under the HOST's name and parent (.../sources/w1/HELM_R1_W1_20261015)
+        must give the same pin as the laptop's default folder (.../HELM_R1_W1_20261015_v3). This covers brain_dir AND the receipt hashes
+        the loop computes over it."""
+        import shutil
+        import helm_brain_canonical as HBC
+        default_dir = os.environ.get(HBC.BRAIN_DIR_ENV) or HBC.DEFAULT_BRAIN_DIR
+        self.assertTrue(os.path.isdir(default_dir), default_dir)
+        with tempfile.TemporaryDirectory() as td:
+            moved = os.path.join(td, "sources", "w1", "HELM_R1_W1_20261015")      # the host's layout and name
+            shutil.copytree(default_dir, moved)
+            base_env = dict(os.environ, PYTHONPATH=HERE, PYTHONDONTWRITEBYTECODE="1")
+            a = self._pin(HERE, dict(base_env, HELM_SESSION_DIR=os.path.join(td, "s_default"), HELM_CANONICAL_BRAIN_DIR=default_dir))
+            b = self._pin(td, dict(base_env, HELM_SESSION_DIR=os.path.join(td, "s_moved"), HELM_CANONICAL_BRAIN_DIR=moved))
+        self.assertEqual(a, b, "the pinned hash depends on the licensed brain folder's path or name (the c53 failure)")
+
     def test_same_hash_from_two_session_dirs_and_two_cwds(self):
         code = ("import json, test_helm_cas_address as T\n"
                 "with T.switches(cas='0', units_note=None):\n"
@@ -99,7 +126,18 @@ class D_TheCanonicalizerItself(unittest.TestCase):
         a = {"trace": [{"brain": {"brain_dir": r"C:\Users\someone\Documents\Codex\2026-10-15\r1_wave1\HELM_R1_W1_20261015_v3"}}]}
         b = {"trace": [{"brain": {"brain_dir": "/opt/helm-shared-r2/sources/w1/HELM_R1_W1_20261015_v3"}}]}
         self.assertEqual(P.canon(a), P.canon(b))
-        self.assertEqual(P.neutral(a)["trace"][0]["brain"]["brain_dir"], "<path>/HELM_R1_W1_20261015_v3")
+        self.assertEqual(P.neutral(a)["trace"][0]["brain"]["brain_dir"], "<stripped:brain_dir>")
+        self.assertEqual(P.neutral({"f": r"C:\Users\x\y\HELM_R1_W1_20261015_v3"})["f"], "<path>/HELM_R1_W1_20261015_v3")
+
+    def test_machine_bound_leaves_are_stripped(self):
+        obj = {"trace": [{"brain": {"brain_dir": "/opt/x/HELM_R1_W1_20261015", "version": "v3"}, "receipt_hash": "83dffbdaa2cd2c52"}],
+               "results": [{"receipt_hash": "5d3e5e22888cb84c", "loop_status": "ok"}]}
+        n = P.neutral(obj)
+        self.assertEqual(n["trace"][0]["brain"]["brain_dir"], "<stripped:brain_dir>")
+        self.assertEqual(n["trace"][0]["receipt_hash"], "<stripped:receipt_hash>")
+        self.assertEqual(n["results"][0]["receipt_hash"], "<stripped:receipt_hash>")
+        self.assertEqual(n["results"][0]["loop_status"], "ok")
+        self.assertEqual(n["trace"][0]["brain"]["version"], "v3")
 
     def test_relative_names_and_plain_text_are_untouched(self):
         for s in ("rb/brain.py", "Topic: Ω_Bread.", "We have 2 or 3 cups sugar.", "flour", "", "3/4"):

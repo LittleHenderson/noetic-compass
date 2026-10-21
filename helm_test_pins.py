@@ -7,7 +7,8 @@ Every stored pin of runtime records must therefore be taken over a machine-neutr
 that defines that form, and `test_helm_pin_hygiene.py` refuses any test pin that bypasses it or any fixture that still carries
 machine-bound material.
 
-    neutral(obj)        -> the same structure with machine-bound strings replaced (absolute paths -> their last component; see RULES)
+    neutral(obj)        -> the same structure with machine-bound strings replaced (absolute paths -> their last component) and the
+                           machine-bound-by-construction leaves STRIP_LEAVES (brain_dir, receipt_hash) stripped; see RULES
     canon(obj)          -> compact, sorted, machine-neutral JSON text
     canon_sha256(obj)   -> sha256 of canon(obj)
     offending(text)     -> the list of machine-bound substrings still present in a canon text (empty = neutral)
@@ -26,8 +27,16 @@ ABS_PATH_RX = re.compile(r"^(?:[A-Za-z]:[\\/]|\\\\|/(?:home|Users|tmp|opt|mnt|va
 #: words that name a machine, a platform or an interpreter build and must never be hashed into a pin
 MACHINE_WORDS = ("win32", "linux", "darwin", "cygwin", "Windows", "Ubuntu", "x86_64", "AMD64", "Python 3.", "python3.", "CPython")
 
+#: leaves that are machine-bound BY CONSTRUCTION and are therefore dropped from pinned material (second pass, 2026-10-21):
+#:   brain_dir     - the licensed brain folder's absolute path; its LAST COMPONENT differs too (laptop ..._v3, host HELM_R1_W1_20261015)
+#:   receipt_hash  - computed inside the loop over rows that contain brain_dir, before any test canon can run; no post-hoc
+#:                   canonicaliser can neutralise it. Receipt coverage stays in test_receipt_hash_identical_on_and_off (ON vs OFF,
+#:                   one environment), which is the right place for it.
+STRIP_LEAVES = ("brain_dir", "receipt_hash")
+
 RULES = {
     "PATH-NEUTRAL": "an absolute path is replaced by its last component (the folder or file name), so Windows and POSIX forms hash alike",
+    "STRIP-LEAVES": "brain_dir and receipt_hash leaves are replaced by '<stripped:NAME>' because they are machine-bound by construction (see STRIP_LEAVES)",
     "NO-MACHINE-WORDS": "platform, OS and interpreter build words may not appear in pinned material",
     "NO-HOME": "the current user's home directory and user name may not appear in pinned material",
     "SORTED-COMPACT": "JSON with sorted keys, compact separators, ensure_ascii=False, default=str",
@@ -44,7 +53,7 @@ def _neutral_str(s: str) -> str:
 def neutral(obj: Any) -> Any:
     """Return obj with every machine-bound string replaced by its neutral form (recursively)."""
     if isinstance(obj, dict):
-        return {str(k): neutral(v) for k, v in obj.items()}
+        return {str(k): ("<stripped:%s>" % k if str(k) in STRIP_LEAVES else neutral(v)) for k, v in obj.items()}
     if isinstance(obj, (list, tuple)):
         return [neutral(v) for v in obj]
     if isinstance(obj, str):
