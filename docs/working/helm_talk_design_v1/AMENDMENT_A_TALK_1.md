@@ -106,6 +106,8 @@ The owner's words: "USE IT'S C-WORLD OF THE 40 ELEMENTS TO DENOTE THE CORRECT EM
 Owner's words, verbatim: "SEE THIS IS WHY I WANT A TRANSFORMER TRAINED ON THE 40 ELEMENTS BECAUSE THAT CAN CONTRIBUTE TO THE NUANCE HUMAN LIKE TONE THAT'S NEED AND HELM DOESN'T HAVE TO DEPEND ON DETERMINISTIC TEMPLATED PHRASES AND WORDS AND SENCTENCES FOR RESPONSES".
 
 ### M.1 What it is, plainly
+The statement of intent the owner ordered kept for whoever comes after is `INTENT_MOUTH_TRANSFORMER_20261021.md` in this folder, sha256 `e8bf17dc90e719fe8602fcd9b0baf39b2fee6e9ed2e05bc61e24b629685c061a`; it is rendered in full on the HELM Hub roadmap page. This Part M is its formal form.
+
 The CTT is a translator with CAS symbols on one side and English on the other, and it can be trained to go both ways. Until now it was only ever trained English→CAS (the ears). Part M trains the same kind of model CAS→English (the mouth): it takes the brain's **checked receipt** (the facts, amounts, names and status the brain actually recorded) plus the turn's **CAS tags** that `helm_cas_address.py` already stamps on records (Foundation F1–F7, Domain P/C/E/O including the Cognitive-domain state among the 40 as `^nC`, Register `|T` / `|A` / `|f` / `|E`, as SPEC §7.97's follow-up records them), and it writes the English reply. The tags are the tone input: the same receipt under `^3C|f` and under `^1C|A` should read differently. This is the owner's "trained on the 40 elements" in the only place HELM has them stamped today.
 
 ### M.2 The safety rule: words, never facts

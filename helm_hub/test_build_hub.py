@@ -167,6 +167,17 @@ class BuildTests(unittest.TestCase):
         self.assertGreaterEqual(r.count("INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED"), 9)
         self.assertIn("LLM_WRITTEN_ONLY", r)
 
+    def test_roadmap_carries_the_statement_of_intent_in_full(self):
+        r = (b.SITE / "roadmap.html").read_text(encoding="utf-8")
+        self.assertIn('id="intent"', r)
+        self.assertIn("the mouth may choose words, never facts", r)
+        src = (b.REPO / "docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md").read_text(encoding="utf-8")
+        for line in src.splitlines():
+            if line.strip() and not line.startswith(("#", "---", "`")):
+                self.assertIn(b.esc(line.strip())[:40], r, line[:40])
+        self.assertIn('roadmap.html#intent', (b.SITE / "index.html").read_text(encoding="utf-8"))
+        self.assertIn('roadmap.html#intent', (b.SITE / "files.html").read_text(encoding="utf-8"))
+
     def test_negatives_are_on_the_scorecard(self):
         r = (b.SITE / "results.html").read_text(encoding="utf-8")
         for w in ("S_UNSAFE_ON_REAL", "EARS_HARMED", "GREW_WRONG_KIND", "WIDE_LEARNING_DID_NOT_EARN_KEEP"):

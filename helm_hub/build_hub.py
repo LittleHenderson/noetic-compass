@@ -966,7 +966,7 @@ are a reading aid only. The words in grey boxes are the record's own words. {T('
 <h2>Where to go next</h2>
 <div class="grid">
 <div class="card"><a href="thinking.html">How HELM thinks</a><br><span class="muted small">Recipes, asking, receipts and the Eye, with the precise definitions.</span></div>
-<div class="card"><a href="files.html#start">Next agent: start here</a><br><span class="muted small">Every file and folder with its full path, and the rules to read first.</span></div>
+<div class="card"><a href="files.html#start">Next agent: start here</a><br><span class="muted small">Every file and folder with its full path, and the rules to read first. Then read the owner's <a href="roadmap.html#intent">statement of intent for whoever comes after</a> (2026-10-21): the transformer mouth trained on the 40 elements; intended, nothing built.</span></div>
 <div class="card"><a href="build.html">The build, animated</a><br><span class="muted small">One turn as wired today, and the intended next wiring.</span></div>
 <div class="card"><a href="architecture.html">Architecture</a><br><span class="muted small">Every part, its parameter count, and what HELM is not.</span></div>
 <div class="card"><a href="results.html">Results scorecard</a><br><span class="muted small">Every result, negatives included.</span></div>
@@ -1715,6 +1715,21 @@ def p_roadmap(S: dict) -> str:
          "Nothing. The ear has only ever been trained English to CAS. The design is Part M of amendment A-TALK-1 ({s7110}): every number and name must be copied from the receipt; the existing voice guard rejects any sentence that names a fact the receipt does not hold and the template answers instead; 0 invented facts is a must-hold check. The owner's words: \"SEE THIS IS WHY I WANT A TRANSFORMER TRAINED ON THE 40 ELEMENTS BECAUSE THAT CAN CONTRIBUTE TO THE NUANCE HUMAN LIKE TONE ... HELM DOESN'T HAVE TO DEPEND ON DETERMINISTIC TEMPLATED PHRASES\".",
          "Train it on (receipt + tags to English) pairs, rule-made and AI-written from several model families; score it against today's templated voice on the same turns: same records exactly, no fewer plain replies, varied wording on repeated receipts, and a tone that matches the key's state label at least 8 of 64 turns more often; about 2.6 USD together with the ear's retraining, inside TALK TRAIN at 3 USD if the sealed count fits, else a separate line."),
     ]
+    intent_path = REPO / "docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md"
+    if not intent_path.exists():
+        raise SystemExit("BUILD STOP: the statement of intent file is missing: " + rel(intent_path))
+    intent_raw = intent_path.read_bytes()
+    INTENT_SHA = hashlib.sha256(intent_raw).hexdigest()
+    intent_parts = []
+    for para in re.split(r"\n\s*\n", intent_raw.decode("utf-8").replace("\r\n", "\n").strip()):
+        para = para.strip()
+        if para == "---":
+            intent_parts.append("<hr>")
+        elif para.startswith("# "):
+            intent_parts.append(f"<p><strong>{esc(para[2:])}</strong></p>")
+        else:
+            intent_parts.append(f"<p>{md(para)}</p>")
+    intent_html = "".join(intent_parts)
     S_ = {"s7049": slink("7.49"), "s7060": slink("7.60"), "s7087": slink("7.87"), "s7090": slink("7.90"), "s7108": slink("7.108"),
           "s7109": slink("7.109"), "s7110": slink("7.110"), "s7111": slink("7.111"),
           "noetic": T("Noetic", "Noetics"), "domain": T("Domain", "level"), "register": T("Register")}
@@ -1749,6 +1764,14 @@ of at least three families, labelled LLM_WRITTEN, never by the owner, who review
 baseline (the cheapest trick that does the same job without the new piece). <em>Licensed:</em> only by the {T('frozen reader', 'frozen reader')}'s
 own word, with a {T('claim ceiling')} (for the talk exam: LLM_WRITTEN_ONLY, never "human-written" or "real people"). The two owner lines on record,
 TALK TRAIN at 3 USD and TALK EXAM at 1 USD, each bind to a future sealed package that does not exist yet; nothing has been spent.</p>
+
+<h2 id="intent">Statement of intent for whoever comes after (2026-10-21)</h2>
+<p><strong>INTENDED / NOTHING BUILT / NOTHING LICENSED.</strong> The owner ordered this statement kept on the hub for the instances and
+models that take over this build after the ones writing today. It is the file
+<code>docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md</code> (sha256 <code>{INTENT_SHA}</code>), rendered in full
+and word for word below; nothing in it is a result. It names the {T('CTT')} and the {T('receipt', 'receipt')} tags; the one safety rule it
+sets is that the mouth may choose words, never facts.</p>
+<blockquote class="verbatim">{intent_html}</blockquote>
 
 <h2 id="chat">"Can I chat with it?"</h2>
 <div class="card">
@@ -2452,6 +2475,7 @@ Repo paths are shown under the main checkout <code>{esc(DISPLAY_REPO)}</code>; t
 <li>Update the spec sheet in the same commit as any result. Never delete a negative. Use only the legend's {T('claim status')} words.</li>
 <li>Heavy work goes to {T('AWS')}; record each job's source, purpose, machine, limits and cleanup in the ledger and job kit. Back up every run to <code>D:\\tksCAS-archive\\</code> with three hash passes.</li>
 <li>End every owner update with the owner's three headings, in order: WHAT IS CURRENTLY HAPPENING, FOR WAKIL TO DO, NEXT (each with the owner's chosen marker; standing format order in the approvals record).</li>
+<li>Read the owner's <a href="roadmap.html#intent">statement of intent for whoever comes after</a> (2026-10-21; <code>docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md</code>): the transformer mouth trained on the 40 elements, which may choose words, never facts. Intended; nothing built; nothing licensed.</li>
 </ol>
 {table("A")}
 
