@@ -1,0 +1,111 @@
+{
+ "added_by_v7_1": [],
+ "all_new_statuses_count_as_asks": true,
+ "asking_exact": [
+  "UNDETERMINED_CLARIFY",
+  "BRAIN_UNDETERMINED",
+  "CONFLICT_UNDETERMINED",
+  "REPAIRED_RETEACH_NEEDED",
+  "VERIFIED_NO_RECIPE_CONTENT",
+  "STATED_RECIPE_NOT_TAKEN",
+  "UNDETERMINED_UNKNOWN_PRODUCT"
+ ],
+ "asking_prefix": [
+  "CLARIFY",
+  "TEACH_REFUSED_",
+  "VALVE_HALT_",
+  "REFUSE_",
+  "FACE_REFUSED_"
+ ],
+ "every_v8_wide_status_is_an_ask": {
+  "CLARIFY_WIDE_DISH_NAME_NOT_BOUND": true,
+  "CLARIFY_WIDE_FACE_NEGATED": true,
+  "CLARIFY_WIDE_FACE_NOT_HELD": true,
+  "CLARIFY_WIDE_FACE_REFUSED": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN": true,
+  "CLARIFY_WIDE_FACE_UNREAD": true,
+  "CLARIFY_WIDE_FACE_WHICH_INGREDIENT": true,
+  "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT": true,
+  "CLARIFY_WIDE_PURPOSE_ABSENT": true
+ },
+ "non_ask_controls": {
+  "COMMITTED": false,
+  "INVENTORY_RECORDED": false,
+  "LEARNED": false,
+  "STOCK_RECORDED": false
+ },
+ "reader_files_byte_identical_v7_v8": {
+  "merge_r1w7.py": true,
+  "score_w7.py": true
+ },
+ "reader_sha256_v8": {
+  "merge_r1w7.py": "3dcb07fa25fa6627049df68391536f8fad55aae3be02178e5ce25a2885f1744a",
+  "score_w7.py": "01fef9272e1d9d0dc5055de7b8b7779c53cc7703803d81134e1f3cb1a0a06af9"
+ },
+ "removed_by_v7_1": [],
+ "v7_cut_statuses": {
+  "all_possible": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NEGATED",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_REFUSED",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_FACE_UNREAD",
+   "CLARIFY_WIDE_FACE_WHICH_INGREDIENT",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "face_reader_codes": [
+   "FACE_NEGATED",
+   "FACE_UNREAD",
+   "FACE_WHICH_INGREDIENT"
+  ],
+  "literal_in_wide_turn": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "wide_reader_codes": [
+   "FACE_REFUSED"
+  ]
+ },
+ "v7_list_of_seven_are_asks": {
+  "CLARIFY_WIDE_FACE_NEGATED": true,
+  "CLARIFY_WIDE_FACE_REFUSED": true,
+  "CLARIFY_WIDE_FACE_UNKNOWN": true,
+  "CLARIFY_WIDE_FACE_UNREAD": true,
+  "CLARIFY_WIDE_FACE_WHICH_INGREDIENT": true,
+  "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT": true,
+  "CLARIFY_WIDE_PURPOSE_ABSENT": true
+ },
+ "v8_cut_statuses": {
+  "all_possible": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NEGATED",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_REFUSED",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_FACE_UNREAD",
+   "CLARIFY_WIDE_FACE_WHICH_INGREDIENT",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "face_reader_codes": [
+   "FACE_NEGATED",
+   "FACE_UNREAD",
+   "FACE_WHICH_INGREDIENT"
+  ],
+  "literal_in_wide_turn": [
+   "CLARIFY_WIDE_DISH_NAME_NOT_BOUND",
+   "CLARIFY_WIDE_FACE_NOT_HELD",
+   "CLARIFY_WIDE_FACE_UNKNOWN",
+   "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT",
+   "CLARIFY_WIDE_PURPOSE_ABSENT"
+  ],
+  "wide_reader_codes": [
+   "FACE_REFUSED"
+  ]
+ }
+}
