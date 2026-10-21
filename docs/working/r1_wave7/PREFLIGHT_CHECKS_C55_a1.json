@@ -1,0 +1,57 @@
+[
+ {
+  "check": "1 watchdog READY",
+  "ok": true,
+  "detail": "start `aws_control_c55.py watch 1` first and leave it running"
+ },
+ {
+  "check": "2 attempt unused",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "check": "3 validate_plan on the shipped plan",
+  "ok": true,
+  "detail": "validate_plan True"
+ },
+ {
+  "check": "4 expected freeze == payload freeze",
+  "ok": true,
+  "detail": "50e03e17f7f004b7"
+ },
+ {
+  "check": "5 no fill token in plan",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "check": "6 values file equals artefacts on disk",
+  "ok": true,
+  "detail": "10 values match"
+ },
+ {
+  "check": "7 template sites intact",
+  "ok": true,
+  "detail": "controller constant equals payload sha; one template site each"
+ },
+ {
+  "check": "8 worker fill simulation",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "check": "9 ledger hold present and pinned",
+  "ok": true,
+  "detail": "hold in ledger last_jobs; closeout pinned"
+ },
+ {
+  "check": "9b transport lease present",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "check": "10 payload members match inventory",
+  "ok": true,
+  "detail": "1145 members"
+ }
+]
