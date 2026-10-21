@@ -1,0 +1,32 @@
+{
+ "schema": "helm.u1c.packet-hashes/1",
+ "status": "DRAFT_NOT_FROZEN",
+ "why_not_frozen": "the preregistration text depends on the owner's answers to Q2 (commit-then-reveal seeds) and Q5 (port strictness), plus Q4 and Q7; the freeze (FROZEN_U1C.precode.json) is written only after those answers and before any code",
+ "written_utc": "2026-10-21T20:41:36Z",
+ "files": {
+  "DESIGN_U1C.md": {
+   "sha256": "2fb6bfefc00bf5b2dddfb8909666f5d75494eab1889d4fb8d2ff74f1d9c6405a",
+   "bytes": 62719
+  },
+  "PREREGISTRATION_U1C.precode.md": {
+   "sha256": "d45e5f3062735d70ac95360873910a2dfb3e9882a7bd602a4247ed8bcd953311",
+   "bytes": 36413
+  },
+  "COST_AND_SIZING_U1C.md": {
+   "sha256": "65ad07f488f72626ed59bd9c3d76f3f20f36ebfd8c7fa0121a65106f04ecbbf5",
+   "bytes": 15242
+  },
+  "OPEN_QUESTIONS_U1C.md": {
+   "sha256": "5c66954c38906684e0a59955712eca46704350414826d96a1f453621fd2021a8",
+   "bytes": 11238
+  },
+  "REVIEW_LOG_U1C.md": {
+   "sha256": "d4bcbdd410e1dbc294f73eac7505e1c68e1bc231e7acdd5c10e8965530718dd6",
+   "bytes": 18274
+  }
+ },
+ "made_by": "design workflow wf_a0ab4929-596 (3 readers, 3 designs, judge, 3 adversarial reviewers, writer); operator spot-checked CALIBRATION wall fields (14), U1b FIX/FALSE totals, 39 gates, speed ratio 1.2427 (spec line 2234), FRESH wording",
+ "spend_usd": "0",
+ "aws_called": false,
+ "code_written": false
+}

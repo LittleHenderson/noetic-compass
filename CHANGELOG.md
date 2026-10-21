@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - U1c design packet (spec sheet 7.120): a fresh-world retest of the Unity Eye acting, designed and costed for AWS; nothing frozen, nothing run; 0 USD
+
+- Owner asked to run U1b; it had already run on 2026-10-15 (spec 7.40: READ, EYE_EARNED_KEEP, CONCERT_EARNED_KEEP; verified, not re-run, PR #442). The owner then asked for U1c: fresh seeds, its own pre-code freeze, sized for AWS, design and cost shown before anything runs.
+- Design: U1b's instrument unchanged (114 files byte-identical, arms A0-A6, six planted faults, 39 gates, merge_u1.py); only the worlds change, drawn by commit-then-reveal from an owner secret plus the sealed package fingerprint; a Linux port proved on a 722-item slice of U1b's own inputs before any fresh world is scored; an optional fair rival A7 with its own reader.
+- Cost: one m6i.xlarge, 240-minute window; expected about 0.36 USD in all (range 0.27-0.57); about 0.03 if the early port check fails; proposed holds 1.00 USD (build tests) and 4.00 USD (run), released at closeout.
+- Made by an 11-agent workflow (three readers, three designs and a judge, three adversarial reviewers, a writer); 65 reviewer problems, 8 BLOCKER, each dispositioned. Operator spot-checks against U1b's files: 14 clock values in CALIBRATION.json, FIX 148/148/128, FALSE 1,816/2,610/10,152, 39 of 39 gates, speed ratio 1.2427 in spec 7.65.
+- Not frozen: the preregistration (draft sha256 d45e5f3062735d70...) changes with the owner's answers to Q2, Q4, Q5, Q7. Files: Documents/Codex/2026-10-21/u1c/, repo copy docs/working/u1c/.
+
 ## 2026-10-21 PDT - HELM-R1 wave 7 v9 reseal on the reader v7.2 fix (spec sheet 7.118): three changes on v8, SEALED, NOT LAUNCHED, waits for the owner's own typed line (proposed "CHAT WAVE 6 at 1 USD"); practice run from the seal reads 0 WRONG in every dialogue family and every mark true, no number moved against v8's run; 0 USD
 
 - Package: Documents/Codex/2026-10-20/r1_wave7/build_v9/HELM_R1_W7_20261020_SOURCE_R1W7_v9.zip sha256 ad3fb98cd3254963263929747791d151949c2f50923672e4bcbf3fc14490942c (1,022,659 bytes, 203 members + the freeze, sealed twice byte-identical); PACKAGE_FREEZE ce9495fafd5507d1c2b1dbc0c6b00df4305034393720ef21528af1f210581355; FROZEN 30ed56d0...; built from a fresh extract of v8 (build_v9/extract_v8/, never edited). v8 (zip e88b125e..., spec 7.114; ran as job c55, spec 7.116, CHAT_WAVE_HARMED) is VOID_SUPERSEDED_BY_V9 for any further run; nothing of v8 moved or deleted; c55's record stands; its line CHAT WAVE 5 at 1 USD was consumed by c55.
