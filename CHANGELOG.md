@@ -15,6 +15,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 - Decisions: practice draw redone by the sealed v8 extract and shown byte-identical to v7's; A-R1W7-7 checked present, not re-applied; exclusions untouched; the line kept; v7's bands reserved not reused; the ask check widened to every status read from both cuts' source; TEST_RECORD section 13 (section 12 is v7's, on PR #436). Nothing failed while building v8.
 - Files: build_v8/ (zip, freeze, FROZEN, ZIP_SHA256_v8.txt, TEST_COUNTS, CUT_CHECK, PRACTICE_READINGS_V8, CONV_PER_ITEM, CV34 mapping, ASK_PREFIX_CHECK_v8, PATCH_V8_LOG, PRACTICE_KEYS_V6_VS_V8, AMENDMENT_A_R1W7_9.md, build/), dry_run/run10_v8_from_seal/, dry_run/practice_inputs_v8/, v7_VOID_SUPERSEDED_BY_V8.md, copies at the top of r1_wave7/; repo copies docs/working/r1_wave7/. Spec sheet: new 7.114 before "## 8. THE TWO CLAIMS", a follow-up line at the end of 7.113, a section 11 row; hub rebuilt with a row for 7.114. No HELM .py file changed; 0 USD.
 
+## 2026-10-21 PDT - HELM memory-compaction census (spec sheet 7.115 follow-up 2): does the chat memory ever fill today? 0 dropped turns of a floor of 8 -> STOP_NOT_EXERCISED; one slip found in user_facts, not fixed; 0 USD, counts only, no claim
+
+- Owner's word: "build v1, rule capsules, census first". Census at docs/working/helm_memory_compaction_v1/CENSUS_FIFO_DROPS_20261021.md.
+- Rule measured: helm_memory.py keeps 50 turns and drops the oldest from working memory (the JSONL ledger keeps all); user_facts capped at 20.
+- Counted: wave 7 c51-c54 dialogues at most 7 turns by the sealed design (3-5 + 2 small talk) -> 0 drops; laptop chat logs sessions/*.jsonl (26 files, 344 records, 2026-10-18) reach turn_id 8 at most -> 0 drops; user_facts: 17 USER_NARRATIVE records in all, at most 1 per run -> cap never reached; helm_ui/sessions/ empty. Dropped turns 0 of a floor of 8 -> STOP_NOT_EXERCISED.
+- Gap: the c51-c54 recipe sessions were not counted (the run folders under Documents/Codex/2026-10-20/r1_wave7/ are off-limits to this session while job c55 runs); a line count per handle_turn session closes it.
+- Found while counting, not fixed (no helm_*.py edit here): add_user_fact keeps the FIRST 20 facts (self.user_facts[:20]) while its comment says "keep last 20"; past 20, new facts are silently discarded from working memory (the cube store still records them). Belongs to the v1 build with a test.
+- By the floor, build v1 waits for the owner's word. Designer's reading, not a decision: TEACH-1 is itself the first design with sessions longer than the budget (32 teaching turns vs budget 12), so the squeeze is created by the test; recommendation: override the floor by word, 0 USD.
+- Spec sheet: follow-up 2 at the end of 7.115 and a section 11 row. No .py file changed. 0 USD.
+
 ## 2026-10-21 PDT - HELM memory-compaction packet follow-up (spec sheet 7.115): PR #441 merged; four worked Atlas scenarios added to DESIGN 6.1; owner's Q1-Q3 ruling recorded (build v1, rule capsules, census first); 0 USD; nothing built, nothing licensed
 
 - Owner's words (typed into the design session, verbatim): "SCENARIOS"; "merge 441"; "add them; OPEN_QUESTIONS Q1-Q3 in one line (recommended: build v1, rule capsules, census first)". PR #441 merged into the thread branch at 0b17016d.
