@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HELM Cube light modes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Inter+Tight:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#E9D9B8}a:hover{color:#FFF3DC}
+@keyframes cadence{0%{opacity:.35}18%{opacity:1}55%{opacity:.6}100%{opacity:.35}}
+@keyframes breathe{0%{opacity:.25}50%{opacity:1}100%{opacity:.25}}
+@keyframes blink{0%{opacity:1}12%{opacity:.1}24%{opacity:1}36%{opacity:.1}48%{opacity:1}100%{opacity:1}}
+@keyframes ask{0%{opacity:1}10%{opacity:.15}20%{opacity:1}30%{opacity:.15}40%{opacity:1}75%{opacity:1}100%{opacity:.15}}
+.a-speak{animation:cadence .23s ease-out infinite}
+.a-breathe{animation:breathe 3.2s ease-in-out infinite}
+.a-blink{animation:blink 2.4s linear infinite}
+.a-ask{animation:ask 2s linear infinite}
+.a-slow{animation:breathe 2.2s ease-in-out infinite}
+</style>
+</helmet>
+<div style="width: 1440px; height: 860px; box-sizing: border-box; background: #121214; color: #ECEAE4; font-family: Inter, system-ui, sans-serif; padding: 64px 72px; display: flex; flex-direction: column; gap: 36px">
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+      <filter id="edgeglow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+    </defs>
+  </svg>
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #A7A39A">HELM Cube · the light</div>
+      <h2 style="margin: 0; font-family: 'Inter Tight', Inter, sans-serif; font-weight: 600; font-size: 44px; letter-spacing: -0.01em">Every mode lives on the twelve edges</h2>
+    </div>
+    <p style="margin: 0; width: 520px; font-size: 15px; line-height: 1.5; color: #C9C5BC">Off, the edges are the same black as the faces. Each mode can be told apart by its motion alone, so colour is never the only signal. Green is kept for one job: a camera is on.</p>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 28px 20px">
+    <sc-for list="{{modes}}" as="m" hint-placeholder-count="16">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="{{m.aria}}">
+          <polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon>
+          <polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon>
+          <polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon>
+          <path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path>
+          <g class="{{m.anim}}" filter="url(#edgeglow)">
+            <path d="{{m.dim}}" fill="none" stroke="{{m.color}}" stroke-width="2.4" stroke-linecap="round" opacity="0.35"></path>
+            <path d="{{m.lit}}" fill="none" stroke="{{m.color}}" stroke-width="2.8" stroke-linecap="round"></path>
+            <circle cx="79" cy="71" r="{{m.dot}}" fill="#3DDC84"></circle>
+          </g>
+        </svg>
+        <div style="font-size: 14px; font-weight: 600; color: #F4F2EC">{{m.name}}</div>
+        <div style="font-size: 11px; line-height: 1.4; color: #A7A39A; font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace">{{m.state}}</div>
+        <div style="font-size: 12px; line-height: 1.45; color: #CFCBC2">{{m.motion}}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":860}}'>
+class Component extends DCLogic {
+renderVals() {
+const E = {
+  e1: 'M60,16 L98.1,38', e2: 'M98.1,38 L60,60', e3: 'M60,60 L21.9,38', e4: 'M21.9,38 L60,16',
+  e5: 'M98.1,38 L98.1,82', e6: 'M60,60 L60,104', e7: 'M21.9,38 L21.9,82', e8: 'M98.1,82 L60,104', e9: 'M60,104 L21.9,82'
+};
+const all = Object.keys(E);
+const p = (ks) => ks.map((k) => E[k]).join(' ');
+const but = (ks) => all.filter((k) => ks.indexOf(k) < 0);
+const mk = (name, state, color, litKeys, dimKeys, anim, motion, dot) => ({
+  name, state, color, lit: p(litKeys), dim: p(dimKeys), anim: anim || '', motion, dot: dot || 0,
+  aria: name + ': ' + motion
+});
+const modes = [
+  mk('Asleep', 'off', '#2C2C31', [], [], '', 'Off. A plain black box. An optional faint presence glow can be set in the app.'),
+  mk('Awake', 'after a shake', '#F4F1EA', all, [], 'a-slow', 'One sweep along all twelve edges, then dim.'),
+  mk('Listening', 'mics live', '#67D8E8', ['e1', 'e2', 'e5', 'e8'], but(['e1', 'e2', 'e5', 'e8']), 'a-slow', 'The edges nearest the person speaking glow brighter.'),
+  mk('Thinking', 'RPM gate check', '#E9B949', ['e1', 'e9'], [], 'a-slow', 'Two points of light travel along the edges, only if it takes over 300 ms.'),
+  mk('Speaking', 'voice out', '#FFE3B8', all, [], 'a-speak', 'Brightness follows HELM’s voice: a pulse per syllable.'),
+  mk('Asking', 'CLARIFY', '#B79CFF', all, [], 'a-ask', 'Short, short, long, every 2 seconds. Then it listens.'),
+  mk('Missing input', 'UNDETERMINED', '#F2A93B', but(['e6']), [], 'a-slow', 'One dark edge: the frame is the recipe, the gap is what is missing.'),
+  mk('Declined', 'refusal', '#C08A3E', ['e8'], [], '', 'The light shrinks to one edge and fades. Not red: red means privacy.'),
+  mk('Privacy, soft', '5 taps', '#E5484D', all, [], 'a-breathe', 'Slow breathing. A software mute, labelled “soft” in the app.'),
+  mk('Privacy, hard', 'hardware switch', '#E5484D', all, [], '', 'Steady red, powered through the switch itself.'),
+  mk('Camera on', 'any camera powered', '#3DDC84', [], [], '', 'A green dot on that face, wired to the camera’s power.', 4),
+  mk('Charging', 'on the Qi pad', '#F4F1EA', ['e5', 'e6', 'e7', 'e8'], [], '', 'One buzz on snap-on. Lit edges show the charge level for 5 seconds.'),
+  mk('Pairing', 'setup window', '#4C8DF6', ['e1', 'e2', 'e3'], [], 'a-slow', 'A chase along the edges; fewer stay lit as the window runs out.'),
+  mk('Low battery, error', 'battery or network', '#F07A2B', all, [], 'a-blink', 'Orange blinks. Low battery every 10 seconds; an error blinks twice, then dims.'),
+  mk('Eye report', 'report filed', '#2BB5A6', ['e4'], [], 'a-breathe', 'One small blip: a report is in the app. It never means the Eye acted.'),
+  mk('Updating', 'firmware', '#F4F1EA', ['e5', 'e6', 'e7'], [], 'a-slow', 'A slow chase along the edges.')
+];
+return { modes };
+}
+}
+</script>
+</body>
+</html>

@@ -4251,6 +4251,7 @@ marks a top and a bottom; the light now runs along all twelve edges, invisible w
 
 - **What a later test could never let us say:** that the Eye decides depth in the live chat; that Eye acting is licensed outside tests; anything about a built device.
 - **What needs the owner:** for depth, the 0 USD fixes and the stage-1 Eye line; for the device, the open questions in the spec's Sections 13 and 15.
+- **Added the same day (owner's request for a film and the drawings on the hub):** the six drawings are reproduced on the hub's device page as static figures (`helm_hub/make_device_figures.py` from `docs/working/helm_cube_device_concept_v0/drawings/`); a concept-film treatment "It Asks First" (92 s, 15 shots, a burned-in status tag on every shot, only shot 5 tagged TODAY, end card naming HELM's latest sealed mistakes) is in `docs/working/helm_cube_device_concept_v0/COMMERCIAL_TREATMENT.md` and on the hub. **No film has been made:** no video tool is reachable from this session (Claude Motion is a claude.ai feature for code-based animation, not offered here; the Creative Claw plugin did not load here). Before any outside video service receives the script, the owner decides on IP counsel: the cube post-dates provisional 64/037,173.
 - **Artifacts:** the two folders above; memory `project_helm_cube_device_owner_rulings_20261021.md`; workflow runs `wf_7fef95d0-c1a` (13 agents) and `wf_1990b95f-68d` (spatial section).
 
 ## 8. THE TWO CLAIMS

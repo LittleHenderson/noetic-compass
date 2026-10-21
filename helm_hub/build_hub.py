@@ -2525,6 +2525,24 @@ def p_device(S: dict) -> str:
         "It cannot charge fast and talk at the same time: both share one small heat budget.",
     ]
     hrows = "".join(f"<li>{esc(h)}</li>" for h in hard)
+    film = ""
+    tpath = HUB.parent / "docs" / "working" / "helm_cube_device_concept_v0" / "COMMERCIAL_TREATMENT.md"
+    ttext = read(tpath) if tpath.exists() else ""
+    trows = md_table(ttext, "| # | Time | Picture") if ttext else []
+    if trows:
+        shot_rows = "".join(f"<tr><td>{esc(r[0])}</td><td>{esc(r[1])}</td><td>{md(r[2])}</td><td>{md(r[5])}</td><td>{md(r[6])}</td></tr>" for r in trows if len(r) >= 7)
+        film = ('<h2 id="film">The concept film: "It Asks First"</h2>'
+                '<p><strong>Not filmed yet.</strong> This is the plan for a 92-second concept film, 15 shots plus an end card. Every shot carries a '
+                'status tag burned into the picture, and only one shot shows real HELM software today (typed, on one computer, in a test kitchen). '
+                'Most of the film shows what HELM is meant to do beyond recipes: plan a day, learn by conversation and refresh a memory, control a '
+                'home by taps, map a room without guessing, refuse to commit failing code, report a failed check as a failure, hold a simulated drone '
+                'still when a reading is missing, and let the Eye report without acting. The film will be made with an outside AI video tool and '
+                'labelled as made with AI; it is waiting for that tool and for the owner\'s word.</p>'
+                '<div class="tablewrap"><table><thead><tr><th>#</th><th>Time</th><th>What you see</th><th>What it shows</th><th>Status</th></tr></thead>'
+                f'<tbody>{shot_rows}</tbody></table></div>'
+                '<p class="small muted">The full treatment, with every line of dialogue, the end card and one ready-to-paste prompt per shot: '
+                '<code>docs/working/helm_cube_device_concept_v0/COMMERCIAL_TREATMENT.md</code>.</p>')
+    figs = read(HUB / "device_figures.html") if (HUB / "device_figures.html").exists() else "<p class=\"small muted\">(The figures file is not on this machine; run helm_hub/make_device_figures.py.)</p>"
     body = f"""
 <h2>The owner's words</h2>
 <p>The brief, and five rulings given on 2026-10-21, word for word:</p>
@@ -2537,6 +2555,12 @@ def p_device(S: dict) -> str:
 <h2>HELM is in charge</h2>
 <p>Every sensor feeds HELM, and HELM holds the controls: which sensors run, when the cube maps, what the light shows, which home devices it controls. Each action goes through the {T('RPM Gate')} and leaves a {T('receipt')}. A fact HELM lacks, such as a corner of the room it never measured, stays {T('UNDETERMINED')}: HELM asks instead of guessing, and never draws a wall it did not measure.</p>
 <p><strong>Two lines stay outside all software, HELM included.</strong> The camera-on light is wired to each camera's power, and the hard mute is a physical switch. HELM can turn any camera or microphone on or off; it cannot hide that it did. This keeps six hidden cameras trustworthy. It is the operator's proposal, kept unless the owner overrules it.</p>
+
+<h2 id="drawings">The drawings</h2>
+<p>Concept drawings, made on the design canvas and reproduced here. Nothing has been built.</p>
+{figs}
+
+{film}
 
 <h2>Who decides when HELM looks deeper?</h2>
 <p>The owner also asked whether the {T('Unity Eye')} or another reasoning part could decide when HELM needs to look deeper into a problem. The answer, in short:</p>
