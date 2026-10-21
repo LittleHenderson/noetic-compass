@@ -1,0 +1,9 @@
+test_twin_provenance_keys_task_b (lm_t4.test_lm_t4.TestLMT4.test_twin_provenance_keys_task_b) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 7.737s
+
+OK
+fixture draw 0, arm A1: taught provenance {"FOLLOWED": 4672, "CREATED": 4, "ATTEMPTED": 0, "key_mismatch": 0, "crossings": 4676}
+fixture draw 0, arm A1: twin provenance   {"FOLLOWED": 220, "CREATED": 0, "ATTEMPTED": 4, "key_mismatch": 0, "crossings": 224}
+RESULT PASS tests run 1 failures 0 errors 0
