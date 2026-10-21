@@ -157,6 +157,16 @@ class BuildTests(unittest.TestCase):
         self.assertIn('inside: WITNESS_ADMITTED', t)
         self.assertIn('class="msg you noise"', t)
 
+    def test_roadmap_carries_the_intended_talk_section_with_the_owners_words(self):
+        r = (b.SITE / "roadmap.html").read_text(encoding="utf-8")
+        self.assertIn('id="talk"', r)
+        self.assertIn("Intended: talking like a person", r)
+        self.assertIn("comment like a normal person would", r)
+        self.assertIn("CONVERSE ABOUT", r)
+        self.assertIn("TRANSFORMER TRAINED ON THE 40 ELEMENTS", r)
+        self.assertGreaterEqual(r.count("INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED"), 9)
+        self.assertIn("LLM_WRITTEN_ONLY", r)
+
     def test_negatives_are_on_the_scorecard(self):
         r = (b.SITE / "results.html").read_text(encoding="utf-8")
         for w in ("S_UNSAFE_ON_REAL", "EARS_HARMED", "GREW_WRONG_KIND", "WIDE_LEARNING_DID_NOT_EARN_KEEP"):

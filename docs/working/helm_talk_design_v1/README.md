@@ -3,6 +3,8 @@
 Status: **DESIGN ONLY. NOTHING BUILT, NOTHING TRAINED, NOTHING RUN, NOTHING LICENSED. 0 USD.**
 Every HELM part named here keeps its claim status on the spec sheet (`ENGINEERED-NOT-VALIDATED` for the CTT, the chat, the voice and the memory; the CTT's words on record `EARS_NO_GAIN`, `EARS_HARMED`, `INCONCLUSIVE` stand). No claim moved. No `.py` file was changed. The files changed outside this folder: `CHANGELOG.md`, the spec sheet (§7.110 and the §11 row), the dictionary (one entry), and the rebuilt hub site.
 
+**Amendment A-TALK-1 (2026-10-21 PDT, `AMENDMENT_A_TALK_1.md`, sha256 `a01ef1d71dfde2a8a397c60168f2a544ace38539864d4ab1c158bf3d94044a18`, 27360 bytes):** the owner's rulings are recorded; the human-written stratum is REMOVED (the owner writes no turns and reviews only; every exam turn is written by AI models of at least three families, labelled `LLM_WRITTEN`, keyed by a different family, second-keyed by a third on FACT / FIX / OFF); the off-topic mouth rule M10 (react, keep verbatim, ask one question about what HELM knows, never an opinion, never an untold fact) with marks O1–O3; label and ceiling `LLM_WRITTEN_ONLY`; tone via the C-domain states named as the next design, not scored here; Part M (the owner's further word the same day): the CTT also trained CAS→English as a mouth on (receipt + CAS tags → English) pairs, choosing words but never facts (voice guard, say-back round trip, template fallback, HG13 0 invented facts), scored against today's templated voice on VARIED and TONE, ceiling `LLM_WRITTEN_ONLY`. The pre-code file is NOT edited: its hash `59bed9ba…` stands for the pre-code; the amendment is hashed on its own. Where they disagree, the amendment governs. Lines on record: `TALK TRAIN at 3 USD`, `TALK EXAM at 1 USD` (pre-approvals bound to future sealed zips).
+
 Owner's order (2026-10-21): "talk packet". Owner's words from the same exchange: "THE CTT ... WAS BUILT TO GIVE HELM THE ABILITY TO HAVE NORMAL CONVERSATIONS WITHOUT SOUNDING LIKE IT WAS GIVING RECIPES ALL THE ... TIME".
 
 ## What this packet is, in plain words
@@ -19,11 +21,14 @@ The hand-written reader's half of the same problem — purpose clauses, feelings
 | `DESIGN_TALK_V1.md` | what "normal conversation" means (seven kinds of turn, one example each); the three layers and who does what; why the data path is the blocker and the K-H fix with floors and arithmetic; the CTT retraining plan, twin / vote and cost; the mouth rules as a testable checklist; sequencing |
 | `PREREGISTRATION_TALK_V1.precode.md` | the exam design: one-sentence question, arms (TALK_ON, EARS_OFF, MOUTH_OFF, REPLAY, ALWAYS_ASK, KEYWORD_ROUTER, RETRIEVAL_VOTE, OLD_EARS), exams (HUMAN, SYNTH, NOISE), scoring, instrument rows, twelve hard gates, marks in two families (UNDERSTOOD, SOUNDED_HUMAN) plus EARS_GAIN and HARM, status words, licence ceiling, forecast, seeds, cost |
 | `PREREGISTRATION_TALK_V1.precode.sha256` | the sha256 of the pre-code file |
-| `OPEN_QUESTIONS.md` | the eleven decisions that are the owner's, each with a one-line recommendation |
+| `OPEN_QUESTIONS.md` | the eleven decisions that were the owner's, each with a one-line recommendation; answered 2026-10-21 (see the amendment) |
+| `AMENDMENT_A_TALK_1.md` | amendment A-TALK-1: the owner's answers; the human-written stratum removed (AI-written turns only, owner reviews); the off-topic mouth rule M10 and marks O1–O4; tone named as the next design; Part M, the transformer mouth trained on the 40 elements |
+| `AMENDMENT_A_TALK_1.sha256` | the sha256 of the amendment |
 
-## The hash
+## The hashes
 
-`PREREGISTRATION_TALK_V1.precode.md` sha256 `59bed9ba6e7b65e82ee3d4d3df3c22b10bb66efea9235aca4e224627717e3680` (23,448 bytes, LF line endings).
+`PREREGISTRATION_TALK_V1.precode.md` sha256 `59bed9ba6e7b65e82ee3d4d3df3c22b10bb66efea9235aca4e224627717e3680` (23,448 bytes, LF line endings) — stands for the pre-code, which is not edited.
+`AMENDMENT_A_TALK_1.md` sha256 `a01ef1d71dfde2a8a397c60168f2a544ace38539864d4ab1c158bf3d94044a18` (27360 bytes, LF line endings) — the amendment, hashed on its own.
 
 ## The short version of the exam
 
