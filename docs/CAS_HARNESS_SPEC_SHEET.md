@@ -3988,6 +3988,7 @@ reason) with `line<i>:MULTI_QTY` in the key's `representable.why_not`, so such r
   record 7.111; then the custodian, the owner's own typed line, one machine run (≈0.02 USD). **Open (the owner):** that line, when the seal is
   verified here.
 - **`NOT LICENSED`:** everything in §7.108's list, unchanged; the v7 reader on any exam.
+- **Limits kept as negatives (measured on the author's sentences):** (a) everyday names the LICENSED brain knows (flour, milk, eggs) are recorded by the licensed path (`INVENTORY_RECORDED`); the clause is still read into the wide faces (test class G) and a wide product applies them at the question, but a product the licensed brain itself knows is answered by the licensed brain, which never reads faces: no face is applied there. (b) A clause on a BATCH sentence (a lesson) is still one question (`UNREAD_CLAUSE`); only stock sentences carry a clause. (c) Cue-word paraphrases the lexicon lacks ("a little weak these days") ask (`FACE_UNREAD`); no-cue paraphrases ("has seen better days") are ignored as not a face — the wave-3 lexicon's own limit, unchanged.
 
 ## 8. THE TWO CLAIMS
 
