@@ -1,0 +1,18 @@
+{
+ "attempts": "one attempt + one plumbing retry",
+ "cap_usd": "1.00",
+ "label": "R1W7",
+ "owner_line_sha256": "61c398c192226bc57eb46714f74fd4c0f6a018b6b3b9992d1f8533ad6bfa40ad",
+ "owner_line_source": "Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md, section 'Owner words (2026-10-20, 7:41 PM Pacific, verbatim): CHAT WAVE at 1 USD'; typed by the owner in the Claude Code session at 7:41 PM PDT 2026-10-20",
+ "owner_line_utf8_bytes": 18,
+ "owner_line_verbatim": "CHAT WAVE at 1 USD",
+ "package_freeze_sha256": "2366e85d7a3b73fa0c6cefb94715aa7ba9cfeb6f3b384c4c0ad88d5ed0165da2",
+ "package_version": "v3",
+ "package_zip": "HELM_R1_W7_20261020_SOURCE_R1W7.zip",
+ "package_zip_sha256": "5063baba8be9ba807e7905d5f86732cb1a535ff5a533e67c79f5cbe16edbc6a9",
+ "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same carrier",
+ "recorded_utc": "2026-10-21T02:42:32Z",
+ "schema": "helm.r1w7.approval/1",
+ "seed_source_rule": "sha256(UTF-8 of the pinned line + ':' + the full zip sha256), no trailing newline",
+ "seed_source_sha256": "767f2f7267bce63b9898d34736909d87f03020e51f7ed53ca94bd301d2c1a49b"
+}
