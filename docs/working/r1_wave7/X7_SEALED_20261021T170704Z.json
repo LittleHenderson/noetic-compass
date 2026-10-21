@@ -1,0 +1,494 @@
+{
+ "approval_package_zip_sha256_matches": true,
+ "approval_record": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\approval_v8\\APPROVAL_RECORD_R1W7.json",
+ "blocked_seed_file_present": false,
+ "carrier_member_sha256": {
+  "x7/INPUTS_CONV_X7.json": "fbd9192d9adc4d0a070be62c48e96e657b1a95542b991452eff530e36bb1c2a7",
+  "x7/INPUTS_NOISE_X7.json": "8adb72455cd4025ac0d87c7a21a19ecf9a2e3e45d5b9e2d7686baddba02eaaa9",
+  "x7/INPUTS_REAL_X7.json": "3732d1472ac7726d246d963fa2d05d07be28587660697c5ccb898f7d98deff3a",
+  "x7/X7_PINS.json": "47b9f37ba9511089d134f71191f41116b2bed87d5ff39ad3a52f50a522cfcbfd"
+ },
+ "carrier_members": [
+  "x7/INPUTS_CONV_X7.json",
+  "x7/INPUTS_NOISE_X7.json",
+  "x7/INPUTS_REAL_X7.json",
+  "x7/X7_PINS.json"
+ ],
+ "carrier_zip_bytes": 38852,
+ "carrier_zip_path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v8_custody\\X7_CARRIER_V1.zip",
+ "carrier_zip_sha256": "a2ad727b38ce951f137ae843dba0263f5f7f94f52ca4f8311b0d1b4071164241",
+ "conv_pool_ids_sorted": [
+  "pg:13286@243658",
+  "pg:13669@159372",
+  "pg:14293@114416",
+  "pg:14293@162214",
+  "pg:15464@156289",
+  "pg:15464@158228",
+  "pg:16514@143467",
+  "pg:16514@39398",
+  "pg:26323@104697",
+  "pg:26323@116627",
+  "pg:26323@133103",
+  "pg:26323@65066",
+  "pg:26558@27302",
+  "pg:31534@52613",
+  "pg:34822@772797",
+  "pg:38193@144773",
+  "pg:38193@41161",
+  "pg:42450@442109",
+  "pg:42450@535264",
+  "pg:42631@10590",
+  "pg:42631@13231",
+  "pg:42631@29304",
+  "pg:42868@229400",
+  "pg:43912@13283",
+  "pg:48804@433620",
+  "pg:49958@123515",
+  "pg:49958@127296",
+  "pg:49958@179709",
+  "pg:49958@471708",
+  "pg:49958@547253",
+  "pg:52800@120439",
+  "pg:52800@348641",
+  "pg:52800@437220",
+  "pg:54568@386444",
+  "pg:56540@231833",
+  "pg:56540@315180",
+  "pg:56540@384150",
+  "pg:60598@153242",
+  "pg:65061@1051595",
+  "pg:65061@299945",
+  "pg:65061@387648",
+  "pg:65061@734311",
+  "pg:65061@741675",
+  "pg:65061@811483",
+  "pg:65061@891167",
+  "pg:65326@10325",
+  "pg:65326@13724",
+  "pg:65398@53731",
+  "pg:65501@39434",
+  "pg:65507@56478",
+  "pg:68137@85813",
+  "pg:6912@239932",
+  "pg:6912@88433",
+  "pg:69364@54947",
+  "pg:77733@34541",
+  "pg:78849@109074",
+  "pg:78849@129179",
+  "pg:78849@194671",
+  "pg:8501@26863",
+  "pg:8501@32947",
+  "wb:16170:4496898",
+  "wb:205500:4516882",
+  "wb:207596:4597224",
+  "wb:34553:4507166"
+ ],
+ "counts": {
+  "conv_every_family_present": true,
+  "conv_expect": {
+   "ANSWER": 30,
+   "ASK": 30,
+   "LEARN": 4
+  },
+  "conv_families": {
+   "R1_STOCK_THEN_ASK": 14,
+   "R2_ABSENT_THEN_ASK": 4,
+   "R3_QUESTION_FORMS": 4,
+   "R4_WITNESS_IN_ENGLISH": 4,
+   "R5_MUST_ASK": 4,
+   "R7_NEXT_SESSION": 2,
+   "S1_WISDOM_STATED": 6,
+   "S2_POWER_STATED": 6,
+   "S3_FACE_UNKNOWN": 6,
+   "S4_RECIPE_PURPOSE_ABSENT": 4,
+   "S5_INGREDIENT_PURPOSE_ABSENT": 4,
+   "S6_TWO_FACES": 2,
+   "S7_NOT_A_FACE": 4
+  },
+  "conv_items": 64,
+  "noise": {
+   "items": 64,
+   "noise_turns": 128,
+   "positions": {
+    "after_first_scored_turn": 10,
+    "between_stock_and_question": 54
+   },
+   "sentence_use": {
+    "1": 10,
+    "10": 10,
+    "11": 7,
+    "12": 10,
+    "2": 13,
+    "3": 14,
+    "4": 12,
+    "5": 10,
+    "6": 12,
+    "7": 8,
+    "8": 11,
+    "9": 11
+   }
+  },
+  "pool_conv": {
+   "eligible": 2680,
+   "shortfall": 0,
+   "skips": 0
+  },
+  "pool_excluded_ids": 2170,
+  "real_answer_keys": 106,
+  "real_by_cell": {
+   "C23:FRACTION": 14,
+   "C23:INTEGER": 14,
+   "C23:MIXED": 14,
+   "C46:FRACTION": 15,
+   "C46:INTEGER": 14,
+   "C46:MIXED": 14,
+   "C710:FRACTION": 15,
+   "C710:INTEGER": 14,
+   "C710:MIXED": 14
+  },
+  "real_excluded_ids": 2042,
+  "real_items": 128,
+  "real_removed": {
+   "by_id": 2019,
+   "by_text": 94
+  },
+  "real_representable_and_answer": 94,
+  "real_shortfall": {},
+  "real_skips": 0,
+  "real_undetermined_keys": 22,
+  "real_undetermined_same_name": 15
+ },
+ "custodian": "separate custodian agent (Claude Code subagent), laptop only, 0 USD, no network",
+ "exam": "X7v8",
+ "exclusion_overlap_check": {
+  "conv_overlap_total": 0,
+  "distinct_excluded_ids": 2042,
+  "lists_checked": 22,
+  "method": "Loaded every id list under 'lists' in the exclusion contract and counted, per list, how many of the manifest's real_drawn_frame_ids_sorted and conv_pool_ids_sorted appear in it (set intersection); PASS only if every total is 0 and real/conv are disjoint.",
+  "per_list": {
+   "X7_c51_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7_c51_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v4_c52_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v4_c52_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v5_c53_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v5_c53_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v6_c54_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v6_c54_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "c46_used": {
+    "conv": 0,
+    "real": 0
+   },
+   "c47_used": {
+    "conv": 0,
+    "real": 0
+   },
+   "rbw1t_practice_v1": {
+    "conv": 0,
+    "real": 0
+   },
+   "rbw1t_practice_v2": {
+    "conv": 0,
+    "real": 0
+   },
+   "w6_practice_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "w6_practice_pairw": {
+    "conv": 0,
+    "real": 0
+   },
+   "w6_practice_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "x6_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "x6_pairw": {
+    "conv": 0,
+    "real": 0
+   },
+   "x6_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "x6v3_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "x6v3_pairw": {
+    "conv": 0,
+    "real": 0
+   },
+   "x6v3_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "xreal_used": {
+    "conv": 0,
+    "real": 0
+   }
+  },
+  "real_and_conv_disjoint": true,
+  "real_overlap_total": 0,
+  "result": "PASS",
+  "source": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v8_custody\\pkg\\HELM_R1_W7_20261020\\contract\\EXCLUDE_R1W7_PRIOR_USED.json",
+  "source_sha256": "174d0d4d9ff0eaefdd805e9c9e58514d4d9142dfb0ad01d16edf1a65223e4d3f",
+  "spent_exams_overlap": {
+   "X7_c51_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7_c51_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v4_c52_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v4_c52_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v5_c53_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v5_c53_real": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v6_c54_conv": {
+    "conv": 0,
+    "real": 0
+   },
+   "X7v6_c54_real": {
+    "conv": 0,
+    "real": 0
+   }
+  }
+ },
+ "files_sha256": {
+  "INPUTS_CONV_X7.json": "fbd9192d9adc4d0a070be62c48e96e657b1a95542b991452eff530e36bb1c2a7",
+  "INPUTS_NOISE_X7.json": "8adb72455cd4025ac0d87c7a21a19ecf9a2e3e45d5b9e2d7686baddba02eaaa9",
+  "INPUTS_REAL_X7.json": "3732d1472ac7726d246d963fa2d05d07be28587660697c5ccb898f7d98deff3a",
+  "KEYS_CONV_X7.json": "ab493bd0f90a10a1521a1457bf62c7fe7447cf5be64330c8a0f0ce6e43a08fc3",
+  "KEYS_REAL_X7.json": "a8ddd35420f302a3b0130fdcd3db2ad066d7f5c1d4b8172088fe363ac54831bd",
+  "POOLS_X7.json": "a57779704620ed32b6ea01644bbfec7b858a95d782219dc9f935903dbb9b1f73",
+  "RECEIVER_CHECK_X7.json": "9ca45a8058c0183e2e5cce6e4391dc54c0f66c0d1396431958b9d0f5784b33d1",
+  "SAMPLE_CONV_X7.json": "98e6623afde6590f524aa1fe3f0e388a6d2f3783e0101190298388fa4903d1c3",
+  "SAMPLE_REAL_X7.json": "d84447eb545f565460222106a2b54dad87b3c2662f68e2f60b43701c4c39ae1b",
+  "SEED_DERIVATION_X7.json": "a2c51fba0ca528ae053950477ede7a19d2cbc46388d1daeed874518b231780ed",
+  "X7_PINS.json": "47b9f37ba9511089d134f71191f41116b2bed87d5ff39ad3a52f50a522cfcbfd"
+ },
+ "frames_dir": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\frames",
+ "frames_sha256": {
+  "COUNTS_PG.json": "547cd36123f95edd371d282f598f017bac973515d71246abd2b21379e89cd112",
+  "COUNTS_S.json": "0da19fe025bd19d33b4530b7e91435580d7bc981f3e7256759b3a3da8ae82d94",
+  "COUNTS_WB.json": "31b2a1b17bdce2fbf0aeddc085966eede9552eedd78107914a6f3aeca3a93e76",
+  "FRAME_R_PG.jsonl": "c983e065bc1783ea9a4807612edafe8168ebb8c09b56a264dfea5ca53cb3aa5e",
+  "FRAME_R_WB.jsonl": "6a0d7cc12d0133991bf44c666ecae80ff1239760d0fcbd9aad62b11842563ddc",
+  "FRAME_S.jsonl": "98c2fb8f5f4b8c2afe4261cae516fe6a9e8ec60fb8e3448a005b463b01c758ea",
+  "PRACTICE_R.jsonl": "060848e3e0698d737a74c96e0d6bae15a78952a22932f410d5a8b3bedac12193",
+  "PRACTICE_S.jsonl": "ef2b3f229df5a224bc68f97d00544a35073ec57e9771b6d353d6ca1b6b22c2b5"
+ },
+ "handoff_written_utc": "20261021T170704Z",
+ "job": "c55",
+ "manifest_path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v8_custody\\out\\MANIFEST_X7.json",
+ "manifest_sha256": "54b49f9f2e4bca669277c46bd52f043c003b2ae6a483e7d65db894d3d977405f",
+ "not_included": "no item text, no key, no seed value, no per-item scaling value; out/exam/ stays on the laptop and was not opened",
+ "package_version": "v8",
+ "package_zip": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\build_v8\\HELM_R1_W7_20261020_SOURCE_R1W7_v8.zip",
+ "package_zip_sha256": "e88b125e3079f0fa79045fec888d4e862a5a742cf82010de6872bdc621f865c7",
+ "real_drawn_frame_ids_sorted": [
+  "pg:13286@170066",
+  "pg:13286@268842",
+  "pg:13545@383668",
+  "pg:13669@156581",
+  "pg:14293@96227",
+  "pg:15464@152221",
+  "pg:16514@143126",
+  "pg:16514@90176",
+  "pg:16977@11134",
+  "pg:17438@225008",
+  "pg:17438@412750",
+  "pg:26323@179253",
+  "pg:26323@179608",
+  "pg:26323@69209",
+  "pg:26558@17285",
+  "pg:31534@94657",
+  "pg:33748@6656",
+  "pg:34822@343045",
+  "pg:38193@147705",
+  "pg:38193@89961",
+  "pg:42450@295174",
+  "pg:42450@472187",
+  "pg:42450@494210",
+  "pg:42450@61065",
+  "pg:42450@84546",
+  "pg:42631@38724",
+  "pg:42868@219772",
+  "pg:42868@432999",
+  "pg:48804@298170",
+  "pg:48804@469917",
+  "pg:48804@647212",
+  "pg:48804@661553",
+  "pg:49958@212636",
+  "pg:49958@291431",
+  "pg:49958@472367",
+  "pg:49958@555083",
+  "pg:51542@16432",
+  "pg:51542@69357",
+  "pg:52800@199231",
+  "pg:52800@250175",
+  "pg:52800@260543",
+  "pg:52800@323378",
+  "pg:52800@353120",
+  "pg:52800@392382",
+  "pg:52800@502761",
+  "pg:52800@76221",
+  "pg:52800@77735",
+  "pg:52800@94604",
+  "pg:54568@163166",
+  "pg:54568@339714",
+  "pg:55734@67935",
+  "pg:56540@392611",
+  "pg:56540@400207",
+  "pg:56540@454723",
+  "pg:56540@613667",
+  "pg:56540@621334",
+  "pg:62345@4638",
+  "pg:62655@17553",
+  "pg:63283@43712",
+  "pg:64685@54381",
+  "pg:65061@1017096",
+  "pg:65061@1072583",
+  "pg:65061@1077325",
+  "pg:65061@1094334",
+  "pg:65061@1098499",
+  "pg:65061@1129353",
+  "pg:65061@144936",
+  "pg:65061@189317",
+  "pg:65061@401988",
+  "pg:65061@587507",
+  "pg:65061@723008",
+  "pg:65061@783236",
+  "pg:65061@846345",
+  "pg:65061@904132",
+  "pg:65061@908185",
+  "pg:65061@912731",
+  "pg:65061@978177",
+  "pg:65061@979364",
+  "pg:65303@5855",
+  "pg:65326@12062",
+  "pg:65379@8605",
+  "pg:65379@9376",
+  "pg:65398@46474",
+  "pg:65439@22572",
+  "pg:65501@36075",
+  "pg:65501@73183",
+  "pg:65502@23048",
+  "pg:65706@41272",
+  "pg:65742@2768",
+  "pg:65793@49210",
+  "pg:65793@5340",
+  "pg:68446@107643",
+  "pg:6912@191636",
+  "pg:6978@75999",
+  "pg:70067@94435",
+  "pg:71395@2041951",
+  "pg:71670@35179",
+  "pg:71670@39825",
+  "pg:72831@50935",
+  "pg:77733@208542",
+  "pg:77733@250878",
+  "pg:77733@253142",
+  "pg:78849@137637",
+  "pg:78849@138531",
+  "pg:78849@157579",
+  "pg:78849@293039",
+  "pg:79370@111170",
+  "pg:79370@244702",
+  "pg:79370@36278",
+  "pg:79370@82523",
+  "pg:8501@89139",
+  "pg:8501@93103",
+  "pg:8542@55303",
+  "wb:108455:4517163",
+  "wb:109338:4610476",
+  "wb:123377:4519170",
+  "wb:134525:4480562",
+  "wb:167676:4330566",
+  "wb:176395:4479634",
+  "wb:200941:4613372",
+  "wb:204712:4510110",
+  "wb:359629:4515281",
+  "wb:360622:4613361",
+  "wb:36159:4516301",
+  "wb:393378:4587432",
+  "wb:457553:4522833",
+  "wb:463520:4512971",
+  "wb:63948:4519045"
+ ],
+ "receiver_bad_files": [],
+ "receiver_check_all_pass": true,
+ "receiver_check_path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v8_custody\\out\\RECEIVER_CHECK_X7.json",
+ "receiver_check_rows": {
+  "approval_binds_zip": true,
+  "carrier_files_exact": true,
+  "carrier_holds_no_key": true,
+  "carrier_matches_pins": true,
+  "conv_count": true,
+  "conv_every_family_present": true,
+  "files_recomputed": true,
+  "frames_pinned": true,
+  "ids_unique": true,
+  "no_excluded_item": true,
+  "no_float_in_keys": true,
+  "noise_bound_to_conv_file": true,
+  "noise_format": true,
+  "noise_sentences_frozen": true,
+  "not_a_practice_derivation": true,
+  "owner_line_pinned": true,
+  "pins_practice_flag_right": true,
+  "pins_recomputed": true,
+  "pool_disjoint_from_real": true,
+  "pool_full": true,
+  "quotas_or_recorded_shortfall": true,
+  "seed_rule": true,
+  "turns_rederive": true
+ },
+ "receiver_check_sha256": "9ca45a8058c0183e2e5cce6e4391dc54c0f66c0d1396431958b9d0f5784b33d1",
+ "receiver_practice_flag": false,
+ "seal_all_pass": true,
+ "sealed_utc_from_manifest": "2026-10-21T17:02:30Z",
+ "seed_overlap_check": "PASS",
+ "wave": "HELM-R1 wave 7, CHAT WAVE round 5"
+}

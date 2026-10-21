@@ -1,0 +1,107 @@
+{
+ "all_pass": true,
+ "bad_files": [],
+ "counts": {
+  "conv_every_family_present": true,
+  "conv_expect": {
+   "ANSWER": 30,
+   "ASK": 30,
+   "LEARN": 4
+  },
+  "conv_families": {
+   "R1_STOCK_THEN_ASK": 14,
+   "R2_ABSENT_THEN_ASK": 4,
+   "R3_QUESTION_FORMS": 4,
+   "R4_WITNESS_IN_ENGLISH": 4,
+   "R5_MUST_ASK": 4,
+   "R7_NEXT_SESSION": 2,
+   "S1_WISDOM_STATED": 6,
+   "S2_POWER_STATED": 6,
+   "S3_FACE_UNKNOWN": 6,
+   "S4_RECIPE_PURPOSE_ABSENT": 4,
+   "S5_INGREDIENT_PURPOSE_ABSENT": 4,
+   "S6_TWO_FACES": 2,
+   "S7_NOT_A_FACE": 4
+  },
+  "conv_items": 64,
+  "noise": {
+   "items": 64,
+   "noise_turns": 128,
+   "positions": {
+    "after_first_scored_turn": 10,
+    "between_stock_and_question": 54
+   },
+   "sentence_use": {
+    "1": 10,
+    "10": 10,
+    "11": 7,
+    "12": 10,
+    "2": 13,
+    "3": 14,
+    "4": 12,
+    "5": 10,
+    "6": 12,
+    "7": 8,
+    "8": 11,
+    "9": 11
+   }
+  },
+  "pool_conv": {
+   "eligible": 2680,
+   "shortfall": 0,
+   "skips": 0
+  },
+  "pool_excluded_ids": 2170,
+  "real_answer_keys": 106,
+  "real_by_cell": {
+   "C23:FRACTION": 14,
+   "C23:INTEGER": 14,
+   "C23:MIXED": 14,
+   "C46:FRACTION": 15,
+   "C46:INTEGER": 14,
+   "C46:MIXED": 14,
+   "C710:FRACTION": 15,
+   "C710:INTEGER": 14,
+   "C710:MIXED": 14
+  },
+  "real_excluded_ids": 2042,
+  "real_items": 128,
+  "real_removed": {
+   "by_id": 2019,
+   "by_text": 94
+  },
+  "real_representable_and_answer": 94,
+  "real_shortfall": {},
+  "real_skips": 0,
+  "real_undetermined_keys": 22,
+  "real_undetermined_same_name": 15
+ },
+ "practice": false,
+ "rows": {
+  "approval_binds_zip": true,
+  "carrier_files_exact": true,
+  "carrier_holds_no_key": true,
+  "carrier_matches_pins": true,
+  "conv_count": true,
+  "conv_every_family_present": true,
+  "files_recomputed": true,
+  "frames_pinned": true,
+  "ids_unique": true,
+  "no_excluded_item": true,
+  "no_float_in_keys": true,
+  "noise_bound_to_conv_file": true,
+  "noise_format": true,
+  "noise_sentences_frozen": true,
+  "not_a_practice_derivation": true,
+  "owner_line_pinned": true,
+  "pins_practice_flag_right": true,
+  "pins_recomputed": true,
+  "pool_disjoint_from_real": true,
+  "pool_full": true,
+  "quotas_or_recorded_shortfall": true,
+  "seed_rule": true,
+  "turns_rederive": true
+ },
+ "schema": "helm.r1w7.receiver-check/1",
+ "seed_overlap_check": "PASS"
+}
