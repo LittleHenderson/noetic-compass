@@ -1,0 +1,9 @@
+{
+ "byte_identical": true,
+ "helm_cut_commit": "dfc7158d0aba3cca7b0a1ccd1e1c2c8a74e36cf6",
+ "not_equal": [],
+ "schema": "helm.r1w7.helm-now-identity/1",
+ "v3_freeze_sha256": "2366e85d7a3b73fa0c6cefb94715aa7ba9cfeb6f3b384c4c0ad88d5ed0165da2",
+ "v3_helm_now_members": 162,
+ "v4_helm_now_files": 162
+}

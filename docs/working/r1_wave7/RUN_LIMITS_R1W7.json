@@ -49,7 +49,7 @@
  },
  "ledger": "Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json is the operator's; NO hold placed by the builder.",
  "package": "HELM_R1_W7_20261020",
- "package_version": "v3",
+ "package_version": "v4",
  "schema": "helm.run-limits/1",
  "sources_on_host": "none of the public sources: the host gets the custodian's X7 carrier (top folder x7) and the five neighbour zips beside this zip",
  "status": "NOT APPROVED, NOT LAUNCHED: the owner has not signed 'CHAT WAVE at 1 USD'; the builder wrote no approval record and ran no custodian seal; nothing is held or launched by the builder"

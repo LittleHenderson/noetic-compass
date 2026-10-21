@@ -1,4 +1,4 @@
-# TEST RECORD — HELM-R1 wave 7, the CHAT WAVE, v3 (FIX FIRST round 2; builder, laptop, 0 USD; practice data only)
+# TEST RECORD — HELM-R1 wave 7, the CHAT WAVE, v3 (FIX FIRST round 2) and v4 (reader repair, section 9; builder, laptop, 0 USD; practice data only)
 
 Nothing here is a result. Every number comes from the builder's PRACTICE inputs (RB-W1T's practice draw v2 and wave 6's
 published practice conversation pool, both excluded from the exam by id and by text; the same draw for v1, v2 and v3).
@@ -114,3 +114,33 @@ wrongly (K3), a question form not claimed (N), or a yield said in a form the quo
 
 Nothing new: the stale-freeze kit test failed before the reseal (expected) and passes from the seal; every suite and the
 dry run passed first time on the v3 cut.
+
+## 9. v4 row (A-R1W7-4, the HG5 reader repair reseal; 2026-10-20, laptop, 0 USD, practice data only; the v3 state of this file is kept as `v3_TEST_RECORD_R1W7.md`)
+
+Why v4 exists: v3 ran as job c51 and the frozen reader said `FAILURE` / `INCONCLUSIVE` because HG5 demanded `helm_now_files_changed`
+from every unit and the recorder unit never wrote it (the fixture gave it the field by hand), plus the stage plan's empty `pythonpath`
+killed attempt 1. The owner ordered: "want the chat test rerun with the reader repaired". Built in `build_v4\` from a fresh extract of
+the v3 zip (`build_v4\extract_v3\`, never edited); every edit is an exact once-only replacement (`build_v4\build\patch_v4_*.py`,
+logs `PATCH_V4_LOG*.json`); `READER_FIX_DIFF_V4.md` holds the whole diff (`r1w7/merge_r1w7.py` 9 changed lines, `r1w7/chat_harness.py`
+22, `tests_r1w7/fixture_run.py`, `test_units_w7.py`, `test_kit_w7.py`, `r1w7/custody_w7.py`, `r1w7/common_w7.py`, `kit/STAGE_R1W7.json`,
+`kit/run_r1w7.py` comment, `RUN_LIMITS_R1W7.json`; new `kit/stage_check_w7.py`). Amendment A-R1W7-4 = section 16 of the package's
+`PREREGISTRATION_R1W7.md` (`8b0ef140...`).
+
+| Item | v4 |
+|---|---|
+| Zip | `HELM_R1_W7_20261020_SOURCE_R1W7_v4.zip` sha256 **`8602b1bc98b543e4551e766d9db540d22d6dbc690b788dbbce5c91e4b6c7b712`** (950,613 bytes; 195 members + the freeze; resealed byte-identical) |
+| `PACKAGE_FREEZE.json` | **`948cf6913963f5fe06ab87b46e2ebcf03c3f541433877e04bda666d6e429f072`**; `FROZEN_R1W7.json` `5d032bb7...` (`FROZEN_R1W7_v4.json` beside the zip) |
+| HELM under test | commit `dfc7158d`, unchanged: `helm_now/` 162 files (161 cut + `SOURCE_CUT.json`) byte-identical to v3's freeze (`HELM_NOW_IDENTITY_V4.json`); `build_v4\CUT_CHECK_W7_v4.json` 161 of 161 equal to `git show dfc7158d`, 0 extra; byte copies `kit/plan_check.py` `84257a23...` and `kit/job_supervisor.py` `3b2337ca...` unchanged |
+| Tests from the sealed extract (`TEST_COUNTS_R1W7_v4.json` `0c4f565a...`) | wave-7 suites **Ran 34, OK** (80.1 s; v3 had 31: +2 HG5 tests, +1 stage-check test); HELM's 8 unittest files on a scratch copy **Ran 201, OK** (skipped 1; 6.1 s); 195 / 195 members re-hashed; `helm_now/` unchanged by the suites. Before the seal the only failing test was the stale-freeze runner test (expected; passes from the seal). |
+| The three HG5 tests | clean fixture: HG5 **true**, 14 of 14 units carry `[]`, missing list empty; plant `HG5c` (recorder unit lacks the field, the c51 shape): HG5 **false**, names `W7_RECORDER_EQUALITY`, 13 with the list; plant `HG5d` (recorder unit lists `helm_chat.py`): HG5 **false**. Also: the real recorder unit on practice turns writes `helm_now_files_changed == []`. |
+| v3 practice data read by the v4 reader (`build_v4\reread_v3_practice\R1_W7_READING_V3DATA_V4READER.json` `5f90b063...`; a copy of `dry_run\run5_v3_from_seal`, never edited) | HG5 **false**, as expected: `units_missing_helm_now_files_changed` = `["W7_RECORDER_EQUALITY"]`, 13 of 14 with the list (the v3 recorder unit never wrote it); the two host rows (wave-1 hash pair, helm_cut row) are absent on the practice mock as well |
+| Practice run from the v4 seal (`dry_run\run6_v4_from_seal`, 14 units one process at a time, 83.6 s, 14 of 14 exit 0, peaks 31.5-51.1 MiB; `DRY_RUN_SUMMARY.json` `01e02012...`, `R1_W7_READING_DRY.json` `4aaf5665...`) | verdict `INSTRUMENT_ERROR` / `INCONCLUSIVE` as designed for a practice mock (I0, I1, I6, I7, I9, I10 false); every mark met; **every number equals the v3 practice reading** (0 differing keys in `DRY_RUN_SUMMARY.json` outside timing and hashes). HG5 unit rows: 14 of 14 carry `[]`, missing list empty, `helm_now_files_changed` `{}`. As run, HG5 still reads false on practice because the laptop dry-run tool supplies neither the wave-1 folder hash pair nor the helm_cut instrument row (the host runner supplies them on AWS; v3's practice read the same two rows false). |
+| The same run6 read again with those two host rows supplied (`reread_v4.py`; units untouched; `R1_W7_READING_DRY_WITH_HOST_ROWS.json` `3e8be09e...`; `PRACTICE_READINGS_V4.json` `a17cd941...`) | **HG5 holds: true**; `failing_gates` `[]`; wave-1 folder equals its sealed freeze after the run (110 of 110 members, 0 extra; tree sha `3a4987af...`); `canonical_brain_equals_base` true; marks and every reported row identical to the as-run reading. The verdict stays `INSTRUMENT_ERROR` (practice mock), as it must. |
+| Exclusions (`contract/EXCLUDE_R1W7_PRIOR_USED.json` `19e972af...`) | block `X7_c51`: `X7_c51_real` 128 + `X7_c51_conv` 64 (ids from `x7_custody\X7_SEALED_20261021T024717Z.json` only); 16 lists, 1,466 distinct ids (v3: 14 lists, 1,277); every list now applies to BOTH pools; the 3 flagged REAL ids (`pg:65501@21017`, `pg:6912@731078` in `x6_conv`; `pg:49958@479072` in `x6v3_conv`) recorded in the block |
+| Seed bands / owner line | REAL 2,000,000,001-2,001,000,000; CONV 2,002,000,001-2,003,000,000; NOISE 2,004,000,001-2,005,000,000; used table 1-1,999,000,000; line to sign **`CHAT WAVE 2 at 1 USD`** (20 UTF-8 bytes); seed = sha256(line + ":" + v4 zip sha256) |
+| Stage plan | `kit/STAGE_R1W7.json` `pythonpath` = `["HELM_R1_W7_20261020"]` (= c51 attempt 2's job plan, D-OP-C51-1); `kit/stage_check_w7.py` PASS on the sealed stage, FAIL on `[]` and on a non-folder; the supervisor's own `validate_plan` passes the sealed stage and raises `PLAN_INVALID:r1w7_host_run:pythonpath` on `[]` (kit test) |
+| Status | SEALED, **NOT LAUNCHED**; no exam drawn; no approval record; c51's record stands; v3 `VOID_SUPERSEDED_BY_V4` (`v3_VOID_SUPERSEDED_BY_V4.md`) |
+
+What failed while building v4: nothing beyond the expected stale-freeze test before the seal. One honest limit: the laptop
+dry-run tool cannot make HG5 read true by itself (two host-only rows); the reread with those rows supplied is the practice
+proof that every HG5 row can now hold, and the sealed test suite is the proof that the gate still catches a missing list.
