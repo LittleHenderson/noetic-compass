@@ -305,7 +305,7 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
     if stage_1c and companion is None:
         if note_unit:                              # "2 sticks butter", "1 dash salt": no exact size -> present, no amount
             return _note_line(name, s, "UNIT_NO_EXACT_SIZE:" + note_unit)
-        if unit and unit in W.OWN_UNITS_AS_NOTES:  # "a pinch of salt", "1 can tomatoes": the same rule for own units
+        if unit and unit in W.OWN_UNITS_AS_NOTES:  # EMPTY today: own-count units ("2 cans") stay exact counts
             return _note_line(name, s, "UNIT_NO_EXACT_SIZE:" + unit)
     said = s + (", " + note if note else "")
     if companion is not None:                      # v5: one bundled line; its proportion is part of its name

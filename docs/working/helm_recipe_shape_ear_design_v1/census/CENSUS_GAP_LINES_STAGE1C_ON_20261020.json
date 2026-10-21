@@ -1,5 +1,5 @@
 {
- "brain_file_sha256": "7ac65404ff5f2d76d57a9eed9719971cfbce0799449cc5369f8b1211af2b6dc0",
+ "brain_file_sha256": "9ba0b20f610f4ae74d333ec2126970b094b51aa315672da4322e71211392c666",
  "floor": {
   "gap_recipes_found": 1477,
   "gap_refused_lines_found": 1974,
@@ -133,7 +133,7 @@
    }
   }
  },
- "reader_file_sha256": "376a27d79ba74ca1077b06fba523770b2b1d0d2eba3fab8dc201b9891050ba75",
+ "reader_file_sha256": "aedb622fd3e4776f6984fe6b00db3005e18488dbcb9716aaa81cc2c269efe928",
  "refused_codes": {
   "AMOUNT_APPROXIMATE": 29,
   "AMOUNT_HAS_TWO_PARTS": 125,
@@ -145,7 +145,7 @@
   "UNREAD_CLAUSE": 30
  },
  "schema": "helm.census.gap_lines/1",
- "seconds": 2.1,
+ "seconds": 1.9,
  "totals": {
   "gap_recipes": 1477,
   "gap_refused_lines": 1974,
@@ -158,5 +158,5 @@
   "recipes_none_read": 30,
   "recipes_over_max_lines": 1260
  },
- "utc": "2026-10-21T00:41:05Z"
+ "utc": "2026-10-21T00:53:33Z"
 }

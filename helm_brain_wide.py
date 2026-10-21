@@ -54,9 +54,11 @@ scoring). ON:
   - a NOTE line: an ingredient stated with no exact amount ("salt", "pepper to taste", "butter for frying", "1 dash
     salt", "2 sticks butter", "a pinch of salt", "1 can tomatoes") is recorded as PRESENT in the recipe, never as a
     requirement, never as the limiting ingredient, and never invented into a number. A unit word with no exact size
-    (NOTE_UNIT_WORDS: stick, dash, handful, ...; and, ON, the table's own-count units with exact_standard False) is NOT
-    a convertible unit: the line is a NOTE line rather than a count in a unit nobody can size. Ranges ("2 to 3 cups"),
-    approximate amounts and names the binder cannot read stay questions, exactly as before.
+    (NOTE_UNIT_WORDS: stick, dash, handful, ...: the unit words outside the table) is NOT a convertible unit: the line
+    is a NOTE line rather than a count in a unit nobody can size. The table's own-count units (can, clove, slice, pinch,
+    package, bunch, square, saltspoon, teacup) stay what they are OFF: EXACT plain counts of themselves, never converted
+    ("2 cans tomatoes" teaches 2 cans per unit); OWN_UNITS_AS_NOTES is kept EMPTY (coordinator correction, same day).
+    Ranges ("2 to 3 cups"), approximate amounts and names the binder cannot read stay questions, exactly as before.
   In the brain a NOTE line is a stock entry (None, ""): the recipe keeps a `notes` list beside its support; notes never
   enter the yield, the limiting reagent, a coefficient or the memory check; a batch whose ran-out ingredient is a note
   is refused (REFUSED_RAN_OUT_IS_A_NOTE). CLAIM STATUS of stage 1c: ENGINEERED-NOT-VALIDATED; no claim moved.
@@ -374,9 +376,10 @@ sprigs piece pieces stalk stalks handful handfuls drop drops cake cakes glass gl
 peck pecks bushel bushels dessertspoon dessertspoons dessertspoonful breakfastcup breakfastcups coffeecup coffeecups
 dram drams cube cubes strip strips inch inches sheet sheets scoop scoops bottle bottles ear ears rasher rashers fillet
 fillets knob knobs tumbler tumblers spoonful spoonfuls quarter-pound""".split())
-#: ON: the table's own-count units (exact_standard False) are read as NOTE lines too (the owner's rule: a unit with no
-#: exact size is not a convertible unit; present, no amount). OFF: they stay their own count unit, as scored in c50.
-OWN_UNITS_AS_NOTES = frozenset(u for u, d in UNITS.items() if not d["exact_standard"])
+#: the table's own-count units that should be read as NOTE lines when ON. EMPTY (coordinator correction 2026-10-20, same
+#: day as the first build): "2 cans tomatoes" is an EXACT count of cans today and stays one ON; the first build had put
+#: all 9 own-count units here. The set and its test are kept so the owner can change it later by name.
+OWN_UNITS_AS_NOTES: frozenset = frozenset()
 REFUSED_RAN_OUT_IS_A_NOTE = "REFUSED_RAN_OUT_IS_A_NOTE"
 
 

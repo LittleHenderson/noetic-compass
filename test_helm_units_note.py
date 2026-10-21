@@ -149,8 +149,7 @@ class B_WidenedUnits(unittest.TestCase):
         self.assertTrue(W.NOTE_UNIT_WORDS.isdisjoint(W.UNIT_WORDS_WIDENED))
         self.assertTrue(W.NOTE_UNIT_WORDS.isdisjoint(W.UNIT_WORDS))
         self.assertEqual(W.OTHER_UNIT_WORDS - W.NOTE_UNIT_WORDS - set(W.UNIT_WORDS_WIDENED), {"fluid", "fl"})
-        self.assertEqual(sorted(W.OWN_UNITS_AS_NOTES), ["bunch", "can", "clove", "package", "pinch", "saltspoon", "slice",
-                                                        "square", "teacup"])
+        self.assertEqual(W.OWN_UNITS_AS_NOTES, frozenset())              # the own-count units stay exact counts
 
 
 class C_NoteLinesReader(unittest.TestCase):
@@ -161,9 +160,7 @@ class C_NoteLinesReader(unittest.TestCase):
                                     ("2 sticks butter", "butter", "UNIT_NO_EXACT_SIZE:sticks"),
                                     ("1 dash salt", "salt", "UNIT_NO_EXACT_SIZE:dash"),
                                     ("a handful of raisins", "raisin", "UNIT_NO_EXACT_SIZE:handful"),
-                                    ("a pinch of salt", "salt", "UNIT_NO_EXACT_SIZE:pinch"),
-                                    ("1 can tomatoes", "tomato", "UNIT_NO_EXACT_SIZE:can"),
-                                    ("2 cloves garlic", "garlic", "UNIT_NO_EXACT_SIZE:clove")):
+                                    ("a dash of salt", "salt", "UNIT_NO_EXACT_SIZE:dash")):
                 lines, ask = WT.parse_lines(text)
                 self.assertIsNone(ask, text)
                 self.assertEqual(len(lines), 1, text)
@@ -177,6 +174,24 @@ class C_NoteLinesReader(unittest.TestCase):
             self.assertEqual((got, ask), ([("clove", Fraction(3), "", False)], None))
             got, ask = names("2 sticks")
             self.assertEqual((got, ask), ([("stick", Fraction(2), "", False)], None))
+
+    def test_own_count_units_stay_exact_counts_on_and_off(self):
+        """Coordinator correction 2026-10-20: "2 cans tomatoes" is an EXACT count of cans today and stays one ON. The set
+        OWN_UNITS_AS_NOTES exists so the owner can change that by name; today it is empty."""
+        self.assertEqual(W.OWN_UNITS_AS_NOTES, frozenset())
+        for on in (False, True):
+            with stage_1c(on):
+                for text, want in (("2 cans tomatoes", ("tomato", Fraction(2), "can", False)),
+                                   ("a pinch of salt", ("salt", Fraction(1), "pinch", False)),
+                                   ("2 cloves garlic", ("garlic", Fraction(2), "clove", False)),
+                                   ("1 package yeast", ("yeast", Fraction(1), "package", False))):
+                    got, ask = names(text)
+                    self.assertEqual((got, ask), ([want], None), (text, on))
+                b = W.WideRecipeBook()
+                rec = b.witness("sauce", {"tomato": (2, "can"), "onion": 1}, 1, ["tomato"])
+                self.assertTrue(rec["admitted"], (rec, on))
+                self.assertEqual(b.requirement_said("sauce", "tomato"), "2 cans")       # 2 cans per unit, exact
+                self.assertNotIn("notes", b.learned_state()["recipes"]["sauce"])
 
     def test_what_stays_a_question(self):
         with stage_1c(True):
@@ -198,7 +213,7 @@ class C_NoteLinesReader(unittest.TestCase):
             self.assertEqual(got, [("milk", Fraction(1), "liter", False), ("brandy", Fraction(2), "fluid ounce", False),
                                    ("cream", Fraction(4), "fluid ounce", False), ("egg", Fraction(1), "dozen", False),
                                    ("water", Fraction(1, 2), "gallon", False), ("stock", Fraction(2), "deciliter", False)])
-            r = WT.read_wide("We made 1 cake from 2 cups flour, 1 dozen eggs, a pinch of salt and 1 liter milk and ran out of flour.")
+            r = WT.read_wide("We made 1 cake from 2 cups flour, 1 dozen eggs, 1 dash of salt and 1 liter milk and ran out of flour.")
             self.assertEqual(r["status"], "WITNESS")
             self.assertEqual(r["witness"]["stock"], {"flour": (Fraction(2), "cup"), "egg": (Fraction(1), "dozen"),
                                                      "salt": (None, ""), "milk": (Fraction(1), "liter")})
@@ -281,11 +296,11 @@ class E_LiveLoop(unittest.TestCase):
         import helm_end_to_end_loop as E
         with stage_1c(True):
             loop = E.HELMEndToEndLoop()
-            r = loop.process_turn("We made 1 cake from 2 cups flour, 2 dozen eggs and a pinch of salt and ran out of flour.", tick=1)
+            r = loop.process_turn("We made 1 cake from 2 cups flour, 2 dozen eggs and 1 dash of salt and ran out of flour.", tick=1)
             self.assertEqual((r["loop_status"], r["path"]), ("WITNESS_ADMITTED", "wide"))
             self.assertEqual(r["response"], "Got it: one cake needs 2 cups of flour. Salt goes in too, with no set amount, so I "
                                             "didn't count it toward the limit. I still need one batch where egg ran out first.")
-            r = loop.process_turn("We made 1 cake from 3 cups flour, 1 dozen eggs and a pinch of salt and ran out of eggs.", tick=2)
+            r = loop.process_turn("We made 1 cake from 3 cups flour, 1 dozen eggs and 1 dash of salt and ran out of eggs.", tick=2)
             self.assertEqual(r["loop_status"], "WITNESS_ADMITTED")
             r = loop.process_turn("We have 4 cups flour and 36 eggs.", tick=3)   # the licensed path records; wide reads too
             self.assertIn(r["loop_status"], ("INVENTORY_RECORDED", "STOCK_RECORDED"))
@@ -297,7 +312,7 @@ class E_LiveLoop(unittest.TestCase):
             self.assertEqual(r["output"], "2")
             self.assertIn("Salt goes in too, with no set amount", r["response"])
             self.assertNotEqual(r["limiting_reagent"], "salt")
-            r = loop.process_turn("We made 1 cake from 2 cups flour, 1 dozen eggs and a pinch of salt and ran out of salt.", tick=6)
+            r = loop.process_turn("We made 1 cake from 2 cups flour, 1 dozen eggs and 1 dash of salt and ran out of salt.", tick=6)
             self.assertEqual(r["loop_status"], "TEACH_REFUSED_REFUSED_RAN_OUT_IS_A_NOTE")
             self.assertEqual(loop.wide_book.learned_state()["recipes"]["cake"]["notes"], ["salt"])
             print("\n[stage 1c] live loop with notes:", json.dumps([t["station"] for t in loop.trace if t["tick"] == 5]))
