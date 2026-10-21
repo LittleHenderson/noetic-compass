@@ -529,6 +529,16 @@ class HELMConversationalSession:
         """Every everyday reply goes through the voice: stock notes, reader questions, brain receipts."""
         is_concise = self.memory.context.user_preferences.get("concise", False)
         status = res.get("loop_status", "")
+        if res.get("path") == "wide":
+            # Wave-7 practice (2026-10-20): a wide-path answer was re-rendered as "about 0.33 units" with no dish name, and a
+            # recorded stock turn as "That's outside what I know". The wide path's own sentence (helm_wide_turn.say_wide,
+            # say_learned, say_refused, say_reader_question) already says every amount exactly and names the dish; the
+            # voice still guards it (no CAS words; every number and name from the sentence or the user's words).
+            line = res.get("everyday_english_response") or ""
+            speech = self.voice._say_plain("loop_line", [line], prompt, [line], status).text
+            if not res.get("cubes_written") and "nothing was saved" not in speech.lower():
+                speech = speech + " Nothing was saved."
+            return speech
         parts = []
         said_order = [s["name"] for s in (res.get("english_in") or {}).get("stocks") or []]
         recorded = sorted(res.get("stock_recorded") or [],

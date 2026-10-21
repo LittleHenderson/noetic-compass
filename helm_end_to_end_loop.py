@@ -547,14 +547,22 @@ class HELMEndToEndLoop:
                                     last_topic=self.last_topic, known_units=self.units)
 
     def wants_turn(self, text: str) -> bool:
-        """True when this loop would act on `text`: checked form, or English the reader claims."""
+        """True when this loop would act on `text`: checked form, English the licensed reader claims, or (switch ON)
+        English the wide reader claims. Wave-7 practice (2026-10-20) found the chat handed a line to the loop only when
+        the LICENSED reader claimed it, so lines only the wide reader handles ("How much consomme can we make?") fell to
+        the chat's general "I don't have verified data" reply; with the wide brain on, those lines are the loop's too."""
         if cce is not None:
             try:
                 cce.parse(text.strip())
                 return True
             except Exception:
                 pass
-        return self.read_english(text)["status"] != "NOT_MINE"
+        if self.read_english(text)["status"] != "NOT_MINE":
+            return True
+        if self.wide_on:
+            import helm_wide_turn
+            return helm_wide_turn.read_wide(text.strip(), last_topic=self.last_topic)["status"] != "NOT_MINE"
+        return False
 
     def _english_turn(self, text: str, reading: Dict[str, Any], tick: int, result: Dict[str, Any],
                       writes_before: int) -> Dict[str, Any]:

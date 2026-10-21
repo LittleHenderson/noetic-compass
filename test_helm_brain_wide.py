@@ -688,9 +688,11 @@ class H_SwitchOff(unittest.TestCase):
         base = "d4488f2a"
         # 2026-10-20: helm_english_in.py left this list. It changed on purpose after the base, outside RB-W1: lexicon v3
         # (PR #386, a7b1650a) and the wave-6 FIX FIRST crash fix (quantities_said on a wide reading); since #386 this
-        # check failed in every git checkout and was skipped only on scratch copies. The licensed brain and the voice
-        # stay pinned to the base.
-        for rel in ("helm_brain_canonical.py", "helm_voice.py"):
+        # check failed in every git checkout and was skipped only on scratch copies.
+        # 2026-10-20 (wave-7 FIX FIRST): helm_voice.py left this list too. It changed on purpose, outside RB-W1: kitchen
+        # fractions are said exactly ("exactly 1/3", never "about 0.33"), mixed numbers parse, and the lesson receipt
+        # never prints a Python list. The licensed brain stays pinned to the base.
+        for rel in ("helm_brain_canonical.py",):
             git = subprocess.run(["git", "-C", HERE, "show", f"{base}:{rel}"], capture_output=True, timeout=60)
             if git.returncode != 0:
                 self.skipTest("base commit not reachable in this checkout")
