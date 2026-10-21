@@ -54,3 +54,15 @@ def test_starting_a_chat_session_makes_no_root_sessions_folder(monkeypatch, tmp_
     if not existed:
         assert not os.path.isdir(root_sessions)
     assert helm_memory.DEFAULT_SESSION_DIR == os.path.join(HERE, "helm_ui", "sessions")
+
+
+def test_user_facts_keeps_the_last_twenty():
+    """The cap keeps the LAST 20 facts. Before 2026-10-21 the code read `[:20]` and kept the FIRST 20, silently
+    discarding every later fact from working memory (found by the memory-compaction census, SPEC 7.115)."""
+    ctx = helm_memory.WorkingMemoryContext(context_id="t-facts-cap")
+    for i in range(1, 26):
+        ctx.add_user_fact(f"fact number {i}", turn_index=i)
+    assert len(ctx.user_facts) == 20
+    assert ctx.user_facts[0] == "fact number 6"
+    assert ctx.user_facts[-1] == "fact number 25"
+    assert "fact number 1" not in ctx.user_facts

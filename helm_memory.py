@@ -129,8 +129,11 @@ class WorkingMemoryContext:
         cleaned = fact.strip().rstrip(".").strip()
         if cleaned and cleaned not in self.user_facts:
             self.user_facts.append(cleaned)
-        # Bounded cap: keep last 20 user narrative facts
-        self.user_facts = self.user_facts[:20]
+        # Bounded cap: keep the LAST 20 user narrative facts. Until 2026-10-21 this read `[:20]`, which kept the
+        # FIRST 20 and silently discarded every later fact from working memory (the cube store still got it);
+        # found by the memory-compaction census (SPEC 7.115 follow-up 2), fixed on the owner's word, test in
+        # test_helm_memory.py::test_user_facts_keeps_the_last_twenty.
+        self.user_facts = self.user_facts[-20:]
 
         # Record into cube store
         if self.cube_store is not None and cleaned:
@@ -312,6 +315,16 @@ class HELMConversationalMemory:
         # session leaves no empty folder behind.
         self.storage_dir = storage_dir or os.environ.get("HELM_SESSION_DIR") or DEFAULT_SESSION_DIR
         self.session_file = os.path.join(self.storage_dir, f"{self.session_id}.jsonl")
+        # Memory compaction (SPEC 7.115, helm_memory_compact.py) behind ONE switch, HELM_MEMORY_COMPACT, default OFF.
+        # OFF: `compactor` stays None and nothing below changes. ON: a turn that the FIFO would drop is compacted
+        # into a capsule with a cold copy, a breadcrumb and a receipt instead (nothing is dropped silently).
+        self.compactor = None
+        try:
+            import helm_memory_compact as _hmc
+            if _hmc.compact_on():
+                _hmc.attach(self)
+        except ImportError:
+            pass
 
     def process_turn_with_cube_store(self, text: str) -> Optional[TurnReceipt]:
         return self.context.process_turn_with_cube_store(text)
@@ -331,7 +344,9 @@ class HELMConversationalMemory:
                     operation: Optional[str] = None,
                     cubes_read: Optional[List[str]] = None,
                     cubes_written: Optional[List[str]] = None) -> ConversationTurn:
-        turn_id = len(self.turns) + 1
+        # OFF: today's rule (the id is the position; after a FIFO drop ids repeat, kept as is for the pinned OFF path).
+        # ON: the compactor counts turn ids, so a compacted turn's id is never reused.
+        turn_id = self.compactor.next_turn_id() if self.compactor is not None else len(self.turns) + 1
         turn = ConversationTurn(
             turn_id=turn_id,
             timestamp_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -354,7 +369,10 @@ class HELMConversationalMemory:
 
         # Enforce FIFO bound on in-memory turns to respect 354 MB memory budget
         if len(self.turns) > self.max_turns:
-            self.turns = self.turns[-self.max_turns:]
+            if self.compactor is not None:
+                self.compactor.housekeep()      # compact the oldest turns (cold copy + capsule + receipt), never drop
+            else:
+                self.turns = self.turns[-self.max_turns:]
 
         # Append to persistent JSONL session ledger (its folder is created lazily, on this first write)
         os.makedirs(os.path.dirname(os.path.abspath(self.session_file)), exist_ok=True)
