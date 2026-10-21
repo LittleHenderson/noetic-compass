@@ -346,6 +346,82 @@ class G_EverydayNamesTheLicensedPathRecordsFirst(unittest.TestCase):
                          ("SUCCESS_EVALUATED", Fraction(2), "milk"))
 
 
+class H_FaceShapedClauseAboutAnUnheldThingAsks(unittest.TestCase):
+    """v7.2 (the c55 finding, 2 wrong dialogue answers): a clause that has the SHAPE of a face statement (a lexicon row
+    matches with the name slot left open) but names a thing the wide brain does not hold must ask, never be read as
+    small talk; and a held name must be found through its plural and spelling forms."""
+
+    def test_unheld_subject_asks_instead_of_none(self):
+        got = FI.read("the yeast cake is just starting to work", ["compressed yeast", "flour"], ["bread"], names_as_given=True)
+        self.assertEqual((got["status"], got["clarify"]["code"]), ("CLARIFY", "FACE_UNKNOWN_INGREDIENT"))
+        got = FI.read("I'm saving the cornmeal for something else", ["flour", "milk"], ["bread"], names_as_given=True)
+        self.assertEqual((got["status"], got["clarify"]["code"]), ("CLARIFY", "FACE_UNKNOWN_INGREDIENT"))
+        got = FI.read("there's no reason to bake cookies today", ["flour"], ["oatcake"], names_as_given=True)
+        self.assertEqual((got["status"], got["clarify"]["code"]), ("CLARIFY", "FACE_UNKNOWN_PRODUCT"))
+        for clause in NOT_A_FACE:                                        # no face shape -> still NONE
+            self.assertEqual(FI.read(clause, ["flour"], ["oatcake"], names_as_given=True)["status"], "NONE", clause)
+
+    def test_plural_and_spelling_forms_reach_the_held_name(self):
+        got = FI.read("I'm saving the tomatoes for something else", ["tomato", "flour"], ["sauce"], names_as_given=True)
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in got["faces"]], [("tomato", "PURPOSE", "ABSENT")])
+        got = FI.read("the loaves are getting old", ["loaf", "flour"], ["pudding"], names_as_given=True)
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in got["faces"]], [("loaf", "POWER", "WANING")])
+        got = FI.read("the potatoes are past their best", ["potato"], ["hash"], names_as_given=True)
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in got["faces"]], [("potato", "POWER", "WANING")])
+
+    def test_wide_path_asks_and_blocks_until_the_stock_is_restated(self):
+        loop = taught_loop()
+        r = loop.process_turn(STOCK[:-1] + ", but the barley cake is just starting to work.", tick=4)
+        self.assertEqual(r["loop_status"], "CLARIFY_WIDE_FACE_UNKNOWN_INGREDIENT")
+        self.assertEqual(r["clause_read"]["status"], "CLARIFY")
+        q = loop.process_turn(QUESTION, tick=5)
+        self.assertNotEqual(q["loop_status"], "SUCCESS_EVALUATED")           # never the raw answer
+        self.assertIsNone(q.get("output_value"))
+        self.assertEqual(loop.process_turn(STOCK, tick=6)["loop_status"], "STOCK_RECORDED")
+        q2 = loop.process_turn(QUESTION, tick=7)
+        self.assertEqual((q2["loop_status"], Fraction(str(q2["output_value"])), q2["limiting_reagent"]),
+                         ("SUCCESS_EVALUATED", Fraction(2), "oat milk"))
+
+    def test_purpose_absent_on_a_plural_form_asks(self):
+        loop = taught_loop()
+        self.assertEqual(loop.process_turn(STOCK[:-1] + ", but I'm saving the duck eggs for something else.", tick=4)["loop_status"], "STOCK_RECORDED")
+        q = loop.process_turn(QUESTION, tick=5)
+        self.assertEqual(q["loop_status"], "CLARIFY_WIDE_INGREDIENT_PURPOSE_ABSENT")
+
+
+class I_AnArticleLedUnitLineIsItsOwnLine(unittest.TestCase):
+    """v7.2 (the c55 wrong lesson): "..., a dash of pepper" after a separator was folded into the previous line as a
+    note (dash counts as a vague word after "a"), and the ran-out name then landed on the PREVIOUS line's ingredient,
+    which learned a wrong amount. A piece "a <vague word> of <name>" is its own line (and asks, since a dash has no
+    exact size); and a ran-out name found only inside another line's notes is never resolved onto that line."""
+
+    def test_a_dash_of_x_after_a_separator_asks(self):
+        for text in ("We made 1 soup from 2 cups water, 3 onions, a dash of pepper and ran out of pepper.",
+                     "We made 1 soup from 2 cups water, 3 onions and a dash of pepper and ran out of onions.",
+                     "We have 2 cups water, 3 onions, a dash of pepper."):
+            r = WT.read_wide(text)
+            self.assertEqual((r["status"], (r["clarify"] or {}).get("code")), ("CLARIFY", "UNIT_NOT_IN_TABLE"), text)
+        self.assertTrue(WT.starts_line("a dash of pepper"))
+        self.assertTrue(WT.starts_line("a handful of raisins"))
+        self.assertFalse(WT.starts_line("a little salt"))                  # no "of": still a note of the line before
+        self.assertFalse(WT.starts_line("cooked rice"))
+
+    def test_a_ran_out_name_inside_another_lines_notes_is_not_resolved(self):
+        r = WT.read_wide("We made 1 soup from 2 cups water and 3 onions, a little pepper and ran out of pepper.")
+        self.assertEqual(r["status"], "WITNESS")
+        self.assertEqual(r["witness"]["ran_out"], ["pepper"])              # left as said, not mapped onto "onion"
+        import helm_end_to_end_loop as E2E
+        loop = E2E.HELMEndToEndLoop(wide_brain=True)
+        res = loop.process_turn("We made 1 soup from 2 cups water and 3 onions, a little pepper and ran out of pepper.", tick=1)
+        self.assertNotEqual(res["loop_status"], "WITNESS_ADMITTED")
+        self.assertEqual(loop.wide_book.recipes.get("soup", {}).get("a", {}).get("onion"), None)
+
+    def test_notes_still_help_a_line_with_no_name_of_its_own(self):
+        r = WT.read_wide("We made 1 rice from 1 cup cold, cooked rice and 2 cups water and ran out of cold.")
+        self.assertEqual(r["status"], "WITNESS")
+        self.assertIn("cooked rice", r["witness"]["stock"])            # the notes still name the line
+
+
 class F_LicensedFaceReaderUnchanged(unittest.TestCase):
     def test_default_mode_reads_only_everyday_names(self):
         got = FI.read("We have 12 cups of flour but I barely know how to use it.", ["Flour"], ["Bread"])
