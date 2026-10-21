@@ -183,6 +183,20 @@ class HELMConversationalSession:
                     speech = f"You said: {matches[0]}."
                 else:
                     speech = f"Yes, absolutely: {matches[0]}."
+            elif getattr(self.memory, "compactor", None) is not None:
+                # Memory compaction ON (SPEC 7.115): fetch first, ask last. EXACT only on a digest-checked original;
+                # a rebuilt memory says so; UNKNOWN names its reason; a refresh question quotes a clue.
+                hit = self.memory.compactor.recall(prompt, will_act=False)
+                if hit["label"] == "EXACT" and hit["texts"]:
+                    speech = f"You said: {hit['texts'][0]}."
+                elif hit["label"] == "RECONSTRUCTED" and hit["texts"]:
+                    speech = f"I don't have your exact words any more. {hit['texts'][0]}"
+                    if hit.get("question"):
+                        speech += " " + hit["question"]
+                else:
+                    speech = "I checked my records for this session, but I don't see a specific note on that yet. Feel free to remind me!"
+                    if hit.get("question"):
+                        speech = hit["question"]
             else:
                 speech = "I checked my records for this session, but I don't see a specific note on that yet. Feel free to remind me!"
             print(f"\nHELM: {speech}\n")
