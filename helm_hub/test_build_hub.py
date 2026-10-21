@@ -164,8 +164,20 @@ class BuildTests(unittest.TestCase):
         self.assertIn("comment like a normal person would", r)
         self.assertIn("CONVERSE ABOUT", r)
         self.assertIn("TRANSFORMER TRAINED ON THE 40 ELEMENTS", r)
-        self.assertGreaterEqual(r.count("INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED"), 9)
+        self.assertGreaterEqual(r.count("INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED"), 13)
         self.assertIn("LLM_WRITTEN_ONLY", r)
+        # items 10 to 13 and the owner's second statement of intent (2026-10-21 09:42 PDT)
+        self.assertIn("Teaching HELM a new subject by ordinary question-and-answer conversation", r)
+        self.assertIn("Memory compacted into CAS, with clues to its subject", r)
+        self.assertIn("quot;Refresh my memory&quot; questions, with a fit check and strengthening", r)
+        self.assertIn("The Unity Eye applied in these situations, correctly", r)
+        self.assertIn("MEMORIES CAN BE COMPACTED INTO CAS W/CLUES TO THERE SUBJECT MATTER", r)
+        self.assertIn("USE THE EYE IN THESE SITUATIONS, CORRECTLY APPLIED", r)
+        self.assertIn("statement of intent,\nnot an approval", r)
+        self.assertIn("Eye acting stays NOT LICENSED", r)
+        # the owner's 09:50 PDT statement under item 11
+        self.assertIn("WHY NOT EMPLOY THEM IN COMPACTING MEMORIES AS WELL AND CAN WORK WITH CUBES AND RECIPE COEFFICIENTS", r)
+        self.assertIn("ONCE WE RUN OUT TOKENS", r)
 
     def test_roadmap_carries_the_statement_of_intent_in_full(self):
         r = (b.SITE / "roadmap.html").read_text(encoding="utf-8")
