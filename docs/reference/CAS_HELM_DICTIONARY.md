@@ -158,7 +158,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 
 ## A–Z entries
 
-**458 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
+**459 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
 
 ### 0-9
 
@@ -453,6 +453,12 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 **Charge, hold and cap** — [Infrastructure]
 - *Plain:* the cap is the most a run may spend; the hold reserves it; the charge is what was actually spent.
 - *Definition:* (usage terms; no canonical definition; first seen in SPEC §7.24, e.g. "cap $0.50"). "Money, as the ledger and the records write it, not as anyone computes it." — SPEC §7.47.
+
+**Chat wave** (HELM-R1 wave 7, "CHAT WAVE") — [HELM test/governance]
+- *Plain:* the wave that types to HELM's chat window line by line, with the wide brain on by default, and scores what comes back: did it learn real recipes, answer right, ask where it should, say it plainly, and stay unbroken by small talk, as well as the loop did when driven directly. Three exams drawn blind by a custodian: 128 real recipes, 64 dialogues, the same 64 with two small-talk turns each.
+- *Definition:* "When a person types to HELM's chat, with the canonical wide brain on, does HELM learn real recipes, answer right, ask where it should, say it plainly, and stay unbroken by ordinary small talk, as well as the loop did when driven directly?" — `PREREGISTRATION_R1W7.precode.md` §1 (sha256 `efe94ed6…`). Marks NH-CHAT, K1, K3, K4, P PLAIN, N NOISE; words `CHAT_WAVE_HARMED` / `CHAT_WAVE_NO_GAIN` / `INCONCLUSIVE` / `CHAT_WAVE_EARNED_KEEP` — §6.
+- *Owner's words:* "the live chat with the wide brain tested for real" (2026-10-20). The line to sign, proposed: `CHAT WAVE at 1 USD`.
+- *Status:* packet sealed (v3, zip `5063baba…`), NOT LAUNCHED; nothing scored, no claim — SPEC §7.98. Two FIX FIRST rounds on practice fixed five chat defects in HELM first (PR #416), one of them a kitchen sentence that ran a shell command; every mark met on practice v3 (practice data only).
 
 **Circular verification** — [HELM test/governance]
 - *Plain:* a run checking itself and reporting "no problems" while an outside checker found problems.
@@ -2110,7 +2116,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 **Wave** (HELM-R1 wave) — [HELM test/governance]
 - *Plain:* one sealed test round in the HELM-R1 series. Parts that already passed their own test are put into HELM's brain slot, each on an on-off switch, and scored on custodian-sealed exams. Waves 1 to 6 so far (wave 3 has a roomier follow-up, 3b).
 - *Definition:* "**Only passing parts.** A part enters a wave only when its own test's program reading shows its pass word" and "**One switch per part.** Every part has a named on/off switch in a frozen config file." — `Documents\Codex\2026-10-15\helm_r1_integration_plan_v1\WAVES.md` §1 (design; the wave numbering comes from this file).
-- *The waves on record:* wave 1 — SPEC §7.47; wave 2 — §7.63, §7.64; wave 3 and 3b — §7.66, §7.69, §7.70, §7.72; wave 4 — §7.75, §7.77; wave 5 — §7.76, §7.78; wave 6, the **Pair wave** — §7.91 (packet), §7.93 (c48, `WIDE_WAVE_NO_GAIN`), §7.96 (c50 re-run, `WIDE_WAVE_EARNED_KEEP`). One entry per scored wave follows (**HELM-R1 wave 1** to **HELM-R1 wave 5**).
+- *The waves on record:* wave 1 — SPEC §7.47; wave 2 — §7.63, §7.64; wave 3 and 3b — §7.66, §7.69, §7.70, §7.72; wave 4 — §7.75, §7.77; wave 5 — §7.76, §7.78; wave 6, the **Pair wave** — §7.91 (packet), §7.93 (c48, `WIDE_WAVE_NO_GAIN`), §7.96 (c50 re-run, `WIDE_WAVE_EARNED_KEEP`); wave 7, the **Chat wave** — §7.98 (packet sealed, not launched). One entry per scored wave follows (**HELM-R1 wave 1** to **HELM-R1 wave 5**).
 - *Status:* each wave has its own reading and words; see the spec sheet sections above. A wave's words carry the claim ceiling of its exams (`SYNTHETIC_ONLY` for waves 1 to 5; wave 6 adds `NAMED_CORPORA_ONLY` for its real-recipe part).
 
 **HELM-R1 wave 1** (W1; job c34-g) — [HELM test/governance]
@@ -2253,3 +2259,4 @@ These are recorded so nobody fills the gap with a guess.
 | 2026-10-20 | Two entries added at the owner's request ("What is a pair wave?"): Wave (HELM-R1 wave) and Pair wave (HELM-R1 wave 6), quoted from SPEC §7.91, WAVES.md §1, the CHANGELOG wave-6 entry and commit cb3db850. Count 454 -> 456. No definition invented; no status changed. |
 | 2026-10-20 | Two entries added at the owner's request ("wide brain needs to be in HELM hub glossary"): Wide brain (RB-W1, switch `WIDE_BRAIN`) and Canonical-brain candidate, quoted from OWNER_APPROVALS_20261018.md, `helm_brain_wide.py`, PREREGISTRATION_R1W6.md §3 and §12, the recipe shape survey title and SPEC §7.88, §7.89, §7.91, §7.93, §7.96. Canonical brain, Pair wave and Wave entries updated with the c48 and c50 outcomes. Count 456 -> 458. No definition invented; no status changed. |
 | 2026-10-20 | Owner ruling "YES TO WIDE BRAIN: Wide brain becomes HELM’s canonical brain" recorded: Canonical brain, Canonical-brain candidate and Wide brain entries updated (pointer = RB-W1; claim statuses unchanged). Count unchanged (458). No definition invented. |
+| 2026-10-20 | One entry added: Chat wave (HELM-R1 wave 7), quoted from PREREGISTRATION_R1W7.precode.md and SPEC §7.98; Wave entry lists wave 7. Count 458 -> 459. No definition invented; no status changed. |

@@ -198,8 +198,12 @@ def _as_fraction(v) -> Fraction:
         return v
     s = str(v).strip().replace(",", "")
     if "/" in s:
+        whole = 0
+        if " " in s:                       # a mixed number: "1 1/3"
+            w, s = s.split(None, 1)
+            whole = int(w)
         p, q = s.split("/")
-        return Fraction(int(p), int(q))
+        return Fraction(whole) + Fraction(int(p), int(q))
     try:
         return Fraction(Decimal(s))
     except (InvalidOperation, ValueError):
@@ -219,12 +223,30 @@ def round_to(value, places: int) -> str:
     return _dec_str(d)
 
 
+def frac_words(fr: Fraction) -> str:
+    """The exact words for a fraction: '1/3', '1 1/3', '3'."""
+    whole, rest = divmod(fr.numerator, fr.denominator)
+    if rest == 0:
+        return str(whole)
+    part = "%d/%d" % (rest, fr.denominator)
+    return part if whole == 0 else "%d %s" % (whole, part)
+
+
+KITCHEN_DENOMINATORS = 16   # thirds, sixths, eighths, twelfths, sixteenths: fractions people say in a kitchen
+
+
 def say_amount(value, register: str) -> str:
-    """'exactly 12' when the shown number is the exact value, else 'about 8.45'. A shows up to 4 places."""
+    """'exactly 12' when the shown number is the exact value; 'exactly 1/3' or 'exactly 1 1/3' when the exact value is a
+    kitchen fraction (denominator up to 16) that no decimal can show; else 'about 8.45'. A shows up to 4 decimal places.
+    Wave-7 practice (2026-10-20) caught the chat saying 'about 0.33' for a third of a batch."""
+    fr = _as_fraction(value)
     places = 4 if register == "A" else 2
     shown = round_to(value, places)
-    exact = _as_fraction(shown) == _as_fraction(value)
-    return ("exactly " if exact else "about ") + shown
+    if _as_fraction(shown) == fr:
+        return "exactly " + shown
+    if fr.denominator <= KITCHEN_DENOMINATORS:
+        return "exactly " + frac_words(fr)
+    return "about " + shown
 
 
 # --------------------------------------------------------------------------------------------- CAS detectors
@@ -322,7 +344,11 @@ def allowed_facts(r: Dict[str, Any], user_have: Optional[str] = None) -> Tuple[s
     if r.get("yield_value") is not None:
         for p in range(0, 7):
             nums.add(_as_fraction(round_to(r["yield_value"], p)))
-        nums.add(_as_fraction(r["yield_value"]))
+        fr = _as_fraction(r["yield_value"])
+        nums.add(fr)
+        whole, rest = divmod(fr.numerator, fr.denominator)        # "1 1/3" is read as the tokens 1 and 1/3
+        nums.add(Fraction(whole))
+        nums.add(Fraction(rest, fr.denominator))
     for f in ("limiting_qty",):
         if r.get(f) is not None:
             nums.add(_as_fraction(r[f]))
@@ -350,7 +376,7 @@ def _key_facts(r: Dict[str, Any], situation: str) -> List[Tuple[str, List[str]]]
     """Each key fact with the spellings that count as saying it."""
     keys = []
     if situation in ("success",) or (situation == "repaired" and r.get("yield_value") is not None):
-        keys.append(("yield", [round_to(r["yield_value"], p) for p in range(0, 7)]))
+        keys.append(("yield", [round_to(r["yield_value"], p) for p in range(0, 7)] + [frac_words(_as_fraction(r["yield_value"]))]))
     if situation == "success" and r.get("limiting"):
         keys.append(("limiting", [say_name(r["limiting"])]))
     if situation == "blocked_missing":
@@ -400,8 +426,8 @@ def verify(text: str, r: Dict[str, Any], situation: Optional[str] = None, user_h
         if n not in names:
             problems.append("INVENTED_NAME:%s" % n)
     exact_vals = {_as_fraction(r[f]) for f in ("yield_value", "limiting_qty") if r.get(f) is not None}
-    for m in re.finditer(r"\bexactly\s+(\d[\d,]*(?:\.\d+)?)", text, re.I):
-        if _as_fraction(m.group(1)) not in exact_vals:  # "exactly 3.333" for 10/3 is a false claim
+    for m in re.finditer(r"\bexactly\s+(\d+\s+\d+/\d+|\d[\d,]*(?:\.\d+)?(?:/\d+)?)", text, re.I):
+        if _as_fraction(m.group(1)) not in exact_vals:  # "exactly 3.333" for 10/3 is a false claim; "exactly 1 1/3" is not
             problems.append("FALSE_EXACT:%s" % m.group(1))
     low = text.lower()
     for key, spellings in _key_facts(r, situation):
@@ -1041,7 +1067,10 @@ def receipt_from_loop_result(res: Dict[str, Any], effective_inputs: Optional[Dic
         return {"kind": "UNDETERMINED", "situation": "cant_determine", "receipt_id": rid}
     if status == "WITNESS_ADMITTED":
         rec = res.get("recipe_receipt") or {}
-        learned = f"{rec.get('ran_out', 'one ingredient')} per batch of {rec.get('product') or 'that'}"
+        ran = rec.get("ran_out") or "one ingredient"
+        if isinstance(ran, (list, tuple)):                 # never a Python list in a sentence ("['egg']")
+            ran = say_list([str(x) for x in ran]) if ran else "one ingredient"
+        learned = f"{ran} per batch of {rec.get('product') or 'that'}"
         # fix H: the loop's own line says the learned requirement exactly ("Learned: one Bread needs 2 Flour.")
         m = re.search(r"Learned: one (\w+) needs (\S+) (\w+)\.", said)
         if m:

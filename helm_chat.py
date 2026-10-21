@@ -434,12 +434,21 @@ class HELMConversationalSession:
 
         # Step 8: Agentic / Software Engineering Goal
         lower_prompt = resolved_prompt.lower()
-        is_agentic = any(k in lower_prompt for k in [
+        # Wave-7 FIX FIRST (2026-10-20): "run" inside "we've run out of sugar" used to make a kitchen sentence a software
+        # goal, and the tool engine then RAN a shell command. Keywords match whole words only; kitchen talk never counts;
+        # and the wide brain's ingredient names count as food, like the licensed brain's.
+        is_agentic = any(re.search(r"\b%s\b" % re.escape(k), lower_prompt) for k in [
             "write", "create", "test", "verify", "git", "commit", "diff",
             "scaffold", "dashboard", "design", "dispatch", "cloud", "aws", "run", "inspect"
         ])
+        kitchen_talk = bool(re.search(r"\b(?:ran out|run out|we have|we've got|we made|we baked|can we make|how much|how many|"
+                                      r"cups?|teaspoons?|tablespoons?|pounds?|ounces?|pantry|recipe|ingredients?)\b", lower_prompt))
+        food_names = list(self.loop.brain.ingredients)
+        if getattr(self.loop, "wide_on", False) and getattr(self.loop, "wide_book", None) is not None:
+            food_names += list(self.loop.wide_book.ingredients)
+        known_food = any(n.lower() in lower_prompt for n in food_names if n)
 
-        if is_agentic and not any(ing.lower() in lower_prompt for ing in self.loop.brain.ingredients):
+        if is_agentic and not kitchen_talk and not known_food:
             # Decompose and execute through Level A1/A2 Topological Planner
             dag = self.engine.decompose_goal(resolved_prompt)
             plan_res = self.engine.execute_dag(dag)
@@ -529,6 +538,16 @@ class HELMConversationalSession:
         """Every everyday reply goes through the voice: stock notes, reader questions, brain receipts."""
         is_concise = self.memory.context.user_preferences.get("concise", False)
         status = res.get("loop_status", "")
+        if res.get("path") == "wide":
+            # Wave-7 practice (2026-10-20): a wide-path answer was re-rendered as "about 0.33 units" with no dish name, and a
+            # recorded stock turn as "That's outside what I know". The wide path's own sentence (helm_wide_turn.say_wide,
+            # say_learned, say_refused, say_reader_question) already says every amount exactly and names the dish; the
+            # voice still guards it (no CAS words; every number and name from the sentence or the user's words).
+            line = res.get("everyday_english_response") or ""
+            speech = self.voice._say_plain("loop_line", [line], prompt, [line], status).text
+            if not res.get("cubes_written") and "nothing was saved" not in speech.lower():
+                speech = speech + " Nothing was saved."
+            return speech
         parts = []
         said_order = [s["name"] for s in (res.get("english_in") or {}).get("stocks") or []]
         recorded = sorted(res.get("stock_recorded") or [],
