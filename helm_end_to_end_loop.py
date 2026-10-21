@@ -554,14 +554,22 @@ class HELMEndToEndLoop:
                                     last_topic=self.last_topic, known_units=self.units)
 
     def wants_turn(self, text: str) -> bool:
-        """True when this loop would act on `text`: checked form, or English the reader claims."""
+        """True when this loop would act on `text`: checked form, English the licensed reader claims, or (switch ON)
+        English the wide reader claims. Wave-7 practice (2026-10-20) found the chat handed a line to the loop only when
+        the LICENSED reader claimed it, so lines only the wide reader handles ("How much consomme can we make?") fell to
+        the chat's general "I don't have verified data" reply; with the wide brain on, those lines are the loop's too."""
         if cce is not None:
             try:
                 cce.parse(text.strip())
                 return True
             except Exception:
                 pass
-        return self.read_english(text)["status"] != "NOT_MINE"
+        if self.read_english(text)["status"] != "NOT_MINE":
+            return True
+        if self.wide_on:
+            import helm_wide_turn
+            return helm_wide_turn.read_wide(text.strip(), last_topic=self.last_topic)["status"] != "NOT_MINE"
+        return False
 
     def _english_turn(self, text: str, reading: Dict[str, Any], tick: int, result: Dict[str, Any],
                       writes_before: int) -> Dict[str, Any]:
@@ -623,9 +631,18 @@ class HELMEndToEndLoop:
         if reading["status"] != "NOT_MINE":
             return self._english_turn(text, reading, tick, result, writes_before)
         lower = text.lower()
+        if self.wide_on:
+            # Wave-7 FIX FIRST (2026-10-20): a kitchen sentence the wide reader claims ("We have 6 peaches but we've run
+            # out of sugar.") must never reach the tool engine because of a word like "run"; the wide path takes it.
+            import helm_wide_turn
+            if helm_wide_turn.read_wide(text, last_topic=self.last_topic)["status"] != "NOT_MINE":
+                return self._finish(result, tick, "CLARIFY_NOT_CCE", HELMVoiceAdapter.format_clarify_not_checked(),
+                                    writes_before, "WAIT_FOR_USER")
         agentic_keywords = ["audit", "run", "inspect", "verify local environment", "dispatch", "write file",
                             "read file"]
-        if any(kw in lower for kw in agentic_keywords):
+        kitchen_talk = re.search(r"\b(?:ran out|run out|we have|we've got|we made|we baked|can we make|how much|how many|"
+                                 r"cups?|teaspoons?|tablespoons?|pounds?|ounces?|pantry|recipe|ingredients?)\b", lower)
+        if not kitchen_talk and any(re.search(r"\b%s\b" % re.escape(kw), lower) for kw in agentic_keywords):
             dag = self.agentic_engine.decompose_goal(text)
             plan_res = self.agentic_engine.execute_dag(dag)
             result["agentic_plan_result"] = plan_res

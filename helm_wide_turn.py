@@ -289,6 +289,12 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
     if ALTERNATIVE_RX.search(rest) or re.match(r"plus\b", rest, re.IGNORECASE):
         return {"clarify": _ask("AMOUNT_HAS_TWO_PARTS", words=s)}
     note = notes.strip().strip(".").strip()
+    alt = re.split(r"\s+or\s+", rest, maxsplit=1)
+    if len(alt) == 2 and alt[0].strip() and not re.search(r"\d", alt[1]):
+        # v6: "dry beans or whole peas" -> the ingredient is the first alternative (the K-R key's head rule); the
+        # alternative stays a note of the line, never a made-up name
+        rest = alt[0].strip()
+        note = (note + ", or " + alt[1].strip()).strip(", ")
     if unit and not bind_name(rest) and m is not None and not bind_name(note):
         unit, rest = "", m.group(1)
     if note_unit and not bind_name(rest) and not bind_name(note):   # stage 1c: "2 sticks" alone: the word is the name
@@ -410,7 +416,8 @@ def normalize_text(text: str) -> str:
         if t2 == t:
             break
         t = t2
-    return re.sub(r"\s+", " ", t).strip()
+    t = re.sub(r"\s+", " ", t).strip()
+    return GREETING_RX.sub("", t)
 
 
 WITNESS_RX = re.compile(r"^(?:so\s+|ok(?:ay)?,?\s+)?(?:we|i)\s+(?:just\s+)?(?:made|baked|cooked|produced|whipped up)\s+"
@@ -427,7 +434,17 @@ STOCK_RX = re.compile(r"^(?:(?:actually|now|ok(?:ay)?|so|sorry|correction|update
                       re.IGNORECASE)
 QUESTION_RX = re.compile(r"^(?:how\s+(?:much|many)\s+(?P<p1>.+?)\s+(?:can|could)\s+(?:we|i)\s+(?:make|bake|cook)"
                          r"(?:\s+now)?(?:\s+with what we have)?|(?:can|could)\s+(?:we|i)\s+(?:make|bake|cook)\s+"
-                         r"(?:any\s+|some\s+)?(?P<p2>.+?))\s*\??$", re.IGNORECASE)
+                         r"(?:any\s+|some\s+)?(?P<p2>.+?)"
+                         # v6 (wave-7 FIX FIRST): wave 3b's two other question forms, which the chat's gate otherwise
+                         # answered as general knowledge
+                         r"|(?:could|can|would)\s+you\s+tell\s+me\s+how\s+(?:much|many)\s+(?P<p3>.+?)\s+that\s+makes"
+                         r"|how\s+(?:much|many)\s+(?P<p4>.+?)\s+do\s+(?:we|i)\s+have\s+the\s+makings\s+of"
+                         r")\s*\??$", re.IGNORECASE)
+#: v6: a greeting in front of a kitchen sentence ("Hi again. How much X can we make?") is not part of it
+GREETING_RX = re.compile(r"^(?:hi|hello|hey|good (?:morning|afternoon|evening))(?:\s+(?:again|there))?[.,!]\s+", re.IGNORECASE)
+#: v6: a stock sentence that ends "but we've run out of X" states an absence; the brain asks rather than guessing a name
+ABSENT_TAIL_RX = re.compile(r"^(?P<lines>.+?),?\s+(?:but|and)\s+(?:we(?:'ve| have)|i(?:'ve| have))\s+run out of\s+(?P<absent>.+)$",
+                            re.IGNORECASE)
 
 
 def _words(text: str) -> List[str]:
@@ -588,6 +605,10 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
         return out
     m = STOCK_RX.match(t)
     if m:
+        a = ABSENT_TAIL_RX.match(m.group("lines"))
+        if a:                                      # v6: "..., but we've run out of sugar" -> a question, never a name
+            return clarify(_ask("ABSENT_STATED", item=bind_name(a.group("absent")) or a.group("absent").strip(),
+                                words=a.group("lines")))
         lines, c = parse_lines(m.group("lines"))
         if c:
             return clarify(c)
@@ -595,7 +616,7 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
         return out
     m = QUESTION_RX.match(t)
     if m:
-        phrase = m.group("p1") or m.group("p2")
+        phrase = m.group("p1") or m.group("p2") or m.group("p3") or m.group("p4")
         product = bind_product(phrase)
         if not product:
             return clarify(_ask("NO_PRODUCT"))
@@ -777,6 +798,10 @@ def say_reader_question(c: Dict[str, Any]) -> str:
     if code == "AMOUNT_RELATIVE":
         return (f"You said \"{s.get('words', '')}\". I can only use an amount like that when it is half, twice or "
                 f"the same as the line right before it. How much is it exactly, on its own?")
+    if code == "ABSENT_STATED":
+        item = s.get("item") or "that"
+        return (f"You said we've run out of {item}. I don't record stock from a sentence like that, so I didn't save "
+                f"anything. Tell me the amounts on hand exactly, and say {item} is 0 if that's what you mean.")
     if code == "NO_INGREDIENTS":
         return "What went into that batch, and how much of each?"
     return "Could you say that another way? Nothing was saved."
