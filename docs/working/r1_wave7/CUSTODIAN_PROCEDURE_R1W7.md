@@ -6,29 +6,32 @@ operator; you hand over hashes, counts and id lists only. The builder never hand
 
 ## Before you start: the owner's signature
 
-The exam seeds come from the owner's signed line and the sealed zip. The line to sign is **`CHAT WAVE at 1 USD`** (18 UTF-8
-bytes, the inner text without quote marks; PREREGISTRATION_R1W7.md section 8). Until the owner signs it, there is no
+The exam seeds come from the owner's signed line and the sealed zip. The line to sign is **`CHAT WAVE 2 at 1 USD`** (20 UTF-8
+bytes, the inner text without quote marks; PREREGISTRATION_R1W7.md section 8 as superseded by amendment A-R1W7-4, section 16; the v3 line `CHAT WAVE at 1 USD` was consumed by job c51 and must never bind a second zip). Until the owner signs it, there is no
 `APPROVAL_RECORD_R1W7.json` and nothing to seal. When the owner has signed, the approval record is written by program from a
 one-line file holding the owner's exact words (`r1w7/approval_w7.py record ... --source "<where the words are recorded>"`);
 it binds the zip and freeze sha256. The seal refuses any other zip or line.
 
-## Seed source (PREREGISTRATION_R1W7.md section 10)
+## Seed source (PREREGISTRATION_R1W7.md section 10 as superseded by A-R1W7-4, section 16)
 
-    H = sha256( UTF-8 bytes of  "CHAT WAVE at 1 USD" + ":" + <full sha256 of the sealed zip, 64 lower-case hex> )
+    H = sha256( UTF-8 bytes of  "CHAT WAVE 2 at 1 USD" + ":" + <full sha256 of the sealed v4 zip, 64 lower-case hex> )
 
 no trailing newline. REAL k = int(H[0:16], 16), CONV k = int(H[16:32], 16), NOISE k = int(H[32:48], 16); slot = k mod
-1,000,000; seed = band low + slot. Bands: REAL 1,990,000,001-1,991,000,000; CONV 1,992,000,001-1,993,000,000; NOISE
-1,994,000,001-1,995,000,000; used table 1-1,989,000,000 whole; gap 1,000,000; slot stepping and STOP as wave 6. You do not
+1,000,000; seed = band low + slot. Bands (v4): REAL 2,000,000,001-2,001,000,000; CONV 2,002,000,001-2,003,000,000; NOISE
+2,004,000,001-2,005,000,000; used table 1-1,999,000,000 whole (v3's bands were spent by X7; 1,996-1,999 M is reserved for the
+continuity packet); gap 1,000,000; slot stepping and STOP as wave 6. You do not
 compute any of it by hand: `r1w7/seed_rule_w7.py` does and writes every step to `exam/SEED_DERIVATION_X7.json`.
 
 **Exclusions (by program, nothing to do by hand; `contract/EXCLUDE_R1W7_PRIOR_USED.json`, ids only):** X-REAL's 128, c46's 128,
 c47's 128, X6's 128 REAL ids, X6v3's 128 REAL ids, both RB-W1T practice draws, wave 6's practice pools, wave 7's practice pool
-(`practice/PRACTICE_POOLS_W7.json`). The conversation pool also excludes the X7_REAL draw and X6's and X6v3's CONV and PAIRW pools.
+(`practice/PRACTICE_POOLS_W7.json`), X6's and X6v3's CONV and PAIRW pools, and (v4, block `X7_c51`) X7's 128 REAL ids and 64 CONV pool ids from job c51.
+From v4 EVERY list applies to BOTH pools (A-R1W7-4); the conversation pool also excludes this package's own REAL draw.
 
 ## Steps
 
-1. Check the zip: `sha256(HELM_R1_W7_20261020_SOURCE_R1W7.zip)` equals `package_zip_sha256` in `APPROVAL_RECORD_R1W7.json`.
-   Extract it to a NEW folder, e.g. `Documents\Codex\2026-10-20\r1_wave7\x7_custody\pkg\`. Extract the five neighbour zips
+1. Check the zip: `sha256(HELM_R1_W7_20261020_SOURCE_R1W7_v4.zip)` equals `package_zip_sha256` in `APPROVAL_RECORD_R1W7.json`
+   (the v4 zip; the v3 zip `5063baba…` is VOID_SUPERSEDED_BY_V4 and the seal refuses it).
+   Extract it to a NEW folder, e.g. `Documents\Codex\2026-10-20\r1_wave7\x7v4_custody\pkg\` (never over the c51 custody folder `x7_custody\`). Extract the five neighbour zips
    (sha256 in `r1w7/common_w7.py` NEIGHBOURS) beside it in `x7_custody\deps\` so the package finds them (`..\deps\<top folder>`),
    or set `R1W7_<W1|W3|W3B|W6|RBW1T>_DIR`.
 2. Check the frames: `x_real\frames\FRAME_R_PG.jsonl` sha256 `c983e065...`, `FRAME_R_WB.jsonl` `6a0d7cc1...` (the seal checks

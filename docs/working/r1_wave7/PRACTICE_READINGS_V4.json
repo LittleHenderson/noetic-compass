@@ -1,0 +1,66 @@
+{
+ "reader_package": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\build_v4\\build\\from_seal\\HELM_R1_W7_20261020",
+ "reader_string": "r1w7.merge_r1w7 v2 (2026-10-20, A-R1W7-4: HG5 names the units missing helm_now_files_changed)",
+ "run6_marks_and_reported_rows_unchanged_by_the_host_rows": {
+  "marks": true,
+  "marks_missed": true,
+  "reported": true
+ },
+ "run6_v4_practice_as_run": {
+  "canonical_brain_equals_base": false,
+  "failing_gates": [
+   "HG5_sandbox"
+  ],
+  "helm_now_files_changed": {},
+  "holds": false,
+  "reader": "r1w7.merge_r1w7 v2 (2026-10-20, A-R1W7-4: HG5 names the units missing helm_now_files_changed)",
+  "session_files_under_scratch_all_true": true,
+  "status_word": "INCONCLUSIVE",
+  "units_missing_helm_now_files_changed": [],
+  "units_planned": 14,
+  "units_with_the_list": 14,
+  "verdict": "INSTRUMENT_ERROR",
+  "wave1_tree_same": false
+ },
+ "run6_v4_practice_with_host_rows": {
+  "canonical_brain_equals_base": true,
+  "failing_gates": [],
+  "helm_now_files_changed": {},
+  "holds": true,
+  "reader": "r1w7.merge_r1w7 v2 (2026-10-20, A-R1W7-4: HG5 names the units missing helm_now_files_changed)",
+  "session_files_under_scratch_all_true": true,
+  "status_word": "INCONCLUSIVE",
+  "units_missing_helm_now_files_changed": [],
+  "units_planned": 14,
+  "units_with_the_list": 14,
+  "verdict": "INSTRUMENT_ERROR",
+  "wave1_tree_same": true
+ },
+ "schema": "helm.r1w7.v4-rereads/1",
+ "v3_practice_data_v4_reader": {
+  "canonical_brain_equals_base": false,
+  "failing_gates": [
+   "HG5_sandbox"
+  ],
+  "helm_now_files_changed": {},
+  "holds": false,
+  "reader": "r1w7.merge_r1w7 v2 (2026-10-20, A-R1W7-4: HG5 names the units missing helm_now_files_changed)",
+  "session_files_under_scratch_all_true": true,
+  "status_word": "INCONCLUSIVE",
+  "units_missing_helm_now_files_changed": [
+   "W7_RECORDER_EQUALITY"
+  ],
+  "units_planned": 14,
+  "units_with_the_list": 13,
+  "verdict": "INSTRUMENT_ERROR",
+  "wave1_tree_same": false,
+  "why": "the v3 recorder unit's record has no helm_now_files_changed (the c51 defect); the v4 reader names it in units_missing_helm_now_files_changed and HG5 reads false, as expected; the two host rows (wave-1 tree hash pair, helm_cut row) are absent on the practice mock too"
+ },
+ "wave1_folder_after_run6": {
+  "equals_its_sealed_freeze": true,
+  "extra_files": [],
+  "members": 110,
+  "members_not_equal_to_freeze": [],
+  "tree_sha_now": "3a4987aff435a093b2a5d97c0ce2b07c0f180cacb2c3c209c4dc6d0df97717eb"
+ }
+}
