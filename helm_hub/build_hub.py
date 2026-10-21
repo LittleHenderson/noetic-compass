@@ -348,6 +348,8 @@ TERMS: dict[str, tuple[str, int, str]] = {
     "wave": (r"(?<!pair )(?<!PAIR )\bwaves?\b", re.I, "one sealed test round in the HELM-R1 series, with each part on its own switch"),
     "wide brain": (r"\bwide (?:recipe )?brains?\b", re.I, "the recipe brain with its ingredient list opened up (any ingredient name, up to 10 per recipe, exact fractions, 20 units), behind a switch; HELM's canonical-brain candidate, not yet canonical"),
     "pair wave": (r"\bpair[ _-]?wave\b", re.I, "wave 6: the wide brain run together with HELM's other parts to read how each pair behaves"),
+    "chat wave": (r"\b[Cc]hat[ _-]?wave\b", 0, "wave 7: HELM's chat window typed to line by line, with the wide brain on, scored on three fresh exams the builder never sees"),
+    "spent exam": (r"\bspent exams?\b", re.I, "an exam that has already been scored; its item ids go on the exclusion list, so no later exam can reuse them and showing its lines tunes nothing"),
     "CTT": (r"\bCTT(?:-[0-9A-Z]+)?\b", 0, "the CAS-token transformer, HELM's optional 'ear': a small translator that proposes a reading only when HELM's own reader would ask, and never writes"),
     "transformer": (r"\btransformers?\b", re.I, "the kind of neural network behind most modern AI chat assistants"),
     "parameter": (r"\bparameters?\b", re.I, "an adjustable number a model learns"),
@@ -567,6 +569,7 @@ def section_job(title: str) -> str:
 NAV = [
     ("index.html", "Home"),
     ("thinking.html", "How HELM thinks"),
+    ("chat.html", "Talking to HELM"),
     ("architecture.html", "Architecture"),
     ("build.html", "The build, animated"),
     ("data.html", "Data lineage"),
@@ -706,6 +709,19 @@ ul.tight li{margin:3px 0}
   table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
 }
 .note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin:14px 0}
+.chat .meta{font-size:12.5px;color:var(--ink-3);margin-bottom:8px;overflow-wrap:anywhere}
+.chat .meta code{font-size:11.5px}
+.msg{display:flex;flex-direction:column;max-width:88%;margin:6px 0}
+.msg.you{align-self:flex-end;align-items:flex-end;margin-left:auto}
+.msg.helm{align-self:flex-start;align-items:flex-start}
+.msg .who{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 6px 2px}
+.msg .bubble{border-radius:14px;padding:8px 12px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.msg.you .bubble{background:var(--accent-soft);border:1px solid var(--line);border-bottom-right-radius:4px}
+.msg.helm .bubble{background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.noise .bubble{border-style:dashed}
+.msg .st{font:11px/1.4 var(--mono);color:var(--ink-3);margin:2px 6px 0}
+.chat .thread{display:flex;flex-direction:column}
 """
 
 JS = r"""
@@ -943,6 +959,8 @@ are a reading aid only. The words in grey boxes are the record's own words. {T('
 <div class="card">The one rule that keeps this honest: a failed {T('hard gate')} is a failure, never "a pass with caveats".
 <a href="safety.html">Safety and honesty</a>.</div>
 </div>
+<div class="card"><a href="chat.html">Talking to HELM: the chat test</a><br><span class="muted small">Latest scored run c54 (package v6): PASS / CHAT_WAVE_NO_GAIN, 91 real recipes right, 0 wrong, 2 asks without an accepted reason, 44 of 64 dialogues right, 0 lost to small talk, 0.02 USD. Before it, c53: 99 right, 0 wrong, 0 unexplained asks, but INCONCLUSIVE on a test pin. Scores for every run, and real exchanges word for word. Claim status NOT LICENSED.</span></div>
+</div>
 
 <h2>Where to go next</h2>
 <div class="grid">
@@ -961,6 +979,188 @@ are a reading aid only. The words in grey boxes are the record's own words. {T('
         f"`{rel(LEDGER)}` (totals only)",
         "Owner's color scale: `docs/reference/CAS_HELM_DICTIONARY.md`, 'Color marks used in owner reports'",
     ], description="What HELM is, in one screen, with today's status.")
+
+
+CHAT_SAMPLES = HUB / "chat_samples_c53.json"
+C54_RESULT = CODEX / "2026-10-20" / "r1_wave7" / "run_c54_r1w7v6_20261021" / "RUN_RESULT_R1W7V6_C54.md"
+
+# HELM's internal status words seen in the c53 transcripts, in plain English (the legend on the chat page)
+CHAT_STATUS = {
+    "WITNESS_ADMITTED": "the lesson was accepted and one amount was saved",
+    "STOCK_RECORDED": "what you have was written down",
+    "INVENTORY_RECORDED": "a stock list was written down",
+    "SUCCESS_EVALUATED": "HELM worked out an answer",
+    "UNDETERMINED_CLARIFY": "HELM could not tell, said so, and asked; nothing was saved",
+    "BRAIN_UNDETERMINED": "the brain itself could not tell; nothing was saved",
+    "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": "HELM has no recipe by that name yet; nothing was saved",
+    "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": "a word in that line was not read as an ingredient; nothing was saved",
+    "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": "an amount came with no ingredient name; nothing was saved",
+    "CLARIFY_ENGLISH_NO_STOCK_FRAME": "the line did not read as a stock statement; nothing was saved",
+    "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": "the thing said to run out was not in that batch, so the lesson was refused",
+    "none": "the chat window answered by itself (small talk or a closing remark); the brain was not called and nothing was saved",
+}
+
+
+def chat_samples() -> dict:
+    t = read(CHAT_SAMPLES)
+    try:
+        return json.loads(t) if t else {}
+    except ValueError:
+        return {}
+
+
+def chat_block(tr: dict, label: str, plain: str = "") -> str:
+    """One transcript as a two-voice chat: You on the right, HELM on the left, HELM's status word small under each reply."""
+    msgs = []
+    for t in tr["turns"]:
+        noise = t.get("kind") == "noise"
+        who = "You (small talk)" if noise else "You"
+        ncls = " noise" if noise else ""
+        st = t.get("status") or "none"
+        msgs.append(f'<div class="msg you{ncls}"><span class="who">{esc(who)}</span><div class="bubble">{esc(t["you"])}</div></div>')
+        msgs.append(f'<div class="msg helm{ncls}"><span class="who">HELM</span><div class="bubble">{esc(t["helm"])}</div>'
+                    f'<span class="st">inside: {esc(st)}</span></div>')
+    arm = {"CHAT_ON": "wide brain on", "CHAT_OFF": "wide brain off (licensed reference brain alone)", "NOISE_CHAT_ON": "wide brain on, small talk mixed in"}.get(tr.get("arm"), tr.get("arm", ""))
+    fam = tr.get("family", "")
+    famtxt = "" if fam == "REAL" else f'; family <code>{esc(fam)}</code>'
+    return (f'<div class="chat"><div class="meta"><strong>{esc(label)}</strong> &middot; item <code>{esc(tr["id"])}</code>{famtxt} &middot; '
+            f'job c53, spent exam &middot; {esc(arm)} &middot; scored turn read <code>{esc(tr.get("scored_status", ""))}</code></div>'
+            f'{("<p class=small>" + plain + "</p>") if plain else ""}<div class="thread">{"".join(msgs)}</div></div>')
+
+
+def p_chat(S: dict) -> str:
+    # Living checks: every number on this page must still be in the cited record
+    need(S, "7.98", "128 real recipes", "64 dialogues", "the same 64 with small talk", "five chat defects", "NOT LAUNCHED")
+    need(S, "7.101", "FAILURE", "INCONCLUSIVE", "HG5", "95 of 97", "RIGHT 96 / WRONG 0",
+         "CONV 64: 44 / 0", "0.02 USD", "K4 0 unexplained asks")
+    need(S, "7.104", "PASS", "CHAT_WAVE_NO_GAIN", "91 of 94", "1 unexplained ask", "CONV 64: 44 / 0", "0.01 USD", "a temperature note after an ingredient line")
+    need(S, "7.106", "INSTRUMENT_ERROR", "INCONCLUSIVE", "99 of 101 real recipes right, 0 wrong", "100 of 101", "K4 0 unexplained", "CONV 64: 43 / 0", "0.02 USD",
+         "21 of 64 dialogues UNDETERMINED (S1 6, S2 6, S7 4, S6 2, R4 2, R3 1)", "fails only on the Ubuntu / Python 3.12 host")
+    need(S, "7.98", "Or chicken bouillon")
+    secs = S["secs"]
+    c54_in_spec = "7.108" in secs
+    if c54_in_spec:
+        need(S, "7.108", "CHAT_WAVE_NO_GAIN", "PASS", "91 of 94")
+    c54_file = read(C54_RESULT)
+    c54_src = "`" + str(C54_RESULT) + "`" + (" and spec sheet §7.108" if c54_in_spec else " (spec sheet §7.108 is on PR #431, not yet on this branch; the next rebuild after it lands checks the row against it)")
+    c54_note = "" if c54_file else " That file was not available on this machine when the page was built; the row carries the coordinator's verified facts of 2026-10-21."
+
+    D = chat_samples()
+    SM = D.get("samples", {})
+    CN = D.get("counts", {})
+    n_tr = sum(len(v) for v in SM.values())
+
+    def row(color, job, pkg, verdict, word, rw, learned, asks, conv, noise, cost, wrong, src):
+        words = f'<span class="word">{esc(verdict)}</span> <span class="word">{esc(word)}</span>'
+        return (f'<tr><td>{dot(color)}<br><strong>{esc(job)}</strong></td><td>{esc(pkg)}</td><td>{words}</td><td>{esc(rw)}</td><td>{esc(learned)}</td>'
+                f'<td>{esc(asks)}</td><td>{esc(conv)}</td><td>{esc(noise)}</td><td>{esc(cost)}</td><td>{wrong}</td><td class="small">{src}</td></tr>')
+
+    rows = "".join([
+        row("null", "c51", "v3", "FAILURE", "INCONCLUSIVE", "96 right / 0 wrong", "95 of 97 (bar 88)", "0", "44 right / 0 wrong", "0", "0.02 USD",
+            "The scoring program demanded a record from a helper unit that never writes one. A defect in the reader, not in HELM; but a failed must-hold check is a failure, so the marks count as facts only.", slink("7.101")),
+        row("weak", "c52", "v4", "PASS", "CHAT_WAVE_NO_GAIN", "91 right / 0 wrong", "91 of 94 (bar 85)", "1", "44 right / 0 wrong", "0", "0.01 USD",
+            "Nothing in the instrument. The one miss was in the brain: a temperature note written after an ingredient line was read as a fifth ingredient, so HELM asked once without a reason. Found afterward and fixed as one general rule.", slink("7.104") + ", " + slink("7.105")),
+        row("null", "c53", "v5", "INSTRUMENT_ERROR", "INCONCLUSIVE", "99 right / 0 wrong", "100 of 101 (bar 91)", "0", "43 right / 0 wrong", "0", "0.02 USD",
+            "One of HELM's own unit tests pinned a fingerprint that matches on the laptop and not on the cloud machine, so the test failed there. A test tied to one machine, not HELM's answers; fixed afterward with a machine-neutral pin. Every mark held, including 0 unexplained asks.", slink("7.106")),
+        row("weak", "c54", "v6", "PASS", "CHAT_WAVE_NO_GAIN", "91 right / 0 wrong", "91 of 94 (bar 85)", "2", "44 right / 0 wrong", "0", "0.02 USD",
+            "Nothing in the instrument this time: every instrument row (8 of 8) and every must-hold check (10 of 10) held, and HELM's test suite ran clean on the cloud machine (245 tests OK), so the pin fix held. Two real recipe lines of a shape the wide reader does not read yet made HELM ask without an accepted reason; the loop driven directly made the same two asks, so the cause is in the brain. By the frozen words that reads NO_GAIN." + esc(c54_note), md(c54_src)),
+    ])
+
+    legend = "".join(f'<div class="w"><dt><code>{esc(k)}</code></dt><dd class="small">{esc(v)}</dd></div>' for k, v in CHAT_STATUS.items())
+
+    def section(key, title, intro, labels):
+        items = SM.get(key, [])
+        if not items:
+            return f"<h3>{esc(title)}</h3><p class=\"muted\">No transcripts in the samples file for this part.</p>"
+        out = [f"<h3>{esc(title)}</h3><p>{intro}</p>"]
+        for i, tr in enumerate(items):
+            lab, plain = labels[i] if i < len(labels) else (f"{title} {i + 1}", "")
+            out.append(chat_block(tr, lab, plain))
+        return "".join(out)
+
+    real_right = section("real_right", "Three real cookbook recipes, taught by typing, then answered",
+        "Each one goes the same way: a lesson per ingredient (what was made, from what, and what ran out first), then a line about what you have, then the question. HELM had never seen any of these recipes. Every reply below is exactly what it said.",
+        [("Real recipe 1 (juice)", ""), ("Real recipe 2 (dumplings)", "Note the untidy source text (stray full stops, 'heaping tablespoonfuls'); HELM still reads the amounts and names."),
+         ("Real recipe 3 (sherbet)", "")])
+    real_off = section("real_off_same", "The same first recipe with the wide brain switched off",
+        "This is the comparison arm. The licensed reference brain alone knows only eight ingredient names and four products, so it cannot take these lessons; it asks on every line and saves nothing. On this exam it answered 0 real recipes. That is why the wide brain is on by default.",
+        [("Real recipe 1 again, wide brain off", "")])
+    real_ask = section("real_ask", "Two real recipes where HELM asked instead of answering",
+        "On job c53 every ask on a real recipe had a reason the frozen reader accepts. HELM says what it cannot do and saves nothing; it never guesses.",
+        [("Ask 1: no recipe by that name", "Plainly: the recipe is for 'veal', and HELM's ask wrongly lists only the old brain's four products. The wide brain could have learned it; the reader did not pass the line through because the first ingredient line read as the product name. The wording of the ask is a known rough edge."),
+         ("Ask 2: one lesson refused, so one amount missing", "Plainly: the first lesson said the batch 'ran out of of' (a typo in the cookbook line), so HELM refused that lesson. With one ingredient's amount still unknown it could not answer and said exactly which batch it still needs.")])
+    conv_right = section("conv_right", "Three made-up kitchen dialogues answered",
+        "These are built dialogues from the exam generator: lessons, a closing remark, a stock line, a question, sometimes phrased differently. The closing remarks ('Okay, that's all of it for now') are answered by the chat window itself, without the brain; its stock phrase there is a known rough edge.",
+        [("Dialogue 1: stock, then ask", ""), ("Dialogue 2: a different question form", "The question is 'How much eggs do we have the makings of?', not the plain form; HELM still answers."),
+         ("Dialogue 3: a new session", "One turn in this item was recorded with no text (the exam's session break); HELM gave no reply there, which is right.")])
+    conv_open = section("conv_open", "Three dialogues HELM could not settle (the known gap)",
+        "In these, the stock line carries a feeling or purpose clause ('but I'm new to using rice water', 'and the eggs is getting old') or is paraphrased in the past tense. The wide reader does not read those shapes yet, so the stock is not saved, and HELM then says plainly that it does not know how much is on hand and asks. It never guesses and never saves a wrong fact. Reading those clauses is the next job. Note also that the 'ingredients I know' list in these asks is the old brain's list of eight, a wording defect on the record.",
+        [("Gap 1: a feeling clause on the stock line", ""), ("Gap 2: a feeling clause on the stock line", ""), ("Gap 3: a clause that is not an ingredient", "")])
+    noise_right = section("noise_right", "Two dialogues with small talk mixed in",
+        "Two small-talk lines are dropped into each dialogue. HELM must answer them as a person would, keep the kitchen facts, and still get the question right. The dashed bubbles are the small talk. One reply below ('Glad you're feeling great today' to 'I live in Oakland') is off; it cost nothing in the kitchen but is on the record.",
+        [("Small talk 1", ""), ("Small talk 2", "")])
+
+    gap_list = "S1 6, S2 6, S7 4, S6 2, R4 2, R3 1 by the reader's count"
+    lede = (f"HELM has a chat window. You type to it line by line in everyday English; it learns {T('recipe', 'recipes')} it has never seen, "
+            f"writes down what you have, works out how much you can make, and asks when it cannot tell. This page shows how that was tested, "
+            f"the exact scores, and real exchanges, word for word, from a {T('spent exam')}.")
+    body = f"""
+<div class="card">
+<h2 style="margin-top:4px">What the chat test is, in one screen</h2>
+<p>The test is called the {T('chat wave', also=('wave',))}. A program types to HELM's chat window exactly as a person would, one line at a time,
+with the {T('wide brain')} on. HELM must do four things from typing alone: learn a recipe it has never seen (one lesson per ingredient:
+"we made 1 juice from 5 lbs grapes and 2 quarts water and ran out of grapes"), record what you have ("we have 7 1/2 lbs grapes and 1/3 quart water"),
+answer how much you can make ("1/3 juice; water runs out first"), and ask instead of guessing when something is missing.</p>
+<p>Each run sits three fresh exams: <strong>128 real cookbook recipes</strong> from old public cookbooks, <strong>64 made-up kitchen dialogues</strong>
+built by a generator in thirteen shapes (30 of the 64 are built so that the right answer is to ask), and <strong>the same 64 with small talk mixed in</strong>
+(two unrelated lines dropped into each one, 128 in all). A {T('custodian')} draws every exam blind and seals it; the builder never sees an exam before the run;
+nothing in HELM is tuned to it. After a run the exam is spent: its item ids go on the exclusion list, which is why its lines can be shown here.</p>
+<p>A {T('frozen reader')}, sealed before the run, alone writes the verdict and the {T('status word')}. It first checks the instrument (did every part run, did HELM's own tests pass
+on the cloud machine) and ten must-hold checks (a {T('hard gate')} each: for example, HELM touched no file outside its sandbox and ran no shell command). Only then does it count the marks:
+recipes learned against a bar, 0 wrong answers, asks only with an accepted reason, nothing lost against the loop driven directly, plain replies, nothing lost to small talk.
+Four runs so far cost 0.07 USD in all.</p>
+</div>
+
+<h2 id="scores">The scores, run by run</h2>
+<p>Exact words and numbers from the record. "Fully learned" counts recipes whose every ingredient amount was learned, against the frozen bar for that draw.
+"Asks without an accepted reason" is the honesty mark: HELM may ask, but only for a reason the reader accepts. The colour dot is the owner's reading aid
+(grey for INCONCLUSIVE, orange for NO_GAIN); it is not a {T('claim status')}. <strong>The chat's claim status is NOT LICENSED</strong> ({T('LICENSED')}):
+no reader word has been earned yet, so "the chat works" may not be said. The numbers are facts on the record.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Run</th><th>Package</th><th>Verdict and status word</th><th>Real recipes right / wrong</th><th>Fully learned (bar)</th><th>Asks without an accepted reason</th>
+<th>Dialogues right / wrong</th><th>Lost to small talk</th><th>Cost</th><th>What went wrong in the instrument</th><th>Record</th></tr></thead>
+<tbody>{rows}</tbody></table></div>
+<p class="small muted">Four draws, four words; facts, not a trend. The licensed reference brain alone (wide brain off) answered 0 real recipes on every draw.
+The one word that would license the chat is CHAT_WAVE_EARNED_KEEP, which needs every mark true on a clean instrument; no run has it yet.</p>
+
+<h2 id="exchanges">Read real exchanges</h2>
+<p>Every transcript below is from job c53 (package v5, exam X7v5, now spent). "You" is what the test typed; "HELM" is the reply, word for word.
+Under each reply, in small type, is HELM's own internal status for that turn, so you can see the machinery agreeing with the words. {n_tr} transcripts.</p>
+<details class="words" open><summary>The status words under the replies, in plain English</summary><dl>{legend}</dl></details>
+{real_right}
+{real_off}
+{real_ask}
+{conv_right}
+{conv_open}
+{noise_right}
+
+<h2 id="cannot">What it cannot do yet</h2>
+<ul class="tight">
+<li><strong>Stock lines with a feeling or purpose clause, and past-tense paraphrases.</strong> On c53, 21 of the 64 dialogues were left {T('UNDETERMINED')} ({gap_list}; the dialogue shapes S1 to S7 are the ones with a stated purpose, feeling or second meaning). By HELM's own status words {esc(str(CN.get('conv_items', 64) - CN.get('conv_answered_by_status', 0)))} of 64 items ended in an ask, but 30 of the 64 are built so that asking is the right answer, and only the reader, with the key, tells those apart. HELM asks instead of guessing, which is the safe side; reading those clauses is the next job.</li>
+<li><strong>The wording of some asks names the wrong brain.</strong> "I can work with flour, water, sugar, butter, milk, eggs, yeast, and salt" is the licensed brain's list of eight; with the wide brain on it is misleading. A wording defect, on the record.</li>
+<li><strong>An "X or Y" ingredient is spoken oddly.</strong> On the practice draw of the first packet, a line like "chicken stock or chicken bouillon" made HELM say "Or chicken bouillon runs out first": right by the key, odd to a person ({slink('7.98')}).</li>
+<li><strong>A few real recipe lines of a shape the wide reader does not read.</strong> One unexplained ask on c52 (a temperature note, since fixed) and two on c54; each one costs the run its gain word.</li>
+<li><strong>The licensed reader alone answers 0 real recipes.</strong> Without the wide brain, HELM's chat cannot learn a real cookbook recipe at all.</li>
+<li><strong>Nothing is licensed.</strong> The chat has no reader word yet. Nothing on this page may be read as "HELM's chat works".</li>
+</ul>
+"""
+    return page("chat.html", "Talking to HELM", "Talking to HELM: the chat test, its scores, and real exchanges", lede, body, [
+        f"Transcripts: `helm_hub/chat_samples_c53.json`, written by `helm_hub/make_chat_samples.py` from the job c53 unit files "
+        f"`W7_X7_REAL_CHAT_ON.json`, `W7_X7_REAL_CHAT_OFF.json`, `W7_X7_CONV_CHAT_ON.json`, `W7_X7_NOISE_CHAT_ON.json`, `W7_X7_REAL_LOOP_ON.json` under `{D.get('units_dir', 'the c53 deliverable')}`",
+        "Readable copy of more exchanges: `docs/working/r1_wave7/CHAT_SAMPLES_C53_20261021.md`",
+        "`docs/CAS_HARNESS_SPEC_SHEET.md` §7.98 (the packet), §7.101 (c51), §7.103 (v4), §7.104 (c52), §7.105 (round 3), §7.106 (c53)",
+        f"c54: {c54_src}",
+    ], words=True, words_open=False, description="HELM's chat test: what it is, the exact scores of every run, and real exchanges word for word.")
 
 
 def precise(S: dict, term: str, label: str = "Definition") -> str:
@@ -2404,6 +2604,7 @@ def build() -> dict:
         "data.html": p_data(S), "compute.html": p_compute(S), "results.html": p_results(S),
         "build.html": p_build(S), "model-card.html": p_model_card(S), "safety.html": p_safety(S), "roadmap.html": p_roadmap(S),
         "glossary.html": p_glossary(S), "changelog.html": p_changelog(S), "run.html": p_run(S), "files.html": p_files(S),
+        "chat.html": p_chat(S),
     }
     for name, content in pages.items():
         content = EMAIL_RE.sub("[e-mail removed]", content)

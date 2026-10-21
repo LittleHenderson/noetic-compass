@@ -120,6 +120,43 @@ class BuildTests(unittest.TestCase):
                 self.assertIn("MISSING", first + info, path)
         self.assertIn("do not open", t)
 
+    def test_chat_page_exists_and_is_linked(self):
+        self.assertIn(("chat.html", "Talking to HELM"), b.NAV)
+        t = (b.SITE / "chat.html").read_text(encoding="utf-8")
+        for anchor in ('id="scores"', 'id="exchanges"', 'id="cannot"'):
+            self.assertIn(anchor, t)
+        self.assertIn("NOT LICENSED", t)
+        self.assertIn('href="chat.html"', (b.SITE / "index.html").read_text(encoding="utf-8"))
+        self.assertFalse(any("chat.html" in e for e in self.report["lint"]), self.report["lint"])
+
+    def test_chat_page_has_the_four_runs_with_exact_words(self):
+        t = (b.SITE / "chat.html").read_text(encoding="utf-8")
+        for job in ("c51", "c52", "c53", "c54"):
+            self.assertIn(f"<strong>{job}</strong>", t)
+        for w in ("FAILURE", "INCONCLUSIVE", "CHAT_WAVE_NO_GAIN", "INSTRUMENT_ERROR", "96 right / 0 wrong", "91 right / 0 wrong",
+                  "99 right / 0 wrong", "95 of 97", "91 of 94", "100 of 101", "43 right / 0 wrong", "44 right / 0 wrong", "0.01 USD", "0.02 USD"):
+            self.assertIn(w, t, w)
+        self.assertEqual(t.count("CHAT_WAVE_NO_GAIN</span>"), 2)
+
+    def test_chat_page_has_at_least_ten_real_transcripts_from_c53_only(self):
+        import json
+        d = json.loads(b.CHAT_SAMPLES.read_text(encoding="utf-8"))
+        n = sum(len(v) for v in d["samples"].values())
+        self.assertGreaterEqual(n, 10)
+        self.assertEqual(d["job"], "c53")
+        t = (b.SITE / "chat.html").read_text(encoding="utf-8")
+        self.assertGreaterEqual(t.count('<div class="chat">'), 10)
+        self.assertGreaterEqual(t.count("job c53, spent exam"), 10)
+        blocks = t.split('<div class="chat">')[1:]
+        self.assertTrue(all("job c53, spent exam" in blk.split("</div>")[0] for blk in blocks))
+        self.assertFalse(any("c54" in blk.split("</div>")[0] for blk in blocks))
+        for tr in (x for v in d["samples"].values() for x in v):
+            self.assertIn(tr["id"], t)
+            for turn in tr["turns"]:
+                self.assertIn(b.esc(turn["helm"]), t)
+        self.assertIn('inside: WITNESS_ADMITTED', t)
+        self.assertIn('class="msg you noise"', t)
+
     def test_negatives_are_on_the_scorecard(self):
         r = (b.SITE / "results.html").read_text(encoding="utf-8")
         for w in ("S_UNSAFE_ON_REAL", "EARS_HARMED", "GREW_WRONG_KIND", "WIDE_LEARNING_DID_NOT_EARN_KEEP"):
