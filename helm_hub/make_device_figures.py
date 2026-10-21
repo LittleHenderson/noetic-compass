@@ -1,9 +1,10 @@
-"""Build helm_hub/device_figures.html: the HELM Cube drawings as static inline SVG figures for the hub's device page.
+"""Build helm_hub/device_figures.html: the HELM Cube drawings as inline SVG figures for the hub's device page.
 
 Source of truth: the design-canvas boards copied into docs/working/helm_cube_device_concept_v0/drawings/*.dc.html (the same files
 published to the private design canvas). This script lifts each board's <svg> block, makes its element ids unique per figure,
 replaces the one template hole ({{glow}}) with its default colour, and builds the light-mode grid (a template on the canvas) as
-static SVG. No network, no rendering. Run: python helm_hub/make_device_figures.py
+SVG. The lights move exactly as on the canvas: the same keyframes, durations and per-mode classes, renamed with a cube- prefix
+so they cannot clash with the hub's own styles. No network, no rendering. Run: python helm_hub/make_device_figures.py
 """
 from __future__ import annotations
 
@@ -29,7 +30,7 @@ def scoped(svg: str, prefix: str) -> str:
     for i in ids:
         svg = svg.replace(f'id="{i}"', f'id="{prefix}-{i}"').replace(f"url(#{i})", f"url(#{prefix}-{i})")
     svg = svg.replace("{{glow}}", "#FFE3B8")
-    svg = re.sub(r'\sclass="(?:speak|buzz)"', "", svg)
+    svg = re.sub(r'\sclass="(speak|buzz)"', r' class="cube-\1"', svg)
     # responsive root: keep the viewBox, drop the fixed size
     head, rest = svg.split(">", 1)
     head = re.sub(r'\swidth="\d+"', "", head, count=1)
@@ -48,36 +49,56 @@ def but(ks):
     return [k for k in ALL if k not in ks]
 
 
+# The canvas's own animation rules (drawings/Main, Charging and Modes .dc.html), copied exactly; only the names gain a cube- prefix.
+ANIM_CSS = (
+    "<style>"
+    "@keyframes cube-cadence{0%{opacity:.35}18%{opacity:1}55%{opacity:.6}100%{opacity:.35}}"
+    "@keyframes cube-breathe{0%{opacity:.25}50%{opacity:1}100%{opacity:.25}}"
+    "@keyframes cube-blink{0%{opacity:1}12%{opacity:.1}24%{opacity:1}36%{opacity:.1}48%{opacity:1}100%{opacity:1}}"
+    "@keyframes cube-ask{0%{opacity:1}10%{opacity:.15}20%{opacity:1}30%{opacity:.15}40%{opacity:1}75%{opacity:1}100%{opacity:.15}}"
+    "@keyframes cube-buzz{0%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}100%{transform:translateX(0)}}"
+    ".cube-speak{animation:cube-cadence .23s ease-out infinite}"
+    ".cube-buzz{animation:cube-buzz .12s linear infinite}"
+    ".cube-a-speak{animation:cube-cadence .23s ease-out infinite}"
+    ".cube-a-breathe{animation:cube-breathe 3.2s ease-in-out infinite}"
+    ".cube-a-blink{animation:cube-blink 2.4s linear infinite}"
+    ".cube-a-ask{animation:cube-ask 2s linear infinite}"
+    ".cube-a-slow{animation:cube-breathe 2.2s ease-in-out infinite}"
+    "</style>"
+)
+
+# Last field: the canvas's animation class for that mode (drawings/Modes.dc.html), "" where the canvas has none.
 MODES = [
-    ("Asleep", "off", "#2C2C31", [], [], "Off. A plain black box.", 0),
-    ("Awake", "after a shake", "#F4F1EA", ALL, [], "One sweep along all twelve edges, then dim.", 0),
-    ("Listening", "mics live", "#67D8E8", ["e1", "e2", "e5", "e8"], but(["e1", "e2", "e5", "e8"]), "The edges nearest the person speaking glow brighter.", 0),
-    ("Thinking", "gate check", "#E9B949", ["e1", "e9"], [], "Two points of light travel along the edges.", 0),
-    ("Speaking", "voice out", "#FFE3B8", ALL, [], "Brightness follows the voice: a pulse per syllable.", 0),
-    ("Asking", "a question", "#B79CFF", ALL, [], "Short, short, long, every 2 seconds. Then it listens.", 0),
-    ("Missing input", "undetermined", "#F2A93B", but(["e6"]), [], "One dark edge: the gap is what is missing.", 0),
-    ("Declined", "refusal", "#C08A3E", ["e8"], [], "Shrinks to one edge and fades. Not red.", 0),
-    ("Privacy, soft", "5 taps", "#E5484D", ALL, [], "Slow breathing. A software mute.", 0),
-    ("Privacy, hard", "hardware switch", "#E5484D", ALL, [], "Steady red, powered through the switch.", 0),
-    ("Camera on", "a camera powered", "#3DDC84", [], [], "A green dot on that face, wired to the camera.", 4),
-    ("Charging", "on the pad", "#F4F1EA", ["e5", "e6", "e7", "e8"], [], "One buzz; lit edges show the charge level.", 0),
-    ("Pairing", "setup window", "#4C8DF6", ["e1", "e2", "e3"], [], "A chase; fewer stay lit as time runs out.", 0),
-    ("Low battery, error", "battery or network", "#F07A2B", ALL, [], "Orange blinks.", 0),
-    ("Eye report", "report filed", "#2BB5A6", ["e4"], [], "One blip: a report is in the app.", 0),
-    ("Updating", "firmware", "#F4F1EA", ["e5", "e6", "e7"], [], "A slow chase along the edges.", 0),
+    ("Asleep", "off", "#2C2C31", [], [], "Off. A plain black box.", 0, ""),
+    ("Awake", "after a shake", "#F4F1EA", ALL, [], "One sweep along all twelve edges, then dim.", 0, "a-slow"),
+    ("Listening", "mics live", "#67D8E8", ["e1", "e2", "e5", "e8"], but(["e1", "e2", "e5", "e8"]), "The edges nearest the person speaking glow brighter.", 0, "a-slow"),
+    ("Thinking", "gate check", "#E9B949", ["e1", "e9"], [], "Two points of light travel along the edges.", 0, "a-slow"),
+    ("Speaking", "voice out", "#FFE3B8", ALL, [], "Brightness follows the voice: a pulse per syllable.", 0, "a-speak"),
+    ("Asking", "a question", "#B79CFF", ALL, [], "Short, short, long, every 2 seconds. Then it listens.", 0, "a-ask"),
+    ("Missing input", "undetermined", "#F2A93B", but(["e6"]), [], "One dark edge: the gap is what is missing.", 0, "a-slow"),
+    ("Declined", "refusal", "#C08A3E", ["e8"], [], "Shrinks to one edge and fades. Not red.", 0, ""),
+    ("Privacy, soft", "5 taps", "#E5484D", ALL, [], "Slow breathing. A software mute.", 0, "a-breathe"),
+    ("Privacy, hard", "hardware switch", "#E5484D", ALL, [], "Steady red, powered through the switch.", 0, ""),
+    ("Camera on", "a camera powered", "#3DDC84", [], [], "A green dot on that face, wired to the camera.", 4, ""),
+    ("Charging", "on the pad", "#F4F1EA", ["e5", "e6", "e7", "e8"], [], "One buzz; lit edges show the charge level.", 0, ""),
+    ("Pairing", "setup window", "#4C8DF6", ["e1", "e2", "e3"], [], "A chase; fewer stay lit as time runs out.", 0, "a-slow"),
+    ("Low battery, error", "battery or network", "#F07A2B", ALL, [], "Orange blinks.", 0, "a-blink"),
+    ("Eye report", "report filed", "#2BB5A6", ["e4"], [], "One blip: a report is in the app.", 0, "a-breathe"),
+    ("Updating", "firmware", "#F4F1EA", ["e5", "e6", "e7"], [], "A slow chase along the edges.", 0, "a-slow"),
 ]
 
 
-def mode_cell(name, state, color, lit, dim, motion, dot) -> str:
+def mode_cell(name, state, color, lit, dim, motion, dot, anim) -> str:
     d_lit = " ".join(EDGES[k] for k in lit)
     d_dim = " ".join(EDGES[k] for k in dim)
+    cls = f' class="cube-{anim}"' if anim else ""
     parts = [
         f'<svg viewBox="0 0 120 120" role="img" aria-label="{html.escape(name)}: {html.escape(motion)}" style="width:100%;max-width:120px;height:auto;display:block">',
         '<polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon>',
         '<polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon>',
         '<polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon>',
         '<path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path>',
-        '<g filter="url(#modes-edgeglow)">',
+        f'<g{cls} filter="url(#modes-edgeglow)">',
     ]
     if d_dim:
         parts.append(f'<path d="{d_dim}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linecap="round" opacity="0.35"></path>')
@@ -116,6 +137,7 @@ def build() -> str:
             + "".join(f"<div>{scoped(s, f'xray{i}')}</div>" for i, s in enumerate(faces)) + "</div>")
     out = [
         "<!-- generated by helm_hub/make_device_figures.py from docs/working/helm_cube_device_concept_v0/drawings/; do not edit by hand -->",
+        ANIM_CSS,
         figure(scoped(main, "hero"), "Off, it is a plain black box: every face the same. Speaking, light glows along all twelve edges and pulses with each syllable. "
                "A tennis ball (67 mm) drawn to the same scale."),
         modes,

@@ -2532,16 +2532,32 @@ def p_device(S: dict) -> str:
     if trows:
         shot_rows = "".join(f"<tr><td>{esc(r[0])}</td><td>{esc(r[1])}</td><td>{md(r[2])}</td><td>{md(r[5])}</td><td>{md(r[6])}</td></tr>" for r in trows if len(r) >= 7)
         film = ('<h2 id="film">The concept film: "It Asks First"</h2>'
-                '<p><strong>Not filmed yet.</strong> This is the plan for a 92-second concept film, 15 shots plus an end card. Every shot carries a '
-                'status tag burned into the picture, and only one shot shows real HELM software today (typed, on one computer, in a test kitchen). '
+                '<p><strong>A short teaser is made. The full film is not.</strong> On 2026-10-21 there was no money for video credits, so a '
+                '44.5-second teaser was made at no cost from what already existed. Every part carries its status tag burned into the picture.</p>'
+                '<video controls preload="metadata" playsinline style="width:100%;max-width:960px;display:block;border-radius:12px;background:#000" '
+                'src="media/helm_cube_it_asks_first_teaser_web.mp4" aria-label="It Asks First, a 44.5-second concept teaser for the HELM Cube"></video>'
+                '<p class="small">What is real and what is not, in the teaser:</p>'
+                '<ul class="tight">'
+                '<li><strong>Not real:</strong> the cube. The opening shot is AI video; the table scene is two AI still pictures with a slow push-in; '
+                'the phone screens are designed pictures. Nothing was filmed, and the cube is not built.</li>'
+                '<li><strong>Real:</strong> one part only, HELM\'s own local page, recorded once on one computer on 2026-10-21. Two lines were typed, '
+                'HELM\'s replies are shown word for word, and the record under the last reply is opened. Its tag reads TODAY · REAL HELM SOFTWARE · '
+                'TYPED · ONE COMPUTER · TEST KITCHEN.</li>'
+                '<li><strong>Voices:</strong> synthetic stock voices. HELM does not hear or speak today.</li>'
+                '<li>The end card says the cube is a concept and that the film was made with AI video tools.</li>'
+                '</ul>'
+                '<p><strong>The full film is planned, not made.</strong> It is a 92-second film, 15 shots plus an end card, and only one shot shows real '
+                'HELM software today (typed, on one computer, in a test kitchen). '
                 'Most of the film shows what HELM is meant to do beyond recipes: plan a day, learn by conversation and refresh a memory, control a '
                 'home by taps, map a room without guessing, refuse to commit failing code, report a failed check as a failure, hold a simulated drone '
-                'still when a reading is missing, and let the Eye report without acting. The film will be made with an outside AI video tool and '
-                'labelled as made with AI; it is waiting for that tool and for the owner\'s word.</p>'
+                'still when a reading is missing, and let the Eye report without acting. It waits for money for video credits; everything made so '
+                'far is kept.</p>'
                 '<div class="tablewrap"><table><thead><tr><th>#</th><th>Time</th><th>What you see</th><th>What it shows</th><th>Status</th></tr></thead>'
                 f'<tbody>{shot_rows}</tbody></table></div>'
                 '<p class="small muted">The full treatment, with every line of dialogue, the end card and one ready-to-paste prompt per shot: '
-                '<code>docs/working/helm_cube_device_concept_v0/COMMERCIAL_TREATMENT.md</code>.</p>')
+                '<code>docs/working/helm_cube_device_concept_v0/COMMERCIAL_TREATMENT.md</code>. The teaser, its record of every take and cost, and '
+                'the plan to finish the full film: <code>C:\\Users\\wakil\\Documents\\Codex\\2026-10-21\\helm_cube_film\\</code> '
+                '(<code>FILM_RECORD.md</code>, <code>RESUME_FULL_FILM.md</code>).</p>')
     figs = read(HUB / "device_figures.html") if (HUB / "device_figures.html").exists() else "<p class=\"small muted\">(The figures file is not on this machine; run helm_hub/make_device_figures.py.)</p>"
     body = f"""
 <h2>The owner's words</h2>
@@ -2557,7 +2573,7 @@ def p_device(S: dict) -> str:
 <p><strong>Two lines stay outside all software, HELM included.</strong> The camera-on light is wired to each camera's power, and the hard mute is a physical switch. HELM can turn any camera or microphone on or off; it cannot hide that it did. This keeps six hidden cameras trustworthy. It is the operator's proposal, kept unless the owner overrules it.</p>
 
 <h2 id="drawings">The drawings</h2>
-<p>Concept drawings, made on the design canvas and reproduced here. Nothing has been built.</p>
+<p>Concept drawings, made on the design canvas and reproduced here, with the lights moving exactly as they do on the canvas. Nothing has been built.</p>
 {figs}
 
 {film}
