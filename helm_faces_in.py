@@ -42,7 +42,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LEXICON_PATH = os.path.join(HERE, "helm_faces_lexicon.json")
-READER_VERSION = "helm_faces_in v1 (2026-10-19)"
+READER_VERSION = "helm_faces_in v2 (2026-10-21: names as given)"
 CLAIM_STATUS = "ENGINEERED-NOT-VALIDATED"
 
 with open(LEXICON_PATH, "rb") as _h:
@@ -79,13 +79,60 @@ def _alt(words: Sequence[str]) -> str:
     return "|".join(sorted((re.escape(w) for w in words), key=len, reverse=True))
 
 
-def _compile_rows(ingredients: Sequence[str], products: Sequence[str]) -> List[Tuple[Dict[str, Any], "re.Pattern"]]:
-    ing_words = [w for w, n in EVERYDAY_INGREDIENTS.items() if n in ingredients]
-    prod_words = [w for w, n in EVERYDAY_PRODUCTS.items() if n in products]
-    ing = _alt(ing_words)
+def _plural_forms(word: str) -> List[str]:
+    """'egg' -> ['egg', 'eggs']; 'eggs' -> ['eggs', 'egg']; 'berry' -> ['berry', 'berries']; no dictionary, no guessing
+    beyond the plain English endings (stdlib only, imports nothing of HELM's)."""
+    w = word.strip().lower()
+    out = [w]
+    if len(w) > 3 and w.endswith("ies"):
+        out.append(w[:-3] + "y")
+    elif len(w) > 2 and w.endswith(("ches", "shes", "sses", "xes", "zes")):
+        out.append(w[:-2])
+    elif len(w) > 2 and w.endswith("s") and not w.endswith("ss"):
+        out.append(w[:-1])
+    if w.endswith("y") and len(w) > 2 and w[-2] not in "aeiou":
+        out.append(w[:-1] + "ies")
+    elif w.endswith(("s", "x", "z", "ch", "sh")):
+        out.append(w + "es")
+    else:
+        out.append(w + "s")
+    return list(dict.fromkeys(x for x in out if x))
+
+
+def _given_map(names: Sequence[str]) -> Dict[str, str]:
+    """v2 (SPEC 7.109 D2): word form -> the name as given. Each name: itself, lower-cased, singular and plural;
+    then, only where no name already claims the word, its last word (so 'the cream' reaches 'heavy cream' when no
+    plain 'cream' is held). Longer alternations win in the pattern, so 'heavy cream' beats 'cream'."""
+    out: Dict[str, str] = {}
+    full = [str(n).strip() for n in names if str(n).strip()]
+    for n in full:
+        for f in _plural_forms(n.lower()):
+            out.setdefault(f, n)
+    for n in full:
+        last = n.lower().split()[-1] if n.split() else ""
+        if last and " " in n.strip():
+            for f in _plural_forms(last):
+                out.setdefault(f, n)
+    return out
+
+
+def _name_maps(ingredients: Sequence[str], products: Sequence[str], names_as_given: bool
+               ) -> Tuple[Dict[str, str], Dict[str, str]]:
+    """word -> name. Default (v1, byte-identical): the everyday maps filtered to the names given. names_as_given
+    (v2, SPEC 7.109 D2): the names themselves, so any bound name of the wide recipe book can carry a face."""
+    if not names_as_given:
+        return ({w: n for w, n in EVERYDAY_INGREDIENTS.items() if n in ingredients},
+                {w: n for w, n in EVERYDAY_PRODUCTS.items() if n in products})
+    return _given_map(ingredients), _given_map(products)
+
+
+def _compile_rows(ing_map: Dict[str, str], prod_map: Dict[str, str]) -> List[Tuple[Dict[str, Any], "re.Pattern"]]:
+    ing_words = list(ing_map)
+    prod_words = list(prod_map)
+    ing = _alt(ing_words) if ing_words else "(?!x)x"
     obj = r"(?P<obj>(?:the |our |my )?(?:%s)|%s)" % (ing, _alt(PRONOUNS))
     subj = r"(?P<subj>(?:the |our |my )?(?:%s|it|they))" % ing
-    prod = r"(?P<prod>%s)" % _alt(prod_words)
+    prod = r"(?P<prod>%s)" % (_alt(prod_words) if prod_words else "(?!x)x")
     out = []
     for row in LEXICON["rows"]:
         pat = row["pattern"].replace("{OBJ}", obj).replace("{SUBJ}", subj).replace("{PROD}", prod)
@@ -93,10 +140,10 @@ def _compile_rows(ingredients: Sequence[str], products: Sequence[str]) -> List[T
     return out
 
 
-def _named_ingredients(text_norm: str, ingredients: Sequence[str]) -> List[str]:
+def _named_ingredients(text_norm: str, ing_map: Dict[str, str]) -> List[str]:
     found = []
-    for w, n in EVERYDAY_INGREDIENTS.items():
-        if n in ingredients and re.search(r"(?<![a-z])%s(?![a-z])" % re.escape(w), text_norm) and n not in found:
+    for w, n in ing_map.items():
+        if re.search(r"(?<![a-z])%s(?![a-z])" % re.escape(w), text_norm) and n not in found:
             found.append(n)
     return found
 
@@ -112,14 +159,20 @@ def _is_question(clause: str, sentence: str) -> bool:
     return sentence.rstrip().endswith("?") or (bool(words) and words[0] in Q_START)
 
 
-def _mentions(clause: str, ingredients: Sequence[str], products: Sequence[str]) -> bool:
-    names = [w for w, n in EVERYDAY_INGREDIENTS.items() if n in ingredients] + \
-            [w for w, n in EVERYDAY_PRODUCTS.items() if n in products] + list(PRONOUNS)
+def _mentions(clause: str, ing_map: Dict[str, str], prod_map: Dict[str, str]) -> bool:
+    names = list(ing_map) + list(prod_map) + list(PRONOUNS)
     return re.search(r"(?<![a-z'])(?:%s)(?![a-z'])" % _alt(names), clause) is not None
 
 
-def read(text: str, ingredients: Sequence[str], products: Sequence[str]) -> Dict[str, Any]:
+def read(text: str, ingredients: Sequence[str], products: Sequence[str], *, names_as_given: bool = False
+         ) -> Dict[str, Any]:
     """Read face statements. Returns {status, faces, remainder, clarify, rows, lexicon, reader}.
+
+    names_as_given=False (default, v1 behaviour byte for byte): `ingredients` / `products` are the everyday canonical
+    names (Flour, Bread, ...) and the eight everyday words are the only words a face can name.
+    names_as_given=True (v2, SPEC 7.109 D2): `ingredients` / `products` are the names themselves (the wide recipe
+    book's bound names, any words), matched as given, singular or plural, or by their last word; a face carries the
+    given name back. Same lexicon rows, same cue rule, same negation rule, same pronoun rule.
 
     status NONE: no face statement (remainder = the text unchanged).
     status FACES: faces read; remainder = the text without the face clauses ('' if nothing is left).
@@ -127,9 +180,10 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str]) -> Dict
     base = {"reader": READER_VERSION, "lexicon": {"sha256": LEXICON_SHA256, "rows": len(LEXICON["rows"])},
             "claim_status": CLAIM_STATUS}
     norm = normalize(text)
-    rows = _compile_rows(ingredients, products)
+    ing_map, prod_map = _name_maps(ingredients, products, names_as_given)
+    rows = _compile_rows(ing_map, prod_map)
     cues = set(LEXICON["cue_words"])
-    named = _named_ingredients(norm, ingredients)
+    named = _named_ingredients(norm, ing_map)
     faces: List[Dict[str, Any]] = []
     kept_sentences: List[str] = []
     for sentence in SENTENCE_SPLIT_RX.split(norm):
@@ -156,7 +210,7 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str]) -> Dict
                                 clarify={"code": "FACE_NEGATED", "slots": {"clause": clause}}, rows=negated[:1])
             if hit is None:
                 words = set(re.findall(r"[a-z]+", clause))
-                if words & cues and _mentions(clause, ingredients, products):
+                if words & cues and _mentions(clause, ing_map, prod_map):
                     return dict(base, status=STATUS_CLARIFY, faces=[], remainder="",
                                 clarify={"code": "FACE_UNREAD", "slots": {"clause": clause}}, rows=[])
                 keep.append(clause)
@@ -166,7 +220,7 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str]) -> Dict
                 return dict(base, status=STATUS_CLARIFY, faces=[], remainder="",
                             clarify={"code": "FACE_NEGATED", "slots": {"clause": clause}}, rows=[row["id"]])
             if row["scope"] == "recipe":
-                name = EVERYDAY_PRODUCTS[m.group("prod")]
+                name = prod_map[m.group("prod")]
             else:
                 ref = m.groupdict().get("obj") or m.groupdict().get("subj")
                 word = _ref_word(ref or "")
@@ -178,7 +232,7 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str]) -> Dict
                                     rows=[row["id"]])
                     name = named[0]
                 else:
-                    name = EVERYDAY_INGREDIENTS[word]
+                    name = ing_map[word]
             faces.append({"scope": row["scope"], "name": name, "face": row["face"], "stage": row["stage"],
                           "row": row["id"], "source": row["source"], "phrase": m.group(0)})
         if keep:
