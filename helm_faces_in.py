@@ -42,7 +42,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LEXICON_PATH = os.path.join(HERE, "helm_faces_lexicon.json")
-READER_VERSION = "helm_faces_in v2 (2026-10-21: names as given)"
+READER_VERSION = "helm_faces_in v2.1 (2026-10-21: names as given, longer phrases resolved)"
 CLAIM_STATUS = "ENGINEERED-NOT-VALIDATED"
 
 with open(LEXICON_PATH, "rb") as _h:
@@ -106,8 +106,12 @@ def _given_map(names: Sequence[str]) -> Dict[str, str]:
     out: Dict[str, str] = {}
     full = [str(n).strip() for n in names if str(n).strip()]
     for n in full:
-        for f in _plural_forms(n.lower()):
-            out.setdefault(f, n)
+        base = n.lower()
+        # v2.1: a two-word name may be written with a hyphen ("corn-starch" for the held "corn starch") or the other way
+        variants = {base, base.replace("-", " "), base.replace(" ", "-")}
+        for v in variants:
+            for f in _plural_forms(v):
+                out.setdefault(f, n)
     for n in full:
         last = n.lower().split()[-1] if n.split() else ""
         if last and " " in n.strip():
@@ -126,12 +130,16 @@ def _name_maps(ingredients: Sequence[str], products: Sequence[str], names_as_giv
     return _given_map(ingredients), _given_map(products)
 
 
-def _compile_rows(ing_map: Dict[str, str], prod_map: Dict[str, str]) -> List[Tuple[Dict[str, Any], "re.Pattern"]]:
+def _compile_rows(ing_map: Dict[str, str], prod_map: Dict[str, str], open_phrase: bool = False
+                  ) -> List[Tuple[Dict[str, Any], "re.Pattern"]]:
     ing_words = list(ing_map)
     prod_words = list(prod_map)
     ing = _alt(ing_words) if ing_words else "(?!x)x"
-    obj = r"(?P<obj>(?:the |our |my )?(?:%s)|%s)" % (ing, _alt(PRONOUNS))
-    subj = r"(?P<subj>(?:the |our |my )?(?:%s|it|they))" % ing
+    # v2.1 (names as given): the person may name a held ingredient by a longer phrase ("the sifted flour", "the whole
+    # oat milk"): up to three words may stand between the determiner and a given name; _resolve_name maps the phrase back
+    lead = r"(?:[a-z][a-z'-]* ){0,3}" if open_phrase else ""      # greedy: the head noun is the LAST name in the phrase
+    obj = r"(?P<obj>(?:the |our |my )?%s(?:%s)|%s)" % (lead, ing, _alt(PRONOUNS))
+    subj = r"(?P<subj>(?:the |our |my )?%s(?:%s)|it|they)" % (lead, ing)
     prod = r"(?P<prod>%s)" % (_alt(prod_words) if prod_words else "(?!x)x")
     out = []
     for row in LEXICON["rows"]:
@@ -146,6 +154,15 @@ def _named_ingredients(text_norm: str, ing_map: Dict[str, str]) -> List[str]:
         if re.search(r"(?<![a-z])%s(?![a-z])" % re.escape(w), text_norm) and n not in found:
             found.append(n)
     return found
+
+
+def _names_in(phrase: str, ing_map: Dict[str, str]) -> List[str]:
+    """The given names a phrase names, by whole-word map keys, longest key first, each name once."""
+    out: List[str] = []
+    for k in sorted(ing_map, key=len, reverse=True):
+        if re.search(r"(?<![a-z'])%s(?![a-z'])" % re.escape(k), phrase) and ing_map[k] not in out:
+            out.append(ing_map[k])
+    return out
 
 
 def _ref_word(fragment: str) -> Optional[str]:
@@ -181,7 +198,7 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str], *, name
             "claim_status": CLAIM_STATUS}
     norm = normalize(text)
     ing_map, prod_map = _name_maps(ingredients, products, names_as_given)
-    rows = _compile_rows(ing_map, prod_map)
+    rows = _compile_rows(ing_map, prod_map, open_phrase=names_as_given)
     cues = set(LEXICON["cue_words"])
     named = _named_ingredients(norm, ing_map)
     faces: List[Dict[str, Any]] = []
@@ -231,8 +248,16 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str], *, name
                                                                                          "named": named}},
                                     rows=[row["id"]])
                     name = named[0]
-                else:
+                elif word in ing_map:
                     name = ing_map[word]
+                else:                                           # v2.1: a longer phrase holding a given name
+                    inside = _names_in(word, ing_map)
+                    if len(inside) != 1:
+                        return dict(base, status=STATUS_CLARIFY, faces=[], remainder="",
+                                    clarify={"code": "FACE_WHICH_INGREDIENT", "slots": {"clause": clause,
+                                                                                         "named": inside}},
+                                    rows=[row["id"]])
+                    name = inside[0]
             faces.append({"scope": row["scope"], "name": name, "face": row["face"], "stage": row["stage"],
                           "row": row["id"], "source": row["source"], "phrase": m.group(0)})
         if keep:
