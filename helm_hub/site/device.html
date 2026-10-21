@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM Cube Concept</title>
+<meta name="description" content="A concept for HELM&#x27;s final home: a plain black cube with no buttons. Design only.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin:14px 0}
+.chat .meta{font-size:12.5px;color:var(--ink-3);margin-bottom:8px;overflow-wrap:anywhere}
+.chat .meta code{font-size:11.5px}
+.msg{display:flex;flex-direction:column;max-width:88%;margin:6px 0}
+.msg.you{align-self:flex-end;align-items:flex-end;margin-left:auto}
+.msg.helm{align-self:flex-start;align-items:flex-start}
+.msg .who{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 6px 2px}
+.msg .bubble{border-radius:14px;padding:8px 12px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.msg.you .bubble{background:var(--accent-soft);border:1px solid var(--line);border-bottom-right-radius:4px}
+.msg.helm .bubble{background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.noise .bubble{border-style:dashed}
+.msg .st{font:11px/1.4 var(--mono);color:var(--ink-3);margin:2px 6px 0}
+.chat .thread{display:flex;flex-direction:column}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="chat.html">Talking to HELM</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="build.html">The build, animated</a></li><li><a href="data.html">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html">Model card</a></li><li><a href="safety.html">Safety and honesty</a></li><li><a href="roadmap.html">Roadmap</a></li><li><a href="device.html" aria-current="page">The HELM Cube</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html">How to run HELM</a></li><li><a href="files.html">Files and paths</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>The HELM Cube: a concept for HELM&#x27;s final home</h1>
+<div class="lede">The HELM Cube is a concept for HELM's final home: a small black cube with no buttons that listens, talks, sees and maps its room. This page is a design only. Nothing has been built, bought or measured, and no money was spent.</div>
+<details class="words"><summary>Words used on this page, in plain English</summary><dl><div class="w"><dt><dfn data-term="recipe" title="a written rule saying how much of each ingredient one unit of an outcome needs">recipe</dfn></dt><dd class="gloss">a written rule saying how much of each ingredient one unit of an outcome needs</dd></div><div class="w"><dt><dfn data-term="recipe brain" title="HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network">recipe brain</dfn></dt><dd class="gloss">HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network</dd></div><div class="w"><dt><dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn></dt><dd class="gloss">HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell</dd></div><div class="w"><dt><dfn data-term="UNDETERMINED" title="HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing">UNDETERMINED</dfn></dt><dd class="gloss">HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing</dd></div><div class="w"><dt><dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn></dt><dd class="gloss">the record a saved fact leaves behind, with a fingerprint, so it can be checked later</dd></div><div class="w"><dt><dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn></dt><dd class="gloss">a small watcher that looks over HELM, reports and whispers, and never writes</dd></div><div class="w"><dt><dfn data-term="whisper" title="a typed nudge from the Eye that HELM may ignore; it never changes a stored fact">whisper</dfn></dt><dd class="gloss">a typed nudge from the Eye that HELM may ignore; it never changes a stored fact</dd></div><div class="w"><dt><dfn data-term="LICENSED" title="a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)">LICENSED</dfn></dt><dd class="gloss">a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)</dd></div><div class="w"><dt><dfn data-term="cascade" title="going down into sub-problems, with a stop rule and a depth limit">cascade</dfn></dt><dd class="gloss">going down into sub-problems, with a stop rule and a depth limit</dd></div></dl></details>
+
+<h2>The owner's words</h2>
+<p>The brief, and five rulings given on 2026-10-21, word for word:</p>
+<blockquote>FOR THE ISSUE OF THE BOTTOM AND CHARGING MAGNETIC PULL AND HAPTIC FEEDBACK SHOULD TAKE CARE OF KNOWING WHICH SIDE TO CHARGE</blockquote><blockquote>YES BECAUSE THE MAIN THING IS THAT IT SHOULD LOOK THE SAME ON ALL SIDES LIKE A PLAIN BLACK BOX</blockquote><blockquote>WITH GYRATOR WHEN IT&#x27;S BEEN MOVE TURNED AND DIRECTION FOR MAPPING IT&#x27;S ENVIROMENT GEOLOCATION AND USE WIFI TO DRAW ITSELF AN INTERNAL SCHEMATIC OF IT&#x27;S ENVIROMENT AND OR USE LIDAR</blockquote><blockquote>ALL OF WHICH FEEDS BACK TO HELM WHO WILL HAVE ANY NECESSARY CONTROLS OVER</blockquote><blockquote>THE ENTIRE OUTSIDE MADE OUT OF GORILLA GLASS THAT IS BLACK BUT CAN TURN ON AND SHOW SCREENS IMAGES VIDEOS ETC THIS COULD BE ANOTHER VERSION YES THIS IS JUST ANOTHER VERSION NOT THE MAIN VERSION</blockquote>
+<p class="small muted">"Gyrator" means gyroscope. The second ruling is the one the owner called the main thing: when it is off, the cube is a plain black box, the same on every face.</p>
+
+<h2>What it is</h2>
+<div class="tablewrap"><table class="cards"><thead><tr><th>Part</th><th>The design</th><th>Status</th></tr></thead><tbody><tr><td data-label="Part"><strong>Size</strong></td><td data-label="The design">64 mm on each edge, about a tennis ball across; 55 mm is the smallest honest size, at the cost of magnetic charging and on-cube speech.</td><td data-label="Status">estimate</td></tr><tr><td data-label="Part"><strong>Look</strong></td><td data-label="The design">A plain black box. Off, all six faces are identical: no band, port, button or logo singles one out.</td><td data-label="Status">owner ruling</td></tr><tr><td data-label="Part"><strong>Light</strong></td><td data-label="The design">Along all twelve edges, invisible until lit. It pulses with each syllable HELM speaks and shows each mode by its motion.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Touch</strong></td><td data-label="The design">No buttons. Shake to wake. Taps to command: the number of taps is the action, the face you tap is the target. A tiny buzz confirms each counted tap.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Charging</strong></td><td data-label="The design">Qi2 magnetic wireless charging only. One unmarked face snaps to the charger by magnetic pull, and a short buzz confirms. Heat, not the standard, sets the speed: about 14 W at first, likely 7 to 10 W as it warms.</td><td data-label="Status">owner ruling; speeds are estimates</td></tr><tr><td data-label="Part"><strong>Cameras, microphones, sound</strong></td><td data-label="The design">Behind every face, hidden behind dark glass and edge slots. While docked, the charge face rests and the other five work. Cameras are off by default.</td><td data-label="Status">owner ruling; design</td></tr><tr><td data-label="Part"><strong>Knowing where it is</strong></td><td data-label="The design">A gyroscope feels every turn; small depth sensors on each face measure the walls; Wi-Fi gives distances; the phone can share the location. Together they build a map of the room.</td><td data-label="Status">design; being fact-checked</td></tr><tr><td data-label="Part"><strong>Brains</strong></td><td data-label="The design">HELM&#x27;s recipe brain runs on the cube. Speech runs on the cube when it is cool enough, otherwise on the phone.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Radios</strong></td><td data-label="The design">Wi-Fi 6, Bluetooth, and Thread for Matter smart-home devices, through the home&#x27;s existing hub.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Another version: the display cube</strong></td><td data-label="The design">Not the main version. The whole outside is black Gorilla Glass over square screens that can show pictures, video, answers and the room map. A dark screen gives no light, so off it is still a plain black box. Screens cost power and heat, so one or two faces light at a time; cameras see worse under a screen.</td><td data-label="Status">owner ruling; estimates only</td></tr></tbody></table></div>
+
+<h2>HELM is in charge</h2>
+<p>Every sensor feeds HELM, and HELM holds the controls: which sensors run, when the cube maps, what the light shows, which home devices it controls. Each action goes through the <dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn><span class="gloss"> (HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell)</span> and leaves a <dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn><span class="gloss"> (the record a saved fact leaves behind, with a fingerprint, so it can be checked later)</span>. A fact HELM lacks, such as a corner of the room it never measured, stays <dfn data-term="UNDETERMINED" title="HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing">UNDETERMINED</dfn><span class="gloss"> (HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing)</span>: HELM asks instead of guessing, and never draws a wall it did not measure.</p>
+<p><strong>Two lines stay outside all software, HELM included.</strong> The camera-on light is wired to each camera's power, and the hard mute is a physical switch. HELM can turn any camera or microphone on or off; it cannot hide that it did. This keeps six hidden cameras trustworthy. It is the operator's proposal, kept unless the owner overrules it.</p>
+
+<h2>Who decides when HELM looks deeper?</h2>
+<p>The owner also asked whether the <dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn><span class="gloss"> (a small watcher that looks over HELM, reports and whispers, and never writes)</span> or another reasoning part could decide when HELM needs to look deeper into a problem. The answer, in short:</p>
+<ul class="tight">
+<li><strong>An exact arithmetic rule should decide, not the Eye.</strong> The owner's own decoupling stop already does this. On HELM's made-up cascade exam it read DECOUPLING_EARNED: 203 deeper looks instead of 609, with more good answers (<a href="results.html#s7-69">§7.69</a>).</li>
+<li><strong>The Eye checks the rule from outside.</strong> By design it never writes and never gates, and its acting is NOT LICENSED (<a href="results.html#s7-38">§7.38</a>). With a new ruling it could ask for more depth, never for less, so the worst it could cause is extra work, not a wrong answer.</li>
+<li><strong>Today's live chat has no depth choice to make.</strong> Every repair opens one level, so a decider there would measure nothing. Depth becomes a real choice when an ingredient has its own recipe.</li>
+</ul>
+
+<h2>What is hard</h2>
+<ul class="tight"><li>Six cameras running at once needs a hotter, phone-class chip; the plan is one camera at a time, chosen by where the voice came from.</li><li>Hiding a camera behind dark glass costs it light, so pictures get noisy in dim rooms.</li><li>Six separate speakers do not fit usefully; one driver with two passive radiators sends sound out through slots on every face.</li><li>The law expects a regulatory mark on the device; the closest fit to the plain-black-box rule is a black-on-black etch on the charge face.</li><li>In the EU, from 18 February 2027, portable batteries must be removable by the user, so an EU version needs an openable face.</li><li>It cannot charge fast and talk at the same time: both share one small heat budget.</li></ul>
+
+<h2>Where the details are</h2>
+<ul class="tight">
+<li>The full spec, with every number marked as measured by a source or estimated: <code>docs/working/helm_cube_device_concept_v0/HELM_CUBE_SPEC.md</code>.</li>
+<li>The depth answer, with the three competing designs and the skeptic's review: <code>docs/working/helm_rpm_depth_decider_design_v1/DESIGN.md</code>.</li>
+<li>The drawings are on a private design canvas, <code>https://claude.ai/artifact/LVdbdNcxV5eY1kcz5BwMoy</code>: off and speaking, the light modes, the six faces and what hides behind them, the magnetic charge face, the room map, and the display version.</li>
+</ul>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li>Owner&#x27;s words: <code>C:\Users\wakil\.claude\projects\...\memory\project_helm_cube_device_owner_rulings_20261021.md</code> and the spec&#x27;s Section 0</li><li><code>docs/working/helm_cube_device_concept_v0/HELM_CUBE_SPEC.md</code> (v0.1)</li><li><code>docs/working/helm_rpm_depth_decider_design_v1/DESIGN.md</code></li><li><code>docs/CAS_HARNESS_SPEC_SHEET.md</code> §7.38, §7.69, §7.120</li></ul>
+<div>Generated 2026-10-21 12:50 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>5dcbf23c</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>
