@@ -75,6 +75,40 @@ CLAUSE_RX = re.compile(
     r"^(?:but|except|although|though|however|yet|unless|whereas)\b"
     r"|^(?:i|i'm|i've|i'd|we're|we've|we don't|we do not|nobody|no one|there's|there is|my|our)\b"
     r"|^the\b[^,]*?\b(?:is|are|was|were|isn't|aren't|wasn't|has|hasn't|have|haven't)\b", re.IGNORECASE)
+#: v6 (2026-10-20, wave-7 round 3 FIX FIRST): a piece of a batch or stock sentence that is an amount of a CONDITION,
+#: not of an ingredient -- a temperature ("80 degrees Fahrenheit", "350 F"), a time ("20 minutes"), a head count
+#: ("4 people"), a percentage -- is a note on the ingredient line before it ("2 cups water, 80 degrees Fahrenheit"),
+#: never an ingredient line of its own. Before v6 the reader bound such a piece as an ingredient named by the condition
+#: word ("degrees fahrenheit"), so the wide brain waited for a batch where that "ingredient" ran out, never got one,
+#: and asked at the question with every real lesson learned (c52: 1 unexplained ask, K4 missed). Same family as
+#: helm_english_in.IGNORED_COUNT_NOUNS; kept here as the wide reader's own table.
+CONDITION_NOUNS = {"degree", "degrees", "deg", "fahrenheit", "celsius", "centigrade", "f", "c",
+                   "minute", "minutes", "min", "mins", "hour", "hours", "hr", "hrs", "second", "seconds", "sec", "secs",
+                   "day", "days", "week", "weeks", "overnight",
+                   "people", "person", "persons", "guest", "guests", "serving", "servings", "portion", "portions",
+                   "percent", "pct", "times", "time", "step", "steps"}
+CONDITION_RX = re.compile(r"^\s*(?:°|º)?\s*([A-Za-z]+)\.?(?=\s|$)")
+
+
+def condition_fragment(seg: str) -> bool:
+    """v6: is this piece an amount of a condition (temperature, time, head count, percentage) rather than of an
+    ingredient? True for "80 degrees Fahrenheit", "350 F", "20 minutes", "4 people"; False for "2 cups water",
+    "3 eggs", "2 cups flour, sifted"."""
+    s = seg.strip()
+    try:
+        got = W.match_amount(s, 0)
+    except W.WideRefused:
+        return False
+    if got is None:
+        return False
+    rest = s[got[1]:]
+    m = CONDITION_RX.match(rest)
+    if not m:
+        return bool(re.match(r"\s*(?:°|º)", rest))
+    word = m.group(1).lower()
+    if word in ("f", "c"):                         # "350 F" is a temperature; "2 c flour" is two cups of flour
+        return not rest[m.end():].strip() or bool(re.match(r"\s*(?:°|º)", rest))
+    return word in CONDITION_NOUNS
 
 
 def singular(word: str) -> str:
@@ -259,6 +293,8 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
                 return _note_line(nm, s, "NO_AMOUNT")
         return {"clarify": _ask("NO_AMOUNT", item=bind_name(s), words=s)}
     amount, end = got
+    if condition_fragment(s):                      # v6: "80 degrees Fahrenheit" alone names no ingredient
+        return {"clarify": _ask("NO_NAME", words=s)}
     rest = s[end:].strip()
     unit = ""
     note_unit = ""                                 # stage 1c: a unit word with no exact size ("stick", "dash")
@@ -343,6 +379,8 @@ def starts_line(seg: str) -> bool:
     s = seg.strip()
     if RELATIVE_WORDS_RX.search(s):                # v5: "half as much soda" belongs to the line before it
         return False
+    if condition_fragment(s):                      # v6: "80 degrees Fahrenheit" belongs to the line before it
+        return False
     if re.match(r"no\s+[a-z]", s, re.IGNORECASE):
         return True
     m = APPROX_RX.match(s.lower())
@@ -370,13 +408,20 @@ def split_lines(text: str) -> List[Tuple[str, str]]:
         sep, pos = m.group(0), m.end()
     pieces.append((sep, text[pos:]))
     out: List[List[str]] = []
+    leading = ""                                   # v6: a condition piece before the first line waits for that line
     for sep, seg in pieces:
         if not seg.strip():
             continue
+        if not out and condition_fragment(seg):
+            leading = (leading + ", " + seg.strip()) if leading else seg.strip()
+            continue
         if not out or starts_line(seg):
-            out.append([seg.strip(), ""])
+            out.append([seg.strip(), leading])
+            leading = ""
         else:
             out[-1][1] = (out[-1][1] + sep + seg.strip()) if out[-1][1] else seg.strip()
+    if leading and not out:                        # only conditions, no ingredient: one line, so the reader asks
+        out.append([leading, ""])
     return [(a, b) for a, b in out]
 
 
