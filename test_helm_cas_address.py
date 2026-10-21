@@ -36,7 +36,9 @@ except ImportError:                                   # the fixture below also r
 #: question's faces_applied / eta_ingredient fields and the v7 reader version, with the address OFF and ON alike; the
 #: pin is recomputed over the same machine-neutral canon (312ddfd6... was the v6 reader). The ON/OFF equality tests are
 #: unchanged and still hold.
-PINNED_OFF_SHA256 = "83f96a4a3e64256f0cae1c5567285463f442f92f1c4759e6b2c7bdd397502c35"
+#: 2026-10-21 (v7.1): the face reader resolves longer phrases and hyphenated names, and an unread clause withdraws the named
+#: stock (the v7 seal's practice finding); the fixture's clause turns change bytes again -> recomputed (83f96a4a... was v7).
+PINNED_OFF_SHA256 = "2c8ba0196921e42ab654cd850032ee5da0e5687b60b809e6cbfa337ea6a01a55"
 
 FIXTURE_TURNS = [
     ("batch", ("Bread", {"Flour": 10, "Water": 8}, 5, "Flour")),

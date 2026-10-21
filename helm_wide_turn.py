@@ -54,7 +54,7 @@ import helm_brain_wide as W
 import helm_faces_in as FI          # v7 (SPEC 7.109 D2/D3): the face reader, names as given
 import helm_triad as HT             # v7 (SPEC 7.109 D4): the one scale and the triad table (stdlib only)
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v7 (2026-10-21)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v7.1 (2026-10-21)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -975,9 +975,11 @@ def extended_turn(loop: Any, user_english: str, tick: int, current_inventory: An
         _stock_of(loop).update(reading["stock"])          # one stock on hand; the wide brain reads it too (no write)
         if reading.get("clause"):                          # v7 (D3): the clause is read into the wide faces too
             cr = _read_clause(loop, reading["clause"], tick, res)
-            # the licensed result (status, message, receipt) stands; a clause the face reader could not read is
-            # asked at the next wide question, never dropped (loop.wide_clause_pending)
-            loop.wide_clause_pending = {"clause": reading["clause"], "read": cr} if cr["status"] == "CLARIFY" else None
+            # the licensed result (status, message, receipt) stands; a clause the face reader could not read makes the
+            # held amount of the ingredient it names stale (v4's withdrawal), so the next wide question asks for it
+            # instead of answering as if the clause were never said (the v7 seal's practice finding, 4 wrong answers)
+            if cr["status"] == "CLARIFY":
+                _withdraw_mentioned_stock(loop, reading["clause"], tick)
     taken = take_over(loop, res, reading)
     if not taken and not recorded and reading["status"] != "QUESTION":
         _withdraw_mentioned_stock(loop, user_english, tick)   # v4: never answer from stock the person just restated
@@ -1072,9 +1074,14 @@ def _withdraw_mentioned_stock(loop: Any, user_english: str, tick: int) -> List[s
         return []
     words = normalize_text(user_english).lower()
     gone = []
+    # v7.1: the same name forms the face reader uses (the name, singular, plural, and its last word when no other held
+    # name claims it), so "the whole oat milk" or "the eggs" withdraw "oat milk" / "duck egg" as the face reader would bind them
+    forms_of = {}
+    for k, n in FI._given_map(list(held)).items():
+        forms_of.setdefault(n, set()).add(k)
     for n in list(held):
-        forms = {n.lower(), plural(n).lower()}
-        if any(re.search(r"(?<![a-z])%s(?![a-z])" % re.escape(f), words) for f in forms if f):
+        forms = forms_of.get(n, set()) | {n.lower(), plural(n).lower()}
+        if any(re.search(r"(?<![a-z'])%s(?![a-z'])" % re.escape(f), words) for f in forms if f):
             held.pop(n)
             gone.append(n)
     if gone:
@@ -1212,7 +1219,9 @@ def _wide_stock(loop: Any, stock: Dict[str, Tuple[Fraction, str]], tick: int, re
         cr = _read_clause(loop, clause, tick, result)
         if cr["status"] == "CLARIFY":
             code = cr["clarify"]["code"]
-            return loop._finish(result, tick, f"CLARIFY_WIDE_{code}", reply + " " + say_clause_question(cr, clause),
+            gone = _withdraw_mentioned_stock(loop, clause, tick)   # v7.1: never answer later as if the clause were unsaid
+            tail = (f" Until you say it again, I won't count the {say_and(gone)}." if gone else "")
+            return loop._finish(result, tick, f"CLARIFY_WIDE_{code}", reply + " " + say_clause_question(cr, clause) + tail,
                                 writes_before, f"WAIT_FOR_USER: {code}")
         if cr["status"] == "FACES":
             reply += " " + " ".join(FI.say_face(f) for f in cr["faces"])
@@ -1231,14 +1240,6 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
         return loop._finish(result, tick, "UNDETERMINED_UNKNOWN_PRODUCT", say_wide(rec), writes_before,
                             "WAIT_FOR_USER: a witnessed batch")
     loop.last_topic = product
-    pending = getattr(loop, "wide_clause_pending", None)
-    if pending:                                    # v7 (D3): a clause the licensed-recorded path could not read
-        loop.wide_clause_pending = None
-        code = pending["read"]["clarify"]["code"]
-        result["clause_read"] = pending["read"]
-        return loop._finish(result, tick, f"CLARIFY_WIDE_{code}",
-                            f"Before I work out {product}: " + say_clause_question(pending["read"], pending["clause"]),
-                            writes_before, f"WAIT_FOR_USER: {code}")
     support = brain.support_of(product)
     # v7 (SPEC 7.109 D4): stated faces are APPLIED, as the licensed triad applies them (helm_triad: eta = the smallest
     # of the three face values; Rising 1/4, Waning 1/2, Peak 1, Absent 0). v4 asked instead (CLARIFY_WIDE_FACE_NOT_HELD).

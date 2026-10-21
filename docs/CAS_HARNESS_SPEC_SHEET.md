@@ -3991,6 +3991,41 @@ reason) with `line<i>:MULTI_QTY` in the key's `representable.why_not`, so such r
 - **`NOT LICENSED`:** everything in §7.108's list, unchanged; the v7 reader on any exam.
 - **Limits kept as negatives (measured on the author's sentences):** (a) everyday names the LICENSED brain knows (flour, milk, eggs) are recorded by the licensed path (`INVENTORY_RECORDED`); the clause is still read into the wide faces (test class G) and a wide product applies them at the question, but a product the licensed brain itself knows is answered by the licensed brain, which never reads faces: no face is applied there. (b) A clause on a BATCH sentence (a lesson) is still one question (`UNREAD_CLAUSE`); only stock sentences carry a clause. (c) Cue-word paraphrases the lexicon lacks ("a little weak these days") ask (`FACE_UNREAD`); no-cue paraphrases ("has seen better days") are ignored as not a face — the wave-3 lexicon's own limit, unchanged.
 
+### 7.113 HELM-R1 wave 7 READER v7.1 (0 USD, FIX FIRST): the v7 seal's own practice run (the forked session's §7.112, run9 vs run8) turned 4 honest asks into 4 WRONG dialogue answers in the wisdom-stated family; measured cause: the clause names the held ingredient by a longer phrase or a hyphenated form, the face row misses, and the question then answers as if the clause were never said; two general rules fix it; all four practice items now return the key's own numbers; 272 HELM tests OK; job c55 HELD on the owner's typed line until a v8 reseal; nothing licensed (2026-10-21 PDT)
+
+**Said plainly first.** The owner typed `CHAT WAVE 5 at 1 USD` in the operator session at 09:10 PDT, after the v7 seal was announced. The seal
+itself checks out here (zip `42c044a9…`, freeze `ce74ccff…`, 203 of 203 members, cut `47440415` 167 files, 12-name host list, the line pinned,
+A-R1W7-7 in, block `X7v6_c54` excluded). But its own practice run (`PRACTICE_READINGS_V7.json`, `CONV_PER_ITEM_FROZEN_RUN9_VS_RUN8.json`) reads
+X7_CONV `CHAT_ON` **59 right / 4 WRONG / 1 undetermined** against v6's 43 / 0 / 21: the v7 reader gained 16 dialogues and LOST 4, all S1
+(wisdom stated). A wrong answer fails the K3 mark, so a paid draw on v7 would most likely come back red. **The run was held** (no approval
+record written, no custodian draw, no hold on the ledger). The four items were replayed through the v7 code on the laptop by program
+(practice items are the published pools; names printed only as hashes): on three the clause reads `FACE_UNREAD` (a cue word, no row) and on
+one `NONE`, because the clause names the held ingredient by a LONGER phrase ("the sifted flour" for a held "flour"; the generator writes the
+recipe's own name form) or by a HYPHENATED form ("corn-starch" for a held "corn starch"); the face reader's name slot wanted the held name
+right after the determiner. Then the stock stayed recorded and the question answered from it as if nothing had been said — the v4 principle
+("a stated face this brain cannot apply → ask, never ignore") broken on the wide path. **Two general rules (v7.1):** (F1) in names-as-given
+mode the name slot allows up to three words before a given name, greedy so the head noun wins, and the captured phrase is resolved to the held
+name (`_names_in`; two held names inside → `FACE_WHICH_INGREDIENT`); a two-word name is matched with a hyphen or a space either way. (F2) a
+clause the face reader cannot read withdraws the amount of the ingredient it names from the wide stock (v4's own `_withdraw_mentioned_stock`,
+now applied to the clause and using the same name forms), on the wide path and on the licensed-recorded path alike, so the next question asks
+for that amount instead of answering; the pending-ask mechanism of v7 is removed. **Result on the four:** CV32 3/8, CV33 1/6, CV34 1/4, CV37
+3/16 — the key's yields — with the stated face applied (η 1/2 or 1/4 on the named ingredient). `ENGINEERED-NOT-VALIDATED`; nothing licensed.
+
+| Item | Value |
+|---|---|
+| Files (branch `claude/helm-reader-gap-v71-20261021`) | `helm_faces_in.py` v2.1 `642451f2a0718997…`; `helm_wide_turn.py` reader `RB-W1 v7.1` `47994f77965562e7…`; `test_helm_reader_gap.py` 27 tests `e6ebb98fdb3ccfa7…` (+ longer-phrase / hyphen / which-ingredient cases; the unread-clause tests now demand an ask at the question and today's answer after a plain restatement); `test_helm_cas_address.py` OFF-path pin `83f96a4a…` → `2c8ba0196921e42ab654cd850032ee5da0e5687b60b809e6cbfa337ea6a01a55` (same machine-neutral canon, `offending` empty) |
+| Practice replay (laptop, v7.1, hashed names) | S1 items: CV32 `3/8` (key `3/8`), CV33 `1/6` (`1/6`), CV34 `1/4` (`1/4`), CV37 `3/16` (`3/16`); CV35 `5/8`, CV36 `2/3` unchanged; every face read `FACES` (wisdom RISING/WANING on the named ingredient) |
+| Every HELM suite (laptop) | 15 files: Ran 272, OK (incl. pin hygiene) |
+| The v7 seal | verified here and VOID for launch: `42c044a9…` / `ce74ccff…`; no approval record was written against it, so the owner's line is unconsumed; a v8 reseal on the merged head follows (the forked session; A-R1W7-9) |
+| Cost | 0 USD |
+
+- **Owner's line:** `CHAT WAVE 5 at 1 USD`, typed here 09:10 PDT, recorded in `OWNER_APPROVALS_20261018.md`; it binds a zip only through the
+  approval record, which was not written; whether it stands for the v8 reseal is the owner's word.
+- **Negatives kept:** the v7 practice finding (4 wrong) stays in §7.112's record; a longer-phrase name that holds TWO held names asks
+  (`FACE_WHICH_INGREDIENT`) rather than guessing; the key's limiting line on CV34 is named by a different surface form than the wide name (the
+  scorer maps it through the lesson records; to be confirmed by the fork's practice reading on v8).
+- **`NOT LICENSED`:** everything in §7.111's list.
+
 ## 8. THE TWO CLAIMS
 
 ### 8.1 CLAIM A — "the weights are natively CAS" — **DEAD**
@@ -4283,6 +4318,7 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 
 | Date | Change | Commit / artifact |
 |---|---|---|
+| 2026-10-21 | **HELM-R1 WAVE 7 READER v7.1 (new §7.113), 0 USD; job c55 HELD.** The v7 seal's practice run read 4 WRONG dialogue answers (S1): the clause named the held ingredient by a longer phrase or a hyphen, the face row missed, and the question answered as if unsaid. Fix: open-phrase name slot resolved to the held name; hyphen/space variants; an unread clause withdraws the named stock so the question asks. All 4 practice items now = key values; 272 tests OK; pin `2c8ba019…`. v7 void for launch; v8 reseal next; the owner's typed line unconsumed. | branch `claude/helm-reader-gap-v71-20261021` |
 | 2026-10-21 | **HELM-R1 WAVE 7 READER-GAP BUILD + AMENDMENT A-R1W7-7 (new §7.111), 0 USD.** D1–D5 as code, FIX FIRST: wide reader v7 carries a stock sentence's clause, the face reader takes any bound name, the wide path stores faces and the wide question applies η (helm_triad), the past-tense lesson reads; 26 new tests (20 of 23 failed on v6); 271 HELM tests OK; OFF-path pin recomputed `83f96a4a…`. D6: `multi_qty_w7.py` + custody hook + 7 tests, proven on a scratch v6 tree with the frozen neighbours. `ENGINEERED-NOT-VALIDATED`; nothing licensed. | branch `claude/helm-reader-gap-build-20261021`; `docs/working/r1_wave7/a_r1w7_7/` |
 | 2026-10-21 | **HELM TALK PACKET v1 — design only (new §7.110; owner order "talk packet"; laptop, 0 USD; NOTHING BUILT, NOTHING TRAINED, NOTHING RUN, NOTHING LICENSED; no claim moved).** Normal conversation as seven kinds of turn (`SMALL FACT ASK FIX SELF OFF MIX`) and three layers: ears (the CTT retrained with `NOTHING_TO_SAVE`, three-copy vote, ask by default, called only where the hand-written reader asks after §7.109's D1–D5), brain (wide, untouched), mouth (voice guard on every reply, M1–M9). Data blocker named (§7.94: 0.174 stock statements per 10,000; the dialogue generator is templates) and the fix: K-H human-written turns by four named writers, floors 16 per kind × 7 = 112 singles + 16 dialogues, writer-keyed, second-keyed blind, pinned, never pasted into a model. Arms incl. KEYWORD_ROUTER (30-line rule; the threat), RETRIEVAL_VOTE, OLD_EARS; 12 hard gates (+HG11 no CAS token in any reply, +HG12 no save on a nothing turn); marks UNDERSTOOD / SOUNDED_HUMAN / EARS_GAIN (+8 / +4) / HARM (0 / 0); words `INCONCLUSIVE` / `TALK_HARMED` / `TALK_NO_GAIN` / `TALK_EARNED_KEEP`; ceiling `HUMAN_WRITTEN_ONLY`. Lines proposed: `TALK TRAIN at 3 USD` (expected about 2.2; c45 1.40 USD yardstick) and `TALK EXAM at 1 USD` (CPU host; the ears cannot run on the laptop). Bands 2,018 / 2,020 / 2,022 M. Precode sha256 `59bed9ba…`. | `docs/working/helm_talk_design_v1/`; `Documents\Codex\2026-10-21\helm_talk_design_v1\`; this commit |
 | 2026-10-21 | **HELM-R1 WAVE 7 READER-GAP DIAGNOSIS + DESIGN PACKET (new §7.109), 0 USD.** c54's two asks = a book line with two amounts (key keeps one lesson, reader reads two; HELM's ask honest; fix = custodian `MULTI_QTY` rule, PROPOSED, A-R1W7-7). The 32 clause-bearing dialogue items fail at the face reader's 8-word name table, not its lexicon (28 of 28 face clauses fit a row with the name slot open; S7 0 of 4). R4 paraphrase: no time phrase / subject form in the regexes. G4 sized: 15 of 128 recipes lost to units outside the table. Design D1–D7 hashed before code; nothing changed in code; no claim moved. | `docs/working/r1_wave7/K4_ITEM_DIAGNOSIS_C54.md` `368cc65d…`; `docs/working/r1_wave7/READER_GAP_DESIGN_PACKET_R1W7_20261021.md` `26b17c49…` |

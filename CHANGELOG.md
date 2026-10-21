@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM-R1 wave 7 reader v7.1 (spec sheet 7.113): the v7 seal's practice run showed 4 wrong dialogue answers (wisdom stated); cause measured and fixed by two general rules; job c55 held on the owner's typed line until a v8 reseal; 0 USD
+
+- Owner typed CHAT WAVE 5 at 1 USD at 09:10 PDT. The v7 seal (zip 42c044a9, freeze ce74ccff, cut 47440415) verified here, but its practice reading (run9 vs run8) read CONV 59/4/1 vs 43/0/21: 16 gained, 4 lost to WRONG. Launch held; no approval record, no draw, no ledger hold.
+- Replay by program (hashed names): the clause names the held ingredient by a longer phrase ("the sifted flour") or a hyphenated form ("corn-starch"); the face row missed (FACE_UNREAD/NONE); the stock stayed and the question answered as if unsaid.
+- Fix: helm_faces_in v2.1 (open-phrase name slot, greedy, head noun last; _names_in resolves the phrase to the held name; two names -> FACE_WHICH_INGREDIENT; hyphen/space variants); helm_wide_turn v7.1 (an unread clause withdraws the named stock via _withdraw_mentioned_stock on both paths; pending ask removed; withdrawal uses the face reader's name forms). All four practice items now give the key's yields (3/8, 1/6, 1/4, 3/16). 27 reader-gap tests; 272 HELM tests OK; OFF-path pin recomputed 2c8ba019.
+- Next: merge, the forked session reseals v8 on the merged head (A-R1W7-9) and re-reads practice (expect 0 wrong), the owner's word on whether the typed line stands for v8, then c55.
+
 ## 2026-10-21 PDT - HELM-R1 wave 7 reader-gap BUILD (spec sheet 7.111): design packet D1-D5 as code, FIX FIRST, 0 USD; amendment A-R1W7-7 (D6, the custodian MULTI_QTY rule) with tests; ENGINEERED-NOT-VALIDATED; nothing licensed
 
 - Owner's word: "Merge PR #433 into the thread branch. Build D1 to D5 with tests, FIX FIRST, at 0 USD. Yes to D6, the custodian MULTI_QTY rule, as amendment A-R1W7-7."
