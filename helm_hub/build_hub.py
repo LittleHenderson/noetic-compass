@@ -431,7 +431,7 @@ def dot(c: str) -> str:
 # kind: scored | packet | rule | audit ; color: key of COLORS
 # --------------------------------------------------------------------------------------------
 CUR: dict[str, tuple[str, str, str, str]] = {
-    "7.110": ("packet", "null", "The talk packet, a design only: how HELM would hold a normal conversation. Three layers: the transformer ear, retrained so it can say \"nothing to save\" on purpose and asked only where HELM's own reader cannot read a line, with its three copies voting and a question before anything is used; the recipe brain, untouched; and the voice guarding every reply (no notation, no recipe words on a greeting, exact amounts, an honest \"I don't know\"). The exam would be typed by four named people for HELM, keyed by the writers and never shown to any model, because public text almost never says what food someone has. A 30-line keyword rule is the cheap rival the ear must beat. Two owner lines proposed, TALK TRAIN at 3 USD and TALK EXAM at 1 USD. Nothing built, nothing trained, nothing run.", "Nothing; a design. Every part keeps its standing; the ear's earlier words (no gain on real sentences; harmed on machine-written ones) stand."),
+    "7.110": ("packet", "null", "The talk packet, a design only: how HELM would hold a normal conversation. Three layers: the transformer ear, retrained so it can say \"nothing to save\" on purpose and asked only where HELM's own reader cannot read a line, with its three copies voting and a question before anything is used; the recipe brain, untouched; and the voice guarding every reply (no notation, no recipe words on a greeting, exact amounts, an honest \"I don't know\"). The exam was first designed to be typed by four named people; on the owner's word of 2026-10-21 (amendment A-TALK-1) the owner writes no turns and reviews only, every exam turn is written by AI models of at least three families and keyed by a different family, and a pass could only ever say \"AI-written turns\", never \"human-written\" (ceiling LLM_WRITTEN_ONLY). Off-topic turns get a rule: react in one line, keep what was said, ask about what HELM knows, never an opinion or an untold fact. Part M adds a trained mouth (the same translator run CAS to English) that may choose words, never facts, scored against today's templated voice. A 30-line keyword rule is the cheap rival the ear must beat. Two owner lines on record, TALK TRAIN at 3 USD and TALK EXAM at 1 USD, each bound to a package not yet built. Nothing built, nothing trained, nothing run.", "Nothing; a design. Every part keeps its standing; the ear's earlier words (no gain on real sentences; harmed on machine-written ones) stand."),
     "7.107": ("packet", "null", "Wave 7, round 4: the one test that failed on job c53's machine was traced by program to a stored fingerprint of the loop's records that carried the licensed brain's folder path; reporting the machine's path on the laptop reproduces the machine's value exactly, so HELM's answers never differed. A second builder made the test pins machine-neutral (the folder and the two receipts that depend on it are cut out before hashing; a hygiene test guards the class); the first attempt was shown insufficient by diff and replaced. The chat wave packet v6 is frozen and fingerprinted on that code, and its freeze step now runs exactly the machine's own test list with the machine's own command (245 tests, OK); not launched; waits for the owner's line CHAT WAVE 4 at 1 USD. Practice numbers equal v5's exactly.", "No claim from the packet itself; the test fix is built and checked on the laptop, not yet on a machine."),
     "7.24": ("scored", "partial", "The first recipe brain, put in the transformer's slot, passed the transformer's own 16-world exam and beat it by one world. A plain lookup table tied it, so the recipe arithmetic got no credit.", "PASS on that exam. Not that recipe math earned its keep."),
     "7.25": ("scored", "weak", "Harder exams. Task A passed, but the transformer passed too. Task B tripped the reader's own instrument rule, so the overall reading is NOT_PASS.", "Nothing new may be said."),
@@ -966,7 +966,7 @@ are a reading aid only. The words in grey boxes are the record's own words. {T('
 <h2>Where to go next</h2>
 <div class="grid">
 <div class="card"><a href="thinking.html">How HELM thinks</a><br><span class="muted small">Recipes, asking, receipts and the Eye, with the precise definitions.</span></div>
-<div class="card"><a href="files.html#start">Next agent: start here</a><br><span class="muted small">Every file and folder with its full path, and the rules to read first.</span></div>
+<div class="card"><a href="files.html#start">Next agent: start here</a><br><span class="muted small">Every file and folder with its full path, and the rules to read first. Then read the owner's <a href="roadmap.html#intent">statement of intent for whoever comes after</a> (2026-10-21): the transformer mouth trained on the 40 elements; intended, nothing built.</span></div>
 <div class="card"><a href="build.html">The build, animated</a><br><span class="muted small">One turn as wired today, and the intended next wiring.</span></div>
 <div class="card"><a href="architecture.html">Architecture</a><br><span class="muted small">Every part, its parameter count, and what HELM is not.</span></div>
 <div class="card"><a href="results.html">Results scorecard</a><br><span class="muted small">Every result, negatives included.</span></div>
@@ -1672,11 +1672,106 @@ def p_roadmap(S: dict) -> str:
         ("Outputs with checkable receipts", "partial", "Every write in the scored waves is receipted and the receipts held as hard gates; a product that hands receipts to outside users is not built.", "§7.47, §7.64"),
     ]
     drows = "".join(f"<tr><td><strong>{esc(n)}</strong></td><td>{dot(c)}</td><td>{md(t)}</td><td>{md(r)}</td></tr>" for n, c, t, r in domains)
+    need(S, "7.110", "A-TALK-1", "LLM_WRITTEN_ONLY", "TALK TRAIN at 3 USD", "TALK EXAM at 1 USD", "`C0`–`C9`", "NOT A PRESENT CAPABILITY")
+    need(S, "7.111", "ENGINEERED-NOT-VALIDATED", "26 new tests")
+    need(S, "7.49", "ENGINEERED-NOT-VALIDATED")
+    need(S, "7.60", "ENGINEERED-NOT-VALIDATED")
+    # (meaning, what exists today, what would have to be built and tested)
+    talk = [
+        ("Ordinary phrasing understood",
+         "HELM reads a sentence the way people actually type it (a purpose clause, a feeling, past tense, a hedge, a typo) and gets the fact out of it.",
+         "A hand-written reader for kitchen sentences; its clause and face-name gaps were fixed on the laptop and pass 26 new tests, but no sealed exam has scored the fix ({s7111}, {s7109}). The transformer ear that would read what the hand-written reader cannot is designed to be retrained, not retrained ({s7110}); its last scored words were no gain on real sentences and harmed on machine-written ones ({s7090}).",
+         "Retrain the ear so it can say \"nothing to save\" on purpose; score reader and ear on a fresh exam of conversational turns the builder never sees."),
+        ("\"Nothing to save\" small talk",
+         "On \"hi\", \"thanks\", \"how are you\", HELM says something short and saves nothing: no stock row, no fact.",
+         "The chat already drops small talk without saving on the scored runs (0 lost to small talk in c54, {s7108}), but on templates, not on sentences people wrote. The ear has no \"nothing\" output yet ({s7110}).",
+         "The new \"nothing to save\" output in the ear; a hard check that nothing was saved on such turns (the packet's HG12); the mark U3, at least 46 of 48."),
+        ("The mouth",
+         "No recipe talk on a turn that is not about recipes; every amount exact; \"I don't know\" said when HELM does not know; what was saved said back.",
+         "The voice guards recipe replies today (exact amounts, honest-unknown markers; {s7060}); the no-recipe-speak rule on other turns and the said-back rule for corrections are designed, not built ({s7110}, rules M1 to M9).",
+         "Extend the guard to every reply; a published list of recipe words that may not appear on a non-recipe turn; marks S1 to S4."),
+        ("Off-topic talk, answered like a person who does not know the subject",
+         "When the person talks about something outside the kitchen, HELM reacts in one line, keeps what was said word for word, and asks one question about it. It never makes up an opinion, and never states a fact it was not told.",
+         "Nothing. Today an off-topic line is dropped without a save and the reply is reported, not scored ({s7110}). The owner ruled on 2026-10-21 that HELM may comment like a normal person would; the coordinator's reading, accepted: like a person who does NOT know the subject. The rule is written as amendment A-TALK-1 (mouth rule M10).",
+         "Build the react / keep / ask templates; marks O1 (0 invented facts), O2 (0 opinions), O3 (a question back on at least 14 of 16), scored by a key written by a different model family than the turn's writer."),
+        ("HELM asks about what it does know",
+         "Whatever the person brings up, HELM asks a question about the part it already holds something on: a fact saved earlier, an ingredient it has a recipe for, a thing said earlier in the session.",
+         "HELM asks today only when a recipe step is missing something (its CLARIFY asks; {s7087}). Asking about a person's subject from what HELM holds is not built.",
+         "A rule that looks up the person's words against the stored records and builds one question from them, using only the person's own words and HELM's stored names; scored as part of O3 first, then as its own mark."),
+        ("HELM remembers the answers and reasons over them",
+         "What the person answers is kept, and the next turn can use it: the memory holds it, the brain can count with it.",
+         "The chat layer keeps this session's turns, up to 20 of the person's own sentences word for word (user_facts), and the stock the brain saved with a receipt in the cube store ({s7049}, {s7108}). It does not yet draw a conclusion from a kept sentence; only saved stock enters the arithmetic.",
+         "A path from a kept sentence into a checked fact the brain can use (through HELM's own checker, never a guess); a sealed exam where a later turn depends on an earlier answer."),
+        ("The reply's emotional tone, chosen from the Cognitive-domain states",
+         "The tone of each reply would be picked by a written rule from the ten Cognitive-domain states of the 40 (C0 to C9: the ten {noetic} at the Cognitive {domain}), and the record would carry that choice with the {register} mark |f (Affective) as its own tone label, as CLAUDE.md and Clarification 8 of the foundational clarifications define it.",
+         "Nothing. No part of HELM reads or writes a tone today, and no tone claim exists ({s7110}, amendment A-TALK-1 section 5). The owner's words: \"USE IT'S C-WORLD OF THE 40 ELEMENTS TO DENOTE THE CORRECT EMOTIONALITY IN IT'S RESPONSE.\"",
+         "Named as the next design after the talk exam: a written rule (not a learned one) that picks one of C0 to C9 per reply, templates per state, a switch (default off), and a sealed exam against a reply with no tone rule at all."),
+        ("Conversing about anything human-like",
+         "The owner's standing vision: HELM talks with a person about anything, growing as it is taught, piece by piece.",
+         "Nothing beyond the kitchen. HELM has no knowledge it was not taught or told, and no large language model inside; the rule against foreign pretrained models stands. Everything above is a step toward this, and each step is unlicensed until its own exam says otherwise.",
+         "Each piece above, in turn, by the same four steps (below). The limit stays honest: HELM will only ever know what it was taught or told."),
+        ("A transformer mouth trained on the 40 elements, for tone",
+         "The same small translator that is HELM's ear (CAS symbols on one side, English on the other) trained the other way round: it takes the brain's checked receipt (the facts, amounts and names HELM actually recorded) plus the CAS tags already stamped on the record (which of the 40 states, which Register) and writes the English reply, so HELM need not depend on fixed templated sentences. It may choose words, never facts.",
+         "Nothing. The ear has only ever been trained English to CAS. The design is Part M of amendment A-TALK-1 ({s7110}): every number and name must be copied from the receipt; the existing voice guard rejects any sentence that names a fact the receipt does not hold and the template answers instead; 0 invented facts is a must-hold check. The owner's words: \"SEE THIS IS WHY I WANT A TRANSFORMER TRAINED ON THE 40 ELEMENTS BECAUSE THAT CAN CONTRIBUTE TO THE NUANCE HUMAN LIKE TONE ... HELM DOESN'T HAVE TO DEPEND ON DETERMINISTIC TEMPLATED PHRASES\".",
+         "Train it on (receipt + tags to English) pairs, rule-made and AI-written from several model families; score it against today's templated voice on the same turns: same records exactly, no fewer plain replies, varied wording on repeated receipts, and a tone that matches the key's state label at least 8 of 64 turns more often; about 2.6 USD together with the ear's retraining, inside TALK TRAIN at 3 USD if the sealed count fits, else a separate line."),
+    ]
+    intent_path = REPO / "docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md"
+    if not intent_path.exists():
+        raise SystemExit("BUILD STOP: the statement of intent file is missing: " + rel(intent_path))
+    intent_raw = intent_path.read_bytes()
+    INTENT_SHA = hashlib.sha256(intent_raw).hexdigest()
+    intent_parts = []
+    for para in re.split(r"\n\s*\n", intent_raw.decode("utf-8").replace("\r\n", "\n").strip()):
+        para = para.strip()
+        if para == "---":
+            intent_parts.append("<hr>")
+        elif para.startswith("# "):
+            intent_parts.append(f"<p><strong>{esc(para[2:])}</strong></p>")
+        else:
+            intent_parts.append(f"<p>{md(para)}</p>")
+    intent_html = "".join(intent_parts)
+    S_ = {"s7049": slink("7.49"), "s7060": slink("7.60"), "s7087": slink("7.87"), "s7090": slink("7.90"), "s7108": slink("7.108"),
+          "s7109": slink("7.109"), "s7110": slink("7.110"), "s7111": slink("7.111"),
+          "noetic": T("Noetic", "Noetics"), "domain": T("Domain", "level"), "register": T("Register")}
+    trows = "".join(
+        f"<tr><td><strong>{esc(n)}</strong><br><span class=\"small\">INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED</span></td>"
+        f"<td>{esc(m)}</td><td>{e.format(**S_) if '{' in e else esc(e)}</td><td>{esc(bld)}</td></tr>"
+        for n, m, e, bld in talk)
     body = f"""
 <h2>The intended domains</h2>
 <p>The colors are the owner's scale, as a reading aid; the words are this hub's summary of the records named on the right.
 Anything marked "not built" is a plan, and a plan is not a capability.</p>
 <div class="tablewrap"><table><thead><tr><th>Domain</th><th>Color</th><th>Honest status</th><th>Records</th></tr></thead><tbody>{drows}</tbody></table></div>
+
+<h2 id="talk">Intended: talking like a person</h2>
+<p>Every line in this table is <strong>INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED</strong>. It is the owner's standing
+vision for HELM, recorded on 2026-10-21 so each piece can be taught and tested in turn. HELM is a recipe brain with a hand-written
+reader and a templated voice; it has no large language model inside (an {T('LLM')}), and nothing here changes that.
+The owner's words, verbatim, with the date:</p>
+<blockquote class="verbatim"><p>"ADD ALL OF THAT SHIT TO The intended domains OF HELM HUB SO EACH CAN EVENTUALLY BE ADDED TO THE MODEL TAUGHT TO
+THE MODEL SO IT WILL EVENTUALLY "comment like a normal person would." ... HELM SHOULD ASK QUESTIONS CONCERNING WHAT IT DOES KNOW ABOUT
+WHAT THE PERSON IS TALKING ABOUT AND REMEMBER AND REASON OVER THE ANSWERS GIVEN AND USE IT'S C-WORLD OF THE 40 ELEMENTS TO DENOTE THE
+CORRECT EMOTIONALITY IN IT'S RESPONSE. NO THERE WILL ONLY BE LLMs LIKE YOURSELF WHO WILL [write the] typed turns ... I WILL ONLY REVIEW
+... Yes THE RULE STANDS; Q 4 YES; Q 5 YES; Q6 YES ... REMEMBER THE EVENTUAL VISION AND INTENTIONS WE HAVE FOR HELM TO CONVERSE ABOUT
+ANYTHING HUMAN LIKE EVEN THOUGH THAT MAY NOT BE A CAPABILITY PRESENT NOW WE ARE WORKING TOWARD THAT AND MORE."</p>
+<p class="small">The owner, 2026-10-21 (afternoon, Pacific); recorded in <code>Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md</code>.
+Earlier the same day the owner ruled that HELM may comment on an off-topic subject like a normal person would; the accepted reading is
+"as a person who does not know the subject would".</p></blockquote>
+<div class="tablewrap"><table><thead><tr><th>Piece</th><th>Plain meaning</th><th>What exists today</th><th>What would have to be built and tested</th></tr></thead><tbody>{trows}</tbody></table></div>
+<p><strong>How each piece gets added, in order.</strong> <em>Taught:</em> a labelled data stratum (today's exam turns are written by AI models
+of at least three families, labelled LLM_WRITTEN, never by the owner, who reviews only; amendment A-TALK-1, {slink('7.110')}).
+<em>Built:</em> behind a switch, default off. <em>Tested:</em> a {T('sealed', 'sealed exam')} the builder never sees, against a mechanism-free
+baseline (the cheapest trick that does the same job without the new piece). <em>Licensed:</em> only by the {T('frozen reader', 'frozen reader')}'s
+own word, with a {T('claim ceiling')} (for the talk exam: LLM_WRITTEN_ONLY, never "human-written" or "real people"). The two owner lines on record,
+TALK TRAIN at 3 USD and TALK EXAM at 1 USD, each bind to a future sealed package that does not exist yet; nothing has been spent.</p>
+
+<h2 id="intent">Statement of intent for whoever comes after (2026-10-21)</h2>
+<p><strong>INTENDED / NOTHING BUILT / NOTHING LICENSED.</strong> The owner ordered this statement kept on the hub for the instances and
+models that take over this build after the ones writing today. It is the file
+<code>docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md</code> (sha256 <code>{INTENT_SHA}</code>), rendered in full
+and word for word below; nothing in it is a result. It names the {T('CTT')} and the {T('receipt', 'receipt')} tags; the one safety rule it
+sets is that the mouth may choose words, never facts.</p>
+<blockquote class="verbatim">{intent_html}</blockquote>
 
 <h2 id="chat">"Can I chat with it?"</h2>
 <div class="card">
@@ -2380,6 +2475,7 @@ Repo paths are shown under the main checkout <code>{esc(DISPLAY_REPO)}</code>; t
 <li>Update the spec sheet in the same commit as any result. Never delete a negative. Use only the legend's {T('claim status')} words.</li>
 <li>Heavy work goes to {T('AWS')}; record each job's source, purpose, machine, limits and cleanup in the ledger and job kit. Back up every run to <code>D:\\tksCAS-archive\\</code> with three hash passes.</li>
 <li>End every owner update with the owner's three headings, in order: WHAT IS CURRENTLY HAPPENING, FOR WAKIL TO DO, NEXT (each with the owner's chosen marker; standing format order in the approvals record).</li>
+<li>Read the owner's <a href="roadmap.html#intent">statement of intent for whoever comes after</a> (2026-10-21; <code>docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md</code>): the transformer mouth trained on the 40 elements, which may choose words, never facts. Intended; nothing built; nothing licensed.</li>
 </ol>
 {table("A")}
 
