@@ -315,6 +315,268 @@ Battery life depends mostly on how low the asleep state goes, not on where speec
 - **Thread** is a low-power mesh radio used by many Matter devices. It needs a **border router**, a box that bridges Thread to Wi-Fi. Apple TV, Nest, some Echo models and IKEA DIRIGERA already include one [M, secondary, S81]. Version 1 relies on the user's existing border router [E]. The cube reaches Thread devices through that border router over Wi-Fi, so its own 802.15.4 radio can stay off while on battery. Joining Thread directly as a router would keep a receiver on all the time and break the asleep power budget [E].
 - **Antennas.** A quarter-wave antenna at 2.4 GHz is about 31 mm long, so chip antennas fit. They need non-metal windows in the shell [E].
 
+## 8a Knowing where it is: motion, heading, location and a map of the room
+
+**Owner ruling 3 (verbatim):** "WITH GYRATOR WHEN IT'S BEEN MOVE TURNED AND DIRECTION FOR MAPPING IT'S ENVIROMENT GEOLOCATION AND USE WIFI TO DRAW ITSELF AN INTERNAL SCHEMATIC OF IT'S ENVIROMENT AND OR USE LIDAR". "Gyrator" means gyroscope. Ruling 4 puts HELM in charge of all of it.
+
+**Said plainly first:**
+1. The gyroscope already on board tells the cube how it was turned, if the gyroscope was running when the turn began. For a turn lasting a few seconds, it is accurate to about 1° [E]. If the cube was asleep, the start of the turn is missed, and the new heading is `UNDETERMINED` until the cube recognises the room (point 2). The gyroscope cannot tell how far the cube was carried: that estimate is wrong within a second or two [E].
+2. There is no compass, so the cube has no "north". It keeps its own heading, which slowly drifts. It corrects the drift by recognising the room with its depth sensors and cameras [E].
+3. GPS does not suit a sealed cube that lives indoors. If the user allows it, the cube gets its town-level location from the phone app [E].
+4. If the home's router answers Wi-Fi ranging requests (many do not), Wi-Fi can tell roughly how far the cube is from it. It works best with a clear line of sight [M, S111]. Wi-Fi can also tell whether something moved nearby. Drawing walls and furniture from Wi-Fi alone is still research [M, S116, S118].
+5. The room drawing comes from tiny "lidar" depth sensors, one behind each face, plus the cameras. In its finer mode each sensor gives 64 distances (an 8 × 8 grid). For the first-pick sensor, ST gives about 2 m on a white wall in the dark, about 0.8 m on a dark grey surface, and about 0.5 m in bright daylight. All three figures are without cover glass [M, S127]. The 3.5 m figure holds only for the coarser 4 × 4 grid (16 distances), in the dark, on a white wall [M, S127]. Turning the cube fills the gaps around the horizon. Some directions stay unmeasured (8a.4).
+6. The result is a coarse 3D sketch of the nearer part of a room: walls, doorways and large objects within about 2 m. At 2 m, one reading covers about 0.26 m [E]. Farther out, only the coarse grid reaches, at about 0.8 m per reading at 3 m [E]. Space the cube has not measured stays blank and is marked `UNDETERMINED`. HELM never draws in a wall it has not measured.
+7. Mapping is off by default. When it is on, it runs only while the cube is awake and shows a light pattern. The map stays on the cube and can be deleted from the app.
+
+**Terms used in this section:**
+- **Gyroscope:** measures how fast the cube turns. Adding up (integrating) the turn rate over time gives the angle turned.
+- **Accelerometer:** measures pushes and gravity. Gravity tells which face is down (tilt). It cannot tell which way the cube faces around the vertical axis.
+- **Heading:** which way a face points around the vertical axis, as a compass would say. **Pose:** position, heading and tilt together.
+- **Bias (zero offset):** the small false reading a sensor gives when it should read zero. Adding up a bias over time is what makes estimates drift.
+- **Dead reckoning:** estimating where you are by adding up your own motion, with no outside reference.
+- **Relocalising:** finding the cube's pose again by matching what it senses now against the stored map.
+- **Time of flight (ToF):** measuring distance by timing a pulse of invisible light to a surface and back. A **multizone** ToF sensor does this for a grid of directions at once. It is a tiny lidar with no moving parts.
+
+**8a.1 Motion and turning from the gyroscope already on board**
+
+**Verdict: turning is feasible with the gyroscope already chosen (untested). Distance carried is not.**
+
+**BMI323 (first pick, Section 6), from Bosch's preliminary flyer [M, S101]:**
+- Gyroscope: zero offset ±1 °/s (typical over the part's life), temperature drift ±0.04 °/s/K, noise density 0.007 °/s/√Hz.
+- Accelerometer: zero offset ±50 mg (typical over the part's life), temperature drift ±0.3 mg/K, noise density 180 µg/√Hz.
+- Bosch says a self-calibration step, run while the part is still, brings the gyroscope's scale error after soldering "down to ± 0.7%" [M, S101]. That is a best case, not a guaranteed limit.
+
+**LSM6DSV16X (alternative):**
+- An on-chip fusion block called SFLP ("sensor fusion low power") outputs three things [M, secondary, S102]:
+  - a "game rotation vector" (an orientation with no north reference);
+  - a gravity vector;
+  - its own estimate of the gyroscope bias.
+- A press article says it can track "while drawing as little as 15µA" [M, secondary, S102]. The article does not say the gyroscope is on at that figure. With the gyroscope on, budget the part's 0.65 mA high-performance figure [M, S72] until ST's low-power figures are checked [check].
+- ST staff say it estimates the bias only while the device is still [M, forum, S102].
+- Gyroscope noise is about 0.0028 °/s/√Hz. ST's LSM6DSV16X product page lists this figure (read through a search summary) [M, secondary, S102], and Luxonis gives the same for the sibling LSM6DSV [M, secondary, S103]. The 16X's own zero-offset figure has not been checked [check].
+
+**What the gyroscope can do [E, our arithmetic from the numbers above]:**
+- **Bias.** Left uncorrected, a 1 °/s bias adds 60° of false turning per minute. So the bias must be re-measured each time the cube sits still. The cube is still most of the day, so this costs almost nothing.
+- **Temperature.** After the bias is corrected, temperature becomes the main error. The cube warms when it talks or charges (Section 7). A 5 K rise moves the bias by up to 0.2 °/s, which is 12° per minute if it is not re-measured. So the gyroscope alone gives good heading for seconds to tens of seconds. It does not stay good for many minutes unless the bias is re-measured at each rest and corrected for temperature.
+- **Noise.** Small: after 60 s it adds about 0.05° (0.007 × √60).
+- **Scale.** At ±0.7% (Bosch's best case), a quarter turn (90°) can be off by up to 0.63°, and a full turn by up to 2.5°.
+- **So:** a pick-up, turn and set-down lasting a few seconds is measured to about 1°. That covers the owner's "when it's been moved, turned".
+
+**What dead reckoning of position cannot do [E]:**
+- Position error from an accelerometer bias grows with the square of time [M, S104]: error = half × bias × time².
+- With the ±50 mg offset: about 0.25 m after 1 s, 1 m after 2 s, and 6 m after 5 s.
+- Even after calibrating it down to 5 mg: about 0.6 m after 5 s, and 2.5 m after 10 s.
+- A 1° tilt error leaks 17 mg of gravity into the sideways reading. That is a problem of the same size.
+- The cube starts and ends each move at rest, with zero speed. That helps a little for a short slide across a table of 1–2 s [E; method in S104]. A carry across a room cannot be measured this way.
+- **So:** the gyroscope says *how the cube was turned*. *Where it was put* comes from relocalising against the map (8a.5). Until relocalising succeeds, the cube's position is `UNDETERMINED`.
+
+**Moves while asleep.**
+- The always-on ADXL367 (Section 6) wakes the processor when the cube moves.
+- The 6-axis IMU runs only while awake. The BMI323 starts in about 2.5 ms in its fast-start mode [M, S70, read through a search summary]. The longer delay is the i.MX 93 waking from deep sleep and starting the IMU, which is not measured [check]. So the first part of a pick-up is missed [E].
+- Option, off by default: the LSM6DSV16X's fusion block could keep running through sleep and hold its results in the sensor's own memory (FIFO) for the processor to read on waking. At 0.65 mA that is about 1.2–2.3 mW [E, from S72], which fits the asleep budget. FIFO size not checked [check].
+- Rule: after any motion while asleep, the stored pose is marked `UNDETERMINED` until the cube relocalises.
+- Gravity still tells which face is down.
+
+**Heading without a compass.** The Qi2 magnet ring rules out a compass (Section 6). So:
+- The cube keeps a **relative** heading. Angles are measured against the room's own walls, not against north. A room map does not need north [E].
+- The gyroscope carries the heading through a turn. Each time the cube rests, HELM corrects the drift by matching depth readings and camera features against the map [E].
+- The cube matches the room only while it rests. That is relocalising, not tracking on the move. Tracking on the move with a camera and an IMU together is an established method called visual-inertial odometry; VINS-Mono is one published example [M, S105]. The cube does not do this by default. It would need a camera running while the cube is carried (green dot on, about 1 W, Section 7), and only one camera runs at a time (Section 8) [E].
+- Camera matching works only in a lit room. The hidden cameras lose 1.9–3.1 f-stops behind the dark glass (Section 12). The ToF sensors carry their own light and work in the dark.
+- If the owner wants true north, the phone's compass could supply it once at setup [E, untested]. The phone must not touch the cube, because the Qi2 magnet ring that rules out a compass in the cube would also bend the phone's reading. The app lights one face. The user lays the phone on the table in line with that face, at least about 50 cm away [E, untested]. Expect a few degrees of error at best indoors [E].
+- Wi-Fi ranging gives distance, not direction (8a.2). It cannot correct heading.
+
+**8a.2 Where in the world: geolocation**
+
+| Method | Verdict | Why |
+|---|---|---|
+| GPS (GNSS) chip in the cube | **Poor fit; not fitted** | Indoors, satellite signals lose 5–15 dB in houses and 20–30 dB in office buildings [M, S106]. A good small receiver, the u-blox MAX-M10S, specifies its 1.5 m accuracy with every satellite at −130 dBm, static, over 24 hours [M, S107]. It needs −148 dBm for a cold start (no stored satellite data). A cold start takes 27 s with every satellite at −130 dBm, and its sensitivity figures were "demonstrated with a good external LNA", meaning an extra signal amplifier [M, S107]. A fix near a window in a timber house may be possible, but it is not dependable inside a sealed cube with a small antenna [E]. Tracking draws 25 mW [M, S107], about equal to the top of the cube's whole asleep budget of about 11–25 mW (Section 7). The antenna would also sit beside the Qi coil and magnets [E]. |
+| The phone's location, through the app | **Works today** | The phone already knows where it is. On Android, "approximate" location is accurate to within about 3 km². "Precise" is usually within about 50 m, and sometimes within a few metres [M, S108]. Town level is enough for time zone, weather and sunrise [E]. Default: approximate, asked once at setup, stored as a dated fact. |
+| Wi-Fi positioning from a cloud database | **Works with limits; off by default** | The cube would send the list of nearby access points (hardware addresses and signal strengths) to a service such as Google's Geolocation API. The service returns a position and an accuracy radius [M, S109]. A 2005 city-scale study measured median errors of 13–40 m [M, S109]. It tells a third party about the home's surroundings, and the phone already gives the same answer [E]. |
+| Wi-Fi round-trip-time ranging (FTM) | **Works with limits** | See below. It gives distance to an access point inside the home, not a street address. |
+| Bluetooth Channel Sounding | **Not on this radio** | Channel Sounding arrived in Bluetooth 6.0 and is claimed to measure distance to 10–50 cm [M, secondary, S83]. The IW612 is Bluetooth 5.4 [M, S53]. Watch for it in version 2 [E]. |
+
+**Wi-Fi round-trip-time ranging (FTM):**
+- **What it is.** Fine Timing Measurement (FTM) times a Wi-Fi exchange with an access point and back. Distance = round-trip time ÷ 2 × the speed of light [M, S111]. It was introduced in IEEE 802.11mc and continues in IEEE 802.11az [M, S111]. Android calls it "Wi-Fi RTT" [M, S110].
+- **The IW612 supports it.**
+    - NXP's AN14044 (Rev. 3.0, 29 April 2026) lists the IW612 [M, S111].
+    - In that note, a client device like the cube can start ranging with 802.11mc, 802.11az non-trigger-based ranging, and 802.11az trigger-based ranging [M, S111].
+    - NXP validated trigger-based 802.11az ranging only with its own in-house access point. The note itself covers only non-trigger-based ranging [M, S111].
+    - NXP's IW612 page lists "802.11az accurate ranging" [M, S53].
+    - The ranging tool, mlanwls, is preinstalled in i.MX Linux board packages based on kernel 6.18.2 and later. Its configuration file and README were not yet in the "lf-6.18.2_1.0.0" release [M, S111].
+- **Accuracy.**
+    - Android's target for 802.11mc, at the 90th percentile, is an error of 2 m at 80 MHz, 4 m at 40 MHz, and 8 m at 20 MHz [M, S110].
+    - For 802.11az it is 1 m at 80 MHz. That target assumes a phone with 2 antennas and an access point with 4 [M, S110].
+    - The IW612 is a 1×1 radio (one data stream) with channels up to 80 MHz [M, S53]. So expect the 2 m class, not the 1 m class [E].
+- **Limits.**
+    - The access point must answer. Many home routers use chipsets without FTM. A community list names some that do [M, secondary, S113]. HELM must check, not assume: if no access point answers, the FTM range is `UNDETERMINED`.
+    - One access point gives a distance, not a position. A position needs about three access points at known places [E]. Most homes have one to three, at places the cube does not yet know [E].
+    - Walls and reflections bias the range. A 2025 survey of over 180 papers covers the accuracy problems and their fixes [M, S114].
+    - NXP says the station and the access point must be in line of sight for an accurate and stable reading [M, S111]. Through a wall, the range is only a rough hint.
+    - The IW612 can also answer ranging requests itself (802.11mc and 802.11az non-trigger-based) [M, S111]. So an Android phone with Wi-Fi RTT could measure its distance to the cube, with no new part [E, untested].
+- **Use in the cube:** a coarse "which part of the home am I in" check. It picks which stored room map to try first when relocalising [E]. It is never used as the drawing itself.
+
+**8a.3 "Use Wi-Fi to draw itself an internal schematic"**
+
+- **Channel state information (CSI)** is the receiver's detailed record of how the radio path changed each Wi-Fi packet: the strength and phase of each subcarrier [M, S112]. People and objects in the path change it. That is the basis of **Wi-Fi sensing**.
+- **The IW612 exposes CSI.**
+    - NXP's AN14011 (Rev. 10.2, 25 June 2026) marks the IW612 "Yes" for CSI. It also marks "Yes" for an **Ambient Motion Index (AMI)**, a built-in motion measure. Both run on Linux, with the cube acting as a normal Wi-Fi client [M, S112].
+    - From Linux 6.12.49 onward, the capture tool (mlancsi) is included in NXP's board package [M, S112].
+    - CSI comes only from received packets [M, S112]. So the radio must keep receiving and cannot sleep while sensing [E].
+- **The standard.** IEEE 802.11bf-2025, "Enhancements for Wireless LAN Sensing", was approved on 28 May 2025 and published on 26 September 2025 [M, S115]. We found no statement that the IW612 implements 802.11bf. NXP's CSI feature is NXP's own interface [M, S112]. This absence claim is only as wide as our search.
+
+| What Wi-Fi sensing can do | Verdict | Evidence |
+|---|---|---|
+| Notice motion near the cube | **Works with limits** | The IW612 has AMI [M, S112]. BleepingComputer reported on 18 August 2026 that Comcast offers WiFi Motion. It turns the radio links between a gateway and fixed Wi-Fi devices into motion sensors. It detects motion, not who is moving. It is opt-in, and it cannot reliably tell a small pet from a child [M, secondary, S119]. Results change between rooms and people. One study found that a method which works in any room is still not proven [M, S116]. |
+| Say whether a person is present, and roughly where | **Research-grade on one 1×1 radio** | A 2025 thesis reports presence and location up to 20 m, through walls, using low-cost Wi-Fi aimed in one direction [M, S117]. The library has not yet verified the record. The cube has one antenna stream and no direction finding [M, S53]. |
+| Draw walls and furniture | **Research-grade** | One 2024 paper maps free space from Wi-Fi signal strength while moving [M, S118]. Nothing we found is ready for a product. |
+
+**Verdict for the owner's words:** Wi-Fi gives the map two dated facts: roughly how far away the router is, and whether something moved. The depth sensors and cameras draw the schematic itself (8a.4). Wi-Fi sensing is off by default (8a.8).
+
+**8a.4 Lidar: a tiny depth sensor behind each face**
+
+**Verdict: works with limits. A spinning lidar does not fit.**
+- A small spinning lidar, the RPLIDAR C1, is 55.6 × 55.6 × 41.3 mm, weighs 110 g and draws 1.15 W [M, distributor, S126]. It would fill most of a 64 mm cube. It would also need a window band around the middle, which breaks the plain-black-box rule [E].
+- **Multizone ToF sensors fit.** One sits behind each face, beside the camera [E].
+
+| | ST VL53L7CX (first pick, wide) | ST VL53L8CX (alternative) |
+|---|---|---|
+| Zones | 8 × 8 (64) at up to 15 Hz, or 4 × 4 at up to 60 Hz [M, S127; S120 gives the same limits for the VL53L8CX] | 8 × 8 at up to 15 Hz; 4 × 4 at up to 60 Hz [M, S120] |
+| View | 60° × 60° (90° diagonal) [M, S122] | 45° × 45° (65° diagonal) [M, S120] |
+| Range | 4 × 4 in the dark: 3.5 m on a white (88%) target, 1.4 m on dark grey (17%). 8 × 8 in the dark: 2.0 m white, 0.8 m dark grey. At 5 klux (bright daylight at 940 nm): 0.5–0.65 m. All typical, without cover glass; minimum 2 cm [M, S127] | Up to 400 cm by ST's headline figure; better in bright light [M, S120, S121]. For the VL53L7CX the headline figure is the 4 × 4, dark, white-target case; the 8 × 8 figures for this part are not checked [check DS14161] |
+| Light source | 940 nm invisible, Class 1 eye-safe laser (VCSEL) [M, S122]. ST lists EN 50689:2021 compliance except its clause 5 on child-appealing products. If the cube could count as child-appealing, ST asks to be contacted [M, S127] | The same [M, S120] |
+| Size | 6.4 × 3.0 × 1.6 mm [M, S127] | 6.4 × 3.0 × 1.75 mm [M, secondary, S121] |
+| Power | Continuous ranging: 216 mW (2.8 V analog, 1.8 V I/O) to 313 mW (3.3 V both) [M, S127]. Autonomous mode, 20 ms per frame: 5.4 mW at 4 × 4 and 1 Hz; 19 mW at 8 × 8 and 1 Hz; 88 mW at 8 × 8 and 5 Hz [M, S127]. Pololu's carrier: about 100 mA typical, peaks 150 mA [M, distributor, S122] | About 215 mW in continuous ranging [M, secondary, S121]. ST quotes 1.6 mW at 4 × 4 and 1 Hz in low-power mode [M, secondary, S121]. One user measured about 68 mW at that setting [M, forum, S121] |
+| Width of one zone | 8 × 8 at 2 m: 7.5°, about 0.26 m. 4 × 4 at 3 m: 15°, about 0.79 m [E] | 8 × 8 at 2 m: 5.6°, about 0.20 m. 4 × 4 at 3 m: 11.25°, about 0.59 m [E] |
+| Share of all directions seen from one still pose | About 40% from one still pose with five usable faces [E] | About 23% [E] |
+
+- **Coverage.** Six faces see in every direction only if each face covers 90° × 90° [E]. A resting cube uses at most five faces, because the bottom face sees the table or sits on the charger. From one still pose, five VL53L7CX views cover about 40% of all directions, and five VL53L8CX views about 23% [E]. Turning the cube about the vertical by about 45° fills the gaps around the horizon [E]. Turning cannot fill a band about 30°–51° above and below the horizon (about 22°–60° for the VL53L8CX). Every resting pose of a cube points its faces level or straight up, so no amount of turning on a table reaches that band. It is about a quarter of all directions [E]. The band holds the upper walls and the corners where walls meet the ceiling, so these stay `UNDETERMINED`. Readings taken while the cube is carried cannot fill them either, because the cube's position is `UNDETERMINED` while it moves (8a.1, 8a.5).
+- **Detail.** In the 8 × 8 mode, one zone is about 0.20–0.26 m wide at 2 m, about as far as that mode reaches. At 3 m only the 4 × 4 mode reaches, at about 0.6–0.8 m per zone [E]. Walls, doorways, sofas, tables and people show up. Chair legs, cables and small objects do not.
+- **Far walls.** In the 8 × 8 mode, readings stop at about 2 m on a white wall in the dark, and at about 0.8 m on a dark one. In the 4 × 4 mode they stop at about 3.5 m [M, S127]. The cover window shortens this further. ST asks for over 87% transmission, so at most about 76% of the light survives the round trip, which cuts these ranges by roughly an eighth [E]. In bright daylight (5 klux) every mode falls to about 0.5–0.65 m [M, S127]. So mapping works best under LED lamps or with the curtains drawn, because LED room light carries little 940 nm light [E]. In any larger room, far walls stay `UNDETERMINED` until the cube is moved closer [E].
+- **Hard surfaces.** Dark surfaces cut the range sharply: a 17% grey surface reads only to about 0.8 m in the 8 × 8 mode, in the dark [M, S127]. Glass and mirrors can give no reading or a false one [E]. ST also warns that indoors the sensor may see several light paths and report false targets [M, S120]. The two-pose rule in 8a.5 guards against this.
+- **Data.** Six sensors read 384 distances per frame (6 × 64) [E]. Each sensor needs about 84 KB of firmware loaded over the bus at start-up [M, S120].
+- **Wiring six sensors.** Every sensor starts at the same bus address, 0x52, and loses any new address when powered off [M, S120, S127]. Each needs its own enable line (LPn) so HELM can give it an address at each start-up [M, S120]. The VL53L7CX talks only I2C, at up to 1 MHz [M, S127]. Loading its firmware (about 84 KB for the VL53L8CX [M, S120]; the VL53L7CX figure is not checked [check]) takes roughly 0.7–1 s per sensor, so about 4–6 s for six at the start of each session [E]. The VL53L8CX also offers SPI at up to 20 MHz [M, S120], which cuts this to well under a second [E].
+- **A denser sensor to watch.** ST's VL53L9CX gives 2,268 zones (54 × 42) over 55° × 42°. It ranges from under 5 cm to 8.8 m, at up to 100 Hz, in a 12.8 × 6.1 × 4.6 mm module. ST said mass production would start in early July 2026 [M, secondary, S124]. We did not confirm that it started. Its power is not published. It connects by MIPI I3C or CSI, and the i.MX 93's one camera port is already busy (Section 8) [E]. It may suit one face in a later version. It also streams a 2D infrared image alongside depth [M, secondary, S124]. An infrared image is a picture that works in the dark. So this sensor would fall under the camera rules, including the hardware camera-on dot (Section 9) [E]. ST has a cover-glass note for it, AN6346 [S131].
+
+**Behind dark glass (it needs an infrared window):**
+- **What ST asks for.** The cover glass must pass more than 87% of the 940 nm light [M, S123]. st.com did not load during this check, so this figure was read through a search summary. The light crosses the glass twice, so 87% one way is about 76% round trip [E].
+- **Window size.** ST requires the opening in the cover to be at least as wide as the receiver's "exclusion zone", a 74° × 74° cone (105° diagonal) [M, S127]. With the ink on the inside of a 2 mm face glass, that means an opening clear to infrared of roughly 2–4 mm over each of the two lenses (emitter and receiver) [E]. Both fit beside the camera on a 64 mm face. On the charge face they go in a corner outside the magnet ring [E].
+- **Why the camera glass will not do.** The cameras' dark face glass passes only 12–27% of visible light (Section 12, S23). The ToF needs the opposite: black to the eye, but clear at 940 nm.
+- **Materials that could work:**
+    - Visible-black, infrared-passing plastic filters exist. They are black to the eye and pass near-infrared above a cut-on wavelength of 670–910 nm, in thicknesses of 0.5–5.0 mm [M, S25]. Their transmission at 940 nm is not stated [check].
+    - An infrared-passing black ink on the inside of the face glass is the other route [E].
+- **Appearance.** When off, the window must look the same as the rest of the face. That needs testing on a sample in daylight and under a phone torch [E].
+- **Crosstalk.** Light bouncing inside the cover glass ("crosstalk") is handled by ST's processing beyond 60 cm [M, S120, S127]. Closer than that, it can make targets look nearer than they are, or invent one. ST then advises a crosstalk calibration with the cover in place, using a target at 600 mm or more that fills the whole view. The result can be saved, and one unit's calibration can be reused on others with a safety margin [M, S120]. Spot-check each production cube [E]. A black barrier between the emitter and receiver openings is needed under the glass [E].
+- **Cameras.** The face cameras need their usual infrared-cut filters, so the 940 nm light does not show up in pictures [E].
+
+**8a.5 How HELM builds and keeps the map**
+
+**What it combines [E]:**
+- gyroscope turns: how the cube moved between rests;
+- ToF depth: where surfaces are;
+- camera features: corner points that fix heading in a lit room (no pictures are kept; 8a.8 item 7 says what is kept);
+- Wi-Fi ranges: which part of the home.
+
+Under ruling 4, HELM decides when to map, which faces and sensors run, and how often. Each mapping session must pass the RPM gate. The gate's inputs are:
+- the consent flag is on;
+- neither privacy mode is on;
+- the battery is at or above 20% [E];
+- there is heat headroom (8a.6).
+
+Each session leaves a receipt in the app. The receipt lists the faces and sensors used, the duration, the cells changed, and the `receipt_hash`.
+
+**The map has three layers [E]:**
+1. **Cells.** Space is divided into 10 cm cubes. Each cell is `occupied`, `free` or `UNDETERMINED`.
+   - Every cell starts as `UNDETERMINED`.
+   - A cell becomes free when a ToF beam passes through it, and occupied where a beam stops.
+   - The published OctoMap method works the same way, and also keeps unknown space as its own state [M, S125].
+2. **Schematic.** Rooms, walls, doorways and large objects, drawn only from measured cells.
+   - A wall piece exists only where occupied cells were measured.
+   - A gap between two measured wall pieces stays `UNDETERMINED`. It is never joined up by a guessed straight line.
+3. **Names.** For example "kitchen", "sofa" or "the lamp on face S2".
+   - Names come from the user, by voice or in the app.
+   - HELM never guesses a name. If it needs one it does not have, it asks.
+
+**Rules [E]:**
+- **Every fact carries where and when.** Each cell stores:
+  - when it was last measured;
+  - which face and sensor measured it;
+  - the cube's pose at that moment;
+  - how many readings support it;
+  - the session's `receipt_hash`.
+- **No pose, no writing.** If the cube's pose is `UNDETERMINED` (it moved while asleep and has not relocalised), new depth readings are held back, not written. Writing them would put walls in the wrong place.
+- **Two poses must agree.** A cell is written as occupied or free only when readings from two different poses agree. A single reading is shown as "seen once" and is not used for decisions. This guards against mirrors and glass.
+- **Facts age.** Each cell shows its age. After an age limit set by the owner, HELM treats the cell as `UNDETERMINED` for any decision. It still shows the old reading with its date.
+- **Answers follow the gate.** "How far is the door?" gets either a number with its measurement date, or `UNDETERMINED` plus where to put the cube to measure it.
+- **Relocalising.**
+  - At each rest, HELM matches the new ToF readings against the stored cells. It also matches camera features if the room is lit.
+  - A clear match sets the pose.
+  - No clear match leaves the pose `UNDETERMINED`, and HELM may ask: "Where did you put me?"
+- **Docked is a known place.** The charger rarely moves, so docking gives a known position and a known face-down. Heading on the charger still has to be found by matching, because the round magnet ring lets the cube sit at any angle.
+
+**Size [E]:**
+- **Cells.** A 5 × 5 × 2.5 m room at 10 cm cells is 62,500 cells. At about 2 bytes per cell, that is about 125 KB.
+- **Raw readings** are much larger. A 2-minute session is 230,400 readings (6 faces × 64 zones × 5 Hz × 120 s), about 7.4 MB at 32 bytes each.
+- **Folding.** At the end of each session the raw readings are folded into the cells and then deleted. The session receipt stays.
+
+**Where the map lives:** on the cube. The app shows it as a 3D sketch. `UNDETERMINED` space is left blank and never filled in [E].
+
+**8a.6 Power and heat**
+
+| Job | Runs when | Power |
+|---|---|---|
+| Noticing the cube was moved (ADXL367) | Always | 180 nA in motion-wake mode [M, S74] |
+| Gyroscope and accelerometer (6-axis IMU) | While awake, and after any motion | BMI323: 790 µA in high-performance mode [M, S101], about 1.4–2.9 mW at 1.8–3.6 V [E]. LSM6DSV16X: 0.65 mA [M, S72]; the 15 µA press figure is not tied to tracking with the gyroscope on [M, secondary, S102] |
+| ToF, one face, continuous | Mapping sessions only | 216–313 mW, depending on supply voltages [M, S127] |
+| ToF, one face, slow (1 Hz) | Mapping sessions only | VL53L7CX, autonomous mode: 5.4 mW at 4 × 4, 19 mW at 8 × 8 [M, S127]. VL53L8CX: 1.6 mW by ST's figure, about 68 mW as measured by one user [M, secondary and forum, S121]. Budget 10–70 mW [E] |
+| ToF, all six faces continuous | **Not allowed** | 1.3–1.9 W [E, 6 × S127]: a third to half of the 3.7 W heat budget (Section 7) |
+| Camera features | Mapping in a lit room | 0.9–1.1 W, the "camera in use" state (Section 7) [E] |
+| Wi-Fi FTM ranging | Mapping sessions and "where am I" checks | NXP publishes no IW612 power figure [M, S53]. NXP's recommended setting is a 128 ms burst every 500 ms [M, S111] (802.11mc), so the radio is busy about a quarter of the time [E]. For 802.11az NXP recommends 5 exchanges a second, 10 measurements each [M, S111]. Budget 50–150 mW [E] |
+| Wi-Fi CSI sensing | Opt-in; awake only | The radio receives steadily and Linux stays awake: about 0.9 W for the whole cube [E, from the Section 7 states] |
+| GNSS | Not fitted | 25 mW while tracking [M, S107] |
+| Phone location | At setup, then on request | About zero on the cube [E] |
+
+**A mapping session [E]:**
+- **Lit room:** two faces ranging continuously, four at 1 Hz, one camera, the IMU and the processor. About 1.4–2.0 W.
+- **Dark room, no camera:** about 1.2–1.7 W. That is about the same as speaking (Section 7, state C: 1.1–1.9 W).
+- **Length:** sessions are capped at 2 minutes. One session uses up to about 0.067 Wh.
+- **Battery:**
+  - One session a day changes typical battery life from about 10 days to about 9.5 days.
+  - Ten sessions a day: about 6.7 days.
+- **Heat:** mapping shares the heat budget with charging and talking. HELM's gate refuses a session during fast charging. If a session must run on the charger, HELM slows the charging first (Section 7).
+
+**While asleep:** only the ADXL367 runs. ToF, cameras, gyroscope, Wi-Fi ranging and Wi-Fi sensing are all off. Even the slowest ToF setting would not fit: six VL53L7CX sensors at 4 × 4 and 1 Hz would add about 32–50 mW [E, 6 × S127]. That is more than the whole 11–25 mW asleep budget. Keeping them in low-power idle, only to skip the firmware reload, would add about 0.8 mW typical and up to about 6 mW worst case [E, from S127: 45 µA typical and 300 µA maximum each]. So they are switched off.
+
+**8a.7 Parts**
+
+Motion, turning, Wi-Fi ranging and Wi-Fi sensing need no new part. The BMI323 or LSM6DSV16X, the ADXL367, the i.MX 93 and the IW612 are already in Section 11. The new parts are six ToF sensors, six infrared windows, one enable line per sensor, and a flex harness to each face [E]. Rows are listed below for Section 11.
+
+**8a.8 Privacy**
+
+A room map and a location reveal a lot: the layout of the home, where people sleep, and when someone is home. They get the strictest defaults.
+
+1. **Off by default.** Mapping, Wi-Fi sensing and cloud Wi-Fi positioning each stay off until the user turns them on in the app. HELM's RPM gate checks the consent flag before every session. With no flag there is no session, and the refusal is logged. HELM does not wake the cube on its own to map. A session runs only inside an awake window that a person started (shake, tap, voice or app), unless the owner turns on scheduled mapping [E, owner choice].
+2. **Kept on the cube.** The map, the pose history and the location fact stay on the cube. The app reads them over the home network or Bluetooth. Cloud backup is opt-in only (Section 8).
+3. **Delete control.**
+   - The app can delete the whole map, one room, a drawn region, or the location fact.
+   - Raw readings are deleted at the end of each session (8a.5).
+   - Flash memory moves data around as it wears, so overwriting a file does not reliably erase it [M, secondary, S130]. So the map, the pose history and the location fact are encrypted from their very first write, with the key held in the i.MX 93's secure enclave [E, check]. Deleting destroys the key ("cryptographic erase"). NIST counts this as a full purge only if nothing was ever stored unencrypted before the key existed [M, S130].
+4. **Coarse location.** Approximate (town level) is the default [M, S108]. The map uses its own room coordinates, not latitude and longitude. Precise location only if the user chooses it.
+5. **No third parties by default.** Cloud Wi-Fi positioning sends the nearby access-point list to an outside service (S109), so it stays off. The map is never shared with Matter devices or other apps by default. HELM ranges only to the home's own access points, while connected to them. 802.11mc ranging frames are not encrypted. 802.11az can encrypt them when the cube is connected with WPA3 protected management frames [M, S111]. So prefer 802.11az over WPA3. Never range unconnected to a neighbour's access point, which would show it the cube's hardware address [E].
+6. **Wi-Fi sensing can sense through walls.** It can pick up a neighbour moving. Comcast tells its users in buildings with shared walls to lower the sensitivity [M, secondary, S119]. The cube records motion only, never who moved. It is off by default. Raw CSI records carry the hardware (MAC) addresses of the sender and receiver of every packet the radio hears [M, S112]. HELM computes the motion measure on the cube, keeps only "motion yes/no, time", and drops each raw record at once. It never stores or sends those addresses [E]. Capture is filtered to packets from the home's own access point; NXP's firmware supports filtering [M, S112].
+7. **Camera mapping keeps points, not pictures, but points are not harmless.** Researchers rebuilt recognisable images of scenes from stored 3D points and their feature descriptors alone [M, S128]. By default HELM keeps only each point's 3D position and drops the descriptors at the end of the session, so relocalising in later sessions uses depth only. If the owner chooses to keep descriptors for faster relocalising, they are treated as camera data under Section 9 [E, owner choice]. The hardware green dot lights while any camera is powered (Section 9).
+8. **The light shows mapping, and only mapping.**
+   - **When it shows:** while any ToF sensor, camera mapping, Wi-Fi ranging or Wi-Fi sensing runs.
+   - **The pattern:** the four edges around the top face glow steady and dim, and the other eight edges stay free for other modes [E]. No other mode in Section 5 lights only the top ring and holds it still, so the shape alone tells it apart, for colour-blind users too [E].
+   - **Colour rules:** pale magenta, used for nothing else. On RGB LEDs behind dark material it can look like violet ("Asking a question"), so test the two side by side on a sample [E].
+   - **When it stops:** the cube goes dark and is a plain black box again.
+   - Add this as a "Mapping" row to the Section 5 mode table.
+9. **Hard mute covers depth sensing too.** The hard-mute switch (Section 9) should also cut power to the ToF sensors [E]. Soft mute stops mapping in firmware. Hard mute cannot cut Wi-Fi sensing or Wi-Fi ranging, because the radio stays on for the network. Under hard mute, firmware turns both off. The app labels this part as software-only, like soft mute [E].
+10. **Access-point lists are location data.** A router's hardware address (BSSID) can be looked up to a street location. Researchers pulled the locations of over 2 billion of them from Apple's public positioning service [M, S129]. So any access-point address the cube stores, for ranging or room hints, is treated like precise location: kept on the cube, encrypted, never sent out by default, and deleted with the map [E].
+11. **Retention.** Pose history and the motion log keep 7 days by default. The owner can change this in the app [E, owner choice]. Map cells keep their dates and age out of decisions (8a.5).
+12. **Other people in the home.** The consent flag belongs to the account holder. Others in the home, and guests, are mapped and sensed without giving their own consent. The Mapping light is their notice. The app offers a guest mode that pauses mapping and Wi-Fi sensing [E].
+13. **Open choice for the owner:** should the ToF sensors get a hardware-wired indicator like the cameras, or is the firmware Mapping pattern enough? [E]
+14. **Law** (not legal advice): a home map linked to a person is likely personal data in the EU [E]. The rules in Section 9 apply.
+
 ## 9 Privacy
 
 **Principle:** hide the lenses, but never hide whether they are on. Airbnb banned all indoor cameras from 30 April 2024, even disclosed ones [M, S85]. Hidden cameras will be read as spying unless their on-state is plain.
@@ -386,6 +648,16 @@ Battery life depends mostly on how low the asleep state goes, not on where speec
 | Charger chip, temperature reference | BQ25618E/BQ25619E (TI) | Warm point 45.5 °C by default, programmable 40–54.5 °C; cool point 10 °C; 1.5 A charger (about 6 W) | [M] | Temperature reference only; the real charger must handle about 3.5–4 A for 14 W [E] | S48 |
 | Camera cover glass | Gorilla Glass DX (Corning) | 98% of light passes | [M, maker claim, 2021] | Window option | S24 |
 | NFC setup tag | NFC tag holding the Matter onboarding data (part not chosen) | Needed for "phone held to the cube" setup; Matter 1.4.1 adds "Onboarding Info in NFC Tag" [M, S79] | [E] | Keep its antenna away from the Qi coil and magnets | S79 |
+| Room depth sensor, one per face (first pick) | VL53L7CX (ST) | 8 × 8 at up to 15 Hz or 4 × 4 at up to 60 Hz; 60° × 60° (90° diagonal); range 4 × 4 dark white 3.5 m, 8 × 8 dark white 2.0 m, 8 × 8 dark grey 0.8 m, 5 klux 0.5–0.65 m, all without cover glass; minimum 2 cm; 940 nm Class 1; 6.4 × 3.0 × 1.6 mm; continuous 216–313 mW; autonomous 1 Hz 5.4 mW (4 × 4) or 19 mW (8 × 8); I2C only, 1 MHz, address 0x52; receive window ≥ 74° × 74° | [M] | Good within about 2 m; needs an infrared window; six needed | S127, S122 |
+| Room depth sensor, alternative | VL53L8CX (ST) | 8 × 8 at up to 15 Hz, 4 × 4 at up to 60 Hz; 45° × 45° (65° diagonal); up to 400 cm; 940 nm Class 1; cover-glass crosstalk handled beyond 60 cm; about 84 KB firmware loaded at start-up; 6.4 × 3.0 × 1.75 mm; about 215 mW continuous; 1.6 mW at 4 × 4, 1 Hz in low-power mode (one user measured about 68 mW); I2C (1 MHz) or SPI (20 MHz); address 0x52, one LPn line per sensor; 8 × 8 range not checked [check DS14161] | [M; size and power secondary] | Narrower view; better in bright rooms | S120, S121 |
+| Dense depth sensor, watch | VL53L9CX (ST) | 2,268 zones (54 × 42); 55° × 42°; under 5 cm to 8.8 m; up to 100 Hz; 12.8 × 6.1 × 4.6 mm; MIPI I3C or CSI; power not published; ST said mass production would start in early July 2026 (not confirmed); also streams a 2D infrared image (camera-class); cover-glass note AN6346 | [M, secondary] | Watch: power unknown; the camera port is already busy | S124, S131 |
+| ToF window, one per face | Visible-black, infrared-passing filter or ink (example: Phillips NIR acrylic filters) | Black to the eye; passes near-infrared above a cut-on of 670–910 nm; 0.5–5.0 mm thick; 940 nm transmission not stated [check]. ST's VL53L7 note asks for over 87% at 940 nm [S123]; opening ≥ the 74° × 74° receive cone [M, S127] | [M] / [check] | Needed; matching the face's look must be proven on a sample | S25, S123, S127 |
+| Wi-Fi ranging and sensing (existing radio) | IW612 (NXP) | 1×1, channels up to 80 MHz; FTM ranging as a client: 802.11mc, 802.11az non-trigger-based and trigger-based (AN14044 Rev. 3.0, 29 April 2026); also an FTM responder (802.11mc, 802.11az non-trigger-based); trigger-based ranging validated only with an NXP in-house access point; line of sight needed for stable readings; mlanwls in board packages from kernel 6.18.2; CSI and Ambient Motion Index on Linux (AN14011 Rev. 10.2, 25 June 2026); no 802.11bf statement found | [M] | Good; no new part | S53, S111, S112 |
+| Gyroscope and accelerometer figures (existing part) | BMI323 (Bosch) | Gyroscope zero offset ±1 °/s, ±0.04 °/s/K, noise 0.007 °/s/√Hz; accelerometer zero offset ±50 mg, ±0.3 mg/K, noise 180 µg/√Hz; scale error after self-calibration down to ±0.7% (best case); fast start 2.5 ms; supply 1.71–3.63 V | [M, preliminary flyer; start-up time via search summary] | Good for turns; not for distance | S101, S70 |
+| Orientation fusion (existing part) | LSM6DSV16X (ST), SFLP block | Game rotation vector, gravity vector, gyroscope bias; 15 µA press figure not tied to tracking with the gyroscope on; budget 0.65 mA with the gyroscope on; bias estimated only while still; gyroscope noise 0.0028 °/s/√Hz (ST product page, via search summary) | [M, secondary] | Good; heading still drifts without a compass | S102, S72, S103 |
+| GNSS receiver, not fitted | MAX-M10S (u-blox) | 25 mW continuous tracking; 1.5 m CEP with satellites at −130 dBm; cold start 27 s with every satellite at −130 dBm (default constellations); sensitivity shown with a good external LNA; cold-start sensitivity −148 dBm | [M] | Not fitted: indoors, sealed cube, power | S107 |
+| Spinning lidar, size reference | RPLIDAR C1 (Slamtec) | 55.6 × 55.6 × 41.3 mm; 110 g; 1.15 W; 360° at about 10 Hz | [M, distributor] | Does not fit | S126 |
+| Ranging to the phone, watch | Bluetooth Channel Sounding (Bluetooth 6.0) | Claimed 10–50 cm; the IW612 is Bluetooth 5.4, so it is not available | [M, secondary] | Version 2 only | S83, S53 |
 
 ## 12 What is hard or may not fit
 
@@ -533,6 +805,43 @@ Battery life depends mostly on how low the asleep state goes, not on where speec
 - S98 https://www.bluetooth.com/download/qprd-document ; https://nrfconnectdocs.nordicsemi.com/ncs/latest/nrf/protocols/bt/bt_qualification/index.html
 - S99 https://broadbandbreakfast.com/fcc-picks-ioxt-alliance-to-head-cyber-trust-mark-program/ ; https://www.ioxtalliance.org/news-events-blog/ul-solutions-withdraws-as-lead-administrator-for-fccs-cyber-trust-mark-program
 - S100 https://petapixel.com/2023/11/06/korean-smartphones-have-mandatory-shutter-sounds-8-in-10-want-it-muted ; https://www.engadget.com/2016-09-30-japans-noisy-iphone-problem.html
+
+**Location, motion and mapping (Section 8a).** st.com pages timed out during this check. ST figures come from ST documents hosted elsewhere (the Pololu copies of UM3109 and of the VL53L7CX datasheet DS13865, ST's China-site flyer), distributor pages, or search summaries, and are tagged that way.
+- S101 https://storage.microchipusa.com/musadev/datasheetpdf/BST-BMI323-FL000-00.pdf (Bosch BMI323 flyer BST-BMI323-FL000-00, version 1.0, 09/2022; marked preliminary)
+- S102 https://circuitdigest.com/news/new-advanced-6-axis-inertial-measurement-unit-with-embedded-sensor-fusion-and-ai (25 Nov 2022) ; https://st.com/LSM6DSV16X (ST product page; noise figure read through a search summary) ; https://community.st.com/mems-and-sensors-62/how-lsm6dsv16x-enables-sensor-fusion-low-power-sflp-algorithm-120280 ; https://community.st.com/t5/mems-sensors/lsm6dsv16x-gyroscope-bias/td-p/714927 (ST forum; read through a search summary)
+- S103 https://docs.luxonis.com/hardware/platform/sensors/imu/lsm6dsv (sibling LSM6DSV, not the 16X)
+- S104 https://lcv.fee.unicamp.br/wp-content/images/BTSym-22-Brasil/papers/paper_057.pdf ; https://arxiv.org/pdf/1503.07889 (error growth in dead reckoning; zero-velocity updates)
+- S105 https://arxiv.org/abs/1708.03852 (VINS-Mono, monocular visual-inertial estimator)
+- S106 https://bme.vgtu.lt/index.php/GAC/article/download/10878/9202 (indoor GNSS attenuation: 5–15 dB houses, 20–30 dB offices; read through a search summary)
+- S107 https://content.u-blox.com/sites/default/files/MAX-M10S_DataSheet_UBX-20035208.pdf (UBX-20035208 R08, 30 Jan 2026)
+- S108 https://developer.android.com/develop/sensors-and-location/location/permissions
+- S109 https://static.usenix.org/events/mobisys05/tech/full_papers/cheng/cheng_html/index.html (Place Lab, MobiSys 2005) ; https://developers.google.com/maps/documentation/geolocation/overview
+- S110 https://source.android.com/docs/core/connect/wifi-rtt
+- S111 https://www.nxp.jp/docs/en/application-note/AN14044.pdf (NXP AN14044, Rev. 3.0, 29 April 2026)
+- S112 https://www.nxp.com/docs/en/application-note/AN14011.pdf (NXP AN14011, Rev. 10.2, 25 June 2026)
+- S113 https://people.csail.mit.edu/bkph/FTMRTT_aps (community-maintained list; currency uncertain)
+- S114 https://arxiv.org/abs/2509.03901 (FTM survey, 4 Sep 2025)
+- S115 https://standards.ieee.org/ieee/802.11bf/11574/ (IEEE 802.11bf-2025)
+- S116 https://arxiv.org/abs/2302.00992 (Cominelli, Gringoli, Restuccia, IEEE PerCom 2023)
+- S117 https://repositum.tuwien.at/handle/20.500.12708/222429 (Strohmayer, TU Wien dissertation, 2025; record not yet verified by the library)
+- S118 https://arxiv.org/abs/2403.02235 (Structure from WiFi, ACC 2024)
+- S119 https://www.bleepingcomputer.com/news/security/comcast-turns-your-xfinity-wifi-into-a-home-motion-detector/ (article dated 18 Aug 2026)
+- S120 https://www.pololu.com/file/0J2030/um3109-a-guide-for-using-the-vl53l8cx-lowpower-highperformance-timeofflight-multizone-ranging-sensor-stmicroelectronics.pdf (ST UM3109 Rev 7, April 2024; Pololu-hosted copy)
+- S121 https://www.st.com.cn/resource/en/flyer/vl53l7cx-vl53l8cx-flyer.pdf ; https://www.st.com/en/imaging-and-photonics-solutions/vl53l8cx.html ; https://wiki.adom.inc/kyle/vl53l8cx (secondary, unreviewed) ; https://community.st.com/imaging-sensors-49/vl53l8cx-power-consumption-is-too-high-139035 (forum) (ST pages read through search summaries)
+- S122 https://www.pololu.com/product/3418 ; https://www.pololu.com/category/306/carriers-for-st-time-of-flight-tof-distance-sensors
+- S123 https://www.st.com/resource/en/application_note/an5939-guidelines-for-the-cover-glass-of-the-vl53l8-timeofflight-tof-multizone-sensor-family-stmicroelectronics.pdf ; https://www.st.com/resource/en/application_note/an5962-guidelines-for-the-cover-glass-of-the-vl53l7-timeofflight-multizone-sensor-family-stmicroelectronics.pdf (did not load; the >87% at 940 nm figure was read through search summaries; the >87% wording is confirmed for AN5962 (VL53L7) and AN6346 through search summaries; AN5939's wording is not confirmed)
+- S124 https://www.cnx-software.com/2026/06/22/st-vl53l9cx-direct-time-of-flight-3d-lidar-supports-5cm-to-9m-range-2-3k-zones-resolution/ ; https://www.st.com/vl53l9cx
+- S125 https://www.hrl.uni-bonn.de/papers/hornung13auro-preprint.pdf (Hornung et al., OctoMap, Autonomous Robots 34:189–206, 2013)
+- S126 https://www.waveshare.com/rplidar-c1.htm (distributor listing)
+- S127 https://www.pololu.com/file/0J1992/vl53l7cx.pdf (ST DS13865 Rev 6, March 2023; Pololu-hosted copy; read in full)
+- S128 https://arxiv.org/abs/1904.03303 (Pittaluga, Koppal, Kang, Sinha, "Revealing Scenes by Inverting Structure from Motion Reconstructions", CVPR 2019)
+- S129 https://arxiv.org/abs/2405.14975 (Rye and Levin, "Surveilling the Masses with Wi-Fi-Based Positioning Systems", 2024; venue not confirmed)
+- S130 https://csrc.nist.gov/pubs/sp/800/88/r2/final ; https://csrc.nist.gov/files/pubs/sp/800/88/r2/final/docs/sp800-88r2-faq.pdf (NIST SP 800-88 Rev. 2, September 2025; read through search summaries)
+- S131 https://www.st.com/resource/en/application_note/an6346-guidelines-for-the-cover-glass-of-the-vl53l9cx-timeofflight-2k-zones-stmicroelectronics.pdf (did not load; read through a search summary)
+
+**Amendments to sources listed in earlier sections:**
+- S70: add "BMI323 datasheet rev 1.6, Aug 2025: fast start 2.5 ms (read through a search summary)".
+- S25: add "(first link returned 404 on 2026-10-21)".
 
 ---
 
