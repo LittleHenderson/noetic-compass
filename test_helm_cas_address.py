@@ -27,10 +27,12 @@ except ImportError:                                   # the fixture below also r
 #: sha256 of the MACHINE-NEUTRAL canon (helm_test_pins.canon) of fixture_records() with CAS_ADDRESS OFF and WIDE_UNITS_NOTE OFF.
 #: History: the first pin (56f356ea...) hashed the raw records, which carry the licensed brain folder as an ABSOLUTE PATH
 #: (trace[].brain.brain_dir); it held on the laptop (Windows) and failed on the Linux host in job c53 (SPEC 7.106). Since
-#: 2026-10-21 the pin is taken over helm_test_pins.canon, which replaces absolute paths by their last component, so the same
-#: records hash alike on every machine; test_helm_pin_hygiene.py enforces this for every record pin. Recompute (OFF code
+#: 2026-10-21 the pin is taken over helm_test_pins.canon: absolute paths -> last component, AND the brain_dir and receipt_hash
+#: leaves are stripped (second pass: the brain folder's last component differs between laptop and host, and the loop computes
+#: receipt_hash over the raw path before any canon runs; measured 2026-10-21, six differing leaves). Receipt coverage stays in
+#: test_receipt_hash_identical_on_and_off. test_helm_pin_hygiene.py enforces this for every record pin. Recompute (OFF code
 #: unchanged since base 159c7d2b): python -c "import test_helm_cas_address as T; print(T.fixture_sha256())"
-PINNED_OFF_SHA256 = "632bffc062804840c1c5d2699e81cd365d751799359ee5828efe46593ae51955"
+PINNED_OFF_SHA256 = "312ddfd687f73182be524acc64f0829d67d11c29ba9546915f344998927abf64"
 
 FIXTURE_TURNS = [
     ("batch", ("Bread", {"Flour": 10, "Water": 8}, 5, "Flour")),
