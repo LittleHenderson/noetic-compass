@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import sys
 import unittest
 from contextlib import contextmanager
 
@@ -25,7 +26,19 @@ except ImportError:                                   # the fixture below also r
 
 #: sha256 of fixture_records() with CAS_ADDRESS OFF and WIDE_UNITS_NOTE OFF, computed on base commit 159c7d2b (the code
 #: before helm_cas_address.py existed) with this same fixture: python -c "import test_helm_cas_address as T; print(T.fixture_sha256())"
-PINNED_OFF_SHA256 = "56f356ea7302a80fd7073c6b76335fb7453ee32ac2950e1c2e4a1cf18b64acc8"
+#: The value is keyed by the ABSOLUTE PATH OF THE WAVE-1 BRAIN FOLDER (HELM_CANONICAL_BRAIN_DIR), because the loop writes that
+#: path into the two brain trace rows (`brain_dir`, from helm_brain_canonical.load_package) and two turn receipts hash over those
+#: rows; nothing else in the records is platform-bound (wave 7 round 4, PIN_TEST_DIAGNOSIS.md). Laptop value: Windows, Python
+#: 3.14.0, the default folder. Host value: the AWS host's folder (Ubuntu 24.04, Python 3.12.3, job c53's reading
+#: `6bf323ad…`), reproduced exactly on the laptop on base 159c7d2b by reporting that path. Any other folder: the pin is skipped
+#: and the OFF hash printed for the record; the determinism and ON-minus-address checks below run everywhere.
+PINNED_OFF_SHA256_BY_BRAIN_DIR = {
+    r"C:\Users\wakil\Documents\Codex\2026-10-15\r1_wave1\HELM_R1_W1_20261015_v3":
+        "56f356ea7302a80fd7073c6b76335fb7453ee32ac2950e1c2e4a1cf18b64acc8",
+    "/opt/helm-shared-r2/sources/w1/HELM_R1_W1_20261015":
+        "6bf323adcde8e01391125280f0f88ec6cb94b9e5ef2baff2a3b45c7f778e9606",
+}
+PINNED_OFF_SHA256 = PINNED_OFF_SHA256_BY_BRAIN_DIR[r"C:\Users\wakil\Documents\Codex\2026-10-15\r1_wave1\HELM_R1_W1_20261015_v3"]
 
 FIXTURE_TURNS = [
     ("batch", ("Bread", {"Flour": 10, "Water": 8}, 5, "Flour")),
@@ -66,6 +79,13 @@ def fixture_records():
 
 def fixture_sha256(records=None):
     return hashlib.sha256(_canon(records if records is not None else fixture_records()).encode("utf-8")).hexdigest()
+
+
+def brain_dir_of(records):
+    """The wave-1 brain folder path the loop wrote into its brain trace rows (the one platform-bound value in the records)."""
+    dirs = sorted({r["brain"]["brain_dir"] for r in records["trace"]
+                   if isinstance(r.get("brain"), dict) and "brain_dir" in r["brain"]})
+    return dirs[0] if len(dirs) == 1 else dirs
 
 
 @contextmanager
@@ -282,18 +302,37 @@ class C_LoopStamps(unittest.TestCase):
         self.assertEqual([r["response"] for r in off["results"]], [r["response"] for r in on["results"]])
 
     def test_off_is_byte_identical_to_the_pre_change_code(self):
+        """OFF records: deterministic, unchanged by the units-note switch, equal to ON minus the address field (everywhere);
+        and equal to the pre-change code's bytes where a pin for this brain folder exists.
+
+        Wave 7 round 4 (job c53, 2026-10-21): on the AWS host this test failed with OFF sha256 `6bf323ad…` against the one
+        stored pin `56f356ea…` (computed on this laptop, Windows, Python 3.14.0). The cause, proven on the laptop: the only
+        value in the records that depends on the machine is the absolute path of the wave-1 brain folder (`brain_dir` in two
+        brain trace rows, and two turn receipts whose hash covers those rows). Reporting the host's path on the laptop gives
+        `6bf323ad…` exactly, on the fix commit and on base 159c7d2b, so the host's OFF path WAS byte-identical to the
+        pre-change code; the test just held one machine's value. The pin is now keyed by that path (laptop and host values,
+        both computed on base 159c7d2b); on any other folder the pin is skipped and the hash printed, while every check that
+        does not need a stored value still runs. Nothing else (platform, Python version, line endings) enters the hash."""
         with switches(cas="0", units_note=None):
             off = fixture_records()
+            off_again = fixture_records()                 # a second fresh loop in the same process
         for path, v in _walk(off):
             self.assertFalse(path.endswith("/address"), path)
         off_sha = fixture_sha256(off)
-        self.assertEqual(off_sha, PINNED_OFF_SHA256, "OFF records differ from the pre-change code (base 159c7d2b)")
+        self.assertEqual(fixture_sha256(off_again), off_sha, "OFF records are not deterministic across two fresh loops")
+        brain_dir = brain_dir_of(off)
+        print(f"\n[helm_cas_address] OFF fixture sha256 {off_sha} brain_dir {brain_dir!r} "
+              f"({sys.platform}, Python {sys.version.split()[0]})")
         with switches(cas="0", units_note="1"):      # stage 1c ON changes none of these turns either
-            self.assertEqual(fixture_sha256(), PINNED_OFF_SHA256)
+            self.assertEqual(fixture_sha256(), off_sha)
         with switches(cas=None, units_note="1"):     # both ON: the address is the ONLY difference
             on = fixture_records()
-        self.assertNotEqual(fixture_sha256(on), PINNED_OFF_SHA256)
-        self.assertEqual(fixture_sha256(A.without_address(on)), PINNED_OFF_SHA256)
+        self.assertNotEqual(fixture_sha256(on), off_sha)
+        self.assertEqual(fixture_sha256(A.without_address(on)), off_sha)
+        pinned = PINNED_OFF_SHA256_BY_BRAIN_DIR.get(brain_dir)
+        if pinned is None:
+            self.skipTest(f"no pre-change pin for brain folder {brain_dir!r}; OFF sha256 {off_sha} printed for the record")
+        self.assertEqual(off_sha, pinned, f"OFF records differ from the pre-change code (base 159c7d2b) for {brain_dir!r}")
 
     def test_tags_are_not_read_by_the_loop_or_the_wide_turn(self):
         with open(os.path.join(HERE, "helm_wide_turn.py"), encoding="utf-8") as fh:
