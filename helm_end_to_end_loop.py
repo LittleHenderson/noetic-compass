@@ -624,9 +624,18 @@ class HELMEndToEndLoop:
         if reading["status"] != "NOT_MINE":
             return self._english_turn(text, reading, tick, result, writes_before)
         lower = text.lower()
+        if self.wide_on:
+            # Wave-7 FIX FIRST (2026-10-20): a kitchen sentence the wide reader claims ("We have 6 peaches but we've run
+            # out of sugar.") must never reach the tool engine because of a word like "run"; the wide path takes it.
+            import helm_wide_turn
+            if helm_wide_turn.read_wide(text, last_topic=self.last_topic)["status"] != "NOT_MINE":
+                return self._finish(result, tick, "CLARIFY_NOT_CCE", HELMVoiceAdapter.format_clarify_not_checked(),
+                                    writes_before, "WAIT_FOR_USER")
         agentic_keywords = ["audit", "run", "inspect", "verify local environment", "dispatch", "write file",
                             "read file"]
-        if any(kw in lower for kw in agentic_keywords):
+        kitchen_talk = re.search(r"\b(?:ran out|run out|we have|we've got|we made|we baked|can we make|how much|how many|"
+                                 r"cups?|teaspoons?|tablespoons?|pounds?|ounces?|pantry|recipe|ingredients?)\b", lower)
+        if not kitchen_talk and any(re.search(r"\b%s\b" % re.escape(kw), lower) for kw in agentic_keywords):
             dag = self.agentic_engine.decompose_goal(text)
             plan_res = self.agentic_engine.execute_dag(dag)
             result["agentic_plan_result"] = plan_res

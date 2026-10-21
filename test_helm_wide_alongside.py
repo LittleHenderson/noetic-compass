@@ -324,5 +324,57 @@ class E_ChatRoutesAndSpeaksWideLines(unittest.TestCase):
         self.assertNotIn("about", out.lower())
         self.assertEqual(V.cas_tokens(out), [])
 
+
+class F_SecondPracticeRound(unittest.TestCase):
+    """Wave-7 practice on the v2 build (2026-10-20): wave 3b's two question forms and a leading greeting were claimed by
+    neither reader (the chat answered them as general knowledge); "1 cup dry beans or whole peas" was learned under the
+    made-up name "dry beans or whole pea"; and "We have 6 peaches, sliced but we've run out of sugar." reached the chat's
+    software-goal branch because of the word "run", and a shell command ran. Each test fails on the v2 build."""
+
+    def test_question_forms_and_greeting_are_read(self):
+        for text in ("Hi again. How much shortcake can we make?", "Could you tell me how much shortcake that makes?",
+                     "How much shortcake do we have the makings of?", "Hello there! Can we make shortcake?"):
+            r = WT.read_wide(text)
+            self.assertEqual((r["status"], r["topic"]), ("QUESTION", "shortcake"), text)
+
+    def test_alternative_binds_the_first_name(self):
+        r = WT.read_wide("We made 1 soup from 1 cup dry beans or whole peas and 12 cups water and ran out of dry beans.")
+        self.assertEqual(r["status"], "WITNESS")
+        self.assertEqual(sorted(r["witness"]["stock"]), ["dry bean", "water"])
+        self.assertEqual(r["witness"]["ran_out"], ["dry bean"])
+        self.assertIn("or whole peas", r["witness"]["said"]["dry bean"])
+        self.assertFalse(any(" or " in n for n in r["witness"]["stock"]))
+
+    def test_run_out_tail_is_a_question_not_a_name(self):
+        r = WT.read_wide("We have 6 peaches, sliced but we've run out of sugar.")
+        self.assertEqual((r["status"], r["clarify"]["code"]), ("CLARIFY", "ABSENT_STATED"))
+        q = WT.say_reader_question(r["clarify"])
+        self.assertIn("sugar", q)
+        self.assertIn("didn't save", q)
+
+    def test_kitchen_talk_never_runs_the_tool_engine(self):
+        import subprocess
+        import helm_chat as hc
+        ran = []
+        real_run = subprocess.run
+
+        def guard(*a, **k):
+            ran.append(a[0] if a else k.get("args"))
+            raise AssertionError("the tool engine ran a command on a kitchen sentence: %r" % (a[:1],))
+        with wide_on():
+            s = hc.HELMConversationalSession(mode="everyday", session_id="test_no_tools_on_kitchen_talk")
+            subprocess.run = guard
+            try:
+                for text in ("We have 6 C-peaches, sliced but we've run out of c-sugar.",
+                             "We have 2 cups flour and we've run out of sugar.",
+                             "Could you run the numbers: how much shortcake can we make?"):
+                    f = io.StringIO()
+                    with redirect_stdout(f):
+                        s.handle_turn(text)
+                    self.assertNotEqual(s.memory.turns[-1].intent, "AGENTIC_GOAL", text)
+            finally:
+                subprocess.run = real_run
+        self.assertEqual(ran, [])
+
 if __name__ == "__main__":
     unittest.main()
