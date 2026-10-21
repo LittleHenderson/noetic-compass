@@ -73,6 +73,7 @@ from helm_brain_canonical import (CanonicalRecipeBrain, CanonicalBrainRefused, e
                                   EVALUATED)
 from tks_meta_valve_controller import TKSMetaValveController
 from helm_agentic_executor import AgenticExecutionEngine
+import helm_cas_address                # the CAS address on every receipt (owner's fix G, stage 1); switch CAS_ADDRESS
 import helm_english_in
 
 #: Rule 6 (STOCK_FRAME_REQUIRED, 2026-10-19): what HELM says when a sentence names an ingredient but states no stock.
@@ -267,6 +268,8 @@ class HELMEndToEndLoop:
     def _emit(self, tick: int, station: str, **fields: Any) -> Dict[str, Any]:
         rec = {"tick": tick, "station": station}
         rec.update(fields)
+        if helm_cas_address.cas_address_on():      # fix G: the row's CAS address, by named rule or UNTAGGED
+            rec["address"] = helm_cas_address.address_for_trace_row(rec)
         rec = json.loads(_canon(rec))
         self.trace.append(rec)
         if self.trace_path:
@@ -452,7 +455,11 @@ class HELMEndToEndLoop:
         if self.cube_store is not None:
             result["cubes_written"] = list(self.cube_store.write_history[writes_before:])
         turn_records = [r for r in self.trace if r.get("tick") == tick]
+        if helm_cas_address.cas_address_on():      # fix G: tags never enter a value; the hash sees no address
+            turn_records = helm_cas_address.without_address(turn_records)
         result["receipt_hash"] = _h16({"status": status, "records": turn_records, "message": message})
+        if helm_cas_address.cas_address_on():
+            helm_cas_address.stamp_turn(result, status)
         self._emit(tick, "S6 next", loop_status=status, next=next_step,
                    cubes_written=result["cubes_written"], receipt_hash=result["receipt_hash"], said=message)
         return result

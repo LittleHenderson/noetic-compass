@@ -1,6 +1,7 @@
 # Recipe-shape proposer ear — design packet v1 (2026-10-20 PDT)
 
 Status: **DESIGN ONLY. 0 USD. Nothing built, nothing trained, nothing run. No claim.**
+Status 2026-10-20 (after the packet): **Q7 BUILT, ENGINEERED-NOT-VALIDATED.** The two deterministic steps Q7 proposed are built behind one switch, `WIDE_UNITS_NOTE` (default OFF; `helm_brain_wide.units_note_on`): 6 widened units with exact programmed factors and NOTE lines; tests `test_helm_units_note.py` (14); census 1 re-run ON refuses 3,654 of 86,291 lines (was 10,069), see `census/CENSUS_REPORT_GAP_LINES.md` section "Re-census after stage 1c". The ear itself: still nothing built, nothing trained, nothing run, no claim.
 Owner word: "Yes, write both design packets at 0 USD: the recipe-shape proposer ear and the Eye pairing over the
 28 cells with receipt tags first. Design only, no run." (2026-10-20, in reply to two wonders of the same day:
 "WHAT IF WE TRAINED TRANFORMS ON ENTIRE CAS EXPRESSIONS AND OR RECIPES INCLUDED".)

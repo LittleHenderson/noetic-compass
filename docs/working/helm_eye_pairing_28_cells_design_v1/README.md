@@ -1,6 +1,7 @@
 # Receipt tags first, then the Unity Eye pairs the 28 cells with the 7 faculties — design packet v1 (2026-10-20 PDT)
 
 Status: **DESIGN ONLY. 0 USD. Nothing built, nothing run. No claim.**
+Status 2026-10-20 (after the packet): **Stage 1 BUILT (fix G), ENGINEERED-NOT-VALIDATED; stage 2 not built.** `helm_cas_address.py` holds the named rules; the live loop stamps `cas_address/1` on every trace row, turn receipt and carried receipt (switch `CAS_ADDRESS`, default ON; OFF byte-identical to the pre-change code, pinned sha256 `56f356ea…`); tests `test_helm_cas_address.py` (17). Honest limit (census 2's finding, now on the record): the live loop names no Foundation, so its cells are all `UNTAGGED`; the 28-cell Eye, the 196-pair table, back-off and any exam are not built; no run, no claim.
 Owner word: "Yes, write both design packets at 0 USD: ... the Eye pairing over the 28 cells with receipt tags first.
 Design only, no run." (2026-10-20, from the wonder: "WHAT IF WE MAKE A 40 ELEMENTS, 10 NOETICS, 28 SUB-FOUNDATIONS,
 22 ACQUISTIONS, 4 WORLDS, ALL BEING MIXED AND MATCHED WITH THE CAS FACULTIES LIKE THEY ARE WITH THE 7 FOUNDATIONS".)

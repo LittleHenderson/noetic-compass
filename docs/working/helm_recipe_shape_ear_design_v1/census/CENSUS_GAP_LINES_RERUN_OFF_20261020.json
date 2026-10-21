@@ -1,0 +1,168 @@
+{
+ "brain_file_sha256": "7ac65404ff5f2d76d57a9eed9719971cfbce0799449cc5369f8b1211af2b6dc0",
+ "floor": {
+  "gap_recipes_found": 3030,
+  "gap_refused_lines_found": 5445,
+  "gap_refused_lines_required": 256,
+  "note": "answer-key rule and spent-exam exclusions not applied (custodian steps); this is an upper bound",
+  "result": "PASS_FLOOR"
+ },
+ "frames": {
+  "PG": {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\frames\\FRAME_R_PG.jsonl",
+   "sha256": "c983e065bc1783ea9a4807612edafe8168ebb8c09b56a264dfea5ca53cb3aa5e"
+  },
+  "WB": {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\frames\\FRAME_R_WB.jsonl",
+   "sha256": "6a0d7cc12d0133991bf44c666ecae80ff1239760d0fcbd9aad62b11842563ddc"
+  }
+ },
+ "gap_refused_codes": {
+  "AMOUNT_APPROXIMATE": 16,
+  "AMOUNT_HAS_TWO_PARTS": 94,
+  "AMOUNT_IS_A_RANGE": 922,
+  "AMOUNT_RELATIVE": 11,
+  "NO_AMOUNT": 2581,
+  "NO_NAME": 588,
+  "UNIT_NOT_IN_TABLE": 1217,
+  "UNREAD_CLAUSE": 16
+ },
+ "max_lines": 10,
+ "per_source": {
+  "PG": {
+   "counts": {
+    "gap_recipes": 1385,
+    "gap_refused_lines": 1744,
+    "lines": 59848,
+    "lines_read": 56818,
+    "lines_refused": 3030,
+    "recipes": 10368,
+    "recipes_all_read": 8767,
+    "recipes_mixed": 1556,
+    "recipes_none_read": 45,
+    "recipes_over_max_lines": 489
+   },
+   "gap_recipes_by_n_lines": {
+    "10": 66,
+    "2": 79,
+    "3": 158,
+    "4": 249,
+    "5": 221,
+    "6": 207,
+    "7": 178,
+    "8": 149,
+    "9": 78
+   },
+   "gap_recipes_by_refused_lines": {
+    "1": 1126,
+    "2": 192,
+    "3": 45,
+    "4": 14,
+    "5": 7,
+    "8": 1
+   },
+   "gap_refused_codes": {
+    "AMOUNT_APPROXIMATE": 3,
+    "AMOUNT_HAS_TWO_PARTS": 59,
+    "AMOUNT_IS_A_RANGE": 459,
+    "AMOUNT_RELATIVE": 4,
+    "NO_AMOUNT": 127,
+    "NO_NAME": 306,
+    "UNIT_NOT_IN_TABLE": 785,
+    "UNREAD_CLAUSE": 1
+   },
+   "refused_codes": {
+    "AMOUNT_APPROXIMATE": 3,
+    "AMOUNT_HAS_TWO_PARTS": 63,
+    "AMOUNT_IS_A_RANGE": 479,
+    "AMOUNT_RELATIVE": 5,
+    "NO_AMOUNT": 244,
+    "NO_NAME": 1268,
+    "UNIT_NOT_IN_TABLE": 967,
+    "UNREAD_CLAUSE": 1
+   }
+  },
+  "WB": {
+   "counts": {
+    "gap_recipes": 1645,
+    "gap_refused_lines": 3701,
+    "lines": 26443,
+    "lines_read": 19404,
+    "lines_refused": 7039,
+    "recipes": 3318,
+    "recipes_all_read": 794,
+    "recipes_mixed": 2307,
+    "recipes_none_read": 217,
+    "recipes_over_max_lines": 771
+   },
+   "gap_recipes_by_n_lines": {
+    "10": 193,
+    "2": 25,
+    "3": 80,
+    "4": 162,
+    "5": 213,
+    "6": 251,
+    "7": 247,
+    "8": 249,
+    "9": 225
+   },
+   "gap_recipes_by_refused_lines": {
+    "1": 627,
+    "2": 466,
+    "3": 275,
+    "4": 143,
+    "5": 85,
+    "6": 32,
+    "7": 11,
+    "8": 3,
+    "9": 3
+   },
+   "gap_refused_codes": {
+    "AMOUNT_APPROXIMATE": 13,
+    "AMOUNT_HAS_TWO_PARTS": 35,
+    "AMOUNT_IS_A_RANGE": 463,
+    "AMOUNT_RELATIVE": 7,
+    "NO_AMOUNT": 2454,
+    "NO_NAME": 282,
+    "UNIT_NOT_IN_TABLE": 432,
+    "UNREAD_CLAUSE": 15
+   },
+   "refused_codes": {
+    "AMOUNT_APPROXIMATE": 23,
+    "AMOUNT_HAS_TWO_PARTS": 56,
+    "AMOUNT_IS_A_RANGE": 826,
+    "AMOUNT_RELATIVE": 12,
+    "NO_AMOUNT": 4920,
+    "NO_NAME": 478,
+    "UNIT_NOT_IN_TABLE": 695,
+    "UNREAD_CLAUSE": 29
+   }
+  }
+ },
+ "reader_file_sha256": "376a27d79ba74ca1077b06fba523770b2b1d0d2eba3fab8dc201b9891050ba75",
+ "refused_codes": {
+  "AMOUNT_APPROXIMATE": 26,
+  "AMOUNT_HAS_TWO_PARTS": 119,
+  "AMOUNT_IS_A_RANGE": 1305,
+  "AMOUNT_RELATIVE": 17,
+  "NO_AMOUNT": 5164,
+  "NO_NAME": 1746,
+  "UNIT_NOT_IN_TABLE": 1662,
+  "UNREAD_CLAUSE": 30
+ },
+ "schema": "helm.census.gap_lines/1",
+ "seconds": 2.1,
+ "totals": {
+  "gap_recipes": 3030,
+  "gap_refused_lines": 5445,
+  "lines": 86291,
+  "lines_read": 76222,
+  "lines_refused": 10069,
+  "recipes": 13686,
+  "recipes_all_read": 9561,
+  "recipes_mixed": 3863,
+  "recipes_none_read": 262,
+  "recipes_over_max_lines": 1260
+ },
+ "utc": "2026-10-21T00:41:02Z"
+}

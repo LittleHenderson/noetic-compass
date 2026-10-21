@@ -27,6 +27,11 @@ store (a cube write only after the gate and the brain's receipt passed, then rea
 
 CLAIM STATUS: see helm_brain_wide: VALIDATED for the SPEC 7.89 / 7.96 sentences only (NAMED_CORPORA_ONLY + SYNTHETIC_ONLY).
 This reader is v5 (relative amounts bundled with their line), the version scored in job c50 (SPEC 7.96).
+
+STAGE 1c (2026-10-20, switch WIDE_UNITS_NOTE, default OFF; see helm_brain_wide's header): with the switch ON this same
+reader also reads the 6 widened units (liter, deciliter, centiliter, gallon, fluid ounce, dozen) and reads a line with no
+exact amount, or with a unit nobody can size, as a NOTE line {"name", "amount": None, "unit": "", "note": True}: present,
+never a requirement. OFF, every line above is exactly v5. ENGINEERED-NOT-VALIDATED; no claim moved.
 """
 from __future__ import annotations
 
@@ -191,12 +196,46 @@ def read_relative(piece: str) -> Optional[Tuple[Fraction, str]]:
     return r, name
 
 
+#: stage 1c (WIDE_UNITS_NOTE ON): tails that say "no exact amount" on a bare ingredient line ("pepper to taste",
+#: "butter for frying", "sugar if desired"); the name is what stands before them
+NOTE_TAIL_RX = re.compile(r"\s+(?:to taste|as needed|as required|as desired|if needed|if desired|if liked|if wanted|"
+                          r"or more|or less|for\b|optional)\b.*$", re.IGNORECASE)
+#: a bare line that is NOT an ingredient said to be present: an absence ("no water"), a heading ("For the sauce:"), a
+#: connective left over from a split; these stay the NO_AMOUNT question reader v5 asks
+NOT_A_NOTE_RX = re.compile(r"^(?:no|none|without|zero|for|to|and|or|with|plus|minus|less|the same)\b", re.IGNORECASE)
+
+
+def note_name(text: str) -> Optional[str]:
+    """Stage 1c: the ingredient a bare line names as PRESENT with no exact amount: "salt" -> "salt", "Pepper to taste"
+    -> "pepper", "butter for frying" -> "butter"; None when the line is an absence, a heading, or only note words
+    ("sifted"), so that the deterministic question of reader v5 stands."""
+    s = text.strip().strip(".").strip()
+    if not s or s.endswith(":") or NOT_A_NOTE_RX.match(s) or re.search(r"\d|[" + "".join(W.VULGAR) + "]", s):
+        return None
+    s = NOTE_TAIL_RX.sub("", s)
+    words = s.split()
+    while words and re.sub(r"[^a-z]", "", words[-1].lower()) in NOTE_WORDS:
+        words.pop()
+    if not words or _is_note(" ".join(words)):
+        return None
+    return bind_name(" ".join(words))
+
+
+def _note_line(name: str, said: str, why: str) -> Dict[str, Any]:
+    """Stage 1c: a NOTE line: present, no amount, no unit; `why` names the rule that made it one."""
+    return {"name": name, "amount": None, "unit": "", "said": said, "note": True, "note_why": why}
+
+
 def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
     """One ingredient line -> {"name", "amount" (Fraction), "unit", "said"} or {"clarify": {...}}.
     v3: `notes` is the rest of the same line after a comma or "and" that does not start a new amount ("cold, cooked
     rice", "squash, steamed and strained"). The name comes from the line's own words; the notes are used only when
-    those words alone bind to nothing ("1 cup cold, cooked rice" -> "cooked rice")."""
+    those words alone bind to nothing ("1 cup cold, cooked rice" -> "cooked rice").
+    Stage 1c (WIDE_UNITS_NOTE ON, default OFF): a line with no amount, or with an amount in a unit that has no exact size,
+    comes back as a NOTE line {"name", "amount": None, "unit": "", "note": True} instead of a question; see
+    helm_brain_wide's header. OFF: exactly reader v5."""
     s = line.strip().strip(".").strip()
+    stage_1c = W.units_note_on()
     if RELATIVE_WORDS_RX.search(s):                # v5: a relative amount with no line before it to be relative to
         return {"clarify": _ask("AMOUNT_RELATIVE", words=s)}
     companion: Optional[Tuple[Fraction, str]] = None
@@ -214,23 +253,38 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
     except W.WideRefused as exc:
         return {"clarify": _ask(exc.code, words=s)}
     if got is None:
+        if stage_1c and companion is None:         # stage 1c: "salt", "pepper to taste" -> present, no amount
+            nm = note_name(s)
+            if nm:
+                return _note_line(nm, s, "NO_AMOUNT")
         return {"clarify": _ask("NO_AMOUNT", item=bind_name(s), words=s)}
     amount, end = got
     rest = s[end:].strip()
     unit = ""
+    note_unit = ""                                 # stage 1c: a unit word with no exact size ("stick", "dash")
     q = re.match(r"(?:level|heaping|heaped|rounded|scant|good|generous|large|small)\s+(?=[A-Za-z])", rest, re.IGNORECASE)
     if q:                                          # "1 heaping teaspoon": a size word before a unit word
         m2 = re.match(r"([A-Za-z]+(?:-[A-Za-z]+)*)\.?(?=\s|$)", rest[q.end():])
         if m2 and W.unit_of(m2.group(1).replace("-", "")) is not None:
             rest = rest[q.end():]
-    m = re.match(r"([A-Za-z]+(?:-[A-Za-z]+)*)\.?(?=\s|$)", rest)
+    m: Optional[re.Match] = None
+    if stage_1c:                                   # stage 1c: a two-word unit ("fluid ounce", "fl oz") first
+        m2w = re.match(r"([A-Za-z]+)\.?\s+([A-Za-z]+)\.?(?=\s|$)", rest)
+        u2 = W.unit_of_two_words(m2w.group(1), m2w.group(2)) if m2w else None
+        if u2 is not None:
+            unit, rest = u2, rest[m2w.end():].strip()
+    if not unit:
+        m = re.match(r"([A-Za-z]+(?:-[A-Za-z]+)*)\.?(?=\s|$)", rest)
     if m:
         word = m.group(1).replace("-", "")
         u = W.unit_of(word)
         if u is not None:
             unit, rest = u, rest[m.end():].strip()
         elif word.lower() in W.OTHER_UNIT_WORDS:
-            return {"clarify": _ask("UNIT_NOT_IN_TABLE", unit=word.lower(), words=s)}
+            if stage_1c and word.lower() in W.NOTE_UNIT_WORDS:
+                note_unit, rest = word.lower(), rest[m.end():].strip()
+            else:
+                return {"clarify": _ask("UNIT_NOT_IN_TABLE", unit=word.lower(), words=s)}
     rest = re.sub(r"^of\s+", "", rest)
     if ALTERNATIVE_RX.search(rest) or re.match(r"plus\b", rest, re.IGNORECASE):
         return {"clarify": _ask("AMOUNT_HAS_TWO_PARTS", words=s)}
@@ -243,6 +297,8 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
         note = (note + ", or " + alt[1].strip()).strip(", ")
     if unit and not bind_name(rest) and m is not None and not bind_name(note):
         unit, rest = "", m.group(1)
+    if note_unit and not bind_name(rest) and not bind_name(note):   # stage 1c: "2 sticks" alone: the word is the name
+        note_unit, rest = "", note_unit if not rest.strip() else rest
     if re.search(r"\bto taste\b|\bas needed\b", rest) and not unit and amount is None:
         return {"clarify": _ask("NO_AMOUNT", words=s)}
     name = bind_name(rest)
@@ -252,6 +308,11 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
         name = bind_name(rest, drop_leading=False)
     if not name:
         return {"clarify": _ask("NO_NAME", words=s)}
+    if stage_1c and companion is None:
+        if note_unit:                              # "2 sticks butter", "1 dash salt": no exact size -> present, no amount
+            return _note_line(name, s, "UNIT_NO_EXACT_SIZE:" + note_unit)
+        if unit and unit in W.OWN_UNITS_AS_NOTES:  # EMPTY today: own-count units ("2 cans") stay exact counts
+            return _note_line(name, s, "UNIT_NO_EXACT_SIZE:" + unit)
     said = s + (", " + note if note else "")
     if companion is not None:                      # v5: one bundled line; its proportion is part of its name
         r, other = companion
@@ -326,11 +387,18 @@ def parse_lines(text: str) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any
         piece = text[m.end():].strip()
         if CLAUSE_RX.match(piece):
             return [], _ask("UNREAD_CLAUSE", words=piece.split(",")[0].strip().rstrip("."))
+    stage_1c = W.units_note_on()
     for seg, notes in split_lines(text):
         rec = parse_line(seg, notes)
         if "clarify" in rec:
             return [], rec["clarify"]
         lines.append(rec)
+        if stage_1c and rec.get("note") and rec.get("note_why") == "NO_AMOUNT" and notes:
+            # stage 1c: "salt and pepper to taste": bare names after a bare name are NOTE lines of their own
+            for piece in SEP_RX.split(notes):
+                nm = note_name(piece)
+                if nm:
+                    lines.append(_note_line(nm, piece.strip().strip(".").strip(), "NO_AMOUNT"))
     names = [x["name"] for x in lines]
     dup = sorted({n for n in names if names.count(n) > 1})
     if dup:
@@ -583,8 +651,12 @@ def say_and(names: List[str]) -> str:
     return ", ".join(names[:-1]) + ", and " + names[-1]
 
 
-def say_amount_of(q: Fraction, unit: str, name: str) -> str:
-    """'1/3 cup of brown sugar', '2 eggs', '1 egg'."""
+def say_amount_of(q: Optional[Fraction], unit: str, name: str) -> str:
+    """'1/3 cup of brown sugar', '2 eggs', '1 egg'; stage 1c: a NOTE entry (q None) -> 'salt (no amount given)'."""
+    if q is None:
+        return f"{name} (no amount given)"
+    if unit == "dozen":                            # stage 1c: a plain-count multiplier reads "2 dozen eggs"
+        return f"{W.say_quantity(q)} dozen {plural(name)}"
     if unit:
         return f"{W.say_measure(q, unit)} of {name}"
     return f"{W.say_quantity(q)} {plural(name) if q > 1 else name}"
@@ -596,10 +668,10 @@ def say_wide(rec: Dict[str, Any]) -> str:
     gate = rec.get("gate")
     if rec.get("status") == W.EVALUATED and rec.get("tied"):          # v3: a tie still fixes the amount
         return (f"With what's on hand we can make {rec['yield_said']} {p}. {cap(say_and(rec['tied']))} would run out "
-                f"at exactly the same moment, so no single one sets the limit.")
+                f"at exactly the same moment, so no single one sets the limit.") + say_notes(rec.get("notes"))
     if rec.get("status") == W.EVALUATED:
         return (f"With what's on hand we can make {rec['yield_said']} {p}. "
-                f"{cap(rec['limiting_reagent'])} runs out first, so it sets the limit.")
+                f"{cap(rec['limiting_reagent'])} runs out first, so it sets the limit.") + say_notes(rec.get("notes"))
     if gate == "UNKNOWN_PRODUCT":
         return (f"I haven't seen a batch of {p} made yet, so I can't say how much we can make. Tell me about one "
                 f"batch: what went in, how much came out, and what ran out first. I didn't guess.")
@@ -631,11 +703,20 @@ def say_wide(rec: Dict[str, Any]) -> str:
     return f"I can't work out {p} right now. I didn't guess, and nothing was saved."
 
 
+def say_notes(notes: Optional[List[str]]) -> str:
+    """Stage 1c: the sentence about NOTE ingredients (present, no amount); '' when there are none."""
+    if not notes:
+        return ""
+    many = len(notes) > 1
+    return (f" {cap(say_and(notes))} {'go' if many else 'goes'} in too, with no set amount, so I didn't count "
+            f"{'them' if many else 'it'} toward the limit.")
+
+
 def say_learned(record: Dict[str, Any], brain: W.WideRecipeBook) -> str:
     p, n = record["product"], record["ingredient"]
     unit = brain.recipes[p]["taught_unit"][n]
     q = W.from_base(brain.coefficient(p, n), unit)
-    msg = f"Got it: one {p} needs {say_amount_of(q, unit, n)}."
+    msg = f"Got it: one {p} needs {say_amount_of(q, unit, n)}." + say_notes(record.get("notes"))
     left = brain.unlearned(p)
     if left:
         msg += (f" I still need one batch for each of {say_and(left)} before I can work out {p}."
@@ -682,6 +763,9 @@ def say_refused(record: Dict[str, Any], brain: W.WideRecipeBook) -> str:
         return f"That batch has {d.get('count')} ingredients; I can hold at most {W.MAX_INGREDIENTS} per recipe.{tail}"
     if reason == "REFUSED_UNIT_NOT_IN_TABLE":
         return f"I don't have an exact size for one of those units, so I can't use that batch.{tail}"
+    if reason == W.REFUSED_RAN_OUT_IS_A_NOTE:      # stage 1c
+        return (f"{cap(d.get('ingredient', 'that'))} was given with no exact amount, so I can't learn how much of it "
+                f"one {p} needs from this batch. Tell me the amount in a unit I can size and I'll learn it.{tail}")
     if reason == "REFUSED_ZERO_YIELD":
         return f"That batch made nothing, so it can't teach me anything.{tail}"
     if reason == "REFUSED_RAN_OUT_NOT_IN_BATCH":
@@ -767,6 +851,8 @@ def take_over(loop: Any, licensed: Dict[str, Any], reading: Dict[str, Any]) -> b
         return True
     if reading["status"] == "STOCK":
         known = set(book.ingredients)
+        if W.units_note_on():                      # stage 1c: a NOTE ingredient of a wide recipe is known too
+            known |= set(book.note_names())
         return bool(reading["stock"]) and all(n in known for n in reading["stock"])
     return False
 
@@ -924,14 +1010,19 @@ def _stock_of(loop: Any) -> Dict[str, Tuple[Fraction, str]]:
 def _wide_stock(loop: Any, stock: Dict[str, Tuple[Fraction, str]], tick: int, result: Dict[str, Any],
                 writes_before: int) -> Dict[str, Any]:
     import helm_end_to_end_loop as E
-    form = E.cce.empty_content()
-    form["stocks"] = [{"amount": _cce_amount(E.cce, q), "ref": {"outcome": omega(n)}} for n, (q, _u) in stock.items()]
-    rt = loop.verify_cce_round_trip(form)
-    result["cce_round_trip"] = {k: v for k, v in rt.items() if k != "content"}
-    loop._emit(tick, "CCE skin", **result["cce_round_trip"])
-    if not rt["verified"]:
-        return loop._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED", E.HELMVoiceAdapter.format_round_trip_failed(),
-                            writes_before, "WAIT_FOR_USER")
+    amounts = {n: (q, u) for n, (q, u) in stock.items() if q is not None}
+    if amounts:
+        form = E.cce.empty_content()
+        form["stocks"] = [{"amount": _cce_amount(E.cce, q), "ref": {"outcome": omega(n)}} for n, (q, _u) in amounts.items()]
+        rt = loop.verify_cce_round_trip(form)
+        result["cce_round_trip"] = {k: v for k, v in rt.items() if k != "content"}
+        loop._emit(tick, "CCE skin", **result["cce_round_trip"])
+        if not rt["verified"]:
+            return loop._finish(result, tick, "CLARIFY_ROUND_TRIP_FAILED", E.HELMVoiceAdapter.format_round_trip_failed(),
+                                writes_before, "WAIT_FOR_USER")
+    else:                                          # stage 1c: NOTE entries only: no number to round-trip, none saved
+        result["cce_round_trip"] = {"verified": None, "skipped": "notes only: no amount to round-trip; no number is saved"}
+        loop._emit(tick, "CCE skin", **result["cce_round_trip"])
     held = _stock_of(loop)
     held.update(stock)
     loop.bias_version += 1
@@ -1044,7 +1135,8 @@ def wide_witness(loop: Any, product: str, stock_before: Dict[str, Any], made: An
                             writes_before, "STOP")
     form = E.cce.empty_content()
     form["topic"] = omega(p)
-    form["stocks"] = ([{"amount": _cce_amount(E.cce, q), "ref": {"outcome": omega(n)}} for n, (q, _u) in stock.items()]
+    form["stocks"] = ([{"amount": _cce_amount(E.cce, q), "ref": {"outcome": omega(n)}} for n, (q, _u) in stock.items()
+                       if q is not None]          # stage 1c: NOTE entries carry no amount
                       + [{"amount": _cce_amount(E.cce, made_q), "ref": {"outcome": omega(p)}}])
     rt = loop.verify_cce_round_trip(form)
     result["cce_round_trip"] = {k: v for k, v in rt.items() if k != "content"}
