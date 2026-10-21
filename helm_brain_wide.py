@@ -44,6 +44,23 @@ PARAMETERS (Capacity Rules v0.1: every parameter has a job). `parameter_table()`
                batches), MAX_INGREDIENTS = 10 (the owner's design limit). Not numbers the brain learns.
 Nothing else is learned. The witness log is a record of what the user said; the answer path never reads it.
 
+STAGE 1c (2026-10-20, recipe-shape packet OPEN_QUESTIONS Q7, owner word "build both"): a WIDER UNIT TABLE and NOTE LINES,
+both behind ONE switch, WIDE_UNITS_NOTE, default OFF (`units_note_on()`; environment variable HELM_WIDE_UNITS_NOTE set to
+1 / ON / TRUE / YES turns it on). OFF: every table, reader and record below is exactly reader v5 / brain v1 (the c50
+scoring). ON:
+  - 6 more units with EXACT, PROGRAMMED sizes (UNITS_WIDENED, built only from NAMED_FACTORS_WIDENED, never learned):
+    liter, deciliter, centiliter (SI definitions in milliliters), gallon (4 US quarts), fluid ounce (2 US tablespoons),
+    dozen (12 of the thing counted, a plain-count multiplier). Each factor has a job; the parameter table lists them.
+  - a NOTE line: an ingredient stated with no exact amount ("salt", "pepper to taste", "butter for frying", "1 dash
+    salt", "2 sticks butter", "a pinch of salt", "1 can tomatoes") is recorded as PRESENT in the recipe, never as a
+    requirement, never as the limiting ingredient, and never invented into a number. A unit word with no exact size
+    (NOTE_UNIT_WORDS: stick, dash, handful, ...; and, ON, the table's own-count units with exact_standard False) is NOT
+    a convertible unit: the line is a NOTE line rather than a count in a unit nobody can size. Ranges ("2 to 3 cups"),
+    approximate amounts and names the binder cannot read stay questions, exactly as before.
+  In the brain a NOTE line is a stock entry (None, ""): the recipe keeps a `notes` list beside its support; notes never
+  enter the yield, the limiting reagent, a coefficient or the memory check; a batch whose ran-out ingredient is a note
+  is refused (REFUSED_RAN_OUT_IS_A_NOTE). CLAIM STATUS of stage 1c: ENGINEERED-NOT-VALIDATED; no claim moved.
+
 SWITCH: WIDE_BRAIN, default ON since the owner's ruling of 2026-10-20 ("YES TO WIDE BRAIN: Wide brain becomes HELM's
 canonical brain", SPEC 7.56). `wide_brain_on()` reads an explicit argument, else the environment variable
 HELM_WIDE_BRAIN: "0" / "OFF" / "FALSE" / "NO" turn it off; anything else, or no variable at all, leaves it on. With it
@@ -290,20 +307,125 @@ handfuls drop drops cake cakes glass glasses wineglass wineglasses wineglassful 
 dessertspoons dessertspoonful breakfastcup breakfastcups coffeecup coffeecups dram drams cube cubes strip strips inch
 inches sheet sheets scoop scoops bottle bottles ear ears rasher rashers fillet fillets knob knobs tumbler tumblers
 spoonful spoonfuls deciliter deciliters centiliter centiliters fluid fl quarter-pound""".split())
-UNIT_PLURAL = {"pinch": "pinches", "bunch": "bunches"}
+UNIT_PLURAL = {"pinch": "pinches", "bunch": "bunches", "dozen": "dozen"}
+
+
+# =====================================================================================================================
+# Stage 1c: the WIDE_UNITS_NOTE switch, the widened table and the NOTE vocabulary (see the header). Default OFF.
+# =====================================================================================================================
+WIDE_UNITS_NOTE_ENV = "HELM_WIDE_UNITS_NOTE"
+WIDE_UNITS_NOTE_ON_WORDS = ("1", "ON", "TRUE", "YES")      # the only values that switch stage 1c on
+
+
+def units_note_on(value: Optional[bool] = None) -> bool:
+    """The WIDE_UNITS_NOTE switch: an explicit argument wins; else HELM_WIDE_UNITS_NOTE = 1 / ON / TRUE / YES; else OFF."""
+    if value is not None:
+        return bool(value)
+    return os.environ.get(WIDE_UNITS_NOTE_ENV, "").strip().upper() in WIDE_UNITS_NOTE_ON_WORDS
+
+
+#: 6 more named factors (stage 1c). Programmed exact definitions, never learned. Each converts at least one widened unit.
+NAMED_FACTORS_WIDENED: Dict[str, Dict[str, Any]] = {
+    "ML_PER_L": {"value": Fraction(1000), "job": "1 liter = 1000 milliliters (SI, exact by definition)"},
+    "ML_PER_DL": {"value": Fraction(100), "job": "1 deciliter = 100 milliliters (SI, exact by definition)"},
+    "ML_PER_CL": {"value": Fraction(10), "job": "1 centiliter = 10 milliliters (SI, exact by definition)"},
+    "QUART_PER_GALLON": {"value": Fraction(4), "job": "1 US gallon = 4 quarts (US)"},
+    "TBSP_PER_FLOZ": {"value": Fraction(2), "job": "1 US fluid ounce = 2 tablespoons (US; 29.5735295625 mL exactly)"},
+    "EACH_PER_DOZEN": {"value": Fraction(12), "job": "1 dozen = 12 of the thing counted (a plain-count multiplier)"},
+}
+
+
+def _fw(*names: str) -> Fraction:
+    out = Fraction(1)
+    for n in names:
+        out *= (NAMED_FACTORS.get(n) or NAMED_FACTORS_WIDENED[n])["value"]
+    return out
+
+
+#: the widened units (stage 1c, ON only). Built ONLY from the named factors of both tables; every one has an exact standard.
+UNITS_WIDENED: Dict[str, Dict[str, Any]] = {
+    "liter": {"kind": VOLUME, "base": _fw("ML_PER_L") / _fw("ML_PER_TSP"), "factors": ["ML_PER_L", "ML_PER_TSP"],
+              "exact_standard": True},
+    "deciliter": {"kind": VOLUME, "base": _fw("ML_PER_DL") / _fw("ML_PER_TSP"), "factors": ["ML_PER_DL", "ML_PER_TSP"],
+                  "exact_standard": True},
+    "centiliter": {"kind": VOLUME, "base": _fw("ML_PER_CL") / _fw("ML_PER_TSP"), "factors": ["ML_PER_CL", "ML_PER_TSP"],
+                   "exact_standard": True},
+    "gallon": {"kind": VOLUME, "base": _fw("TSP_PER_TBSP", "TBSP_PER_CUP", "CUP_PER_PINT", "PINT_PER_QUART", "QUART_PER_GALLON"),
+               "factors": ["TSP_PER_TBSP", "TBSP_PER_CUP", "CUP_PER_PINT", "PINT_PER_QUART", "QUART_PER_GALLON"],
+               "exact_standard": True},
+    "fluid ounce": {"kind": VOLUME, "base": _fw("TSP_PER_TBSP", "TBSP_PER_FLOZ"), "factors": ["TSP_PER_TBSP", "TBSP_PER_FLOZ"],
+                    "exact_standard": True},
+    "dozen": {"kind": COUNT, "base": _fw("EACH_PER_DOZEN"), "factors": ["EACH_PER_DOZEN"], "exact_standard": True},
+}
+UNIT_WORDS_WIDENED: Dict[str, str] = {}
+for _u, _forms in {"liter": "liter liters litre litres l", "deciliter": "deciliter deciliters decilitre decilitres dl",
+                   "centiliter": "centiliter centiliters centilitre centilitres cl", "gallon": "gallon gallons gal gals",
+                   "dozen": "dozen dozens doz"}.items():
+    for _w in _forms.split():
+        UNIT_WORDS_WIDENED[_w] = _u
+#: two-word spellings of the fluid ounce (ON only; "fl"/"fluid" alone stay a UNIT_NOT_IN_TABLE question)
+TWO_WORD_UNITS_WIDENED: Dict[Tuple[str, str], str] = {("fluid", "ounce"): "fluid ounce", ("fluid", "ounces"): "fluid ounce",
+                                                       ("fl", "oz"): "fluid ounce", ("fl", "ozs"): "fluid ounce",
+                                                       ("fluid", "oz"): "fluid ounce"}
+#: unit words with NO exact size (ON: a line in one of these is a NOTE line, never a count in a unit nobody can size).
+#: Exactly OTHER_UNIT_WORDS minus the widened words minus the fluid-ounce halves; a test pins that equality.
+NOTE_UNIT_WORDS = set("""stick sticks bag bags box boxes jar jars carton cartons dash dashes pack packs head heads sprig
+sprigs piece pieces stalk stalks handful handfuls drop drops cake cakes glass glasses wineglass wineglasses wineglassful
+peck pecks bushel bushels dessertspoon dessertspoons dessertspoonful breakfastcup breakfastcups coffeecup coffeecups
+dram drams cube cubes strip strips inch inches sheet sheets scoop scoops bottle bottles ear ears rasher rashers fillet
+fillets knob knobs tumbler tumblers spoonful spoonfuls quarter-pound""".split())
+#: ON: the table's own-count units (exact_standard False) are read as NOTE lines too (the owner's rule: a unit with no
+#: exact size is not a convertible unit; present, no amount). OFF: they stay their own count unit, as scored in c50.
+OWN_UNITS_AS_NOTES = frozenset(u for u, d in UNITS.items() if not d["exact_standard"])
+REFUSED_RAN_OUT_IS_A_NOTE = "REFUSED_RAN_OUT_IS_A_NOTE"
+
+
+def unit_table() -> Dict[str, Dict[str, Any]]:
+    """The active unit table: the 20 survey units, plus the 6 widened units when WIDE_UNITS_NOTE is on."""
+    if units_note_on():
+        merged = dict(UNITS)
+        merged.update(UNITS_WIDENED)
+        return merged
+    return UNITS
+
+
+def named_factors() -> Dict[str, Dict[str, Any]]:
+    """The active factor table: 9 programmed factors, 15 when WIDE_UNITS_NOTE is on."""
+    if units_note_on():
+        merged = dict(NAMED_FACTORS)
+        merged.update(NAMED_FACTORS_WIDENED)
+        return merged
+    return NAMED_FACTORS
+
+
+def is_note_entry(v: Any) -> bool:
+    """A stock value that says PRESENT with no amount: None, or (None, unit)."""
+    return v is None or (isinstance(v, (tuple, list)) and len(v) == 2 and v[0] is None)
 
 
 def unit_of(word: str) -> Optional[str]:
     """A table unit for one written word ('Cups', 'tbsp.', 'lbs') or None. '' (no unit) is a plain count."""
-    return UNIT_WORDS.get(word.lower().rstrip("."))
+    w = word.lower().rstrip(".")
+    u = UNIT_WORDS.get(w)
+    if u is None and units_note_on():
+        u = UNIT_WORDS_WIDENED.get(w)
+    return u
+
+
+def unit_of_two_words(first: str, second: str) -> Optional[str]:
+    """ON only: 'fluid ounce', 'fl oz' -> 'fluid ounce'; else None."""
+    if not units_note_on():
+        return None
+    return TWO_WORD_UNITS_WIDENED.get((first.lower().rstrip("."), second.lower().rstrip(".")))
 
 
 def unit_kind(unit: str) -> str:
     if not unit:
         return COUNT
-    if unit not in UNITS:
+    table = unit_table()
+    if unit not in table:
         raise WideRefused("UNIT_NOT_IN_TABLE", unit)
-    return UNITS[unit]["kind"]
+    return table[unit]["kind"]
 
 
 def to_base(amount: Any, unit: str) -> Tuple[str, Fraction]:
@@ -312,11 +434,11 @@ def to_base(amount: Any, unit: str) -> Tuple[str, Fraction]:
     if not unit:
         return COUNT, q
     kind = unit_kind(unit)
-    return kind, q * UNITS[unit]["base"]
+    return kind, q * unit_table()[unit]["base"]
 
 
 def from_base(base_amount: Fraction, unit: str) -> Fraction:
-    return Fraction(base_amount) / (UNITS[unit]["base"] if unit else 1)
+    return Fraction(base_amount) / (unit_table()[unit]["base"] if unit else 1)
 
 
 def convert(amount: Any, unit_from: str, unit_to: str) -> Fraction:
@@ -353,11 +475,14 @@ def _canon(obj: Any) -> bytes:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("ascii")
 
 
-def _stock_entry(v: Any) -> Tuple[Fraction, str]:
-    """A stock value: (amount, unit) or a bare amount (a plain count)."""
+def _stock_entry(v: Any) -> Tuple[Optional[Fraction], str]:
+    """A stock value: (amount, unit) or a bare amount (a plain count). Stage 1c ON: None or (None, unit) is a NOTE entry
+    (present, no amount) and comes back as (None, "")."""
+    if units_note_on() and is_note_entry(v):
+        return None, ""
     if isinstance(v, (tuple, list)) and len(v) == 2:
         unit = v[1] or ""
-        if unit and unit not in UNITS:
+        if unit and unit not in unit_table():
             raise WideRefused("UNIT_NOT_IN_TABLE", unit)
         return parse_quantity(v[0]), unit
     return parse_quantity(v), ""
@@ -407,6 +532,18 @@ class WideRecipeBook:
     def support_of(self, product: str) -> List[str]:
         return list(self.recipes[norm_name(product)]["support"])
 
+    def notes_of(self, product: str) -> List[str]:
+        """Stage 1c: the ingredients recorded as PRESENT with no amount (never a requirement). [] before any note."""
+        return list(self.recipes[norm_name(product)].get("notes", []))
+
+    def note_names(self) -> List[str]:
+        out: List[str] = []
+        for r in self.recipes.values():
+            for n in r.get("notes", []):
+                if n not in out:
+                    out.append(n)
+        return out
+
     def unlearned(self, product: str) -> List[str]:
         r = self.recipes[norm_name(product)]
         return [n for n in r["support"] if r["a"][n] is None]
@@ -434,11 +571,15 @@ class WideRecipeBook:
     # ------------------------------------------------------------------ state
     def learned_state(self) -> Dict[str, Any]:
         """Everything the brain has learned or been given as structure. Coefficients are the only numbers."""
-        return {"kind": self.kind,
-                "recipes": {p: {"support": list(r["support"]), "kinds": dict(r["kinds"]),
-                                "taught_unit": dict(r["taught_unit"]),
-                                "a": {n: frac_text(r["a"][n]) for n in r["support"]}}
-                            for p, r in self.recipes.items()}}
+        state = {"kind": self.kind,
+                 "recipes": {p: {"support": list(r["support"]), "kinds": dict(r["kinds"]),
+                                 "taught_unit": dict(r["taught_unit"]),
+                                 "a": {n: frac_text(r["a"][n]) for n in r["support"]}}
+                             for p, r in self.recipes.items()}}
+        for p, r in self.recipes.items():          # stage 1c: notes are structure (names), written only when present
+            if r.get("notes"):
+                state["recipes"][p]["notes"] = list(r["notes"])
+        return state
 
     def learned_digest(self) -> str:
         return hashlib.sha256(_canon(self.learned_state())).hexdigest()
@@ -476,7 +617,10 @@ class WideRecipeBook:
         r = self.recipes[p]
         given = {norm_name(k): _stock_entry(v) for k, v in stock.items()}
         rec["count_items"] = [n for n in r["support"] if r["kinds"][n] == COUNT]
-        rec["absent"] = [n for n in r["support"] if n not in given]
+        if r.get("notes"):                         # stage 1c: present, no amount; never in the yield or the limit
+            rec["notes"] = list(r["notes"])
+        # a support ingredient given with no amount (a NOTE entry, stage 1c) is as unknown as one not given at all
+        rec["absent"] = [n for n in r["support"] if n not in given or given[n][0] is None]
         rec["unlearned"] = [n for n in r["support"] if r["a"][n] is None]
         if rec["absent"] or rec["unlearned"]:
             rec["gate"] = "G1"
@@ -565,22 +709,30 @@ class WideRecipeBook:
             return refuse("REFUSED_TOO_MANY_INGREDIENTS", count=len(stock), limit=MAX_INGREDIENTS)
         if cell not in stock:
             return refuse("REFUSED_RAN_OUT_NOT_IN_BATCH", ran_out=cell, batch=sorted(stock))
-        if any(q < 0 for q, _ in stock.values()):
+        # stage 1c: NOTE entries (None, "") are present with no amount; they are structure, never a number
+        notes = [n for n, (q, _) in stock.items() if q is None]
+        if cell in notes:
+            return refuse(REFUSED_RAN_OUT_IS_A_NOTE, ingredient=cell)
+        amounts = {n: v for n, v in stock.items() if v[0] is not None}
+        if any(q < 0 for q, _ in amounts.values()):
             return refuse("REFUSED_NEGATIVE_AMOUNT")
         book = copy.deepcopy(self.recipes)
         is_new = p not in book
         if is_new:
-            book[p] = {"support": list(stock), "kinds": {n: unit_kind(u) for n, (_, u) in stock.items()},
-                       "taught_unit": {}, "a": {n: None for n in stock}, "introduced_by": seed, "lessons": []}
+            book[p] = {"support": list(amounts), "kinds": {n: unit_kind(u) for n, (_, u) in amounts.items()},
+                       "taught_unit": {}, "a": {n: None for n in amounts}, "introduced_by": seed, "lessons": []}
         r = book[p]
-        missing = [n for n in r["support"] if n not in stock]
-        extra = [n for n in stock if n not in r["support"]]
+        missing = [n for n in r["support"] if n not in amounts]
+        extra = [n for n in amounts if n not in r["support"]]
         if missing or extra:
             return refuse("REFUSED_SUPPORT_MISMATCH", missing=missing, extra=extra)
-        wrong_kind = [n for n, (_, u) in stock.items() if unit_kind(u) != r["kinds"][n]]
+        wrong_kind = [n for n, (_, u) in amounts.items() if unit_kind(u) != r["kinds"][n]]
         if wrong_kind:
             return refuse("REFUSED_UNIT_KIND_MISMATCH", ingredients=wrong_kind)
-        base = {n: to_base(q, u)[1] for n, (q, u) in stock.items()}
+        new_notes = [n for n in notes if n not in r.get("notes", [])]
+        if new_notes:
+            r["notes"] = list(r.get("notes", [])) + new_notes
+        base = {n: to_base(q, u)[1] for n, (q, u) in amounts.items()}
         value = base[cell] / made                                   # witnessed_lr_ratio_v1, exact
         old = r["a"][cell]
         if old is not None and old != value:
@@ -610,17 +762,20 @@ class WideRecipeBook:
                           "memory_check_ok": False, "detail": {"faded_seeds": faded}}
         r["lessons"].append({"seed": seed, "made": frac_text(made), "ran_out": cell,
                              "stock_base": {n: frac_text(v) for n, v in base.items()}})
-        return book, {"reason": ADMITTED, "eta_eps": receipt, "memory_check_ok": True, "faded_seeds": [],
-                      "new_recipe": is_new, "ingredient": cell, "value_base": frac_text(value),
-                      "value_said": say_measure(from_base(value, r["taught_unit"][cell]), r["taught_unit"][cell]),
-                      "detail": {}}
+        record = {"reason": ADMITTED, "eta_eps": receipt, "memory_check_ok": True, "faded_seeds": [],
+                  "new_recipe": is_new, "ingredient": cell, "value_base": frac_text(value),
+                  "value_said": say_measure(from_base(value, r["taught_unit"][cell]), r["taught_unit"][cell]),
+                  "detail": {}}
+        if notes:                                  # stage 1c: the batch's present-no-amount ingredients, by name
+            record["notes"] = notes
+        return book, record
 
     def replay(self, rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         """Replay witnessed rows, in order, on a FRESH brain. Changes nothing here."""
         fresh = WideRecipeBook()
         out = []
         for row in rows:
-            stock = {k: (Fraction(v[0]), v[1]) for k, v in row["stock_before"].items()}
+            stock = {k: ((Fraction(v[0]) if v[0] is not None else None), v[1]) for k, v in row["stock_before"].items()}
             rec = fresh.witness(row["product"], stock, Fraction(row["made"]) if row["made"] else 0, row["ran_out"])
             out.append({"seed": row["seed"], "admitted": rec["admitted"], "reason": rec["reason"]})
         return {"rows": out, "learned_digest": fresh.learned_digest()}
@@ -675,10 +830,10 @@ def parameter_table(brain: Optional[WideRecipeBook] = None) -> List[Dict[str, An
          "per_recipe": {p: {"ingredients": len(r["support"]),
                             "filled": sum(1 for v in r["a"].values() if v is not None)}
                         for p, r in brain.recipes.items()}},
-        {"class": "unit factor", "learned": False, "count": len(NAMED_FACTORS),
+        {"class": "unit factor", "learned": False, "count": len(named_factors()),
          "job": "convert a stated amount exactly into its kind's base unit (one conversion each)",
          "how_learned": "never learned: exact definitions, programmed",
-         "factors": {k: {"value": _exact_decimal(v["value"]), "job": v["job"]} for k, v in NAMED_FACTORS.items()}},
+         "factors": {k: {"value": _exact_decimal(v["value"]), "job": v["job"]} for k, v in named_factors().items()}},
     ]
 
 
@@ -695,6 +850,10 @@ def print_parameter_table(brain: Optional[WideRecipeBook] = None) -> List[Dict[s
         print(f"  {k:<15} = {v['value']:<26} {v['job']}")
     print("  structure (not learned numbers): product names, ingredient names, recipe supports, unit kinds, "
           f"MAX_INGREDIENTS = {MAX_INGREDIENTS}")
+    if units_note_on():
+        print(f"  stage 1c WIDE_UNITS_NOTE is ON: {len(UNITS_WIDENED)} widened units ({', '.join(UNITS_WIDENED)}) from "
+              f"{len(NAMED_FACTORS_WIDENED)} more programmed factors; NOTE lines (present, no amount) are structure, "
+              "never a number")
     print("  records (not parameters; the answer path never reads them): the witness log, and each recipe's saved "
           "admitted batches, which the memory check re-reads before admitting a new batch")
     print("  no other learned numbers exist (checked by walking the learned state)")

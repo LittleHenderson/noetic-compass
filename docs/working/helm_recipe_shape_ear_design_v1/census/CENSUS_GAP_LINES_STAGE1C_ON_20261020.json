@@ -1,0 +1,162 @@
+{
+ "brain_file_sha256": "7ac65404ff5f2d76d57a9eed9719971cfbce0799449cc5369f8b1211af2b6dc0",
+ "floor": {
+  "gap_recipes_found": 1477,
+  "gap_refused_lines_found": 1974,
+  "gap_refused_lines_required": 256,
+  "note": "answer-key rule and spent-exam exclusions not applied (custodian steps); this is an upper bound",
+  "result": "PASS_FLOOR"
+ },
+ "frames": {
+  "PG": {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\frames\\FRAME_R_PG.jsonl",
+   "sha256": "c983e065bc1783ea9a4807612edafe8168ebb8c09b56a264dfea5ca53cb3aa5e"
+  },
+  "WB": {
+   "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\x_real\\frames\\FRAME_R_WB.jsonl",
+   "sha256": "6a0d7cc12d0133991bf44c666ecae80ff1239760d0fcbd9aad62b11842563ddc"
+  }
+ },
+ "gap_refused_codes": {
+  "AMOUNT_APPROXIMATE": 19,
+  "AMOUNT_HAS_TWO_PARTS": 100,
+  "AMOUNT_IS_A_RANGE": 955,
+  "AMOUNT_RELATIVE": 13,
+  "NO_AMOUNT": 206,
+  "NO_NAME": 662,
+  "SAME_INGREDIENT_TWICE": 1,
+  "UNREAD_CLAUSE": 18
+ },
+ "max_lines": 10,
+ "per_source": {
+  "PG": {
+   "counts": {
+    "gap_recipes": 712,
+    "gap_refused_lines": 893,
+    "lines": 59848,
+    "lines_read": 57939,
+    "lines_refused": 1909,
+    "recipes": 10368,
+    "recipes_all_read": 9533,
+    "recipes_mixed": 806,
+    "recipes_none_read": 29,
+    "recipes_over_max_lines": 489
+   },
+   "gap_recipes_by_n_lines": {
+    "10": 22,
+    "2": 54,
+    "3": 99,
+    "4": 135,
+    "5": 111,
+    "6": 104,
+    "7": 90,
+    "8": 65,
+    "9": 32
+   },
+   "gap_recipes_by_refused_lines": {
+    "1": 589,
+    "2": 88,
+    "3": 21,
+    "4": 8,
+    "5": 5,
+    "8": 1
+   },
+   "gap_refused_codes": {
+    "AMOUNT_APPROXIMATE": 3,
+    "AMOUNT_HAS_TWO_PARTS": 61,
+    "AMOUNT_IS_A_RANGE": 463,
+    "AMOUNT_RELATIVE": 4,
+    "NO_AMOUNT": 53,
+    "NO_NAME": 308,
+    "UNREAD_CLAUSE": 1
+   },
+   "refused_codes": {
+    "AMOUNT_APPROXIMATE": 3,
+    "AMOUNT_HAS_TWO_PARTS": 65,
+    "AMOUNT_IS_A_RANGE": 481,
+    "AMOUNT_RELATIVE": 5,
+    "NO_AMOUNT": 84,
+    "NO_NAME": 1270,
+    "UNREAD_CLAUSE": 1
+   }
+  },
+  "WB": {
+   "counts": {
+    "gap_recipes": 765,
+    "gap_refused_lines": 1081,
+    "lines": 26443,
+    "lines_read": 24698,
+    "lines_refused": 1745,
+    "recipes": 3318,
+    "recipes_all_read": 2204,
+    "recipes_mixed": 1113,
+    "recipes_none_read": 1,
+    "recipes_over_max_lines": 771
+   },
+   "gap_recipes_by_n_lines": {
+    "10": 105,
+    "2": 17,
+    "3": 31,
+    "4": 70,
+    "5": 105,
+    "6": 96,
+    "7": 103,
+    "8": 130,
+    "9": 108
+   },
+   "gap_recipes_by_refused_lines": {
+    "1": 551,
+    "2": 146,
+    "3": 41,
+    "4": 20,
+    "5": 7
+   },
+   "gap_refused_codes": {
+    "AMOUNT_APPROXIMATE": 16,
+    "AMOUNT_HAS_TWO_PARTS": 39,
+    "AMOUNT_IS_A_RANGE": 492,
+    "AMOUNT_RELATIVE": 9,
+    "NO_AMOUNT": 153,
+    "NO_NAME": 354,
+    "SAME_INGREDIENT_TWICE": 1,
+    "UNREAD_CLAUSE": 17
+   },
+   "refused_codes": {
+    "AMOUNT_APPROXIMATE": 26,
+    "AMOUNT_HAS_TWO_PARTS": 60,
+    "AMOUNT_IS_A_RANGE": 828,
+    "AMOUNT_RELATIVE": 12,
+    "NO_AMOUNT": 207,
+    "NO_NAME": 579,
+    "SAME_INGREDIENT_TWICE": 4,
+    "UNREAD_CLAUSE": 29
+   }
+  }
+ },
+ "reader_file_sha256": "376a27d79ba74ca1077b06fba523770b2b1d0d2eba3fab8dc201b9891050ba75",
+ "refused_codes": {
+  "AMOUNT_APPROXIMATE": 29,
+  "AMOUNT_HAS_TWO_PARTS": 125,
+  "AMOUNT_IS_A_RANGE": 1309,
+  "AMOUNT_RELATIVE": 17,
+  "NO_AMOUNT": 291,
+  "NO_NAME": 1849,
+  "SAME_INGREDIENT_TWICE": 4,
+  "UNREAD_CLAUSE": 30
+ },
+ "schema": "helm.census.gap_lines/1",
+ "seconds": 2.1,
+ "totals": {
+  "gap_recipes": 1477,
+  "gap_refused_lines": 1974,
+  "lines": 86291,
+  "lines_read": 82637,
+  "lines_refused": 3654,
+  "recipes": 13686,
+  "recipes_all_read": 11737,
+  "recipes_mixed": 1919,
+  "recipes_none_read": 30,
+  "recipes_over_max_lines": 1260
+ },
+ "utc": "2026-10-21T00:41:05Z"
+}
