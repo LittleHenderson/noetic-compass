@@ -1,0 +1,133 @@
+{
+ "host_exact_suite_list": {
+  "as_run_here": {
+   "exit": 0,
+   "scratch": "<tempdir>",
+   "wave1_folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\deps\\HELM_R1_W1_20261015"
+  },
+  "c54_host_for_comparison": {
+   "detail": "skipped=1",
+   "names": 11,
+   "ran": 245,
+   "verdict": "OK"
+  },
+  "c55_host_for_comparison": {
+   "detail": "skipped=1",
+   "names": 12,
+   "ran": 273,
+   "verdict": "OK"
+  },
+  "command_form": [
+   "python",
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "-c",
+   "<HELM_LOADER>",
+   "<scratch>/helm_now_tests",
+   "test_helm_brain_wide",
+   "test_helm_end_to_end_loop",
+   "test_helm_english_in",
+   "test_helm_english_in_stock_frame",
+   "test_helm_voice",
+   "test_helm_faces_in",
+   "test_helm_triad",
+   "test_helm_wide_alongside",
+   "test_helm_cas_address",
+   "test_helm_units_note",
+   "test_helm_pin_hygiene",
+   "test_helm_reader_gap"
+  ],
+  "count": 12,
+  "cwd": "<scratch>/helm_now_tests",
+  "detail": "skipped=1",
+  "env": {
+   "HELM_CANONICAL_BRAIN_DIR": "<wave-1 package folder>",
+   "HELM_SESSION_DIR": "<scratch>/helm_test_sessions",
+   "HELM_WIDE_BRAIN": "unset",
+   "PYTHONPATH": "unset (-I ignores it anyway)"
+  },
+  "equals_this_tools_typed_copy": true,
+  "loader": "import sys, unittest; sys.path.insert(0, sys.argv[1]); unittest.main(module=None, argv=['unittest', '-v'] + sys.argv[2:])",
+  "names": [
+   "test_helm_brain_wide",
+   "test_helm_end_to_end_loop",
+   "test_helm_english_in",
+   "test_helm_english_in_stock_frame",
+   "test_helm_voice",
+   "test_helm_faces_in",
+   "test_helm_triad",
+   "test_helm_wide_alongside",
+   "test_helm_cas_address",
+   "test_helm_units_note",
+   "test_helm_pin_hygiene",
+   "test_helm_reader_gap"
+  ],
+  "pin_line": [
+   "test_off_is_byte_identical_to_the_pre_change_code (test_helm_cas_address.C_LoopStamps.test_off_is_byte_identical_to_the_pre_change_code) ... ok"
+  ],
+  "ran": [
+   280
+  ],
+  "ran_ok_lines": [
+   "Ran 280 tests in 5.254s",
+   "OK (skipped=1)"
+  ],
+  "rule": "A-R1W7-6 (kept in A-R1W7-8, A-R1W7-9 and A-R1W7-10): the seal step runs EXACTLY the host's HELM suite list with the host's command form, from a fresh extract",
+  "seconds": 6.7,
+  "skip_lines": [
+   "helm_brain_canonical.py and the reader are byte-identical to the thread branch this build started from. ... skipped 'base commit not reachable in this checkout'"
+  ],
+  "source_in_the_sealed_package": "kit/run_r1w7.py HELM_TESTS (the script kit/STAGE_R1W7.json argv[0] runs)",
+  "stage_plan_argv0": "kit/run_r1w7.py",
+  "v6_seal_for_comparison": {
+   "detail": "skipped=1",
+   "names": 11,
+   "ran": 245,
+   "verdict": "OK"
+  },
+  "v7_seal_for_comparison": {
+   "detail": "skipped=1",
+   "names": 12,
+   "ran": 271,
+   "verdict": "OK"
+  },
+  "v8_seal_for_comparison": {
+   "detail": "skipped=1",
+   "names": 12,
+   "ran": 273,
+   "verdict": "OK"
+  },
+  "verdict": "OK"
+ },
+ "members": 203,
+ "members_rehashed_bad": [],
+ "package_freeze_sha256": "ce9495fafd5507d1c2b1dbc0c6b00df4305034393720ef21528af1f210581355",
+ "package_zip_sha256": "ad3fb98cd3254963263929747791d151949c2f50923672e4bcbf3fc14490942c",
+ "platform": "win32",
+ "python": "3.14.0",
+ "r1w7_suites_from_sealed_extract": {
+  "detail": "",
+  "multi_qty_lines": [
+   "test_an_already_unrepresentable_key_stays_so_and_keeps_its_reasons (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_an_already_unrepresentable_key_stays_so_and_keeps_its_reasons) ... ok",
+   "test_and_joined_second_amount (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_and_joined_second_amount) ... ok",
+   "test_comma_joined_second_amount (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_comma_joined_second_amount) ... ok",
+   "test_idempotent (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_idempotent) ... ok",
+   "test_one_amount_is_one_amount (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_one_amount_is_one_amount) ... ok",
+   "test_plain_lines_are_untouched (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_plain_lines_are_untouched) ... ok",
+   "test_two_amounts_after_a_separator (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_two_amounts_after_a_separator) ... ok"
+  ],
+  "ran": [
+   41
+  ],
+  "ran_ok_lines": [
+   "Ran 41 tests in 63.454s",
+   "OK"
+  ],
+  "seconds": 63.7,
+  "verdict": "OK"
+ },
+ "schema": "helm.r1w7.test-counts/2",
+ "sealed_helm_now_unchanged_by_the_suites": true
+}

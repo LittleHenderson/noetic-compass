@@ -1,0 +1,81 @@
+{
+ "all_other_key_fields_equal": true,
+ "carrier_sha256_equal": {
+  "INPUTS_CONV_X7.json": true,
+  "INPUTS_NOISE_X7.json": true,
+  "INPUTS_REAL_X7.json": true
+ },
+ "inputs_sha256_equal": {
+  "INPUTS_CONV_X7.json": true,
+  "INPUTS_NOISE_X7.json": true,
+  "INPUTS_REAL_X7.json": true,
+  "KEYS_CONV_X7.json": true,
+  "POOLS_X7.json": true
+ },
+ "items": 128,
+ "key_fields": [
+  "answer",
+  "id",
+  "lessons",
+  "representable"
+ ],
+ "kind_field": null,
+ "multi_qty_item_ids": [
+  "RW:pg:63007@34737",
+  "RW:wb:425075:4511682",
+  "RW:wb:202496:4494726",
+  "RW:wb:457675:4587499",
+  "RW:pg:65706@19804",
+  "RW:pg:65507@35986"
+ ],
+ "multi_qty_items": 6,
+ "multi_qty_lines_per_item": [
+  1,
+  1,
+  1,
+  1,
+  1,
+  1
+ ],
+ "tagged_items_have_answer_in_v6": [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true
+ ],
+ "tagged_items_kind_in_v6": null,
+ "tagged_items_were_representable_in_v6": 6,
+ "tagged_items_why_not_v6": [
+  [],
+  [],
+  [],
+  [],
+  [],
+  []
+ ],
+ "tagged_items_why_not_v7": [
+  [
+   "line2:MULTI_QTY"
+  ],
+  [
+   "line5:MULTI_QTY"
+  ],
+  [
+   "line0:MULTI_QTY"
+  ],
+  [
+   "line3:MULTI_QTY"
+  ],
+  [
+   "line4:MULTI_QTY"
+  ],
+  [
+   "line7:MULTI_QTY"
+  ]
+ ],
+ "untagged_items_representable_equal": true,
+ "v6_representable": 120,
+ "v7_representable": 114
+}
