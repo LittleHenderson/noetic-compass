@@ -1,5 +1,5 @@
 {
- "commit": "f45a85706a9d8b9177e4b7279453d1538c12045d",
+ "commit": "ad4fde734257cfd5e94ff1b54b8891df9d2e3003",
  "files": {
   "cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
    "bytes": 92461,
@@ -581,6 +581,10 @@
    "bytes": 19890,
    "sha256": "7edc93e05a0381db44fccf4615d4327ba62b58d9c041a6ddf3591adf7e2cbde4"
   },
+  "helm_test_pins.py": {
+   "bytes": 4885,
+   "sha256": "091d31cbae07dcb9796e418eb32fea416534bcc9d0aaecf3ff7057f7c0fd9b07"
+  },
   "helm_triad.py": {
    "bytes": 24100,
    "sha256": "0d9d0bdaf3ba594e49c72c81f8f2a5749317cee1611906d8b847f8db6c00db1e"
@@ -606,8 +610,8 @@
    "sha256": "598c8c075e32a68e29fcf7639f18ee5364717cb1baea5443fa2a4dff47258f2d"
   },
   "test_helm_cas_address.py": {
-   "bytes": 17795,
-   "sha256": "50dfac0fe5fd7f8ba0d6110a412f738b755ac6dec6562dbd3db637936b4cea0d"
+   "bytes": 18630,
+   "sha256": "3870c01eec6cd66e33b3d6f5bb97d68ef705a7ea6cec4c9cc0d84de9ca6ff963"
   },
   "test_helm_chat_nuance.py": {
    "bytes": 14813,
@@ -632,6 +636,10 @@
   "test_helm_memory.py": {
    "bytes": 2348,
    "sha256": "5928cdc7c187feaa1cd593acf29eecffd548832024bdd938297bf4d4d496a3c0"
+  },
+  "test_helm_pin_hygiene.py": {
+   "bytes": 8998,
+   "sha256": "66b43b2ad4ef45d0b0591ee6260ff1e18dcf5c65496aaacad16b0e2c0e928e00"
   },
   "test_helm_triad.py": {
    "bytes": 20265,
