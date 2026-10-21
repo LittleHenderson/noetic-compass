@@ -1676,6 +1676,14 @@ def p_roadmap(S: dict) -> str:
     need(S, "7.110", "A-TALK-1", "LLM_WRITTEN_ONLY", "TALK TRAIN at 3 USD", "TALK EXAM at 1 USD", "`C0`–`C9`", "NOT A PRESENT CAPABILITY")
     need(S, "7.111", "ENGINEERED-NOT-VALIDATED", "26 new tests")
     need(S, "7.49", "ENGINEERED-NOT-VALIDATED")
+    need(S, "7.38", "INCONCLUSIVE", "NOT LICENSED")
+    need(S, "7.31", "round trip 576/576")
+    need(S, "7.48", "cube store", "ENGINEERED-NOT-VALIDATED")
+    need(S, "7.77", "EYE_SCAN_EARNED_KEEP", "0 Eye writes")
+    need(S, "7.78", "EYE_PAIRING_EARNED_KEEP", "0 Eye writes")
+    need(S, "7.98", "session log")
+    need(S, "7.24", "recipe")
+    need(S, "7.56", "CANONICAL BRAIN POINTER")
     need(S, "7.60", "ENGINEERED-NOT-VALIDATED")
     # (meaning, what exists today, what would have to be built and tested)
     talk = [
@@ -1715,6 +1723,24 @@ def p_roadmap(S: dict) -> str:
          "The same small translator that is HELM's ear (CAS symbols on one side, English on the other) trained the other way round: it takes the brain's checked receipt (the facts, amounts and names HELM actually recorded) plus the CAS tags already stamped on the record (which of the 40 states, which Register) and writes the English reply, so HELM need not depend on fixed templated sentences. It may choose words, never facts.",
          "Nothing. The ear has only ever been trained English to CAS. The design is Part M of amendment A-TALK-1 ({s7110}): every number and name must be copied from the receipt; the existing voice guard rejects any sentence that names a fact the receipt does not hold and the template answers instead; 0 invented facts is a must-hold check. The owner's words: \"SEE THIS IS WHY I WANT A TRANSFORMER TRAINED ON THE 40 ELEMENTS BECAUSE THAT CAN CONTRIBUTE TO THE NUANCE HUMAN LIKE TONE ... HELM DOESN'T HAVE TO DEPEND ON DETERMINISTIC TEMPLATED PHRASES\".",
          "Train it on (receipt + tags to English) pairs, rule-made and AI-written from several model families; score it against today's templated voice on the same turns: same records exactly, no fewer plain replies, varied wording on repeated receipts, and a tone that matches the key's state label at least 8 of 64 turns more often; about 2.6 USD together with the ear's retraining, inside TALK TRAIN at 3 USD if the sealed count fits, else a separate line."),
+        # Items 10 to 13: the owner's statement of intent of 2026-10-21, 09:42 PDT (quoted below the first quote)
+        ("Teaching HELM a new subject by ordinary question-and-answer conversation, until it understands",
+         "A person teaches HELM something it does not know the way one person teaches another: by talking, asking and answering, in ordinary sentences, until HELM gets it. It should sound natural throughout. \"Understood\" would be shown by a test, not by HELM saying so.",
+         "Lessons by typed sentences only, one fact per line, kitchen only: the chat rounds taught stock and recipe lines one at a time ({s7098} to {s7108}); the talk packet designs the three layers that would carry a normal conversation ({s7110}). No lesson arrives as a back-and-forth conversation today, and no test of \"it understood\" exists.",
+         "A written test for \"understood\" first (the subject asked back in fresh words, in the right amounts, with HELM's own checker as the judge, never a feeling of understanding); then a teaching path where each turn of the conversation can add, correct or withdraw a fact through the same checker; a fresh exam of taught subjects the builder never sees, scored against the cheapest trick (lessons typed as plain lines)."),
+        ("Memory compacted into CAS, with clues to its subject, as space fills",
+         "When HELM's memory runs short, old memories are not thrown away: each is folded into a short CAS statement (HELM's exact inner language) that keeps a clue to what the memory was about, so it takes less room and can be rebuilt later.",
+         "A bounded memory of this session's turns and the person's own sentences, kept word for word, with a session log on disk ({s7049}, {s7098}); the CAS compiler and the controlled CAS English {roundtrip} that turn a checked statement into English and back exactly, 576 of 576 ({s7031}); every saved fact leaves a {receipt} in the {cubestore} ({s7048}). Nothing compacts today: when the memory is full, the oldest sentences are dropped.",
+         "A compaction rule (which memories, when, into which CAS statement, with which clue) written down before any code; a rebuild rule that turns the statement back into the facts; a check that a rebuilt memory equals the saved one or is marked lossy; an exam where HELM answers from compacted memory as well as from full memory, against the cheapest trick (drop the oldest). The owner named the parts (09:50 PDT, quoted below): the CTT (CAS symbols on one side, English on the other) and the CAS compiler as the compaction and rebuild machinery, the statement checked by the compiler and the round trip as the equality check; the CAS SDG, the synthetic data generator, to make the training and test pairs (memory to CAS statement and back); and compaction that works over the cube store and over the recipe brain's coefficients, so a compacted memory can still be used by the brain. All of this is INTENDED; nothing is built; nothing is licensed.",
+         """<p><strong>The owner's second statement on this item, verbatim (2026-10-21 09:50 PDT, operator session; recorded in <code>Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md</code> under the heading "Owner words (2026-10-21 09:50 PDT, operator session, verbatim; a STATEMENT OF INTENT plus an ORDER to record it on the HELM Hub)"):</strong></p><blockquote class="verbatim"><p>"REMEMBER IF CTT AND CAS SDG AND CAS COMPILER ALREADY EXIST AND WORK WHY NOT EMPLOY THEM IN COMPACTING MEMORIES AS WELL AND CAN WORK WITH CUBES AND RECIPE COEFFICIENTS ALSO MAKE SURE TO PUT THIS IN HELM HUB FOR POSTERITY'S SAKE THE LLMs  MODELS THAT WILL TAKE YOUR PLACE ONCE WE RUN OUT TOKENS"</p></blockquote><p class="small">The parts it names and what each is today: the CTT, the transformer ear, trained English to CAS only ({s7110}); the CAS SDG, the generator of practice English from CAS statements; the CAS compiler and its controlled CAS English round trip, 576 of 576 ({s7031}); the cube store, where saved facts and their receipts live ({s7048}); the recipe brain and its coefficients ({s7024}, the canonical wide brain at {s7056}). None of them compacts a memory today. INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED.</p>"""),
+        ("\"Refresh my memory\" questions, with a fit check and strengthening",
+         "When HELM needs a memory it no longer holds in full, it asks the person a \"refresh my memory\" question, reasons whether the answer fits in with the rest of the context it rebuilt, and if it fits, strengthens that memory so it is recalled better next time.",
+         "The person's own sentences are recalled word for word on \"what do you know about me so far?\" ({s7049}); the loop asks by default when a reading is unsure ({s7108}). There is no fit check: an answer is kept or dropped, never tested against the rest of the context. Nothing is strengthened: every kept sentence has the same weight.",
+         "A written fit rule (what \"fits logically with the rest\" means, decided by HELM's own checker, never a guess); a strengthening rule that changes how a memory is kept, with a record of each change; an exam with planted wrong answers to refresh questions, scored on 0 wrong answers accepted and on recall of strengthened memories against unstrengthened ones."),
+        ("The Unity Eye applied in these situations, correctly",
+         "The small watcher that looks over HELM would also watch teaching, compaction and refresh: it reports what it sees and whispers a hint, and it never writes a memory, a fact or a reply itself.",
+         "The {eye} scan and pairing earned keep words on made-up worlds only: found 88 of 88 planted faults with 0 Eye writes ({s7077}), and the Eye-paired idle work resolved 70.18% of a backlog with 0 Eye writes ({s7078}). The Eye acting on the recipe brain read INCONCLUSIVE in both readings, and Eye acting stays NOT LICENSED ({s7038}). The Eye is not wired to the live chat.",
+         "First a written rule for what \"correctly applied\" means here (report and whisper only; 0 Eye writes as a must-hold check); then the Eye wired to the teaching, compaction and refresh paths behind a switch, default off; an exam against the same paths with the Eye off, scored on items lost, wrong memories accepted, and 0 Eye writes."),
     ]
     intent_path = REPO / "docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md"
     if not intent_path.exists():
@@ -1733,11 +1759,15 @@ def p_roadmap(S: dict) -> str:
     intent_html = "".join(intent_parts)
     S_ = {"s7049": slink("7.49"), "s7060": slink("7.60"), "s7087": slink("7.87"), "s7090": slink("7.90"), "s7108": slink("7.108"),
           "s7109": slink("7.109"), "s7110": slink("7.110"), "s7111": slink("7.111"),
-          "noetic": T("Noetic", "Noetics"), "domain": T("Domain", "level"), "register": T("Register")}
+          "s7031": slink("7.31"), "s7038": slink("7.38"), "s7048": slink("7.48"), "s7077": slink("7.77"), "s7078": slink("7.78"),
+          "s7098": slink("7.98"), "s7024": slink("7.24"), "s7056": slink("7.56"),
+          "noetic": T("Noetic", "Noetics"), "domain": T("Domain", "level"), "register": T("Register"),
+          "roundtrip": T("round trip"), "receipt": T("receipt"), "cubestore": T("cube store"), "eye": T("Unity Eye")}
     trows = "".join(
-        f"<tr><td><strong>{esc(n)}</strong><br><span class=\"small\">INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED</span></td>"
-        f"<td>{esc(m)}</td><td>{e.format(**S_) if '{' in e else esc(e)}</td><td>{esc(bld)}</td></tr>"
-        for n, m, e, bld in talk)
+        f"<tr><td><strong>{esc(t[0])}</strong><br><span class=\"small\">INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED</span></td>"
+        f"<td>{esc(t[1])}</td><td>{t[2].format(**S_) if '{' in t[2] else esc(t[2])}</td><td>{esc(t[3])}</td></tr>"
+        + (f"<tr><td colspan=\"4\">{t[4].format(**S_)}</td></tr>" if len(t) > 4 else "")
+        for t in talk)
     body = f"""
 <h2>The intended domains</h2>
 <p>The colors are the owner's scale, as a reading aid; the words are this hub's summary of the records named on the right.
@@ -1758,6 +1788,18 @@ ANYTHING HUMAN LIKE EVEN THOUGH THAT MAY NOT BE A CAPABILITY PRESENT NOW WE ARE 
 <p class="small">The owner, 2026-10-21 (afternoon, Pacific); recorded in <code>Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md</code>.
 Earlier the same day the owner ruled that HELM may comment on an off-topic subject like a normal person would; the accepted reading is
 "as a person who does not know the subject would".</p></blockquote>
+<p>Items 10 to 13 of the table come from a second statement the owner typed the same morning. It is a <strong>statement of intent,
+not an approval</strong> and not a launch order: it approves no package, no spend and no claim. It names the {T('CTT')}, the {T('SDG')}
+and the CAS compiler (the program that checks and converts CAS statements), and the Eye. The owner's words, verbatim:</p>
+<blockquote class="verbatim"><p>"YEAH BECAUSE SINCE WE HAVE THE CTT AND CAS SDG AND CAS COMPILER AS IT LEARNS VIA CONVERSATIONS (IN FACT WE SHOULD TEST
+TEACH HELM NEW SUBJECT VIA REGULAR NORMAL Q AND A HUMAN LIKE CONVERSATIONS UNTIL IT GETS IT AND UNDERSTANDS AND IT SHOULD ALL SOUND VERY
+NATURAL LIKE) AS SPACE GET TAKEN UP MEMORIES CAN BE COMPACTED INTO CAS W/CLUES TO THERE SUBJECT MATTER AND HELM IF NEED TO CAN ASK REFRESH
+MY MEMORY QUESTIONS AND REASON IT OUT TO SEE IF IT FITS LOGICALLY IN WITH THE REST OF THE CONTEXT IT REBUILT AND IF SO STRENGTHEN THAT
+PARTICULARS OF THAT MEMORY FOR BETTER RECALL NEXT TIME ALSO USE THE EYE IN THESE SITUATIONS, CORRECTLY APPLIED."</p>
+<p class="small">The owner, 2026-10-21 09:42 PDT, typed in the operator session; recorded in
+<code>Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md</code> under the heading "Owner words (2026-10-21 09:42 PDT, operator session,
+verbatim; a STATEMENT OF INTENT, not an approval and not a launch order)". Nothing in it is built; nothing is licensed; the Eye's acting
+stays NOT LICENSED ({slink('7.38')}).</p></blockquote>
 <div class="tablewrap"><table><thead><tr><th>Piece</th><th>Plain meaning</th><th>What exists today</th><th>What would have to be built and tested</th></tr></thead><tbody>{trows}</tbody></table></div>
 <p><strong>How each piece gets added, in order.</strong> <em>Taught:</em> a labelled data stratum (today's exam turns are written by AI models
 of at least three families, labelled LLM_WRITTEN, never by the owner, who reviews only; amendment A-TALK-1, {slink('7.110')}).
@@ -1793,8 +1835,9 @@ The status correction of 2026-10-18 added an honest column, copied here.</p>
     return page("roadmap.html", "HELM Roadmap", "Roadmap", lede, body, [
         "`docs/working/HELM_CAPABILITIES_ROADMAP_STATUS_CORRECTION_20261018.md` (milestone table, copied)",
         "`docs/working/HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md` §2.4, §2.5, §2.7, §2.8, §2.9 (plans)",
-        "`docs/CAS_HARNESS_SPEC_SHEET.md` §7.47, §7.48, §7.55, §7.56, §7.64, §7.69, §7.77, §7.83, §7.87, §7.89, §7.90, §9.9",
+        "`docs/CAS_HARNESS_SPEC_SHEET.md` §7.31, §7.38, §7.47, §7.48, §7.49, §7.55, §7.56, §7.64, §7.69, §7.77, §7.78, §7.83, §7.87, §7.89, §7.90, §7.98, §7.108, §7.110, §9.9",
         "`helm_ui/README.md` ('Wired vs not wired')",
+        "Items 10 to 13: the owner's statements of intent of 2026-10-21 09:42 and 09:50 PDT in `Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md`",
         "Domain list: the owner's brief for this hub (2026-10-19), statuses from the records above",
     ], words=True, description="Intended domains with honest status, and the chat question answered plainly.")
 
