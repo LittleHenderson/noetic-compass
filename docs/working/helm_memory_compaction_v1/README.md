@@ -31,6 +31,8 @@ The honesty rule is the first hard gate: a rebuilt memory is never presented as 
 
 `PREREGISTRATION_MEMORY_COMPACTION_V1.precode.md` sha256 **`7eef0edc7d342bb0438e4052db646528442badefa92d6bdf31e8485914073bf1`** (18,290 bytes, LF line endings). The pre-code is not edited after this; amendments are appended, dated and hashed on their own.
 
+**Follow-up 2026-10-21 PDT (after the merge of PR #441):** DESIGN §6.1 adds four worked Atlas scenarios on the owner's word "add them"; OPEN_QUESTIONS records the owner's Q1–Q3 line (build v1, rule capsules, census first). The pre-code is not edited.
+
 ## The short version of the exam
 
 - **Arms:** COMPACT_ON (under test), VERBATIM_ONLY (ceiling), FIFO_DROP (today's behaviour, the floor), **SUMMARY_TEXT** (a plain-English note with the same clues and breadcrumb, no CAS: the mechanism-free baseline the capsule must beat), NO_REFRESH, RANDOM_REFRESH (the control for asking), REPLAY.
