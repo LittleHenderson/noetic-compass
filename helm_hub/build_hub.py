@@ -1681,6 +1681,8 @@ def p_roadmap(S: dict) -> str:
     need(S, "7.77", "EYE_SCAN_EARNED_KEEP", "0 Eye writes")
     need(S, "7.78", "EYE_PAIRING_EARNED_KEEP", "0 Eye writes")
     need(S, "7.98", "session log")
+    need(S, "7.24", "recipe")
+    need(S, "7.56", "CANONICAL BRAIN POINTER")
     need(S, "7.60", "ENGINEERED-NOT-VALIDATED")
     # (meaning, what exists today, what would have to be built and tested)
     talk = [
@@ -1728,7 +1730,8 @@ def p_roadmap(S: dict) -> str:
         ("Memory compacted into CAS, with clues to its subject, as space fills",
          "When HELM's memory runs short, old memories are not thrown away: each is folded into a short CAS statement (HELM's exact inner language) that keeps a clue to what the memory was about, so it takes less room and can be rebuilt later.",
          "A bounded memory of this session's turns and the person's own sentences, kept word for word, with a session log on disk ({s7049}, {s7098}); the CAS compiler and the controlled CAS English {roundtrip} that turn a checked statement into English and back exactly, 576 of 576 ({s7031}); every saved fact leaves a {receipt} in the {cubestore} ({s7048}). Nothing compacts today: when the memory is full, the oldest sentences are dropped.",
-         "A compaction rule (which memories, when, into which CAS statement, with which clue) written down before any code; a rebuild rule that turns the statement back into the facts; a check that a rebuilt memory equals the saved one or is marked lossy; an exam where HELM answers from compacted memory as well as from full memory, against the cheapest trick (drop the oldest)."),
+         "A compaction rule (which memories, when, into which CAS statement, with which clue) written down before any code; a rebuild rule that turns the statement back into the facts; a check that a rebuilt memory equals the saved one or is marked lossy; an exam where HELM answers from compacted memory as well as from full memory, against the cheapest trick (drop the oldest). The owner named the parts (09:50 PDT, quoted below): the CTT (CAS symbols on one side, English on the other) and the CAS compiler as the compaction and rebuild machinery, the statement checked by the compiler and the round trip as the equality check; the CAS SDG, the synthetic data generator, to make the training and test pairs (memory to CAS statement and back); and compaction that works over the cube store and over the recipe brain's coefficients, so a compacted memory can still be used by the brain. All of this is INTENDED; nothing is built; nothing is licensed.",
+         """<p><strong>The owner's second statement on this item, verbatim (2026-10-21 09:50 PDT, operator session; recorded in <code>Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md</code> under the heading "Owner words (2026-10-21 09:50 PDT, operator session, verbatim; a STATEMENT OF INTENT plus an ORDER to record it on the HELM Hub)"):</strong></p><blockquote class="verbatim"><p>"REMEMBER IF CTT AND CAS SDG AND CAS COMPILER ALREADY EXIST AND WORK WHY NOT EMPLOY THEM IN COMPACTING MEMORIES AS WELL AND CAN WORK WITH CUBES AND RECIPE COEFFICIENTS ALSO MAKE SURE TO PUT THIS IN HELM HUB FOR POSTERITY'S SAKE THE LLMs  MODELS THAT WILL TAKE YOUR PLACE ONCE WE RUN OUT TOKENS"</p></blockquote><p class="small">The parts it names and what each is today: the CTT, the transformer ear, trained English to CAS only ({s7110}); the CAS SDG, the generator of practice English from CAS statements; the CAS compiler and its controlled CAS English round trip, 576 of 576 ({s7031}); the cube store, where saved facts and their receipts live ({s7048}); the recipe brain and its coefficients ({s7024}, the canonical wide brain at {s7056}). None of them compacts a memory today. INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED.</p>"""),
         ("\"Refresh my memory\" questions, with a fit check and strengthening",
          "When HELM needs a memory it no longer holds in full, it asks the person a \"refresh my memory\" question, reasons whether the answer fits in with the rest of the context it rebuilt, and if it fits, strengthens that memory so it is recalled better next time.",
          "The person's own sentences are recalled word for word on \"what do you know about me so far?\" ({s7049}); the loop asks by default when a reading is unsure ({s7108}). There is no fit check: an answer is kept or dropped, never tested against the rest of the context. Nothing is strengthened: every kept sentence has the same weight.",
@@ -1756,13 +1759,14 @@ def p_roadmap(S: dict) -> str:
     S_ = {"s7049": slink("7.49"), "s7060": slink("7.60"), "s7087": slink("7.87"), "s7090": slink("7.90"), "s7108": slink("7.108"),
           "s7109": slink("7.109"), "s7110": slink("7.110"), "s7111": slink("7.111"),
           "s7031": slink("7.31"), "s7038": slink("7.38"), "s7048": slink("7.48"), "s7077": slink("7.77"), "s7078": slink("7.78"),
-          "s7098": slink("7.98"),
+          "s7098": slink("7.98"), "s7024": slink("7.24"), "s7056": slink("7.56"),
           "noetic": T("Noetic", "Noetics"), "domain": T("Domain", "level"), "register": T("Register"),
           "roundtrip": T("round trip"), "receipt": T("receipt"), "cubestore": T("cube store"), "eye": T("Unity Eye")}
     trows = "".join(
-        f"<tr><td><strong>{esc(n)}</strong><br><span class=\"small\">INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED</span></td>"
-        f"<td>{esc(m)}</td><td>{e.format(**S_) if '{' in e else esc(e)}</td><td>{esc(bld)}</td></tr>"
-        for n, m, e, bld in talk)
+        f"<tr><td><strong>{esc(t[0])}</strong><br><span class=\"small\">INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED</span></td>"
+        f"<td>{esc(t[1])}</td><td>{t[2].format(**S_) if '{' in t[2] else esc(t[2])}</td><td>{esc(t[3])}</td></tr>"
+        + (f"<tr><td colspan=\"4\">{t[4].format(**S_)}</td></tr>" if len(t) > 4 else "")
+        for t in talk)
     body = f"""
 <h2>The intended domains</h2>
 <p>The colors are the owner's scale, as a reading aid; the words are this hub's summary of the records named on the right.
@@ -1832,7 +1836,7 @@ The status correction of 2026-10-18 added an honest column, copied here.</p>
         "`docs/working/HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md` §2.4, §2.5, §2.7, §2.8, §2.9 (plans)",
         "`docs/CAS_HARNESS_SPEC_SHEET.md` §7.31, §7.38, §7.47, §7.48, §7.49, §7.55, §7.56, §7.64, §7.69, §7.77, §7.78, §7.83, §7.87, §7.89, §7.90, §7.98, §7.108, §7.110, §9.9",
         "`helm_ui/README.md` ('Wired vs not wired')",
-        "Items 10 to 13: the owner's statement of intent of 2026-10-21 09:42 PDT in `Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md`",
+        "Items 10 to 13: the owner's statements of intent of 2026-10-21 09:42 and 09:50 PDT in `Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md`",
         "Domain list: the owner's brief for this hub (2026-10-19), statuses from the records above",
     ], words=True, description="Intended domains with honest status, and the chat question answered plainly.")
 

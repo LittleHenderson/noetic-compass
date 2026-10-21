@@ -175,6 +175,9 @@ class BuildTests(unittest.TestCase):
         self.assertIn("USE THE EYE IN THESE SITUATIONS, CORRECTLY APPLIED", r)
         self.assertIn("statement of intent,\nnot an approval", r)
         self.assertIn("Eye acting stays NOT LICENSED", r)
+        # the owner's 09:50 PDT statement under item 11
+        self.assertIn("WHY NOT EMPLOY THEM IN COMPACTING MEMORIES AS WELL AND CAN WORK WITH CUBES AND RECIPE COEFFICIENTS", r)
+        self.assertIn("ONCE WE RUN OUT TOKENS", r)
 
     def test_roadmap_carries_the_statement_of_intent_in_full(self):
         r = (b.SITE / "roadmap.html").read_text(encoding="utf-8")
