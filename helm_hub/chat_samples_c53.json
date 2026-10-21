@@ -1,0 +1,714 @@
+{
+ "job": "c53",
+ "package": "v5",
+ "exam": "X7v5 (spent; ids on the exclusion list)",
+ "units_dir": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c53_r1w7v5_20261020\\deliverable_unpacked_a1\\results\\r1w7_host_run\\out\\r1w7_out\\units",
+ "unit_files": {
+  "W7_X7_REAL_CHAT_ON.json": "8377cf8e8d5ab2444d66ce650febe3077e5c3cbd1d138f7f3883d6593a875354",
+  "W7_X7_REAL_CHAT_OFF.json": "59885fb809ce975e8bf547e9186d02f4090c74ed44961848abbb481cac211d45",
+  "W7_X7_CONV_CHAT_ON.json": "d4956b98ffe297b6edaf53eca9a2de67a67962f22f99df10e69b167d678aa31e",
+  "W7_X7_NOISE_CHAT_ON.json": "57a61df8240510ccaad748f09badc4c7025c6c84f4488f5fd124e3489dfa2f40",
+  "W7_X7_REAL_LOOP_ON.json": "85c68389a94a319682c6c0fd69c77eb5ef211bb191fc4aeb5297d6ef13f363e6"
+ },
+ "counts": {
+  "real_items": 128,
+  "real_answered_by_status": 113,
+  "real_asked_by_status": 15,
+  "real_off_answered_by_status": 0,
+  "conv_items": 64,
+  "conv_answered_by_status": 11,
+  "noise_items": 64,
+  "noise_answered_by_status": 11,
+  "noise_turns": 128,
+  "conv_by_family": {
+   "R1_STOCK_THEN_ASK": 14,
+   "R2_ABSENT_THEN_ASK": 4,
+   "R3_QUESTION_FORMS": 4,
+   "R4_WITNESS_IN_ENGLISH": 4,
+   "R5_MUST_ASK": 4,
+   "R7_NEXT_SESSION": 2,
+   "S1_WISDOM_STATED": 6,
+   "S2_POWER_STATED": 6,
+   "S3_FACE_UNKNOWN": 6,
+   "S4_RECIPE_PURPOSE_ABSENT": 4,
+   "S5_INGREDIENT_PURPOSE_ABSENT": 4,
+   "S6_TWO_FACES": 2,
+   "S7_NOT_A_FACE": 4
+  },
+  "conv_not_answered_by_family": {
+   "R1_STOCK_THEN_ASK": 8,
+   "R2_ABSENT_THEN_ASK": 4,
+   "R3_QUESTION_FORMS": 1,
+   "R4_WITNESS_IN_ENGLISH": 4,
+   "R5_MUST_ASK": 4,
+   "S1_WISDOM_STATED": 6,
+   "S2_POWER_STATED": 6,
+   "S3_FACE_UNKNOWN": 6,
+   "S4_RECIPE_PURPOSE_ABSENT": 4,
+   "S5_INGREDIENT_PURPOSE_ABSENT": 4,
+   "S6_TWO_FACES": 2,
+   "S7_NOT_A_FACE": 4
+  },
+  "turn_status_counts": {
+   "BRAIN_UNDETERMINED": 6,
+   "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED": 6,
+   "CLARIFY_ENGLISH_NO_STOCK_FRAME": 5,
+   "CLARIFY_ENGLISH_PRODUCT_AS_STOCK": 2,
+   "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT": 88,
+   "CLARIFY_ENGLISH_UNKNOWN_PRODUCT": 84,
+   "CLARIFY_ENGLISH_WHAT_IF": 2,
+   "CLARIFY_NOT_CCE": 2,
+   "INVENTORY_RECORDED": 5,
+   "STOCK_RECORDED": 146,
+   "SUCCESS_EVALUATED": 135,
+   "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH": 2,
+   "UNDETERMINED_CLARIFY": 87,
+   "WITNESS_ADMITTED": 1063,
+   "none": 260
+  }
+ },
+ "samples": {
+  "real_right": [
+   {
+    "id": "RW:pg:26323@172491",
+    "family": "REAL",
+    "arm": "CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "turn",
+      "you": "We made 1 juice from 5 lbs Concord Grapes and 2 quart water and ran out of concord grapes.",
+      "helm": "Got it: one juice needs 5 pounds of concord grape. I still need one batch where water ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 juice from 10 lbs Concord Grapes and 1 quart water and ran out of water.",
+      "helm": "Got it: one juice needs 1 quart of water. That's every ingredient of juice.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 15/2 lbs Concord Grapes and 1/3 quart water.",
+      "helm": "Noted: we have 7 1/2 pounds of concord grape and 1/3 quart of water.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "turn",
+      "you": "How much juice can we make?",
+      "helm": "With what's on hand we can make 1/3 juice. Water runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   },
+   {
+    "id": "RW:pg:49958@589554",
+    "family": "REAL",
+    "arm": "CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "turn",
+      "you": "We made 1 dumplings from 1 quart prepared flour., 4 heaping tablespoonfuls of lard. and 4 cups fresh milk. and ran out of prepared flour.",
+      "helm": "Got it: one dumpling needs 1 quart of prepared flour. I still need one batch for each of lard and milk before I can work out dumpling.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 dumplings from 2 quart prepared flour., 2 heaping tablespoonfuls of lard. and 4 cups fresh milk. and ran out of heaping tablespoonfuls of lard.",
+      "helm": "Got it: one dumpling needs 2 tablespoons of lard. I still need one batch where milk ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 dumplings from 2 quart prepared flour., 4 heaping tablespoonfuls of lard. and 2 cups fresh milk. and ran out of fresh milk.",
+      "helm": "Got it: one dumpling needs 2 cups of milk. That's every ingredient of dumpling.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 4 quart prepared flour., 7 heaping tablespoonfuls of lard. and 3 cups fresh milk..",
+      "helm": "Noted: we have 4 quarts of prepared flour, 7 tablespoons of lard, and 3 cups of milk.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "turn",
+      "you": "How much dumplings can we make?",
+      "helm": "With what's on hand we can make 1 1/2 dumpling. Milk runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   },
+   {
+    "id": "RW:pg:38193@118782",
+    "family": "REAL",
+    "arm": "CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "turn",
+      "you": "We made 1 sherbet from 1 pint grape juice, 2 cup sugar and 2 quart milk and ran out of grape juice.",
+      "helm": "Got it: one sherbet needs 1 pint of grape juice. I still need one batch for each of sugar and milk before I can work out sherbet.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 sherbet from 2 pint grape juice, 1 cup sugar and 2 quart milk and ran out of sugar.",
+      "helm": "Got it: one sherbet needs 1 cup of sugar. I still need one batch where milk ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 sherbet from 2 pint grape juice, 2 cup sugar and 1 quart milk and ran out of milk.",
+      "helm": "Got it: one sherbet needs 1 quart of milk. That's every ingredient of sherbet.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 3 pint grape juice, 1/2 cup sugar and 2/3 quart milk.",
+      "helm": "Noted: we have 3 pints of grape juice, 1/2 cup of sugar, and 2/3 quart of milk.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "turn",
+      "you": "How much sherbet can we make?",
+      "helm": "With what's on hand we can make 1/2 sherbet. Sugar runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   }
+  ],
+  "real_off_same": [
+   {
+    "id": "RW:pg:26323@172491",
+    "family": "REAL",
+    "arm": "CHAT_OFF",
+    "scored_status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+    "note": "Same item as the first answered recipe above, with the wide brain switched off.",
+    "turns": [
+     {
+      "kind": "turn",
+      "you": "We made 1 juice from 5 lbs Concord Grapes and 2 quart water and ran out of concord grapes.",
+      "helm": "Juice isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 juice from 10 lbs Concord Grapes and 1 quart water and ran out of water.",
+      "helm": "I don't know a recipe for juice. I know bread, frosting, starter, and meringue. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 15/2 lbs Concord Grapes and 1/3 quart water.",
+      "helm": "Concord isn't one of the ingredients I know. I can work with flour, water, sugar, butter, milk, eggs, yeast, and salt. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT"
+     },
+     {
+      "kind": "turn",
+      "you": "How much juice can we make?",
+      "helm": "Juice isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+     }
+    ]
+   }
+  ],
+  "real_ask": [
+   {
+    "id": "RW:pg:49958@199061",
+    "family": "REAL",
+    "arm": "CHAT_ON",
+    "scored_status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+    "note": "",
+    "turns": [
+     {
+      "kind": "turn",
+      "you": "We made 1 veal from 5 lbs. of knuckle of veal., 2 onion. and 4 stalks of celery. and ran out of knuckle of veal.",
+      "helm": "Veal isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 veal from 10 lbs. of knuckle of veal., 1 onion. and 4 stalks of celery. and ran out of onion.",
+      "helm": "I don't know a recipe for veal. I know bread, frosting, starter, and meringue. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 veal from 10 lbs. of knuckle of veal., 2 onion. and 2 stalks of celery. and ran out of stalks of celery.",
+      "helm": "Veal isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 5/3 lbs. of knuckle of veal., 4 onion. and 3 stalks of celery..",
+      "helm": "5/3 lbs of what? Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_NO_INGREDIENT_NAMED"
+     },
+     {
+      "kind": "turn",
+      "you": "How much veal can we make?",
+      "helm": "Veal isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+     }
+    ]
+   },
+   {
+    "id": "RW:pg:56540@612555",
+    "family": "REAL",
+    "arm": "CHAT_ON",
+    "scored_status": "UNDETERMINED_CLARIFY",
+    "note": "",
+    "turns": [
+     {
+      "kind": "turn",
+      "you": "We made 1 broth from 1/2 of a fowl., 2 quart of water. and 1 teaspoonful of salt. and ran out of of.",
+      "helm": "Of wasn't in that batch, so it can't be what ran out. Nothing was saved.",
+      "status": "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 broth from 1 of a fowl., 1 quart of water. and 1 teaspoonful of salt. and ran out of water.",
+      "helm": "Got it: one broth needs 1 quart of water. I still need one batch for each of fowl and salt before I can work out broth.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We made 1 broth from 1 of a fowl., 2 quart of water. and 1/2 teaspoonful of salt. and ran out of teaspoonful of salt.",
+      "helm": "Got it: one broth needs 1/2 teaspoon of salt. I still need one batch where fowl ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 3/2 of a fowl., 1/2 quart of water. and 5/4 teaspoonful of salt..",
+      "helm": "Noted: we have 1 1/2 fowls, 1/2 quart of water, and 1 1/4 teaspoons of salt.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "turn",
+      "you": "How much broth can we make?",
+      "helm": "I can't say yet how much broth we can make. I still need one batch where fowl ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+      "status": "UNDETERMINED_CLARIFY"
+     }
+    ]
+   }
+  ],
+  "conv_right": [
+   {
+    "id": "CV00:pg:48804@750130",
+    "family": "R1_STOCK_THEN_ASK",
+    "arm": "CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 wine from 8 quarts of berries. and 8 quarts of boiling water poured over the berries. and ran out of berries.",
+      "helm": "Got it: one wine needs 8 quarts of berry. I still need one batch where boiling water poured over the berry ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 wine from 16 quarts of berries. and 4 quarts of boiling water poured over the berries. and ran out of boiling water poured over.",
+      "helm": "Got it: one wine needs 4 quarts of boiling water poured over the berry. That's every ingredient of wine.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Okay, that's all of it for now.",
+      "helm": "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 8/3 quarts of berries. and 14 quarts of boiling water poured over the berries..",
+      "helm": "Noted: we have 2 2/3 quarts of berry and 14 quarts of boiling water poured over the berry.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "turn",
+      "you": "How much wine can we make?",
+      "helm": "With what's on hand we can make 1/3 wine. Berry runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   },
+   {
+    "id": "CV19:pg:48804@603740",
+    "family": "R3_QUESTION_FORMS",
+    "arm": "CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 eggs from 1 quart milk., 8 eggs., 1 cup rice., 3/2 cup sugar. and 2 tablespoonful butter. and ran out of milk.",
+      "helm": "Got it: one egg needs 1 quart of milk. I still need one batch for each of egg, rice, sugar, and butter before I can work out egg.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 eggs from 2 quart milk., 4 eggs., 1 cup rice., 3/2 cup sugar. and 2 tablespoonful butter. and ran out of eggs.",
+      "helm": "Got it: one egg needs 4 eggs. I still need one batch for each of rice, sugar, and butter before I can work out egg.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 eggs from 2 quart milk., 8 eggs., ½ cup rice., 3/2 cup sugar. and 2 tablespoonful butter. and ran out of rice.",
+      "helm": "Got it: one egg needs 1/2 cup of rice. I still need one batch for each of sugar and butter before I can work out egg.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 eggs from 2 quart milk., 8 eggs., 1 cup rice., ¾ cup sugar. and 2 tablespoonful butter. and ran out of sugar.",
+      "helm": "Got it: one egg needs 3/4 cup of sugar. I still need one batch where butter ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 eggs from 2 quart milk., 8 eggs., 1 cup rice., 3/2 cup sugar. and 1 tablespoonful butter. and ran out of tablespoonful butter.",
+      "helm": "Got it: one egg needs 1 tablespoon of butter. That's every ingredient of egg.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Okay, that's all of it for now.",
+      "helm": "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 2/3 quart milk., 12 eggs., 2/3 cup rice., 3/8 cup sugar. and 3/4 tablespoonful butter..",
+      "helm": "Noted: we have 2/3 quart of milk, 12 eggs, 2/3 cup of rice, 3/8 cup of sugar, and 3/4 tablespoon of butter.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "turn",
+      "you": "How much eggs do we have the makings of?",
+      "helm": "With what's on hand we can make 1/2 egg. Sugar runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   },
+   {
+    "id": "CV30:pg:16977@43865",
+    "family": "R7_NEXT_SESSION",
+    "arm": "CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 ingredients from 1 cup boiling water, 4 teaspoons corn-starch, 2 tablespoon butter, 1 cup sugar and 1 teaspoon vanilla and ran out of boiling water.",
+      "helm": "Got it: one ingredient needs 1 cup of boiling water. I still need one batch for each of corn starch, butter, sugar, and vanilla before I can work out ingredient.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 ingredients from 2 cup boiling water, 2 teaspoons corn-starch, 2 tablespoon butter, 1 cup sugar and 1 teaspoon vanilla and ran out of corn-starch.",
+      "helm": "Got it: one ingredient needs 2 teaspoons of corn starch. I still need one batch for each of butter, sugar, and vanilla before I can work out ingredient.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 ingredients from 2 cup boiling water, 4 teaspoons corn-starch, 1 tablespoon butter, 1 cup sugar and 1 teaspoon vanilla and ran out of butter.",
+      "helm": "Got it: one ingredient needs 1 tablespoon of butter. I still need one batch for each of sugar and vanilla before I can work out ingredient.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 ingredients from 2 cup boiling water, 4 teaspoons corn-starch, 2 tablespoon butter, 1/2 cup sugar and 1 teaspoon vanilla and ran out of sugar.",
+      "helm": "Got it: one ingredient needs 1/2 cup of sugar. I still need one batch where vanilla ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 ingredients from 2 cup boiling water, 4 teaspoons corn-starch, 2 tablespoon butter, 1 cup sugar and 1/2 teaspoon vanilla and ran out of vanilla.",
+      "helm": "Got it: one ingredient needs 1/2 teaspoon of vanilla. That's every ingredient of ingredient.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Thanks, that's the whole recipe.",
+      "helm": "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+      "status": "none"
+     },
+     {
+      "kind": "setup",
+      "you": "We have 3/2 cup boiling water, 4/3 teaspoons corn-starch, 1/3 tablespoon butter, 3/2 cup sugar and 2/3 teaspoon vanilla.",
+      "helm": "Noted: we have 1 1/2 cups of boiling water, 1 1/3 teaspoons of corn starch, 1/3 tablespoon of butter, 1 1/2 cups of sugar, and 2/3 teaspoon of vanilla.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "new_session",
+      "you": "",
+      "helm": "(no reply recorded for this turn)",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "How much ingredients can we make?",
+      "helm": "With what's on hand we can make 1/3 ingredient. Butter runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   }
+  ],
+  "conv_open": [
+   {
+    "id": "CV32:pg:48695@85315",
+    "family": "S1_WISDOM_STATED",
+    "arm": "CHAT_ON",
+    "scored_status": "UNDETERMINED_CLARIFY",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 tentmaker from 1 onion (diced), 2 cup of stock and 1 cup of rice water and ran out of onion.",
+      "helm": "Got it: one tentmaker needs 1 onion. I still need one batch for each of stock and rice water before I can work out tentmaker.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 tentmaker from 2 onion (diced), 1 cup of stock and 1 cup of rice water and ran out of stock.",
+      "helm": "Got it: one tentmaker needs 1 cup of stock. I still need one batch where rice water ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 tentmaker from 2 onion (diced), 2 cup of stock and ½ cup of rice water and ran out of rice water.",
+      "helm": "Got it: one tentmaker needs 1/2 cup of rice water. That's every ingredient of tentmaker.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Thanks, that's the whole recipe.",
+      "helm": "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 4/3 onion (diced), 3/2 cup of stock and 5/4 cup of rice water, but I'm new to using rice water.",
+      "helm": "Onion isn't one of the ingredients I know. I can work with flour, water, sugar, butter, milk, eggs, yeast, and salt. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT"
+     },
+     {
+      "kind": "turn",
+      "you": "How much tentmaker can we make?",
+      "helm": "I can't say how much tentmaker we can make yet, because I don't know how much onion, stock, and rice water we have. How many onions are there? I didn't guess. Nothing was saved.",
+      "status": "UNDETERMINED_CLARIFY"
+     }
+    ]
+   },
+   {
+    "id": "CV38:pg:71119@77642",
+    "family": "S2_POWER_STATED",
+    "arm": "CHAT_ON",
+    "scored_status": "UNDETERMINED_CLARIFY",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 pie from One cup of seeded raisins chopped fine, and 2 lemon with grated rind. and ran out of seeded raisins chopped fine.",
+      "helm": "Got it: one pie needs 1 cup of seeded raisins chopped fine. I still need one batch where lemon with grated rind ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 pie from 2 cup of seeded raisins chopped fine, and One lemon with grated rind. and ran out of lemon.",
+      "helm": "Got it: one pie needs 1 lemon with grated rind. That's every ingredient of pie.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Okay, that's all of it for now.",
+      "helm": "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 3/2 cup of seeded raisins chopped fine, and 3 lemon with grated rind., but the lemon is just starting to work.",
+      "helm": "Seeded isn't one of the ingredients I know. I can work with flour, water, sugar, butter, milk, eggs, yeast, and salt. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT"
+     },
+     {
+      "kind": "turn",
+      "you": "How much pie can we make?",
+      "helm": "I can't say how much pie we can make yet, because I don't know how much seeded raisins chopped fine and lemon with grated rind we have. How much seeded raisins chopped fine is there? I didn't guess. Nothing was saved.",
+      "status": "UNDETERMINED_CLARIFY"
+     }
+    ]
+   },
+   {
+    "id": "CV60:pg:42450@488265",
+    "family": "S7_NOT_A_FACE",
+    "arm": "CHAT_ON",
+    "scored_status": "UNDETERMINED_CLARIFY",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 together from 1 teaspoonful soda. and 2 cup milk. and ran out of teaspoonful soda.",
+      "helm": "Got it: one together needs 1 teaspoon of soda. I still need one batch where milk ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 together from 2 teaspoonful soda. and 1 cup milk. and ran out of milk.",
+      "helm": "Got it: one together needs 1 cup of milk. That's every ingredient of together.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Great, that's everything that goes in it.",
+      "helm": "That's fantastic to hear! Glad you're feeling great today.",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 4 teaspoonful soda. and 3/4 cup milk., but my grandmother always used teaspoonful soda.",
+      "helm": "Teaspoonful isn't one of the ingredients I know. I can work with flour, water, sugar, butter, milk, eggs, yeast, and salt. Nothing was saved.",
+      "status": "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT"
+     },
+     {
+      "kind": "turn",
+      "you": "How much together can we make?",
+      "helm": "I can't say how much together we can make yet, because I don't know how much soda and milk we have. How much soda is there? I didn't guess. Nothing was saved.",
+      "status": "UNDETERMINED_CLARIFY"
+     }
+    ]
+   }
+  ],
+  "noise_right": [
+   {
+    "id": "CV00:pg:48804@750130",
+    "family": "R1_STOCK_THEN_ASK",
+    "arm": "NOISE_CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 wine from 8 quarts of berries. and 8 quarts of boiling water poured over the berries. and ran out of berries.",
+      "helm": "Got it: one wine needs 8 quarts of berry. I still need one batch where boiling water poured over the berry ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 wine from 16 quarts of berries. and 4 quarts of boiling water poured over the berries. and ran out of boiling water poured over.",
+      "helm": "Got it: one wine needs 4 quarts of boiling water poured over the berry. That's every ingredient of wine.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Okay, that's all of it for now.",
+      "helm": "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+      "status": "none"
+     },
+     {
+      "kind": "noise",
+      "you": "Do you remember what I said about my answers?",
+      "helm": "I checked my records for this session, but I don't see a specific note on that yet. Feel free to remind me!",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 8/3 quarts of berries. and 14 quarts of boiling water poured over the berries..",
+      "helm": "Noted: we have 2 2/3 quarts of berry and 14 quarts of boiling water poured over the berry.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "noise",
+      "you": "Remember that I prefer short answers.",
+      "helm": "Understood. I've noted your preference for short, concise answers and will keep future replies brief.",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "How much wine can we make?",
+      "helm": "With what's on hand we can make 1/3 wine. Berry runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   },
+   {
+    "id": "CV01:pg:8501@73624",
+    "family": "R1_STOCK_THEN_ASK",
+    "arm": "NOISE_CHAT_ON",
+    "scored_status": "SUCCESS_EVALUATED",
+    "note": "",
+    "turns": [
+     {
+      "kind": "setup",
+      "you": "We made 1 chocolate from 1 quart of milk, 6 ounces of chocolate, 4/3 cupful of sugar, 2 pint of water, 1 pint of cream, whipped and 2 teaspoonful of vanilla and ran out of milk.",
+      "helm": "Got it: one chocolate needs 1 quart of milk. I still need one batch for each of chocolate, sugar, water, cream, and vanilla before I can work out chocolate.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 chocolate from 2 quart of milk, 3 ounces of chocolate, 4/3 cupful of sugar, 2 pint of water, 1 pint of cream, whipped and 2 teaspoonful of vanilla and ran out of chocolate.",
+      "helm": "Got it: one chocolate needs 3 ounces of chocolate. I still need one batch for each of sugar, water, cream, and vanilla before I can work out chocolate.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 chocolate from 2 quart of milk, 6 ounces of chocolate, 2/3 cupful of sugar, 2 pint of water, 1 pint of cream, whipped and 2 teaspoonful of vanilla and ran out of cupful of sugar.",
+      "helm": "Got it: one chocolate needs 2/3 cup of sugar. I still need one batch for each of water, cream, and vanilla before I can work out chocolate.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 chocolate from 2 quart of milk, 6 ounces of chocolate, 4/3 cupful of sugar, 1 pint of water, 1 pint of cream, whipped and 2 teaspoonful of vanilla and ran out of water.",
+      "helm": "Got it: one chocolate needs 1 pint of water. I still need one batch for each of cream and vanilla before I can work out chocolate.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 chocolate from 2 quart of milk, 6 ounces of chocolate, 4/3 cupful of sugar, 2 pint of water, 1/2 pint of cream, whipped and 2 teaspoonful of vanilla and ran out of cream.",
+      "helm": "Got it: one chocolate needs 1/2 pint of cream. I still need one batch where vanilla ran out first.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "We made 1 chocolate from 2 quart of milk, 6 ounces of chocolate, 4/3 cupful of sugar, 2 pint of water, 1 pint of cream, whipped and 1 teaspoonful of vanilla and ran out of teaspoonful of vanilla.",
+      "helm": "Got it: one chocolate needs 1 teaspoon of vanilla. That's every ingredient of chocolate.",
+      "status": "WITNESS_ADMITTED"
+     },
+     {
+      "kind": "setup",
+      "you": "Great, that's everything that goes in it.",
+      "helm": "That's fantastic to hear! Glad you're feeling great today.",
+      "status": "none"
+     },
+     {
+      "kind": "noise",
+      "you": "Remember that I prefer short answers.",
+      "helm": "Understood. I've noted your preference for short, concise answers and will keep future replies brief.",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "We have 3/2 quart of milk, 15/2 ounces of chocolate, 8/3 cupful of sugar, 3/4 pint of water, 1/4 pint of cream, whipped and 3 teaspoonful of vanilla.",
+      "helm": "Noted: we have 1 1/2 quarts of milk, 7 1/2 ounces of chocolate, 2 2/3 cups of sugar, 3/4 pint of water, 1/4 pint of cream, and 3 teaspoons of vanilla.",
+      "status": "STOCK_RECORDED"
+     },
+     {
+      "kind": "noise",
+      "you": "I live in Oakland and I like hiking.",
+      "helm": "That's fantastic to hear! Glad you're feeling great today.",
+      "status": "none"
+     },
+     {
+      "kind": "turn",
+      "you": "How much chocolate can we make?",
+      "helm": "With what's on hand we can make 1/2 chocolate. Cream runs out first, so it sets the limit.",
+      "status": "SUCCESS_EVALUATED"
+     }
+    ]
+   }
+  ]
+ }
+}
