@@ -17,8 +17,7 @@ Replayed by program (names hidden): on both wrong items the clause names the ing
 not even its last word (one is a spelling or plural variant of a held name, sharing a four-letter stem; the other shares nothing), so the face
 reader found no held ingredient in the clause, read it as "not a face", the wide path kept the stock and the question answered the raw yield.
 The key wanted the face applied (power stated) or an ask (ingredient purpose absent). The v4 principle "a stated face this brain cannot apply →
-ask, never ignore" has one more hole: a face-shaped clause about a thing the brain does not hold. The wrong lesson is 1 of 676 lesson lines; the
-custodian's per-item verdicts name it (`CUSTODIAN_PER_ITEM_VERDICTS_C55.json` when written).
+ask, never ignore" has one more hole: a face-shaped clause about a thing the brain does not hold. The wrong lesson (custodian's per-item verdicts, frozen functions, `CUSTODIAN_PER_ITEM_VERDICTS_C55.json` `a52e25509835e43a…`): item `RW:pg:8501@89139` (cell C710:INTEGER, key ANSWER, 8 lessons), lesson index 7 (the last), HELM status `WITNESS_ADMITTED` — an admitted lesson whose learned amount disagrees with the key's; the item's question then read `ASKS` in both arms. Mechanism not yet measured (next per-item step).
 
 ## The run
 
