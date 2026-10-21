@@ -313,6 +313,30 @@ class G_EverydayNamesTheLicensedPathRecordsFirst(unittest.TestCase):
         q2 = loop.process_turn("How much scone can we make?", tick=7)
         self.assertEqual((q2["loop_status"], Fraction(str(q2["output_value"]))), ("SUCCESS_EVALUATED", Fraction(2)))
 
+    def test_longer_phrase_face_on_an_everyday_name_is_applied_never_answered_high(self):
+        """The v7 seal's practice finding, in the everyday-name shape: a Rising face stated with a longer phrase on an
+        ingredient the licensed path records must be APPLIED (flour at a quarter: 6/4 = 3/2 cups -> 3/4 scone) or asked,
+        never answered at the raw 2."""
+        loop = self._loop()
+        r = loop.process_turn(self.STOCK + ", but I'm new to using the sifted flour.", tick=4)
+        # whichever path records the stock (the licensed reader may refuse "sifted flour" and hand the turn to the wide path)
+        self.assertIn(r["loop_status"], ("INVENTORY_RECORDED", "STOCK_RECORDED"))
+        self.assertEqual([(f["name"], f["face"], f["stage"]) for f in r["clause_read"]["faces"]],
+                         [("flour", "WISDOM", "RISING")])
+        q = loop.process_turn("How much scone can we make?", tick=5)
+        self.assertEqual((q["loop_status"], Fraction(str(q["output_value"])), q["limiting_reagent"]),
+                         ("SUCCESS_EVALUATED", Fraction(3, 4), "flour"))
+        for clause in ("I'm a bit rusty with the plain flour", "I'm still learning how to use the eggs",
+                       "I'm out of practice with the whole milk"):
+            loop = self._loop()
+            self.assertIn(loop.process_turn(self.STOCK + ", but " + clause + ".", tick=4)["loop_status"],
+                          ("INVENTORY_RECORDED", "STOCK_RECORDED", "CLARIFY_WIDE_FACE_UNREAD"))
+            q = loop.process_turn("How much scone can we make?", tick=5)
+            if q["loop_status"] == "SUCCESS_EVALUATED":
+                self.assertLess(Fraction(str(q["output_value"])), Fraction(2), clause)     # never the raw answer
+            else:
+                self.assertIsNone(q.get("output_value"), clause)
+
     def test_not_a_face_on_the_licensed_recorded_path_changes_nothing(self):
         loop = self._loop()
         r = loop.process_turn(self.STOCK + ", but I love baking with milk.", tick=4)
