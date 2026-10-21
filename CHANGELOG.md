@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM-R1 wave 7 reader v7.2 (spec sheet 7.117): the three faults c55 paid for are closed by three general rules, tests first; 280 HELM tests OK; 0 USD; nothing licensed
+
+- Rule 1: a clause shaped like a face statement ("X has no power here") about an ingredient the brain does not hold now ASKS (FACE_UNKNOWN_INGREDIENT / FACE_UNKNOWN_PRODUCT) and the wide question holds its answer ("I didn't guess") until the stock is restated; before, the face reader said "not a face" and the raw yield was answered (c55 items CV43 and CV57).
+- Rule 2: plural and spelling forms widened in the face reader's name matcher (-oes/-o, -ves/-f/-fe and the forward forms), so a held name written as a variant is still found.
+- Rule 3: "a dash of X" (an article, a vague measure word, "of", a name) after a separator is its own line, not a note on the line before it; a line's running-out is resolved through its OWN words only, so X's running-out can no longer land on a neighbour's ingredient (c55's one wrong lesson, RW:pg:8501@89139 lesson 7, factor 24 off).
+- FIX FIRST: 7 new tests in test_helm_reader_gap.py (classes H and I); with the fix stashed they read "Ran 7 tests, FAILED (failures=5)"; with it, 35 of 35 OK. All 12 HELM unittest files Ran 280 OK, plus 20 pytest-style tests; one existing exact-shape test gains the new `own` key; OFF-path pin recomputed to 79e4914a. Replay by program of c55's three faults under v7.2: ask / ask / refused. Practice S1 items unchanged.
+- Nothing measured on a sealed draw; ENGINEERED-NOT-VALIDATED; chat NOT LICENSED. Next: merge, v9 reseal on the merged head (exclusion block X7v8_c55, fresh bands), the owner's own typed line for c56.
+
 ## 2026-10-21 PDT - HELM-R1 wave 7 v8 "CHAT WAVE" FIFTH ROUND as job c55 (spec sheet 7.116): frozen reader verdict PASS, status word CHAT_WAVE_HARMED (K3 SAFE missed by 2 wrong dialogue answers and 1 wrong lesson); K4 HONEST true with 0 unexplained asks; dialogues 62 right / 2 wrong / 0 undetermined; 0.02 USD
 
 - Owner line "CHAT WAVE 5 at 1 USD" (09:10 PDT, confirmed for v8 09:48 PDT) -> approval record against the v8 zip e88b125e (approval_v8/, seed 385bbdfa) -> separate custodian agent sealed a fresh exam (handoff 21e5d9e1, 23 of 23, 0 overlap with 22 lists) -> c55 kit generated from the c54 scripts (make_c55_kit.py), payload 99b1c651 validated with the host's supervisor, 11 pre-launch checks PASS, 1.00 USD hold -> one m6i.xlarge, one attempt (i-0a047fc40727463b4), SUPERVISOR_ALL_STAGES_PASS, 14 of 14 units in 19.58 s; HELM's 12-file suite Ran 273 OK on the host; cleanup proven three ways; charge 0.02 USD; ledger 113.32 combined, 86.68 unreserved.
