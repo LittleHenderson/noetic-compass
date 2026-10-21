@@ -1,0 +1,18 @@
+--- C:/Users/wakil/Documents/Codex/2026-10-20/lm_t4b_sealed_reader_rerun/package/lm_t4/test_lm_t4.py	2026-10-20 20:19:07.292533700 -0700
++++ package/lm_t4/test_lm_t4.py	2026-10-20 21:09:22.855576400 -0700
+@@ -161,6 +161,15 @@
+         self.assertEqual(d["provenance"]["key_mismatch"], 0, d["provenance"])
+         self.assertTrue(any(x["reply"] and x["reply"]["kind"] == "ANSWER" for x in d["released_answers"]))
+ 
++    def test_twin_provenance_keys_task_b(self):
++        # CONT-3 (LM-T4c): the untaught twin asks but is never taught, so its asking crossings end ATTEMPTED and
++        # their key must say so; the taught brain's keys must still match (its questions are answered = CREATED)
++        d = taskb("A1")
++        self.assertEqual(d["provenance"]["key_mismatch"], 0, d["provenance"])
++        self.assertEqual(d["provenance_twin"]["key_mismatch"], 0, d["provenance_twin"])
++        self.assertGreater(d["provenance_twin"]["ATTEMPTED"], 0, d["provenance_twin"])
++        self.assertEqual(d["provenance_twin"]["CREATED"], 0, d["provenance_twin"])
++
+ 
+ QUICK = tuple(n for n in dir(TestLMT4) if n.startswith("test_"))
+ 
