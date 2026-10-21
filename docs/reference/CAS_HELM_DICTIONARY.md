@@ -158,7 +158,7 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 
 ## A–Z entries
 
-**459 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
+**460 entries.** Jump to: [0-9](#0-9) · [A](#a) · [B](#b) · [C](#c) · [D](#d) · [E](#e) · [F](#f) · [G](#g) · [H](#h) · [I](#i) · [J](#j) · [K](#k) · [L](#l) · [M](#m) · [N](#n) · [O](#o) · [P](#p) · [R](#r) · [S](#s) · [T](#t) · [U](#u) · [V](#v) · [W](#w) · [X](#x) · [Y](#y)
 
 ### 0-9
 
@@ -1966,6 +1966,12 @@ A color is a reading aid. **It is never a claim status.** The claim status is al
 - *Plain:* two harder exams: A scales the numbers far past training; B asks for recipe compositions never taught.
 - *Definition:* Task A "boards scaled 8-16x beyond every taught value"; Task B "4 base recipes taught, two 2-input and two 3-input; tested on held-out chains and best-of-two routes; worlds kept only where the bottleneck is not the smallest stock" — SPEC §7.25.
 
+**Talk packet** (HELM talk packet v1; design only) — [HELM test/governance]
+- *Plain:* the design for HELM having a normal conversation: the ears (the CTT, retrained so it can say "nothing to save") read what a person typed where the hand-written reader cannot; the brain stays the recipe brain; the mouth (the voice) answers in plain English with no CAS tokens, no recipe words on non-recipe turns, exact amounts and an honest "I don't know". The exam is typed by named people for HELM, because public text almost never says what food someone has.
+- *Definition:* "When named people type to HELM's chat in their own words — small talk, kitchen facts with purpose clauses, feelings, past tense, hedges and typos, plain questions, corrections, questions about HELM, off-topic talk and mixed turns — does HELM with the retrained ears and the guarded mouth save the right facts, answer right, apply corrections, save nothing where there is nothing to save, and say it all in plain English with exact amounts and honest unknowns, better than the hand-written reader alone and better than a 30-line keyword rule, without saving one wrong fact?" — `docs/working/helm_talk_design_v1/PREREGISTRATION_TALK_V1.precode.md` §1 (sha256 `59bed9ba…`). Marks in two families, UNDERSTOOD and SOUNDED_HUMAN, plus EARS_GAIN and HARM; words `INCONCLUSIVE` / `TALK_HARMED` / `TALK_NO_GAIN` / `TALK_EARNED_KEEP` — §6. Spec section: SPEC §7.110.
+- *Owner's words:* "talk packet" (2026-10-21); "THE CTT ... WAS BUILT TO GIVE HELM THE ABILITY TO HAVE NORMAL CONVERSATIONS WITHOUT SOUNDING LIKE IT WAS GIVING RECIPES ALL THE ... TIME" (same exchange). Lines proposed, not signed: `TALK TRAIN at 3 USD` and `TALK EXAM at 1 USD`.
+- *Status:* design only; nothing built, nothing trained, nothing run, nothing licensed; 0 USD. The reader-gap packet (SPEC §7.109) is the hand-written reader's half and is not redone by it.
+
 **The loop** (`the_loop_v3`) — [HELM part]
 - *Plain:* one turn of HELM's thinking in a fixed order, with each role kept separate.
 - *Definition:* "one turn of the loop, five stages in a fixed order, with the jobs kept apart." — `the_loop_v3/loop.py`. Claim ceiling: "MECHANISM ONLY. THE GATE IS REAL; NOTHING HAS RUN INSIDE HELM." — LOOP3.
@@ -2264,3 +2270,4 @@ These are recorded so nobody fills the gap with a guess.
 | 2026-10-20 | Chat wave: status updated for job c52 (SPEC §7.104, `PASS` / `CHAT_WAVE_NO_GAIN`); Wave entry lists §7.103 and §7.104. No definition changed. Count unchanged (459). |
 | 2026-10-20 | Chat wave: status updated for job c53 (SPEC §7.106, `INSTRUMENT_ERROR` / `INCONCLUSIVE`); Wave entry lists §7.105 and §7.106. No definition changed. Count unchanged (459). |
 | 2026-10-21 | Chat wave: status updated for job c54 (SPEC §7.108, `PASS` / `CHAT_WAVE_NO_GAIN`); Wave entry lists §7.107 and §7.108. No definition changed. Count unchanged (459). |
+| 2026-10-21 | One entry added: Talk packet (HELM talk packet v1, design only), quoted from PREREGISTRATION_TALK_V1.precode.md §1 and SPEC §7.110. Count 459 -> 460. No definition invented; no status changed. |
