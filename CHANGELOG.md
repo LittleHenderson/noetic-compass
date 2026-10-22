@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM CTT retraining pre-registered (spec sheet 7.125 follow-up 14): owner chose to train first; the owner writes nothing (approval recorded, cap 3 USD); design only, 0 USD
+
+- Owner's words: "T7 (a): train the CTT first." and "I'M NOT WRITING A MUTHA FUCKING THING YOU AND OR OTHER LLMs".
+- A-TEACH2-16 f2d39443... (T7 = a); A-TEACH2-17 8d7e0ff0... (no typed lines from the owner; the choice is the approval, recorded as CUBE TRAIN at 3 USD).
+- PREREGISTRATION_CUBE_TRAIN.precode.md 6e1afceb... (92c59297): fine-tune 3 CTT copies + twin from c45 on cube readings; generator-truth labels; 40,000 SDG rows + 1,200 LLM-written lines + 20,000 kept CAS rows; g5.xlarge cap 3 USD; gates G-INVENT, G-CONFIDENT-WRONG, G-EXERCISED, G-KEEP-OLD. Next: row builder + CTT adapter test-first.
+
 ## 2026-10-22 PDT - HELM TEACH-2 brought up to today's memory design (spec sheet 7.125 follow-up 13; design only, 0 USD); not sealed: waits on the owner's choice (train the CTT first, or the rule reader as proposer)
 
 - Owner's words: "bring the TEACH-2 exam up to date with today's memory design ... and seal it, so the CUBE EXAM at 1 USD can run. Amendment first."
