@@ -1,0 +1,106 @@
+REAL_FIT_RESULT -- rb_c4's own route fitter under faculties_v2's restart fallback
+==============================================================================
+
+WHAT RAN
+  fitter   : rb_c4/fitg.py:96 route_fit_once (read-only; this build never writes rb_c4)
+  fallback : faculties_v2/restart.py:428 restart_fallback
+  adapter  : faculties_v2/real_fit.py real_fit_start
+  python   : 3.14.0
+
+PRIMARY RUN -- family TaskB_d3, outcome 0
+  dataset sha256      : c27d0bdcb85b9dbc84052a445e6405dc7ad62fc545881406e5cd6cdd2b902368
+  routes (cell sets)  : [[0, 1], [2, 3]]
+  skeleton            : MAX[MIN{0,1};MIN{2,3}]
+  tau                 : 0.4054651081081644
+  training rows       : 64
+
+STARTS
+  starts that ran on start 0              : 1
+  extra starts the fallback fired         : 8
+  fallback_fired flag                     : True
+
+  start        seed  explained/total  kept  iterations  fixed_point  refusal
+      0           0       0/64      no             0  False        ROUTE0_NO_CLEAN_ROWS
+      1  2638936942762837327      64/64      yes            6  True         -
+      2  3336188626275008148      64/64      no             6  True         -
+      3  7015132323823532862      64/64      no             5  True         -
+      4  16653929449330421339      64/64      no             7  True         -
+      5  8694290981314238769      64/64      no             7  True         -
+      6  9849143298239819505      64/64      no             5  True         -
+      7  17666955830338305558      64/64      no             8  True         -
+      8  3763645474073318756      64/64      no             6  True         -
+
+KEPT
+  start kept                              : 1
+  candidate it proposed                   : MAX[MIN{0,1};MIN{2,3}]
+  rows explained by the kept start        : 64/64
+
+HELD-OUT
+  start 0 alone (the fallback switched off): start 0 refused, so there is no tree at
+                                            all: held-out 0/32, by having nothing to
+                                            predict with, not by predicting wrong
+  kept start 1, held-out right            : 32/32
+
+SECOND RUN -- family TaskB_d4, outcome 0 (same method, the other family RESULTS.md names)
+  dataset sha256      : e4b5e7e71cc80ba205d0dbc8fb0590f88d6dfc88d9e958669e6d311657830b08
+  skeleton            : MAX[MIN{0,1};MIN{2,3}]
+  tau                 : 0.4054651081081644
+  training rows       : 64
+  starts that ran on start 0              : 1
+  extra starts the fallback fired         : 8
+  start kept                              : 1
+  rows explained by the kept start        : 64/64
+  kept start held-out right               : 32/32
+  start        seed  explained/total  kept  iterations  fixed_point  refusal
+      0           0       0/64      no             0  False        ROUTE0_NO_CLEAN_ROWS
+      1  6447350207416592591      64/64      yes            8  True         -
+      2  6478731792391321766      38/64      no             4  True         -
+      3  15117312949686630603      64/64      no             4  True         -
+      4  12202898441068115775      64/64      no             8  True         -
+      5  2250991444709822791      64/64      no             8  True         -
+      6  10968603597612205677      64/64      no             7  True         -
+      7  11557750258675675899      64/64      no             4  True         -
+      8  11505341674116658389      25/64      no             5  True         -
+
+SWEEP -- the SAME fixed skeleton over all 16 TaskB_d3 outcomes
+  skeleton                         : MAX[MIN{0,1};MIN{2,3}]
+  outcomes where start 0 produced a fit   : 0/16
+  held-out right, start 0 alone           : 0/512
+  held-out right, after the fallback      : 349/512
+  start kept, per outcome                 : [1, 1, 1, 1, 1, 2, 3, 2, 1, 1, 2, 2, 2, 1, 1, 4]
+
+CONTROL -- two other real skeletons the same generator emits, same method, same seeds rule
+  MAX[MIN{0,1};MIN{4,5,6}]:              held-out right 184/512
+  MAX[MIN{0,1};MIN{2,5,7}]:              held-out right 263/512
+  The control is why the held-out column above is worth reading. It is not a
+  near-constant: a different real skeleton scores far lower on the same rows.
+  It is still NOT a measure of finding the target. One fixed skeleton was applied to
+  all 16 outcomes, including outcomes whose target it is not, so the number says
+  "this skeleton explains this share of held-out rows", nothing stronger.
+
+HOW LOOSE 'EXPLAINED' IS HERE
+  gexplained(y, yhat, tau) is |log(y/yhat)| <= tau (lsr_t1/engine.py). This run uses
+  tau index 0 = 0.4054651081081644 = log(1.5), the loosest level on TAU_LADDER and the level
+  loop.py starts every outcome at. A prediction within a factor of 1.5 counts as
+  explained. Tighter levels were not run here.
+
+TWO THINGS FOUND ABOUT rb_c4 ITSELF (reported, not repaired; rb_c4 was not modified)
+  1. On Task B data start 0 could not fit ANY multi-route skeleton, in 16 of 16
+     outcomes. A row is 'certain' for a route only when exactly one route is uncut on
+     it (fitg.py:104-108), and with taught stocks all of one magnitude no cell of any
+     row is cut (is_cut is x_i <= 0 or x_i < (1/5) * the row's median). So every row is
+     uncut for every route, no row is ever certain, start 0 assigns nothing, the first
+     route gets no rows and typed_wrm returns NO_CLEAN_ROWS. This is the exact case the
+     fallback exists for, and it is measured, not assumed: 16/16 outcomes.
+  2. route_fit_once cannot fit a ONE-route skeleton. fitg.py:145 always builds a MAX
+     node, and lsr_t4/engine.py:73 asserts len(children) >= 2, so a single MIN route
+     raises AssertionError instead of returning a fit or a refusal string. Found while
+     running a control; the control was changed, rb_c4 was not.
+
+WHAT THESE NUMBERS ARE NOT
+  They are NOT the RESULTS.md numbers (TaskB_d3 held-out-right 64 -> 264..344,
+  TaskB_d4 0 -> 208..266). Those come from the full run_c4.py run: 9 arms over 16
+  outcomes per family, with the loop, the verifier, the admission ledger and three
+  seeds. This file runs the fitter and the fallback alone, on one fixed skeleton
+  that rb_c4's own grammar emits. The held-out figures above are measured, but they
+  measure a narrower thing, and they are not offered as the RESULTS.md figure.

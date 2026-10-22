@@ -161,6 +161,23 @@ class HELMConversationalSession:
         t0 = time.time()
         lower_prompt = prompt.lower()
 
+        # Memory compaction ON (SPEC 7.115): the line right after a refresh-my-memory question is the person's answer to
+        # it; it goes to the compactor (F5 + strengthening) and is kept as a turn. TEACH-1 FIX FIRST 2026-10-21: the
+        # question used to be asked and the answer then ignored.
+        comp = getattr(self.memory, "compactor", None)
+        pending = getattr(self, "_pending_refresh", None)
+        self._pending_refresh = None
+        if comp is not None and pending:
+            res = comp.answer(pending, prompt)
+            if res.get("strengthened"):
+                speech = "Thanks, that helps. I'll hold on to that one."
+            else:
+                speech = "Okay. I'll leave that one as something I don't know."
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(prompt, prompt, "REFRESH_ANSWER", {}, speech, gate_code="GATE_PASS",
+                                    duration=time.time() - t0)
+            return
+
         # Step 1: Resolve conversational references & pronouns against working memory
         resolved_prompt, entities = AnaphoraResolver.resolve(prompt, self.memory.context)
         if resolved_prompt != prompt and self.mode == "cas_diagnostic":
@@ -193,6 +210,7 @@ class HELMConversationalSession:
                     speech = f"I don't have your exact words any more. {hit['texts'][0]}"
                     if hit.get("question"):
                         speech += " " + hit["question"]
+                        self._pending_refresh = hit.get("capsule_id")
                 else:
                     speech = "I checked my records for this session, but I don't see a specific note on that yet. Feel free to remind me!"
                     if hit.get("question"):

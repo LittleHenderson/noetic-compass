@@ -1,0 +1,209 @@
+{
+ "writer": "independent sub-agent; read only FUNDAMENTALS.md, MAP.md, GRAMMAR_CCE_v0_1.md, GRAMMAR_CCE_v0_1b_ADDENDUM.md, GRAMMAR_CCE_v0_1c_ADDENDUM.md",
+ "items": [
+  {
+   "id": "D01",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "DIGITS",
+   "text": "The Noetic fractal is 6.2.9.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 9,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED",
+     "flags": [
+      "PENDING_N1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "D02",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "DIGITS",
+   "text": "The Noetic fractal is 7.4.8.0.3.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 3,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 0,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 7,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED",
+     "flags": [
+      "PENDING_N1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "D03",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "WITHIN",
+   "text": "The Noetic fractal is Positive within Above/Cause within Rhythm within Mind.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 7,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED",
+     "flags": [
+      "PENDING_N1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "D04",
+   "kind": "POSITIVE",
+   "group": "DOTTED",
+   "wording": "WITHIN",
+   "text": "The Noetic fractal is Below/Effect within Male.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 9,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": [],
+     "expr": null,
+     "fractal_notation": "DOTTED",
+     "flags": [
+      "PENDING_N1"
+     ]
+    }
+   }
+  }
+ ]
+}

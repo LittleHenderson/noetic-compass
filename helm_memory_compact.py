@@ -69,6 +69,17 @@ STOP_WORDS = {
     "hello", "okay", "yeah", "well", "really", "maybe", "again", "here", "where", "which", "while", "because",
     "remember", "remind", "told", "tells", "talk", "talked", "talking", "mean", "means",
 }
+#: Number words are never clue words: a capsule never holds a number (DESIGN 3.1); numbers stay in the cubes and the
+#: verbatim cold copy. TEACH-1 FIX FIRST 2026-10-21 (number words such as "twelve" were reaching capsule clues).
+NUMBER_WORDS = {
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen",
+    "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty", "sixty",
+    "seventy", "eighty", "ninety", "hundred", "thousand", "million", "dozen", "half", "quarter", "third", "fourth",
+    "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "once", "twice", "first", "second",
+}
+#: Turns that ASK about memory hold no memory of their own: recall never serves them, and a capsule made only of them
+#: is kind "question" and is skipped by recall (TEACH-1 FIX FIRST 2026-10-21: quiz questions were served as answers).
+MEMORY_QUERY_INTENTS = {"QUERY_MEMORY_RECALL", "QUERY_MEMORY_COUNT", "USER_KNOWLEDGE_QUERY", "SESSION_SUMMARY"}
 NEGATIVE_ANSWER_RX = re.compile(r"\b(?:no|nope|not|don'?t remember|do not remember|can'?t remember|wrong|never)\b", re.I)
 
 #: CCE frame per turn intent (the verb frame picks the Noetic; GRAMMAR_CCE_v0_1 section 2). The person is `you`.
@@ -162,12 +173,12 @@ def read_cold(path: str) -> List[Dict[str, Any]]:
 
 def content_words(text: str) -> List[str]:
     """Words copied verbatim from the text, in order, lower-cased, letters only, at least MIN_CLUE_LETTERS long,
-    not a stop word, no digits. These are the only words a clue may be made of."""
+    not a stop word, not a number word, no digits. These are the only words a clue may be made of."""
     seen = set()
     out = []
     for w in re.findall(r"[A-Za-z][A-Za-z'\-]*", text):
         lw = w.lower().strip("'-")
-        if len(lw) < MIN_CLUE_LETTERS or lw in STOP_WORDS or lw in seen:
+        if len(lw) < MIN_CLUE_LETTERS or lw in STOP_WORDS or lw in NUMBER_WORDS or lw in seen:
             continue
         seen.add(lw)
         out.append(lw)
@@ -185,6 +196,7 @@ class Capsule:
     mass: Dict[str, int]             # value, confirmed
     receipt: str
     atlas: Dict[str, Any] = field(default_factory=dict)   # node (thread CONTEXT id), node_id (capsule node), side
+    kind: str = "statement"          # "question" when every turn of the window asked about memory (recall skips it)
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -354,9 +366,11 @@ class Compactor:
         records = [asdict(t) for t in turns]
         turn_ids = [t.turn_id for t in turns]
         capsule_id = f"cap-{self.memory.session_id}-{turn_ids[0]:06d}-{turn_ids[-1]:06d}"
-        # 1. clues, verbatim words only
+        # 1. clues, verbatim words only; a turn that asked about memory gives clues only if nothing else does
+        stated = [t for t in turns if t.intent not in MEMORY_QUERY_INTENTS]
+        kind = "statement" if stated else "question"
         clues: List[str] = []
-        for t in turns:
+        for t in (stated or turns):
             for w in content_words(t.user_raw_text):
                 if w not in clues:
                     clues.append(w)
@@ -410,7 +424,8 @@ class Compactor:
         crumb = {"cold_path": cold_path, "sha256": digest, "turn_ids": turn_ids}
         mass = {"value": len(turn_ids), "confirmed": 0}
         receipt = _receipt_of(capsule_id, cas, clues, binds, crumb, mass)
-        cap = Capsule(capsule_id=capsule_id, cas=cas, clues=clues, binds=binds, crumb=crumb, mass=mass, receipt=receipt)
+        cap = Capsule(capsule_id=capsule_id, cas=cas, clues=clues, binds=binds, crumb=crumb, mass=mass, receipt=receipt,
+                      kind=kind)
         self._file(cap)
         self.capsules.append(cap)
         self._receipt("COMPACTION", capsule_id, receipt, {"turn_ids": turn_ids, "cold_sha256": digest})
@@ -523,12 +538,19 @@ class Compactor:
         if not tokens:
             return {"label": "UNKNOWN", "texts": [], "question": None, "reason": "no clue word in the question",
                     "lookup": lookup, "capsule_id": None}
+        # A memory matches only when it holds EVERY content word of the question (TEACH-1 FIX FIRST 2026-10-21: one
+        # shared word used to be enough, so a question about one bus line was answered from another). Turns and
+        # capsules that only asked about memory are never memories. Among matches the NEWEST comes first: a later
+        # statement (a correction) supersedes an earlier one.
         # working memory first (the verbatim items that never left)
-        live = [t for t in self.memory.turns if tokens & set(content_words(t.user_raw_text))]
-        pinned = [(cid, texts) for cid, texts in self._pinned.items()
-                  if any(tokens & set(content_words(x)) for x in texts)]
-        wanted = {c.capsule_id for c in self.capsules if tokens & set(c.clues) and c.capsule_id not in self._pinned}
+        live = [t for t in reversed(self.memory.turns)
+                if t.intent not in MEMORY_QUERY_INTENTS and tokens <= set(content_words(t.user_raw_text))]
+        pinned = [(cid, entry) for cid, entry in reversed(list(self._pinned.items()))
+                  if any(tokens <= set(content_words(x)) for x in entry["texts"])]
+        wanted = {c.capsule_id for c in self.capsules if c.kind == "statement" and tokens <= set(c.clues)
+                  and c.capsule_id not in self._pinned}
         hits, radius, beyond = self._searchlight(wanted) if wanted else ([], 0, False)
+        hits = sorted(hits, key=lambda c: c.crumb["turn_ids"][-1], reverse=True)
         lookup.update({"radius": radius, "beyond_searchlight": beyond})
         candidates = len(live) + len(pinned) + len(hits)
         lookup["candidates"] = candidates
@@ -544,9 +566,12 @@ class Compactor:
             return {"label": "EXACT", "texts": [t.user_raw_text for t in live], "question": None, "reason": "in working memory",
                     "lookup": lookup, "capsule_id": None}
         if pinned:
-            cid, texts = pinned[0]
-            return {"label": "EXACT", "texts": list(texts), "question": None, "reason": "strengthened item", "lookup": lookup,
-                    "capsule_id": cid}
+            cid, entry = pinned[0]
+            # a strengthened item keeps the label it was confirmed under: EXACT only when its digest-checked original
+            # was fetched (TEACH-1 FIX FIRST 2026-10-21: a strengthened rebuild was served as EXACT, M1's H8)
+            return {"label": entry["label"], "texts": list(entry["texts"]), "question": None,
+                    "reason": "strengthened item" if entry["label"] == "EXACT" else "strengthened item, rebuilt from the capsule",
+                    "lookup": lookup, "capsule_id": cid}
         cap = hits[0]
         status, texts = self._fetch(cap)
         if status == "EXACT":
@@ -618,7 +643,8 @@ class Compactor:
         cap.atlas["side"] = "fact"
         # the strengthened original stays available and is never compacted again
         status, texts = self._fetch(cap)
-        self._pinned[cap.capsule_id] = texts if status == "EXACT" else [self._rebuilt_text(cap)]
+        self._pinned[cap.capsule_id] = ({"label": "EXACT", "texts": texts} if status == "EXACT"
+                                        else {"label": "RECONSTRUCTED", "texts": [self._rebuilt_text(cap)]})
         self._strengthened.add(cap.capsule_id)
         receipt = _sha(_canon({"kind": "STRENGTHEN", "capsule": cap.receipt, "mass": cap.mass, "clues": cap.clues,
                                 "side": cap.atlas["side"]}))
@@ -631,7 +657,7 @@ class Compactor:
         return capsule_id in self._strengthened
 
     def pinned_texts(self) -> List[List[str]]:
-        return [list(v) for v in self._pinned.values()]
+        return [list(v["texts"]) for v in self._pinned.values()]
 
     # ---------------------------------------------------------------- record
     def state(self) -> Dict[str, Any]:

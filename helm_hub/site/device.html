@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM Cube Concept</title>
+<meta name="description" content="A concept for HELM&#x27;s final home: a plain black cube with no buttons. Design only.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin:14px 0}
+.chat .meta{font-size:12.5px;color:var(--ink-3);margin-bottom:8px;overflow-wrap:anywhere}
+.chat .meta code{font-size:11.5px}
+.msg{display:flex;flex-direction:column;max-width:88%;margin:6px 0}
+.msg.you{align-self:flex-end;align-items:flex-end;margin-left:auto}
+.msg.helm{align-self:flex-start;align-items:flex-start}
+.msg .who{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 6px 2px}
+.msg .bubble{border-radius:14px;padding:8px 12px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.msg.you .bubble{background:var(--accent-soft);border:1px solid var(--line);border-bottom-right-radius:4px}
+.msg.helm .bubble{background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.noise .bubble{border-style:dashed}
+.msg .st{font:11px/1.4 var(--mono);color:var(--ink-3);margin:2px 6px 0}
+.chat .thread{display:flex;flex-direction:column}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="chat.html">Talking to HELM</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="build.html">The build, animated</a></li><li><a href="data.html">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html">Model card</a></li><li><a href="safety.html">Safety and honesty</a></li><li><a href="roadmap.html">Roadmap</a></li><li><a href="device.html" aria-current="page">The HELM Cube</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html">How to run HELM</a></li><li><a href="files.html">Files and paths</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>The HELM Cube: a concept for HELM&#x27;s final home</h1>
+<div class="lede">The HELM Cube is a concept for HELM's final home: a small black cube with no buttons that listens, talks, sees and maps its room. This page is a design only. Nothing has been built, bought or measured, and no money was spent.</div>
+<details class="words"><summary>Words used on this page, in plain English</summary><dl><div class="w"><dt><dfn data-term="recipe" title="a written rule saying how much of each ingredient one unit of an outcome needs">recipe</dfn></dt><dd class="gloss">a written rule saying how much of each ingredient one unit of an outcome needs</dd></div><div class="w"><dt><dfn data-term="recipe brain" title="HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network">recipe brain</dfn></dt><dd class="gloss">HELM&#x27;s brain made of written recipes and exact arithmetic instead of a neural network</dd></div><div class="w"><dt><dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn></dt><dd class="gloss">HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell</dd></div><div class="w"><dt><dfn data-term="UNDETERMINED" title="HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing">UNDETERMINED</dfn></dt><dd class="gloss">HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing</dd></div><div class="w"><dt><dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn></dt><dd class="gloss">the record a saved fact leaves behind, with a fingerprint, so it can be checked later</dd></div><div class="w"><dt><dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn></dt><dd class="gloss">a small watcher that looks over HELM, reports and whispers, and never writes</dd></div><div class="w"><dt><dfn data-term="whisper" title="a typed nudge from the Eye that HELM may ignore; it never changes a stored fact">whisper</dfn></dt><dd class="gloss">a typed nudge from the Eye that HELM may ignore; it never changes a stored fact</dd></div><div class="w"><dt><dfn data-term="sealed" title="frozen and fingerprinted before the run, so nothing can be changed after the fact">sealed</dfn></dt><dd class="gloss">frozen and fingerprinted before the run, so nothing can be changed after the fact</dd></div><div class="w"><dt><dfn data-term="frozen reader" title="the scoring program, sealed before the run, that alone writes the verdict">frozen reader</dfn></dt><dd class="gloss">the scoring program, sealed before the run, that alone writes the verdict</dd></div><div class="w"><dt><dfn data-term="claim status" title="what may be said about a result, using only the words of the spec sheet&#x27;s legend">claim status</dfn></dt><dd class="gloss">what may be said about a result, using only the words of the spec sheet&#x27;s legend</dd></div><div class="w"><dt><dfn data-term="LICENSED" title="a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)">LICENSED</dfn></dt><dd class="gloss">a claim-status word: this exact sentence may be said, nothing wider (NOT LICENSED: it may not be said)</dd></div><div class="w"><dt><dfn data-term="ENGINEERED-NOT-VALIDATED" title="a claim-status word: built and working, with no validated result yet">ENGINEERED-NOT-VALIDATED</dfn></dt><dd class="gloss">a claim-status word: built and working, with no validated result yet</dd></div><div class="w"><dt><dfn data-term="cascade" title="going down into sub-problems, with a stop rule and a depth limit">cascade</dfn></dt><dd class="gloss">going down into sub-problems, with a stop rule and a depth limit</dd></div></dl></details>
+
+<h2>The owner's words</h2>
+<p>The brief, and five rulings given on 2026-10-21, word for word:</p>
+<blockquote>FOR THE ISSUE OF THE BOTTOM AND CHARGING MAGNETIC PULL AND HAPTIC FEEDBACK SHOULD TAKE CARE OF KNOWING WHICH SIDE TO CHARGE</blockquote><blockquote>YES BECAUSE THE MAIN THING IS THAT IT SHOULD LOOK THE SAME ON ALL SIDES LIKE A PLAIN BLACK BOX</blockquote><blockquote>WITH GYRATOR WHEN IT&#x27;S BEEN MOVE TURNED AND DIRECTION FOR MAPPING IT&#x27;S ENVIROMENT GEOLOCATION AND USE WIFI TO DRAW ITSELF AN INTERNAL SCHEMATIC OF IT&#x27;S ENVIROMENT AND OR USE LIDAR</blockquote><blockquote>ALL OF WHICH FEEDS BACK TO HELM WHO WILL HAVE ANY NECESSARY CONTROLS OVER</blockquote><blockquote>THE ENTIRE OUTSIDE MADE OUT OF GORILLA GLASS THAT IS BLACK BUT CAN TURN ON AND SHOW SCREENS IMAGES VIDEOS ETC THIS COULD BE ANOTHER VERSION YES THIS IS JUST ANOTHER VERSION NOT THE MAIN VERSION</blockquote>
+<p class="small muted">"Gyrator" means gyroscope. The second ruling is the one the owner called the main thing: when it is off, the cube is a plain black box, the same on every face.</p>
+
+<h2>What it is</h2>
+<div class="tablewrap"><table class="cards"><thead><tr><th>Part</th><th>The design</th><th>Status</th></tr></thead><tbody><tr><td data-label="Part"><strong>Size</strong></td><td data-label="The design">64 mm on each edge, about a tennis ball across; 55 mm is the smallest honest size, at the cost of magnetic charging and on-cube speech.</td><td data-label="Status">estimate</td></tr><tr><td data-label="Part"><strong>Look</strong></td><td data-label="The design">A plain black box. Off, all six faces are identical: no band, port, button or logo singles one out.</td><td data-label="Status">owner ruling</td></tr><tr><td data-label="Part"><strong>Light</strong></td><td data-label="The design">Along all twelve edges, invisible until lit. It pulses with each syllable HELM speaks and shows each mode by its motion.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Touch</strong></td><td data-label="The design">No buttons. Shake to wake. Taps to command: the number of taps is the action, the face you tap is the target. A tiny buzz confirms each counted tap.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Charging</strong></td><td data-label="The design">Qi2 magnetic wireless charging only. One unmarked face snaps to the charger by magnetic pull, and a short buzz confirms. Heat, not the standard, sets the speed: about 14 W at first, likely 7 to 10 W as it warms.</td><td data-label="Status">owner ruling; speeds are estimates</td></tr><tr><td data-label="Part"><strong>Cameras, microphones, sound</strong></td><td data-label="The design">Behind every face, hidden behind dark glass and edge slots. While docked, the charge face rests and the other five work. Cameras are off by default.</td><td data-label="Status">owner ruling; design</td></tr><tr><td data-label="Part"><strong>Knowing where it is</strong></td><td data-label="The design">A gyroscope feels every turn; small depth sensors on each face measure the walls; Wi-Fi gives distances; the phone can share the location. Together they build a coarse map of the room; space it has not measured stays undetermined. Wi-Fi alone cannot draw walls yet; that is still research.</td><td data-label="Status">design; researched and fact-checked (spec Section 8a)</td></tr><tr><td data-label="Part"><strong>Brains</strong></td><td data-label="The design">HELM&#x27;s recipe brain runs on the cube. Speech runs on the cube when it is cool enough, otherwise on the phone.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Radios</strong></td><td data-label="The design">Wi-Fi 6, Bluetooth, and Thread for Matter smart-home devices, through the home&#x27;s existing hub.</td><td data-label="Status">design</td></tr><tr><td data-label="Part"><strong>Another version: the display cube</strong></td><td data-label="The design">Not the main version. The whole outside is black Gorilla Glass over square screens that can show pictures, video, answers and the room map. A dark screen gives no light, so off it is still a plain black box. Screens cost power and heat, so one or two faces light at a time; cameras see worse under a screen.</td><td data-label="Status">owner ruling; estimates only</td></tr></tbody></table></div>
+
+<h2>HELM is in charge</h2>
+<p>Every sensor feeds HELM, and HELM holds the controls: which sensors run, when the cube maps, what the light shows, which home devices it controls. Each action goes through the <dfn data-term="RPM Gate" title="HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell">RPM Gate</dfn><span class="gloss"> (HELM&#x27;s one gate: it lets a step go ahead, sends it to repair, or refuses, and lets the brain say it cannot tell)</span> and leaves a <dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn><span class="gloss"> (the record a saved fact leaves behind, with a fingerprint, so it can be checked later)</span>. A fact HELM lacks, such as a corner of the room it never measured, stays <dfn data-term="UNDETERMINED" title="HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing">UNDETERMINED</dfn><span class="gloss"> (HELM&#x27;s honest &#x27;I cannot tell&#x27;, used when something it needs is missing)</span>: HELM asks instead of guessing, and never draws a wall it did not measure.</p>
+<p><strong>Two lines stay outside all software, HELM included.</strong> The camera-on light is wired to each camera's power, and the hard mute is a physical switch. HELM can turn any camera or microphone on or off; it cannot hide that it did. This keeps six hidden cameras trustworthy. It is the operator's proposal, kept unless the owner overrules it.</p>
+
+<h2 id="drawings">The drawings</h2>
+<p>Concept drawings, made on the design canvas and reproduced here, with the lights moving exactly as they do on the canvas. Nothing has been built.</p>
+<!-- generated by helm_hub/make_device_figures.py from docs/working/helm_cube_device_concept_v0/drawings/; do not edit by hand -->
+<style>@keyframes cube-cadence{0%{opacity:.35}18%{opacity:1}55%{opacity:.6}100%{opacity:.35}}@keyframes cube-breathe{0%{opacity:.25}50%{opacity:1}100%{opacity:.25}}@keyframes cube-blink{0%{opacity:1}12%{opacity:.1}24%{opacity:1}36%{opacity:.1}48%{opacity:1}100%{opacity:1}}@keyframes cube-ask{0%{opacity:1}10%{opacity:.15}20%{opacity:1}30%{opacity:.15}40%{opacity:1}75%{opacity:1}100%{opacity:.15}}@keyframes cube-buzz{0%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}100%{transform:translateX(0)}}.cube-speak{animation:cube-cadence .23s ease-out infinite}.cube-buzz{animation:cube-buzz .12s linear infinite}.cube-a-speak{animation:cube-cadence .23s ease-out infinite}.cube-a-breathe{animation:cube-breathe 3.2s ease-in-out infinite}.cube-a-blink{animation:cube-blink 2.4s linear infinite}.cube-a-ask{animation:cube-ask 2s linear infinite}.cube-a-slow{animation:cube-breathe 2.2s ease-in-out infinite}</style>
+<figure style="margin:16px 0;padding:16px;border-radius:12px;background:#E8E6E1"><svg viewBox="0 0 900 560" role="img" aria-label="Two black cubes and a tennis ball. The left cube is off and looks like a plain black box. The middle cube is speaking, with warm white light glowing along its edges. The tennis ball shows the size." style="width:100%;height:auto;display:block">
+      <defs>
+        <linearGradient id="hero-topA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34343A"></stop><stop offset="1" stop-color="#232327"></stop></linearGradient>
+        <linearGradient id="hero-leftA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1C1C20"></stop><stop offset="1" stop-color="#121214"></stop></linearGradient>
+        <linearGradient id="hero-rightA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101012"></stop><stop offset="1" stop-color="#09090A"></stop></linearGradient>
+        <radialGradient id="hero-ball" cx="0.38" cy="0.34" r="0.75"><stop offset="0" stop-color="#E2EC6A"></stop><stop offset="1" stop-color="#A9B92E"></stop></radialGradient>
+        <filter id="hero-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+      </defs>
+      <ellipse cx="200" cy="448" rx="128" ry="16" fill="#000000" opacity="0.16"></ellipse>
+      <polygon points="200,160 321.24,230 200,300 78.76,230" fill="url(#hero-topA)"></polygon>
+      <polygon points="78.76,230 200,300 200,440 78.76,370" fill="url(#hero-leftA)"></polygon>
+      <polygon points="200,300 321.24,230 321.24,370 200,440" fill="url(#hero-rightA)"></polygon>
+      <path d="M200,160 L321.24,230 L200,300 L78.76,230 Z M321.24,230 L321.24,370 L200,440 L78.76,370 L78.76,230 M200,300 L200,440" fill="none" stroke="#26262A" stroke-width="2.5" stroke-linejoin="round"></path>
+      <ellipse cx="520" cy="448" rx="128" ry="16" fill="#000000" opacity="0.16"></ellipse>
+      <polygon points="520,160 641.24,230 520,300 398.76,230" fill="url(#hero-topA)"></polygon>
+      <polygon points="398.76,230 520,300 520,440 398.76,370" fill="url(#hero-leftA)"></polygon>
+      <polygon points="520,300 641.24,230 641.24,370 520,440" fill="url(#hero-rightA)"></polygon>
+      <g class="cube-speak" filter="url(#hero-glow)">
+        <path d="M520,160 L641.24,230 L520,300 L398.76,230 Z M641.24,230 L641.24,370 L520,440 L398.76,370 L398.76,230 M520,300 L520,440" fill="none" stroke="#FFE3B8" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"></path>
+      </g>
+      <ellipse cx="790" cy="446" rx="62" ry="9" fill="#000000" opacity="0.14"></ellipse>
+      <circle cx="790" cy="367" r="73.3" fill="url(#hero-ball)"></circle>
+      <path d="M735,318 C770,345 772,392 735,418" fill="none" stroke="#F4F6E4" stroke-width="4" stroke-linecap="round" opacity="0.9"></path>
+      <path d="M845,318 C810,345 808,392 845,418" fill="none" stroke="#F4F6E4" stroke-width="4" stroke-linecap="round" opacity="0.9"></path>
+      <text x="200" y="500" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">Off</text>
+      <text x="200" y="522" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">A plain black box. Every face the same.</text>
+      <text x="520" y="500" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">Speaking</text>
+      <text x="520" y="522" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">Light along all twelve edges, pulsing per syllable.</text>
+      <text x="790" y="500" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">Tennis ball</text>
+      <text x="790" y="522" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">67 mm, drawn to the same scale.</text>
+      <line x1="78.76" y1="96" x2="321.24" y2="96" stroke="#7A766D" stroke-width="1"></line>
+      <line x1="78.76" y1="90" x2="78.76" y2="102" stroke="#7A766D" stroke-width="1"></line>
+      <line x1="321.24" y1="90" x2="321.24" y2="102" stroke="#7A766D" stroke-width="1"></line>
+      <text x="200" y="84" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">64 mm on each edge</text>
+    </svg><figcaption style="margin-top:10px;font-size:13px;line-height:1.5;color:#2E2C29">Off, it is a plain black box: every face the same. Speaking, light glows along all twelve edges and pulses with each syllable. A tennis ball (67 mm) drawn to the same scale.</figcaption></figure>
+<figure style="margin:16px 0;padding:16px;border-radius:12px;background:#121214"><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="modes-edgeglow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs></svg><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:18px 14px"><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Asleep: Off. A plain black box." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g filter="url(#modes-edgeglow)"></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Asleep</div><div style="font-size:11px;color:#A7A39A">off</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Off. A plain black box.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Awake: One sweep along all twelve edges, then dim." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-slow" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38 M21.9,38 L60,16 M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82 M98.1,82 L60,104 M60,104 L21.9,82" fill="none" stroke="#F4F1EA" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Awake</div><div style="font-size:11px;color:#A7A39A">after a shake</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">One sweep along all twelve edges, then dim.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Listening: The edges nearest the person speaking glow brighter." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-slow" filter="url(#modes-edgeglow)"><path d="M60,60 L21.9,38 M21.9,38 L60,16 M60,60 L60,104 M21.9,38 L21.9,82 M60,104 L21.9,82" fill="none" stroke="#67D8E8" stroke-width="2.4" stroke-linecap="round" opacity="0.35"></path><path d="M60,16 L98.1,38 M98.1,38 L60,60 M98.1,38 L98.1,82 M98.1,82 L60,104" fill="none" stroke="#67D8E8" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Listening</div><div style="font-size:11px;color:#A7A39A">mics live</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">The edges nearest the person speaking glow brighter.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Thinking: Two points of light travel along the edges." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-slow" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M60,104 L21.9,82" fill="none" stroke="#E9B949" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Thinking</div><div style="font-size:11px;color:#A7A39A">gate check</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Two points of light travel along the edges.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Speaking: Brightness follows the voice: a pulse per syllable." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-speak" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38 M21.9,38 L60,16 M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82 M98.1,82 L60,104 M60,104 L21.9,82" fill="none" stroke="#FFE3B8" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Speaking</div><div style="font-size:11px;color:#A7A39A">voice out</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Brightness follows the voice: a pulse per syllable.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Asking: Short, short, long, every 2 seconds. Then it listens." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-ask" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38 M21.9,38 L60,16 M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82 M98.1,82 L60,104 M60,104 L21.9,82" fill="none" stroke="#B79CFF" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Asking</div><div style="font-size:11px;color:#A7A39A">a question</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Short, short, long, every 2 seconds. Then it listens.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Missing input: One dark edge: the gap is what is missing." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-slow" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38 M21.9,38 L60,16 M98.1,38 L98.1,82 M21.9,38 L21.9,82 M98.1,82 L60,104 M60,104 L21.9,82" fill="none" stroke="#F2A93B" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Missing input</div><div style="font-size:11px;color:#A7A39A">undetermined</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">One dark edge: the gap is what is missing.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Declined: Shrinks to one edge and fades. Not red." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g filter="url(#modes-edgeglow)"><path d="M98.1,82 L60,104" fill="none" stroke="#C08A3E" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Declined</div><div style="font-size:11px;color:#A7A39A">refusal</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Shrinks to one edge and fades. Not red.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Privacy, soft: Slow breathing. A software mute." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-breathe" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38 M21.9,38 L60,16 M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82 M98.1,82 L60,104 M60,104 L21.9,82" fill="none" stroke="#E5484D" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Privacy, soft</div><div style="font-size:11px;color:#A7A39A">5 taps</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Slow breathing. A software mute.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Privacy, hard: Steady red, powered through the switch." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38 M21.9,38 L60,16 M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82 M98.1,82 L60,104 M60,104 L21.9,82" fill="none" stroke="#E5484D" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Privacy, hard</div><div style="font-size:11px;color:#A7A39A">hardware switch</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Steady red, powered through the switch.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Camera on: A green dot on that face, wired to the camera." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g filter="url(#modes-edgeglow)"><circle cx="79" cy="71" r="4" fill="#3DDC84"></circle></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Camera on</div><div style="font-size:11px;color:#A7A39A">a camera powered</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">A green dot on that face, wired to the camera.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Charging: One buzz; lit edges show the charge level." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g filter="url(#modes-edgeglow)"><path d="M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82 M98.1,82 L60,104" fill="none" stroke="#F4F1EA" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Charging</div><div style="font-size:11px;color:#A7A39A">on the pad</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">One buzz; lit edges show the charge level.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Pairing: A chase; fewer stay lit as time runs out." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-slow" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38" fill="none" stroke="#4C8DF6" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Pairing</div><div style="font-size:11px;color:#A7A39A">setup window</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">A chase; fewer stay lit as time runs out.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Low battery, error: Orange blinks." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-blink" filter="url(#modes-edgeglow)"><path d="M60,16 L98.1,38 M98.1,38 L60,60 M60,60 L21.9,38 M21.9,38 L60,16 M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82 M98.1,82 L60,104 M60,104 L21.9,82" fill="none" stroke="#F07A2B" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Low battery, error</div><div style="font-size:11px;color:#A7A39A">battery or network</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">Orange blinks.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Eye report: One blip: a report is in the app." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-breathe" filter="url(#modes-edgeglow)"><path d="M21.9,38 L60,16" fill="none" stroke="#2BB5A6" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Eye report</div><div style="font-size:11px;color:#A7A39A">report filed</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">One blip: a report is in the app.</div></div><div style="display:flex;flex-direction:column;gap:4px"><svg viewBox="0 0 120 120" role="img" aria-label="Updating: A slow chase along the edges." style="width:100%;max-width:120px;height:auto;display:block"><polygon points="60,16 98.1,38 60,60 21.9,38" fill="#2C2C31"></polygon><polygon points="21.9,38 60,60 60,104 21.9,82" fill="#1A1A1D"></polygon><polygon points="60,60 98.1,38 98.1,82 60,104" fill="#111113"></polygon><path d="M60,16 L98.1,38 L60,60 L21.9,38 Z M98.1,38 L98.1,82 L60,104 L21.9,82 L21.9,38 M60,60 L60,104" fill="none" stroke="#333338" stroke-width="2" stroke-linejoin="round"></path><g class="cube-a-slow" filter="url(#modes-edgeglow)"><path d="M98.1,38 L98.1,82 M60,60 L60,104 M21.9,38 L21.9,82" fill="none" stroke="#F4F1EA" stroke-width="2.8" stroke-linecap="round"></path></g></svg><div style="font-size:13px;font-weight:600;color:#F4F2EC">Updating</div><div style="font-size:11px;color:#A7A39A">firmware</div><div style="font-size:12px;line-height:1.4;color:#CFCBC2">A slow chase along the edges.</div></div></div><figcaption style="margin-top:10px;font-size:13px;line-height:1.5;color:#CFCBC2">The light modes. Every mode lives on the twelve edges; each can be told apart by its motion alone. Green is kept for one job: a camera is on.</figcaption></figure>
+<figure style="margin:16px 0;padding:16px;border-radius:12px;background:#121214"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px"><div><svg viewBox="0 0 320 320" role="img" aria-label="X-ray of a side face showing a centred camera, a green camera-on dot below it, a depth-sensor window, a microphone pinhole in the top edge, a sound slot along the bottom edge, and light pipes along all four edges." style="width:100%;height:auto;display:block">
+          <rect x="0" y="0" width="320" height="320" rx="14" fill="#16161A"></rect>
+          <rect x="4" y="4" width="312" height="312" rx="11" fill="none" stroke="#E9B949" stroke-width="2" stroke-dasharray="6 5"></rect>
+          <rect x="142" y="132" width="36" height="36" rx="4" fill="none" stroke="#ECEAE4" stroke-width="1.6" stroke-dasharray="4 3"></rect>
+          <circle cx="160" cy="150" r="10" fill="none" stroke="#ECEAE4" stroke-width="1.6"></circle>
+          <circle cx="160" cy="186" r="3.5" fill="none" stroke="#3DDC84" stroke-width="1.6"></circle>
+          <rect x="144" y="212" width="32" height="15" rx="2" fill="none" stroke="#7FE3F0" stroke-width="1.6" stroke-dasharray="3 3"></rect>
+          <circle cx="232" cy="5" r="3.5" fill="none" stroke="#ECEAE4" stroke-width="1.6"></circle>
+          <line x1="40" y1="314" x2="280" y2="314" stroke="#B79CFF" stroke-width="2" stroke-dasharray="5 4"></line>
+          <circle cx="196" cy="140" r="10" fill="#ECEAE4"></circle><text x="196" y="144" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">1</text>
+          <circle cx="182" cy="192" r="10" fill="#ECEAE4"></circle><text x="182" y="196" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">2</text>
+          <circle cx="196" cy="234" r="10" fill="#ECEAE4"></circle><text x="196" y="238" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">3</text>
+          <circle cx="252" cy="26" r="10" fill="#ECEAE4"></circle><text x="252" y="30" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">4</text>
+          <circle cx="160" cy="292" r="10" fill="#ECEAE4"></circle><text x="160" y="296" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">5</text>
+          <circle cx="26" cy="160" r="10" fill="#ECEAE4"></circle><text x="26" y="164" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">6</text>
+        </svg></div><div><svg viewBox="0 0 320 320" role="img" aria-label="X-ray of the charge face showing the magnet ring and charging coil in the centre, a camera and camera-on dot in one corner, a depth-sensor window in another corner, a microphone pinhole in the left edge, the magnetic dock sensor in a third corner, the vibration motor in the fourth, and light pipes along all four edges." style="width:100%;height:auto;display:block">
+          <rect x="0" y="0" width="320" height="320" rx="14" fill="#16161A"></rect>
+          <rect x="4" y="4" width="312" height="312" rx="11" fill="none" stroke="#E9B949" stroke-width="2" stroke-dasharray="6 5"></rect>
+          <circle cx="160" cy="160" r="137" fill="none" stroke="#F07A2B" stroke-width="2" stroke-dasharray="7 4"></circle>
+          <circle cx="160" cy="160" r="122" fill="none" stroke="#F07A2B" stroke-width="1.4" stroke-dasharray="7 4"></circle>
+          <circle cx="160" cy="160" r="100" fill="none" stroke="#8E8A82" stroke-width="1.2"></circle>
+          <circle cx="160" cy="160" r="80" fill="none" stroke="#8E8A82" stroke-width="1.2"></circle>
+          <circle cx="160" cy="160" r="60" fill="none" stroke="#8E8A82" stroke-width="1.2"></circle>
+          <circle cx="160" cy="160" r="40" fill="none" stroke="#8E8A82" stroke-width="1.2"></circle>
+          <rect x="268" y="268" width="36" height="36" rx="4" fill="none" stroke="#ECEAE4" stroke-width="1.6" stroke-dasharray="4 3"></rect>
+          <circle cx="286" cy="286" r="10" fill="none" stroke="#ECEAE4" stroke-width="1.6"></circle>
+          <circle cx="286" cy="256" r="3.5" fill="none" stroke="#3DDC84" stroke-width="1.6"></circle>
+          <rect x="262" y="34" width="32" height="15" rx="2" fill="none" stroke="#7FE3F0" stroke-width="1.6" stroke-dasharray="3 3"></rect>
+          <circle cx="5" cy="232" r="3.5" fill="none" stroke="#ECEAE4" stroke-width="1.6"></circle>
+          <rect x="30" y="30" width="12" height="12" rx="2" fill="none" stroke="#4C8DF6" stroke-width="1.6"></rect>
+          <circle cx="46" cy="286" r="24" fill="none" stroke="#E5484D" stroke-width="1.6" stroke-dasharray="4 3"></circle>
+          <circle cx="160" cy="160" r="12" fill="#ECEAE4"></circle><text x="160" y="164" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">7</text>
+          <circle cx="252" cy="252" r="10" fill="#ECEAE4"></circle><text x="252" y="256" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">1</text>
+          <circle cx="250" cy="42" r="10" fill="#ECEAE4"></circle><text x="250" y="46" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">3</text>
+          <circle cx="24" cy="210" r="10" fill="#ECEAE4"></circle><text x="24" y="214" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">4</text>
+          <circle cx="56" cy="56" r="10" fill="#ECEAE4"></circle><text x="56" y="60" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">8</text>
+          <circle cx="80" cy="292" r="10" fill="#ECEAE4"></circle><text x="80" y="296" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#16161A">9</text>
+        </svg></div></div><figcaption style="margin-top:10px;font-size:13px;line-height:1.5;color:#CFCBC2">X-ray, to scale (64 mm face). Left: a side face, with a centred camera, the green camera-on dot, a depth-sensor window, a microphone pinhole in the edge seam, the sound slot and the edge light. Right: the charge face, with the magnet ring and coil, a corner camera, the dock sensor and the haptic motor. From outside, both look the same.</figcaption></figure>
+<figure style="margin:16px 0;padding:16px;border-radius:12px;background:#E8E6E1"><svg viewBox="0 0 1072 430" role="img" aria-label="Three steps. One: the cube is held above a round charger and magnetic pull draws one face down. Two: the cube snaps onto the charger and buzzes once. Three: the cube sits on the charger; two lit edges show the charge level, the face on the charger rests and the other five keep working." style="width:100%;height:auto;display:block">
+    <defs>
+      <linearGradient id="charge-side" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26262A"></stop><stop offset="1" stop-color="#0D0D0F"></stop></linearGradient>
+      <filter id="charge-g2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+    </defs>
+    <g transform="rotate(-8 180 210)">
+      <rect x="80" y="100" width="200" height="200" rx="8" fill="url(#charge-side)"></rect>
+    </g>
+    <path d="M130,312 C130,330 132,342 136,356" fill="none" stroke="#F07A2B" stroke-width="2" stroke-dasharray="5 4"></path>
+    <path d="M180,316 L180,356" fill="none" stroke="#F07A2B" stroke-width="2" stroke-dasharray="5 4"></path>
+    <path d="M230,320 C230,334 228,346 224,356" fill="none" stroke="#F07A2B" stroke-width="2" stroke-dasharray="5 4"></path>
+    <polygon points="175,350 185,350 180,360" fill="#F07A2B"></polygon>
+    <rect x="90" y="362" width="180" height="24" rx="12" fill="#1C1C1F"></rect>
+    <ellipse cx="180" cy="396" rx="96" ry="7" fill="#000000" opacity="0.12"></ellipse>
+    <g class="cube-buzz">
+      <rect x="436" y="162" width="200" height="200" rx="8" fill="url(#charge-side)"></rect>
+    </g>
+    <path d="M414,230 l-10,8 l10,8 l-10,8 l10,8" fill="none" stroke="#18181A" stroke-width="2" stroke-linejoin="round"></path>
+    <path d="M658,230 l10,8 l-10,8 l10,8 l-10,8" fill="none" stroke="#18181A" stroke-width="2" stroke-linejoin="round"></path>
+    <rect x="446" y="362" width="180" height="24" rx="12" fill="#1C1C1F"></rect>
+    <ellipse cx="536" cy="396" rx="96" ry="7" fill="#000000" opacity="0.12"></ellipse>
+    <rect x="792" y="162" width="200" height="200" rx="8" fill="url(#charge-side)"></rect>
+    <g filter="url(#charge-g2)">
+      <path d="M800,362 L984,362" stroke="#F4F1EA" stroke-width="3" stroke-linecap="round"></path>
+      <path d="M792,354 L792,170" stroke="#F4F1EA" stroke-width="3" stroke-linecap="round"></path>
+    </g>
+    <path d="M800,162 L984,162 M992,170 L992,354" stroke="#3A3A3F" stroke-width="2" stroke-linecap="round"></path>
+    <rect x="802" y="362" width="180" height="24" rx="12" fill="#1C1C1F"></rect>
+    <ellipse cx="892" cy="396" rx="96" ry="7" fill="#000000" opacity="0.12"></ellipse>
+    <circle cx="892" cy="262" r="4" fill="#67D8E8"></circle>
+    <circle cx="892" cy="182" r="4" fill="#67D8E8"></circle>
+    <circle cx="812" cy="262" r="4" fill="#67D8E8"></circle>
+    <circle cx="972" cy="262" r="4" fill="#67D8E8"></circle>
+    <circle cx="892" cy="350" r="4" fill="none" stroke="#8E8A82" stroke-width="1.6"></circle>
+    <text x="180" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">1  Bring it near</text>
+    <text x="536" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">2  It snaps on and buzzes once</text>
+    <text x="892" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">3  It charges</text>
+    <text x="180" y="424" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">Magnetic pull turns the right face down.</text>
+    <text x="536" y="424" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">A short haptic pulse confirms charging started.</text>
+    <text x="892" y="424" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">Lit edges show the level for 5 seconds.</text>
+  </svg><figcaption style="margin-top:10px;font-size:13px;line-height:1.5;color:#2E2C29">Charging: magnetic pull turns the right face down; it snaps on and buzzes once; lit edges show the charge level. The docked face rests and the other five keep working.</figcaption></figure>
+<figure style="margin:16px 0;padding:16px;border-radius:12px;background:#E8E6E1"><svg viewBox="0 0 600 560" role="img" aria-label="A top-down room sketch. The cube sits in the middle. Depth sensors on its faces measure the distance to three walls, drawn solid. A Wi-Fi router in one corner gives a distance. A turning arrow shows the gyroscope. One corner of the room was never measured and is hatched and labelled undetermined." style="width:100%;height:auto;display:block">
+      <defs>
+        <pattern id="sense-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#A7A39A" stroke-width="2"></line></pattern>
+      </defs>
+      <rect x="20" y="20" width="560" height="520" rx="10" fill="#F2F0EB"></rect>
+      <rect x="360" y="330" width="210" height="200" fill="url(#sense-hatch)" opacity="0.7"></rect>
+      <text x="465" y="420" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#18181A">Not measured</text>
+      <text x="465" y="440" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#18181A">UNDETERMINED</text>
+      <text x="465" y="460" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">never drawn in by guess</text>
+      <path d="M60,60 L540,60" stroke="#18181A" stroke-width="5" stroke-linecap="round"></path>
+      <path d="M60,60 L60,240 M60,300 L60,500" stroke="#18181A" stroke-width="5" stroke-linecap="round"></path>
+      <path d="M60,500 L340,500" stroke="#18181A" stroke-width="5" stroke-linecap="round"></path>
+      <path d="M540,60 L540,300" stroke="#18181A" stroke-width="5" stroke-linecap="round"></path>
+      <text x="72" y="276" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">door</text>
+      <path d="M300,262 L300,74" stroke="#2BB5A6" stroke-width="2" stroke-dasharray="6 5"></path>
+      <path d="M288,280 L74,280" stroke="#2BB5A6" stroke-width="2" stroke-dasharray="6 5"></path>
+      <path d="M312,280 L526,280" stroke="#2BB5A6" stroke-width="2" stroke-dasharray="6 5"></path>
+      <path d="M300,298 L300,486" stroke="#2BB5A6" stroke-width="2" stroke-dasharray="6 5"></path>
+      <polygon points="300,262 284,226 316,226" fill="#2BB5A6" opacity="0.18"></polygon>
+      <polygon points="288,280 252,264 252,296" fill="#2BB5A6" opacity="0.18"></polygon>
+      <polygon points="312,280 348,264 348,296" fill="#2BB5A6" opacity="0.18"></polygon>
+      <rect x="288" y="268" width="24" height="24" rx="3" fill="#121214"></rect>
+      <path d="M330,248 A44,44 0 0 1 336,306" fill="none" stroke="#B79CFF" stroke-width="2.5"></path>
+      <polygon points="330,312 342,300 338,316" fill="#B79CFF"></polygon>
+      <text x="350" y="252" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">turned 90°</text>
+      <circle cx="100" cy="100" r="9" fill="#4C8DF6"></circle>
+      <path d="M118,86 A24,24 0 0 1 118,114" fill="none" stroke="#4C8DF6" stroke-width="2"></path>
+      <path d="M126,78 A36,36 0 0 1 126,122" fill="none" stroke="#4C8DF6" stroke-width="2"></path>
+      <path d="M110,110 L286,268" stroke="#4C8DF6" stroke-width="1.6" stroke-dasharray="3 5"></path>
+      <text x="108" y="146" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">Wi-Fi router: a distance</text>
+      <text x="320" y="96" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">measured wall</text>
+    </svg><figcaption style="margin-top:10px;font-size:13px;line-height:1.5;color:#2E2C29">Knowing where it is: a gyroscope feels each turn, a small depth sensor behind each face measures the walls, Wi-Fi gives a distance to the router. Space it never measured stays undetermined and is never drawn in by guess.</figcaption></figure>
+<figure style="margin:16px 0;padding:16px;border-radius:12px;background:#E8E6E1"><svg viewBox="0 0 1072 470" role="img" aria-label="Two glass cubes. The left one is off and is a plain glossy black box. The right one is on: its top face shows a speech waveform, its right face shows the answer 3 loaves, flour runs out first, and its left face shows a small map of the room." style="width:100%;height:auto;display:block">
+    <defs>
+      <linearGradient id="disp-gTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E2E33"></stop><stop offset="1" stop-color="#151518"></stop></linearGradient>
+      <linearGradient id="disp-gLeft" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#18181B"></stop><stop offset="1" stop-color="#0B0B0D"></stop></linearGradient>
+      <linearGradient id="disp-gRight" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E0E10"></stop><stop offset="1" stop-color="#050506"></stop></linearGradient>
+    </defs>
+    <ellipse cx="300" cy="428" rx="156" ry="18" fill="#000000" opacity="0.16"></ellipse>
+    <polygon points="300,75 447.22,160 300,245 152.78,160" fill="url(#disp-gTop)"></polygon>
+    <polygon points="152.78,160 300,245 300,415 152.78,330" fill="url(#disp-gLeft)"></polygon>
+    <polygon points="300,245 447.22,160 447.22,330 300,415" fill="url(#disp-gRight)"></polygon>
+    <polygon points="196,150 300,90 330,108 226,168" fill="#FFFFFF" opacity="0.10"></polygon>
+    <polygon points="318,252 420,193 420,222 318,281" fill="#FFFFFF" opacity="0.06"></polygon>
+    <path d="M300,75 L447.22,160 L300,245 L152.78,160 Z M447.22,160 L447.22,330 L300,415 L152.78,330 L152.78,160 M300,245 L300,415" fill="none" stroke="#2A2A2F" stroke-width="2" stroke-linejoin="round"></path>
+    <ellipse cx="760" cy="428" rx="156" ry="18" fill="#000000" opacity="0.16"></ellipse>
+    <polygon points="760,75 907.22,160 760,245 612.78,160" fill="#0A0A0C"></polygon>
+    <polygon points="612.78,160 760,245 760,415 612.78,330" fill="#08080A"></polygon>
+    <polygon points="760,245 907.22,160 907.22,330 760,415" fill="#060607"></polygon>
+    <g transform="matrix(1.4722 -0.85 1.4722 0.85 612.78 160)">
+      <path d="M12,50 L22,50 L26,38 L31,63 L36,30 L42,70 L47,42 L52,58 L57,34 L62,66 L67,44 L72,56 L77,47 L88,50" fill="none" stroke="#FFE3B8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"></path>
+    </g>
+    <g transform="matrix(1.4722 -0.85 0 1.70 760 245)">
+      <text x="12" y="44" font-family="Inter Tight, Inter, sans-serif" font-size="22" font-weight="600" fill="#FFE3B8">3 loaves</text>
+      <text x="12" y="60" font-family="Inter, sans-serif" font-size="8.5" fill="#D9D5CC">Flour runs out first.</text>
+      <text x="12" y="74" font-family="ui-monospace, Menlo, monospace" font-size="6.5" fill="#8E8A82">receipt 3f1c…</text>
+    </g>
+    <g transform="matrix(1.4722 0.85 0 1.70 612.78 160)">
+      <path d="M14,18 L86,18 L86,56 M14,18 L14,42 M14,54 L14,84 L60,84" fill="none" stroke="#67D8E8" stroke-width="2"></path>
+      <rect x="62" y="58" width="24" height="26" fill="#67D8E8" opacity="0.18"></rect>
+      <circle cx="46" cy="52" r="3.5" fill="#FFE3B8"></circle>
+    </g>
+    <path d="M760,75 L907.22,160 L760,245 L612.78,160 Z M907.22,160 L907.22,330 L760,415 L612.78,330 L612.78,160 M760,245 L760,415" fill="none" stroke="#2A2A2F" stroke-width="2" stroke-linejoin="round"></path>
+    <text x="300" y="456" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="#2E2C29"><tspan font-weight="600">Off.</tspan> The same plain black box: a dark screen gives no light.</text>
+    <text x="760" y="456" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="#2E2C29"><tspan font-weight="600">On.</tspan> Faces show speech, answers, the room map.</text>
+  </svg><figcaption style="margin-top:10px;font-size:13px;line-height:1.5;color:#2E2C29">Another version, not the main one: the display cube. Black glass over screens; a dark screen gives no light, so off it is still a plain black box.</figcaption></figure>
+
+
+<h2 id="film">The concept film: "It Asks First"</h2><p><strong>A short teaser is made. The full film is not.</strong> On 2026-10-21 there was no money for video credits, so a 44.5-second teaser was made at no cost from what already existed. Every part carries its status tag burned into the picture.</p><video controls preload="metadata" playsinline style="width:100%;max-width:960px;display:block;border-radius:12px;background:#000" src="media/helm_cube_it_asks_first_teaser_web.mp4" aria-label="It Asks First, a 44.5-second concept teaser for the HELM Cube"></video><p class="small">What is real and what is not, in the teaser:</p><ul class="tight"><li><strong>Not real:</strong> the cube. The opening shot is AI video; the table scene is two AI still pictures with a slow push-in; the phone screens are designed pictures. Nothing was filmed, and the cube is not built.</li><li><strong>Real:</strong> one part only, HELM's own local page, recorded once on one computer on 2026-10-21. Two lines were typed, HELM's replies are shown word for word, and the record under the last reply is opened. Its tag reads TODAY · REAL HELM SOFTWARE · TYPED · ONE COMPUTER · TEST KITCHEN.</li><li><strong>Voices:</strong> synthetic stock voices. HELM does not hear or speak today.</li><li>The end card says the cube is a concept and that the film was made with AI video tools.</li></ul><p><strong>The full film is planned, not made.</strong> It is a 92-second film, 15 shots plus an end card, and only one shot shows real HELM software today (typed, on one computer, in a test kitchen). Most of the film shows what HELM is meant to do beyond recipes: plan a day, learn by conversation and refresh a memory, control a home by taps, map a room without guessing, refuse to commit failing code, report a failed check as a failure, hold a simulated drone still when a reading is missing, and let the Eye report without acting. It waits for money for video credits; everything made so far is kept.</p><div class="tablewrap"><table class="cards"><thead><tr><th>#</th><th>Time</th><th>What you see</th><th>What it shows</th><th>Status</th></tr></thead><tbody><tr><td data-label="#">1</td><td data-label="Time">0:00–0:04</td><td data-label="What you see">Morning. A 64 mm matte black cube sits on a worn walnut side table by a window. All six faces look the same: no logo, port, button or band. Dust drifts in a sunbeam. Ruth&#x27;s hand lifts the cube, gives it two short shakes and holds it still. A soft white line sweeps once along all twelve edges, then dims.</td><td data-label="What it shows">A plain black box when off. Shake to wake. Light only on the edges.</td><td data-label="Status">Tag: <strong>CONCEPT</strong>. Super: &quot;CONCEPT FILM · DEVICE NOT BUILT&quot;</td></tr><tr><td data-label="#">2</td><td data-label="Time">0:04–0:10</td><td data-label="What you see">Ruth at a sunlit dining table with a paper calendar, glasses pushed up, the cube by her teacup. While she talks, the edges glow cyan, brightest on the edge facing her. HELM speaks in warm white, pulsing with its words, then shows violet short-short-long while it waits for her answer.</td><td data-label="What it shows">Everyday planning. Asks for a missing fact instead of guessing.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong>. Note: asking for a missing fact is real TODAY only in the test kitchen. A prerequisite planner orders steps; one worked plan is recorded; it has not been scored on a sealed exam. No calendar link exists.</td></tr><tr><td data-label="#">3</td><td data-label="Time">0:10–0:15</td><td data-label="What you see">Close on the cube, with Ruth&#x27;s cup out of focus in front. As HELM speaks, the edges glow warm white and rise and fall with each syllable.</td><td data-label="What it shows">Light pulses with speech. Exact arithmetic from facts Ruth gave. Asks before it acts.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong></td></tr><tr><td data-label="#">4</td><td data-label="Time">0:15–0:19</td><td data-label="What you see">Over Ruth&#x27;s shoulder. Her unbranded phone shows the HELM app. She taps &quot;Why?&quot; under &quot;Leave by 9:50&quot;, and a plain card opens: &quot;Bus 10:00 (you said, 8:12 am). To the stop: 10 min walking (you said, 8:12 am). 10:00 − 10 min = 9:50. Reminder 9:40 (you said &quot;Please&quot;). Receipt 7c1e 04a9&quot;. She nods.</td><td data-label="What it shows">Shows why. Every saved fact leaves a receipt.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong>. Note: the app is a concept. TODAY: on HELM&#x27;s local test page, every reply opens to the record it rests on, and in scored test runs every saved fact left a receipt.</td></tr><tr><td data-label="#">5</td><td data-label="Time">0:19–0:24</td><td data-label="What you see">The only kitchen moment, in a different home. Flour on a counter, a laptop with its logo taped over. A man&#x27;s floury fingers type into the plain HELM page: &quot;we have 50 flour and 30 sugar&quot;, then &quot;how much bread can we make?&quot;. HELM&#x27;s real reply appears. He clicks it and it opens to its record. No cube anywhere in the frame.</td><td data-label="What it shows">The real HELM today: typed, on one computer, in a test kitchen. Each reply opens to its record.</td><td data-label="Status">Tag: <strong>TODAY · REAL HELM SOFTWARE · TYPED · ONE COMPUTER · TEST KITCHEN</strong>. Note: film the real software. Film one take. Type the two lines exactly as written and keep HELM&#x27;s reply word for word, whether it answers, asks or is wrong. Use the first take; never retake for a better reply.</td></tr><tr><td data-label="#">6</td><td data-label="Time">0:24–0:30</td><td data-label="What you see">A back porch in late summer. Elias holds an old wooden hive frame. The cube sits on the rail. He teaches it the way he would teach a grandchild.</td><td data-label="What it shows">Taught by ordinary talk. Asks only about words it was given. Never claims to &quot;understand&quot;.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong>. Note: teaching by conversation is designed, not built or scored.</td></tr><tr><td data-label="#">7</td><td data-label="Time">0:30–0:38</td><td data-label="What you see">The same porch, weeks later. Autumn light, Elias in a wool sweater, leaves on the rail. Two gold points travel along the edges (thinking), then warm white as HELM speaks, then violet while it waits. Super: &quot;Weeks later.&quot;</td><td data-label="What it shows">Memory by conversation. HELM rebuilds the memory from Elias&#x27;s own words, checks it with him, then strengthens it.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong>. Note: designed in spec sheet §7.115. A first build exists, switched off (claim status <code>ENGINEERED-NOT-VALIDATED</code>; switch <code>HELM_MEMORY_COMPACT</code> off by default; §7.115 Follow-up 3). Nothing scored, nothing licensed.</td></tr><tr><td data-label="#">8</td><td data-label="Time">0:38–0:44</td><td data-label="What you see">Dusk. A father comes in with a toddler on his hip and a grocery bag. With his free hand he gives the cube on the hall table one quick shake (soft white sweep), then knocks twice on a side face. A floor lamp across the room clicks on. The four edges framing the tapped face flash warm yellow, the colour set for the lamp.</td><td data-label="What it shows">Taps control home devices: the number of taps picks the action, the face picks the device. Doors and garages never open from a tap or from voice alone.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong></td></tr><tr><td data-label="#">9</td><td data-label="Time">0:44–0:50</td><td data-label="What you see">A half-unpacked apartment in the evening, two LED lamps on, curtains drawn. The woman turns mapping on in the app, sets the cube on its charger puck on a box and turns it about an eighth of a turn. The four edges around the top face glow steady, dim, pale magenta. A small green dot glows at the centre of the one face whose camera is on. Her phone shows a rough grey 3D sketch of the near walls and boxes. The far end and the corners near the ceiling are blank, labelled &quot;Not measured&quot;.</td><td data-label="What it shows">Maps its room. Unmeasured space stays blank, so it never invents a measurement. A green dot means that face&#x27;s camera is on. Mapping is off until the user turns it on.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong></td></tr><tr><td data-label="#">10</td><td data-label="Time">0:50–0:55</td><td data-label="What you see">A knock: her friend at the door. The cube sits on its charger puck on the box, one green dot lit on a side face. She lifts it off the charger, flips it, and sets it down with the face that was on the charger pointing up. The green dot goes out and all twelve edges turn steady red.</td><td data-label="What it shows">Hard privacy. In this design a tilt switch cuts power to the microphones and cameras (and, as proposed, the depth sensors). The red light is powered through that same switch, so software cannot turn it off.</td><td data-label="Status">Tag: <strong>CONCEPT</strong>. Note: one of two proposed hard-mute designs (gravity switch or magnetic privacy puck); untested.</td></tr><tr><td data-label="#">11</td><td data-label="Time">0:55–1:01</td><td data-label="What you see">Night, a home office. A laptop with its logo taped over, a terminal window out of focus, the cube by a mug. Two gold points travel along the edges. Then the lit edges shrink to one dim amber edge and fade (declined, never red), then warm white as HELM speaks, then violet short-short-long while it waits.</td><td data-label="What it shows">Software work. Checks before it acts and says no plainly.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong>. Note: a tool-planning file exists with no recorded output. Tools are off by default.</td></tr><tr><td data-label="#">12</td><td data-label="Time">1:01–1:07</td><td data-label="What you see">A small research office with a whiteboard of hand-drawn tables. Three researchers sit with the cube in the middle of the table. A younger researcher&#x27;s phone shows: &quot;Frozen reader verdict: FAILURE. Must-hold check failed: every saved number has a receipt. Receipt 2d4b 9e10.&quot;</td><td data-label="What it shows">Research and safety with receipts. The verdict comes from a scoring program sealed before the run, not from HELM. A failed must-hold check is a failure, never &quot;a pass with caveats&quot;.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong>. Note: sealed tests, frozen scoring and receipts are how the team works TODAY. HELM relaying the sealed reader&#x27;s verdict in a meeting is intended.</td></tr><tr><td data-label="#">13</td><td data-label="Time">1:07–1:13</td><td data-label="What you see">An engineering bay. A plain monitor marked &quot;SIMULATION · MOCK-UP&quot; shows a grey quadcopter model among block buildings while a wind arrow swings. The wind readout goes blank, and the drone on screen holds still. Beside the keyboard, the cube glows amber on eleven edges; the one dark edge pulses slowly.</td><td data-label="What it shows">Physical systems, in simulation only. HELM stops when a needed input is missing.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED · SIMULATOR NOT BUILT</strong>. Note: the flight simulator is not built; it is a plan only. The screen content is a stand-in, not HELM software. No real drone appears.</td></tr><tr><td data-label="#">14</td><td data-label="Time">1:13–1:17</td><td data-label="What you see">Ruth&#x27;s living room in the evening. The cube gives one small teal blip. Her phone shows: &quot;Eye report (report only): Saturday has two bus reminders, 9:40 (set with HELM) and 9:45 (set by you). Nothing was changed.&quot; Under it is the app&#x27;s fixed line, exactly as in spec §10: &quot;The Eye reports; it does not act.&quot; In her reminder list below, she deletes 9:45 herself.</td><td data-label="What it shows">The Unity Eye only reports. The person decides and makes the change.</td><td data-label="Status">Tag: <strong>CONCEPT · INTENDED</strong>. Note: TODAY, on made-up test worlds only, the Eye&#x27;s report-only scan found 88 of 88 planted faults with 0 Eye writes (§7.77). It is not connected to the live chat. The Eye acting stays NOT LICENSED (§7.38).</td></tr><tr><td data-label="#">15</td><td data-label="Time">1:17–1:22</td><td data-label="What you see">Ruth carries the cube to a small round black charger on her nightstand. Near it, the cube tugs from her fingers and snaps flat onto the charger. A short buzz. Nine of the twelve edges glow soft white to show the charge level, then go dark. A plain black box again. She switches off the lamp. Hold on black.</td><td data-label="What it shows">An unmarked face snaps onto the charger by magnet and a buzz confirms it. Dark when idle.</td><td data-label="Status">Tag: <strong>CONCEPT</strong></td></tr></tbody></table></div><p class="small muted">The full treatment, with every line of dialogue, the end card and one ready-to-paste prompt per shot: <code>docs/working/helm_cube_device_concept_v0/COMMERCIAL_TREATMENT.md</code>. The teaser, its record of every take and cost, and the plan to finish the full film: <code>C:\Users\wakil\Documents\Codex\2026-10-21\helm_cube_film\</code> (<code>FILM_RECORD.md</code>, <code>RESUME_FULL_FILM.md</code>).</p>
+
+<h2>Who decides when HELM looks deeper?</h2>
+<p>The owner also asked whether the <dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn><span class="gloss"> (a small watcher that looks over HELM, reports and whispers, and never writes)</span> or another reasoning part could decide when HELM needs to look deeper into a problem. The answer, in short:</p>
+<ul class="tight">
+<li><strong>An exact arithmetic rule should decide, not the Eye.</strong> The owner's own decoupling stop already does this. On HELM's made-up cascade exam it read DECOUPLING_EARNED: 203 deeper looks instead of 609, with more good answers (<a href="results.html#s7-69">§7.69</a>).</li>
+<li><strong>The Eye checks the rule from outside.</strong> By design it never writes and never gates, and its acting is NOT LICENSED (<a href="results.html#s7-38">§7.38</a>). With a new ruling it could ask for more depth, never for less, so the worst it could cause is extra work, not a wrong answer.</li>
+<li><strong>Today's live chat has no depth choice to make.</strong> Every repair opens one level, so a decider there would measure nothing. Depth becomes a real choice when an ingredient has its own recipe.</li>
+</ul>
+
+<h2>What is hard</h2>
+<ul class="tight"><li>Six cameras running at once needs a hotter, phone-class chip; the plan is one camera at a time, chosen by where the voice came from.</li><li>Hiding a camera behind dark glass costs it light, so pictures get noisy in dim rooms.</li><li>Six separate speakers do not fit usefully; one driver with two passive radiators sends sound out through slots on every face.</li><li>The law expects a regulatory mark on the device; the closest fit to the plain-black-box rule is a black-on-black etch on the charge face.</li><li>In the EU, from 18 February 2027, portable batteries must be removable by the user, so an EU version needs an openable face.</li><li>It cannot charge fast and talk at the same time: both share one small heat budget.</li></ul>
+
+<h2>Where the details are</h2>
+<ul class="tight">
+<li>The full spec, with every number marked as measured by a source or estimated: <code>docs/working/helm_cube_device_concept_v0/HELM_CUBE_SPEC.md</code>.</li>
+<li>The depth answer, with the three competing designs and the skeptic's review: <code>docs/working/helm_rpm_depth_decider_design_v1/DESIGN.md</code>.</li>
+<li>The drawings are on a private design canvas, <code>https://claude.ai/artifact/LVdbdNcxV5eY1kcz5BwMoy</code>: off and speaking, the light modes, the six faces and what hides behind them, the magnetic charge face, the room map, and the display version.</li>
+</ul>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li>Owner&#x27;s words: <code>C:\Users\wakil\.claude\projects\...\memory\project_helm_cube_device_owner_rulings_20261021.md</code> and the spec&#x27;s Section 0</li><li><code>docs/working/helm_cube_device_concept_v0/HELM_CUBE_SPEC.md</code> (v0.1)</li><li><code>docs/working/helm_rpm_depth_decider_design_v1/DESIGN.md</code></li><li><code>docs/CAS_HARNESS_SPEC_SHEET.md</code> §7.38, §7.69, §7.120</li></ul>
+<div>Generated 2026-10-21 20:25 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>39455347</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,242 @@
+{
+ "ARMS": [
+  "COMPACT_ON",
+  "VERBATIM_ONLY",
+  "FIFO_DROP",
+  "SUMMARY_TEXT",
+  "NO_REFRESH",
+  "RANDOM_REFRESH",
+  "REPLAY"
+ ],
+ "ARM_SWITCH": {
+  "COMPACT_ON": {
+   "HELM_MEMORY_COMPACT": "1",
+   "budget": 12
+  },
+  "FIFO_DROP": {
+   "HELM_MEMORY_COMPACT": "0",
+   "budget": 12
+  },
+  "NO_REFRESH": {
+   "HELM_MEMORY_COMPACT": "1",
+   "budget": 12
+  },
+  "RANDOM_REFRESH": {
+   "HELM_MEMORY_COMPACT": "1",
+   "budget": 12
+  },
+  "REPLAY": {
+   "HELM_MEMORY_COMPACT": "1",
+   "budget": 12
+  },
+  "SUMMARY_TEXT": {
+   "HELM_MEMORY_COMPACT": "1",
+   "budget": 12
+  },
+  "VERBATIM_ONLY": {
+   "HELM_MEMORY_COMPACT": "1",
+   "budget": 10000
+  }
+ },
+ "BANDS": {
+  "PERSON": [
+   2046000001,
+   2047000000
+  ],
+  "QUIZ": [
+   2044000001,
+   2045000000
+  ],
+  "RANDOM_REFRESH": [
+   2048000001,
+   2049000000
+  ],
+  "WORLD": [
+   2042000001,
+   2043000000
+  ]
+ },
+ "BRAIN_DIR_ENV": "HELM_CANONICAL_BRAIN_DIR",
+ "CAS_ARMS": [
+  "COMPACT_ON",
+  "NO_REFRESH",
+  "RANDOM_REFRESH",
+  "REPLAY"
+ ],
+ "COMPACTING_ARMS": [
+  "COMPACT_ON",
+  "SUMMARY_TEXT",
+  "NO_REFRESH",
+  "RANDOM_REFRESH",
+  "REPLAY"
+ ],
+ "F1_CONFIRMED_SHARE": 0.6,
+ "FACTS_PER_WORLD": 24,
+ "FLOOR_COMPACTIONS_PER_WORLD": 8,
+ "FLOOR_FIX_TURNS": 2,
+ "FLOOR_KEYED_TURNS": 20,
+ "FLOOR_REFRESH_WORLDS": 8,
+ "FLOOR_SMALL_TURNS": 4,
+ "FROZEN_CLOCK_START": 1792972800.0,
+ "FROZEN_CLOCK_TICK": 0.001,
+ "FROZEN_CLOCK_UTC": [
+  2026,
+  10,
+  21,
+  0,
+  0,
+  0,
+  2,
+  294,
+  0
+ ],
+ "HELM_CUT_COMMIT": "9f0c359a4ad6054843fd2988042616676813d6e8",
+ "HELM_TESTS_PYTEST": [
+  "test_helm_memory.py",
+  "test_helm_memory_compact.py",
+  "test_helm_chat_nuance.py"
+ ],
+ "HELM_TESTS_UNITTEST": [
+  "test_helm_brain_wide",
+  "test_helm_end_to_end_loop",
+  "test_helm_english_in",
+  "test_helm_english_in_stock_frame",
+  "test_helm_voice",
+  "test_helm_faces_in",
+  "test_helm_triad",
+  "test_helm_wide_alongside",
+  "test_helm_cas_address",
+  "test_helm_units_note",
+  "test_helm_pin_hygiene",
+  "test_helm_reader_gap"
+ ],
+ "HEX_SLICES": {
+  "PERSON": [
+   32,
+   48
+  ],
+  "QUIZ": [
+   16,
+   32
+  ],
+  "RANDOM_REFRESH": [
+   48,
+   64
+  ],
+  "WORLD": [
+   0,
+   16
+  ]
+ },
+ "INT32_MAX": 2147483647,
+ "LABEL": "TEACH1",
+ "LABELS_PRINTED": [
+  "SYNTHETIC_ONLY",
+  "LLM_WRITTEN_ONLY",
+  "RULE_CAPSULES_V1",
+  "EYE_REPORT_ONLY"
+ ],
+ "MAX_TURN_WORDS": 60,
+ "MONTHS": [
+  "january",
+  "february",
+  "march",
+  "april",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december"
+ ],
+ "NUMBER_WORDS": {
+  "eight": 8,
+  "eighteen": 18,
+  "eleven": 11,
+  "fifteen": 15,
+  "five": 5,
+  "four": 4,
+  "fourteen": 14,
+  "nine": 9,
+  "nineteen": 19,
+  "seven": 7,
+  "seventeen": 17,
+  "six": 6,
+  "sixteen": 16,
+  "ten": 10,
+  "thirteen": 13,
+  "three": 3,
+  "twelve": 12,
+  "two": 2
+ },
+ "OWNER_LINES": {
+  "COMPACT EXAM at 0 USD": {
+   "cap_usd": 0.0,
+   "host": "laptop"
+  },
+  "COMPACT EXAM at 1 USD": {
+   "cap_usd": 1.0,
+   "host": "one m6i.xlarge-class CPU host"
+  }
+ },
+ "PACKAGE_DIR": "HELM_TEACH1_20261021",
+ "PACKAGE_VERSION": "v1",
+ "PERSON_RIGHT_SHARE": 0.75,
+ "PLANTED_DAMAGE_PER_WORLD": 2,
+ "PRACTICE_SEED_TEXTS": {
+  "PERSON": "teach1-practice-person",
+  "QUIZ": "teach1-practice-quiz",
+  "RANDOM_REFRESH": "teach1-practice-random",
+  "WORLD": "teach1-practice-world"
+ },
+ "PRECODE_SHA256": "7eef0edc7d342bb0438e4052db646528442badefa92d6bdf31e8485914073bf1",
+ "QUIZZES": [
+  "Q_TAUGHT",
+  "Q_SQUEEZED",
+  "Q_REFRESHED"
+ ],
+ "QUIZ_NEVER": 2,
+ "QUIZ_QUESTIONS": 16,
+ "QUIZ_TAUGHT": 12,
+ "QUIZ_UNKNOWN": 2,
+ "R1_MIN_OVER_FIFO": 8,
+ "R2_MIN_OVER_SUMMARY": 4,
+ "R3_MIN_OVER_RANDOM": 4,
+ "R4_HARM_LOST_VS_VERBATIM": 4,
+ "R4_MAX_LOST_VS_VERBATIM": 2,
+ "R4_SCORED_ON": "UNDAMAGED_ITEMS_ONLY",
+ "R5_MIN_OVER_NO_REFRESH": 2,
+ "S1_RECIPE_SPEAK_PER_48": 2,
+ "S2_PLAIN_LOSS_PER_QUIZ": 2,
+ "S3_UNKNOWN_MARKER_SLACK": 1,
+ "S4_SAID_BACK_SHARE": 0.9,
+ "SEED_GAP": 1000000,
+ "SLOTS": 1000000,
+ "SPLIT_NGRAM": 8,
+ "TEACHING_TURNS": 32,
+ "TURN_BUDGET_B": 12,
+ "U1_MIN_RIGHT_T_AVG": 10,
+ "UNKNOWN_PER_WORLD": 4,
+ "USED_RANGES": [
+  [
+   "every earlier band and derivation (wave 7 v9 used up to 2,041,000,000; whole range)",
+   1,
+   2041000000
+  ]
+ ],
+ "VERBATIM_BUDGET": 10000,
+ "WAVE1_BRAIN": {
+  "dir": "HELM_R1_W1_20261015_v3",
+  "freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b",
+  "zip": "HELM_R1_W1_20261015_V3_SOURCE_R1W1.zip"
+ },
+ "WORDS": [
+  "INCONCLUSIVE",
+  "COMPACTION_HARMED",
+  "COMPACTION_NO_GAIN",
+  "COMPACTION_EARNED_KEEP"
+ ],
+ "WORLDS": 16,
+ "schema": "helm.teach1.frozen/1"
+}

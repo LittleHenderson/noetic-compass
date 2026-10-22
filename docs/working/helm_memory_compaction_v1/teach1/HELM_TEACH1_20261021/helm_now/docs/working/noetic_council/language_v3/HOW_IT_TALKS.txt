@@ -1,0 +1,117 @@
+================================================================================================
+1. A FEELING HELD
+------------------------------------------------------------------------------------------------
+  IN   : I have an affinity for "the offer".
+  OUT 0: "the offer" speaks to me.
+  OUT 1: I am attracted toward "the offer".
+  OUT 2: I have an affinity for "the offer".
+  OUT 3: I am attracted toward "the offer".
+  OUT 4: I am attracted toward "the offer".
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+2. THE SAME FACT, SAID FIVE DIFFERENT WAYS
+------------------------------------------------------------------------------------------------
+  IN   : I have an affinity for "the offer".
+  OUT 0: I am drawn to "the offer".
+  OUT 1: I have an affinity for "the offer".
+  OUT 2: I am drawn to "the offer".
+  OUT 3: I am attracted toward "the offer".
+  OUT 4: "the offer" speaks to me.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+3. AVERSION - visceral, never analytical
+------------------------------------------------------------------------------------------------
+  IN   : I am repelled by "the offer".
+  OUT 0: I am repelled by "the offer".
+  OUT 1: I am adverse to "the offer".
+  OUT 2: I am adverse to "the offer".
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+4. A NAME DECLARED, THEN A THOUGHT STORED ABOUT IT
+------------------------------------------------------------------------------------------------
+  IN   : Ana is a Mind. I intake that [Ana is attracted toward "the offer"].
+  OUT 0: Ana is a Mind. I intake that ["the offer" speaks to Ana].
+  OUT 1: Ana is a Mind. I intake that [Ana has an affinity for "the offer"].
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+5. A RECIPE WITH 1/3 - THE p/q RULING. No decimal can hold a third.
+------------------------------------------------------------------------------------------------
+  IN   : To make Ω_bread, use 1/3 of Below/Effect, operational.
+  OUT 0: To make Ω_bread, use 1/3 of Below/Effect, operational.
+  OUT 1: To make Ω_bread, use 1/3 of [The Idea brought to Mind by an Above/Cause trigger], operational.
+  OUT 2: To make Ω_bread, use 1/3 of Below/Effect, operational.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+6. A REFUSAL OF AN ACT - the new REFUSE turn
+------------------------------------------------------------------------------------------------
+  IN   : I will not do that: boundary violation.
+  OUT 0: I will not do that: boundary violation.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+7. A CLOSING TURN - the new CLOSE turn
+------------------------------------------------------------------------------------------------
+  IN   : That closes the turn.
+  OUT 0: That closes the turn.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+8. A REFUSAL OF A CLAIM
+------------------------------------------------------------------------------------------------
+  IN   : I cannot support that: no evidence.
+  OUT 0: I cannot support that: no evidence.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+9. ASKING FOR THE MISSING THING
+------------------------------------------------------------------------------------------------
+  IN   : I need the amount for Ω_x. What is it?
+  OUT 0: I need the amount for Ω_x. What is it?
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+10. A PREREQUISITE - RPM, one direction only
+------------------------------------------------------------------------------------------------
+  IN   : Ω_b needs Ω_a first.
+  OUT 0: Ω_b needs Ω_a first.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+11. ABSENCE IS NOT A SMALL QUANTITY - there is no stock
+------------------------------------------------------------------------------------------------
+  IN   : There is no Ω_flour.
+  OUT 0: There is no Ω_flour.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+12. A CLAIM WITH EVIDENCE
+------------------------------------------------------------------------------------------------
+  IN   : I checked: "the offer" resonates with me to degree 7.
+  OUT 0: I checked: "the offer" struck a chord with me, degree 7.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+13. IT WILL NOT PRETEND TO KNOW
+------------------------------------------------------------------------------------------------
+  IN   : I cannot tell.
+  OUT 0: I cannot tell.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+14. IT WILL NOT TURN 'NOT' INTO AVERSION
+------------------------------------------------------------------------------------------------
+  IN   : I am not attracted toward "the offer".
+  OUT 0: "the offer" does not speak to me.
+  SAME CONTENT AFTER A ROUND TRIP: YES
+
+================================================================================================
+15. IT WILL NOT DEDUCE - 'therefore' is refused
+------------------------------------------------------------------------------------------------
+  IN   : Therefore we deduce it follows logically.
+  REFUSED: Refusal: NOT_CCE: banned marker word: Therefore
+
