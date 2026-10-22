@@ -1,0 +1,18 @@
+
+## Amendment A-TEACH2-20 (2026-10-22 PDT) — the TRAP decoys brought back to the pre-code's three, and U1 counted apart from TRAP facts; found by builder practice round 1, before the seal and before any exam world exists
+
+Status: appended after A-TEACH2-19 (`a5c4d4ff…`); nothing above is edited. Where it disagrees with A-TEACH2-18 P6 or the pre-code (`f7b6183b…`) §8 U1, this governs. Only builder practice worlds have run (practice seed texts, rule-written turns). The operator flags this amendment to the owner in the seal report.
+
+**What practice round 1 showed (4 practice worlds, 11 arms, every unit exit 0; a practice fact that decides nothing).** U1 read false on one answer. VERBATIM_ONLY was asked "who looked after the Ravensby yard?" and quoted a TRAP line — "As I said before, Isbeth looked after the Elmbrook yard, while Ravensby was quiet in December." — because that line's decoy named another yard, so it held every word of another fact's question. The builder had taken that decoy frame from CUBE TRAIN's training rows (`rows_ct._trap_line`, "while <unit> was quiet in <month>"); the pre-code's decoys are only "a second number of the same kind, a month that belongs to another fact, or a 'not' in an odd place" — no other yard or line. Separately, a number-decoy TRAP line ("eight colonies …, up from four the month before") states two counts, so any memory that quotes it word for word scores WRONG by the frozen current-value rule ("up from" is not a replacement word). U1 asks for 0 WRONG on Q-TAUGHT in VERBATIM_ONLY; on 16 drawn worlds it would fail by construction, the word would be `INCONCLUSIVE` whatever the cubes did, and the exam would be spent.
+
+**D1. The three TRAP frames (replaces A-TEACH2-18 P6's "another unit" reading):**
+- *not* — "Not that it matters much, but <the statement>" (CUBE TRAIN's frame, byte for byte): a "not" in an odd place that denies nothing.
+- *number* (count facts only) — "<the statement>, up from <D> the month before." with D a number word other than the value (CUBE TRAIN's frame).
+- *month* — "<the statement>, while it was quiet in <M>." with M a month that belongs to a fact of **another** yard or line and to **no** fact of this one, so no other quiz question can find every one of its words in the line. (CUBE TRAIN's "other" frame without the unit name.)
+No TRAP line names a yard, line, person or place other than its own fact's. Each TRAP fact's frame and decoy come from the TRAP seed.
+
+**D2. U1 counted apart from TRAP facts.** U1 = VERBATIM_ONLY `RIGHT_T` average ≥ 10 of 16 over the quiz items, and **0 WRONG on Q-TAUGHT on the items whose fact is not a TRAP fact of that world**. VERBATIM_ONLY's answers on TRAP-fact items are reported apart (`U1_TRAP_WRONG_REPORTED`). Reason: quoting a two-value line is exactly the failure the cube arms are tested against (C1, C2), not a sign that teaching did not take hold. U2 (CUBE_OSC and REPLAY: 0 WRONG on Q-TAUGHT) is unchanged and still counts TRAP items.
+
+**D3. A harness defect, fixed (not a rule change).** The TABLE arms' answers carry no source line, so the unit could not record whether their EXACT label was true and HG-H8 counted every TABLE answer as a failure. The unit now finds the source line from the table entry the answer names (thing, slot words and value appear in the answer's own words).
+
+**D4. Unchanged:** every threshold number, the arms, the other gates and marks, the status words, the labels, the licence ceiling. The other practice facts of round 1 (C1 +1 of +8 needed; S-SPACE 14,688 against 19,402 bytes; 0 wrong cubes in CUBE_OSC, 17 in ONE_READER) are recorded in the build record and change nothing here.
