@@ -11,6 +11,7 @@ Monorepo-level log. Subprojects keep their own changelogs
 - Reader v2; 20 package tests (one new); seal 5 zip 811726c45bd3f31a3df1d565295d191382685f7e7681edfc567e70e22e17dc73 (freeze 1ddf5128..., sealed twice identical; every check passes from a fresh extract); seal 4 (65e2a926...) superseded, never used.
 - Practice round 5 (16 practice worlds; facts, not results): all 12 hard gates hold; R4 0 lost (all-items count 9, reported); R2 -2, S1, S4 missed; practice word would be COMPACTION_NO_GAIN. Owner's line to type: COMPACT EXAM at 0 USD. Nothing run on sealed worlds; nothing licensed.
 
+
 ## 2026-10-21 PDT - HELM memory compaction TEACH-1 (spec sheet 7.115 follow-up 4): the exam built and SEALED, NOT RUN, NOT SCORED; FIX FIRST on HELM's memory (5 rules, 6 tests, 335 HELM tests pass); practice word would be COMPACTION_HARMED by R4 on planted damage alone; 0 USD
 
 - Package docs/working/helm_memory_compaction_v1/teach1/: zip HELM_TEACH1_20261021_SOURCE_TEACH1_v1.zip sha256 65e2a926c723f79965a09072bdc805eea1f4aade047988d6e21d88a1e23e61be (195 members, freeze 351c71e2..., sealed twice identical); amendment A-TEACH1-1 sha256 b178cc41... (deviations D-TEACH1-1..19, moved seed bands 2,042/2,044/2,046/2,048 M, forecast); pre-code 7eef0edc... not edited.
@@ -18,6 +19,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 - FIX FIRST on HELM (commit 9f0c359a; practice round 0 had every arm at 4 right / 27 WRONG of 64): recall needs every word of the question and the newest wins; memory questions are never memories; number words are never clues; a strengthened rebuild is never EXACT; the chat passes the answer to a refresh question to the compactor. 6 tests fail on build v1, pass on the fix; every HELM suite OFF 335 passed.
 - Practice round 4 (16 practice worlds; facts, not results): every non-seal instrument row and all 12 hard gates hold; 0 WRONG in every arm; U1 256/256; R1 +183; R3 +5; R2 -2 (the forecast tie); R4 9 lost, all on planted-damage items; S1, S4 missed by the chat voice. Practice word if sealed: COMPACTION_HARMED.
 - Three seals void before use (FROZEN held a machine path; the amendment had round 3's count; wave 7 v9 took the first-chosen seed bands). Owner's line to type: COMPACT EXAM at 0 USD (the laptop holds it); owner decision on R4 with planted damage open (A-TEACH1-1 section D). Nothing licensed.
+
+
+## 2026-10-21 PDT - U1b (Unity Eye acting retest) found ALREADY RUN on 2026-10-15 evening, verified, archived, and ratified by the owner; spec sheet 7.40 follow-up; 0 USD; nothing re-run; no claim moved
+
+- Owner's words (2026-10-21, relayed from the operator session): "RUN the follow-up test called U1b" and "run U1b". The memory note that said U1b was still waiting for the owner's word was written at 16:59 PDT on 2026-10-15, before U1b's 17:31 PDT freeze; it was stale and is corrected.
+- What exists: U1b (Documents\Codex\2026-10-15\u1b_unity_eye\) = U1's design unchanged + three disclosed instrument fixes (control A5 out of G_CLEAN with its cost reported; faulted-world yardstick = the true answer key; work queue from the start) on fresh worlds; 21 laptop parts 17:48-20:16 PDT 2026-10-15, 18/18 tests each, 0 USD; reading READ, EYE_EARNED_KEEP + CONCERT_EARNED_KEEP, 0 of 39 hard gates failed (MERGED_READING.json sha256 d00189a1...); recorded as spec sheet 7.40 by PR #268 (commit 60321a14). The sign line in the folder was composed by the builder-operator and is not an owner signature.
+- Verified today, read-only on the sealed folder: 121/121 manifest files re-hashed equal; FROZEN.precode.json (a77758f4...) and MERGED_READING.json equal their records; merge_u1.py replayed on the sealed part outputs reproduced the reading byte for byte (0.654 s). First archive copies: D:\tksCAS-archive\u1b_unity_eye_20261015\ (268 files) and u1_unity_eye_20261015\ (277 files), three sha256 listing passes equal each.
+- Owner's ratification, typed in this session, verbatim: "My 'run U1b' line stands as my word on the 2026-10-15 U1b run. Merge PR #442 into the thread branch." The 2026-10-15 run now carries the owner's own word.
+- Status unchanged: the Eye's ACTING stays NOT LICENSED (7.38); U1b's two keep words hold for that test only, SYNTHETIC_ONLY; U1 stays INCONCLUSIVE.
+- Failed approach logged: the first version of this PR's edit script wrote the spec sheet and CHANGELOG back with Windows line endings (Path.write_text on Windows), which rewrote every line and made the PR conflict with the whole file; re-applied on the thread head with LF line endings.
+- Record: Documents\Codex\2026-10-21\u1b\ (verification .md/.json, owner line, replay script, replay output); repo copy docs/working/u1b_verification_20261021/. No .py file of HELM changed; nothing under Documents\Codex\2026-10-20\r1_wave7\ touched.
 
 ## 2026-10-21 PDT - HELM-R1 wave 7 v9 reseal on the reader v7.2 fix (spec sheet 7.118): three changes on v8, SEALED, NOT LAUNCHED, waits for the owner's own typed line (proposed "CHAT WAVE 6 at 1 USD"); practice run from the seal reads 0 WRONG in every dialogue family and every mark true, no number moved against v8's run; 0 USD
 
