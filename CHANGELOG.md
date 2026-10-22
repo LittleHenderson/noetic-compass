@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: the Eye runs a lean capsule (spec sheet 7.125 follow-up 5): one capsule 812 -> 281 B; memory under the limit at 200 lines (3,955 B of 4,000) and at the owner's 53,370 for 2,000 lines (48,745 B); still over at 600 lines (26,126 B); 429 HELM tests pass; 0 USD
+
+- Owner's words: "put the Eye in charge of this part ... Shrink the capsule: don't save what can be rebuilt ... A rebuilt capsule must match its receipt."
+- A-TEACH2-7 58ef426e... before code (c44c6e07). Commit 6ef29c83: helm_eye_act.CapsuleEye + LeanCapsules on the size-limit path. ACT = lean record (name, clues, Noetic digits, template 1, fingerprint, cubes, mass, receipt), kept only if the rebuild is the same capsule and matches the receipt (else full, LEAN_REFUSED); READ = rebuild + receipt check on every use; HOLD = a mismatching record is never used (LEAN_REBUILD_MISMATCH).
+- FIX FIRST: 11 failed/3 passed -> 3 failed (2 test faults, 1 real: mass change uncaught, fixed with the STRENGTHEN receipt check) -> 14 passed; write-back order fixed (after the STRENGTHEN receipt) with a test; 2 old full-capsule pins kept with the Eye off. Every HELM suite OFF 429 passed.
+- Measured negative kept: lean capsules still pile up; the limit breaks later, not never. Next choice is the owner's (old capsules off working memory with a small clue index).
+
 ## 2026-10-21 PDT - HELM cube memory: size limit + widening batches + AWS cloud tier (spec sheet 7.125 follow-up 4); 19 tests; 414 HELM tests pass; live smoke on a private S3 bucket PASS; measured negative: memory does not stay under the limit; < 0.001 USD
 
 - Owner's words: "keep every line and only start the fade process once that reaches 53370"; "yes, size limit plus batches"; "once that becomes filled begin moving things to an aws server where if HELM has wifi he can reach it".

@@ -142,3 +142,49 @@ deletes); the smoke objects are 7 small synthetic files.
 Gaps kept: client-side encryption with keys on the device (needs a crypto library outside HELM's standard-library rule);
 sensitivity classes for real personal data (owner's word); the live switch attaches no cloud yet (`cloud=None` until the
 owner says to point real conversations at the bucket).
+
+## 8. The Eye runs a lean capsule (A-TEACH2-7 `58ef426e…`, commit `6ef29c83`)
+
+Owner's words (2026-10-22, verbatim): "bro put the Eye in charge of this part that is causing or is an issue: 2.; Shrink
+the capsule: don’t save what can be rebuilt. … A rebuilt capsule must match its receipt. Amendment first, test-first,
+0 USD; measure bytes before and after."
+
+The amendment was committed before any code (`c44c6e07`). The Eye is the same Eye as EYE-ACT-1 (`helm_eye_act.py`), with
+a second watch, `CapsuleEye`, and the capsule list it runs, `LeanCapsules`. It runs only on the size-limit path.
+
+| Eye step | What it does |
+|---|---|
+| ACT (shrink) | Stores a lean record: name, clues, Noetic digits, template version 1, fingerprint of the original, bound cubes, mass, receipt (plus the kind only for a "question" capsule, the original clue count only after strengthening added clues, and the line numbers only when they are not consecutive). It rebuilds the record at once and keeps it lean only if the rebuild is the same capsule and matches its receipt; otherwise the full capsule is kept (`LEAN_REFUSED`) |
+| READ (rebuild) | Every use rebuilds the CAS sentence and notation (clues + digits, template 1), runs the compile and round-trip checks again (results remembered per exact text), rebuilds the cold-copy path, the line numbers (first and last id in the name), the Atlas thread (8 capsules per thread), node id, side and fact node, then checks the receipt |
+| HOLD | A record whose rebuild does not match its receipt is never offered to recall, answers, fit checks or the cloud move; the Eye report flags `LEAN_REBUILD_MISMATCH` |
+
+Receipt check: the compaction receipt is recomputed from the rebuilt capsule with the clues and mass as they were at
+compaction; a strengthened capsule must also carry exactly the mass and clues of its latest STRENGTHEN receipt. A
+change to any kept field (clue, digits, fingerprint, cubes, mass, receipt, template) makes the Eye hold the capsule
+(tested field by field).
+
+FIX FIRST (`test_helm_cube_lean.py`, written first): (a) 11 failed, 3 passed; (b) built: 3 failed — two were test
+faults (a test spy also caught the size measurements, and the strengthening test expected a ninth clue under the cap
+of 8), one was real (a changed mass was not caught; fixed by the STRENGTHEN receipt check); (c) 14 passed. Found by
+reading, then tested: the strengthened capsule was written back before its STRENGTHEN receipt existed, so the Eye kept
+it full; the write-back now follows the receipt and a test checks it stays lean. Two older tests pinned facts of full
+capsules (batches of short lines widen; memory over the limit at 200 lines); both now run with full capsules (the Eye
+off), so the old negative stays tested. Every HELM suite, both switches OFF: **429 passed**.
+
+**Bytes before (full capsules) and after (the Eye's lean records), same chats** (`LEAN_BYTES_20261022.json`):
+
+| Chat | One capsule (median) | Working memory | Keeping every line | Under the limit |
+|---|---|---|---|---|
+| 200 lines of ~60 bytes, limit 4,000 | 812 → **281** | 11,126 → **3,955** | 11,910 | 🟥 → ✅ |
+| 2,000 lines of ~60 bytes, limit 53,370 | 828 → **280** | 110,746 → **48,745** | 120,294 | 🟥 → ✅ |
+| 600 lines of ~60 bytes, limit 4,000 | 820 → **280** | 34,515 → **26,126** | 35,730 | 🟥 → 🟥 |
+| 300 short lines of ~32 bytes, limit 3,000 | 874 → **282** | 8,948 → **7,202** | 9,474 | 🟥 → 🟥 |
+
+(The 200-line "before" is 11,126 here against 11,165 in section 7 because the test lines gained a unique word.) The Eye
+refused to shrink 0 capsules in all four runs.
+
+**Measured negative kept 🟥:** a lean capsule still stays in working memory and costs about 3 bytes in 10 of the lines it
+replaces, so capsules still pile up. The lean capsule moves the point where the limit breaks (about 3.4 times the limit
+in lines of 60 bytes); it does not remove it. At the owner's 53,370 bytes that is roughly 3,000 lines of this length.
+Holding the limit for ever still needs the other choice (old capsules leave working memory too, with a small clue
+index), which is the owner's.

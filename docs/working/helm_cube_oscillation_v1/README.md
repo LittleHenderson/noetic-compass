@@ -26,3 +26,5 @@ the new kind of fact, expected about 2 USD) and `CUBE EXAM at 1 USD` (one CPU ho
 new `PROPOSED`.
 
 **2026-10-21, follow-up 4:** size limit (53,370 B) + widening batches + AWS cloud tier for the oldest originals (A-TEACH2-5, A-TEACH2-6; `BUILD_V2_RECORD_20261021.md` §7; live smoke `CLOUD_SMOKE_20261021.json`). Measured negative: memory does not stay under the limit.
+
+**2026-10-22, follow-up 5:** the Eye runs a lean capsule (A-TEACH2-7; `BUILD_V2_RECORD_20261021.md` §8; `LEAN_BYTES_20261022.json`): one capsule 812 → 281 bytes; under the limit at 200 lines and at 53,370 for 2,000 lines; still over at 600 lines.
