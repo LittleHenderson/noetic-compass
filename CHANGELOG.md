@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: the Eye's deep search reads the cloud's fold records when online (spec sheet 7.125 follow-up 9): old lines recalled EXACT 1 -> 30 of 30; ~9 cloud reads per question, estimated ~10 s each on the real bucket; 467 HELM tests pass; 0 USD
+
+- Owner's words: "when a question misses everything on the device and HELM is online, let the Eye's deep search also read the fold records in the cloud, so rare words of old lines can still be found."
+- A-TEACH2-11 43b11166... before code (6e28c9aa). Commit d031ea42: working memory -> device fold records -> cloud fold records only if both miss and the cloud is reachable; each read checked; nothing kept; offline "stored away".
+- FIX FIRST: 3 failed/2 passed -> 5 passed; A-TEACH2-10 pinned negative narrowed to offline; every HELM suite OFF 467 passed.
+- Negatives kept: slow on the real cloud (estimate from the smoke test, ~1.12 s per AWS command-line call); offline rare words in cloud fold records still not found.
+
 ## 2026-10-22 PDT - HELM: capsules take clue words from every line of a batch (spec sheet 7.125 follow-up 8): at the owner's 53,370 for 8,000 lines, old lines found EXACT by their own word 1 -> 30 of 30, memory still under (48,743 B); small 4,000 limits now go over; 462 HELM tests pass; 0 USD
 
 - Owner's words: "let each capsule take its clue words from every line in its batch (not just the first lines), so any old line can be found by its own words."

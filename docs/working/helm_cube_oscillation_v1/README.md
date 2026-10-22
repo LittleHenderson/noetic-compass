@@ -34,3 +34,5 @@ new `PROPOSED`.
 **2026-10-22, follow-up 7:** the Eye folds old index rows, row upon row (A-TEACH2-9; `BUILD_V2_RECORD_20261021.md` §10; `FOLD_BYTES_20261022.json`): 8,000 lines stay under 53,370; a 4,000 limit is below the two-level floor.
 
 **2026-10-22, follow-up 8:** clue words from every line of a batch (A-TEACH2-10; `BUILD_V2_RECORD_20261021.md` §11; `EVERYLINE_BYTES_20261022.json`): at 53,370 for 8,000 lines, reach 1 → 30 of 30, memory under; small limits now go over.
+
+**2026-10-22, follow-up 9:** the deep search reads the cloud's fold records when online (A-TEACH2-11; `BUILD_V2_RECORD_20261021.md` §12; `CLOUDSEARCH_REACH_20261022.json`): reach 1 → 30 of 30; estimated ~10 s per question on the real bucket.

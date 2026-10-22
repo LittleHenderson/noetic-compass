@@ -333,3 +333,36 @@ search of the device folder, because a folded row keeps only 48 of a thread's wo
    only fold records still on the device. HELM then says it does not know (never a wrong line). Pinned as a test.
 3. Most old lines are now found through the deep search, whose time grows with the chat (it reads every fold record on
    the device after a miss in working memory).
+
+## 12. The deep search reads the cloud's fold records when online (A-TEACH2-11 `43b11166…`, commit `d031ea42`)
+
+Owner's words (2026-10-22, verbatim): "Yes: when a question misses everything on the device and HELM is online, let the
+Eye's deep search also read the fold records in the cloud, so rare words of old lines can still be found. Amendment
+first, test-first, 0 USD; measure reach and time before and after."
+
+The amendment was committed before any code (`6e28c9aa`). Order: working memory, then the device's fold records, and
+only if both find nothing and the cloud says it can be reached, the cloud's fold records. Each cloud read is checked
+against the 16 characters its row kept (a mismatch is held); nothing read is kept in working memory. Offline, HELM says
+its notes are stored away; never EXACT.
+
+FIX FIRST (`test_helm_cube_cloudsearch.py`, written first): 3 failed, 2 passed → 5 passed. The A-TEACH2-10 pinned
+negative ("words past the cap are not found once fold records are in the cloud") failed as expected, because they are
+now found online; it was narrowed to what is still true, OFFLINE. Every HELM suite, both switches OFF: **467 passed**.
+
+**Before (device only) and after (cloud too, when online)** — 600 lines, limit 4,000, device limit 2,000, a stand-in
+cloud; 30 lines sampled across the chat, each asked by its own word (`CLOUDSEARCH_REACH_20261022.json`):
+
+| | Recalled EXACT | Cloud reads per question (median / most) | Time per question, stand-in cloud (median / most) | Estimated time on the real bucket (median / most) |
+|---|---|---|---|---|
+| Before | **1 of 30** | 0 / 4 | 0.1 / 0.6 ms | 0 / 4.5 s |
+| After | **30 of 30** | 9 / 9 | 0.8 / 1.0 ms | **10.1 / 10.1 s** |
+
+No sampled question was answered with a wrong line. The real-bucket time is an ESTIMATE, not a measurement: the live
+smoke test of 2026-10-21 took 20.1 seconds for about 18 calls through the AWS command line tool (≈ 1.12 s per call),
+times the measured number of cloud reads. No AWS call was made for this step (0 USD).
+
+**Measured negatives kept 🟥:**
+1. Slow on the real cloud: about 9 reads per question, about 10 seconds through the AWS command line tool (estimate).
+   Each read starts a new command-line process; a faster client or a small device-side cache of fold records would cut
+   this, but either is a design change for the owner.
+2. Offline, rare words whose fold records are in the cloud are still not found (pinned test).
