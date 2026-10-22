@@ -28,3 +28,5 @@ new `PROPOSED`.
 **2026-10-21, follow-up 4:** size limit (53,370 B) + widening batches + AWS cloud tier for the oldest originals (A-TEACH2-5, A-TEACH2-6; `BUILD_V2_RECORD_20261021.md` §7; live smoke `CLOUD_SMOKE_20261021.json`). Measured negative: memory does not stay under the limit.
 
 **2026-10-22, follow-up 5:** the Eye runs a lean capsule (A-TEACH2-7; `BUILD_V2_RECORD_20261021.md` §8; `LEAN_BYTES_20261022.json`): one capsule 812 → 281 bytes; under the limit at 200 lines and at 53,370 for 2,000 lines; still over at 600 lines.
+
+**2026-10-22, follow-up 6:** the Eye moves old capsules off working memory with a clue index (A-TEACH2-8; `BUILD_V2_RECORD_20261021.md` §9; `OFFLOAD_BYTES_20261022.json`): 300 short lines at 3,000 now under; 600 lines at 4,000 still over (the index grows).

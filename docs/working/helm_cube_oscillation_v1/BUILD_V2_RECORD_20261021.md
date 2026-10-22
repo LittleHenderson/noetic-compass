@@ -188,3 +188,49 @@ replaces, so capsules still pile up. The lean capsule moves the point where the 
 in lines of 60 bytes); it does not remove it. At the owner's 53,370 bytes that is roughly 3,000 lines of this length.
 Holding the limit for ever still needs the other choice (old capsules leave working memory too, with a small clue
 index), which is the owner's.
+
+## 9. The Eye moves old capsules off working memory (A-TEACH2-8 `d5fbf746…`, commit `5523585b`)
+
+Owner's words (2026-10-22, verbatim): "Yes: let the Eye move old capsules off working memory too (device folder, then
+the cloud), keeping only a small index of clue words in working memory. Amendment first, test-first, 0 USD; measure
+bytes before and after."
+
+The amendment was committed before any code (`717edc58`). What was built (`helm_eye_act.LeanCapsules`,
+`helm_memory_compact`, `helm_cube_osc`):
+
+| Step | What happens |
+|---|---|
+| Move off | After the batch fading of a turn, if working memory is still over 90 % of the limit, the Eye moves the oldest capsules out: the record is written to `<cold folder>/<capsule name>.lean.json`, read back byte for byte, and only then replaced in working memory by an index row (name, clue words, first 16 characters of the receipt; the kind and line numbers only when needed). A failed write keeps the capsule (`MOVE_OFF_FAILED`) |
+| Recall | Matches the question's words against the clue words of every capsule (in working memory or moved off) without fetching anything; only the matching capsule is fetched (device folder, then the cloud) |
+| Check | A fetched record must carry the same name, the same clue words as its index row and a receipt beginning with the kept 16 characters, then pass the A-TEACH2-7 rebuild and receipt check; otherwise it is held (`LEAN_REBUILD_MISMATCH`), never answered from |
+| Cloud | The device folder's limit counts the moved records too; past it, the oldest capsule's original (checked by its fingerprint) and its record (checked byte for byte) are uploaded and read back before either is removed locally; one `MOVED_TO_CLOUD` receipt names both keys |
+| Out of reach | A capsule whose record is in the cloud that cannot be reached gives no answer: recall says "my full notes are stored away and I can't reach them right now"; a cube answer is RECONSTRUCTED, never EXACT |
+| Strengthening | Brings a moved capsule back into working memory; its device copy of the record is removed (the cloud keeps its copy) |
+
+FIX FIRST (`test_helm_cube_offload.py`, written first): 9 failed, 2 passed → 11 passed. Two older cloud tests in
+`test_helm_cube_tiers.py` assumed every capsule stays in working memory and only originals go to the cloud; they now
+find capsules by name and allow the Eye's records next to their originals (A-TEACH2-8 M4 amends A-TEACH2-5 L5; cubes
+still never leave the device, still tested). A pinned negative test was added after measuring. Every HELM suite, both
+switches OFF: **440 passed** (+1 pinned negative).
+
+**Bytes before (lean capsules kept in working memory) and after (moved off, index only)** (`OFFLOAD_BYTES_20261022.json`):
+
+| Chat | Working memory before → after | Capsules moved off | Under the limit | Time |
+|---|---|---|---|---|
+| 200 lines, limit 4,000 | 3,943 → 3,943 | 0 (not needed) | ✅ → ✅ | 0.3 s |
+| 2,000 lines, limit 53,370 | 48,640 → 48,640 | 0 (not needed) | ✅ → ✅ | 3.8 s |
+| 300 short lines, limit 3,000 | 7,145 → **2,830** | 21 | 🟥 → ✅ | 0.8 s |
+| 600 lines, limit 4,000 | 26,034 → **10,870** | 83 | 🟥 → 🟥 | 3.6 s |
+| 3,000 lines, limit 4,000 | 159,034 → **72,222** | 563 | 🟥 → 🟥 | 30.3 s |
+
+One index row is about 129 bytes (median 127–131) against about 281 for a lean record.
+
+**Measured negatives kept 🟥:**
+1. The index also grows with the chat: about 129 bytes per capsule stay in working memory, so a long chat at a small
+   limit still goes over (600 lines at 4,000: 10,870 bytes). The limit breaks later again, not never. At the owner's
+   53,370 bytes and 16-line capsules of 60-byte lines, the index alone fills the limit after roughly 6,600 lines.
+2. Once working memory stays over the limit, each turn fades whatever short run of lines it can, so capsules get small
+   (600 lines made 83 capsules where 16-line batches would make about 37), and each small capsule adds its own index
+   row. In plain words: when memory is permanently full, the folding gets less efficient.
+Holding the limit for ever would need the index itself to fold (for example, many old index rows merged into one row
+per thread of conversation), which is the owner's choice.

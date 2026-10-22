@@ -184,3 +184,12 @@ def test_a_cube_answer_for_a_fact_whose_capsule_is_in_the_cloud(tmp_path):
     cloud.online = False
     out = osc.answer(q)
     assert out["label"] == "RECONSTRUCTED" and out["value"] == "eight" and "stored away" in out["text"]
+
+
+def test_a_long_chat_at_a_small_limit_still_goes_over(tmp_path):
+    """PINNED MEASURED NEGATIVE (A-TEACH2-8 record, OFFLOAD_BYTES_20261022.json): every moved capsule still leaves an
+    index row (~129 bytes) in working memory, so the index grows with the chat: 600 lines at a 4,000 limit end at
+    10,870 bytes (26,034 before). Moving capsules off moves the point where the limit breaks; it does not remove it."""
+    mem, osc = _run(tmp_path)
+    assert 4000 < osc.working_bytes() < BEFORE_600
+    assert any(k in _flags(mem) for k in ("BATCH_NO_GAIN", "OVER_LIMIT_PROTECTED", "OVER_LIMIT_INDEX"))

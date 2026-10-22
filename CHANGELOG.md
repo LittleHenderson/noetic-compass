@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: the Eye moves old capsules off working memory (spec sheet 7.125 follow-up 6): device folder then cloud, clue index stays; 300 short lines at 3,000 now under (2,830 B); 600 lines at 4,000 still over (26,034 -> 10,870 B); 440 HELM tests pass; 0 USD
+
+- Owner's words: "let the Eye move old capsules off working memory too (device folder, then the cloud), keeping only a small index of clue words in working memory."
+- A-TEACH2-8 d5fbf746... before code (717edc58). Commit 5523585b: move-off after batch fading when still over 90 %; record to <cold>/<name>.lean.json read back byte for byte; index row = name, clue words, 16 receipt characters; recall matches the index, fetches only the match, checks it (else held); cloud move carries the record with its original; out of reach = "stored away", never EXACT; strengthening brings a capsule back.
+- FIX FIRST: 9 failed/2 passed -> 11 passed; 2 older cloud tests updated to the amended rule; pinned negative added; every HELM suite OFF 440 passed.
+- Measured negatives kept: the index grows (~129 B per capsule), so the limit breaks later, not never (~6,600 lines at 53,370); when memory stays full, batches get small. Folding the index itself is the owner's choice.
+
 ## 2026-10-22 PDT - HELM: the Eye runs a lean capsule (spec sheet 7.125 follow-up 5): one capsule 812 -> 281 B; memory under the limit at 200 lines (3,955 B of 4,000) and at the owner's 53,370 for 2,000 lines (48,745 B); still over at 600 lines (26,126 B); 429 HELM tests pass; 0 USD
 
 - Owner's words: "put the Eye in charge of this part ... Shrink the capsule: don't save what can be rebuilt ... A rebuilt capsule must match its receipt."
