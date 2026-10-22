@@ -1,0 +1,32 @@
+{
+  "version": "lm-t1b-v0.1b",
+  "status": "FROZEN_BEFORE_CODE",
+  "frozen_note": "Written 2026-10-15 about 04:35 UTC (2026-10-14 about 9:35 PM Pacific) before cce_v01b.py, cas_ast.py, the T1b ledger, worker_t1b.py or any T1b test existed, and before the parser ran on any added hand-set item or any book example. LM-T1 (CCE v0.1) was already frozen and scored; per the coordinator's instruction the owner's addition is a separate test, LM-T1b, with this freeze.",
+  "owner_words_verbatim": [
+    {"when": "2026-10-14 about 9:40 PM Pacific", "words": "oh shit i almost for got about Noetic Fractals nested noetics, as well as meta-logic CAS they both are saved locally in various books and files"},
+    {"when": "2026-10-14 about 9:10 PM Pacific", "words": "RB2b, LM defaults, RB-C defaults, delete them"},
+    {"when": "standing rule", "words": "Run it locally as long as it Quick if long use aws"}
+  ],
+  "coordinator_relay": "Owner pointed at the newest CAS compiler: source local at C:/Users/wakil/Documents/Codex/2026-10-08/task-4/cas-online/dist/compiler/api/notation/compiler.py (6,415 lines, git 69ccba2, 2026-10-08), a superset of the tksCAS copy with the nesting analysis. Use it read-only for nesting and meta-logic checks; prefer its grammar over bridge v2's regex where they overlap and record disagreements; use Programming_in_CAS_Corrected_Examples_2026-10-11.txt as an extra held-out round-trip set counted separately.",
+  "compiler_used": {"path": "C:/Users/wakil/Documents/Codex/2026-10-08/task-4/cas-online/dist/compiler/api/notation/compiler.py", "sha256": "464fd4adfae90a35ba54aa794829da1fe713b9b9cccd68b630ecccfdfbca2f56", "import": "sys.path insert of .../dist/compiler, import api.notation.compiler; never modified"},
+  "grammar": {"base": "GRAMMAR_CCE_v0_1.md (sha256 36b9a6db...)", "addendum": "GRAMMAR_CCE_v0_1b_ADDENDUM.md sections A-D, sha256 9191c7dbc4b3220fb2236c4bbb4493649d586ce05d113ddad2a9530fbb086241", "disclosure": "the hand-set writer read sections A-C; section D (CAS expressions for the book examples) was appended after the writer finished and is not exercised by the hand set"},
+  "brief_conflict_disclosed": "Depth: the owner addition asks depth cap 5 for nested Noetics. v0.1b: fractal sequences 1-5 terms (more = NEST_TOO_DEEP). Clause nesting 'that [...]' keeps the v0.1 cap of 2 (owner default Q9), unchanged.",
+  "inputs": {
+    "hand_set_add16": "handset/HAND_SET_v0_1b_ADD16.json, sha256 cf28d0a065190bbc283e6256de46503917b924e952a3682bfb22dd750fdc1ffc (frozen on receipt)",
+    "book_examples": {"path": "C:/Users/wakil/Documents/Codex/2026-10-08/task-4/cas-online/dist/downloads/Programming_in_CAS_Corrected_Examples_2026-10-11.txt", "sha256": "1b75e18aabd4887171c00b9aaafbd96e8a2640044caac6d4cd32342a2dc8af5a", "cases": 67, "expected_accepted": 60, "expected_rejected": 7, "builder_had_seen": "the first 8 lines-of-cases while checking the file format"},
+    "lm_t1_inputs": "the same seeds, hand set (64) as LM-T1, for the no-damage regression"
+  },
+  "marks": {
+    "B1_NEST": {"what": "U-NEST: fractal depth 1..5 x governing Noetic 0..9 = 50 cells; 2 probes per cell (no tails; per-term Domain C + register on the governing term), floor 2 of 2", "pass": "50 of 50 COVERED; and every probe's CAS rendering compiles in the new compiler with the same sequence (and domain when all terms share one)", "type": "hard"},
+    "B2_META": {"what": "U-META: 15 operators (member, nonmember, subset_eq, subset_strict, superset_eq, superset_strict, union, intersection, difference, pullback, product, cover, partition, size, let) x 8 set kinds (noetic, state, state_variant, domain, register, drive, relation, builtin) = 120 cells; eligible iff the new compiler accepts the probe's CAS rendering through parsing and typecheck (execution truth not required)", "pass": "every eligible cell COVERED (round trip exact); covered_without_charge 0", "type": "hard"},
+    "B3_HAND_ADD16": {"what": "16 added items (8 nested, 8 meta-logic) from the independent writer", "pass": "16 of 16", "type": "hard"},
+    "B4_COMPILER": {"what": "CAS-side identity: for every nested / meta / expression content that round-trips, compile(CAS rendering of the content read back) equals compile(CAS rendering of the content) in the new compiler (to_dict, including the nesting block)", "pass": "all equal", "type": "hard"},
+    "B5_NO_DAMAGE": {"what": "CCE v0.1b on the LM-T1 inputs", "pass": "576 of 576 recipes round-trip; 64 of 64 hand set", "type": "hard"},
+    "B6_BOOK_EXAMPLES": {"what": "held-out: each accepted example: new-compiler parse -> content -> CCE -> parse -> content (exact) -> CAS -> compile; pass per case when CCE round trip exact AND compile(to_dict) of the rendering equals compile of the original source. Unsupported constructs counted as FORM_GAP with the construct name. Rejected examples: the compiler rejects them, so no content exists; counted 'no content (rejected)'.", "pass": "REPORTED ONLY (no frozen mark; first scoring)", "prediction": "25-45 of 60 accepted cases exact; gaps mostly in yields, RPM, let/fn, tuples, emergent forms"},
+    "B7_RECIPE_GRAMMAR": {"what": "the 576 SDG recipe seeds: new-compiler AST (coefficient, Noetic, Domain, Drive, Register, leakage, catalyst, inhibitor) vs bridge v2 parse_recipe", "pass": "REPORTED ONLY: number of disagreements, each listed as a finding"}
+  },
+  "reading_rule": "LM-T1b core = PASS only if B1, B2, B3, B4 and B5 all pass. Any failed hard mark is a FAILURE. B6 and B7 are reported numbers. Claim ceiling: ENGINEERED-NOT-VALIDATED; FORM only; the meaning of nesting (book open questions N1-N13) is not settled by CCE.",
+  "predictions_before_build": {"B1": "pass", "B2": "pass on eligible cells; some cells ineligible (the compiler refuses e.g. size of a relation set? unknown)", "B3": "13-16 of 16", "B4": "pass", "B5": "pass", "B6": "25-45 of 60", "B7": "0-5 disagreements"},
+  "run": {"environment": "LOCAL_CPU_ONCE on MSI", "hard_wall_seconds": 300, "memory_cap_mib": 300, "network": "sockets blocked", "spend": 0, "processes": 1,
+          "sign_line_template": "APPROVE lm_t1b, source <manifest8>, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend."}
+}

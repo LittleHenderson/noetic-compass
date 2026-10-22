@@ -1,0 +1,318 @@
+{
+  "version": "lm-t1c-v0.1c-R",
+  "created_utc": "2026-10-15T04:50:01.569830+00:00",
+  "files": [
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cce.py",
+      "sha256": "b494598e4b665514d7fd78b89a90186d7e7fc679ab7f407b4826459356289bd3",
+      "bytes": 41546,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cce_v01b.py",
+      "sha256": "25047ba1c3cd3ecb9212aa0cb66f59fad9b8abdb62a9875f403ce59c201228bd",
+      "bytes": 16716,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cas_ast.py",
+      "sha256": "175fbadf23e9ae11ed94513e6ff382b07e6bb46f78bbc7e764200f3afb8f58ae",
+      "bytes": 13148,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\t1b.py",
+      "sha256": "4a175cad7f95266cf3a86a1974ed2a0c6e30dceab73295037dab85b1c46b0b46",
+      "bytes": 13121,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\aliaswide.py",
+      "sha256": "e6afd206736ea9c70bd15a72281c503d15cf7f97da2735cacb476ede8c722211",
+      "bytes": 8421,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\coverage.py",
+      "sha256": "36e520e5f47074a8815e4c38aa9d82d859877a19aafc225a40749207b9dc22b5",
+      "bytes": 11804,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\scoring.py",
+      "sha256": "1712681f0c088f552227f52730172701a6b9a36ad53b2a16f4f276197a24f1d8",
+      "bytes": 16677,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\worker_t1c.py",
+      "sha256": "fa32d686933aef74afcc33e57a2ec8e74e50dadc772bf188d1e6068ac6f2ee84",
+      "bytes": 6182,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\cce_v01c.py",
+      "sha256": "a043c988f7fda529adb2a3cdf8ad28405f7fe2b7e7c4f96e43bc42ef57a4302f",
+      "bytes": 5143,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\t1c.py",
+      "sha256": "5afecfb42c7f763487cea70ca565f10edb897ff4e74f1458761187ce42fd04f5",
+      "bytes": 5260,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\test_lm_t1c.py",
+      "sha256": "27410bf408c430718eba060d484154efb1610c4a496516ec165657665326cdd2",
+      "bytes": 1595,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\FROZEN_T1C.json",
+      "sha256": "f69a58e1a5addbb9a854e85d06c0c64ca599af861c714f412d6dfffaffb9f926",
+      "bytes": 3230,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\GRAMMAR_CCE_v0_1c_R_ADDENDUM.md",
+      "sha256": "b76d2093fc5058822afc43170bf12133abfa64743f37e8a7de7fd98683bc5119",
+      "bytes": 1402,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1c_R_DOTTED4.json",
+      "sha256": "73b71b44c524753185fcd87180860e5ac9322c2ce3ab29315be092dbd203c86f",
+      "bytes": 3778,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1c_R_DOTTED4_FREEZE.json",
+      "sha256": "d3b17da7097c6d5063c7478df4a8a39f5dfeb87f75f0a4c5697dc6870dc02ae0",
+      "bytes": 333,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\supervisor_t1c.ps1",
+      "sha256": "87b5de585ab59ca6602e9d692ef92689c89942516e25b78f6f8e95343d67d9fc",
+      "bytes": 6514,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\test_lm_t1.py",
+      "sha256": "2e6880a7c13a14022814f664e45cb5246bf024e61de754ab459a8e5942d60ce2",
+      "bytes": 11799,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\test_lm_t1b.py",
+      "sha256": "473fec265b39a685c012e45194ea51c77fe130e0088d025823ebdec8ce468ca6",
+      "bytes": 4150,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\static_check_t1c.py",
+      "sha256": "e3bc4102fc728caedeb3883984b1db8d789bf7f8dbfe95f1215498812485c49c",
+      "bytes": 5233,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\FROZEN_T1B.json",
+      "sha256": "6a9eae1aa7fdf6ff3ce8c874a291b2ef149b98084d34f57e8a079e8e678717b6",
+      "bytes": 6161,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\GRAMMAR_CCE_v0_1b_ADDENDUM.md",
+      "sha256": "9191c7dbc4b3220fb2236c4bbb4493649d586ce05d113ddad2a9530fbb086241",
+      "bytes": 7271,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1b_ADD16.json",
+      "sha256": "cf28d0a065190bbc283e6256de46503917b924e952a3682bfb22dd750fdc1ffc",
+      "bytes": 12445,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1b_ADD16_FREEZE.json",
+      "sha256": "44e152b3e20aadb2dfec0d44514cc26e7bc745b147fc4c84f9849eb3b9544277",
+      "bytes": 391,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\FROZEN.json",
+      "sha256": "ac41c92ea5dc4a44391f7e4366af4f03503b2ddff45a5ddbf66e06948429094f",
+      "bytes": 11016,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\GRAMMAR_CCE_v0_1.md",
+      "sha256": "36b9a6dbb52facdadf293476d5623fb80d122cf90412ba3d033d9de59b12ef70",
+      "bytes": 14707,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\ALIAS_WIDE_LEXICON_v0_1.json",
+      "sha256": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0",
+      "bytes": 6133,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\OWNER_APPROVAL_EVIDENCE.template.md",
+      "sha256": "746e7b37dbeb2ce9dcadf7dd365123fc840a81f5702970246f5030b127df8d52",
+      "bytes": 1277,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_v0_1.json",
+      "sha256": "653cdc708112410b18c59ce26daf65382eccd94a8f9e49705fcea32eeedab56b",
+      "bytes": 47070,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lm_t1\\handset\\HAND_SET_FREEZE.json",
+      "sha256": "91b49bb98af31e5fb074442f1dc328c564ad846ed6f121f987ce579216962acf",
+      "bytes": 511,
+      "role": "LM_T1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\__init__.py",
+      "sha256": "735557b20b50a5052bd7f428a87dcd0729cb2ff815a94fedd1e0f788509a02d0",
+      "bytes": 529,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\grammar.py",
+      "sha256": "570a12719fe40f74e6c04c37641bf967151f0e836ea5ebedc3f382e23d19dff4",
+      "bytes": 8458,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\english.py",
+      "sha256": "51db117c289886254cd5387c546d8c42e93568ce30fa7885fa0d8a10709a3b67",
+      "bytes": 10850,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\binder.py",
+      "sha256": "b71f1f64879be73979c68f1b737fabf6537b56f1768315adff23650d4ec92f27",
+      "bytes": 7785,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\bridge.py",
+      "sha256": "2b80e071c0b8fe176046f264f353322c57fc013b8c0444b119e71b954c8b4ee0",
+      "bytes": 5782,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\sdg_bridge_v2\\tables.py",
+      "sha256": "c402b4d2e82dc59812ed65544f754a36df15bdc3129516fadb07c5da0c94e167",
+      "bytes": 2884,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\__init__.py",
+      "sha256": "453c58f675ca52243891d2e3bf21d6a7b93c6ddd14cd956eb2c3f656ba7c0ab1",
+      "bytes": 99,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\CAS-Recipe-Network-Comparison-20261011\\fair_data_experiment_v2_sdg\\sdg_source.py",
+      "sha256": "4dfe5fa8a58ba1dd5f5947b8dea82f4dd1088a05ae3bdf5c85c86fcda02bb823",
+      "bytes": 6033,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\__init__.py",
+      "sha256": "f2c1d437f4d01160f08693928d096164a3b0512a00ba11cd8fe20323866b03a5",
+      "bytes": 89,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\universe.py",
+      "sha256": "93cf1223a7f61858f23abe8a5212e3d6ea3fe5462b5a64f2b717302481b5265b",
+      "bytes": 1797,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\ledger.py",
+      "sha256": "a7573d467c458f40e9dbd8ec269859e5fba8891bdf724c5f3cba7fbaee140c9d",
+      "bytes": 2125,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1\\lacunarity_machine\\readers.py",
+      "sha256": "0fbe90474c6f43232a4d8d90f2e9f25eed946e2cd88d6d2e05dea1f98dc90c3b",
+      "bytes": 5453,
+      "role": "REUSED_UNCHANGED"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\seeds.jsonl",
+      "sha256": "df68d2447ccd7371f8b9a18e48fa90269914be2505f1a96d92e4164aabe91639",
+      "bytes": 3470287,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\cas_language_first_principles_map_v1\\OWNER_RULING_N1_NESTING_DIRECTION_20261014.md",
+      "sha256": "e6bab2c160f57eb54c34316377941756e9966ac518a45f99370ea6d36bffe21a",
+      "bytes": 1176,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260508T203848Z.jsonl",
+      "sha256": "b825b67a3029657f40d128d382448b5f0b55580fc7451bfce8b4a35687a46817",
+      "bytes": 7404440,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260509T002355Z.jsonl",
+      "sha256": "d814397c4957ce89e6721cfcb2ec3852773976ad7176e25247d98d7d7ef6893e",
+      "bytes": 4519,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d\\wave3_step2_5_english_descriptions_20260509T002541Z.jsonl",
+      "sha256": "23ac1e36021bec455309bf7ff02d759a7766838eda03faba01cc3b069bec1028",
+      "bytes": 864,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\api\\notation\\compiler.py",
+      "sha256": "065dc4384f7f52d1d8a081dc2d62af69980f1f6ea9bf9099d22de776ce05df87",
+      "bytes": 248859,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Python314\\python.exe",
+      "sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+      "bytes": 106328,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-08\\task-4\\cas-online\\dist\\compiler\\api\\notation\\__init__.py",
+      "sha256": "97813899f9f2c679d013fdfc28ce563b93cb198a91e49ed94d61006f12d1dae2",
+      "bytes": 142,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-08\\task-4\\cas-online\\dist\\compiler\\api\\notation\\compiler.py",
+      "sha256": "464fd4adfae90a35ba54aa794829da1fe713b9b9cccd68b630ecccfdfbca2f56",
+      "bytes": 286318,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-08\\task-4\\cas-online\\dist\\compiler\\api\\notation\\cas_ohm.py",
+      "sha256": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+      "bytes": 14027,
+      "role": "EXTERNAL_READ_ONLY"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-08\\task-4\\cas-online\\dist\\downloads\\Programming_in_CAS_Corrected_Examples_2026-10-11.txt",
+      "sha256": "1b75e18aabd4887171c00b9aaafbd96e8a2640044caac6d4cd32342a2dc8af5a",
+      "bytes": 10244,
+      "role": "EXTERNAL_READ_ONLY"
+    }
+  ]
+}

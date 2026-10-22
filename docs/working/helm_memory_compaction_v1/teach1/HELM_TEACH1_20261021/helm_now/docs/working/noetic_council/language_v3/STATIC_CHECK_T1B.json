@@ -1,0 +1,109 @@
+{
+  "check_type": "STATIC_SOURCE_ONLY",
+  "imports": {
+    "cce.py": [
+      "decimal",
+      "hashlib",
+      "itertools",
+      "json",
+      "random",
+      "re"
+    ],
+    "cce_v01b.py": [
+      "cce",
+      "hashlib",
+      "json",
+      "random",
+      "re"
+    ],
+    "cas_ast.py": [
+      "api.notation.compiler",
+      "cce_v01b",
+      "decimal",
+      "json",
+      "re",
+      "sys"
+    ],
+    "t1b.py": [
+      "cas_ast",
+      "cce",
+      "cce_v01b",
+      "collections",
+      "fractions",
+      "json",
+      "lacunarity_machine.ledger",
+      "lacunarity_machine.readers",
+      "lacunarity_machine.universe",
+      "re"
+    ],
+    "aliaswide.py": [
+      "collections",
+      "decimal",
+      "json",
+      "pathlib",
+      "re",
+      "sdg_bridge_v2"
+    ],
+    "coverage.py": [
+      "cce",
+      "fractions",
+      "lacunarity_machine.ledger",
+      "lacunarity_machine.readers",
+      "lacunarity_machine.universe"
+    ],
+    "scoring.py": [
+      "aliaswide",
+      "cce",
+      "collections",
+      "fair_data_experiment_v2_sdg",
+      "hashlib",
+      "json",
+      "pathlib",
+      "random",
+      "re",
+      "sdg_bridge_v2.english",
+      "sdg_bridge_v2.grammar",
+      "statistics"
+    ],
+    "worker_t1b.py": [
+      "argparse",
+      "cas_ast",
+      "cce_v01b",
+      "hashlib",
+      "io",
+      "json",
+      "os",
+      "pathlib",
+      "scoring",
+      "socket",
+      "sys",
+      "t1b",
+      "time",
+      "unittest"
+    ],
+    "test_lm_t1.py": [
+      "aliaswide",
+      "cce",
+      "coverage",
+      "random",
+      "sdg_bridge_v2.grammar",
+      "unittest"
+    ],
+    "test_lm_t1b.py": [
+      "cas_ast",
+      "cce_v01b",
+      "random",
+      "unittest"
+    ],
+    "static_check_t1b.py": [
+      "ast",
+      "datetime",
+      "hashlib",
+      "json",
+      "pathlib"
+    ]
+  },
+  "problems": [],
+  "source_manifest_sha256": "db2d4f4076270c3bf4b0a82f1af74eddc2d99e2a92824bf7031a9f00ef27adf9",
+  "files_hashed": 44
+}
