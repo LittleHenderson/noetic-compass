@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="t d">
+  <title id="t">HELM Cube concept</title>
+  <desc id="d">A matte black cube with a single glowing band around its middle, shown at an angle, beside a front view with sizes from 55 to 67 millimetres compared with a tennis ball.</desc>
+  <defs>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2d33"/><stop offset="1" stop-color="#17191d"/></linearGradient>
+    <linearGradient id="lf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121417"/><stop offset="1" stop-color="#08090b"/></linearGradient>
+    <linearGradient id="rt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1e23"/><stop offset="1" stop-color="#0d0f12"/></linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="760" height="420" fill="#0b0c0e"/>
+  <!-- angled view -->
+  <ellipse cx="200" cy="352" rx="130" ry="18" fill="#000000" opacity="0.55"/>
+  <path d="M200 70 L314 136 L200 202 L86 136 Z" fill="url(#top)" stroke="#33373e" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M86 136 L200 202 L200 334 L86 268 Z" fill="url(#lf)" stroke="#23262b" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M200 202 L314 136 L314 268 L200 334 Z" fill="url(#rt)" stroke="#2a2d33" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M86 202 L200 268 L314 202" fill="none" stroke="#7fe3ff" stroke-width="4" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M86 202 L200 268 L314 202" fill="none" stroke="#e8fbff" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="200" y="392" fill="#8b929c" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" text-anchor="middle">Angled view: one band of light, no buttons, no visible holes</text>
+  <!-- front view with sizes -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#8b929c">
+    <circle cx="560" cy="200" r="96" fill="none" stroke="#c9d36a" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <text x="560" y="88" text-anchor="middle" fill="#c9d36a">tennis ball, about 67 mm</text>
+    <rect x="481" y="121" width="158" height="158" rx="14" fill="none" stroke="#5a606a" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="646" y="128" fill="#5a606a">67 mm</text>
+    <rect x="496" y="136" width="128" height="128" rx="12" fill="#121417" stroke="#33373e" stroke-width="1.2"/>
+    <line x1="496" y1="200" x2="624" y2="200" stroke="#7fe3ff" stroke-width="3" filter="url(#glow)"/>
+    <text x="560" y="250" text-anchor="middle">55 to 60 mm</text>
+    <text x="560" y="322" text-anchor="middle">Front view to scale: the cube sits inside a tennis ball's span</text>
+  </g>
+</svg>

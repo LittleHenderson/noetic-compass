@@ -36,6 +36,7 @@ except Exception:  # pragma: no cover - fallback when tz data is missing
 HUB = Path(__file__).resolve().parent
 REPO = HUB.parent
 SITE = HUB / "site"
+ASSETS = HUB / "assets"  # static files copied into the site as-is (e.g. SVG drawings)
 CODEX = Path(os.environ.get("HELM_HUB_CODEX", r"C:\Users\wakil\Documents\Codex"))
 
 SPEC = REPO / "docs" / "CAS_HARNESS_SPEC_SHEET.md"
@@ -1703,6 +1704,18 @@ def p_roadmap(S: dict) -> str:
     need(S, "7.24", "recipe")
     need(S, "7.56", "CANONICAL BRAIN POINTER")
     need(S, "7.60", "ENGINEERED-NOT-VALIDATED")
+    need(S, "7.120", "VACUOUS", "HELM Cube")
+    need(S, "7.122", "HELM_EYE_ACT", "NOT LICENSED")
+    need(S, "7.55", "HORIZON")
+    need(S, "7.69", "DECOUPLING_EARNED")
+    _cube = "helm_cube_concept.svg"
+    if (ASSETS / _cube).is_file():
+        CUBE_SLOT = (f'<figure class="small"><img src="{_cube}" alt="Concept drawing of the HELM Cube: a matte black cube with a glowing band, '
+                     'beside a front view with sizes from 55 to 67 mm compared with a tennis ball" style="max-width:100%;height:auto">'
+                     '<figcaption>Concept drawing (2026-10-22), not a product photo. It shows the middle-band option; the owner\'s ruling of record '
+                     '(2026-10-21) puts the light on all twelve edges instead. Nothing is built.</figcaption></figure>')
+    else:
+        CUBE_SLOT = '<p class="small muted">(Slot for the concept drawing <code>helm_cube_concept.svg</code>; not yet in <code>helm_hub/assets/</code>.)</p>'
     # (meaning, what exists today, what would have to be built and tested)
     talk = [
         ("Ordinary phrasing understood",
@@ -1759,6 +1772,15 @@ def p_roadmap(S: dict) -> str:
          "The small watcher that looks over HELM would also watch teaching, compaction and refresh: it reports what it sees and whispers a hint, and it never writes a memory, a fact or a reply itself.",
          "The {eye} scan and pairing earned keep words on made-up worlds only: found 88 of 88 planted faults with 0 Eye writes ({s7077}), and the Eye-paired idle work resolved 70.18% of a backlog with 0 Eye writes ({s7078}). The Eye acting on the recipe brain read INCONCLUSIVE in both readings, and Eye acting stays NOT LICENSED ({s7038}). The Eye is not wired to the live chat.",
          "First a written rule for what \"correctly applied\" means here (report and whisper only; 0 Eye writes as a must-hold check); then the Eye wired to the teaching, compaction and refresh paths behind a switch, default off; an exam against the same paths with the Eye off, scored on items lost, wrong memories accepted, and 0 Eye writes."),
+        ("Thinking deeper on demand: a depth governor in the RPM gate, the Eye as advisor only",
+         "When a matter needs more thought, HELM goes one level deeper only for a written, checkable reason the gate can see (a missing prerequisite, an unread clause, an untaught line), never because the person did not say something, and never past a ceiling. The Eye may whisper \"worth going deeper\" or \"this is looping\"; it never sets the depth.",
+         "The depth ruling of record is HORIZON = 12, with canon's 5 kept on the record ({s7055}); the D/W/P engine and the repair performer are built, not validated ({s7048}); the live loop starts at depth 0 and a REPAIR opens one child per gap ({s7120}, where a decider in today's live chat reads VACUOUS). The owner's decoupling stop earned its word on made-up worlds only ({s7069}). The {eye} acting stays NOT LICENSED ({s7038}); EYE-ACT-1 was built behind a switch that is off by default and scored on made-up worlds; acting stays NOT LICENSED ({s7122}).",
+         "The governor written as a rule before any code: go deeper only on REPAIR or UNDETERMINED with a reason a child repair can address; a hard ceiling; a per-turn budget; a no-progress stop; a receipt for every descent; the Eye's whisper counted as one input at most. Then an exam the builder never sees, with items needing depth 1, 2 or 3 and items needing none, against three cheap baselines (always depth 1, always the deepest, depth = number of missing prerequisites), scored on right answers, wrong answers (must be 0), wasted descents and asks."),
+        ("The HELM Cube: the eventual hardware form",
+         "HELM's final home: a black cube from palm size (55 mm) to tennis-ball size (about 67 mm), no buttons, no visible holes, one light strip that shows listening, thinking, speech cadence, asking and privacy, shake to wake, taps to control, Qi2 wireless charging only, cameras, microphones and sound on all six faces behind dark glass and micro-perforations, and a companion app.",
+         "A concept only. The v0.1 concept spec, its research and the owner's 2026-10-21 rulings (a plain black box the same on every face; light on all twelve edges, the middle band withdrawn) are on the record ({s7120}) and on the <a href=\"device.html\">HELM Cube page</a>; the v1 concept spec of 2026-10-22 is <code>docs/working/helm_cube_device_v1/HELM_CUBE_DEVICE_SPEC_V1.md</code>. No part is bought, built or measured.",
+         "First a 3D-printed shell with a dev board (an ESP32-S3 or a small Linux board) running HELM's chat, to test the light language and the tap grammar; then custom electronics only on the owner's money line. Hard parts to solve: heat and density in a 55 to 67 mm cube, camera windows that read as solid black, a hidden service pad because there is no port, sound leaking between faces, and drops on a corner.",
+         CUBE_SLOT),
     ]
     intent_path = REPO / "docs/working/helm_talk_design_v1/INTENT_MOUTH_TRANSFORMER_20261021.md"
     if not intent_path.exists():
@@ -1779,6 +1801,7 @@ def p_roadmap(S: dict) -> str:
           "s7109": slink("7.109"), "s7110": slink("7.110"), "s7111": slink("7.111"),
           "s7031": slink("7.31"), "s7038": slink("7.38"), "s7048": slink("7.48"), "s7077": slink("7.77"), "s7078": slink("7.78"),
           "s7098": slink("7.98"), "s7024": slink("7.24"), "s7056": slink("7.56"),
+          "s7055": slink("7.55"), "s7069": slink("7.69"), "s7120": slink("7.120"), "s7122": slink("7.122"),
           "noetic": T("Noetic", "Noetics"), "domain": T("Domain", "level"), "register": T("Register"),
           "roundtrip": T("round trip"), "receipt": T("receipt"), "cubestore": T("cube store"), "eye": T("Unity Eye")}
     trows = "".join(
@@ -1818,6 +1841,14 @@ PARTICULARS OF THAT MEMORY FOR BETTER RECALL NEXT TIME ALSO USE THE EYE IN THESE
 <code>Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md</code> under the heading "Owner words (2026-10-21 09:42 PDT, operator session,
 verbatim; a STATEMENT OF INTENT, not an approval and not a launch order)". Nothing in it is built; nothing is licensed; the Eye's acting
 stays NOT LICENSED ({slink('7.38')}).</p></blockquote>
+<p>Items 14 and 15 come from a third statement, typed on 2026-10-22. It is a <strong>statement of intent, not an approval</strong>:
+it approves no money, no hardware order, no build and no claim. Two words in it, said plainly first: "RPM depth" means how many levels down
+HELM's {T('RPM Gate')} may go to check prerequisites; "the Eye" is the {T('Unity Eye')}, the small watcher that reports and never writes.
+The owner's words, verbatim:</p>
+<blockquote class="verbatim" id="cube-words"><p>"WHAT IF WE LET THE EYE OR SOME OTHER REASONING PART DETERMINE IF MORE RPM DEPTH WAS NEEDED/NECESSARY ON A GIVEN MATTER? HOW WOULD THAT WORK AND COULD THAT WORK? ALSO I WANT TO CREATE A HARDWARE DEVICE FOR THE EVENTUAL FINAL FORM FACTOR OF HELM LIKE A BLACK CUBE WITH A GLOWING, PULSATING LIGHT STRIP TO DENOTE SPEECH CADENCE, LISTENING AND VARIOUS OTHER LIKELY MODES ETC. CONNECTS TO WIFI W/ BLUETOOTH OF COURSE NO BUTTONS JUST A SHAKE TO WAKE AND TAPS TO CONNECT, CONTROL OTHER DEVICES(DIFFERENT NUMBERS OF TAPS FOR VARIOUS FUNCTIONS), QI SUPERCHARGING ONLY, HAS A COMPANION APP OF COURSE THE SMALLER THE CUBE THE BETTER ACCEPTABLE SIZES ARE ANYWHERE FROM PALM SIZE TO TENNIS BALL SIZE CAMERAS SPEAKERS AND MICROPHONES ON ALL SIX SIDES BUT VISIBLE NOWHERE ONCE WRITTEN UP OF COURSE ADD TO HELM HUB GET CLAUDE DESIGN TO DRAW IT UP."</p>
+<p class="small">The owner, 2026-10-22; recorded in <code>Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md</code> as a STATEMENT OF INTENT,
+not an approval. The written answer to both questions is the concept spec <code>docs/working/helm_cube_device_v1/HELM_CUBE_DEVICE_SPEC_V1.md</code>
+(a copy is in <code>Documents\\Codex\\2026-10-22\\helm_cube_device_v1\\</code>). INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED.</p></blockquote>
 <div class="tablewrap"><table><thead><tr><th>Piece</th><th>Plain meaning</th><th>What exists today</th><th>What would have to be built and tested</th></tr></thead><tbody>{trows}</tbody></table></div>
 <p><strong>How each piece gets added, in order.</strong> <em>Taught:</em> a labelled data stratum (today's exam turns are written by AI models
 of at least three families, labelled LLM_WRITTEN, never by the owner, who reviews only; amendment A-TALK-1, {slink('7.110')}).
@@ -2857,6 +2888,10 @@ def check_site(site: Path = SITE) -> dict:
                 continue
             target, _, anchor = href.partition("#")
             target = target or name
+            if kind == "img" and not target.endswith(".html"):
+                if not (site / target).is_file():
+                    report["links"].append(f"{name}: missing asset {href} (put it in helm_hub/assets/)")
+                continue
             if target not in ids:
                 report["links"].append(f"{name}: broken link {href}")
             elif anchor and anchor not in ids[target]:
@@ -2882,6 +2917,10 @@ def build() -> dict:
     for name, content in pages.items():
         content = EMAIL_RE.sub("[e-mail removed]", content)
         (SITE / name).write_text(content, encoding="utf-8", newline="\n")
+    if ASSETS.is_dir():
+        for f in sorted(ASSETS.iterdir()):
+            if f.is_file():
+                shutil.copyfile(f, SITE / f.name)
     if UI_DEMO.exists():
         demo = read(UI_DEMO)
         (SITE / "demo.html").write_text(demo, encoding="utf-8", newline="\n")
