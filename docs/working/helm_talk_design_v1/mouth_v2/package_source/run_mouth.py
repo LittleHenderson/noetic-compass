@@ -30,9 +30,9 @@ PKG = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PKG)
 
 from cube_task import audit_judge, read as cube_read, target  # noqa: E402
-from mouth_task import check, names as N  # noqa: E402
+from mouth_task import check, names as N, roundtrip  # noqa: E402
 
-APPROVAL = "MOUTH TRAIN at 4 USD"
+APPROVAL = "MOUTH TRAIN v2 at 3 USD"
 MODELS = ("A4-s1", "A4-s2", "A4-s3", "A5-s1")
 COPIES = ("A4-s1", "A4-s2", "A4-s3")
 SPEAKER = "A4-s1"
@@ -114,7 +114,7 @@ def chunks(items, n=64):
 
 def mouth_item(x, turn, number_words):
     return {"id": f"{x['input_key']}#{turn}", "situation": x["situation"], "tone": list(x["tone"]),
-            "input_text": x["input_text"], "turn": turn,
+            "input_text": x["input_text"], "turn": turn, "style": x.get("style"),
             "names": N.names_for(x.get("reading"), x.get("person_line"), number_words)}
 
 
@@ -128,17 +128,7 @@ def write_all(server, copy, items):
 
 
 def same_fact(reading_str, x) -> bool:
-    if not reading_str or reading_str == "NONE":
-        return False
-    parts = [p.strip() for p in reading_str.split("|")]
-    if len(parts) != 4:
-        return False
-    thing, slot, value, rep = parts
-    r = x["reading"]
-    months = {w for w in r["slot"] if w in N.MONTHS}
-    got_months = {w for w in slot.split() if w in N.MONTHS}
-    return thing == r["thing"] and value == r["value"] and (rep if rep != "-" else None) == r.get("replaces") \
-        and got_months == months
+    return roundtrip.same_fact(reading_str, x["reading"], x["situation"])     # A-TALK-7 H3: ASK on thing/value/month
 
 
 def main(argv=None) -> int:

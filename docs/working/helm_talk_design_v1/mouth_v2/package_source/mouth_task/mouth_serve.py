@@ -66,7 +66,8 @@ def main(argv=None) -> int:
             break
         if req["mode"] == "mouth":
             items = req["items"]
-            srcs = [vm.encode_mouth_source(it["situation"], tuple(it["tone"]), it["input_text"]) for it in items]
+            srcs = [vm.encode_mouth_source(it["situation"], tuple(it["tone"]), it["input_text"],
+                                           tuple(it["style"]) if it.get("style") else None) for it in items]
             autos = [lock.MouthAutomaton(vm, lock.allowed_words(function, it["input_text"])) for it in items]
             seeds = [sample.seed_of(it["input_text"], it["situation"], str(it.get("turn", ""))) for it in items]
             res = sample.sample_locked(nets[req["copy"]], srcs, autos, vm.tokens, vm.id, device, seeds,

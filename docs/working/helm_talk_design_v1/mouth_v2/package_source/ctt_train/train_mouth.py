@@ -86,9 +86,13 @@ def main(argv=None) -> int:
     mouth = load("mouth_train.jsonl")
     cube = load("train_cube.jsonl")
     cas = load("cas_keep.jsonl")
+    ear_m = load("ear_m.jsonl")                    # A-TALK-7 H2 + A-TALK-8 I1: the ear learns the mouth's sentences and
+                                                   # the corpus's chat lines ("nothing to save")
     enc = {
-        "MOUTH": [(vm.encode_mouth_source(r["situation"], tuple(r["tone"]), r["input_text"]), vm.encode_mouth_target(r["target"]))
+        "MOUTH": [(vm.encode_mouth_source(r["situation"], tuple(r["tone"]), r["input_text"],
+                                          tuple(r["style"]) if r.get("style") else None), vm.encode_mouth_target(r["target"]))
                   for r in mouth],
+        "EAR_M": [(vm.base.encode_source(target.DIRECTION, r["text"], [])[0], vm.base.encode_target(r["target"])) for r in ear_m],
         "CUBE": [(vm.base.encode_source(target.DIRECTION, r["text"], [])[0], vm.base.encode_target(r["target"])) for r in cube],
         "CAS": [(vm.base.encode_source(r["direction"], r["text"], context_units(r["context"]))[0], vm.base.encode_target(r["target"]))
                 for r in cas],

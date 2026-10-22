@@ -34,6 +34,8 @@ import helm_cube_osc as hco  # noqa: E402
 import helm_talk as ht  # noqa: E402
 import helm_voice  # noqa: E402
 from teach1 import worlds_t1 as W  # noqa: E402
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "package_source"))
+from mouth_task import check as MCHECK  # noqa: E402
 
 FACT_SITUATIONS = ("ANSWER", "SAYBACK", "ASK")
 LINE_SITUATIONS = ("SMALL", "SELF", "OFF", "WORLD")
@@ -50,6 +52,17 @@ NODATA_RX = re.compile(r"\b(?:don't know|do not know|not sure|no idea|can't say|
                        r"no way to know|don't have that)\b", re.I)
 _WORD_RX = re.compile(r"[A-Za-z][A-Za-z'\-]*|\d+")
 OWN_NAMES = {"helm"}                   # HELM's own name is not a fact about the world (a SELF reply may say it)
+
+# v2 (A-TALK-7 H4): the owner's styles, reading levels and professions; style words ride outside the input
+STYLES = ("plain", "warm", "formal", "casual", "barbershop", "intimate", "curious", "jovial", "storyteller", "professional")
+WARM_STYLES = ("warm", "intimate", "jovial", "barbershop")
+LEVELS = ("grade5", "grade10", "college")
+PROFESSIONS = ("nurse", "electrician", "plumber", "carpenter", "teacher", "lawyer", "accountant", "software developer",
+               "truck driver", "farmer", "mechanic", "barber", "firefighter", "pilot", "pharmacist", "librarian", "architect",
+               "musician", "photographer", "journalist", "real-estate agent", "construction worker", "dentist",
+               "veterinarian", "social worker", "graphic designer", "lab scientist", "coach", "retail cashier", "hairstylist")
+WORLD_NOUNS = ("yard", "line", "buses", "colonies", "queens", "depot", "honey", "market")   # the generator's own nouns
+STORY_MAX_WORDS = 60
 
 
 def _words(text: str) -> List[str]:
@@ -109,6 +122,57 @@ def line_input(situation: str, person_line: str, key: str) -> Dict[str, Any]:
             "tone": tone(situation, person_line), "input_key": key}
 
 
+def tone_v2(situation: str, style: str, text: str = "") -> Tuple[str, str]:
+    """A-TALK-7 H4: register |f for the warm styles and small talk, |A otherwise; state ^1 as in v1."""
+    if situation == "SMALL" or style in WARM_STYLES:
+        return "^1", "|f"
+    return "^1", "|A"
+
+
+def styled(x: Dict[str, Any], style: str, level: str, profession: Optional[str] = None,
+           form: str = "line") -> Dict[str, Any]:
+    """An input with its style part (A-TALK-7 H4): style and level reach the mouth's source; profession and form
+    only guide the writers."""
+    return dict(x, style=[style, level], profession=profession, form=form, tone=list(tone_v2(x["situation"], style)))
+
+
+def word_forms(w: str) -> set:
+    """A-TALK-9 J1: a word and its regular forms (+s, +es, +ed, +d, +ing, +er, +ly; a final "e" dropped before +ing)."""
+    out = {w, w + "s", w + "es", w + "ed", w + "ing", w + "er", w + "ly"}
+    if w.endswith("e"):
+        out |= {w + "d", w[:-1] + "ing", w + "r"}
+    return out
+
+
+CONTRACTION_PARTS = ("doesn", "didn", "isn", "wasn", "aren", "weren", "hasn", "haven", "hadn", "couldn", "wouldn",
+                     "shouldn", "won", "can", "t", "s", "re", "ve", "ll", "d", "m")      # A-TALK-9 J1, fixed list
+
+
+def lesson_templates_ok(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """A-TALK-9 J2: the off-topic template can build broken English, so its lines are not lessons (fallback only)."""
+    return [r for r in rows if not (r.get("source") == "TEMPLATE" and r["situation"] == "OFF")]
+
+
+def function_words(rows: List[Dict[str, Any]], min_seen: int = 2, vocab: Optional[List[str]] = None) -> List[str]:
+    """A-TALK-7 H1 F1 + A-TALK-9 J1: every word seen in >= min_seen checked LLM-written lessons (outside the row's own
+    input), plus the vetted vocabulary lists and their regular forms; minus fact words (names, numbers, months) and the
+    world's own nouns. Nothing else is removed."""
+    seen: Dict[str, int] = {}
+    banned = NAMES | NUMBERS | MONTHS | set(WORLD_NOUNS)
+    extra = set()
+    for v in vocab or []:
+        extra |= word_forms(v.lower())
+    for r in rows:
+        if r.get("source") != "LLM_WRITTEN":
+            continue
+        have = {w.lower() for w in _words(r["input_text"])}
+        for w in {w.lower() for w in re.findall(r"[A-Za-z]+", r["target"])}:
+            if w not in have:
+                seen[w] = seen.get(w, 0) + 1
+    keep = {w for w, c in seen.items() if c >= min_seen} | extra | set(CONTRACTION_PARTS)
+    return sorted(w for w in keep if w not in banned and w.isalpha())
+
+
 # ----------------------------------------------------------------------------------------------- the rule check
 def _input_words(inp: Dict[str, Any]) -> set:
     return {w.lower() for w in _words(inp["input_text"])}
@@ -127,6 +191,9 @@ def rule_check(inp: Dict[str, Any], line: str) -> Tuple[bool, str]:
         return False, "CAS token"
     if not 1 <= helm_voice.sentence_count(text) <= 3:
         return False, "sentences"
+    ok, why = MCHECK.sense_ok(text)             # v2 (A-TALK-7 H1 F3): the guard's sense check, layer 1
+    if not ok:
+        return False, why
     if ht.OPINION_RX.search(text):
         return False, "opinion"
     have = _input_words(inp)

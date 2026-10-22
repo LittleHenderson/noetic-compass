@@ -72,3 +72,36 @@ def test_split_holds_inputs_out_whole():
 def test_helms_own_name_is_allowed():
     inp = ML.line_input("SELF", "What are you called?", "k")
     assert ML.rule_check(inp, "I'm HELM, a program that keeps what you tell me in this chat.")[0]
+
+
+
+def test_v2_word_list_keeps_everyday_words_and_drops_facts_and_world_nouns():
+    """A-TALK-7 H1 F1: the everyday-word rule keeps 'what' and drops only fact words and the world's nouns."""
+    rows = [{"source": "LLM_WRITTEN", "input_text": "off i got a new dog", "target": t} for t in
+            ("What a day! What about the dog?", "What about Oxley and the colonies in March? Tell me.")]
+    fw = ML.function_words(rows)
+    assert "what" in fw and "about" in fw
+    for w in ("oxley", "colonies", "march"):
+        assert w not in fw
+
+
+def test_v2_rule_check_refuses_a_line_that_repeats_a_word():
+    x = ML.line_input("OFF", "Our basement has a bat in it.", "t:1")
+    assert not ML.rule_check(x, "A bat bat in your basement. How did it get in?")[0]
+    assert ML.rule_check(x, "A bat in your basement. How did it get in?")[0]
+
+
+def test_v2_vocab_words_and_their_forms_join_the_lock_but_never_facts():
+    """A-TALK-9 J1: vetted vocabulary + regular forms join the word list; names, numbers, months, world nouns never."""
+    fw = ML.function_words([], vocab=["snow", "pick", "doze", "early", "oxley", "march", "seven", "colonies"])
+    for w in ("snow", "snows", "pick", "picking", "picked", "doze", "dozing", "dozed", "early"):
+        assert w in fw, w
+    for w in ("oxley", "march", "seven", "colonies"):
+        assert w not in fw, w
+
+
+def test_v2_off_topic_template_lines_are_not_lessons():
+    """A-TALK-9 J2: the off-topic template is the fallback only."""
+    rows = [{"situation": "OFF", "source": "TEMPLATE"}, {"situation": "SMALL", "source": "TEMPLATE"},
+            {"situation": "OFF", "source": "LLM_WRITTEN"}]
+    assert [r["situation"] + r["source"] for r in ML.lesson_templates_ok(rows)] == ["SMALLTEMPLATE", "OFFLLM_WRITTEN"]
