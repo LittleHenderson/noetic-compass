@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM EYE-ACT-1 SCORED (spec sheet 7.122 follow-up): all 10 hard gates hold; EYE_ACT_EARNED_KEEP, CONCERT_ACT_EARNED_KEEP, EYE_ACT_BEATS_CHECKSUM_COPY, TIES_REBUILD_ALWAYS; acting stays NOT LICENSED; laptop, 0 USD
+
+- Owner's line, verbatim (seeds the worlds): "EYE ACT EXAM, sealed e49d459c, laptop, 0 USD." (45 bytes, sha256 4ee0d7b4...).
+- Seal verified 42/42 (zip e49d459c...). 200 worlds x 7 arms = 1,400 world-runs in 52.651 s; tests 19 + 10 + 17 OK; replays 8/8; VOID 0.
+- READING.json sha256 e43703154f5db9dccabc1358de765b70c0463642b2fc092bb1a95f6d87518155; RUN_RESULTS.json 9de9d64e....
+- 320 faulted items: no Eye 0 right / 0 ask / 320 wrong; HOLD 0 / 249 / 71; ACT 184 / 65 / 71; CONCERT 240 / 80 / 0; checksum-copy 240 / 0 / 80 (all 80 wrong on the slipped lesson); rebuild-before-answer 240 / 80 / 0; random-repair control 116 / 42 / 162 (83 fixed vs chance bound 91.2971).
+- Plain reading: acting beats holding with no harm, and the concert Eye is never wrong; but a plain rebuild-before-every-answer rule with no Eye ties it on every answer. The Eye's additions are holding, the ledger, and cadence-limited checking.
+- Predictions missed, kept: ACT right on P2 (cadence falls on P2 only in 2-ingredient worlds: 64 of 120); the Eye's state changes equal the rebuild rule's (160 each, 0 on clean worlds).
+- Status: ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY; the Eye's acting in live HELM stays NOT LICENSED; HELM_EYE_ACT stays OFF; PR #454 not merged (the owner's decision).
+
 ## 2026-10-21 PDT - HELM EYE-ACT-1 (spec sheet 7.122): the Unity Eye acting inside live HELM, built behind switch HELM_EYE_ACT (default OFF), exam kit sealed, practice on dev seeds only; NOT SCORED, NOT LICENSED; 0 USD
 
 - Owner's words: "want the Eye to act inside real HELM, GO!"; then "MAKE SURE YOU CHECK WITH THE OTHER SESSIONS ... AND UPDATE HELM HUB SITE AS WELL".
