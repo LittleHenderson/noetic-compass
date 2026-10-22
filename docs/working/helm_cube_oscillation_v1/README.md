@@ -15,7 +15,8 @@ memory, a plain lookup table, and one reader alone.
 | `DESIGN_CUBE_OSCILLATION_V1.md` | the owner's words and the five requirements read from them; the round loop and keep rule; cubes at the Atlas endpoint; the fading ladder S0 → S1 → S2; the cheap rivals; build, training and exam order with prices |
 | `PREREGISTRATION_TEACH2.precode.md` | the exam: 9 arms, 16 worlds with trap lines, scoring with a current-value rule, I16–I18, 5 new hard gates, marks C1–C4 and SPACE, the words, the forecast |
 | `PREREGISTRATION_TEACH2.precode.sha256` | sha256 **`f7b6183bba5f8a1a241e3c64c8930f6a2c6df06fbe8c5845c0207f6d2a84c855`** (9,873 bytes, LF); not edited after this, amendments appended and hashed apart |
-| `OPEN_QUESTIONS.md` | the eight owner decisions, each with a recommendation and its cost |
+| `OPEN_QUESTIONS.md` | the eight owner decisions, each with a recommendation and its cost; **answered 2026-10-21** |
+| `AMENDMENT_A_TEACH2_1.md` (+ `.sha256` `fb2f104d…`) | the owner's rulings, the reported shadow of rounds 4–6, the exam line `CUBE EXAM at 1 USD` |
 
 **Money:** this packet 0 USD. Later, two separate owner lines are proposed: `CUBE TRAIN at 3 USD` (CTT retraining on
 the new kind of fact, expected about 2 USD) and `CUBE EXAM at 1 USD` (one CPU host, expected under 0.20 USD).

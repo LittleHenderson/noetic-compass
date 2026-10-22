@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM cube oscillation (spec sheet 7.125 follow-up): the owner's rulings on the eight open questions, amendment A-TEACH2-1; 0 USD; nothing built yet
+
+- Owner's words (verbatim): "1.A, 2.A, 3.A.(WE MAY NEED MORE THAN 3 ROUNDS SO JUST KEEP THAT IN MIND), 4.A,5.A FOR TEST THEN C FOR REAL LIFE, 6.A,7.A, 8.CUBE EXAM at 1 USD"
+- A-TEACH2-1 (sha256 fb2f104d...): Q1 current-value scoring; Q2 build v2 now behind HELM_CUBE_OSC default OFF; Q3 cap 3 + Eye report-only, plus a reported-only shadow of rounds 4-6 (never stored) on the owner's note that more rounds may be needed; Q4 2 agreeing rounds; Q5 sweep every 4 turns in the exam, a byte budget for real-life HELM (v3); Q6 4 traps per world; Q7 retrain the CTT (CUBE TRAIN at 3 USD not yet typed); Q8 CUBE EXAM at 1 USD typed = pre-approval of the exam host, cap 1 USD, bound to the future sealed TEACH-2 zip.
+- Pre-code f7b6183b... not edited. Nothing built, trained or run.
+
 ## 2026-10-21 PDT - HELM cube oscillation packet v1 (spec sheet 7.125): facts become cubes at their Atlas node only after the CTT and the brain side agree in rounds; whole memories fade step by step into CAS; exam TEACH-2 designed; 0 USD; nothing built, nothing licensed
 
 - Owner's words: "design the cube oscillation follow-up" and that memory should live at the RPA endpoint, where whole plain-English memories periodically and incrementally fade into CAS expressions to save space, with everything already established for memory; and to use the oscillation between the CTT and the recipe brain to decide what to keep, the Eye perhaps controlling the rounds.
