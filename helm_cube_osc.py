@@ -122,6 +122,46 @@ class StandInProposer:
         return self.fn(text)
 
 
+def target_string(r: Optional[Reading]) -> str:
+    """The CTT's output format for a reading (A-CUBE-TRAIN-1): `<thing> | <slot words, sorted> | <value> | <replaces
+    or ->`, or `NONE`. The training rows are written with this, so rows and adapter cannot disagree."""
+    if r is None:
+        return "NONE"
+    return f"{r.thing} | {' '.join(sorted(r.slot))} | {r.value} | {r.replaces or '-'}"
+
+
+def reading_from_ctt(output: str, line: str) -> Optional[Reading]:
+    """The CTT adapter (A-CUBE-TRAIN-1 A4): a CTT output becomes a Reading, or None. Refused: `NONE`; anything not in
+    the four-field format; an empty field; an empty slot; any word (thing, slot, value, replaces) that is not a word of
+    the person's line (nothing invented)."""
+    parts = [p.strip() for p in (output or "").split("|")]
+    if len(parts) != 4 or not all(parts):
+        return None
+    thing, slot_text, value, replaces = (p.lower() for p in parts)
+    slot = frozenset(slot_text.split())
+    line_words = _words(line)
+    words = {thing, value} | set(slot) | ({replaces} if replaces != "-" else set())
+    if not slot or any(len(w.split()) != 1 for w in (thing, value, replaces)) or not words <= line_words:
+        return None
+    return Reading(thing, slot, value, None if replaces == "-" else replaces)
+
+
+class CTTProposer:
+    """One proposer copy backed by the CTT: `serve(line) -> raw output` (the model runs in its own process), then the
+    adapter. Never raises: a serving error is no reading."""
+
+    is_ctt = True
+
+    def __init__(self, serve: Callable[[str], str], name: str = "CTT") -> None:
+        self.serve, self.name = serve, name
+
+    def propose(self, text: str) -> Optional[Reading]:
+        try:
+            return reading_from_ctt(self.serve(text), text)
+        except Exception:
+            return None
+
+
 def _target_and_kind(r: Reading) -> Tuple[Optional[str], str]:
     """The second node of the fact and the commonality kind (A-TEACH2-4 R2)."""
     if r.value in VALUE_NUMBERS:
