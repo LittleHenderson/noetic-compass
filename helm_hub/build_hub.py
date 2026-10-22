@@ -431,6 +431,7 @@ def dot(c: str) -> str:
 # kind: scored | packet | rule | audit ; color: key of COLORS
 # --------------------------------------------------------------------------------------------
 CUR: dict[str, tuple[str, str, str, str]] = {
+    "7.120": ("packet", "null", "Two design answers to the owner, nothing built or run. First: who should decide when HELM looks deeper into a problem? An exact arithmetic rule at the gate, not the Eye; the owner's own decoupling stop already does this and earned its keep on made-up worlds (7.69). The Eye's right job is to check that rule from outside, and later, with a new ruling, to ask for more depth but never less. In today's live chat there is no depth choice to make, so a decider there would measure nothing. Second: the HELM Cube, a concept for HELM's final home: a 64 mm black cube that looks the same on all six faces when off, light along all twelve edges, a magnetic charge face found by feel, hidden cameras, microphones and depth sensors on every face, and everything feeding HELM.", "Nothing; designs only. The Eye's acting stays NOT LICENSED; the cube is a concept with no part bought or measured."),
     "7.119": ("scored", "failed", "Wave 7 ran a sixth time (job c56) with the reader fix of 7.117 in and a fresh exam. Every instrument check and every must-hold check held, though the instrument's code does not do what its written rule says (see below). This time the chat got every one of the 64 dialogues right, with none wrong and none left unsure (the fifth round got 2 wrong), and the copy with small talk mixed in read the same. On the real recipes it got 93 right and none wrong, and asked on 15. But two marks failed. On one recipe the book line ended with a loose 'or', so the reader tied a 'ran out' sentence to the next line and the brain stored a wrong amount; a wrong stored amount fails the safety mark. On another recipe one book line held two amounts, the lessons never taught the second, and HELM asked; the ask was honest, but the frozen rule does not accept it, so the honesty mark failed. Both faults happen the same way without the chat layer, so they belong to the reader and brain, not the chat. The instrument's own written rule says that second recipe's question should have been left unscored, but its code scores it. That rule was written by this project's operator, and its code never did what the text said: the mistake is the builder's. The conflict is left for the owner to decide, and this round is not re-scored. By the frozen words this reads HARMED. 0.02 USD.", "Nothing. A recorded failure of the safety mark and the honesty mark with every instrument check and hard gate held; the chat stays NOT LICENSED. Every dialogue right is a fact about this one draw, not a license. The next fix, proposed only: a line ending in a loose 'or' is one ingredient with an alternative, and a 'ran out' sentence that could fit two lines must ask, never guess."),
     "7.118": ("packet", "null", "Wave 7, the sixth round's packet, frozen and fingerprinted again as v9 with exactly three changes on v8: HELM is cut at the merged reader fix of 7.117 (a sentence shaped like a stated fact about an ingredient HELM does not hold now makes it ask and hold its answer; plural and spelling forms of a held name are found; a measure phrase such as \"a dash of pepper\" after a comma is its own line), the ids of the fifth round's exam can never be drawn again, and the number ranges for the exam draw are fresh; the line the owner would sign, CHAT WAVE 6 at 1 USD, is proposed only. The machine's own test list of 12 files was run from the frozen copy (280 tests, OK). On the builder's practice dialogues the chat gets 63 of 64 right with 0 wrong and asks on 1, exactly as v8 did, because none of the practice dialogues has the shapes the fifth round got wrong; the loop driven directly 59 right, 0 wrong; real recipes unchanged; every mark true. Not launched.", "No claim from the packet itself; the practice numbers are facts about practice data, not a result, and they cannot show the fix works."),
     "7.114": ("packet", "null", "Wave 7, the fifth round's packet, frozen and fingerprinted again as v8 with exactly two changes on v7: HELM is cut at the merged reader fix of 7.113 (a stock sentence's clause that names the held ingredient by a longer or hyphenated phrase is now read, and a clause the reader cannot read makes the next question ask instead of answering), and the number ranges for the exam draw are fresh; the owner line CHAT WAVE 5 at 1 USD is kept, since it was never bound to v7. The machine's own test list of 12 files was run from the frozen copy (273 tests, OK). On the builder's practice dialogues, the same ones v7 got 4 wrong, the chat now gets 63 of 64 right with 0 wrong and asks on 1; the loop driven directly 59 right, 0 wrong; real recipes unchanged; every mark true. Not launched.", "No claim from the packet itself; the practice numbers are facts about practice data, not a result."),
@@ -584,6 +585,7 @@ NAV = [
     ("model-card.html", "Model card"),
     ("safety.html", "Safety and honesty"),
     ("roadmap.html", "Roadmap"),
+    ("device.html", "The HELM Cube"),
     ("glossary.html", "Glossary"),
     ("changelog.html", "Changelog"),
     ("run.html", "How to run HELM"),
@@ -976,6 +978,7 @@ are a reading aid only. The words in grey boxes are the record's own words. {T('
 <div class="card"><a href="architecture.html">Architecture</a><br><span class="muted small">Every part, its parameter count, and what HELM is not.</span></div>
 <div class="card"><a href="results.html">Results scorecard</a><br><span class="muted small">Every result, negatives included.</span></div>
 <div class="card"><a href="roadmap.html">Roadmap</a><br><span class="muted small">What is real, what is planned, and "can I chat with it?"</span></div>
+<div class="card"><a href="device.html">The HELM Cube (concept)</a><br><span class="muted small">HELM's intended final home: a small black cube with no buttons. Design only.</span></div>
 <div class="card"><a href="demo.html">Try the demo page</a><br><span class="muted small">A recorded HELM session you can open without a server.</span></div>
 <div class="card"><a href="model-card.html#not-here">What this hub does not have, and why</a><br><span class="muted small">The usual chatbot sections that do not apply to HELM.</span></div>
 </div>
@@ -1633,7 +1636,7 @@ def p_safety(S: dict) -> str:
 nothing is invented, a replay gives the same answer, the controls behave. If one fails, the run is a FAILURE, never "a pass with caveats".
 Examples: the {T('faculty', 'faculties')} run failed on gate H1 ({slink('7.34')}); the memory run failed on gate H8 ({slink('7.43')}); the {T('transformer')} ear failed gate H-CWFW ({slink('7.90')}).</p></div>
 <div class="card"><h3>Read back before writing</h3><p>Every fact is read back and checked before it counts as saved. A write that fails the read-back is refused and nothing is saved.
-Each saved fact leaves a fingerprinted receipt.</p></div>
+Each saved fact leaves a receipt carrying a {T('hash')}.</p></div>
 <div class="card"><h3>The Eye never writes</h3><p>The {T('Unity Eye')} may report a problem and {T('whisper', 'whisper')} a suggestion.
 HELM may ignore the whisper. In {T('wave', 'waves')} 4 and 5 the Eye made 0 writes ({slink('7.77')}, {slink('7.78')}).</p></div>
 <div class="card"><h3>Refuse rather than guess</h3><p>Missing information gives {T('UNDETERMINED')}; unreadable English gives {T('CLARIFY')}; a step that should not run gets REFUSE
@@ -2495,6 +2498,120 @@ def files_inventory() -> Inv:
     return I
 
 
+def p_device(S: dict) -> str:
+    need(S, "7.69", "DECOUPLING_EARNED")
+    need(S, "7.38", "NOT LICENSED")
+    lede = ("The HELM Cube is a concept for HELM's final home: a small black cube with no buttons that listens, talks, sees and maps its "
+            "room. This page is a design only. Nothing has been built, bought or measured, and no money was spent.")
+    rulings = [
+        "FOR THE ISSUE OF THE BOTTOM AND CHARGING MAGNETIC PULL AND HAPTIC FEEDBACK SHOULD TAKE CARE OF KNOWING WHICH SIDE TO CHARGE",
+        "YES BECAUSE THE MAIN THING IS THAT IT SHOULD LOOK THE SAME ON ALL SIDES LIKE A PLAIN BLACK BOX",
+        "WITH GYRATOR WHEN IT'S BEEN MOVE TURNED AND DIRECTION FOR MAPPING IT'S ENVIROMENT GEOLOCATION AND USE WIFI TO DRAW ITSELF AN INTERNAL SCHEMATIC OF IT'S ENVIROMENT AND OR USE LIDAR",
+        "ALL OF WHICH FEEDS BACK TO HELM WHO WILL HAVE ANY NECESSARY CONTROLS OVER",
+        "THE ENTIRE OUTSIDE MADE OUT OF GORILLA GLASS THAT IS BLACK BUT CAN TURN ON AND SHOW SCREENS IMAGES VIDEOS ETC THIS COULD BE ANOTHER VERSION YES THIS IS JUST ANOTHER VERSION NOT THE MAIN VERSION",
+    ]
+    rq = "".join(f"<blockquote>{esc(r)}</blockquote>" for r in rulings)
+    feats = [
+        ("Size", "64 mm on each edge, about a tennis ball across; 55 mm is the smallest honest size, at the cost of magnetic charging and on-cube speech.", "estimate"),
+        ("Look", "A plain black box. Off, all six faces are identical: no band, port, button or logo singles one out.", "owner ruling"),
+        ("Light", "Along all twelve edges, invisible until lit. It pulses with each syllable HELM speaks and shows each mode by its motion.", "design"),
+        ("Touch", "No buttons. Shake to wake. Taps to command: the number of taps is the action, the face you tap is the target. A tiny buzz confirms each counted tap.", "design"),
+        ("Charging", "Qi2 magnetic wireless charging only. One unmarked face snaps to the charger by magnetic pull, and a short buzz confirms. Heat, not the standard, sets the speed: about 14 W at first, likely 7 to 10 W as it warms.", "owner ruling; speeds are estimates"),
+        ("Cameras, microphones, sound", "Behind every face, hidden behind dark glass and edge slots. While docked, the charge face rests and the other five work. Cameras are off by default.", "owner ruling; design"),
+        ("Knowing where it is", "A gyroscope feels every turn; small depth sensors on each face measure the walls; Wi-Fi gives distances; the phone can share the location. Together they build a coarse map of the room; space it has not measured stays undetermined. Wi-Fi alone cannot draw walls yet; that is still research.", "design; researched and fact-checked (spec Section 8a)"),
+        ("Brains", "HELM's recipe brain runs on the cube. Speech runs on the cube when it is cool enough, otherwise on the phone.", "design"),
+        ("Radios", "Wi-Fi 6, Bluetooth, and Thread for Matter smart-home devices, through the home's existing hub.", "design"),
+        ("Another version: the display cube", "Not the main version. The whole outside is black Gorilla Glass over square screens that can show pictures, video, answers and the room map. A dark screen gives no light, so off it is still a plain black box. Screens cost power and heat, so one or two faces light at a time; cameras see worse under a screen.", "owner ruling; estimates only"),
+    ]
+    frows = "".join(f"<tr><td><strong>{esc(a)}</strong></td><td>{esc(b)}</td><td>{esc(c)}</td></tr>" for a, b, c in feats)
+    hard = [
+        "Six cameras running at once needs a hotter, phone-class chip; the plan is one camera at a time, chosen by where the voice came from.",
+        "Hiding a camera behind dark glass costs it light, so pictures get noisy in dim rooms.",
+        "Six separate speakers do not fit usefully; one driver with two passive radiators sends sound out through slots on every face.",
+        "The law expects a regulatory mark on the device; the closest fit to the plain-black-box rule is a black-on-black etch on the charge face.",
+        "In the EU, from 18 February 2027, portable batteries must be removable by the user, so an EU version needs an openable face.",
+        "It cannot charge fast and talk at the same time: both share one small heat budget.",
+    ]
+    hrows = "".join(f"<li>{esc(h)}</li>" for h in hard)
+    film = ""
+    tpath = HUB.parent / "docs" / "working" / "helm_cube_device_concept_v0" / "COMMERCIAL_TREATMENT.md"
+    ttext = read(tpath) if tpath.exists() else ""
+    trows = md_table(ttext, "| # | Time | Picture") if ttext else []
+    if trows:
+        shot_rows = "".join(f"<tr><td>{esc(r[0])}</td><td>{esc(r[1])}</td><td>{md(r[2])}</td><td>{md(r[5])}</td><td>{md(r[6])}</td></tr>" for r in trows if len(r) >= 7)
+        film = ('<h2 id="film">The concept film: "It Asks First"</h2>'
+                '<p><strong>A short teaser is made. The full film is not.</strong> On 2026-10-21 there was no money for video credits, so a '
+                '44.5-second teaser was made at no cost from what already existed. Every part carries its status tag burned into the picture.</p>'
+                '<video controls preload="metadata" playsinline style="width:100%;max-width:960px;display:block;border-radius:12px;background:#000" '
+                'src="media/helm_cube_it_asks_first_teaser_web.mp4" aria-label="It Asks First, a 44.5-second concept teaser for the HELM Cube"></video>'
+                '<p class="small">What is real and what is not, in the teaser:</p>'
+                '<ul class="tight">'
+                '<li><strong>Not real:</strong> the cube. The opening shot is AI video; the table scene is two AI still pictures with a slow push-in; '
+                'the phone screens are designed pictures. Nothing was filmed, and the cube is not built.</li>'
+                '<li><strong>Real:</strong> one part only, HELM\'s own local page, recorded once on one computer on 2026-10-21. Two lines were typed, '
+                'HELM\'s replies are shown word for word, and the record under the last reply is opened. Its tag reads TODAY · REAL HELM SOFTWARE · '
+                'TYPED · ONE COMPUTER · TEST KITCHEN.</li>'
+                '<li><strong>Voices:</strong> synthetic stock voices. HELM does not hear or speak today.</li>'
+                '<li>The end card says the cube is a concept and that the film was made with AI video tools.</li>'
+                '</ul>'
+                '<p><strong>The full film is planned, not made.</strong> It is a 92-second film, 15 shots plus an end card, and only one shot shows real '
+                'HELM software today (typed, on one computer, in a test kitchen). '
+                'Most of the film shows what HELM is meant to do beyond recipes: plan a day, learn by conversation and refresh a memory, control a '
+                'home by taps, map a room without guessing, refuse to commit failing code, report a failed check as a failure, hold a simulated drone '
+                'still when a reading is missing, and let the Eye report without acting. It waits for money for video credits; everything made so '
+                'far is kept.</p>'
+                '<div class="tablewrap"><table><thead><tr><th>#</th><th>Time</th><th>What you see</th><th>What it shows</th><th>Status</th></tr></thead>'
+                f'<tbody>{shot_rows}</tbody></table></div>'
+                '<p class="small muted">The full treatment, with every line of dialogue, the end card and one ready-to-paste prompt per shot: '
+                '<code>docs/working/helm_cube_device_concept_v0/COMMERCIAL_TREATMENT.md</code>. The teaser, its record of every take and cost, and '
+                'the plan to finish the full film: <code>C:\\Users\\wakil\\Documents\\Codex\\2026-10-21\\helm_cube_film\\</code> '
+                '(<code>FILM_RECORD.md</code>, <code>RESUME_FULL_FILM.md</code>).</p>')
+    figs = read(HUB / "device_figures.html") if (HUB / "device_figures.html").exists() else "<p class=\"small muted\">(The figures file is not on this machine; run helm_hub/make_device_figures.py.)</p>"
+    body = f"""
+<h2>The owner's words</h2>
+<p>The brief, and five rulings given on 2026-10-21, word for word:</p>
+{rq}
+<p class="small muted">"Gyrator" means gyroscope. The second ruling is the one the owner called the main thing: when it is off, the cube is a plain black box, the same on every face.</p>
+
+<h2>What it is</h2>
+<div class="tablewrap"><table><thead><tr><th>Part</th><th>The design</th><th>Status</th></tr></thead><tbody>{frows}</tbody></table></div>
+
+<h2>HELM is in charge</h2>
+<p>Every sensor feeds HELM, and HELM holds the controls: which sensors run, when the cube maps, what the light shows, which home devices it controls. Each action goes through the {T('RPM Gate')} and leaves a {T('receipt')}. A fact HELM lacks, such as a corner of the room it never measured, stays {T('UNDETERMINED')}: HELM asks instead of guessing, and never draws a wall it did not measure.</p>
+<p><strong>Two lines stay outside all software, HELM included.</strong> The camera-on light is wired to each camera's power, and the hard mute is a physical switch. HELM can turn any camera or microphone on or off; it cannot hide that it did. This keeps six hidden cameras trustworthy. It is the operator's proposal, kept unless the owner overrules it.</p>
+
+<h2 id="drawings">The drawings</h2>
+<p>Concept drawings, made on the design canvas and reproduced here, with the lights moving exactly as they do on the canvas. Nothing has been built.</p>
+{figs}
+
+{film}
+
+<h2>Who decides when HELM looks deeper?</h2>
+<p>The owner also asked whether the {T('Unity Eye')} or another reasoning part could decide when HELM needs to look deeper into a problem. The answer, in short:</p>
+<ul class="tight">
+<li><strong>An exact arithmetic rule should decide, not the Eye.</strong> The owner's own decoupling stop already does this. On HELM's made-up cascade exam it read DECOUPLING_EARNED: 203 deeper looks instead of 609, with more good answers ({slink('7.69')}).</li>
+<li><strong>The Eye checks the rule from outside.</strong> By design it never writes and never gates, and its acting is NOT LICENSED ({slink('7.38')}). With a new ruling it could ask for more depth, never for less, so the worst it could cause is extra work, not a wrong answer.</li>
+<li><strong>Today's live chat has no depth choice to make.</strong> Every repair opens one level, so a decider there would measure nothing. Depth becomes a real choice when an ingredient has its own recipe.</li>
+</ul>
+
+<h2>What is hard</h2>
+<ul class="tight">{hrows}</ul>
+
+<h2>Where the details are</h2>
+<ul class="tight">
+<li>The full spec, with every number marked as measured by a source or estimated: <code>docs/working/helm_cube_device_concept_v0/HELM_CUBE_SPEC.md</code>.</li>
+<li>The depth answer, with the three competing designs and the skeptic's review: <code>docs/working/helm_rpm_depth_decider_design_v1/DESIGN.md</code>.</li>
+<li>The drawings are on a private design canvas, <code>https://claude.ai/artifact/LVdbdNcxV5eY1kcz5BwMoy</code>: off and speaking, the light modes, the six faces and what hides behind them, the magnetic charge face, the room map, and the display version.</li>
+</ul>
+"""
+    return page("device.html", "HELM Cube Concept", "The HELM Cube: a concept for HELM's final home", lede, body, [
+        "Owner's words: `C:\\Users\\wakil\\.claude\\projects\\...\\memory\\project_helm_cube_device_owner_rulings_20261021.md` and the spec's Section 0",
+        "`docs/working/helm_cube_device_concept_v0/HELM_CUBE_SPEC.md` (v0.1)",
+        "`docs/working/helm_rpm_depth_decider_design_v1/DESIGN.md`",
+        "`docs/CAS_HARNESS_SPEC_SHEET.md` §7.38, §7.69, §7.120",
+    ], words=True, words_open=False, description="A concept for HELM's final home: a plain black cube with no buttons. Design only.")
+
+
 def p_files(S: dict) -> str:
     I = files_inventory()
 
@@ -2756,7 +2873,7 @@ def build() -> dict:
         "data.html": p_data(S), "compute.html": p_compute(S), "results.html": p_results(S),
         "build.html": p_build(S), "model-card.html": p_model_card(S), "safety.html": p_safety(S), "roadmap.html": p_roadmap(S),
         "glossary.html": p_glossary(S), "changelog.html": p_changelog(S), "run.html": p_run(S), "files.html": p_files(S),
-        "chat.html": p_chat(S),
+        "chat.html": p_chat(S), "device.html": p_device(S),
     }
     for name, content in pages.items():
         content = EMAIL_RE.sub("[e-mail removed]", content)
