@@ -138,9 +138,14 @@ def styled(x: Dict[str, Any], style: str, level: str, profession: Optional[str] 
 
 def word_forms(w: str) -> set:
     """A-TALK-9 J1: a word and its regular forms (+s, +es, +ed, +d, +ing, +er, +ly; a final "e" dropped before +ing)."""
-    out = {w, w + "s", w + "es", w + "ed", w + "ing", w + "er", w + "ly"}
+    out = {w, w + "s", w + "es", w + "ed", w + "ing", w + "er", w + "ly", w + "est"}
     if w.endswith("e"):
-        out |= {w + "d", w[:-1] + "ing", w + "r"}
+        out |= {w + "d", w[:-1] + "ing", w + "r", w + "st", w[:-1] + "y"}
+    if len(w) >= 3 and w[-1] not in "aeiouwxy" and w[-2] in "aeiou" and w[-3] not in "aeiou":
+        d = w + w[-1]                                    # A-TALK-10 K1: stop -> stopped, stopping
+        out |= {d + "ed", d + "ing", d + "er", d + "est"}
+    if w.endswith("y") and len(w) >= 3 and w[-2] not in "aeiou":
+        out |= {w[:-1] + "ies", w[:-1] + "ied", w[:-1] + "ier", w[:-1] + "iest", w[:-1] + "ily"}
     return out
 
 

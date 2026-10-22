@@ -75,7 +75,8 @@ def main(argv=None) -> int:
             out = []
             for it, r in zip(items, res):
                 text = vocab_m.detokenize(r["tokens"], it.get("names") or {}) if r["complete"] else ""
-                out.append({"id": it["id"], "tokens": r["tokens"], "complete": r["complete"], "text": text})
+                out.append({"id": it["id"], "tokens": r["tokens"], "complete": r["complete"], "text": text,
+                            "score": r.get("score")})
             sys.stdout.write(json.dumps({"outputs": out}, ensure_ascii=False) + "\n")
         elif req["mode"] == "ear":
             texts = list(req["texts"])

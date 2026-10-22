@@ -66,6 +66,7 @@
  ],
  "rater_min_pairs": 300,
  "roundtrip_min": 0.95,
+ "sense_layer2_threshold": -0.607,
  "sounds_human_min": 0.6,
  "steps": 6000,
  "top_p": 0.9,

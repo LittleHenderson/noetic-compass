@@ -105,3 +105,10 @@ def test_v2_off_topic_template_lines_are_not_lessons():
     rows = [{"situation": "OFF", "source": "TEMPLATE"}, {"situation": "SMALL", "source": "TEMPLATE"},
             {"situation": "OFF", "source": "LLM_WRITTEN"}]
     assert [r["situation"] + r["source"] for r in ML.lesson_templates_ok(rows)] == ["SMALLTEMPLATE", "OFFLLM_WRITTEN"]
+
+
+def test_v2_doubled_consonant_and_est_forms():
+    """A-TALK-10 K1: stop -> stopped / stopping, jam -> jamming, cut -> cutting, fast -> fastest."""
+    for base, form in (("stop", "stopped"), ("stop", "stopping"), ("jam", "jamming"), ("cut", "cutting"),
+                       ("fast", "fastest"), ("noise", "noisy"), ("happy", "happier"), ("happy", "happiest")):
+        assert form in ML.word_forms(base), (base, form)

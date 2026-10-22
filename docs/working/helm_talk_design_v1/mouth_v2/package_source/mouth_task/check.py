@@ -60,6 +60,14 @@ def sense_ok(line: str) -> Tuple[bool, str]:
     return True, ""
 
 
+def layer2_ok(score, threshold: float) -> Tuple[bool, str]:
+    """Sense check, layer 2 (A-TALK-7 H1 F3; census SENSE_LAYER2_CENSUS.json): the mouth's own average log-probability
+    per piece of the line it wrote must be at least the frozen threshold; a line with no score fails."""
+    if score is None or score < threshold:
+        return False, "sense: low confidence"
+    return True, ""
+
+
 def check(situation: str, input_text: str, line: str, fact_words: Set[str],
           reading: Optional[Dict[str, object]] = None) -> Tuple[bool, str]:
     """`fact_words` = every name, number word and month of the subject pools (published in the package)."""

@@ -101,3 +101,12 @@ class EarLessonsFromTheMouth(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SenseLayer2(unittest.TestCase):
+    """A-TALK-7 H1 F3 layer 2 (census SENSE_LAYER2_CENSUS.json: joins the guard at threshold -0.607)."""
+
+    def test_low_confidence_fails_and_missing_score_fails(self):
+        self.assertFalse(check.layer2_ok(-0.9, -0.607)[0])
+        self.assertTrue(check.layer2_ok(-0.2, -0.607)[0])
+        self.assertFalse(check.layer2_ok(None, -0.607)[0])

@@ -20,6 +20,18 @@ def allowed_words(function_words: Iterable[str], input_text: str) -> Set[str]:
     return {w for w in function_words} | set(input_words(input_text))
 
 
+_PIECES: Dict[tuple, Optional[list]] = {}
+
+
+def _pieces(vocab, w: str) -> Optional[list]:
+    """A word's piece tokens, remembered (v2: the lock holds ~20,000 everyday words and is rebuilt for every line)."""
+    key = (id(vocab), w)
+    if key not in _PIECES:
+        pieces = vocab.wp.word(w)
+        _PIECES[key] = None if (not pieces or None in pieces) else ["en:" + p for p in pieces]
+    return _PIECES[key]
+
+
 class _Node:
     __slots__ = ("kids", "end")
 
@@ -37,10 +49,9 @@ class MouthAutomaton:
                 if not all(t in vocab.id for t in toks):
                     continue
             else:
-                pieces = vocab.wp.word(w)
-                if not pieces or None in pieces:
+                toks = _pieces(vocab, w)
+                if toks is None:
                     continue
-                toks = ["en:" + p for p in pieces]
             n = self.root
             for t in toks:
                 n = n.kids.setdefault(t, _Node())

@@ -32,6 +32,7 @@ def sample_locked(model, srcs: List[List[int]], automata: List[object], tok_of_i
         b = len(srcs)
         tgt = torch.full((b, 1), 1, dtype=torch.long, device=device)            # [BOS]
         done = [False] * b
+        sums, cnt = [0.0] * b, [0] * b          # v2 layer 2: the mouth's own log-probability of each piece it wrote
         out: List[List[str]] = [[] for _ in range(b)]
         cache: Dict[frozenset, torch.Tensor] = {}
         for _ in range(max_len):
@@ -60,6 +61,8 @@ def sample_locked(model, srcs: List[List[int]], automata: List[object], tok_of_i
                     sp = sp / sp.sum()
                     k = int(si[torch.multinomial(sp, 1, generator=gens[i])].item())
                 tok = tok_of_id[k]
+                sums[i] += float(logp[i, k])
+                cnt[i] += 1
                 automata[i].step(tok)
                 nxt[i] = k
                 if tok == "[EOS]":
@@ -72,4 +75,5 @@ def sample_locked(model, srcs: List[List[int]], automata: List[object], tok_of_i
                                        # pool grew ~0.55 GB a step and ran out of memory at step 47 (laptop smoke 2026-10-22)
             if all(done):
                 break
-    return [{"tokens": out[i], "complete": bool(getattr(automata[i], "ended", False))} for i in range(b)]
+    return [{"tokens": out[i], "complete": bool(getattr(automata[i], "ended", False)),
+             "score": (sums[i] / cnt[i]) if cnt[i] else None} for i in range(b)]

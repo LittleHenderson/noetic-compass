@@ -195,6 +195,9 @@ def main(argv=None) -> int:
         allowed = set(function) | set(check.WORD_RX.findall(x["input_text"].lower()))
         if not check.only_allowed_words(o["text"], allowed):
             return False, "a word outside the lock"
+        ok, why = check.layer2_ok(o.get("score"), FZ["sense_layer2_threshold"])     # A-TALK-7 H1 F3 layer 2
+        if not ok:
+            return False, why
         return check.check(x["situation"], x["input_text"], o["text"], fact_words, x.get("reading"))
 
     records = []
