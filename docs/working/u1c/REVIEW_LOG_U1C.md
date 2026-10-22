@@ -9,7 +9,7 @@ Scale 0-5 per criterion, maximum 35. Criteria: (1) clear question U1b left open;
 |---|---|---|---|---|---|---|---|---|
 | Design 1: replication-purist, two lanes on AWS CPU (full PORT lane + fresh U1C lane) | 5 | 5 | 4 | 2 | 5 | 4 | 5 | 30 |
 | Design 2: 3x size, A7 + A8 rivals inside the instrument, 16 shards on m6i.8xlarge | 4 | 4 | 5 | 5 | 2 | 3 | 2 | 25 |
-| Design 3: Part R replication (one lane, sequential), optional firewalled A7, Part W split off as EYE-ACT-1 (spec 7.122, PR #454; named EYE-ACT-1 (spec 7.122) in the first draft) | 5 | 4 | 3 | 3 | 3 | 3 | 5 | 26 |
+| Design 3: Part R replication (one lane, sequential), optional firewalled A7, Part W split off as EYE-ACT-1 (spec 7.122, PR #454; named U1d in the first draft) | 5 | 4 | 3 | 3 | 3 | 3 | 5 | 26 |
 
 The judge recommended a synthesis on Design 1 (grafting Design 2's matched-schedule rival, five rival words, custodian, three-family seed check, forecasts; and Design 3's EYE-ACT-1 (spec 7.122) split, firewall, build-test jobs, Python 3.12.3 default, text-scan net, speed check, anchor fallback). This packet starts from that synthesis and applies the reviewer fixes below.
 

@@ -1,0 +1,39 @@
+{
+ "schema": "helm.u1c.packet-hashes/1",
+ "status": "DRAFT_NOT_FROZEN",
+ "why_not_frozen": "the preregistration text depends on the owner's answers to Q2 (commit-then-reveal seeds) and Q5 (port strictness), plus Q4 and Q7; the freeze (FROZEN_U1C.precode.json) is written only after those answers and before any code",
+ "written_utc": "2026-10-22T03:00:05Z",
+ "files": {
+  "DESIGN_U1C.md": {
+   "sha256": "2fb6bfefc00bf5b2dddfb8909666f5d75494eab1889d4fb8d2ff74f1d9c6405a",
+   "bytes": 62719
+  },
+  "PREREGISTRATION_U1C.precode.md": {
+   "sha256": "d45e5f3062735d70ac95360873910a2dfb3e9882a7bd602a4247ed8bcd953311",
+   "bytes": 36413
+  },
+  "COST_AND_SIZING_U1C.md": {
+   "sha256": "65ad07f488f72626ed59bd9c3d76f3f20f36ebfd8c7fa0121a65106f04ecbbf5",
+   "bytes": 15242
+  },
+  "OPEN_QUESTIONS_U1C.md": {
+   "sha256": "f9a1a7f2724c184ed1fe8c259834ba01f7c3ca4368c8155df96037e89d70f320",
+   "bytes": 11296
+  },
+  "REVIEW_LOG_U1C.md": {
+   "sha256": "de65b1531a3c036516010ed0cfdea2e9a1f7ce0d296016dd88de31fbb7d24a85",
+   "bytes": 18351
+  }
+ },
+ "made_by": "design workflow wf_a0ab4929-596 (3 readers, 3 designs, judge, 3 adversarial reviewers, writer); operator spot-checked CALIBRATION wall fields (14), U1b FIX/FALSE totals, 39 gates, speed ratio 1.2427 (spec line 2234), FRESH wording",
+ "spend_usd": "0",
+ "aws_called": false,
+ "code_written": false,
+ "version": 3,
+ "change_from_v1": "the later live-loop Eye test is named EYE-ACT-1 (spec 7.122, PR #454) by the session that built it; the two U1c mentions of 'U1d' (OPEN_QUESTIONS Q1, REVIEW_LOG) now point there; no rule, number or question changed",
+ "supersedes": {
+  "file": "PACKET_HASHES_DRAFT_U1C_v2.json",
+  "sha256": "b9eae526ed6afedcf0fd0c4a3a1a68b2469c2c412d0fb1789047abdc73d67cfc"
+ },
+ "change_from_v2": "v2 garbled the pointer text (a second replace pass rewrote 'U1d' inside the new phrase); v3 restores 'named U1d in the first draft'; no rule, number or question changed"
+}
