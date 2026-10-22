@@ -4,6 +4,25 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM EYE-ACT-1 SCORED (spec sheet 7.122 follow-up): all 10 hard gates hold; EYE_ACT_EARNED_KEEP, CONCERT_ACT_EARNED_KEEP, EYE_ACT_BEATS_CHECKSUM_COPY, TIES_REBUILD_ALWAYS; acting stays NOT LICENSED; laptop, 0 USD
+
+- Owner's line, verbatim (seeds the worlds): "EYE ACT EXAM, sealed e49d459c, laptop, 0 USD." (45 bytes, sha256 4ee0d7b4...).
+- Seal verified 42/42 (zip e49d459c...). 200 worlds x 7 arms = 1,400 world-runs in 52.651 s; tests 19 + 10 + 17 OK; replays 8/8; VOID 0.
+- READING.json sha256 e43703154f5db9dccabc1358de765b70c0463642b2fc092bb1a95f6d87518155; RUN_RESULTS.json 9de9d64e....
+- 320 faulted items: no Eye 0 right / 0 ask / 320 wrong; HOLD 0 / 249 / 71; ACT 184 / 65 / 71; CONCERT 240 / 80 / 0; checksum-copy 240 / 0 / 80 (all 80 wrong on the slipped lesson); rebuild-before-answer 240 / 80 / 0; random-repair control 116 / 42 / 162 (83 fixed vs chance bound 91.2971).
+- Plain reading: acting beats holding with no harm, and the concert Eye is never wrong; but a plain rebuild-before-every-answer rule with no Eye ties it on every answer. The Eye's additions are holding, the ledger, and cadence-limited checking.
+- Predictions missed, kept: ACT right on P2 (cadence falls on P2 only in 2-ingredient worlds: 64 of 120); the Eye's state changes equal the rebuild rule's (160 each, 0 on clean worlds).
+- Status: ENGINEERED-NOT-VALIDATED, SYNTHETIC_ONLY; the Eye's acting in live HELM stays NOT LICENSED; HELM_EYE_ACT stays OFF; PR #454 not merged (the owner's decision).
+
+## 2026-10-21 PDT - HELM EYE-ACT-1 (spec sheet 7.122): the Unity Eye acting inside live HELM, built behind switch HELM_EYE_ACT (default OFF), exam kit sealed, practice on dev seeds only; NOT SCORED, NOT LICENSED; 0 USD
+
+- Owner's words: "want the Eye to act inside real HELM, GO!"; then "MAKE SURE YOU CHECK WITH THE OTHER SESSIONS ... AND UPDATE HELM HUB SITE AS WELL".
+- Pre-registration docs/working/helm_eye_act_v1/PREREGISTRATION_EYE_ACT_V1.precode.md sha256 0d731774... hashed and committed before code. Amendment A1 (before code): the verified stock folds stock records, withdrawals and licensed-path stock turns; an unexplained held entry is held, never removed. Amendment A2 (after the first practice run, before the seal): H10 counts an F4 WRONG as invented only if it differs from the no-Eye answer.
+- Build: helm_eye_act.py (sweep = re-derive the wide book from the user's witnessed batches with the book's own writer + fold the verified stock from the loop's trace; HOLD holds, ACT restores on a cadence of 4 turns, CONCERT also on a request before every question; ledgered; never invents); hook in helm_end_to_end_loop.py reached only when ON; test_helm_eye_act.py 19 tests (16 failed before the module). All HELM suites: Ran 299, OK; the OFF pin unchanged.
+- Exam kit (eye_act_kit/): made-up-word worlds, plants F1-F4, arms A0-A3 + rivals R1 CHECKSUM_COPY and R2 REBUILD_ALWAYS + control C1, driver, frozen reader, seal. Sealed: zip e49d459c... (42 files, manifest 333922a1...).
+- Practice (dev:1-8, unscored): first read INCONCLUSIVE (the H10 defect fixed by A2); after A2 all gates hold. CONCERT 6 right / 0 wrong on 8 faulted items vs no Eye 0 / 8; REBUILD_ALWAYS tied it exactly; CHECKSUM_COPY 2 wrong (fooled by the slipped lesson). Two predictions already missed and kept (ACT's cadence on P2; R2 makes 0 clean state changes too).
+- Coordination: notes to the operator session and to the owners of PRs #451, #452, #453 before any shared file; no objection received; the U1c PR moved to 7.121.
+- Next: the owner types EYE ACT EXAM, sealed e49d459c, laptop, 0 USD; the run and the frozen reader follow.
 ## 2026-10-21 PDT - HELM memory compaction TEACH-1 first run (spec sheet 7.121): verdict PASS, status word INCONCLUSIVE (U1 failed); every hard gate held; 0 USD; nothing licensed
 
 - Owner's line COMPACT EXAM at 0 USD; PR #453 merged at 10f83272; custodian (helper agent, separate context, on the owner's "Do this task here") drew 16 worlds, had 512 lines written by Anthropic / OpenAI / Google (171/171/170) and keyed AGREE by the two other families (448 of 448); attestation fa6e4701...

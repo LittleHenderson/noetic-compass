@@ -226,7 +226,7 @@ class HELMEndToEndLoop:
     def __init__(self, cube_store: Optional[Any] = None, brain: Optional[CanonicalRecipeBrain] = None,
                  default_aperture: Any = "0.75", trace_path: Optional[str] = None,
                  brain_dir: Optional[str] = None, wide_brain: Optional[bool] = None, wide_book: Optional[Any] = None,
-                 **_ignored: Any):
+                 eye_act: Optional[str] = None, **_ignored: Any):
         # RB-W1 switch WIDE_BRAIN: ON by default since the owner's ruling of 2026-10-20 ("YES TO WIDE BRAIN", SPEC 7.56).
         # OFF (explicit wide_brain=False, or HELM_WIDE_BRAIN set to 0 / OFF / FALSE / NO): nothing below changes and the
         # wide modules are never imported, so the licensed reference brain is the only brain. ON: the licensed brain stays
@@ -263,6 +263,15 @@ class HELMEndToEndLoop:
         self.units: Dict[str, str] = {}                 # unit words the user gave per ingredient ("cups")
         self.last_topic: Optional[str] = None           # the product the conversation is on ("bake a batch")
         self._pending_words: Dict[str, Dict[str, str]] = {}
+        # EYE-ACT-1 switch HELM_EYE_ACT (default OFF; docs/working/helm_eye_act_v1/, pre-registration 0d731774...).
+        # OFF (unset, or any word but HOLD / ACT / CONCERT, or WIDE_BRAIN off): no Eye object, helm_eye_act is never
+        # imported, every turn runs exactly as before. ON: the Unity Eye watches the wide book and wide stock and may
+        # hold a question (HOLD) or put back what the user's own words re-derive (ACT / CONCERT). Acting is NOT LICENSED.
+        self.eye_act = None
+        _eye_word = eye_act if eye_act is not None else os.environ.get("HELM_EYE_ACT", "")
+        if self.wide_on and isinstance(_eye_word, str) and _eye_word.strip().upper() in ("HOLD", "ACT", "CONCERT"):
+            import helm_eye_act
+            self.eye_act = helm_eye_act.UnityEyeAct(helm_eye_act.mode_from(_eye_word))
 
     # ------------------------------------------------------------------ trace
     def _emit(self, tick: int, station: str, **fields: Any) -> Dict[str, Any]:
@@ -471,8 +480,44 @@ class HELMEndToEndLoop:
         sentences and goes through the same parse and round trip as the text; it is never trusted on its own."""
         if self.wide_on:                       # RB-W1 switch ON: licensed first, the wide path where it cannot bind
             import helm_wide_turn
+            if self.eye_act is not None:       # EYE-ACT-1 switch ON only; OFF never reaches this line's body
+                return self._eye_turn(user_english, tick, current_inventory)
             return helm_wide_turn.extended_turn(self, user_english, tick, current_inventory)
         return self._process_turn_licensed(user_english, tick, current_inventory)
+
+    # ------------------------------------------------------------------ EYE-ACT-1 (switch HELM_EYE_ACT ON only)
+    def _eye_turn(self, user_english: str, tick: int, current_inventory: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """The Unity Eye looks first (helm_eye_act.UnityEyeAct.before_turn); a held question is finished here."""
+        import helm_wide_turn
+        held = self.eye_act.before_turn(self, user_english, tick)
+        if held is not None:
+            result = self._new_result(user_english, tick)
+            writes_before = self._store_writes()
+            self._emit(tick, "user", text=user_english.strip())
+            self._emit(tick, "eye", mode=self.eye_act.mode, action="HOLD", held=sorted(self.eye_act.flags))
+            return self._finish(result, tick, held[0], held[1], writes_before, "WAIT_FOR_USER: the held thing restated")
+        return helm_wide_turn.extended_turn(self, user_english, tick, current_inventory)
+
+    def eye_restore_book(self, fresh: Any, tick: int) -> None:
+        """The loop's routine for the Eye's book restore: the wide book becomes the state its own writer re-derives
+        from the user's witnessed batches (helm_eye_act.rederive_book). Nothing else changes."""
+        import copy
+        book = self.wide_book
+        book.recipes = copy.deepcopy(fresh.recipes)
+        book.witness_log = copy.deepcopy(fresh.witness_log)
+        book._seed = fresh._seed
+        self._emit(tick, "eye", mode=self.eye_act.mode, action="RESTORE_BOOK", learned_digest=book.learned_digest())
+
+    def eye_restore_stock(self, name: str, value: Any, tick: int) -> None:
+        """The loop's routine for the Eye's stock restore: one held amount put back to the verified stock."""
+        import helm_wide_turn
+        held = helm_wide_turn._stock_of(self)
+        if value is None:
+            held.pop(name, None)
+        else:
+            held[name] = value
+        self._emit(tick, "eye", mode=self.eye_act.mode, action="RESTORE_STOCK", ingredient=name,
+                   amount=None if value is None or value[0] is None else frac_text(value[0]))
 
     def _process_turn_licensed(self, user_english: str, tick: int = 1,
                                current_inventory: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
