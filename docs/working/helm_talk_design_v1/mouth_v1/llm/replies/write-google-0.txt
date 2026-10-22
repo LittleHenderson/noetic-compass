@@ -1,0 +1,1 @@
+I will execute a Python script to inspect the dataset items, analyze patterns, check slot words, and draft helper functions.

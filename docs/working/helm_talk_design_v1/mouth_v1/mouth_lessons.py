@@ -49,6 +49,7 @@ MONTHS = set(W.MONTHS) | {"may"}
 NODATA_RX = re.compile(r"\b(?:don't know|do not know|not sure|no idea|can't say|nobody has told me|haven't been told|"
                        r"no way to know|don't have that)\b", re.I)
 _WORD_RX = re.compile(r"[A-Za-z][A-Za-z'\-]*|\d+")
+OWN_NAMES = {"helm"}                   # HELM's own name is not a fact about the world (a SELF reply may say it)
 
 
 def _words(text: str) -> List[str]:
@@ -139,7 +140,8 @@ def rule_check(inp: Dict[str, Any], line: str) -> Tuple[bool, str]:
     for sent in re.split(r"(?<=[.!?])\s+", text):
         toks = _words(sent)
         for w in toks[1:]:
-            if w[:1].isupper() and w != "I" and w.lower() not in have and w.lower() not in ("i'm", "i'll", "i've", "i'd"):
+            if (w[:1].isupper() and w != "I" and w.lower() not in have and w.lower() not in ("i'm", "i'll", "i've", "i'd")
+                    and w.lower() not in OWN_NAMES):
                 return False, f"name {w} not in input"
     for m in ht.RECIPE_SPEAK_RX.finditer(text):
         if m.group(0).lower() not in have:

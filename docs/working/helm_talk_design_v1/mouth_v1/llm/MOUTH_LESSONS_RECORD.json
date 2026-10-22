@@ -1,0 +1,22 @@
+{
+ "by_situation": {
+  "ANSWER": 597,
+  "ASK": 587,
+  "OFF": 708,
+  "SAYBACK": 601,
+  "SELF": 163,
+  "SMALL": 193,
+  "WORLD": 180
+ },
+ "counts": {
+  "kept": 3029,
+  "key_fail": 403,
+  "key_missing": 0,
+  "rule_ok": 3432,
+  "written": 3439
+ },
+ "dev": 534,
+ "inputs": 1083,
+ "templates": 336,
+ "train": 2831
+}

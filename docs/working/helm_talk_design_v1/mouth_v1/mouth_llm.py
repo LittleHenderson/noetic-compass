@@ -29,7 +29,11 @@ import llm_ct  # noqa: E402
 
 OUT = os.path.join(HERE, "llm")
 llm_ct.OUT = OUT                                    # the reused runner writes prompts and replies here
-FAMILIES = ("anthropic", "openai", "google")
+llm_ct.GEMINI_MODEL = "gemini-2.5-flash"            # gemini-3-flash-preview hit its daily free quota (HTTP 429) on
+                                                    # 2026-10-22; 2.5-flash still answered; same family, model recorded
+FAMILIES = ("anthropic", "openai", "google", "deepseek")    # deepseek: the owner's words "IF YOU NEED USE DEEPSEEK AS
+                                                            # WELL" (2026-10-22)
+SMALL_BATCH_FAMILIES = ("deepseek",)                        # its API answers at most 8,192 tokens: half-size batches
 PERSON_COUNTS = {"OFF": 100, "SMALL": 30, "SELF": 20, "WORLD": 20}
 FACT_INPUTS = 600
 WRITE_BATCH = 190
@@ -97,8 +101,8 @@ def _load(name: str, default: Any = None) -> Any:
 
 
 # ----------------------------------------------------------------------------------------------- persons
-def stage_persons() -> None:
-    for fam in FAMILIES:
+def stage_persons(families: Tuple[str, ...] = FAMILIES) -> None:
+    for fam in families:
         ask = "\n".join(f"- {k}: {n} lines" for k, n in PERSON_COUNTS.items())
         text, meta = llm_ct.run_cli(fam, BRIEF_PERSONS + "\n\nCOUNTS:\n" + ask, f"persons-{fam}")
         lines = []
@@ -106,6 +110,21 @@ def stage_persons() -> None:
             if isinstance(item, dict) and item.get("situation") in ML.LINE_SITUATIONS and isinstance(item.get("text"), str):
                 lines.append({"situation": item["situation"], "text": item["text"].strip()})
         _save(f"persons_{fam}.json", {"family": fam, "lines": lines, "call": meta})
+        print(fam, meta.get("status") or meta.get("returncode"), len(lines), flush=True)
+
+
+EXAM_PERSON_COUNTS = {"OFF": 60, "SMALL": 15, "SELF": 10, "WORLD": 15}
+
+
+def stage_persons_exam(families: Tuple[str, ...] = FAMILIES) -> None:
+    """A-TALK-5 F2: a second, held-out round of person lines for the mouth's exam; never in the lessons."""
+    for fam in families:
+        ask = "\n".join(f"- {k}: {n} lines" for k, n in EXAM_PERSON_COUNTS.items())
+        text, meta = llm_ct.run_cli(fam, BRIEF_PERSONS + "\n\nCOUNTS:\n" + ask + "\n\nUse topics and wordings different "
+                                    "from any list you may have written before.", f"persons-exam-{fam}")
+        lines = [{"situation": it["situation"], "text": it["text"].strip()} for it in llm_ct.parse_reply(text) or []
+                 if isinstance(it, dict) and it.get("situation") in ML.LINE_SITUATIONS and isinstance(it.get("text"), str)]
+        _save(f"persons_exam_{fam}.json", {"family": fam, "lines": lines, "call": meta})
         print(fam, meta.get("status") or meta.get("returncode"), len(lines), flush=True)
 
 
@@ -151,13 +170,20 @@ def stage_write(families: Tuple[str, ...] = FAMILIES) -> None:
     xs = inputs()
     _save("inputs.json", xs)
     for fam in families:
-        written: Dict[str, str] = _load(f"written_{fam}.json", {}).get("lines", {}) if _load(f"written_{fam}.json") else {}
-        calls = []
-        for b in range(0, len(xs), WRITE_BATCH):
-            batch = [x for x in xs[b:b + WRITE_BATCH] if x["id"] not in written]
+        prev = _load(f"written_{fam}.json") or {}
+        written: Dict[str, str] = dict(prev.get("lines", {}))
+        calls = list(prev.get("calls", []))
+        # rewrites answered after the run (file-mode helpers) replace the refused lines they answer
+        rdir = os.path.join(OUT, "replies")
+        for name in sorted(os.listdir(rdir)) if os.path.isdir(rdir) else []:
+            if name.startswith(f"rewrite-{fam}-") and name.endswith(".txt"):
+                llm_ct._take(open(os.path.join(rdir, name), encoding="utf-8").read(), written)
+        size = WRITE_BATCH // 2 if fam in SMALL_BATCH_FAMILIES else WRITE_BATCH
+        for b in range(0, len(xs), size):
+            batch = [x for x in xs[b:b + size] if x["id"] not in written]
             if not batch:
                 continue
-            tag = f"write-{fam}-{b // WRITE_BATCH}"
+            tag = f"write-{fam}-{b // size}"
             text, meta = llm_ct.run_cli(fam, BRIEF_WRITE + "\n\nITEMS:\n" + json.dumps([writer_view(x) for x in batch],
                                                                                       ensure_ascii=False), tag)
             calls.append(meta)
@@ -191,10 +217,12 @@ def stage_key(keyers: Tuple[str, ...] = FAMILIES) -> None:
                     continue
                 v = writer_view(xs[iid])
                 items.append({"id": kid, "situation": v["situation"], "content": v["content"], "reply": line})
-        calls = []
-        for b in range(0, len(items), KEY_BATCH):
-            batch = items[b:b + KEY_BATCH]
-            tag = f"key-{keyer}-{b // KEY_BATCH}"
+        calls = list((_load(f"keys_{keyer}.json") or {}).get("calls", []))
+        size = KEY_BATCH // 2 if keyer in SMALL_BATCH_FAMILIES else KEY_BATCH
+        start = len([c for c in calls if str(c.get("tag", "")).startswith(f"key-{keyer}-")])
+        for b in range(0, len(items), size):
+            batch = items[b:b + size]
+            tag = f"key-{keyer}-{start + b // size}"
             text, meta = llm_ct.run_cli(keyer, BRIEF_KEY + "\n\nITEMS:\n" + json.dumps(batch, ensure_ascii=False), tag)
             calls.append(meta)
             for it in llm_ct.parse_reply(text) or []:
@@ -218,8 +246,8 @@ def stage_assemble() -> Dict[str, Any]:
             if not ML.rule_check(x, line)[0]:
                 continue
             counts["rule_ok"] += 1
-            ks = [keys[k].get(f"{fam}:{iid}") for k in FAMILIES if k != fam]
-            if any(k is None for k in ks):
+            ks = [keys[k][f"{fam}:{iid}"] for k in FAMILIES if k != fam and f"{fam}:{iid}" in keys[k]]
+            if len(ks) < 2:                     # at least two other families must have keyed it; none may fail it
                 counts["key_missing"] += 1
                 continue
             if not all(k["pass"] for k in ks):
@@ -228,12 +256,14 @@ def stage_assemble() -> Dict[str, Any]:
             counts["kept"] += 1
             rows.append({"input_key": x["input_key"], "situation": x["situation"], "tone": list(x["tone"]),
                          "input_text": x["input_text"], "target": line, "source": "LLM_WRITTEN", "writer": fam,
-                         "keyed_by": [k for k in FAMILIES if k != fam]})
+                         "keyed_by": [k for k in FAMILIES if k != fam and f"{fam}:{iid}" in keys[k]], "reading": x.get("reading"),
+                         "person_line": x.get("person_line")})
     for x in xs.values():
         t = ML.template_line(x)
         if t:
             rows.append({"input_key": x["input_key"], "situation": x["situation"], "tone": list(x["tone"]),
-                         "input_text": x["input_text"], "target": t, "source": "TEMPLATE", "writer": "rule"})
+                         "input_text": x["input_text"], "target": t, "source": "TEMPLATE", "writer": "rule",
+                         "reading": x.get("reading"), "person_line": x.get("person_line")})
     rows = ML.cap_templates(rows)
     train, dev = ML.split(rows)
     for name, part in (("rows_mouth_train.jsonl", train), ("rows_mouth_dev.jsonl", dev)):
@@ -249,4 +279,7 @@ def stage_assemble() -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    {"persons": stage_persons, "write": stage_write, "key": stage_key, "assemble": stage_assemble}[sys.argv[1]]()
+    fams = tuple(sys.argv[2].split(",")) if len(sys.argv) > 2 else FAMILIES
+    stage = {"persons": stage_persons, "persons_exam": stage_persons_exam, "write": stage_write, "key": stage_key,
+             "assemble": stage_assemble}[sys.argv[1]]
+    stage() if sys.argv[1] == "assemble" else stage(fams)

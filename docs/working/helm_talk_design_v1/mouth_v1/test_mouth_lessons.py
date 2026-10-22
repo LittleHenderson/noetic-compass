@@ -67,3 +67,8 @@ def test_split_holds_inputs_out_whole():
     tr, dv = ML.split(rows)
     assert not ({r["input_key"] for r in tr} & {r["input_key"] for r in dv})
     assert dv
+
+
+def test_helms_own_name_is_allowed():
+    inp = ML.line_input("SELF", "What are you called?", "k")
+    assert ML.rule_check(inp, "I'm HELM, a program that keeps what you tell me in this chat.")[0]

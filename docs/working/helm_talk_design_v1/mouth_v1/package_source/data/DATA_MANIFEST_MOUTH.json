@@ -1,0 +1,49 @@
+{
+ "counts": {
+  "exam_by_situation": {
+   "ANSWER": 267,
+   "ASK": 266,
+   "OFF": 179,
+   "SAYBACK": 267,
+   "SELF": 30,
+   "SMALL": 26,
+   "WORLD": 41
+  },
+  "fact_words": 110,
+  "function_words": 378,
+  "mouth_dev": 534,
+  "mouth_exam": 1076,
+  "mouth_exam_facts": 800,
+  "mouth_exam_person_lines": 276,
+  "mouth_train": 2831,
+  "train_by_situation": {
+   "ANSWER": 549,
+   "ASK": 565,
+   "OFF": 700,
+   "SAYBACK": 539,
+   "SELF": 144,
+   "SMALL": 175,
+   "WORLD": 159
+  },
+  "train_by_source": {
+   "LLM_WRITTEN": 2555,
+   "TEMPLATE": 276
+  }
+ },
+ "cube_train_package": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-22\\cube_train\\HELM_CUBE_TRAIN_20261022",
+ "function_rule": "LLM-written TRAIN target words not in their own row's input, seen >= 2 times, minus FACT_WORDS and the generator's subject nouns",
+ "schema": "mouth-train.data-manifest/1",
+ "sha256": {
+  "FACT_WORDS.json": "2c1de56e08221a3f3b2c4b05c62ca724b64aa34da73e3e88190ed63828a7f759",
+  "FUNCTION_WORDS.json": "c466ed267c34ad5f93818f8127d567da730678e72606602b3b4a65a4b968c5ec",
+  "cas_keep.jsonl": "edf0daa54a9b7a808ff125cd5ea8e700a07fa118f3e073f6816c46f7a58de140",
+  "cas_val.jsonl": "cb01691142190ba140efb96e951e6e65e930237d6c92a03bf4c5b9f5c1eddc26",
+  "dev_llm.jsonl": "8aa6610ae334ebac2f9fe1fe1456d89d4ecc47ee84778fc3b5d91e7f0129c5b8",
+  "dev_sdg.jsonl": "fa0ffb660928cbc1c90e57ff86c4ceecce0590b14cc8540e71151d9a336906c1",
+  "mouth_dev.jsonl": "bc28e5f855c2b59d198dd5b6949b13bc662fa7748bfd2f6583128ad8f1dc8a69",
+  "mouth_exam.jsonl": "a46e54bfe3473f631e347a19cc640e3184bcc40d08e34e8de86c42a5c5f055e2",
+  "mouth_train.jsonl": "be3741d728ac6b658522ac859181cd92da2bb34c27f63c406406d8f0fcfa36fe",
+  "train_cube.jsonl": "32020e1772a4143dccedf4bac54c05020444f9a55c0444f1c06b27c405302291",
+  "vocab.json": "825b417a62b6df94567fdb686200988b92a058cafefb127561c661c28db1265a"
+ }
+}

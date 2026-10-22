@@ -1,0 +1,411 @@
+{
+ "call": {
+  "family": "anthropic",
+  "mode": "file",
+  "status": "replied",
+  "tag": "persons-exam-anthropic"
+ },
+ "family": "anthropic",
+ "lines": [
+  {
+   "situation": "OFF",
+   "text": "I got a plot at the community garden and someone already planted sunflowers in my corner."
+  },
+  {
+   "situation": "OFF",
+   "text": "Got called for jury duty next Tuesday, first time ever."
+  },
+  {
+   "situation": "OFF",
+   "text": "Our washing machine flooded the laundry room this morning, there are towels everywhere."
+  },
+  {
+   "situation": "OFF",
+   "text": "My wife works night shifts at the hospital so I barely see her this week."
+  },
+  {
+   "situation": "OFF",
+   "text": "I went kayaking on the reservoir and tipped over twice in the first ten minutes."
+  },
+  {
+   "situation": "OFF",
+   "text": "found a stack of letters my grandparents wrote each other during the war"
+  },
+  {
+   "situation": "OFF",
+   "text": "I auditioned for the community choir today and they put me with the tenors."
+  },
+  {
+   "situation": "OFF",
+   "text": "My neighbor keeps bees and gave me a tour of the hives in his backyard."
+  },
+  {
+   "situation": "OFF",
+   "text": "I took my first sailing lesson and somehow didn't fall in."
+  },
+  {
+   "situation": "OFF",
+   "text": "Our office moved to the 14th floor and the view of the harbor is amazing."
+  },
+  {
+   "situation": "OFF",
+   "text": "My niece is doing a semester abroad in Seoul and loves it so far."
+  },
+  {
+   "situation": "OFF",
+   "text": "I've been sewing a quilt out of my kids' old t-shirts."
+  },
+  {
+   "situation": "OFF",
+   "text": "The wind knocked over our fence last night, half of it is in the neighbor's yard."
+  },
+  {
+   "situation": "OFF",
+   "text": "Finally donated a whole carload of old clothes to the thrift store."
+  },
+  {
+   "situation": "OFF",
+   "text": "my landlord says the rent is going up again in january"
+  },
+  {
+   "situation": "OFF",
+   "text": "I watched my son's first violin recital and he only squeaked once."
+  },
+  {
+   "situation": "OFF",
+   "text": "There was a hot air balloon festival outside town and the sky was full of them."
+  },
+  {
+   "situation": "OFF",
+   "text": "I renewed my library card and checked out way more books than I can read."
+  },
+  {
+   "situation": "OFF",
+   "text": "My old college roommate is running for city council this fall."
+  },
+  {
+   "situation": "OFF",
+   "text": "Our street did a block-wide yard sale on Saturday and I sold my treadmill."
+  },
+  {
+   "situation": "OFF",
+   "text": "I've been learning to juggle, I can do three balls for about ten seconds."
+  },
+  {
+   "situation": "OFF",
+   "text": "The hospital where I was born is being torn down next year."
+  },
+  {
+   "situation": "OFF",
+   "text": "I got my first tattoo yesterday, a small compass on my wrist."
+  },
+  {
+   "situation": "OFF",
+   "text": "My grandfather is teaching me how to fix old clocks in his workshop."
+  },
+  {
+   "situation": "OFF",
+   "text": "we had a surprise inspection at the warehouse today and everything passed"
+  },
+  {
+   "situation": "OFF",
+   "text": "I spent the weekend repainting the rowboat my dad built in the 80s."
+  },
+  {
+   "situation": "OFF",
+   "text": "My sister just got her pilot's license and wants to fly me to the coast."
+  },
+  {
+   "situation": "OFF",
+   "text": "There's a fox that walks across our lawn every evening around eight."
+  },
+  {
+   "situation": "OFF",
+   "text": "I'm giving a talk at a small conference in Montreal next month."
+  },
+  {
+   "situation": "OFF",
+   "text": "Our internet has been down since Monday and the company keeps rescheduling."
+  },
+  {
+   "situation": "OFF",
+   "text": "My friend Tomas just finished building a cabin by himself up north."
+  },
+  {
+   "situation": "OFF",
+   "text": "I joined a Wednesday night bowling league with some people from work."
+  },
+  {
+   "situation": "OFF",
+   "text": "The town put up a new statue in the square and everyone hates it."
+  },
+  {
+   "situation": "OFF",
+   "text": "my mother-in-law is staying with us for a month while her house gets renovated"
+  },
+  {
+   "situation": "OFF",
+   "text": "I tried ice skating for the first time since I was a kid and my ankles hurt."
+  },
+  {
+   "situation": "OFF",
+   "text": "My daughter wants to be an astronaut now, last week it was a veterinarian."
+  },
+  {
+   "situation": "OFF",
+   "text": "I finally cleaned out my email inbox, down from 12,000 to zero."
+  },
+  {
+   "situation": "OFF",
+   "text": "We went to a wedding in Mexico City and danced until three in the morning."
+  },
+  {
+   "situation": "OFF",
+   "text": "I've been writing short poems on my commute, mostly about the people on the subway."
+  },
+  {
+   "situation": "OFF",
+   "text": "The hardware store on the corner is closing after sixty years."
+  },
+  {
+   "situation": "OFF",
+   "text": "My nephew taught me how to use a 3D printer and I made a tiny elephant."
+  },
+  {
+   "situation": "OFF",
+   "text": "I signed up to give blood for the first time this Friday."
+  },
+  {
+   "situation": "OFF",
+   "text": "Our church is raising money to fix the old bell tower."
+  },
+  {
+   "situation": "OFF",
+   "text": "I dropped my wedding ring down the sink drain and a plumber fished it out."
+  },
+  {
+   "situation": "OFF",
+   "text": "My best friend moved to Ireland and the time difference is killing our phone calls."
+  },
+  {
+   "situation": "OFF",
+   "text": "I've been restoring a 1970s motorcycle in the garage on weekends."
+  },
+  {
+   "situation": "OFF",
+   "text": "the fog was so thick this morning i couldn't see the end of the driveway"
+  },
+  {
+   "situation": "OFF",
+   "text": "I got an email from a teacher I had in fourth grade, she remembered me."
+  },
+  {
+   "situation": "OFF",
+   "text": "Our neighborhood started a little free library on the corner and it's always full."
+  },
+  {
+   "situation": "OFF",
+   "text": "My coworker and I won the office trivia night by one point."
+  },
+  {
+   "situation": "OFF",
+   "text": "I'm training for my black belt test in karate in December."
+  },
+  {
+   "situation": "OFF",
+   "text": "There was an earthquake drill at my kid's school and she explained the whole thing to me."
+  },
+  {
+   "situation": "OFF",
+   "text": "My cousin Amara just opened a bike repair shop near the university."
+  },
+  {
+   "situation": "OFF",
+   "text": "I've been going to a stargazing club that meets in a field outside town."
+  },
+  {
+   "situation": "OFF",
+   "text": "Our basement has a bat in it and nobody wants to deal with it."
+  },
+  {
+   "situation": "OFF",
+   "text": "I finished my first online course in accounting, got a little certificate and everything."
+  },
+  {
+   "situation": "OFF",
+   "text": "My grandma started a podcast about her childhood on a farm in Ohio."
+  },
+  {
+   "situation": "OFF",
+   "text": "The ferry was cancelled because of high waves so we're stuck on the island another night."
+  },
+  {
+   "situation": "OFF",
+   "text": "I've been teaching my parrot to whistle the theme from an old western."
+  },
+  {
+   "situation": "OFF",
+   "text": "My husband and I celebrated our tenth anniversary at the same lake where we met."
+  },
+  {
+   "situation": "SMALL",
+   "text": "good evening"
+  },
+  {
+   "situation": "SMALL",
+   "text": "hiya"
+  },
+  {
+   "situation": "SMALL",
+   "text": "many thanks!"
+  },
+  {
+   "situation": "SMALL",
+   "text": "ty so much"
+  },
+  {
+   "situation": "SMALL",
+   "text": "hold on"
+  },
+  {
+   "situation": "SMALL",
+   "text": "ok I'm back"
+  },
+  {
+   "situation": "SMALL",
+   "text": "fair enough"
+  },
+  {
+   "situation": "SMALL",
+   "text": "great, thanks!"
+  },
+  {
+   "situation": "SMALL",
+   "text": "see you later"
+  },
+  {
+   "situation": "SMALL",
+   "text": "howdy"
+  },
+  {
+   "situation": "SMALL",
+   "text": "afternoon!"
+  },
+  {
+   "situation": "SMALL",
+   "text": "okie dokie"
+  },
+  {
+   "situation": "SMALL",
+   "text": "anyone home?"
+  },
+  {
+   "situation": "SMALL",
+   "text": "you're the best"
+  },
+  {
+   "situation": "SMALL",
+   "text": "hey, long time"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you have a body somewhere?"
+  },
+  {
+   "situation": "SELF",
+   "text": "How old are you?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you dream?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Are you a man or a woman?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you keep a secret?"
+  },
+  {
+   "situation": "SELF",
+   "text": "What's your favorite thing to talk about?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you make phone calls for me?"
+  },
+  {
+   "situation": "SELF",
+   "text": "are you running on my computer or somewhere else"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you ever disagree with the people you talk to?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Will you still be here if I come back next week?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What's the tallest building in the world?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Who won the Tour de France this year?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "How many people live in Canada?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "When does daylight saving time end this year?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Is the art museum downtown free on Wednesdays?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What's the price of gold today?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Did the Yankees make the playoffs?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "what's the speed limit on the highways in germany"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Will it be windy at the beach on Saturday?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "How deep is Lake Baikal?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "When does the bank on Elm Street open tomorrow?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "How much is a movie ticket around here?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What's the humidity outside right now?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Who is the prime minister of Japan right now?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "how many moons does jupiter have"
+  }
+ ]
+}

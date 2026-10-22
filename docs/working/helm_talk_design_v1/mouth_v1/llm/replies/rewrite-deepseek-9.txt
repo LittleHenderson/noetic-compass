@@ -1,0 +1,6 @@
+[
+  {"id": "m00892", "text": "I keep what you tell me in this chat, including things about you and the kitchen amounts you give."},
+  {"id": "m00901", "text": "I keep what you tell me in the chat, along with things about you and the kitchen amounts you give."},
+  {"id": "m00903", "text": "I keep the things you tell me about yourself and the kitchen amounts you give."},
+  {"id": "m00927", "text": "That puzzle is finally finished after three weeks. What was the puzzle like?"}
+]
