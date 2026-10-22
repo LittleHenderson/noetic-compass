@@ -1,0 +1,1 @@
+["client","court","case","evidence","contract","motion","brief","hearing","judge","jury","witness","statute","deposition","discovery","pleading","affidavit","counsel","objection","verdict","settlement","subpoena","docket","filing","courthouse","testimony"]

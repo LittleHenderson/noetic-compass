@@ -1,0 +1,6 @@
+Here is a word list meant to be: about 25 words a musician uses at work every day (tools, tasks, places, people). Return ONLY a JSON list of the words from it that truly
+fit that description (lowercase, exactly as given). Leave out any word that does not fit, is a name, a number, a month,
+or is about food or cooking.
+
+WORDS:
+["amplifier", "bandmate", "cable", "capo", "drumsticks", "gig", "headphones", "instrument", "mastering", "metronome", "microphone", "mixer", "mixing", "monitor", "pedal", "pick", "recording", "rehearsal", "soundcheck", "speaker", "stage", "stand", "strings", "studio", "tuner"]

@@ -1,0 +1,1 @@
+[{"id":"pof0242","text":"You completed the register check after a silent moment by the window. What happened at the register check?"},{"id":"pof0399","text":"You counted the register twice after a busy, hot shift at the store. What happened at the store?"}]

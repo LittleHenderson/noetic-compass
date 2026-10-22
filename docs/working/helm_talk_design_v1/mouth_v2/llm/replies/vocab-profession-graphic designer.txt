@@ -1,0 +1,1 @@
+["brief","mockup","layout","font","palette","grid","vector","export","render","layer","canvas","proof","client","deadline","feedback","revision","asset","template","sketch","contrast","spacing","alignment","branding","wireframe","prototype"]

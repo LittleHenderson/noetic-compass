@@ -1,0 +1,1 @@
+["code","bug","debug","commit","branch","merge","deploy","build","test","review","server","database","query","script","function","variable","repository","terminal","console","keyboard","monitor","desk","meeting","sprint","backlog"]

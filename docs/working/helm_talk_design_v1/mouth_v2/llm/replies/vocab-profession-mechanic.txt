@@ -1,0 +1,1 @@
+["wrench","socket","ratchet","screwdriver","pliers","hammer","jack","lift","scanner","multimeter","torque","diagnostic","repair","inspection","service","maintenance","alignment","brakes","engine","transmission","garage","workshop","technician","customer","invoice"]

@@ -1,0 +1,1 @@
+["instrument","microphone","amplifier","speaker","monitor","mixer","headphones","cable","pedal","strings","drumsticks","metronome","tuner","capo","pick","stand","stage","studio","rehearsal","gig","soundcheck","recording","mixing","mastering","bandmate"]

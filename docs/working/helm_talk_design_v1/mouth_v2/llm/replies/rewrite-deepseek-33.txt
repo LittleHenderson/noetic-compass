@@ -1,0 +1,14 @@
+[
+  {
+    "id": "pof1799",
+    "text": "Sounds like you had to work through the alarm, the relief valve and the civil plan. What was the principle you had to extract?"
+  },
+  {
+    "id": "pof1889",
+    "text": "That covers the severe burden, the sensitive parts and what may alter our profession. How do you plan to expand and highlight it?"
+  },
+  {
+    "id": "pof1902",
+    "text": "So the quiet complaint and the other bathroom are both on your mind. What are you hoping to find at the source of the quiet complaint?"
+  }
+]

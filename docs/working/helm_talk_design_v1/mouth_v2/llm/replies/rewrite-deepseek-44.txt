@@ -1,0 +1,22 @@
+[
+  {
+    "id": "pse0274",
+    "text": "I don't have a question for you right now, friend. You're the one with the questions today, and I'm glad to hear them."
+  },
+  {
+    "id": "pse0277",
+    "text": "I can't come up with a school example on my own. Tell me one and I'll keep it here with us."
+  },
+  {
+    "id": "pse0282",
+    "text": "I can explain how I work. I keep what you tell me in the chat, up to twenty things about you and the kitchen amounts you give, and I know only what I was told here."
+  },
+  {
+    "id": "pse0307",
+    "text": "I can't invent a class example myself. Give me one and I'll keep it here for us."
+  },
+  {
+    "id": "pse0317",
+    "text": "I can't learn a trick myself, but tell me the computer trick at the register and I'll help you walk through it."
+  }
+]

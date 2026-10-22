@@ -1,0 +1,1 @@
+["camera","lens","tripod","flash","battery","memory","sensor","shutter","aperture","focus","exposure","lighting","studio","backdrop","portrait","editor","client","model","assistant","shoot","frame","compose","capture","preview","retouch"]

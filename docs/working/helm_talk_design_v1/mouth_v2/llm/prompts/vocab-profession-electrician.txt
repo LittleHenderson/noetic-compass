@@ -1,0 +1,2 @@
+Write a word list. Return ONLY a JSON list of lowercase single words (no phrases, no names of people or
+places, no numbers, no months, nothing about food or cooking). about 25 words a electrician uses at work every day (tools, tasks, places, people)

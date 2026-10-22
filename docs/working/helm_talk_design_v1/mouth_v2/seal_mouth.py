@@ -1,4 +1,4 @@
-"""seal_mouth.py -- seal the MOUTH TRAIN package (A-TALK-4 .. A-TALK-6). Standard library only. 0 USD.
+"""seal_mouth.py -- seal the MOUTH TRAIN v2 package (A-TALK-4 .. A-TALK-11). Standard library only. 0 USD.
 
     python -X utf8 -B seal_mouth.py <out_dir>
 
@@ -19,10 +19,11 @@ import zipfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 PKG = os.path.join(HERE, "package_source")
 DESIGN = os.path.dirname(HERE)
-NAME = "HELM_MOUTH_TRAIN_20261022"
-AMENDMENTS = ("AMENDMENT_A_TALK_4.md", "AMENDMENT_A_TALK_5.md", "AMENDMENT_A_TALK_6.md")
+NAME = "HELM_MOUTH_TRAIN_V2_20261022"
+AMENDMENTS = tuple("AMENDMENT_A_TALK_%d.md" % k for k in range(4, 12))
 SKIP_DIRS = {"__pycache__", "smoke_out"}
 SKIP_FILES = {".gitignore"}
+SKIP_DIRS_EXTRA = ("smoke_out",)
 
 
 def sha(path: str) -> str:
@@ -68,7 +69,7 @@ def main(argv) -> int:
             with open(os.path.join(PKG, n), "rb") as fh:
                 z.writestr(info, fh.read())
     zsha = sha(zpath)
-    freeze = {"schema": "mouth-train.package-freeze/1", "package": NAME,
+    freeze = {"schema": "mouth-train.package-freeze/2", "package": NAME,
               "amendments": {a: sha(os.path.join(DESIGN, a)) for a in AMENDMENTS},
               "files": {n: sha(os.path.join(PKG, n)) for n in names}, "exam_replies": exam,
               "zip": os.path.basename(zpath), "zip_sha256": zsha}

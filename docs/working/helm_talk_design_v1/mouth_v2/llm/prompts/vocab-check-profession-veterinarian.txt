@@ -1,0 +1,6 @@
+Here is a word list meant to be: about 25 words a veterinarian uses at work every day (tools, tasks, places, people). Return ONLY a JSON list of the words from it that truly
+fit that description (lowercase, exactly as given). Leave out any word that does not fit, is a name, a number, a month,
+or is about food or cooking.
+
+WORDS:
+["anesthesia", "appointment", "bandage", "checkup", "clinic", "colleague", "diagnosis", "examination", "forceps", "injection", "kennel", "monitor", "owner", "patient", "prescription", "sample", "scalpel", "stethoscope", "surgery", "syringe", "technician", "thermometer", "treatment", "vaccine", "xray"]

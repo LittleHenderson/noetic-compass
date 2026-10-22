@@ -1,0 +1,1 @@
+["audit", "balance", "billing", "budget", "calculator", "client", "database", "expense", "invoice", "journal", "ledger", "manager", "meeting", "office", "payment", "payroll", "profit", "receipt", "report", "revenue", "software", "spreadsheet", "tax", "vendor", "voucher"]

@@ -1,0 +1,3 @@
+```json
+[{"id": "psm0188", "text": "The register is open, then. Sounds like the day is getting going."}]
+```

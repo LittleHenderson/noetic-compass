@@ -1,0 +1,18 @@
+[
+  {
+    "id": "pof1214",
+    "text": "A simple trim course bringing peace to a rough carpenter's day, huh? What does that trim course look like for you?"
+  },
+  {
+    "id": "pof1227",
+    "text": "Each skill got a cheerful little spotlight in your review of the literature series. Which skill got the brightest one?"
+  },
+  {
+    "id": "pof1230",
+    "text": "You arrived early to roll the warm power cable across the clean site. What happened after the cable was rolled out?"
+  },
+  {
+    "id": "pof1244",
+    "text": "A beam reached the wrong mark at the end of the shift, and you laughed after the foreman found the desk note. What did the desk note say?"
+  }
+]

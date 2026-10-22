@@ -1,0 +1,3 @@
+```json
+[{"id": "pof0895", "text": "That sounds like a lot to carry when the climate makes every small task feel heavier. What part of the daily routine feels heaviest to you?"}]
+```

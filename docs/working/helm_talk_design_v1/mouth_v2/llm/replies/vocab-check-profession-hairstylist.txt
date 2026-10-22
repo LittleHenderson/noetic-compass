@@ -1,0 +1,1 @@
+["bangs","blowdryer","brush","cape","chair","clippers","color","comb","conditioner","curler","cut","foil","layer","mirror","part","razor","scissors","section","shampoo","sink","station","straightener","towel","trim","trimmer"]

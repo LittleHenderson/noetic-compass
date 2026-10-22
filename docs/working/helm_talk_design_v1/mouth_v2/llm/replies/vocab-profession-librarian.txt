@@ -1,0 +1,1 @@
+["shelf","catalog","book","patron","reference","archive","database","index","borrow","return","checkout","due","fine","stacks","cart","scanner","label","barcode","periodical","journal","fiction","nonfiction","circulation","reserve","hold","weeding","inventory","desk","clerk","librarian"]

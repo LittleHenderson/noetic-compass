@@ -1,0 +1,1 @@
+["dentist","patient","tooth","teeth","gum","enamel","cavity","filling","crown","bridge","implant","braces","aligner","floss","mirror","probe","drill","suction","anesthetic","xray","hygienist","assistant","receptionist","clinic","sterilization"]

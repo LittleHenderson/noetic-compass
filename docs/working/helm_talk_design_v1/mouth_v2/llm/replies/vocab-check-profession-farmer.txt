@@ -1,0 +1,1 @@
+["barn","combine","fence","fertilizer","harvest","hoe","irrigate","irrigation","livestock","manure","pasture","plough","plow","pruning","scarecrow","seed","shovel","silo","sowing","sprayer","stable","tractor","trough","weeding","wheelbarrow"]

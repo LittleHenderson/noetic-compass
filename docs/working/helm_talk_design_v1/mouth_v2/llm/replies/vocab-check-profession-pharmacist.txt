@@ -1,0 +1,1 @@
+["capsule", "copay", "counsel", "counter", "dispense", "dosage", "drawer", "formulary", "gloves", "insurance", "inventory", "label", "patient", "physician", "prescription", "refill", "refrigerator", "register", "scanner", "shelf", "syringe", "tablet", "technician", "verify", "vial"]

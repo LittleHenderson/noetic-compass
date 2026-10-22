@@ -1,0 +1,1 @@
+["assessment", "bandage", "bed", "catheter", "chart", "clipboard", "colleague", "doctor", "documentation", "gauze", "gloves", "handoff", "mask", "medication", "monitor", "pager", "patient", "rounds", "sanitizer", "specimen", "stethoscope", "syringe", "thermometer", "triage", "wheelchair"]

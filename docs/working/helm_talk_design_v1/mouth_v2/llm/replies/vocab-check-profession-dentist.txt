@@ -1,0 +1,1 @@
+["aligner", "anesthetic", "assistant", "braces", "bridge", "cavity", "clinic", "crown", "dentist", "drill", "enamel", "filling", "floss", "gum", "hygienist", "implant", "mirror", "patient", "probe", "receptionist", "sterilization", "suction", "teeth", "tooth", "xray"]

@@ -1,0 +1,6 @@
+[
+  {"id": "pwo0133", "text": "I don't know that, because nobody has told me the recommended adult dental checkup schedule."},
+  {"id": "pwo0144", "text": "I've got nothing on that, friend. Nobody has told me the current estimate of global population."},
+  {"id": "pwo0154", "text": "I don't know, friend. Nobody has told me which movie is playing at the theater tonight."},
+  {"id": "pwo0224", "text": "Sorry, friend, I don't know. Nobody has told me what the surprise bill people want Congress to control is."}
+]

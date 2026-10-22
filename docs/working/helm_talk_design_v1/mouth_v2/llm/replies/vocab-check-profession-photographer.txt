@@ -1,0 +1,1 @@
+["aperture", "assistant", "backdrop", "battery", "camera", "capture", "client", "compose", "editor", "exposure", "flash", "focus", "frame", "lens", "lighting", "memory", "model", "portrait", "preview", "retouch", "sensor", "shoot", "shutter", "studio", "tripod"]

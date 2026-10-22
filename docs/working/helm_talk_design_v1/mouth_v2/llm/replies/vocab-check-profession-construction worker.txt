@@ -1,0 +1,1 @@
+["beam","blueprint","bolt","concrete","crane","crew","drill","excavator","foreman","gloves","hammer","helmet","ladder","level","lumber","nail","plank","rebar","scaffold","screw","shovel","site","tape","vest","wrench"]

@@ -1,0 +1,1 @@
+["article","assignment","brief","byline","copy","deadline","draft","edit","editor","fact","headline","interview","lead","notes","press","proofread","publish","quote","recording","reporter","research","source","story","transcript","verify"]

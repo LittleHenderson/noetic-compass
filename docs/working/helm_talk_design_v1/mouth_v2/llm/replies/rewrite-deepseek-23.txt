@@ -1,0 +1,6 @@
+[
+  {"id": "pof0528", "text": "Your guitar cable failed before the show, and you held the crowd with an easy song until a friend found another one. What was the crowd like while you played?"},
+  {"id": "pof0552", "text": "You told me the doctor said to always read and follow your heart to improve. What was it like when you camped where it is clean?"},
+  {"id": "pof0596", "text": "You predict the previous register will satisfy the launch. What makes you say that about the launch?"},
+  {"id": "pof0608", "text": "A customer pressed the wrong button, and the register gave a loud little beep. What did you do after the beep?"}
+]

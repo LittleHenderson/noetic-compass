@@ -60,6 +60,8 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦q1⟧", "|", "⟦n5⟧"], "text": "You told me oxley is two colonies in december now, not thirteen, in the yard. I've kept that.", "truth": "oxley | colonies december yard | two | thirteen"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦q1⟧", "|", "⟦n7⟧"], "text": "You told me oxley has two colonies in the yard in december, and before that it was thirteen.", "truth": "oxley | colonies december yard | two | thirteen"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "|", "⟦q1⟧", "|", "⟦n5⟧"], "text": "oxley had two colonies in the december yard, not thirteen.", "truth": "oxley | colonies december yard | two | thirteen"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "ashby came from elmbrook queens yard.", "truth": "ashby | came queens yard | elmbrook | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n5⟧", "|", "⟦n4⟧", "⟦n6⟧", "⟦n7⟧", "|", "⟦n8⟧", "|", "-"], "text": "Ah, good news: the queens at the Ashby yard came from Elmbrook, just as you told me.", "truth": "ashby | came queens yard | elmbrook | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "greystoke came from ravensby queens yard.", "truth": "greystoke | came queens yard | ravensby | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n6⟧", "|", "-"], "text": "So, as you tell it, the queens at the Greystoke yard came from Ravensby.", "truth": "greystoke | came queens yard | ravensby | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n4⟧", "|", "-"], "text": "Is it still true that oxley came from bramlow queens yard?", "truth": "oxley | came queens yard | bramlow | -"}
@@ -271,6 +273,7 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "The nethercote depot line is brindle.", "truth": "nethercote | depot line | brindle | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n1⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "The depot for the Nethercote line is Brindle. That is what you told me.", "truth": "nethercote | depot line | brindle | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n1⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "Got it! The depot for the Dunmere line is Ravensby.", "truth": "dunmere | depot line | ravensby | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "The dunmere depot line is ravensby, nice and clear!", "truth": "dunmere | depot line | ravensby | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "The dunmere line depot was ravensby.", "truth": "dunmere | depot line | ravensby | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is it still true that the fennick line depot was carrow?", "truth": "fennick | depot line | carrow | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "Was the fennick depot line carrow?", "truth": "fennick | depot line | carrow | -"}
@@ -369,6 +372,7 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n4⟧", "|", "-"], "text": "I have recorded that the Yarrowdale yard had fourteen colonies in July.", "truth": "yarrowdale | colonies july yard | fourteen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "|", "⟦q1⟧", "|", "-"], "text": "Does the Umberley yard still have two colonies in September?", "truth": "umberley | colonies september yard | two | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "|", "⟦q1⟧", "|", "-"], "text": "So the umberley yard had two colonies in september?", "truth": "umberley | colonies september yard | two | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "The nethercote yard had sixteen colonies in august, all good.", "truth": "nethercote | august colonies yard | sixteen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "Well, the Nethercote yard had sixteen colonies in August. You told me that yourself.", "truth": "nethercote | august colonies yard | sixteen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n5⟧", "⟦n7⟧", "⟦n8⟧", "|", "⟦n6⟧", "|", "-"], "text": "I'll keep this close: the Vellmoor yard had twelve colonies in December.", "truth": "vellmoor | colonies december yard | twelve | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "The vellmoor yard had twelve colonies in december.", "truth": "vellmoor | colonies december yard | twelve | -"}
@@ -517,6 +521,7 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n4⟧", "|", "-"], "text": "You told me the Greystoke line has seventeen buses in March.", "truth": "greystoke | buses line march | seventeen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "Does the Kelsmere line still have nineteen buses in June?", "truth": "kelsmere | buses june line | nineteen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦q1⟧", "|", "-"], "text": "You told me the Quarrybank line has four buses in July.", "truth": "quarrybank | buses july line | four | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n4⟧", "|", "-"], "text": "You said the Greystoke line has fourteen buses in October.", "truth": "greystoke | buses line october | fourteen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "Noted: for quarrybank, who drove the line is maudry.", "truth": "quarrybank | drove line | maudry | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "|", "⟦n5⟧", "|", "-"], "text": "You said the Quarrybank line was driven by Maudry.", "truth": "quarrybank | line | maudry | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is it still true that, for greystoke, who drove the line is corvan?", "truth": "greystoke | drove line | corvan | -"}
@@ -539,6 +544,8 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "Did the Northgate yard move to Yarrowdale in February?", "truth": "northgate | february yard | yarrowdale | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "The Foxley yard moved to Dunholm in October, as you told me.", "truth": "foxley | moved october yard | dunholm | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "You shared that foxley moved the yard to dunholm in october.", "truth": "foxley | moved october yard | dunholm | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n6⟧", "|", "-"], "text": "Interesting, in september marrow moved the yard to nethercote.", "truth": "marrow | moved september yard | nethercote | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "You said the Marrow yard moved to Nethercote in September.", "truth": "marrow | moved september yard | nethercote | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "Is the Quarrybank line still at twelve buses in July?", "truth": "quarrybank | buses july line | twelve | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is quarrybank buses july line still twelve?", "truth": "quarrybank | buses july line | twelve | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "vellmoor buses line october is sixteen.", "truth": "vellmoor | buses line october | sixteen | -"}
@@ -615,6 +622,8 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Was the Eastwold line rerouted through Fennick in November?", "truth": "eastwold | line november rerouted through | fennick | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n6⟧", "|", "-"], "text": "ashby january line rerouted through is stonewick.", "truth": "ashby | january line rerouted through | stonewick | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "⟦n7⟧", "|", "⟦n6⟧", "|", "-"], "text": "You told me the Ashby line was rerouted through Stonewick in January.", "truth": "ashby | january line rerouted through | stonewick | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "⟦n7⟧", "|", "⟦n6⟧", "|", "-"], "text": "You said the Vellmoor line was rerouted through Moorcroft in October.", "truth": "vellmoor | line october rerouted through | moorcroft | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n7⟧", "|", "-"], "text": "You said vellmoor line october rerouted through is moorcroft.", "truth": "vellmoor | line october rerouted through | moorcroft | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n1⟧", "⟦n2⟧", "|", "⟦n4⟧", "|", "-"], "text": "Is the depot line for ashby still pellstone?", "truth": "ashby | depot line | pellstone | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n6⟧", "|", "⟦n4⟧", "⟦n5⟧", "|", "⟦n7⟧", "|", "-"], "text": "Quick check, friend: is the depot line for ashby still pellstone?", "truth": "ashby | depot line | pellstone | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "The Vellmoor depot line is Thornfield. I have that noted.", "truth": "vellmoor | depot line | thornfield | -"}
@@ -850,6 +859,7 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "moorcroft line rerouted through harrowby in july.", "truth": "moorcroft | july line rerouted through | harrowby | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n1⟧", "⟦n2⟧", "|", "⟦n4⟧", "|", "-"], "text": "So the depot line for Ivybridge is Foxley.", "truth": "ivybridge | depot line | foxley | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n1⟧", "⟦n2⟧", "|", "⟦n4⟧", "|", "-"], "text": "The depot line for ivybridge is foxley.", "truth": "ivybridge | depot line | foxley | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n4⟧", "⟦n5⟧", "|", "⟦n6⟧", "|", "-"], "text": "The tale you told me: the Kelsmere depot on the line is Vellmoor.", "truth": "kelsmere | depot line | vellmoor | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n5⟧", "|", "-"], "text": "As you told me, the depot line for Kelsmere is Vellmoor.", "truth": "kelsmere | depot line | vellmoor | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "Kelsmere’s depot line is vellmoor.", "truth": "kelsmere | depot line | vellmoor | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n1⟧", "⟦n2⟧", "⟦n3⟧", "|", "⟦q1⟧", "|", "-"], "text": "Is the July colonies yard for Umberley still ten?", "truth": "umberley | colonies july yard | ten | -"}
@@ -874,6 +884,7 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n2⟧", "|", "-"], "text": "I have that. For umberley, quilla looked after the yard.", "truth": "umberley | after looked yard | quilla | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "|", "⟦n1⟧", "|", "-"], "text": "quilla looked after umberley yard.", "truth": "umberley | after looked yard | quilla | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "|", "⟦n1⟧", "|", "-"], "text": "ambrin looked after moorcroft yard.", "truth": "moorcroft | after looked yard | ambrin | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n5⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n7⟧", "|", "-"], "text": "The story you gave me: after you looked, the Moorcroft yard was Ambrin.", "truth": "moorcroft | after looked yard | ambrin | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n5⟧", "⟦n6⟧", "⟦n7⟧", "|", "⟦n4⟧", "|", "-"], "text": "So the tale goes: for Moorcroft, Ambrin looked after the yard.", "truth": "moorcroft | after looked yard | ambrin | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n6⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n2⟧", "|", "-"], "text": "Can you confirm that Vexley still looked after the yard for Northgate?", "truth": "northgate | after looked yard | vexley | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "|", "⟦n6⟧", "|", "-"], "text": "Just confirming, after you looked, the Northgate yard was Vexley. Is that still accurate?", "truth": "northgate | after looked yard | vexley | -"}
@@ -924,6 +935,7 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Did millbrook line reroute through eastwold in september?", "truth": "millbrook | line september through | eastwold | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n8⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n7⟧", "|", "-"], "text": "I am curious, is it still true that in September the line was rerouted through Eastwold for Millbrook?", "truth": "millbrook | line rerouted september through | eastwold | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n5⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n6⟧", "|", "-"], "text": "So the tale goes: the depot line for Ashcombe is Hazelby.", "truth": "ashcombe | depot line | hazelby | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "So the tale is that the Ashcombe depot on the line is Hazelby.", "truth": "ashcombe | depot line | hazelby | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "Just confirming, the Millbrook depot on the line is Marrow. Is that still correct?", "truth": "millbrook | depot line | marrow | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n5⟧", "|", "-"], "text": "Can you confirm that the depot line for Millbrook is still Marrow?", "truth": "millbrook | depot line | marrow | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n2⟧", "|", "-"], "text": "pennyford had sixteen colonies in september.", "truth": "pennyford | colonies september | sixteen | -"}
@@ -1053,6 +1065,9 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n1⟧", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Honey from hazelby yard went to marrow market.", "truth": "hazelby | honey market went yard | marrow | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n1⟧", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "The honey from the Hazelby yard went to the Marrow market.", "truth": "hazelby | honey market went yard | marrow | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n4⟧", "|", "-"], "text": "hazelby yard went to marrow honey market.", "truth": "hazelby | honey market went yard | marrow | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is it still true that dovecote yard moved to nethercote in february?", "truth": "dovecote | february moved yard | nethercote | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "Did the Dovecote yard really move to Nethercote in February?", "truth": "dovecote | february yard | nethercote | -"}
+{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "Did dovecote yard move to nethercote in february?", "truth": "dovecote | february yard | nethercote | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n1⟧", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "In april, hazelby yard moved to wexcombe.", "truth": "hazelby | april moved yard | wexcombe | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "The Hazelby yard moved to Wexcombe in April.", "truth": "hazelby | april moved yard | wexcombe | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "hazelby yard moved to wexcombe in april.", "truth": "hazelby | april moved yard | wexcombe | -"}
@@ -2212,19 +2227,23 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "So the Pennyford line depot is Umberley.", "truth": "pennyford | depot line | umberley | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n2⟧", "⟦n4⟧", "|", "⟦n1⟧", "|", "-"], "text": "Is Saltwick still the depot for the Hazelby line?", "truth": "hazelby | depot line | saltwick | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "Is the Hazelby line depot still Saltwick?", "truth": "hazelby | depot line | saltwick | -"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister just moved to Denver and she says the altitude is wrecking her sleep.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I finally finished painting the spare bedroom last night, it's a pale green now.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Work was brutal today, three meetings back to back and none of them needed to happen.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I started learning guitar again after like ten years off.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My neighbor's kid won the regional spelling bee this weekend, the whole street was cheering.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "i just got back from a hike up near the lake, my legs are dead", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My grandmother turned 92 yesterday and she still beats everyone at cards.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "There was a power outage on our block for about three hours tonight.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I've been reading a lot of old science fiction lately, mostly Asimov and Le Guin.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We adopted a second cat last week and the first one is not thrilled.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I saw on the news that they're closing the old library downtown.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My flight to Lisbon got moved up by two hours so I have to leave super early.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Started a new job on monday, still figuring out where everything is.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My brother and I haven't talked in months but he called me today out of nowhere.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "It snowed for the first time this year and the kids went nuts.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I've been trying to get into birdwatching, saw a red-tailed hawk this morning.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "my car made a weird grinding noise on the highway so it's at the shop now", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I volunteered at the animal shelter on Saturday and walked about a dozen dogs.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My best friend from college is getting married in Scotland next summer.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I've been knitting a scarf for my dad and it's way longer than I planned.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I passed my driving test on the second try today!", "truth": "NONE"}
@@ -2243,16 +2262,19 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I signed up for a pottery class on Thursday evenings.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our town had its annual parade today and the marching band was great.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My cousin is studying marine biology in Australia and keeps sending me shark pictures.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The heat wave here is unreal, it hit 104 degrees this afternoon.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I finally beat that video game I've been stuck on for weeks.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My partner surprised me with tickets to see a play next Friday.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I've been helping my dad clean out the garage and found my old skateboard.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "there was a huge traffic jam on the bridge because of a stalled truck", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My yoga teacher is moving away and I'm kind of sad about it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I just renewed my passport and the photo is terrible as usual.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our local soccer club needs a new coach and they asked me.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I planted tulip bulbs in the front yard today, hoping they come up in spring.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My laptop died right in the middle of a presentation this morning.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Went to my high school reunion and barely recognized half the people.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My grandpa served in the navy and just showed me a box of his old photos.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We're thinking about getting solar panels on the roof this year.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The museum had a dinosaur exhibit and my nephew refused to leave.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My friend Priya just opened her own dental practice across town.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I've been sleeping badly ever since the neighbors got a new puppy.", "truth": "NONE"}
@@ -2292,6 +2314,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "good morning!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "hello again", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "thx", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "got it, thanks", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "brb", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "one sec", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "you there?", "truth": "NONE"}
@@ -2301,7 +2324,9 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "alright then", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "good night!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "take care", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "thanks, that helps", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "hey again", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "makes sense", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What exactly are you?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Are you a real person or a bot?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "what kinds of things can you help me with", "truth": "NONE"}
@@ -2335,12 +2360,15 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Are the trains running on time this morning?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "When is the next full moon?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "How long is the flight from New York to London?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I finally cleaned out the hallway closet and found my old roller skates.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My neighbor's dog has decided my front porch is its favorite observation deck.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I took the train to work today instead of sitting in traffic.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister sent me a photo of her new apartment and it looks really cozy.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I spent most of Sunday reorganizing my bookshelf by color for no reason.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The office elevator has been making a weird noise all week.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My commute was surprisingly peaceful this morning because it rained.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My cousin is visiting next month, so I need to tidy up the guest room.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The sunset from my balcony was unreal tonight.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I have been listening to old podcasts during my evening walks.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My manager gave me a shoutout in the team meeting today.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I found a tiny library near the park and borrowed a mystery novel.", "truth": "NONE"}
@@ -2368,10 +2396,12 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I found a loose button in my coat pocket from who knows when.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The apartment upstairs has been renovating for what feels like forever.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I started using a paper planner again because my calendar was getting chaotic.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My coworker brought their baby into the office and everyone lost focus.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I am halfway through painting the bedroom and deeply questioning the color choice.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My uncle restored an old motorcycle and took me for a ride.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I found a playlist from college and suddenly remembered every word.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The printer at work only jams when I am in a hurry.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I donated a bag of clothes and now my closet finally closes properly.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My friend got engaged over the weekend and sent us all a blurry photo.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I have been practicing my handwriting during boring conference calls.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The local theater is showing old movies on Tuesday nights.", "truth": "NONE"}
@@ -2460,6 +2490,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Are any major roads closed because of the storm?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What concerts are happening downtown this weekend?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What is the latest score in the soccer match?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I finally finished that massive puzzle I've been working on for three weeks.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My neighbor's dog keeps barking at the squirrels in the backyard every morning.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I'm planning a hiking trip to the Rocky Mountains next summer with my brother.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The traffic on the way to work was absolutely brutal this morning because of rain.", "truth": "NONE"}
@@ -2473,6 +2504,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My computer crashed right before I saved my progress on the project I was doing.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I found a stray cat in the alley and I'm thinking about taking it in.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The local park is always so peaceful during the weekdays when most people are working.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My boss gave me a promotion today and I'm feeling really proud of my hard work.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I started a new workout routine and I can barely walk up the stairs right now.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The air conditioner in my apartment broke during the middle of a heat wave yesterday.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I'm trying to reduce my screen time by reading more physical books before I sleep.", "truth": "NONE"}
@@ -2590,41 +2622,53 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Who is the fastest runner in the world?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "How many countries are in Africa?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My neighbor sent a funny summer photo, and my coat hair looked all wrong already.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The little boy at the front desk brought a bear to his next visit and made everyone smile.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I saw the silo after my walk and checked the fields before the doctor visit.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At the salon, I found brown shampoo tucked in the corner behind the color bowls.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The wind hit the dark window while I checked my client’s usual haircut in the mirror.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I need to show my neighbor the real report about her dog’s weight.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I felt proud when she became more confident and found real value in her book project.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "During triage, I documented the patient’s concern and filled the appropriate area notes.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I admit, watching that child grow this season gave me something to be proud of.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I prefer to relax with old photos again before putting them in any order.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Their choice to teach the kids made me laugh; what a fine relationship with the neighborhood.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I completed the smoke report and guided someone safely from the area.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My friends built a diverse, stable circle that always seems to protect one another.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I selected available lumber after assessing the surface and the essential force on the frame.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The tenant and landlord finally settled on a sufficient repair plan for the kitchen.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I admire anyone who can compose a digital playlist without starting a family debate.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A client complained that her layers lacked shape. I revised the core cut and delivered a style that matched her figure. Her smile made the extra labor worthwhile.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I attended the review after an error triggered a system collapse. We captured the details, published the correction, and required a further check before using the tool again.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My daughter left a beautiful rock on my desk, and the class loved it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My aunt marked the red house on the street so I could find it easily.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I disinfected every tool after the busy summer rush. A child dropped a beautiful bag in the grass. I placed it safely by the barber chair.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I hung my soft shoes below the shelf and turned the light off.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My friend sang an old school song, and the whole shop joined in.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Snow fell slow outside the school while I listened for the gas truck.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I taught the apprentice how to check the plywood before cutting. By the end of the day, the white wood floor was level and strong.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The irrigation service lost power, so I drove out early to protect the sowing schedule.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My family helped me through another hard week, and I am finally feeling well.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The crowded waiting room became quiet after we opened another area. I explained the difference in wait times and raised the value of calm, clear updates.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The drill stopped outside my room just as my patient settled in. We waited a moment, then made the visit feel easy and fun.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Before the end of the season, the old barbershop became a place where every strong story found a home. During each cut, somebody added another page.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "After a short fire call tonight, the blue sky made my heart feel fine again.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I left everything extra on my desk because the social plan changed at the last minute.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "An old computer sent a strange maintenance message, and the whole crew had a laugh. We agreed the future can wait until after lunch. Then the report showed it was only a loose cable.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At that cool moment in court, one small fact changed the whole story.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The practice machine failed during the trip. We remembered the right repair method and got it running that same day. Nobody lost faith in the plan.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My colleague helped monitor each detail, so we could achieve the project’s purpose.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I used a clamp to hold the component steady, and the honest repair should last permanently.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I adjusted the course framework and schedule to address bias across the entire topic.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "One vial transformed the experiment from an ancient idea into a real demonstration.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A clean fade can contribute more confidence than people expect, provided the work is honest.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My office design still reflects the culture we built together, and that supports me deeply.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our checkout policy rescued an ancient book from a very cheerful late return.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I managed the debate carefully and extracted a clear account of the conflict for tomorrow’s story.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The snow was thin and bright outside the library. I went a mile down the road to check the book database, but the branch was not open. I think I want to touch base tomorrow.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My neighbor came in with a surprise vial and I had to think deep about whether it could travel well in her bag.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The school already put a mark on the west wall after the old shoe drive, and we should stop there before it is gone.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to lay my bag in the car at the end of the evening, and my back hurt like crazy through the whole talk.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I sent a cool pair of socks home instead, and you should check the low shelf by the bottom of the nose type thing.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to climb far up the road to the edge of town for a garden circle. My feet were tired, so I sat and read a book instead of walking back.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I saw a small bird play in the forest field, and I have my own issue with the weight of that direct report.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "She has an angry child in the area this morning, and I begin to count the people who ever came to help.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The weeding report is ready for the meeting, but I worry the self-check hand-off will be difficult to move forward from.", "truth": "NONE"}
@@ -2636,8 +2680,10 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I am eager to clarify the flight category and describe the function we rely on to sustain this campaign.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We had to comply with the cockpit caution and defend our schedule during the taxi pressure.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "It is typical to compare the severe harm of that category, and many mature people retire to a virtual escape.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to conduct the interview and locate a distinct detail that would enhance my notes. I could not ignore the character of the man, and I began to conclude the piece.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We need to adjust the report and assess the climate risk, with a valid vision and priority link to the resource.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to edit the native error and recall the precise progress we made. I did not want to commit to the treat too soon, but the result did impress me.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to calculate the client scope and detect the equivalent method to persuade them of our progress.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The theory was rare and visible, and we had to establish a reasonable economy that would depend on the direct circumstance. It did involve a small risk.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The alarm went off and we had to argue the charge to justify the scheme. We did operate with relief, and the result was a real challenge.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My voice was tired on the approach, and the airspeed was alive as we ran the runway heading with full power.", "truth": "NONE"}
@@ -2646,13 +2692,16 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I have a small problem with the real shape of the sea across the way, and it needs pretty close attention.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Yes, the beacon will beat a direct path along the art wall, and I dream of the gear by my neck.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My dog must have run through the wood and left a key on the paper within several shops.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The board has no note with your name and number, while the song form brings a new song.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I guess the bad climb in the garden will tell us which member can head to the phone in the room by the table.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The swim through the sea was almost too hard, and the cost of the letter gave me a lot to mind. I had to tie my shoes and go.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I will try to build the exact pair from paper and throw the usual hard friend a line.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to pull the old insulation away and decide what was better for the person living there. My parent came to help, and we got a social call about it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The city will ask about the process and compare a bit of the letter, even with the safe site itself.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I know they will carry the door and produce enough little parts without ever receiving a like for it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I love the world around the tree between visits, and I notice a full fun kind of day especially now.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mother has a beautiful face and a long view of the large part, so I will pick the special obvious one.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to bring the doctor a line and catch a test for my hand, so anyone can mind the place and wear a mask.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to relate the lesson between the calm center and the college example. I did hear a welcome from the people who live there, and it was good to be part of it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I will carry the chair half a block and walk together with the quiet police order, better than before.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The night report will become available in a minute, and the true tool box is high on the daughter's list.", "truth": "NONE"}
@@ -2661,21 +2710,30 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I need to explain the policy and extract the substance from the poll, so I can inform the initiative and assign influence.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We will confirm the initial draft and generate a separate series to compete in the virtual society.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I prefer the private practical notice and want to perform a unique abstract piece, though it may confuse the compete plan.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I will estimate the dynamic result and capture the objective version, then submit a vision that remains appropriate.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We will align the external career plan and utilize a substance that can develop and establish a disagree point.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We will assemble the passage and attach a conscious mechanism, then discuss the rare theory and reject the circumstance.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My body felt bad after carrying boxes out by the river.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our team rode bikes after practice, though one player hurt her knee. I loved how everyone stayed close and helped her up.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "This summer, my sister and I discovered a wide old hall on the west side. I am glad the design ideas will help with tomorrow's plans.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My aunt left an hour ago, and everyone is still talking about her funny story.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That small black bird flew farther east than I would have guessed.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My wife laughed when I hit my leg on the corner during the game.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I have music here because it helps me sleep after important days.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I got the multimeter out, and that old truck finally quit acting tall.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A strange calm moved toward us, and every parent stopped to count the minutes.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My colleague offered to chart the current patient notes while I handled the next room.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I cut that thing from my list because it was giving me fear.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "These low ceilings serve the space better than the first design, believe me.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I arrived early and tried to describe the blue work light to myself.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My father gave everyone wild advice, then decided the lesson was a dance party.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The teacher moved across the stage and produced a lesson everyone remembered.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "During the rush, I admitted that rest is necessary for every hairstylist.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I nearly abandoned the virtual project when the algorithm kept failing. Then I focused on one small change, and my overall opinion improved.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I hope my small acts of kindness inspire people to defend one another.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I started an efficient initiative to prevent the tension from becoming everyone's problem.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I found an obvious bias in the poll while comparing the database results.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I altered the layout to align the text volume with the poster's purpose.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The campaign began with a curious call that made me realize its core tension.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our private team adopted a significant shift and continued with better alignment.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I sent the difficult winter lesson again so every adult could repeat it.", "truth": "NONE"}
@@ -2683,11 +2741,15 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I accepted my neighbor's plan to walk by the river. Soon, we both laughed at a pretty dog with a wet nose.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I checked the chart and learned which patient needed help tomorrow.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I wish my sister could come down our street before winter ends.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At the pharmacy, I found a special paper ring near the counter. It made a child smile, which felt better than a fast morning.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That heavy pipe never beat me; I went back ready to fix it.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Each summer page still brings me back to that cold swim toward shore.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I reviewed the interview picture before meeting my client on the third floor.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I forgot the form at home, but my friend helped me feel complete again.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I placed the glass box between the open doors to improve the display.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I put the garden plans online so I could save them for later.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I found your old letter across the room and felt the past rise up.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Everyone had a good laugh when my low goal became the public headline.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At the first meeting, a cold silence filled the room. Then one family told their story, and the project became active.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I listened carefully and helped the nervous child keep her teeth safe.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I helped repair the exhibit, and the curator warmly mentioned my contribution.", "truth": "NONE"}
@@ -2723,14 +2785,15 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Each day I use a flat piece of wood on the table by my bed, and I often find it full of heart.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My daughter saw the huge floor plan and beat me to the sketch, so I put on my coat and drew a dear little room.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The team will trade a hot summer day in the south for more lab time, and the kid made us laugh.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The bank will get a direct cost difference this term, and the risk is total before we study it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The government will sound out a social direction between the early picture and the beautiful right answer.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We had a good day on the site. The team set the ladder in form and I could see the hand of a new worker. We will explain it all tomorrow.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mother will wait for the last lesson, and I am proud that she wants to play except on days she practices.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Since the fall I have had a white light in my memory for a couple of hours, and it would pain me to lose that level.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Along the train tonight a member must train with the shears and clippers, and the neckstrip is legal light work.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister is a firefighter, and she had to stop and fix the possible problem. The fact is she helped a woman get out, especially with the need for speed.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I aim to pursue a federal grant for the stage and convince the microphone crew to participate in the intense restore.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The librarian will acquire and cite the virtual edit, then return the significant file we expect to receive.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I suppose the burden is a valid factor, and we must overcome the struggle to assign a solution that will accompany the result.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The client had a rapid and dramatic capacity to contain the negative issue, and we prepare to retain the apparent gain.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The teacher put the folder in the office and noticed a formal pattern in the core technique that would eventually direct the event.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The veterinarian will derive mature evidence from the stethoscope and exhibit the ultimate trend on the federal agenda.", "truth": "NONE"}
@@ -2750,6 +2813,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Someone painted a whole story on the wall facing south, you know.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I saved the old comb because it reminds me of my first shop.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A patient dog in the kennel watched the training video with real interest.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I landed fast after my teacher's advice, though I still worried.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We will compare the two real samples together until the report is complete.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I organized the grant files to evaluate possible damage and reduce anxiety.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The community relief effort exceeded our objective, and that felt deeply encouraging.", "truth": "NONE"}
@@ -2871,12 +2935,15 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I coordinated with a family services channel to link one parent with practical support.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The club took a vote and we all agreed to wait. I shall speak to them when they come, and we can act together.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Each picture from the street race shows a bit of black smoke and something common to every goal.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My arm hurt all day because I tried to fix the color on my car, but it was a great problem to laugh at.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My brother and I drove south across the road, and both of us saw a blank circle mark on the well.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My son took me to the art center, and it was difficult to lay my feelings out where he could help most.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The payment round took us on a trip again, and my parent began to race on foot for a chance to begin now.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The next guy wanted a short, sharp cut on the west side, and the cool bag started well.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Both kids move through the week fast, so I add a bit of rest and explain the course to them.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I sit on the ground and reflect on my health. It took a degree of effort to develop an easy rule, but the tool helped me turn things around.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I got excited about the camera cover and dear memories from the past, so I will continue to build well in this country.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I note some hot habit in the build itself, and I wait when I forget to be afraid.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The beautiful summer race allowed us to support each other better, and then we stood together at the top in the light.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The current week is also a good time to fill the space and borrow the white sprayer for a secret habit.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The livestock behave better when I correct the supply and restore the complex cause, so imagine how essential it is to tolerate change.", "truth": "NONE"}
@@ -2884,6 +2951,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The academic poll included a domestic aspect, so we must ensure adequate media coverage. We gained a plan to interact and include every voice.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I disagree with the recent finance margin, so confirm the source and reverse the scope for subsequent exchange.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I admire the dynamic scheme in this channel and define its source, but I ignore the draft aspect worth a second look.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "An expert witnessed the rare event and referred to the subsequent equal contribution, which helped isolate the normal from the isolate.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The office pressure relates to a relevant objective, and I deny any voluntary welfare accident at the edge.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The survey found an efficient link between patient contact and the abstract benefit, so we invest in a sequence.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I hope the class call goes around quick, and there is no fact like a wide hope in war.", "truth": "NONE"}
@@ -2897,6 +2965,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The event can add a blue color to the clothes and complete the science job work.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I believe the early interview will invite first information from the government, and I often remember that day.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The dentist will enter the crown around the filling, and yes, the cost is strong for the future head.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The crowd made me cry and fill with history, so I risk a sudden pass to settle that.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Please watch the ball arrive tonight, and of course the couple will have fun over work.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That guy was late and afraid to lose, but the lesson was necessary and I want to depend on where he is able.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The early news gave a clear idea to send the force and cover the room air step.", "truth": "NONE"}
@@ -2904,12 +2973,14 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We had to conclude that the permanent stress could injure the profession. I mention we must persuade and align, with a permit to avoid the threat.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I wonder if society can integrate this valid opinion and transfer it at scale, since the environment does possess it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The climate alert attracted genuine insight, and I attended to indicate how influence can surround and survive the story.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I prepare to verify each element and exhibit the skill, but rigid rules impose an aspect I must remind myself to operate.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The previous version had to adapt and respond to the charge. We apply a passage to represent the advantage, which enables us to begin.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My priority is to trim and brush each aspect, display a mature summary, and participate in the reform with belief.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I shut down the test server after the next round of state checks.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister is sick, so I brought flowers to her house.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The yellow leaves along the branch made the dark path pleasant.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I spent the whole game watching my team lose by one.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "After the audit, the numbers came out fine, my friend.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I moved the little tree here because it reminds me of you.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A student found a strange smell under the stairs. It made everyone stop and look. By noon, we learned a bird had built a nest there.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Near the old door, I found a sharp little stone and kept it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My editor asked for a direct source before the difficult story could run.", "truth": "NONE"}
@@ -3065,7 +3136,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I admit the feature had a genuine impact, and I predict the summary will resemble a simple character study.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I deserve a little adventure, and I must remind myself to maintain the duty to intervene and remove the stress before I permit any algorithm to decide.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The barn display was meant to prove a probable source of the problem, and I had to intervene when the circumstance called for a guide to compose a plan.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I must report the alert and convince the civil team to correct the major issue, and I refuse to transform the plan until they conclude.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Every side of the gas line had a number on it, and I would say several other workers did well to follow the plan.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "All that black smoke got into my home, and then I heard a quick story about it while I was upon the porch.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "People were busy at the top of the world today, and they sent a nice point straight to me about moving enough chairs.", "truth": "NONE"}
@@ -3079,9 +3149,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Everyone on the ground today had a camera, and the current difference in the word provides a lead for that.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Most of the conversation about the past had to turn to the police, and I will teach the rest to keep their head down.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mother went to the store in the dark, and the glass house itself was full. I also had to focus and join the fun.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I made a simple mistake at the shop, and I have to answer for it against the play. Please give me an example of a thing I can fix.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The daily game was hard to finish, and I might sit through the final read. I will remember to read it again.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The budget was flexible, but a specific trigger in the industry present a valid instance of attitude. I represent the team, so I have to respond.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I recommend we seek a diverse core and organize a summary to respond to the dispute, and I predict the native group will support it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My client had to rely on a simple lease and a voluntary poll, and I had to support the institute sequence while I admire the effort.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to describe the constant conflict in the appointment and ensure the decline was not permanent, which I recognize as significant.", "truth": "NONE"}
@@ -3184,6 +3252,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I argue that we should adopt the resource plan, contain the demand, and promote the execute phase.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I anticipate the corporate element will behave well, and I submit the sensitive purchase.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The previous topic was effective, so we will develop a forward perspective and inform the ultimate team. They require us to oppose the old method.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The former institute had to isolate the cause and handle the harm at the edge. They depend on mutual trust to resist.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The diverse dimension may confuse progress, so we should not delay or neglect the publish step.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The rural formula will exist in a separate target, and I approve the function we express.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I tend to relate the vast issue and dedicate the reform, though I neglect to edit the inspire part.", "truth": "NONE"}
@@ -3231,6 +3300,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I encountered a serious privacy concern while drafting portraits. I isolated the private files before interacting with the client again.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A specific issue can arise when an individual submits a rigid form without examining the trigger.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We can debate the mature version later; first, let’s establish the basic element and expand from there.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I struggle to manage the daily routine when the climate makes every small task feel heavier.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A buyer denied the first estimate because it differed from her target. I cited the comparable sales, and we found a capable solution without neglecting repairs.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We chose the safer option, because no solution should satisfy a threat that could destroy the plan.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I investigated the injured sample and applied a flexible method. The result clarified the scope of the problem and brought relief.", "truth": "NONE"}
@@ -3332,6 +3402,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I gave the new table my full attention and it has a sharp edge, so everything should join well without a problem.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I was awake early and put my finger on a big black spot to check the color of the earth.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Give me a bit of that grass plant and I will stick it on the face of the sign, no laugh needed.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "During the cut I must save her a question about the garden room and then send a notice to the barber next door.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The dry branch on the farm went late into the night, and I wanted to keep it well like the other ones.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My father told me to rest ahead of the jump, and the empty space gave me a great sight of the branch.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "When the kid came in for a cut, I thought about my own family and had no reason to sign off early, so I disinfected everything dead clean.", "truth": "NONE"}
@@ -3443,7 +3514,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I tend to advocate for the rural pets, and from my perspective the aggressive cases argue for a current result, so I wonder and submit my notes.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I cannot tolerate the negative standard, and I will evaluate how these narrow rules affect the desire to contribute.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The team had to define the specific function of the launch, and despite a threat, they found an effective way to assist. It was a correct and normal result.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Despite the strict rules, I am conscious of how my career choices differ, and I can justify the absolute quantity I need to reduce.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We had to anticipate the digital quantity and conduct a test before we proceed. The team did not abandon the plan, and they began to interact and capture the data. It seemed to govern the whole result.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I encourage the patient to persist, and I indicate the best option in my summary while we implement the project with caution.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to inform the dispatcher and propose a private route with adequate volume. The advantage was sufficient, so I did not hesitate to perform the job.", "truth": "NONE"}
@@ -3466,7 +3536,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The routine media policy should protect us from severe harm and narrow the climate risk, not offend or reward the wrong people.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The scope of the finance context is rare, and I found a reasonable way to replace the accident that occurred.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I will avoid the random detail and submit a serious reward to prevent the former judge from being a witness.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We must allocate the reserve to protect a sensitive aspect of the research and resist the urge to eliminate the edge.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I will maintain the vision and adapt to the apparent advance, and I remind myself to assert the frequent checks that serve us.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I wish we could bring cover before the whole fight gets worse.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A good neighbor left us a note weeks ago. Such a kind guy made this place feel more like home.", "truth": "NONE"}
@@ -3479,15 +3548,19 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The white conference room needs a quick, clean cut in the display board.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mother still worries when I walk toward the cockpit before another flight.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our meeting approved an extra half-day to improve the college library entrance.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I stayed late at the computer after the coach left. Seeing the open map made our move feel like the start of a real journey.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "While preparing the panel, I found the active wire had a different secret route.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The board carried a huge view of the project history, especially the early work.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I drafted a contract alternative after evaluating minor climate-related risks in the research.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our mutual effort accomplished something genuine during an intense and sensitive week.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I adjusted the source code after users kept reminding me about the average delay.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "As a librarian, I feel the original letters trace an essential domestic situation.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I prefer to anticipate the general issue before I commit to a plumbing design.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My review of the literature series assigned each skill a cheerful little spotlight.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I watched the old transport crew cooperate as they replaced the broken crate.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I arrived early to roll the warm power cable across the clean site.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I held a special appointment for tonight. The client laughed after I crossed out the old style.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I picked up a kid near the school after their bike fell off. Maybe the road was too slick again.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A low tablet alert flashed behind the scanner, and I felt angry for the patient.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A family rode out to view an island home last summer. Their dog chased a bird, and everyone laughed before the signature.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The evidence table showed the school did not send the notice over.", "truth": "NONE"}
@@ -3508,7 +3581,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We settled the mutual profit plan before the quantity report could collapse the mood.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "An accident changed the pattern of the stair contract. I edited the precise measurements and assisted the crew with a new perspective.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The revenue trend may force our firm to cite circumstances affecting this career decision.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Today I had to carry a case between two families and guess what was possible. Everyone wants to grow, but war can wear a person down.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The old black rock wall was left less strong than the map showed. Next, I shall cause the new case to be built with a stronger base.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My family came by the house today, and we stuck to the same map while walking around outside for a bit.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Several folks told me they found a good offer, so I could pull up a chair and sometimes sing along. Example: shut the shop early and enjoy.", "truth": "NONE"}
@@ -3521,6 +3593,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Behind the old college floor, the exercise tool caused trouble, so we raise the base and give it new meaning.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Ahead of the game, I want the team to build right and relax, and imagine what the community can land.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Before the flash, I had fun on the road and quite a few stops to sell this up, so come visit.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My partner and I had almost enough class today, and tomorrow we get a couple free hours to check the legal value. Fast fun!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The lesson cost me some pain, but I was able to reduce it. Under the top eye of health, society can learn from this.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I admit the review will cite the constant tradition, but the capacity result may permit us to intervene and impress the board.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We observe the pattern in the elevation and reveal the source of stress. The engineer will display each component and address the burden.", "truth": "NONE"}
@@ -3530,8 +3603,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our strategy is to protect the region with a strict draft, treat the damage, and inspire an effective attempt.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I agree we should apply the classic control, not neglect the brief, and prevent any reason to reject the opinion.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We attract the community with a valid skill exchange and vary the feature with caution. The mechanism is severe but the books are fine.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I accept and appreciate your help; please assist me to confirm the strict scale and prepare the welfare report, so we evolve and express the plan.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I arrive at class fast, then climb the light page and deal with the neighbor about the world.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Someone fell asleep in the corner of the school, so I follow the dream and let them grow sharp under the lamp.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I believe the crowd will choose the next ride above the bit, so we shut the team line and go.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The parent showed me the fire damage down the wall. I grabbed my screwdriver, checked the neutral line, and joined the insulation in a minute this season.", "truth": "NONE"}
@@ -3554,7 +3625,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The private patient had a genuine insight, and the strict error was a desire to assemble the agenda with vision.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I suspect the ancient channel holds a conflict, and we must locate the sensitive profit before it escapes.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I wonder if the civil career exhibit will receive the initial result, and I refuse to collapse on the job.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Despite the burden, I am eager to ensure the target and recall the purpose, so we prevent harm with the algorithm.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I walked along the street and paid them with careful attention.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Man, the day started thick and slow. A sick customer called, so we gathered around and made the deal easy. By closing time, everything moved fast.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I still remember her touch under the cold sky after our long walk.", "truth": "NONE"}
@@ -3620,7 +3690,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A filling came loose in my own mouth, and the receptionist told me to just control the cry. Nothing hurt, but the police in town had a body in the chair next door.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Another clean present from the market must stand out, so I can support the race and touch the center of the support.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The best method is to head the case control in the right direction, and the permit rule is already necessary for the permit.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I need to discuss the potential consequence of the context, and estimate the harm that may arise from that category.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We found an honest exchange between two components of the private system. I had to prepare a secure equivalent, and the team had to compete to impose it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to emphasize the distinct version of the launch and describe how we employ the features that resemble the ones we require.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to adjust the manual access under this circumstance, but the enormous climate compromise may impress the regular evidence.", "truth": "NONE"}
@@ -3775,10 +3844,13 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We shared the corner with a beautiful crowd after the show. Each person related a mistake that made the night feel human.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The diagnostic trace linked the engine fault to a failed sensor, not the control algorithm.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I appreciate how my former coworker helped me discover a better balance this week.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I provided the status report after overcoming the wiring issue and conveying the repair plan.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My colleague introduced a relief space in the design process, and I prefer its calm context.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That original plan had evidence and purpose, so nobody was ready to abandon it, my friend.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I conduct my practice with voluntary focus because music can steady a mental storm.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I revised the disinfect routine after recognizing how crucial the current device settings are.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "An expert can discuss finance all day, but a flexible method makes the obvious fix more fun.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At the firehouse, an old captain suggested equipment worth more than its cost during a high-demand call.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The formula clarified each element of the transition, and honest progress followed.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The key thing today was a brave mom who let us sit with her and raise a safety plan after the intervention.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mother took the boat out on the field pond and we planted long rows. I feel we shall do it again.", "truth": "NONE"}
@@ -3798,7 +3870,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "It is probable we must reduce the burden and retain the trace. I hesitate to divide the work, though it is curious and absolute.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I mention the adventure and calculate the average skill, but I complain when people correspond about my status.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I admire the capacity to align and defend a new dimension, and I urge you to equip and explore the equivalent.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The objective was to obtain a permanent policy under pressure. I realize we must assign and measure the trace to retain it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I determine the margin on each physical reserve and agree the revenue will succeed if I retire with ability.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The purpose is to eliminate the enormous dispute and diminish negative media, so I witness a brief develop.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I recall the average struggle to capture insight and implement a global plan. We conduct and equip the innocent.", "truth": "NONE"}
@@ -3924,6 +3995,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I completed my delivery before dark and headed home. A small fire near the road slowed the truck, but everyone got through safely.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Rain started right as I got to her door. We waited between the floors and laughed about our soggy shoes.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Man, my brother wore that old hat again this morning. I took his photo before he could put a hand over his face.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "During the fire alarm, I left the shop with my ring still on the counter. It felt too strange to walk away without it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I keep wondering what tiny plant is growing behind the shed without any care.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I sectioned her hair carefully, then wrapped the towel before the wind picked up.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I searched the whole north side of town after class and still found nothing.", "truth": "NONE"}
@@ -3937,6 +4009,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I explained the process to everyone in the area before placing the large order.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I decided to invest in my career instead of ignoring a complex problem.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I adjusted the socket connection and confirmed the quantity of replacement parts.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I am trying to manage the usual work struggle without letting it run my life.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That sprint meeting was so long, I thought the merge might become a family tradition.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I eased the throttle forward and felt my fear loosen as the aircraft climbed.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I witnessed a practical act of kindness that made the whole street feel different.", "truth": "NONE"}
@@ -3986,11 +4059,9 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The outcome of our strategy will evolve as we replace the routine feature and gain insight into the context.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The initial switch to a native source was strict, so I had to negotiate the standard and submit the permanent plan. Dynamic work, that carpentry.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I approve the comprehensive schedule and want to illustrate the issue before we remove it and inspire the forward team.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The average poll result will serve as our solution, and we must divide the labor to overcome and persuade the scale.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to observe the negative notion around the scheme and predict how access might injure or neglect the people we surround.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I assume the expert will attend and expose a particular opinion, so we specify the belief before we compete in that environment.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "On my rural rounds I monitor each medication source, and it is curious how we avoid a permanent finance burden.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We must eliminate the severe burden and distinguish the sensitive parts, then expand and highlight what may alter our profession.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Maybe we head north to the wide forest, since it is hot and sure to be quiet away from anyone.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My son wants to bear the cold this winter and look after his hands, such a good kid.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "His neighbor will come to wash the body of the car and hope to keep it from the winter hang.", "truth": "NONE"}
@@ -4297,6 +4368,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you try everything until full, and keep a neutral national joke direct through the long day?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Will you help me create a video without a center tool, and stay to use it?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you follow my brother below the low way, since his father made a choice behind me?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Who can definitely wish each direction forward, and are you able to welcome a south trip instead?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you consider a clear legal offer first, and guide the club through a difficult deal?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you love art and law, and can you decide like a cool coach in a serious example?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you receive the best hair interview from a great road, and does the matter play out?", "truth": "NONE"}
@@ -4409,20 +4481,32 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you remember the stories I tell today?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I am tired but happy.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good morning to you.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "All good here, thanks.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that helps a lot.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi there, how are you?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Morning, crew is ready.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, see you soon.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Noted, thank you.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good morning, hope you are well.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, thanks for that.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Nice, thanks a lot.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Great, thanks for the call.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Cool, thanks for the help.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, welcome aboard.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, I will check my schedule.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Appreciate it, thanks.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good morning, thank you kindly.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, thanks a bunch.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, appreciate the help.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that is relevant and helpful.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, I will respond soon.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Great, thanks for the update.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, the survey looks good.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, the summary is clear.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, nice of you.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good morning, thank you.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, thanks a lot.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Yes, thanks, all good.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that was a big help.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, drive safe.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good afternoon. How may I assist?", "truth": "NONE"}
@@ -4432,6 +4516,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello, class is in session!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good morning. Ready when you are.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi, I have a moment.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello! It's good to connect.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good day. I am available.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, checking in from the road.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello, let’s build on that.", "truth": "NONE"}
@@ -4455,6 +4540,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello, where does the story begin?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good morning. I’m standing by.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello. Ready to begin.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi, glad we could connect.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good afternoon. Please continue.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, what’s the plan?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello—what changed?", "truth": "NONE"}
@@ -4462,6 +4548,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi, I missed this.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, what happens next?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey! Let’s do this!", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, good to see you again.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good afternoon, I appreciate your help.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, thanks, catch you later.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Alright, thanks, take it easy now.", "truth": "NONE"}
@@ -4469,6 +4556,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Oh, thanks, that's helpful, cheers.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, pal, see you next time.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that's kind of you.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you so much, that's wonderful.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Cool, thanks, talk later.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that really helps me.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, buddy, you're the best.", "truth": "NONE"}
@@ -4483,6 +4571,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that's really nice of you.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you, I appreciate it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, thanks, good to see you.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks so much, that's great.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you, that is very kind.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Cool, thanks, appreciate it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that's helpful, cheers.", "truth": "NONE"}
@@ -4498,6 +4587,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Tomorrow brings another chapter.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you; I’m ready.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A brief check-in.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I’m happy we connected.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good afternoon, everyone.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, I’m back.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Morning—fields are looking good.", "truth": "NONE"}
@@ -4506,10 +4596,14 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A new scene begins.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good morning; systems are stable.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks for the help.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Glad you came by.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello, dear assistant.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "All good, champ.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I’m here with you.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Nailed it—good day!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello, class.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that helps.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "So glad to chat.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good day to you.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, clinic’s busy today.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Fresh start, my friend.", "truth": "NONE"}
@@ -4572,6 +4666,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey there, bright spark!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "So the conversation begins.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello, coach!", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi, nice to see you!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello. I am ready.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, let's do this.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Alright, talk to me.", "truth": "NONE"}
@@ -4587,6 +4682,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, talk to you later.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, noted. Talk soon.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you, that's kind of you.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that works for me.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, you're a star!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you, that's helpful.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that's so nice of you.", "truth": "NONE"}
@@ -4682,11 +4778,13 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Were reporters able to get a photo of the mayor at today's press conference?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the final tour date for that band is sold out yet?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know whether the usual train schedule changes on holidays?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know how many people in the crowd at the dental convention came from out of state?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know the price of the new science museum tickets at the store downtown?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What evidence do researchers offer to specify how the two measures differ?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know what triggered the serious dispute and what the final outcome was?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the school board extended the deadline for submitting the recent worksheet?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you clarify whether the survey shows a stable trend or a private one?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the release of that report posed a sufficient threat to the margin of error?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the new version of that algorithm will exceed the previous recall measure?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the town has a wide area where sick people can meet a social worker?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the rain will stop before the course starts this afternoon?", "truth": "NONE"}
@@ -4701,6 +4799,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the primary repair shop will proceed with the quote they recommend?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the mechanic will replace that portion of the design and retain the rest?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the contract testimony will settle the enormous dispute this week?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the review will exhibit a regular priority for that enormous scenario?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the military hospital will confirm the updated career schedule for nurses?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the new contract will secure the funding target and ease the burden?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know how many hours the bank on Main Street is open on Saturday?", "truth": "NONE"}
@@ -4720,6 +4819,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What factors determine whether a passport application is expedited?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What causes copper pipe to develop green corrosion?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What tire pressure does a 2020 Ford F-150 require?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What permits are legally required to build a backyard deck?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What is the latest unemployment rate in the United States?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Will it rain in Seattle tomorrow?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What is the tallest building in the world?", "truth": "NONE"}
@@ -4887,6 +4987,7 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What song is number one on the charts this week?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What lumberyard near me stays open late tonight?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Which school district has the earliest spring break this year?", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What highway route has the least traffic for truckers today?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What goal has the United Nations set for clean energy?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What hair-color trends are most popular this season?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Which states offer the best truck-driver training programs?", "truth": "NONE"}
@@ -4929,7 +5030,6 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n6⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n2⟧", "|", "-"], "text": "You shared that nethercote moved in june, in the yard at greystoke. I'm holding onto that.", "truth": "greystoke | june moved yard | nethercote | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "greystoke moved to nethercote in june from the yard.", "truth": "greystoke | june moved yard | nethercote | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "Did oxley still move to kelsmere in february from the yard?", "truth": "oxley | february yard | kelsmere | -"}
-{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n3⟧", "|", "-"], "text": "ashby came from elmbrook queens yard.", "truth": "ashby | came queens yard | elmbrook | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n4⟧", "|", "-"], "text": "Is it still true that millbrook came from moorcroft queens yard?", "truth": "millbrook | came queens yard | moorcroft | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "carrow drove line is jorvan.", "truth": "carrow | drove line | jorvan | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "|", "⟦n4⟧", "|", "-"], "text": "The Carrow line was driven by Jorvan, as you told me.", "truth": "carrow | line | jorvan | -"}
@@ -4947,8 +5047,6 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "You said ashby drove line is caddock.", "truth": "ashby | drove line | caddock | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n3⟧", "⟦n5⟧", "|", "⟦n2⟧", "|", "-"], "text": "You said Caddock drove the Ashby line.", "truth": "ashby | drove line | caddock | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "Is ivybridge drove line still ambrin?", "truth": "ivybridge | drove line | ambrin | -"}
-{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "⟦n7⟧", "|", "⟦n6⟧", "|", "-"], "text": "You said the Vellmoor line was rerouted through Moorcroft in October.", "truth": "vellmoor | line october rerouted through | moorcroft | -"}
-{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n7⟧", "|", "-"], "text": "You said vellmoor line october rerouted through is moorcroft.", "truth": "vellmoor | line october rerouted through | moorcroft | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n1⟧", "|", "-"], "text": "vellmoor came to carrow queens yard.", "truth": "carrow | came queens yard | vellmoor | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n2⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n1⟧", "|", "-"], "text": "pennyford came to cresswell queens yard.", "truth": "cresswell | came queens yard | pennyford | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n3⟧", "|", "⟦n4⟧", "⟦n5⟧", "|", "⟦n1⟧", "|", "-"], "text": "Did ashby come to kelsmere queens yard?", "truth": "kelsmere | queens yard | ashby | -"}
@@ -4971,8 +5069,6 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "|", "⟦n5⟧", "|", "-"], "text": "Noted that Millbrook drove the line to Garron.", "truth": "millbrook | drove line | garron | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "Did glenhollow yard move to oxley in september?", "truth": "glenhollow | september yard | oxley | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is it still true that glenhollow yard moved to oxley in september?", "truth": "glenhollow | moved september yard | oxley | -"}
-{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is it still true that dovecote yard moved to nethercote in february?", "truth": "dovecote | february moved yard | nethercote | -"}
-{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "Did dovecote yard move to nethercote in february?", "truth": "dovecote | february yard | nethercote | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is it still true that ravensby yard moved to kelsmere in january?", "truth": "ravensby | january moved yard | kelsmere | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "Did ravensby yard move to kelsmere in january?", "truth": "ravensby | january yard | kelsmere | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n5⟧", "|", "⟦n4⟧", "|", "-"], "text": "Did carrow yard move to glenhollow in december?", "truth": "carrow | december yard | glenhollow | -"}
@@ -4988,73 +5084,27 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n5⟧", "|", "⟦n1⟧", "|", "-"], "text": "Is yarrowdale still where oakridge moved in the yard in January?", "truth": "oakridge | january moved yard | yarrowdale | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Was kelsmere line rerouted through pellstone in september?", "truth": "kelsmere | line rerouted september through | pellstone | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "Is the kelsmere line still rerouted through pellstone in september?", "truth": "kelsmere | line rerouted september through | pellstone | -"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister just moved to Denver and she says the altitude is wrecking her sleep.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My neighbor's kid won the regional spelling bee this weekend, the whole street was cheering.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "There was a power outage on our block for about three hours tonight.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I volunteered at the animal shelter on Saturday and walked about a dozen dogs.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My daughter lost her first tooth at school and was very proud of it.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The heat wave here is unreal, it hit 104 degrees this afternoon.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My yoga teacher is moving away and I'm kind of sad about it.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We're thinking about getting solar panels on the roof this year.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "i think my upstairs neighbor is learning the drums, badly", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "It's been raining for nine days straight here, I'm losing my mind.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "my little brother just got his learner's permit and I'm scared for everyone", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "hey", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "how's your day going?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "got it, thanks", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "sounds good", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "hey, what's up", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "thanks, that helps", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "how are you doing?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "perfect, thank you", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "makes sense", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I finally cleaned out the hallway closet and found my old roller skates.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My commute was surprisingly peaceful this morning because it rained.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The sunset from my balcony was unreal tonight.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My coworker brought their baby into the office and everyone lost focus.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I stayed up too late finishing a book because the ending was stressful.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I donated a bag of clothes and now my closet finally closes properly.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I finally finished that massive puzzle I've been working on for three weeks.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My boss gave me a promotion today and I'm feeling really proud of my hard work.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My car is finally paid off and it feels so good to not have that bill.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I'm trying to learn how to do a handstand but my balance is still really bad.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The little boy at the front desk brought a bear to his next visit and made everyone smile.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "She said yes to our soft little promise, and I felt my whole heart grow.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That old truck was silent until I fixed one loose wire, then it surprised us all.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Their choice to teach the kids made me laugh; what a fine relationship with the neighborhood.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I admire anyone who can compose a digital playlist without starting a family debate.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My friend sang an old school song, and the whole shop joined in.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I need to show my neighbor the real report about her dog’s weight.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I made you a small gold promise to stay, even when life gets hard.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Snow fell slow outside the school while I listened for the gas truck.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I left everything extra on my desk because the social plan changed at the last minute.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "An old computer sent a strange maintenance message, and the whole crew had a laugh. We agreed the future can wait until after lunch. Then the report showed it was only a loose cable.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At that cool moment in court, one small fact changed the whole story.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A clean fade can contribute more confidence than people expect, provided the work is honest.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our checkout policy rescued an ancient book from a very cheerful late return.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to lay my bag in the car at the end of the evening, and my back hurt like crazy through the whole talk.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to climb far up the road to the edge of town for a garden circle. My feet were tired, so I sat and read a book instead of walking back.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I had to conduct the interview and locate a distinct detail that would enhance my notes. I could not ignore the character of the man, and I began to conclude the piece.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to calculate the client scope and detect the equivalent method to persuade them of our progress.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The board has no note with your name and number, while the song form brings a new song.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The swim through the sea was almost too hard, and the cost of the letter gave me a lot to mind. I had to tie my shoes and go.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I was able to calm my friend at the window and cut the social laugh short, but I did not die of general worry.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to bring the doctor a line and catch a test for my hand, so anyone can mind the place and wear a mask.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I will estimate the dynamic result and capture the objective version, then submit a vision that remains appropriate.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My aunt left an hour ago, and everyone is still talking about her funny story.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I have music here because it helps me sleep after important days.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I got the multimeter out, and that old truck finally quit acting tall.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A strange calm moved toward us, and every parent stopped to count the minutes.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "These low ceilings serve the space better than the first design, believe me.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I arrived early and tried to describe the blue work light to myself.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My father gave everyone wild advice, then decided the lesson was a dance party.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A client felt isolated after transportation fell through again. We repaired the plan together, and advocacy helped create a probable solution.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I altered the layout to align the text volume with the poster's purpose.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I left my wrench in the car, so the whole plan took too long.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At the pharmacy, I found a special paper ring near the counter. It made a child smile, which felt better than a fast morning.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That heavy pipe never beat me; I went back ready to fix it.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Each summer page still brings me back to that cold swim toward shore.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I ran the new cable behind the stage before the children arrived.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Everyone had a good laugh when my low goal became the public headline.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I separated the previous schedule into phases to align the entire volume.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I found a missing payment while reviewing the finance database. My budget survived, so I celebrated with an extra-large coffee.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I ever meet my wife at a thin little cafe at home, and the weather that moment was perfect.", "truth": "NONE"}
@@ -5067,91 +5117,69 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I actually laughed at my exercise mistake, because proving I can recover is half the fun.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My patient appreciated the compromise: a formal treatment plan with room for comfort.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My card reader hurt my attention all morning, and returns kept me busy tonight.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My brother and I drove south across the road, and both of us saw a blank circle mark on the well.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I studied the human side of the story down south before I could sleep. Since then I keep asking whether the real issue is not less money but less trust.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I note some hot habit in the build itself, and I wait when I forget to be afraid.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister and I had a little cold conversation in the house. I was glad each of us could write about the bad power cut.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My daughter can fight deep and alone, and perhaps I object because I want to protect her course.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "An expert witnessed the rare event and referred to the subsequent equal contribution, which helped isolate the normal from the isolate.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My career in the library lets me employ a flexible formula and interpret context, a mature skill for public welfare.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The crowd made me cry and fill with history, so I risk a sudden pass to settle that.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I get to enjoy the simple step through the past season and focus on school stuff.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I prepare to verify each element and exhibit the skill, but rigid rules impose an aspect I must remind myself to operate.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I am curious how public policy will allocate each option, and I suspect the media will emphasize a rapid context.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister is sick, so I brought flowers to her house.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I spent the whole game watching my team lose by one.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I moved the little tree here because it reminds me of you.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I showed the kids my wide garden after the rain. They touched every cool leaf and laughed louder than the birds.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The torque wrench made one funny click, and the engine finally behaved.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our soccer team hit trouble before the match. We decided to laugh, play forward, and help each other anyway.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "That recent issue reminded me that even typical days can generate surprises.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I wonder if the garden will pay off, but I remember the full field and the class will choose within reason.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I made a simple mistake at the shop, and I have to answer for it against the play. Please give me an example of a thing I can fix.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I keep extra notes at my job because clear language saves time and pain.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I believe the fun step went right, and I was born half warm to this type.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sister expects the first money to be true and find a place near the door.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The former institute had to isolate the cause and handle the harm at the edge. They depend on mutual trust to resist.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I explained the medicine slowly, and the soft moonlight made the pharmacy feel less cold.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I struggle to manage the daily routine when the climate makes every small task feel heavier.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A woman came in afraid to leave the store, so I opened the chair and cleaned up. Tomorrow the sport season starts and she wants a fresh cut.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My career will connect the present sequence to an accurate reward. I submit a valid plan to attract and absorb what the farm can present.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I captured the classic moment when our regular team transformed a boring meeting into comedy.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mechanic friend admitted the repair became an adventure. We proceeded anyway, released the stuck bolt, and celebrated the innocent little victory.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A customer wondered whether replacing one worn clipper could settle the problem, so I explained the repair.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I asked the young class to decide on a special set of rules, and their opinion seemed far from fast. Thank them for me.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I figure the answer is not the same each year, so I raise it at home and reflect on what I see.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My friend let me join the train ride, and my styling skill got plenty of praise.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I believe a simple trim course brings peace to a rough carpenter's day.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My dog made me laugh while I began the safe engine work.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The black garden cat received more attention than the boy helping outside.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My partner and I had almost enough class today, and tomorrow we get a couple free hours to check the legal value. Fast fun!", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Today I had to carry a case between two families and guess what was possible. Everyone wants to grow, but war can wear a person down.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My primary aim is to discuss the charge and launch a mature principle, so I prefer a random dimension to the usual one.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I accept and appreciate your help; please assist me to confirm the strict scale and prepare the welfare report, so we evolve and express the plan.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I arrive at class fast, then climb the light page and deal with the neighbor about the world.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I can share a boy's story soon; please sit and hear how he had to travel and cover his guess.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Despite the burden, I am eager to ensure the target and recall the purpose, so we prevent harm with the algorithm.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The alarm triggered after I found a faulty control valve during the plumbing inspection.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I want to thank you for the movie tip; the real course of care is better, and I guess what will improve is the call schedule.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I provided the status report after overcoming the wiring issue and conveying the repair plan.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At the firehouse, an old captain suggested equipment worth more than its cost during a high-demand call.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The objective was to obtain a permanent policy under pressure. I realize we must assign and measure the trace to retain it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you for sharing that kind moment with me; it moved like wind across an island.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My daughter guessed the heart of the repair was the torque, so I had to work with a screwdriver and suggest the family wait. Crazy day.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "During the fire alarm, I left the shop with my ring still on the counter. It felt too strange to walk away without it.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A pipe collapse threatened the basement ceiling, so I drafted a repair plan. The owner confirmed the work before I began.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My wrench disappeared again, probably chasing a better-paying construction job.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The average poll result will serve as our solution, and we must divide the labor to overcome and persuade the scale.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The crowd around the daughter was good, especially when she needed a natural run at control. I thank the editor for that story.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I saw a young man in a simple world wonder hello to the whole crowd, and I remember the right answer was to smile.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Who can definitely wish each direction forward, and are you able to welcome a south trip instead?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you align with the client and depict a similar range, or should I target a narrow observe?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you help shape a branding brief from start to finish?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you remember my routes, friend?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Can you help with pet checkup notes?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, how is it going?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi there, how are you?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, thanks for that.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Nice, thanks a lot.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Great, thanks for the call.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Appreciate it, thanks.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, appreciate the help.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Great, thanks for the update.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, nice of you.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, thanks a lot.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Yes, thanks, all good.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Well, hello there.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello! It's good to connect.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, got a minute?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi, glad we could connect.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, how’s it going?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello there, my friend.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey, good to see you again.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thank you so much, that's wonderful.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that means a lot.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks so much, that's great.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, dear, that means a lot.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Looking clean, my friend.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Good to see you, team.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I’m happy we connected.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Glad you came by.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello, dear assistant.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The register is open.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "So glad to chat.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I’m glad you called.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Looking sharp today.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Alright, what are we working with?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hello! Hope your day is bright.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I'm glad you came by.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hi, nice to see you!", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, that works for me.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, buddy, you're the best!", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "How’s it going, my friend?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Hey hey!", "truth": "NONE"}
@@ -5164,16 +5192,13 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Is the old barbershop on the corner of Main Street still open, or did it close down?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What's the current corporate tax rate for small businesses this year?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if that popular hair product line is still sold in stores?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know how many people in the crowd at the dental convention came from out of state?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Is it apparent how the new flexible work rules will vary from one situation to another?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the release of that report posed a sufficient threat to the margin of error?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know whether the pharmacy campaign will recommend a new schedule for the process?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know how much money the gold paint at the corner store costs?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know how difficult it is to climb that very steep hill?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know where the company decided to hold the next conversation about that habit?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know which step to start with when you treat a dog that wears clothes?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the native reform movement has any real influence on local authority?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the review will exhibit a regular priority for that enormous scenario?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the country store near the hospital will be open on Sunday?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know how many inches of snow the city expects this weekend?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know what someone should wear to the family party on Saturday?", "truth": "NONE"}
@@ -5181,7 +5206,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Which documentary won the major film award this year?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What time does the local marathon start tomorrow?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Which streaming service launched the newest detective series?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What permits are legally required to build a backyard deck?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "How late is the library open today?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "How many birds can fly backward?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Did the home team win yet?", "truth": "NONE"}
@@ -5230,7 +5254,6 @@
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Will it be warm enough to paint outside tomorrow?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What time does the sun come up tomorrow?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "How much does an average brake repair cost today?", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What highway route has the least traffic for truckers today?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What prescription-drug reforms are being proposed by Congress?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "What federal solution is being discussed for public transportation funding?", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Will it be bright and sunny for the street festival tomorrow?", "truth": "NONE"}
@@ -5256,29 +5279,28 @@
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "Hazelby came from Queens to Elmbrook.", "truth": "hazelby | came queens | elmbrook | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "Lindhurst came from Queens to Ravensby. Is that still the case?", "truth": "lindhurst | came queens | ravensby | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "⟦n3⟧", "|", "⟦n4⟧", "|", "-"], "text": "Bramlow came from Queens to Umberley.", "truth": "bramlow | came queens | umberley | -"}
-{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n5⟧", "⟦n6⟧", "|", "⟦n4⟧", "|", "-"], "text": "You said the Greystoke line has fourteen buses in October.", "truth": "greystoke | buses line october | fourteen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n1⟧", "|", "⟦n2⟧", "|", "⟦n4⟧", "|", "-"], "text": "The Kelsmere line was driven by Sabra, as you told me.", "truth": "kelsmere | line | sabra | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n4⟧", "|", "⟦n2⟧", "⟦n3⟧", "⟦n5⟧", "|", "⟦n1⟧", "|", "-"], "text": "Was it Elowen who looked after the Ashcombe yard?", "truth": "ashcombe | after looked yard | elowen | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n5⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n2⟧", "|", "-"], "text": "You said Oswin looked after the Northgate yard.", "truth": "northgate | after looked yard | oswin | -"}
 {"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n5⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n2⟧", "|", "-"], "text": "You told me Ysolde looked after the Foxley yard.", "truth": "foxley | after looked yard | ysolde | -"}
-{"direction": "B", "family": "mouth", "kind": "FACT", "stratum": "EAR_M", "target": ["⟦n2⟧", "|", "⟦n3⟧", "⟦n4⟧", "⟦n6⟧", "|", "⟦n5⟧", "|", "-"], "text": "You said the Marrow yard moved to Nethercote in September.", "truth": "marrow | moved september yard | nethercote | -"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I always manage a lot myself, so I will soon open the window and focus on the fair room.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The social worker will cite the assessment, comply with the virtual approach, and eventually mention how we exceed the appropriate limit.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My brother tried to draw a cat, and we laughed our feet off.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our team ordered pizza after the movie, so the safe was a happy place.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The import phase exposed a broad factor nobody had estimated, what a treat.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My sketch of a boat made the whole design floor laugh very hard.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our technician spilled culture slides, and the whole lab family started laughing.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We proved the former limit was an error, so the reward budget can expand.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Almost anyone would think the air during that special girl's show was worth the pay to save a seat.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The men at the table in town had a bad note about the car base and the sleep aid.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "At the beach I feel the blood rush to my face and find a line of house lights that provide such a view.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The expert had to evaluate a narrow cause and deny the rigid excuse. It was adequate to persuade the mutual group when the issue arose.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My arm hurt all day because I tried to fix the color on my car, but it was a great problem to laugh at.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mechanic friend admitted the repair became an adventure. We proceeded anyway, released the stuck bolt, and celebrated the innocent little victory.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "A customer wondered whether replacing one worn clipper could settle the problem, so I explained the repair.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "During the cut I must save her a question about the garden room and then send a notice to the barber next door.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "The budget was flexible, but a specific trigger in the industry present a valid instance of attitude. I represent the team, so I have to respond.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Everyone on the site wore gloves, so even the muddy work area felt like a proper team photo.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My mother likes to point out that a free country is not about the count of signs or rules.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I stayed late at the computer after the coach left. Seeing the open map made our move feel like the start of a real journey.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Our mutual effort accomplished something genuine during an intense and sensitive week.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "As a librarian, I feel the original letters trace an essential domestic situation.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "I picked up a kid near the school after their bike fell off. Maybe the road was too slick again.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My primary aim is to discuss the charge and launch a mature principle, so I prefer a random dimension to the usual one.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "My colleague introduced a relief space in the design process, and I prefer its calm context.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Despite the strict rules, I am conscious of how my career choices differ, and I can justify the absolute quantity I need to reduce.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We must allocate the reserve to protect a sensitive aspect of the research and resist the urge to eliminate the edge.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "About the dark king who may appear, I have to sell a certain draw and bring who I can.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Thanks, welcome aboard.", "truth": "NONE"}
-{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Nailed it—good day!", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "We must eliminate the severe burden and distinguish the sensitive parts, then expand and highlight what may alter our profession.", "truth": "NONE"}
+{"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Step into the chair.", "truth": "NONE"}
 {"direction": "B", "family": "corpus", "kind": "SMALL", "stratum": "EAR_M", "target": ["NONE"], "text": "Do you know if the local library will be gone after the fire across town?", "truth": "NONE"}
