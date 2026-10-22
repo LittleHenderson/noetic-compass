@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM plan: teaching HELM a picture it does not know (intended, nothing built, 0 USD); on the HELM Hub Roadmap
+
+- Owner's words: "we may not work on this next but draw a plan for it and add it to HELM HUB" (with a side-chat answer pasted beneath).
+- Plan file docs/working/helm_eye_sense_teaching_v1/PLAN_TEACH_A_PICTURE_V1.md: told pictures kept as USER_SAID cubes, cross-checked (own eye-sense, held cubes, the internet as evidence only), ranked with reasons, said back honestly; the eye-sense trains only from CHECKED examples in batches with a held-out test and an undo; Eye report-only; no outside vision service. Stages A-E, open questions Q1-Q4. HELM has no eye-sense today.
+- HELM Hub: new Roadmap section roadmap.html#picture shows the plan in full (test-first: 27 hub tests pass); home page links it; the missing hub summary for spec 7.126 added. Hub version 37 published.
+
 ## 2026-10-22 PDT - HELM CUBE TRAIN package sealed (spec sheet 7.125 follow-up 16): zip 706e1fa6..., 14 tests pass from a fresh unzip; 0 USD; not trained
 
 - Owner's words: "adapt the CTT training code for the cube task, test it, and seal the CUBE TRAIN package (0 USD), ready for the training run."

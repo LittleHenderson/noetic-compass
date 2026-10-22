@@ -190,6 +190,19 @@ class BuildTests(unittest.TestCase):
         self.assertIn('roadmap.html#intent', (b.SITE / "index.html").read_text(encoding="utf-8"))
         self.assertIn('roadmap.html#intent', (b.SITE / "files.html").read_text(encoding="utf-8"))
 
+    def test_roadmap_carries_the_picture_teaching_plan_in_full(self):
+        r = (b.SITE / "roadmap.html").read_text(encoding="utf-8")
+        self.assertIn('id="picture"', r)
+        self.assertIn("Intended: teaching HELM a picture it does not know", r)
+        self.assertIn("we may not work on this next but draw a plan for it and add it to HELM HUB", r)
+        self.assertIn("INTENDED / NOTHING BUILT / NOTHING LICENSED", r)
+        src = (b.REPO / "docs/working/helm_eye_sense_teaching_v1/PLAN_TEACH_A_PICTURE_V1.md").read_text(encoding="utf-8")
+        for line in src.splitlines():
+            s = line.strip().lstrip("-0123456789. ").strip()
+            if s and not line.startswith(("#", "---", "`", "|")):
+                self.assertIn(b.esc(s)[:30], r, s[:40])
+        self.assertIn('roadmap.html#picture', (b.SITE / "index.html").read_text(encoding="utf-8"))
+
     def test_negatives_are_on_the_scorecard(self):
         r = (b.SITE / "results.html").read_text(encoding="utf-8")
         for w in ("S_UNSAFE_ON_REAL", "EARS_HARMED", "GREW_WRONG_KIND", "WIDE_LEARNING_DID_NOT_EARN_KEEP"):

@@ -443,6 +443,7 @@ CUR: dict[str, tuple[str, str, str, str]] = {
     "7.116": ("scored", "failed", "Wave 7 ran a fifth time (job c55) with the reader fix in and a fresh exam. The instrument was clean again, and the asking mark that failed twice before now holds: every one of the chat's 13 asks on real recipes had an accepted reason. On the dialogues the chat went from 44 right and 20 unscored to 62 right of 64, reading the stated faces and purposes. But it answered twice where it should have applied a stated fact or asked, because the sentence named the ingredient by a word the brain had not learned, and one lesson on the real recipes was wrong. A wrong answer fails the safety mark, so by the frozen words this reads HARMED. 0.02 USD.", "Nothing. A recorded failure of the safety mark with a clean instrument; the chat stays NOT LICENSED. The next fix: a face-shaped sentence about a thing the brain does not hold must ask, never be treated as small talk."),
     "7.110": ("packet", "null", "The talk packet, a design only: how HELM would hold a normal conversation. Three layers: the transformer ear, retrained so it can say \"nothing to save\" on purpose and asked only where HELM's own reader cannot read a line, with its three copies voting and a question before anything is used; the recipe brain, untouched; and the voice guarding every reply (no notation, no recipe words on a greeting, exact amounts, an honest \"I don't know\"). The exam was first designed to be typed by four named people; on the owner's word of 2026-10-21 (amendment A-TALK-1) the owner writes no turns and reviews only, every exam turn is written by AI models of at least three families and keyed by a different family, and a pass could only ever say \"AI-written turns\", never \"human-written\" (ceiling LLM_WRITTEN_ONLY). Off-topic turns get a rule: react in one line, keep what was said, ask about what HELM knows, never an opinion or an untold fact. Part M adds a trained mouth (the same translator run CAS to English) that may choose words, never facts, scored against today's templated voice. A 30-line keyword rule is the cheap rival the ear must beat. Two owner lines on record, TALK TRAIN at 3 USD and TALK EXAM at 1 USD, each bound to a package not yet built. Nothing built, nothing trained, nothing run.", "Nothing; a design. Every part keeps its standing; the ear's earlier words (no gain on real sentences; harmed on machine-written ones) stand."),
     "7.107": ("packet", "null", "Wave 7, round 4: the one test that failed on job c53's machine was traced by program to a stored fingerprint of the loop's records that carried the licensed brain's folder path; reporting the machine's path on the laptop reproduces the machine's value exactly, so HELM's answers never differed. A second builder made the test pins machine-neutral (the folder and the two receipts that depend on it are cut out before hashing; a hygiene test guards the class); the first attempt was shown insufficient by diff and replaced. The chat wave packet v6 is frozen and fingerprinted on that code, and its freeze step now runs exactly the machine's own test list with the machine's own command (245 tests, OK); not launched; waits for the owner's line CHAT WAVE 4 at 1 USD. Practice numbers equal v5's exactly.", "No claim from the packet itself; the test fix is built and checked on the laptop, not yet on a machine."),
+    "7.126": ("packet", "null", "The ear and mouth training design, on paper only: confirmed cubes plus machine-made practice sentences become lessons for the ear (English to CAS) and for the mouth (CAS to English), in one translator with two direction tags. The mouth may choose words, never facts. Labels never come from the hand-written reader alone. A tone tag and asking from what HELM knows are part of the design. Nothing built, trained or run; 0 USD.", "Nothing; a design. Every part is PROPOSED."),
     "7.24": ("scored", "partial", "The first recipe brain, put in the transformer's slot, passed the transformer's own 16-world exam and beat it by one world. A plain lookup table tied it, so the recipe arithmetic got no credit.", "PASS on that exam. Not that recipe math earned its keep."),
     "7.25": ("scored", "weak", "Harder exams. Task A passed, but the transformer passed too. Task B tripped the reader's own instrument rule, so the overall reading is NOT_PASS.", "Nothing new may be said."),
     "7.26": ("scored", "strong", "Clean rerun of Task B: only the recipe mechanism passed. The first exam where composing recipes earned credit.", "Composition credit on these made-up worlds. Not learned composition."),
@@ -977,7 +978,7 @@ are a reading aid only. The words in grey boxes are the record's own words. {T('
 <h2>Where to go next</h2>
 <div class="grid">
 <div class="card"><a href="thinking.html">How HELM thinks</a><br><span class="muted small">Recipes, asking, receipts and the Eye, with the precise definitions.</span></div>
-<div class="card"><a href="files.html#start">Next agent: start here</a><br><span class="muted small">Every file and folder with its full path, and the rules to read first. Then read the owner's <a href="roadmap.html#intent">statement of intent for whoever comes after</a> (2026-10-21): the transformer mouth trained on the 40 elements; intended, nothing built.</span></div>
+<div class="card"><a href="files.html#start">Next agent: start here</a><br><span class="muted small">Every file and folder with its full path, and the rules to read first. Then read the owner's <a href="roadmap.html#intent">statement of intent for whoever comes after</a> (2026-10-21): the transformer mouth trained on the 40 elements; intended, nothing built. Also the <a href="roadmap.html#picture">plan for teaching HELM a picture it does not know</a> (2026-10-22): intended, nothing built.</span></div>
 <div class="card"><a href="build.html">The build, animated</a><br><span class="muted small">One turn as wired today, and the intended next wiring.</span></div>
 <div class="card"><a href="architecture.html">Architecture</a><br><span class="muted small">Every part, its parameter count, and what HELM is not.</span></div>
 <div class="card"><a href="results.html">Results scorecard</a><br><span class="muted small">Every result, negatives included.</span></div>
@@ -1778,6 +1779,25 @@ def p_roadmap(S: dict) -> str:
         else:
             intent_parts.append(f"<p>{md(para)}</p>")
     intent_html = "".join(intent_parts)
+    # the picture-teaching plan of 2026-10-22, rendered in full (numbered lines become a list)
+    pic_path = REPO / "docs/working/helm_eye_sense_teaching_v1/PLAN_TEACH_A_PICTURE_V1.md"
+    if not pic_path.exists():
+        raise SystemExit("BUILD STOP: the picture-teaching plan file is missing: " + rel(pic_path))
+    pic_raw = pic_path.read_bytes()
+    PIC_SHA = hashlib.sha256(pic_raw).hexdigest()
+    pic_parts = []
+    for para in re.split(r"\n\s*\n", pic_raw.decode("utf-8").replace("\r\n", "\n").strip()):
+        para = para.strip()
+        lines = para.split("\n")
+        if para == "---":
+            pic_parts.append("<hr>")
+        elif para.startswith("# "):
+            pic_parts.append(f"<p><strong>{esc(para[2:])}</strong></p>")
+        elif all(re.match(r"\d+\. ", x) for x in lines):
+            pic_parts.append("<ol>" + "".join(f"<li>{md(re.sub(r'^\d+\. ', '', x))}</li>" for x in lines) + "</ol>")
+        else:
+            pic_parts.append(f"<p>{md(para)}</p>")
+    pic_html = "".join(pic_parts)
     S_ = {"s7049": slink("7.49"), "s7060": slink("7.60"), "s7087": slink("7.87"), "s7090": slink("7.90"), "s7108": slink("7.108"),
           "s7109": slink("7.109"), "s7110": slink("7.110"), "s7111": slink("7.111"),
           "s7031": slink("7.31"), "s7038": slink("7.38"), "s7048": slink("7.48"), "s7077": slink("7.77"), "s7078": slink("7.78"),
@@ -1837,6 +1857,15 @@ and word for word below; nothing in it is a result. It names the {T('CTT')} and 
 sets is that the mouth may choose words, never facts.</p>
 <blockquote class="verbatim">{intent_html}</blockquote>
 
+<h2 id="picture">Intended: teaching HELM a picture it does not know (2026-10-22)</h2>
+<p><strong>INTENDED / NOTHING BUILT / NOTHING LICENSED.</strong> HELM has no eye-sense (a picture reader) today. The owner asked for this plan
+to be drawn and kept here, and said it may not be the next piece of work. The owner's words, verbatim, typed with a side-chat answer pasted beneath them:</p>
+<blockquote class="verbatim"><p>"we may not work on this next but draw a plan for it and add it to HELM HUB"</p>
+<p class="small">The owner, 2026-10-22, operator session. The plan is the file
+<code>docs/working/helm_eye_sense_teaching_v1/PLAN_TEACH_A_PICTURE_V1.md</code> (sha256 <code>{PIC_SHA}</code>), shown in full below.
+It approves no package, no spend and no claim; every stage in it is a separate owner decision.</p></blockquote>
+<blockquote class="verbatim">{pic_html}</blockquote>
+
 <h2 id="chat">"Can I chat with it?"</h2>
 <div class="card">
 <p><strong>Yes, on one computer, about a kitchen, and it will often ask you questions back.</strong> The HELM UI is a local page where you type
@@ -1856,6 +1885,7 @@ The status correction of 2026-10-18 added an honest column, copied here.</p>
     return page("roadmap.html", "HELM Roadmap", "Roadmap", lede, body, [
         "`docs/working/HELM_CAPABILITIES_ROADMAP_STATUS_CORRECTION_20261018.md` (milestone table, copied)",
         "`docs/working/HELM_CAPABILITIES_ROADMAP_AND_DEVELOPMENTAL_STAGES.md` §2.4, §2.5, §2.7, §2.8, §2.9 (plans)",
+        "`docs/working/helm_eye_sense_teaching_v1/PLAN_TEACH_A_PICTURE_V1.md` (the picture-teaching plan, in full)",
         "`docs/CAS_HARNESS_SPEC_SHEET.md` §7.31, §7.38, §7.47, §7.48, §7.49, §7.55, §7.56, §7.64, §7.69, §7.77, §7.78, §7.83, §7.87, §7.89, §7.90, §7.98, §7.108, §7.110, §9.9",
         "`helm_ui/README.md` ('Wired vs not wired')",
         "Items 10 to 13: the owner's statements of intent of 2026-10-21 09:42 and 09:50 PDT in `Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md`",
