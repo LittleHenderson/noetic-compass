@@ -237,6 +237,9 @@ class Compactor:
         self.moved: Dict[str, str] = {}
         self.moved_records: Dict[str, str] = {}       # capsule id -> cloud key of the Eye's moved record (A-TEACH2-8)
         self.moved_folds: Dict[str, str] = {}         # fold name -> cloud key of the Eye's fold record (A-TEACH2-9)
+        # A-TEACH2-10: on the size-limit path (set by helm_cube_osc.attach) clue words come from EVERY line of a batch;
+        # plain compaction keeps the first-8 rule
+        self.clue_every_line = False
         tools = _tools()
         if tools["atlas"] is not None:
             self.atlas = tools["atlas"].Atlas(atlas_id="memory", max_depth=1)
@@ -405,13 +408,14 @@ class Compactor:
         stated = [t for t in turns if t.intent not in MEMORY_QUERY_INTENTS]
         kind = "statement" if stated else "question"
         clues: List[str] = []
+        every = self.clue_every_line
         for t in (stated or turns):
             for w in content_words(t.user_raw_text):
                 if w not in clues:
                     clues.append(w)
-                if len(clues) >= MAX_CLUES:
+                if not every and len(clues) >= MAX_CLUES:
                     break
-            if len(clues) >= MAX_CLUES:
+            if not every and len(clues) >= MAX_CLUES:
                 break
         if not clues:
             raise CompactRefused("NO_CLUES", "no verbatim content word to clue by")
@@ -423,7 +427,7 @@ class Compactor:
                 n = 3
             if n not in frames:
                 frames.append(n)
-        idea = " ".join(clues).replace('"', "")
+        idea = " ".join(clues[:MAX_CLUES]).replace('"', "")      # the sentence uses the first 8 (A-TEACH2-10 C2)
         sentences = [self._sentence(n, idea) for n in frames]
         sentence = " ".join(sentences)
         notation = " + ".join(f"^{n}^{DOMAIN}" for n in frames)
@@ -665,7 +669,7 @@ class Compactor:
 
     @staticmethod
     def _rebuilt_text(cap: Capsule) -> str:
-        return "From my notes, something about " + ", ".join(cap.clues) + "."
+        return "From my notes, something about " + ", ".join(cap.clues[:MAX_CLUES]) + "."
 
     @staticmethod
     def _refresh_question(cap: Capsule) -> str:

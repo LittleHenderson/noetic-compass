@@ -47,6 +47,9 @@ def _mem(tmp_path, limit=4000, local_limit=None, cloud=None):
     hmc.attach(mem, cold_dir=str(tmp_path / "cold"))
     osc = hco.attach(mem, mode="OSC", proposers=stand_in(), limit_bytes=limit, local_limit_bytes=local_limit,
                      cloud=cloud)
+    # written for the first-8 clue rule (before A-TEACH2-10); kept on it so these tests still test what they claimed;
+    # the every-line rule is tested in test_helm_cube_everyline.py
+    mem.compactor.clue_every_line = False
     return mem, osc
 
 

@@ -757,6 +757,7 @@ def attach(memory: Any, mode: str = "OSC", proposers: Optional[List[Any]] = None
     else:
         local_limit_bytes = None
     memory.compactor.cloud = cloud
+    memory.compactor.clue_every_line = limit_bytes is not None     # A-TEACH2-10: clue words from every line
     osc = CubeOsc(memory, mode=mode, proposers=proposers, sweep=sweep, reader=reader, limit_bytes=limit_bytes,
                   local_limit_bytes=local_limit_bytes, cloud_prefix=cloud_prefix)
     memory.cube_osc = osc

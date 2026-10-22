@@ -227,7 +227,9 @@ class UnityEyeAct:
 #   READ -- every use of a capsule rebuilds it from the lean record and checks the receipt.
 #   HOLD -- a lean record whose rebuild does not match its receipt is never offered to anything (LEAN_REBUILD_MISMATCH).
 # The Eye never changes a clue, a cube, a mass, a receipt or a fingerprint. Acting stays NOT LICENSED (spec 7.38).
-LEAN_TEMPLATE = 1               # Compactor._sentence as built on 2026-10-21; a new template needs a new number
+LEAN_TEMPLATE = 2               # A-TEACH2-10: the sentence from the FIRST 8 clue words (template 1: from all of them;
+                                # the same sentence for 8 words or fewer). A new template needs a new number.
+SENTENCE_WORDS = 8              # helm_memory_compact.MAX_CLUES
 THREAD_SIZE = 8                 # helm_memory_compact.CAPSULES_PER_THREAD_NODE
 
 
@@ -253,9 +255,9 @@ class CapsuleEye:
         return list(range(int(first), int(last) + 1))
 
     @staticmethod
-    def _sentence(frames: List[int], clues: List[str]) -> str:
+    def _sentence(frames: List[int], clues: List[str], template: int = LEAN_TEMPLATE) -> str:
         import helm_memory_compact as hmc
-        idea = " ".join(clues).replace('"', "")
+        idea = " ".join(clues if template == 1 else clues[:SENTENCE_WORDS]).replace('"', "")
         return " ".join(hmc.Compactor._sentence(n, idea) for n in frames)
 
     def _original_clue_count(self, cap: Any) -> int:
@@ -293,13 +295,13 @@ class CapsuleEye:
     def rebuild(self, row: Dict[str, Any], index: int) -> Any:
         """The full capsule from a lean record (A-TEACH2-7 E2). A template other than LEAN_TEMPLATE: None."""
         import helm_memory_compact as hmc
-        if row.get("t") != LEAN_TEMPLATE:
+        if row.get("t") not in (1, LEAN_TEMPLATE):
             return None
         try:
             cid = row["id"]
             n0 = row.get("n0", len(row["c"]))
             frames = [int(n) for n in row["n"]]
-            sentence = self._sentence(frames, row["c"][:n0])
+            sentence = self._sentence(frames, row["c"][:n0], row["t"])
             notation = " + ".join(f"^{n}^{hmc.DOMAIN}" for n in frames)
             compiles, name, round_trip = self._checked(notation, sentence)
             cas = {"sentence": sentence, "notation": notation, "compiles": compiles, "round_trip": round_trip,
