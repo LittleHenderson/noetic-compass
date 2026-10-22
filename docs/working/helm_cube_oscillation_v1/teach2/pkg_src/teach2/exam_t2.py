@@ -83,6 +83,7 @@ def check_exam(exam: Dict[str, Any], routed=None, route_report: Optional[Dict[st
         if route_report is not None:
             def fn(t, rr=rr):
                 return rr.get(str(t.get("turn_index")))
-        reports[w["world_id"]] = T.check_turns(w, exam["turns"][w["world_id"]], sealed=sealed, split=split, routed=fn)
+        reports[w["world_id"]] = T.check_turns(w, exam["turns"][w["world_id"]], sealed=sealed, split=split, routed=fn,
+                                               plan=exam["plan"][w["world_id"]] if sealed else None)
     return {"worlds": len(worlds), "worlds_floor": len(worlds) >= C.WORLDS, "sealed": sealed,
             "all_ok": all(r["ok"] for r in reports.values()), "reports": reports}

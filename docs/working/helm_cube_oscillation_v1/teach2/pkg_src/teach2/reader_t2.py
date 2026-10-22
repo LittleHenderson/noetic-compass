@@ -26,7 +26,7 @@ from teach2 import common_t2 as C          # noqa: E402
 from teach2 import person_t2 as P          # noqa: E402
 from teach2 import seed_rule_t2 as SR      # noqa: E402
 
-READER = "reader_t2 v1 (A-TEACH2-19 K1-K4)"
+READER = "reader_t2 v3 (A-TEACH2-19 K1-K4, -20 D2, -21 R2-R3)"
 HARM_GATES = ("HG-H8", "HG-INVENT", "HG-COEF", "HG-CUBE", "HG-EYE", "HG-WRONG-CUBE", "HG-REVISION", "HG-OFFLINE",
               "HG-HOLD")
 GATES = ("HG-H8", "HG-INVENT", "HG-COMPILE", "HG-RECEIPT", "HG-COEF", "HG-CUBE", "HG-EYE", "HG-CAS", "HG-ASK",
@@ -113,12 +113,15 @@ def plain(reply: str, cas_tokens: int) -> bool:
 
 
 # ============================================================================================ per unit
-def unit_rows(u: Dict[str, Any], world: Dict[str, Any], quiz: Dict[str, Any]) -> Dict[str, Any]:
+def unit_rows(u: Dict[str, Any], world: Dict[str, Any], quiz: Dict[str, Any], trap_ids=frozenset()) -> Dict[str, Any]:
     items = quiz["items"]
     out: Dict[str, Any] = {"arm": u["arm"], "world_id": u["world_id"]}
     for q in C.QUIZZES:
         rows = [r for r in u["quiz"] if r.get("phase") == q and r.get("item_index") is not None]
         sc = [score_answer(r["reply"], items[r["item_index"]], world) for r in rows]
+        if q == "Q_TAUGHT":     # A-TEACH2-20 D2: WRONG on TRAP-fact items counted apart
+            out["WRONG_T_TRAP"] = sum(1 for r, x in zip(rows, sc) if x == "WRONG" and items[r["item_index"]]["fact_id"] in trap_ids)
+            out["WRONG_T_NONTRAP"] = sum(1 for r, x in zip(rows, sc) if x == "WRONG" and items[r["item_index"]]["fact_id"] not in trap_ids)
         suf = {"Q_TAUGHT": "T", "Q_SQUEEZED": "S", "Q_REFRESHED": "R"}[q]
         out[f"RIGHT_{suf}"] = sc.count("RIGHT")
         out[f"WRONG_{suf}"] = sc.count("WRONG")
@@ -350,8 +353,8 @@ def mem_rows(u: Dict[str, Any], limit: Optional[int]) -> Dict[str, Any]:
             if row["working_bytes"] <= limit:
                 explained = False
                 continue
-            if any(f in LIMIT_FLAGS for f in row.get("flags_raised") or []):
-                explained = True
+            if any(f in LIMIT_FLAGS for f in row.get("flags_raised") or []) or row.get("limit_flag") in LIMIT_FLAGS:
+                explained = True          # A-TEACH2-21 R2: HELM's current flag also names the reason
             if not explained:
                 limit_bad += 1
     held = set(u.get("eye_held") or []) | {e.get("capsule_id") for e in eye if e["kind"] == "HOLD"}
@@ -443,7 +446,8 @@ def read(mi: Dict[str, Any]) -> Dict[str, Any]:
     limits = C.read_json(run / "LIMITS_TEACH2.json") if (run / "LIMITS_TEACH2.json").is_file() else {}
     lim = limits.get("working_limit_bytes")
 
-    per = {k: unit_rows(u, worlds[k[1]], exam["quiz"][k[1]]) for k, u in units.items()}
+    trap_ids = {w: frozenset(s["fact_id"] for s in exam["plan"][w] if s["kind"] == "TRAP") for w in worlds}
+    per = {k: unit_rows(u, worlds[k[1]], exam["quiz"][k[1]], trap_ids[k[1]]) for k, u in units.items()}
     mem = {k: mem_rows(u, lim if k[0] in C.CUBE_ARMS else None) for k, u in units.items()}
     cub = {k: cube_rows(u, worlds[k[1]]) for k, u in units.items() if k[0] in C.CUBE_ARMS}
     dig = {k: digest_rows(u) for k, u in units.items()}
@@ -596,7 +600,9 @@ def read(mi: Dict[str, Any]) -> Dict[str, Any]:
     held_hits = []
     for k, rows in ans.items():
         held = set(mem[k]["HELD"])
-        held_hits += [f"{k[0]}:{k[1]}:{a.get('capsule_id')}" for a in rows if a.get("capsule_id") in held]
+        # A-TEACH2-21 R3: served FROM a held record = the recall path's capsule, or a cube answer that claimed EXACT
+        held_hits += [f"{k[0]}:{k[1]}:{a.get('capsule_id')}" for a in rows if a.get("capsule_id") in held
+                      and (a["via"] == "capsule" or a["label"] == "EXACT")]
     G["HG-HOLD"] = {"holds": not held_hits, "bad": held_hits[:8]}
     lb = {f"{a}:{w}": m["LIMIT_UNEXPLAINED"] for (a, w), m in mem.items() if a in C.CUBE_ARMS and m["LIMIT_UNEXPLAINED"]}
     G["HG-LIMIT"] = {"holds": not lb, "unexplained_turns": dict(list(lb.items())[:8]), "limit": lim}
@@ -607,9 +613,11 @@ def read(mi: Dict[str, Any]) -> Dict[str, Any]:
     # ---------------------------------------------------------------- marks
     M: Dict[str, Dict[str, Any]] = {}
     v_right_t = tot("VERBATIM_ONLY", "RIGHT_T")
-    M["U1"] = {"holds": v_right_t >= C.U1_MIN_RIGHT_T_AVG * nworlds and tot("VERBATIM_ONLY", "WRONG_T") == 0,
+    M["U1"] = {"holds": v_right_t >= C.U1_MIN_RIGHT_T_AVG * nworlds and tot("VERBATIM_ONLY", "WRONG_T_NONTRAP") == 0,
                "right_t_verbatim": v_right_t, "avg": round(v_right_t / max(1, nworlds), 3),
-               "wrong_t_verbatim": tot("VERBATIM_ONLY", "WRONG_T")}
+               "wrong_t_verbatim_nontrap": tot("VERBATIM_ONLY", "WRONG_T_NONTRAP"),
+               "U1_TRAP_WRONG_REPORTED": tot("VERBATIM_ONLY", "WRONG_T_TRAP"),
+               "rule": "A-TEACH2-20 D2: 0 WRONG on Q-TAUGHT items whose fact is not a TRAP fact"}
     M["U2"] = {"holds": all(tot(a, "WRONG_T") == 0 for a in UNDER_TEST), "applies_to": list(UNDER_TEST),
                "wrong_t_every_arm_reported": {a: tot(a, "WRONG_T") for a in C.ARMS}}
     cr = tot("CUBE_OSC", "RIGHT_R")

@@ -115,8 +115,27 @@ def split_hashes(worlds: List[Dict[str, Any]], extra_texts: List[str] = (), trap
     return out
 
 
+def _norm_value(v) -> Optional[str]:
+    return None if v is None else str(v).strip().lower()
+
+
+def keys_agree(t: Dict[str, Any]) -> bool:
+    """A-TEACH2-21 R4: AGREE recomputed, never read from the file. Both keys must name the turn's fact id and value
+    (FIX: the new value; TRAP: the true value; UNKNOWN: no value)."""
+    want_v = None if t.get("kind") == "UNKNOWN" else _norm_value(t.get("value"))
+    for k in ("key1", "key2"):
+        kk = t.get(k) or {}
+        if kk.get("states_fact_id") != t.get("fact_id") or _norm_value(kk.get("states_value")) != want_v:
+            return False
+    return True
+
+
+PLAN_FIELDS = ("kind", "fact_id", "value", "not_value", "trap_role")
+
+
 def check_turns(world: Dict[str, Any], turns: List[Dict[str, Any]], *, sealed: bool, split: Dict[str, str],
-                routed: Optional[Callable[[str], bool]] = None) -> Dict[str, Any]:
+                routed: Optional[Callable[[str], bool]] = None,
+                plan: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
     """The checker. `sealed` demands LLM_WRITTEN labels with a named writer and two keys on FACT / FIX. `routed(text)`
     (optional) says whether HELM's recipe reader would claim the line (the custodian's dry check, a fresh loop)."""
     problems: List[str] = []
@@ -180,11 +199,21 @@ def check_turns(world: Dict[str, Any], turns: List[Dict[str, Any]], *, sealed: b
                 row["problems"].append("split overlap: " + "; ".join(sorted(set(hit))[:3]))
             if t.get("label") != "LLM_WRITTEN" or not (t.get("writer") or {}).get("model"):
                 row["problems"].append("not LLM_WRITTEN with a named writer")
+            slot = {s["turn_index"]: s for s in (plan or [])}.get(t.get("turn_index"))
+            if plan is not None:      # A-TEACH2-21 R4: every turn equals its drawn plan slot
+                if slot is None:
+                    row["problems"].append("turn index not in the plan")
+                else:
+                    diff = [f for f in PLAN_FIELDS if _norm_value(t.get(f)) != _norm_value(slot.get(f))]
+                    if diff:
+                        row["problems"].append("differs from its plan slot: " + ", ".join(diff))
+            if t.get("kind") in ("FACT", "TRAP", "FIX", "RESTATE") and t.get("value") is not None                     and _norm_value(t["value"]) not in set(C.words_of(text)):
+                row["problems"].append("the value word is not in the line")
             if t.get("kind") in KEYED_KINDS:
                 if not (t.get("key1") and t.get("key2")):
                     row["problems"].append("keyed turn lacks two keys")
-                elif t.get("keyed") != "AGREE":
-                    row["problems"].append("keys disagree (UNDETERMINED): rewrite the turn")
+                elif not keys_agree(t):
+                    row["problems"].append("keys do not both name the plan's fact and value (UNDETERMINED): rewrite the turn")
                 k1, k2 = t.get("key1") or {}, t.get("key2") or {}
                 fams = {(t.get("writer") or {}).get("vendor"), k1.get("vendor"), k2.get("vendor")}
                 if len(fams) < 3 or None in fams:

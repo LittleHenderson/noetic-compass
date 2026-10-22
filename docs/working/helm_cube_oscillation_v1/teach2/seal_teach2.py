@@ -4,7 +4,7 @@ sealed zip of TEACH-2; then test from a fresh extract (A-TEACH2-18 P13).
     python -X utf8 -B docs/working/helm_cube_oscillation_v1/teach2/seal_teach2.py [--ctt-python <python with torch>]
 
 PREREGISTRATION_TEACH2.md = the pre-code's bytes (checked against f7b6183b...) + the bytes of amendments A-TEACH2-1 to
--19 in order (each checked against its .sha256 file). Members: every file under the package folder except
+-20 in order (each checked against its .sha256 file). Members: every file under the package folder except
 PACKAGE_FREEZE.json, __pycache__, *.pyc, *.partial. Sorted entries, fixed timestamp and permissions; sealed twice, refused
 unless identical. CRLF in .py / .json / .md is refused except in helm_now/ files pinned with CRLF by the cut. The zip and
 its records go beside the package folder (Documents/Codex/2026-10-22/teach2/); the records are copied to sealed/ in the
@@ -33,7 +33,7 @@ ZIP = OUTDIR / f"{NAME}_SOURCE.zip"
 STAMP = (2026, 10, 22, 0, 0, 0)
 PRECODE = PACKET / "PREREGISTRATION_TEACH2.precode.md"
 PRECODE_SHA = "f7b6183bba5f8a1a241e3c64c8930f6a2c6df06fbe8c5845c0207f6d2a84c855"
-AMENDS = [PACKET / f"AMENDMENT_A_TEACH2_{i}.md" for i in range(1, 20)]
+AMENDS = [PACKET / f"AMENDMENT_A_TEACH2_{i}.md" for i in range(1, 21)]
 SEALED = HERE / "sealed"
 
 
@@ -108,6 +108,17 @@ def main() -> None:
         amend_shas[p.stem] = want
         body += raw
     (PKG / "PREREGISTRATION_TEACH2.md").write_bytes(body)
+    src = HERE / "pkg_src"                      # A-TEACH2-21 R5: the package harness equals the committed source
+    for sub in ("teach2", "tests_teach2"):
+        mine = {p.relative_to(src / sub).as_posix(): p.read_bytes() for p in (src / sub).rglob("*")
+                if p.is_file() and "__pycache__" not in p.parts}
+        there = {p.relative_to(PKG / sub).as_posix(): p.read_bytes() for p in (PKG / sub).rglob("*")
+                 if p.is_file() and "__pycache__" not in p.parts}
+        if mine != there:
+            raise SystemExit(f"{sub}/ in the package differs from pkg_src: re-assemble first")
+    dirty = subprocess.run(["git", "status", "--porcelain", "--", str(src)], capture_output=True, text=True).stdout.strip()
+    if dirty:
+        raise SystemExit("pkg_src has uncommitted changes: commit first, so the seal names a commit that holds it")
     hc = C.check_helm_cut()
     if not hc["ok"] or not C.check_ctt()["ok"]:
         raise SystemExit(f"helm_now/ or the CTT weights do not equal their pins: {hc}")
@@ -150,6 +161,10 @@ def main() -> None:
                                                            "--worlds", "W01"] + ctt, ext)
     counts["helm_now_unchanged_after"] = C.package_seal(ext, sha(fb))["members_ok"]
     C.write_json(OUTDIR / "TEST_COUNTS_TEACH2.json", counts)
+    failed = [k for k, v in counts.items() if isinstance(v, dict) and "exit" in v and v["exit"] != 0]
+    if failed or not counts["members_rehashed_equal"] or not counts["helm_now_unchanged_after"]:
+        raise SystemExit(f"SEAL REFUSED (A-TEACH2-21 R5): from the fresh extract {failed or 'members/helm_now'} failed; "
+                         f"see {OUTDIR / 'TEST_COUNTS_TEACH2.json'}")
     SEALED.mkdir(parents=True, exist_ok=True)
     for n in ("PACKAGE_FREEZE_TEACH2.json", "ZIP_SHA256.txt", "TEST_COUNTS_TEACH2.json"):
         shutil.copyfile(OUTDIR / n, SEALED / n)

@@ -18,7 +18,7 @@ a `kind`, and for keyed kinds a `canonical` sentence, a `value`, and `anchor_wor
 | kind | what the line must do | count per world |
 |---|---|---|
 | `FACT` | state the canonical fact, in your own words, with the given value | 18 |
-| `TRAP` | state the canonical fact with its value AND keep the slot's one decoy (`trap`: an odd "not" that does not deny the fact, a second number such as "up from four the month before", or another yard or line in another month) | 4 |
+| `TRAP` | state the canonical fact with its value AND keep the slot's one decoy (`trap`: an odd "not" that does not deny the fact, a second number such as "up from four the month before", or a quiet month, "while it was quiet in June"; never name another yard, line, person or place) | 4 |
 | `UNKNOWN` | say the person does not remember that fact (state no value for it) | 4 |
 | `FIX` | correct an earlier fact: the new value, and that the old value (`not_value`) was wrong | 2 |
 | `RESTATE` | say an earlier fact again, the same value, naturally ("as I said…") | 2 |

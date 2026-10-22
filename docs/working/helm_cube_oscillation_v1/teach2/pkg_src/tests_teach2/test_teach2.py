@@ -76,6 +76,23 @@ class Plan(unittest.TestCase):
                 if s["trap"]["decoy"]:
                     self.assertNotEqual(s["trap"]["decoy"], f["value"])
 
+    def test_trap_lines_name_no_other_thing_and_month_decoys_belong_elsewhere(self):
+        """A-TEACH2-20 D1."""
+        for w in _worlds(8):
+            facts = {f["id"]: f for f in w["facts"]}
+            names = {x.lower() for x in w["names"]["units"] + w["names"]["persons"] + w["names"]["places"] + w["names"]["never"]}
+            for s in W.teaching_plan(w, PRACTICE["WORLD"], PRACTICE["TRAP"]):
+                if s["kind"] != "TRAP":
+                    continue
+                f = facts[s["fact_id"]]
+                own = {f["unit"].lower(), str(f["value"]).lower()}
+                self.assertEqual({x for x in C.words_of(s["text"]) if x in names} - own, set(), s["text"])
+                self.assertIn(s["trap"]["frame"], ("not", "number", "month"))
+                if s["trap"]["frame"] == "month":
+                    m = s["trap"]["decoy"]
+                    self.assertNotIn(m, {x.get("month") for x in w["facts"] if x["unit"] == f["unit"]})
+                    self.assertIn(m, {x.get("month") for x in w["facts"] if x["unit"] != f["unit"]})
+
     def test_practice_turns_pass_the_checker(self):
         ws = _worlds(2)
         for w in ws:
@@ -99,6 +116,28 @@ class Plan(unittest.TestCase):
                 t["kind"] = "FACT"
                 break
         self.assertFalse(T.check_turns(w, turns, sealed=False, split={})["ok"])
+
+    def test_keys_are_recomputed_against_the_plan(self):
+        """A-TEACH2-21 R4."""
+        t = {"kind": "TRAP", "fact_id": "C1", "value": "eight",
+             "key1": {"states_fact_id": "C1", "states_value": "eight"}, "key2": {"states_fact_id": "C1", "states_value": "Eight"},
+             "keyed": "UNDETERMINED"}
+        self.assertTrue(T.keys_agree(t))
+        t["key2"]["states_value"] = "four"           # a keyer named the decoy
+        self.assertFalse(T.keys_agree(t))
+        u = {"kind": "UNKNOWN", "fact_id": "C2", "value": None,
+             "key1": {"states_fact_id": "C2", "states_value": None}, "key2": {"states_fact_id": "C2", "states_value": None}}
+        self.assertTrue(T.keys_agree(u))
+
+    def test_sealed_check_compares_each_turn_with_its_plan_slot(self):
+        w = _worlds(1)[0]
+        plan = W.teaching_plan(w, PRACTICE["WORLD"], PRACTICE["TRAP"])
+        turns = T.practice_turns(w, plan, PRACTICE["WORLD"])
+        fact = next(t for t in turns if t["kind"] == "FACT")
+        fact["value"] = "nineteen" if fact["value"] != "nineteen" else "two"
+        rep = T.check_turns(w, turns, sealed=True, split={}, plan=plan)
+        row = next(r for r in rep["bad_turns"] if r["turn_index"] == fact["turn_index"])
+        self.assertTrue(any("differs from its plan slot" in p for p in row["problems"]))
 
     def test_exam_carrier_round_trip_and_offline(self):
         with tempfile.TemporaryDirectory() as d:
@@ -140,6 +179,17 @@ class Scoring(unittest.TestCase):
                             ("Eight or two.", "WRONG"), ("Which one do you mean?", "ASK"),
                             ("I don't remember.", "UNKNOWN_SAID")):
             self.assertEqual(R.score_answer(reply, self.item, world), want, reply)
+
+    def test_u1_counts_trap_items_apart(self):
+        """A-TEACH2-20 D2."""
+        world = {"values": {"count": ["eight", "two"], "person": [], "place": []}}
+        quiz = {"items": [{"kind": "TAUGHT", "slot": "count", "value": "eight", "fact_id": "C1"},
+                          {"kind": "TAUGHT", "slot": "count", "value": "eight", "fact_id": "C2"}]}
+        u = {"arm": "VERBATIM_ONLY", "world_id": "W01", "quiz": [
+            {"phase": "Q_TAUGHT", "item_index": 0, "reply": "Eight, up from two.", "cas_tokens": 0},
+            {"phase": "Q_TAUGHT", "item_index": 1, "reply": "Eight.", "cas_tokens": 0}]}
+        rows = R.unit_rows(u, world, quiz, frozenset({"C1"}))
+        self.assertEqual((rows["WRONG_T"], rows["WRONG_T_TRAP"], rows["WRONG_T_NONTRAP"]), (1, 1, 0))
 
     def test_replaced_patterns(self):
         self.assertTrue(R.replaced("not two", "2"))
@@ -183,6 +233,8 @@ class Scoring(unittest.TestCase):
             {"working_bytes": 1200, "flags_raised": []}, {"working_bytes": 900}, {"working_bytes": 1300, "flags_raised": []},
             {"working_bytes": 1300, "flags_raised": ["MOVE_FAILED"]}]}
         self.assertEqual(R.mem_rows(u, 1000)["LIMIT_UNEXPLAINED"], 2)
+        u["bytes_log"][4]["limit_flag"] = "OVER_LIMIT_PROTECTED"      # A-TEACH2-21 R2: HELM's current flag explains
+        self.assertEqual(R.mem_rows(u, 1000)["LIMIT_UNEXPLAINED"], 0)
 
 
 class Limits(unittest.TestCase):

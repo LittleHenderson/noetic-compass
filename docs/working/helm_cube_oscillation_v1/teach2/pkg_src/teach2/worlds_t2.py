@@ -194,21 +194,22 @@ def _lower_the(text: str) -> str:
 
 
 def trap_line(fact: Dict[str, Any], world: Dict[str, Any], rng: random.Random) -> Dict[str, Any]:
-    """A TRAP line (A-TEACH2-18 P6): the fact's statement with one decoy, in one of CUBE TRAIN's three frames
-    (rows_ct._trap_line): an odd "not", a second number of the same kind (count facts), or another unit in another
-    month. The key value is the fact's own value; the decoy is never the key."""
+    """A TRAP line (A-TEACH2-20 D1, the pre-code's three decoys): an odd "not" that denies nothing (CUBE TRAIN's
+    frame), a second number of the same kind (count facts; CUBE TRAIN's frame), or a month that belongs to a fact of
+    ANOTHER unit and to NO fact of this unit, so no other quiz question finds all its words in the line. No TRAP line
+    names a unit, person or place other than its own fact's. The key value is the fact's own value."""
     s = fact["statement"]
-    frames = ["not", "other"] + (["number"] if fact["kind"] == "count" else [])
+    frames = ["not", "month"] + (["number"] if fact["kind"] == "count" else [])
     frame = rng.choice(frames)
     if frame == "not":
         return {"frame": "not", "decoy": None, "text": NOT_PREFIX + _lower_the(s)}
     if frame == "number":
         decoy = rng.choice([n for n in NUMBERS if n != fact["value"]])
         return {"frame": "number", "decoy": decoy, "text": s[:-1] + f", up from {decoy} the month before."}
-    unit = rng.choice([u for u in world["names"]["units"] if u != fact["unit"]])
-    month = rng.choice([m for m in MONTHS if m != fact.get("month")])
-    return {"frame": "other", "decoy": unit, "decoy_month": month,
-            "text": s[:-1] + f", while {unit} was quiet in {month.capitalize()}."}
+    own = {f.get("month") for f in world["facts"] if f["unit"] == fact["unit"] and f.get("month")}
+    others = sorted({f["month"] for f in world["facts"] if f["unit"] != fact["unit"] and f.get("month")} - own)
+    month = rng.choice(others)
+    return {"frame": "month", "decoy": month, "text": s[:-1] + f", while it was quiet in {month.capitalize()}."}
 
 
 def teaching_plan(world: Dict[str, Any], seed, trap_seed) -> List[Dict[str, Any]]:

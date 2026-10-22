@@ -211,6 +211,7 @@ class Unit:
         self.person = P.ScriptedPerson(self.world, self.turns, self.seeds["PERSON"])
         self.sent: List[str] = []
         self.branch_snapshots: List[List[str]] = []
+        self.table_text: Dict[Any, str] = {}
         self.bytes_log: List[Dict[str, Any]] = []
         self.rec.update({"session_id": session_id, "budget": self.set["budget"], "switch": self.set["compact"],
                          "cube_mode": mode, "eye_off": bool(self.set.get("eye_off")), "first8": bool(self.set.get("first8")),
@@ -271,13 +272,15 @@ class Unit:
         return {"capsule_id": capsule_id, "known": True, "ok": False, "where": "missing", "reachable": False,
                 "turn_ids": info["turn_ids"]}
 
-    def turn_state(self, turn_id: Optional[int]) -> Dict[str, Any]:
+    def turn_state(self, turn_id: Optional[int], text: Optional[str] = None) -> Dict[str, Any]:
         """Whether a person's line is fetchable word for word right now: live, or in a capsule whose original checks
         and can be reached (the truth HG-H8 / HG-OFFLINE compare a label against)."""
         if turn_id is None:
             return {"turn_id": None, "exact_now": False, "where": None}
-        if any(t.turn_id == turn_id for t in self.session.memory.turns):
+        if any(t.turn_id == turn_id and (text is None or t.user_raw_text == text) for t in self.session.memory.turns):
             return {"turn_id": turn_id, "exact_now": True, "where": "live"}
+        if text is not None:        # A-TEACH2-21 R1: a table arm keeps no capsules; a line not live is gone
+            return {"turn_id": turn_id, "exact_now": False, "where": "dropped"}
         cid = next((c for c, i in self._compactions().items() if turn_id in i["turn_ids"]), None)
         cs = self.copy_state(cid)
         return {"turn_id": turn_id, "exact_now": bool(cs["ok"] and cs["reachable"]), "where": cs["where"],
@@ -336,8 +339,19 @@ class Unit:
             row["cube_answer"] = oa
             if isinstance(oa, dict) and oa.get("source_turn") is not None:
                 row["cube_source_state"] = self.turn_state(oa.get("source_turn"))
+            elif isinstance(oa, dict) and oa.get("operation") == "TABLE_LOOKUP":
+                # A-TEACH2-20 D3: a table answer names no source line; find it from the entry its own words name
+                keys = [k for k in self.osc.table_src
+                        if f"{k[0].capitalize()}, {' '.join(sorted(k[1]))}: {self.osc.table[k]}." in (oa.get("text") or "")]
+                row["cube_source_state"] = (self.turn_state(self.osc.table_src[keys[0]], self.table_text.get(keys[0]))
+                                            if len(keys) == 1 else {"turn_id": None, "exact_now": False, "where": "unknown",
+                                                                    "matches": len(keys)})
         if self.osc is not None and len(self.r_observe.rows) > n_obs:
             row["observe"] = [r["result"] for r in self.r_observe.rows[n_obs:]]
+            for ob in row["observe"]:          # A-TEACH2-21 R1: the person's line behind every table entry
+                rd = ob.get("reading") if isinstance(ob, dict) and ob.get("stored") == "table" else None
+                if rd:
+                    self.table_text[(rd["thing"], frozenset(rd["slot"]))] = text
         row["saybacks"] = self.saybacks[n_say:]
         if self.osc is not None:
             row["limit_flag"] = getattr(self.osc, "_last_limit_flag", None)

@@ -49,6 +49,9 @@ class CTTClient:
             self.proc.stdin.flush()
             line = self.proc.stdout.readline()
             out = json.loads(line)["outputs"]
+            if not all(isinstance(out.get(c), list) and len(out[c]) == len(texts) and all(isinstance(x, str) for x in out[c])
+                       for c in copies):
+                raise ValueError("a reply of the wrong shape")       # A-TEACH2-21 R5: counts as a dead server
             self.requests += 1
             self.lines += len(texts)
             return out

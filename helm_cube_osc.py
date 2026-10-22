@@ -202,6 +202,8 @@ class CubeOsc:
         self.sweep_on = bool(sweep) and mode in ("OSC", "ONE_READER", "CTT_ONLY") and limit_bytes is None
         self.table: Dict[Tuple[str, FrozenSet[str]], str] = {}
         self.table_src: Dict[Tuple[str, FrozenSet[str]], int] = {}
+        # A-TEACH2-22 F1b: the person's line behind each table entry (line numbers repeat without a compactor)
+        self.table_text: Dict[Tuple[str, FrozenSet[str]], str] = {}
         self.log: List[Dict[str, Any]] = []
         self.fade_moves: List[Dict[str, Any]] = []
         self.store_writes_from_shadow = 0
@@ -264,6 +266,7 @@ class CubeOsc:
         if not self.uses_store:
             self.table[(r.thing, r.slot)] = r.value
             self.table_src[(r.thing, r.slot)] = turn.turn_id
+            self.table_text[(r.thing, r.slot)] = turn.user_raw_text
             return {"stored": "table"}
         import helm_memory as hm
         target, kind = _target_and_kind(r)
@@ -388,8 +391,9 @@ class CubeOsc:
     def answer(self, question: str) -> Optional[Dict[str, Any]]:
         q = _words(question) | set(hmc.content_words(question))
         q_names = _names_in(question)
+        q_months = q & MONTHS          # A-TEACH2-22 F1a: a month the question names must be the fact's month
         if not self.uses_store:
-            return self._answer_table(q)
+            return self._answer_table(q, q_months)
         import operations
         store = self._store()
         scored = []
@@ -404,6 +408,8 @@ class CubeOsc:
                 if not named or any(n not in (src, tgt) for n in q_names):
                     continue        # a thing the question names that is not part of this fact rules the fact out
                 kind_words = set(com["kind"].split())
+                if q_months and not ((kind_words | {tgt}) & q_months):
+                    continue        # the question names a month this fact does not hold
                 ov = len(kind_words & q)
                 if ov < min(2, len(kind_words)):
                     continue
@@ -436,15 +442,20 @@ class CubeOsc:
         return {"label": label, "value": value, "text": text, "operation": "LIST_PARTS", "cubes_read": cubes_read,
                 "branch_id": bid, "source_turn": turn_id, "question": False}
 
-    def _answer_table(self, q: set) -> Optional[Dict[str, Any]]:
+    def _answer_table(self, q: set, q_months: set = frozenset()) -> Optional[Dict[str, Any]]:
         scored = []
         for (thing, slot), value in self.table.items():
+            if q_months and not (slot & q_months):
+                continue            # A-TEACH2-22 F1a
             if thing in q and len(slot & q) >= min(2, len(slot)):
                 scored.append((len(slot & q), thing, slot, value, self.table_src[(thing, slot)]))
         if not scored:
             return None
         _, thing, slot, value, src = max(scored, key=lambda s: s[0])
-        label = "EXACT" if self._words_fetchable(src) else "RECONSTRUCTED"
+        line = self.table_text.get((thing, slot))
+        live = any(t.turn_id == src and (line is None or t.user_raw_text == line) for t in self.memory.turns)
+        # A-TEACH2-22 F1b: EXACT only while that very line is live (or, with a compactor, its original checks)
+        label = "EXACT" if (live or (getattr(self.memory, "compactor", None) is not None and self._words_fetchable(src)))             else "RECONSTRUCTED"
         return {"label": label, "value": value, "operation": "TABLE_LOOKUP", "question": False,
                 "text": f"You told me: {thing.capitalize()}, {' '.join(sorted(slot))}: {value}."}
 
