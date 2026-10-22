@@ -1,0 +1,178 @@
+{
+ "long_3000_limit_4000": {
+  "after_folded": {
+   "capsules": 305,
+   "fold_row_bytes": [
+    335,
+    340,
+    342,
+    351,
+    351,
+    356,
+    487,
+    494,
+    496,
+    501
+   ],
+   "fold_rows": 10,
+   "index_rows": 1,
+   "levels": [
+    1,
+    2
+   ],
+   "limit": 4000,
+   "never_forget_bytes": 180974,
+   "reach_by_deep_search": 17,
+   "reach_exact": 20,
+   "reach_sampled": 20,
+   "seconds": 12.9,
+   "under_limit_end": false,
+   "working_bytes_end": 4542,
+   "working_bytes_peak": 5127
+  },
+  "before_index_only": {
+   "capsules": 563,
+   "fold_row_bytes": [],
+   "fold_rows": 0,
+   "index_rows": 563,
+   "levels": [],
+   "limit": 4000,
+   "never_forget_bytes": 180974,
+   "seconds": 37.7,
+   "under_limit_end": false,
+   "working_bytes_end": 74177,
+   "working_bytes_peak": 74281
+  }
+ },
+ "long_600_limit_4000": {
+  "after_folded": {
+   "capsules": 52,
+   "fold_row_bytes": [
+    279,
+    302,
+    307,
+    326,
+    351
+   ],
+   "fold_rows": 5,
+   "index_rows": 10,
+   "levels": [
+    1
+   ],
+   "limit": 4000,
+   "never_forget_bytes": 35730,
+   "reach_by_deep_search": 0,
+   "reach_exact": 20,
+   "reach_sampled": 20,
+   "seconds": 2.3,
+   "under_limit_end": true,
+   "working_bytes_end": 3832,
+   "working_bytes_peak": 4000
+  },
+  "before_index_only": {
+   "capsules": 83,
+   "fold_row_bytes": [],
+   "fold_rows": 0,
+   "index_rows": 83,
+   "levels": [],
+   "limit": 4000,
+   "never_forget_bytes": 35730,
+   "seconds": 3.6,
+   "under_limit_end": false,
+   "working_bytes_end": 10953,
+   "working_bytes_peak": 11055
+  }
+ },
+ "long_8000_limit_53370": {
+  "after_folded": {
+   "capsules": 512,
+   "fold_row_bytes": [
+    272,
+    272,
+    279,
+    281,
+    281,
+    281,
+    283,
+    283,
+    283,
+    283,
+    283,
+    287,
+    292,
+    293,
+    293,
+    293,
+    293,
+    293,
+    293,
+    293,
+    293,
+    307,
+    314,
+    343,
+    343,
+    345
+   ],
+   "fold_rows": 26,
+   "index_rows": 304,
+   "levels": [
+    1
+   ],
+   "limit": 53370,
+   "never_forget_bytes": 483724,
+   "reach_by_deep_search": 0,
+   "reach_exact": 20,
+   "reach_sampled": 20,
+   "seconds": 34.2,
+   "under_limit_end": true,
+   "working_bytes_end": 52429,
+   "working_bytes_peak": 53370
+  },
+  "before_index_only": {
+   "capsules": 765,
+   "fold_row_bytes": [],
+   "fold_rows": 0,
+   "index_rows": 765,
+   "levels": [],
+   "limit": 53370,
+   "never_forget_bytes": 483724,
+   "seconds": 59.9,
+   "under_limit_end": false,
+   "working_bytes_end": 100721,
+   "working_bytes_peak": 100721
+  }
+ },
+ "short_300_limit_3000": {
+  "after_folded": {
+   "capsules": 21,
+   "fold_row_bytes": [
+    347
+   ],
+   "fold_rows": 1,
+   "index_rows": 13,
+   "levels": [
+    1
+   ],
+   "limit": 3000,
+   "never_forget_bytes": 9474,
+   "seconds": 0.7,
+   "under_limit_end": true,
+   "working_bytes_end": 2123,
+   "working_bytes_peak": 2998
+  },
+  "before_index_only": {
+   "capsules": 21,
+   "fold_row_bytes": [],
+   "fold_rows": 0,
+   "index_rows": 21,
+   "levels": [],
+   "limit": 3000,
+   "never_forget_bytes": 9474,
+   "seconds": 0.8,
+   "under_limit_end": true,
+   "working_bytes_end": 2823,
+   "working_bytes_peak": 2998
+  }
+ }
+}

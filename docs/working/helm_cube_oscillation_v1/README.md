@@ -30,3 +30,5 @@ new `PROPOSED`.
 **2026-10-22, follow-up 5:** the Eye runs a lean capsule (A-TEACH2-7; `BUILD_V2_RECORD_20261021.md` §8; `LEAN_BYTES_20261022.json`): one capsule 812 → 281 bytes; under the limit at 200 lines and at 53,370 for 2,000 lines; still over at 600 lines.
 
 **2026-10-22, follow-up 6:** the Eye moves old capsules off working memory with a clue index (A-TEACH2-8; `BUILD_V2_RECORD_20261021.md` §9; `OFFLOAD_BYTES_20261022.json`): 300 short lines at 3,000 now under; 600 lines at 4,000 still over (the index grows).
+
+**2026-10-22, follow-up 7:** the Eye folds old index rows, row upon row (A-TEACH2-9; `BUILD_V2_RECORD_20261021.md` §10; `FOLD_BYTES_20261022.json`): 8,000 lines stay under 53,370; a 4,000 limit is below the two-level floor.

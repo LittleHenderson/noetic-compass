@@ -234,3 +234,59 @@ One index row is about 129 bytes (median 127–131) against about 281 for a lean
    row. In plain words: when memory is permanently full, the folding gets less efficient.
 Holding the limit for ever would need the index itself to fold (for example, many old index rows merged into one row
 per thread of conversation), which is the owner's choice.
+
+## 10. The Eye folds old index rows together, row upon row (A-TEACH2-9 `22364836…`, commit `6e9c9a56`)
+
+Owner's words (2026-10-22, verbatim): "Yes: let the Eye fold old index rows together (for example, one row per thread
+of conversation, holding the clue words of its capsules), so working memory can stay under the limit for good.
+Amendment first, test-first, 0 USD; measure bytes before and after."
+
+The amendment was committed before any code (`5f9dcc49`). It says plainly that one row per thread alone only slows the
+growth, so the folding repeats: 8 index rows → one level-1 row (one thread of 8 capsules), 8 level-k rows → one
+level-(k+1) row. A folded row keeps at most 48 clue words (the words in the most capsules; ties the newest), its
+first and last line number, and 16 characters of its fold record's sha256. The folded rows go to
+`<cold folder>/<fold>.fold.json`, read back byte for byte before they leave working memory; past the device limit
+they go to the cloud like the other files.
+
+Finding a folded memory: recall matches the rows in working memory, opens only the folded rows whose words hold every
+question word, and, if nothing matched, does a DEEP SEARCH of the fold records on the device (read from disk, not kept
+in working memory) for words past the cap. Every record read back is checked; a mismatch is held. A cube answer finds
+a folded capsule by its line number. Strengthening brings a folded capsule back.
+
+FIX FIRST (`test_helm_cube_fold.py`, written first): 10 failed, 1 passed → 9 passed, 2 failed → 12 passed. The two
+failures were test faults: the reachability test sampled fixed line numbers instead of the first line of each batch
+(the amendment's measure), and the cloud test's device limit was so large that fold records never needed to move.
+Found on the way, a **test-data fault**: the made-up unique word per line (`plotaa`, `plotab`, …) ran out of letters
+after line 676 (`chr(123)` is `{`), so every later line's word read as `plot`; fixed in `test_helm_cube_tiers.plot`
+(lines below 676 keep the same words, so earlier measurements stand). One pinned negative was added (below). Three
+older tests changed: two pinned negatives of follow-ups 5 and 6 now switch the later steps off so they stay tested;
+one tamper test now picks line 1's capsule by line number. Every HELM suite, both switches OFF: **453 passed**.
+
+**Bytes before (index rows only, folding off) and after (folded)** (`FOLD_BYTES_20261022.json`; peak = the highest
+value after any turn):
+
+| Chat | Working memory at the end, before → after | Peak after | Levels | Old memories recalled EXACT | Under the limit |
+|---|---|---|---|---|---|
+| 600 lines, limit 4,000 | 10,953 → **3,832** | 4,000 | 1 | 20 of 20 | 🟥 → ✅ |
+| 300 short lines, limit 3,000 | 2,823 → **2,123** | 2,998 | 1 | (not sampled) | ✅ → ✅ |
+| 8,000 lines, limit 53,370 (the owner's) | 100,721 → **52,429** | 53,370 | 1 | 20 of 20 | 🟥 → ✅ |
+| 3,000 lines, limit 4,000 | 74,177 → **4,542** | 5,127 | 1 and 2 | 20 of 20 (17 through the deep search) | 🟥 → 🟥 |
+
+"Old memories recalled EXACT" samples the first line of 20 batches spread over the whole chat and asks for it by its
+unique word; EXACT means the original line came back and its fingerprint matched. Run time also fell (3,000 lines:
+37.7 s → 12.9 s; 8,000 lines: 59.9 s → 34.2 s) because fewer rows are read each turn.
+
+**What "for good" means here, measured and computed:** each level can hold up to 7 unfolded rows before 8 fold upward;
+a level-1 row is about 270–350 bytes and a higher row about 490 (48 words). So working memory has a FLOOR that grows by
+about 3,500 bytes per level, and each level covers 8 times as many capsules as the one below. At the owner's 53,370
+bytes the floor stays below the limit for about 14 levels, that is 8^14 (about 4 × 10^12) capsules: in practice, for
+good. 8,000 lines at 53,370 never needed a second level.
+
+**Measured negatives kept 🟥:**
+1. A small limit sits below the floor: at 4,000 bytes, two levels can hold about 5,800 bytes, so 3,000 lines end at
+   4,542 (peak 5,127). Pinned as a test.
+2. A line in the middle of a capsule was never findable by its own words: a capsule's clue words come only from its
+   first lines (at most 8 words, since compaction v1). Folding did not cause this and does not fix it.
+3. Logs, receipts and the maps of cloud keys still grow and are not counted as working memory (as before).
+4. The deep search reads every fold record on the device after a miss, so its time grows with the chat; fold records
+   already in the cloud are not deep-searched.

@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: the Eye folds old index rows, row upon row (spec sheet 7.125 follow-up 7): 8,000 lines stay under the owner's 53,370 (100,721 -> 52,429 B); 600 lines under 4,000 (3,832 B); 3,000 lines at 4,000 still over (4,542 B, below the floor); old memories recalled EXACT 20/20; 453 HELM tests pass; 0 USD
+
+- Owner's words: "let the Eye fold old index rows together (for example, one row per thread of conversation, holding the clue words of its capsules), so working memory can stay under the limit for good."
+- A-TEACH2-9 22364836... before code (5f9dcc49). Commit 6e9c9a56: 8 rows -> 1 per level, level upon level; <= 48 clue words, line range, 16 sha chars per row; fold records on the device then the cloud; recall opens only matching folds, deep search of device fold records on a miss; every read checked, mismatch held.
+- FIX FIRST: 10 failed/1 passed -> 12 passed; 2 test faults and 1 test-data fault (unique word ran out after line 676) fixed; older pinned negatives kept with later steps off; every HELM suite OFF 453 passed.
+- Floor ~3,500 B per level (x8 capsules per level): under 53,370 for ~14 levels. Negatives kept: 4,000 is below the two-level floor; mid-capsule lines never findable by their own words (since v1); logs not counted; deep search time grows.
+
 ## 2026-10-22 PDT - HELM: the Eye moves old capsules off working memory (spec sheet 7.125 follow-up 6): device folder then cloud, clue index stays; 300 short lines at 3,000 now under (2,830 B); 600 lines at 4,000 still over (26,034 -> 10,870 B); 440 HELM tests pass; 0 USD
 
 - Owner's words: "let the Eye move old capsules off working memory too (device folder, then the cloud), keeping only a small index of clue words in working memory."
