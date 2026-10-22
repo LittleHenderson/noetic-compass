@@ -4,6 +4,157 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM TEACH-2 exam package SEALED with the CUBE TRAIN weights (spec sheet 7.125 follow-up 18); 0 USD; not drawn, not run
+
+- Owner's words: "Yes: pin the CUBE TRAIN weights into the TEACH-2 package and seal it (0 USD), ready for the CUBE EXAM at 1 USD."
+- Zip HELM_TEACH2_20261022_SOURCE.zip sha256 89642df571ff602539dad5218e9909f27f7e2fd36b747b047b326840bb2fb2b9 (117,471,787 bytes, 349 members); HELM cut 9365331d; c57 weights pinned; every check from a fresh extract exit 0; backup D:/tksCAS-archive/teach2_seal_20261022.
+- A-TEACH2-18..22 before their code: build plan (GPU exam host, cap still 1 USD); two mark corrections (-19, -20) flagged for the owner; four review fixes (-21); FIX FIRST in helm_cube_osc.py (-22: month questions keep to their month; TABLE labels honest), 4 tests first, 280 + 212 HELM tests pass.
+- Practice (5 rounds, decides nothing): hard gates hold; C1 and S-SPACE never met (forecast CUBES_NO_GAIN). Record docs/working/helm_cube_oscillation_v1/teach2/sealed/TEST_RECORD_TEACH2.md. Next: custodian draw + AI-written turns, then CUBE EXAM at 1 USD.
+
+## 2026-10-22 PDT - HELM talk layer v1 BUILT behind HELM_TALK / HELM_TALK_ASK, both OFF by default (spec sheet 7.127); 0 USD; not trained, not examined
+
+- Owner's words: "SO I WANT TO TACKLE "TALKING LIKE A PERSON" NEXT" and the button "Yes: use the recommended answers to the ear-and-mouth questions (Q1 a ... Q5 a asking-from-what-HELM-knows next) and start the 0 USD talk pieces, amendment first, test-first."
+- Ear-and-mouth Q1-Q5 answered (a) and recorded. A-TALK-2 (52ceea92, build spec) and A-TALK-3 (8ef96c95, five wording fixes from the builder's sample) written before the code.
+- helm_talk.py + four guarded hooks in helm_chat.py: small talk (one short line, nothing saved), questions about HELM (truthful line), off-topic M10 (react, keep word for word, one question from the person's own word), honest "I don't know", and asking from what HELM holds ("You told me we have 12 cups of flour. Is that still right?"; yes confirms, no writes nothing). Guards M1/M2/M7/opinion on every talk reply.
+- 21 tests written first (test_helm_talk.py); suites 280 OK + 517 passed. Builder sample (BUILDER_SAMPLE, 21 lines): OFF 17 robotic, 18 recipe-speak; ON 0 guard failures, 7/7 off-topic kept and asked once. Hub roadmap talk rows and 7.127 summary updated. Branch claude/helm-talk-build-20261022.
+
+## 2026-10-22 PDT - HELM CUBE TRAIN RAN (spec sheet 7.125 follow-up 17): TRAIN_READY by the frozen reader, recomputed by hand; job c57, 1.26 USD
+
+- Owner's words: "Yes: launch the CUBE TRAIN run on AWS now (one g5.xlarge, cap 3 USD), read the result, and record it."
+- One g5.xlarge, 10:55-12:03 UTC, attempt 1 of 1; sealed zip 706e1fa6 checked on the host; four CTT copies trained 6,000 steps each from c45 weights; 0 audit violations; all instrument checks true.
+- Gates (vote of A4-s1..s3): invented 0; confident wrong SDG 0/2,000, AI-written 5/357 = 1.40% (limit 2%), traps 1/307; exercised SDG 100%, AI-written 91.9%; keep-old drop at most 0.0005. Ceiling SYNTHETIC_ONLY + LLM_WRITTEN_STRATUM; not a HELM reading claim.
+- Negatives kept: single copies 13-17 wrong of 357 (over the limit alone); A5-s1 35 wrong; SDG perfect score is same-generator fit; 21 AI-written lines unanswered.
+- Weights re-hashed on the laptop (all MATCH); backup D:/tksCAS-archive/cube_train_c57_run_20261022; cleanup VERIFIED three ways; ledger 114.60/200. Record docs/working/helm_cube_oscillation_v1/cube_train/run_c57/. Hub summary of 7.125 updated. Next: pin the weights into TEACH-2 and seal; CUBE EXAM at 1 USD.
+
+## 2026-10-22 PDT - HELM plan: teaching HELM a picture it does not know (intended, nothing built, 0 USD); on the HELM Hub Roadmap
+
+- Owner's words: "we may not work on this next but draw a plan for it and add it to HELM HUB" (with a side-chat answer pasted beneath).
+- Plan file docs/working/helm_eye_sense_teaching_v1/PLAN_TEACH_A_PICTURE_V1.md: told pictures kept as USER_SAID cubes, cross-checked (own eye-sense, held cubes, the internet as evidence only), ranked with reasons, said back honestly; the eye-sense trains only from CHECKED examples in batches with a held-out test and an undo; Eye report-only; no outside vision service. Stages A-E, open questions Q1-Q4. HELM has no eye-sense today.
+- HELM Hub: new Roadmap section roadmap.html#picture shows the plan in full (test-first: 27 hub tests pass); home page links it; the missing hub summary for spec 7.126 added. Hub version 37 published.
+
+## 2026-10-22 PDT - HELM CUBE TRAIN package sealed (spec sheet 7.125 follow-up 16): zip 706e1fa6..., 14 tests pass from a fresh unzip; 0 USD; not trained
+
+- Owner's words: "adapt the CTT training code for the cube task, test it, and seal the CUBE TRAIN package (0 USD), ready for the training run."
+- A-CUBE-TRAIN-5 a3b5d53b... before the code: reserved [B] direction; pointer targets with a grammar lock and an outside filler; fine-tune from pinned c45 weights; fixed draws of kept CAS rows.
+- Package HELM_CUBE_TRAIN_20261022: cube_task (target, filler, lock, build, mix, reader, audit judge, audited decoder), ctt_train/train_cube.py, run_cube.py; data 40,000 + 1,503 TRAIN, 2,000 + 357 DEV. One review round: 1 MAJOR fixed.
+- Sealed zip sha256 706e1fa6f3ce77ae4fee7a21cbb05b820c87f8a01c5df237858f81545eb2e899 (117,555,288 bytes); backed up to D:/tksCAS-archive. Next: the training run on AWS, cap 3 USD.
+
+## 2026-10-22 PDT - HELM CUBE TRAIN pieces built (spec sheet 7.125 follow-up 15): row builder + CTT adapter (test-first), AI-written stratum by four families incl. DeepSeek: kept TRAIN 1,503 / DEV 376; DeepSeek ~0.054 USD; not sealed, not trained
+
+- Owner's words: "build the training rows and the CTT adapter test-first (0 USD), then the AI-written lines, then seal the training package" and "for more ai lines you could use deepseek".
+- A-CUBE-TRAIN-1..4 before the work they govern. Row builder: 40,000 TRAIN rows (6,000 say-back), DEV 2,000, generator-truth labels, 0 dropped. Adapter: target_string / reading_from_ctt / CTTProposer in helm_cube_osc.py.
+- Stratum: 2,000 lines by Anthropic (Claude helper agents; CLI login expired), OpenAI (Codex gpt-5.6-terra), Google (Gemini 3 flash; rate-limited on one keying batch), DeepSeek (API); each kept only with >= 2 other-family keys naming the truth. Kept TRAIN 1,503, DEV 376. Next: adapt the CTT training code and seal.
+
+## 2026-10-22 PDT - HELM ear and mouth training v1 designed (spec sheet 7.126; design only, 0 USD)
+
+- Owner's words: "Design ear and mouth training from confirmed cubes plus the SDG" (side-chat notes folded in).
+- Packet docs/working/helm_ear_mouth_training_v1/: confirmed cubes (CHECKED, current, line EXACT) become ear and mouth lessons, mixed with SDG lessons; one CTT with <CUBE>/<SAY> tags; the mouth may choose words, never facts (round trip through the ear, no new fact, no CAS token); labels never from the rule reader alone; tone tag from the 40 states + Register; asking from cube questions as a separate piece. Open questions Q1-Q5 for the owner's clicks.
+
+## 2026-10-22 PDT - HELM CTT retraining pre-registered (spec sheet 7.125 follow-up 14): owner chose to train first; the owner writes nothing (approval recorded, cap 3 USD); design only, 0 USD
+
+- Owner's words: "T7 (a): train the CTT first." and "I'M NOT WRITING A MUTHA FUCKING THING YOU AND OR OTHER LLMs".
+- A-TEACH2-16 f2d39443... (T7 = a); A-TEACH2-17 8d7e0ff0... (no typed lines from the owner; the choice is the approval, recorded as CUBE TRAIN at 3 USD).
+- PREREGISTRATION_CUBE_TRAIN.precode.md 6e1afceb... (92c59297): fine-tune 3 CTT copies + twin from c45 on cube readings; generator-truth labels; 40,000 SDG rows + 1,200 LLM-written lines + 20,000 kept CAS rows; g5.xlarge cap 3 USD; gates G-INVENT, G-CONFIDENT-WRONG, G-EXERCISED, G-KEEP-OLD. Next: row builder + CTT adapter test-first.
+
+## 2026-10-22 PDT - HELM TEACH-2 brought up to today's memory design (spec sheet 7.125 follow-up 13; design only, 0 USD); not sealed: waits on the owner's choice (train the CTT first, or the rule reader as proposer)
+
+- Owner's words: "bring the TEACH-2 exam up to date with today's memory design ... and seal it, so the CUBE EXAM at 1 USD can run. Amendment first."
+- A-TEACH2-15 1f121fab... (f735d119): size-limit memory in the cube arms; limits frozen by rule at the seal; stand-in cloud with an offline window per world; EYE_OFF and FIRST8 arms; I19; HG-OFFLINE, HG-HOLD, HG-LIMIT; S-SPACE in two parts.
+- Blocker: the pre-registration needs the retrained CTT with pinned weights; CUBE TRAIN at 3 USD not typed. Owner picks T7 (a) train first or (b) seal now with the rule reader as proposer (CTT claims dropped).
+
+## 2026-10-22 PDT - HELM: a direct cloud client (spec sheet 7.125 follow-up 12): stdlib HTTPS, one kept connection, SigV4 matching AWS's published examples; live 2.65 -> 0.21 s per cloud question, chat build 77.6 -> 4.7 s, 8/8 EXACT; 489 HELM tests pass; live test < 0.01 USD
+
+- Owner's words: "build a direct cloud client for HELM (standard library only, signs its own requests, keeps one connection open) so cloud calls stop starting a new program each time."
+- A-TEACH2-14 32015c87... before code (b72d62bf). Commit bf243de2: helm_cold_cloud.S3DirectCloud; keys from the environment or ~/.aws/credentials, never shown; no delete; S3Cloud kept as fallback.
+- FIX FIRST: 11 failed -> 11 passed; the signer matches AWS's three published SigV4 S3 examples; every HELM suite OFF 489 passed.
+- Live (synthetic lines, prefixes smoke/20261022T094601Z-cli/, -direct/, -cross/): 2.65 -> 0.21 s per cloud question; 77.6 -> 4.7 s to build the chat; cross-check both ways byte for byte. Gaps kept: no client-side encryption; live HELM attaches no cloud.
+
+## 2026-10-22 PDT - HELM: remember a 'cloud reachable' yes for 60 seconds (spec sheet 7.125 follow-up 11): live 3.46 -> 2.66 s per cloud question (4 -> 3 calls), 8/8 EXACT; chat build 93.6 -> 73.8 s; 478 HELM tests pass; live test < 0.01 USD
+
+- Owner's words: "let HELM remember for a short while that the cloud was reachable, so a cloud question skips that check (one call fewer)."
+- A-TEACH2-13 9c8e3daa... before code (3dc12252). Commit 8e8bf338: a yes remembered 60 s, a no never, forgotten at the first failed call; used by the cloud search and the cloud move.
+- FIX FIRST: 5 failed -> 5 passed; every HELM suite OFF 478 passed.
+- Live (synthetic lines, prefixes smoke/20261022T093130Z-reach-off/ and -on/): 3.46 -> 2.66 s, reachability checks in the build 22 -> 2. Negative kept: still ~2.7 s per cloud question (3 command-line calls).
+
+## 2026-10-22 PDT - HELM: the cloud search fetches all fold records in one call (spec sheet 7.125 follow-up 10): live on the real bucket 4.16 -> 3.54 s per question (5 -> 4 calls), 8/8 EXACT; 473 HELM tests pass; live test < 0.01 USD
+
+- Owner's word: "Yes, make it faster".
+- A-TEACH2-12 5b42e233... before code (b551781b). Commit e8382fbc: one aws s3 cp --recursive (or get_many) per cloud search, each record still checked, nothing kept; the found index row is handed to the fetch.
+- FIX FIRST: 3 failed/3 passed -> 1 failed -> 6 passed; every HELM suite OFF 473 passed.
+- Live timing (synthetic lines, bucket helm-cold-memory-807562639912-usw2, 200-line chat, 2 fold records in the cloud): 4.16 -> 3.54 s median, ~0.83 s per real call; projection for 600 lines ~7.5 -> ~3.3 s (not measured). Negatives kept: still ~3.5 s per cloud question; small live saving.
+
+## 2026-10-22 PDT - HELM: the Eye's deep search reads the cloud's fold records when online (spec sheet 7.125 follow-up 9): old lines recalled EXACT 1 -> 30 of 30; ~9 cloud reads per question, estimated ~10 s each on the real bucket; 467 HELM tests pass; 0 USD
+
+- Owner's words: "when a question misses everything on the device and HELM is online, let the Eye's deep search also read the fold records in the cloud, so rare words of old lines can still be found."
+- A-TEACH2-11 43b11166... before code (6e28c9aa). Commit d031ea42: working memory -> device fold records -> cloud fold records only if both miss and the cloud is reachable; each read checked; nothing kept; offline "stored away".
+- FIX FIRST: 3 failed/2 passed -> 5 passed; A-TEACH2-10 pinned negative narrowed to offline; every HELM suite OFF 467 passed.
+- Negatives kept: slow on the real cloud (estimate from the smoke test, ~1.12 s per AWS command-line call); offline rare words in cloud fold records still not found.
+
+## 2026-10-22 PDT - HELM: capsules take clue words from every line of a batch (spec sheet 7.125 follow-up 8): at the owner's 53,370 for 8,000 lines, old lines found EXACT by their own word 1 -> 30 of 30, memory still under (48,743 B); small 4,000 limits now go over; 462 HELM tests pass; 0 USD
+
+- Owner's words: "let each capsule take its clue words from every line in its batch (not just the first lines), so any old line can be found by its own words."
+- A-TEACH2-10 d7242340... before code (bb7747be). Commit d6155be5: every distinct content word of every line on the size-limit path; the CAS sentence keeps the first 8 (Eye template 2); plain compaction keeps the first-8 rule.
+- FIX FIRST: 5 failed/2 passed -> 7 passed (1 test fault); 2 pinned negatives; 4 older test files kept on the first-8 rule; every HELM suite OFF 462 passed.
+- Negatives kept: bigger index rows push small limits over (600 lines at 4,000: 4,742 B; 3,000 lines peak 7,821); words past the 48-word cap are not found once fold records are in the cloud; most finds go through the deep search.
+
+## 2026-10-22 PDT - HELM: the Eye folds old index rows, row upon row (spec sheet 7.125 follow-up 7): 8,000 lines stay under the owner's 53,370 (100,721 -> 52,429 B); 600 lines under 4,000 (3,832 B); 3,000 lines at 4,000 still over (4,542 B, below the floor); old memories recalled EXACT 20/20; 453 HELM tests pass; 0 USD
+
+- Owner's words: "let the Eye fold old index rows together (for example, one row per thread of conversation, holding the clue words of its capsules), so working memory can stay under the limit for good."
+- A-TEACH2-9 22364836... before code (5f9dcc49). Commit 6e9c9a56: 8 rows -> 1 per level, level upon level; <= 48 clue words, line range, 16 sha chars per row; fold records on the device then the cloud; recall opens only matching folds, deep search of device fold records on a miss; every read checked, mismatch held.
+- FIX FIRST: 10 failed/1 passed -> 12 passed; 2 test faults and 1 test-data fault (unique word ran out after line 676) fixed; older pinned negatives kept with later steps off; every HELM suite OFF 453 passed.
+- Floor ~3,500 B per level (x8 capsules per level): under 53,370 for ~14 levels. Negatives kept: 4,000 is below the two-level floor; mid-capsule lines never findable by their own words (since v1); logs not counted; deep search time grows.
+
+## 2026-10-22 PDT - HELM: the Eye moves old capsules off working memory (spec sheet 7.125 follow-up 6): device folder then cloud, clue index stays; 300 short lines at 3,000 now under (2,830 B); 600 lines at 4,000 still over (26,034 -> 10,870 B); 440 HELM tests pass; 0 USD
+
+- Owner's words: "let the Eye move old capsules off working memory too (device folder, then the cloud), keeping only a small index of clue words in working memory."
+- A-TEACH2-8 d5fbf746... before code (717edc58). Commit 5523585b: move-off after batch fading when still over 90 %; record to <cold>/<name>.lean.json read back byte for byte; index row = name, clue words, 16 receipt characters; recall matches the index, fetches only the match, checks it (else held); cloud move carries the record with its original; out of reach = "stored away", never EXACT; strengthening brings a capsule back.
+- FIX FIRST: 9 failed/2 passed -> 11 passed; 2 older cloud tests updated to the amended rule; pinned negative added; every HELM suite OFF 440 passed.
+- Measured negatives kept: the index grows (~129 B per capsule), so the limit breaks later, not never (~6,600 lines at 53,370); when memory stays full, batches get small. Folding the index itself is the owner's choice.
+
+## 2026-10-22 PDT - HELM: the Eye runs a lean capsule (spec sheet 7.125 follow-up 5): one capsule 812 -> 281 B; memory under the limit at 200 lines (3,955 B of 4,000) and at the owner's 53,370 for 2,000 lines (48,745 B); still over at 600 lines (26,126 B); 429 HELM tests pass; 0 USD
+
+- Owner's words: "put the Eye in charge of this part ... Shrink the capsule: don't save what can be rebuilt ... A rebuilt capsule must match its receipt."
+- A-TEACH2-7 58ef426e... before code (c44c6e07). Commit 6ef29c83: helm_eye_act.CapsuleEye + LeanCapsules on the size-limit path. ACT = lean record (name, clues, Noetic digits, template 1, fingerprint, cubes, mass, receipt), kept only if the rebuild is the same capsule and matches the receipt (else full, LEAN_REFUSED); READ = rebuild + receipt check on every use; HOLD = a mismatching record is never used (LEAN_REBUILD_MISMATCH).
+- FIX FIRST: 11 failed/3 passed -> 3 failed (2 test faults, 1 real: mass change uncaught, fixed with the STRENGTHEN receipt check) -> 14 passed; write-back order fixed (after the STRENGTHEN receipt) with a test; 2 old full-capsule pins kept with the Eye off. Every HELM suite OFF 429 passed.
+- Measured negative kept: lean capsules still pile up; the limit breaks later, not never. Next choice is the owner's (old capsules off working memory with a small clue index).
+
+## 2026-10-21 PDT - HELM cube memory: size limit + widening batches + AWS cloud tier (spec sheet 7.125 follow-up 4); 19 tests; 414 HELM tests pass; live smoke on a private S3 bucket PASS; measured negative: memory does not stay under the limit; < 0.001 USD
+
+- Owner's words: "keep every line and only start the fade process once that reaches 53370"; "yes, size limit plus batches"; "once that becomes filled begin moving things to an aws server where if HELM has wifi he can reach it".
+- A-TEACH2-5 257a8145... and A-TEACH2-6 2c019244... before code (A-TEACH2-6 from a pre-code measurement: 16 short lines 603 B -> capsule 794 B, so batches widen by 16 until they save).
+- Commit 242a8d45: keep every line until a byte limit (53,370 B live); batch the oldest unprotected lines into one capsule each down to 90 %; helm_cold_cloud.py (FakeCloud, S3Cloud via the aws CLI, SSE-S3, no ACL, no delete); past a device limit (50 MB live) the oldest originals are uploaded, read back, fingerprint-checked, then removed locally; fetch-back device then cloud; out of reach = OFFLINE, never EXACT.
+- FIX FIRST: collection error -> 17 failed/2 passed -> 2 failed (memory under the limit) -> pinned -> 19 passed; every HELM suite OFF 414 passed.
+- Measured negative: capsules (~810 B) replace ~900 B of lines and stay in working memory: 200 lines, limit 4,000 -> 11,165 B. The fix is the owner's choice.
+- Live smoke: bucket helm-cold-memory-807562639912-usw2 (us-west-2, public access blocked, versioning, SSE-S3) created; 7 synthetic originals (52,178 B) moved and fetched back EXACT; unreachable -> RECONSTRUCTED "stored away". Record CLOUD_SMOKE_20261021.json. Live switch attaches no cloud yet.
+
+## 2026-10-21 PDT - HELM cube oscillation REWORK onto the existing Cube Node Schema and cube store (spec sheet 7.125 follow-up 3): things are cubes, facts are branches with commonality, answers through the three operations, no parser in HELM; 41 tests; 395 HELM tests pass; 0 USD
+
+- Owner's words: "there was already a cube node system built ... before you do this twice"; "6 items on each side, one being analogy or metaphor; the edges are what 2 nodes have in common"; then "Yes: rework v2 onto the existing Cube Node Schema and cube store".
+- Found: Cube_Node_Schema_v0.1.md (Downloads), SPEC_CUBE_STORE_UNIFIED_20261018.md, docs/working/noetic_council/cube_store/. The first v2 build had forked the schema and carried its own reader (negative kept).
+- A-TEACH2-4 efe358ad... before code. Rework (commit 0897312a): thing cubes with six faces (faces 2-6 incl. analogy unknown with an explanation, never invented); facts as contains branches whose commonality is what the two nodes share; corrections as newer branches; answers via LIST_PARTS / FIND_SHARED_PART / REACHED_VIA; the rule reader moved to the exam side; operations.list_parts additive change.
+- FIX FIRST: 25 failed -> 5 -> 41 passed; every HELM suite OFF 395 passed; cube store suite 21/21. Space re-measured: working memory 53,370 B vs 2,450 B never forgetting; store +9,113 B for 5 things; owner's choice still open.
+
+## 2026-10-21 PDT - HELM cube oscillation BUILD v2 (spec sheet 7.125 follow-up 2): rounds, cubes at the Atlas node and the fading ladder behind HELM_CUBE_OSC (default OFF); 38 tests; 392 HELM tests pass; measured: fading costs space on short lines; 0 USD
+
+- Owner's words: "2.A" (build now) and "Do it here". Build spec frozen first: A-TEACH2-2 ec3d65fc..., A-TEACH2-3 fdf912d2... (before any code).
+- helm_cube_osc.py (new): rule reader; proposer interface (test StandInProposer, NOT the CTT); round = unanimous proposal, brain-side check, say-back, re-read; keep after 2 agreeing rounds in <= 3; shadow rounds 4-6 reported only; cubes per (thing, slot) with revisions + history; Atlas CONTEXT / POSSIBILITY / FACT; current-value answers; ladder S0 -> S1 -> S2 every 4 turns; arms OSC, ONE_READER, CTT_ONLY, TABLE, TABLE_OSC, ONE_STEP_FADE. helm_memory.py / helm_chat.py touched on the ON path only.
+- FIX FIRST: collection error -> 1 failed / 36 passed (the byte test) -> 38 passed. Every HELM suite OFF: 392 passed.
+- Measured finding: a person's line 31 bytes, an S1 capsule 813, a lean S2 record 363; working memory 49,863 vs 2,238 bytes for never forgetting on a 72-line chat. Fading as built costs space on short lines (TEACH-1's compaction too). Owner decision needed before TEACH-2: batch fading, shorter fingerprints, or another space count.
+- Not wired yet: confirm on a chat refresh; the real CTT adapter (with CUBE TRAIN at 3 USD, not yet typed). ENGINEERED-NOT-VALIDATED; nothing scored.
+
+## 2026-10-21 PDT - HELM cube oscillation (spec sheet 7.125 follow-up): the owner's rulings on the eight open questions, amendment A-TEACH2-1; 0 USD; nothing built yet
+
+- Owner's words (verbatim): "1.A, 2.A, 3.A.(WE MAY NEED MORE THAN 3 ROUNDS SO JUST KEEP THAT IN MIND), 4.A,5.A FOR TEST THEN C FOR REAL LIFE, 6.A,7.A, 8.CUBE EXAM at 1 USD"
+- A-TEACH2-1 (sha256 fb2f104d...): Q1 current-value scoring; Q2 build v2 now behind HELM_CUBE_OSC default OFF; Q3 cap 3 + Eye report-only, plus a reported-only shadow of rounds 4-6 (never stored) on the owner's note that more rounds may be needed; Q4 2 agreeing rounds; Q5 sweep every 4 turns in the exam, a byte budget for real-life HELM (v3); Q6 4 traps per world; Q7 retrain the CTT (CUBE TRAIN at 3 USD not yet typed); Q8 CUBE EXAM at 1 USD typed = pre-approval of the exam host, cap 1 USD, bound to the future sealed TEACH-2 zip.
+- Pre-code f7b6183b... not edited. Nothing built, trained or run.
+
+## 2026-10-21 PDT - HELM cube oscillation packet v1 (spec sheet 7.125): facts become cubes at their Atlas node only after the CTT and the brain side agree in rounds; whole memories fade step by step into CAS; exam TEACH-2 designed; 0 USD; nothing built, nothing licensed
+
+- Owner's words: "design the cube oscillation follow-up" and that memory should live at the RPA endpoint, where whole plain-English memories periodically and incrementally fade into CAS expressions to save space, with everything already established for memory; and to use the oscillation between the CTT and the recipe brain to decide what to keep, the Eye perhaps controlling the rounds.
+- Design (docs/working/helm_cube_oscillation_v1/): the CTT proposes, the brain side checks and says back, the CTT re-reads; keep after 2 agreeing rounds in at most 3, else keep the words and ask; corrections as new cube revisions; cubes at the thing's Atlas node; fading ladder whole line -> CAS capsule -> small CAS record every 4 turns; the Eye report-only beside a fixed cap (its acting stays NOT LICENSED).
+- Pre-code PREREGISTRATION_TEACH2 sha256 f7b6183bba5f8a1a241e3c64c8930f6a2c6df06fbe8c5845c0207f6d2a84c855: 9 arms incl. a plain lookup table as the mechanism-free baseline; trap lines; current-value scoring rule; new gates HG-WRONG-CUBE, HG-REVISION, HG-NUMBER, HG-FADE, HG-SAYBACK; marks C1-C4 and SPACE; words INCONCLUSIVE / CUBES_HARMED / CUBES_NO_GAIN / CUBES_EARNED_KEEP.
+- Honest forecast: the CTT was trained on kitchen English only, so retraining is needed (proposed CUBE TRAIN at 3 USD); the exam needs one CPU host (proposed CUBE EXAM at 1 USD). Eight owner decisions in OPEN_QUESTIONS. Nothing built, nothing spent.
+
 ## 2026-10-21 PDT - HELM EYE-ACT-1 SCORED (spec sheet 7.122 follow-up): all 10 hard gates hold; EYE_ACT_EARNED_KEEP, CONCERT_ACT_EARNED_KEEP, EYE_ACT_BEATS_CHECKSUM_COPY, TIES_REBUILD_ALWAYS; acting stays NOT LICENSED; laptop, 0 USD
 
 - Owner's line, verbatim (seeds the worlds): "EYE ACT EXAM, sealed e49d459c, laptop, 0 USD." (45 bytes, sha256 4ee0d7b4...).

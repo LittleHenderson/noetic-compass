@@ -1,0 +1,39 @@
+{
+  "schema": "helm.claude-job.cleanup-proof/1",
+  "utc": "2026-10-22T12:10:21.535764+00:00",
+  "job": "helm-claude-cubetrain-20261022-c57",
+  "attempts": {
+    "helm-claude-cubetrain-20261022-c57#a1": {
+      "instance": "i-0a93a50584129d0e4",
+      "instance_type": "g5.xlarge",
+      "ami": "ami-0dddfa1ffa6b87af7",
+      "launch_utc": "2026-10-22T10:55:28.912641+00:00",
+      "controller_cleanup_utc": "2026-10-22T12:09:29.107773+00:00",
+      "host_seconds": 4440.195132,
+      "rate_usd_per_hour": 1.0175753424657534,
+      "list_price_usage_usd": 1.255065,
+      "charge_usd": 1.26,
+      "cautious_usd": 1.36,
+      "controller_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_cubetrain_c57\\aws-c57-a1-cleanup.json",
+        "sha256": "61d846c434a68feb741ada3721ddb15932f53052334b8490f1a7d462dbcff2f9",
+        "status": "PRESERVED_AND_PREFIX_PURGE_VERIFIED"
+      },
+      "independent_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_cubetrain_c57\\aws-c57-a1-independent-cleanup.json",
+        "sha256": "a1378dad97fed4fecf19be475734bad133cd1ec6ee49e0ca169c1ef701bf1b40",
+        "status": "VERIFIED",
+        "utc": "2026-10-22T12:09:46.973105+00:00"
+      },
+      "direct_observation": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_cubetrain_c57\\aws-c57-a1-direct-observation.json",
+        "sha256": "e3e733f75a4d53a93faaae84509d36271b3a556750c8a66afc754faf2e0ef63e",
+        "utc": "2026-10-22T12:09:49.565371+00:00",
+        "terminated_reason": "User initiated (2026-10-22 12:03:52 GMT)"
+      }
+    }
+  },
+  "observation": "every attempt: instance terminated; root volume deleted; no live project instances, no job volumes, no prefix versions or delete markers, no multipart uploads",
+  "temporary_role_profile_bucket": "none created: standing instance profile cas-aws-gpu-standby-v1-us-west-2 and the standing shared bucket/prefix (purged, verified empty)",
+  "status": "VERIFIED"
+}

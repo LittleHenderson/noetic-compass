@@ -325,6 +325,14 @@ class HELMConversationalMemory:
                 _hmc.attach(self)
         except ImportError:
             pass
+        self.cube_osc = None
+        try:
+            import helm_cube_osc as _hco
+            _mode = _hco.cube_osc_mode()
+            if _mode:
+                _hco.attach(self, mode=_mode)
+        except ImportError:
+            pass
 
     def process_turn_with_cube_store(self, text: str) -> Optional[TurnReceipt]:
         return self.context.process_turn_with_cube_store(text)
@@ -373,6 +381,11 @@ class HELMConversationalMemory:
                 self.compactor.housekeep()      # compact the oldest turns (cold copy + capsule + receipt), never drop
             else:
                 self.turns = self.turns[-self.max_turns:]
+
+        # Cube oscillation (SPEC 7.125, helm_cube_osc.py) behind HELM_CUBE_OSC, default OFF: read the turn, keep a fact as a
+        # cube only after the rounds agree, and run the fading sweep. OFF: `cube_osc` is None and nothing here runs.
+        if getattr(self, "cube_osc", None) is not None:
+            self.cube_osc.on_turn(turn)
 
         # Append to persistent JSONL session ledger (its folder is created lazily, on this first write)
         os.makedirs(os.path.dirname(os.path.abspath(self.session_file)), exist_ok=True)

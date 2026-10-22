@@ -1,0 +1,190 @@
+{
+ "audits": {
+  "dev_A4-s1": [],
+  "dev_A4-s2": [],
+  "dev_A4-s3": [],
+  "dev_A5-s1": [],
+  "keep_A4-s1_after": [],
+  "keep_A4-s1_before": [],
+  "keep_A4-s2_after": [],
+  "keep_A4-s2_before": [],
+  "keep_A4-s3_after": [],
+  "keep_A4-s3_before": [],
+  "smoke": []
+ },
+ "copies": {
+  "A4-s1": {
+   "llm": {
+    "fact_right": 278,
+    "fact_rows": 295,
+    "fact_wrong": 16,
+    "invented": 0,
+    "none": 1,
+    "right": 339,
+    "rows": 357,
+    "trap_rows": 50,
+    "trap_wrong": 3,
+    "wrong": 17
+   },
+   "sdg": {
+    "fact_right": 1967,
+    "fact_rows": 1967,
+    "fact_wrong": 0,
+    "invented": 0,
+    "none": 0,
+    "right": 2000,
+    "rows": 2000,
+    "trap_rows": 257,
+    "trap_wrong": 0,
+    "wrong": 0
+   }
+  },
+  "A4-s2": {
+   "llm": {
+    "fact_right": 280,
+    "fact_rows": 295,
+    "fact_wrong": 14,
+    "invented": 0,
+    "none": 1,
+    "right": 341,
+    "rows": 357,
+    "trap_rows": 50,
+    "trap_wrong": 2,
+    "wrong": 15
+   },
+   "sdg": {
+    "fact_right": 1967,
+    "fact_rows": 1967,
+    "fact_wrong": 0,
+    "invented": 0,
+    "none": 0,
+    "right": 2000,
+    "rows": 2000,
+    "trap_rows": 257,
+    "trap_wrong": 0,
+    "wrong": 0
+   }
+  },
+  "A4-s3": {
+   "llm": {
+    "fact_right": 280,
+    "fact_rows": 295,
+    "fact_wrong": 13,
+    "invented": 0,
+    "none": 2,
+    "right": 342,
+    "rows": 357,
+    "trap_rows": 50,
+    "trap_wrong": 4,
+    "wrong": 13
+   },
+   "sdg": {
+    "fact_right": 1967,
+    "fact_rows": 1967,
+    "fact_wrong": 0,
+    "invented": 0,
+    "none": 0,
+    "right": 2000,
+    "rows": 2000,
+    "trap_rows": 257,
+    "trap_wrong": 0,
+    "wrong": 0
+   }
+  },
+  "A5-s1": {
+   "llm": {
+    "fact_right": 261,
+    "fact_rows": 295,
+    "fact_wrong": 33,
+    "invented": 0,
+    "none": 1,
+    "right": 321,
+    "rows": 357,
+    "trap_rows": 50,
+    "trap_wrong": 6,
+    "wrong": 35
+   },
+   "sdg": {
+    "fact_right": 1967,
+    "fact_rows": 1967,
+    "fact_wrong": 0,
+    "invented": 0,
+    "none": 0,
+    "right": 2000,
+    "rows": 2000,
+    "trap_rows": 257,
+    "trap_wrong": 0,
+    "wrong": 0
+   }
+  }
+ },
+ "estimated_cost_usd_this_script": 1.0839,
+ "final_sha256": {
+  "A4-s1": "c39eafb6db92845a463a0c6bc711c73d45ddcb482b5e5eaffad466f337d7a69a",
+  "A4-s2": "3bfbf1f064e4dd96980bfa971cbd089706a4b99cfdaba0b84324f4a4b3a883ee",
+  "A4-s3": "6418ef1e27ffd18df9f571e9f5410af1afae6843d9d56cbcb01d31ccf947564b",
+  "A5-s1": "07a54adcdb58cfb746f35e0d4350a9bde536eb72f97d6b29451960313fca4bc1"
+ },
+ "gates": {
+  "G-CONFIDENT-WRONG": true,
+  "G-EXERCISED": true,
+  "G-INVENT": true,
+  "G-KEEP-OLD": true
+ },
+ "instrument": {
+  "I1_zip_sha256": true,
+  "I2_audits_clean": true,
+  "I3_trained_no_nan": true,
+  "I5_I6_package_tests": true,
+  "I6_dev_floors": true,
+  "I7_cost_under_cap_estimate": true
+ },
+ "keep_old": {
+  "A4-s1": {
+   "after": 0.9785,
+   "before": 0.9785
+  },
+  "A4-s2": {
+   "after": 0.979,
+   "before": 0.9795
+  },
+  "A4-s3": {
+   "after": 0.9775,
+   "before": 0.977
+  }
+ },
+ "labels": [
+  "SYNTHETIC_ONLY",
+  "LLM_WRITTEN_STRATUM",
+  "CTT_RETRAINED_V1"
+ ],
+ "repetition_note": "each AI-written row about 100 times, each SDG row about 23 times (A-CUBE-TRAIN-5)",
+ "schema": "cube-train.reading/1",
+ "status_word": "TRAIN_READY",
+ "vote": {
+  "llm": {
+   "fact_right": 271,
+   "fact_rows": 295,
+   "fact_wrong": 5,
+   "invented": 0,
+   "none": 21,
+   "right": 331,
+   "rows": 357,
+   "trap_rows": 50,
+   "trap_wrong": 1,
+   "wrong": 5
+  },
+  "sdg": {
+   "fact_right": 1967,
+   "fact_rows": 1967,
+   "fact_wrong": 0,
+   "invented": 0,
+   "none": 0,
+   "right": 2000,
+   "rows": 2000,
+   "trap_rows": 257,
+   "trap_wrong": 0,
+   "wrong": 0
+  }
+ }
+}

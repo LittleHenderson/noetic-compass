@@ -1,0 +1,142 @@
+{
+ "after_calls_median": 4,
+ "after_exact": 8,
+ "after_seconds_median": 3.54,
+ "before_calls_median": 5,
+ "before_exact": 8,
+ "before_seconds_median": 4.16,
+ "bucket": "helm-cold-memory-807562639912-usw2",
+ "build_cli_calls": 106,
+ "build_seconds": 94.6,
+ "chat": "200 lines, limit 2,000, device limit 1,000",
+ "cleanup": "none by design: keep indefinitely, nothing deleted by code; synthetic objects under the prefix",
+ "cost_note": "a few hundred requests of a few kilobytes; well under 0.01 USD",
+ "data": "SYNTHETIC_ONLY (made-up planting lines)",
+ "fold_records_in_cloud": 2,
+ "objects_moved": 42,
+ "prefix": "smoke/20261022T092048Z-batch/",
+ "questions": [
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.54
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.23
+   },
+   "line": 3
+  },
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.4
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.16
+   },
+   "line": 23
+  },
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.58
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.04
+   },
+   "line": 43
+  },
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.45
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.1
+   },
+   "line": 63
+  },
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.51
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.1
+   },
+   "line": 83
+  },
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.45
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.18
+   },
+   "line": 103
+  },
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.54
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.23
+   },
+   "line": 123
+  },
+  {
+   "after": {
+    "calls": 4,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 3.59
+   },
+   "before": {
+    "calls": 5,
+    "deep_search": true,
+    "exact": true,
+    "seconds": 4.15
+   },
+   "line": 143
+  }
+ ],
+ "region": "us-west-2",
+ "stamp": "20261022T092048Z"
+}

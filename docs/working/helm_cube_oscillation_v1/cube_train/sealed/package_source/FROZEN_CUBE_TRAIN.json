@@ -1,0 +1,61 @@
+{
+ "batch": 256,
+ "cap_usd": 3,
+ "checkpoint_scored": "final",
+ "direction": "B",
+ "dropout": 0.1,
+ "early_stopping": false,
+ "gates": {
+  "confident_wrong_llm_max": 0.02,
+  "confident_wrong_sdg_max": 0.01,
+  "confident_wrong_trap_max": 0.01,
+  "exercised_llm_min": 0.25,
+  "exercised_sdg_min": 0.4,
+  "keep_old_max_drop": 0.02
+ },
+ "grad_clip": 1.0,
+ "host": "one AWS g5.xlarge, us-west-2, on demand; the controller stops it at the cap",
+ "init": "each model starts from its c45 final.pt (pinned below)",
+ "labels": [
+  "SYNTHETIC_ONLY",
+  "LLM_WRITTEN_STRATUM",
+  "CTT_RETRAINED_V1"
+ ],
+ "lr": 0.0005,
+ "mix": {
+  "CAS": 3,
+  "LLM": 1,
+  "SDG": 6
+ },
+ "models": {
+  "A4-s1": {
+   "c45_seed_name": "A4-s1",
+   "config": "A4_9p6M",
+   "init_sha256": "db53775be8e46f6234548e5c4f5c1cbd4f7a376b0de06db87aa45b819fbf3a68"
+  },
+  "A4-s2": {
+   "c45_seed_name": "A4-s2",
+   "config": "A4_9p6M",
+   "init_sha256": "16aebd0dfb32a5a14a387aa1c1dca9b9bc06e0ad179c4ca1d95566d74fc7f855"
+  },
+  "A4-s3": {
+   "c45_seed_name": "A4-s3",
+   "config": "A4_9p6M",
+   "init_sha256": "76abf0195c2c71cccf9b44798e78c4bc3245995b56d446643cbc3e33efe2ceed"
+  },
+  "A5-s1": {
+   "c45_seed_name": "A5-s1",
+   "config": "A5_2p5M",
+   "init_sha256": "525898b8812274f1e15daa2ff171c69ce99485970242494039b9b232f6158315"
+  }
+ },
+ "precision": "fp32",
+ "preregistration": "PREREGISTRATION_CUBE_TRAIN.precode.md 6e1afceb + A-CUBE-TRAIN-1..5",
+ "schedule": "linear warm-up then cosine to 0 (the c45 train.py rule: warm-up = min(1000, steps // 10))",
+ "schema": "cube-train.frozen/1",
+ "seed_rule": "model RNG: sha256('CUBE-TRAIN-<model>-20261022') mod 2^63; batch order: sha256('CUBE TRAIN at 3 USD' + ':' + the sealed zip's sha256) mod 2^63 (the house rule; computed on the host)",
+ "steps": 6000,
+ "vote": "ACCEPT-2: A4-s1, A4-s2, A4-s3 all give the same complete answer",
+ "warmup_steps": 600,
+ "weight_decay": 0.01
+}

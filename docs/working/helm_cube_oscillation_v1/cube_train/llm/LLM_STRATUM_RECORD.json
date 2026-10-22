@@ -1,0 +1,62 @@
+{
+ "cost_usd": 0,
+ "labels": [
+  "LLM_WRITTEN",
+  "SYNTHETIC_ONLY"
+ ],
+ "note": "command-line tools on subscriptions the owner already pays for",
+ "rows": {
+  "DEV": 376,
+  "TRAIN": 1503
+ },
+ "tally": {
+  "anthropic:DEV": {
+   "checked": 100,
+   "kept": 100,
+   "slots": 100,
+   "written": 100
+  },
+  "anthropic:TRAIN": {
+   "checked": 400,
+   "kept": 398,
+   "slots": 400,
+   "written": 400
+  },
+  "deepseek:DEV": {
+   "checked": 86,
+   "kept": 81,
+   "slots": 100,
+   "written": 100
+  },
+  "deepseek:TRAIN": {
+   "checked": 332,
+   "kept": 318,
+   "slots": 400,
+   "written": 400
+  },
+  "google:DEV": {
+   "checked": 100,
+   "kept": 97,
+   "slots": 100,
+   "written": 100
+  },
+  "google:TRAIN": {
+   "checked": 400,
+   "kept": 394,
+   "slots": 400,
+   "written": 400
+  },
+  "openai:DEV": {
+   "checked": 100,
+   "kept": 98,
+   "slots": 100,
+   "written": 100
+  },
+  "openai:TRAIN": {
+   "checked": 399,
+   "kept": 393,
+   "slots": 400,
+   "written": 400
+  }
+ }
+}

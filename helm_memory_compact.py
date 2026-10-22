@@ -162,13 +162,13 @@ def cube_faces_digest(store: Any) -> str:
 
 def read_cold(path: str) -> List[Dict[str, Any]]:
     """The verbatim turn records of a cold copy (one JSON object per line)."""
-    out = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if line:
-                out.append(json.loads(line))
-    return out
+    with open(path, "rb") as fh:
+        return read_cold_bytes(fh.read())
+
+
+def read_cold_bytes(data: bytes) -> List[Dict[str, Any]]:
+    """The same, from bytes already in hand (a copy fetched back from the cloud tier)."""
+    return [json.loads(line) for line in data.decode("utf-8").splitlines() if line.strip()]
 
 
 def content_words(text: str) -> List[str]:
@@ -231,6 +231,15 @@ class Compactor:
         self._capsules_in_thread = 0
         self.atlas = None
         self._anchor: Optional[str] = None
+        # the cloud tier (A-TEACH2-5 L3/L4): None = no cloud. `moved` maps a capsule id to its cloud key once its
+        # original left the device after the read-back check.
+        self.cloud: Any = None
+        self.moved: Dict[str, str] = {}
+        self.moved_records: Dict[str, str] = {}       # capsule id -> cloud key of the Eye's moved record (A-TEACH2-8)
+        self.moved_folds: Dict[str, str] = {}         # fold name -> cloud key of the Eye's fold record (A-TEACH2-9)
+        # A-TEACH2-10: on the size-limit path (set by helm_cube_osc.attach) clue words come from EVERY line of a batch;
+        # plain compaction keeps the first-8 rule
+        self.clue_every_line = False
         tools = _tools()
         if tools["atlas"] is not None:
             self.atlas = tools["atlas"].Atlas(atlas_id="memory", max_depth=1)
@@ -307,12 +316,40 @@ class Compactor:
         self.atlas.add_edge(thread, node_id, "holds", cross_kind_declared=True)
         cap.atlas = {"node": thread, "node_id": node_id, "side": "possibility"}
 
+    def _capsule_index(self) -> List[Tuple[str, List[str], str]]:
+        """(name, clue words, kind) of every capsule. On the Eye's path this reads the index; nothing is fetched."""
+        if hasattr(self.capsules, "clue_index"):
+            return self.capsules.clue_index()
+        return [(c.capsule_id, c.clues, c.kind) for c in self.capsules]
+
+    def _capsule(self, capsule_id: str) -> Optional[Capsule]:
+        """One capsule by name. On the Eye's path a moved capsule is fetched back and checked (A-TEACH2-8)."""
+        if hasattr(self.capsules, "get"):
+            return self.capsules.get(capsule_id)
+        return next((c for c in self.capsules if c.capsule_id == capsule_id), None)
+
     def _searchlight(self, wanted: set) -> Tuple[List[Capsule], int, bool]:
-        """Read the anchor first, then widen over the radii; cap the candidates. Returns (hits, radius, beyond)."""
+        """Read the anchor first, then widen over the radii; cap the candidates. Returns (hits, radius, beyond).
+        Hits are capsules; on the Eye's path only the hits are fetched (a moved capsule that cannot be fetched now is
+        left out of the hits and noted in `self._away`)."""
+        names, radius, beyond = self._searchlight_names(wanted)
+        self._away = []
+        hits = []
+        for cid in names:
+            cap = self._capsule(cid)
+            if cap is not None:
+                hits.append(cap)
+            elif getattr(self.capsules, "last_status", None) == "AWAY":
+                self._away.append(cid)
+        return hits, radius, beyond
+
+    def _searchlight_names(self, wanted: set) -> Tuple[List[str], int, bool]:
+        order = [cid for cid, _c, _k in self._capsule_index()]
+        known = set(order)
+        order += [w for w in sorted(wanted) if w not in known]     # folded capsules found by the Eye (A-TEACH2-9)
         if self.atlas is None or self._anchor is None:
-            hits = [c for c in self.capsules if c.capsule_id in wanted]
-            return hits[:SEARCHLIGHT_CAP], 0, True
-        by_node = {c.atlas.get("node_id"): c for c in self.capsules if c.atlas.get("node_id")}
+            return [c for c in order if c in wanted][:SEARCHLIGHT_CAP], 0, True
+        by_node = {f"capsule:{cid}": cid for cid in order}
         for radius in SEARCHLIGHT_RADII:
             frontier = [self._anchor]
             seen = {self._anchor}
@@ -329,11 +366,10 @@ class Compactor:
                 frontier = nxt
                 if not frontier:
                     break
-            hits = [c for c in reach if c.capsule_id in wanted][:SEARCHLIGHT_CAP]
+            hits = [c for c in reach if c in wanted][:SEARCHLIGHT_CAP]
             if hits:
                 return hits, radius, False
-        hits = [c for c in self.capsules if c.capsule_id in wanted][:SEARCHLIGHT_CAP]
-        return hits, SEARCHLIGHT_RADII[-1], True
+        return [c for c in order if c in wanted][:SEARCHLIGHT_CAP], SEARCHLIGHT_RADII[-1], True
 
     # ---------------------------------------------------------------- compaction
     def housekeep(self) -> List[Capsule]:
@@ -359,7 +395,9 @@ class Compactor:
         self._check_brain("housekeep.end")
         return written
 
-    def _compact(self, turns: List[Any]) -> Capsule:
+    def _compact(self, turns: List[Any], dry_run: bool = False) -> Capsule:
+        """Write one capsule for `turns`. dry_run=True builds the same capsule (to measure its size, A-TEACH2-6 W1)
+        but writes nothing: no cold copy, no Atlas node, no receipt, not added to `capsules`."""
         tools = _tools()
         if tools["compiler"] is None or tools["cce"] is None:
             raise CompactRefused("TOOLS_MISSING", "compiler or CCE skin not importable")
@@ -370,13 +408,14 @@ class Compactor:
         stated = [t for t in turns if t.intent not in MEMORY_QUERY_INTENTS]
         kind = "statement" if stated else "question"
         clues: List[str] = []
+        every = self.clue_every_line
         for t in (stated or turns):
             for w in content_words(t.user_raw_text):
                 if w not in clues:
                     clues.append(w)
-                if len(clues) >= MAX_CLUES:
+                if not every and len(clues) >= MAX_CLUES:
                     break
-            if len(clues) >= MAX_CLUES:
+            if not every and len(clues) >= MAX_CLUES:
                 break
         if not clues:
             raise CompactRefused("NO_CLUES", "no verbatim content word to clue by")
@@ -388,7 +427,7 @@ class Compactor:
                 n = 3
             if n not in frames:
                 frames.append(n)
-        idea = " ".join(clues).replace('"', "")
+        idea = " ".join(clues[:MAX_CLUES]).replace('"', "")      # the sentence uses the first 8 (A-TEACH2-10 C2)
         sentences = [self._sentence(n, idea) for n in frames]
         sentence = " ".join(sentences)
         notation = " + ".join(f"^{n}^{DOMAIN}" for n in frames)
@@ -412,9 +451,17 @@ class Compactor:
                     cubes.append(fid)
         binds = {"cubes": cubes, "coefficients": []}
         # 4. the cold copy first, then its digest
-        os.makedirs(self.cold_dir, exist_ok=True)
         cold_path = os.path.join(self.cold_dir, f"{capsule_id}.jsonl")
         payload = "".join(json.dumps(r, sort_keys=True, ensure_ascii=False) + "\n" for r in records).encode("utf-8")
+        if dry_run:
+            crumb = {"cold_path": cold_path, "sha256": _sha(payload), "turn_ids": turn_ids}
+            mass = {"value": len(turn_ids), "confirmed": 0}
+            node = f"thread-{max(self._thread_count, 1):04d}" if self.atlas is not None else None
+            return Capsule(capsule_id=capsule_id, cas=cas, clues=clues, binds=binds, crumb=crumb, mass=mass,
+                           receipt=_receipt_of(capsule_id, cas, clues, binds, crumb, mass), kind=kind,
+                           atlas={"node": node, "node_id": f"capsule:{capsule_id}" if node else None,
+                                  "side": "possibility"})
+        os.makedirs(self.cold_dir, exist_ok=True)
         with open(cold_path, "wb") as fh:
             fh.write(payload)
         with open(cold_path, "rb") as fh:
@@ -471,17 +518,30 @@ class Compactor:
 
     # ---------------------------------------------------------------- recall
     def _fetch(self, cap: Capsule) -> Tuple[str, List[str]]:
-        """Follow the breadcrumb. EXACT only when the bytes on disk hash to the crumb's sha256."""
+        """Follow the breadcrumb: the device's folder first, then the cloud when the original was moved there.
+        EXACT only when the bytes, from either place, hash to the crumb's sha256. A moved original that cannot be
+        reached is OFFLINE, never EXACT (A-TEACH2-5 L4)."""
         path = cap.crumb["cold_path"]
-        if not os.path.isfile(path):
+        if os.path.isfile(path):
+            with open(path, "rb") as fh:
+                data = fh.read()
+        elif cap.capsule_id in self.moved:
+            try:
+                data = self.cloud.get(self.moved[cap.capsule_id]) if self.cloud is not None else None
+            except Exception:
+                data = None
+            if data is None:
+                import helm_cold_cloud as _hcc
+                _hcc.forget_reachable(self.cloud)    # A-TEACH2-13 R2: forget a remembered yes at the first failure
+                self._flag("CLOUD_UNREACHABLE", self.moved[cap.capsule_id], cap.capsule_id)
+                return "OFFLINE", []
+        else:
             self._flag("COLD_MISSING", path, cap.capsule_id)
             return "MISSING", []
-        with open(path, "rb") as fh:
-            data = fh.read()
         if _sha(data) != cap.crumb["sha256"]:
             self._flag("DIGEST_FAILED", path, cap.capsule_id)
             return "CORRUPT", []
-        texts = [r.get("user_raw_text", "") for r in read_cold(path)]
+        texts = [r.get("user_raw_text", "") for r in read_cold_bytes(data)]
         return "EXACT", texts
 
     def fit_check(self, cap: Capsule) -> Dict[str, Any]:
@@ -508,7 +568,7 @@ class Compactor:
                 held = False
             f4 = held
             if held:
-                hits, _radius, beyond = self._searchlight({cap.capsule_id})
+                hits, _radius, beyond = self._searchlight_names({cap.capsule_id})
                 f4 = bool(hits) and not beyond
         else:
             f4 = False
@@ -547,13 +607,26 @@ class Compactor:
                 if t.intent not in MEMORY_QUERY_INTENTS and tokens <= set(content_words(t.user_raw_text))]
         pinned = [(cid, entry) for cid, entry in reversed(list(self._pinned.items()))
                   if any(tokens <= set(content_words(x)) for x in entry["texts"])]
-        wanted = {c.capsule_id for c in self.capsules if c.kind == "statement" and tokens <= set(c.clues)
-                  and c.capsule_id not in self._pinned}
+        match_away, deep = False, False
+        if hasattr(self.capsules, "match"):
+            # the Eye's path: rows in working memory, then the folded rows, then a deep search on the device (A-TEACH2-9)
+            names, match_away, deep = self.capsules.match(tokens)
+            wanted = {cid for cid in names if cid not in self._pinned}
+        else:
+            wanted = {cid for cid, clues, kind in self._capsule_index() if kind == "statement" and tokens <= set(clues)
+                      and cid not in self._pinned}
+        lookup["deep_search"] = deep
         hits, radius, beyond = self._searchlight(wanted) if wanted else ([], 0, False)
         hits = sorted(hits, key=lambda c: c.crumb["turn_ids"][-1], reverse=True)
         lookup.update({"radius": radius, "beyond_searchlight": beyond})
         candidates = len(live) + len(pinned) + len(hits)
         lookup["candidates"] = candidates
+        away_now = match_away or (bool(wanted) and bool(getattr(self, "_away", [])))
+        if candidates == 0 and away_now:
+            # A-TEACH2-8 M5 / A-TEACH2-9 F5: the matching memory is in the cloud and cannot be reached now; never EXACT
+            return {"label": "UNKNOWN", "texts": [], "question": None, "lookup": lookup,
+                    "capsule_id": (getattr(self, "_away", []) or [None])[0],
+                    "reason": "my full notes are stored away and I can't reach them right now"}
         if candidates == 0:
             return {"label": "UNKNOWN", "texts": [], "question": None, "reason": "no clue matched", "lookup": lookup,
                     "capsule_id": None}
@@ -581,21 +654,24 @@ class Compactor:
         fit = self.fit_check(cap)
         if not fit["fits"]:
             failed = [k for k, v in fit.items() if k != "fits" and not v]
+            away = "; my full notes are stored away and I can't reach them right now" if status == "OFFLINE" else ""
             return {"label": "UNKNOWN", "texts": [], "question": None,
-                    "reason": f"memory did not fit its own clues (failed {', '.join(failed)}; cold copy {status})",
+                    "reason": f"memory did not fit its own clues (failed {', '.join(failed)}; cold copy {status}){away}",
                     "lookup": lookup, "capsule_id": cap.capsule_id, "fit": fit}
         rebuilt = self._rebuilt_text(cap)
         question = None
         if (will_act or status in ("MISSING", "CORRUPT")) and self._question_allowed(cap):
             question = self._refresh_question(cap)
             self._count_question(cap)
-        return {"label": "RECONSTRUCTED", "texts": [rebuilt], "question": question,
-                "reason": f"rebuilt from the capsule; cold copy {status}", "lookup": lookup,
+        reason = f"rebuilt from the capsule; cold copy {status}"
+        if status == "OFFLINE":
+            reason += "; my full notes are stored away and I can't reach them right now"
+        return {"label": "RECONSTRUCTED", "texts": [rebuilt], "question": question, "reason": reason, "lookup": lookup,
                 "capsule_id": cap.capsule_id, "fit": fit}
 
     @staticmethod
     def _rebuilt_text(cap: Capsule) -> str:
-        return "From my notes, something about " + ", ".join(cap.clues) + "."
+        return "From my notes, something about " + ", ".join(cap.clues[:MAX_CLUES]) + "."
 
     @staticmethod
     def _refresh_question(cap: Capsule) -> str:
@@ -605,7 +681,7 @@ class Compactor:
 
     # ---------------------------------------------------------------- the person answers (F5) and strengthening
     def answer(self, capsule_id: str, text: str) -> Dict[str, Any]:
-        cap = next((c for c in self.capsules if c.capsule_id == capsule_id), None)
+        cap = self._capsule(capsule_id)
         if cap is None:
             return {"strengthened": False, "reason": "no such capsule"}
         if NEGATIVE_ANSWER_RX.search(text or "") and not re.search(r"\byes\b", text or "", re.I):
@@ -649,6 +725,9 @@ class Compactor:
         receipt = _sha(_canon({"kind": "STRENGTHEN", "capsule": cap.receipt, "mass": cap.mass, "clues": cap.clues,
                                 "side": cap.atlas["side"]}))
         self._receipt("STRENGTHEN", cap.capsule_id, receipt, {"mass": dict(cap.mass), "clues": list(cap.clues)})
+        if hasattr(self.capsules, "store"):
+            # the Eye's lean list: write the strengthened capsule back, after its receipt exists (A-TEACH2-7)
+            self.capsules.store(cap)
         self._check_brain("strengthen.end")
         return {"strengthened": True, "receipt": receipt, "mass": dict(cap.mass), "clues": list(cap.clues),
                 "side": cap.atlas["side"]}

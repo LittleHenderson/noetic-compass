@@ -1,0 +1,448 @@
+{
+ "after_cloud_when_online": {
+  "cloud_reads_max": 9,
+  "cloud_reads_median": 9,
+  "estimated_real_seconds_max": 10.1,
+  "estimated_real_seconds_median": 10.1,
+  "exact": 30,
+  "ms_max_stand_in": 1.0,
+  "ms_median_stand_in": 0.8,
+  "rows": [
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 3,
+    "ms": 0.9
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 21,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 39,
+    "ms": 0.9
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 57,
+    "ms": 1.0
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 75,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 93,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 111,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 129,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 147,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 165,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 183,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 201,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 219,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 237,
+    "ms": 0.9
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 255,
+    "ms": 0.9
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 273,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 291,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 309,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 327,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 345,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 363,
+    "ms": 0.6
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 381,
+    "ms": 0.6
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 399,
+    "ms": 0.6
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 417,
+    "ms": 0.7
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 435,
+    "ms": 0.9
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 453,
+    "ms": 0.8
+   },
+   {
+    "cloud_reads": 4,
+    "exact": true,
+    "fold_reads": 2,
+    "line": 471,
+    "ms": 0.3
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 489,
+    "ms": 0.6
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 507,
+    "ms": 0.6
+   },
+   {
+    "cloud_reads": 9,
+    "exact": true,
+    "fold_reads": 7,
+    "line": 525,
+    "ms": 0.6
+   }
+  ],
+  "sampled": 30
+ },
+ "before_device_only": {
+  "cloud_reads_max": 4,
+  "cloud_reads_median": 0,
+  "estimated_real_seconds_max": 4.5,
+  "estimated_real_seconds_median": 0.0,
+  "exact": 1,
+  "ms_max_stand_in": 0.6,
+  "ms_median_stand_in": 0.1,
+  "rows": [
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 3,
+    "ms": 0.3
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 21,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 39,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 57,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 75,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 93,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 111,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 129,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 147,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 165,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 183,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 201,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 219,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 237,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 255,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 273,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 291,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 309,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 327,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 345,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 363,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 381,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 399,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 417,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 435,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 453,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 4,
+    "exact": true,
+    "fold_reads": 2,
+    "line": 471,
+    "ms": 0.6
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 489,
+    "ms": 0.2
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 507,
+    "ms": 0.1
+   },
+   {
+    "cloud_reads": 0,
+    "exact": false,
+    "fold_reads": 0,
+    "line": 525,
+    "ms": 0.1
+   }
+  ],
+  "sampled": 30
+ },
+ "chat": "600 lines of ~60 bytes, limit 4,000, device limit 2,000, stand-in cloud",
+ "seconds_per_real_call_estimate": 1.12
+}

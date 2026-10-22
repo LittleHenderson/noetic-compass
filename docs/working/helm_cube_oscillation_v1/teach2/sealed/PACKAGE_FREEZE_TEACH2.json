@@ -1,0 +1,1457 @@
+{
+ "amendments_sha256": {
+  "AMENDMENT_A_TEACH2_1": "fb2f104d3503741ebea9971b4f8f556bde76a0ee055a600a36d2dc822f6396c2",
+  "AMENDMENT_A_TEACH2_10": "d7242340a340c0b2f488f98b2d0917d3ba2e9aa039ea63c03277cd249b4167dd",
+  "AMENDMENT_A_TEACH2_11": "43b111663c5095ef57ef4db03e2bc32f371aaa9de353de7d7df2d5f1dfe0e7e3",
+  "AMENDMENT_A_TEACH2_12": "5b42e2330cf8470485f7bc16b022cd7decd42374e6bee107c8621dc2d65d2433",
+  "AMENDMENT_A_TEACH2_13": "9c8e3daaa9f48029994cf3fa1931e88dbaf50e2859f7854fdc3fbbe71abcea07",
+  "AMENDMENT_A_TEACH2_14": "32015c87f7bff7861beaa6e6591c54304958e3628be7038da4f59534936af68f",
+  "AMENDMENT_A_TEACH2_15": "1f121fab4d2b65cca4f62b980fa28329c97e3225f7bdd41fe2728435149c741e",
+  "AMENDMENT_A_TEACH2_16": "f2d39443926a9daac9d42665d095d66038bfeae528c15c9d14ec34820055c3d1",
+  "AMENDMENT_A_TEACH2_17": "8d7e0ff0700386235f1ab96d97e249fdd8c4242fcfb3fb5c9d554d537c22e1c1",
+  "AMENDMENT_A_TEACH2_18": "4b8b529a684ee26f7f60f4ace021b4f8046af8b07ad74da47c0715261e5b3877",
+  "AMENDMENT_A_TEACH2_19": "a5c4d4ff1d87efe0014a56d8dc30c13f1ed4be2c8a33c704e08c8ab47102818d",
+  "AMENDMENT_A_TEACH2_2": "ec3d65fc1ffa091d22d4d2766f29c66a185b0ae5e1c6cfe2bfaf5ac9f07807d3",
+  "AMENDMENT_A_TEACH2_20": "a29ebaf445bc6a01c3a7cd131c3fcd904fab22210a90f0a1d18c31d74feadc77",
+  "AMENDMENT_A_TEACH2_21": "0aa9ced6833cb10ca14e647508e34a6bac9aca68df7884485cecf40507327563",
+  "AMENDMENT_A_TEACH2_22": "91c8ea21c9d7beede0fce79659c9b1ec93ab2e315501dfe2a2043f90602ae6ef",
+  "AMENDMENT_A_TEACH2_3": "fdf912d2b6d47f947c26fad5807255e44cfdcd91a32372aaa69a1d4ec3c55bfa",
+  "AMENDMENT_A_TEACH2_4": "efe358ad61911420ac320cb3f83443bf348d568bebd1ff99d96c4c3bb9609ef4",
+  "AMENDMENT_A_TEACH2_5": "257a8145800027d6532f72ab488ea4a8f112e39b849044b38848836f90672fc6",
+  "AMENDMENT_A_TEACH2_6": "2c019244dca70a981779fc9a85643a63bd4238dfa1eb138993eed6525dfae34c",
+  "AMENDMENT_A_TEACH2_7": "58ef426ec4e1b076cdd431203075e274e5008ba73658059c5795e1dacbc16239",
+  "AMENDMENT_A_TEACH2_8": "d5fbf74647483b70858071bd9933175e406ced3f3fa9a94004bdda315a3a2466",
+  "AMENDMENT_A_TEACH2_9": "223648368bdeed62965e753543e6f9e1df047ecc44ef823e258f98ae4b778e22"
+ },
+ "ctt_weights_sha256": {
+  "A4-s1": "c39eafb6db92845a463a0c6bc711c73d45ddcb482b5e5eaffad466f337d7a69a",
+  "A4-s2": "3bfbf1f064e4dd96980bfa971cbd089706a4b99cfdaba0b84324f4a4b3a883ee",
+  "A4-s3": "6418ef1e27ffd18df9f571e9f5410af1afae6843d9d56cbcb01d31ccf947564b",
+  "A5-s1": "07a54adcdb58cfb746f35e0d4350a9bde536eb72f97d6b29451960313fca4bc1"
+ },
+ "cube_train_zip_sha256": "706e1fa6f3ce77ae4fee7a21cbb05b820c87f8a01c5df237858f81545eb2e899",
+ "frozen_teach2_sha256": "d62d5d07389dcf88e3a03da709828738f3a6082d8cdf3b43baddd10271afc0c1",
+ "helm_cut_commit": "9365331d38ca3ec0a9b62ee9b636026b5e2a02d1",
+ "helm_cut_files": 190,
+ "helm_cut_pinned": {
+  "helm_brain_canonical.py": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a",
+  "helm_brain_wide.py": "9ba0b20f610f4ae74d333ec2126970b094b51aa315672da4322e71211392c666",
+  "helm_chat.py": "fce018a6eed9d9c1d43fe80319826d0491978c5ad8de1b23714f64f10f5e3a93",
+  "helm_cold_cloud.py": "37930e16ea0cc8fb2b6be9fa46e4b3166fbee9e7543d777e69c3fa4e2ac95dc9",
+  "helm_cube_osc.py": "a7ce19757922aa9413ec5da373977b149b96f78039497ccfa62c5a921a525685",
+  "helm_eye_act.py": "8af1d7dca71fe3c404d355d880c3cb58adf2ad8f45999ed1fedd29b43b3cc25c",
+  "helm_memory.py": "9bd533eade1fbe4e55f614b0939c6d95a598399930576913311d7aca7d28bb2b",
+  "helm_memory_compact.py": "3f1f9eaa2d5356f7bb45590a71c869445b21910de68e90ecfc2ee626f4f586aa",
+  "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c"
+ },
+ "label": "TEACH2",
+ "member_count_excluding_freeze": 349,
+ "members": {
+  "FROZEN_TEACH2.json": {
+   "bytes": 5928,
+   "sha256": "d62d5d07389dcf88e3a03da709828738f3a6082d8cdf3b43baddd10271afc0c1"
+  },
+  "PREREGISTRATION_TEACH2.md": {
+   "bytes": 90092,
+   "sha256": "7ba88e1a177f9955c65a7d7ebf99ff89d35edc7e61ff8c628da8a22653ed0dba"
+  },
+  "README_TEACH2.md": {
+   "bytes": 2841,
+   "sha256": "1e9e87f594f52714446050f4fdc537e4b6b36e8fba96f77d03d3ae264b647379"
+  },
+  "brain/HELM_R1_W1_20261015_v3/AMENDMENT_DRAW_LOOKUP_20261016.md": {
+   "bytes": 1853,
+   "sha256": "5a54b494a6b4cc9c2998f60b4a111490b727a52ce63caa7f3c5cc0d0962d8056"
+  },
+  "brain/HELM_R1_W1_20261015_v3/AMENDMENT_I1F_20261016.md": {
+   "bytes": 2197,
+   "sha256": "7e2c376df972fe91695dcd1f1dee18f5f6a08a69ef2c6255fe74a441983a9849"
+  },
+  "brain/HELM_R1_W1_20261015_v3/FROZEN.json": {
+   "bytes": 8496,
+   "sha256": "7b00eb8e02e74c1ff75b6898c34de341705135d204de65c6eef2912ddbc7da3d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/FROZEN.precode.json": {
+   "bytes": 54476,
+   "sha256": "bbde22c78a3866e9eb56fcc84f72c4ac090dffa1c0563f4daba188156aae609d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/PACKAGE_FREEZE.json": {
+   "bytes": 16165,
+   "sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b"
+  },
+  "brain/HELM_R1_W1_20261015_v3/README_R1W1.md": {
+   "bytes": 7888,
+   "sha256": "40bb5299ac357906c4a34672454f807d56275f7f017a7dff2ac8155f61815045"
+  },
+  "brain/HELM_R1_W1_20261015_v3/RUN_LIMITS_R1W1.json": {
+   "bytes": 1411,
+   "sha256": "1d9fd1bc50a538f26d8bbbe3f8b927491d86c0fb347ced0c6ab53986246243fb"
+  },
+  "brain/HELM_R1_W1_20261015_v3/RUN_LIMITS_RB3.json": {
+   "bytes": 2905,
+   "sha256": "3c33af09015dc48bfa9de51b83b459ab5b84cf56c3546735439c3ad2acddfc49"
+  },
+  "brain/HELM_R1_W1_20261015_v3/c23_reference/C23_STATES.json": {
+   "bytes": 1103,
+   "sha256": "2fe34c0fbb730234cef1c8202d897d0261c9df41f01d34e5849f561a721bfd13"
+  },
+  "brain/HELM_R1_W1_20261015_v3/c25_reference/C25_TASKB_WORLDS.json": {
+   "bytes": 5684,
+   "sha256": "0f0bbda6fccd88f1fbe92bd0a2e201bde6f03cadc6b54e8b0185fd84d23e2eea"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/OWNER_APPROVAL_EVIDENCE.template.md": {
+   "bytes": 672,
+   "sha256": "3339f55c7c10175735d11e4bba529ebeb03d8d048573d0c973da76398b993135"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/PLAN.json": {
+   "bytes": 5359,
+   "sha256": "c6eca14da683e32c13a2df835440b90c3fb773d3cf66123b6b49dd7eb01eec91"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/SOURCE_MANIFEST.json": {
+   "bytes": 54010,
+   "sha256": "59f1be24a36ad21121db066820535e71f13a15658dd45b25a17c797010c1562e"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/STATUS.json": {
+   "bytes": 298,
+   "sha256": "737b3a2fbb09e93b639d795c8dc8b05a4147451c10daaf23535d6ef5cafd0485"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/__init__.py": {
+   "bytes": 104,
+   "sha256": "bb0871ea1700acf044c68062c2a696b5675147f16a56cf24d76519aed95c2151"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/merge_d34.py": {
+   "bytes": 12186,
+   "sha256": "2379d8039730d5ca70d13d64cfd8cc591f6b2ba7f6081acb91c913f61091b603"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/run_all_parts.ps1": {
+   "bytes": 3456,
+   "sha256": "96215dd3b147eb756b18ee3448101a2eceb2a0796ecb4f8690e838c39bd7d43a"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/run_d34.py": {
+   "bytes": 10750,
+   "sha256": "fe94d47696fab999331238f2a68c46cec3df0994f9b4af7c7699e2447df76106"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/static_check.py": {
+   "bytes": 4213,
+   "sha256": "eca14dc20b7ee99bc942f1b326a999f22ae7194ffc3c2a4638e86382f71a5282"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/supervisor.ps1": {
+   "bytes": 7505,
+   "sha256": "97604c67fc47248889bb22fafd744630ec33d8dbab38430a0783c49faa93f717"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/test_d34.py": {
+   "bytes": 4336,
+   "sha256": "d4c3a3749dce8a72cdca63f9d0025f002e262629e0e04a9b9740b009e43a3d62"
+  },
+  "brain/HELM_R1_W1_20261015_v3/d34/worker.py": {
+   "bytes": 6738,
+   "sha256": "323833db40da1d257363a983105d6d60ab1bc5e34517fff119772d5bbaacb18c"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_c26/C25_TASKB_WORLDS.json": {
+   "bytes": 5684,
+   "sha256": "0f0bbda6fccd88f1fbe92bd0a2e201bde6f03cadc6b54e8b0185fd84d23e2eea"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_c26/RB2C_READING.json": {
+   "bytes": 9770,
+   "sha256": "25f69e58e0fd86e9a9357483b3fa94579fc593e83ddc710e99213203f3706ea6"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_c26/worlds_rb2c.json": {
+   "bytes": 1929204,
+   "sha256": "807cecdb60fadd3dcda9bd8ab499584fdefe5f0d0524bcbfdeb25fe0187dde36"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_exposed/worlds_sealed_c23.json": {
+   "bytes": 87694,
+   "sha256": "1fb7a1c74762e805095582308cbc58da6c3ac71528edc272faaef15d67d7a27d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_refs/RB_C4_TARGETS.json": {
+   "bytes": 3736,
+   "sha256": "41dff83d0a7766b2763a49286f574dcb30a47cf9e0b1aad9aee49799b731afde"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_refs/REF_C21_T.json": {
+   "bytes": 1725,
+   "sha256": "856c548d90be814cff93e3287f30783c84ea1f43ecfc969088b9fdf5145f0b40"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_refs/REF_C23_RB_DET.json": {
+   "bytes": 3563,
+   "sha256": "980904862b5e828607fec007419cdd862b0041275923596fada5abb17b8a5122"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_refs/REF_C26_RB_DET.json": {
+   "bytes": 51335,
+   "sha256": "374b7635c305c710844ae820f71c1a2432cf47fae34c9b92ab7eea643ccac09f"
+  },
+  "brain/HELM_R1_W1_20261015_v3/frozen_refs/REF_C27_T.json": {
+   "bytes": 808,
+   "sha256": "b0dcae5e51909e60b66c221d03edc3f672d2f3f95cca3be311b91c108d27629d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/label_audit_b.py": {
+   "bytes": 4135,
+   "sha256": "5a8a7b6112645d2640294bba02de05856ce8e8e8f317d55eb666522c172794c2"
+  },
+  "brain/HELM_R1_W1_20261015_v3/lm_t1_cce/GRAMMAR_CCE_v0_1.md": {
+   "bytes": 14707,
+   "sha256": "36b9a6dbb52facdadf293476d5623fb80d122cf90412ba3d033d9de59b12ef70"
+  },
+  "brain/HELM_R1_W1_20261015_v3/lm_t1_cce/GRAMMAR_CCE_v0_1b_ADDENDUM.md": {
+   "bytes": 7271,
+   "sha256": "9191c7dbc4b3220fb2236c4bbb4493649d586ce05d113ddad2a9530fbb086241"
+  },
+  "brain/HELM_R1_W1_20261015_v3/lm_t1_cce/GRAMMAR_CCE_v0_1c_R_ADDENDUM.md": {
+   "bytes": 1402,
+   "sha256": "b76d2093fc5058822afc43170bf12133abfa64743f37e8a7de7fd98683bc5119"
+  },
+  "brain/HELM_R1_W1_20261015_v3/lm_t1_cce/cce.py": {
+   "bytes": 41546,
+   "sha256": "b494598e4b665514d7fd78b89a90186d7e7fc679ab7f407b4826459356289bd3"
+  },
+  "brain/HELM_R1_W1_20261015_v3/lm_t1_cce/cce_v01b.py": {
+   "bytes": 16716,
+   "sha256": "25047ba1c3cd3ecb9212aa0cb66f59fad9b8abdb62a9875f403ce59c201228bd"
+  },
+  "brain/HELM_R1_W1_20261015_v3/lm_t1_cce/cce_v01c.py": {
+   "bytes": 5143,
+   "sha256": "a043c988f7fda529adb2a3cdf8ad28405f7fe2b7e7c4f96e43bc42ef57a4302f"
+  },
+  "brain/HELM_R1_W1_20261015_v3/make_worlds.py": {
+   "bytes": 8325,
+   "sha256": "802aa255b4dc3033642452615189c8665183783c55269d83ac583d65e277d904"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/__init__.py": {
+   "bytes": 750,
+   "sha256": "ec1a67b433a30b43a1201b1068d85db0ceb69c1900b21007765e673c40e3af7d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/cce_skin.py": {
+   "bytes": 12683,
+   "sha256": "da2261a39c8689d884b3bcca30bf246accd64cd7190664445412c19762ecea7e"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/cce_stage.py": {
+   "bytes": 3084,
+   "sha256": "e8344c284ab84b4087fe129eee183c56e54ccfa5911c34a36ef9b3cae71de2d5"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/check_fresh_format.py": {
+   "bytes": 4908,
+   "sha256": "a1cca69c27cb01e9d7c92d43a11264723cb79357c365f68c0b17f068af84bcea"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/common_r1.py": {
+   "bytes": 5191,
+   "sha256": "45269ed176e713156e0ded23b290b5abdc71db089aae54065ff129afdf70cc2f"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/exams.py": {
+   "bytes": 9972,
+   "sha256": "0d0dfd984c600cd74ef9cdde1b6a7fd661027839a3b83ef52cb13272360d177f"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/gate_off.py": {
+   "bytes": 5697,
+   "sha256": "a2c31441acb4a7f48d8766b2733006ccba9c1208001cbe32c1e972d86f2e27df"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/gb_arms.py": {
+   "bytes": 4618,
+   "sha256": "c9e706a43075bac9ff96f4629bfe20062ca30d03f71a5e84f03f46d001dc49f1"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/gb_ls.py": {
+   "bytes": 11864,
+   "sha256": "1c0bc3b5b16864f474c7fe3a10495d3bb3732e3666d8d052e394e9152ee721dc"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/host_summary.py": {
+   "bytes": 7074,
+   "sha256": "d477aa0734412ae71dc0904184996961ead99c6693b208a1e93f0898a4150bf1"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/label_shuffle.py": {
+   "bytes": 2151,
+   "sha256": "0137d8913915957e6cb68914b13d511c07600b677f7a7f3b1eba6a709f47f7ad"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/merge_r1w1.py": {
+   "bytes": 46308,
+   "sha256": "e87671b92b4c050e712c177b5fc31cda88c27b7473e29ef9ac3d1e12246a1c05"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/switches.py": {
+   "bytes": 3399,
+   "sha256": "fa3ba8dfe650971931dbea2a2c6c1df13252d1d6e004b401745d2087c1cf78b5"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/t_gb_check.py": {
+   "bytes": 4358,
+   "sha256": "bf015e5825cf04df5a1161df6303dc166367c9a2f6749a6c2fcbeb81f0ed3809"
+  },
+  "brain/HELM_R1_W1_20261015_v3/r1/tb_arms.py": {
+   "bytes": 12871,
+   "sha256": "df9e394fa09d144e67222e6532a6dd55e848f422a309f914a74244196588385a"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/__init__.py": {
+   "bytes": 423,
+   "sha256": "32dba1fad4cd9e1b056a0ef1179df8e8288a9141e218254439bde5f86a8aaec6"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/brain.py": {
+   "bytes": 12317,
+   "sha256": "ef27cd8fbc761b6910691053201d1b9162282ea2d052f3591eadb93cc25c12c5"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/common.py": {
+   "bytes": 2393,
+   "sha256": "490d3db581fba24ba01267be5982df252b97bc1ef90882966156465ce50095a5"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/driver.py": {
+   "bytes": 23668,
+   "sha256": "07ab342bf7753a92d7907232cafb038154a7125ed5ca898214df648fb6eefb48"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/lut.py": {
+   "bytes": 7220,
+   "sha256": "ffede7b0403c510ca3354d6431972d2ff3944c1c7bee7c0d7b5072d3ecf88206"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/no_torch.py": {
+   "bytes": 1482,
+   "sha256": "973276d037c23ff22bbbe2ad6c913dec283bd1b67f792d02e7f9025bc213850b"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/policy.py": {
+   "bytes": 11792,
+   "sha256": "609db413c6a59cd74dbaeb695797426b0d893da65e23f5d9f5f247b803545217"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/rows.py": {
+   "bytes": 9029,
+   "sha256": "b2409f29fe615f006405197b1bfa57ba18eca345f42a10af33cd991c93159b1b"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/state.py": {
+   "bytes": 2883,
+   "sha256": "f601bd9c492d220856666006e3c0dcec0475d7e47bce2169b6b670e0d81624b9"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/worlds.py": {
+   "bytes": 8359,
+   "sha256": "a5606471f368223ed00d97b256564bf6e00fd9867b0af6123250d6a323c8c4c9"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb/writer.py": {
+   "bytes": 4856,
+   "sha256": "7167400e118c3d214febc021e65c616776f75ed817a23859741ccb06ae9fcaa8"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/__init__.py": {
+   "bytes": 804,
+   "sha256": "fcdf6e5fdd6fef2aea3bda908e4ba0cffd5d1f3bee4ae23d7cd73c6d50368207"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/brain_b.py": {
+   "bytes": 6432,
+   "sha256": "e8013d1c656dfb5c2e1b5ef832d1c4980f1b7077c5f733975f1708c42f20a887"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/common2.py": {
+   "bytes": 2904,
+   "sha256": "7e11d76994409535902a7f0350bc02e971be1180e2c5d7930cc1395a8afc7842"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/compose.py": {
+   "bytes": 11431,
+   "sha256": "8edbf7595433bde5afc3b04e8fde7b28bf4f2c6afbdece649221b301a9cbbd0c"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/driver_rb2.py": {
+   "bytes": 46079,
+   "sha256": "e7aeb9fb088b3f0c6f657b955b6f8f591eb0090b399c3c9b5cdb8d82623a3df8"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/lut2.py": {
+   "bytes": 10247,
+   "sha256": "c7c81886383ed4c17d07b7e18cf09763fb20b204f3ff44e4c4548b27e4d0169f"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/mlp.py": {
+   "bytes": 4458,
+   "sha256": "8ec97aceeaf4a7e2f4e251174b76baa7544f60237f9fe47a7d121b6b332040ef"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/rows_rb2.py": {
+   "bytes": 20176,
+   "sha256": "52296013f45a95865184a703f4d2e2c06280e533dce5c18abd188dc3ed1abf3f"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/sdg_select.py": {
+   "bytes": 7063,
+   "sha256": "df4f8dd543d76b9eed433b54b85fbf36a75d0ed1ad2db41ed08c6754f647c537"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/state2.py": {
+   "bytes": 2457,
+   "sha256": "762aa39ae64db959fa6a1cb0542e303511d953d9ca514ec79e362b3ff2be622d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/worlds_a.py": {
+   "bytes": 7471,
+   "sha256": "a36d4748a4f4b663db75d0c6a592d404651e2e1704b0bf925eb8e17214925581"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/worlds_b.py": {
+   "bytes": 15343,
+   "sha256": "aa8383e668ac4d6c043c515cc1a309be00e66df7c24273f2ddc456c5bf2c4512"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/worlds_h1.py": {
+   "bytes": 4396,
+   "sha256": "127d549648724190f4cc18505fd6ddb28797e6366392eb0230a4b9d4705941a0"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb2/writer_b.py": {
+   "bytes": 3382,
+   "sha256": "cde6b1013eb96726411884ae46ed7b7b88a0ba8f5cbbae115a5c6edf50363a53"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb3/__init__.py": {
+   "bytes": 1465,
+   "sha256": "3728c25297933b31ae9f0d09a0a2ac210339cb5bf3eafb01193d7cf91b72ee58"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb3/common3.py": {
+   "bytes": 2464,
+   "sha256": "643ca31f4c831a005d23d289864794557de2f6af0f343654afe36cc790c4273c"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb3/encode.py": {
+   "bytes": 9550,
+   "sha256": "ac3b924d2ed9fff30dbb693a1b547430f0b48af1bc7db8da4774658788fda98e"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb3/frozen.py": {
+   "bytes": 4061,
+   "sha256": "1225744b0c7450936c591ede3145cf1a7be2ce69b0a270bb9ea31108a72cbb9c"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb3/params.py": {
+   "bytes": 1610,
+   "sha256": "c207c3cd49383d31ed4dc1bb394395db2c5d3d90b1020325521584287ea45734"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb3/reading.py": {
+   "bytes": 8911,
+   "sha256": "189e765a5f567e3b0bc1fc900dbc13a77806532f9b4b20627adb0b6948ed2afc"
+  },
+  "brain/HELM_R1_W1_20261015_v3/rb3/schedule.py": {
+   "bytes": 1733,
+   "sha256": "a6ca5a922d8542930852460293d3e39a3a412f804e224a63f39e48e17d783e94"
+  },
+  "brain/HELM_R1_W1_20261015_v3/sdg_source/SDG_ROUTING.json": {
+   "bytes": 45427,
+   "sha256": "02a93150888e2bbb5c2648c1e74baddaa6b4f5f289bccd06d194a35a462ea848"
+  },
+  "brain/HELM_R1_W1_20261015_v3/t_frozen/GB2_READING_c21.json": {
+   "bytes": 57867,
+   "sha256": "f2f69ab5e2fd95cf3b6a6584326a53b24a9c24bd101c9630e86bc4dd0973fb68"
+  },
+  "brain/HELM_R1_W1_20261015_v3/t_frozen/T_C21.json": {
+   "bytes": 3883,
+   "sha256": "8b52f9787fd4d8e58f8bee86fd7695e2dc8fa16dad817671e4bfa949e7435d6f"
+  },
+  "brain/HELM_R1_W1_20261015_v3/t_frozen/panel_readwrite_c21.json": {
+   "bytes": 61902,
+   "sha256": "40e9cb1a015928eb5b5157b98d4d626ee0f89a25efb7b4398b9283dfd6dddeb2"
+  },
+  "brain/HELM_R1_W1_20261015_v3/t_on_b/t_b.py": {
+   "bytes": 15986,
+   "sha256": "1b39245d8dc316c067ec29598c971bc8ba5d4c0b3407a8a05df374dbf286bc43"
+  },
+  "brain/HELM_R1_W1_20261015_v3/t_task_a/score_t.py": {
+   "bytes": 5867,
+   "sha256": "f8c0cf5133cb4c10d6be0a303a9e1775603d7bfe6fd17341d911a6d8a8a5b2a1"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_r1/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_r1/test_repro_r1.py": {
+   "bytes": 4070,
+   "sha256": "72f4f98d97c8a75ebcbb0c45f3a2cce7e07b38ea4c8a3411499a9c91fb2699e7"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_r1/test_run_r1w1.py": {
+   "bytes": 25651,
+   "sha256": "9736d0a9f5700ca46e6906435c25ad2b29e4b49e9c271d6463e897b6c69abaab"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_r1/test_units_r1.py": {
+   "bytes": 14042,
+   "sha256": "1064f0fc9c8425b0d8c2b8ff07fbabb5de508065de056a868c1715bbda589e8d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_rb/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_rb/test_units.py": {
+   "bytes": 38573,
+   "sha256": "22cd3d141f2e4776a8a076ca816c2dd51f7e7af4c7950d1513366076ebb7053e"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_rb2/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_rb2/test_units_rb2.py": {
+   "bytes": 34050,
+   "sha256": "16bb848c87c4c2b048e0a0b9cd5540d10a9e0ec0d85adba862ddc4a7aca90e70"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_rb3/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_rb3/test_run_rb3.py": {
+   "bytes": 11349,
+   "sha256": "5f9b54047b9bfddb49e7e7d934aaa8f2819b8f85e303ec45a675262c9d2ef4e7"
+  },
+  "brain/HELM_R1_W1_20261015_v3/tests_rb3/test_units_rb3.py": {
+   "bytes": 15131,
+   "sha256": "690d1b2e1276f7407a827d6a9bf340f6f12e8e5c607414ba6dbae35b1fa288c4"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t1/__init__.py": {
+   "bytes": 104,
+   "sha256": "7ebf67f788a8ce18a991d866e217e669bb3585abbb8166432d621c18ec45e6aa"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t1/engine.py": {
+   "bytes": 28210,
+   "sha256": "d8589ef494e29add7fefd31be2523fc5f54e9907594d69ea27ddeba41225b751"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t2/__init__.py": {
+   "bytes": 128,
+   "sha256": "b6ed20f45e3bbe2eda2710333e56d9c90d32a0f794d721e7c382c49fb99b1ce2"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t2/engine.py": {
+   "bytes": 26484,
+   "sha256": "c9aa0f01e894a8d55d87ca10c494319b847e3e6d28632fb670315256a868aa6d"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t3/__init__.py": {
+   "bytes": 173,
+   "sha256": "f0953f478e9a2f74836d484a41f3f7c0848d421933b2e04f744eb6cd6f9f82f0"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t3/engine.py": {
+   "bytes": 23768,
+   "sha256": "0e48cd011b6da2aba186e7fc967a10230cc5e8f91001359e0b2f3ecd536a1af4"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t4/__init__.py": {
+   "bytes": 187,
+   "sha256": "f289815d50f9e7155d928e794079abfd767db20d1e3fd244d94acf3144b48979"
+  },
+  "brain/HELM_R1_W1_20261015_v3/vendor/lsr_t4/engine.py": {
+   "bytes": 38014,
+   "sha256": "2047144c1d5f5e3c77ee1694407fe2c703ae3c76b3a396d1f6aac9a640480886"
+  },
+  "contract/CUSTODIAN_PROCEDURE_TEACH2.md": {
+   "bytes": 3927,
+   "sha256": "c7f9c14e1117a3c21fcbb6b5dc3dad72caf9709c50dd6beb825a7bc255ddbbf1"
+  },
+  "contract/DISJOINT_CHECK_TEACH2.json": {
+   "bytes": 897,
+   "sha256": "2417cfd56ab88a722a6e45ad7937120537b50c4a13048324195b9073dabea8aa"
+  },
+  "contract/HELM_CUT_TEACH2.json": {
+   "bytes": 31596,
+   "sha256": "f9fc151544974ecb8a42e4b9968ecc567006a9ec4e9b0a8e167f531798f13f66"
+  },
+  "contract/KEY_FORMAT_TEACH2.md": {
+   "bytes": 3105,
+   "sha256": "12a0206ca6b0b7ab642f118a32953e27fc8c8c6fa3517364ca094f95a21c9e49"
+  },
+  "contract/WRITER_BRIEF_TEACH2.md": {
+   "bytes": 5454,
+   "sha256": "cb4079b66971dc7ec232c9e6b2581031b39383d91c36499ebb7c3ef9baeb912e"
+  },
+  "ctt/cube_task/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "ctt/cube_task/audit_judge.py": {
+   "bytes": 2009,
+   "sha256": "6a914ed3b8c66fddc2e146c521851ec929ce395feb495e934593af3603330cda"
+  },
+  "ctt/cube_task/build_cube.py": {
+   "bytes": 7275,
+   "sha256": "50173b85125567104e8058291e19c0af5e1fdf2a0098284bfc5b1c75381fe70b"
+  },
+  "ctt/cube_task/cube_serve.py": {
+   "bytes": 2755,
+   "sha256": "284a8ca0f59a463f79962cedf1385a65926b212135ef8defa0542b7f2bb953f1"
+  },
+  "ctt/cube_task/mix.py": {
+   "bytes": 1546,
+   "sha256": "e2b49ced6680b2c9c94060fcb793e497e0efe5396ef015f717620c689487be2d"
+  },
+  "ctt/cube_task/read.py": {
+   "bytes": 3726,
+   "sha256": "a1b020357c9d0041dd7a6145e090885d29249e75c9703488e62f043ccb6cf0a9"
+  },
+  "ctt/cube_task/target.py": {
+   "bytes": 5569,
+   "sha256": "c41e5726394506b42df30fcef84da1eb4fb714309e36b9fc45d74abe7d9941cb"
+  },
+  "ctt/helm_cas_translator/__init__.py": {
+   "bytes": 479,
+   "sha256": "ead3ffdc54a9d7a6bb86cb8da6cf4077e3faccae0f03ee76b8cd58c789cb717e"
+  },
+  "ctt/helm_cas_translator/audit.py": {
+   "bytes": 3258,
+   "sha256": "6a3b9c4c0579027105ed7d848e9cc76451ecb9ceab5fb3faaa337c7ecc1b4662"
+  },
+  "ctt/helm_cas_translator/aworld_target.py": {
+   "bytes": 6340,
+   "sha256": "0c1f57f304dbf12d7259e8bf1ffab6fb45de6a28e85139dc949533f17c06af5d"
+  },
+  "ctt/helm_cas_translator/cas_vocab.py": {
+   "bytes": 9819,
+   "sha256": "579f9d1656d8faa92aaf912fa2ec0bc6e474409fe1160d65302a2e96ee1d0bee"
+  },
+  "ctt/helm_cas_translator/model.py": {
+   "bytes": 7103,
+   "sha256": "69575ff9976de6e2e0119444ec18dc0985fd078b38abfa6db21c7f11d93a0d31"
+  },
+  "ctt/helm_cas_translator/notation_target.py": {
+   "bytes": 3285,
+   "sha256": "47b7dd1f29f95da01418c158ea880e63180a143f046e7360fd1e88b334ada782"
+  },
+  "ctt/helm_cas_translator/param_count.py": {
+   "bytes": 2904,
+   "sha256": "6732f133003d8fdeaa09657fd2685be21f9eff63bd9de03c35314cf8b545425e"
+  },
+  "ctt/helm_cas_translator/serve.py": {
+   "bytes": 3887,
+   "sha256": "eb481308052dca15712a32d6877ae203e7a7622131b1501eee4cbb6056543054"
+  },
+  "ctt/helm_cas_translator/slots.py": {
+   "bytes": 6004,
+   "sha256": "d1553c7a7d934f3d003fd090bbdad98e88fba0a8ce58cccfac7903b79c4d6bbf"
+  },
+  "ctt/helm_cas_translator/vocab.py": {
+   "bytes": 4530,
+   "sha256": "e4df240e5ff974f640b1fe109fe8c86860bde7bae9b3ed76458002b89347b667"
+  },
+  "ctt/helm_cas_translator/wordpiece.py": {
+   "bytes": 3790,
+   "sha256": "6229e0c5932e18bb5ecf262b7f9bc377dcf7e3cc92336cced8de2ce249a37142"
+  },
+  "ctt/vocab.json": {
+   "bytes": 101032,
+   "sha256": "825b417a62b6df94567fdb686200988b92a058cafefb127561c661c28db1265a"
+  },
+  "ctt/weights/A4-s1.pt": {
+   "bytes": 38380975,
+   "sha256": "c39eafb6db92845a463a0c6bc711c73d45ddcb482b5e5eaffad466f337d7a69a"
+  },
+  "ctt/weights/A4-s2.pt": {
+   "bytes": 38380975,
+   "sha256": "3bfbf1f064e4dd96980bfa971cbd089706a4b99cfdaba0b84324f4a4b3a883ee"
+  },
+  "ctt/weights/A4-s3.pt": {
+   "bytes": 38380975,
+   "sha256": "6418ef1e27ffd18df9f571e9f5410af1afae6843d9d56cbcb01d31ccf947564b"
+  },
+  "ctt/weights/A5-s1.pt": {
+   "bytes": 9960424,
+   "sha256": "07a54adcdb58cfb746f35e0d4350a9bde536eb72f97d6b29451960313fca4bc1"
+  },
+  "helm_now/SOURCE_CUT.json": {
+   "bytes": 31596,
+   "sha256": "f9fc151544974ecb8a42e4b9968ecc567006a9ec4e9b0a8e167f531798f13f66"
+  },
+  "helm_now/cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
+   "bytes": 92461,
+   "sha256": "17cd198321d242bd74ff789a4b7f8032d499a7ff8534e5b07545b6221930fde0"
+  },
+  "helm_now/docs/working/helm_cube_oscillation_v1/teach2_rule_reader.py": {
+   "bytes": 3443,
+   "sha256": "368b8759ac0d9e284259c91382959b6b731920bbd46c9f5b4e63c84c02761088"
+  },
+  "helm_now/docs/working/noetic_council/continuity_build_v2/atlas.py": {
+   "bytes": 30857,
+   "sha256": "f6982a4926059013862532cfb2d4063432d734300ae566854510305f6ec18485"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/PROVENANCE.md": {
+   "bytes": 1567,
+   "sha256": "c975c869cb7fa5fb90899d090052db595d318d5503f568562cc59f4b7436cc47"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/README.md": {
+   "bytes": 1896,
+   "sha256": "115de7109263125ae858780a0e3ba1326e670ba87ccbb476a19bc85c17a35475"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/RESULTS_20261018.md": {
+   "bytes": 5341,
+   "sha256": "60bb9ec7c38e5313f39e1e43a4e56560b96001bee80412c34940484566e14bec"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube.py": {
+   "bytes": 12430,
+   "sha256": "f8133f83afbd55727ed42549ef0b83f637d9bbe9608f32cdc9646cd9c70ad23a"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/PROVENANCE.md": {
+   "bytes": 1567,
+   "sha256": "c975c869cb7fa5fb90899d090052db595d318d5503f568562cc59f4b7436cc47"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/README.md": {
+   "bytes": 1896,
+   "sha256": "115de7109263125ae858780a0e3ba1326e670ba87ccbb476a19bc85c17a35475"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/RESULTS_20261018.md": {
+   "bytes": 5341,
+   "sha256": "60bb9ec7c38e5313f39e1e43a4e56560b96001bee80412c34940484566e14bec"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/cube.py": {
+   "bytes": 12430,
+   "sha256": "f8133f83afbd55727ed42549ef0b83f637d9bbe9608f32cdc9646cd9c70ad23a"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/operations.py": {
+   "bytes": 8289,
+   "sha256": "75a210eadfd1180f987107ec9a4afd25f3b0d7a834596addb3f35e099d496a9d"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/store.py": {
+   "bytes": 4754,
+   "sha256": "9fcb9027a494f84c4b52762e728c5b80926d1ffd87c90c7e227b6c41dd3d2245"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/test_all.py": {
+   "bytes": 22212,
+   "sha256": "91ec14d8a170e016e24bcfa80029f006cd94ac2cc7044afc4ee4200bb23b2540"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/cube_store/turn.py": {
+   "bytes": 26557,
+   "sha256": "3fb0020bd8810f69df643bf2f35545864c1886a5cc879f7a131507e9cef4c6c4"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/operations.py": {
+   "bytes": 9280,
+   "sha256": "186dcedbab471e7d7ab013429bcdcd12456275dcc2d5675d5071958c12d82815"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/store.py": {
+   "bytes": 4754,
+   "sha256": "9fcb9027a494f84c4b52762e728c5b80926d1ffd87c90c7e227b6c41dd3d2245"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/test_all.py": {
+   "bytes": 24344,
+   "sha256": "0154df4fd1beac637d512421db0c99c35c75ef8a120de687eccef95d07e9da6b"
+  },
+  "helm_now/docs/working/noetic_council/cube_store/turn.py": {
+   "bytes": 27914,
+   "sha256": "48af01d8fefbf5aed41c79c4752fdcc22b38fde41691abd82f6a950802e6ba6c"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/PROVENANCE.md": {
+   "bytes": 9210,
+   "sha256": "e209c3c69c7c7c1aee7c4b9e4ad35c2ae5d7735ab2bcee85a93ce40586b79ab9"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/README.md": {
+   "bytes": 32820,
+   "sha256": "91a81c500cdd88ad288f80cb53b517dae3a6db76d6c529ef5a1d0d9372c57dd1"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/REAL_FIT_RESULT.txt": {
+   "bytes": 6264,
+   "sha256": "05ca6d6fe019751ddf9557b00a26e332760b455b5f0cd63c00170d6f075ce8e8"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/bias.py": {
+   "bytes": 14736,
+   "sha256": "d31a129db14a2c37ae712ec55c703705e4d735f433dab773a848ead68421e1b5"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/drive_loop.py": {
+   "bytes": 26000,
+   "sha256": "f54791d401971791d5ae1a8f82a13e2c39acba0443ed0ea0f9f37bdfd994ead8"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/eye/__init__.py": {
+   "bytes": 2544,
+   "sha256": "fe7f69a8c325e044c422314aa08c3efee6667131f10c46463a767f93a575bcf7"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/eye/eye.py": {
+   "bytes": 18008,
+   "sha256": "e561ac707e691727e5b0b64bed4fbb909fa3037f18cb79a652c92ee579ffe97d"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/eye/recipe.py": {
+   "bytes": 14203,
+   "sha256": "9ed765fec23901d2c7ce7154a6834d6321282654e2a65f6259b3d91ffb87e950"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/eye/recorded_suite_results.json": {
+   "bytes": 6593,
+   "sha256": "d3925567e165200fc960f428d365be24adc28dde0b6a2788877278e6a99d22e5"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/eye/signals.py": {
+   "bytes": 14452,
+   "sha256": "3d0a20588e075a12cbaee9475b54a33d16504d5b5146783403504ffc9ac35a07"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/eye/tap.py": {
+   "bytes": 7974,
+   "sha256": "e0cb0edd791019e118a3410625eca697530ec80c1b0ac0ae72a8156b6c366ec6"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/faculties.py": {
+   "bytes": 30743,
+   "sha256": "1a255235fc36fed655f03552e7d4a6b97b8d50da0917b95469f6afb195dbc276"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/guard.py": {
+   "bytes": 31030,
+   "sha256": "f5e4c805a1827d2e919d7afaa643c4691979ca82749066d596e207d8f349007c"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/held.py": {
+   "bytes": 22965,
+   "sha256": "9d8d715d30c7f401749fa40c24219766d7c6692e43b0149a29201cc7af15fd70"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/real_fit.py": {
+   "bytes": 23438,
+   "sha256": "507f0abba7e6397ed883240c898a43711764d0ad99ce446cde7c74d465d45df6"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/restart.py": {
+   "bytes": 31250,
+   "sha256": "d5133233eaf88f592ad93e4ea82b5454d41bf0fce04754eb2dbdefce42ff0bfb"
+  },
+  "helm_now/docs/working/noetic_council/faculties_v2/test_all.py": {
+   "bytes": 79525,
+   "sha256": "1b85ded0db0c4b3352c2a6915f13d680771e9d4c4e3630139d105fe63740dbe3"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/ALIAS_WIDE_LEXICON_v0_1.json": {
+   "bytes": 6133,
+   "sha256": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/FROZEN.json": {
+   "bytes": 11016,
+   "sha256": "ac41c92ea5dc4a44391f7e4366af4f03503b2ddff45a5ddbf66e06948429094f"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/FROZEN_LEXICON_V2.json": {
+   "bytes": 5659,
+   "sha256": "ef663e28be657058d0b6bfccc5c5076d6eb300c12b94fad74bd89ea3bc8c5431"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/FROZEN_T1B.json": {
+   "bytes": 6161,
+   "sha256": "6a9eae1aa7fdf6ff3ce8c874a291b2ef149b98084d34f57e8a079e8e678717b6"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/FROZEN_T1C.json": {
+   "bytes": 3230,
+   "sha256": "f69a58e1a5addbb9a854e85d06c0c64ca599af861c714f412d6dfffaffb9f926"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1.md": {
+   "bytes": 14707,
+   "sha256": "36b9a6dbb52facdadf293476d5623fb80d122cf90412ba3d033d9de59b12ef70"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1_v3_ADDENDUM.md": {
+   "bytes": 6733,
+   "sha256": "c6c93153cc937ddb6adf086ed9963f6dbc77df340278c0a6c817c079b7d27cbb"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1b_ADDENDUM.md": {
+   "bytes": 7271,
+   "sha256": "9191c7dbc4b3220fb2236c4bbb4493649d586ce05d113ddad2a9530fbb086241"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1c_ADDENDUM.md": {
+   "bytes": 2269,
+   "sha256": "333ebde57b269d8f1494218cd1f8f6bfe950a7a2d53e0bb9f1d736e926c94d1a"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1c_R_ADDENDUM.md": {
+   "bytes": 1402,
+   "sha256": "b76d2093fc5058822afc43170bf12133abfa64743f37e8a7de7fd98683bc5119"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/HOW_IT_TALKS.txt": {
+   "bytes": 6105,
+   "sha256": "4e37109f8acfee8a8689488cff76157d343053a5a379dbc8661e9f3d77d27a9d"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/M4_BASELINE_20261018.json": {
+   "bytes": 96549,
+   "sha256": "2c34b248dd6987cea1222d6d49702e4d8a09af7741589dc82ef93cd42a8cf728"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/MEASUREMENTS.md": {
+   "bytes": 6230,
+   "sha256": "173ca6eef56d04d9472dda5a14871ed39241f074cb1b63b1e5355fadf63096d2"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/MEASURE_AFTER.json": {
+   "bytes": 8577,
+   "sha256": "9ff265e30236bc1cc3f76f39b33af5b4e757e4ffd7fb2aa21eac3931c51de1b1"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/MEASURE_BEFORE.json": {
+   "bytes": 8736,
+   "sha256": "9a192974a1d4737981265e7866ba214343f21453d78560030943ca9860c1eda2"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/OWNER_APPROVAL_EVIDENCE.template.md": {
+   "bytes": 1277,
+   "sha256": "746e7b37dbeb2ce9dcadf7dd365123fc840a81f5702970246f5030b127df8d52"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/PROVENANCE.md": {
+   "bytes": 17561,
+   "sha256": "540f7b4ae402ac6a947f747c055832bcc7e4963eea57d85159224a6e7d852354"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/README.md": {
+   "bytes": 7168,
+   "sha256": "30d46e6b1587e0acfb80f461a719a898dcdc360a52606236218813ed802a24b3"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/RESULTS.md": {
+   "bytes": 4432,
+   "sha256": "1e96b4fc52804297a4a113e88071a6aac4e6e0cef0ddf167f4ad513bf6f2ef41"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/RESULTS_LEXICON_V2_20261018.md": {
+   "bytes": 8802,
+   "sha256": "3de458f1fe0166653abd7ac114f37b70e05f0a55eae6c76acd3168dbc623635e"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/RESULTS_T1B.md": {
+   "bytes": 3228,
+   "sha256": "f6b46849023a0aa45c357e6f2805ada00a4ef956833a27e29cfee4cc6b7d379c"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/RESULTS_T1C.md": {
+   "bytes": 1464,
+   "sha256": "3e3a53e67a7bba064ff85a3bd6f8a995ea68414afd742a9f994ddcff6b692a36"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/SEALED_98_SCORE_RECEIPT_LEXICON_V2.json": {
+   "bytes": 612,
+   "sha256": "2ac6fe71eabbfc23be498a3a2138d543c51145dd8f130f0a06157fa6a81a2295"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/SOURCE_MANIFEST.json": {
+   "bytes": 8243,
+   "sha256": "0db2fcdb01965110ec15f2d032fc6014f7890bd043a15a46e60f9e588c4a580e"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/SOURCE_MANIFEST_T1B.json": {
+   "bytes": 11277,
+   "sha256": "db2d4f4076270c3bf4b0a82f1af74eddc2d99e2a92824bf7031a9f00ef27adf9"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/SOURCE_MANIFEST_T1C.json": {
+   "bytes": 13231,
+   "sha256": "89c17fddc3063e3b425f5845cdeb5b9b979f65246cf2f53b4e99d2ab4df40012"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/STATIC_CHECK.json": {
+   "bytes": 1363,
+   "sha256": "7c04c8e0d234096b0cd0e0464f2f89feaefa997930e761a58e07b775d745bff7"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/STATIC_CHECK_T1B.json": {
+   "bytes": 1961,
+   "sha256": "843176ed52419651be3568cde548ee356e379215c5ea8bb487fd90e45a3204ea"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/STATIC_CHECK_T1C.json": {
+   "bytes": 2357,
+   "sha256": "b704cc1aa89693d3eee0dad69dfe19f7d57cba4c62f5e1fe1a2afb199b41f26b"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/STATUS.json": {
+   "bytes": 274,
+   "sha256": "dc520b205a0c0f64198a2528c1cbeecbb3a0ca0bce1be265f707c0f7ebc78a7d"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/STATUS_T1B.json": {
+   "bytes": 276,
+   "sha256": "24a4c6fbe4559d35908b1ae6a78a8ca6cbec133999688cde5f43860b0ba38f6b"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/STATUS_T1C.json": {
+   "bytes": 276,
+   "sha256": "c5a009eb036e66018d0f22b1b961f3703f6976e0e466ac97e9b7fa2ee8e33a91"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/aliaswide.py": {
+   "bytes": 8421,
+   "sha256": "e6afd206736ea9c70bd15a72281c503d15cf7f97da2735cacb476ede8c722211"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/cas_ast.py": {
+   "bytes": 13148,
+   "sha256": "175fbadf23e9ae11ed94513e6ff382b07e6bb46f78bbc7e764200f3afb8f58ae"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/cce.py": {
+   "bytes": 46446,
+   "sha256": "7135d3958ad5890a148fcb65f307b89b9f9966a1b9e25cd7a9a5e1e62a5ee614"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/cce_v01b.py": {
+   "bytes": 16716,
+   "sha256": "25047ba1c3cd3ecb9212aa0cb66f59fad9b8abdb62a9875f403ce59c201228bd"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/cce_v01c.py": {
+   "bytes": 5143,
+   "sha256": "a043c988f7fda529adb2a3cdf8ad28405f7fe2b7e7c4f96e43bc42ef57a4302f"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/coverage.py": {
+   "bytes": 12561,
+   "sha256": "2919d2d803eb184b812a0ba92f4594c3962b953a0b8536c848ac0b8e23e8eb5f"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_FREEZE.json": {
+   "bytes": 511,
+   "sha256": "91b49bb98af31e5fb074442f1dc328c564ad846ed6f121f987ce579216962acf"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1.json": {
+   "bytes": 47070,
+   "sha256": "653cdc708112410b18c59ce26daf65382eccd94a8f9e49705fcea32eeedab56b"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1b_ADD16.json": {
+   "bytes": 12445,
+   "sha256": "cf28d0a065190bbc283e6256de46503917b924e952a3682bfb22dd750fdc1ffc"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1b_ADD16_FREEZE.json": {
+   "bytes": 391,
+   "sha256": "44e152b3e20aadb2dfec0d44514cc26e7bc745b147fc4c84f9849eb3b9544277"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_DOTTED4.json": {
+   "bytes": 3946,
+   "sha256": "e34bf08cb38171299abe146316f3457e8f015c3c7075c29d2eac9cbe43ebc216"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_DOTTED4_FREEZE.json": {
+   "bytes": 299,
+   "sha256": "4fcb6ac202a311aa6880b10949a901cfde25e90553c1022a597900e3156e99f1"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_R_DOTTED4.json": {
+   "bytes": 3778,
+   "sha256": "73b71b44c524753185fcd87180860e5ac9322c2ce3ab29315be092dbd203c86f"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_R_DOTTED4_FREEZE.json": {
+   "bytes": 333,
+   "sha256": "d3b17da7097c6d5063c7478df4a8a39f5dfeb87f75f0a4c5697dc6870dc02ae0"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/how_it_talks.py": {
+   "bytes": 3945,
+   "sha256": "ee1300c28aecc8e5d996576f07f0bebe5b2527090ea5d8e1d73a2991fdefb0a7"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/lexicon_v2.py": {
+   "bytes": 7394,
+   "sha256": "b1eee572e67445552a80a90630120855218480292574c71bbbffa0f471131113"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/lexicon_v3.py": {
+   "bytes": 12602,
+   "sha256": "7bb1de26f0fcca20d99f6be526a7ce9a0119fec680551803eacf2c8aab8b7585"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/measure_marks.py": {
+   "bytes": 4589,
+   "sha256": "e3fe0d6ae93a7968a0b6a31fea688c33441f22d188f46686ba66733e81328048"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/run_suites.py": {
+   "bytes": 1987,
+   "sha256": "ebd3765b18322489c30215838f1626dc41f34f7d17aa084407f392a479d52058"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/scoring.py": {
+   "bytes": 16677,
+   "sha256": "1712681f0c088f552227f52730172701a6b9a36ad53b2a16f4f276197a24f1d8"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/static_check.py": {
+   "bytes": 4315,
+   "sha256": "53b60e221765557cbbc9994d9bb29b101f7b65bbf948e391e491203d85954821"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/static_check_t1b.py": {
+   "bytes": 4887,
+   "sha256": "0a6027a4251c7e8b254987da9f18419404947cd70e2a973764dc068269f314a1"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/static_check_t1c.py": {
+   "bytes": 5233,
+   "sha256": "e3bc4102fc728caedeb3883984b1db8d789bf7f8dbfe95f1215498812485c49c"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/supervisor.ps1": {
+   "bytes": 6301,
+   "sha256": "39654f795b07e6ef6db0b8fdea63cb9edb8f56f1304bcd5df35c966d41dda77a"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/supervisor_t1b.ps1": {
+   "bytes": 6458,
+   "sha256": "d1c2e580b24396a20638305595b3c8834b19895ef51e39cfad8ac1fa7cdd282c"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/supervisor_t1c.ps1": {
+   "bytes": 6514,
+   "sha256": "87b5de585ab59ca6602e9d692ef92689c89942516e25b78f6f8e95343d67d9fc"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/t1b.py": {
+   "bytes": 13121,
+   "sha256": "4a175cad7f95266cf3a86a1974ed2a0c6e30dceab73295037dab85b1c46b0b46"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/t1c.py": {
+   "bytes": 5260,
+   "sha256": "5afecfb42c7f763487cea70ca565f10edb897ff4e74f1458761187ce42fd04f5"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/test_lexicon_v2.py": {
+   "bytes": 7472,
+   "sha256": "27a7f8d571f789de4c8b991a44f79920029b598d262eca6fcb64a978e82914f9"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/test_lexicon_v3.py": {
+   "bytes": 7080,
+   "sha256": "68e6956ccd330f26302501d3b1c901b9829ecc14d606f092f7488c1b4a08eea2"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/test_lm_t1.py": {
+   "bytes": 11799,
+   "sha256": "2e6880a7c13a14022814f664e45cb5246bf024e61de754ab459a8e5942d60ce2"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/test_lm_t1b.py": {
+   "bytes": 4150,
+   "sha256": "473fec265b39a685c012e45194ea51c77fe130e0088d025823ebdec8ce468ca6"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/test_lm_t1c.py": {
+   "bytes": 1595,
+   "sha256": "27410bf408c430718eba060d484154efb1610c4a496516ec165657665326cdd2"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/test_lm_t1v3.py": {
+   "bytes": 12738,
+   "sha256": "f149b2f24444d2414530b17834cec96012e73981f8ecaf17a540d9dc8d89dc46"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/worker.py": {
+   "bytes": 9615,
+   "sha256": "bb54388f8246c706d9b93b543cd04007abba864aabfcb3593a6e8d014b456669"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/worker_t1b.py": {
+   "bytes": 7389,
+   "sha256": "ceeb309b8c468ee7897f6287afb265cfc5f82fe35e3a4ee48702f07bc84e8b0e"
+  },
+  "helm_now/docs/working/noetic_council/language_v3/worker_t1c.py": {
+   "bytes": 6182,
+   "sha256": "fa32d686933aef74afcc33e57a2ec8e74e50dadc772bf188d1e6068ac6f2ee84"
+  },
+  "helm_now/docs/working/noetic_council/repair_performer/ACTOR_RESULT.txt": {
+   "bytes": 1452,
+   "sha256": "fbc9cc15e007ef7ea2939c02c1352878416796fb1b61f98d8250ba4951321002"
+  },
+  "helm_now/docs/working/noetic_council/repair_performer/README.md": {
+   "bytes": 4436,
+   "sha256": "b562ceba27037eb4a30466309002bd90e0a42b76e9acbba0826599cce24afbab"
+  },
+  "helm_now/docs/working/noetic_council/repair_performer/actor.py": {
+   "bytes": 10502,
+   "sha256": "4a0e14d78e4f7d3a1a78734aa44f97a2b3f5788a3423b766f373390e738f866d"
+  },
+  "helm_now/docs/working/noetic_council/repair_performer/test_all.py": {
+   "bytes": 12509,
+   "sha256": "a32ec5560ea9e3b3f75c77f380f658f2b86a79a877d8387146f4dcd99c9729d9"
+  },
+  "helm_now/docs/working/noetic_council/return_address/ATLAS_COPY.md": {
+   "bytes": 3082,
+   "sha256": "f5d512f1b47c44097a9fdb429bed45d79f63a3b21786b568a732e1dfd888a322"
+  },
+  "helm_now/docs/working/noetic_council/return_address/README.md": {
+   "bytes": 20159,
+   "sha256": "7000a50929d9047001bb3ffe7cbdf410008fad5edb8facaacd4ecc1ba367704e"
+  },
+  "helm_now/docs/working/noetic_council/return_address/address.py": {
+   "bytes": 25557,
+   "sha256": "6b1335f9de33aa54f68e876d074719e21d132c471c78f75c09c46761b7a6230d"
+  },
+  "helm_now/docs/working/noetic_council/return_address/atlas_binding.py": {
+   "bytes": 10922,
+   "sha256": "8c173f50df21382374a62586a7ccad71c7d7aacc7cf6bb5bef9cc692b3b8f267"
+  },
+  "helm_now/docs/working/noetic_council/return_address/dirty.py": {
+   "bytes": 11081,
+   "sha256": "87ba127f0b199703bd900f0eb20c6f91ccfd5b5de7bf0de6a0bbdc3a784181c0"
+  },
+  "helm_now/docs/working/noetic_council/return_address/real_atlas/CAS_RPA_OHM_ATLAS_20260922.md": {
+   "bytes": 8882,
+   "sha256": "516aa180212643c97da6241dfe618548d71be422e3d966d747cad812c95acc34"
+  },
+  "helm_now/docs/working/noetic_council/return_address/real_atlas/PROVENANCE.md": {
+   "bytes": 4441,
+   "sha256": "209d2e5a77cd4f38057a5eb67a4229b3c843652dee1cd217488d1eead5f34cce"
+  },
+  "helm_now/docs/working/noetic_council/return_address/real_atlas/VERIFICATION.md": {
+   "bytes": 4917,
+   "sha256": "5eec0108af1408d91c44063fb4950723c52e3170856b6947bfad77bef69602d0"
+  },
+  "helm_now/docs/working/noetic_council/return_address/real_atlas/canonical.py": {
+   "bytes": 1696,
+   "sha256": "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a"
+  },
+  "helm_now/docs/working/noetic_council/return_address/real_atlas/model.py": {
+   "bytes": 58492,
+   "sha256": "aafa82f0267d0e741a90ba095d939da47401be577b5682832608a6845be54766"
+  },
+  "helm_now/docs/working/noetic_council/return_address/real_atlas/rpa_model.py": {
+   "bytes": 24726,
+   "sha256": "323a53b951644a93603cd2f56204fd5a038a3161f4778e28777e650a4f966f01"
+  },
+  "helm_now/docs/working/noetic_council/return_address/real_atlas/rpa_ohm_atlas.py": {
+   "bytes": 30449,
+   "sha256": "6aa030651278f217965a788427d55d3f475bb666b366a8095d6a5fb05be9694f"
+  },
+  "helm_now/docs/working/noetic_council/return_address/stack.py": {
+   "bytes": 47164,
+   "sha256": "98d5b7cb2d4b4eeb73a3a67c7ef02cae9faa6e47db8385bfd7ebec24c20ec110"
+  },
+  "helm_now/docs/working/noetic_council/return_address/test_all.py": {
+   "bytes": 44052,
+   "sha256": "0d4a9459316b07a6c957d5e71dff627d266229acc2dcb05b2bd2f88d87bcf771"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/PROVENANCE.md": {
+   "bytes": 10411,
+   "sha256": "fb208e2c8fe06b974430a88d2f4cead26c137ea64a36c899dd3396d996da0cc6"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/README.md": {
+   "bytes": 34117,
+   "sha256": "b612f8e24656ac441d3fd87813fac75486e9ccfca2f01e31db95a71d7d1404b1"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/asom.py": {
+   "bytes": 3835,
+   "sha256": "6c8f964e7f031a1d3bdf9e6bcf1c4a72101a507bcf8cc6ad4fee28d0e4a6b4fd"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/bias.py": {
+   "bytes": 14736,
+   "sha256": "d31a129db14a2c37ae712ec55c703705e4d735f433dab773a848ead68421e1b5"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/disengage.py": {
+   "bytes": 14182,
+   "sha256": "78a73a853f920e9f819ceeeb272d21dd513c08ba7355254dd7db0dd5314add98"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/dwp/depth.py": {
+   "bytes": 14971,
+   "sha256": "92e06ded47fe550b559ebf8b37a39751b384f1c84e1ad600cfca50d930e7b4ab"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/dwp/dwp.py": {
+   "bytes": 43166,
+   "sha256": "cde1a1c4d0cc8198b83fd12db13ca80a721491e4eb2aabf3df8b6d32b4a9bbca"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/dwp/lacunarity.py": {
+   "bytes": 6569,
+   "sha256": "d393a46d35575ab4b9cbc4476305f51d28f7fb04824a24e27e044891a36b2634"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/dwp/retraction.py": {
+   "bytes": 13864,
+   "sha256": "ec979b1ec1c1f36ca9fb7985e586445be8123813f4aee0b5f97d52a3b123c46e"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/loop.py": {
+   "bytes": 35388,
+   "sha256": "0c6ad612ae2b3166ac840bcd5703d940b7d7d61da3f73e7b50bf1f591e79846d"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/rpm_gate.py": {
+   "bytes": 42856,
+   "sha256": "b934bf059ee74a8e298b66841c28589fa76b8ab2884c3e1a6052dc9a666f9ae6"
+  },
+  "helm_now/docs/working/noetic_council/the_loop_v3/test_all.py": {
+   "bytes": 107360,
+   "sha256": "b8f276587dd462a390d41b413588dc65af67d843872b246690a5d227056bc370"
+  },
+  "helm_now/helm_agentic_executor.py": {
+   "bytes": 82081,
+   "sha256": "a84041b1db69973b9a4da8509ed8142f00e112d1602ab30ac3391263051d8df3"
+  },
+  "helm_now/helm_brain_22x40.py": {
+   "bytes": 15810,
+   "sha256": "8e77fddedb790161283c00182ef7fbc7c8e210c94630720c0ffcc1094cf8236a"
+  },
+  "helm_now/helm_brain_canonical.py": {
+   "bytes": 18707,
+   "sha256": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a"
+  },
+  "helm_now/helm_brain_wide.py": {
+   "bytes": 49604,
+   "sha256": "9ba0b20f610f4ae74d333ec2126970b094b51aa315672da4322e71211392c666"
+  },
+  "helm_now/helm_cas_address.py": {
+   "bytes": 22865,
+   "sha256": "517b9e7a179e011ec0fe56af0efadef3a339acda763d105be54470a5c9536db3"
+  },
+  "helm_now/helm_chat.py": {
+   "bytes": 41710,
+   "sha256": "fce018a6eed9d9c1d43fe80319826d0491978c5ad8de1b23714f64f10f5e3a93"
+  },
+  "helm_now/helm_cold_cloud.py": {
+   "bytes": 14838,
+   "sha256": "37930e16ea0cc8fb2b6be9fa46e4b3166fbee9e7543d777e69c3fa4e2ac95dc9"
+  },
+  "helm_now/helm_creativity_dial.py": {
+   "bytes": 7349,
+   "sha256": "9fbdda40d63e87b5c5a0bb1101adf8960c8032dc1d3dd476cfed408c0934c136"
+  },
+  "helm_now/helm_cube_osc.py": {
+   "bytes": 43826,
+   "sha256": "a7ce19757922aa9413ec5da373977b149b96f78039497ccfa62c5a921a525685"
+  },
+  "helm_now/helm_end_to_end_loop.py": {
+   "bytes": 69257,
+   "sha256": "ec9fd39d68e1dc89a6e763473aa365a0cbc2737884a3a9d180803efc0c210e73"
+  },
+  "helm_now/helm_english_in.py": {
+   "bytes": 53750,
+   "sha256": "af782845fa06dbc3c3be9bf1df1e691a97df97d585f8c3f1fec95fd7af5caec1"
+  },
+  "helm_now/helm_eye_act.py": {
+   "bytes": 40642,
+   "sha256": "8af1d7dca71fe3c404d355d880c3cb58adf2ad8f45999ed1fedd29b43b3cc25c"
+  },
+  "helm_now/helm_faces_in.py": {
+   "bytes": 18444,
+   "sha256": "2f7d4b575bbe62e6e850048208c94358d5316d282d729f42b8d80566f1830ec6"
+  },
+  "helm_now/helm_faces_lexicon.json": {
+   "bytes": 7357,
+   "sha256": "7f51f4f85e5adcb76ba3e729380164caf13875c7529655300c3202f184a73872"
+  },
+  "helm_now/helm_memory.py": {
+   "bytes": 21812,
+   "sha256": "9bd533eade1fbe4e55f614b0939c6d95a598399930576913311d7aca7d28bb2b"
+  },
+  "helm_now/helm_memory_compact.py": {
+   "bytes": 40727,
+   "sha256": "3f1f9eaa2d5356f7bb45590a71c869445b21910de68e90ecfc2ee626f4f586aa"
+  },
+  "helm_now/helm_test_pins.py": {
+   "bytes": 4885,
+   "sha256": "091d31cbae07dcb9796e418eb32fea416534bcc9d0aaecf3ff7057f7c0fd9b07"
+  },
+  "helm_now/helm_triad.py": {
+   "bytes": 24100,
+   "sha256": "0d9d0bdaf3ba594e49c72c81f8f2a5749317cee1611906d8b847f8db6c00db1e"
+  },
+  "helm_now/helm_voice.py": {
+   "bytes": 57689,
+   "sha256": "9a5d918f23092b3bf270dbfb9b3443398c5997fe98f560753a02ecb3109f60d9"
+  },
+  "helm_now/helm_wide_turn.py": {
+   "bytes": 85849,
+   "sha256": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf"
+  },
+  "helm_now/noetic-compass-scaffold/noetic-compass/api/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "helm_now/noetic-compass-scaffold/noetic-compass/api/notation/__init__.py": {
+   "bytes": 587,
+   "sha256": "688869e925f6c4b18c420649e8abee3a4fd022a04e1469f2d8ddd9afc1fe3d77"
+  },
+  "helm_now/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py": {
+   "bytes": 243046,
+   "sha256": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c"
+  },
+  "helm_now/phrasebook.json": {
+   "bytes": 39980,
+   "sha256": "f92d5e19e4cf3083e2d01226724beb9a1faf11dd849881bafbe88b81ca953a28"
+  },
+  "helm_now/test_helm_agentic_planner.py": {
+   "bytes": 3097,
+   "sha256": "3c38bbd257077262a8ca23bd37fad93e1c7da4906ae9b75190677979b454c98f"
+  },
+  "helm_now/test_helm_brain_wide.py": {
+   "bytes": 41125,
+   "sha256": "8ad4a0ba84fe12b95142e4747b06c637275780082a98358bcf8930ed62dd6a09"
+  },
+  "helm_now/test_helm_cas_address.py": {
+   "bytes": 19414,
+   "sha256": "06889a63a17bee941bb0fc12108bb201efe781ae33c175cde0376ca41eae8065"
+  },
+  "helm_now/test_helm_chat_nuance.py": {
+   "bytes": 14813,
+   "sha256": "98520f823690f59709716cf4960d7b4783128c9dc97e572038e1e2c8417e12ca"
+  },
+  "helm_now/test_helm_cold_cloud_direct.py": {
+   "bytes": 10104,
+   "sha256": "f3948ee446820906c5d44700b454807fb4b563d2d97ba2693eec77386a0a9a1e"
+  },
+  "helm_now/test_helm_ctt_adapter.py": {
+   "bytes": 3448,
+   "sha256": "f7675c7372a639cdcbe13eb8a075ba261023250783bf690b133632acdc9cbccb"
+  },
+  "helm_now/test_helm_cube_cloudbatch.py": {
+   "bytes": 5194,
+   "sha256": "e7a4b3dedf08d6fad1deab1325e805351c442058f241bbdd92058ed67ad338c1"
+  },
+  "helm_now/test_helm_cube_cloudsearch.py": {
+   "bytes": 4417,
+   "sha256": "0186f17bb963e49f2ceb5fdcad18b1d77c61dd778d212dc9ed737b5875440c7d"
+  },
+  "helm_now/test_helm_cube_everyline.py": {
+   "bytes": 7318,
+   "sha256": "551d662f4bac0e2a23c4bf195a30132f04236f86be320b27e9e30104ebe33570"
+  },
+  "helm_now/test_helm_cube_fold.py": {
+   "bytes": 8893,
+   "sha256": "0d910f96b76b637108bb770231411f3a9cebc255d974e9c68efbf4f0ce82c26f"
+  },
+  "helm_now/test_helm_cube_lean.py": {
+   "bytes": 12386,
+   "sha256": "73b4302adc2c947409babe7751d8727ca26e74ab4bb5a0ce8d073a9e971e36ba"
+  },
+  "helm_now/test_helm_cube_month_label.py": {
+   "bytes": 3530,
+   "sha256": "104c0bc5c769e1f02040087093f3aac829a228ccf5d44fa3dcc455c5e11ce957"
+  },
+  "helm_now/test_helm_cube_offload.py": {
+   "bytes": 9061,
+   "sha256": "5ebe0933f9d29acff27c0f95557a4e911cdda1c7b3e6228e3cceabe8ac158b97"
+  },
+  "helm_now/test_helm_cube_osc.py": {
+   "bytes": 16228,
+   "sha256": "008b227a25d4383cab953338c8cfdce44521b09b41843d3444a1fbfba963638e"
+  },
+  "helm_now/test_helm_cube_reach_memory.py": {
+   "bytes": 4045,
+   "sha256": "d2f2b35b9060b44877b8e7c806e6fcc8b6371d031ef3b709db2065dbcb156fd1"
+  },
+  "helm_now/test_helm_cube_tiers.py": {
+   "bytes": 16426,
+   "sha256": "e331e090e5199a637e49b7b40919cf6e64f52499cb8c107cdcd6add6b98f48a8"
+  },
+  "helm_now/test_helm_end_to_end_loop.py": {
+   "bytes": 17969,
+   "sha256": "cefff684507b281ec40ef3c85899c445114b7c749ccca339b1cf21241d295c10"
+  },
+  "helm_now/test_helm_english_in.py": {
+   "bytes": 25918,
+   "sha256": "4a6c422e8488d1de1e1d4a70d4ea4b45ac448e39a7bc02e4f158613b3c9a3fa9"
+  },
+  "helm_now/test_helm_english_in_stock_frame.py": {
+   "bytes": 16176,
+   "sha256": "02c7eef94d98ad50aa137efae21f27f0ba1b31c5184679419b8d5a633a00954d"
+  },
+  "helm_now/test_helm_eye_act.py": {
+   "bytes": 10234,
+   "sha256": "50bcfe30c8920572f2236271c697660884f60ee366e4f2b3f7d0521a71c17951"
+  },
+  "helm_now/test_helm_faces_in.py": {
+   "bytes": 6926,
+   "sha256": "ad8f86d3246ad39591bd59d06601ffc9b11aebbf57aa09f80ba5ae11ab4c5c58"
+  },
+  "helm_now/test_helm_memory.py": {
+   "bytes": 2955,
+   "sha256": "adbb21ce106efbcb222b9b0f416599484fbb91fc7f7a2e36c02d2db95db1b2b6"
+  },
+  "helm_now/test_helm_memory_compact.py": {
+   "bytes": 21093,
+   "sha256": "93130ef692fe0ad15cbabc7e6a3c9b37902e76fd87e3ebd6e817451c59a7f814"
+  },
+  "helm_now/test_helm_pin_hygiene.py": {
+   "bytes": 8998,
+   "sha256": "66b43b2ad4ef45d0b0591ee6260ff1e18dcf5c65496aaacad16b0e2c0e928e00"
+  },
+  "helm_now/test_helm_reader_gap.py": {
+   "bytes": 28066,
+   "sha256": "3eed47afa23f8de8922e05609289d9d7ce737c1b7d3662cf9c31a76aff32e74b"
+  },
+  "helm_now/test_helm_triad.py": {
+   "bytes": 20265,
+   "sha256": "15cb6ad25f0243a1cd7fbd492d144ed792402845e3b4e5c3a922d34d0cc3bbd2"
+  },
+  "helm_now/test_helm_units_note.py": {
+   "bytes": 20653,
+   "sha256": "8036a319821ebf7ef8eccdc821b2ebc06bc0aac0db23d3561b5a1cbf1a085653"
+  },
+  "helm_now/test_helm_voice.py": {
+   "bytes": 17087,
+   "sha256": "a5edf7670b443a3b2c4624a664e48d10af0991daef64512d5daa27026bdfcd93"
+  },
+  "helm_now/test_helm_wide_alongside.py": {
+   "bytes": 28140,
+   "sha256": "b5e06868d86b30f963f6c0b7c3d45e3ddde449203493542480f94d12bf5842b7"
+  },
+  "helm_now/tks_meta_valve_controller.py": {
+   "bytes": 10430,
+   "sha256": "06fb7a3b1c468551c19cd368091f2ceaf84b3da21da4318f2bb96df220eb789a"
+  },
+  "helm_now/tks_meta_valve_weights_v0_4.json": {
+   "bytes": 859,
+   "sha256": "511ebe94360b108d1f6d90c897be0d061da3205b0ce1ef48c67caf5e67ff3ba5"
+  },
+  "teach2/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "teach2/arms_t2.py": {
+   "bytes": 31454,
+   "sha256": "199c611366bc5928c7b1efdcb0cd3031a1179465e8c15735740736876e5af4ec"
+  },
+  "teach2/common_t2.py": {
+   "bytes": 14212,
+   "sha256": "d023304c745659e719e73f8b39c05df7892e47a9fdbcc397f4e7e2c58098dacd"
+  },
+  "teach2/ctt_client.py": {
+   "bytes": 5991,
+   "sha256": "53316bd55768cede1852a20892db5e3ea2ccfc54f992840940ddda666705fe61"
+  },
+  "teach2/ctt_server.py": {
+   "bytes": 3666,
+   "sha256": "5bc7e921d2856115d2dea59c192b86a9341595837fa620645625728234ee2e20"
+  },
+  "teach2/custody_t2.py": {
+   "bytes": 7640,
+   "sha256": "fc7879d3dc8cc211bd307f8294f8743143911c57e3dc45d856f04f1424884966"
+  },
+  "teach2/exam_t2.py": {
+   "bytes": 5303,
+   "sha256": "cfc6e267ae6925999481011c2a71989e39d0c80fa582341ba8775e035137377f"
+  },
+  "teach2/person_t2.py": {
+   "bytes": 2076,
+   "sha256": "f0a4d8e312ef792a2620f4cd40fdd98b6ae6c54aaa68b7fb52e1a308191d07e1"
+  },
+  "teach2/reader_t2.py": {
+   "bytes": 42285,
+   "sha256": "5e3589d0916c4747ae07d90b4563c52ad87d969be74908ec124ce9f3cf54a12c"
+  },
+  "teach2/run_t2.py": {
+   "bytes": 13612,
+   "sha256": "b2948b20f5a1e423da918a9d160b291a7d30c9fd12056b99ccbb4f4c8a74745e"
+  },
+  "teach2/seed_rule_t2.py": {
+   "bytes": 3409,
+   "sha256": "f9539a7b58226a157bb50f0a1c982199d0a886e76110e12b24c539a04fdc9475"
+  },
+  "teach2/teach2_rule_reader.py": {
+   "bytes": 3443,
+   "sha256": "368b8759ac0d9e284259c91382959b6b731920bbd46c9f5b4e63c84c02761088"
+  },
+  "teach2/turns_t2.py": {
+   "bytes": 13761,
+   "sha256": "76fb28e6c6900966171158127cf1348604dcdb31be6ac35de8cb5112104f063b"
+  },
+  "teach2/worlds_t2.py": {
+   "bytes": 20815,
+   "sha256": "a69cd19670bbdad9aec5a13a9686470f00244bb8ac2c5bc1b81734f06492a597"
+  },
+  "tests_teach2/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_teach2/test_teach2.py": {
+   "bytes": 14071,
+   "sha256": "5ed0901ed9ee5c47956f1d9970c7bc06bfc768ce9852d66830ba8ee6508467e3"
+  }
+ },
+ "not_inside": "the exam (drawn by the custodian after the seal), the approval record, the attestation",
+ "package": "HELM_TEACH2_20261022",
+ "package_version": "v1",
+ "precode_sha256": "f7b6183bba5f8a1a241e3c64c8930f6a2c6df06fbe8c5845c0207f6d2a84c855",
+ "schema": "helm.teach2.package-freeze/1",
+ "sealed_on": "2026-10-22 (Pacific)",
+ "wave1_brain": {
+  "dir": "HELM_R1_W1_20261015_v3",
+  "freeze_sha256": "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b"
+ }
+}

@@ -58,6 +58,11 @@ class HELMConversationalSession:
         self.loop = e2e.HELMEndToEndLoop(cube_store=self.memory.context.cube_store)
         self.voice = HELMVoice()  # Fix F: deterministic everyday-English writer over brain receipts
         self.turn_count = 0
+        # The talk layer (A-TALK-2) behind HELM_TALK, default OFF: small talk, questions about HELM, off-topic lines
+        # (react, keep word for word, ask one question), honest "I don't know"; HELM_TALK_ASK adds asking about what
+        # HELM holds. OFF: None, and every branch below behaves exactly as before.
+        import helm_talk
+        self.talk = helm_talk.TalkLayer(self) if helm_talk.talk_on() else None
 
     def print_banner(self):
         print("\n" + "=" * 76)
@@ -183,6 +188,10 @@ class HELMConversationalSession:
         if resolved_prompt != prompt and self.mode == "cas_diagnostic":
             print(f"[Anaphora Resolver] '{prompt}' -> '{resolved_prompt}' (Entities: {entities})")
 
+        # Talk layer ON (A-TALK-2 B6): the line right after HELM asked "Is that still right?" is the answer to it
+        if self.talk is not None and self.talk.take_answer(prompt, resolved_prompt, entities, t0):
+            return
+
         # Step 2: Meta Conversational Queries from Memory
         clean_lp = re.sub(r"[^\w\s]", "", lower_prompt).strip()
         if entities.get("query_last_result") or clean_lp in ["what did we do", "what did we just do", "summary"]:
@@ -200,6 +209,10 @@ class HELMConversationalSession:
                     speech = f"You said: {matches[0]}."
                 else:
                     speech = f"Yes, absolutely: {matches[0]}."
+            elif getattr(self.memory, "cube_osc", None) is not None and self.memory.cube_osc.answer(prompt) is not None:
+                # Cube oscillation ON (SPEC 7.125): a kept fact answers with its current value; EXACT only while the
+                # person's own line is fetchable, else said as rebuilt; three or more matches -> which one.
+                speech = self.memory.cube_osc.answer(prompt)["text"]
             elif getattr(self.memory, "compactor", None) is not None:
                 # Memory compaction ON (SPEC 7.115): fetch first, ask last. EXACT only on a digest-checked original;
                 # a rebuilt memory says so; UNKNOWN names its reason; a refresh question quotes a clue.
@@ -319,6 +332,15 @@ class HELMConversationalSession:
             _, _, classify_pol, classify_val, _ = self.memory.context.turn_processor.classify_turn(prompt)
 
         is_affect = (classify_val in ("POSITIVE", "NEGATIVE")) or bool(re.search(r"\b(i'm feeling|i am feeling|i feel|i'm tired|i am tired)\b", lower_prompt))
+        if self.talk is not None:
+            # Talk layer ON (A-TALK-2 B2 item 4): feelings and personal lines are off-topic lines -- react, keep the
+            # person's words exactly, ask one question -- taken here, before the tool engine can see them
+            personal = any(re.search(pat, lower_prompt) for pat in (
+                r"\b(my grandfather|my grandmother|my dad|my father|my mother|my brother|my sister|my family|my friend|my cousin)\b",
+                r"\b(i live in|i work at|i grew up in|i enjoy|i like|i love|i own|i have a|i used to|i am a|i'm a)\b",
+                r"\b(kept bees|keeps bees|beekeeping|beekeeper|farmer|gardener|carpenter)\b"))
+            if (is_affect or personal) and self.talk.take(prompt, resolved_prompt, entities, t0):
+                return
         if is_affect:
             cube_rec = self.memory.process_turn_with_cube_store(prompt)
             val = cube_rec.valence if cube_rec else classify_val
@@ -519,6 +541,8 @@ class HELMConversationalSession:
             return
 
         # Step 10: General Chitchat / Greetings or Ungrounded Refusal
+        if self.talk is not None and self.talk.take(prompt, resolved_prompt, entities, t0):
+            return          # talk layer ON (A-TALK-2): small talk, about HELM, off-topic, or an honest "I don't know"
         elapsed = time.time() - t0
         greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "how are you"]
         cube_rec = self.memory.process_turn_with_cube_store(prompt)

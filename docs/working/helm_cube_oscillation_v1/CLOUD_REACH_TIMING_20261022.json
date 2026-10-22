@@ -1,0 +1,151 @@
+{
+ "after_memory_on": {
+  "build": {
+   "calls": 86,
+   "reachability_checks": 2,
+   "seconds": 73.8
+  },
+  "calls_median": 3,
+  "exact": 8,
+  "fold_records_in_cloud": 2,
+  "memory_seconds": 60,
+  "prefix": "smoke/20261022T093130Z-reach-on/",
+  "questions": [
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 3,
+    "reachability_checks": 0,
+    "seconds": 2.63
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 23,
+    "reachability_checks": 0,
+    "seconds": 2.59
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 43,
+    "reachability_checks": 0,
+    "seconds": 2.72
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 63,
+    "reachability_checks": 0,
+    "seconds": 2.66
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 83,
+    "reachability_checks": 0,
+    "seconds": 2.66
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 103,
+    "reachability_checks": 0,
+    "seconds": 2.6
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 123,
+    "reachability_checks": 0,
+    "seconds": 2.55
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 143,
+    "reachability_checks": 0,
+    "seconds": 2.66
+   }
+  ],
+  "seconds_median": 2.66
+ },
+ "before_memory_off": {
+  "build": {
+   "calls": 106,
+   "reachability_checks": 22,
+   "seconds": 93.6
+  },
+  "calls_median": 4,
+  "exact": 8,
+  "fold_records_in_cloud": 2,
+  "memory_seconds": 0,
+  "prefix": "smoke/20261022T093130Z-reach-off/",
+  "questions": [
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 3,
+    "reachability_checks": 1,
+    "seconds": 3.44
+   },
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 23,
+    "reachability_checks": 1,
+    "seconds": 3.48
+   },
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 43,
+    "reachability_checks": 1,
+    "seconds": 3.45
+   },
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 63,
+    "reachability_checks": 1,
+    "seconds": 3.46
+   },
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 83,
+    "reachability_checks": 1,
+    "seconds": 3.48
+   },
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 103,
+    "reachability_checks": 1,
+    "seconds": 3.46
+   },
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 123,
+    "reachability_checks": 1,
+    "seconds": 3.47
+   },
+   {
+    "calls": 4,
+    "exact": true,
+    "line": 143,
+    "reachability_checks": 1,
+    "seconds": 3.39
+   }
+  ],
+  "seconds_median": 3.46
+ },
+ "bucket": "helm-cold-memory-807562639912-usw2",
+ "chat": "200 lines, limit 2,000, device limit 1,000",
+ "cleanup": "none by design: keep indefinitely, nothing deleted by code; synthetic objects under the prefixes",
+ "cost_note": "a few hundred requests of a few kilobytes; well under 0.01 USD",
+ "data": "SYNTHETIC_ONLY (made-up planting lines)",
+ "region": "us-west-2",
+ "stamp": "20261022T093130Z"
+}

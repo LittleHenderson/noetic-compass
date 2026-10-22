@@ -1,0 +1,14 @@
+{"I1": true, "event": "start", "order_seed": 2840735047235775460, "t": 0.1}
+{"audit_violations": [], "event": "smoke", "t": 58.7, "trained": true}
+{"event": "trained", "model": "A4-s1", "ok": true, "t": 1126.0}
+{"event": "trained", "model": "A4-s2", "ok": true, "t": 2187.6}
+{"event": "trained", "model": "A4-s3", "ok": true, "t": 3250.1}
+{"event": "trained", "model": "A5-s1", "ok": true, "t": 3802.4}
+{"audit_violations": [], "event": "decoded", "model": "A4-s1", "rows": 2357, "t": 3809.5}
+{"audit_violations": [], "event": "decoded", "model": "A4-s2", "rows": 2357, "t": 3816.5}
+{"audit_violations": [], "event": "decoded", "model": "A4-s3", "rows": 2357, "t": 3823.6}
+{"audit_violations": [], "event": "decoded", "model": "A5-s1", "rows": 2357, "t": 3830.1}
+{"after": 0.9785, "before": 0.9785, "event": "keep_old", "model": "A4-s1", "t": 3846.2}
+{"after": 0.979, "before": 0.9795, "event": "keep_old", "model": "A4-s2", "t": 3862.4}
+{"after": 0.9775, "before": 0.977, "event": "keep_old", "model": "A4-s3", "t": 3878.6}
+{"event": "done", "status_word": "TRAIN_READY", "t": 3879.1}
