@@ -440,3 +440,43 @@ to 4.16 s (measured), 3.54 s, and now 2.66 s.
 read, the capsule's record, its original) of about 0.85 s each, most of it starting a new AWS command-line process per
 call. A client that keeps one connection open would cut that further; it is a design change for the owner (HELM is
 standard-library only, so it would mean signing requests to the bucket by hand).
+
+## 15. A direct cloud client: standard library, signs its own requests, one kept connection (A-TEACH2-14 `32015c87…`, commit `bf243de2`)
+
+Owner's words (2026-10-22, verbatim): "Yes: build a direct cloud client for HELM (standard library only, signs its own
+requests, keeps one connection open) so cloud calls stop starting a new program each time. Amendment first,
+test-first; time it live with a tiny test."
+
+The amendment was committed before any code (`b72d62bf`). `helm_cold_cloud.S3DirectCloud`: the same four operations
+as the command-line client (`available`, `put`, `get`, `get_many`) and no delete; `http.client` over HTTPS to
+`<bucket>.s3.<region>.amazonaws.com`; one connection opened on first use and kept (reopened once if the bucket closes
+it); every request signed with AWS Signature Version 4 by `hashlib` and `hmac`; uploads carry
+`x-amz-server-side-encryption: AES256` and their body's sha256, never an ACL; a missing object is None, anything else
+is `CloudUnavailable`; `get_many` follows the list pages over the same connection. Keys: the environment first, else
+`[default]` of `~/.aws/credentials` (here: the credentials file, no session token); never printed, logged or recorded.
+The command-line client `S3Cloud` stays as a fallback; the live HELM still attaches no cloud.
+
+FIX FIRST (`test_helm_cold_cloud_direct.py`, written first, no network): 11 failed → 11 passed. **The signing matches
+all three of AWS's published Signature Version 4 examples for S3** (GET object `f0e8bdb8…`, PUT object `98ad7217…`,
+list objects `34b48302…`) ✅ — a check that cannot be passed by a wrong signer. Every HELM suite, both switches OFF:
+**489 passed**.
+
+**Live timing on the real bucket ✅ (2026-10-22, `CLOUD_DIRECT_TIMING_20261022.json`).** Source: commit `bf243de2`;
+purpose: time the direct client against the command-line client; place: bucket `helm-cold-memory-807562639912-usw2`
+(us-west-2), prefixes `smoke/20261022T094601Z-cli/`, `smoke/20261022T094601Z-direct/` and
+`smoke/20261022T094601Z-cross/`, from the laptop, no instance; data: made-up planting lines only (`SYNTHETIC_ONLY`);
+the same 200-line chat (limit 2,000, device limit 1,000; 42 objects moved, 2 fold records in the cloud) built once with
+each client; cleanup: none by design. Cost: about 190 requests of a few kilobytes, well under 0.01 USD.
+
+| | Building the 200-line chat | Per cloud question (median of 8) | Recalled EXACT |
+|---|---|---|---|
+| Command-line client | 77.6 s, 86 calls | 2.65 s, 3 calls | 8 of 8 |
+| Direct client | **4.7 s**, 85 requests | **0.21 s**, 5 requests on one connection | 8 of 8 |
+
+Cross-check: an object written by the direct client was read back byte for byte by the command-line client, and the
+other way round ✅. No question was answered with a wrong line. Across follow-ups 9–12 a cloud question went from about
+10 s (estimated) to 4.16, 3.54, 2.66 and now **0.21 s** (all measured live).
+
+**Gaps kept (not negatives of this step):** client-side encryption with keys on the device is still not built (the
+bucket encrypts at rest; A-TEACH2-5 gap); the live HELM still attaches no cloud, so real conversations go nowhere near
+the bucket until the owner says so; sensitivity classes for real personal data are the owner's word.

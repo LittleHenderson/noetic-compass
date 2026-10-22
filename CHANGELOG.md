@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: a direct cloud client (spec sheet 7.125 follow-up 12): stdlib HTTPS, one kept connection, SigV4 matching AWS's published examples; live 2.65 -> 0.21 s per cloud question, chat build 77.6 -> 4.7 s, 8/8 EXACT; 489 HELM tests pass; live test < 0.01 USD
+
+- Owner's words: "build a direct cloud client for HELM (standard library only, signs its own requests, keeps one connection open) so cloud calls stop starting a new program each time."
+- A-TEACH2-14 32015c87... before code (b72d62bf). Commit bf243de2: helm_cold_cloud.S3DirectCloud; keys from the environment or ~/.aws/credentials, never shown; no delete; S3Cloud kept as fallback.
+- FIX FIRST: 11 failed -> 11 passed; the signer matches AWS's three published SigV4 S3 examples; every HELM suite OFF 489 passed.
+- Live (synthetic lines, prefixes smoke/20261022T094601Z-cli/, -direct/, -cross/): 2.65 -> 0.21 s per cloud question; 77.6 -> 4.7 s to build the chat; cross-check both ways byte for byte. Gaps kept: no client-side encryption; live HELM attaches no cloud.
+
 ## 2026-10-22 PDT - HELM: remember a 'cloud reachable' yes for 60 seconds (spec sheet 7.125 follow-up 11): live 3.46 -> 2.66 s per cloud question (4 -> 3 calls), 8/8 EXACT; chat build 93.6 -> 73.8 s; 478 HELM tests pass; live test < 0.01 USD
 
 - Owner's words: "let HELM remember for a short while that the cloud was reachable, so a cloud question skips that check (one call fewer)."
