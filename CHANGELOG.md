@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - U1c design packet (spec sheet 7.124): a fresh-world retest of the Unity Eye acting, designed and costed for AWS; nothing frozen, nothing run; 0 USD
+
+- Owner asked to run U1b; it had already run on 2026-10-15 (spec 7.40: READ, EYE_EARNED_KEEP, CONCERT_EARNED_KEEP; verified, not re-run, PR #442). The owner then asked for U1c: fresh seeds, its own pre-code freeze, sized for AWS, design and cost shown before anything runs.
+- Design: U1b's instrument unchanged (114 files byte-identical, arms A0-A6, six planted faults, 39 gates, merge_u1.py); only the worlds change, drawn by commit-then-reveal from an owner secret plus the sealed package fingerprint; a Linux port proved on a 722-item slice of U1b's own inputs before any fresh world is scored; an optional fair rival A7 with its own reader.
+- Cost: one m6i.xlarge, 240-minute window; expected about 0.36 USD in all (range 0.27-0.57); about 0.03 if the early port check fails; proposed holds 1.00 USD (build tests) and 4.00 USD (run), released at closeout.
+- Made by an 11-agent workflow (three readers, three designs and a judge, three adversarial reviewers, a writer); 65 reviewer problems, 8 BLOCKER, each dispositioned. Operator spot-checks against U1b's files: 14 clock values in CALIBRATION.json, FIX 148/148/128, FALSE 1,816/2,610/10,152, 39 of 39 gates, speed ratio 1.2427 in spec 7.65.
+- Not frozen: the preregistration (draft sha256 d45e5f3062735d70...) changes with the owner's answers to Q2, Q4, Q5, Q7. Files: Documents/Codex/2026-10-21/u1c/, repo copy docs/working/u1c/.
+
 ## 2026-10-21 PDT - HELM memory compaction TEACH-1 first run (spec sheet 7.121): verdict PASS, status word INCONCLUSIVE (U1 failed); every hard gate held; 0 USD; nothing licensed
 
 - Owner's line COMPACT EXAM at 0 USD; PR #453 merged at 10f83272; custodian (helper agent, separate context, on the owner's "Do this task here") drew 16 worlds, had 512 lines written by Anthropic / OpenAI / Google (171/171/170) and keyed AGREE by the two other families (448 of 448); attestation fa6e4701...
