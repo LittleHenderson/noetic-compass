@@ -59,6 +59,14 @@ S_IMPORTANCE = Fraction(1, 2)
 DECAY = Fraction(19, 20)
 THETA_S1 = Fraction(1, 5)
 THETA_S2 = Fraction(1, 50)
+#: A-TEACH2-5 / A-TEACH2-6: keep every line until working memory passes the limit, then fade the oldest unprotected
+#: lines in batches (16, widened by 16 until the capsule is smaller than its lines) down to 90 % of the limit. When the
+#: device's cold folder passes its own limit, the oldest originals move to the cloud tier (helm_cold_cloud).
+WORKING_LIMIT_BYTES = 53370
+LOCAL_COLD_LIMIT_BYTES = 50 * 1024 * 1024
+BATCH_LINES = 16
+LIMIT_TARGET = Fraction(9, 10)
+AWAY = "My full notes are stored away and I can't reach them right now"
 PLAIN_INTENTS = {"GENERAL_KNOWLEDGE_INQUIRY", "GENERAL_CONVERSATION", "REFRESH_ANSWER"}
 MONTHS = {"january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"}
@@ -138,13 +146,20 @@ def thing_id(name: str) -> str:
 # ----------------------------------------------------------------------------------------------- the oscillator
 class CubeOsc:
     def __init__(self, memory: Any, mode: str = "OSC", proposers: Optional[List[Any]] = None, sweep: bool = True,
-                 cold_dir: Optional[str] = None, reader: Optional[Callable[[str], Optional[Reading]]] = None) -> None:
+                 cold_dir: Optional[str] = None, reader: Optional[Callable[[str], Optional[Reading]]] = None,
+                 limit_bytes: Optional[int] = None, local_limit_bytes: Optional[int] = None,
+                 cloud_prefix: Optional[str] = None) -> None:
         if mode not in MODES:
             raise ValueError(mode)
         self.memory, self.mode, self.reader = memory, mode, reader
         self.proposers = list(proposers or [])
         self.uses_store = mode in ("OSC", "ONE_READER", "CTT_ONLY", "ONE_STEP_FADE")
-        self.sweep_on = bool(sweep) and mode in ("OSC", "ONE_READER", "CTT_ONLY")
+        self.limit_bytes, self.local_limit_bytes = limit_bytes, local_limit_bytes
+        self.cloud_prefix = cloud_prefix or f"teach/{memory.session_id}/"
+        self.batch_log: List[Dict[str, Any]] = []
+        self._last_limit_flag: Optional[str] = None
+        # the per-4-turn sweep runs only on the ladder path (no limit); with a limit it is retired (A-TEACH2-5 L1)
+        self.sweep_on = bool(sweep) and mode in ("OSC", "ONE_READER", "CTT_ONLY") and limit_bytes is None
         self.table: Dict[Tuple[str, FrozenSet[str]], str] = {}
         self.table_src: Dict[Tuple[str, FrozenSet[str]], int] = {}
         self.log: List[Dict[str, Any]] = []
@@ -369,10 +384,15 @@ class CubeOsc:
         if turn_id is not None and turn_id in self.items:
             self.items[turn_id]["uses"] += 1
             self.items[turn_id]["last"] = self.tick
-        label = "EXACT" if turn_id is not None and self._words_fetchable(turn_id) else "RECONSTRUCTED"
+        status = self._words_status(turn_id) if turn_id is not None else "MISSING"
+        label = "EXACT" if status == "EXACT" else "RECONSTRUCTED"
         phrase = f"{src.capitalize()}, {com['kind']}, {tgt.capitalize()}" + (f": {com['amount']}" if "amount" in com else "")
-        text = (f"You told me: {phrase}." if label == "EXACT"
-                else f"I don't have your exact words any more, but my notes say: {phrase}.")
+        if label == "EXACT":
+            text = f"You told me: {phrase}."
+        elif status == "OFFLINE":
+            text = f"{AWAY}, but my notes say: {phrase}."
+        else:
+            text = f"I don't have your exact words any more, but my notes say: {phrase}."
         return {"label": label, "value": value, "text": text, "operation": "LIST_PARTS", "cubes_read": cubes_read,
                 "branch_id": bid, "source_turn": turn_id, "question": False}
 
@@ -410,13 +430,16 @@ class CubeOsc:
         return None
 
     def _words_fetchable(self, turn_id: int) -> bool:
+        return self._words_status(turn_id) == "EXACT"
+
+    def _words_status(self, turn_id: int) -> str:
+        """EXACT when the person's line is live or its original hashes right (device or cloud); else MISSING,
+        CORRUPT or OFFLINE (moved to the cloud, which cannot be reached now)."""
         if any(t.turn_id == turn_id for t in self.memory.turns):
-            return True
+            return "EXACT"
         comp = getattr(self.memory, "compactor", None)
-        if comp is None:
-            return False
-        cap = next((c for c in comp.capsules if turn_id in c.crumb["turn_ids"]), None)
-        return cap is not None and comp._fetch(cap)[0] == "EXACT"
+        cap = next((c for c in (comp.capsules if comp else []) if turn_id in c.crumb["turn_ids"]), None)
+        return comp._fetch(cap)[0] if cap is not None else "MISSING"
 
     # ---------------------------------------------------------------- the ladder
     def _mass(self, item: Dict[str, Any]) -> Fraction:
@@ -445,6 +468,110 @@ class CubeOsc:
             self.observe(turn)
         if self.sweep_on and self.tick % SWEEP_EVERY == 0:
             self.sweep()
+        if self.limit_bytes is not None:
+            self.fade_to_limit()
+        if self.local_limit_bytes is not None:
+            self.move_cold()
+
+    # ---------------------------------------------------------------- the size limit (A-TEACH2-5 L1/L2, A-TEACH2-6)
+    def _limit_flag(self, kind: str, detail: str) -> None:
+        if self._last_limit_flag != kind:          # one flag per stretch, not one per turn
+            self.memory.compactor._flag(kind, detail)
+        self._last_limit_flag = kind
+
+    def _runs(self) -> List[List[Any]]:
+        """Runs of consecutive old lines that may fade: never the last 2, never a line holding an unconfirmed fact."""
+        runs: List[List[Any]] = [[]]
+        for t in self.memory.turns[: max(0, len(self.memory.turns) - ACTIVE_TAIL)]:
+            if self._protected(t.turn_id):
+                runs.append([])
+            else:
+                runs[-1].append(t)
+        return [r for r in runs if r]
+
+    def fade_to_limit(self) -> None:
+        """Every line stays word for word until working memory passes the limit. Then the oldest unprotected lines
+        become one capsule per batch -- 16 lines, widened by 16 until the capsule is smaller than its lines -- until
+        memory is at or under 90 % of the limit. A batch that cannot save space is not written (BATCH_NO_GAIN)."""
+        comp = getattr(self.memory, "compactor", None)
+        if comp is None or self.working_bytes() <= self.limit_bytes:
+            return
+        target = self.limit_bytes * LIMIT_TARGET
+        while self.working_bytes() > target:
+            runs = self._runs()
+            if not runs:
+                self._limit_flag("OVER_LIMIT_PROTECTED", "over the limit; every old line is protected")
+                return
+            written = False
+            for run in runs:
+                n = min(BATCH_LINES, len(run))
+                while True:
+                    batch = run[:n]
+                    line_bytes = sum(len(t.user_raw_text.encode("utf-8")) for t in batch)
+                    try:
+                        dry = comp._compact(batch, dry_run=True)
+                    except hmc.CompactRefused:
+                        break
+                    if len(hmc._canon(dry.as_dict())) < line_bytes:
+                        before = self.working_bytes()
+                        cap = comp._compact(batch)
+                        ids = set(cap.crumb["turn_ids"])
+                        self.memory.turns = [t for t in self.memory.turns if t.turn_id not in ids]
+                        self.batch_log.append({"capsule_id": cap.capsule_id, "lines": len(batch), "widest": n == len(run),
+                                               "line_bytes": line_bytes, "capsule_bytes": len(hmc._canon(cap.as_dict())),
+                                               "bytes_before": before, "bytes_after": self.working_bytes(),
+                                               "receipt": cap.receipt})
+                        written = True
+                        break
+                    if n >= len(run):
+                        break
+                    n = min(n + BATCH_LINES, len(run))
+                if written:
+                    break
+            if not written:
+                self._limit_flag("BATCH_NO_GAIN", "over the limit; no batch of the old lines would save space")
+                return
+        self._last_limit_flag = None
+
+    # ---------------------------------------------------------------- the cloud tier (A-TEACH2-5 L3-L6)
+    def local_cold_bytes(self) -> int:
+        comp = getattr(self.memory, "compactor", None)
+        return sum(os.path.getsize(c.crumb["cold_path"]) for c in (comp.capsules if comp else [])
+                   if os.path.isfile(c.crumb["cold_path"]))
+
+    def move_cold(self) -> None:
+        """When the device's cold folder passes its limit, MOVE the oldest originals to the cloud: upload, read back,
+        check the fingerprint against the breadcrumb, and only then remove the local copy (receipt MOVED_TO_CLOUD).
+        Unreachable cloud or a failed check: the local copy stays (MOVE_FAILED). Nothing is ever deleted in the cloud."""
+        comp = getattr(self.memory, "compactor", None)
+        if comp is None or self.local_cold_bytes() <= self.local_limit_bytes:
+            return
+        cloud = comp.cloud
+        if cloud is None or not cloud.available():
+            self._limit_flag("MOVE_FAILED", "local cold folder over its limit; the cloud cannot be reached")
+            return
+        for cap in comp.capsules:
+            if self.local_cold_bytes() <= self.local_limit_bytes:
+                break
+            path = cap.crumb["cold_path"]
+            if cap.capsule_id in comp.moved or not os.path.isfile(path):
+                continue
+            with open(path, "rb") as fh:
+                data = fh.read()
+            key = self.cloud_prefix + os.path.basename(path)
+            try:
+                cloud.put(key, data)
+                back = cloud.get(key)
+            except Exception:
+                back = None
+            if back is None or hmc._sha(back) != cap.crumb["sha256"]:
+                self._limit_flag("MOVE_FAILED", f"read-back check failed for {key}; the local copy stays")
+                return
+            os.remove(path)
+            comp.moved[cap.capsule_id] = key
+            comp._receipt("MOVED_TO_CLOUD", cap.capsule_id, cap.receipt,
+                          {"key": key, "sha256": cap.crumb["sha256"], "bytes": len(data)})
+        self._last_limit_flag = None
 
     def sweep(self) -> None:
         self._sweeps += 1
@@ -517,11 +644,20 @@ def _rd(r: Reading) -> Dict[str, Any]:
 
 
 def attach(memory: Any, mode: str = "OSC", proposers: Optional[List[Any]] = None, sweep: bool = True,
-           reader: Optional[Callable[[str], Optional[Reading]]] = None) -> CubeOsc:
+           reader: Optional[Callable[[str], Optional[Reading]]] = None,
+           limit_bytes: Optional[int] = WORKING_LIMIT_BYTES, local_limit_bytes: Optional[int] = LOCAL_COLD_LIMIT_BYTES,
+           cloud: Any = None, cloud_prefix: Optional[str] = None) -> CubeOsc:
     """Give a HELMConversationalMemory its cube oscillator (the switch ON path). The v1 compactor is attached too when
-    missing, because the ladder's S1 step is v1's capsule."""
+    missing, because a faded batch is v1's capsule. Defaults are the owner's: keep every line until 53,370 bytes, then
+    fade in batches; move originals to `cloud` past 50 MB on the device. limit_bytes=None keeps the old ladder path."""
     if getattr(memory, "compactor", None) is None:
         hmc.attach(memory)
-    osc = CubeOsc(memory, mode=mode, proposers=proposers, sweep=sweep, reader=reader)
+    if limit_bytes is not None:
+        memory.max_turns = max(memory.max_turns, 10 ** 9)      # the turn budget no longer drops or compacts
+    else:
+        local_limit_bytes = None
+    memory.compactor.cloud = cloud
+    osc = CubeOsc(memory, mode=mode, proposers=proposers, sweep=sweep, reader=reader, limit_bytes=limit_bytes,
+                  local_limit_bytes=local_limit_bytes, cloud_prefix=cloud_prefix)
     memory.cube_osc = osc
     return osc

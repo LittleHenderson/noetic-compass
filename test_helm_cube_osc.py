@@ -52,7 +52,8 @@ def _mem(tmp_path, mode="OSC", proposer="stand_in", max_turns=50, sweep=True, re
     mem = HELMConversationalMemory(session_id="t-cube", max_turns=max_turns, storage_dir=str(tmp_path / "log"))
     hmc.attach(mem, cold_dir=str(tmp_path / "cold"))
     props = stand_in() if proposer == "stand_in" else proposer
-    osc = hco.attach(mem, mode=mode, proposers=props, sweep=sweep, reader=reader)
+    # these tests exercise the ladder path (per-4-turn sweep, turn budget); the size-limit path is test_helm_cube_tiers.py
+    osc = hco.attach(mem, mode=mode, proposers=props, sweep=sweep, reader=reader, limit_bytes=None)
     return mem, osc
 
 

@@ -162,13 +162,13 @@ def cube_faces_digest(store: Any) -> str:
 
 def read_cold(path: str) -> List[Dict[str, Any]]:
     """The verbatim turn records of a cold copy (one JSON object per line)."""
-    out = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if line:
-                out.append(json.loads(line))
-    return out
+    with open(path, "rb") as fh:
+        return read_cold_bytes(fh.read())
+
+
+def read_cold_bytes(data: bytes) -> List[Dict[str, Any]]:
+    """The same, from bytes already in hand (a copy fetched back from the cloud tier)."""
+    return [json.loads(line) for line in data.decode("utf-8").splitlines() if line.strip()]
 
 
 def content_words(text: str) -> List[str]:
@@ -231,6 +231,10 @@ class Compactor:
         self._capsules_in_thread = 0
         self.atlas = None
         self._anchor: Optional[str] = None
+        # the cloud tier (A-TEACH2-5 L3/L4): None = no cloud. `moved` maps a capsule id to its cloud key once its
+        # original left the device after the read-back check.
+        self.cloud: Any = None
+        self.moved: Dict[str, str] = {}
         tools = _tools()
         if tools["atlas"] is not None:
             self.atlas = tools["atlas"].Atlas(atlas_id="memory", max_depth=1)
@@ -359,7 +363,9 @@ class Compactor:
         self._check_brain("housekeep.end")
         return written
 
-    def _compact(self, turns: List[Any]) -> Capsule:
+    def _compact(self, turns: List[Any], dry_run: bool = False) -> Capsule:
+        """Write one capsule for `turns`. dry_run=True builds the same capsule (to measure its size, A-TEACH2-6 W1)
+        but writes nothing: no cold copy, no Atlas node, no receipt, not added to `capsules`."""
         tools = _tools()
         if tools["compiler"] is None or tools["cce"] is None:
             raise CompactRefused("TOOLS_MISSING", "compiler or CCE skin not importable")
@@ -412,9 +418,17 @@ class Compactor:
                     cubes.append(fid)
         binds = {"cubes": cubes, "coefficients": []}
         # 4. the cold copy first, then its digest
-        os.makedirs(self.cold_dir, exist_ok=True)
         cold_path = os.path.join(self.cold_dir, f"{capsule_id}.jsonl")
         payload = "".join(json.dumps(r, sort_keys=True, ensure_ascii=False) + "\n" for r in records).encode("utf-8")
+        if dry_run:
+            crumb = {"cold_path": cold_path, "sha256": _sha(payload), "turn_ids": turn_ids}
+            mass = {"value": len(turn_ids), "confirmed": 0}
+            node = f"thread-{max(self._thread_count, 1):04d}" if self.atlas is not None else None
+            return Capsule(capsule_id=capsule_id, cas=cas, clues=clues, binds=binds, crumb=crumb, mass=mass,
+                           receipt=_receipt_of(capsule_id, cas, clues, binds, crumb, mass), kind=kind,
+                           atlas={"node": node, "node_id": f"capsule:{capsule_id}" if node else None,
+                                  "side": "possibility"})
+        os.makedirs(self.cold_dir, exist_ok=True)
         with open(cold_path, "wb") as fh:
             fh.write(payload)
         with open(cold_path, "rb") as fh:
@@ -471,17 +485,28 @@ class Compactor:
 
     # ---------------------------------------------------------------- recall
     def _fetch(self, cap: Capsule) -> Tuple[str, List[str]]:
-        """Follow the breadcrumb. EXACT only when the bytes on disk hash to the crumb's sha256."""
+        """Follow the breadcrumb: the device's folder first, then the cloud when the original was moved there.
+        EXACT only when the bytes, from either place, hash to the crumb's sha256. A moved original that cannot be
+        reached is OFFLINE, never EXACT (A-TEACH2-5 L4)."""
         path = cap.crumb["cold_path"]
-        if not os.path.isfile(path):
+        if os.path.isfile(path):
+            with open(path, "rb") as fh:
+                data = fh.read()
+        elif cap.capsule_id in self.moved:
+            try:
+                data = self.cloud.get(self.moved[cap.capsule_id]) if self.cloud is not None else None
+            except Exception:
+                data = None
+            if data is None:
+                self._flag("CLOUD_UNREACHABLE", self.moved[cap.capsule_id], cap.capsule_id)
+                return "OFFLINE", []
+        else:
             self._flag("COLD_MISSING", path, cap.capsule_id)
             return "MISSING", []
-        with open(path, "rb") as fh:
-            data = fh.read()
         if _sha(data) != cap.crumb["sha256"]:
             self._flag("DIGEST_FAILED", path, cap.capsule_id)
             return "CORRUPT", []
-        texts = [r.get("user_raw_text", "") for r in read_cold(path)]
+        texts = [r.get("user_raw_text", "") for r in read_cold_bytes(data)]
         return "EXACT", texts
 
     def fit_check(self, cap: Capsule) -> Dict[str, Any]:
@@ -581,16 +606,19 @@ class Compactor:
         fit = self.fit_check(cap)
         if not fit["fits"]:
             failed = [k for k, v in fit.items() if k != "fits" and not v]
+            away = "; my full notes are stored away and I can't reach them right now" if status == "OFFLINE" else ""
             return {"label": "UNKNOWN", "texts": [], "question": None,
-                    "reason": f"memory did not fit its own clues (failed {', '.join(failed)}; cold copy {status})",
+                    "reason": f"memory did not fit its own clues (failed {', '.join(failed)}; cold copy {status}){away}",
                     "lookup": lookup, "capsule_id": cap.capsule_id, "fit": fit}
         rebuilt = self._rebuilt_text(cap)
         question = None
         if (will_act or status in ("MISSING", "CORRUPT")) and self._question_allowed(cap):
             question = self._refresh_question(cap)
             self._count_question(cap)
-        return {"label": "RECONSTRUCTED", "texts": [rebuilt], "question": question,
-                "reason": f"rebuilt from the capsule; cold copy {status}", "lookup": lookup,
+        reason = f"rebuilt from the capsule; cold copy {status}"
+        if status == "OFFLINE":
+            reason += "; my full notes are stored away and I can't reach them right now"
+        return {"label": "RECONSTRUCTED", "texts": [rebuilt], "question": question, "reason": reason, "lookup": lookup,
                 "capsule_id": cap.capsule_id, "fit": fit}
 
     @staticmethod
