@@ -1,0 +1,142 @@
+{
+ "record": "U1B_VERIFICATION_20261021",
+ "written_utc": "2026-10-21T17:13:22+00:00",
+ "owner_line_20261021_as_relayed": [
+  "RUN the follow-up test called U1b",
+  "run U1b"
+ ],
+ "finding": "U1b already RAN, READ and RECORDED (spec sheet section 7.40, PR #268, commit 60321a14); nothing re-run today; no claim status changed",
+ "u1b_folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye",
+ "freeze": {
+  "FROZEN.precode.json_sha256": "a77758f41d5aaa01adbb12b674e62d549bff4d34955c394e93373313621e26b2",
+  "recorded": "a77758f41d5aaa01adbb12b674e62d549bff4d34955c394e93373313621e26b2",
+  "FROZEN.json_sha256": "349644c6e3a8fc196fb74155413338bcb736a9a2f0d55c3458f6868193af045c",
+  "written_laptop_clock": "2026-10-15 17:31 PDT, before any U1b code"
+ },
+ "source_manifest": {
+  "sha256": "ecba90709b58b2294ecad6fe0e2e5bf8077ca072c6fddf526774417443271640",
+  "recorded_in_STATUS": "ecba90709b58b2294ecad6fe0e2e5bf8077ca072c6fddf526774417443271640",
+  "files": 121,
+  "rehash_20261021": {
+   "ok": 121,
+   "changed": 0,
+   "missing": 0
+  }
+ },
+ "run": {
+  "parts": 21,
+  "names": "U1B_MSI_P01..P21",
+  "driver_start_utc": "2026-10-16T00:46:06Z (17:46:06 PDT 2026-10-15)",
+  "first_part_start_utc": "2026-10-16T00:48:09Z",
+  "last_part_end_utc": "2026-10-16T03:16:10Z (20:16:10 PDT 2026-10-15)",
+  "part_wall_sum_s": 4228.659,
+  "planned_worlds_counted_once": 1544,
+  "deadline_hits": 0,
+  "throttle_fired": 0,
+  "tests_per_part": "18/18",
+  "sign_line_as_composed_by_operator": "APPROVE u1b, source ecba9070, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "authorization_of_record": "coordinator's reading of the owner's words of about 5:10 PM PDT 2026-10-15 (FROZEN.json owner_authorization_u1b); the sign line is not an owner signature (OWNER_APPROVAL_EVIDENCE.md)",
+  "spend_usd": 0
+ },
+ "reading": {
+  "MERGED_READING.json_sha256": "d00189a185d5110d97fc815d7b77afd01775e0e6332ed93e51c063ba7aa41a88",
+  "recorded": "d00189a185d5110d97fc815d7b77afd01775e0e6332ed93e51c063ba7aa41a88",
+  "test_verdict": "READ",
+  "status_words": [
+   "EYE_EARNED_KEEP",
+   "CONCERT_EARNED_KEEP"
+  ],
+  "CHECKLIST_SUFFICES": false,
+  "hard_gates_failed": [],
+  "hard_gates_total": 39,
+  "FIX": {
+   "A0": 0,
+   "A1": 0,
+   "A2": 60,
+   "A3": 148,
+   "A4": 148,
+   "A5": 13,
+   "A6": 128
+  },
+  "FALSE_clean_interventions": {
+   "A0": 0,
+   "A1": 0,
+   "A2": 1410,
+   "A3": 2610,
+   "A4": 1816,
+   "A5": 558,
+   "A6": 10152
+  },
+  "WORSE_THAN_NO_EYE_true_key_faulted": {
+   "A0": 0,
+   "A1": 0,
+   "A2": 0,
+   "A3": 0,
+   "A4": 0,
+   "A5": 23,
+   "A6": 239
+  },
+  "WORSE_THAN_NO_EYE_OLD_STYLE_unscored": {
+   "A2": 149,
+   "A3": 259,
+   "A4": 259,
+   "A5": 70,
+   "A6": 498
+  },
+  "A5_CONTROL_COST": {
+   "dl_clean_changed_turns": 25,
+   "worlds_affected": 22,
+   "same_answer_repeated": 20,
+   "other": 5,
+   "tb_clean_worse": 0
+  },
+  "G_CONTROLS": {
+   "A5_detected": 2,
+   "chance_expectation": "1.3160",
+   "bound_E_plus_3sd": "4.6412"
+  },
+  "REQUESTS_A4": "8125/8125",
+  "CONCERT": {
+   "FIX_A4": 148,
+   "FIX_A3": 148,
+   "FALSE_A4": 1816,
+   "FALSE_A3": 2610
+  }
+ },
+ "reader_replay_20261021": {
+  "script": "replay_u1b_reader.py (read-only import of the sealed package; output written to the scratchpad only)",
+  "output_copy": "MERGED_READING.replay.json",
+  "replay_sha256": "d00189a185d5110d97fc815d7b77afd01775e0e6332ed93e51c063ba7aa41a88",
+  "byte_identical_to_sealed": true,
+  "seconds": 0.654
+ },
+ "archive_20261021": {
+  "u1b": {
+   "path": "D:\\tksCAS-archive\\u1b_unity_eye_20261015",
+   "files": 268,
+   "three_sha256_passes_equal": true,
+   "listing_sha256": "1500a2e665d0d2d747c3212b1882fdc7e3c3a30ef16e4ee824ba55db45decc60"
+  },
+  "u1": {
+   "path": "D:\\tksCAS-archive\\u1_unity_eye_20261015",
+   "files": 277,
+   "three_sha256_passes_equal": true,
+   "listing_sha256": "5c91617adb9043ef81e5e5f1b4e52445600807a71cc20ae5c0dbc047997b0b05"
+  }
+ },
+ "status_unchanged": {
+  "eye_acting": "NOT LICENSED (section 7.38)",
+  "u1": "INCONCLUSIVE (section 7.38)",
+  "u1b": "READ; EYE_EARNED_KEEP, CONCERT_EARNED_KEEP for this test only; ceiling SYNTHETIC_ONLY (section 7.40)"
+ },
+ "record_repairs": [
+  "memory note project_u1_unity_eye_acting_ran_20261015.md (16:59 PDT 2026-10-15, before the U1b freeze) said 'U1b only on owner word'; corrected 2026-10-21",
+  "hub change-log row of 2026-10-21 09:42 PDT cites section 7.38 only for the Eye's acting; section 7.40 (U1b) not cited there; noted, not edited"
+ ],
+ "open_for_owner": "closed: the owner ratified the 2026-10-15 run (see owner_ratification_20261021)",
+ "owner_ratification_20261021": {
+  "words_verbatim": "My 'run U1b' line stands as my word on the 2026-10-15 U1b run. Merge PR #442 into the thread branch.",
+  "where": "typed by the owner in this session",
+  "effect": "the 2026-10-15 run carries the owner's word after the fact; no claim status moves"
+ }
+}
