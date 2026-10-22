@@ -4,13 +4,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
-## 2026-10-21 PDT - U1c design packet (spec sheet 7.120): a fresh-world retest of the Unity Eye acting, designed and costed for AWS; nothing frozen, nothing run; 0 USD
+## 2026-10-21 PDT - U1c design packet (spec sheet 7.121): a fresh-world retest of the Unity Eye acting, designed and costed for AWS; nothing frozen, nothing run; 0 USD
 
 - Owner asked to run U1b; it had already run on 2026-10-15 (spec 7.40: READ, EYE_EARNED_KEEP, CONCERT_EARNED_KEEP; verified, not re-run, PR #442). The owner then asked for U1c: fresh seeds, its own pre-code freeze, sized for AWS, design and cost shown before anything runs.
 - Design: U1b's instrument unchanged (114 files byte-identical, arms A0-A6, six planted faults, 39 gates, merge_u1.py); only the worlds change, drawn by commit-then-reveal from an owner secret plus the sealed package fingerprint; a Linux port proved on a 722-item slice of U1b's own inputs before any fresh world is scored; an optional fair rival A7 with its own reader.
 - Cost: one m6i.xlarge, 240-minute window; expected about 0.36 USD in all (range 0.27-0.57); about 0.03 if the early port check fails; proposed holds 1.00 USD (build tests) and 4.00 USD (run), released at closeout.
 - Made by an 11-agent workflow (three readers, three designs and a judge, three adversarial reviewers, a writer); 65 reviewer problems, 8 BLOCKER, each dispositioned. Operator spot-checks against U1b's files: 14 clock values in CALIBRATION.json, FIX 148/148/128, FALSE 1,816/2,610/10,152, 39 of 39 gates, speed ratio 1.2427 in spec 7.65.
 - Not frozen: the preregistration (draft sha256 d45e5f3062735d70...) changes with the owner's answers to Q2, Q4, Q5, Q7. Files: Documents/Codex/2026-10-21/u1c/, repo copy docs/working/u1c/.
+
+## 2026-10-21 PDT - U1b (Unity Eye acting retest) found ALREADY RUN on 2026-10-15 evening, verified, archived, and ratified by the owner; spec sheet 7.40 follow-up; 0 USD; nothing re-run; no claim moved
+
+- Owner's words (2026-10-21, relayed from the operator session): "RUN the follow-up test called U1b" and "run U1b". The memory note that said U1b was still waiting for the owner's word was written at 16:59 PDT on 2026-10-15, before U1b's 17:31 PDT freeze; it was stale and is corrected.
+- What exists: U1b (Documents\Codex\2026-10-15\u1b_unity_eye\) = U1's design unchanged + three disclosed instrument fixes (control A5 out of G_CLEAN with its cost reported; faulted-world yardstick = the true answer key; work queue from the start) on fresh worlds; 21 laptop parts 17:48-20:16 PDT 2026-10-15, 18/18 tests each, 0 USD; reading READ, EYE_EARNED_KEEP + CONCERT_EARNED_KEEP, 0 of 39 hard gates failed (MERGED_READING.json sha256 d00189a1...); recorded as spec sheet 7.40 by PR #268 (commit 60321a14). The sign line in the folder was composed by the builder-operator and is not an owner signature.
+- Verified today, read-only on the sealed folder: 121/121 manifest files re-hashed equal; FROZEN.precode.json (a77758f4...) and MERGED_READING.json equal their records; merge_u1.py replayed on the sealed part outputs reproduced the reading byte for byte (0.654 s). First archive copies: D:\tksCAS-archive\u1b_unity_eye_20261015\ (268 files) and u1_unity_eye_20261015\ (277 files), three sha256 listing passes equal each.
+- Owner's ratification, typed in this session, verbatim: "My 'run U1b' line stands as my word on the 2026-10-15 U1b run. Merge PR #442 into the thread branch." The 2026-10-15 run now carries the owner's own word.
+- Status unchanged: the Eye's ACTING stays NOT LICENSED (7.38); U1b's two keep words hold for that test only, SYNTHETIC_ONLY; U1 stays INCONCLUSIVE.
+- Failed approach logged: the first version of this PR's edit script wrote the spec sheet and CHANGELOG back with Windows line endings (Path.write_text on Windows), which rewrote every line and made the PR conflict with the whole file; re-applied on the thread head with LF line endings.
+- Record: Documents\Codex\2026-10-21\u1b\ (verification .md/.json, owner line, replay script, replay output); repo copy docs/working/u1b_verification_20261021/. No .py file of HELM changed; nothing under Documents\Codex\2026-10-20\r1_wave7\ touched.
 
 ## 2026-10-21 PDT - HELM-R1 wave 7 v9 reseal on the reader v7.2 fix (spec sheet 7.118): three changes on v8, SEALED, NOT LAUNCHED, waits for the owner's own typed line (proposed "CHAT WAVE 6 at 1 USD"); practice run from the seal reads 0 WRONG in every dialogue family and every mark true, no number moved against v8's run; 0 USD
 
