@@ -270,6 +270,34 @@ def stage_write(families: Tuple[str, ...] = NEW_FAMILIES) -> None:
     MM.stage_write(families)
 
 
+def stage_rewrite(families: Tuple[str, ...] = NEW_FAMILIES) -> None:
+    """Every NEW reply that still breaks a rule goes back once to its own family with the reason (tag fix2-<fam>-k)."""
+    xs = {x["id"]: x for x in _load("inputs.json")}
+    for fam in families:
+        doc = _load(f"written_{fam}.json") or {"lines": {}, "calls": []}
+        written = doc["lines"]
+        rdir = os.path.join(OUT, "replies")
+        for name in sorted(os.listdir(rdir)) if os.path.isdir(rdir) else []:
+            if name.startswith(f"fix2-{fam}-") and name.endswith(".txt"):
+                llm_ct._take(open(os.path.join(rdir, name), encoding="utf-8").read(), written)
+        redo = [dict(writer_view(x), refused_because=ML.rule_check(x, written.get(x["id"], ""))[1],
+                     your_reply=written.get(x["id"], "")) for x in xs.values()
+                if not x["id"].startswith("m") and not ML.rule_check(x, written.get(x["id"], ""))[0]]
+        size = 95 if fam in MM.SMALL_BATCH_FAMILIES else 190
+        for b in range(0, len(redo), size):
+            tag = f"fix2-{fam}-{b // size}"
+            if os.path.exists(os.path.join(rdir, tag + ".txt")):
+                continue
+            text, meta = llm_ct.run_cli(fam, BRIEF_WRITE2 + "\n\nREWRITE these items (each was refused for the reason "
+                                        "given):\n" + json.dumps(redo[b:b + size], ensure_ascii=False), tag)
+            doc.setdefault("calls", []).append(meta)
+            llm_ct._take(text, written)
+        print(fam, "refused before", len(redo), "still refused",
+              sum(1 for x in xs.values() if not x["id"].startswith("m") and not ML.rule_check(x, written.get(x["id"], ""))[0]),
+              flush=True)
+        _save(f"written_{fam}.json", doc)
+
+
 def stage_key(families: Tuple[str, ...] = NEW_FAMILIES) -> None:
     MM.stage_key(families)
 
@@ -333,7 +361,7 @@ def stage_assemble(families=None) -> Dict[str, Any]:
 if __name__ == "__main__":
     fams = tuple(sys.argv[2].split(",")) if len(sys.argv) > 2 else None
     stage = {"vocab": stage_vocab, "persons": stage_persons, "persons_exam": stage_persons_exam, "write": stage_write,
-             "key": stage_key, "assemble": stage_assemble}[sys.argv[1]]
+             "key": stage_key, "rewrite": stage_rewrite, "assemble": stage_assemble}[sys.argv[1]]
     if sys.argv[1] == "vocab":
         stage_vocab(sys.argv[2] if len(sys.argv) > 2 else "0/1")
     else:

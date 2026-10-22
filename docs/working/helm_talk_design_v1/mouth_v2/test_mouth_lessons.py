@@ -112,3 +112,11 @@ def test_v2_doubled_consonant_and_est_forms():
     for base, form in (("stop", "stopped"), ("stop", "stopping"), ("jam", "jamming"), ("cut", "cutting"),
                        ("fast", "fastest"), ("noise", "noisy"), ("happy", "happier"), ("happy", "happiest")):
         assert form in ML.word_forms(base), (base, form)
+
+
+def test_v2_possessive_keeps_the_thing():
+    """A-TALK-10 K2: "Longmoor's line" states the thing longmoor."""
+    x = {"situation": "ANSWER", "input_text": "answer longmoor line rerouted september through cresswell",
+         "reading": {"thing": "longmoor", "slot": ["line", "rerouted", "september", "through"], "value": "cresswell",
+                     "replaces": None}, "tone": ["^1", "|A"]}
+    assert ML.rule_check(x, "You said Longmoor's line got rerouted through Cresswell in September.")[0]

@@ -212,7 +212,7 @@ def rule_check(inp: Dict[str, Any], line: str) -> Tuple[bool, str]:
     for sent in re.split(r"(?<=[.!?])\s+", text):
         toks = _words(sent)
         for w in toks[1:]:
-            if (w[:1].isupper() and w != "I" and w.lower() not in have and w.lower() not in ("i'm", "i'll", "i've", "i'd")
+            if (w[:1].isupper() and w != "I" and re.sub(r"'s$", "", w.lower()) not in have and w.lower() not in ("i'm", "i'll", "i've", "i'd")
                     and w.lower() not in OWN_NAMES):
                 return False, f"name {w} not in input"
     for m in ht.RECIPE_SPEAK_RX.finditer(text):
@@ -221,7 +221,7 @@ def rule_check(inp: Dict[str, Any], line: str) -> Tuple[bool, str]:
     q = text.count("?")
     if sit in FACT_SITUATIONS:
         r = inp["reading"]
-        low = {w.lower() for w in words}
+        low = {re.sub(r"'s$", "", w.lower()) for w in words}          # A-TALK-10 K2: "Longmoor's" states longmoor
         if r["value"] not in low or r["thing"] not in low:
             return False, "the reading's value or thing missing"
         if sit == "ASK" and (q != 1 or not text.endswith("?")):
