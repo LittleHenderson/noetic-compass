@@ -1,0 +1,466 @@
+{
+ "claim_status_if_not_word_4": "ENGINEERED-NOT-VALIDATED",
+ "counts": {
+  "A0": {
+   "K_dialogue": {
+    "ASKED": 33,
+    "RIGHT": 27,
+    "scored": 60,
+    "turns": 60
+   },
+   "K_single": {
+    "ASKED": 60,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 63,
+    "scored": 128,
+    "turns": 128
+   }
+  },
+  "A1": {
+   "K_dialogue": {
+    "ASKED": 54,
+    "RIGHT": 6,
+    "scored": 60,
+    "turns": 60
+   },
+   "K_single": {
+    "ASKED": 84,
+    "RIGHT": 44,
+    "scored": 128,
+    "turns": 128
+   }
+  },
+  "A2": {
+   "K_dialogue": {
+    "ASKED": 30,
+    "RIGHT": 30,
+    "offered": 3,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 3
+   },
+   "K_single": {
+    "ASKED": 55,
+    "CWFW": 3,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 65,
+    "diff:MISSING_CLAUSE": 1,
+    "diff:WRONG_KIND": 1,
+    "diff:WRONG_POLARITY": 1,
+    "offered": 6,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 3
+   }
+  },
+  "A2E": {
+   "K_dialogue": {
+    "ASKED": 32,
+    "RIGHT": 28,
+    "offered": 1,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 1
+   },
+   "K_single": {
+    "ASKED": 58,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 65,
+    "offered": 2,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 2
+   }
+  },
+  "A4-s1": {
+   "K_dialogue": {
+    "ASKED": 16,
+    "CWFW": 2,
+    "RIGHT": 42,
+    "diff:EXTRA_CLAUSE": 2,
+    "diff:MISSING_CLAUSE": 1,
+    "diff:WRONG_CONTEXT_REF": 2,
+    "offered": 17,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 15
+   },
+   "K_single": {
+    "ASKED": 39,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 84,
+    "offered": 21,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 21
+   }
+  },
+  "A4-s2": {
+   "K_dialogue": {
+    "ASKED": 17,
+    "RIGHT": 43,
+    "offered": 16,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 16
+   },
+   "K_single": {
+    "ASKED": 36,
+    "CWFW": 5,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 82,
+    "diff:EXTRA_CLAUSE": 2,
+    "diff:MISSING_CLAUSE": 1,
+    "diff:WRONG_AMOUNT_BINDING": 1,
+    "diff:WRONG_KIND": 2,
+    "diff:WRONG_POLARITY": 1,
+    "offered": 27,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 22
+   }
+  },
+  "A4-s3": {
+   "K_dialogue": {
+    "ASKED": 17,
+    "CWFW": 1,
+    "RIGHT": 42,
+    "diff:EXTRA_CLAUSE": 1,
+    "diff:WRONG_CONTEXT_REF": 1,
+    "offered": 16,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 15
+   },
+   "K_single": {
+    "ASKED": 39,
+    "CWFW": 5,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 79,
+    "diff:EXTRA_CLAUSE": 2,
+    "diff:WRONG_KIND": 2,
+    "diff:WRONG_NAME": 1,
+    "diff:WRONG_POLARITY": 1,
+    "offered": 25,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 20
+   }
+  },
+  "A4E": {
+   "K_dialogue": {
+    "ASKED": 20,
+    "RIGHT": 40,
+    "offered": 13,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 13
+   },
+   "K_single": {
+    "ASKED": 44,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 79,
+    "offered": 16,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 16
+   }
+  },
+  "A5-s1": {
+   "K_dialogue": {
+    "ASKED": 18,
+    "RIGHT": 42,
+    "offered": 15,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 15
+   },
+   "K_single": {
+    "ASKED": 40,
+    "CWFW": 2,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 81,
+    "diff:WRONG_AMOUNT_BINDING": 1,
+    "diff:WRONG_KIND": 1,
+    "offered": 21,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 19
+   }
+  },
+  "C1-s1": {
+   "K_dialogue": {
+    "ASKED": 32,
+    "RIGHT": 28,
+    "offered": 1,
+    "scored": 60,
+    "turns": 60,
+    "used_with_yes": 1
+   },
+   "K_single": {
+    "ASKED": 58,
+    "CWFW": 2,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 63,
+    "diff:MISSING_CLAUSE": 1,
+    "diff:WRONG_AMOUNT_BINDING": 1,
+    "offered": 2,
+    "scored": 128,
+    "turns": 128,
+    "used_with_yes": 0
+   }
+  },
+  "C2E": {
+   "K_dialogue": {
+    "ASKED": 33,
+    "RIGHT": 27,
+    "scored": 60,
+    "turns": 60
+   },
+   "K_single": {
+    "ASKED": 60,
+    "READER_WRONG": 5,
+    "READER_WRONG_saved": 3,
+    "RIGHT": 63,
+    "scored": 128,
+    "turns": 128
+   }
+  }
+ },
+ "diff_classes": {
+  "A2E": {
+   "K_dialogue": {},
+   "K_single": {}
+  },
+  "A4E": {
+   "K_dialogue": {},
+   "K_single": {}
+  }
+ },
+ "gates": {
+  "H-CWFW": true,
+  "H-CWFW_detail": {
+   "A2E": {
+    "K_dialogue": 0,
+    "K_single": 0
+   },
+   "A4E": {
+    "K_dialogue": 0,
+    "K_single": 0
+   }
+  },
+  "H-LEN": true,
+  "H-LEN_truncated": 0,
+  "H-NOHARM": true,
+  "H-READBACK": true,
+  "H-REMOVE": true,
+  "H-RT": true,
+  "H-RT_detail": {
+   "used_readings_failing_round_trip": 0,
+   "well_formed_share": {
+    "A4-s1/K": "38/38",
+    "A4-s2/K": "43/43",
+    "A4-s3/K": "41/41"
+   }
+  },
+  "H-SAVED": true,
+  "H-SEP": true,
+  "H-USED": true,
+  "H-WRITE": true
+ },
+ "human_pass_K_H": "NOT_RUN (HUMAN_EXAM_ABSENT)",
+ "instrument_problems": [
+  "Part R NOT_EXERCISED (census R1 below 24)"
+ ],
+ "label": "NAMED_CORPORA_ONLY (Part R) + LLM_WRITTEN (Part K)",
+ "lexicon": "scored path uses no Noetic lexicon: helm_english_in.read() never looks up a Noetic word; branch v1.2 = v1.1 + noetic_reading() (lexicon_v3, HELM_LEXICON_V3 default ON), which read() never calls; v1.1 pinned because RTR-1 sealed and measured these bytes",
+ "logs": {
+  "a4_alignment": {
+   "ALIGNED": 78,
+   "CONTEXT_ONLY": 22,
+   "NOT_ALIGNED": 11,
+   "NO_ITEMS": 11
+  },
+  "a4_margin_argmax_consistent": {
+   "True": 122
+  },
+  "agreement": {
+   "A2E:1_of_3_agree": 12,
+   "A2E:2_of_3_agree": 2,
+   "A2E:3_of_3_agree": 3,
+   "A2E:none_read": 92,
+   "A4E:1_of_3_agree": 5,
+   "A4E:2_of_3_agree": 13,
+   "A4E:3_of_3_agree": 29,
+   "A4E:none_read": 62,
+   "C2E:1_of_3_agree": 6,
+   "C2E:none_read": 103
+  }
+ },
+ "marks": {
+  "M-K1": true,
+  "M-K2": true,
+  "M-K3": true,
+  "M-K4": true
+ },
+ "part_k_line": {
+  "gates": {
+   "H-CWFW": true,
+   "H-LEN": true,
+   "H-LEN_truncated": 0,
+   "H-NOHARM": true,
+   "H-READBACK": true,
+   "H-REMOVE": true,
+   "H-RT": true,
+   "H-SAVED": true,
+   "H-SEP": true,
+   "H-USED": true,
+   "H-WRITE": true
+  },
+  "note": "Part K only (LLM_WRITTEN); reported, never the reading's word",
+  "parts": [
+   "K_dialogue",
+   "K_single"
+  ],
+  "rule": 4,
+  "verdict": "PASS",
+  "word": "EARS_EARNED_KEEP"
+ },
+ "reach": {
+  "K_dialogue": {
+   "H": 33,
+   "floor": 8,
+   "ok": true
+  },
+  "K_single": {
+   "H": 60,
+   "floor": 16,
+   "ok": true
+  }
+ },
+ "right": {
+  "A0": {
+   "K_dialogue": 27,
+   "K_single": 63
+  },
+  "A1": {
+   "K_dialogue": 6,
+   "K_single": 44
+  },
+  "A2": {
+   "K_dialogue": 30,
+   "K_single": 65
+  },
+  "A2E": {
+   "K_dialogue": 28,
+   "K_single": 65
+  },
+  "A4-s1": {
+   "K_dialogue": 42,
+   "K_single": 84
+  },
+  "A4-s2": {
+   "K_dialogue": 43,
+   "K_single": 82
+  },
+  "A4-s3": {
+   "K_dialogue": 42,
+   "K_single": 79
+  },
+  "A4E": {
+   "K_dialogue": 40,
+   "K_single": 79
+  },
+  "A5-s1": {
+   "K_dialogue": 42,
+   "K_single": 81
+  },
+  "C1-s1": {
+   "K_dialogue": 28,
+   "K_single": 63
+  },
+  "C2E": {
+   "K_dialogue": 27,
+   "K_single": 63
+  }
+ },
+ "rule": 1,
+ "schema": "ctt2r.reading/1",
+ "test": "CTT-2R ACCEPT-2 on the c45 weights",
+ "trap_families": {
+  "A0": {
+   "trap_condition": {
+    "READER_WRONG": 1,
+    "RIGHT": 3
+   },
+   "trap_negation_scope": {
+    "RIGHT": 5
+   },
+   "trap_number_not_stock": {
+    "RIGHT": 6
+   },
+   "trap_other_person": {
+    "RIGHT": 6
+   },
+   "trap_past_future": {
+    "RIGHT": 6
+   },
+   "trap_reported_unsure": {
+    "RIGHT": 5
+   }
+  },
+  "A2E": {
+   "trap_condition": {
+    "READER_WRONG": 1,
+    "RIGHT": 3
+   },
+   "trap_negation_scope": {
+    "RIGHT": 5
+   },
+   "trap_number_not_stock": {
+    "RIGHT": 6
+   },
+   "trap_other_person": {
+    "RIGHT": 6
+   },
+   "trap_past_future": {
+    "RIGHT": 6
+   },
+   "trap_reported_unsure": {
+    "RIGHT": 5
+   }
+  },
+  "A4E": {
+   "trap_condition": {
+    "READER_WRONG": 1,
+    "RIGHT": 3
+   },
+   "trap_negation_scope": {
+    "RIGHT": 5
+   },
+   "trap_number_not_stock": {
+    "RIGHT": 6
+   },
+   "trap_other_person": {
+    "RIGHT": 6
+   },
+   "trap_past_future": {
+    "RIGHT": 6
+   },
+   "trap_reported_unsure": {
+    "RIGHT": 5
+   }
+  }
+ },
+ "verdict": "INSTRUMENT_ERROR",
+ "word": "INCONCLUSIVE"
+}

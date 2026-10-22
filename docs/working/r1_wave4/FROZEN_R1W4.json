@@ -1,0 +1,663 @@
+{
+ "arms": {
+  "X4_E64": {
+   "-CUBE_STORE": {
+    "eye": null,
+    "off": [
+     "CUBE_STORE"
+    ]
+   },
+   "-CUBE_STORE+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "CUBE_STORE"
+    ]
+   },
+   "-ENGLISH_IN": {
+    "eye": null,
+    "off": [
+     "ENGLISH_IN"
+    ]
+   },
+   "-ENGLISH_IN+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "ENGLISH_IN"
+    ]
+   },
+   "-VOICE": {
+    "eye": null,
+    "off": [
+     "VOICE"
+    ]
+   },
+   "-VOICE+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "VOICE"
+    ]
+   },
+   "CHECKLIST": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "CHECKLIST",
+     "trigger": "AFTER_EACH_WRITE"
+    },
+    "off": []
+   },
+   "EYE_SCAN_REPORT_ONLY": {
+    "eye": {
+     "delivery": "REPORT_ONLY",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "EYE_SCAN_SELF_ONLY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "SELF_INITIATED"
+    },
+    "off": []
+   },
+   "FULL": {
+    "eye": null,
+    "off": []
+   },
+   "FULL+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   }
+  },
+  "X4_F64": {
+   "-ENGLISH_IN": {
+    "eye": null,
+    "off": [
+     "ENGLISH_IN"
+    ]
+   },
+   "-ENGLISH_IN+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "ENGLISH_IN"
+    ]
+   },
+   "-TRIAD": {
+    "eye": null,
+    "off": [
+     "TRIAD"
+    ]
+   },
+   "-TRIAD+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "TRIAD"
+    ]
+   },
+   "-VOICE": {
+    "eye": null,
+    "off": [
+     "VOICE"
+    ]
+   },
+   "-VOICE+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "VOICE"
+    ]
+   },
+   "CHECKLIST": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "CHECKLIST",
+     "trigger": "AFTER_EACH_WRITE"
+    },
+    "off": []
+   },
+   "EYE_SCAN_REPORT_ONLY": {
+    "eye": {
+     "delivery": "REPORT_ONLY",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "EYE_SCAN_SELF_ONLY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "SELF_INITIATED"
+    },
+    "off": []
+   },
+   "FULL": {
+    "eye": null,
+    "off": []
+   },
+   "FULL+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   }
+  },
+  "X4_SELF": {
+   "-CUBE_STORE": {
+    "eye": null,
+    "off": [
+     "CUBE_STORE"
+    ]
+   },
+   "-CUBE_STORE+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "CUBE_STORE"
+    ]
+   },
+   "-ENGLISH_IN": {
+    "eye": null,
+    "off": [
+     "ENGLISH_IN"
+    ]
+   },
+   "-ENGLISH_IN+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "ENGLISH_IN"
+    ]
+   },
+   "-TRIAD": {
+    "eye": null,
+    "off": [
+     "TRIAD"
+    ]
+   },
+   "-TRIAD+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "TRIAD"
+    ]
+   },
+   "-VOICE": {
+    "eye": null,
+    "off": [
+     "VOICE"
+    ]
+   },
+   "-VOICE+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": [
+     "VOICE"
+    ]
+   },
+   "CHECKLIST": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "CHECKLIST",
+     "trigger": "AFTER_EACH_WRITE"
+    },
+    "off": []
+   },
+   "EYE_SCAN_REPORT_ONLY": {
+    "eye": {
+     "delivery": "REPORT_ONLY",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "EYE_SCAN_SELF_ONLY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "SELF_INITIATED"
+    },
+    "off": []
+   },
+   "FULL": {
+    "eye": null,
+    "off": []
+   },
+   "FULL+EYE_SCAN": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "eye": {
+     "delivery": "REPORT_AND_WHISPER",
+     "kind": "EYE",
+     "trigger": "FULL"
+    },
+    "off": []
+   }
+  }
+ },
+ "attempts": {
+  "plumbing_retry": 1,
+  "scored": 1
+ },
+ "beats": {
+  "checklist": "the candidate fully finds at least one fault kind the checklist does not fully find",
+  "whisper": "acted(candidate) - acted(EYE_SCAN_REPORT_ONLY) >= ceil(found / 2)"
+ },
+ "candidate": "FULL+EYE_SCAN",
+ "carried_full_units": {
+  "E1_GB_C21": [
+   "E1_GB_C21_A1_TEACH",
+   "E1_GB_C21_A1_PANEL"
+  ],
+  "E2_TB_C25": [
+   "E2_TB_C25_A1_TEACH",
+   "E2_TB_C25_A1_RESTART"
+  ],
+  "X2_CASC": [
+   "W3_CASC_FULL"
+  ],
+  "X2_CCE": [
+   "E3_CCE_X1"
+  ],
+  "X2_GB": [
+   "E3_GB_X1_A1_TEACH",
+   "E3_GB_X1_A1_PANEL"
+  ],
+  "X2_IDLE": [
+   "W3_IDLE_FULL"
+  ],
+  "X2_TB": [
+   "E3_TB_X1_A1_TEACH",
+   "E3_TB_X1_A1_RESTART"
+  ]
+ },
+ "claim_ceiling": "SYNTHETIC_ONLY",
+ "claim_status_if_earned": "ENGINEERED-NOT-VALIDATED",
+ "denominators": {
+  "X4_E64": 64,
+  "X4_F64": 64,
+  "X4_SELF": 152
+ },
+ "eye_numbers": {
+  "IDLE_WINDOW": 80,
+  "MAX_SUMMONS_PER_WINDOW": 4,
+  "MIN_IDLE_GAP": 64,
+  "SCAN_ALLOWANCE": 1024,
+  "STREAK_K": 3,
+  "UNITS_PER_TICK": 256,
+  "WHISPERS_PER_SCAN_MAX": 2,
+  "WHISPER_BUDGET_PER_WINDOW": 2,
+  "WINDOW_BUDGET": 5120
+ },
+ "hard_gates": [
+  "H1 receipts",
+  "H8 voice changes no answer",
+  "H11 replay",
+  "H3 eye never writes",
+  "H5 no awake scans",
+  "H6 controls valid",
+  "H7 budget",
+  "H9 delivery neutral",
+  "HV no void planting where the target exists",
+  "HS sandbox",
+  "HC sidecars wrote nothing"
+ ],
+ "instrument_rows": [
+  "I1 data identity",
+  "I3 same brain (c38 live, c37 carried)",
+  "I4 parameter counts",
+  "I6 completeness",
+  "I7 laptop reading",
+  "I9 governance",
+  "I10 X4 band rule"
+ ],
+ "label": "R1W4",
+ "marks": {
+  "a_no_harm_max_loss": 2,
+  "b1_faults_found": 88,
+  "b2_faults_acted_on": "acted = found = 88",
+  "c_false_alarms": 0,
+  "d_whisper_writes": 0,
+  "e_traceable": "100%",
+  "f_self_initiated_only": "reported, not a mark"
+ },
+ "neighbours": {
+  "w1": [
+   "31f97d67122b45860cdff2b03481655fa502ff359f10b70a181904972ddbb3c9",
+   "8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b"
+  ],
+  "w2": [
+   "21ad185d885a11c4ee498e31e106c71ca608dc9edea1b201a283347086d58dc5",
+   "c8f82a6d652ae6f910021e9d1c19ad7e67bcf29bdacc0613b8eb469d84b29224"
+  ],
+  "w3": [
+   "152bca2a3c869212642f96514e7d485413727bf92cf67e9aff1774cefa532362",
+   "bd06f324a9643a8aacefab3d8ef52de4cf673a68820544897def95854b73d310"
+  ],
+  "w3b": [
+   "a4f82556bf0fc26de5635a7c81ec8f5053951d4c64a3906c8e5dd474e3814d26",
+   "a6d9dbc78d3f720941c5a358be9a4d514617f8de226811c55938f807833dfbba"
+  ]
+ },
+ "not_in_wave": {
+  "RANDOM_SAMPLE_SCAN": "U3-T1's second baseline; the order names one mechanism-free rival, the checklist (D-4.5)",
+  "X2_D34 (depth)": "a LAPTOP stage in wave 3 (197 pinned sources hard-code Windows paths, wave 3 D3); wave 3b did not run it; EYE_SCAN has no path into it (deviation D-4.3)"
+ },
+ "owner_order_verbatim": "\u201cEYE_SCAN wave\u201d",
+ "owner_phrases": [
+  "check yourself",
+  "run a self-check",
+  "do a self-scan",
+  "how are you doing",
+  "is anything wrong with you",
+  "what do you know about yourself",
+  "how's your memory"
+ ],
+ "owner_rulings_file": "Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md",
+ "pair_margin_ratio": "1/8",
+ "pair_runs": [
+  [
+   "X4_E64",
+   "CUBE_STORE"
+  ],
+  [
+   "X4_E64",
+   "ENGLISH_IN"
+  ],
+  [
+   "X4_E64",
+   "VOICE"
+  ],
+  [
+   "X4_F64",
+   "ENGLISH_IN"
+  ],
+  [
+   "X4_F64",
+   "VOICE"
+  ],
+  [
+   "X4_F64",
+   "TRIAD"
+  ],
+  [
+   "X4_SELF",
+   "CUBE_STORE"
+  ],
+  [
+   "X4_SELF",
+   "ENGLISH_IN"
+  ],
+  [
+   "X4_SELF",
+   "VOICE"
+  ],
+  [
+   "X4_SELF",
+   "TRIAD"
+  ]
+ ],
+ "pairs": [
+  [
+   "CUBE_STORE",
+   "EYE_SCAN"
+  ],
+  [
+   "ENGLISH_IN",
+   "EYE_SCAN"
+  ],
+  [
+   "EYE_SCAN",
+   "TRIAD"
+  ],
+  [
+   "EYE_SCAN",
+   "VOICE"
+  ]
+ ],
+ "preregistration_precode_sha256": "411b31e2da4568b4c7eddd10e9ed8c52b829d9eeeb433abc125bfed17edd2fbf",
+ "refused_prefixes": [
+  "TEACH_REFUSED_",
+  "FACE_REFUSED_",
+  "REFUSE_",
+  "READ_WROTE_REFUSED",
+  "CONFLICT_UNDETERMINED",
+  "CLARIFY_BATCH_NOT_USABLE"
+ ],
+ "reproduction_references": {
+  "c37_host": "e2bf6d4c1df7ca6b738627ab63a0e557e692f4b0eb44470f62e55ee576a2d1cb",
+  "c37_reading": "1cc7dba8236abbfae2ea2b03a7d62ad79134a3f38e6ec244e2131764dc31b336",
+  "c38_host": "5f479f613788b7d672141be0a4cf8a423de28e8d989808dd9f9b66ee77e21b8b",
+  "c38_reading": "384f30388a60e74dc682e474086b1bdc55d3f4cf3e0a4f8d8f679735a1c4b802"
+ },
+ "schema": "helm.r1w4.frozen/1",
+ "seed_bands": {
+  "E64": {
+   "hi": 1859000000,
+   "k": "k4",
+   "lo": 1858000001,
+   "rule": "X3 E64 band (1,838,000,001-1,839,000,000) + 20,000,000",
+   "slots": 1000000
+  },
+  "F64": {
+   "hi": 1861000000,
+   "k": "k1",
+   "lo": 1860000001,
+   "rule": "X3 F64 band (1,840,000,001-1,841,000,000) + 20,000,000",
+   "slots": 1000000
+  },
+  "SELF": {
+   "hi": 1863000000,
+   "k": "k2",
+   "lo": 1862000001,
+   "rule": "new: the next free 1,000,000 band after F64 + the 1,000,000 gap",
+   "slots": 1000000
+  }
+ },
+ "seed_gap": 1000000,
+ "self_composition": [
+  [
+   "K1",
+   "G7",
+   24
+  ],
+  [
+   "K2",
+   "FACE_ANY",
+   16
+  ],
+  [
+   "K3",
+   "FACE_WISDOM",
+   8
+  ],
+  [
+   "K4",
+   "G1",
+   16
+  ],
+  [
+   "K5",
+   "G6",
+   24
+  ],
+  [
+   "C1",
+   "G7",
+   16
+  ],
+  [
+   "C2",
+   "FACE_ANY",
+   16
+  ],
+  [
+   "C3",
+   "G1",
+   16
+  ],
+  [
+   "C4",
+   "G6",
+   16
+  ]
+ ],
+ "self_owner_turns": [
+  "Check yourself.",
+  "Do a self-scan and break it down."
+ ],
+ "spent_files": {
+  "CASCADE_CHAINS": {
+   "file": "CASCADE_X2.json",
+   "sha256": "d39f5b2553dd7607d3875041470ba2ca8666fb9ba1f5daf00613f1f07e054df1"
+  },
+  "CCE_PLANTED_ITEMS": {
+   "file": "CCE_PLANTED_W1.json",
+   "sha256": "be0828ab288b6e3d214ff03d8e67a7f8ddbaa98479351c6d1ebd21def0f69ccb"
+  },
+  "GB_FRESH_WORLDS": {
+   "file": "GB_FRESH_W1.json",
+   "sha256": "21706f4f2585b8dd277e107dab3c54b28af92e8056e2e293d6d58ff73ae5e1f0"
+  },
+  "IDLE_SESSIONS": {
+   "file": "IDLE_X2.json",
+   "sha256": "f883f8b0fe6f7b1d6faea8f78842123ecac19d74f4c95eba746203bd17a00432"
+  },
+  "TB_FRESH_WORLDS": {
+   "file": "TB_FRESH_W1.json",
+   "sha256": "4049fa490900ae8b217239283ec46521a3020247a2739e2cfb37c1d54229431f"
+  },
+  "X3_ENGLISH64": {
+   "file": "ENGLISH64_X3.json",
+   "sha256": "a5a4286a839fa5d9d3253fc742839967ba4f95736d941383f81d2296b6784139"
+  },
+  "X3_FACES64": {
+   "file": "FACES64_X3.json",
+   "sha256": "8c1ff66adfe9b969c5aee9a7703826bb8ec5711955e12bf8768b2d6659278683"
+  }
+ },
+ "status_words_frozen_order": [
+  "EYE_SCAN_EARNED_KEEP",
+  "EYE_SCAN_HARMED",
+  "EYE_SCAN_NO_EFFECT",
+  "INCONCLUSIVE"
+ ],
+ "u3_t1_provenance": {
+  "u3_self_scan_design_v1/ARCHITECTURE_U3.md": "83d3b2000e6d16a9f37ef59657614ef280b44f093327adde08d6ff6424c1d108",
+  "u3_self_scan_design_v1/TEST_PLAN_U3.md": "290be21b64333819bbd599b636a3629d4eb7e7b2090f8ad101491d48c8a57c61",
+  "u3_self_scan_design_v1/TRIGGERS_U3.md": "1935897a330cbbd527ceb15213067db2a74a5473ff813ccd201105d07d86c59e",
+  "u3_t1/FROZEN.json": "66afd40b188710469e02bc8d73e8b706c8ddec73c17399a23fb6d20e3e7429a6",
+  "u3_t1/arms.py": "cbda05e151b85390fcf959cca6f85564c3777c2d2a2b47ef78c256da4c7a7f4d",
+  "u3_t1/consts.py": "a29a11788260b822b443ad91e8a4d36d00e3fd6e72a45e132d1a56f06fa0b46f",
+  "u3_t1/eye_scan.py": "3829b085bcedd863cf1ad7d728344be2888eb232c1c9af4b37cb390b1be66cad",
+  "u3_t1/runs/MERGED_READING.json": "d35a52101110f343470daacbd1f60589af0c1f84cb848f098125c4bfad1695ff",
+  "u3_t1/voice_u3.py": "13794733e32d0304950094ce6a18b501ffc89d476cb7a1c805d7233319bae34a",
+  "u3_t1/world.py": "b179a703a23f2a8fd6a8c38692ebd0c561781c8d0afe04ce8cacb030ba075e90"
+ },
+ "used_derivations": {
+  "X0": "641b246a5db9eefc185191d62fbcae99065b38eb019dd6da536904cedab3f7f7",
+  "X1": "a18ddd969b0920512bcb1488dcb3323ec76c6e1c74ee735db33b1b3166d3b991",
+  "X2V1": "841a0b20c3f5575224eab69efcc8b4c8b493fbce536c29467c0ac1502bb5f205",
+  "X2V1_ATTEMPT1": "6aaffe6fe2e6a837650614150cb5d0641c92c7128e2aab1a45d3f8032c547c99",
+  "X2V2": "8731da9c25db898825779c8d9d94338eb61cfd8746581eccb7893588335d764c",
+  "X2V2_PRE_TEXT_STEP": "1818a81330f00c15148a5a4efb97ac29d3ff662e456a88fe58a7b4012764821b",
+  "X3": "40fd6276709154a2c8cbffba5f16bd0b2ea7626ab7c2896ee854794b04c5ac7f"
+ },
+ "verdict_rule": "INSTRUMENT_ERROR if any instrument row is false; else FAILURE if any hard gate is false; else PASS",
+ "void_allowed": {
+  "CUBE_STORE": [
+   "K5"
+  ],
+  "ENGLISH_IN": [
+   "K1",
+   "K2",
+   "K3",
+   "K5"
+  ],
+  "TRIAD": [
+   "K2",
+   "K3"
+  ],
+  "VOICE": []
+ },
+ "whisper_receiver": {
+  "held_status": "CLARIFY_SELF_CHECK",
+  "notice_generic": "Before I answer: one of my own records no longer matches what I wrote down, so I can't vouch for an answer that uses it.",
+  "notice_table": {
+   "PACKAGE_HASH_CHANGED": "Before I answer: one of my sealed brain files has changed since it was sealed, so I can't vouch for an answer from it.",
+   "READBACK_FAILS_NOW": "Before I answer: my saved record for {x} doesn't read back the way I wrote it, so I can't vouch for anything that uses it.",
+   "RECEIPT_WITHOUT_RECORD": "Before I answer: a saved note about the {x} is missing, but my record of saving it is still there, so I can't vouch for an answer that uses it.",
+   "STALE_ANSWER": "Before I answer: what my store says about the {x} no longer matches what it told you earlier, and nothing I saved explains the change.",
+   "TAMPERED_RECORD": "Before I answer: my saved note about how the {x} is doing no longer matches what I wrote down, so I can't vouch for an answer that uses it.",
+   "WISDOM_DROP_NO_EVENT": "Before I answer: my saved know-how about the {x} went down and nothing on record explains why, so I can't vouch for an answer that uses it."
+  },
+  "notice_tail": "I won't give you an answer from it until it's checked. Can you tell me again, or ask me to check myself?",
+  "policy_label": "OUR_CONVENTION",
+  "where": "r1w4/eye_live.py WhisperReceiver.present, called in r1w4/session_w4.py between ExamLoop3.process_turn (wave 3 r1w3/live_w3.py over helm/helm_end_to_end_loop.py) and helm_chat.HELMConversationalSession._speak (wave 3 helm/helm_chat.py); a held reply is spoken by helm_voice.HELMVoice._say_plain (wave 3 helm/helm_voice.py)"
+ },
+ "yardstick": "FULL"
+}

@@ -1,0 +1,272 @@
+{
+ "schema": "helm.voice.sdg_mining/1",
+ "corpus_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\path_d",
+ "files_sha256": {
+  "wave3_step2_5_english_descriptions_20260508T203848Z.jsonl": "b825b67a3029657f40d128d382448b5f0b55580fc7451bfce8b4a35687a46817",
+  "wave3_step2_5_english_descriptions_20260509T002355Z.jsonl": "d814397c4957ce89e6721cfcb2ec3852773976ad7176e25247d98d7d7ef6893e",
+  "wave3_step2_5_english_descriptions_20260509T002541Z.jsonl": "23ac1e36021bec455309bf7ff02d759a7766838eda03faba01cc3b069bec1028"
+ },
+ "rows_streamed": 5268,
+ "rows_by_category": {
+  "binary_composition": 733,
+  "cross_register_omega": 579,
+  "diagram_export": 417,
+  "fractal_sequence": 466,
+  "inversion": 63,
+  "let_binding": 441,
+  "meta_logic_relation": 710,
+  "recipe": 481,
+  "rpm_chain": 359,
+  "state_literal": 1019
+ },
+ "categories_mined": [
+  "cross_register_omega",
+  "inversion",
+  "recipe",
+  "rpm_chain"
+ ],
+ "frames": {
+  "open_to_produce": {
+   "pattern": "^To produce\\b",
+   "count": 380,
+   "seed_ids": [
+    "seed_recipe_00459",
+    "seed_recipe_00229",
+    "seed_recipe_00060",
+    "seed_recipe_00163",
+    "seed_recipe_00110"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00459",
+    "text": "To produce the outcome called translation_59, combine 2 of what one thing leads to another in operational thinking with 1 of what popped into mind in operational thinking — together these inputs yield the named outcome translation_59, plus an additional 0.1 contribution weighted by the sum of one's "
+   }
+  },
+  "open_to_build": {
+   "pattern": "^To build\\b",
+   "count": 42,
+   "seed_ids": [
+    "seed_recipe_00441",
+    "seed_recipe_00196",
+    "seed_recipe_00356",
+    "seed_recipe_00262",
+    "seed_recipe_00015"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00441",
+    "text": "To build the outcome called tracking_41, take 0.7 of something that just clicked in foundational thinking about connection and belonging, and add 2 of being pushed away from operational behavior — together these produce the outcome called tracking_41."
+   }
+  },
+  "open_to_make": {
+   "pattern": "^To (make|create)\\b",
+   "count": 0,
+   "seed_ids": [],
+   "example": null
+  },
+  "combine_with": {
+   "pattern": "\\bcombine\\b[^.]{0,160}\\bwith\\b",
+   "count": 86,
+   "seed_ids": [
+    "seed_recipe_00459",
+    "seed_recipe_00163",
+    "seed_recipe_00081",
+    "seed_recipe_00175",
+    "seed_recipe_00045"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00459",
+    "text": "To produce the outcome called translation_59, combine 2 of what one thing leads to another in operational thinking with 1 of what popped into mind in operational thinking — together these inputs yield the named outcome translation_59, plus an additional 0.1 contribution weighted by the sum of one's "
+   }
+  },
+  "take_and_add": {
+   "pattern": "\\btake\\b[^.]{0,160}\\band add\\b",
+   "count": 39,
+   "seed_ids": [
+    "seed_recipe_00060",
+    "seed_recipe_00452",
+    "seed_recipe_00356",
+    "seed_recipe_00547",
+    "seed_recipe_00217"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00060",
+    "text": "To produce the outcome called decision_60, take 1 of something that rubs you the wrong way in a foundational way, expressed through a big-picture way, and add 2 of breaking down an idea in a foundational way — together these produce the outcome called decision_60, with an additional 0.1 contribution"
+   }
+  },
+  "blend_in": {
+   "pattern": "\\bblend in\\b",
+   "count": 3,
+   "seed_ids": [
+    "seed_recipe_00110",
+    "seed_recipe_00183",
+    "seed_recipe_00388"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00110",
+    "text": "To produce the outcome called translation_10, take 0.5 of what speaks to you in cognitive thinking about agency and self-determination, add 1.0 of what speaks to you in evaluative judging, and blend in a 0.1 contribution from the resonance between what pulled you toward it and the outcome called jud"
+   }
+  },
+  "together_these_produce": {
+   "pattern": "\\btogether these (inputs )?(produce|yield|create|make)\\b",
+   "count": 164,
+   "seed_ids": [
+    "seed_recipe_00459",
+    "seed_recipe_00060",
+    "seed_recipe_00441",
+    "seed_recipe_00195",
+    "seed_recipe_00570"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00459",
+    "text": "To produce the outcome called translation_59, combine 2 of what one thing leads to another in operational thinking with 1 of what popped into mind in operational thinking — together these inputs yield the named outcome translation_59, plus an additional 0.1 contribution weighted by the sum of one's "
+   }
+  },
+  "these_inputs_together_yield": {
+   "pattern": "\\bthese inputs together yield\\b",
+   "count": 88,
+   "seed_ids": [
+    "seed_recipe_00163",
+    "seed_recipe_00081",
+    "seed_recipe_00150",
+    "seed_recipe_00103",
+    "seed_recipe_00314"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00163",
+    "text": "To produce the outcome called rehearsal_63, combine 1 of a thought in the operational realm with 0.7 of paying attention to a foundational principle — these inputs together yield the named outcome rehearsal_63."
+   }
+  },
+  "together_create": {
+   "pattern": "\\btogether (these )?(create|build)\\b",
+   "count": 18,
+   "seed_ids": [
+    "seed_recipe_00195",
+    "seed_recipe_00383",
+    "seed_recipe_00412",
+    "seed_recipe_00307",
+    "seed_recipe_00205"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00195",
+    "text": "To produce the outcome called production_95, combine two weighted inputs: 0.5 of something that rubs you the wrong way in foundational thinking, and 0.5 of what just clicked in evaluative judgment about a need for connection—together these create production_95."
+   }
+  },
+  "you_arrive_at": {
+   "pattern": "\\byou arrive at\\b",
+   "count": 21,
+   "seed_ids": [
+    "seed_cross_register_omega_00192",
+    "seed_cross_register_omega_00400",
+    "seed_cross_register_omega_00246",
+    "seed_cross_register_omega_00437",
+    "seed_cross_register_omega_00038"
+   ],
+   "example": {
+    "seed_id": "seed_cross_register_omega_00192",
+    "text": "When you break down an idea in an evaluative way, expressed through an analytical lens, an embodied sensorimotor way, and a transcendent strategic conviction—all three modes fusing together—you arrive at the outcome called clarity."
+   }
+  },
+  "fuse_into": {
+   "pattern": "\\bfuse into\\b",
+   "count": 283,
+   "seed_ids": [
+    "seed_cross_register_omega_00608",
+    "seed_cross_register_omega_00144",
+    "seed_cross_register_omega_00254",
+    "seed_cross_register_omega_00004",
+    "seed_cross_register_omega_00396"
+   ],
+   "example": {
+    "seed_id": "seed_cross_register_omega_00608",
+    "text": "When practice and habit—the grooved, embodied way of doing things—combines with the felt, emotional resonance of an experience, those two modes fuse into the outcome called presence."
+   }
+  },
+  "leads_to": {
+   "pattern": "\\bleads to\\b",
+   "count": 371,
+   "seed_ids": [
+    "seed_rpm_chain_00297",
+    "seed_recipe_00459",
+    "seed_rpm_chain_00050",
+    "seed_rpm_chain_00120",
+    "seed_rpm_chain_00109"
+   ],
+   "example": {
+    "seed_id": "seed_rpm_chain_00297",
+    "text": "Let stageA0_5_0296 name a foundational thought, stageD5_5_0296 name practiced rhythm with agency and self-determination as the driving need, stageW5_5_0296 name practiced rhythm in the cognitive arena with agency and self-determination as the driving need, and stageP5_5_0296 name practiced rhythm in"
+   }
+  },
+  "then_leads_to": {
+   "pattern": "\\bthen leads to\\b",
+   "count": 175,
+   "seed_ids": [
+    "seed_rpm_chain_00050",
+    "seed_rpm_chain_00109",
+    "seed_rpm_chain_00223",
+    "seed_rpm_chain_00369",
+    "seed_rpm_chain_00008"
+   ],
+   "example": {
+    "seed_id": "seed_rpm_chain_00050",
+    "text": "Let stageA0_4_0049 name a foundational thought, stageD4_4_0049 name something that triggered an evaluative judgment tied to connection and belonging, stageW4_4_0049 name a cognitive response to that, and stageP4_4_0049 name an evaluative judgment tied to connection and belonging. stageD4_4_0049 then"
+   }
+  },
+  "side_effect_feeds_into": {
+   "pattern": "\\bside effect\\b",
+   "count": 35,
+   "seed_ids": [
+    "seed_recipe_00570",
+    "seed_recipe_00276",
+    "seed_recipe_00103",
+    "seed_recipe_00546",
+    "seed_recipe_00429"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00570",
+    "text": "To produce the outcome called production_70, combine 1.5 of who you are shaped by through operational behavior with agency and self-determination, and add 2 of a foundational principle shaped by experience through operational behavior with agency and self-determination. Together these inputs yield t"
+   }
+  },
+  "plus_an_additional": {
+   "pattern": "\\bplus an additional\\b",
+   "count": 3,
+   "seed_ids": [
+    "seed_recipe_00459",
+    "seed_recipe_00345",
+    "seed_recipe_00210"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00459",
+    "text": "To produce the outcome called translation_59, combine 2 of what one thing leads to another in operational thinking with 1 of what popped into mind in operational thinking — together these inputs yield the named outcome translation_59, plus an additional 0.1 contribution weighted by the sum of one's "
+   }
+  },
+  "transforms_into": {
+   "pattern": "\\btransforms into\\b",
+   "count": 6,
+   "seed_ids": [
+    "seed_inversion_00013",
+    "seed_inversion_00030",
+    "seed_inversion_00022",
+    "seed_inversion_00019",
+    "seed_inversion_00023"
+   ],
+   "example": {
+    "seed_id": "seed_inversion_00013",
+    "text": "A thought about principled foundations transforms into mental attention on cognitive thinking."
+   }
+  },
+  "n_of_something": {
+   "pattern": "\\b\\d+(\\.\\d+)? of (what|something|a|the|being|who|paying)\\b",
+   "count": 346,
+   "seed_ids": [
+    "seed_recipe_00459",
+    "seed_recipe_00229",
+    "seed_recipe_00060",
+    "seed_recipe_00163",
+    "seed_recipe_00110"
+   ],
+   "example": {
+    "seed_id": "seed_recipe_00459",
+    "text": "To produce the outcome called translation_59, combine 2 of what one thing leads to another in operational thinking with 1 of what popped into mind in operational thinking — together these inputs yield the named outcome translation_59, plus an additional 0.1 contribution weighted by the sum of one's "
+   }
+  }
+ }
+}

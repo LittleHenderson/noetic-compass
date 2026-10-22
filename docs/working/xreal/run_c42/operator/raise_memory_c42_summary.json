@@ -1,0 +1,30 @@
+{
+ "folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42",
+ "changes": {
+  "worker.sh": {
+   "old_sha256": "27280e7697e6891e8e2edf8ec57d172feac6e7c4850922df825f0c777af33da8",
+   "new_sha256": "b04fce3fe0c1d2728eca0287a424ddfa411f01ccca72966966eef95b5f161583",
+   "replacement": [
+    "-p MemoryMax=8589934592 -p MemorySwapMax=0",
+    "-p MemoryMax=15032385536 -p MemorySwapMax=0"
+   ]
+  },
+  "COST_POLICY.json": {
+   "old_sha256": "e7da92664f40da0fb31c925344006c105c143d674e641c35b77437adc3b0af7a",
+   "new_sha256": "7d9182a3f236dc50b441aef0a5ac0ecbf1f010b089d17f34b98fae69db767f1c",
+   "replacement": [
+    "\"memory_bytes\": 8589934592",
+    "\"memory_bytes\": 15032385536"
+   ]
+  },
+  "CONTROLLER_SOURCE_PINS.json": {
+   "old_sha256": "5911b409d3971d00969de9a4b2be1c67f5c7e486078c83e0b034df237859fd17",
+   "new_sha256": "a2b2dcdc977de8f8df8a2dc5a4bf9324368e83df3b7516998d1e14a4112583f3",
+   "repinned": [
+    "worker.sh",
+    "COST_POLICY.json"
+   ]
+  }
+ },
+ "status": "MEMORY_RAISED_TO_14_GIB"
+}

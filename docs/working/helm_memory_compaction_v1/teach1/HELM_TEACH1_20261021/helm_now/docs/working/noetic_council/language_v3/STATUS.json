@@ -1,0 +1,6 @@
+{
+  "status": "STATIC_CHECK_PASS_AWAITING_LOCAL_RUN",
+  "source_manifest_sha256": "0db2fcdb01965110ec15f2d032fc6014f7890bd043a15a46e60f9e588c4a580e",
+  "sign_line": "APPROVE lm_t1, source 0db2fcdb, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "run_id": "LM_T1_MSI_ONCE"
+}

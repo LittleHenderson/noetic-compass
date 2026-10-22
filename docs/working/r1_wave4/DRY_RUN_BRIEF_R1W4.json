@@ -1,0 +1,546 @@
+{
+ "beats": {
+  "beats_checklist": true,
+  "whisper_beats_report_only": true
+ },
+ "e64": {
+  "-CUBE_STORE": {
+   "RIGHT": 52,
+   "RIGHT_AND_PLAIN": 52,
+   "UNDETERMINED": 12,
+   "WRONG": 0
+  },
+  "-CUBE_STORE+EYE_SCAN": {
+   "RIGHT": 52,
+   "RIGHT_AND_PLAIN": 52,
+   "UNDETERMINED": 12,
+   "WRONG": 0
+  },
+  "-ENGLISH_IN": {
+   "RIGHT": 32,
+   "RIGHT_AND_PLAIN": 32,
+   "UNDETERMINED": 32,
+   "WRONG": 0
+  },
+  "-ENGLISH_IN+EYE_SCAN": {
+   "RIGHT": 32,
+   "RIGHT_AND_PLAIN": 32,
+   "UNDETERMINED": 32,
+   "WRONG": 0
+  },
+  "-VOICE": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 44,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  },
+  "-VOICE+EYE_SCAN": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 44,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  },
+  "CHECKLIST": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  },
+  "EYE_SCAN_REPORT_ONLY": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  },
+  "EYE_SCAN_SELF_ONLY": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  },
+  "FULL": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  },
+  "FULL+EYE_SCAN": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  },
+  "FULL+EYE_SCAN_REPLAY": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 4,
+   "WRONG": 0
+  }
+ },
+ "exit_0": 56,
+ "eye_scan_word": "INCONCLUSIVE",
+ "f64": {
+  "-ENGLISH_IN": {
+   "RIGHT": 40,
+   "RIGHT_AND_PLAIN": 40,
+   "UNDETERMINED": 24,
+   "WRONG": 0
+  },
+  "-ENGLISH_IN+EYE_SCAN": {
+   "RIGHT": 40,
+   "RIGHT_AND_PLAIN": 40,
+   "UNDETERMINED": 24,
+   "WRONG": 0
+  },
+  "-TRIAD": {
+   "RIGHT": 36,
+   "RIGHT_AND_PLAIN": 36,
+   "UNDETERMINED": 2,
+   "WRONG": 26
+  },
+  "-TRIAD+EYE_SCAN": {
+   "RIGHT": 36,
+   "RIGHT_AND_PLAIN": 36,
+   "UNDETERMINED": 2,
+   "WRONG": 26
+  },
+  "-VOICE": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 40,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  },
+  "-VOICE+EYE_SCAN": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 40,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  },
+  "CHECKLIST": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  },
+  "EYE_SCAN_REPORT_ONLY": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  },
+  "EYE_SCAN_SELF_ONLY": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  },
+  "FULL": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  },
+  "FULL+EYE_SCAN": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  },
+  "FULL+EYE_SCAN_REPLAY": {
+   "RIGHT": 60,
+   "RIGHT_AND_PLAIN": 60,
+   "UNDETERMINED": 2,
+   "WRONG": 2
+  }
+ },
+ "failing_gates": [],
+ "failing_instruments": [
+  "I10_x4_band_rule",
+  "I1_data_identity",
+  "I3_same_brain",
+  "I4_parameter_counts",
+  "I6_completeness",
+  "I7_laptop_reading",
+  "I9_governance"
+ ],
+ "gates": {
+  "H11_replay": true,
+  "H1_receipts": true,
+  "H3_eye_never_writes": true,
+  "H5_no_awake_scans": true,
+  "H6_controls_valid": true,
+  "H7_budget": true,
+  "H8_voice_changes_no_answer": true,
+  "H9_delivery_neutral": true,
+  "HC_sidecars_wrote_nothing": true,
+  "HS_sandbox": true,
+  "HV_no_void_planting": true
+ },
+ "host_json_bytes": 16907706,
+ "mark_a_per_exam": {
+  "E1_GB_C21_panel": [
+   37,
+   37,
+   0
+  ],
+  "E2_TB_C25_restart": [
+   0,
+   0,
+   0
+  ],
+  "E2_TB_C25_teach": [
+   1461,
+   1461,
+   0
+  ],
+  "X2_CASC_casc": [
+   64,
+   64,
+   0
+  ],
+  "X2_CCE_cce": [
+   null,
+   null,
+   null
+  ],
+  "X2_GB_panel": [
+   null,
+   null,
+   null
+  ],
+  "X2_IDLE_idle": [
+   52,
+   52,
+   0
+  ],
+  "X2_TB_restart": [
+   null,
+   null,
+   null
+  ],
+  "X2_TB_teach": [
+   null,
+   null,
+   null
+  ],
+  "X4_E64": [
+   60,
+   60,
+   0
+  ],
+  "X4_F64": [
+   60,
+   60,
+   0
+  ],
+  "X4_SELF_clean_worlds": [
+   64,
+   64,
+   0
+  ]
+ },
+ "marks": {
+  "a_no_harm": false,
+  "b1_faults_found": true,
+  "b2_faults_acted_on": true,
+  "c_false_alarms": true,
+  "d_whisper_writes": true,
+  "e_traceable": true,
+  "f_self_initiated_only_reported": null
+ },
+ "max_unit_seconds": 16.71,
+ "not_ok": [],
+ "not_run_here": [],
+ "pairs": {
+  "CUBE_STORExEYE_SCAN": {
+   "per_exam": {
+    "X4_E64": [
+     "ADDITIVE",
+     "0",
+     "8",
+     "8",
+     "44"
+    ],
+    "X4_SELF": [
+     "INTERFERENCE",
+     "88",
+     "40",
+     "104",
+     "5"
+    ]
+   },
+   "word_if_read": "INTERFERENCE"
+  },
+  "ENGLISH_INxEYE_SCAN": {
+   "per_exam": {
+    "X4_E64": [
+     "ADDITIVE",
+     "0",
+     "28",
+     "28",
+     "24"
+    ],
+    "X4_F64": [
+     "ADDITIVE",
+     "0",
+     "20",
+     "20",
+     "32"
+    ],
+    "X4_SELF": [
+     "CEILING_NOT_READABLE",
+     "88",
+     "152",
+     "152",
+     "-107"
+    ]
+   },
+   "word_if_read": "ADDITIVE"
+  },
+  "EYE_SCANxTRIAD": {
+   "per_exam": {
+    "X4_F64": [
+     "ADDITIVE",
+     "0",
+     "24",
+     "24",
+     "28"
+    ],
+    "X4_SELF": [
+     "INTERFERENCE",
+     "88",
+     "40",
+     "104",
+     "5"
+    ]
+   },
+   "word_if_read": "INTERFERENCE"
+  },
+  "EYE_SCANxVOICE": {
+   "per_exam": {
+    "X4_E64": [
+     "ADDITIVE",
+     "0",
+     "16",
+     "16",
+     "36"
+    ],
+    "X4_F64": [
+     "ADDITIVE",
+     "0",
+     "20",
+     "20",
+     "32"
+    ],
+    "X4_SELF": [
+     "CEILING_NOT_READABLE",
+     "88",
+     "48",
+     "136",
+     "-3"
+    ]
+   },
+   "word_if_read": "ADDITIVE"
+  }
+ },
+ "ran": 56,
+ "reader_peak_mib": 139.5,
+ "self": {
+  "-CUBE_STORE": {
+   "GOOD": 48,
+   "acted": 0,
+   "clean_RIGHT": 48,
+   "fault_RIGHT": 16,
+   "fault_UNDETERMINED": 27,
+   "fault_WRONG": 45,
+   "found": 0
+  },
+  "-CUBE_STORE+EYE_SCAN": {
+   "GOOD": 112,
+   "acted": 64,
+   "clean_RIGHT": 48,
+   "fault_RIGHT": 0,
+   "fault_UNDETERMINED": 88,
+   "fault_WRONG": 0,
+   "found": 64
+  },
+  "-ENGLISH_IN": {
+   "GOOD": 0,
+   "acted": 0,
+   "clean_RIGHT": 0,
+   "fault_RIGHT": 0,
+   "fault_UNDETERMINED": 88,
+   "fault_WRONG": 0,
+   "found": 0
+  },
+  "-ENGLISH_IN+EYE_SCAN": {
+   "GOOD": 0,
+   "acted": 0,
+   "clean_RIGHT": 0,
+   "fault_RIGHT": 0,
+   "fault_UNDETERMINED": 88,
+   "fault_WRONG": 0,
+   "found": 16
+  },
+  "-TRIAD": {
+   "GOOD": 48,
+   "acted": 0,
+   "clean_RIGHT": 48,
+   "fault_RIGHT": 16,
+   "fault_UNDETERMINED": 1,
+   "fault_WRONG": 71,
+   "found": 0
+  },
+  "-TRIAD+EYE_SCAN": {
+   "GOOD": 112,
+   "acted": 64,
+   "clean_RIGHT": 48,
+   "fault_RIGHT": 0,
+   "fault_UNDETERMINED": 65,
+   "fault_WRONG": 23,
+   "found": 64
+  },
+  "-VOICE": {
+   "GOOD": 16,
+   "acted": 0,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 16,
+   "fault_UNDETERMINED": 3,
+   "fault_WRONG": 69,
+   "found": 0
+  },
+  "-VOICE+EYE_SCAN": {
+   "GOOD": 104,
+   "acted": 88,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 0,
+   "fault_UNDETERMINED": 88,
+   "fault_WRONG": 0,
+   "found": 88
+  },
+  "CHECKLIST": {
+   "GOOD": 64,
+   "acted": 0,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 16,
+   "fault_UNDETERMINED": 3,
+   "fault_WRONG": 69,
+   "found": 0
+  },
+  "EYE_SCAN_REPORT_ONLY": {
+   "GOOD": 64,
+   "acted": 0,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 16,
+   "fault_UNDETERMINED": 3,
+   "fault_WRONG": 69,
+   "found": 88
+  },
+  "EYE_SCAN_SELF_ONLY": {
+   "GOOD": 64,
+   "acted": 0,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 16,
+   "fault_UNDETERMINED": 3,
+   "fault_WRONG": 69,
+   "found": 0
+  },
+  "FULL": {
+   "GOOD": 64,
+   "acted": 0,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 16,
+   "fault_UNDETERMINED": 3,
+   "fault_WRONG": 69,
+   "found": 0
+  },
+  "FULL+EYE_SCAN": {
+   "GOOD": 152,
+   "acted": 88,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 0,
+   "fault_UNDETERMINED": 88,
+   "fault_WRONG": 0,
+   "found": 88
+  },
+  "FULL+EYE_SCAN_REPLAY": {
+   "GOOD": 152,
+   "acted": 88,
+   "clean_RIGHT": 64,
+   "fault_RIGHT": 0,
+   "fault_UNDETERMINED": 88,
+   "fault_WRONG": 0,
+   "found": 88
+  }
+ },
+ "test_verdict": "INSTRUMENT_ERROR",
+ "traceability": {
+  "dropped": 0,
+  "fact_sentences": 8751,
+  "notices": 88,
+  "notices_traceable": 88,
+  "reports": 1177,
+  "sentences": 11105,
+  "traceable": 8751
+ },
+ "unit_seconds": {
+  "E1_GB_C21_A1_PANEL": 0.22,
+  "E1_GB_C21_A1_TEACH": 0.52,
+  "E2_TB_C25_A1_RESTART": 0.71,
+  "E2_TB_C25_A1_TEACH": 16.71,
+  "EYE_E1_GB_C21_A1_PANEL": 0.23,
+  "EYE_E1_GB_C21_A1_TEACH": 0.53,
+  "EYE_E2_TB_C25_A1_RESTART": 0.28,
+  "EYE_E2_TB_C25_A1_TEACH": 16.38,
+  "EYE_W3_CASC_FULL": 0.49,
+  "EYE_W3_IDLE_FULL": 0.26,
+  "SIDE_E1_GB_C21": 0.48,
+  "SIDE_E2_TB_C25": 0.82,
+  "SIDE_X2_CASC_POST": 0.45,
+  "SIDE_X2_CASC_PRE": 0.57,
+  "SIDE_X2_IDLE_POST": 0.43,
+  "SIDE_X2_IDLE_PRE": 0.44,
+  "W3_CASC_FULL": 0.48,
+  "W3_IDLE_FULL": 0.24,
+  "W4_E64_-CUBE_STORE": 0.99,
+  "W4_E64_-CUBE_STORE+EYE_SCAN": 1.54,
+  "W4_E64_-ENGLISH_IN": 1.11,
+  "W4_E64_-ENGLISH_IN+EYE_SCAN": 1.61,
+  "W4_E64_-VOICE": 1.13,
+  "W4_E64_-VOICE+EYE_SCAN": 1.69,
+  "W4_E64_CHECKLIST": 1.19,
+  "W4_E64_EYE_SCAN_REPORT_ONLY": 1.71,
+  "W4_E64_EYE_SCAN_SELF_ONLY": 1.23,
+  "W4_E64_FULL": 1.14,
+  "W4_E64_FULL+EYE_SCAN": 1.68,
+  "W4_E64_FULL+EYE_SCAN_REPLAY": 1.67,
+  "W4_F64_-ENGLISH_IN": 1.21,
+  "W4_F64_-ENGLISH_IN+EYE_SCAN": 1.85,
+  "W4_F64_-TRIAD": 1.21,
+  "W4_F64_-TRIAD+EYE_SCAN": 1.86,
+  "W4_F64_-VOICE": 1.27,
+  "W4_F64_-VOICE+EYE_SCAN": 1.84,
+  "W4_F64_CHECKLIST": 1.33,
+  "W4_F64_EYE_SCAN_REPORT_ONLY": 1.83,
+  "W4_F64_EYE_SCAN_SELF_ONLY": 1.29,
+  "W4_F64_FULL": 1.24,
+  "W4_F64_FULL+EYE_SCAN": 1.79,
+  "W4_F64_FULL+EYE_SCAN_REPLAY": 1.82,
+  "W4_SELF_-CUBE_STORE": 2.27,
+  "W4_SELF_-CUBE_STORE+EYE_SCAN": 4.36,
+  "W4_SELF_-ENGLISH_IN": 1.96,
+  "W4_SELF_-ENGLISH_IN+EYE_SCAN": 4.12,
+  "W4_SELF_-TRIAD": 2.59,
+  "W4_SELF_-TRIAD+EYE_SCAN": 5.55,
+  "W4_SELF_-VOICE": 2.78,
+  "W4_SELF_-VOICE+EYE_SCAN": 5.56,
+  "W4_SELF_CHECKLIST": 2.9,
+  "W4_SELF_EYE_SCAN_REPORT_ONLY": 5.66,
+  "W4_SELF_EYE_SCAN_SELF_ONLY": 2.89,
+  "W4_SELF_FULL": 2.64,
+  "W4_SELF_FULL+EYE_SCAN": 5.66,
+  "W4_SELF_FULL+EYE_SCAN_REPLAY": 5.28
+ },
+ "unit_seconds_total": 129.7,
+ "units": 56
+}

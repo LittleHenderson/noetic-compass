@@ -1,0 +1,1239 @@
+{
+ "code": {
+  "xreal/frames.py": "660d5f95971964e52836cfe810bc9f8de163a84444d2903e759f047254fa5fe9",
+  "xreal/grammar.py": "a3cecbb34072d7cc9bd41a644b4ca31e9c5292181a06a9902a3af8b6f3b11c2c"
+ },
+ "counts": {
+  "COUNTS_PG": {
+   "books": {
+    "10011": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "10072": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "10136": {
+     "recipes": 1276,
+     "status": "OK"
+    },
+    "10520": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "10582": {
+     "recipes": 61,
+     "status": "OK"
+    },
+    "1084": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "12069": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "12238": {
+     "recipes": 5,
+     "status": "OK"
+    },
+    "12293": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "12519": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "12815": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "13177": {
+     "recipes": 52,
+     "status": "OK"
+    },
+    "13265": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "13286": {
+     "recipes": 275,
+     "status": "OK"
+    },
+    "13493": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "13545": {
+     "recipes": 103,
+     "status": "OK"
+    },
+    "13669": {
+     "recipes": 245,
+     "status": "OK"
+    },
+    "13923": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "14066": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "14293": {
+     "recipes": 70,
+     "status": "OK"
+    },
+    "14377": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "15360": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "15363": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "15407": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "15464": {
+     "recipes": 232,
+     "status": "OK"
+    },
+    "16441": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "16514": {
+     "recipes": 101,
+     "status": "OK"
+    },
+    "16977": {
+     "recipes": 30,
+     "status": "OK"
+    },
+    "17438": {
+     "recipes": 415,
+     "status": "OK"
+    },
+    "18097": {
+     "recipes": 90,
+     "status": "OK"
+    },
+    "18435": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "18542": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "19775": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "20557": {
+     "recipes": 74,
+     "status": "OK"
+    },
+    "21826": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "22114": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "22790": {
+     "recipes": 26,
+     "status": "OK"
+    },
+    "24125": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "24205": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "24384": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "24387": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "24407": {
+     "recipes": 3,
+     "status": "OK"
+    },
+    "24542": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "24656": {
+     "recipes": 14,
+     "status": "OK"
+    },
+    "25007": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "25631": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "25914": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "26005": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "26032": {
+     "recipes": 5,
+     "status": "OK"
+    },
+    "26209": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "26311": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "26323": {
+     "recipes": 134,
+     "status": "OK"
+    },
+    "26368": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "26374": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "26492": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "26558": {
+     "recipes": 146,
+     "status": "OK"
+    },
+    "27245": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "27639": {
+     "recipes": 21,
+     "status": "OK"
+    },
+    "28419": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "28452": {
+     "recipes": 31,
+     "status": "OK"
+    },
+    "28491": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "28681": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "29007": {
+     "recipes": 16,
+     "status": "OK"
+    },
+    "29084": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "29232": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "29519": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "29728": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "29970": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "29982": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "30121": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "30734": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "30861": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "31102": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "31534": {
+     "recipes": 175,
+     "status": "OK"
+    },
+    "31605": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "31982": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "32414": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "33213": {
+     "recipes": 69,
+     "status": "OK"
+    },
+    "33246": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "33253": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "33748": {
+     "recipes": 19,
+     "status": "OK"
+    },
+    "33975": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "34107": {
+     "recipes": 4,
+     "status": "OK"
+    },
+    "34185": {
+     "recipes": 3,
+     "status": "OK"
+    },
+    "34509": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "34651": {
+     "recipes": 13,
+     "status": "OK"
+    },
+    "34822": {
+     "recipes": 115,
+     "status": "OK"
+    },
+    "34837": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "35506": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "35567": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "35646": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "36007": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "36689": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "37444": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "37680": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "38193": {
+     "recipes": 248,
+     "status": "OK"
+    },
+    "38215": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "38464": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "38823": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "39550": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "39586": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "40796": {
+     "recipes": 6,
+     "status": "OK"
+    },
+    "40943": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "41352": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "41899": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "41940": {
+     "recipes": 11,
+     "status": "OK"
+    },
+    "42154": {
+     "recipes": 3,
+     "status": "OK"
+    },
+    "4219": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "42450": {
+     "recipes": 358,
+     "status": "OK"
+    },
+    "42544": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "42631": {
+     "recipes": 70,
+     "status": "OK"
+    },
+    "42803": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "42868": {
+     "recipes": 493,
+     "status": "OK"
+    },
+    "43278": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "43468": {
+     "recipes": 446,
+     "status": "OK"
+    },
+    "43643": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "43879": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "43912": {
+     "recipes": 28,
+     "status": "OK"
+    },
+    "43943": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "44915": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "44947": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "45348": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "45572": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "45838": {
+     "recipes": 10,
+     "status": "OK"
+    },
+    "45863": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "46254": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "46514": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "47444": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "48695": {
+     "recipes": 9,
+     "status": "OK"
+    },
+    "48804": {
+     "recipes": 351,
+     "status": "OK"
+    },
+    "49155": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "49707": {
+     "recipes": 85,
+     "status": "OK"
+    },
+    "49833": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "49944": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "49958": {
+     "recipes": 292,
+     "status": "OK"
+    },
+    "50121": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "50191": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "51197": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "51259": {
+     "recipes": 9,
+     "status": "OK"
+    },
+    "51393": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "51542": {
+     "recipes": 92,
+     "status": "OK"
+    },
+    "52422": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "52716": {
+     "recipes": 4,
+     "status": "OK"
+    },
+    "52800": {
+     "recipes": 605,
+     "status": "OK"
+    },
+    "52815": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "53458": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "53521": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "53525": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "53892": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "53951": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "54039": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "54138": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "54568": {
+     "recipes": 86,
+     "status": "OK"
+    },
+    "54685": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "54965": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "55314": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "55555": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "55566": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "55705": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "55734": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "56285": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "56477": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "56540": {
+     "recipes": 363,
+     "status": "OK"
+    },
+    "58948": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "59521": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "59713": {
+     "recipes": 105,
+     "status": "OK"
+    },
+    "60025": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "60163": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "60285": {
+     "recipes": 28,
+     "status": "OK"
+    },
+    "60598": {
+     "recipes": 118,
+     "status": "OK"
+    },
+    "61185": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "61487": {
+     "recipes": 18,
+     "status": "OK"
+    },
+    "61678": {
+     "recipes": 44,
+     "status": "OK"
+    },
+    "61785": {
+     "recipes": 7,
+     "status": "OK"
+    },
+    "62230": {
+     "recipes": 27,
+     "status": "OK"
+    },
+    "62284": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "62345": {
+     "recipes": 9,
+     "status": "OK"
+    },
+    "62655": {
+     "recipes": 63,
+     "status": "OK"
+    },
+    "62665": {
+     "recipes": 3,
+     "status": "OK"
+    },
+    "62804": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "62834": {
+     "recipes": 15,
+     "status": "OK"
+    },
+    "62835": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "62841": {
+     "recipes": 33,
+     "status": "OK"
+    },
+    "62846": {
+     "recipes": 20,
+     "status": "OK"
+    },
+    "63007": {
+     "recipes": 14,
+     "status": "OK"
+    },
+    "63052": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "63055": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "63283": {
+     "recipes": 18,
+     "status": "OK"
+    },
+    "63395": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "63457": {
+     "recipes": 29,
+     "status": "OK"
+    },
+    "63670": {
+     "recipes": 4,
+     "status": "OK"
+    },
+    "6385": {
+     "recipes": 4,
+     "status": "OK"
+    },
+    "63883": {
+     "recipes": 138,
+     "status": "OK"
+    },
+    "6429": {
+     "recipes": 41,
+     "status": "OK"
+    },
+    "64459": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "64685": {
+     "recipes": 78,
+     "status": "OK"
+    },
+    "64687": {
+     "recipes": 5,
+     "status": "OK"
+    },
+    "64703": {
+     "recipes": 20,
+     "status": "OK"
+    },
+    "65061": {
+     "recipes": 779,
+     "status": "OK"
+    },
+    "65250": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "65303": {
+     "recipes": 14,
+     "status": "OK"
+    },
+    "65326": {
+     "recipes": 24,
+     "status": "OK"
+    },
+    "65327": {
+     "recipes": 58,
+     "status": "OK"
+    },
+    "65364": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "65379": {
+     "recipes": 21,
+     "status": "OK"
+    },
+    "65398": {
+     "recipes": 63,
+     "status": "OK"
+    },
+    "65439": {
+     "recipes": 18,
+     "status": "OK"
+    },
+    "65501": {
+     "recipes": 87,
+     "status": "OK"
+    },
+    "65502": {
+     "recipes": 32,
+     "status": "OK"
+    },
+    "65507": {
+     "recipes": 77,
+     "status": "OK"
+    },
+    "65510": {
+     "recipes": 22,
+     "status": "OK"
+    },
+    "65562": {
+     "recipes": 6,
+     "status": "OK"
+    },
+    "65563": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "65706": {
+     "recipes": 55,
+     "status": "OK"
+    },
+    "65742": {
+     "recipes": 8,
+     "status": "OK"
+    },
+    "65743": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "65793": {
+     "recipes": 73,
+     "status": "OK"
+    },
+    "66069": {
+     "recipes": 72,
+     "status": "OK"
+    },
+    "66316": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "66654": {
+     "recipes": 83,
+     "status": "OK"
+    },
+    "6677": {
+     "recipes": 34,
+     "status": "OK"
+    },
+    "6703": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "6745": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "67482": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "67651": {
+     "recipes": 46,
+     "status": "OK"
+    },
+    "68137": {
+     "recipes": 74,
+     "status": "OK"
+    },
+    "68235": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "68446": {
+     "recipes": 108,
+     "status": "OK"
+    },
+    "68567": {
+     "recipes": 87,
+     "status": "OK"
+    },
+    "68909": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "68983": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "6912": {
+     "recipes": 192,
+     "status": "OK"
+    },
+    "69171": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "69334": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "69364": {
+     "recipes": 88,
+     "status": "OK"
+    },
+    "69370": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "69519": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "6978": {
+     "recipes": 12,
+     "status": "OK"
+    },
+    "69858": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "69876": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "70067": {
+     "recipes": 29,
+     "status": "OK"
+    },
+    "70164": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "70259": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "71119": {
+     "recipes": 81,
+     "status": "OK"
+    },
+    "71395": {
+     "recipes": 34,
+     "status": "OK"
+    },
+    "71670": {
+     "recipes": 51,
+     "status": "OK"
+    },
+    "7223": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "72482": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "7262": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "72624": {
+     "recipes": 3,
+     "status": "OK"
+    },
+    "72831": {
+     "recipes": 41,
+     "status": "OK"
+    },
+    "73744": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "74369": {
+     "recipes": 4,
+     "status": "OK"
+    },
+    "74538": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "75027": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "75442": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "75832": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "75850": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "76573": {
+     "recipes": 23,
+     "status": "OK"
+    },
+    "77282": {
+     "recipes": 28,
+     "status": "OK"
+    },
+    "77397": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "77552": {
+     "recipes": 1,
+     "status": "OK"
+    },
+    "77612": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "77698": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "77733": {
+     "recipes": 164,
+     "status": "OK"
+    },
+    "78330": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "78799": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "78849": {
+     "recipes": 274,
+     "status": "OK"
+    },
+    "79370": {
+     "recipes": 229,
+     "status": "OK"
+    },
+    "8501": {
+     "recipes": 134,
+     "status": "OK"
+    },
+    "8542": {
+     "recipes": 123,
+     "status": "OK"
+    },
+    "9101": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "930": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "9464": {
+     "recipes": 0,
+     "status": "OK"
+    },
+    "9624": {
+     "recipes": 2,
+     "status": "OK"
+    },
+    "9935": {
+     "recipes": 11,
+     "status": "OK"
+    },
+    "9936": {
+     "recipes": 19,
+     "status": "OK"
+    },
+    "9937": {
+     "recipes": 42,
+     "status": "OK"
+    },
+    "9938": {
+     "recipes": 114,
+     "status": "OK"
+    },
+    "9939": {
+     "recipes": 81,
+     "status": "OK"
+    }
+   },
+   "catalog_frame": 281,
+   "excluded": {
+    "1979": "COPYRIGHTED Project Gutenberg eBook (licence not as SOURCES.md says)"
+   },
+   "no_title_noun": 363,
+   "practice_recipes": 1165,
+   "rebound_eligible": 1641,
+   "recipes": 10368
+  },
+  "COUNTS_S": {
+   "exam": {
+    "S1_QUANTITY": 1545,
+    "S2_ABSENCE": 267,
+    "S3_QUESTION": 1661,
+    "S4_OTHER": 12199
+   },
+   "no_food_word": 2105030,
+   "personal_data": {
+    "ADDRESS": 258,
+    "DIGITS7": 176,
+    "EMAIL": 11,
+    "HANDLE": 4,
+    "URL": 22
+   },
+   "practice": 1690,
+   "practice_by_stratum": {
+    "S1_QUANTITY": 125,
+    "S2_ABSENCE": 36,
+    "S3_QUESTION": 175,
+    "S4_OTHER": 1354
+   },
+   "tatoeba_read": 2039120,
+   "tm_user_turns_read": 83743
+  },
+  "COUNTS_WB": {
+   "cookbook_pages": 7857,
+   "pages": 151119,
+   "rebound_eligible": 87,
+   "recipes": 3318,
+   "with_ingredients": 3318
+  }
+ },
+ "frames": {
+  "FRAME_R_PG.jsonl": {
+   "file_sha256": "c983e065bc1783ea9a4807612edafe8168ebb8c09b56a264dfea5ca53cb3aa5e",
+   "ids_sorted_sha256": "87f6f527c55f7a67b51a8d22c1fbc97c6a1dbea25199d42ec65cc983b0e12eca",
+   "items": 10368,
+   "rebound_eligible": 1641
+  },
+  "FRAME_R_WB.jsonl": {
+   "file_sha256": "6a0d7cc12d0133991bf44c666ecae80ff1239760d0fcbd9aad62b11842563ddc",
+   "ids_sorted_sha256": "e111f828c1827e667d41039f7963c939da0cf0a116df0e0405f9ad3d915bcbcc",
+   "items": 3318,
+   "rebound_eligible": 87
+  },
+  "FRAME_S.jsonl": {
+   "file_sha256": "98c2fb8f5f4b8c2afe4261cae516fe6a9e8ec60fb8e3448a005b463b01c758ea",
+   "ids_sorted_sha256": "a2928948e5cd10fc216d5f9f75633052618de4c6ec48ccb7a1d2b961bfae5f4b",
+   "items": 15672,
+   "strata": {
+    "S1_QUANTITY": {
+     "ids_sorted_sha256": "1900f39c81dc02a6f86ee6a83090e32895b290422a0fb8a6a3388014bc20809a",
+     "items": 1545
+    },
+    "S2_ABSENCE": {
+     "ids_sorted_sha256": "cfddb3ed0d7a947fe244abba7063067262a06dfab209bbf517b2981d81e90a16",
+     "items": 267
+    },
+    "S3_QUESTION": {
+     "ids_sorted_sha256": "5deb2bafd7a2b3af573728f3c89721e1471c9d82c7bf9ae135c00a0e34aa2720",
+     "items": 1661
+    },
+    "S4_OTHER": {
+     "ids_sorted_sha256": "f591c937717c274885a9fb3722e9e0b0253f90aa17c84ffa58d29e5477d30de0",
+     "items": 12199
+    }
+   }
+  },
+  "PRACTICE_R.jsonl": {
+   "file_sha256": "060848e3e0698d737a74c96e0d6bae15a78952a22932f410d5a8b3bedac12193",
+   "ids_sorted_sha256": "3fddff07d9a62856cdcf0a2e22788e7fe81098b166531439e56899733b616d2d",
+   "items": 1165,
+   "rebound_eligible": 14
+  },
+  "PRACTICE_S.jsonl": {
+   "file_sha256": "ef2b3f229df5a224bc68f97d00544a35073ec57e9771b6d353d6ca1b6b22c2b5",
+   "ids_sorted_sha256": "870f081c098525537104efeaf0ba7fd71f265a68474fee459655f16391f8a645",
+   "items": 1690,
+   "strata": {
+    "S1_QUANTITY": {
+     "ids_sorted_sha256": "e12a72707b44c22257ec057179ac3374d8085d60ed962752a0d77373616a6393",
+     "items": 125
+    },
+    "S2_ABSENCE": {
+     "ids_sorted_sha256": "722414888c5b52cc564db3ef3c88edbfa4e27590972dc4f1ddddd85ba7a5b4b0",
+     "items": 36
+    },
+    "S3_QUESTION": {
+     "ids_sorted_sha256": "4202250614d428fe3910f7171e58eaea29ff425b7e8e8473e7be598462f240bb",
+     "items": 175
+    },
+    "S4_OTHER": {
+     "ids_sorted_sha256": "e54490e108ee2b9673648fc250979426d6c0101a4b4cde85d0e70153eebfbd5f",
+     "items": 1354
+    }
+   }
+  }
+ },
+ "schema": "helm.xreal.frames-pinned/1"
+}

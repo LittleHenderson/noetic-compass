@@ -1,0 +1,248 @@
+{
+ "carrier_inputs_equal_published_practice": true,
+ "hard_gates": {
+  "HB_same_inputs": true,
+  "HC_control": true,
+  "HK_key_blind": true,
+  "HN_no_network": true,
+  "HP_parameter_audit": false,
+  "HR_replay": false,
+  "HSW_switch_hygiene": true,
+  "HS_sandbox": true
+ },
+ "helm_suites": {
+  "detail": "skipped=1",
+  "ran": [
+   177
+  ],
+  "verdict": "OK"
+ },
+ "instrument_rows": {
+  "I0_not_a_practice_mock": false,
+  "I10_seed_rule": true,
+  "I14_not_vacuous": true,
+  "I1_data_identity": false,
+  "I6_completeness": false,
+  "I7_reading_from_sealed_package": false,
+  "I9_governance": true
+ },
+ "main": {
+  "ALWAYS_ASK": {
+   "ASKS": 113,
+   "NOT_SCORED": 15,
+   "RIGHT": 0,
+   "WRONG": 0,
+   "commitments_on_unsettled": 0,
+   "fully_learned_rep": 0,
+   "lessons_LEARNED": 0,
+   "lessons_NOT_LEARNED": 670,
+   "lessons_WRONG": 0,
+   "plain": 0,
+   "rep_answer": 106,
+   "right_rep": 0,
+   "unexplained_asks": 0
+  },
+  "LICENSED": {
+   "ASKS": 113,
+   "NOT_SCORED": 15,
+   "RIGHT": 0,
+   "WRONG": 0,
+   "commitments_on_unsettled": 0,
+   "fully_learned_rep": 0,
+   "lessons_LEARNED": 0,
+   "lessons_NOT_LEARNED": 670,
+   "lessons_WRONG": 0,
+   "plain": 118,
+   "rep_answer": 106,
+   "right_rep": 0,
+   "unexplained_asks": 0
+  },
+  "WIDE": {
+   "ASKS": 12,
+   "NOT_SCORED": 15,
+   "RIGHT": 101,
+   "WRONG": 0,
+   "commitments_on_unsettled": 12,
+   "fully_learned_rep": 100,
+   "lessons_LEARNED": 577,
+   "lessons_NOT_LEARNED": 93,
+   "lessons_WRONG": 0,
+   "plain": 127,
+   "rep_answer": 106,
+   "right_rep": 99,
+   "unexplained_asks": 0
+  },
+  "WIDE_NO_LEARNING": {
+   "ASKS": 113,
+   "NOT_SCORED": 15,
+   "RIGHT": 0,
+   "WRONG": 0,
+   "commitments_on_unsettled": 0,
+   "fully_learned_rep": 0,
+   "lessons_LEARNED": 0,
+   "lessons_NOT_LEARNED": 670,
+   "lessons_WRONG": 0,
+   "plain": 118,
+   "rep_answer": 106,
+   "right_rep": 0,
+   "unexplained_asks": 0
+  },
+  "WIDE_REPLAY": {
+   "ASKS": 12,
+   "NOT_SCORED": 15,
+   "RIGHT": 101,
+   "WRONG": 0,
+   "commitments_on_unsettled": 12,
+   "fully_learned_rep": 100,
+   "lessons_LEARNED": 577,
+   "lessons_NOT_LEARNED": 93,
+   "lessons_WRONG": 0,
+   "plain": 127,
+   "rep_answer": 106,
+   "right_rep": 99,
+   "unexplained_asks": 0
+  }
+ },
+ "marks": {
+  "K1_LEARNS": true,
+  "K3_SAFE": true,
+  "K4_HONEST": true,
+  "NH_OFF": false,
+  "NH_ON": false
+ },
+ "nh": {
+  "W5P_E64": {
+   "complete": true,
+   "identical_off_now_vs_base": 64,
+   "items": 64,
+   "lost_by_wide": 0,
+   "replay_identical": true,
+   "restored": true,
+   "totals": {
+    "OFF_BASE": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    },
+    "OFF_NOW": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    },
+    "OFF_NOW_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    },
+    "WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 61,
+     "UNDETERMINED": 3,
+     "WRONG": 0
+    }
+   },
+   "wide_audit_ok": true
+  },
+  "W5P_F64": {
+   "complete": true,
+   "identical_off_now_vs_base": 64,
+   "items": 64,
+   "lost_by_wide": 0,
+   "replay_identical": true,
+   "restored": true,
+   "totals": {
+    "OFF_BASE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "OFF_NOW": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "OFF_NOW_REPLAY": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    },
+    "WIDE": {
+     "CRASHED": 0,
+     "RIGHT": 60,
+     "UNDETERMINED": 2,
+     "WRONG": 2
+    }
+   },
+   "wide_audit_ok": true
+  },
+  "X5_E64": {
+   "complete": false
+  },
+  "X5_F64": {
+   "complete": false
+  }
+ },
+ "notes": {
+  "K1_need": 96,
+  "bad_units": [],
+  "receiver_check": {
+   "approval_binds_zip": true,
+   "carrier_files_exact": true,
+   "carrier_holds_no_key": true,
+   "carrier_inputs_pinned": true,
+   "frames_pinned": true,
+   "host_view_has_no_key_fields": true,
+   "ids_unique": true,
+   "inputs_recomputed": true,
+   "keys_recomputed": true,
+   "no_excluded_item": true,
+   "no_excluded_text": true,
+   "no_float_in_keys": true,
+   "owner_line_frozen": true,
+   "quotas_or_recorded_shortfall": true,
+   "sample_recomputed": true,
+   "seed_rule": true,
+   "turns_rederive": true
+  },
+  "representable_and_answer_keyed": 106
+ },
+ "practice_seed_text": "RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published",
+ "rbw1t_suites": {
+  "detail": "",
+  "ran": [
+   26
+  ],
+  "verdict": "OK"
+ },
+ "schema": "helm.rbw1t.dry-run/1",
+ "sensitivity_D_W_1_head_only_WIDE": {
+  "ASKS": 15,
+  "NOT_SCORED": 15,
+  "RIGHT": 98,
+  "WRONG": 0,
+  "commitments_on_unsettled": 0,
+  "fully_learned_rep": 97,
+  "lessons_LEARNED": 530,
+  "lessons_NOT_LEARNED": 139,
+  "lessons_WRONG": 1,
+  "plain": 127,
+  "rep_answer": 106,
+  "right_rep": 96,
+  "unexplained_asks": 0
+ },
+ "status_word": "INCONCLUSIVE",
+ "timing_seconds": {
+  "custody_seal": 1.52,
+  "helm_suites": 3.08,
+  "merge": 1.11,
+  "pool": 18.72,
+  "rbw1t_suites": 4.7
+ },
+ "verdict": "INSTRUMENT_ERROR"
+}

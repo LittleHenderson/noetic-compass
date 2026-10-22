@@ -1,0 +1,19 @@
+{
+ "attempts": "one attempt + one plumbing retry",
+ "cap_usd": "1.00",
+ "label": "R1W6",
+ "no_sign_request": "the owner pre-approved this wave; this record replaces OWNER_SIGN_REQUEST",
+ "owner_line_sha256": "083d4c3fb31b545c71ad361860af2e86aed9a0ea8931472965f28ec6341d1ae3",
+ "owner_line_source": "Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md, heading 'Owner words (2026-10-19 night, verbatim)' (FETCH STACKEXCHANGE ... FIX K4 at 1 USD), bullet 'FIX K4 at 1 USD'",
+ "owner_line_utf8_bytes": 15,
+ "owner_line_verbatim": "FIX K4 at 1 USD",
+ "package_freeze_sha256": "da1ec4d2e144a8921d27231e99ff277de0e915b61e2de205cc94646a4723c8a8",
+ "package_version": "v3",
+ "package_zip": "HELM_R1_W6_20261019_SOURCE_R1W6.zip",
+ "package_zip_sha256": "f1b64a5edf0df2b152c867f328c71b3df8640a759836108079590e7959c31b47",
+ "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same carriers",
+ "recorded_utc": "2026-10-20T05:38:25Z",
+ "schema": "helm.r1w6.approval/1",
+ "seed_source_rule": "sha256(UTF-8 of the pinned line + ':' + the full zip sha256), no trailing newline",
+ "seed_source_sha256": "430df5a9b41b073d30f78957a12b2117bc8254058be413be06a87c7ce60972bb"
+}

@@ -1,0 +1,10 @@
+{
+ "reservation": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\x_real_c42_reservation_20261019\\BUDGET_RESERVATION_XREAL_C42.json",
+ "reservation_sha256": "7fb27c7ee295cc2418fc9430671906d28afc5aad2295e058482821666c32667c",
+ "ledger_before_sha256": "4169f4de412e7f17fc54f4562337c48c9431ae87328361141f92209cf2611ce7",
+ "ledger_after_sha256": "3787bb9e726290b02b59eb0f5c85a5f9d5642e1f435991894779cbb7fed39dc6",
+ "ceiling_usd": 200.0,
+ "combined_allocation_before_usd": 111.3,
+ "combined_allocation_usd": 112.3,
+ "unreserved_usd": 87.7
+}

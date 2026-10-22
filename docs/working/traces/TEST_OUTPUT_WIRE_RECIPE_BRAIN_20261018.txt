@@ -1,0 +1,31 @@
+=== test_helm_end_to_end_loop.py (Windows, Python 3.14.0) ===
+test_01_canonical_brain_is_station_s0 (__main__.TestCanonicalBrainWiring.test_01_canonical_brain_is_station_s0) ... ok
+test_02_cookie_brain_is_demo_standin_never_default (__main__.TestCanonicalBrainWiring.test_02_cookie_brain_is_demo_standin_never_default) ... ok
+test_03_torch_only_parts_not_imported (__main__.TestCanonicalBrainWiring.test_03_torch_only_parts_not_imported) ... ok
+test_04_no_invented_quantity (__main__.TestCanonicalBrainWiring.test_04_no_invented_quantity) ... ok
+test_08_absent_ingredient_is_undetermined (__main__.TestCircuit.test_08_absent_ingredient_is_undetermined) ... ok
+test_09_real_gate_called_with_real_request (__main__.TestCircuit.test_09_real_gate_called_with_real_request) ... ok
+test_10_success_writes_only_after_gate_and_receipt (__main__.TestCircuit.test_10_success_writes_only_after_gate_and_receipt) ... ok
+test_11_repair_child_glues_actual_result (__main__.TestCircuit.test_11_repair_child_glues_actual_result) ... ok
+test_12_repair_opens_on_real_detected_failure (__main__.TestCircuit.test_12_repair_opens_on_real_detected_failure) ... ok
+test_14_unparseable_english_clarifies_with_zero_writes (__main__.TestEdges.test_14_unparseable_english_clarifies_with_zero_writes) ... ok
+test_15_stated_recipe_not_taken (__main__.TestEdges.test_15_stated_recipe_not_taken) ... ok
+test_16_pantry_read_writes_nothing (__main__.TestEdges.test_16_pantry_read_writes_nothing) ... ok
+test_17_kept_paths_and_voice (__main__.TestEdges.test_17_kept_paths_and_voice) ... ok
+test_18_live_trace (__main__.TestEdges.test_18_live_trace) ... ok
+test_05_round_trip_checked (__main__.TestRoundTrip.test_05_round_trip_checked) ... ok
+test_06_round_trip_mismatch_refuses_with_zero_writes (__main__.TestRoundTrip.test_06_round_trip_mismatch_refuses_with_zero_writes) ... ok
+test_07_missing_checker_is_not_verified (__main__.TestRoundTrip.test_07_missing_checker_is_not_verified) ... ok
+test_13_written_rule (__main__.TestValveRule.test_13_written_rule) ... ok
+Ran 18 tests in 0.216s
+OK
+=== test_helm_chat_nuance.py (pytest) ===
+.....                                                                    [100%]
+5 passed in 0.24s
+=== tks_meta_valve_controller.py self-test ===
+valve self-test: 3 written-rule cases PASS ( ENGINEERED-NOT-VALIDATED )
+=== repair_performer/test_all.py (unchanged module, regression) ===
+17
+RESULT: ALL PASS
+=== pyflakes ===
+pyflakes: clean (4 files)

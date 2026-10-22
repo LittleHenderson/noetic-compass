@@ -1,0 +1,89 @@
+{
+ "schema": "ctt.run-limits/1",
+ "test": "CTT-1 CAS-token translator, ears first",
+ "approval": "owner pre-approval 2026-10-19 (verbatim in APPROVAL_RECORD_CTT.json) + the sealed zip sha256; cap 8.00 USD; one attempt + one plumbing retry",
+ "cost_cap_usd": 8.0,
+ "cost_cap_status": "OWNER PRE-APPROVED 8 USD (line quoted in APPROVAL_RECORD_CTT.json)",
+ "attempts": {
+  "scored": 1,
+  "plumbing_retry": 1,
+  "plumbing_retry_rule": "only if no model was scored (the run stopped in refusals, preflight, data build or training because of plumbing); same zip, same exam carrier, same settings; any package change is a reseal and needs a new owner word",
+  "anti_tuning": "no rerun with a different learning rate, size, schedule or seed to coax a pass; a miss is a result"
+ },
+ "host": {
+  "cloud": "AWS",
+  "region": "us-west-2",
+  "instance": "g5.xlarge (1 x NVIDIA A10G 24 GB, 4 vCPU, 16 GiB RAM)",
+  "fallback_instance": "g4dn.xlarge (1 x NVIDIA T4 16 GB) only if g5 capacity is refused; training is then about 3 times slower and may hit the wall cap (then INSTRUMENT_ERROR, never a pass)",
+  "price_usd_per_hour_on_demand": {
+   "g5.xlarge": 1.006,
+   "g4dn.xlarge": 0.526,
+   "note": "list prices; the controller checks the price page on the day"
+  },
+  "image": "an AWS Deep Learning AMI with PyTorch 2.x and CUDA (python3 with torch importable in the system interpreter); no other model files",
+  "hosts": 1,
+  "automatic_retry": false,
+  "instance_life_cap_hours": 6,
+  "self_terminate": "shutdown -h +360 set at boot, instance-initiated shutdown behaviour = terminate",
+  "disk_gib": 60
+ },
+ "deadlines": {
+  "job_wall_cap_hours": 5,
+  "runner_deadline": "kit/run_ctt.py stops every stage at min(--deadline-epoch, start + 5 h)",
+  "preflight_cap_minutes": 15,
+  "data_build_cap_minutes": 30
+ },
+ "estimate": {
+  "preflight_minutes": "about 8-15 (unit tests about 1, smoke build about 1, 50-step smoke train about 2, translator audit about 1)",
+  "data_build_minutes": "about 3-8 (laptop 10% build: 10.3 s, 85 MiB peak)",
+  "training_minutes": "about 70-110 on g5 for A4 x 3 + C1 (each about 12,000 steps of 256 pairs) + A5; C2 is init only",
+  "scoring_minutes": "about 5-15",
+  "noharm_minutes": "about 5 (laptop OFF run of one 64-item exam: 3.8 s)",
+  "total_hours_g5": "about 2-3",
+  "expected_usd": "about 2-3.5 on g5 including boot and cleanup",
+  "worst_case_usd": "8.00 (the controller stops at the cap across both attempts)"
+ },
+ "stages_in_order": [
+  "refusals",
+  "preflight (GPU smoke on AWS)",
+  "data build",
+  "train A4-s1",
+  "train A4-s2",
+  "train A4-s3",
+  "train A5-s1",
+  "train C1-s1",
+  "C2-s1 init",
+  "score ears",
+  "NO-HARM off",
+  "NO-HARM off with the translator folder deleted",
+  "NO-HARM on x 3 seeds",
+  "merge input draft"
+ ],
+ "record_per_job": [
+  "source: this zip sha256 and PACKAGE_FREEZE sha256",
+  "purpose: CTT-1 training + scoring",
+  "instance id, type, region",
+  "start/stop UTC",
+  "time and cost limits (this file)",
+  "actual cost from the billing record",
+  "cleanup: instance terminated and volumes deleted, checked by a second describe-instances / describe-volumes call; S3 leftovers deleted; temporary role/profile removed",
+  "backup: deliverable to D:/tksCAS-archive/ with three sha256 confirmations"
+ ],
+ "laptop": "no torch on the laptop (torch alone measured at 475 MiB RAM, above the 300 MiB per-process limit; free RAM about 754 MB, below the design's 2 GB smoke floor): the GPU smoke is stage 1 of this job, inside the cap",
+ "outputs_kept": [
+  "RUN_RECORD_CTT.json",
+  "PREFLIGHT_CTT.json",
+  "data/DATA_MANIFEST_CTT.json",
+  "data/LEAKAGE_CTT.json",
+  "data/vocab.json",
+  "runs/*/WEIGHTS_MANIFEST.json",
+  "runs/*/progress.jsonl",
+  "runs/*/final.pt",
+  "runs/*/init.pt",
+  "SCORE_EARS_CTT.json",
+  "NOHARM_*.json",
+  "MERGE_INPUT_CTT.draft.json",
+  "*.log"
+ ],
+ "amendment_A_CTT_1": "the primary run scores the machine-side exam E-MACHINE-S; the human exam is an optional later scoring-only job (kit/run_ctt_human.py, one GPU host, about 15-30 minutes, expected well under 1 USD) against the same frozen weights, inside the same 8.00 USD cap; it trains nothing"
+}

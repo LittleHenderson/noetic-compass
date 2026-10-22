@@ -1,0 +1,50 @@
+{
+  "schema": "helm.aws-combined-allocation.hold-disposition/1",
+  "utc": "2026-10-16T23:26:26.630449+00:00",
+  "job": "helm-claude-r1-w1-20261016-c34 (attempts 1 to 7)",
+  "disposition": "CLEAR_THE_SEVEN_OPEN_WAVE_1_HOLDS",
+  "owner_authority": "The owner's own answer, given in this session through the harness's question channel. The question put to the owner was: \"Those 63.75 of holds are entries in my own ledger file, not AWS bookings. Should I clear them so the unreserved room goes from 37.55 to 101.30?\" The owner selected: \"Yes, clear them\". No message id exists for that channel, so none is recorded: an invented identifier is worse than an absent one. In the same answer the owner also selected \"Yes, go ahead (costs $0 for now)\" for R1-RT, which is a separate authorisation recorded in the council directive, not in this budget file.",
+  "owner_words_verbatim": [
+    "Yes, clear them",
+    "Yes, go ahead (costs $0 for now)"
+  ],
+  "ledger_usd": 162.45,
+  "ceiling_usd": 200.0,
+  "charges_established_usd": 2.75,
+  "holds_placed_count": 7,
+  "holds_placed_total_usd": 66.5,
+  "holds_open_before_usd": 63.75,
+  "holds_open_after_usd": 0.0,
+  "unreserved_before_usd": 37.55,
+  "unreserved_after_usd": 101.3,
+  "what_this_changes": "ONE number in the ledger: the 63.75 USD of holds that were still open become unreserved, so the unreserved room goes from 37.55 to 101.3 USD. The ledger total stays at 162.45 of 200.0.",
+  "what_this_does_not_do": "It changes no AWS resource, no charge and no ceiling. It deletes no attempt and re-prices nothing. It does not touch the two running instances the owner was told about. The cleared holds were always bookkeeping: nothing was reserved on Amazon's side, and the AWS check run in this session found none of the wave-1 machines still present.",
+  "aws_reality_checked": {
+    "how": "boto3 describe_instances in the default region and in us-east-1 and us-west-2",
+    "wave_1_machine_present": false,
+    "instances_found_and_not_ours": [
+      {
+        "id": "i-0bd0a082507a51ae3",
+        "type": "t3.small",
+        "name": "nc-customer-app",
+        "state": "running"
+      },
+      {
+        "id": "i-02137d196e671b5c1",
+        "type": "t3.small",
+        "name": "nc-canary-app",
+        "state": "running"
+      },
+      {
+        "id": "i-0c3028734c8885542",
+        "type": "g6e.xlarge",
+        "name": "cas-bridge-control-20260822",
+        "state": "stopped"
+      }
+    ],
+    "note": "These three were NOT created by this work and were NOT touched. They are recorded because two are running and billing and one is holding disk, and the owner should know. Changing them is the owner's call and nobody else's."
+  },
+  "actual_billing": "PENDING",
+  "written_by": "the TKS Noetic Council session, round 17",
+  "disposition_digest": "8b70c13b8b2e77980e91c3ae2e6f99740db60183aef26deaf691d64e6a2848d4"
+}

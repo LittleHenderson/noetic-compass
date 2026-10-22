@@ -1,0 +1,54 @@
+{
+ "attempts": {
+  "plumbing_retry": 1,
+  "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same carriers; any package change is a reseal and needs a new owner word",
+  "scored": 1
+ },
+ "cost_cap_status": "APPROVED_BY_OWNER_ORDER_VIA_COORDINATOR_MAPPING",
+ "cost_cap_usd": 0.1,
+ "deadline_seconds_whole_command": 1200,
+ "enforced_by_launch_controller": [
+  "cost cap 0.10 USD covers the scored attempt and at most one plumbing retry",
+  "cleanup: host and volumes terminated, launch slot released, temporary role/profile/bucket removed, proof recorded; independent cleanup check within an hour; a direct read-only look",
+  "backup: deliverable copied to D:/tksCAS-archive/ with three sha256 confirmations",
+  "job record: source, purpose, instance, time and cost limits, cleanup (owner order 2026-09-23)"
+ ],
+ "enforced_by_package": [
+  "deadline: kit/run_rtr.py caps the whole command at 1,200 s; a unit still running at the deadline is killed and the reading is INSTRUMENT_ERROR (I6)",
+  "one unit at a time; no torch; no GPU; every HELM unit installs X-REAL's socket guard before any HELM import (hard gate HN)",
+  "refusals before any package code runs: this package's freeze and members; X-REAL (67b48541), wave 4 (0d45017c), wave 3b (a6d9dbc7), wave 3 v3 (bd06f324), wave 1 v3 (8c55c413) freezes and members; the rt carrier (exactly INPUTS_RTR.json + RTR_PINS.json; a key file is refused); X-REAL's spent inputs (37312a31); disk free >= 2 GiB",
+  "HS: the wave-1 brain folder is hashed at start and end"
+ ],
+ "estimate": {
+  "expected_usd_per_attempt": "about 0.01 at list (about 0.02 at the conservative rate)",
+  "host_seconds": "about 300-480 (boot, checks, tests, pool)",
+  "host_units": "5 (V11, V11 replay, V10, baselines, V10 on X-REAL's spent inputs) + 2 test commands",
+  "max_usd_per_attempt": "about 0.04 (1,200 s deadline + about 10 minutes of boot and cleanup at 0.10 USD/h)",
+  "measured_laptop": "the 5-unit pool on the builder's practice draw (99 items) took 9.05 s, one unit at a time; RTR tests 29 in about 8 s; reader tests 104+ in about 2 s",
+  "price_usd_per_host_hour": {
+   "conservative_charge": 0.1,
+   "list_t3_medium": 0.0416
+  },
+  "worst_case_usd": "about 0.08 (scored + one plumbing retry, both at their maximum) - under the 0.10 cap"
+ },
+ "host": {
+  "automatic_retry": false,
+  "hosts": 1,
+  "image": "ami-0dddfa1ffa6b87af7 (the c42 image, Python 3.12.3)",
+  "instance_type": "t3.medium (2 vCPU, 4 GiB; the c41 precedent); m6i.large allowed if t3.medium is unavailable",
+  "region": "us-west-2",
+  "workers": 1
+ },
+ "label": "RTR1",
+ "laptop": {
+  "custodian": "pure Python, one process at a time, >= 300 MB free RAM, each command under 300 s, no network",
+  "neural_work": "none",
+  "reading": "rtr/merge_rtr.py from a fresh extract of the sealed zip"
+ },
+ "ledger": "Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json (after c42: 111.33 of 200.00 used). NO hold placed by the builder.",
+ "package": "HELM_RTR1_20261019",
+ "schema": "helm.run-limits/1",
+ "sources_on_host": "none of the public corpora; the host gets the custodian's rt carrier and X-REAL's spent inputs (xrspent) only",
+ "stage_limit_seconds": 1500,
+ "status": "OWNER-APPROVED CAP (owner order 2026-10-19 \"RE-TEST READER\" (0.03 USD); coordinator mapping: cap 0.10 USD, one attempt + one plumbing retry). Nothing held or launched by the builder."
+}

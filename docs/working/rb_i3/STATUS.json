@@ -1,0 +1,11 @@
+{
+ "source_manifest_sha256": "9ecfb7e7e486b148d82ca2d4f5d4fe263b1d6c27578ce0248c8eff3e1d198ff1",
+ "frozen_json_sha256": "945a1bd3a195bdbb22b82ff1fb1c2da210e667b562c394d7879652f05e9e6566",
+ "precode_sha256": "06d95bdbb15ce37fd48d47bf204806880604ec963954fdb0a4ff93170eee9440",
+ "files": 40,
+ "sign_line": "APPROVE rb_i3, source 9ecfb7e7, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+ "sign_line_note": "operator-composed from the owner word \"RB-I3\" (OWNER_APPROVALS_20261018.md, Order 2026-10-19) under the relayed delegation; not a separate owner signature",
+ "parts": 103,
+ "reader_part": "M00",
+ "claim_ceiling": "SYNTHETIC_ONLY"
+}

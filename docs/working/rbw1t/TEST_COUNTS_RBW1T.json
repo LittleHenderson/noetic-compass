@@ -1,0 +1,26 @@
+{
+ "dry_reading_sha256": "cb149dc9db431ee0a68ebf7014d5f43a2930124c266f86c93c47f04a7598f15f",
+ "dry_run_summary_sha256": "89d220aebd3793cdfcf4f548898e312c3fb2755fab9a545712d0704aa6900527",
+ "fix_v3_practice_counts_sha256": "93baf11d13ab9d9c9019e884d0c22eec4875494318dffaae6f06f80231f75853",
+ "helm_suites_from_sealed_extract_scratch_copy": {
+  "detail": "skipped=1",
+  "ran": [
+   177
+  ],
+  "verdict": "OK"
+ },
+ "members": 395,
+ "members_rehashed_bad": [],
+ "package_freeze_sha256": "04eef88645acbd0c89de9e6e914d8faf2896939769e11f4d4c93f2dfc12e84f4",
+ "package_zip_sha256": "3a8ae37eb51c18414bfa83a71b9079dd7ec2282bec6ba3952d86ac0454f0e967",
+ "plan_check": "PASS",
+ "rbw1t_suites_from_sealed_extract": {
+  "detail": "",
+  "ran": [
+   26
+  ],
+  "verdict": "OK"
+ },
+ "schema": "helm.rbw1t.test-counts/1",
+ "sealed_helm_now_not_written": true
+}

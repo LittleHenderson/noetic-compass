@@ -65,6 +65,14 @@
         "5180"
       ],
       "port": 5180
+    },
+    {
+      "name": "helm-ui",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "helm_ui/server.py"
+      ],
+      "port": 8765
     }
   ]
 }

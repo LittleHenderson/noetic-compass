@@ -1,0 +1,46 @@
+{
+  "what": "The appendix-F candidate rule against the runtime LIVE oracle, two encodings",
+  "date": "2026-10-16",
+  "cases_compared": 323851,
+  "disagreements": 0,
+  "gated": 0,
+  "coverage": {
+    "exhaustive_routes": 8736,
+    "exhaustive_cases": 122304,
+    "random_cases": 200000,
+    "adversarial_cases": 1547,
+    "total": 323851
+  },
+  "answer_streams": {
+    "padding_encoding": {
+      "sha256": "c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e",
+      "lines": 323851
+    },
+    "reference_encoding": {
+      "sha256": "c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e",
+      "lines": 323851
+    },
+    "runtime_oracle": {
+      "sha256": "c591c5685b84f96ae2ab05ceedc4720ccabc16efd68ab9d908832ecf9383dd8e",
+      "lines": 323851
+    }
+  },
+  "all_streams_byte_identical": true,
+  "encodings": {
+    "padding": "legs at cells 0..k-1, a constant 1.5 in the spare region from cell k; the bridge writes per-leg membership and ONE constant and holds NO part of the answer. This is the encoding the design should use.",
+    "reference": "section 7 as first written: a reference cell at index 0 whose value encodes whether every leg is present. Proved too, and no longer needed."
+  },
+  "why_padding_resolves_the_open_question": "a route has at most seven legs and CELLS is eight, so a spare cell always exists. The spare constant is strictly between the two leg values, so the spare cell is the minimum exactly when every leg is present, and a missing leg cell is the minimum exactly when one is. The brain discovers which by its own argmin, so RT_SHIM_NO_MATH is satisfied by construction rather than by a judgement call.",
+  "candidate_side": "a process holding a live RecipeBrain, no torch, rb package refuses torch",
+  "oracle_side": "a process holding the live native_task, which imports torch",
+  "why_two_processes": "the brain and torch cannot share an interpreter; see appendix E",
+  "packages_used": {
+    "recipe_brain": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3",
+    "runtime_source": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_r6_restoration_op13\\source_r6"
+  },
+  "reproduce": "C:\\Python314\\python.exe -B prove_candidate_vs_oracle.py <v3-package-root> <r6-source-root> padding reference",
+  "not_in_this_repository": "the 7.2 MB answer files are not committed; the digests above are what make the run falsifiable. Re-running the committed generator and the committed runners reproduces them.",
+  "defect_kept_on_the_page": "when the proof was refactored to carry both encodings, BOTH were given the padding layout mapping, so the reference encoding disagreed on all 323851 cases. The disagreement was the refactor bug, visible immediately as digests d1d4c303 against c591c568. Each encoding now has its own mapping and both reproduce the oracle digest.",
+  "what_this_does_not_decide": "whether the encoding is approved for a run, and the four-against-eight alphabet mismatch in appendix F section 5, which is solved here by reading the limiting CELL rather than the label",
+  "manifest_digest": "8b5999d7f560c7c379a3e6dbc9764e8a0ca10e311a0175f2a38830a156b9801a"
+}

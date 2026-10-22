@@ -1,0 +1,189 @@
+{
+ "schema": "u3_t1.frozen/precode-1",
+ "label": "U3_T1",
+ "written_utc": "2026-10-19 (Pacific morning), before any U3-T1 code or test was written",
+ "status": "PRECODE. Marks, arms, worlds, gates and status rules below are frozen. The verdict comes only from merge_u3.py reading these rules. Claude is not the research governor.",
+ "claim_ceiling": "SYNTHETIC_ONLY. Any positive word stays ENGINEERED-NOT-VALIDATED: the faults are planted knowing what the scan checks. No consciousness, awareness or inner-life claim. No learned self-model (0 learned parameters).",
+ "owner_words": {
+  "source": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-18\\OWNER_APPROVALS_20261018.md, block 'Rulings (2026-10-19 morning, verbatim)'",
+  "verbatim": "WHY CAN'T THE EYE REPORT AND WHISPER BUT IF IT CAN'T DO BOTH THEN DEFINITELY WHISPER; run U3-T1",
+  "rulings_applied": [
+   "Unity Eye = REPORT AND WHISPER (both). Arms include REPORT_ONLY, WHISPER_ONLY, REPORT_AND_WHISPER.",
+   "Whisper = a typed attention nudge handed to the brain's presentation policy through the normal gate; it never writes a cell, never changes a dial; the brain may ignore it.",
+   "Self-notice CAS wording = ^1 Mind on ^5 Female ('paying attention' / 'it's who I am'); the Body scan = ^6 Male ('breaking it down'). Named only in the technical view.",
+   "The four ways of getting unstuck are counted by the designer's table (ARCHITECTURE_U3.md section 3.3), label PROPOSED.",
+   "Records name domain and pathway only where the receipt already knows them; never invented."
+  ]
+ },
+ "design_source": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\u3_self_scan_design_v1 (ARCHITECTURE_U3.md, TRIGGERS_U3.md, CAS_MAPPING_U3.md, TEST_PLAN_U3.md, OPEN_QUESTIONS.md, u3_sketch.py)",
+ "reuse_by_import_never_modified": {
+  "unity_eye": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\u1b_unity_eye (ConcertLedger = the whisper channel; consts K_DETECT, DECLINE_REASONS)",
+  "lacunarity_machine": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-14\\lacunarity_machine_v1 (Universe, Ledger, deterministic_read)",
+  "thread_branch_copies": "helm_triad.py, helm_voice.py, helm_brain_canonical.py, tks_meta_valve_controller.py, docs/working/noetic_council/cube_store/*.py copied from origin/claude/project-thread-pmbzd6 into vendor_thread/ (hashes in SOURCE_MANIFEST.json)",
+  "recipe_brain": "the 17 LOADED_MEMBERS + PACKAGE_FREEZE.json of C:\\Users\\wakil\\Documents\\Codex\\2026-10-15\\r1_wave1\\HELM_R1_W1_20261015_v3 copied into pkg_copy/ (freeze sha256 8c55c4136e1b24bc322779160ffed666f9eb9ee21512c1972101263a243c039b); the real sealed folder is only hashed (H8)"
+ },
+ "instrument_choices": {
+  "world_disk": "Each world's stored files are byte strings in an in-memory WorldDisk (one per world-run). The brain side writes them; the Eye gets a read-only view (no write method). Reason: 6,256 world-runs on a laptop short of memory and disk time; it also keeps every arm's world isolated.",
+  "brain": "The live brain and the Eye's sandbox brain are two separate helm_brain_canonical.CanonicalRecipeBrain objects loaded from pkg_copy/ with the freeze check. The Eye never calls the live brain's evaluate() or witness(); it reads learned_digest() and the stored files only. Witness re-checks run on fresh sandbox RecipeBookBrain objects.",
+  "presentation_policy": "OUR_CONVENTION test-harness stand-in: at each presentation slot the brain presents one known object: its own pending odd item first (from its own record stream), then an accepted whisper, else round robin over its known objects in a seeded order. Presentations are attention outputs, not writes.",
+  "normal_gate_for_whispers": "OUR_CONVENTION: a whisper is admitted only if its target is a known object (else GATE), every evidence ref resolves in the scan-log entry it cites (else RECEIPT), fewer than 2 whispers were accepted this idle window (else BUDGET); a whisper arriving while AWAKE waits until the turn ends. Decline words reuse u1b DECLINE_REASONS.",
+  "ledger": "SYNTHETIC: the U40 ledger is built by the world generator on the ledger-universes schema (sha256 a8217c9d...) under the declared adapter default Domain O of the c34 worked example: first teaching step -> CHARGE U40:O5 (CR-1.2), repeat -> O7 (CR-1.3), repair / re-fit -> O6 (CR-1.4), refused teaching step -> REFUSED on O5 (CR-1.5), readout RIGHT/WRONG -> PROBE O6 (CR-1.7), readout UNDETERMINED -> PROBE with probe_outcome UNDETERMINED, counted on its own line. coordinates.domain_source = ADAPTER_DEFAULT; drive and pathway null (no receipt names them).",
+  "floor_reader": "deterministic_read with floor 3/4 on a rolling 'last4' probe per cell (hits = RIGHT among that cell's last 4 RIGHT/WRONG readouts, total = min(4, n)), state_tag 'last4'.",
+  "mechanism_records": "SYNTHETIC trace records for the four RPM mechanisms, classified by the designer's table (u3_sketch.classify_mechanism fields).",
+  "scan_timing": "A scan is computed atomically at its start tick on that tick's files. Its duration in ticks = ceil(read units / 256), at least 1. A PERIODIC or SELF scan whose duration reaches an AWAKE tick is recorded INTERRUPTED and nothing from it is spoken or whispered."
+ },
+ "session": {
+  "ticks": 408,
+  "blocks": 6,
+  "block_period": 68,
+  "awake_ticks_per_block": 4,
+  "awake_ticks": "68*b + 0..3 for b in 0..5",
+  "idle_windows": "68*b + 4 .. 68*b + 67",
+  "owner_turns": {
+   "204": "check yourself",
+   "340": "run a self-check and break it down"
+  },
+  "body_plant_tick": 156,
+  "signal_tick_awake": 138,
+  "signal_tick_idle": 170,
+  "script": "fixed per-tick actions (witnesses, readouts, triad faces, cube writes, cited cube operations, mechanism records, idle rehearsal at ticks 100, 101, 170, 171, 300); stocks and true requirements (1..4) drawn from the world seed"
+ },
+ "worlds": {
+  "seed_rule": "seed = int(sha256('u3_t1|fresh|' + world_id).hexdigest()[:16], 16); world ids C001..C064, P1-01..P7-32, S1-01..S5-16",
+  "clean": 64,
+  "planted_body": {
+   "P1_TAMPERED_RECEIPT": "32 (16 a stored triad Purpose/Power record changed after its receipt; 16 a stored witness row changed after its receipt); expected B1 TAMPERED_RECORD naming key or witness seed with both digests",
+   "P2_FADED_WITHOUT_EVENT": "32; the last stored ledger reading marks one non-FADED U40 cell FADED with no events behind it; expected B6 STATE_NOT_REDERIVABLE naming the cell",
+   "P3_SILENTLY_DROPPED_WISDOM": "32 (16 delete a stored Wisdom record, receipt stays -> B1 RECEIPT_WITHOUT_RECORD; 16 lower a stored Wisdom stage in place, no event -> B1 WISDOM_DROP_NO_EVENT), naming the ingredient",
+   "P4_STALE_CUBE": "32; one part cube read by a cited LIST_PARTS answer gets a new label in place, no write_history entry -> B3 STALE_ANSWER naming the operation and the cube",
+   "P5_PACKAGE_HASH": "32; one byte changed in one of the 17 loaded members of the world's package copy -> B2 PACKAGE_HASH_CHANGED naming the member and both hashes"
+  },
+  "planted_mind": {
+   "P6_UNUSED_MECHANISM": "32; the history uses 3 of the 4 mechanisms (missing one rotates POWER, WISDOM_RECEPTION, WISDOM_DECOMPOSITION, DESIRE_EXPOSURE by world index); expected the missing one named and RPM resolution lacunarity exactly 1/4 (clean worlds: all 4 used, exactly 0)",
+   "P7_UNDETERMINED_STREAK": "32; extra questions on the never-taught product Meringue at block 2 (3 or 4, alternating), so one key gets 3 or more UNDETERMINED in a row; expected the key named with the run length equal to the reference"
+  },
+  "signal": "16 each of S1 REFUSED_WRITE (8 writer REFUSED_CONFLICT, 8 triad WISDOM_DROP_NEEDS_EVENT refusal), S2 FADED_CELL (real: a wrongly taught Starter answers wrong after O6 was charged and covered), S3 UNDETERMINED_STREAK, S4 READBACK_FAILED (a cube write whose stored copy differs; a real body fault), S5 WISDOM_EVENT (a Wisdom drop through a named CORRECTION event); half fire at an AWAKE tick (138), half at an IDLE tick (170)",
+  "total": 368,
+  "void_rule": "a planting that did not take effect (bytes unchanged, or the target absent) is VOID; VOID must be 0"
+ },
+ "arms": {
+  "triggers": [
+   "NO_SCAN",
+   "PERIODIC",
+   "SELF_INITIATED",
+   "OWNER_INITIATED",
+   "FULL"
+  ],
+  "deliveries": [
+   "REPORT_ONLY",
+   "WHISPER_ONLY",
+   "REPORT_AND_WHISPER"
+  ],
+  "trigger_x_delivery": "15 arms 'TRIGGER/DELIVERY'. FULL = PERIODIC + SELF_INITIATED + OWNER_INITIATED (TEST_PLAN A4, the U3 candidate; added to the coordinator's list because the plan's marks are read on it).",
+  "baselines": {
+   "FIXED_CHECKLIST": "U1's A6 idea with no Eye: after every brain write, re-read that write's own receipt and nothing else; no Mind scan; a fixed list of findings as its report; delivery REPORT_AND_WHISPER",
+   "RANDOM_SAMPLE_SCAN": "at PERIODIC's cadence, re-reads a seeded random sample (with replacement) of the full scan's read units; sample size = floor of PERIODIC/REPORT_ONLY's mean read units per complete scan on the same world; no change check; findings only from sampled units; delivery REPORT_AND_WHISPER"
+  },
+  "count": 17,
+  "candidate": "FULL/REPORT_AND_WHISPER",
+  "yardstick": "NO_SCAN/REPORT_ONLY",
+  "delivery_meaning": {
+   "REPORT_ONLY": "the SELF_REPORT's plain-English sentences go to the owner channel and the record; no whisper",
+   "WHISPER_ONLY": "no sentences are delivered (an owner request gets only the fact-free line 'I've looked myself over.'); whispers go to the brain",
+   "REPORT_AND_WHISPER": "both"
+  }
+ },
+ "operating_numbers_PROPOSED": {
+  "MIN_IDLE_GAP": 64,
+  "STREAK_K": 3,
+  "MAX_SUMMONS_PER_WINDOW": 4,
+  "IDLE_SHARE": "1/8",
+  "IDLE_TICK_WORK_read_units": 512,
+  "window_scan_budget_read_units": 4096,
+  "SCAN_ALLOWANCE_read_units": 1024,
+  "UNITS_PER_TICK": 256,
+  "PRESENT_EVERY_idle_ticks": 16,
+  "WHISPER_BUDGET_PER_WINDOW": 2,
+  "WHISPERS_PER_SCAN_MAX": 2,
+  "K_DETECT_idle_ticks": 128,
+  "FLOOR": "3/4",
+  "LAST_N": 4,
+  "owner_phrases_full": [
+   "check yourself",
+   "run a self-check",
+   "do a self-scan",
+   "how are you doing",
+   "is anything wrong with you",
+   "what do you know about yourself",
+   "how's your memory"
+  ],
+  "owner_phrase_short": "how are you",
+  "read_unit": "one record parsed, one file hashed, or one sandbox re-check"
+ },
+ "detection_rule": "Detected and named = a COMPLETE scan (or, for FIXED_CHECKLIST, a write re-check) inside the window (from the plant/signal tick to the 128th idle tick after it, or the session end) has a finding whose check id, code and object equal the planting key and whose evidence refs contain the planting's evidence ref.",
+ "hard_gates": {
+  "H1_instrument": "every world spec regenerates byte-equal from its seed (generated twice per world); all 368 worlds x 17 arms present exactly once; VOID plantings 0; code tests pass in every part; no time-guard hit",
+  "H2_replay": "NO_SCAN/REPORT_ONLY and FULL/REPORT_AND_WHISPER re-run in a separate part on 32 worlds (C001-C008, P1-01, P2-01, P3-01, P3-17, P4-01, P5-01, P6-01..P6-04, P7-01, P7-02, S1-01, S1-09, S2-01, S2-09, S3-01, S3-09, S4-01, S4-09, S5-01, S5-09, P1-17, P5-17) give equal answer digests, equal SELF_REPORT digests record for record, equal final world digests",
+  "H3_never_writes": "in every scan of every arm the live digest (all brain-side file bytes + learned_digest + triad snapshot digest) before equals after; eye_writes_to_brain 0; whisper writes 0 (brain-state digest unchanged by every whisper)",
+  "H4_answers_unchanged": "on every world, every arm's scored answers equal NO_SCAN/REPORT_ONLY's answers",
+  "H5_no_awake_scans": "0 PERIODIC or SELF scans started on an AWAKE tick",
+  "H6_controls_valid": "RANDOM_SAMPLE_SCAN body detections <= E + 3 sigma of its exact chance expectation (E, sigma from the exact per-scan hit probabilities); FIXED_CHECKLIST re-reads exactly one receipt per write, the just-written one, and nothing else",
+  "H7_budget": "no PERIODIC/SELF scan over SCAN_ALLOWANCE; per idle window PERIODIC+SELF read units <= 4096 (1/8 of the window's work); 0 wasted complete scans (inputs byte-identical to the last complete scan) in PERIODIC and FULL arms",
+  "H8_sandbox": "the real sealed package folder (every file) hashes the same at the start and end of every part and across parts",
+  "H9_delivery_neutral": "for each trigger, the SELF_REPORT digests are equal across the three deliveries (a whisper or a report never feeds back into a scan)"
+ },
+ "marks": {
+  "K1_body_detection": "FULL/REPORT_AND_WHISPER detects and names every planted body fault: 160 of 160 (P1-P5, 32 each) plus 16 of 16 S4 worlds = 176 of 176",
+  "K2_false_alarms": "0 Body findings in any FULL scan on the 64 clean worlds and the 64 S1/S2/S3/S5 worlds",
+  "K3_traceable": "every delivered fact sentence in every FULL/REPORT_AND_WHISPER self-report has cites that all resolve inside its SELF_REPORT and passes the voice read-back re-run by merge (helm_voice _numbers_in/_names_in/cas_tokens, inner-experience word list): traceable == fact sentences (100%); invented facts 0; every NO_EVIDENCE / NEVER_TESTED sentence cites a section or cells with 0 records; every technical line re-derives exactly from its SELF_REPORT. Dropped sentences are reported.",
+  "K4_trigger": "SELF_INITIATED/REPORT_AND_WHISPER summons on 80 of 80 signal worlds within the window and on 0 of 64 clean worlds; summonses raised on AWAKE ticks run only after the turn ends (counted)",
+  "K5_mind_exact": "every COMPLETE FULL scan's U40 states equal deterministic_read called directly by merge on the world's ledger events up to that tick, cell for cell, on every world; P6 missing mechanism named 32 of 32 with exactly 1/4, clean worlds exactly 0 on 64 of 64; P7 key named 32 of 32 with run length equal to the reference run computed by merge from the scored answers",
+  "K6_cost_reported": "read units per scan and per detected body fault for every arm"
+ },
+ "status_rule_frozen_order": [
+  "INCONCLUSIVE - any hard gate fails. No other word.",
+  "SCAN_DID_NOT_EARN_KEEP - the candidate misses any of K1-K5; or RANDOM_SAMPLE_SCAN detects as many body faults as the candidate (at its PERIODIC-matched reads).",
+  "CHECKLIST_SUFFICIENT - FIXED_CHECKLIST meets K1 and K2 with total reads no more than the candidate's.",
+  "SELF_SCAN_EARNED_KEEP - all hard gates hold, the candidate meets K1-K5, and beats FIXED_CHECKLIST (fully detects at least one body fault kind more, or the same with at least 25% fewer reads) and beats RANDOM_SAMPLE_SCAN (more body faults detected)."
+ ],
+ "whisper_rule_frozen_order": {
+  "measure": "T(arm) = number of the 240 planted worlds (P1-P7, S4) where the brain's first presentation after the first in-window detecting complete scan targets the planted object. D = number of those 240 the candidate detected. Read on FULL/REPORT_ONLY (T_R), FULL/WHISPER_ONLY (T_WO), FULL/REPORT_AND_WHISPER (T_RW).",
+  "WHISPER_HARMFUL": "any whisper write > 0, or any whisper arm's answers differ from the yardstick's, or any whisper accepted on a clean world, or T_WO < T_R, or T_RW < T_R",
+  "NOT_AWARDED": "not harmful but a hard gate fails (main word INCONCLUSIVE): no whisper word",
+  "WHISPER_EARNED_KEEP": "not harmful, hard gates hold, T_RW - T_R >= ceil(D/2) and T_WO - T_R >= ceil(D/2)",
+  "WHISPER_NEUTRAL": "otherwise"
+ },
+ "three_valued_scoring": "scored answers use helm_triad.score3: UNDETERMINED is not wrong (RIGHT / WRONG / UNDETERMINED counted on separate lines)",
+ "predictions_written_before_code": {
+  "main": {
+   "SELF_SCAN_EARNED_KEEP": "0.55",
+   "INCONCLUSIVE": "0.25 (a new build with nine gates; most likely H6 random bound, H7 budget, or a replay slip)",
+   "SCAN_DID_NOT_EARN_KEEP": "0.15 (most likely K3, a sentence that fails read-back, or K5)",
+   "CHECKLIST_SUFFICIENT": "0.05"
+  },
+  "whisper": {
+   "WHISPER_EARNED_KEEP": "0.70 (close to by construction: the stand-in brain admits a well-formed whisper)",
+   "WHISPER_NEUTRAL": "0.20",
+   "WHISPER_HARMFUL": "0.10"
+  },
+  "numbers": "candidate K1 176/176; FIXED_CHECKLIST about 16/176 (only S4, a fault present at write time); RANDOM_SAMPLE_SCAN between 50% and 90% of 176; T_R near chance (about 1 in 100 known objects) except P7 where the brain's own item already points at the key; T_RW and T_WO near D minus budget declines",
+  "main_limit": "The plantings are built knowing what the scan checks, so high detection is close to by-construction. What the test can show: the scan does what it says, raises no false alarm, keeps every sentence traceable, never writes, never runs while awake, and what it costs next to two dumb baselines. It cannot show the scan finds faults nobody planned for."
+ },
+ "would_license_only_with_SELF_SCAN_EARNED_KEEP": "On synthetic copies of HELM's state with planted faults, a read-only scan run by the Unity Eye found and named every planted fault with its record, raised no false alarm on clean copies, changed no answer, and every fact sentence of its self-report pointed to a record; it did this with fewer missed faults or fewer reads than a fixed checklist and a random spot-check.",
+ "would_not_license": [
+  "consciousness, awareness or an inner life",
+  "HELM knows itself in any general sense",
+  "a learned self-model",
+  "finding real or unplanned faults",
+  "anything about the 28 drive cells or 22 pathways",
+  "any production or real-data claim",
+  "any drive-loop claim",
+  "that the whisper helps the real brain (the presentation policy is a stand-in)"
+ ],
+ "run": {
+  "where": "LOCAL_CPU_ONCE on MSI, 0 USD, sockets blocked, one process at a time, each part <= 300 s wall and <= 300 MiB working set, free RAM checked before each part",
+  "sign_line_form": "APPROVE u3_t1, source <SOURCE_MANIFEST sha256 first 8>, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend.",
+  "sign_line_note": "operator-composed per TEST_PLAN_U3 section 9; owner word 'run U3-T1' (2026-10-19 morning)",
+  "parts": "fixed in PLAN.json before launch; one attempt; a part that fails stops the driver"
+ }
+}

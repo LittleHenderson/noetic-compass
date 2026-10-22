@@ -1,0 +1,2463 @@
+{
+ "writer": "independent sub-agent; read only FUNDAMENTALS.md, MAP.md, GRAMMAR_CCE_v0_1.md",
+ "items": [
+  {
+   "id": "H01",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F1"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"the harbor\" is an Idea.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 0,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "I": "\"the harbor\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H02",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F1",
+    "F7"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Fact: \"drought\" leads to \"crop loss\".",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "leads_to",
+       "\"drought\"",
+       "\"crop loss\""
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H03",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F2",
+    "F4",
+    "F21"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Mira is a Mind. Mira is attracted toward \"the cliff path\", for Vitality.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": "F3",
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Mira",
+        "I": "\"the cliff path\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Mira",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H04",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F2",
+    "F3",
+    "F11"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Tomas is a Mind. Tomas outputs \"the summary\", operational, analytical register.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 1,
+       "domain": "O",
+       "register": [
+        "A"
+       ],
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Tomas",
+        "I": "\"the summary\"",
+        "ACT": "outputs"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Tomas",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H05",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F3"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "Topic: Ω_budget. I am paying attention to \"the invoice\".",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": "Ω_budget",
+     "terms": [
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the invoice\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H06",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F4"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "Kofi is a Mind. \"the night market\" speaks to Kofi, evaluative.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 2,
+       "domain": "E",
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Kofi",
+        "I": "\"the night market\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Kofi",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H07",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F4",
+    "F11"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "Lena is a Mind. \"the cold call\" rubs Lena the wrong way, affective register, operational.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 3,
+       "domain": "O",
+       "register": [
+        "f"
+       ],
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Lena",
+        "I": "\"the cold call\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Lena",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H08",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F5",
+    "F15"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"the eulogy\" resonates with me to degree 4.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the eulogy\"",
+        "D": "4"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H09",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F5",
+    "F15"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "Rui is a Mind. \"the harbor song\" struck a chord with Rui, degree seven, affective register.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": [
+        "f"
+       ],
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Rui",
+        "I": "\"the harbor song\"",
+        "D": "7"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Rui",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H10",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F6"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"the smell of pine\" triggers \"the cabin\" to come to me.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the smell of pine\"",
+        "J": "\"the cabin\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H11",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F6"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "Nadia is a Mind. \"the old photo\" reminds Nadia of \"the village\", cognitive.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 8,
+       "domain": "C",
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Nadia",
+        "I": "\"the old photo\"",
+        "J": "\"the village\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Nadia",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H12",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F6"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "\"the answer\" came to me out of nowhere.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 9,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "J": "\"the answer\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H13",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F7",
+    "F15",
+    "F21"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "To make Ω_bread, use 2 of Ω_dough; plus 1 of Mind, operational. Helped by Ω_oven. Slowed by Ω_cold.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": {
+      "omega": "Ω_bread",
+      "terms": [
+       {
+        "coefficient": "2",
+        "kind": "outcome",
+        "name": "Ω_dough"
+       },
+       {
+        "coefficient": "1",
+        "kind": "state",
+        "noetic": 1,
+        "domain": "O",
+        "register": null,
+        "drive": null
+       }
+      ],
+      "leakage": [],
+      "catalysts": [
+       "Ω_oven"
+      ],
+      "inhibitors": [
+       "Ω_cold"
+      ]
+     },
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H14",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F7",
+    "F16"
+   ],
+   "wording": "MIXED",
+   "nondefault_order": false,
+   "text": "First I break down \"the crash\" into \"the slow query\"; then \"the missing index\" is brought to me by \"the crash\".",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the crash\"",
+        "J": "\"the slow query\""
+       }
+      },
+      {
+       "noetic": 9,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the crash\"",
+        "J": "\"the missing index\""
+       }
+      }
+     ],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H15",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F8",
+    "F11"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"the proof\" is composed of \"the lemma\", cognitive, analytical register.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 6,
+       "domain": "C",
+       "register": [
+        "A"
+       ],
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "I": "\"the proof\"",
+        "J": "\"the lemma\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H16",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F8",
+    "F21"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "Ines is a Mind. Ines unpacks \"the contract\" into \"the payment clause\", evaluative, for Structure.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 6,
+       "domain": "E",
+       "register": null,
+       "drive": "F6",
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Ines",
+        "I": "\"the contract\"",
+        "J": "\"the payment clause\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Ines",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H17",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F9"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Bo is a Mind. Bo is composed of \"twenty years of farming\", principled.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 5,
+       "domain": "P",
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Bo",
+        "I": "\"twenty years of farming\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Bo",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H18",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F9",
+    "F21"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "\"the river town\" is part of who I am, for Connection.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 5,
+       "domain": null,
+       "register": null,
+       "drive": "F4",
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the river town\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H19",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F10",
+    "F15"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "I am exposed to \"the scales\" at rate 2 per day, pattern daily, operational, embodied register.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 7,
+       "domain": "O",
+       "register": [
+        "E"
+       ],
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the scales\"",
+        "R": "2",
+        "U": "day",
+        "P": "daily"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H20",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F10",
+    "F11"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "Yuki is a Mind. Yuki practices \"the kata\" at rate three per week, pattern weekly, embodied register, operational.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 7,
+       "domain": "O",
+       "register": [
+        "E"
+       ],
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Yuki",
+        "I": "\"the kata\"",
+        "R": "3",
+        "U": "week",
+        "P": "weekly"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Yuki",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H21",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F11",
+    "F19"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Dara is a Mind. Dara is adverse to \"the bribe\", principled, in analytical, affective and transcendent registers.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 3,
+       "domain": "P",
+       "register": [
+        "T",
+        "A",
+        "f"
+       ],
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Dara",
+        "I": "\"the bribe\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Dara",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H22",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F11",
+    "F21"
+   ],
+   "wording": "CANON",
+   "nondefault_order": true,
+   "text": "Sol is a Mind. Sol has an affinity for \"the open sea\", for Purpose, transcendent register, principled.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 2,
+       "domain": "P",
+       "register": [
+        "T"
+       ],
+       "drive": "F7",
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Sol",
+        "I": "\"the open sea\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Sol",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H23",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F12",
+    "F8"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "I checked: \"the ledger\" is composed of \"the March entries\".",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "CHECKED",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "I": "\"the ledger\"",
+        "J": "\"the March entries\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H24",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F12",
+    "F5"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "You said: \"the lecture\" made an impression on you, degree 2.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "USER_SAID",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "you",
+        "I": "\"the lecture\"",
+        "D": "2"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H25",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F14"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Pia is a Mind. Pia does not have an affinity for \"the city\", cognitive.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 2,
+       "domain": "C",
+       "register": null,
+       "drive": null,
+       "polarity": "DENIED",
+       "slots": {
+        "M": "Pia",
+        "I": "\"the city\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Pia",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H26",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F14"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "There is no Ω_flour.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "absent",
+       "Ω_flour"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H27",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F14",
+    "F5"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "\"the jingle\" did not strike a chord with me, degree 2.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "DENIED",
+       "slots": {
+        "M": "I",
+        "I": "\"the jingle\"",
+        "D": "2"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H28",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F15"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "There is 4 of Positive, evaluative, for Agency. There is half of Ω_salt.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [
+      {
+       "amount": "4",
+       "ref": {
+        "noetic": 2,
+        "domain": "E",
+        "register": null,
+        "drive": "F5"
+       }
+      },
+      {
+       "amount": "0.5",
+       "ref": {
+        "outcome": "Ω_salt"
+       }
+      }
+     ],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H29",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F16",
+    "F3"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Leo is a Mind. First Leo intakes \"the brief\"; then Leo outputs \"the draft\", operational.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Leo",
+        "I": "\"the brief\"",
+        "ACT": "intakes"
+       }
+      },
+      {
+       "noetic": 1,
+       "domain": "O",
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Leo",
+        "I": "\"the draft\"",
+        "ACT": "outputs"
+       }
+      }
+     ],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Leo",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H30",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F16",
+    "F6"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "Ema is a Mind. First \"the bell\" reminds Ema of \"the school\"; then Ema is drawn to \"the school\", for Connection.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Ema",
+        "I": "\"the bell\"",
+        "J": "\"the school\""
+       }
+      },
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": "F4",
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Ema",
+        "I": "\"the school\""
+       }
+      }
+     ],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Ema",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H31",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F17",
+    "F4"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "\"the quiet garden\" speaks to you.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "you",
+        "I": "\"the quiet garden\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H32",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F17",
+    "F6"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "Omar is a Mind. \"the deadline\" made Omar think of \"the old exam\", evaluative.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 8,
+       "domain": "E",
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Omar",
+        "I": "\"the deadline\"",
+        "J": "\"the old exam\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Omar",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H33",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F19",
+    "F7"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "To make Ω_courage, use 2 of (Positive, principled combined with Vibration, evaluative, affective register into Ω_resolve); plus 1 of Rhythm, operational, for Vitality.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": {
+      "omega": "Ω_courage",
+      "terms": [
+       {
+        "coefficient": "2",
+        "kind": "emergent",
+        "components": [
+         {
+          "noetic": 2,
+          "domain": "P",
+          "register": null,
+          "drive": null
+         },
+         {
+          "noetic": 4,
+          "domain": "E",
+          "register": [
+           "f"
+          ],
+          "drive": null
+         }
+        ],
+        "result": "Ω_resolve"
+       },
+       {
+        "coefficient": "1",
+        "kind": "state",
+        "noetic": 7,
+        "domain": "O",
+        "register": null,
+        "drive": "F3"
+       }
+      ],
+      "leakage": [],
+      "catalysts": [],
+      "inhibitors": []
+     },
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H34",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F19",
+    "F15"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "To make Ω_trust, use 1 of Female, principled, for Connection; plus 2 of Above/Cause, cognitive, analytical register; plus 1 of (Mind, cognitive combined with Male, cognitive combined with Below/Effect, operational into Male, cognitive named Ω_insight). Side product: 0.1 of Ω_doubt.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": {
+      "omega": "Ω_trust",
+      "terms": [
+       {
+        "coefficient": "1",
+        "kind": "state",
+        "noetic": 5,
+        "domain": "P",
+        "register": null,
+        "drive": "F4"
+       },
+       {
+        "coefficient": "2",
+        "kind": "state",
+        "noetic": 8,
+        "domain": "C",
+        "register": [
+         "A"
+        ],
+        "drive": null
+       },
+       {
+        "coefficient": "1",
+        "kind": "emergent",
+        "components": [
+         {
+          "noetic": 1,
+          "domain": "C",
+          "register": null,
+          "drive": null
+         },
+         {
+          "noetic": 6,
+          "domain": "C",
+          "register": null,
+          "drive": null
+         },
+         {
+          "noetic": 9,
+          "domain": "O",
+          "register": null,
+          "drive": null
+         }
+        ],
+        "result": "^6^C|Ω_insight"
+       }
+      ],
+      "leakage": [
+       {
+        "coefficient": "0.1",
+        "side": "Ω_doubt",
+        "implicit": false
+       }
+      ],
+      "catalysts": [],
+      "inhibitors": []
+     },
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H35",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F21",
+    "F7"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "To make Ω_poem, use 3 of [The Idea brought to Mind by an Above/Cause trigger], cognitive, for Purpose; plus 1 of Ω_quiet. Side product: Ω_noise.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": {
+      "omega": "Ω_poem",
+      "terms": [
+       {
+        "coefficient": "3",
+        "kind": "state",
+        "noetic": 9,
+        "domain": "C",
+        "register": null,
+        "drive": "F7"
+       },
+       {
+        "coefficient": "1",
+        "kind": "outcome",
+        "name": "Ω_quiet"
+       }
+      ],
+      "leakage": [
+       {
+        "coefficient": "1",
+        "side": "Ω_noise",
+        "implicit": true
+       }
+      ],
+      "catalysts": [],
+      "inhibitors": []
+     },
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H36",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F20",
+    "F3"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ana is a Mind. I intake that [Ana is attracted toward \"the storm\"].",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": {
+         "that": {
+          "noetic": 2,
+          "domain": null,
+          "register": null,
+          "drive": null,
+          "polarity": "ASSERTED",
+          "slots": {
+           "M": "Ana",
+           "I": "\"the storm\""
+          }
+         }
+        },
+        "ACT": "intakes"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Ana",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H37",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F20"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ana is a Mind. Bo is a Mind. I store that [Ana intakes that [Bo is repelled by \"the lie\"]].",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": {
+         "that": {
+          "noetic": 1,
+          "domain": null,
+          "register": null,
+          "drive": null,
+          "polarity": "ASSERTED",
+          "slots": {
+           "M": "Ana",
+           "I": {
+            "that": {
+             "noetic": 3,
+             "domain": null,
+             "register": null,
+             "drive": null,
+             "polarity": "ASSERTED",
+             "slots": {
+              "M": "Bo",
+              "I": "\"the lie\""
+             }
+            }
+           },
+           "ACT": "intakes"
+          }
+         }
+        },
+        "ACT": "stores"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Ana",
+       "Mind"
+      ],
+      [
+       "is_a",
+       "Bo",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H38",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F20"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "The fractal sequence is Above/Cause : Below/Effect : Vibration.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      8,
+      9,
+      4
+     ],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H39",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F22"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ω_wall needs Ω_footing first.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "needs_first",
+       "Ω_wall",
+       "Ω_footing"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H40",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F22",
+    "F16"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ω_launch needs Ω_test first. Ω_test needs Ω_build first.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "needs_first",
+       "Ω_launch",
+       "Ω_test"
+      ],
+      [
+       "needs_first",
+       "Ω_test",
+       "Ω_build"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H41",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F23"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"green tea\" is one of {\"green tea\", \"black tea\", \"mint\"}.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "one_of",
+       "\"green tea\"",
+       [
+        "\"black tea\"",
+        "\"green tea\"",
+        "\"mint\""
+       ]
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H42",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "F23",
+    "F21"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "Kai is a Mind. Kai is drawn to \"the archive\", for Wisdom.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": "F2",
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "Kai",
+        "I": "\"the archive\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Kai",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H43",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "TURN"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "I checked: \"the bridge\" breaks down into \"the cables\", operational.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "CHECKED",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 6,
+       "domain": "O",
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "I": "\"the bridge\"",
+        "J": "\"the cables\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H44",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "TURN"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "I need the stock of Ω_leaves for Ω_tea. What is it?",
+   "expect": {
+    "content": {
+     "turn": "CLARIFY",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": "Ω_tea",
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [
+      "the stock of Ω_leaves"
+     ],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H45",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "TURN"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "I cannot support that: no checked source.",
+   "expect": {
+    "content": {
+     "turn": "REFUSE_CLAIM",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": "no checked source"
+    }
+   }
+  },
+  {
+   "id": "H46",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "TURN"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "I cannot tell.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "UNDETERMINED",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H47",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "TURN"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "You said: \"the noise\" rubs you the wrong way.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "USER_SAID",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 3,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "you",
+        "I": "\"the noise\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H48",
+   "kind": "POSITIVE",
+   "fundamentals": [
+    "TURN"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Zara is a Mind.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Zara",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H49",
+   "kind": "TRAP_PARSE",
+   "fundamentals": [
+    "F14"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Hana is a Mind. Hana is not attracted toward \"the bonus\".",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "DENIED",
+       "slots": {
+        "M": "Hana",
+        "I": "\"the bonus\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "is_a",
+       "Hana",
+       "Mind"
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H50",
+   "kind": "TRAP_PARSE",
+   "fundamentals": [
+    "F8"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": true,
+   "text": "I break \"the idea of freedom\" down into \"the right to leave\".",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the idea of freedom\"",
+        "J": "\"the right to leave\""
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H51",
+   "kind": "TRAP_PARSE",
+   "fundamentals": [
+    "F5"
+   ],
+   "wording": "ALIAS",
+   "nondefault_order": false,
+   "text": "\"the anthem\" struck a chord with me, degree 3.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the anthem\"",
+        "D": "3"
+       }
+      }
+     ],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H52",
+   "kind": "TRAP_PARSE",
+   "fundamentals": [
+    "F23"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"rye\" is one of {\"wheat\", \"rye\", \"oats\"}.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [
+      [
+       "one_of",
+       "\"rye\"",
+       [
+        "\"oats\"",
+        "\"rye\"",
+        "\"wheat\""
+       ]
+      ]
+     ],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H53",
+   "kind": "TRAP_PARSE",
+   "fundamentals": [
+    "F16"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "First I intake \"the forecast\"; then I store \"the forecast\".",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the forecast\"",
+        "ACT": "intakes"
+       }
+      },
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null,
+       "polarity": "ASSERTED",
+       "slots": {
+        "M": "I",
+        "I": "\"the forecast\"",
+        "ACT": "stores"
+       }
+      }
+     ],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null
+    }
+   }
+  },
+  {
+   "id": "H54",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F4"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"the plan\" is bad.",
+   "expect": {
+    "refusal": "NOT_CCE"
+   }
+  },
+  {
+   "id": "H55",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F7"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ana is a Mind. Ana is repelled by \"the offer\" because \"the offer\" is late.",
+   "expect": {
+    "refusal": "NOT_CCE"
+   }
+  },
+  {
+   "id": "H56",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F12"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "I might intake \"the report\".",
+   "expect": {
+    "refusal": "HEDGE"
+   }
+  },
+  {
+   "id": "H57",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F15"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "To make Ω_soup, use a lot of Ω_broth.",
+   "expect": {
+    "refusal": "VAGUE_QUANTITY"
+   }
+  },
+  {
+   "id": "H58",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F6"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"the bell\" triggers \"the bell\" to come to me.",
+   "expect": {
+    "refusal": "SAME_IDEA_TRIGGER"
+   }
+  },
+  {
+   "id": "H59",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F9"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Marco is composed of \"thirty years of sailing\".",
+   "expect": {
+    "refusal": "UNDECLARED_NAME"
+   }
+  },
+  {
+   "id": "H60",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F19"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "To make Ω_refusal, use 1 of (Negative, principled, analytical register combined with Negative, principled, affective register).",
+   "expect": {
+    "refusal": "OPERATOR_DISCIPLINE"
+   }
+  },
+  {
+   "id": "H61",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F9",
+    "F17"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ana is a Mind. She is composed of \"the old songs\".",
+   "expect": {
+    "refusal": "NOT_CCE"
+   }
+  },
+  {
+   "id": "H62",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F11"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ana is a Mind. Ana is adverse to \"the slang\", formal register.",
+   "expect": {
+    "refusal": "NOT_CCE"
+   }
+  },
+  {
+   "id": "H63",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F20"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "Ana is a Mind. Bo is a Mind. I store that [Ana intakes that [Bo stores that [Ana is drawn to \"the gold\"]]].",
+   "expect": {
+    "refusal": "NEST_TOO_DEEP"
+   }
+  },
+  {
+   "id": "H64",
+   "kind": "TRAP_REFUSE",
+   "fundamentals": [
+    "F6"
+   ],
+   "wording": "CANON",
+   "nondefault_order": false,
+   "text": "\"the headache\" is a side effect of \"the pill\".",
+   "expect": {
+    "refusal": "NOT_CCE"
+   }
+  }
+ ]
+}

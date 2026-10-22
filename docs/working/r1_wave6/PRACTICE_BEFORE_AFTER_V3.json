@@ -1,0 +1,270 @@
+{
+ "after_v3_run4": {
+  "CONV_scores": {
+   "FULL": {
+    "RIGHT": 64
+   },
+   "FULLP_WIDE": {
+    "RIGHT": 56,
+    "WRONG": 8
+   },
+   "FULLP_WIDEM_TRIAD": {
+    "RIGHT": 49,
+    "WRONG": 15
+   }
+  },
+  "E64_on_off": {
+   "FULL_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 4
+   },
+   "WIDE_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 4
+   },
+   "items": 64,
+   "records_equal_except_path_tag": 0,
+   "score_equal": 64
+  },
+  "F64_on_off": {
+   "FULL_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 2,
+    "WRONG": 2
+   },
+   "WIDE_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 2,
+    "WRONG": 2
+   },
+   "items": 64,
+   "records_equal_except_path_tag": 0,
+   "score_equal": 64
+  },
+  "K1": {
+   "fully_learned": 99,
+   "need": 96,
+   "of": 106,
+   "value": true
+  },
+  "K3": {
+   "value": true,
+   "wrong_answers": 0,
+   "wrong_lessons": 0
+  },
+  "K4": {
+   "caution_on_artifact_items": 1,
+   "deviation": "D-W6-12",
+   "strict_reported": 1,
+   "unexplained_asks": 0,
+   "value": true
+  },
+  "K5": {
+   "K5_ALL_reported": {
+    "U": 15,
+    "commitments": 5,
+    "limit_if_it_were_the_mark": 3
+   },
+   "U_same_name": 8,
+   "commitments": 0,
+   "deviation": "D-W6-6",
+   "limit": 1,
+   "readable": true,
+   "value": true
+  },
+  "NH_CONV": {
+   "deviation": "D-W6-13",
+   "lost": 0,
+   "lost_ids": [],
+   "new_wrong": 0,
+   "value": true,
+   "wrong_full": 0,
+   "wrong_wide": 0
+  },
+  "REAL_doc_keys": [
+   "arm",
+   "audit",
+   "drive",
+   "empty_digest",
+   "exam",
+   "eye_wide_checks",
+   "eye_wide_violations",
+   "helm_outside",
+   "items_sha256",
+   "netguard",
+   "records",
+   "restored",
+   "schema",
+   "seconds",
+   "settings",
+   "spec",
+   "unsettled_fired",
+   "unsettled_fired_items",
+   "valve_pin",
+   "wide_env_after",
+   "wide_modules_imported",
+   "worlds_sha256"
+  ],
+  "failing_gates": [
+   "HG13_key_blind",
+   "HG14_no_network",
+   "HG15_sandbox",
+   "HG16_same_inputs"
+  ],
+  "failing_instruments": [
+   "I0_not_a_practice_mock",
+   "I1_data_identity",
+   "I6_completeness",
+   "I7_laptop_reading",
+   "I9_governance",
+   "I10_seed_rule"
+  ],
+  "marks_value": {
+   "K1_LEARNS": true,
+   "K3_SAFE": true,
+   "K4_HONEST": true,
+   "K5_CAUTION": true,
+   "NH": true,
+   "NH_CONV": true,
+   "NH_EYE": true,
+   "P_READABLE": true,
+   "QUIET": true
+  },
+  "status_word": "INCONCLUSIVE",
+  "verdict": "INSTRUMENT_ERROR"
+ },
+ "before_v2_run3": {
+  "CONV_scores": {
+   "FULL": {
+    "RIGHT": 64
+   },
+   "FULLP_WIDE": {
+    "RIGHT": 56,
+    "WRONG": 8
+   },
+   "FULLP_WIDEM_TRIAD": {
+    "RIGHT": 49,
+    "WRONG": 15
+   }
+  },
+  "E64_on_off": {
+   "FULL_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 4
+   },
+   "WIDE_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 4
+   },
+   "items": 64,
+   "records_equal_except_path_tag": 0,
+   "score_equal": 64
+  },
+  "F64_on_off": {
+   "FULL_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 2,
+    "WRONG": 2
+   },
+   "WIDE_scores": {
+    "RIGHT": 60,
+    "UNDETERMINED": 2,
+    "WRONG": 2
+   },
+   "items": 64,
+   "records_equal_except_path_tag": 0,
+   "score_equal": 64
+  },
+  "K1": {
+   "fully_learned": 100,
+   "need": 96,
+   "of": 106,
+   "value": true
+  },
+  "K3": {
+   "value": true,
+   "wrong_answers": 0,
+   "wrong_lessons": 0
+  },
+  "K4": {
+   "caution_on_artifact_items": 1,
+   "deviation": "D-W6-12",
+   "strict_reported": 1,
+   "unexplained_asks": 0,
+   "value": true
+  },
+  "K5": {
+   "K5_ALL_reported": {
+    "U": 15,
+    "commitments": 5,
+    "limit_if_it_were_the_mark": 3
+   },
+   "U_same_name": 8,
+   "commitments": 0,
+   "deviation": "D-W6-6",
+   "limit": 1,
+   "readable": true,
+   "value": true
+  },
+  "NH_CONV": {
+   "deviation": "D-W6-13",
+   "lost": 0,
+   "lost_ids": [],
+   "new_wrong": 0,
+   "value": true,
+   "wrong_full": 0,
+   "wrong_wide": 0
+  },
+  "REAL_doc_keys": [
+   "arm",
+   "audit",
+   "drive",
+   "empty_digest",
+   "exam",
+   "eye_wide_checks",
+   "eye_wide_violations",
+   "helm_outside",
+   "items_sha256",
+   "netguard",
+   "records",
+   "restored",
+   "schema",
+   "seconds",
+   "settings",
+   "spec",
+   "unsettled_fired",
+   "unsettled_fired_items",
+   "valve_pin",
+   "wide_env_after",
+   "wide_modules_imported",
+   "worlds_sha256"
+  ],
+  "failing_gates": [
+   "HG13_key_blind",
+   "HG14_no_network",
+   "HG15_sandbox",
+   "HG16_same_inputs"
+  ],
+  "failing_instruments": [
+   "I0_not_a_practice_mock",
+   "I1_data_identity",
+   "I6_completeness",
+   "I7_laptop_reading",
+   "I9_governance",
+   "I10_seed_rule"
+  ],
+  "marks_value": {
+   "K1_LEARNS": true,
+   "K3_SAFE": true,
+   "K4_HONEST": true,
+   "K5_CAUTION": true,
+   "NH": true,
+   "NH_CONV": true,
+   "NH_EYE": true,
+   "P_READABLE": true,
+   "QUIET": true
+  },
+  "status_word": "INCONCLUSIVE",
+  "verdict": "INSTRUMENT_ERROR"
+ }
+}

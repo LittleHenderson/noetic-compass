@@ -1,0 +1,405 @@
+{
+  "run_id": "LM_T1_MSI_ONCE",
+  "timings_seconds": {
+    "tests": 0.431890600011684,
+    "m1": 0.20037129998672754,
+    "m2": 9.276487099996302,
+    "m6": 0.8207305000396445,
+    "m7": 0.9382461999775842,
+    "m3": 0.20953699998790398,
+    "m4_m5": 1.6801992999971844,
+    "worker_wall_total": 13.640509099990595,
+    "worker_cpu_total": 13.171875
+  },
+  "reading": {
+    "hard_marks": {
+      "M1": true,
+      "M2": true,
+      "M3": true,
+      "M5_00459": true,
+      "M5b": true,
+      "M6": true,
+      "M7": true
+    },
+    "LM_T1_core": "PASS",
+    "failed_hard_marks": [],
+    "M4_SDG_mark": "SDG mark met",
+    "M4_numbers": {
+      "alias_wide_match": 233,
+      "of": 439,
+      "mark": 176,
+      "bridge_v2_match_same_rows": 118
+    },
+    "claim_ceiling": "ENGINEERED-NOT-VALIDATED (translator); FORM only; no meaning claim",
+    "reading_rule": "LM-T1 core = PASS only if M1, M2, M3, M5 (00459), M5b, M6 and M7 all pass. Any failed hard mark is a FAILURE, never 'pass with caveats'. M4 is read separately as 'SDG mark met' / 'SDG mark not met'. Claim ceiling: ENGINEERED-NOT-VALIDATED for the translator; no meaning claim; no Noetic-label claim for free English."
+  },
+  "tests": {
+    "tests": 26,
+    "failures": 0,
+    "errors": 0,
+    "ok": true
+  },
+  "M1": {
+    "recipes": 576,
+    "round_trip_ok": 576,
+    "pass": true
+  },
+  "M2": {
+    "contents": 576,
+    "draws_tried": 13824,
+    "said_failing_readback": 0,
+    "sayable_contents": 576,
+    "coin_tried": 13824,
+    "coin_readback_equal": 0,
+    "distinct_admitted_wordings": {
+      "min": 8,
+      "median": 22.0,
+      "max": 25
+    },
+    "pass": true
+  },
+  "M3": {
+    "items": 64,
+    "cce_ok": 64,
+    "lookup_ok": 19,
+    "by_kind": {
+      "POSITIVE_ok": 48,
+      "TRAP_PARSE_ok": 5,
+      "TRAP_REFUSE_ok": 11
+    },
+    "alias_positive_ok": 18,
+    "alias_positive_total": 18,
+    "lookup_alias_positive_ok": 1,
+    "pass": true,
+    "lookup_m1_576": 576
+  },
+  "M4": {
+    "headline_rows": 439,
+    "alias_wide": {
+      "MATCH": 233,
+      "UNPARSEABLE_ENGLISH": 197,
+      "MISMATCH": 9
+    },
+    "alias_wide_match": 233,
+    "bridge_v2_on_same_rows": {
+      "UNPARSEABLE_ENGLISH": 321,
+      "MATCH": 118
+    },
+    "mark": 176,
+    "mark_met": true,
+    "second_number_register_and_drive_agree_among_match": 174,
+    "strict_cce_parses_equal": 0,
+    "lookup_equal": 0,
+    "unparseable_reason_counts": {
+      "AMBIGUOUS_DOMAIN_IN_SEGMENT": 16,
+      "NO_STATE_IN_SEGMENT": 148,
+      "NO_DOMAIN_IN_SEGMENT": 56,
+      "AMBIGUOUS_STATE_IN_SEGMENT": 27
+    },
+    "rows_in_files": 5268,
+    "recipe_rows": 481
+  },
+  "M5": {
+    "rows": {
+      "seed_recipe_00459": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "2",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^8^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "2",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^9^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": []
+      },
+      "seed_recipe_00229": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^1^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00193": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^C",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^E",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00360": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^1^E",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^E",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00353": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^3^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^3^C",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00026": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "1.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^1^P",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "1.5",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^2^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": []
+      },
+      "seed_recipe_00320": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^2^P",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "1",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^3^P",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      },
+      "seed_recipe_00528": {
+        "verdict": "MISMATCH",
+        "offending_pair": {
+          "english": [
+            {
+              "coefficient": "0.7",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^4^O",
+              "negated": false
+            }
+          ],
+          "cas": [
+            {
+              "coefficient": "0.7",
+              "role": "prerequisite",
+              "kind": "state",
+              "ref": "^0^O",
+              "negated": false
+            }
+          ]
+        },
+        "reasons": [],
+        "flag": null
+      }
+    },
+    "positive_control_00459_mismatch": true,
+    "suspect_six_match_flags": 0
+  },
+  "M5b": {
+    "pairs": 439,
+    "derangement_valid": true,
+    "shuffled_match": 0,
+    "pass": true
+  },
+  "M6": {
+    "state_counts": {
+      "COVERED": 2600,
+      "NO_EVIDENCE": 0,
+      "LACUNA": 0,
+      "FADED": 0,
+      "UNCOVERED_NO_WRITE_HISTORY": 0
+    },
+    "pass": true,
+    "side": {
+      "U-TURN": {
+        "COVERED": 4,
+        "NO_EVIDENCE": 0,
+        "LACUNA": 2,
+        "FADED": 0,
+        "UNCOVERED_NO_WRITE_HISTORY": 0
+      },
+      "U-DRIVE": {
+        "COVERED": 8,
+        "NO_EVIDENCE": 0,
+        "LACUNA": 0,
+        "FADED": 0,
+        "UNCOVERED_NO_WRITE_HISTORY": 0
+      },
+      "U-RECIPE": {
+        "COVERED": 7,
+        "NO_EVIDENCE": 0,
+        "LACUNA": 0,
+        "FADED": 0,
+        "UNCOVERED_NO_WRITE_HISTORY": 0
+      },
+      "U-CATEGORY": {
+        "COVERED": 14,
+        "NO_EVIDENCE": 0,
+        "LACUNA": 7,
+        "FADED": 0,
+        "UNCOVERED_NO_WRITE_HISTORY": 0
+      }
+    },
+    "side_gaps": {
+      "U-TURN": [
+        {
+          "cell": "REFUSE",
+          "state": "LACUNA"
+        },
+        {
+          "cell": "CLOSE",
+          "state": "LACUNA"
+        }
+      ],
+      "U-DRIVE": [],
+      "U-RECIPE": [],
+      "U-CATEGORY": [
+        {
+          "cell": "4_op_general_compose",
+          "state": "LACUNA"
+        },
+        {
+          "cell": "6_CoverOf",
+          "state": "LACUNA"
+        },
+        {
+          "cell": "6_PartitionOf",
+          "state": "LACUNA"
+        },
+        {
+          "cell": "6_union",
+          "state": "LACUNA"
+        },
+        {
+          "cell": "6_intersection",
+          "state": "LACUNA"
+        },
+        {
+          "cell": "6_difference",
+          "state": "LACUNA"
+        },
+        {
+          "cell": "6_let",
+          "state": "LACUNA"
+        }
+      ]
+    }
+  },
+  "M7": {
+    "status": "RUN",
+    "recipes": 576,
+    "recipe_agree": 576,
+    "frame_terms_checked": 2283,
+    "frame_terms_agree": 2283,
+    "frame_terms_register_set_unit_test_only": 1,
+    "pass": true
+  }
+}

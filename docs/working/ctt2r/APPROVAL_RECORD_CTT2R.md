@@ -1,0 +1,17 @@
+# APPROVAL RECORD — CTT-2R (written by program; quotes the owner, not an owner signature)
+
+| Field | Value |
+|---|---|
+| Test | CTT-2R ACCEPT-2 rule-only test on the c45 weights |
+| Owner line (pinned bytes, cut by program) | `CTT RULE TEST at 1.50 USD` |
+| Bytes / sha256 | 25 / `0ed5828323f6fa100eb7287000ca454602ead9b1547bfc09d52862d5efa1a193` |
+| Source | Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md, the line beginning '## Owner words (2026-10-19 night, verbatim): ', the bytes inside its first quoted span |
+| Source line sha256 | `8f17d1827a63bf1408fd5a27e6ce261b2fe9bf7794af07972c76390bf69c7206` |
+| Package zip | `HELM_CTT2R_20261019_SOURCE_CTT2R.zip` |
+| Zip sha256 | `d97a16d6683b41037b51d028bcc4776be86ae1db66b117bd2af0126bab6159b6` |
+| Freeze sha256 | `26367200c4d56a9698b87dfadbc2173068e0a6a9ad9c2962b41917d5d397f50d` |
+| Cap | 1.50 USD |
+| Attempts | one scored attempt + one plumbing retry |
+| Seed source | `c0230aa3e579536d03f9ba25d618c8dc61398963a30b986ea560f80284c1dc8c` |
+| Seed rule | sha256(UTF-8(owner_line_verbatim + ':' + package_zip_sha256)); recomputed by the custodian and by the frozen reader |
+| Coordinator mapping | CTT-2 rule-only test (stricter acceptance rule ACCEPT-2 on the existing c45 weights; design ctt2_design_v1 with its five picks: RULE FIRST, BOTH KITCHEN AND REAL, ALL THREE AGREE, KITCHEN ONLY NOW, NEW LLM POOL / HUMAN WHEN READY): cap 1.50 USD, one attempt + one plumbing retry; approval = the pinned owner bytes + the sealed zip sha256; seed = sha256(line + ':' + zip sha256). The confident-wrong cap of 2 is NOT raised (coordinator answer: the cap counts plausible wrong readings put in front of the user; the fix is the agreement rule, not a looser cap). |

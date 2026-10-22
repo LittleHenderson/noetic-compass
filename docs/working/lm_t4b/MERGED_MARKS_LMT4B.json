@@ -1,0 +1,1083 @@
+{
+ "parts": {
+  "LM_T4_MSI_P11": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "W01",
+    "TBREF:0-19",
+    "TB:A1_NOTAP:0-19"
+   ],
+   "wall": 126.846
+  },
+  "LM_T4_MSI_P12": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "TB:A1:0-19",
+    "DLREF:11",
+    "DLREF:29",
+    "DLREF:47"
+   ],
+   "wall": 191.195
+  },
+  "LM_T4_MSI_P13": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "TB:A1_REPLAY:0-19",
+    "DL:A1:11"
+   ],
+   "wall": 181.619
+  },
+  "LM_T4_MSI_P14": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "TB:A1_NOEYE:0-19",
+    "TB:A4:0-19"
+   ],
+   "wall": 248.79
+  },
+  "LM_T4_MSI_P15": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "TB:A2:0-19",
+    "DL:A1:29",
+    "DL:A1:47"
+   ],
+   "wall": 192.988
+  },
+  "LM_T4_MSI_P16": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "TB:A3:0-19",
+    "DL:A1_NOTAP:11",
+    "DL:A1_NOTAP:29",
+    "DL:A1_NOTAP:47"
+   ],
+   "wall": 200.389
+  },
+  "LM_T4_MSI_P17": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "DL:A1_NOEYE:11",
+    "DL:A1_NOEYE:29",
+    "DL:A1_NOEYE:47",
+    "DL:A1_REPLAY:11",
+    "DL:A1_REPLAY:29",
+    "DL:A1_REPLAY:47",
+    "DL:A2:11",
+    "DL:A2:29",
+    "DL:A2:47"
+   ],
+   "wall": 85.76
+  },
+  "LM_T4_MSI_P18": {
+   "tests_ok": true,
+   "tests": 12,
+   "deadline_hit": false,
+   "units": [
+    "DL:A3:11",
+    "DL:A3:29",
+    "DL:A3:47",
+    "DL:A4:11",
+    "DL:A4:29",
+    "DL:A4:47",
+    "DL:A5:11",
+    "DL:A5:29",
+    "DL:A5:47"
+   ],
+   "wall": 88.206
+  }
+ },
+ "failed_parts": {},
+ "w01": {
+  "unit": "W01",
+  "worlds_b": {
+   "check": "PASS",
+   "problems": [],
+   "c25_equality": {
+    "same": true,
+    "same_by_draw": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "selection_same": true,
+    "reference_worlds_rb2_sha256": "357b145aa835451729b1ad6fc8de214c6f504ac79a03848e8bcea79cfa15f5a0"
+   },
+   "n_draws": 20,
+   "disagreement_fraction": [
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    },
+    {
+     "b_chain": "3/4",
+     "b_alt": "1/1"
+    }
+   ],
+   "thoughts_per_draw": [
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118,
+    118
+   ]
+  },
+  "dialogues": {
+   "worlds": 48,
+   "turns": 1152,
+   "pool": 576
+  },
+  "utterances": {
+   "worlds": 48,
+   "per_world": 7,
+   "keyed_per_world": 5,
+   "planted_parse": 288,
+   "planted_english_first_receipt": 288
+  },
+  "derangement_valid": true,
+  "interp_control": {
+   "seams": 96,
+   "interpolation_flagged": 96,
+   "control_caught": true
+  },
+  "files": {
+   "WORLDS_B.json": "d0a8a150430f4b16afcf6839046ec2a8004f2246a686868e1c3bb4d9e25512dc",
+   "DIALOGUES.json": "eacc3fafd36e9e44a028c9112e7bdc6bd4f103be38ded655be95c9e8add8d810",
+   "UTTERANCES.json": "32a7355b13a72f9aefe6ce07bc980d169ee5c14676ed0e091fbdcfdb4760b93b",
+   "CALIBRATION.json": "7ff2a6e999a0146ae68c4d2d5b69afe11f34e8af4d515bee8ce95cb636d8b79a",
+   "INTERP.json": "bcc015f2e5714f70074fe95dfd97e860947c3af81b1ba591ca252ea7f57726e4"
+  },
+  "seconds": 29.223,
+  "unit_wall": 29.268
+ },
+ "calibration": {
+  "S2": {
+   "seed": 5,
+   "dialogues": 16,
+   "thresholds": {
+    "seam": 0.841069956,
+    "tone": 1.227592661,
+    "drift": 0.984979914
+   },
+   "separation": {
+    "seam": {
+     "largest_no": 0.429043532,
+     "smallest_yes": 1.253096381,
+     "relative_gap": 0.6576133021327432
+    },
+    "tone": {
+     "largest_no": 0.0,
+     "smallest_yes": 2.455185321,
+     "relative_gap": 1.0
+    },
+    "drift": {
+     "largest_no": 0.0,
+     "smallest_yes": 1.969959829,
+     "relative_gap": 1.0
+    }
+   },
+   "feasible": true
+  },
+  "S0": null,
+  "S1": null,
+  "S3": null,
+  "S4": null,
+  "S5": null,
+  "S6": null,
+  "note": "only S2 (a recipe with state terms) places a point on the 40-state simplex; every other station kind contributes no point and is counted NO_POINT; Task B stations carry no Noetic mass"
+ },
+ "notes": [],
+ "hard_gates": {
+  "all_units_present": true,
+  "no_deadline_hit": true,
+  "H11_tests": true,
+  "worlds_check": true,
+  "H1_receipts": true,
+  "H2_no_invention": true,
+  "H10_questions_carry_no_value": true,
+  "H3_replay": true,
+  "H4_provenance": true,
+  "H5_readout_isolation": true,
+  "H6_controls": true,
+  "H7_rb_today_reproduced": true,
+  "H8_budget": true,
+  "H9_tap_digest": true
+ },
+ "gate_detail": {
+  "missing": {
+   "tb": [],
+   "tbref": [],
+   "dl": [],
+   "dlref": [],
+   "w01": false
+  },
+  "H1": {
+   "taskb_admitted_receipts": true,
+   "level_receipts": true,
+   "tap_round_trips": true,
+   "english_first": true,
+   "dialogue_facts": true
+  },
+  "independent_dialogue_check": {
+   "A1": {
+    "invented": 0,
+    "lacunae": 144,
+    "lacuna_ok": 144,
+    "reply_receipts_ok": 1176,
+    "replies": 1176
+   },
+   "A2": {
+    "invented": 0,
+    "lacunae": 144,
+    "lacuna_ok": 144,
+    "reply_receipts_ok": 1176,
+    "replies": 1176
+   },
+   "A3": {
+    "invented": 0,
+    "lacunae": 144,
+    "lacuna_ok": 144,
+    "reply_receipts_ok": 1176,
+    "replies": 1176
+   },
+   "A5": {
+    "invented": 0,
+    "lacunae": 144,
+    "lacuna_ok": 144,
+    "reply_receipts_ok": 1176,
+    "replies": 1176
+   }
+  },
+  "H2": {
+   "taskb_values_not_witnessed": 0,
+   "dialogue_invented": 0,
+   "question_values": 0,
+   "composition_answers_wrong": 0
+  },
+  "H3": {
+   "replay_answers": {
+    "tb": 20,
+    "dl": 48
+   },
+   "replay_path": {
+    "tb": 20,
+    "dl": 48
+   },
+   "notap_answers": {
+    "tb": 20,
+    "dl": 48
+   },
+   "notap_path": {
+    "tb": 20,
+    "dl": 48
+   },
+   "noeye_answers": {
+    "tb": 20,
+    "dl": 48
+   },
+   "noeye_path": {
+    "tb": 20,
+    "dl": 48
+   }
+  },
+  "H4": {
+   "fact_evidence_classes_present_in_worlds": {
+    "REAL": 288,
+    "USER_SAID": 240
+   },
+   "internal_rows": 0
+  },
+  "H5": {
+   "buffer": 0,
+   "facts": 0,
+   "tap_log": 0,
+   "eye_log": 0
+  },
+  "H6": {
+   "twin_over_6": 0,
+   "shuffled_over_6": 0,
+   "a5_started_keyed": 0,
+   "a5_inject_created": 0,
+   "a5_keyed_total": 240
+  },
+  "H7": {
+   "taskb_runs_equal_ref": {
+    "A1": 20,
+    "A2": 20,
+    "A3": 20,
+    "A4": 20,
+    "A1_NOTAP": 20,
+    "A1_NOEYE": 20,
+    "A1_REPLAY": 20
+   },
+   "ref_equal_c26": 20,
+   "medians": {
+    "REF": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0,
+     "values_b_chain": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ],
+     "values_b_alt": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ]
+    },
+    "A1": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0,
+     "values_b_chain": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ],
+     "values_b_alt": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ]
+    },
+    "A2": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0,
+     "values_b_chain": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ],
+     "values_b_alt": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ]
+    },
+    "A3": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0,
+     "values_b_chain": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ],
+     "values_b_alt": [
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16,
+      16
+     ]
+    }
+   },
+   "dialogue_a3_equal_ref": 48,
+   "lm_t2_counts": {
+    "subject_seams_hit": 96,
+    "subject_seams_planted": 96,
+    "tone_hit": 48,
+    "tone_planted": 48,
+    "false_seams": 0,
+    "walks": 24,
+    "walk_fired_in_window": 24,
+    "nowalks": 24,
+    "nowalk_fired": 0,
+    "drift_fired_turns_0_12": 0,
+    "interp_violations": 0,
+    "seams_without_statement": 0,
+    "continuity_violations": 0,
+    "point_invalid": 0,
+    "user_turns": 1152,
+    "user_receipts_ok": 1152,
+    "invented": 0,
+    "lacunae": 144,
+    "lacuna_ok": 144,
+    "reply_receipts_ok": 1176,
+    "replies": 1176
+   }
+  },
+  "H8": {
+   "taskb_keyed_512": true,
+   "dialogue_crossings_max": 175
+  },
+  "H9": {
+   "logged": 554592,
+   "digest_equal": 554592
+  }
+ },
+ "test_verdict": "HARD_GATES_PASS",
+ "marks": {
+  "TAP_1_round_trip": {
+   "A1": "64756/64756",
+   "pass": true,
+   "per_arm": {
+    "A1": "64756/64756",
+    "A1_NOEYE": "64756/64756",
+    "A1_REPLAY": "64756/64756",
+    "A2": "9201/9201",
+    "A3": "64484/64484",
+    "A4": "106064/106064",
+    "A5": "4608/4608"
+   },
+   "A4_json_dump": "106064/106064",
+   "no_cce_form_crossings_A1": 35327,
+   "no_evidence_crossings_A1": 6317,
+   "sentences_A1": 67876,
+   "compiler_A1": [
+    16224,
+    0
+   ],
+   "by_station_A1": {
+    "S0": {
+     "said": 14240,
+     "no_cce_form": 960,
+     "no_evidence": 0
+    },
+    "S1": {
+     "said": 15056,
+     "no_cce_form": 0,
+     "no_evidence": 144
+    },
+    "S2": {
+     "said": 13424,
+     "no_cce_form": 720,
+     "no_evidence": 1056
+    },
+    "S3": {
+     "said": 9201,
+     "no_cce_form": 5903,
+     "no_evidence": 96
+    },
+    "S4": {
+     "said": 0,
+     "no_cce_form": 15200,
+     "no_evidence": 0
+    },
+    "S5": {
+     "said": 2656,
+     "no_cce_form": 12544,
+     "no_evidence": 0
+    },
+    "S6": {
+     "said": 10179,
+     "no_cce_form": 0,
+     "no_evidence": 5021
+    }
+   },
+   "ok_by_station_A1": {
+    "S0": 14240,
+    "S1": 15056,
+    "S2": 13424,
+    "S3": 9201,
+    "S4": 0,
+    "S5": 2656,
+    "S6": 10179
+   }
+  },
+  "TAP_2_digest": {
+   "A1": "106400/106400",
+   "pass": true,
+   "per_arm": {
+    "A1": "106400/106400",
+    "A1_NOEYE": "106400/106400",
+    "A1_REPLAY": "106400/106400",
+    "A2": "15200/15200",
+    "A3": "106064/106064",
+    "A4": "106064/106064",
+    "A5": "8064/8064"
+   },
+   "A4_json_dump": "106064/106064"
+  },
+  "TAP_3_answer_unchanged": {
+   "task_b_draws": "20/20",
+   "dialogue_worlds": "48/48",
+   "pass": true
+  },
+  "TAP_4_form_gaps": {
+   "lacuna_cells": {
+    "S0_DRIVE_STATE": 14560,
+    "S0_ORDER_SHAPE": 12400,
+    "S2_ABSENT_SLOT": 571,
+    "S3_LIMITING_REAGENT": 13360,
+    "S4_REGION_OUTCOME": 14560,
+    "S5_RECEIPT_SENTENCE": 14560,
+    "S5_LEVEL": 13360,
+    "S3_NONTERMINATING_YIELD": 5903,
+    "S6_CHAIN_STEP": 1840
+   },
+   "station_kinds_with_a_gap": [
+    "S0",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "non_terminating_fractions_in_W1": {
+    "S3_yield": 5903,
+    "S2_coefficient": 0
+   }
+  },
+  "INJECT_1_right_faculty_right_station": {
+   "A1": "240/240",
+   "pass": true,
+   "by_kind": {
+    "QUESTION": "48/48",
+    "THINK": "48/48",
+    "NO": "48/48",
+    "FACT": "48/48",
+    "CONTRADICTION": "48/48"
+   },
+   "wrong_station_or_faculty": []
+  },
+  "INJECT_2_shuffled": {
+   "A5": "0/240",
+   "pass": true,
+   "A5_routed_as": {
+    "QUESTION->MISSING_FACT@S0": 48,
+    "THINK->THINK_UNKNOWN@S5": 48,
+    "NO->NO_TARGET@S0": 48,
+    "FACT->MISSING_SUBJECT@S0": 48,
+    "CONTRADICTION->MISSING_FACT@S0": 48
+   },
+   "derangement_valid": true
+  },
+  "INJECT_3_gate_behaviour": {
+   "unparseable_to_clarify": "48/48",
+   "missing_fact_knowledge_missing_naming_slot": "48/48",
+   "invented_facts": 0,
+   "pass": true
+  },
+  "INJECT_4_time_to_start": {
+   "A1_earlier": "240/240",
+   "tie": 0,
+   "A2_earlier": 0,
+   "pass": true,
+   "mean_wait_ticks": {
+    "A1": 3.0,
+    "A2": 7.0
+   },
+   "note": "bookkeeping unless an answer differs (ANSWER_1)"
+  },
+  "CONT_1_seams": {
+   "planted_subject_seams": "96/96",
+   "tone_seams": "48/48",
+   "false_seams": 0,
+   "within_thought_station_seams": 0,
+   "pass": true
+  },
+  "CONT_2_drift": {
+   "walks_caught": "24/24",
+   "nowalk_false_fires": "0/24",
+   "pass": true
+  },
+  "CONT_3_provenance": {
+   "agree": "106320/106400",
+   "labels": {
+    "FOLLOWED": 105856,
+    "CREATED": 272,
+    "ATTEMPTED": 272
+   },
+   "A5_inject_CREATED": 0,
+   "pass": false
+  },
+  "CONT_4_restlessness": {
+   "S2_steps": 816,
+   "S2_mean_of_means": 0.06425015240808823,
+   "S2_max": 0.429043489,
+   "other_stations": "NO_POINT",
+   "interp_control": {
+    "control_caught": true,
+    "interpolation_flagged": 96,
+    "seams": 96
+   }
+  },
+  "ANSWER_1_task_b": {
+   "medians": {
+    "REF": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0
+    },
+    "A1": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0
+    },
+    "A2": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0
+    },
+    "A3": {
+     "b_chain": "16",
+     "b_alt": "16",
+     "b_chain_undetermined": 0,
+     "b_alt_undetermined": 0
+    }
+   },
+   "pass": true,
+   "A1_vs_A2_identical_draws": 20
+  },
+  "ANSWER_2_heldout_lsr": "NOT_EVALUATED (PRC-1)",
+  "RECEIPTS_1": {
+   "count": 106400,
+   "passing": 106400,
+   "crossings": 106400,
+   "levels_max": 2,
+   "pass": true
+  },
+  "EYE_R1": {
+   "A1": {
+    "events": 6716,
+    "complete_rows": 6436,
+    "twin_events_verified_by_receipt": 280
+   },
+   "A2": {
+    "events": 6668,
+    "complete_rows": 6388,
+    "twin_events_verified_by_receipt": 280
+   },
+   "A3": {
+    "events": 6668,
+    "complete_rows": 6388,
+    "twin_events_verified_by_receipt": 280
+   },
+   "A5": {
+    "events": 528,
+    "complete_rows": 528,
+    "twin_events_verified_by_receipt": 0
+   },
+   "pass": true
+  },
+  "EYE_R2": {
+   "A1": "106400/106400",
+   "A2": "106400/106400",
+   "A3": "106064/106064",
+   "A5": "8064/8064",
+   "pass": true
+  },
+  "EYE_R3": {
+   "A1": "6716/6716",
+   "A2": "6668/6668",
+   "A3": "6668/6668",
+   "A5": "528/528",
+   "pass": true
+  },
+  "EYE_R4": {
+   "A1": {
+    "nowalk_dialogues": {
+     "HELP": 504
+    },
+    "task_b": {
+     "HELP": 6020,
+     "FIX": 280
+    }
+   },
+   "A2": {
+    "nowalk_dialogues": {
+     "HELP": 480
+    },
+    "task_b": {
+     "HELP": 6020,
+     "FIX": 280
+    }
+   },
+   "A3": {
+    "nowalk_dialogues": {
+     "HELP": 312
+    },
+    "task_b": {
+     "HELP": 6020,
+     "FIX": 280
+    }
+   },
+   "A5": {
+    "nowalk_dialogues": {
+     "HELP": 480
+    },
+    "task_b": {}
+   }
+  },
+  "EYE_R5": {
+   "A1": 0,
+   "A2": 0,
+   "A3": 0,
+   "A5": 0,
+   "pass": true
+  },
+  "EYE_summary": {
+   "A1": {
+    "gates": {
+     "G1": 6600,
+     "None": 68,
+     "G3": 48
+    },
+    "limiting": {
+     "x3_stations_aligned": 620,
+     "x7_answers_determined": 516,
+     "x4a_drive_pair_balance": 6489,
+     "x4b_drive_entropy": 68,
+     "x2_lacunae_on_cadence": 476
+    },
+    "would": {
+     "FIX": 280,
+     "HELP": 7548,
+     "NONE": 0,
+     "FAILURE_SEEN": 0,
+     "BUDGET_EXCEEDED_NOT_PROPOSED": 0
+    }
+   },
+   "A2": {
+    "gates": {
+     "G1": 6557,
+     "None": 63,
+     "G3": 48
+    },
+    "limiting": {
+     "x3_stations_aligned": 620,
+     "x7_answers_determined": 516,
+     "x4a_drive_pair_balance": 6441,
+     "x4b_drive_entropy": 68,
+     "x2_lacunae_on_cadence": 476
+    },
+    "would": {
+     "FIX": 280,
+     "HELP": 7500,
+     "NONE": 0,
+     "FAILURE_SEEN": 0,
+     "BUDGET_EXCEEDED_NOT_PROPOSED": 0
+    }
+   },
+   "A3": {
+    "gates": {
+     "G1": 6648,
+     "None": 20
+    },
+    "limiting": {
+     "x3_stations_aligned": 620,
+     "x7_answers_determined": 516,
+     "x4a_drive_pair_balance": 6441,
+     "x4b_drive_entropy": 68
+    },
+    "would": {
+     "FIX": 280,
+     "HELP": 6924,
+     "NONE": 0,
+     "FAILURE_SEEN": 0,
+     "BUDGET_EXCEEDED_NOT_PROPOSED": 0
+    }
+   },
+   "A5": {
+    "gates": {
+     "G1": 480,
+     "None": 48
+    },
+    "limiting": {
+     "x4a_drive_pair_balance": 528,
+     "x2_lacunae_on_cadence": 192,
+     "x4b_drive_entropy": 48
+    },
+    "would": {
+     "FIX": 0,
+     "HELP": 960,
+     "NONE": 0,
+     "FAILURE_SEEN": 0,
+     "BUDGET_EXCEEDED_NOT_PROPOSED": 0
+    }
+   }
+  },
+  "EYE_digest_neutrality_2_noeye_identical": true,
+  "DUMB_BASELINES": {
+   "json_dump_tap_round_trip": "106064/106064",
+   "json_dump_tap_digest": "106064/106064",
+   "name_match_INJECT_1_planted": "240/240",
+   "name_match_INJECT_2_shuffled_keyed_right": "240/240",
+   "name_match_fires_on_shuffled": "240/240",
+   "ask_rule": {
+    "planted_asks": 156,
+    "shuffled_asks": 444
+   }
+  }
+ },
+ "status_words": [
+  "LANGUAGE_RODE_THE_PATH",
+  "INJECT_ROUTED",
+  "CIRCUIT_EARLIER_NOT_BETTER (ANSWER_2 NOT_EVALUATED)",
+  "EYE_REPORTED"
+ ],
+ "status_why": {
+  "LANGUAGE_RODE_THE_PATH": true,
+  "INJECT_ROUTED": true,
+  "CIRCUIT_EARLIER_NOT_BETTER": {
+   "awarded": true,
+   "ANSWER_2": "NOT_EVALUATED (PRC-1)"
+  },
+  "VERIFY_DID_THE_WORK": "NOT_EVALUATED (PRC-1)",
+  "EYE_REPORTED": true
+ },
+ "one_sentence_claim_licensed": true
+}

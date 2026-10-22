@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELM Data Lineage</title>
+<meta name="description" content="Generators, pinned public sources, custody and the outside-material rule.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin:14px 0}
+.chat .meta{font-size:12.5px;color:var(--ink-3);margin-bottom:8px;overflow-wrap:anywhere}
+.chat .meta code{font-size:11.5px}
+.msg{display:flex;flex-direction:column;max-width:88%;margin:6px 0}
+.msg.you{align-self:flex-end;align-items:flex-end;margin-left:auto}
+.msg.helm{align-self:flex-start;align-items:flex-start}
+.msg .who{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 6px 2px}
+.msg .bubble{border-radius:14px;padding:8px 12px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.msg.you .bubble{background:var(--accent-soft);border:1px solid var(--line);border-bottom-right-radius:4px}
+.msg.helm .bubble{background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.noise .bubble{border-style:dashed}
+.msg .st{font:11px/1.4 var(--mono);color:var(--ink-3);margin:2px 6px 0}
+.chat .thread{display:flex;flex-direction:column}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="chat.html">Talking to HELM</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="build.html">The build, animated</a></li><li><a href="data.html" aria-current="page">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html">Model card</a></li><li><a href="safety.html">Safety and honesty</a></li><li><a href="roadmap.html">Roadmap</a></li><li><a href="device.html">The HELM Cube</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html">How to run HELM</a></li><li><a href="files.html">Files and paths</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>Data lineage</h1>
+<div class="lede">Where every piece of HELM's practice and test material comes from, who was allowed to see it, and which outside text is allowed in.</div>
+
+
+<h2>Made-up worlds first</h2>
+<p>Almost every HELM result so far was earned on <dfn data-term="synthetic world" title="a made-up test world built by a program, with known right answers">synthetic worlds</dfn><span class="gloss"> (a made-up test world built by a program, with known right answers)</span>: test worlds written by programs, where the right answers are
+known. That is why most results carry the <dfn data-term="claim ceiling" title="the widest world a claim covers; nothing outside it is claimed">claim ceiling</dfn><span class="gloss"> (the widest world a claim covers; nothing outside it is claimed)</span> <dfn data-term="SYNTHETIC_ONLY" title="a claim ceiling: the result holds on made-up test worlds only">SYNTHETIC_ONLY</dfn><span class="gloss"> (a claim ceiling: the result holds on made-up test worlds only)</span>. The main generators:</p>
+<ul class="tight">
+<li><strong>The <dfn data-term="SDG" title="the CAS Synthetic Data Generator, the project&#x27;s program for making practice English">SDG</dfn><span class="gloss"> (the CAS Synthetic Data Generator, the project&#x27;s program for making practice English)</span></strong> (<code>cas-synthetic/</code>): practice English written from <dfn data-term="CAS" title="the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works">CAS</dfn><span class="gloss"> (the Cognitive Architecture System, the project&#x27;s framework for describing how any mind works)</span> statements; 5,802 <dfn data-term="seed" title="starting statements the generator writes English from; elsewhere on this page, a seed is a starting number for random choices">seeds</dfn><span class="gloss"> (starting statements the generator writes English from; elsewhere on this page, a seed is a starting number for random choices)</span> in <code>cas-synthetic/data/path_d/seeds.jsonl</code> (language-map coverage report).</li>
+<li><strong>The kitchen world generator</strong> used to train the <dfn data-term="transformer" title="the kind of neural network behind most modern AI chat assistants">transformer</dfn><span class="gloss"> (the kind of neural network behind most modern AI chat assistants)</span> ear: "200,000 A-world rows" (<a href="results.html#s7-82">§7.82</a>).</li>
+<li><strong>Exam builders</strong> for each test <dfn data-term="wave" title="one sealed test round in the HELM-R1 series, with each part on its own switch">wave</dfn><span class="gloss"> (one sealed test round in the HELM-R1 series, with each part on its own switch)</span>: fresh worlds X0 to X5, each built for one run and then spent (<a href="results.html#s7-44">§7.44</a>, <a href="results.html#s7-77">§7.77</a>, <a href="results.html#s7-78">§7.78</a>).</li>
+</ul>
+
+<h2>Custody: who may see an exam</h2>
+<p>Every scored exam is built by a <dfn data-term="custodian" title="a separate session that builds and seals each exam so the builder never sees it">custodian</dfn><span class="gloss"> (a separate session that builds and seals each exam so the builder never sees it)</span>. The builder of the part under test never sees the exam, only its fingerprints
+(<dfn data-term="hash" title="a fingerprint of a file; change one byte and the fingerprint changes">hashes</dfn><span class="gloss"> (a fingerprint of a file; change one byte and the fingerprint changes)</span>). The scoring program is <dfn data-term="sealed" title="frozen and fingerprinted before the run, so nothing can be changed after the fact">sealed</dfn><span class="gloss"> (frozen and fingerprinted before the run, so nothing can be changed after the fact)</span> before the run. In the record's words, the operator "never opened, printed or parsed" an exam file (wave 5 run record).</p>
+<ul class="tight">
+<li><strong>Seeds from owner lines.</strong> The random draw for an exam is fixed by a fingerprint of the owner's own approval line joined with the sealed package's fingerprint. "No seed could be known before the package bytes were final" (<a href="results.html#s7-79">§7.79</a>).</li>
+<li><strong>Bands.</strong> Each exam draws its seeds from its own range of numbers, so no two exams can share a draw. Example: the transformer ear's exams used bands "CW 1,920,000,001–1,921,000,000 and CD 1,922,000,001–1,923,000,000" (<a href="results.html#s7-82">§7.82</a>).</li>
+<li><strong>Two answer keys.</strong> For the real-text exam, key A was written by the builder and key B by a separate session that read only the written rule. Items where they disagree are not scored; agreement had to be at least 90% (<a href="results.html#s7-79">§7.79</a>).</li>
+</ul>
+
+<h2>Real text: the pinned public sources</h2>
+<p>The X-REAL exam (and later tests drawn from the same frames) uses text other people wrote. Every file was downloaded once,
+fingerprinted, and pinned. Pin file <code>docs/working/xreal/SOURCES_PINNED.json</code>, sha256 <code>24cfb0d17c0cea0602a907e5b4537fbace8fd01e4d1ebddbb4530b5da659fbdd</code>.
+Results on this material carry the ceiling <dfn data-term="NAMED_CORPORA_ONLY" title="a claim ceiling: the result holds on the named public text collections only">NAMED_CORPORA_ONLY</dfn><span class="gloss"> (a claim ceiling: the result holds on the named public text collections only)</span>.</p>
+<div class="tablewrap verbatim"><table class="cards"><thead><tr><th>Source</th><th>Files</th><th>Bytes</th><th>Licence (as recorded)</th><th>Largest file and its sha256</th></tr></thead><tbody><tr><td data-label="Source">Project Gutenberg robots file (procedure only)</td><td data-label="Files">1</td><td data-label="Bytes">40</td><td data-label="Licence (as recorded)">n/a (site file)</td><td data-label="Largest file and its sha256"><code>A0_pg_robots/robots.txt</code><br><code>1f9a3a7eb83eff1ebbd9b11c01a440ec80e91c484fc9d1a63d8f5d00087f4973</code></td></tr><tr><td data-label="Source">Project Gutenberg catalog</td><td data-label="Files">1</td><td data-label="Bytes">21,263,721</td><td data-label="Licence (as recorded)">Project Gutenberg catalog (public metadata)</td><td data-label="Largest file and its sha256"><code>A1_pg_catalog/pg_catalog.csv</code><br><code>3d402f23786a990140d990fe6946c3575b2fcdd7cffb31fd47769a78663d8c73</code></td></tr><tr><td data-label="Source">Project Gutenberg cookery eBooks</td><td data-label="Files">281</td><td data-label="Bytes">101,571,664</td><td data-label="Licence (as recorded)">COPYRIGHTED (excluded)<br>Public domain in the USA (Project Gutenberg eBook; PG header/footer and trademark not used)</td><td data-label="Largest file and its sha256"><code>A1_pg_ebooks/pg10136.txt</code><br><code>8a546e25e6cda0294b70fde4c6735f69460f75db9e586958f9eb87a688722e61</code></td></tr><tr><td data-label="Source">English Wikibooks dump 20261001</td><td data-label="Files">2</td><td data-label="Bytes">203,588,298</td><td data-label="Licence (as recorded)">CC BY-SA 4.0 (older revisions also GFDL); attribution per item: page id, revision id, dump date<br>n/a (dump index)</td><td data-label="Largest file and its sha256"><code>A2_wikibooks/enwikibooks-20261001-pages-articles.xml.bz2</code><br><code>a0a69f081f14e0e10ae418ed5e3a637919e6e910b47b04b93ba12bdc52084970</code></td></tr><tr><td data-label="Source">Tatoeba English sentences</td><td data-label="Files">1</td><td data-label="Bytes">24,908,986</td><td data-label="Licence (as recorded)">CC BY 2.0 FR (Tatoeba; CC0 subset export not fetched: no exact URL in SOURCES.md, D-XR-3); attribution per sentence: Tatoeba sentence id</td><td data-label="Largest file and its sha256"><code>B1_tatoeba/eng_sentences.tsv.bz2</code><br><code>bb3dcc28a8984a26dc466ee14eb53c4210b0dd9bb111b9d686d1efc83ecf091c</code></td></tr><tr><td data-label="Source">Google Taskmaster dialogues</td><td data-label="Files">13</td><td data-label="Bytes">130,144,240</td><td data-label="Licence (as recorded)">CC BY 4.0 (Google Taskmaster; READMEs TM-1-2019/README.md and TM-2-2020/README.md, read)</td><td data-label="Largest file and its sha256"><code>B2_taskmaster/TM-1-2019/self-dialogs.json</code><br><code>1e590ed0ccee279e40c2fb9e083d3b9417477c6bfe35ce5b2277167698dd858d</code></td></tr></tbody></table></div>
+<p class="small">Skipped, with the recorded reason:</p><ul class="small tight"><li><code>B3_USDA_SR_LEGACY</code>: SOURCES.md names &#x27;the FoodData Central download page&#x27; but gives no exact URL; the build order allows only exact URLs; not fetched, no substitute (D-XR-2)</li><li><code>FTFY_RELEASE</code>: SOURCES.md names &#x27;one released version pinned by sha256&#x27; with no URL; not fetched; E1 uses the three code pages SOURCES.md itself names (D-XR-4)</li><li><code>TATOEBA_CC0_EXPORT</code>: SOURCES.md names &#x27;the licence/CC0 export&#x27; with no exact URL; not fetched; every Tatoeba item recorded CC BY 2.0 FR (D-XR-3)</li></ul>
+<h3>The source list as preregistered</h3>
+<div class="tablewrap verbatim"><table class="cards"><thead><tr><th>A1</th><th>Project Gutenberg English cookery eBooks: catalog <code>pg_catalog.csv</code> + 281 eBooks, one request each</th><th>PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)</th></tr></thead><tbody><tr><td data-label="A1">A1-practice</td><td data-label="Project Gutenberg English cookery eBooks: catalog pg_catalog.csv + 281 eBooks, one request each">PG eBook 10136, Mrs Beeton, <em>The Book of Household Management</em> (in the catalog frame)</td><td data-label="PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)">PINNED, builder practice only, excluded from every exam frame</td></tr><tr><td data-label="A1">A2</td><td data-label="Project Gutenberg English cookery eBooks: catalog pg_catalog.csv + 281 eBooks, one request each">English Wikibooks dump 20261001, <code>enwikibooks-20261001-pages-articles.xml.bz2</code>, Wikimedia sha1 checked</td><td data-label="PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)">PINNED (CC BY-SA 4.0; files stay internal; attribution = page id + revision id + dump date per item)</td></tr><tr><td data-label="A1">B1</td><td data-label="Project Gutenberg English cookery eBooks: catalog pg_catalog.csv + 281 eBooks, one request each">Tatoeba English export <code>eng_sentences.tsv.bz2</code></td><td data-label="PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)">PINNED (licence recorded as CC BY 2.0 FR for every sentence, see D-XR-3)</td></tr><tr><td data-label="A1">B2</td><td data-label="Project Gutenberg English cookery eBooks: catalog pg_catalog.csv + 281 eBooks, one request each">Google Taskmaster, commit <code>d92cb6af3005f1dc09c39e75e7daf4a04905e00b</code>, TM-1 <code>self-dialogs.json</code>, <code>woz-dialogs.json</code>, splits; TM-2 <code>food-ordering.json</code>, <code>restaurant-search.json</code></td><td data-label="PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)">PINNED (CC BY 4.0, read from the two READMEs)</td></tr><tr><td data-label="A1">B3</td><td data-label="Project Gutenberg English cookery eBooks: catalog pg_catalog.csv + 281 eBooks, one request each">USDA FoodData Central SR Legacy food list</td><td data-label="PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)"><strong>SKIPPED</strong>: SOURCES.md gives no exact URL; the build order allows only exact URLs (D-XR-2)</td></tr><tr><td data-label="A1">ftfy</td><td data-label="Project Gutenberg English cookery eBooks: catalog pg_catalog.csv + 281 eBooks, one request each">one pinned <code>ftfy</code> release (only to choose wrong-codec pairs)</td><td data-label="PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)"><strong>SKIPPED</strong>: no exact URL; the three code pages SOURCES.md itself names are used (D-XR-4)</td></tr><tr><td data-label="A1">B1-CC0</td><td data-label="Project Gutenberg English cookery eBooks: catalog pg_catalog.csv + 281 eBooks, one request each">Tatoeba CC0 export</td><td data-label="PINNED (280 in the frame; eBook 1979 excluded: its header says &quot;COPYRIGHTED Project Gutenberg eBook&quot;, licence not as SOURCES.md says)"><strong>SKIPPED</strong>: no exact URL (D-XR-3)</td></tr></tbody></table></div>
+<p class="small muted">One recorded slip: the first download request carried the owner's e-mail address in its browser identification string. Every later request used a neutral one (<a href="results.html#s7-79">§7.79</a>).</p>
+
+<h2>"Foreign questions OK, answers never"</h2>
+<p>This is the project's rule for outside material. Text written outside the project, by people or by other AI models, may be used as
+<em>questions</em>: the sentences HELM is asked to read. The <em>answers</em> HELM is scored against must never come from an outside model;
+they come from HELM's own written rules. Example: the transformer ear's second exam used kitchen sentences written by two outside <dfn data-term="LLM" title="large language model, a big pretrained text-predicting neural network like those behind chat assistants">LLMs</dfn><span class="gloss"> (large language model, a big pretrained text-predicting neural network like those behind chat assistants)</span>,
+labelled LLM_WRITTEN, while its answer keys came from the frozen rules (owner question and coordinator answer, 2026-10-19, in the owner-approvals record; <a href="results.html#s7-90">§7.90</a>).</p>
+<p>No user data is collected for training. HELM UI session logs stay on the local machine in a folder git ignores (<code>helm_ui/README.md</code>).</p>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li><code>docs/CAS_HARNESS_SPEC_SHEET.md</code> §7.44, §7.77, §7.78, §7.79, §7.82, §7.90</li><li><code>docs/working/xreal/SOURCES_PINNED.json</code> (groups, licences, hashes computed by the build)</li><li><code>docs/working/xreal/PREREGISTRATION_X_REAL.md</code> section 1 (table copied)</li><li><code>C:\Users\wakil\Documents\Codex\2026-10-19\language_map_coverage_v1\COVERAGE.md</code> (SDG seed count)</li><li><code>C:\Users\wakil\Documents\Codex\2026-10-19\r1_wave5\run_c40_r1w5_20261019\RUN_RESULT_R1W5_C40.md</code> (operator never opened the exam)</li><li><code>C:\Users\wakil\Documents\Codex\2026-10-18\OWNER_APPROVALS_20261018.md</code> (heading &#x27;Owner question (2026-10-19)&#x27;; headings only)</li><li><code>helm_ui/README.md</code> (session logs)</li></ul>
+<div>Generated 2026-10-21 20:23 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>63cfb6a6</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,20 @@
+1. TYPE: FRAME - attraction (Noetic ^2)
+   ENGLISH: I have an affinity for "the offer".
+   READ BACK: IDENTICAL to the input content
+
+2. TYPE: NESTED FRAME - a thought inside a thought, with the name declared
+   ENGLISH: Ana is a Mind. I store that [Ana has an affinity for "the offer"].
+   READ BACK: IDENTICAL to the input content
+
+3. TYPE: RECIPE - exact fractions with no decimal form
+   ENGLISH: To make Ω_bread, use 1/3 of Female, cognitive; plus 2 of Rhythm, operational, analytical register, for Structure; plus 3/7 of Ω_starter.
+   READ BACK: IDENTICAL to the input content
+
+4. TYPE: DECLARATION - what a name IS
+   ENGLISH: Ana is a Mind. Ana has an affinity for "the offer".
+   READ BACK: IDENTICAL to the input content
+
+5. TYPE: REFUSAL - the brain declining to answer
+   ENGLISH: I cannot tell.
+   READ BACK: IDENTICAL to the input content
+

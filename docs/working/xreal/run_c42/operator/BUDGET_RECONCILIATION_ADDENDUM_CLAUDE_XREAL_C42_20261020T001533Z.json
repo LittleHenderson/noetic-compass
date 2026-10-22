@@ -1,0 +1,60 @@
+{
+  "schema": "helm.aws-combined-allocation.reconciliation-addendum/1",
+  "utc": "2026-10-20T00:15:33.355028+00:00",
+  "job": "helm-claude-xreal-20261019-c42",
+  "action": "CLOSEOUT_CONSERVATIVE_CHARGE",
+  "owner_authority": "OWNER_APPROVAL_XREAL_20261020T000138Z.json sha256 6b4799b22750ca1c0c3050588f2364a66fc743c9ba0cd2245e9dc627399c4d6e, quoting the owner's pre-approval line (sha256 2a8a6f86, 121 bytes, 'X-REAL at 1 USD'; APPROVAL_RECORD_XREAL.md sha256 8592702c5389e6fa88b5e5005ba99d63460c1133a3965337e622341ae61b185c binds it to package a9b4c954): one attempt + one plumbing retry, cap 1.00 USD",
+  "hold_placed_usd": 1.0,
+  "hold_source": "SOURCE_BOUND_SINGLE_ATTEMPT_RESERVATION already in the pointer (C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\x_real_c42_reservation_20261019\\BUDGET_RESERVATION_XREAL_C42.json, sha256 7fb27c7ee295cc2418fc9430671906d28afc5aad2295e058482821666c32667c); the pointer read 112.3 including it and is changed here by (charges - hold) in one step",
+  "jobs_under_this_hold": {
+    "helm-claude-xreal-20261019-c42": {
+      "instance": "i-0decaa7956027896c",
+      "instance_type": "m6i.xlarge",
+      "launch_utc": "2026-10-20T00:06:56.497779+00:00",
+      "controller_cleanup_utc": "2026-10-20T00:14:38.599749+00:00",
+      "host_seconds": 462.10197,
+      "list_price_usage_usd": 0.026815,
+      "charge_usd": 0.03,
+      "conservative_rate_0_46_usd": 0.06,
+      "controller_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42\\aws-claude-xreal-c42-cleanup.json",
+        "sha256": "28e5e7daa0b557055a01f2cedef687cce8952445442fe6711a4305c77fabca6a",
+        "status": "PRESERVED_AND_PREFIX_PURGE_VERIFIED"
+      },
+      "independent_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42\\aws-claude-xreal-c42-independent-cleanup.json",
+        "sha256": "b25377886404a4260d4c25553855a7aff4bb3ec19c760ccdf797963b3bc25202",
+        "status": "VERIFIED",
+        "utc": "2026-10-20T00:14:48.174947+00:00"
+      },
+      "direct_observation": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42\\aws-claude-xreal-c42-direct-observation.json",
+        "sha256": "e3d1331c613b9061be29b48a2a64ba6830f4f589c95f2297cb722d7fbdce14a7",
+        "utc": "2026-10-20T00:14:53.197667+00:00",
+        "terminated_reason": "User initiated"
+      }
+    }
+  },
+  "helper_note": "no helper job ran under this hold (custodian laptop-only, 0 USD)",
+  "attempts": {
+    "scored": 1,
+    "plumbing_retries_used": 0,
+    "helper_plumbing_retries_used": 0
+  },
+  "outcome": "STAGE_PASS; reader verdict PASS (reading 79b6ea30); words S_UNSAFE_ON_REAL, R_REBOUND R_SAFE_NOT_CORRECT, R_ASIS R_ASIS_SAFE, F: D1 E1 KIND_CAUGHT, T1 T2 E2a S1 KIND_SAFE_NOT_CAUGHT, E2b C1 KIND_BENIGN_KEPT; 0 plumbing retries",
+  "charge_usd": 0.03,
+  "charge_basis": "per job: ACTUAL list-price usage from the measured host time (launch intent to controller cleanup; m6i.xlarge 0.192 USD/h + root disk 0.0119 USD/h + public IPv4 0.005 USD/h; S3 requests and transfer not separately priced), rounded up to the cent, same basis as the c21-c34 closeouts; the AWS bill itself is not yet posted",
+  "conservative_rate_alternative_usd": 0.06,
+  "conservative_rate_note": "at RUN_LIMITS_XREAL.json conservative 0.46 USD per host hour the job would be the figure above; shown, not charged",
+  "pointer_value_read_at_closeout_usd": 112.3,
+  "combined_allocation_after_usd": 111.33,
+  "update_mode": "DELTA_READ_MODIFY_WRITE",
+  "ceiling_usd": 200.0,
+  "ceiling_changed": false,
+  "cleanup_proof": {
+    "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_xreal_c42\\CLEANUP_PROOF_XREAL_C42.json",
+    "sha256": "314af7ecbb420ee5b13baa71d8843177317a2eba5d853a3003a864d4fbe21b85"
+  },
+  "actual_billing": "PENDING",
+  "written_by": "Claude Code sub-agent, AWS launch operator c42 (laptop MSI)"
+}

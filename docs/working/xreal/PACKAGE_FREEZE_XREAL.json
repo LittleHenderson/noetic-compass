@@ -1,0 +1,220 @@
+{
+ "label": "XREAL",
+ "members": {
+  "ANSWERABILITY_XREAL.json": {
+   "bytes": 152,
+   "sha256": "33974c2e65b36baefb66599333d656643b20fcf2abcd1a03d059e52af9db0ec4"
+  },
+  "FORBIDDEN_LIST_XREAL.json": {
+   "bytes": 55102,
+   "sha256": "81a3f337b1bb70344dd22afb60ad557ee163ba2abb125faa6526b0d3cda1e080"
+  },
+  "FORBIDDEN_LIST_XREAL.json.sha256": {
+   "bytes": 92,
+   "sha256": "61bf3cb7725c0d32564a46b1386fb11bc98a7eda28c091ef997cafba24b56945"
+  },
+  "FRAMES_PINNED.json": {
+   "bytes": 20716,
+   "sha256": "0b99ffe21f8532e5a39a2bc03d87e4d7f2106722d0936971af8b679cfcb677a4"
+  },
+  "FROZEN_XREAL.json": {
+   "bytes": 7470,
+   "sha256": "f79e4cbc4e757c713c68dd775f6eb2a75d7ac676d2cff87da1de963fb4713832"
+  },
+  "I11_XREAL.json": {
+   "bytes": 4513,
+   "sha256": "bc964927ef786127bdcaa06637707c290f8f141ddf67b693f2c97f9d6ccb6a78"
+  },
+  "I11_XREAL.json.sha256": {
+   "bytes": 81,
+   "sha256": "65988fdbc303987bcae6889dfe106e2925fe00b4884731afcc33777ba093a022"
+  },
+  "PREREGISTRATION_X_REAL.md": {
+   "bytes": 51470,
+   "sha256": "d011559617faa16a4d2fe353b3c91ee75431b0e057f83973ec181e154ed21674"
+  },
+  "README_XREAL.md": {
+   "bytes": 3807,
+   "sha256": "8d6601f09f3a9fa2676caf96aed23d7dde62127fa526f1bc9fab65165b8dad6f"
+  },
+  "RUN_LIMITS_XREAL.json": {
+   "bytes": 3641,
+   "sha256": "f1b469adfa0b512544a19f732a8d48b444173c0656f0469498f74000a7a31c57"
+  },
+  "SOURCES_PINNED.json": {
+   "bytes": 214696,
+   "sha256": "24cfb0d17c0cea0602a907e5b4537fbace8fd01e4d1ebddbb4530b5da659fbdd"
+  },
+  "kit/STAGE_XREAL.json": {
+   "bytes": 1725,
+   "sha256": "4013700a48fef57e1e135bb3d1704a25c76d1e56c2c7890d541be9e6a351907a"
+  },
+  "kit/job_supervisor.py": {
+   "bytes": 19550,
+   "sha256": "3b2337ca75b189287c4591ed44671e308d37ef92d043f7bebb37ede77e6a1b01"
+  },
+  "kit/plan_check.py": {
+   "bytes": 3464,
+   "sha256": "84257a23545bfe87d7d4ef4565feae12adc9c325fa0fff06fefcb626c3301035"
+  },
+  "kit/run_xreal.py": {
+   "bytes": 15435,
+   "sha256": "67d75cbccd4fede9459e429c52028cb1687441b00424d1b11c56caa13676479b"
+  },
+  "practice/INPUTS_PRACTICE_XREAL.json": {
+   "bytes": 148397,
+   "sha256": "aeda156136ac11dea0fb5a312bd6fbba6cc864eaa248c825b4c23bcb1a38ab1c"
+  },
+  "practice/INPUTS_PRACTICE_XREAL.json.sha256": {
+   "bytes": 93,
+   "sha256": "98cee537feced74028802395263ee353765e31d85cb3962998ae6b9e8292e542"
+  },
+  "practice/KEYS_PRACTICE_XREAL.json": {
+   "bytes": 55174,
+   "sha256": "fa3756df199bf5af85d495f0f92d8bdf26011441f6b49190acf01d1b4aceada7"
+  },
+  "practice/KEYS_PRACTICE_XREAL.json.sha256": {
+   "bytes": 91,
+   "sha256": "bd58dac3e4e4e8f0d7bd85c7b632a5f73586d24388a4dff4a88a0ef9f7358646"
+  },
+  "practice/SAMPLE_RECORD_PRACTICE_XREAL.json": {
+   "bytes": 243503,
+   "sha256": "bf23a3a111a0199de432bcd39ba7d932b65c6a48c7daf0657312af0593925d7d"
+  },
+  "practice/SAMPLE_RECORD_PRACTICE_XREAL.json.sha256": {
+   "bytes": 100,
+   "sha256": "1ad2ebf6789efc359718308767d5fe3e1c838819ec435ad25334db57b689ace7"
+  },
+  "tests_xreal/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "tests_xreal/fixtures/FIXTURE_INPUTS_XR.json": {
+   "bytes": 6971,
+   "sha256": "2b88de08fa272269289d0510d86550ff1ec52258a7720668820054885a2288ff"
+  },
+  "tests_xreal/test_keys_b.py": {
+   "bytes": 12098,
+   "sha256": "c6b47ee1b4db949016e07f24b06c2014e969a7d577901a49468313b4fb5dafbb"
+  },
+  "tests_xreal/test_kit_xr.py": {
+   "bytes": 3683,
+   "sha256": "5cba49df9ea838f5ac5184964daa2eaef33609fa05c4fd132b24a843803b582e"
+  },
+  "tests_xreal/test_units_xr.py": {
+   "bytes": 27152,
+   "sha256": "0ad698e109d6d25e85ff121e00c66c7286163237a0f40d29f26c49bfabd83ae8"
+  },
+  "xr_contract/SEED_RULE_XREAL.md": {
+   "bytes": 2939,
+   "sha256": "f3b448e87475114a67549fe26d659f75189d2278babcaeef15616109c667c351"
+  },
+  "xr_contract/XREAL_CUSTODIAN_CONTRACT.md": {
+   "bytes": 7037,
+   "sha256": "b955293db5e488af3c5561eb0c93e848bd801e28f0dd45bde634b09d4468afac"
+  },
+  "xr_contract/fetch_sources.sh": {
+   "bytes": 1940,
+   "sha256": "5f7c79239eb798e796520249f525c629449722723ba0076dbf4bf79687ed7719"
+  },
+  "xr_contract/xrun.py": {
+   "bytes": 296,
+   "sha256": "c44477d73f87dfed3def8f32b87b9f077ccb1cf67b7768c0ba457afa27babbd9"
+  },
+  "xreal/WORDLISTS.json": {
+   "bytes": 1947,
+   "sha256": "b8441bd431271c94bd159c973af5a975fd082dfa6dd6e8e91c99d23cdea74c41"
+  },
+  "xreal/WORDLISTS_HELM_COPY.json": {
+   "bytes": 1947,
+   "sha256": "b8441bd431271c94bd159c973af5a975fd082dfa6dd6e8e91c99d23cdea74c41"
+  },
+  "xreal/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "xreal/baselines.py": {
+   "bytes": 6378,
+   "sha256": "6d3925941b7b0211e4d43f19b1417968091ca09c29b15578a48854f4b781be19"
+  },
+  "xreal/check_xreal_format.py": {
+   "bytes": 14295,
+   "sha256": "b5810e66ae7d64faa8141e544a2094a952dcaf5990b8cdca13da28956509ce95"
+  },
+  "xreal/common_xr.py": {
+   "bytes": 11086,
+   "sha256": "3043b927b6a3009bdfa2b90fe2f8852e4bf20a9c91b8e314f71adda87c03170d"
+  },
+  "xreal/custody_xr.py": {
+   "bytes": 4314,
+   "sha256": "4ed6ae850094406f6a2dc6fdcd389275a052123c099778a73fc7e32adcfe696c"
+  },
+  "xreal/forbidden.py": {
+   "bytes": 5334,
+   "sha256": "489c8e3f77541759b16c6479fd07b473dbfd444446e6f8e5ab11eea0665acf40"
+  },
+  "xreal/frames.py": {
+   "bytes": 32005,
+   "sha256": "660d5f95971964e52836cfe810bc9f8de163a84444d2903e759f047254fa5fe9"
+  },
+  "xreal/grammar.py": {
+   "bytes": 10199,
+   "sha256": "a3cecbb34072d7cc9bd41a644b4ca31e9c5292181a06a9902a3af8b6f3b11c2c"
+  },
+  "xreal/i11_xr.py": {
+   "bytes": 5311,
+   "sha256": "58045777d005f717f2f2207acf4e526915776bbff42eb358d9c355b6f6ae07c7"
+  },
+  "xreal/keys.py": {
+   "bytes": 10140,
+   "sha256": "7ad232a61a5018fd7c80b09481b7ff047fdf746e7528a3c8e48a4a638e3baba4"
+  },
+  "xreal/keys_b.py": {
+   "bytes": 21446,
+   "sha256": "d99404c85d885205e6218e148b9bbcef3b57a8920b812d6f5656bc77ca4199ea"
+  },
+  "xreal/mapping.py": {
+   "bytes": 4953,
+   "sha256": "5507acde94e523a7c52e42061528a9e38f4013da373fa7fab4071e8ac2a9a5f0"
+  },
+  "xreal/merge_xreal.py": {
+   "bytes": 20126,
+   "sha256": "6f9160a460443842fc2370d5305318880f75eec302fb0a452c65339c89b999f6"
+  },
+  "xreal/netguard.py": {
+   "bytes": 927,
+   "sha256": "796bb831fb58446b6f7db423a971bede3366ffae66eba1909440068b71885322"
+  },
+  "xreal/planter_xr.py": {
+   "bytes": 6754,
+   "sha256": "7951fefe314c6d7adc34dd0c17d93978b88f0b32f2d3cdeb9b272f01e5b35b1c"
+  },
+  "xreal/pool_xr.py": {
+   "bytes": 7491,
+   "sha256": "a3d8ac196579e92bc5b4c25d04da76ba3ef898974ebaa46a5919b64bfcc66500"
+  },
+  "xreal/run_parts.py": {
+   "bytes": 9740,
+   "sha256": "088444ec77c30d3443dc4c81a44eea74d2bd4b88f28594034ff9bfc9ee1e12d0"
+  },
+  "xreal/sample_xr.py": {
+   "bytes": 16490,
+   "sha256": "b58fa0f295482e44dcabccaffb2337f6928c96b94bb79fec17a9eec03a6f33d3"
+  },
+  "xreal/score_xr.py": {
+   "bytes": 10555,
+   "sha256": "70e376e3acfd53d3fecc1a5513687fea10d2c03359f5ef18460c46fc5b3fb38a"
+  },
+  "xreal/seed_rule_xreal.py": {
+   "bytes": 7976,
+   "sha256": "d50338b5ce2224c24d454c929a81afb17620a96683e06c5f17136cc1a858fbb1"
+  },
+  "xreal/session_xr.py": {
+   "bytes": 19623,
+   "sha256": "efb45251d79e09df9081500f37a43d30c079d14e21209824663533c55efe863a"
+  }
+ },
+ "package": "HELM_XREAL_20261019",
+ "schema": "helm.package-freeze/1",
+ "status": "SEALED, NOT LAUNCHED"
+}

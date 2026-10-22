@@ -1,0 +1,1477 @@
+{
+ "A_wrong_lesson": {
+  "brain_replay": {
+   "evaluate": {
+    "absent_sha6": [],
+    "gate": "G1",
+    "mismatch_count": 0,
+    "ratio_yield_over_key_yield": null,
+    "status": "UNDETERMINED",
+    "unlearned_sha6": [
+     "3d3a4b",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ]
+   },
+   "lessons": [
+    {
+     "admitted": true,
+     "batch_size": 7,
+     "grouped_index_in_batch": 1,
+     "ingredient_sha6": "89c599",
+     "lesson_index": 0,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "89c599"
+     ],
+     "ratio_learned_over_batch_amount_of_that_line": "1",
+     "ratio_learned_over_key_q_of_line_at_that_index": "2",
+     "ratio_learned_over_key_q_of_this_lesson": "7",
+     "reading": "WITNESS",
+     "reason": "ADMITTED",
+     "taught_unit": "cup"
+    },
+    {
+     "admitted": false,
+     "batch_size": 7,
+     "ingredient_sha6": null,
+     "lesson_index": 1,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "89c599"
+     ],
+     "reading": "WITNESS",
+     "reason": "REFUSED_CONFLICT"
+    },
+    {
+     "admitted": false,
+     "batch_size": 7,
+     "ingredient_sha6": null,
+     "lesson_index": 2,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "288971"
+     ],
+     "reading": "WITNESS",
+     "reason": "RECEIPT_FAILED",
+     "receipt_tied_with_count": 1
+    },
+    {
+     "admitted": false,
+     "batch_size": 7,
+     "ingredient_sha6": null,
+     "lesson_index": 3,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "c9b82b"
+     ],
+     "reading": "WITNESS",
+     "reason": "RECEIPT_FAILED",
+     "receipt_tied_with_count": 1
+    },
+    {
+     "admitted": false,
+     "batch_size": 7,
+     "ingredient_sha6": null,
+     "lesson_index": 4,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "f55f97"
+     ],
+     "reading": "WITNESS",
+     "reason": "RECEIPT_FAILED",
+     "receipt_tied_with_count": 1
+    },
+    {
+     "admitted": false,
+     "batch_size": 7,
+     "ingredient_sha6": null,
+     "lesson_index": 5,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "63479a"
+     ],
+     "reading": "WITNESS",
+     "reason": "RECEIPT_FAILED",
+     "receipt_tied_with_count": 1
+    },
+    {
+     "admitted": false,
+     "batch_size": 7,
+     "ingredient_sha6": null,
+     "lesson_index": 6,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "8cbbcf"
+     ],
+     "reading": "WITNESS",
+     "reason": "RECEIPT_FAILED",
+     "receipt_tied_with_count": 1
+    }
+   ],
+   "question_product_matches_book": true,
+   "question_reading": "QUESTION",
+   "rpm_gate_would_have_unsatisfied": 6,
+   "stock_entries": 7,
+   "stock_names_all_known_to_book": true,
+   "stock_reading": "STOCK",
+   "stock_reading_code": null,
+   "support_count": 7,
+   "support_sha6": [
+    "3d3a4b",
+    "89c599",
+    "288971",
+    "c9b82b",
+    "f55f97",
+    "63479a",
+    "8cbbcf"
+   ],
+   "unlearned_after_lessons_sha6": [
+    "3d3a4b",
+    "288971",
+    "c9b82b",
+    "f55f97",
+    "63479a",
+    "8cbbcf"
+   ]
+  },
+  "id": "RW:pg:65061@573841",
+  "lesson_mechanism": {
+   "counterfactual_without_dangling_or": {
+    "lesson_line_name_equals_bound_ran_out": true,
+    "resolve_step": {
+     "exact_in_batch": true,
+     "step": "EXACT_NAME_IN_BATCH"
+    },
+    "resolved_grouped_index": 0
+   },
+   "helm_admitted_name_equals_key_head": false,
+   "helm_admitted_name_grouped_index": 1,
+   "helm_admitted_name_sha6": "89c599",
+   "helm_alternative_split_applies_to_lesson_line": false,
+   "helm_alternative_split_needs_a_word_after_or": "parse_line: re.split(r'\\s+or\\s+', rest) needs whitespace after 'or'",
+   "helm_lesson_line_has_notes": false,
+   "helm_lesson_line_note_contains_key_head_word": false,
+   "helm_name_of_lesson_line_contains_key_head_word": true,
+   "helm_name_of_lesson_line_ends_with_bound_ran_out": false,
+   "helm_name_of_lesson_line_equals_key_head": false,
+   "helm_name_of_lesson_line_last_word_is_or": true,
+   "helm_name_of_lesson_line_sha6": "3d3a4b",
+   "helm_name_of_lesson_line_word_count": 2,
+   "helm_name_of_neighbour_line_1_ends_with_bound_ran_out": true,
+   "helm_name_of_neighbour_line_1_equals_key_head": false,
+   "helm_unit_of_lesson_line": "can",
+   "helm_unit_of_neighbour_line_1": "cup",
+   "key_head_of_lesson_line_shared_with_lines": [
+    1
+   ],
+   "key_heads_equal_lines": [
+    [
+     0,
+     1
+    ]
+   ],
+   "learned_equals_twice_key_q_of_admitted_line": true,
+   "lesson_index": 0,
+   "loop_on_same_admitted_name": true,
+   "loop_on_same_learned_value": true,
+   "ratio_learned_over_key_q_of_admitted_line": "2",
+   "ratio_learned_over_key_q_of_lesson_line": "7",
+   "raw_line_last_word_is_or": true,
+   "raw_line_word_index_of_key_head": [
+    2
+   ],
+   "raw_line_word_index_of_or": [
+    3
+   ],
+   "raw_line_word_index_of_table_unit": [
+    1
+   ],
+   "replay_admitted_name_equals_recorded": true,
+   "replay_reasons_equal_recorded_reasons": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "xreal_grammar_stops_name_at_or": true,
+   "xreal_ran_out_name_is_bare_head": true,
+   "xreal_ran_out_name_word_count": 1
+  },
+  "per_lesson_reader": [
+   {
+    "frozen_grouped_lines": 7,
+    "grouped_equals_key_lines": true,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     0,
+     1
+    ],
+    "grouped_name_sha6": [
+     "3d3a4b",
+     "89c599",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_units": [
+     "can",
+     "cup",
+     "slice",
+     "tablespoon",
+     "tablespoon",
+     "teaspoon",
+     "teaspoon"
+    ],
+    "key_lines": 7,
+    "lesson_index": 0,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [],
+    "ran_out_bound_sha6": "5ed728",
+    "ran_out_phrase_sha6": "20c526",
+    "ran_out_phrase_word_count": 1,
+    "ran_out_resolve_step": {
+     "ends_with_candidates": 1,
+     "exact_in_batch": false,
+     "starts_with_candidates": 0,
+     "step": "ENDS_WITH"
+    },
+    "ran_out_resolved_grouped_index": 1,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "89c599",
+    "raw_separator_pieces": 7,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": "89c599",
+    "recorded_status_CHAT_ON": "WITNESS_ADMITTED"
+   },
+   {
+    "frozen_grouped_lines": 7,
+    "grouped_equals_key_lines": true,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     1
+    ],
+    "grouped_name_sha6": [
+     "3d3a4b",
+     "89c599",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_units": [
+     "can",
+     "cup",
+     "slice",
+     "tablespoon",
+     "tablespoon",
+     "teaspoon",
+     "teaspoon"
+    ],
+    "key_lines": 7,
+    "lesson_index": 1,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [],
+    "ran_out_bound_sha6": "89c599",
+    "ran_out_phrase_sha6": "d4e30f",
+    "ran_out_phrase_word_count": 3,
+    "ran_out_resolve_step": {
+     "exact_in_batch": true,
+     "step": "EXACT_NAME_IN_BATCH"
+    },
+    "ran_out_resolved_grouped_index": 1,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "89c599",
+    "raw_separator_pieces": 7,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": null,
+    "recorded_status_CHAT_ON": "TEACH_REFUSED_REFUSED_CONFLICT"
+   },
+   {
+    "frozen_grouped_lines": 7,
+    "grouped_equals_key_lines": true,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     2
+    ],
+    "grouped_name_sha6": [
+     "3d3a4b",
+     "89c599",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_units": [
+     "can",
+     "cup",
+     "slice",
+     "tablespoon",
+     "tablespoon",
+     "teaspoon",
+     "teaspoon"
+    ],
+    "key_lines": 7,
+    "lesson_index": 2,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [],
+    "ran_out_bound_sha6": "141def",
+    "ran_out_phrase_sha6": "141def",
+    "ran_out_phrase_word_count": 2,
+    "ran_out_resolve_step": {
+     "exact_in_batch": false,
+     "step": "UNIT_WORDS_DROPPED_EXACT"
+    },
+    "ran_out_resolved_grouped_index": 2,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "288971",
+    "raw_separator_pieces": 7,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": null,
+    "recorded_status_CHAT_ON": "TEACH_REFUSED_RECEIPT_FAILED"
+   },
+   {
+    "frozen_grouped_lines": 7,
+    "grouped_equals_key_lines": true,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     3
+    ],
+    "grouped_name_sha6": [
+     "3d3a4b",
+     "89c599",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_units": [
+     "can",
+     "cup",
+     "slice",
+     "tablespoon",
+     "tablespoon",
+     "teaspoon",
+     "teaspoon"
+    ],
+    "key_lines": 7,
+    "lesson_index": 3,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [
+     3
+    ],
+    "ran_out_bound_sha6": "c9b82b",
+    "ran_out_phrase_sha6": "c9b82b",
+    "ran_out_phrase_word_count": 1,
+    "ran_out_resolve_step": {
+     "exact_in_batch": true,
+     "step": "EXACT_NAME_IN_BATCH"
+    },
+    "ran_out_resolved_grouped_index": 3,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "c9b82b",
+    "raw_separator_pieces": 7,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": null,
+    "recorded_status_CHAT_ON": "TEACH_REFUSED_RECEIPT_FAILED"
+   },
+   {
+    "frozen_grouped_lines": 7,
+    "grouped_equals_key_lines": true,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     4
+    ],
+    "grouped_name_sha6": [
+     "3d3a4b",
+     "89c599",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_units": [
+     "can",
+     "cup",
+     "slice",
+     "tablespoon",
+     "tablespoon",
+     "teaspoon",
+     "teaspoon"
+    ],
+    "key_lines": 7,
+    "lesson_index": 4,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [
+     4
+    ],
+    "ran_out_bound_sha6": "f55f97",
+    "ran_out_phrase_sha6": "f55f97",
+    "ran_out_phrase_word_count": 1,
+    "ran_out_resolve_step": {
+     "exact_in_batch": true,
+     "step": "EXACT_NAME_IN_BATCH"
+    },
+    "ran_out_resolved_grouped_index": 4,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "f55f97",
+    "raw_separator_pieces": 7,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": null,
+    "recorded_status_CHAT_ON": "TEACH_REFUSED_RECEIPT_FAILED"
+   },
+   {
+    "frozen_grouped_lines": 7,
+    "grouped_equals_key_lines": true,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     5
+    ],
+    "grouped_name_sha6": [
+     "3d3a4b",
+     "89c599",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_units": [
+     "can",
+     "cup",
+     "slice",
+     "tablespoon",
+     "tablespoon",
+     "teaspoon",
+     "teaspoon"
+    ],
+    "key_lines": 7,
+    "lesson_index": 5,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [
+     5
+    ],
+    "ran_out_bound_sha6": "63479a",
+    "ran_out_phrase_sha6": "63479a",
+    "ran_out_phrase_word_count": 1,
+    "ran_out_resolve_step": {
+     "exact_in_batch": true,
+     "step": "EXACT_NAME_IN_BATCH"
+    },
+    "ran_out_resolved_grouped_index": 5,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "63479a",
+    "raw_separator_pieces": 7,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": null,
+    "recorded_status_CHAT_ON": "TEACH_REFUSED_RECEIPT_FAILED"
+   },
+   {
+    "frozen_grouped_lines": 7,
+    "grouped_equals_key_lines": true,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     6
+    ],
+    "grouped_name_sha6": [
+     "3d3a4b",
+     "89c599",
+     "288971",
+     "c9b82b",
+     "f55f97",
+     "63479a",
+     "8cbbcf"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ],
+     [
+      3
+     ],
+     [
+      4
+     ],
+     [
+      5
+     ],
+     [
+      6
+     ]
+    ],
+    "grouped_units": [
+     "can",
+     "cup",
+     "slice",
+     "tablespoon",
+     "tablespoon",
+     "teaspoon",
+     "teaspoon"
+    ],
+    "key_lines": 7,
+    "lesson_index": 6,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [
+     6
+    ],
+    "ran_out_bound_sha6": "8cbbcf",
+    "ran_out_phrase_sha6": "8cbbcf",
+    "ran_out_phrase_word_count": 1,
+    "ran_out_resolve_step": {
+     "exact_in_batch": true,
+     "step": "EXACT_NAME_IN_BATCH"
+    },
+    "ran_out_resolved_grouped_index": 6,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "8cbbcf",
+    "raw_separator_pieces": 7,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": null,
+    "recorded_status_CHAT_ON": "TEACH_REFUSED_RECEIPT_FAILED"
+   }
+  ]
+ },
+ "B_unexplained_ask": {
+  "ask_mechanism": {
+   "helm_question_path_on_unlearned": "helm_wide_turn._wide_question: unsatisfied = absent stock + brain.unlearned(product); RPM gate verdict != PROCEED -> status UNDETERMINED_CLARIFY",
+   "key_answer_word": "ANSWER",
+   "key_representable": false,
+   "key_why_not": [
+    "line0:MULTI_QTY"
+   ],
+   "lesson_line_amount_ratio_to_lesson0_for_first_name_of_line0": [
+    "1",
+    "2",
+    "2"
+   ],
+   "loop_on_same_scored_status": true,
+   "multi_qty_line_indexes_frozen_rule": [
+    0
+   ],
+   "replay_reasons_equal_recorded_reasons": [
+    true,
+    true,
+    true
+   ],
+   "score_question_consults_representable": false,
+   "unexplained_ask_consults_representable": false,
+   "unlearned_amount_ratio_stock_over_lesson0": [
+    "1"
+   ],
+   "unlearned_amount_ratio_to_lesson0_per_lesson": [
+    [
+     "1"
+    ],
+    [
+     "1"
+    ],
+    [
+     "1"
+    ]
+   ],
+   "unlearned_count": 1,
+   "unlearned_equals_any_key_head": [
+    false
+   ],
+   "unlearned_ever_resolved_as_ran_out": [
+    false
+   ],
+   "unlearned_grouped_index_in_lesson0_batch": [
+    1
+   ],
+   "unlearned_in_stock_reading": [
+    true
+   ],
+   "unlearned_name_mentions_key_head_of_lines": [
+    [
+     1
+    ]
+   ],
+   "unlearned_raw_line_origin": [
+    [
+     0
+    ]
+   ],
+   "unlearned_sha6": [
+    "08a286"
+   ],
+   "would_be_NOT_SCORED_if_scorer_read_representable": true
+  },
+  "brain_replay": {
+   "evaluate": {
+    "absent_sha6": [],
+    "gate": "G1",
+    "mismatch_count": 0,
+    "ratio_yield_over_key_yield": null,
+    "status": "UNDETERMINED",
+    "unlearned_sha6": [
+     "08a286"
+    ]
+   },
+   "lessons": [
+    {
+     "admitted": true,
+     "batch_size": 4,
+     "grouped_index_in_batch": 0,
+     "ingredient_sha6": "c9b82b",
+     "lesson_index": 0,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "c9b82b"
+     ],
+     "ratio_learned_over_batch_amount_of_that_line": "1",
+     "ratio_learned_over_key_q_of_line_at_that_index": "1",
+     "ratio_learned_over_key_q_of_this_lesson": "1",
+     "reading": "WITNESS",
+     "reason": "ADMITTED",
+     "taught_unit": "tablespoon"
+    },
+    {
+     "admitted": true,
+     "batch_size": 4,
+     "grouped_index_in_batch": 2,
+     "ingredient_sha6": "ab7902",
+     "lesson_index": 1,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "ab7902"
+     ],
+     "ratio_learned_over_batch_amount_of_that_line": "1",
+     "ratio_learned_over_key_q_of_line_at_that_index": "4",
+     "ratio_learned_over_key_q_of_this_lesson": "1",
+     "reading": "WITNESS",
+     "reason": "ADMITTED",
+     "taught_unit": "tablespoon"
+    },
+    {
+     "admitted": true,
+     "batch_size": 4,
+     "grouped_index_in_batch": 3,
+     "ingredient_sha6": "d2f35f",
+     "lesson_index": 2,
+     "made_is_one": true,
+     "ran_out_sha6": [
+      "d2f35f"
+     ],
+     "ratio_learned_over_key_q_of_this_lesson": "1",
+     "reading": "WITNESS",
+     "reason": "ADMITTED",
+     "taught_unit": "cup"
+    }
+   ],
+   "question_product_matches_book": true,
+   "question_reading": "QUESTION",
+   "rpm_gate_would_have_unsatisfied": 1,
+   "stock_entries": 4,
+   "stock_names_all_known_to_book": true,
+   "stock_reading": "STOCK",
+   "stock_reading_code": null,
+   "support_count": 4,
+   "support_sha6": [
+    "c9b82b",
+    "08a286",
+    "ab7902",
+    "d2f35f"
+   ],
+   "unlearned_after_lessons_sha6": [
+    "08a286"
+   ]
+  },
+  "id": "RW:pg:6912@197664",
+  "per_lesson_reader": [
+   {
+    "frozen_grouped_lines": 4,
+    "grouped_equals_key_lines": false,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     0
+    ],
+    "grouped_name_sha6": [
+     "c9b82b",
+     "08a286",
+     "ab7902",
+     "d2f35f"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ]
+    ],
+    "grouped_units": [
+     "tablespoon",
+     "tablespoon",
+     "tablespoon",
+     "cup"
+    ],
+    "key_lines": 3,
+    "lesson_index": 0,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [],
+    "ran_out_bound_sha6": "6ce059",
+    "ran_out_phrase_sha6": "6ce059",
+    "ran_out_phrase_word_count": 2,
+    "ran_out_resolve_step": {
+     "exact_in_batch": false,
+     "step": "UNIT_WORDS_DROPPED_EXACT"
+    },
+    "ran_out_resolved_grouped_index": 0,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "c9b82b",
+    "raw_separator_pieces": 4,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": "c9b82b",
+    "recorded_status_CHAT_ON": "WITNESS_ADMITTED"
+   },
+   {
+    "frozen_grouped_lines": 4,
+    "grouped_equals_key_lines": false,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     1,
+     2
+    ],
+    "grouped_name_sha6": [
+     "c9b82b",
+     "08a286",
+     "ab7902",
+     "d2f35f"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ]
+    ],
+    "grouped_units": [
+     "tablespoon",
+     "tablespoon",
+     "tablespoon",
+     "cup"
+    ],
+    "key_lines": 3,
+    "lesson_index": 1,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [],
+    "ran_out_bound_sha6": "990027",
+    "ran_out_phrase_sha6": "990027",
+    "ran_out_phrase_word_count": 2,
+    "ran_out_resolve_step": {
+     "exact_in_batch": false,
+     "step": "UNIT_WORDS_DROPPED_EXACT"
+    },
+    "ran_out_resolved_grouped_index": 2,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "ab7902",
+    "raw_separator_pieces": 4,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": "ab7902",
+    "recorded_status_CHAT_ON": "WITNESS_ADMITTED"
+   },
+   {
+    "frozen_grouped_lines": 4,
+    "grouped_equals_key_lines": false,
+    "grouped_has_notes": [
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_key_heads_mentioned": [
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ]
+    ],
+    "grouped_lines_whose_own_words_contain_ran_out_phrase": [
+     3
+    ],
+    "grouped_name_sha6": [
+     "c9b82b",
+     "08a286",
+     "ab7902",
+     "d2f35f"
+    ],
+    "grouped_own_differs_from_said": [
+     false,
+     false,
+     false,
+     false
+    ],
+    "grouped_parse_codes": [
+     "LINE",
+     "LINE",
+     "LINE",
+     "LINE"
+    ],
+    "grouped_raw_line_origin": [
+     [
+      0
+     ],
+     [
+      0
+     ],
+     [
+      1
+     ],
+     [
+      2
+     ]
+    ],
+    "grouped_units": [
+     "tablespoon",
+     "tablespoon",
+     "tablespoon",
+     "cup"
+    ],
+    "key_lines": 3,
+    "lesson_index": 2,
+    "lines_portion_found": true,
+    "pieces_starting_line_by_vague_after_a_branch_v72": 0,
+    "ran_out_bound_equals_key_head_of_lines": [],
+    "ran_out_bound_sha6": "e784bf",
+    "ran_out_phrase_sha6": "e784bf",
+    "ran_out_phrase_word_count": 4,
+    "ran_out_resolve_step": {
+     "exact_in_batch": false,
+     "step": "UNIT_WORDS_DROPPED_EXACT"
+    },
+    "ran_out_resolved_grouped_index": 3,
+    "ran_out_resolved_same_through_said_as_through_own": true,
+    "ran_out_resolved_sha6_own_words": "d2f35f",
+    "raw_separator_pieces": 4,
+    "read_wide_clarify_code": null,
+    "read_wide_status": "WITNESS",
+    "recorded_ingredient_sha6": "d2f35f",
+    "recorded_status_CHAT_ON": "WITNESS_ADMITTED"
+   }
+  ]
+ },
+ "brain_version": "helm_brain_wide RB-W1 v1 (2026-10-19)",
+ "exam": "X7v9",
+ "helm_modules_from_package_helm_now": true,
+ "job": "c56",
+ "name_hashing": "names and phrases only as sha256(lower-cased)[:6]; no words of any line or sentence are written",
+ "reader_version": "helm_wide_turn reader RB-W1 v7.2 (2026-10-21)",
+ "same_item_behind_both": false,
+ "schema": "helm.r1w7.custodian-shape-facts-mechanism/1",
+ "units_note_on": false,
+ "written_utc": "2026-10-21T19:06:16Z"
+}

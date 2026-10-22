@@ -1,0 +1,17 @@
+{
+  "status": "COMPLETED",
+  "run_id": "LM_T1B_MSI_ONCE",
+  "part": "ALL",
+  "start_utc": "2026-10-15T04:38:26.1593128+00:00",
+  "end_utc": "2026-10-15T04:38:28.8220645+00:00",
+  "elapsed_wall_seconds": 2.6630116,
+  "hard_wall_seconds": 300,
+  "memory_cap_bytes": 314572800,
+  "worker_exit_code": 0,
+  "worker_cpu_seconds": 2.21875,
+  "worker_peak_working_set_bytes": 48087040,
+  "peak_status": "PARTIAL_OBSERVED_PEAK_200MS_POLL",
+  "supervisor_error": null,
+  "network": "BLOCKED_IN_WORKER",
+  "new_spend": 0
+}

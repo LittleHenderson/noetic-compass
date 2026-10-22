@@ -1,0 +1,13 @@
+taught {"FOLLOWED": 4672, "CREATED": 4, "ATTEMPTED": 0, "key_mismatch": 0, "crossings": 4676}
+twin   {"FOLLOWED": 220, "CREATED": 0, "ATTEMPTED": 4, "key_mismatch": 4, "crossings": 224}
+twin thoughts 32 twin crossings 224 = thoughts x stations per thought: ['S0', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6']
+twin questions asked 10 answered 0
+  twin asking crossing: thought twin:d00:twin_b_chain:1 station S5 slots [[0, 0], [0, 1]] label ATTEMPTED key CREATED
+  twin asking crossing: thought twin:d00:twin_b_chain:5 station S5 slots [[3, 2], [3, 5], [3, 7]] label ATTEMPTED key CREATED
+  twin asking crossing: thought twin:d00:twin_b_chain:9 station S5 slots [[1, 2], [1, 3]] label ATTEMPTED key CREATED
+  twin asking crossing: thought twin:d00:twin_b_chain:13 station S5 slots [[2, 4], [2, 5], [2, 6]] label ATTEMPTED key CREATED
+taught questions asked 10 answered 10
+  taught asking crossing: thought taught:d00:keyed:1 station S5 slots [[0, 0], [0, 1]] label CREATED key CREATED
+  taught asking crossing: thought taught:d00:keyed:9 station S5 slots [[1, 2], [1, 3]] label CREATED key CREATED
+  taught asking crossing: thought taught:d00:keyed:18 station S5 slots [[2, 4], [2, 5], [2, 6]] label CREATED key CREATED
+  taught asking crossing: thought taught:d00:keyed:28 station S5 slots [[3, 2], [3, 5], [3, 7]] label CREATED key CREATED

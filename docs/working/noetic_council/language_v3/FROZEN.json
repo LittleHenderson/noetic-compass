@@ -1,0 +1,90 @@
+{
+  "version": "lm-t1-v0.1",
+  "status": "FROZEN_BEFORE_CODE",
+  "frozen_note": "Written 2026-10-15 04:15 UTC (2026-10-14 about 9:15 PM Pacific) before cce.py, aliaswide.py, ledger code, worker.py or any test was written, and before the parser ran on any hand-set sentence or any SDG English row. GRAMMAR_CCE_v0_1.md and ALIAS_WIDE_LEXICON_v0_1.json were written first and are pinned below. The hand set is written by an independent sub-agent (OPEN_QUESTIONS Q12) and pinned in handset/HAND_SET_FREEZE.json before the parser is run on it.",
+  "owner_words_verbatim": [
+    {"when": "2026-10-14 about 9:10 PM Pacific", "words": "RB2b, LM defaults, RB-C defaults, delete them"},
+    {"when": "2026-10-14 (standing rule)", "words": "Run it locally as long as it Quick if long use aws"},
+    {"when": "2026-10-14 (question folded into LM-T2)", "words": "can the coordinates in this case be taught and should they have a stochastic quality?"}
+  ],
+  "operator_interpretation": "'LM defaults' = take all 19 defaults in cas_language_first_principles_map_v1/OPEN_QUESTIONS.md, run LM-T1, then LM-T2 with a taught-coordinates arm. Laptop (MSI) only if each run is under 300 s wall and 300 MiB working set, sockets blocked, no spend; one process. This record is not an owner-signed phase-approval record and promotes no claim.",
+  "defaults_taken": {
+    "Q1": "reasoned cause = ^6 then ^9 as a time-ordered sequence (+ with order), no fusion",
+    "Q2": "English modal words -> Domains is a CCE-only PROPOSED convention; CCE v0.1 uses only the four Domain words",
+    "Q3": "ALIAS tier = Clarification 6 + sdg_bridge_v2 frozen phrases + definition verbs; bare cause/effect dropped; no new alias",
+    "Q4": "bare 'X is bad' refused (NOT_CCE)",
+    "Q5": "lexicon frozen from canon only; scored once on the 439 un-examined recipe rows; the 42 read rows excluded from the headline",
+    "Q6": "SDG mark 40% = 176 of 439, PROPOSED",
+    "Q7": "promise out of v0.1",
+    "Q8": "digits + one..ten + half; vague amounts refused",
+    "Q9": "nesting depth at most 2",
+    "Q10": "not applicable here (no learned parser)",
+    "Q11": "laptop once under the supervisor caps after the sign line",
+    "Q12": "hand set by an independent sub-agent that has not seen parser code; hashed before scoring",
+    "Q13": "social style never maps to a Register",
+    "Q14": "I = SELF, you = USER, declared names; no third-person pronouns",
+    "Q15": "Drive names Unity, Wisdom, Vitality, Connection, Agency, Structure, Purpose",
+    "Q16": "wording draw cap 8 then the fixed twin; 'I cannot tell.' never drawn",
+    "Q17": "in parallel, laptop, 0 USD",
+    "Q18": "point = coefficient-weighted counts over 40 states + floor 1/400 per state, normalized, exact Fractions until the distance step (LM-T2)",
+    "Q19": "theta_seam and theta_drift frozen on a separate seed-5 calibration set (LM-T2)"
+  },
+  "brief_conflict_disclosed": "The coordinator's brief listed 'embedding to depth 5'. Owner default Q9 says depth at most 2, and the TEST_PLAN trap requires depth 3 to be refused. Frozen: CCE v0.1 accepts depth <= 2 (NEST_TOO_DEEP above). The recursive machinery is unit-tested to depth 5 with the limit raised inside the test only.",
+  "pinned_design_files": {
+    "GRAMMAR_CCE_v0_1.md": "36b9a6dbb52facdadf293476d5623fb80d122cf90412ba3d033d9de59b12ef70",
+    "ALIAS_WIDE_LEXICON_v0_1.json": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0"
+  },
+  "inputs": {
+    "seeds": {"path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas-synthetic/data/path_d/seeds.jsonl", "sha256": "df68d2447ccd7371f8b9a18e48fa90269914be2505f1a96d92e4164aabe91639", "use": "the 576 recipe seeds (uses_theta_recipe true), parsed by sdg_bridge_v2.grammar.parse_recipe (imported, unchanged)"},
+    "english_files": {
+      "wave3_step2_5_english_descriptions_20260508T203848Z.jsonl": "b825b67a3029657f40d128d382448b5f0b55580fc7451bfce8b4a35687a46817",
+      "wave3_step2_5_english_descriptions_20260509T002355Z.jsonl": "d814397c4957ce89e6721cfcb2ec3852773976ad7176e25247d98d7d7ef6893e",
+      "wave3_step2_5_english_descriptions_20260509T002541Z.jsonl": "23ac1e36021bec455309bf7ff02d759a7766838eda03faba01cc3b069bec1028"
+    },
+    "bridge_v2": "C:/Users/wakil/Documents/Codex/CAS-Recipe-Network-Comparison-20261011/sdg_bridge_v2 (grammar.py, english.py imported read-only; source as run b77ad449)",
+    "compiler": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py via fair_data_experiment_v2_sdg.sdg_source.load_compiler (imports in about 0.1 s; USED)",
+    "lacunarity_machine": "lacunarity_machine_v1/lacunarity_machine (universe, ledger, readers) imported read-only"
+  },
+  "headline_rows": {
+    "rule": "recipe rows whose source_cas parses under bridge v2 (481), minus the 42 rows bridge v2 marked MISMATCH (read by an operator) = 439",
+    "excluded_42_seed_ids": ["seed_recipe_00459", "seed_recipe_00229", "seed_recipe_00193", "seed_recipe_00360", "seed_recipe_00405", "seed_recipe_00356", "seed_recipe_00262", "seed_recipe_00524", "seed_recipe_00113", "seed_recipe_00353", "seed_recipe_00003", "seed_recipe_00135", "seed_recipe_00172", "seed_recipe_00043", "seed_recipe_00240", "seed_recipe_00192", "seed_recipe_00539", "seed_recipe_00519", "seed_recipe_00342", "seed_recipe_00205", "seed_recipe_00180", "seed_recipe_00098", "seed_recipe_00002", "seed_recipe_00026", "seed_recipe_00565", "seed_recipe_00112", "seed_recipe_00178", "seed_recipe_00007", "seed_recipe_00423", "seed_recipe_00166", "seed_recipe_00108", "seed_recipe_00464", "seed_recipe_00259", "seed_recipe_00001", "seed_recipe_00542", "seed_recipe_00167", "seed_recipe_00294", "seed_recipe_00320", "seed_recipe_00100", "seed_recipe_00088", "seed_recipe_00237", "seed_recipe_00528"],
+    "baseline_bridge_v2_match_on_439": 118
+  },
+  "content_normalization": "content records as in GRAMMAR_CCE_v0_1.md section 9. Terms, recipe terms, leakage, stocks, catalysts, inhibitors, relations and lacunae compare as sorted multisets; sequence and fractal keep order; numbers compare as exact Decimals (2.0 = 2); register lists sort in T, A, f, E order; one_of sets sort; names byte for byte. Absent top-level fields are filled with their empty value (null / [] / 'ANSWER' / 'NONE' / 'RIGHT_PATH'). Nothing else is normalized.",
+  "arms": {
+    "CCE": "the CCE v0.1 parser and renderer (test arm)",
+    "LOOKUP": "dumb baseline: a table built from every content the run knows (576 recipes, hand-set gold contents, ledger probes): content -> its CANON sentence, and that exact sentence -> content. Reads nothing else. Refusal code NOT_IN_TABLE.",
+    "BRIDGE_V2": "sdg_bridge_v2/english.py check_binding as frozen (SDG mark only)",
+    "COIN_WORDING": "control: random strings of 6-14 words drawn from the lexicon tiers (CANON verbs, ALIAS verbs, function words, Noetic names, tail words) plus the content's own names, seeds 11, 29, 47, 8 per content; read back against the intended content; must equal it 0 times"
+  },
+  "marks": {
+    "M1": {"what": "CAS-first round trip, fixed CANON wording, all 576 SDG recipe seeds", "pass": "576 of 576", "type": "hard"},
+    "M2": {"what": "wording draws: 576 contents x 8 draws x seeds 11, 29, 47; a draw is said only if read-back passes (cap 8 then fixed twin)", "pass": "0 sentences said that fail read-back; 576 of 576 contents sayable; COIN_WORDING read-back equal 0", "type": "hard", "reported": "distinct admitted wordings per content (min / median / max) over the 24 draws"},
+    "M3": {"what": "hand set of 64 (48 positives, 16 traps), independent writer", "pass": "64 of 64: positives and trap-parse items parse to their gold content AND round-trip; trap-refuse items are refused with the named code", "type": "hard"},
+    "M4": {"what": "SDG English, ALIAS-WIDE mode, 439 headline rows, same tuple as bridge v2 (coefficient, role, kind, state, negation)", "pass": "MATCH >= 176 of 439 (40%), PROPOSED", "type": "soft", "baseline": "BRIDGE_V2 = 118 of 439", "reported": "register and drive agreement among MATCH rows (second number); strict-CCE parses of the SDG rows; LOOKUP matches"},
+    "M5": {"what": "negative controls", "pass": "seed_recipe_00459 reads MISMATCH (else the check is declared broken)", "type": "hard (00459)", "flags": "00229, 00193, 00360, 00353, 00320, 00528: any MATCH -> FLAG_FOR_HUMAN_REVIEW; 00026 reported only"},
+    "M5b_SHUFFLED": {"what": "label-shuffled control: each of the 439 headline English sentences is paired with a different recipe by a seeded derangement (seed 11) restricted to pairs whose CAS tuple multisets differ", "pass": "MATCH = 0", "type": "hard"},
+    "M6": {"what": "coverage ledger over (fundamental x Noetic x Domain x Register) with the Lacunarity Machine", "pass": "all 2,600 main cells in exactly one of COVERED / NO_EVIDENCE / LACUNA / FADED; covered_without_charge = 0; every COVERED cell has a receipt id", "type": "hard", "reported": "state counts; side universes U-TURN, U-DRIVE, U-RECIPE, U-CATEGORY"},
+    "M7": {"what": "CAS-side cross-check by the CAS compiler (never sees English)", "pass": "for all 576 recipes the compiler's (coefficient, Noetic, Domain, Drive, Register, leakage) equals the round-tripped content; for every frame term of the ledger probes and hand-set gold with a single register or none, the compiled state index, drive and register equal the term", "type": "hard", "not_checked": "register sets and emergent x terms: unit tests only (the compiler cannot read them inside a recipe), as in bridge v2"}
+  },
+  "reading_rule": "LM-T1 core = PASS only if M1, M2, M3, M5 (00459), M5b, M6 and M7 all pass. Any failed hard mark is a FAILURE, never 'pass with caveats'. M4 is read separately as 'SDG mark met' / 'SDG mark not met'. Claim ceiling: ENGINEERED-NOT-VALIDATED for the translator; no meaning claim; no Noetic-label claim for free English.",
+  "test_gate": "unit tests (per frame parse/render, round-trip property on fixtures, negation, + / x discipline, gate, nesting) must all pass inside the worker before scoring, else ABORTED_TEST_GATE",
+  "predictions_before_build": {
+    "M1": "pass 576 of 576",
+    "M2": "pass; distinct admitted wordings per content median >= 8 (term order, tail order, name-or-definition reference, number words)",
+    "M3": "56-64 of 64; an independent writer makes some gold or form choices the parser does not share; any shortfall is a FAILURE of the hard mark",
+    "M3_LOOKUP": "LOOKUP fails every ALIAS-tier and re-ordered positive and every trap",
+    "M4": "130-210 of 439 (30%-48%); about a coin flip on the 176 mark",
+    "M4_LOOKUP": "0 of 439",
+    "M5": "00459 MISMATCH",
+    "M5b": "0",
+    "M6": "COVERED >= 95% of 2,600 cells",
+    "M7": "pass",
+    "runtime": "under 30 s wall, under 100 MiB"
+  },
+  "run": {
+    "environment": "LOCAL_CPU_ONCE on MSI", "hard_wall_seconds": 300, "memory_cap_mib": 300,
+    "network": "sockets blocked in the worker", "spend": 0, "processes": 1,
+    "sign_line_template": "APPROVE lm_t1, source <manifest8>, LOCAL_CPU_ONCE on MSI, 300 s cap, no spend."
+  }
+}

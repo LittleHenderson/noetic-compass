@@ -1,0 +1,2084 @@
+{
+ "items": [
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:68137@91761",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "scones",
+   "turns": [
+    "We made 1 scones from 4 cups flour, 4 cups milk and 2 egg and ran out of flour.",
+    "We made 1 scones from 8 cups flour, 2 cups milk and 2 egg and ran out of milk.",
+    "We made 1 scones from 8 cups flour, 4 cups milk and 1 egg and ran out of egg.",
+    "We have 2 cups flour, 8/3 cups milk and 3/4 egg.",
+    "How much scones can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:52800@457564",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "plums",
+   "turns": [
+    "We made 1 plums from 4 pounds plums and 8 pounds sugar and ran out of plums.",
+    "We made 1 plums from 8 pounds plums and 4 pounds sugar and ran out of sugar.",
+    "We have 16/3 pounds plums and 6 pounds sugar.",
+    "How much plums can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:65793@6637",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "punch",
+   "turns": [
+    "We made 1 punch from 2 quarts lime sherbet and 4 quarts ginger ale and ran out of lime sherbet.",
+    "We made 1 punch from 4 quarts lime sherbet and 2 quarts ginger ale and ran out of ginger ale.",
+    "We have 3 quarts lime sherbet and 7 quarts ginger ale.",
+    "How much punch can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:49707@19748",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "dumplings",
+   "turns": [
+    "We made 1 dumplings from 1 teacupful flour and 4 tablespoonfuls chopped suet and ran out of flour.",
+    "We made 1 dumplings from 2 teacupful flour and 2 tablespoonfuls chopped suet and ran out of tablespoonfuls chopped suet.",
+    "We have 4/3 teacupful flour and 3/2 tablespoonfuls chopped suet.",
+    "How much dumplings can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:17438@110255",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "add",
+   "turns": [
+    "We made 1 add from One quart of boiling water, and 2 large onion with two cloves stuck in it, and ran out of boiling water.",
+    "We made 1 add from 2 quart of boiling water, and One large onion with two cloves stuck in it, and ran out of large onion.",
+    "We have 5/2 quart of boiling water, and 1/3 large onion with two cloves stuck in it,.",
+    "How much add can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:8542@39202",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "veal",
+   "turns": [
+    "We made 1 veal from 2 Pounds of Veal, or according to size of family and 2 Egg and ran out of veal.",
+    "We made 1 veal from 4 Pounds of Veal, or according to size of family and 1 Egg and ran out of egg.",
+    "We have 3/2 Pounds of Veal, or according to size of family and 2/3 Egg.",
+    "How much veal can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:34822@179925",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "stock",
+   "turns": [
+    "We made 1 stock from 1 knuckle of veal. and 2 fowl. and ran out of knuckle of veal.",
+    "We made 1 stock from 2 knuckle of veal. and 1 fowl. and ran out of fowl.",
+    "We have 3/4 knuckle of veal. and 4 fowl..",
+    "How much stock can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:63007@34737",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "soup",
+   "turns": [
+    "We made 1 soup from 1 quart clarified soup stock, 4 onions and 4 large or 4 small green peppers and ran out of clarified soup stock.",
+    "We made 1 soup from 2 quart clarified soup stock, 2 onions and 4 large or 4 small green peppers and ran out of onions.",
+    "We made 1 soup from 2 quart clarified soup stock, 4 onions and 2 large or 4 small green peppers and ran out of large.",
+    "We have 3/4 quart clarified soup stock, 2/3 onions and 6 large or 4 small green peppers.",
+    "How much soup can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:49958@180142",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "soup",
+   "turns": [
+    "We made 1 soup from 4 calf\u2019s feet. and 2 onion. and ran out of calf\u2019s feet.",
+    "We made 1 soup from 8 calf\u2019s feet. and 1 onion. and ran out of onion.",
+    "We have 3 calf\u2019s feet. and 7/2 onion..",
+    "How much soup can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:48804@297567",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 2 large heads of celery., 2 teacupful of broth in which the fowl is boiled. and 2 teacupful cream or milk. and ran out of large heads of celery.",
+    "We made 1 sauce from 4 large heads of celery., 1 teacupful of broth in which the fowl is boiled. and 2 teacupful cream or milk. and ran out of broth.",
+    "We made 1 sauce from 4 large heads of celery., 2 teacupful of broth in which the fowl is boiled. and 1 teacupful cream or milk. and ran out of cream.",
+    "We have 5 large heads of celery., 3/4 teacupful of broth in which the fowl is boiled. and 4 teacupful cream or milk..",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:wb:146786:4512360",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "smoothie",
+   "turns": [
+    "We made 1 smoothie from 2 cups unsweetened vanilla-flavored almond milk, 2 large, ripe D'Anjou pear and 2 lemon wedge and ran out of unsweetened vanilla-flavored almond milk.",
+    "We made 1 smoothie from 4 cups unsweetened vanilla-flavored almond milk, 1 large, ripe D'Anjou pear and 2 lemon wedge and ran out of large.",
+    "We made 1 smoothie from 4 cups unsweetened vanilla-flavored almond milk, 2 large, ripe D'Anjou pear and 1 lemon wedge and ran out of lemon wedge.",
+    "We have 6 cups unsweetened vanilla-flavored almond milk, 4 large, ripe D'Anjou pear and 4/3 lemon wedge.",
+    "How much smoothie can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:48804@517687",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "jumbles",
+   "turns": [
+    "We made 1 jumbles from 1 lb. butter., 2 lb. sugar. and 8 eggs. and ran out of butter.",
+    "We made 1 jumbles from 2 lb. butter., 1 lb. sugar. and 8 eggs. and ran out of sugar.",
+    "We made 1 jumbles from 2 lb. butter., 2 lb. sugar. and 4 eggs. and ran out of eggs.",
+    "We have 1/3 lb. butter., 3/2 lb. sugar. and 14 eggs..",
+    "How much jumbles can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:62655@40706",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "spread",
+   "turns": [
+    "We made 1 spread from 1 large avocado and 2 small onion, minced and ran out of large avocado.",
+    "We made 1 spread from 2 large avocado and 1 small onion, minced and ran out of small onion.",
+    "We have 7/2 large avocado and 4 small onion, minced.",
+    "How much spread can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "RW:pg:48804@513536",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cookies",
+   "turns": [
+    "We made 1 cookies from 6 eggs, whites and yolks separately., 2 cup butter. and 6 cups sugar. and ran out of eggs.",
+    "We made 1 cookies from 12 eggs, whites and yolks separately., 1 cup butter. and 6 cups sugar. and ran out of butter.",
+    "We made 1 cookies from 12 eggs, whites and yolks separately., 2 cup butter. and 3 cups sugar. and ran out of sugar.",
+    "We have 9/2 eggs, whites and yolks separately., 4 cup butter. and 21/2 cups sugar..",
+    "How much cookies can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:56540@242802",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "steaks",
+   "turns": [
+    "We made 1 steaks from 1 pound of round, shoulder, or flank of beef., 1/2 teaspoonful of pepper. and 2 teaspoonful of salt. and ran out of round.",
+    "We made 1 steaks from 2 pound of round, shoulder, or flank of beef., 1/4 teaspoonful of pepper. and 2 teaspoonful of salt. and ran out of teaspoonful of pepper.",
+    "We made 1 steaks from 2 pound of round, shoulder, or flank of beef., 1/2 teaspoonful of pepper. and 1 teaspoonful of salt. and ran out of teaspoonful of salt.",
+    "We have 3 pound of round, shoulder, or flank of beef., 1/6 teaspoonful of pepper. and 3/4 teaspoonful of salt..",
+    "How much steaks can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:65061@1063756",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from \u00bd cup butter, 1 cup brown sugar and 2 egg and ran out of butter.",
+    "We made 1 cake from 1 cup butter, \u00bd cup brown sugar and 2 egg and ran out of brown sugar.",
+    "We made 1 cake from 1 cup butter, 1 cup brown sugar and 1 egg and ran out of egg.",
+    "We have 1/4 cup butter, 1/6 cup brown sugar and 7/2 egg.",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:65061@98198",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "cocoa",
+   "turns": [
+    "We made 1 cocoa from \u00bd cup cracked cocoa and 6 pints boiling water and ran out of cracked cocoa.",
+    "We made 1 cocoa from 1 cup cracked cocoa and 3 pints boiling water and ran out of boiling water.",
+    "We have 3/4 cup cracked cocoa and 9 pints boiling water.",
+    "How much cocoa can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:31534@190496",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 teaspoon salt. and 1/4 teaspoon black pepper. and ran out of salt.",
+    "We made 1 sauce from 2 teaspoon salt. and 1/8 teaspoon black pepper. and ran out of black pepper.",
+    "We have 5/2 teaspoon salt. and 1/12 teaspoon black pepper..",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:65706@87827",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "chowder",
+   "turns": [
+    "We made 1 chowder from 1 cup dry beans, 2 quart water and 3/2 cup chopped carrots and ran out of dry beans.",
+    "We made 1 chowder from 2 cup dry beans, 1 quart water and 3/2 cup chopped carrots and ran out of water.",
+    "We made 1 chowder from 2 cup dry beans, 2 quart water and \u00be cup chopped carrots and ran out of chopped carrots.",
+    "We have 3 cup dry beans, 3/4 quart water and 15/8 cup chopped carrots.",
+    "How much chowder can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:16514@116749",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 egg., 1 cup powdered sugar. and 2 teaspoonful vanilla. and ran out of egg.",
+    "We made 1 sauce from 2 egg., 1/2 cup powdered sugar. and 2 teaspoonful vanilla. and ran out of powdered sugar.",
+    "We made 1 sauce from 2 egg., 1 cup powdered sugar. and 1 teaspoonful vanilla. and ran out of teaspoonful vanilla.",
+    "We have 3/4 egg., 2/3 cup powdered sugar. and 4 teaspoonful vanilla..",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:13286@209067",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sandwiches",
+   "turns": [
+    "We made 1 sandwiches from 1 tablespoonful Crisco, 1/2 cupful grated horseradish and 2 tomato and ran out of tablespoonful crisco.",
+    "We made 1 sandwiches from 2 tablespoonful Crisco, 1/4 cupful grated horseradish and 2 tomato and ran out of cupful grated horseradish.",
+    "We made 1 sandwiches from 2 tablespoonful Crisco, 1/2 cupful grated horseradish and 1 tomato and ran out of tomato.",
+    "We have 3/2 tablespoonful Crisco, 7/8 cupful grated horseradish and 1/3 tomato.",
+    "How much sandwiches can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:51542@188088",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "eggs",
+   "turns": [
+    "We made 1 eggs from 3 eggs,, 1 teaspoonful salt, and 2/3 cup milk or water, and ran out of eggs.",
+    "We made 1 eggs from 6 eggs,, \u00bd teaspoonful salt, and 2/3 cup milk or water, and ran out of teaspoonful salt.",
+    "We made 1 eggs from 6 eggs,, 1 teaspoonful salt, and \u2153 cup milk or water, and ran out of milk.",
+    "We have 1 eggs,, 3/2 teaspoonful salt, and 7/6 cup milk or water,.",
+    "How much eggs can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:15464@147392",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "pimento",
+   "turns": [
+    "We made 1 pimento from 1/4 cup horseradish, 2 tablespoon chopped pimento and 2 cup white sauce and ran out of horseradish.",
+    "We made 1 pimento from 1/2 cup horseradish, 1 tablespoon chopped pimento and 2 cup white sauce and ran out of chopped pimento.",
+    "We made 1 pimento from 1/2 cup horseradish, 2 tablespoon chopped pimento and 1 cup white sauce and ran out of white sauce.",
+    "We have 1/3 cup horseradish, 4 tablespoon chopped pimento and 3/4 cup white sauce.",
+    "How much pimento can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:48804@510458",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 1 lb. sugar., 3/2 lb. flour. and 1 lb. butter. and ran out of sugar.",
+    "We made 1 cake from 2 lb. sugar., \u00be lb. flour. and 1 lb. butter. and ran out of flour.",
+    "We made 1 cake from 2 lb. sugar., 3/2 lb. flour. and \u00bd lb. butter. and ran out of butter.",
+    "We have 7/2 lb. sugar., 1 lb. flour. and 3/2 lb. butter..",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:52800@149770",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "chicken",
+   "turns": [
+    "We made 1 chicken from 2 cups soft bread crumbs, 1/2 cup melted butter and 2 tablespoon poultry seasoning and ran out of soft bread crumbs.",
+    "We made 1 chicken from 4 cups soft bread crumbs, \u00bc cup melted butter and 2 tablespoon poultry seasoning and ran out of melted butter.",
+    "We made 1 chicken from 4 cups soft bread crumbs, 1/2 cup melted butter and 1 tablespoon poultry seasoning and ran out of poultry seasoning.",
+    "We have 5 cups soft bread crumbs, 7/8 cup melted butter and 3 tablespoon poultry seasoning.",
+    "How much chicken can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:65061@530389",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "i",
+   "turns": [
+    "We made 1 i from 1 cup cracker crumbs, 2/3 cup butter and 2/3 cup boiling water and ran out of cracker crumbs.",
+    "We made 1 i from 2 cup cracker crumbs, \u2153 cup butter and 2/3 cup boiling water and ran out of butter.",
+    "We made 1 i from 2 cup cracker crumbs, 2/3 cup butter and \u2153 cup boiling water and ran out of boiling water.",
+    "We have 4 cup cracker crumbs, 5/6 cup butter and 1/4 cup boiling water.",
+    "How much i can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:pg:63883@565406",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "half",
+   "turns": [
+    "We made 1 half from 1 cup of brown sugar, 1 cup of milk and 2 cup of grated bitter chocolate and ran out of brown sugar.",
+    "We made 1 half from 2 cup of brown sugar, \u00bd cup of milk and 2 cup of grated bitter chocolate and ran out of milk.",
+    "We made 1 half from 2 cup of brown sugar, 1 cup of milk and 1 cup of grated bitter chocolate and ran out of grated bitter chocolate.",
+    "We have 2/3 cup of brown sugar, 7/4 cup of milk and 3 cup of grated bitter chocolate.",
+    "How much half can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "RW:wb:17844:4606890",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "porridge",
+   "turns": [
+    "We made 1 porridge from \u00bd cup (45 g) rolled oats or other grain, 3/2 cup (180 ml) water and 3/2 cup (180 ml) milk and ran out of rolled oats.",
+    "We made 1 porridge from 1 cup (45 g) rolled oats or other grain, \u00be cup (180 ml) water and 3/2 cup (180 ml) milk and ran out of water.",
+    "We made 1 porridge from 1 cup (45 g) rolled oats or other grain, 3/2 cup (180 ml) water and \u00be cup (180 ml) milk and ran out of milk.",
+    "We have 1/6 cup (45 g) rolled oats or other grain, 21/8 cup (180 ml) water and 15/8 cup (180 ml) milk.",
+    "How much porridge can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:62655@30880",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "morocco",
+   "turns": [
+    "We made 1 morocco from 1\u00bd tablespoons paprika, 4 teaspoons ginger and 2 teaspoon salt and ran out of paprika.",
+    "We made 1 morocco from 3 tablespoons paprika, 2 teaspoons ginger and 2 teaspoon salt and ran out of ginger.",
+    "We made 1 morocco from 3 tablespoons paprika, 4 teaspoons ginger and 1 teaspoon salt and ran out of salt.",
+    "We have 2 tablespoons paprika, 5 teaspoons ginger and 4 teaspoon salt.",
+    "How much morocco can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:77733@306693",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "paste",
+   "turns": [
+    "We made 1 paste from 1\u00bd pints rain water and 2 oz. gum tragacanth and ran out of rain water.",
+    "We made 1 paste from 3 pints rain water and 1 oz. gum tragacanth and ran out of gum tragacanth.",
+    "We have 9/8 pints rain water and 4/3 oz. gum tragacanth.",
+    "How much paste can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:49958@514208",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "ham",
+   "turns": [
+    "We made 1 ham from 2 lbs. veal cutlets without bone. and 3 lbs. of ham. and ran out of veal cutlets without bone.",
+    "We made 1 ham from 4 lbs. veal cutlets without bone. and 1\u00bd lbs. of ham. and ran out of ham.",
+    "We have 5 lbs. veal cutlets without bone. and 1 lbs. of ham..",
+    "How much ham can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:42450@516369",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 5 cupfuls of flour., 6 cupfuls of sugar. and 3 cupfuls of butter. and ran out of cupfuls of flour.",
+    "We made 1 cake from 10 cupfuls of flour., 3 cupfuls of sugar. and 3 cupfuls of butter. and ran out of cupfuls of sugar.",
+    "We made 1 cake from 10 cupfuls of flour., 6 cupfuls of sugar. and 1\u00bd cupfuls of butter. and ran out of cupfuls of butter.",
+    "We have 20 cupfuls of flour., 9/2 cupfuls of sugar. and 15/4 cupfuls of butter..",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:34185@2865",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sherbet",
+   "turns": [
+    "We made 1 sherbet from 2 3/4 cups water, 4 cups sugar and 8 cups Eatmor Cranberries and ran out of water.",
+    "We made 1 sherbet from 11/2 cups water, 2 cups sugar and 8 cups Eatmor Cranberries and ran out of sugar.",
+    "We made 1 sherbet from 11/2 cups water, 4 cups sugar and 4 cups Eatmor Cranberries and ran out of eatmor cranberries.",
+    "We have 11/6 cups water, 8 cups sugar and 12 cups Eatmor Cranberries.",
+    "How much sherbet can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:43468@536212",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "unequaled",
+   "turns": [
+    "We made 1 unequaled from \u00bc cup butter, 1 cup flour and 3 cup milk and ran out of butter.",
+    "We made 1 unequaled from 1/2 cup butter, \u00bd cup flour and 3 cup milk and ran out of flour.",
+    "We made 1 unequaled from 1/2 cup butter, 1 cup flour and 1\u00bd cup milk and ran out of milk.",
+    "We have 1/8 cup butter, 2 cup flour and 2 cup milk.",
+    "How much unequaled can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:70067@93517",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "balls",
+   "turns": [
+    "We made 1 balls from 1\u00bd cupfuls of grated cheese. and 2 tablespoonful of flour. and ran out of cupfuls of grated cheese.",
+    "We made 1 balls from 3 cupfuls of grated cheese. and 1 tablespoonful of flour. and ran out of tablespoonful of flour.",
+    "We have 21/4 cupfuls of grated cheese. and 4 tablespoonful of flour..",
+    "How much balls can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:52800@170552",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "oatmeal",
+   "turns": [
+    "We made 1 oatmeal from 1 cup oatmeal, 8 cups boiling water and 3 teaspoons salt and ran out of oatmeal.",
+    "We made 1 oatmeal from 2 cup oatmeal, 4 cups boiling water and 3 teaspoons salt and ran out of boiling water.",
+    "We made 1 oatmeal from 2 cup oatmeal, 8 cups boiling water and 1\u00bd teaspoons salt and ran out of salt.",
+    "We have 2/3 cup oatmeal, 3 cups boiling water and 3/4 teaspoons salt.",
+    "How much oatmeal can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:6912@55288",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "corn",
+   "turns": [
+    "We made 1 corn from 1 can corn, 4/3 cupful milk and 5/2 teaspoonfuls salt and ran out of corn.",
+    "We made 1 corn from 2 can corn, 2/3 cupful milk and 5/2 teaspoonfuls salt and ran out of cupful milk.",
+    "We made 1 corn from 2 can corn, 4/3 cupful milk and 1 1/4 teaspoonfuls salt and ran out of teaspoonfuls salt.",
+    "We have 7/2 can corn, 2/9 cupful milk and 15/8 teaspoonfuls salt.",
+    "How much corn can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:64685@59328",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1\u00bd cups sugar, 2 cup water and 2 tsp. vanilla and ran out of sugar.",
+    "We made 1 sauce from 3 cups sugar, 1 cup water and 2 tsp. vanilla and ran out of water.",
+    "We made 1 sauce from 3 cups sugar, 2 cup water and 1 tsp. vanilla and ran out of vanilla.",
+    "We have 9/2 cups sugar, 4 cup water and 1/2 tsp. vanilla.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:26323@156349",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 1/2 cups whitestock, 2 slice onion and 2 slice carrot and ran out of whitestock.",
+    "We made 1 sauce from 3 cups whitestock, 1 slice onion and 2 slice carrot and ran out of slice onion.",
+    "We made 1 sauce from 3 cups whitestock, 2 slice onion and 1 slice carrot and ran out of slice carrot.",
+    "We have 6 cups whitestock, 3/4 slice onion and 1/2 slice carrot.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:42450@493371",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 1 teacup of butter., 6 teacups of sugar. and 7 teacups of flour. and ran out of teacup of butter.",
+    "We made 1 cake from 2 teacup of butter., 3 teacups of sugar. and 7 teacups of flour. and ran out of teacups of sugar.",
+    "We made 1 cake from 2 teacup of butter., 6 teacups of sugar. and 3\u00bd teacups of flour. and ran out of teacups of flour.",
+    "We have 3/2 teacup of butter., 3/2 teacups of sugar. and 14 teacups of flour..",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:77733@319231",
+   "n_lessons": 2,
+   "n_lines": 2,
+   "noun": "paper",
+   "turns": [
+    "We made 1 paper from 1 quart cold water and 5/2 cupfuls aqua ammonia and ran out of cold water.",
+    "We made 1 paper from 2 quart cold water and 1\u00bc cupfuls aqua ammonia and ran out of cupfuls aqua ammonia.",
+    "We have 7/2 quart cold water and 5/8 cupfuls aqua ammonia.",
+    "How much paper can we make?"
+   ]
+  },
+  {
+   "cell": "C23:MIXED",
+   "id": "RW:pg:52800@171704",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "rice",
+   "turns": [
+    "We made 1 rice from 1 cup rice, 5 cups boiling water and 2 teaspoon salt and ran out of rice.",
+    "We made 1 rice from 2 cup rice, 2\u00bd cups boiling water and 2 teaspoon salt and ran out of boiling water.",
+    "We made 1 rice from 2 cup rice, 5 cups boiling water and 1 teaspoon salt and ran out of salt.",
+    "We have 1/3 cup rice, 10/3 cups boiling water and 4 teaspoon salt.",
+    "How much rice can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:78849@150577",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "france",
+   "turns": [
+    "We made 1 france from 3 tablespoonfuls Crisco, 4 lbs. new potatoes, 4 sprigs mint, 2 teaspoonful salt, 2 tablespoonful chopped parsley and 2 tablespoonful lemon juice and ran out of tablespoonfuls crisco.",
+    "We made 1 france from 6 tablespoonfuls Crisco, 2 lbs. new potatoes, 4 sprigs mint, 2 teaspoonful salt, 2 tablespoonful chopped parsley and 2 tablespoonful lemon juice and ran out of new potatoes.",
+    "We made 1 france from 6 tablespoonfuls Crisco, 4 lbs. new potatoes, 2 sprigs mint, 2 teaspoonful salt, 2 tablespoonful chopped parsley and 2 tablespoonful lemon juice and ran out of sprigs mint.",
+    "We made 1 france from 6 tablespoonfuls Crisco, 4 lbs. new potatoes, 4 sprigs mint, 1 teaspoonful salt, 2 tablespoonful chopped parsley and 2 tablespoonful lemon juice and ran out of teaspoonful salt.",
+    "We made 1 france from 6 tablespoonfuls Crisco, 4 lbs. new potatoes, 4 sprigs mint, 2 teaspoonful salt, 1 tablespoonful chopped parsley and 2 tablespoonful lemon juice and ran out of tablespoonful chopped parsley.",
+    "We made 1 france from 6 tablespoonfuls Crisco, 4 lbs. new potatoes, 4 sprigs mint, 2 teaspoonful salt, 2 tablespoonful chopped parsley and 1 tablespoonful lemon juice and ran out of tablespoonful lemon juice.",
+    "We have 21/2 tablespoonfuls Crisco, 3 lbs. new potatoes, 4/3 sprigs mint, 3/4 teaspoonful salt, 4/3 tablespoonful chopped parsley and 1/3 tablespoonful lemon juice.",
+    "How much france can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:79370@235844",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "dumplings",
+   "turns": [
+    "We made 1 dumplings from 4 level teaspoonfuls RYZON., 4 level cupfuls (\u00bd pound) flour., 2 level teaspoonful salt. and 2 level tablespoonful (\u00bd ounce) shortening. and ran out of level teaspoonfuls ryzon.",
+    "We made 1 dumplings from 8 level teaspoonfuls RYZON., 2 level cupfuls (\u00bd pound) flour., 2 level teaspoonful salt. and 2 level tablespoonful (\u00bd ounce) shortening. and ran out of level cupfuls flour.",
+    "We made 1 dumplings from 8 level teaspoonfuls RYZON., 4 level cupfuls (\u00bd pound) flour., 1 level teaspoonful salt. and 2 level tablespoonful (\u00bd ounce) shortening. and ran out of level teaspoonful salt.",
+    "We made 1 dumplings from 8 level teaspoonfuls RYZON., 4 level cupfuls (\u00bd pound) flour., 2 level teaspoonful salt. and 1 level tablespoonful (\u00bd ounce) shortening. and ran out of level tablespoonful shortening.",
+    "We have 6 level teaspoonfuls RYZON., 1 level cupfuls (\u00bd pound) flour., 7/2 level teaspoonful salt. and 4/3 level tablespoonful (\u00bd ounce) shortening..",
+    "How much dumplings can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:49707@25460",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "cakes",
+   "turns": [
+    "We made 1 cakes from 1 teacup curds, 2 oz. butter, 2 oz. sugar, 2 egg and 2 tablespoon currants and ran out of teacup curds.",
+    "We made 1 cakes from 2 teacup curds, 1 oz. butter, 2 oz. sugar, 2 egg and 2 tablespoon currants and ran out of butter.",
+    "We made 1 cakes from 2 teacup curds, 2 oz. butter, 1 oz. sugar, 2 egg and 2 tablespoon currants and ran out of sugar.",
+    "We made 1 cakes from 2 teacup curds, 2 oz. butter, 2 oz. sugar, 1 egg and 2 tablespoon currants and ran out of egg.",
+    "We made 1 cakes from 2 teacup curds, 2 oz. butter, 2 oz. sugar, 2 egg and 1 tablespoon currants and ran out of currants.",
+    "We have 3/4 teacup curds, 1/3 oz. butter, 3 oz. sugar, 5/2 egg and 4/3 tablespoon currants.",
+    "How much cakes can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:48804@477619",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "cakes",
+   "turns": [
+    "We made 1 cakes from 1 pint cream and same quantity of milk, slightly sour., 8 eggs, whites and yolks whipped separately., 2 teaspoonful soda dissolved in boiling water. and 2 teaspoonful salt. and ran out of cream.",
+    "We made 1 cakes from 2 pint cream and same quantity of milk, slightly sour., 4 eggs, whites and yolks whipped separately., 2 teaspoonful soda dissolved in boiling water. and 2 teaspoonful salt. and ran out of eggs.",
+    "We made 1 cakes from 2 pint cream and same quantity of milk, slightly sour., 8 eggs, whites and yolks whipped separately., 1 teaspoonful soda dissolved in boiling water. and 2 teaspoonful salt. and ran out of teaspoonful soda dissolved.",
+    "We made 1 cakes from 2 pint cream and same quantity of milk, slightly sour., 8 eggs, whites and yolks whipped separately., 2 teaspoonful soda dissolved in boiling water. and 1 teaspoonful salt. and ran out of teaspoonful salt.",
+    "We have 1/3 pint cream and same quantity of milk, slightly sour., 6 eggs, whites and yolks whipped separately., 1/2 teaspoonful soda dissolved in boiling water. and 7/2 teaspoonful salt..",
+    "How much cakes can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:wb:414652:4509646",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "meliana",
+   "turns": [
+    "We made 1 meliana from 1 kg of sugar cubes, 2 glass of warm water, 2 glass of pressed cherry juice and 2 tsp of broken cherry pits and ran out of sugar cubes.",
+    "We made 1 meliana from 2 kg of sugar cubes, 1 glass of warm water, 2 glass of pressed cherry juice and 2 tsp of broken cherry pits and ran out of glass of warm water.",
+    "We made 1 meliana from 2 kg of sugar cubes, 2 glass of warm water, 1 glass of pressed cherry juice and 2 tsp of broken cherry pits and ran out of glass of pressed cherry juice.",
+    "We made 1 meliana from 2 kg of sugar cubes, 2 glass of warm water, 2 glass of pressed cherry juice and 1 tsp of broken cherry pits and ran out of broken cherry pits.",
+    "We have 3/2 kg of sugar cubes, 1/3 glass of warm water, 2/3 glass of pressed cherry juice and 7/2 tsp of broken cherry pits.",
+    "How much meliana can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:48804@640661",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "cream",
+   "turns": [
+    "We made 1 cream from 1 pint of cream., 8 tablespoonfuls powdered sugar., 2 teaspoonful of nutmeg. and 2 teaspoonful vanilla. and ran out of cream.",
+    "We made 1 cream from 2 pint of cream., 4 tablespoonfuls powdered sugar., 2 teaspoonful of nutmeg. and 2 teaspoonful vanilla. and ran out of tablespoonfuls powdered sugar.",
+    "We made 1 cream from 2 pint of cream., 8 tablespoonfuls powdered sugar., 1 teaspoonful of nutmeg. and 2 teaspoonful vanilla. and ran out of teaspoonful of nutmeg.",
+    "We made 1 cream from 2 pint of cream., 8 tablespoonfuls powdered sugar., 2 teaspoonful of nutmeg. and 1 teaspoonful vanilla. and ran out of teaspoonful vanilla.",
+    "We have 3 pint of cream., 16 tablespoonfuls powdered sugar., 1/3 teaspoonful of nutmeg. and 1/2 teaspoonful vanilla..",
+    "How much cream can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:wb:447234:4522211",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "leben",
+   "turns": [
+    "We made 1 leben from 1 gallon homogenized whole milk, 2 cup unflavored (plain) yogurt, 2 quart half and half cream (optional), 2 teaspoon citric acid (optional) and 2 teaspoon sugar (optional) and ran out of homogenized whole milk.",
+    "We made 1 leben from 2 gallon homogenized whole milk, 1 cup unflavored (plain) yogurt, 2 quart half and half cream (optional), 2 teaspoon citric acid (optional) and 2 teaspoon sugar (optional) and ran out of unflavored yogurt.",
+    "We made 1 leben from 2 gallon homogenized whole milk, 2 cup unflavored (plain) yogurt, 1 quart half and half cream (optional), 2 teaspoon citric acid (optional) and 2 teaspoon sugar (optional) and ran out of half.",
+    "We made 1 leben from 2 gallon homogenized whole milk, 2 cup unflavored (plain) yogurt, 2 quart half and half cream (optional), 1 teaspoon citric acid (optional) and 2 teaspoon sugar (optional) and ran out of citric acid.",
+    "We made 1 leben from 2 gallon homogenized whole milk, 2 cup unflavored (plain) yogurt, 2 quart half and half cream (optional), 2 teaspoon citric acid (optional) and 1 teaspoon sugar (optional) and ran out of sugar.",
+    "We have 3 gallon homogenized whole milk, 7/2 cup unflavored (plain) yogurt, 2/3 quart half and half cream (optional), 5/2 teaspoon citric acid (optional) and 3/4 teaspoon sugar (optional).",
+    "How much leben can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:78849@317100",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "tomatoes",
+   "turns": [
+    "We made 1 tomatoes from 3 tablespoonfuls Crisco, 8 even-sized tomatoes, 16 rounds buttered toast, 6 eggs, 4 tablespoonfuls cream and 2 tablespoonful chopped pimiento and ran out of tablespoonfuls crisco.",
+    "We made 1 tomatoes from 6 tablespoonfuls Crisco, 4 even-sized tomatoes, 16 rounds buttered toast, 6 eggs, 4 tablespoonfuls cream and 2 tablespoonful chopped pimiento and ran out of even-sized tomatoes.",
+    "We made 1 tomatoes from 6 tablespoonfuls Crisco, 8 even-sized tomatoes, 8 rounds buttered toast, 6 eggs, 4 tablespoonfuls cream and 2 tablespoonful chopped pimiento and ran out of rounds buttered toast.",
+    "We made 1 tomatoes from 6 tablespoonfuls Crisco, 8 even-sized tomatoes, 16 rounds buttered toast, 3 eggs, 4 tablespoonfuls cream and 2 tablespoonful chopped pimiento and ran out of eggs.",
+    "We made 1 tomatoes from 6 tablespoonfuls Crisco, 8 even-sized tomatoes, 16 rounds buttered toast, 6 eggs, 2 tablespoonfuls cream and 2 tablespoonful chopped pimiento and ran out of tablespoonfuls cream.",
+    "We made 1 tomatoes from 6 tablespoonfuls Crisco, 8 even-sized tomatoes, 16 rounds buttered toast, 6 eggs, 4 tablespoonfuls cream and 1 tablespoonful chopped pimiento and ran out of tablespoonful chopped pimiento.",
+    "We have 2 tablespoonfuls Crisco, 3 even-sized tomatoes, 24 rounds buttered toast, 21/2 eggs, 3 tablespoonfuls cream and 4 tablespoonful chopped pimiento.",
+    "How much tomatoes can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:31534@54515",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "balls",
+   "turns": [
+    "We made 1 balls from 1 cup cold, cooked rice., 4 tablespoons flour., 2 teaspoon grated onion., 2 teaspoon finely chopped parsley. and 2 egg slightly beaten. and ran out of cold.",
+    "We made 1 balls from 2 cup cold, cooked rice., 2 tablespoons flour., 2 teaspoon grated onion., 2 teaspoon finely chopped parsley. and 2 egg slightly beaten. and ran out of flour.",
+    "We made 1 balls from 2 cup cold, cooked rice., 4 tablespoons flour., 1 teaspoon grated onion., 2 teaspoon finely chopped parsley. and 2 egg slightly beaten. and ran out of grated onion.",
+    "We made 1 balls from 2 cup cold, cooked rice., 4 tablespoons flour., 2 teaspoon grated onion., 1 teaspoon finely chopped parsley. and 2 egg slightly beaten. and ran out of finely chopped parsley.",
+    "We made 1 balls from 2 cup cold, cooked rice., 4 tablespoons flour., 2 teaspoon grated onion., 2 teaspoon finely chopped parsley. and 1 egg slightly beaten. and ran out of egg slightly beaten.",
+    "We have 7/2 cup cold, cooked rice., 6 tablespoons flour., 3/4 teaspoon grated onion., 3/2 teaspoon finely chopped parsley. and 5/2 egg slightly beaten..",
+    "How much balls can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:54568@150708",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "gruel",
+   "turns": [
+    "We made 1 gruel from 1 Tablespoon of arrowroot., 2 Saltspoon of salt., 2 Scant teaspoon of sugar., 2 Cup of hot water. and 2 Cup of milk. and ran out of arrowroot.",
+    "We made 1 gruel from 2 Tablespoon of arrowroot., 1 Saltspoon of salt., 2 Scant teaspoon of sugar., 2 Cup of hot water. and 2 Cup of milk. and ran out of salt.",
+    "We made 1 gruel from 2 Tablespoon of arrowroot., 2 Saltspoon of salt., 1 Scant teaspoon of sugar., 2 Cup of hot water. and 2 Cup of milk. and ran out of scant teaspoon of sugar.",
+    "We made 1 gruel from 2 Tablespoon of arrowroot., 2 Saltspoon of salt., 2 Scant teaspoon of sugar., 1 Cup of hot water. and 2 Cup of milk. and ran out of hot water.",
+    "We made 1 gruel from 2 Tablespoon of arrowroot., 2 Saltspoon of salt., 2 Scant teaspoon of sugar., 2 Cup of hot water. and 1 Cup of milk. and ran out of milk.",
+    "We have 5/2 Tablespoon of arrowroot., 7/2 Saltspoon of salt., 4/3 Scant teaspoon of sugar., 1/2 Cup of hot water. and 3/2 Cup of milk..",
+    "How much gruel can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:68567@38426",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "fritters",
+   "turns": [
+    "We made 1 fritters from 1 pine-apple (fresh or tinned), 4 cups flour, 2 table-spoon melted butter and 2 egg and ran out of pine-apple.",
+    "We made 1 fritters from 2 pine-apple (fresh or tinned), 2 cups flour, 2 table-spoon melted butter and 2 egg and ran out of flour.",
+    "We made 1 fritters from 2 pine-apple (fresh or tinned), 4 cups flour, 1 table-spoon melted butter and 2 egg and ran out of table-spoon melted butter.",
+    "We made 1 fritters from 2 pine-apple (fresh or tinned), 4 cups flour, 2 table-spoon melted butter and 1 egg and ran out of egg.",
+    "We have 3/2 pine-apple (fresh or tinned), 2/3 cups flour, 2/3 table-spoon melted butter and 4/3 egg.",
+    "How much fritters can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:wb:425075:4511682",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "spread",
+   "turns": [
+    "We made 1 spread from 100 g white granulated sugar, 40 g cocoa powder, 4 g salt, 400 g milk, 200 g dark chocolate (60% cocoa) and 500 g raw tahini or 200 g natural peanut butter and ran out of white granulated sugar.",
+    "We made 1 spread from 200 g white granulated sugar, 20 g cocoa powder, 4 g salt, 400 g milk, 200 g dark chocolate (60% cocoa) and 500 g raw tahini or 200 g natural peanut butter and ran out of cocoa powder.",
+    "We made 1 spread from 200 g white granulated sugar, 40 g cocoa powder, 2 g salt, 400 g milk, 200 g dark chocolate (60% cocoa) and 500 g raw tahini or 200 g natural peanut butter and ran out of salt.",
+    "We made 1 spread from 200 g white granulated sugar, 40 g cocoa powder, 4 g salt, 200 g milk, 200 g dark chocolate (60% cocoa) and 500 g raw tahini or 200 g natural peanut butter and ran out of milk.",
+    "We made 1 spread from 200 g white granulated sugar, 40 g cocoa powder, 4 g salt, 400 g milk, 100 g dark chocolate (60% cocoa) and 500 g raw tahini or 200 g natural peanut butter and ran out of dark chocolate.",
+    "We made 1 spread from 200 g white granulated sugar, 40 g cocoa powder, 4 g salt, 400 g milk, 200 g dark chocolate (60% cocoa) and 250 g raw tahini or 200 g natural peanut butter and ran out of raw tahini.",
+    "We have 300 g white granulated sugar, 50 g cocoa powder, 3/2 g salt, 400/3 g milk, 100/3 g dark chocolate (60% cocoa) and 125 g raw tahini or 200 g natural peanut butter.",
+    "How much spread can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:52800@95322",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "consomm\u00e9",
+   "turns": [
+    "We made 1 consomm\u00e9 from 8 cups consomm\u00e9, 4 tablespoons carrots, 4 tablespoons string beans, 4 tablespoons turnips, 4 tablespoons green peas and 4 tablespoons asparagus tips and ran out of consomm\u00e9.",
+    "We made 1 consomm\u00e9 from 16 cups consomm\u00e9, 2 tablespoons carrots, 4 tablespoons string beans, 4 tablespoons turnips, 4 tablespoons green peas and 4 tablespoons asparagus tips and ran out of carrots.",
+    "We made 1 consomm\u00e9 from 16 cups consomm\u00e9, 4 tablespoons carrots, 2 tablespoons string beans, 4 tablespoons turnips, 4 tablespoons green peas and 4 tablespoons asparagus tips and ran out of string beans.",
+    "We made 1 consomm\u00e9 from 16 cups consomm\u00e9, 4 tablespoons carrots, 4 tablespoons string beans, 2 tablespoons turnips, 4 tablespoons green peas and 4 tablespoons asparagus tips and ran out of turnips.",
+    "We made 1 consomm\u00e9 from 16 cups consomm\u00e9, 4 tablespoons carrots, 4 tablespoons string beans, 4 tablespoons turnips, 2 tablespoons green peas and 4 tablespoons asparagus tips and ran out of green peas.",
+    "We made 1 consomm\u00e9 from 16 cups consomm\u00e9, 4 tablespoons carrots, 4 tablespoons string beans, 4 tablespoons turnips, 4 tablespoons green peas and 2 tablespoons asparagus tips and ran out of asparagus tips.",
+    "We have 4 cups consomm\u00e9, 5 tablespoons carrots, 8/3 tablespoons string beans, 2/3 tablespoons turnips, 3/2 tablespoons green peas and 4/3 tablespoons asparagus tips.",
+    "How much consomm\u00e9 can we make?"
+   ]
+  },
+  {
+   "cell": "C46:INTEGER",
+   "id": "RW:pg:65061@981061",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "ii",
+   "turns": [
+    "We made 1 ii from 1 cup squash, steamed and strained, 2 cup heavy cream, 2 cup sugar, 6 eggs, slightly beaten and 8 tablespoons brandy and ran out of squash.",
+    "We made 1 ii from 2 cup squash, steamed and strained, 1 cup heavy cream, 2 cup sugar, 6 eggs, slightly beaten and 8 tablespoons brandy and ran out of heavy cream.",
+    "We made 1 ii from 2 cup squash, steamed and strained, 2 cup heavy cream, 1 cup sugar, 6 eggs, slightly beaten and 8 tablespoons brandy and ran out of sugar.",
+    "We made 1 ii from 2 cup squash, steamed and strained, 2 cup heavy cream, 2 cup sugar, 3 eggs, slightly beaten and 8 tablespoons brandy and ran out of eggs.",
+    "We made 1 ii from 2 cup squash, steamed and strained, 2 cup heavy cream, 2 cup sugar, 6 eggs, slightly beaten and 4 tablespoons brandy and ran out of brandy.",
+    "We have 5/2 cup squash, steamed and strained, 1/3 cup heavy cream, 3/4 cup sugar, 3/2 eggs, slightly beaten and 6 tablespoons brandy.",
+    "How much ii can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:18097@197879",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 tbsp. cornstarch., 1 cup sugar., 2 pint boiling water., 2 tbsp. butter., 2 egg. and 2 lemon. and ran out of cornstarch.",
+    "We made 1 sauce from 2 tbsp. cornstarch., 1/2 cup sugar., 2 pint boiling water., 2 tbsp. butter., 2 egg. and 2 lemon. and ran out of sugar.",
+    "We made 1 sauce from 2 tbsp. cornstarch., 1 cup sugar., 1 pint boiling water., 2 tbsp. butter., 2 egg. and 2 lemon. and ran out of boiling water.",
+    "We made 1 sauce from 2 tbsp. cornstarch., 1 cup sugar., 2 pint boiling water., 1 tbsp. butter., 2 egg. and 2 lemon. and ran out of butter.",
+    "We made 1 sauce from 2 tbsp. cornstarch., 1 cup sugar., 2 pint boiling water., 2 tbsp. butter., 1 egg. and 2 lemon. and ran out of egg.",
+    "We made 1 sauce from 2 tbsp. cornstarch., 1 cup sugar., 2 pint boiling water., 2 tbsp. butter., 2 egg. and 1 lemon. and ran out of lemon.",
+    "We have 3/4 tbsp. cornstarch., 1/3 cup sugar., 1/2 pint boiling water., 3/2 tbsp. butter., 5/2 egg. and 4 lemon..",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:14293@142032",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "fondiddy",
+   "turns": [
+    "We made 1 fondiddy from 3/4 pound sharp cheese, diced, 2 can condensed tomato soup, 1 cup catsup, 1 teaspoon mustard and 2 egg, lightly beaten and ran out of sharp cheese.",
+    "We made 1 fondiddy from 3/2 pound sharp cheese, diced, 1 can condensed tomato soup, 1 cup catsup, 1 teaspoon mustard and 2 egg, lightly beaten and ran out of condensed tomato soup.",
+    "We made 1 fondiddy from 3/2 pound sharp cheese, diced, 2 can condensed tomato soup, 1/2 cup catsup, 1 teaspoon mustard and 2 egg, lightly beaten and ran out of catsup.",
+    "We made 1 fondiddy from 3/2 pound sharp cheese, diced, 2 can condensed tomato soup, 1 cup catsup, 1/2 teaspoon mustard and 2 egg, lightly beaten and ran out of mustard.",
+    "We made 1 fondiddy from 3/2 pound sharp cheese, diced, 2 can condensed tomato soup, 1 cup catsup, 1 teaspoon mustard and 1 egg, lightly beaten and ran out of egg.",
+    "We have 9/8 pound sharp cheese, diced, 7/2 can condensed tomato soup, 1/6 cup catsup, 2/3 teaspoon mustard and 5/2 egg, lightly beaten.",
+    "How much fondiddy can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:18097@149011",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "salad",
+   "turns": [
+    "We made 1 salad from 4 oranges., 2 cup water., 1/2 package gelatine. and 8 bananas. and ran out of oranges.",
+    "We made 1 salad from 8 oranges., 1 cup water., 1/2 package gelatine. and 8 bananas. and ran out of water.",
+    "We made 1 salad from 8 oranges., 2 cup water., 1/4 package gelatine. and 8 bananas. and ran out of package gelatine.",
+    "We made 1 salad from 8 oranges., 2 cup water., 1/2 package gelatine. and 4 bananas. and ran out of bananas.",
+    "We have 14 oranges., 4 cup water., 3/8 package gelatine. and 10 bananas..",
+    "How much salad can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:38193@134740",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "dressing",
+   "turns": [
+    "We made 1 dressing from 2 cups stale bread crumbs, 2 tablespoon finely cut onion, 2 tablespoon drippings, 2 tablespoon chopped parsley, 2 teaspoon salt and 1/4 teaspoon pepper and ran out of stale bread crumbs.",
+    "We made 1 dressing from 4 cups stale bread crumbs, 1 tablespoon finely cut onion, 2 tablespoon drippings, 2 tablespoon chopped parsley, 2 teaspoon salt and 1/4 teaspoon pepper and ran out of finely cut onion.",
+    "We made 1 dressing from 4 cups stale bread crumbs, 2 tablespoon finely cut onion, 1 tablespoon drippings, 2 tablespoon chopped parsley, 2 teaspoon salt and 1/4 teaspoon pepper and ran out of drippings.",
+    "We made 1 dressing from 4 cups stale bread crumbs, 2 tablespoon finely cut onion, 2 tablespoon drippings, 1 tablespoon chopped parsley, 2 teaspoon salt and 1/4 teaspoon pepper and ran out of chopped parsley.",
+    "We made 1 dressing from 4 cups stale bread crumbs, 2 tablespoon finely cut onion, 2 tablespoon drippings, 2 tablespoon chopped parsley, 1 teaspoon salt and 1/4 teaspoon pepper and ran out of salt.",
+    "We made 1 dressing from 4 cups stale bread crumbs, 2 tablespoon finely cut onion, 2 tablespoon drippings, 2 tablespoon chopped parsley, 2 teaspoon salt and 1/8 teaspoon pepper and ran out of pepper.",
+    "We have 7 cups stale bread crumbs, 4 tablespoon finely cut onion, 3/2 tablespoon drippings, 1/2 tablespoon chopped parsley, 3 teaspoon salt and 1/12 teaspoon pepper.",
+    "How much dressing can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:56540@333102",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "tomatoes",
+   "turns": [
+    "We made 1 tomatoes from 1 pint of canned tomatoes., 1 gill of fine cracker crumbs., 1 teaspoonful of salt., 1/4 teaspoonful of pepper., 1 tablespoonful of sugar. and 1 tablespoonful of butter. and ran out of canned tomatoes.",
+    "We made 1 tomatoes from 2 pint of canned tomatoes., 1/2 gill of fine cracker crumbs., 1 teaspoonful of salt., 1/4 teaspoonful of pepper., 1 tablespoonful of sugar. and 1 tablespoonful of butter. and ran out of gill of fine cracker crumbs.",
+    "We made 1 tomatoes from 2 pint of canned tomatoes., 1 gill of fine cracker crumbs., 1/2 teaspoonful of salt., 1/4 teaspoonful of pepper., 1 tablespoonful of sugar. and 1 tablespoonful of butter. and ran out of teaspoonful of salt.",
+    "We made 1 tomatoes from 2 pint of canned tomatoes., 1 gill of fine cracker crumbs., 1 teaspoonful of salt., 1/8 teaspoonful of pepper., 1 tablespoonful of sugar. and 1 tablespoonful of butter. and ran out of teaspoonful of pepper.",
+    "We made 1 tomatoes from 2 pint of canned tomatoes., 1 gill of fine cracker crumbs., 1 teaspoonful of salt., 1/4 teaspoonful of pepper., 1/2 tablespoonful of sugar. and 1 tablespoonful of butter. and ran out of tablespoonful of sugar.",
+    "We made 1 tomatoes from 2 pint of canned tomatoes., 1 gill of fine cracker crumbs., 1 teaspoonful of salt., 1/4 teaspoonful of pepper., 1 tablespoonful of sugar. and 1/2 tablespoonful of butter. and ran out of tablespoonful of butter.",
+    "We have 7/2 pint of canned tomatoes., 1/4 gill of fine cracker crumbs., 1/6 teaspoonful of salt., 1/2 teaspoonful of pepper., 1/3 tablespoonful of sugar. and 3/8 tablespoonful of butter..",
+    "How much tomatoes can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:71670@13527",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "cream",
+   "turns": [
+    "We made 1 cream from 1 package Royal Lemon Gelatin, 2 cup boiling water, 1/4 teaspoon salt, 2 cup canned pineapple juice, 2 cup grated pineapple and 2 cup cream, whipped and ran out of package royal lemon gelatin.",
+    "We made 1 cream from 2 package Royal Lemon Gelatin, 1 cup boiling water, 1/4 teaspoon salt, 2 cup canned pineapple juice, 2 cup grated pineapple and 2 cup cream, whipped and ran out of boiling water.",
+    "We made 1 cream from 2 package Royal Lemon Gelatin, 2 cup boiling water, \u215b teaspoon salt, 2 cup canned pineapple juice, 2 cup grated pineapple and 2 cup cream, whipped and ran out of salt.",
+    "We made 1 cream from 2 package Royal Lemon Gelatin, 2 cup boiling water, 1/4 teaspoon salt, 1 cup canned pineapple juice, 2 cup grated pineapple and 2 cup cream, whipped and ran out of canned pineapple juice.",
+    "We made 1 cream from 2 package Royal Lemon Gelatin, 2 cup boiling water, 1/4 teaspoon salt, 2 cup canned pineapple juice, 1 cup grated pineapple and 2 cup cream, whipped and ran out of grated pineapple.",
+    "We made 1 cream from 2 package Royal Lemon Gelatin, 2 cup boiling water, 1/4 teaspoon salt, 2 cup canned pineapple juice, 2 cup grated pineapple and 1 cup cream, whipped and ran out of cream.",
+    "We have 3/4 package Royal Lemon Gelatin, 1/2 cup boiling water, 5/16 teaspoon salt, 3/2 cup canned pineapple juice, 7/2 cup grated pineapple and 3 cup cream, whipped.",
+    "How much cream can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:wb:370344:4587428",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "watalappam",
+   "turns": [
+    "We made 1 watalappam from 2 cups thick coconut milk, 1 lb brown sugar (or jaggery), 8 eggs, 2 pinch of ground cardamom (optional), 6 cloves (optional) and 24 cashews and ran out of thick coconut milk.",
+    "We made 1 watalappam from 4 cups thick coconut milk, \u00bd lb brown sugar (or jaggery), 8 eggs, 2 pinch of ground cardamom (optional), 6 cloves (optional) and 24 cashews and ran out of brown sugar.",
+    "We made 1 watalappam from 4 cups thick coconut milk, 1 lb brown sugar (or jaggery), 4 eggs, 2 pinch of ground cardamom (optional), 6 cloves (optional) and 24 cashews and ran out of eggs.",
+    "We made 1 watalappam from 4 cups thick coconut milk, 1 lb brown sugar (or jaggery), 8 eggs, 1 pinch of ground cardamom (optional), 6 cloves (optional) and 24 cashews and ran out of ground cardamom.",
+    "We made 1 watalappam from 4 cups thick coconut milk, 1 lb brown sugar (or jaggery), 8 eggs, 2 pinch of ground cardamom (optional), 3 cloves (optional) and 24 cashews and ran out of cloves.",
+    "We made 1 watalappam from 4 cups thick coconut milk, 1 lb brown sugar (or jaggery), 8 eggs, 2 pinch of ground cardamom (optional), 6 cloves (optional) and 12 cashews and ran out of cashews.",
+    "We have 2/3 cups thick coconut milk, 1/3 lb brown sugar (or jaggery), 14 eggs, 3/4 pinch of ground cardamom (optional), 15/2 cloves (optional) and 48 cashews.",
+    "How much watalappam can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:65061@581628",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 tablespoon vinegar, 2 teaspoon lemon juice, 1/2 teaspoon salt, 2 tablespoon Worcestershire Sauce and 2/3 cup butter and ran out of vinegar.",
+    "We made 1 sauce from 2 tablespoon vinegar, 1 teaspoon lemon juice, 1/2 teaspoon salt, 2 tablespoon Worcestershire Sauce and 2/3 cup butter and ran out of lemon juice.",
+    "We made 1 sauce from 2 tablespoon vinegar, 2 teaspoon lemon juice, \u00bc teaspoon salt, 2 tablespoon Worcestershire Sauce and 2/3 cup butter and ran out of salt.",
+    "We made 1 sauce from 2 tablespoon vinegar, 2 teaspoon lemon juice, 1/2 teaspoon salt, 1 tablespoon Worcestershire Sauce and 2/3 cup butter and ran out of worcestershire sauce.",
+    "We made 1 sauce from 2 tablespoon vinegar, 2 teaspoon lemon juice, 1/2 teaspoon salt, 2 tablespoon Worcestershire Sauce and \u2153 cup butter and ran out of butter.",
+    "We have 1/2 tablespoon vinegar, 4/3 teaspoon lemon juice, 7/8 teaspoon salt, 1/3 tablespoon Worcestershire Sauce and 1/2 cup butter.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:wb:389691:4531793",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "jal-jeera",
+   "turns": [
+    "We made 1 jal-jeera from 1 tsp cumin powder, 1/4 tsp green mango powder, 2 pinch Himalayan black salt, 1/2 tsp ground mint leaves (grind to paste), 2 tsp lemon juice and 2 cup plain soda water and ran out of cumin powder.",
+    "We made 1 jal-jeera from 2 tsp cumin powder, \u215b tsp green mango powder, 2 pinch Himalayan black salt, 1/2 tsp ground mint leaves (grind to paste), 2 tsp lemon juice and 2 cup plain soda water and ran out of green mango powder.",
+    "We made 1 jal-jeera from 2 tsp cumin powder, 1/4 tsp green mango powder, 1 pinch Himalayan black salt, 1/2 tsp ground mint leaves (grind to paste), 2 tsp lemon juice and 2 cup plain soda water and ran out of himalayan black salt.",
+    "We made 1 jal-jeera from 2 tsp cumin powder, 1/4 tsp green mango powder, 2 pinch Himalayan black salt, \u00bc tsp ground mint leaves (grind to paste), 2 tsp lemon juice and 2 cup plain soda water and ran out of ground mint leaves.",
+    "We made 1 jal-jeera from 2 tsp cumin powder, 1/4 tsp green mango powder, 2 pinch Himalayan black salt, 1/2 tsp ground mint leaves (grind to paste), 1 tsp lemon juice and 2 cup plain soda water and ran out of lemon juice.",
+    "We made 1 jal-jeera from 2 tsp cumin powder, 1/4 tsp green mango powder, 2 pinch Himalayan black salt, 1/2 tsp ground mint leaves (grind to paste), 2 tsp lemon juice and 1 cup plain soda water and ran out of plain soda water.",
+    "We have 5/2 tsp cumin powder, 1/16 tsp green mango powder, 3/4 pinch Himalayan black salt, 1/3 tsp ground mint leaves (grind to paste), 2/3 tsp lemon juice and 3 cup plain soda water.",
+    "How much jal-jeera can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:72831@43282",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "croquettes",
+   "turns": [
+    "We made 1 croquettes from 2 cups cold cooked fish., 3/2 cup thick White Sauce., 1 teaspoon salt., 1/4 teaspoon pepper., 1 teaspoon finely chopped parsley. and 2 teaspoon lemon juice. and ran out of cold cooked fish.",
+    "We made 1 croquettes from 4 cups cold cooked fish., \u00be cup thick White Sauce., 1 teaspoon salt., 1/4 teaspoon pepper., 1 teaspoon finely chopped parsley. and 2 teaspoon lemon juice. and ran out of thick white sauce.",
+    "We made 1 croquettes from 4 cups cold cooked fish., 3/2 cup thick White Sauce., \u00bd teaspoon salt., 1/4 teaspoon pepper., 1 teaspoon finely chopped parsley. and 2 teaspoon lemon juice. and ran out of salt.",
+    "We made 1 croquettes from 4 cups cold cooked fish., 3/2 cup thick White Sauce., 1 teaspoon salt., \u215b teaspoon pepper., 1 teaspoon finely chopped parsley. and 2 teaspoon lemon juice. and ran out of pepper.",
+    "We made 1 croquettes from 4 cups cold cooked fish., 3/2 cup thick White Sauce., 1 teaspoon salt., 1/4 teaspoon pepper., \u00bd teaspoon finely chopped parsley. and 2 teaspoon lemon juice. and ran out of finely chopped parsley.",
+    "We made 1 croquettes from 4 cups cold cooked fish., 3/2 cup thick White Sauce., 1 teaspoon salt., 1/4 teaspoon pepper., 1 teaspoon finely chopped parsley. and 1 teaspoon lemon juice. and ran out of lemon juice.",
+    "We have 8 cups cold cooked fish., 1/2 cup thick White Sauce., 7/4 teaspoon salt., 3/16 teaspoon pepper., 3/2 teaspoon finely chopped parsley. and 1/2 teaspoon lemon juice..",
+    "How much croquettes can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:42868@434188",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 egg, 1/2 C-powdered sugar, 2 T-milk and 1 t-vanilla and ran out of egg.",
+    "We made 1 sauce from 2 egg, 1/4 C-powdered sugar, 2 T-milk and 1 t-vanilla and ran out of c-powdered sugar.",
+    "We made 1 sauce from 2 egg, 1/2 C-powdered sugar, 1 T-milk and 1 t-vanilla and ran out of t-milk.",
+    "We made 1 sauce from 2 egg, 1/2 C-powdered sugar, 2 T-milk and 1/2 t-vanilla and ran out of t-vanilla.",
+    "We have 3/4 egg, 1/8 C-powdered sugar, 7/2 T-milk and 1/6 t-vanilla.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:65061@737887",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "jelly",
+   "turns": [
+    "We made 1 jelly from \u00bd cup rice, 1 cup boiling water, 2 cup scalded milk and 1 teaspoon salt and ran out of rice.",
+    "We made 1 jelly from 1 cup rice, \u00bd cup boiling water, 2 cup scalded milk and 1 teaspoon salt and ran out of boiling water.",
+    "We made 1 jelly from 1 cup rice, 1 cup boiling water, 1 cup scalded milk and 1 teaspoon salt and ran out of scalded milk.",
+    "We made 1 jelly from 1 cup rice, 1 cup boiling water, 2 cup scalded milk and \u00bd teaspoon salt and ran out of salt.",
+    "We have 5/4 cup rice, 7/4 cup boiling water, 2/3 cup scalded milk and 3/4 teaspoon salt.",
+    "How much jelly can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:70067@91828",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "souffl\u00e9",
+   "turns": [
+    "We made 1 souffl\u00e9 from 2 tablespoonfuls of butter., 6 tablespoonfuls of flour., 1 cupful of milk (scalded). and 1 teaspoonful of salt. and ran out of tablespoonfuls of butter.",
+    "We made 1 souffl\u00e9 from 4 tablespoonfuls of butter., 3 tablespoonfuls of flour., 1 cupful of milk (scalded). and 1 teaspoonful of salt. and ran out of tablespoonfuls of flour.",
+    "We made 1 souffl\u00e9 from 4 tablespoonfuls of butter., 6 tablespoonfuls of flour., \u00bd cupful of milk (scalded). and 1 teaspoonful of salt. and ran out of cupful of milk.",
+    "We made 1 souffl\u00e9 from 4 tablespoonfuls of butter., 6 tablespoonfuls of flour., 1 cupful of milk (scalded). and \u00bd teaspoonful of salt. and ran out of teaspoonful of salt.",
+    "We have 1 tablespoonfuls of butter., 4 tablespoonfuls of flour., 3/2 cupful of milk (scalded). and 3/4 teaspoonful of salt..",
+    "How much souffl\u00e9 can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:pg:78849@273290",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "balls",
+   "turns": [
+    "We made 1 balls from 1 cupful flour, 1 cupful Crisco, 1 cupful water, 8 eggs and 1 teaspoonful salt and ran out of cupful flour.",
+    "We made 1 balls from 2 cupful flour, \u00bd cupful Crisco, 1 cupful water, 8 eggs and 1 teaspoonful salt and ran out of cupful crisco.",
+    "We made 1 balls from 2 cupful flour, 1 cupful Crisco, \u00bd cupful water, 8 eggs and 1 teaspoonful salt and ran out of cupful water.",
+    "We made 1 balls from 2 cupful flour, 1 cupful Crisco, 1 cupful water, 4 eggs and 1 teaspoonful salt and ran out of eggs.",
+    "We made 1 balls from 2 cupful flour, 1 cupful Crisco, 1 cupful water, 8 eggs and \u00bd teaspoonful salt and ran out of teaspoonful salt.",
+    "We have 4/3 cupful flour, 3/8 cupful Crisco, 7/4 cupful water, 4/3 eggs and 3/2 teaspoonful salt.",
+    "How much balls can we make?"
+   ]
+  },
+  {
+   "cell": "C46:FRACTION",
+   "id": "RW:wb:30693:4513067",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "balls",
+   "turns": [
+    "We made 1 balls from 3 cups prepared steamed sweet rice, 1/2 cup toasted black sesame seeds, lightly crushed, 2 tablespoon sugar, 2 cup smooth Japanese bean paste (koshi-an), chilled and 1 cup roasted soybean powder (kinako) or toasted ground pecans and ran out of prepared steamed sweet rice.",
+    "We made 1 balls from 6 cups prepared steamed sweet rice, \u00bc cup toasted black sesame seeds, lightly crushed, 2 tablespoon sugar, 2 cup smooth Japanese bean paste (koshi-an), chilled and 1 cup roasted soybean powder (kinako) or toasted ground pecans and ran out of toasted black sesame seeds.",
+    "We made 1 balls from 6 cups prepared steamed sweet rice, 1/2 cup toasted black sesame seeds, lightly crushed, 1 tablespoon sugar, 2 cup smooth Japanese bean paste (koshi-an), chilled and 1 cup roasted soybean powder (kinako) or toasted ground pecans and ran out of sugar.",
+    "We made 1 balls from 6 cups prepared steamed sweet rice, 1/2 cup toasted black sesame seeds, lightly crushed, 2 tablespoon sugar, 1 cup smooth Japanese bean paste (koshi-an), chilled and 1 cup roasted soybean powder (kinako) or toasted ground pecans and ran out of smooth japanese bean paste.",
+    "We made 1 balls from 6 cups prepared steamed sweet rice, 1/2 cup toasted black sesame seeds, lightly crushed, 2 tablespoon sugar, 2 cup smooth Japanese bean paste (koshi-an), chilled and \u00bd cup roasted soybean powder (kinako) or toasted ground pecans and ran out of roasted soybean powder.",
+    "We have 15/2 cups prepared steamed sweet rice, 3/4 cup toasted black sesame seeds, lightly crushed, 3/4 tablespoon sugar, 2/3 cup smooth Japanese bean paste (koshi-an), chilled and 1/4 cup roasted soybean powder (kinako) or toasted ground pecans.",
+    "How much balls can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:8542@39794",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "patties",
+   "turns": [
+    "We made 1 patties from 1 1/2 Cupfuls of Boiled Rice, 2 Cupful of Veal, 2 Teaspoonful of Salt, 1 Teaspoonful of Poultry Dressing, 2 Egg and 2 Tablespoonful of Milk and ran out of cupfuls of boiled rice.",
+    "We made 1 patties from 3 Cupfuls of Boiled Rice, 1 Cupful of Veal, 2 Teaspoonful of Salt, 1 Teaspoonful of Poultry Dressing, 2 Egg and 2 Tablespoonful of Milk and ran out of cupful of veal.",
+    "We made 1 patties from 3 Cupfuls of Boiled Rice, 2 Cupful of Veal, 1 Teaspoonful of Salt, 1 Teaspoonful of Poultry Dressing, 2 Egg and 2 Tablespoonful of Milk and ran out of teaspoonful of salt.",
+    "We made 1 patties from 3 Cupfuls of Boiled Rice, 2 Cupful of Veal, 2 Teaspoonful of Salt, 1/2 Teaspoonful of Poultry Dressing, 2 Egg and 2 Tablespoonful of Milk and ran out of teaspoonful of poultry dressing.",
+    "We made 1 patties from 3 Cupfuls of Boiled Rice, 2 Cupful of Veal, 2 Teaspoonful of Salt, 1 Teaspoonful of Poultry Dressing, 1 Egg and 2 Tablespoonful of Milk and ran out of egg.",
+    "We made 1 patties from 3 Cupfuls of Boiled Rice, 2 Cupful of Veal, 2 Teaspoonful of Salt, 1 Teaspoonful of Poultry Dressing, 2 Egg and 1 Tablespoonful of Milk and ran out of tablespoonful of milk.",
+    "We have 15/4 Cupfuls of Boiled Rice, 3/4 Cupful of Veal, 1/3 Teaspoonful of Salt, 3/2 Teaspoonful of Poultry Dressing, 7/2 Egg and 3/2 Tablespoonful of Milk.",
+    "How much patties can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:wb:202496:4494726",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "potatoes",
+   "turns": [
+    "We made 1 potatoes from 1 pound (450 g) each Russet potatoes and redskin potatoes, cut into 2-inch (5 cm) cubes, 2 tbsp salt, 2 tbsp freshly ground black pepper, 1 cup olive oil and 3 tsp each dried parsley, rosemary, thyme, basil and oregano and ran out of pound.",
+    "We made 1 potatoes from 2 pound (450 g) each Russet potatoes and redskin potatoes, cut into 2-inch (5 cm) cubes, 1 tbsp salt, 2 tbsp freshly ground black pepper, 1 cup olive oil and 3 tsp each dried parsley, rosemary, thyme, basil and oregano and ran out of salt.",
+    "We made 1 potatoes from 2 pound (450 g) each Russet potatoes and redskin potatoes, cut into 2-inch (5 cm) cubes, 2 tbsp salt, 1 tbsp freshly ground black pepper, 1 cup olive oil and 3 tsp each dried parsley, rosemary, thyme, basil and oregano and ran out of freshly ground black pepper.",
+    "We made 1 potatoes from 2 pound (450 g) each Russet potatoes and redskin potatoes, cut into 2-inch (5 cm) cubes, 2 tbsp salt, 2 tbsp freshly ground black pepper, \u00bd cup olive oil and 3 tsp each dried parsley, rosemary, thyme, basil and oregano and ran out of olive oil.",
+    "We made 1 potatoes from 2 pound (450 g) each Russet potatoes and redskin potatoes, cut into 2-inch (5 cm) cubes, 2 tbsp salt, 2 tbsp freshly ground black pepper, 1 cup olive oil and 1 \u00bd tsp each dried parsley, rosemary, thyme, basil and oregano and ran out of tsp.",
+    "We have 3 pound (450 g) each Russet potatoes and redskin potatoes, cut into 2-inch (5 cm) cubes, 1/3 tbsp salt, 4/3 tbsp freshly ground black pepper, 3/4 cup olive oil and 21/4 tsp each dried parsley, rosemary, thyme, basil and oregano.",
+    "How much potatoes can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:26323@137944",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "pudding",
+   "turns": [
+    "We made 1 pudding from 1 cup beef suet, 2 teaspoon salt, 4 eggs, 7 cups flour, 6 teaspoons baking powder and 4 cups milk and ran out of beef suet.",
+    "We made 1 pudding from 2 cup beef suet, 1 teaspoon salt, 4 eggs, 7 cups flour, 6 teaspoons baking powder and 4 cups milk and ran out of salt.",
+    "We made 1 pudding from 2 cup beef suet, 2 teaspoon salt, 2 eggs, 7 cups flour, 6 teaspoons baking powder and 4 cups milk and ran out of eggs.",
+    "We made 1 pudding from 2 cup beef suet, 2 teaspoon salt, 4 eggs, 3 1/2 cups flour, 6 teaspoons baking powder and 4 cups milk and ran out of flour.",
+    "We made 1 pudding from 2 cup beef suet, 2 teaspoon salt, 4 eggs, 7 cups flour, 3 teaspoons baking powder and 4 cups milk and ran out of baking powder.",
+    "We made 1 pudding from 2 cup beef suet, 2 teaspoon salt, 4 eggs, 7 cups flour, 6 teaspoons baking powder and 2 cups milk and ran out of milk.",
+    "We have 5/2 cup beef suet, 2/3 teaspoon salt, 7 eggs, 21/8 cups flour, 3/2 teaspoons baking powder and 8 cups milk.",
+    "How much pudding can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:42450@70545",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "waffles",
+   "turns": [
+    "We made 1 waffles from 1 quart of flour., 12 eggs beaten very light,, 3 pint of new milk., 4 teaspoonfuls of salt. and 6 tablespoonfuls of yeast. and ran out of flour.",
+    "We made 1 waffles from 2 quart of flour., 6 eggs beaten very light,, 3 pint of new milk., 4 teaspoonfuls of salt. and 6 tablespoonfuls of yeast. and ran out of eggs beaten very light.",
+    "We made 1 waffles from 2 quart of flour., 12 eggs beaten very light,, 1\u00bd pint of new milk., 4 teaspoonfuls of salt. and 6 tablespoonfuls of yeast. and ran out of new milk.",
+    "We made 1 waffles from 2 quart of flour., 12 eggs beaten very light,, 3 pint of new milk., 2 teaspoonfuls of salt. and 6 tablespoonfuls of yeast. and ran out of teaspoonfuls of salt.",
+    "We made 1 waffles from 2 quart of flour., 12 eggs beaten very light,, 3 pint of new milk., 4 teaspoonfuls of salt. and 3 tablespoonfuls of yeast. and ran out of tablespoonfuls of yeast.",
+    "We have 4 quart of flour., 21 eggs beaten very light,, 1 pint of new milk., 3/2 teaspoonfuls of salt. and 15/2 tablespoonfuls of yeast..",
+    "How much waffles can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:65061@168593",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "i",
+   "turns": [
+    "We made 1 i from 1\u00bc cups Graham flour, 2 cup flour, 2 cup sour milk, 2/3 cup molasses, 3/2 teaspoon soda and 2 teaspoon salt and ran out of graham flour.",
+    "We made 1 i from 5/2 cups Graham flour, 1 cup flour, 2 cup sour milk, 2/3 cup molasses, 3/2 teaspoon soda and 2 teaspoon salt and ran out of flour.",
+    "We made 1 i from 5/2 cups Graham flour, 2 cup flour, 1 cup sour milk, 2/3 cup molasses, 3/2 teaspoon soda and 2 teaspoon salt and ran out of sour milk.",
+    "We made 1 i from 5/2 cups Graham flour, 2 cup flour, 2 cup sour milk, \u2153 cup molasses, 3/2 teaspoon soda and 2 teaspoon salt and ran out of molasses.",
+    "We made 1 i from 5/2 cups Graham flour, 2 cup flour, 2 cup sour milk, 2/3 cup molasses, \u00be teaspoon soda and 2 teaspoon salt and ran out of soda.",
+    "We made 1 i from 5/2 cups Graham flour, 2 cup flour, 2 cup sour milk, 2/3 cup molasses, 3/2 teaspoon soda and 1 teaspoon salt and ran out of salt.",
+    "We have 5/12 cups Graham flour, 5/2 cup flour, 1/2 cup sour milk, 2/9 cup molasses, 1 teaspoon soda and 4 teaspoon salt.",
+    "How much i can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:69364@68722",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "soup",
+   "turns": [
+    "We made 1 soup from 1 pint of split peas., 3 quarts of boiling water., 2 quart of soup stock., 2 small teaspoonful of salt. and 6 shakes of pepper. and ran out of split peas.",
+    "We made 1 soup from 2 pint of split peas., 1\u00bd quarts of boiling water., 2 quart of soup stock., 2 small teaspoonful of salt. and 6 shakes of pepper. and ran out of boiling water.",
+    "We made 1 soup from 2 pint of split peas., 3 quarts of boiling water., 1 quart of soup stock., 2 small teaspoonful of salt. and 6 shakes of pepper. and ran out of soup stock.",
+    "We made 1 soup from 2 pint of split peas., 3 quarts of boiling water., 2 quart of soup stock., 1 small teaspoonful of salt. and 6 shakes of pepper. and ran out of small teaspoonful of salt.",
+    "We made 1 soup from 2 pint of split peas., 3 quarts of boiling water., 2 quart of soup stock., 2 small teaspoonful of salt. and 3 shakes of pepper. and ran out of shakes of pepper.",
+    "We have 3 pint of split peas., 6 quarts of boiling water., 7/2 quart of soup stock., 4/3 small teaspoonful of salt. and 3/2 shakes of pepper..",
+    "How much soup can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:65510@12847",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "macaroons",
+   "turns": [
+    "We made 1 macaroons from 2 egg whites, 1 cup sugar, 1/2 teaspoon salt, 1 teaspoon vanilla, 2 Economy Size Bar (7 oz.) Nestl\u00e9\u2019s Semi-Sweet Chocolate and 3 cups cocoanut, shredded and ran out of egg whites.",
+    "We made 1 macaroons from 4 egg whites, \u00bd cup sugar, 1/2 teaspoon salt, 1 teaspoon vanilla, 2 Economy Size Bar (7 oz.) Nestl\u00e9\u2019s Semi-Sweet Chocolate and 3 cups cocoanut, shredded and ran out of sugar.",
+    "We made 1 macaroons from 4 egg whites, 1 cup sugar, \u00bc teaspoon salt, 1 teaspoon vanilla, 2 Economy Size Bar (7 oz.) Nestl\u00e9\u2019s Semi-Sweet Chocolate and 3 cups cocoanut, shredded and ran out of salt.",
+    "We made 1 macaroons from 4 egg whites, 1 cup sugar, 1/2 teaspoon salt, \u00bd teaspoon vanilla, 2 Economy Size Bar (7 oz.) Nestl\u00e9\u2019s Semi-Sweet Chocolate and 3 cups cocoanut, shredded and ran out of vanilla.",
+    "We made 1 macaroons from 4 egg whites, 1 cup sugar, 1/2 teaspoon salt, 1 teaspoon vanilla, 1 Economy Size Bar (7 oz.) Nestl\u00e9\u2019s Semi-Sweet Chocolate and 3 cups cocoanut, shredded and ran out of economy size bar nestl\u00e9\u2019s semi-sweet chocolate.",
+    "We made 1 macaroons from 4 egg whites, 1 cup sugar, 1/2 teaspoon salt, 1 teaspoon vanilla, 2 Economy Size Bar (7 oz.) Nestl\u00e9\u2019s Semi-Sweet Chocolate and 1\u00bd cups cocoanut, shredded and ran out of cocoanut.",
+    "We have 8 egg whites, 3/2 cup sugar, 1/8 teaspoon salt, 3/4 teaspoon vanilla, 1/3 Economy Size Bar (7 oz.) Nestl\u00e9\u2019s Semi-Sweet Chocolate and 21/4 cups cocoanut, shredded.",
+    "How much macaroons can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:52800@419663",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "cream",
+   "turns": [
+    "We made 1 cream from 4 ounces Lowney\u2019s Premium Chocolate, 8 cups cream, 3/2 cup sugar, 2 tablespoon vanilla, 1 teaspoon salt and 3 cups finely chopped figs and ran out of lowney\u2019s premium chocolate.",
+    "We made 1 cream from 8 ounces Lowney\u2019s Premium Chocolate, 4 cups cream, 3/2 cup sugar, 2 tablespoon vanilla, 1 teaspoon salt and 3 cups finely chopped figs and ran out of cream.",
+    "We made 1 cream from 8 ounces Lowney\u2019s Premium Chocolate, 8 cups cream, \u00be cup sugar, 2 tablespoon vanilla, 1 teaspoon salt and 3 cups finely chopped figs and ran out of sugar.",
+    "We made 1 cream from 8 ounces Lowney\u2019s Premium Chocolate, 8 cups cream, 3/2 cup sugar, 1 tablespoon vanilla, 1 teaspoon salt and 3 cups finely chopped figs and ran out of vanilla.",
+    "We made 1 cream from 8 ounces Lowney\u2019s Premium Chocolate, 8 cups cream, 3/2 cup sugar, 2 tablespoon vanilla, \u00bd teaspoon salt and 3 cups finely chopped figs and ran out of salt.",
+    "We made 1 cream from 8 ounces Lowney\u2019s Premium Chocolate, 8 cups cream, 3/2 cup sugar, 2 tablespoon vanilla, 1 teaspoon salt and 1\u00bd cups finely chopped figs and ran out of finely chopped figs.",
+    "We have 2 ounces Lowney\u2019s Premium Chocolate, 6 cups cream, 9/4 cup sugar, 4 tablespoon vanilla, 2/3 teaspoon salt and 1/2 cups finely chopped figs.",
+    "How much cream can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:54568@384545",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 1 Tablespoon of butter., 2 Cup of sugar (powdered)., 5/2 Cups of pastry flour., 1 Teaspoon of soda. and 2 Teaspoon of cream of tartar. and ran out of butter.",
+    "We made 1 cake from 2 Tablespoon of butter., 1 Cup of sugar (powdered)., 5/2 Cups of pastry flour., 1 Teaspoon of soda. and 2 Teaspoon of cream of tartar. and ran out of sugar.",
+    "We made 1 cake from 2 Tablespoon of butter., 2 Cup of sugar (powdered)., 1\u00bc Cups of pastry flour., 1 Teaspoon of soda. and 2 Teaspoon of cream of tartar. and ran out of pastry flour.",
+    "We made 1 cake from 2 Tablespoon of butter., 2 Cup of sugar (powdered)., 5/2 Cups of pastry flour., \u00bd Teaspoon of soda. and 2 Teaspoon of cream of tartar. and ran out of soda.",
+    "We made 1 cake from 2 Tablespoon of butter., 2 Cup of sugar (powdered)., 5/2 Cups of pastry flour., 1 Teaspoon of soda. and 1 Teaspoon of cream of tartar. and ran out of cream of tartar.",
+    "We have 5/2 Tablespoon of butter., 7/2 Cup of sugar (powdered)., 5/12 Cups of pastry flour., 1/3 Teaspoon of soda. and 3/2 Teaspoon of cream of tartar..",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:65061@138798",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "sticks",
+   "turns": [
+    "We made 1 sticks from 1 cup scalded milk, 1/2 cup butter, 3 tablespoons sugar, 1 teaspoon salt, 2 yeast cake dissolved in and 1/2 cup lukewarm water and ran out of scalded milk.",
+    "We made 1 sticks from 2 cup scalded milk, \u00bc cup butter, 3 tablespoons sugar, 1 teaspoon salt, 2 yeast cake dissolved in and 1/2 cup lukewarm water and ran out of butter.",
+    "We made 1 sticks from 2 cup scalded milk, 1/2 cup butter, 1\u00bd tablespoons sugar, 1 teaspoon salt, 2 yeast cake dissolved in and 1/2 cup lukewarm water and ran out of sugar.",
+    "We made 1 sticks from 2 cup scalded milk, 1/2 cup butter, 3 tablespoons sugar, \u00bd teaspoon salt, 2 yeast cake dissolved in and 1/2 cup lukewarm water and ran out of salt.",
+    "We made 1 sticks from 2 cup scalded milk, 1/2 cup butter, 3 tablespoons sugar, 1 teaspoon salt, 1 yeast cake dissolved in and 1/2 cup lukewarm water and ran out of yeast cake dissolved.",
+    "We made 1 sticks from 2 cup scalded milk, 1/2 cup butter, 3 tablespoons sugar, 1 teaspoon salt, 2 yeast cake dissolved in and \u00bc cup lukewarm water and ran out of lukewarm water.",
+    "We have 5/2 cup scalded milk, 1 cup butter, 2 tablespoons sugar, 3/8 teaspoon salt, 7/2 yeast cake dissolved in and 1/12 cup lukewarm water.",
+    "How much sticks can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:wb:457675:4587499",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "cotta",
+   "turns": [
+    "We made 1 cotta from \u00be tsp powdered gelatin, 4 cups (480 ml) heavy cream, 1 cup (60 g) white granulated sugar, 3 tsp vanilla essence or 1 small vanilla bean and 2 pinch of salt and ran out of powdered gelatin.",
+    "We made 1 cotta from 3/2 tsp powdered gelatin, 2 cups (480 ml) heavy cream, 1 cup (60 g) white granulated sugar, 3 tsp vanilla essence or 1 small vanilla bean and 2 pinch of salt and ran out of heavy cream.",
+    "We made 1 cotta from 3/2 tsp powdered gelatin, 4 cups (480 ml) heavy cream, \u00bd cup (60 g) white granulated sugar, 3 tsp vanilla essence or 1 small vanilla bean and 2 pinch of salt and ran out of white granulated sugar.",
+    "We made 1 cotta from 3/2 tsp powdered gelatin, 4 cups (480 ml) heavy cream, 1 cup (60 g) white granulated sugar, 1\u00bd tsp vanilla essence or 1 small vanilla bean and 2 pinch of salt and ran out of vanilla essence.",
+    "We made 1 cotta from 3/2 tsp powdered gelatin, 4 cups (480 ml) heavy cream, 1 cup (60 g) white granulated sugar, 3 tsp vanilla essence or 1 small vanilla bean and 1 pinch of salt and ran out of salt.",
+    "We have 3/8 tsp powdered gelatin, 3/2 cups (480 ml) heavy cream, 3/4 cup (60 g) white granulated sugar, 2 tsp vanilla essence or 1 small vanilla bean and 5/2 pinch of salt.",
+    "How much cotta can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:62655@14394",
+   "n_lessons": 6,
+   "n_lines": 6,
+   "noun": "cookies",
+   "turns": [
+    "We made 1 cookies from 1 cup butter, 3 tablespoons powdered sugar, 4 cups cake flour, 2 teaspoon water, 2 teaspoon vanilla and 3 cups chopped pecans and ran out of butter.",
+    "We made 1 cookies from 2 cup butter, 1\u00bd tablespoons powdered sugar, 4 cups cake flour, 2 teaspoon water, 2 teaspoon vanilla and 3 cups chopped pecans and ran out of powdered sugar.",
+    "We made 1 cookies from 2 cup butter, 3 tablespoons powdered sugar, 2 cups cake flour, 2 teaspoon water, 2 teaspoon vanilla and 3 cups chopped pecans and ran out of cake flour.",
+    "We made 1 cookies from 2 cup butter, 3 tablespoons powdered sugar, 4 cups cake flour, 1 teaspoon water, 2 teaspoon vanilla and 3 cups chopped pecans and ran out of water.",
+    "We made 1 cookies from 2 cup butter, 3 tablespoons powdered sugar, 4 cups cake flour, 2 teaspoon water, 1 teaspoon vanilla and 3 cups chopped pecans and ran out of vanilla.",
+    "We made 1 cookies from 2 cup butter, 3 tablespoons powdered sugar, 4 cups cake flour, 2 teaspoon water, 2 teaspoon vanilla and 1\u00bd cups chopped pecans and ran out of chopped pecans.",
+    "We have 1/3 cup butter, 1 tablespoons powdered sugar, 7 cups cake flour, 4/3 teaspoon water, 3/2 teaspoon vanilla and 3/4 cups chopped pecans.",
+    "How much cookies can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:66654@18497",
+   "n_lessons": 4,
+   "n_lines": 4,
+   "noun": "jubilee",
+   "turns": [
+    "We made 1 jubilee from 1 cup sugar, 3 cups water, 4 cups Ocean Spray fresh or frozen cranberries and 1/2 cup brandy and ran out of sugar.",
+    "We made 1 jubilee from 2 cup sugar, 1\u00bd cups water, 4 cups Ocean Spray fresh or frozen cranberries and 1/2 cup brandy and ran out of water.",
+    "We made 1 jubilee from 2 cup sugar, 3 cups water, 2 cups Ocean Spray fresh or frozen cranberries and 1/2 cup brandy and ran out of ocean spray fresh.",
+    "We made 1 jubilee from 2 cup sugar, 3 cups water, 4 cups Ocean Spray fresh or frozen cranberries and \u00bc cup brandy and ran out of brandy.",
+    "We have 1/2 cup sugar, 2 cups water, 4/3 cups Ocean Spray fresh or frozen cranberries and 7/8 cup brandy.",
+    "How much jubilee can we make?"
+   ]
+  },
+  {
+   "cell": "C46:MIXED",
+   "id": "RW:pg:51542@59135",
+   "n_lessons": 5,
+   "n_lines": 5,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 5 eggs,, 1 pound pulverized sugar,, 2 orange,, 1 pound Gold Medal Flour, and 3 dessert spoonfuls rose water. and ran out of eggs.",
+    "We made 1 cake from 10 eggs,, \u00bd pound pulverized sugar,, 2 orange,, 1 pound Gold Medal Flour, and 3 dessert spoonfuls rose water. and ran out of pulverized sugar.",
+    "We made 1 cake from 10 eggs,, 1 pound pulverized sugar,, 1 orange,, 1 pound Gold Medal Flour, and 3 dessert spoonfuls rose water. and ran out of orange.",
+    "We made 1 cake from 10 eggs,, 1 pound pulverized sugar,, 2 orange,, \u00bd pound Gold Medal Flour, and 3 dessert spoonfuls rose water. and ran out of gold medal flour.",
+    "We made 1 cake from 10 eggs,, 1 pound pulverized sugar,, 2 orange,, 1 pound Gold Medal Flour, and 1\u00bd dessert spoonfuls rose water. and ran out of dessert spoonfuls rose water.",
+    "We have 5/2 eggs,, 5/4 pound pulverized sugar,, 4/3 orange,, 3/4 pound Gold Medal Flour, and 9/2 dessert spoonfuls rose water..",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:wb:56803:4587302",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 1 teaspoon vanilla, 2 cup (240 g) butter, 2 cup (240 ml) milk, 4 cups (450 g) white granulated sugar, 6 cups (650 g) spelt flour, 6 teaspoons baking powder, 6 pinches salt and 8 eggs and ran out of vanilla.",
+    "We made 1 cake from 2 teaspoon vanilla, 1 cup (240 g) butter, 2 cup (240 ml) milk, 4 cups (450 g) white granulated sugar, 6 cups (650 g) spelt flour, 6 teaspoons baking powder, 6 pinches salt and 8 eggs and ran out of butter.",
+    "We made 1 cake from 2 teaspoon vanilla, 2 cup (240 g) butter, 1 cup (240 ml) milk, 4 cups (450 g) white granulated sugar, 6 cups (650 g) spelt flour, 6 teaspoons baking powder, 6 pinches salt and 8 eggs and ran out of milk.",
+    "We made 1 cake from 2 teaspoon vanilla, 2 cup (240 g) butter, 2 cup (240 ml) milk, 2 cups (450 g) white granulated sugar, 6 cups (650 g) spelt flour, 6 teaspoons baking powder, 6 pinches salt and 8 eggs and ran out of white granulated sugar.",
+    "We made 1 cake from 2 teaspoon vanilla, 2 cup (240 g) butter, 2 cup (240 ml) milk, 4 cups (450 g) white granulated sugar, 3 cups (650 g) spelt flour, 6 teaspoons baking powder, 6 pinches salt and 8 eggs and ran out of spelt flour.",
+    "We made 1 cake from 2 teaspoon vanilla, 2 cup (240 g) butter, 2 cup (240 ml) milk, 4 cups (450 g) white granulated sugar, 6 cups (650 g) spelt flour, 3 teaspoons baking powder, 6 pinches salt and 8 eggs and ran out of baking powder.",
+    "We made 1 cake from 2 teaspoon vanilla, 2 cup (240 g) butter, 2 cup (240 ml) milk, 4 cups (450 g) white granulated sugar, 6 cups (650 g) spelt flour, 6 teaspoons baking powder, 3 pinches salt and 8 eggs and ran out of salt.",
+    "We made 1 cake from 2 teaspoon vanilla, 2 cup (240 g) butter, 2 cup (240 ml) milk, 4 cups (450 g) white granulated sugar, 6 cups (650 g) spelt flour, 6 teaspoons baking powder, 6 pinches salt and 4 eggs and ran out of eggs.",
+    "We have 3/4 teaspoon vanilla, 5/2 cup (240 g) butter, 4 cup (240 ml) milk, 4/3 cups (450 g) white granulated sugar, 9/2 cups (650 g) spelt flour, 1 teaspoons baking powder, 9 pinches salt and 2 eggs.",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:42450@67687",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "bread",
+   "turns": [
+    "We made 1 bread from 1 pint of flour., 2 tablespoonful of butter., 6 tablespoonfuls of sugar., 2 teaspoonful of soda., 4 teaspoonfuls cream of tartar., 4 eggs. and 2 cup of milk and a little salt. and ran out of flour.",
+    "We made 1 bread from 2 pint of flour., 1 tablespoonful of butter., 6 tablespoonfuls of sugar., 2 teaspoonful of soda., 4 teaspoonfuls cream of tartar., 4 eggs. and 2 cup of milk and a little salt. and ran out of tablespoonful of butter.",
+    "We made 1 bread from 2 pint of flour., 2 tablespoonful of butter., 3 tablespoonfuls of sugar., 2 teaspoonful of soda., 4 teaspoonfuls cream of tartar., 4 eggs. and 2 cup of milk and a little salt. and ran out of tablespoonfuls of sugar.",
+    "We made 1 bread from 2 pint of flour., 2 tablespoonful of butter., 6 tablespoonfuls of sugar., 1 teaspoonful of soda., 4 teaspoonfuls cream of tartar., 4 eggs. and 2 cup of milk and a little salt. and ran out of teaspoonful of soda.",
+    "We made 1 bread from 2 pint of flour., 2 tablespoonful of butter., 6 tablespoonfuls of sugar., 2 teaspoonful of soda., 2 teaspoonfuls cream of tartar., 4 eggs. and 2 cup of milk and a little salt. and ran out of teaspoonfuls cream of tartar.",
+    "We made 1 bread from 2 pint of flour., 2 tablespoonful of butter., 6 tablespoonfuls of sugar., 2 teaspoonful of soda., 4 teaspoonfuls cream of tartar., 2 eggs. and 2 cup of milk and a little salt. and ran out of eggs.",
+    "We made 1 bread from 2 pint of flour., 2 tablespoonful of butter., 6 tablespoonfuls of sugar., 2 teaspoonful of soda., 4 teaspoonfuls cream of tartar., 4 eggs. and 1 cup of milk and a little salt. and ran out of milk.",
+    "We have 4 pint of flour., 1/2 tablespoonful of butter., 9/2 tablespoonfuls of sugar., 4/3 teaspoonful of soda., 7 teaspoonfuls cream of tartar., 4/3 eggs. and 3/4 cup of milk and a little salt..",
+    "How much bread can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:42868@473234",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "salad",
+   "turns": [
+    "We made 1 salad from 3 slices of pineapple, 6 halves of pears, 12 marshmallows, 6 maraschino cherries, 12 halves of nut meats, 6 T-salad dressing, 6 T-whipped cream and 6 pieces of lettuce and ran out of slices of pineapple.",
+    "We made 1 salad from 6 slices of pineapple, 3 halves of pears, 12 marshmallows, 6 maraschino cherries, 12 halves of nut meats, 6 T-salad dressing, 6 T-whipped cream and 6 pieces of lettuce and ran out of halves of pears.",
+    "We made 1 salad from 6 slices of pineapple, 6 halves of pears, 6 marshmallows, 6 maraschino cherries, 12 halves of nut meats, 6 T-salad dressing, 6 T-whipped cream and 6 pieces of lettuce and ran out of marshmallows.",
+    "We made 1 salad from 6 slices of pineapple, 6 halves of pears, 12 marshmallows, 3 maraschino cherries, 12 halves of nut meats, 6 T-salad dressing, 6 T-whipped cream and 6 pieces of lettuce and ran out of maraschino cherries.",
+    "We made 1 salad from 6 slices of pineapple, 6 halves of pears, 12 marshmallows, 6 maraschino cherries, 6 halves of nut meats, 6 T-salad dressing, 6 T-whipped cream and 6 pieces of lettuce and ran out of halves of nut meats.",
+    "We made 1 salad from 6 slices of pineapple, 6 halves of pears, 12 marshmallows, 6 maraschino cherries, 12 halves of nut meats, 3 T-salad dressing, 6 T-whipped cream and 6 pieces of lettuce and ran out of t-salad dressing.",
+    "We made 1 salad from 6 slices of pineapple, 6 halves of pears, 12 marshmallows, 6 maraschino cherries, 12 halves of nut meats, 6 T-salad dressing, 3 T-whipped cream and 6 pieces of lettuce and ran out of t-whipped cream.",
+    "We made 1 salad from 6 slices of pineapple, 6 halves of pears, 12 marshmallows, 6 maraschino cherries, 12 halves of nut meats, 6 T-salad dressing, 6 T-whipped cream and 3 pieces of lettuce and ran out of pieces of lettuce.",
+    "We have 12 slices of pineapple, 9 halves of pears, 15 marshmallows, 1 maraschino cherries, 4 halves of nut meats, 4 T-salad dressing, 21/2 T-whipped cream and 9/4 pieces of lettuce.",
+    "How much salad can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:42868@305314",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 12 large, ripe tomatoes, 6 green peppers, 4 onions, 4 T-salt, 4 T-sugar, 2 T-ground cinnamon and 6 C-vinegar and ran out of large.",
+    "We made 1 sauce from 24 large, ripe tomatoes, 3 green peppers, 4 onions, 4 T-salt, 4 T-sugar, 2 T-ground cinnamon and 6 C-vinegar and ran out of green peppers.",
+    "We made 1 sauce from 24 large, ripe tomatoes, 6 green peppers, 2 onions, 4 T-salt, 4 T-sugar, 2 T-ground cinnamon and 6 C-vinegar and ran out of onions.",
+    "We made 1 sauce from 24 large, ripe tomatoes, 6 green peppers, 4 onions, 2 T-salt, 4 T-sugar, 2 T-ground cinnamon and 6 C-vinegar and ran out of t-salt.",
+    "We made 1 sauce from 24 large, ripe tomatoes, 6 green peppers, 4 onions, 4 T-salt, 2 T-sugar, 2 T-ground cinnamon and 6 C-vinegar and ran out of t-sugar.",
+    "We made 1 sauce from 24 large, ripe tomatoes, 6 green peppers, 4 onions, 4 T-salt, 4 T-sugar, 1 T-ground cinnamon and 6 C-vinegar and ran out of t-ground cinnamon.",
+    "We made 1 sauce from 24 large, ripe tomatoes, 6 green peppers, 4 onions, 4 T-salt, 4 T-sugar, 2 T-ground cinnamon and 3 C-vinegar and ran out of c-vinegar.",
+    "We have 48 large, ripe tomatoes, 9/4 green peppers, 3 onions, 1 T-salt, 7 T-sugar, 1/3 T-ground cinnamon and 4 C-vinegar.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:69364@80742",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "pudding",
+   "turns": [
+    "We made 1 pudding from 1 cup of sugar., 8 eggs., 4 lemons., 2 pint of milk., 2 tablespoonful of granulated sugar., 4 tablespoonfuls of cornflour. and 2 pinch of salt. and ran out of sugar.",
+    "We made 1 pudding from 2 cup of sugar., 4 eggs., 4 lemons., 2 pint of milk., 2 tablespoonful of granulated sugar., 4 tablespoonfuls of cornflour. and 2 pinch of salt. and ran out of eggs.",
+    "We made 1 pudding from 2 cup of sugar., 8 eggs., 2 lemons., 2 pint of milk., 2 tablespoonful of granulated sugar., 4 tablespoonfuls of cornflour. and 2 pinch of salt. and ran out of lemons.",
+    "We made 1 pudding from 2 cup of sugar., 8 eggs., 4 lemons., 1 pint of milk., 2 tablespoonful of granulated sugar., 4 tablespoonfuls of cornflour. and 2 pinch of salt. and ran out of milk.",
+    "We made 1 pudding from 2 cup of sugar., 8 eggs., 4 lemons., 2 pint of milk., 1 tablespoonful of granulated sugar., 4 tablespoonfuls of cornflour. and 2 pinch of salt. and ran out of tablespoonful of granulated sugar.",
+    "We made 1 pudding from 2 cup of sugar., 8 eggs., 4 lemons., 2 pint of milk., 2 tablespoonful of granulated sugar., 2 tablespoonfuls of cornflour. and 2 pinch of salt. and ran out of tablespoonfuls of cornflour.",
+    "We made 1 pudding from 2 cup of sugar., 8 eggs., 4 lemons., 2 pint of milk., 2 tablespoonful of granulated sugar., 4 tablespoonfuls of cornflour. and 1 pinch of salt. and ran out of salt.",
+    "We have 1/3 cup of sugar., 12 eggs., 4/3 lemons., 3/2 pint of milk., 7/2 tablespoonful of granulated sugar., 8 tablespoonfuls of cornflour. and 4/3 pinch of salt..",
+    "How much pudding can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:wb:102054:4510628",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "sangr\u00eda",
+   "turns": [
+    "We made 1 sangr\u00eda from 1 L (8 cups) red wine, 4 peaches, 2 apple, 2 banana, 2 orange, 6 lemons, 250 ml (\u00bc cup) brandy, 8 tbsp sugar and 2 cinnamon stick (optional) and ran out of red wine.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 2 peaches, 2 apple, 2 banana, 2 orange, 6 lemons, 250 ml (\u00bc cup) brandy, 8 tbsp sugar and 2 cinnamon stick (optional) and ran out of peaches.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 4 peaches, 1 apple, 2 banana, 2 orange, 6 lemons, 250 ml (\u00bc cup) brandy, 8 tbsp sugar and 2 cinnamon stick (optional) and ran out of apple.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 4 peaches, 2 apple, 1 banana, 2 orange, 6 lemons, 250 ml (\u00bc cup) brandy, 8 tbsp sugar and 2 cinnamon stick (optional) and ran out of banana.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 4 peaches, 2 apple, 2 banana, 1 orange, 6 lemons, 250 ml (\u00bc cup) brandy, 8 tbsp sugar and 2 cinnamon stick (optional) and ran out of orange.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 4 peaches, 2 apple, 2 banana, 2 orange, 3 lemons, 250 ml (\u00bc cup) brandy, 8 tbsp sugar and 2 cinnamon stick (optional) and ran out of lemons.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 4 peaches, 2 apple, 2 banana, 2 orange, 6 lemons, 125 ml (\u00bc cup) brandy, 8 tbsp sugar and 2 cinnamon stick (optional) and ran out of brandy.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 4 peaches, 2 apple, 2 banana, 2 orange, 6 lemons, 250 ml (\u00bc cup) brandy, 4 tbsp sugar and 2 cinnamon stick (optional) and ran out of sugar.",
+    "We made 1 sangr\u00eda from 2 L (8 cups) red wine, 4 peaches, 2 apple, 2 banana, 2 orange, 6 lemons, 250 ml (\u00bc cup) brandy, 8 tbsp sugar and 1 cinnamon stick (optional) and ran out of cinnamon stick.",
+    "We have 4/3 L (8 cups) red wine, 3/2 peaches, 5/2 apple, 4 banana, 2/3 orange, 1 lemons, 375/2 ml (\u00bc cup) brandy, 2 tbsp sugar and 3 cinnamon stick (optional).",
+    "How much sangr\u00eda can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:48804@509597",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "nut-cake",
+   "turns": [
+    "We made 1 nut-cake from 2 cups sugar., 2 cup butter., 6 cups flour., 2 cup cold water., 8 eggs., 2 teaspoonful soda. and 4 teaspoonfuls cream-tartar. and ran out of sugar.",
+    "We made 1 nut-cake from 4 cups sugar., 1 cup butter., 6 cups flour., 2 cup cold water., 8 eggs., 2 teaspoonful soda. and 4 teaspoonfuls cream-tartar. and ran out of butter.",
+    "We made 1 nut-cake from 4 cups sugar., 2 cup butter., 3 cups flour., 2 cup cold water., 8 eggs., 2 teaspoonful soda. and 4 teaspoonfuls cream-tartar. and ran out of flour.",
+    "We made 1 nut-cake from 4 cups sugar., 2 cup butter., 6 cups flour., 1 cup cold water., 8 eggs., 2 teaspoonful soda. and 4 teaspoonfuls cream-tartar. and ran out of cold water.",
+    "We made 1 nut-cake from 4 cups sugar., 2 cup butter., 6 cups flour., 2 cup cold water., 4 eggs., 2 teaspoonful soda. and 4 teaspoonfuls cream-tartar. and ran out of eggs.",
+    "We made 1 nut-cake from 4 cups sugar., 2 cup butter., 6 cups flour., 2 cup cold water., 8 eggs., 1 teaspoonful soda. and 4 teaspoonfuls cream-tartar. and ran out of teaspoonful soda.",
+    "We made 1 nut-cake from 4 cups sugar., 2 cup butter., 6 cups flour., 2 cup cold water., 8 eggs., 2 teaspoonful soda. and 2 teaspoonfuls cream-tartar. and ran out of teaspoonfuls cream-tartar.",
+    "We have 7 cups sugar., 5/2 cup butter., 9/2 cups flour., 3/4 cup cold water., 16/3 eggs., 2/3 teaspoonful soda. and 2/3 teaspoonfuls cream-tartar..",
+    "How much nut-cake can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:13669@139581",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "croquettes",
+   "turns": [
+    "We made 1 croquettes from 1 cup rice, 4 eggs, 6 tablespoons milk, 2 teaspoon salt, 2 tablespoon sugar, 2 tablespoon butter and 2 teaspoon chopped parsley and ran out of rice.",
+    "We made 1 croquettes from 2 cup rice, 2 eggs, 6 tablespoons milk, 2 teaspoon salt, 2 tablespoon sugar, 2 tablespoon butter and 2 teaspoon chopped parsley and ran out of eggs.",
+    "We made 1 croquettes from 2 cup rice, 4 eggs, 3 tablespoons milk, 2 teaspoon salt, 2 tablespoon sugar, 2 tablespoon butter and 2 teaspoon chopped parsley and ran out of milk.",
+    "We made 1 croquettes from 2 cup rice, 4 eggs, 6 tablespoons milk, 1 teaspoon salt, 2 tablespoon sugar, 2 tablespoon butter and 2 teaspoon chopped parsley and ran out of salt.",
+    "We made 1 croquettes from 2 cup rice, 4 eggs, 6 tablespoons milk, 2 teaspoon salt, 1 tablespoon sugar, 2 tablespoon butter and 2 teaspoon chopped parsley and ran out of sugar.",
+    "We made 1 croquettes from 2 cup rice, 4 eggs, 6 tablespoons milk, 2 teaspoon salt, 2 tablespoon sugar, 1 tablespoon butter and 2 teaspoon chopped parsley and ran out of butter.",
+    "We made 1 croquettes from 2 cup rice, 4 eggs, 6 tablespoons milk, 2 teaspoon salt, 2 tablespoon sugar, 2 tablespoon butter and 1 teaspoon chopped parsley and ran out of chopped parsley.",
+    "We have 4/3 cup rice, 2/3 eggs, 9/2 tablespoons milk, 5/2 teaspoon salt, 1/2 tablespoon sugar, 2/3 tablespoon butter and 3/4 teaspoon chopped parsley.",
+    "How much croquettes can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:18097@277556",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "ware",
+   "turns": [
+    "We made 1 ware from 1 spider., 2 griddle., 2 pan for meat., 2 pan for fish., 2 meat fork., 2 can opener., 2 meat cleaver., 4 wooden-handled spoons. and 2 braising pan (cover). and ran out of spider.",
+    "We made 1 ware from 2 spider., 1 griddle., 2 pan for meat., 2 pan for fish., 2 meat fork., 2 can opener., 2 meat cleaver., 4 wooden-handled spoons. and 2 braising pan (cover). and ran out of griddle.",
+    "We made 1 ware from 2 spider., 2 griddle., 1 pan for meat., 2 pan for fish., 2 meat fork., 2 can opener., 2 meat cleaver., 4 wooden-handled spoons. and 2 braising pan (cover). and ran out of pan.",
+    "We made 1 ware from 2 spider., 2 griddle., 2 pan for meat., 1 pan for fish., 2 meat fork., 2 can opener., 2 meat cleaver., 4 wooden-handled spoons. and 2 braising pan (cover). and ran out of pan.",
+    "We made 1 ware from 2 spider., 2 griddle., 2 pan for meat., 2 pan for fish., 1 meat fork., 2 can opener., 2 meat cleaver., 4 wooden-handled spoons. and 2 braising pan (cover). and ran out of meat fork.",
+    "We made 1 ware from 2 spider., 2 griddle., 2 pan for meat., 2 pan for fish., 2 meat fork., 1 can opener., 2 meat cleaver., 4 wooden-handled spoons. and 2 braising pan (cover). and ran out of opener.",
+    "We made 1 ware from 2 spider., 2 griddle., 2 pan for meat., 2 pan for fish., 2 meat fork., 2 can opener., 1 meat cleaver., 4 wooden-handled spoons. and 2 braising pan (cover). and ran out of meat cleaver.",
+    "We made 1 ware from 2 spider., 2 griddle., 2 pan for meat., 2 pan for fish., 2 meat fork., 2 can opener., 2 meat cleaver., 2 wooden-handled spoons. and 2 braising pan (cover). and ran out of wooden-handled spoons.",
+    "We made 1 ware from 2 spider., 2 griddle., 2 pan for meat., 2 pan for fish., 2 meat fork., 2 can opener., 2 meat cleaver., 4 wooden-handled spoons. and 1 braising pan (cover). and ran out of braising pan.",
+    "We have 3/4 spider., 1/2 griddle., 3/2 pan for meat., 4/3 pan for fish., 1/3 meat fork., 4 can opener., 2/3 meat cleaver., 6 wooden-handled spoons. and 5/2 braising pan (cover)..",
+    "How much ware can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:48804@738413",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "soy",
+   "turns": [
+    "We made 1 soy from 2 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 4 quarts vinegar., 2 quart sugar., 4 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of tomatoes.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 12 good-sized onions, also sliced., 4 quarts vinegar., 2 quart sugar., 4 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of good-sized onions.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 2 quarts vinegar., 2 quart sugar., 4 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of vinegar.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 4 quarts vinegar., 1 quart sugar., 4 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of sugar.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 4 quarts vinegar., 2 quart sugar., 2 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of tablespoonfuls salt.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 4 quarts vinegar., 2 quart sugar., 4 tablespoonfuls salt., 2 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of tablespoonfuls ground mustard.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 4 quarts vinegar., 2 quart sugar., 4 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 2 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of tablespoonfuls black pepper.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 4 quarts vinegar., 2 quart sugar., 4 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 1 tablespoonful allspice. and 2 tablespoonful cloves. and ran out of tablespoonful allspice.",
+    "We made 1 soy from 4 gallons tomatoes, green, and sliced without peeling., 24 good-sized onions, also sliced., 4 quarts vinegar., 2 quart sugar., 4 tablespoonfuls salt., 4 tablespoonfuls ground mustard., 4 tablespoonfuls black pepper, ground., 2 tablespoonful allspice. and 1 tablespoonful cloves. and ran out of tablespoonful cloves.",
+    "We have 8/3 gallons tomatoes, green, and sliced without peeling., 36 good-sized onions, also sliced., 7 quarts vinegar., 2/3 quart sugar., 3/2 tablespoonfuls salt., 8 tablespoonfuls ground mustard., 1 tablespoonfuls black pepper, ground., 5/2 tablespoonful allspice. and 1/3 tablespoonful cloves..",
+    "How much soy can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:wb:457129:4513132",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "wings",
+   "turns": [
+    "We made 1 wings from 1 cup flour, 4 tablespoons cornmeal, 2 teaspoon black pepper, 2 teaspoon salt, 2 teaspoon ginger powder, 2 teaspoon paprika powder and 20 chicken wingettes and ran out of flour.",
+    "We made 1 wings from 2 cup flour, 2 tablespoons cornmeal, 2 teaspoon black pepper, 2 teaspoon salt, 2 teaspoon ginger powder, 2 teaspoon paprika powder and 20 chicken wingettes and ran out of cornmeal.",
+    "We made 1 wings from 2 cup flour, 4 tablespoons cornmeal, 1 teaspoon black pepper, 2 teaspoon salt, 2 teaspoon ginger powder, 2 teaspoon paprika powder and 20 chicken wingettes and ran out of black pepper.",
+    "We made 1 wings from 2 cup flour, 4 tablespoons cornmeal, 2 teaspoon black pepper, 1 teaspoon salt, 2 teaspoon ginger powder, 2 teaspoon paprika powder and 20 chicken wingettes and ran out of salt.",
+    "We made 1 wings from 2 cup flour, 4 tablespoons cornmeal, 2 teaspoon black pepper, 2 teaspoon salt, 1 teaspoon ginger powder, 2 teaspoon paprika powder and 20 chicken wingettes and ran out of ginger powder.",
+    "We made 1 wings from 2 cup flour, 4 tablespoons cornmeal, 2 teaspoon black pepper, 2 teaspoon salt, 2 teaspoon ginger powder, 1 teaspoon paprika powder and 20 chicken wingettes and ran out of paprika powder.",
+    "We made 1 wings from 2 cup flour, 4 tablespoons cornmeal, 2 teaspoon black pepper, 2 teaspoon salt, 2 teaspoon ginger powder, 2 teaspoon paprika powder and 10 chicken wingettes and ran out of chicken wingettes.",
+    "We have 1/2 cup flour, 8 tablespoons cornmeal, 3/2 teaspoon black pepper, 2/3 teaspoon salt, 5/2 teaspoon ginger powder, 3 teaspoon paprika powder and 10/3 chicken wingettes.",
+    "How much wings can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:42450@482967",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 2 pounds best stoned raisins., 4 pounds currants., 2 pound citron., 24 eggs., 2 pound fresh butter., 2 pound loaf sugar. and 2 pound flour. and ran out of best stoned raisins.",
+    "We made 1 cake from 4 pounds best stoned raisins., 2 pounds currants., 2 pound citron., 24 eggs., 2 pound fresh butter., 2 pound loaf sugar. and 2 pound flour. and ran out of currants.",
+    "We made 1 cake from 4 pounds best stoned raisins., 4 pounds currants., 1 pound citron., 24 eggs., 2 pound fresh butter., 2 pound loaf sugar. and 2 pound flour. and ran out of citron.",
+    "We made 1 cake from 4 pounds best stoned raisins., 4 pounds currants., 2 pound citron., 12 eggs., 2 pound fresh butter., 2 pound loaf sugar. and 2 pound flour. and ran out of eggs.",
+    "We made 1 cake from 4 pounds best stoned raisins., 4 pounds currants., 2 pound citron., 24 eggs., 1 pound fresh butter., 2 pound loaf sugar. and 2 pound flour. and ran out of fresh butter.",
+    "We made 1 cake from 4 pounds best stoned raisins., 4 pounds currants., 2 pound citron., 24 eggs., 2 pound fresh butter., 1 pound loaf sugar. and 2 pound flour. and ran out of loaf sugar.",
+    "We made 1 cake from 4 pounds best stoned raisins., 4 pounds currants., 2 pound citron., 24 eggs., 2 pound fresh butter., 2 pound loaf sugar. and 1 pound flour. and ran out of flour.",
+    "We have 7 pounds best stoned raisins., 6 pounds currants., 4 pound citron., 8 eggs., 1/2 pound fresh butter., 3/2 pound loaf sugar. and 1/3 pound flour..",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:wb:178946:4515347",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "vanillekipferl",
+   "turns": [
+    "We made 1 vanillekipferl from 350 g plain flour, 400 g cold unsalted butter, 200 g icing sugar, 200 g finely-ground almonds, 2 egg, 2 packet (8 g) vanilla sugar and 2 pinch salt and ran out of plain flour.",
+    "We made 1 vanillekipferl from 700 g plain flour, 200 g cold unsalted butter, 200 g icing sugar, 200 g finely-ground almonds, 2 egg, 2 packet (8 g) vanilla sugar and 2 pinch salt and ran out of cold unsalted butter.",
+    "We made 1 vanillekipferl from 700 g plain flour, 400 g cold unsalted butter, 100 g icing sugar, 200 g finely-ground almonds, 2 egg, 2 packet (8 g) vanilla sugar and 2 pinch salt and ran out of icing sugar.",
+    "We made 1 vanillekipferl from 700 g plain flour, 400 g cold unsalted butter, 200 g icing sugar, 100 g finely-ground almonds, 2 egg, 2 packet (8 g) vanilla sugar and 2 pinch salt and ran out of finely-ground almonds.",
+    "We made 1 vanillekipferl from 700 g plain flour, 400 g cold unsalted butter, 200 g icing sugar, 200 g finely-ground almonds, 1 egg, 2 packet (8 g) vanilla sugar and 2 pinch salt and ran out of egg.",
+    "We made 1 vanillekipferl from 700 g plain flour, 400 g cold unsalted butter, 200 g icing sugar, 200 g finely-ground almonds, 2 egg, 1 packet (8 g) vanilla sugar and 2 pinch salt and ran out of vanilla sugar.",
+    "We made 1 vanillekipferl from 700 g plain flour, 400 g cold unsalted butter, 200 g icing sugar, 200 g finely-ground almonds, 2 egg, 2 packet (8 g) vanilla sugar and 1 pinch salt and ran out of salt.",
+    "We have 1400/3 g plain flour, 800 g cold unsalted butter, 250 g icing sugar, 75 g finely-ground almonds, 1/3 egg, 1/2 packet (8 g) vanilla sugar and 3 pinch salt.",
+    "How much vanillekipferl can we make?"
+   ]
+  },
+  {
+   "cell": "C710:INTEGER",
+   "id": "RW:pg:78849@239011",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "bread",
+   "turns": [
+    "We made 1 bread from 4 cupfuls flour, 10 tablespoonfuls Crisco, 2 teaspoonful salt, 2 teaspoonful soda, 4 teaspoonfuls cream of tartar, 6 tablespoonfuls sugar and 4 eggs and ran out of cupfuls flour.",
+    "We made 1 bread from 8 cupfuls flour, 5 tablespoonfuls Crisco, 2 teaspoonful salt, 2 teaspoonful soda, 4 teaspoonfuls cream of tartar, 6 tablespoonfuls sugar and 4 eggs and ran out of tablespoonfuls crisco.",
+    "We made 1 bread from 8 cupfuls flour, 10 tablespoonfuls Crisco, 1 teaspoonful salt, 2 teaspoonful soda, 4 teaspoonfuls cream of tartar, 6 tablespoonfuls sugar and 4 eggs and ran out of teaspoonful salt.",
+    "We made 1 bread from 8 cupfuls flour, 10 tablespoonfuls Crisco, 2 teaspoonful salt, 1 teaspoonful soda, 4 teaspoonfuls cream of tartar, 6 tablespoonfuls sugar and 4 eggs and ran out of teaspoonful soda.",
+    "We made 1 bread from 8 cupfuls flour, 10 tablespoonfuls Crisco, 2 teaspoonful salt, 2 teaspoonful soda, 2 teaspoonfuls cream of tartar, 6 tablespoonfuls sugar and 4 eggs and ran out of teaspoonfuls cream of tartar.",
+    "We made 1 bread from 8 cupfuls flour, 10 tablespoonfuls Crisco, 2 teaspoonful salt, 2 teaspoonful soda, 4 teaspoonfuls cream of tartar, 3 tablespoonfuls sugar and 4 eggs and ran out of tablespoonfuls sugar.",
+    "We made 1 bread from 8 cupfuls flour, 10 tablespoonfuls Crisco, 2 teaspoonful salt, 2 teaspoonful soda, 4 teaspoonfuls cream of tartar, 6 tablespoonfuls sugar and 2 eggs and ran out of eggs.",
+    "We have 14 cupfuls flour, 10/3 tablespoonfuls Crisco, 1/3 teaspoonful salt, 1/2 teaspoonful soda, 5 teaspoonfuls cream of tartar, 4 tablespoonfuls sugar and 6 eggs.",
+    "How much bread can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:65398@78248",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "doughnuts",
+   "turns": [
+    "We made 1 doughnuts from 4 cups sifted flour, 8 teaspoons Calumet Baking Powder, 1 teaspoon salt, 1/2 teaspoon nutmeg, 2 cup sugar, 4 eggs, well beaten, 1/2 teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 2 cup milk and ran out of sifted flour.",
+    "We made 1 doughnuts from 8 cups sifted flour, 4 teaspoons Calumet Baking Powder, 1 teaspoon salt, 1/2 teaspoon nutmeg, 2 cup sugar, 4 eggs, well beaten, 1/2 teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 2 cup milk and ran out of calumet baking powder.",
+    "We made 1 doughnuts from 8 cups sifted flour, 8 teaspoons Calumet Baking Powder, \u00bd teaspoon salt, 1/2 teaspoon nutmeg, 2 cup sugar, 4 eggs, well beaten, 1/2 teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 2 cup milk and ran out of salt.",
+    "We made 1 doughnuts from 8 cups sifted flour, 8 teaspoons Calumet Baking Powder, 1 teaspoon salt, \u00bc teaspoon nutmeg, 2 cup sugar, 4 eggs, well beaten, 1/2 teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 2 cup milk and ran out of nutmeg.",
+    "We made 1 doughnuts from 8 cups sifted flour, 8 teaspoons Calumet Baking Powder, 1 teaspoon salt, 1/2 teaspoon nutmeg, 1 cup sugar, 4 eggs, well beaten, 1/2 teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 2 cup milk and ran out of sugar.",
+    "We made 1 doughnuts from 8 cups sifted flour, 8 teaspoons Calumet Baking Powder, 1 teaspoon salt, 1/2 teaspoon nutmeg, 2 cup sugar, 2 eggs, well beaten, 1/2 teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 2 cup milk and ran out of eggs.",
+    "We made 1 doughnuts from 8 cups sifted flour, 8 teaspoons Calumet Baking Powder, 1 teaspoon salt, 1/2 teaspoon nutmeg, 2 cup sugar, 4 eggs, well beaten, \u00bc teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 2 cup milk and ran out of lemon extract.",
+    "We made 1 doughnuts from 8 cups sifted flour, 8 teaspoons Calumet Baking Powder, 1 teaspoon salt, 1/2 teaspoon nutmeg, 2 cup sugar, 4 eggs, well beaten, 1/2 teaspoon lemon extract, 2 tablespoons melted butter or other shortening and 2 cup milk and ran out of melted butter.",
+    "We made 1 doughnuts from 8 cups sifted flour, 8 teaspoons Calumet Baking Powder, 1 teaspoon salt, 1/2 teaspoon nutmeg, 2 cup sugar, 4 eggs, well beaten, 1/2 teaspoon lemon extract, 4 tablespoons melted butter or other shortening and 1 cup milk and ran out of milk.",
+    "We have 2 cups sifted flour, 12 teaspoons Calumet Baking Powder, 3/4 teaspoon salt, 5/8 teaspoon nutmeg, 1/3 cup sugar, 7 eggs, well beaten, 1/6 teaspoon lemon extract, 3/2 tablespoons melted butter or other shortening and 4/3 cup milk.",
+    "How much doughnuts can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:wb:39267:4613377",
+   "n_lessons": 10,
+   "n_lines": 10,
+   "noun": "rarebit",
+   "turns": [
+    "We made 1 rarebit from 2 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of unsalted butter.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 2 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of all-purpose flour.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 1 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of dijon mustard.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 1 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of worcestershire sauce.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, \u00bd teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of salt.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, \u00bd teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of freshly ground black pepper.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 2 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of fl oz beer such.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 4 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of fl oz double cream.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 6 oz (170 g) grated Cheddar cheese and 8 slices of toast and ran out of grated cheddar cheese.",
+    "We made 1 rarebit from 4 tablespoons unsalted butter, 4 tablespoons all-purpose flour, 2 teaspoon Dijon mustard, 2 teaspoon Worcestershire sauce, 1 teaspoon salt, 1 teaspoon freshly ground black pepper, 4 fl oz (60 ml) beer such as porter (Guinness will do), 8 fl oz (120 ml) double cream, 12 oz (170 g) grated Cheddar cheese and 4 slices of toast and ran out of slices of toast.",
+    "We have 4/3 tablespoons unsalted butter, 3 tablespoons all-purpose flour, 1/2 teaspoon Dijon mustard, 1/3 teaspoon Worcestershire sauce, 3/2 teaspoon salt, 2 teaspoon freshly ground black pepper, 3/2 fl oz (60 ml) beer such as porter (Guinness will do), 10 fl oz (120 ml) double cream, 8 oz (170 g) grated Cheddar cheese and 14 slices of toast.",
+    "How much rarebit can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:42631@39191",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "chips",
+   "turns": [
+    "We made 1 chips from 1 clove garlic, 12 oz. cream cheese, 2 t Worcestershire sauce (op), 2 t lemon juice, 1 t salt, 1 C minced clams and 2 T clam juice and ran out of clove garlic.",
+    "We made 1 chips from 2 clove garlic, 6 oz. cream cheese, 2 t Worcestershire sauce (op), 2 t lemon juice, 1 t salt, 1 C minced clams and 2 T clam juice and ran out of cream cheese.",
+    "We made 1 chips from 2 clove garlic, 12 oz. cream cheese, 1 t Worcestershire sauce (op), 2 t lemon juice, 1 t salt, 1 C minced clams and 2 T clam juice and ran out of t worcestershire sauce.",
+    "We made 1 chips from 2 clove garlic, 12 oz. cream cheese, 2 t Worcestershire sauce (op), 1 t lemon juice, 1 t salt, 1 C minced clams and 2 T clam juice and ran out of t lemon juice.",
+    "We made 1 chips from 2 clove garlic, 12 oz. cream cheese, 2 t Worcestershire sauce (op), 2 t lemon juice, \u00bd t salt, 1 C minced clams and 2 T clam juice and ran out of t salt.",
+    "We made 1 chips from 2 clove garlic, 12 oz. cream cheese, 2 t Worcestershire sauce (op), 2 t lemon juice, 1 t salt, \u00bd C minced clams and 2 T clam juice and ran out of c minced clams.",
+    "We made 1 chips from 2 clove garlic, 12 oz. cream cheese, 2 t Worcestershire sauce (op), 2 t lemon juice, 1 t salt, 1 C minced clams and 1 T clam juice and ran out of t clam juice.",
+    "We have 4 clove garlic, 18 oz. cream cheese, 4/3 t Worcestershire sauce (op), 3/4 t lemon juice, 7/4 t salt, 1/6 C minced clams and 2/3 T clam juice.",
+    "How much chips can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:15464@161178",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "pudding",
+   "turns": [
+    "We made 1 pudding from 1/4 lb suet, 1 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 2 cup milk, 1 cup molasses, 1 cup corn syrup, 2 cup breadcrumbs, 4 eggs and 2/3 cup flour and ran out of suet.",
+    "We made 1 pudding from 1/2 lb suet, 1/2 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 2 cup milk, 1 cup molasses, 1 cup corn syrup, 2 cup breadcrumbs, 4 eggs and 2/3 cup flour and ran out of chopped figs.",
+    "We made 1 pudding from 1/2 lb suet, 1 lb chopped figs, 1 cup sour apple (cored, pared and chopped), 2 cup milk, 1 cup molasses, 1 cup corn syrup, 2 cup breadcrumbs, 4 eggs and 2/3 cup flour and ran out of sour apple.",
+    "We made 1 pudding from 1/2 lb suet, 1 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 1 cup milk, 1 cup molasses, 1 cup corn syrup, 2 cup breadcrumbs, 4 eggs and 2/3 cup flour and ran out of milk.",
+    "We made 1 pudding from 1/2 lb suet, 1 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 2 cup milk, 1/2 cup molasses, 1 cup corn syrup, 2 cup breadcrumbs, 4 eggs and 2/3 cup flour and ran out of molasses.",
+    "We made 1 pudding from 1/2 lb suet, 1 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 2 cup milk, 1 cup molasses, 1/2 cup corn syrup, 2 cup breadcrumbs, 4 eggs and 2/3 cup flour and ran out of corn syrup.",
+    "We made 1 pudding from 1/2 lb suet, 1 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 2 cup milk, 1 cup molasses, 1 cup corn syrup, 1 cup breadcrumbs, 4 eggs and 2/3 cup flour and ran out of breadcrumbs.",
+    "We made 1 pudding from 1/2 lb suet, 1 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 2 cup milk, 1 cup molasses, 1 cup corn syrup, 2 cup breadcrumbs, 2 eggs and 2/3 cup flour and ran out of eggs.",
+    "We made 1 pudding from 1/2 lb suet, 1 lb chopped figs, 2 cup sour apple (cored, pared and chopped), 2 cup milk, 1 cup molasses, 1 cup corn syrup, 2 cup breadcrumbs, 4 eggs and 1/3 cup flour and ran out of flour.",
+    "We have 3/16 lb suet, 1/6 lb chopped figs, 3/2 cup sour apple (cored, pared and chopped), 2/3 cup milk, 7/4 cup molasses, 2 cup corn syrup, 5/2 cup breadcrumbs, 1 eggs and 1 cup flour.",
+    "How much pudding can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:65061@151018",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "buns",
+   "turns": [
+    "We made 1 buns from 1 cup scalded milk, 2/3 cup butter, 2/3 cup sugar, 2 yeast cake dissolved in, 1/2 cup lukewarm water, 1 teaspoon salt, 1 cup raisins stoned and cut in quarters and 2 teaspoon extract lemon and ran out of scalded milk.",
+    "We made 1 buns from 2 cup scalded milk, \u2153 cup butter, 2/3 cup sugar, 2 yeast cake dissolved in, 1/2 cup lukewarm water, 1 teaspoon salt, 1 cup raisins stoned and cut in quarters and 2 teaspoon extract lemon and ran out of butter.",
+    "We made 1 buns from 2 cup scalded milk, 2/3 cup butter, \u2153 cup sugar, 2 yeast cake dissolved in, 1/2 cup lukewarm water, 1 teaspoon salt, 1 cup raisins stoned and cut in quarters and 2 teaspoon extract lemon and ran out of sugar.",
+    "We made 1 buns from 2 cup scalded milk, 2/3 cup butter, 2/3 cup sugar, 1 yeast cake dissolved in, 1/2 cup lukewarm water, 1 teaspoon salt, 1 cup raisins stoned and cut in quarters and 2 teaspoon extract lemon and ran out of yeast cake dissolved.",
+    "We made 1 buns from 2 cup scalded milk, 2/3 cup butter, 2/3 cup sugar, 2 yeast cake dissolved in, \u00bc cup lukewarm water, 1 teaspoon salt, 1 cup raisins stoned and cut in quarters and 2 teaspoon extract lemon and ran out of lukewarm water.",
+    "We made 1 buns from 2 cup scalded milk, 2/3 cup butter, 2/3 cup sugar, 2 yeast cake dissolved in, 1/2 cup lukewarm water, \u00bd teaspoon salt, 1 cup raisins stoned and cut in quarters and 2 teaspoon extract lemon and ran out of salt.",
+    "We made 1 buns from 2 cup scalded milk, 2/3 cup butter, 2/3 cup sugar, 2 yeast cake dissolved in, 1/2 cup lukewarm water, 1 teaspoon salt, \u00bd cup raisins stoned and cut in quarters and 2 teaspoon extract lemon and ran out of raisins stoned.",
+    "We made 1 buns from 2 cup scalded milk, 2/3 cup butter, 2/3 cup sugar, 2 yeast cake dissolved in, 1/2 cup lukewarm water, 1 teaspoon salt, 1 cup raisins stoned and cut in quarters and 1 teaspoon extract lemon and ran out of extract lemon.",
+    "We have 5/2 cup scalded milk, 1/6 cup butter, 1/9 cup sugar, 7/2 yeast cake dissolved in, 3/4 cup lukewarm water, 1/3 teaspoon salt, 3/8 cup raisins stoned and cut in quarters and 4 teaspoon extract lemon.",
+    "How much buns can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:16514@53390",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "eggs",
+   "turns": [
+    "We made 1 eggs from 6 eggs., 4 saltspoonfuls of dry mustard., 1 teaspoonful of salt., 2 saltspoonful of cayenne pepper., 2 teaspoonful of olive-oil or cream., 2 large tablespoonful of chopped ham. and 1 teaspoonful of vinegar. and ran out of eggs.",
+    "We made 1 eggs from 12 eggs., 2 saltspoonfuls of dry mustard., 1 teaspoonful of salt., 2 saltspoonful of cayenne pepper., 2 teaspoonful of olive-oil or cream., 2 large tablespoonful of chopped ham. and 1 teaspoonful of vinegar. and ran out of saltspoonfuls of dry mustard.",
+    "We made 1 eggs from 12 eggs., 4 saltspoonfuls of dry mustard., 1/2 teaspoonful of salt., 2 saltspoonful of cayenne pepper., 2 teaspoonful of olive-oil or cream., 2 large tablespoonful of chopped ham. and 1 teaspoonful of vinegar. and ran out of teaspoonful of salt.",
+    "We made 1 eggs from 12 eggs., 4 saltspoonfuls of dry mustard., 1 teaspoonful of salt., 1 saltspoonful of cayenne pepper., 2 teaspoonful of olive-oil or cream., 2 large tablespoonful of chopped ham. and 1 teaspoonful of vinegar. and ran out of saltspoonful of cayenne pepper.",
+    "We made 1 eggs from 12 eggs., 4 saltspoonfuls of dry mustard., 1 teaspoonful of salt., 2 saltspoonful of cayenne pepper., 1 teaspoonful of olive-oil or cream., 2 large tablespoonful of chopped ham. and 1 teaspoonful of vinegar. and ran out of teaspoonful of olive-oil.",
+    "We made 1 eggs from 12 eggs., 4 saltspoonfuls of dry mustard., 1 teaspoonful of salt., 2 saltspoonful of cayenne pepper., 2 teaspoonful of olive-oil or cream., 1 large tablespoonful of chopped ham. and 1 teaspoonful of vinegar. and ran out of large tablespoonful of chopped ham.",
+    "We made 1 eggs from 12 eggs., 4 saltspoonfuls of dry mustard., 1 teaspoonful of salt., 2 saltspoonful of cayenne pepper., 2 teaspoonful of olive-oil or cream., 2 large tablespoonful of chopped ham. and 1/2 teaspoonful of vinegar. and ran out of teaspoonful of vinegar.",
+    "We have 21 eggs., 6 saltspoonfuls of dry mustard., 1/6 teaspoonful of salt., 3/4 saltspoonful of cayenne pepper., 3/2 teaspoonful of olive-oil or cream., 5/2 large tablespoonful of chopped ham. and 2/3 teaspoonful of vinegar..",
+    "How much eggs can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:65501@15756",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 tbsp. butter, 4 tbsp. flour, 1 tsp. salt, 1/4 tsp. pepper, 3/2 cup Carnation Milk, 4 egg yolks, 1/2 cup butter and 2 tbsp. lemon juice and ran out of butter.",
+    "We made 1 sauce from 2 tbsp. butter, 2 tbsp. flour, 1 tsp. salt, 1/4 tsp. pepper, 3/2 cup Carnation Milk, 4 egg yolks, 1/2 cup butter and 2 tbsp. lemon juice and ran out of flour.",
+    "We made 1 sauce from 2 tbsp. butter, 4 tbsp. flour, \u00bd tsp. salt, 1/4 tsp. pepper, 3/2 cup Carnation Milk, 4 egg yolks, 1/2 cup butter and 2 tbsp. lemon juice and ran out of salt.",
+    "We made 1 sauce from 2 tbsp. butter, 4 tbsp. flour, 1 tsp. salt, \u215b tsp. pepper, 3/2 cup Carnation Milk, 4 egg yolks, 1/2 cup butter and 2 tbsp. lemon juice and ran out of pepper.",
+    "We made 1 sauce from 2 tbsp. butter, 4 tbsp. flour, 1 tsp. salt, 1/4 tsp. pepper, \u00be cup Carnation Milk, 4 egg yolks, 1/2 cup butter and 2 tbsp. lemon juice and ran out of carnation milk.",
+    "We made 1 sauce from 2 tbsp. butter, 4 tbsp. flour, 1 tsp. salt, 1/4 tsp. pepper, 3/2 cup Carnation Milk, 2 egg yolks, 1/2 cup butter and 2 tbsp. lemon juice and ran out of egg yolks.",
+    "We made 1 sauce from 2 tbsp. butter, 4 tbsp. flour, 1 tsp. salt, 1/4 tsp. pepper, 3/2 cup Carnation Milk, 4 egg yolks, \u00bc cup butter and 2 tbsp. lemon juice and ran out of butter.",
+    "We made 1 sauce from 2 tbsp. butter, 4 tbsp. flour, 1 tsp. salt, 1/4 tsp. pepper, 3/2 cup Carnation Milk, 4 egg yolks, 1/2 cup butter and 1 tbsp. lemon juice and ran out of lemon juice.",
+    "We have 1/3 tbsp. butter, 3 tbsp. flour, 7/4 tsp. salt, 3/32 tsp. pepper, 9/4 cup Carnation Milk, 4/3 egg yolks, 5/8 cup butter and 1/2 tbsp. lemon juice.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:52800@334391",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "pudding",
+   "turns": [
+    "We made 1 pudding from 1 cup milk, 2 cup flour, 4 eggs, 4 tablespoons butter, 2 teaspoon salt, 4 cups quartered apples, 4 tablespoons lemon juice and 1/2 cup sugar and ran out of milk.",
+    "We made 1 pudding from 2 cup milk, 1 cup flour, 4 eggs, 4 tablespoons butter, 2 teaspoon salt, 4 cups quartered apples, 4 tablespoons lemon juice and 1/2 cup sugar and ran out of flour.",
+    "We made 1 pudding from 2 cup milk, 2 cup flour, 2 eggs, 4 tablespoons butter, 2 teaspoon salt, 4 cups quartered apples, 4 tablespoons lemon juice and 1/2 cup sugar and ran out of eggs.",
+    "We made 1 pudding from 2 cup milk, 2 cup flour, 4 eggs, 2 tablespoons butter, 2 teaspoon salt, 4 cups quartered apples, 4 tablespoons lemon juice and 1/2 cup sugar and ran out of butter.",
+    "We made 1 pudding from 2 cup milk, 2 cup flour, 4 eggs, 4 tablespoons butter, 1 teaspoon salt, 4 cups quartered apples, 4 tablespoons lemon juice and 1/2 cup sugar and ran out of salt.",
+    "We made 1 pudding from 2 cup milk, 2 cup flour, 4 eggs, 4 tablespoons butter, 2 teaspoon salt, 2 cups quartered apples, 4 tablespoons lemon juice and 1/2 cup sugar and ran out of quartered apples.",
+    "We made 1 pudding from 2 cup milk, 2 cup flour, 4 eggs, 4 tablespoons butter, 2 teaspoon salt, 4 cups quartered apples, 2 tablespoons lemon juice and 1/2 cup sugar and ran out of lemon juice.",
+    "We made 1 pudding from 2 cup milk, 2 cup flour, 4 eggs, 4 tablespoons butter, 2 teaspoon salt, 4 cups quartered apples, 4 tablespoons lemon juice and \u00bc cup sugar and ran out of sugar.",
+    "We have 2/3 cup milk, 3/2 cup flour, 7 eggs, 8 tablespoons butter, 4/3 teaspoon salt, 5 cups quartered apples, 3/2 tablespoons lemon juice and 1/12 cup sugar.",
+    "How much pudding can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:56540@299768",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1/2 pint of hot milk., 2 large tablespoonful of butter., 2 level tablespoonful of flour., 2 level teaspoonful of salt., 1/2 teaspoonful of pepper., 1 teaspoonful of onion juice. and 2 spray of parsley. and ran out of hot milk.",
+    "We made 1 sauce from 1 pint of hot milk., 1 large tablespoonful of butter., 2 level tablespoonful of flour., 2 level teaspoonful of salt., 1/2 teaspoonful of pepper., 1 teaspoonful of onion juice. and 2 spray of parsley. and ran out of large tablespoonful of butter.",
+    "We made 1 sauce from 1 pint of hot milk., 2 large tablespoonful of butter., 1 level tablespoonful of flour., 2 level teaspoonful of salt., 1/2 teaspoonful of pepper., 1 teaspoonful of onion juice. and 2 spray of parsley. and ran out of level tablespoonful of flour.",
+    "We made 1 sauce from 1 pint of hot milk., 2 large tablespoonful of butter., 2 level tablespoonful of flour., 1 level teaspoonful of salt., 1/2 teaspoonful of pepper., 1 teaspoonful of onion juice. and 2 spray of parsley. and ran out of level teaspoonful of salt.",
+    "We made 1 sauce from 1 pint of hot milk., 2 large tablespoonful of butter., 2 level tablespoonful of flour., 2 level teaspoonful of salt., 1/4 teaspoonful of pepper., 1 teaspoonful of onion juice. and 2 spray of parsley. and ran out of teaspoonful of pepper.",
+    "We made 1 sauce from 1 pint of hot milk., 2 large tablespoonful of butter., 2 level tablespoonful of flour., 2 level teaspoonful of salt., 1/2 teaspoonful of pepper., 1/2 teaspoonful of onion juice. and 2 spray of parsley. and ran out of teaspoonful of onion juice.",
+    "We made 1 sauce from 1 pint of hot milk., 2 large tablespoonful of butter., 2 level tablespoonful of flour., 2 level teaspoonful of salt., 1/2 teaspoonful of pepper., 1 teaspoonful of onion juice. and 1 spray of parsley. and ran out of spray of parsley.",
+    "We have 1/6 pint of hot milk., 4/3 large tablespoonful of butter., 3/2 level tablespoonful of flour., 7/2 level teaspoonful of salt., 1/8 teaspoonful of pepper., 3/2 teaspoonful of onion juice. and 2/3 spray of parsley..",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:52800@354740",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from \u00be cup powdered sugar, 2 cup cream, 1/2 cup Lowney\u2019s Premium Chocolate grated, 1/4 teaspoon salt, 8 tablespoons hot water, 2 egg white, 2 teaspoon almond extract, or and 2 tablespoon cordial and ran out of powdered sugar.",
+    "We made 1 sauce from 3/2 cup powdered sugar, 1 cup cream, 1/2 cup Lowney\u2019s Premium Chocolate grated, 1/4 teaspoon salt, 8 tablespoons hot water, 2 egg white, 2 teaspoon almond extract, or and 2 tablespoon cordial and ran out of cream.",
+    "We made 1 sauce from 3/2 cup powdered sugar, 2 cup cream, \u00bc cup Lowney\u2019s Premium Chocolate grated, 1/4 teaspoon salt, 8 tablespoons hot water, 2 egg white, 2 teaspoon almond extract, or and 2 tablespoon cordial and ran out of lowney\u2019s premium chocolate grated.",
+    "We made 1 sauce from 3/2 cup powdered sugar, 2 cup cream, 1/2 cup Lowney\u2019s Premium Chocolate grated, \u215b teaspoon salt, 8 tablespoons hot water, 2 egg white, 2 teaspoon almond extract, or and 2 tablespoon cordial and ran out of salt.",
+    "We made 1 sauce from 3/2 cup powdered sugar, 2 cup cream, 1/2 cup Lowney\u2019s Premium Chocolate grated, 1/4 teaspoon salt, 4 tablespoons hot water, 2 egg white, 2 teaspoon almond extract, or and 2 tablespoon cordial and ran out of hot water.",
+    "We made 1 sauce from 3/2 cup powdered sugar, 2 cup cream, 1/2 cup Lowney\u2019s Premium Chocolate grated, 1/4 teaspoon salt, 8 tablespoons hot water, 1 egg white, 2 teaspoon almond extract, or and 2 tablespoon cordial and ran out of egg white.",
+    "We made 1 sauce from 3/2 cup powdered sugar, 2 cup cream, 1/2 cup Lowney\u2019s Premium Chocolate grated, 1/4 teaspoon salt, 8 tablespoons hot water, 2 egg white, 1 teaspoon almond extract, or and 2 tablespoon cordial and ran out of almond extract.",
+    "We made 1 sauce from 3/2 cup powdered sugar, 2 cup cream, 1/2 cup Lowney\u2019s Premium Chocolate grated, 1/4 teaspoon salt, 8 tablespoons hot water, 2 egg white, 2 teaspoon almond extract, or and 1 tablespoon cordial and ran out of cordial.",
+    "We have 1/4 cup powdered sugar, 5/2 cup cream, 1/3 cup Lowney\u2019s Premium Chocolate grated, 3/32 teaspoon salt, 2 tablespoons hot water, 3 egg white, 2/3 teaspoon almond extract, or and 3/2 tablespoon cordial.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:42868@521738",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "custard",
+   "turns": [
+    "We made 1 custard from 1 C-milk, 2 large egg, 8 T-sugar, 2/3 square of chocolate, melted, 2 T-water, 1 t-vanilla and 1/4 t-salt and ran out of c-milk.",
+    "We made 1 custard from 2 C-milk, 1 large egg, 8 T-sugar, 2/3 square of chocolate, melted, 2 T-water, 1 t-vanilla and 1/4 t-salt and ran out of large egg.",
+    "We made 1 custard from 2 C-milk, 2 large egg, 4 T-sugar, 2/3 square of chocolate, melted, 2 T-water, 1 t-vanilla and 1/4 t-salt and ran out of t-sugar.",
+    "We made 1 custard from 2 C-milk, 2 large egg, 8 T-sugar, 1/3 square of chocolate, melted, 2 T-water, 1 t-vanilla and 1/4 t-salt and ran out of square of chocolate.",
+    "We made 1 custard from 2 C-milk, 2 large egg, 8 T-sugar, 2/3 square of chocolate, melted, 1 T-water, 1 t-vanilla and 1/4 t-salt and ran out of t-water.",
+    "We made 1 custard from 2 C-milk, 2 large egg, 8 T-sugar, 2/3 square of chocolate, melted, 2 T-water, 1/2 t-vanilla and 1/4 t-salt and ran out of t-vanilla.",
+    "We made 1 custard from 2 C-milk, 2 large egg, 8 T-sugar, 2/3 square of chocolate, melted, 2 T-water, 1 t-vanilla and 1/8 t-salt and ran out of t-salt.",
+    "We have 4/3 C-milk, 3/2 large egg, 8/3 T-sugar, 5/6 square of chocolate, melted, 4 T-water, 7/4 t-vanilla and 3/8 t-salt.",
+    "How much custard can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:52800@185664",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from \u00bc cup freshly grated horse-radish, 1/2 cup soft bread crumbs, 1 teaspoon salt, 2 cup White Sauce, 1/2 teaspoon paprika, 4 tablespoons lemon juice and 2 tablespoon vinegar and ran out of freshly grated horse-radish.",
+    "We made 1 sauce from 1/2 cup freshly grated horse-radish, \u00bc cup soft bread crumbs, 1 teaspoon salt, 2 cup White Sauce, 1/2 teaspoon paprika, 4 tablespoons lemon juice and 2 tablespoon vinegar and ran out of soft bread crumbs.",
+    "We made 1 sauce from 1/2 cup freshly grated horse-radish, 1/2 cup soft bread crumbs, \u00bd teaspoon salt, 2 cup White Sauce, 1/2 teaspoon paprika, 4 tablespoons lemon juice and 2 tablespoon vinegar and ran out of salt.",
+    "We made 1 sauce from 1/2 cup freshly grated horse-radish, 1/2 cup soft bread crumbs, 1 teaspoon salt, 1 cup White Sauce, 1/2 teaspoon paprika, 4 tablespoons lemon juice and 2 tablespoon vinegar and ran out of white sauce.",
+    "We made 1 sauce from 1/2 cup freshly grated horse-radish, 1/2 cup soft bread crumbs, 1 teaspoon salt, 2 cup White Sauce, \u00bc teaspoon paprika, 4 tablespoons lemon juice and 2 tablespoon vinegar and ran out of paprika.",
+    "We made 1 sauce from 1/2 cup freshly grated horse-radish, 1/2 cup soft bread crumbs, 1 teaspoon salt, 2 cup White Sauce, 1/2 teaspoon paprika, 2 tablespoons lemon juice and 2 tablespoon vinegar and ran out of lemon juice.",
+    "We made 1 sauce from 1/2 cup freshly grated horse-radish, 1/2 cup soft bread crumbs, 1 teaspoon salt, 2 cup White Sauce, 1/2 teaspoon paprika, 4 tablespoons lemon juice and 1 tablespoon vinegar and ran out of vinegar.",
+    "We have 1 cup freshly grated horse-radish, 3/4 cup soft bread crumbs, 3/8 teaspoon salt, 2/3 cup White Sauce, 1/3 teaspoon paprika, 3 tablespoons lemon juice and 5/2 tablespoon vinegar.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:42868@571316",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 1/3 C-butter, 2 C-sugar, 4 eggs, 2 C-strong coffee, 1 t-vanilla, 4 C-flour and 6 t-baking powder and ran out of c-butter.",
+    "We made 1 cake from 2/3 C-butter, 1 C-sugar, 4 eggs, 2 C-strong coffee, 1 t-vanilla, 4 C-flour and 6 t-baking powder and ran out of c-sugar.",
+    "We made 1 cake from 2/3 C-butter, 2 C-sugar, 2 eggs, 2 C-strong coffee, 1 t-vanilla, 4 C-flour and 6 t-baking powder and ran out of eggs.",
+    "We made 1 cake from 2/3 C-butter, 2 C-sugar, 4 eggs, 1 C-strong coffee, 1 t-vanilla, 4 C-flour and 6 t-baking powder and ran out of c-strong coffee.",
+    "We made 1 cake from 2/3 C-butter, 2 C-sugar, 4 eggs, 2 C-strong coffee, 1/2 t-vanilla, 4 C-flour and 6 t-baking powder and ran out of t-vanilla.",
+    "We made 1 cake from 2/3 C-butter, 2 C-sugar, 4 eggs, 2 C-strong coffee, 1 t-vanilla, 2 C-flour and 6 t-baking powder and ran out of c-flour.",
+    "We made 1 cake from 2/3 C-butter, 2 C-sugar, 4 eggs, 2 C-strong coffee, 1 t-vanilla, 4 C-flour and 3 t-baking powder and ran out of t-baking powder.",
+    "We have 2/9 C-butter, 3/4 C-sugar, 3 eggs, 1/3 C-strong coffee, 2/3 t-vanilla, 1 C-flour and 12 t-baking powder.",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:pg:31534@101383",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "souffl\u00e9",
+   "turns": [
+    "We made 1 souffl\u00e9 from 2 tablespoons butter., 6 tablespoons flour., 1 teaspoon salt., 1/4 teaspoon ground mustard., 1/2 teaspoon paprika., 1 cup scalded milk. and 1/2 cup grated American cheese. and ran out of butter.",
+    "We made 1 souffl\u00e9 from 4 tablespoons butter., 3 tablespoons flour., 1 teaspoon salt., 1/4 teaspoon ground mustard., 1/2 teaspoon paprika., 1 cup scalded milk. and 1/2 cup grated American cheese. and ran out of flour.",
+    "We made 1 souffl\u00e9 from 4 tablespoons butter., 6 tablespoons flour., 1/2 teaspoon salt., 1/4 teaspoon ground mustard., 1/2 teaspoon paprika., 1 cup scalded milk. and 1/2 cup grated American cheese. and ran out of salt.",
+    "We made 1 souffl\u00e9 from 4 tablespoons butter., 6 tablespoons flour., 1 teaspoon salt., 1/8 teaspoon ground mustard., 1/2 teaspoon paprika., 1 cup scalded milk. and 1/2 cup grated American cheese. and ran out of ground mustard.",
+    "We made 1 souffl\u00e9 from 4 tablespoons butter., 6 tablespoons flour., 1 teaspoon salt., 1/4 teaspoon ground mustard., 1/4 teaspoon paprika., 1 cup scalded milk. and 1/2 cup grated American cheese. and ran out of paprika.",
+    "We made 1 souffl\u00e9 from 4 tablespoons butter., 6 tablespoons flour., 1 teaspoon salt., 1/4 teaspoon ground mustard., 1/2 teaspoon paprika., 1/2 cup scalded milk. and 1/2 cup grated American cheese. and ran out of scalded milk.",
+    "We made 1 souffl\u00e9 from 4 tablespoons butter., 6 tablespoons flour., 1 teaspoon salt., 1/4 teaspoon ground mustard., 1/2 teaspoon paprika., 1 cup scalded milk. and 1/4 cup grated American cheese. and ran out of grated american cheese.",
+    "We have 2/3 tablespoons butter., 21/2 tablespoons flour., 2 teaspoon salt., 3/16 teaspoon ground mustard., 3/16 teaspoon paprika., 1/4 cup scalded milk. and 3/4 cup grated American cheese..",
+    "How much souffl\u00e9 can we make?"
+   ]
+  },
+  {
+   "cell": "C710:FRACTION",
+   "id": "RW:wb:38748:4630848",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "brownies",
+   "turns": [
+    "We made 1 brownies from 110 g (1.2 dl or \u00bd cup or 4 oz) flour, 220 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 560 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 4 large, cold eggs, 340 g (1.8 dl or \u00be cup or 6 oz) cocoa, 1/2 tsp salt and 2 tsp vanilla essence and ran out of flour.",
+    "We made 1 brownies from 220 g (1.2 dl or \u00bd cup or 4 oz) flour, 110 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 560 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 4 large, cold eggs, 340 g (1.8 dl or \u00be cup or 6 oz) cocoa, 1/2 tsp salt and 2 tsp vanilla essence and ran out of unsalted butter.",
+    "We made 1 brownies from 220 g (1.2 dl or \u00bd cup or 4 oz) flour, 220 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 280 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 4 large, cold eggs, 340 g (1.8 dl or \u00be cup or 6 oz) cocoa, 1/2 tsp salt and 2 tsp vanilla essence and ran out of granulated sugar.",
+    "We made 1 brownies from 220 g (1.2 dl or \u00bd cup or 4 oz) flour, 220 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 560 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 2 large, cold eggs, 340 g (1.8 dl or \u00be cup or 6 oz) cocoa, 1/2 tsp salt and 2 tsp vanilla essence and ran out of large.",
+    "We made 1 brownies from 220 g (1.2 dl or \u00bd cup or 4 oz) flour, 220 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 560 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 4 large, cold eggs, 170 g (1.8 dl or \u00be cup or 6 oz) cocoa, 1/2 tsp salt and 2 tsp vanilla essence and ran out of cocoa.",
+    "We made 1 brownies from 220 g (1.2 dl or \u00bd cup or 4 oz) flour, 220 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 560 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 4 large, cold eggs, 340 g (1.8 dl or \u00be cup or 6 oz) cocoa, \u00bc tsp salt and 2 tsp vanilla essence and ran out of salt.",
+    "We made 1 brownies from 220 g (1.2 dl or \u00bd cup or 4 oz) flour, 220 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 560 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 4 large, cold eggs, 340 g (1.8 dl or \u00be cup or 6 oz) cocoa, 1/2 tsp salt and 1 tsp vanilla essence and ran out of vanilla essence.",
+    "We have 440/3 g (1.2 dl or \u00bd cup or 4 oz) flour, 55 g (1.2 dl or \u00bd cup or 4 oz) unsalted butter, 420 g (3 dl or 1 \u00bc cups or 10 oz) granulated sugar, 5 large, cold eggs, 680 g (1.8 dl or \u00be cup or 6 oz) cocoa, 3/16 tsp salt and 7/2 tsp vanilla essence.",
+    "How much brownies can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:65061@548598",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "stuffing",
+   "turns": [
+    "We made 1 stuffing from 2 cups hot mashed potato, 5/2 cups soft stale bread crumbs, 1/2 cup finely chopped fat salt pork, 2 finely chopped onion, 2/3 cup butter, 2 egg, 3 teaspoons salt and 2 teaspoon sage and ran out of hot mashed potato.",
+    "We made 1 stuffing from 4 cups hot mashed potato, 1\u00bc cups soft stale bread crumbs, 1/2 cup finely chopped fat salt pork, 2 finely chopped onion, 2/3 cup butter, 2 egg, 3 teaspoons salt and 2 teaspoon sage and ran out of soft stale bread crumbs.",
+    "We made 1 stuffing from 4 cups hot mashed potato, 5/2 cups soft stale bread crumbs, \u00bc cup finely chopped fat salt pork, 2 finely chopped onion, 2/3 cup butter, 2 egg, 3 teaspoons salt and 2 teaspoon sage and ran out of finely chopped fat salt pork.",
+    "We made 1 stuffing from 4 cups hot mashed potato, 5/2 cups soft stale bread crumbs, 1/2 cup finely chopped fat salt pork, 1 finely chopped onion, 2/3 cup butter, 2 egg, 3 teaspoons salt and 2 teaspoon sage and ran out of finely chopped onion.",
+    "We made 1 stuffing from 4 cups hot mashed potato, 5/2 cups soft stale bread crumbs, 1/2 cup finely chopped fat salt pork, 2 finely chopped onion, \u2153 cup butter, 2 egg, 3 teaspoons salt and 2 teaspoon sage and ran out of butter.",
+    "We made 1 stuffing from 4 cups hot mashed potato, 5/2 cups soft stale bread crumbs, 1/2 cup finely chopped fat salt pork, 2 finely chopped onion, 2/3 cup butter, 1 egg, 3 teaspoons salt and 2 teaspoon sage and ran out of egg.",
+    "We made 1 stuffing from 4 cups hot mashed potato, 5/2 cups soft stale bread crumbs, 1/2 cup finely chopped fat salt pork, 2 finely chopped onion, 2/3 cup butter, 2 egg, 1\u00bd teaspoons salt and 2 teaspoon sage and ran out of salt.",
+    "We made 1 stuffing from 4 cups hot mashed potato, 5/2 cups soft stale bread crumbs, 1/2 cup finely chopped fat salt pork, 2 finely chopped onion, 2/3 cup butter, 2 egg, 3 teaspoons salt and 1 teaspoon sage and ran out of sage.",
+    "We have 6 cups hot mashed potato, 5/3 cups soft stale bread crumbs, 3/16 cup finely chopped fat salt pork, 7/2 finely chopped onion, 4/3 cup butter, 2/3 egg, 1/2 teaspoons salt and 5/2 teaspoon sage.",
+    "How much stuffing can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:78849@216697",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "muffins",
+   "turns": [
+    "We made 1 muffins from 3 tablespoonfuls sugar, 6 tablespoonfuls Crisco, 2 egg, 3 cupfuls milk, 2 teaspoonful salt, 7 teaspoonfuls baking powder and 7 cupfuls sifted flour and ran out of tablespoonfuls sugar.",
+    "We made 1 muffins from 6 tablespoonfuls sugar, 3 tablespoonfuls Crisco, 2 egg, 3 cupfuls milk, 2 teaspoonful salt, 7 teaspoonfuls baking powder and 7 cupfuls sifted flour and ran out of tablespoonfuls crisco.",
+    "We made 1 muffins from 6 tablespoonfuls sugar, 6 tablespoonfuls Crisco, 1 egg, 3 cupfuls milk, 2 teaspoonful salt, 7 teaspoonfuls baking powder and 7 cupfuls sifted flour and ran out of egg.",
+    "We made 1 muffins from 6 tablespoonfuls sugar, 6 tablespoonfuls Crisco, 2 egg, 1\u00bd cupfuls milk, 2 teaspoonful salt, 7 teaspoonfuls baking powder and 7 cupfuls sifted flour and ran out of cupfuls milk.",
+    "We made 1 muffins from 6 tablespoonfuls sugar, 6 tablespoonfuls Crisco, 2 egg, 3 cupfuls milk, 1 teaspoonful salt, 7 teaspoonfuls baking powder and 7 cupfuls sifted flour and ran out of teaspoonful salt.",
+    "We made 1 muffins from 6 tablespoonfuls sugar, 6 tablespoonfuls Crisco, 2 egg, 3 cupfuls milk, 2 teaspoonful salt, 3\u00bd teaspoonfuls baking powder and 7 cupfuls sifted flour and ran out of teaspoonfuls baking powder.",
+    "We made 1 muffins from 6 tablespoonfuls sugar, 6 tablespoonfuls Crisco, 2 egg, 3 cupfuls milk, 2 teaspoonful salt, 7 teaspoonfuls baking powder and 3\u00bd cupfuls sifted flour and ran out of cupfuls sifted flour.",
+    "We have 12 tablespoonfuls sugar, 4 tablespoonfuls Crisco, 1/3 egg, 15/4 cupfuls milk, 3 teaspoonful salt, 7/4 teaspoonfuls baking powder and 21/4 cupfuls sifted flour.",
+    "How much muffins can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:65398@74934",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "cakes",
+   "turns": [
+    "We made 1 cakes from 1\u00bc cups sifted flour, 6 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 4 teaspoons sugar, 4 egg yolks, well beaten, 7/2 cups milk, 2 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of sifted flour.",
+    "We made 1 cakes from 5/2 cups sifted flour, 3 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 4 teaspoons sugar, 4 egg yolks, well beaten, 7/2 cups milk, 2 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of calumet baking powder.",
+    "We made 1 cakes from 5/2 cups sifted flour, 6 teaspoons Calumet Baking Powder, \u00be teaspoon salt, 4 teaspoons sugar, 4 egg yolks, well beaten, 7/2 cups milk, 2 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of salt.",
+    "We made 1 cakes from 5/2 cups sifted flour, 6 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 2 teaspoons sugar, 4 egg yolks, well beaten, 7/2 cups milk, 2 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of sugar.",
+    "We made 1 cakes from 5/2 cups sifted flour, 6 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 4 teaspoons sugar, 2 egg yolks, well beaten, 7/2 cups milk, 2 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of egg yolks.",
+    "We made 1 cakes from 5/2 cups sifted flour, 6 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 4 teaspoons sugar, 4 egg yolks, well beaten, 1\u00be cups milk, 2 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of milk.",
+    "We made 1 cakes from 5/2 cups sifted flour, 6 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 4 teaspoons sugar, 4 egg yolks, well beaten, 7/2 cups milk, 1 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of post\u2019s.",
+    "We made 1 cakes from 5/2 cups sifted flour, 6 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 4 teaspoons sugar, 4 egg yolks, well beaten, 7/2 cups milk, 2 cup Post\u2019s 40% Bran Flakes, 1 tablespoon melted butter or other shortening and 4 egg whites, stiffly beaten and ran out of melted butter.",
+    "We made 1 cakes from 5/2 cups sifted flour, 6 teaspoons Calumet Baking Powder, 3/2 teaspoon salt, 4 teaspoons sugar, 4 egg yolks, well beaten, 7/2 cups milk, 2 cup Post\u2019s 40% Bran Flakes, 2 tablespoon melted butter or other shortening and 2 egg whites, stiffly beaten and ran out of egg whites.",
+    "We have 5/6 cups sifted flour, 3/2 teaspoons Calumet Baking Powder, 1/4 teaspoon salt, 8/3 teaspoons sugar, 6 egg yolks, well beaten, 35/8 cups milk, 3/2 cup Post\u2019s 40% Bran Flakes, 7/2 tablespoon melted butter or other shortening and 3/2 egg whites, stiffly beaten.",
+    "How much cakes can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:65706@19804",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "style",
+   "turns": [
+    "We made 1 style from 2 pounds spareribs, 3 cups water, 1/2 cup raisins, 1 teaspoon salt, 4 green peppers, cut in 6 pieces each, 3 tablespoons cornstarch, 1/2 cup sugar and 1/2 cup vinegar and ran out of spareribs.",
+    "We made 1 style from 4 pounds spareribs, 1\u00bd cups water, 1/2 cup raisins, 1 teaspoon salt, 4 green peppers, cut in 6 pieces each, 3 tablespoons cornstarch, 1/2 cup sugar and 1/2 cup vinegar and ran out of water.",
+    "We made 1 style from 4 pounds spareribs, 3 cups water, \u00bc cup raisins, 1 teaspoon salt, 4 green peppers, cut in 6 pieces each, 3 tablespoons cornstarch, 1/2 cup sugar and 1/2 cup vinegar and ran out of raisins.",
+    "We made 1 style from 4 pounds spareribs, 3 cups water, 1/2 cup raisins, \u00bd teaspoon salt, 4 green peppers, cut in 6 pieces each, 3 tablespoons cornstarch, 1/2 cup sugar and 1/2 cup vinegar and ran out of salt.",
+    "We made 1 style from 4 pounds spareribs, 3 cups water, 1/2 cup raisins, 1 teaspoon salt, 2 green peppers, cut in 6 pieces each, 3 tablespoons cornstarch, 1/2 cup sugar and 1/2 cup vinegar and ran out of green peppers.",
+    "We made 1 style from 4 pounds spareribs, 3 cups water, 1/2 cup raisins, 1 teaspoon salt, 4 green peppers, cut in 6 pieces each, 1\u00bd tablespoons cornstarch, 1/2 cup sugar and 1/2 cup vinegar and ran out of cornstarch.",
+    "We made 1 style from 4 pounds spareribs, 3 cups water, 1/2 cup raisins, 1 teaspoon salt, 4 green peppers, cut in 6 pieces each, 3 tablespoons cornstarch, \u00bc cup sugar and 1/2 cup vinegar and ran out of sugar.",
+    "We made 1 style from 4 pounds spareribs, 3 cups water, 1/2 cup raisins, 1 teaspoon salt, 4 green peppers, cut in 6 pieces each, 3 tablespoons cornstarch, 1/2 cup sugar and \u00bc cup vinegar and ran out of vinegar.",
+    "We have 7 pounds spareribs, 9/4 cups water, 3/4 cup raisins, 1/6 teaspoon salt, 8/3 green peppers, cut in 6 pieces each, 9/8 tablespoons cornstarch, 1/8 cup sugar and 5/8 cup vinegar.",
+    "How much style can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:77733@143328",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "pudding",
+   "turns": [
+    "We made 1 pudding from \u2153 cupful tapioca, 8 cupfuls scalded milk, 2 cupful milk, 1/2 cupful corn meal, 3/2 cupful molasses, 6 tablespoonfuls butter and 3 teaspoonfuls salt and ran out of cupful tapioca.",
+    "We made 1 pudding from 2/3 cupful tapioca, 4 cupfuls scalded milk, 2 cupful milk, 1/2 cupful corn meal, 3/2 cupful molasses, 6 tablespoonfuls butter and 3 teaspoonfuls salt and ran out of cupfuls scalded milk.",
+    "We made 1 pudding from 2/3 cupful tapioca, 8 cupfuls scalded milk, 1 cupful milk, 1/2 cupful corn meal, 3/2 cupful molasses, 6 tablespoonfuls butter and 3 teaspoonfuls salt and ran out of cupful milk.",
+    "We made 1 pudding from 2/3 cupful tapioca, 8 cupfuls scalded milk, 2 cupful milk, \u00bc cupful corn meal, 3/2 cupful molasses, 6 tablespoonfuls butter and 3 teaspoonfuls salt and ran out of cupful corn meal.",
+    "We made 1 pudding from 2/3 cupful tapioca, 8 cupfuls scalded milk, 2 cupful milk, 1/2 cupful corn meal, \u00be cupful molasses, 6 tablespoonfuls butter and 3 teaspoonfuls salt and ran out of cupful molasses.",
+    "We made 1 pudding from 2/3 cupful tapioca, 8 cupfuls scalded milk, 2 cupful milk, 1/2 cupful corn meal, 3/2 cupful molasses, 3 tablespoonfuls butter and 3 teaspoonfuls salt and ran out of tablespoonfuls butter.",
+    "We made 1 pudding from 2/3 cupful tapioca, 8 cupfuls scalded milk, 2 cupful milk, 1/2 cupful corn meal, 3/2 cupful molasses, 6 tablespoonfuls butter and 1\u00bd teaspoonfuls salt and ran out of teaspoonfuls salt.",
+    "We have 1/9 cupful tapioca, 16 cupfuls scalded milk, 7/2 cupful milk, 1/6 cupful corn meal, 9/16 cupful molasses, 9 tablespoonfuls butter and 3/4 teaspoonfuls salt.",
+    "How much pudding can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:65507@35986",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "snaps",
+   "turns": [
+    "We made 1 snaps from 3 cups sifted enriched flour, 3 teaspoons soda, 2 teaspoon salt, 6 teaspoons ginger, 1 cup shortening, 2 cup sugar, 1 cup GRANDMA\u2019S MOLASSES and 1 cup plus 1 tablespoon water and ran out of sifted enriched flour.",
+    "We made 1 snaps from 6 cups sifted enriched flour, 1\u00bd teaspoons soda, 2 teaspoon salt, 6 teaspoons ginger, 1 cup shortening, 2 cup sugar, 1 cup GRANDMA\u2019S MOLASSES and 1 cup plus 1 tablespoon water and ran out of soda.",
+    "We made 1 snaps from 6 cups sifted enriched flour, 3 teaspoons soda, 1 teaspoon salt, 6 teaspoons ginger, 1 cup shortening, 2 cup sugar, 1 cup GRANDMA\u2019S MOLASSES and 1 cup plus 1 tablespoon water and ran out of salt.",
+    "We made 1 snaps from 6 cups sifted enriched flour, 3 teaspoons soda, 2 teaspoon salt, 3 teaspoons ginger, 1 cup shortening, 2 cup sugar, 1 cup GRANDMA\u2019S MOLASSES and 1 cup plus 1 tablespoon water and ran out of ginger.",
+    "We made 1 snaps from 6 cups sifted enriched flour, 3 teaspoons soda, 2 teaspoon salt, 6 teaspoons ginger, \u00bd cup shortening, 2 cup sugar, 1 cup GRANDMA\u2019S MOLASSES and 1 cup plus 1 tablespoon water and ran out of shortening.",
+    "We made 1 snaps from 6 cups sifted enriched flour, 3 teaspoons soda, 2 teaspoon salt, 6 teaspoons ginger, 1 cup shortening, 1 cup sugar, 1 cup GRANDMA\u2019S MOLASSES and 1 cup plus 1 tablespoon water and ran out of sugar.",
+    "We made 1 snaps from 6 cups sifted enriched flour, 3 teaspoons soda, 2 teaspoon salt, 6 teaspoons ginger, 1 cup shortening, 2 cup sugar, \u00bd cup GRANDMA\u2019S MOLASSES and 1 cup plus 1 tablespoon water and ran out of grandma\u2019s molasses.",
+    "We made 1 snaps from 6 cups sifted enriched flour, 3 teaspoons soda, 2 teaspoon salt, 6 teaspoons ginger, 1 cup shortening, 2 cup sugar, 1 cup GRANDMA\u2019S MOLASSES and \u00bd cup plus 1 tablespoon water and ran out of plus.",
+    "We have 15/2 cups sifted enriched flour, 21/4 teaspoons soda, 1/3 teaspoon salt, 9/4 teaspoons ginger, 3/2 cup shortening, 3/2 cup sugar, 2/3 cup GRANDMA\u2019S MOLASSES and 1/4 cup plus 1 tablespoon water.",
+    "How much snaps can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:wb:13114:4522408",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "bliny",
+   "turns": [
+    "We made 1 bliny from 4 cups of milk, warmed (80\u201395\u00b0F), 2 tablespoon of white granulated sugar, 2 tablespoon of salt, 10 teaspoons of butter, melted, 2 ounce of yeast, 2 egg white, 13/5 pounds (5 cups) of wheat flour and 10 teaspoons of olive oil and ran out of milk.",
+    "We made 1 bliny from 8 cups of milk, warmed (80\u201395\u00b0F), 1 tablespoon of white granulated sugar, 2 tablespoon of salt, 10 teaspoons of butter, melted, 2 ounce of yeast, 2 egg white, 13/5 pounds (5 cups) of wheat flour and 10 teaspoons of olive oil and ran out of white granulated sugar.",
+    "We made 1 bliny from 8 cups of milk, warmed (80\u201395\u00b0F), 2 tablespoon of white granulated sugar, 1 tablespoon of salt, 10 teaspoons of butter, melted, 2 ounce of yeast, 2 egg white, 13/5 pounds (5 cups) of wheat flour and 10 teaspoons of olive oil and ran out of salt.",
+    "We made 1 bliny from 8 cups of milk, warmed (80\u201395\u00b0F), 2 tablespoon of white granulated sugar, 2 tablespoon of salt, 5 teaspoons of butter, melted, 2 ounce of yeast, 2 egg white, 13/5 pounds (5 cups) of wheat flour and 10 teaspoons of olive oil and ran out of butter.",
+    "We made 1 bliny from 8 cups of milk, warmed (80\u201395\u00b0F), 2 tablespoon of white granulated sugar, 2 tablespoon of salt, 10 teaspoons of butter, melted, 1 ounce of yeast, 2 egg white, 13/5 pounds (5 cups) of wheat flour and 10 teaspoons of olive oil and ran out of yeast.",
+    "We made 1 bliny from 8 cups of milk, warmed (80\u201395\u00b0F), 2 tablespoon of white granulated sugar, 2 tablespoon of salt, 10 teaspoons of butter, melted, 2 ounce of yeast, 1 egg white, 13/5 pounds (5 cups) of wheat flour and 10 teaspoons of olive oil and ran out of egg white.",
+    "We made 1 bliny from 8 cups of milk, warmed (80\u201395\u00b0F), 2 tablespoon of white granulated sugar, 2 tablespoon of salt, 10 teaspoons of butter, melted, 2 ounce of yeast, 2 egg white, 1.3 pounds (5 cups) of wheat flour and 10 teaspoons of olive oil and ran out of wheat flour.",
+    "We made 1 bliny from 8 cups of milk, warmed (80\u201395\u00b0F), 2 tablespoon of white granulated sugar, 2 tablespoon of salt, 10 teaspoons of butter, melted, 2 ounce of yeast, 2 egg white, 13/5 pounds (5 cups) of wheat flour and 5 teaspoons of olive oil and ran out of olive oil.",
+    "We have 8/3 cups of milk, warmed (80\u201395\u00b0F), 3 tablespoon of white granulated sugar, 7/2 tablespoon of salt, 15/2 teaspoons of butter, melted, 4/3 ounce of yeast, 1/3 egg white, 13/20 pounds (5 cups) of wheat flour and 20 teaspoons of olive oil.",
+    "How much bliny can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:wb:34625:4523335",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "muffin",
+   "turns": [
+    "We made 1 muffin from 1\u00be cups (250 g) flour, 2/3 cup (65 g) white granulated sugar, 4 teaspoons baking powder, 1/2 teaspoon salt, 2 egg, beaten, 3/2 cup (180 ml) milk, 1/2 cup (60 ml) cooking oil and 3/2 cup (180 ml) blueberries, fresh or frozen and ran out of flour.",
+    "We made 1 muffin from 7/2 cups (250 g) flour, \u2153 cup (65 g) white granulated sugar, 4 teaspoons baking powder, 1/2 teaspoon salt, 2 egg, beaten, 3/2 cup (180 ml) milk, 1/2 cup (60 ml) cooking oil and 3/2 cup (180 ml) blueberries, fresh or frozen and ran out of white granulated sugar.",
+    "We made 1 muffin from 7/2 cups (250 g) flour, 2/3 cup (65 g) white granulated sugar, 2 teaspoons baking powder, 1/2 teaspoon salt, 2 egg, beaten, 3/2 cup (180 ml) milk, 1/2 cup (60 ml) cooking oil and 3/2 cup (180 ml) blueberries, fresh or frozen and ran out of baking powder.",
+    "We made 1 muffin from 7/2 cups (250 g) flour, 2/3 cup (65 g) white granulated sugar, 4 teaspoons baking powder, \u00bc teaspoon salt, 2 egg, beaten, 3/2 cup (180 ml) milk, 1/2 cup (60 ml) cooking oil and 3/2 cup (180 ml) blueberries, fresh or frozen and ran out of salt.",
+    "We made 1 muffin from 7/2 cups (250 g) flour, 2/3 cup (65 g) white granulated sugar, 4 teaspoons baking powder, 1/2 teaspoon salt, 1 egg, beaten, 3/2 cup (180 ml) milk, 1/2 cup (60 ml) cooking oil and 3/2 cup (180 ml) blueberries, fresh or frozen and ran out of egg.",
+    "We made 1 muffin from 7/2 cups (250 g) flour, 2/3 cup (65 g) white granulated sugar, 4 teaspoons baking powder, 1/2 teaspoon salt, 2 egg, beaten, \u00be cup (180 ml) milk, 1/2 cup (60 ml) cooking oil and 3/2 cup (180 ml) blueberries, fresh or frozen and ran out of milk.",
+    "We made 1 muffin from 7/2 cups (250 g) flour, 2/3 cup (65 g) white granulated sugar, 4 teaspoons baking powder, 1/2 teaspoon salt, 2 egg, beaten, 3/2 cup (180 ml) milk, \u00bc cup (60 ml) cooking oil and 3/2 cup (180 ml) blueberries, fresh or frozen and ran out of cooking oil.",
+    "We made 1 muffin from 7/2 cups (250 g) flour, 2/3 cup (65 g) white granulated sugar, 4 teaspoons baking powder, 1/2 teaspoon salt, 2 egg, beaten, 3/2 cup (180 ml) milk, 1/2 cup (60 ml) cooking oil and \u00be cup (180 ml) blueberries, fresh or frozen and ran out of blueberries.",
+    "We have 35/8 cups (250 g) flour, 2/9 cup (65 g) white granulated sugar, 1 teaspoons baking powder, 3/8 teaspoon salt, 4 egg, beaten, 9/16 cup (180 ml) milk, 1/3 cup (60 ml) cooking oil and 9/4 cup (180 ml) blueberries, fresh or frozen.",
+    "How much muffin can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:wb:96870:4587328",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "strips",
+   "turns": [
+    "We made 1 strips from \u00bd lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 2 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of unsalted butter.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 3\u00bd cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 2 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of flour.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 3 tbsp (45 ml) white granulated sugar, 2 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of white granulated sugar.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 1 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of egg.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 2 egg, 1\u00bd cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of raspberry preserves.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 2 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 2 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of butter.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 2 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 2 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of confectioner's sugar.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 2 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, \u00bc cup (120 ml) cold water and 4 tsp (10 ml) lemon juice and ran out of cold water.",
+    "We made 1 strips from 1 lb (225 g) unsalted butter, chilled and cut into small pieces, 7 cups (840 ml) flour, 6 tbsp (45 ml) white granulated sugar, 2 egg, 3 cups (360 ml / 12 oz) raspberry preserves, 4 tbsp (30 ml) butter, softened, 4 cups (480 ml) confectioner's sugar, 1/2 cup (120 ml) cold water and 2 tsp (10 ml) lemon juice and ran out of lemon juice.",
+    "We have 3/4 lb (225 g) unsalted butter, chilled and cut into small pieces, 21/2 cups (840 ml) flour, 2 tbsp (45 ml) white granulated sugar, 4 egg, 9/8 cups (360 ml / 12 oz) raspberry preserves, 1 tbsp (30 ml) butter, softened, 2/3 cups (480 ml) confectioner's sugar, 5/8 cup (120 ml) cold water and 7 tsp (10 ml) lemon juice.",
+    "How much strips can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:65061@877434",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "souffl\u00e9",
+   "turns": [
+    "We made 1 souffl\u00e9 from 1\u00bd cups coffee infusion, 1 cup milk, 4/3 cup sugar, 1/2 teaspoon salt, 6 eggs, 1 teaspoon vanilla and 2 tablespoon granulated gelatine and ran out of coffee infusion.",
+    "We made 1 souffl\u00e9 from 3 cups coffee infusion, \u00bd cup milk, 4/3 cup sugar, 1/2 teaspoon salt, 6 eggs, 1 teaspoon vanilla and 2 tablespoon granulated gelatine and ran out of milk.",
+    "We made 1 souffl\u00e9 from 3 cups coffee infusion, 1 cup milk, \u2154 cup sugar, 1/2 teaspoon salt, 6 eggs, 1 teaspoon vanilla and 2 tablespoon granulated gelatine and ran out of sugar.",
+    "We made 1 souffl\u00e9 from 3 cups coffee infusion, 1 cup milk, 4/3 cup sugar, \u00bc teaspoon salt, 6 eggs, 1 teaspoon vanilla and 2 tablespoon granulated gelatine and ran out of salt.",
+    "We made 1 souffl\u00e9 from 3 cups coffee infusion, 1 cup milk, 4/3 cup sugar, 1/2 teaspoon salt, 3 eggs, 1 teaspoon vanilla and 2 tablespoon granulated gelatine and ran out of eggs.",
+    "We made 1 souffl\u00e9 from 3 cups coffee infusion, 1 cup milk, 4/3 cup sugar, 1/2 teaspoon salt, 6 eggs, \u00bd teaspoon vanilla and 2 tablespoon granulated gelatine and ran out of vanilla.",
+    "We made 1 souffl\u00e9 from 3 cups coffee infusion, 1 cup milk, 4/3 cup sugar, 1/2 teaspoon salt, 6 eggs, 1 teaspoon vanilla and 1 tablespoon granulated gelatine and ran out of granulated gelatine.",
+    "We have 1/2 cups coffee infusion, 5/4 cup milk, 2 cup sugar, 3/8 teaspoon salt, 9/4 eggs, 2/3 teaspoon vanilla and 7/2 tablespoon granulated gelatine.",
+    "How much souffl\u00e9 can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:26323@104464",
+   "n_lessons": 8,
+   "n_lines": 8,
+   "noun": "gingerbread",
+   "turns": [
+    "We made 1 gingerbread from 1 cup sour milk, 1 cup butter, 4 eggs, 4 pints flour, 2 cup molasses, 1 cup sugar, 3 teaspoons soda and 4 teaspoons ginger and ran out of sour milk.",
+    "We made 1 gingerbread from 2 cup sour milk, 1/2 cup butter, 4 eggs, 4 pints flour, 2 cup molasses, 1 cup sugar, 3 teaspoons soda and 4 teaspoons ginger and ran out of butter.",
+    "We made 1 gingerbread from 2 cup sour milk, 1 cup butter, 2 eggs, 4 pints flour, 2 cup molasses, 1 cup sugar, 3 teaspoons soda and 4 teaspoons ginger and ran out of eggs.",
+    "We made 1 gingerbread from 2 cup sour milk, 1 cup butter, 4 eggs, 2 pints flour, 2 cup molasses, 1 cup sugar, 3 teaspoons soda and 4 teaspoons ginger and ran out of flour.",
+    "We made 1 gingerbread from 2 cup sour milk, 1 cup butter, 4 eggs, 4 pints flour, 1 cup molasses, 1 cup sugar, 3 teaspoons soda and 4 teaspoons ginger and ran out of molasses.",
+    "We made 1 gingerbread from 2 cup sour milk, 1 cup butter, 4 eggs, 4 pints flour, 2 cup molasses, 1/2 cup sugar, 3 teaspoons soda and 4 teaspoons ginger and ran out of sugar.",
+    "We made 1 gingerbread from 2 cup sour milk, 1 cup butter, 4 eggs, 4 pints flour, 2 cup molasses, 1 cup sugar, 1 1/2 teaspoons soda and 4 teaspoons ginger and ran out of soda.",
+    "We made 1 gingerbread from 2 cup sour milk, 1 cup butter, 4 eggs, 4 pints flour, 2 cup molasses, 1 cup sugar, 3 teaspoons soda and 2 teaspoons ginger and ran out of ginger.",
+    "We have 5/2 cup sour milk, 2/3 cup butter, 8 eggs, 3 pints flour, 1/3 cup molasses, 3/2 cup sugar, 21/4 teaspoons soda and 1 teaspoons ginger.",
+    "How much gingerbread can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:wb:62604:4523341",
+   "n_lessons": 10,
+   "n_lines": 10,
+   "noun": "muffins",
+   "turns": [
+    "We made 1 muffins from 1 \u00be cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of all-purpose flour.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 1 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of chocolate chips.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, \u00be cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of granulated sugar.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, \u2153 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of cocoa.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 1 tablespoon baking powder, 1 teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of baking powder.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, \u00bd teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of salt.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 1 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of egg.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 2 egg, 1 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of milk.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, \u2153 cup (80 ml / 2.7 fl oz) cooking oil and 2 teaspoon vanilla and ran out of cooking oil.",
+    "We made 1 muffins from 7/2 cup (250 g / 8.8 oz) all-purpose flour, 2 cup (80 g / 2.8 oz) chocolate chips, 3/2 cup (175 g / 6.2 oz) granulated sugar, 2/3 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 2 tablespoon baking powder, 1 teaspoon salt, 2 egg, 2 cup (250 ml / 8.5 oz) milk, 2/3 cup (80 ml / 2.7 fl oz) cooking oil and 1 teaspoon vanilla and ran out of vanilla.",
+    "We have 21/16 cup (250 g / 8.8 oz) all-purpose flour, 4 cup (80 g / 2.8 oz) chocolate chips, 9/8 cup (175 g / 6.2 oz) granulated sugar, 7/6 cup (40 g / 1.4 oz) cocoa, sifted if lumpy, 3 tablespoon baking powder, 1/3 teaspoon salt, 1/3 egg, 4/3 cup (250 ml / 8.5 oz) milk, 5/6 cup (80 ml / 2.7 fl oz) cooking oil and 1/2 teaspoon vanilla.",
+    "How much muffins can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:pg:65061@158933",
+   "n_lessons": 7,
+   "n_lines": 7,
+   "noun": "toast",
+   "turns": [
+    "We made 1 toast from 1\u00bd cups stewed and strained tomato, 1 cup scalded cream, 1/2 teaspoon soda, 6 tablespoons butter, 6 tablespoons flour, 1 teaspoon salt and 12 slices toast and ran out of stewed.",
+    "We made 1 toast from 3 cups stewed and strained tomato, \u00bd cup scalded cream, 1/2 teaspoon soda, 6 tablespoons butter, 6 tablespoons flour, 1 teaspoon salt and 12 slices toast and ran out of scalded cream.",
+    "We made 1 toast from 3 cups stewed and strained tomato, 1 cup scalded cream, \u00bc teaspoon soda, 6 tablespoons butter, 6 tablespoons flour, 1 teaspoon salt and 12 slices toast and ran out of soda.",
+    "We made 1 toast from 3 cups stewed and strained tomato, 1 cup scalded cream, 1/2 teaspoon soda, 3 tablespoons butter, 6 tablespoons flour, 1 teaspoon salt and 12 slices toast and ran out of butter.",
+    "We made 1 toast from 3 cups stewed and strained tomato, 1 cup scalded cream, 1/2 teaspoon soda, 6 tablespoons butter, 3 tablespoons flour, 1 teaspoon salt and 12 slices toast and ran out of flour.",
+    "We made 1 toast from 3 cups stewed and strained tomato, 1 cup scalded cream, 1/2 teaspoon soda, 6 tablespoons butter, 6 tablespoons flour, \u00bd teaspoon salt and 12 slices toast and ran out of salt.",
+    "We made 1 toast from 3 cups stewed and strained tomato, 1 cup scalded cream, 1/2 teaspoon soda, 6 tablespoons butter, 6 tablespoons flour, 1 teaspoon salt and 6 slices toast and ran out of slices toast.",
+    "We have 6 cups stewed and strained tomato, 3/2 cup scalded cream, 1/8 teaspoon soda, 9/2 tablespoons butter, 4 tablespoons flour, 5/4 teaspoon salt and 21 slices toast.",
+    "How much toast can we make?"
+   ]
+  },
+  {
+   "cell": "C710:MIXED",
+   "id": "RW:wb:95499:4524009",
+   "n_lessons": 9,
+   "n_lines": 9,
+   "noun": "waffles",
+   "turns": [
+    "We made 1 waffles from 1\u00bc cups whole wheat flour, 2 cup wheat germ, 4 tablespoons white granulated sugar, 2 tablespoon baking powder, 2 tablespoon nutmeg, 2 teaspoon salt, 4 cups milk, 1 cup vegetable oil and 4 eggs and ran out of whole wheat flour.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 1 cup wheat germ, 4 tablespoons white granulated sugar, 2 tablespoon baking powder, 2 tablespoon nutmeg, 2 teaspoon salt, 4 cups milk, 1 cup vegetable oil and 4 eggs and ran out of wheat germ.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 2 cup wheat germ, 2 tablespoons white granulated sugar, 2 tablespoon baking powder, 2 tablespoon nutmeg, 2 teaspoon salt, 4 cups milk, 1 cup vegetable oil and 4 eggs and ran out of white granulated sugar.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 2 cup wheat germ, 4 tablespoons white granulated sugar, 1 tablespoon baking powder, 2 tablespoon nutmeg, 2 teaspoon salt, 4 cups milk, 1 cup vegetable oil and 4 eggs and ran out of baking powder.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 2 cup wheat germ, 4 tablespoons white granulated sugar, 2 tablespoon baking powder, 1 tablespoon nutmeg, 2 teaspoon salt, 4 cups milk, 1 cup vegetable oil and 4 eggs and ran out of nutmeg.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 2 cup wheat germ, 4 tablespoons white granulated sugar, 2 tablespoon baking powder, 2 tablespoon nutmeg, 1 teaspoon salt, 4 cups milk, 1 cup vegetable oil and 4 eggs and ran out of salt.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 2 cup wheat germ, 4 tablespoons white granulated sugar, 2 tablespoon baking powder, 2 tablespoon nutmeg, 2 teaspoon salt, 2 cups milk, 1 cup vegetable oil and 4 eggs and ran out of milk.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 2 cup wheat germ, 4 tablespoons white granulated sugar, 2 tablespoon baking powder, 2 tablespoon nutmeg, 2 teaspoon salt, 4 cups milk, \u00bd cup vegetable oil and 4 eggs and ran out of vegetable oil.",
+    "We made 1 waffles from 5/2 cups whole wheat flour, 2 cup wheat germ, 4 tablespoons white granulated sugar, 2 tablespoon baking powder, 2 tablespoon nutmeg, 2 teaspoon salt, 4 cups milk, 1 cup vegetable oil and 2 eggs and ran out of eggs.",
+    "We have 5/12 cups whole wheat flour, 4/3 cup wheat germ, 7 tablespoons white granulated sugar, 3/2 tablespoon baking powder, 1/2 tablespoon nutmeg, 4 teaspoon salt, 5 cups milk, 1/3 cup vegetable oil and 6 eggs.",
+    "How much waffles can we make?"
+   ]
+  }
+ ],
+ "schema": "helm.rbw1t.inputs/1",
+ "seed_text": "RBW1-DISHNAME-FIX-PRACTICE-V2-20261020-builder-published"
+}

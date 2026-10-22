@@ -1,0 +1,167 @@
+{
+ "schema": "use1.census_c1/1",
+ "shards": [
+  "shard_comments_0of8.json",
+  "shard_comments_1of8.json",
+  "shard_comments_2of8.json",
+  "shard_comments_3of8.json",
+  "shard_comments_4of8.json",
+  "shard_comments_5of8.json",
+  "shard_comments_6of8.json",
+  "shard_comments_7of8.json",
+  "shard_posts_0of8.json",
+  "shard_posts_1of8.json",
+  "shard_posts_2of8.json",
+  "shard_posts_3of8.json",
+  "shard_posts_4of8.json",
+  "shard_posts_5of8.json",
+  "shard_posts_6of8.json",
+  "shard_posts_7of8.json"
+ ],
+ "train_rows_checked": 227497,
+ "train_sha256": "d92a070b695a93ee02b49e39c90e876e568650afb4d84d5de4f3987f92511b8b",
+ "leakage_py_sha256": "2087222eb4aded9123bbbb66f1c49502b93997daafae11e5ca9a0c30c43fee3f",
+ "totals": {
+  "units": {
+   "units_comment": 142919,
+   "units_answer": 64239,
+   "units_question": 27325
+  },
+  "sentences_all": 899195,
+  "sentences_frame": 863598,
+  "sentences_designer_slice": 35597,
+  "food_sentences_frame": 143151,
+  "KS_frame": {
+   "ASK": 1582,
+   "EMPTY": 119728,
+   "FACTS": 56,
+   "UNDETERMINED": 21785,
+   "disagree": 657
+  },
+  "two_key_agreement_frame_food": 0.9954,
+  "KS_FACTS_frame_all": 56,
+  "KS_FACTS_frame_R1_reader_gives_up": 45,
+  "KS_FACTS_frame_R4_reader_reads": 11,
+  "STOCK_FP_frame (FACTS + first-person shape, no recipe talk, no instruction)": 15,
+  "STOCK_FP_frame_R1_reader_gives_up": 9,
+  "STOCK_FP_frame_R4_reader_reads": 6,
+  "made_any_first_person_frame (REPORTED only)": 5618,
+  "made_food_first_person_frame (REPORTED only)": 1139,
+  "made_food_KS": {
+   "EMPTY": 176,
+   "UNDETERMINED": 962,
+   "ASK": 1
+  },
+  "slice_KS_FACTS": 2,
+  "slice_STOCK_FP": 0
+ },
+ "per_10000_sentences_all": {
+  "KS_FACTS_frame_all": 0.648,
+  "STOCK_FP_frame": 0.174,
+  "STOCK_FP_frame_R1": 0.104,
+  "STOCK_FP_frame_R4": 0.069,
+  "made_food_frame": 13.189
+ },
+ "exclusions_applied_by_candidate_class": {
+  "U4b": {
+   "PERSONAL_DATA": 3723,
+   "DUPLICATE_TEXT": 403
+  },
+  "MADE_REPORTED": {
+   "PERSONAL_DATA": 26,
+   "DUPLICATE_TEXT": 5
+  },
+  "U3": {
+   "PERSONAL_DATA": 10,
+   "DUPLICATE_TEXT": 1
+  },
+  "U4a": {
+   "PERSONAL_DATA": 9,
+   "DUPLICATE_TEXT": 8
+  }
+ },
+ "eligible_after_exclusions": {
+  "U1_stock (any reader)": 15,
+  "U2_stock_reader_gives_up": 9,
+  "U1_stock_reader_reads": 6,
+  "U3_say_ask": 268,
+  "U4a_instruction_trap": 864,
+  "U4b_fact_from_nothing (leakage not applied)": 103430,
+  "MADE_REPORTED (not drawable)": 946
+ },
+ "not_applied_at_census": [
+  "XREAL_USED / CTT_USED / RTR_USED / CTT2R_USED (spent draws: custodian, by id and text)",
+  "FORBIDDEN_TEXT (needs the forbidden list files: custodian)",
+  "POOL_OVERLAP (CTT-2R Part K pool: custodian)",
+  "SE precision check (DESIGN 3.1: non-builder reader; not done)"
+ ],
+ "example_ids_hash_only": [
+  {
+   "id": "se:cooking:post:97458:3",
+   "text_sha256": "0768b4d51c51a62afbbad99b20482d709fb0b023105369e581377a097774de20",
+   "reader": "reads"
+  },
+  {
+   "id": "se:cooking:post:88174:3",
+   "text_sha256": "1b50490d66eb8cabb31b86f1142054e12583ad35ed73ed187c5932623d396b0f",
+   "reader": "gives_up"
+  },
+  {
+   "id": "se:cooking:post:53419:0",
+   "text_sha256": "2eaa990ca8f282ae45a81e93caaa7bd45a216d43eb7a7596bc81d3eddd720a63",
+   "reader": "reads"
+  },
+  {
+   "id": "se:cooking:post:58591:0",
+   "text_sha256": "3235ad2f475dcaf3a63f0ffc176f585a712cc7bde14dd7909ec9550531760321",
+   "reader": "gives_up"
+  },
+  {
+   "id": "se:cooking:comment:69670:4",
+   "text_sha256": "34d442a8a0f546cdcc19dce16937244489073faffd96ebefe8c8a5c98d01b80b",
+   "reader": "gives_up"
+  },
+  {
+   "id": "se:cooking:comment:24483:1",
+   "text_sha256": "3a7cd37b52b35cb60b24e22d9065e4c97fbc7ad4108ef901e30c36f484c708ba",
+   "reader": "gives_up"
+  },
+  {
+   "id": "se:cooking:comment:191037:0",
+   "text_sha256": "48451c62a2b534bb2a5c27be6bd0a93c36a63d601269848fe0c04ed6e9172741",
+   "reader": "gives_up"
+  },
+  {
+   "id": "se:cooking:comment:117235:2",
+   "text_sha256": "5a4f32c88d8ad181ef1f5be842c2e312882f3216c57cced33d6d28d1097e4185",
+   "reader": "gives_up"
+  },
+  {
+   "id": "se:cooking:post:78189:2",
+   "text_sha256": "697e5dac6ffc65487324596d3148ddcb165329a7739dc526bb6ef3b6cf43c4db",
+   "reader": "gives_up"
+  },
+  {
+   "id": "se:cooking:post:44543:0",
+   "text_sha256": "6de155fd7d9fa7b611f6f8199f451cfa7231b61e7cfa3e78cc9384b660931523",
+   "reader": "reads"
+  }
+ ],
+ "all_U1_ids": [
+  "se:cooking:comment:117235:2",
+  "se:cooking:comment:191037:0",
+  "se:cooking:comment:24483:1",
+  "se:cooking:comment:69670:4",
+  "se:cooking:post:23852:5",
+  "se:cooking:post:44543:0",
+  "se:cooking:post:46323:2",
+  "se:cooking:post:53419:0",
+  "se:cooking:post:56120:4",
+  "se:cooking:post:58591:0",
+  "se:cooking:post:77634:0",
+  "se:cooking:post:78189:2",
+  "se:cooking:post:88174:3",
+  "se:cooking:post:97458:3",
+  "se:cooking:post:9904:0"
+ ]
+}

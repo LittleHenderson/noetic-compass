@@ -1,0 +1,112 @@
+{
+  "schema": "helm.r1-rt-reading/1",
+  "utc": "2026-10-16T23:39:16.606266+00:00",
+  "target": "HELM_R1_RT_HOSTED",
+  "headline": "R1_RT_MECHANISM_PROVED_ANSWERS_WITHHELD",
+  "claim_status": "ENGINEERED_NOT_VALIDATED",
+  "claim_status_basis": "The mechanism is built and every part of it is measured. No claim is made about the brain's performance on the runtime's task, because the runtime declined to authorise the answers and no exam was run. The status words are the spec sheet's own legend.",
+  "what_was_established": [
+    {
+      "part": "the input rule as frozen",
+      "state": "FALSIFIED",
+      "evidence": "appendix F section 2: one missing leg drives the best yield to zero, so the brain's own gate G2 refuses on EVERY case with a missing leg"
+    },
+    {
+      "part": "a replacement input rule",
+      "state": "PROVED",
+      "evidence": "appendix F section 8, the spare-constant encoding. Proved against the runtime's LIVE oracle; figures below"
+    },
+    {
+      "part": "the patch that lets an operation see the task's content",
+      "state": "BUILT_AND_MEASURED",
+      "evidence": "appendix D, measured on the runtime's own method"
+    },
+    {
+      "part": "a client operation the runtime accepts and calls",
+      "state": "BUILT_AND_MEASURED",
+      "evidence": "appendix G"
+    },
+    {
+      "part": "the brain behind that client, across a process boundary",
+      "state": "BUILT_AND_MEASURED",
+      "evidence": "appendix I: 3 of 3 ticks, three distinct answers, read by the runtime's own decoder"
+    },
+    {
+      "part": "surviving a restart through HELM's own store",
+      "state": "BUILT_AND_MEASURED",
+      "evidence": "appendix J: create, tick, close, reopen, tick, both answers correct on different cases"
+    },
+    {
+      "part": "a real nested repair inside HELM driven by the brain",
+      "state": "UNREACHABLE",
+      "evidence": "appendix K: the verifier ABSTAINS with reason EXPERIMENTAL_OPERATION_NOT_AUTHORITY_ADMITTED, and the only door into a repair frame requires a REPAIR receipt"
+    }
+  ],
+  "falsifications_caught_by_measurement": [
+    "the brain and HELM's runtime cannot share a process (appendix E): all four import orders refused",
+    "the frozen input rule cannot name a failing leg (appendix F): the brain's own gate refuses, ceiling 36 of 288",
+    "a client operation can never be believed by the verifier (appendix K): it abstains before the semantic comparison"
+  ],
+  "measured_figures": {
+    "candidate_rule_vs_live_oracle": {
+      "error": "manifest not found"
+    },
+    "process_boundary_cost_per_tick_ms": {
+      "median": 0.061,
+      "p99": 0.172,
+      "max": 0.273,
+      "ticks": 2000,
+      "source": "appendix H, probe_process_boundary.py",
+      "note": "measured, recorded in the appendix, not re-measured here"
+    },
+    "hosted_tick": {
+      "ticks": 3,
+      "agreed": 3,
+      "distinct_answers": 3,
+      "source": "appendix I, probe_hosted_brain.py"
+    },
+    "restart": {
+      "phases": 2,
+      "both_answers_correct": true,
+      "store_bytes": 266240,
+      "source": "appendix J, probe_hosted_restart.py"
+    },
+    "peak_laptop_memory_mib": 221.6
+  },
+  "client_patch_cost": {
+    "edits": {
+      "total": 12,
+      "route_d": 8,
+      "client_extra": 4
+    },
+    "note": "route D's edits were the design's one edit. The client adds the rest, and every one of them was forced by a measured refusal or a measured failure."
+  },
+  "engine_of_record_sha256": "64c957e948a7754c6c4e8175b07299188a5892e75952b87e36d2d9b0847022ba",
+  "frozen_trees_unchanged": {
+    "r6_runtime": {
+      "python_files": 34,
+      "tree_sha256": "86378c498a21dc6d85a57dc54d55d216ff2bb20305350244c28175edaedc59fe"
+    },
+    "gb3_vendored_runtime": {
+      "python_files": 29,
+      "tree_sha256": "3743ae81141e6faa27211fc7795cf8fc7ddd710f1521634725d6e79189ff86b1"
+    },
+    "recipe_brain": {
+      "python_files": 11,
+      "tree_sha256": "135aba02615edce41c2eb7abe9bf7ef9fa3d60ec99bb2a1591304e10e9b86217"
+    }
+  },
+  "NOT_CLAIMED": [
+    "that the recipe brain can answer the runtime's task, or any mark on it. No exam was run.",
+    "that anything was published or authorised inside HELM. The runtime abstained and the receipt says audit_only: True.",
+    "that wave 1's reading is altered, upgraded or superseded. It is untouched.",
+    "that a nested repair was driven. It is unreachable as designed.",
+    "that the design's own decoder contract is the task's. native_task.task_decoder_contracts pins ^6, so a client run bypasses it, and no version-2 contract with its lineage exists yet.",
+    "that the envelope is re-costed. It is not.",
+    "any claim about generality. The brain's own record says it is task-specific."
+  ],
+  "what_the_claim_actually_is": "The same answers COMPUTED INSIDE HELM's runtime, decoded by its own decoder, and WITHHELD by its own verifier.",
+  "owner_authority": "The owner authorised the engineering on copies and no more. Nothing has been applied to a frozen tree, no paid run is authorised, and the one decision this result puts to the owner - whether to declare the client operation authority-admitted - is open and is not assumed here.",
+  "written_by": "the TKS Noetic Council session, round 22",
+  "reading_digest": "7e87795c1a9d256828d78c535ba9553869e7f3eb639455bc0abb573d8d06ab5f"
+}

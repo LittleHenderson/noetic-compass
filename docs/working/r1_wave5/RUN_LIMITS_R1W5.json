@@ -1,0 +1,59 @@
+{
+ "attempts": {
+  "plumbing_retry": 1,
+  "plumbing_retry_rule": "only if no unit of the scored pool started; same zip, same X5 pins; any package change is a reseal and a new sign line",
+  "scored": 1
+ },
+ "cost_cap_status": "PROPOSED",
+ "cost_cap_usd": 1.0,
+ "deadline_seconds_whole_command": 2400,
+ "enforced_by_launch_controller": [
+  "cost_cap_usd: the owner's cap (proposed 1.00) covers the scored attempt and at most one plumbing retry",
+  "host_window: the supervisor is wave 2's byte for byte (work cut-off 111 minutes); the runner's own deadline (2,400 s) ends the work first",
+  "stage_limit_seconds: 3000",
+  "cleanup: host and volumes terminated, launch slot released, temporary role/profile/bucket removed, proof recorded; independent cleanup check within an hour",
+  "backup: deliverable copied to D:/tksCAS-archive/ with three sha256 confirmations"
+ ],
+ "enforced_by_package": [
+  "deadline: kit/run_r1w5.py caps the whole command at 2,400 s; a unit still running at the deadline is killed and the reading is INSTRUMENT_ERROR (I6)",
+  "workers: R1W5_WORKERS = 2; no torch anywhere; no GPU",
+  "refusals before any package code runs: this package's freeze and members, the wave-3b package (a6d9dbc7), the wave-3 v3 package (bd06f324), the wave-2 package (c8f82a6d), the wave-1 v3 package (8c55c413), every X5 host file, the two spent X3 files (a5a4286a, 8c1ff66a), disk free >= 5 GiB"
+ ],
+ "estimate": {
+  "expected_usd_per_attempt": "about 0.03-0.04 at list (c38: 0.03 USD for 17 units, host 353.7 s); about 0.07-0.09 at the conservative rate",
+  "host_seconds": "about 500-700 (c38's non-stage overhead about 235 s: 353.7 host - 119.2 stage)",
+  "host_units": "41 (1 job map + 32 X5_PAIR family-arm units of 3 lives each + 6 live arms + 2 reproduction units), against c38's 17",
+  "max_usd_per_attempt": "about 0.35 (2,400 s deadline + about 5 minutes of boot and cleanup at 0.46 USD/h)",
+  "measured_laptop_pool": "39 units (all but the 2 reproduction units), one at a time, 121.1 s in all on the builder's practice files (longest unit 34.8 s); one X5 unit (3 lives): 3 s and 77 MiB peak",
+  "price_usd_per_host_hour": {
+   "conservative_charge": 0.46,
+   "list": 0.192
+  },
+  "stage_seconds": "about 250-450 (wave 1's 128 tests about 70 s, wave 2's 34, wave 3's 41 and wave 3b's 26 about 40 s, wave 5's tests about 25 s, the pool about 70-140 s at 2 workers)",
+  "torch_helper": "none",
+  "worst_case_usd": "about 0.70 (scored + one plumbing retry, both at their maximum)",
+  "x5_build": "laptop custodian, 0 USD"
+ },
+ "host": {
+  "automatic_retry": false,
+  "cpu_slice": "2 CPUs (cgroup slice, the c19-c21 / c35 / c37 / c38 kit precedent)",
+  "hosts": 1,
+  "image": "ami-0dddfa1ffa6b87af7 (the c21 image: Python 3.12.3)",
+  "instance_type": "m6i.xlarge",
+  "memory_slice_gib": 14,
+  "region": "us-west-2"
+ },
+ "label": "R1W5",
+ "laptop": {
+  "neural_work": "none",
+  "reading": "r1w5/merge_r1w5.py from an extracted copy of the sealed zip (about 10 s, under 300 MiB)",
+  "x5_custodian": "pure Python, one process at a time, >= 300 MB free RAM, each command under 300 s"
+ },
+ "ledger": "Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json, read after c38: 111.22 of 200.00 used, 88.78 unreserved (RUN_RESULT_R1W3B_C38.md). NO hold placed by the builder.",
+ "measured_basis": {
+  "c38": "wave 3b scored host: 17 units, stage 119.2 s, host 353.7 s, 0.03 USD at list"
+ },
+ "package": "HELM_R1_W5_20261019",
+ "schema": "helm.run-limits/1",
+ "status": "PROPOSED (the owner signs the cap; nothing is held or launched before that)"
+}

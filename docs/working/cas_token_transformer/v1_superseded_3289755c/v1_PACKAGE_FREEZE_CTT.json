@@ -1,0 +1,13 @@
+{
+ "deps_files": 22,
+ "deps_manifest_sha256": "1ecc21987d4f375161c092d21223c797ffbf50ffeec518a1180be8192ca9c48e",
+ "deps_zip": "HELM_CTT_DEPS_20261019.zip",
+ "deps_zip_sha256": "fc89054a6893a149301ee8504dbd325e7b46a75b0152d80622e4096cf06acd3f",
+ "members": 47,
+ "package_freeze_sha256": "4dd5fe867755d87836014c42a6b87083c63d48e46083b4d34e0266178ddf0ba2",
+ "package_zip": "HELM_CTT_20261019_SOURCE_CTT.zip",
+ "package_zip_sha256": "3289755c154111ce41e44bf4d17f4f6bfa14e0dff1f91d287bd5b6c74a5453ec",
+ "preregistration_precode_sha256": "05c99a7ec6ed008374caf5c97e9fb19ba0d81521c3a7b7c7f6e65ca965ff0f18",
+ "preregistration_sha256": "8e89424d1ee7a70d82b89d1461e9568faee7c2e88bc79999e790b22a4716955e",
+ "schema": "ctt.package-freeze-outside/1"
+}

@@ -1,0 +1,400 @@
+{
+ "F": {
+  "counts": {
+   "CHECKLIST": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:SILENT_HARMLESS": 16,
+    "E1:SILENT_HARMLESS": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 12,
+    "T2:SILENT_HARMLESS": 4
+   },
+   "EYE_SCAN_REPORT_ONLY": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 12,
+    "T2:SILENT_HARMLESS": 4
+   },
+   "FULL": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:SILENT_HARMLESS": 16,
+    "E1:SILENT_HARMLESS": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 12,
+    "T2:SILENT_HARMLESS": 4
+   },
+   "FULL+EYE_SCAN": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 12,
+    "T2:SILENT_HARMLESS": 4
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:KEPT": 16,
+    "S1:SILENT_HARMLESS": 16,
+    "T1:SILENT_HARMLESS": 16,
+    "T2:FAILED_LOUD": 12,
+    "T2:SILENT_HARMLESS": 4
+   },
+   "WATCHDOG": {
+    "C1:KEPT": 16,
+    "CLEAN:CLEAN_OK": 64,
+    "D1:CAUGHT": 16,
+    "E1:CAUGHT": 16,
+    "E2a:FAILED_LOUD": 16,
+    "E2b:OVER_CAUTIOUS": 16,
+    "S1:CAUGHT": 16,
+    "T1:CAUGHT": 16,
+    "T2:FAILED_LOUD": 12,
+    "T2:SILENT_HARMLESS": 4
+   }
+  }
+ },
+ "I3": {
+  "E64": {
+   "c40_items": 0,
+   "differ": [],
+   "equal": false,
+   "items": 0
+  },
+  "F64": {
+   "c40_items": 0,
+   "differ": [],
+   "equal": false,
+   "items": 0
+  }
+ },
+ "R": {
+  "census": {
+   "by_shape": {},
+   "frame": 1165,
+   "represented": 0
+  },
+  "eye": {
+   "RA": {
+    "body_findings": 0,
+    "eye_writes": 0,
+    "held": 0
+   },
+   "RB": {
+    "body_findings": 0,
+    "eye_writes": 0,
+    "held": 0
+   }
+  },
+  "tally": {
+   "RA": {
+    "-VOICE": {
+     "NOT_SCORED": 58,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 6
+    },
+    "B-ASK": {
+     "NOT_SCORED": 58,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 6
+    },
+    "B-KEYCALC": {
+     "NOT_SCORED": 58,
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 6
+    },
+    "FULL": {
+     "NOT_SCORED": 58,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 6
+    },
+    "FULL+EYE_SCAN": {
+     "NOT_SCORED": 58,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 6
+    },
+    "FULL+EYE_SCAN_REPLAY": {
+     "NOT_SCORED": 58,
+     "RIGHT": 5,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 64,
+     "scored": 6
+    },
+    "answer_keys_right": 0,
+    "answer_keys_scored": 1
+   },
+   "RB": {
+    "-VOICE": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4,
+     "scored": 4
+    },
+    "B-ASK": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4,
+     "scored": 4
+    },
+    "B-KEYCALC": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 2,
+     "WRONG": 2,
+     "items": 4,
+     "scored": 4
+    },
+    "FULL": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4,
+     "scored": 4
+    },
+    "FULL+EYE_SCAN": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4,
+     "scored": 4
+    },
+    "FULL+EYE_SCAN_REPLAY": {
+     "NOT_SCORED": 0,
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4,
+     "scored": 4
+    },
+    "answer_keys_right": 0,
+    "answer_keys_scored": 4
+   }
+  }
+ },
+ "S": {
+  "eye": {
+   "body_findings": 0,
+   "eye_writes": 0,
+   "held": 0
+  },
+  "items": 128,
+  "plain_full": 128,
+  "tally": {
+   "-ENGLISH_IN": {
+    "NOT_SCORED": 22,
+    "RIGHT": 101,
+    "UNDETERMINED": 5,
+    "WRONG": 0,
+    "items": 128,
+    "scored": 106
+   },
+   "-VOICE": {
+    "NOT_SCORED": 22,
+    "RIGHT": 4,
+    "UNDETERMINED": 0,
+    "WRONG": 102,
+    "items": 128,
+    "scored": 106
+   },
+   "B-ASK": {
+    "NOT_SCORED": 22,
+    "RIGHT": 102,
+    "UNDETERMINED": 4,
+    "WRONG": 0,
+    "items": 128,
+    "scored": 106
+   },
+   "B-ECHO": {
+    "NOT_SCORED": 22,
+    "RIGHT": 97,
+    "UNDETERMINED": 9,
+    "WRONG": 0,
+    "items": 128,
+    "scored": 106
+   },
+   "B-KEYCALC": {
+    "NOT_SCORED": 22,
+    "RIGHT": 95,
+    "UNDETERMINED": 9,
+    "WRONG": 2,
+    "items": 128,
+    "scored": 106
+   },
+   "FULL": {
+    "NOT_SCORED": 22,
+    "RIGHT": 99,
+    "UNDETERMINED": 0,
+    "WRONG": 7,
+    "items": 128,
+    "scored": 106
+   },
+   "FULL+EYE_SCAN": {
+    "NOT_SCORED": 22,
+    "RIGHT": 99,
+    "UNDETERMINED": 0,
+    "WRONG": 7,
+    "items": 128,
+    "scored": 106
+   },
+   "FULL+EYE_SCAN_REPLAY": {
+    "NOT_SCORED": 22,
+    "RIGHT": 99,
+    "UNDETERMINED": 0,
+    "WRONG": 7,
+    "items": 128,
+    "scored": 106
+   }
+  }
+ },
+ "claim_ceiling_if_earned": null,
+ "claim_ceiling_now": "SYNTHETIC_ONLY",
+ "h11_differ": [],
+ "h8_differ": [],
+ "hard_gates": {
+  "H11_replay_identical": true,
+  "H1_receipts": true,
+  "H3_eye_writes_nothing": true,
+  "H8_voice_changes_no_answer": true,
+  "HB_baselines_same_inputs": true,
+  "HK_key_blind": false,
+  "HN_no_network": true,
+  "HS_sandbox": false
+ },
+ "instrument_rows": {
+  "I10_seed_rule": false,
+  "I11_frame_acceptance": true,
+  "I12_contamination": false,
+  "I13_void_rule": true,
+  "I1_data_identity": false,
+  "I2_two_key_agreement": true,
+  "I3_same_brain": false,
+  "I4_no_learned_parameters": true,
+  "I6_completeness": false,
+  "I7_laptop_reading_sealed": true,
+  "I9_governance": false
+ },
+ "marks": {
+  "F-a_NO_FALSE_ALARM": true,
+  "F-b_ACTED": true,
+  "R-a_SAFE_RA": true,
+  "R-a_SAFE_RB": true,
+  "R-b_CORRECT": false,
+  "R-c_SAFER_THAN_KEYCALC": true,
+  "R-e_EYE_QUIET_RA": true,
+  "R-e_EYE_QUIET_RB": true,
+  "S-a_SAFE": false,
+  "S-b_USEFUL": false,
+  "S-c_SAFER_THAN_KEYCALC": false,
+  "S-d_PLAIN": true,
+  "S-e_EYE_QUIET": true
+ },
+ "notes": [],
+ "schema": "helm.xreal.reading/1",
+ "two_key": {
+  "agree": 195,
+  "items": 196,
+  "rate": "195/196"
+ },
+ "verdict": "INSTRUMENT_ERROR",
+ "void_bad": [],
+ "words": {
+  "F": {
+   "C1": "INCONCLUSIVE",
+   "D1": "INCONCLUSIVE",
+   "E1": "INCONCLUSIVE",
+   "E2a": "INCONCLUSIVE",
+   "E2b": "INCONCLUSIVE",
+   "S1": "INCONCLUSIVE",
+   "T1": "INCONCLUSIVE",
+   "T2": "INCONCLUSIVE"
+  },
+  "R_ASIS": "INCONCLUSIVE",
+  "R_REBOUND": "INCONCLUSIVE",
+  "S": "INCONCLUSIVE"
+ },
+ "words_for_comparison": {
+  "CHECKLIST": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_SAFE_NOT_CAUGHT",
+   "E1": "KIND_SAFE_NOT_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_BENIGN_KEPT",
+   "S1": "KIND_SAFE_NOT_CAUGHT",
+   "T1": "KIND_SAFE_NOT_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  },
+  "EYE_SCAN_REPORT_ONLY": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_CAUGHT",
+   "E1": "KIND_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_BENIGN_KEPT",
+   "S1": "KIND_SAFE_NOT_CAUGHT",
+   "T1": "KIND_SAFE_NOT_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  },
+  "FULL": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_SAFE_NOT_CAUGHT",
+   "E1": "KIND_SAFE_NOT_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_BENIGN_KEPT",
+   "S1": "KIND_SAFE_NOT_CAUGHT",
+   "T1": "KIND_SAFE_NOT_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  },
+  "WATCHDOG": {
+   "C1": "KIND_BENIGN_KEPT",
+   "D1": "KIND_CAUGHT",
+   "E1": "KIND_CAUGHT",
+   "E2a": "KIND_SAFE_NOT_CAUGHT",
+   "E2b": "KIND_OVER_CAUTIOUS",
+   "S1": "KIND_CAUGHT",
+   "T1": "KIND_CAUGHT",
+   "T2": "KIND_SAFE_NOT_CAUGHT"
+  }
+ }
+}

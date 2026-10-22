@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running HELM</title>
+<meta name="description" content="Start the HELM UI, open the demo, and rebuild the hub.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --bg-glow:#ece7dc; --surface:#fffefb; --surface-2:#f8f5ef;
+  --line:rgba(24,27,33,.09); --line-strong:rgba(24,27,33,.18);
+  --ink:#16191f; --ink-2:#4a505a; --ink-3:#6f7580;
+  --accent:#7d5f22; --accent-soft:rgba(125,95,34,.10);
+  --c-win:#23784a; --c-strong:#3f9a6e; --c-partial:#b58a12; --c-weak:#c4651f; --c-failed:#b23a3a;
+  --c-null:#8b9099; --c-method:#2a78d6; --c-blocked:#7a5bb5; --c-rule:#d9d4c9;
+  --shadow:0 1px 2px rgba(20,22,28,.04),0 8px 28px rgba(20,22,28,.05);
+  --radius:14px;
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+    --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+    --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+    --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+    --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+    --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1015; --bg-glow:#141a23; --surface:#141920; --surface-2:#1a2029;
+  --line:rgba(232,230,225,.08); --line-strong:rgba(232,230,225,.16);
+  --ink:#e9e7e2; --ink-2:#b4b9c2; --ink-3:#8a919c;
+  --accent:#d2b06e; --accent-soft:rgba(210,176,110,.12);
+  --c-win:#4cc07f; --c-strong:#6cc79a; --c-partial:#e0b84a; --c-weak:#ec9150; --c-failed:#ec6d6d;
+  --c-null:#8f96a1; --c-method:#5598e7; --c-blocked:#a98ae0; --c-rule:#3a404a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);background-image:radial-gradient(1200px 500px at 10% -10%,var(--bg-glow),transparent 60%);
+  color:var(--ink);font:15.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+code{font:12.5px/1.5 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+pre{font:12px/1.55 var(--mono);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+header.top{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);backdrop-filter:blur(6px)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px}
+.wordmark{font:500 22px/1 var(--serif);letter-spacing:.16em;text-decoration:none}
+.tagline{font-size:12.5px;color:var(--ink-3);margin-top:5px}
+.tools{display:flex;gap:8px;align-items:center}
+.btn{font:inherit;font-size:12.5px;color:var(--ink-2);background:transparent;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;cursor:pointer}
+.btn:hover{color:var(--ink);border-color:var(--accent)}
+nav.pages ul{list-style:none;margin:0;padding:0 0 12px;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.pages a{display:inline-block;font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:999px;border:1px solid transparent}
+nav.pages a:hover{border-color:var(--line-strong);color:var(--ink)}
+nav.pages a[aria-current="page"]{background:var(--accent-soft);color:var(--ink);border-color:var(--line-strong)}
+#menu-btn{display:none}
+@media (max-width:760px){
+  #menu-btn{display:inline-block}
+  html.js nav.pages{display:none}
+  html.js nav.pages.open{display:block}
+  nav.pages ul{flex-direction:column}
+}
+.conf{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+main{padding:28px 0 40px}
+h1{font:400 clamp(28px,4.4vw,40px)/1.15 var(--serif);margin:6px 0 12px;letter-spacing:-.01em}
+h2{font:500 clamp(21px,2.6vw,26px)/1.25 var(--serif);margin:36px 0 10px}
+h3{font:600 15.5px/1.35 var(--sans);margin:22px 0 6px}
+p{margin:0 0 12px}
+.lede{font:400 clamp(17px,2.1vw,20px)/1.55 var(--serif);color:var(--ink-2);max-width:62ch}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+dfn{font-style:normal;font-weight:600;border-bottom:1px dotted var(--accent);cursor:help}
+.gloss{color:var(--ink-2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.grid .card{margin:0}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:16px 0}
+.pill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.pill .what{font-weight:600;display:block;margin-bottom:3px}
+.word{font:11.5px/1.4 var(--mono);padding:1px 6px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);display:inline-block;margin:2px 3px 2px 0;overflow-wrap:anywhere}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline;border:1px solid var(--line-strong)}
+.clabel{font-size:12.5px;color:var(--ink-2)}
+.c-win{background:var(--c-win)} .c-strong{background:var(--c-strong)} .c-partial{background:var(--c-partial)}
+.c-weak{background:var(--c-weak)} .c-failed{background:var(--c-failed)} .c-null{background:var(--c-null)}
+.c-method{background:var(--c-method)} .c-blocked{background:var(--c-blocked)} .c-rule{background:var(--c-rule)}
+.tablewrap{width:100%;overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:9px 11px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--ink-2);background:var(--surface-2);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+td{overflow-wrap:anywhere}
+.verbatim{border-left:3px solid var(--line-strong)}
+blockquote{margin:12px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 10px 10px 0;font:400 16px/1.55 var(--serif)}
+details{margin:8px 0}
+details>summary{cursor:pointer;color:var(--ink-2);font-size:13.5px}
+details.precise{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+details.precise[open]>summary{margin-bottom:6px}
+details.words{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:16px 0}
+details.words dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px 18px;margin:10px 0 0}
+details.words dt{font-size:13px} details.words dd{margin:0 0 6px;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.search{width:100%;font:inherit;font-size:15px;padding:10px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink)}
+article.entry{border-bottom:1px solid var(--line);padding:12px 0}
+article.entry h3{margin:0 0 4px;font-size:15px}
+.cat{font-size:11.5px;color:var(--ink-3);margin-left:6px}
+.entry .line{font-size:13.5px;margin:3px 0}
+.entry .lab{font-weight:600;color:var(--ink-2)}
+footer.sources{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+footer.sources ul{margin:6px 0 10px;padding-left:18px}
+footer.sources li{overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+ul.tight li{margin:3px 0}
+@media (max-width:760px){
+  table.cards thead{display:none}
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards tr{border-bottom:1px solid var(--line);padding:8px 0}
+  table.cards tr[hidden]{display:none}
+  table.cards td{border:0;padding:3px 12px}
+  table.cards td[data-label]::before{content:attr(data-label);display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1px}
+}
+.note{border:1px dashed var(--line-strong);border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:14px}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin:14px 0}
+.chat .meta{font-size:12.5px;color:var(--ink-3);margin-bottom:8px;overflow-wrap:anywhere}
+.chat .meta code{font-size:11.5px}
+.msg{display:flex;flex-direction:column;max-width:88%;margin:6px 0}
+.msg.you{align-self:flex-end;align-items:flex-end;margin-left:auto}
+.msg.helm{align-self:flex-start;align-items:flex-start}
+.msg .who{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:0 6px 2px}
+.msg .bubble{border-radius:14px;padding:8px 12px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.msg.you .bubble{background:var(--accent-soft);border:1px solid var(--line);border-bottom-right-radius:4px}
+.msg.helm .bubble{background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.noise .bubble{border-style:dashed}
+.msg .st{font:11px/1.4 var(--mono);color:var(--ink-3);margin:2px 6px 0}
+.chat .thread{display:flex;flex-direction:column}
+</style>
+<script>
+(function(){
+  var d=document.documentElement; d.classList.add('js');
+  function get(){try{return localStorage.getItem('helmhub-theme')||'auto'}catch(e){return 'auto'}}
+  function set(v){try{localStorage.setItem('helmhub-theme',v)}catch(e){}}
+  function apply(v){if(v==='auto'){d.removeAttribute('data-theme')}else{d.setAttribute('data-theme',v)}
+    var b=document.getElementById('theme-btn'); if(b){b.textContent='Theme: '+v}}
+  apply(get());
+  document.addEventListener('DOMContentLoaded',function(){
+    apply(get());
+    var b=document.getElementById('theme-btn');
+    if(b){b.addEventListener('click',function(){var o=['auto','light','dark'];var v=o[(o.indexOf(get())+1)%3];set(v);apply(v)})}
+    var m=document.getElementById('menu-btn'), n=document.getElementById('pages');
+    if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')})}
+    var q=document.getElementById('gsearch');
+    if(q){var items=[].slice.call(document.querySelectorAll('article.entry')), c=document.getElementById('gcount');
+      q.addEventListener('input',function(){var s=q.value.trim().toLowerCase(), k=0;
+        items.forEach(function(a){var on=!s||a.textContent.toLowerCase().indexOf(s)>=0; a.hidden=!on; if(on)k++});
+        if(c){c.textContent=k+' of '+items.length+' entries shown'}})}
+    var fb=[].slice.call(document.querySelectorAll('[data-filter]'));
+    fb.forEach(function(btn){btn.addEventListener('click',function(){
+      var f=btn.getAttribute('data-filter');
+      fb.forEach(function(x){x.setAttribute('aria-pressed',x===btn?'true':'false')});
+      [].slice.call(document.querySelectorAll('tr[data-kind]')).forEach(function(r){
+        var on=f==='all'||r.getAttribute('data-kind')===f||r.getAttribute('data-color')===f||(f==='neg'&&r.getAttribute('data-neg')==='1');
+        r.hidden=!on})})});
+  });
+})();
+</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<div class="bar"><div><a class="wordmark" href="index.html">HELM HUB</a>
+<div class="tagline">A living spec sheet for HELM, rebuilt from the project's own records</div></div>
+<div class="tools"><button class="btn" id="menu-btn" type="button" aria-controls="pages" aria-expanded="false">Pages</button>
+<button class="btn" id="theme-btn" type="button">Theme: auto</button></div></div>
+<nav class="pages" id="pages" aria-label="Hub pages"><ul><li><a href="index.html">Home</a></li><li><a href="thinking.html">How HELM thinks</a></li><li><a href="chat.html">Talking to HELM</a></li><li><a href="architecture.html">Architecture</a></li><li><a href="build.html">The build, animated</a></li><li><a href="data.html">Data lineage</a></li><li><a href="compute.html">Compute and cost</a></li><li><a href="results.html">Results scorecard</a></li><li><a href="model-card.html">Model card</a></li><li><a href="safety.html">Safety and honesty</a></li><li><a href="roadmap.html">Roadmap</a></li><li><a href="device.html">The HELM Cube</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="changelog.html">Changelog</a></li><li><a href="run.html" aria-current="page">How to run HELM</a></li><li><a href="files.html">Files and paths</a></li></ul></nav>
+</div></header>
+<main class="wrap">
+<div class="conf">Confidential, internal. Not for public posting.</div>
+<h1>How to run HELM</h1>
+<div class="lede">HELM runs on one computer, in a calm local page. Here is how to start it, what you will see, and the rules for which computer does what.</div>
+
+
+<h2>Try it without installing anything</h2>
+<p>The <a href="demo.html">demo page</a> is a recorded HELM session. It needs no server: open it and read each reply's record.</p>
+
+<h2>Run the live page</h2>
+<pre>python helm_ui/server.py</pre>
+<p>Then open <code>http://127.0.0.1:8765</code>. The server listens on this computer only. It needs FastAPI and uvicorn.
+Tests: <code>python -m pytest helm_ui/tests -q</code>. Page options: <code>?theme=dark|light</code>, <code>?records=1</code>.</p>
+<p>Type everyday kitchen sentences. HELM's reply comes with a plain status and a "Show the record" link that opens what was saved,
+the gate's verdict, and the <dfn data-term="receipt" title="the record a saved fact leaves behind, with a fingerprint, so it can be checked later">receipt</dfn><span class="gloss"> (the record a saved fact leaves behind, with a fingerprint, so it can be checked later)</span>. If HELM cannot read a sentence, it asks one question and saves nothing.</p>
+
+<h2>What is wired and what is not</h2>
+<p>The list below is copied from the UI's own notes. It mentions the <dfn data-term="Unity Eye" title="a small watcher that looks over HELM, reports and whispers, and never writes">Unity Eye</dfn><span class="gloss"> (a small watcher that looks over HELM, reports and whispers, and never writes)</span>, which may <dfn data-term="whisper" title="a typed nudge from the Eye that HELM may ignore; it never changes a stored fact">whisper</dfn><span class="gloss"> (a typed nudge from the Eye that HELM may ignore; it never changes a stored fact)</span> suggestions; the idle <dfn data-term="drive loop" title="HELM&#x27;s idle attention moving among the seven Drives toward unfinished work">drive loop</dfn><span class="gloss"> (HELM&#x27;s idle attention moving among the seven Drives toward unfinished work)</span>,
+which moves attention among the seven <dfn data-term="Drive" title="one of seven core motivations, F1 Unity to F7 Purpose">Drives</dfn><span class="gloss"> (one of seven core motivations, F1 Unity to F7 Purpose)</span>; and test copies built from a fixed <dfn data-term="seed" title="a starting number that fixes which random choices a program makes">seed</dfn><span class="gloss"> (a starting number that fixes which random choices a program makes)</span>.</p>
+<ul class="verbatim"><li>Wired: the chat turn, the record, What HELM knows, the planner dry run, the dials (read and set).</li><li>Wired, but not to this chat: the Self-check runs on a built test copy of HELM&#x27;s state (dev seed), not on the live session. The Attention card reads a finished run record, not the live session. Both say so on screen.</li><li>Not wired: the Eye reading or whispering to the live chat session; a live idle drive loop; the live attention point (it is never written into a record, so only the share of steps is shown).</li><li>Not built: Phase A of the Radial Architecture Display (the 40-petal, 4-ring display in <code>docs/design/cas_v7_5_multimodal_display_specification.md</code>). HELM produces no 40 x 4 activation data to fill it, so drawing it would mean inventing numbers. The Attention card uses only the Drive ring idea.</li><li>Switched off: tool actions (write files, run commands, git, cloud jobs). In this window a tool request is planned but not run, and its record says <code>UI_TOOLS_OFF</code>. Set <code>HELM_UI_ALLOW_TOOLS=1</code> to turn them on.</li></ul>
+
+<h2>Local endpoints</h2>
+<p>For developers: the page talks to these addresses on the same computer. Only <code>POST /turn</code> can change HELM's state.</p>
+<div class="tablewrap verbatim"><table class="cards"><thead><tr><th>POST</th><th><code>/turn</code> <code>{&quot;text&quot;: ...}</code></th><th>one turn; returns the reply, the record, and the new state</th></tr></thead><tbody><tr><td data-label="POST">GET</td><td data-label="/turn {&quot;text&quot;: ...}"><code>/state</code></td><td data-label="one turn; returns the reply, the record, and the new state">what HELM knows, dials, pairing table, last self-check, wiring, claims</td></tr><tr><td data-label="POST">GET</td><td data-label="/turn {&quot;text&quot;: ...}"><code>/history</code></td><td data-label="one turn; returns the reply, the record, and the new state">this session&#x27;s turns with their records</td></tr><tr><td data-label="POST">GET</td><td data-label="/turn {&quot;text&quot;: ...}"><code>/eye/scan?world=clean|fault</code></td><td data-label="one turn; returns the reply, the record, and the new state">one read-only self-scan on a test copy</td></tr><tr><td data-label="POST">GET, POST</td><td data-label="/turn {&quot;text&quot;: ...}"><code>/dials</code></td><td data-label="one turn; returns the reply, the record, and the new state">read the dials; set a preset <code>{&quot;preset&quot;: &quot;BALANCED&quot;}</code> or values <code>{&quot;K&quot;: 12}</code> (422 if out of range)</td></tr><tr><td data-label="POST">POST</td><td data-label="/turn {&quot;text&quot;: ...}"><code>/plan</code> <code>{&quot;text&quot;: ...}</code></td><td data-label="one turn; returns the reply, the record, and the new state">plan only, plus the gate&#x27;s dry run; never runs a tool</td></tr></tbody></table></div>
+
+<h2>Rebuild this hub</h2>
+<pre>python helm_hub/build_hub.py</pre>
+<p>The build reads the spec sheet, the dictionary, the roadmap and its correction, the changelog, the run records and the ledger totals,
+then writes <code>helm_hub/site/</code>. It checks every page for unexplained jargon, broken links, and anything that looks like a secret or an
+e-mail address, and fails if it finds one. It runs on the laptop in seconds.</p>
+
+<h2>Laptop rules</h2>
+<ul class="tight">
+<li>Heavy work goes to rented <dfn data-term="AWS" title="Amazon Web Services, the rented cloud computers used for heavy runs">AWS</dfn><span class="gloss"> (Amazon Web Services, the rented cloud computers used for heavy runs)</span> machines; the laptop is for light editing, launching and downloading (owner, 2026-09-23).</li>
+<li>Local runs stay small: one process, a time cap such as 300 s, and no spend.</li>
+<li>Neural network training never runs on the laptop's processor; it goes to a cloud <dfn data-term="GPU" title="a graphics chip used to train neural networks quickly">GPU</dfn><span class="gloss"> (a graphics chip used to train neural networks quickly)</span>.</li>
+</ul>
+<p>Details and costs: <a href="compute.html">Compute and cost</a>.</p>
+
+</main>
+<footer class="sources"><div class="wrap">
+<strong>Sources for this page</strong>
+<ul><li><code>helm_ui/README.md</code> (run command, options, endpoints table copied, &#x27;Wired vs not wired&#x27; copied)</li><li><code>helm_ui/demo/index.html</code> (copied to <code>demo.html</code>)</li><li><code>CLAUDE.md</code> (compute rules)</li></ul>
+<div>Generated 2026-10-21 20:23 PDT (Pacific) by <code>helm_hub/build_hub.py</code> from repo commit <code>63cfb6a6</code>.
+Rebuild with <code>python helm_hub/build_hub.py</code>. Where this page and a source disagree, the source wins.</div>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+ "by_file": {
+  "test_audit": 5,
+  "test_cas_vocab": 8,
+  "test_custody_build_merge": 27,
+  "test_generator_checker": 11,
+  "test_notation_separation_retrieval": 6,
+  "test_slots_wordpiece_params": 9
+ },
+ "command": "python -X utf8 -B -W ignore -m unittest discover -s tests_ctt -p test_*.py (CTT_DEPS_DIR = the extracted deps)",
+ "errors": 0,
+ "failed": 0,
+ "laptop_harness_dry_runs_0_usd": {
+  "data_build_10pct": {
+   "peak_MiB": 85.2,
+   "seconds": 10.3,
+   "train_rows": 22952,
+   "val_rows": 1098
+  },
+  "noharm_off_X3_F64_same_brain_as_c38": true,
+  "noharm_off_X5_E64_same_brain_as_c40": true,
+  "noharm_on_fake_always_ask_digest_equals_off": true,
+  "noharm_on_fake_topic_digest_differs": true
+ },
+ "log_sha256": "d46cfafa88837fa523a32a189e6613d4f1487b2b3da6070c02e8bab5bf0718fd",
+ "not_testable_on_the_laptop": "helm_cas_translator/model.py, serve.py, ctt_train/train.py import torch (475 MiB RAM measured > 300 MiB per-process limit): parsed only; first run = AWS preflight (50-step GPU smoke, exact parameter count assert, translator audit)",
+ "note_v2": "8 new tests for amendment A-CTT-1: primary needs no human exam (NOT_RUN, HUMAN_EXAM_ABSENT), primary refuses a human score as its exam, human pass absent = NOT_RUN and fails nothing, human pass has its own word and pins the primary, human pass refuses other weights, X-REAL K-S scoring x2, blind machine draw with a FAKE zip (the real draw is the custodian's)",
+ "note_v3": "8 new tests for amendment A-CTT-2: allowlist (null device + own temp folder), planted write into a stand-in brain folder inside temp still fails, real brain path judged forbidden, missing report / network / process fail, torch 2-step audit (host only), exam-seed hash x2, NO-HARM translator audit must be clean",
+ "passed": 65,
+ "ran": 66,
+ "schema": "ctt.test-counts/1",
+ "seconds": 18.435,
+ "skipped": 1,
+ "skipped_detail": "test_audit.test_torch_two_steps_under_the_audit_is_clean: GPU host only (torch is above the laptop's 300 MiB limit); it runs in the host preflight",
+ "where": "laptop, extracted copy of HELM_CTT_20261019_SOURCE_CTT.zip v3 (f280633d...) + deps (fc89054a...), no torch"
+}

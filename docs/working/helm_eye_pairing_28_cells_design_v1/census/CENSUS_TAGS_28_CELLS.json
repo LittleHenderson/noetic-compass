@@ -1,0 +1,133 @@
+{
+ "domain_only_by_D": {
+  "C": 58494,
+  "E": 3419,
+  "O": 6036,
+  "P": 2770
+ },
+ "floor": {
+  "cells_with_8_or_more_found": 0,
+  "cells_with_8_or_more_required": 20,
+  "result": "STOP_NOT_EXERCISED"
+ },
+ "foundation_only_by_F": {
+  "F1": 14594,
+  "F2": 13827,
+  "F3": 15117,
+  "F4": 15431,
+  "F5": 14077,
+  "F6": 14923,
+  "F7": 13551
+ },
+ "grid_28": {
+  "F1C": 0,
+  "F1E": 0,
+  "F1O": 0,
+  "F1P": 0,
+  "F2C": 0,
+  "F2E": 0,
+  "F2O": 0,
+  "F2P": 0,
+  "F3C": 0,
+  "F3E": 0,
+  "F3O": 0,
+  "F3P": 0,
+  "F4C": 0,
+  "F4E": 0,
+  "F4O": 0,
+  "F4P": 0,
+  "F5C": 0,
+  "F5E": 0,
+  "F5O": 0,
+  "F5P": 0,
+  "F6C": 0,
+  "F6E": 0,
+  "F6O": 0,
+  "F6P": 0,
+  "F7C": 0,
+  "F7E": 0,
+  "F7O": 0,
+  "F7P": 0
+ },
+ "how": {
+  "DOM-1a rules, caps, refusals, guards": 2770,
+  "DOM-1b readings, lessons, answers, plans": 34497,
+  "DOM-1c verdicts, receipts, Eye findings": 3419,
+  "DOM-1d stock, batches, tools, files": 6036,
+  "DOM-1e a question = a reading that stopped": 23997,
+  "UNTAGGED": 101718
+ },
+ "items_total": 172437,
+ "per_root": {
+  "c50_host": {
+   "cells": {
+    "UNTAGGED_DOMAIN": 94,
+    "UNTAGGED_FOUNDATION": 70511
+   },
+   "counts": {
+    "items": 70605
+   },
+   "files": 80
+  },
+  "rb_i3_runs": {
+   "cells": {
+    "UNTAGGED_DOMAIN": 101624,
+    "UNTAGGED_FOUNDATION": 208
+   },
+   "counts": {
+    "items": 101832
+   },
+   "files": 624
+  }
+ },
+ "roots": {
+  "c50_host": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\r1_wave6\\run_c50_r1w6v3_20261020\\deliverable_unpacked_a1\\results\\r1w6_host_run\\out\\r1w6_out",
+  "rb_i3_runs": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-19\\rb_i3\\runs"
+ },
+ "rules": [
+  {
+   "domain": "P",
+   "regex": "REFUSED|GUARD|CUT_|CLAMPED|ALWAYS_ASK|LEARNING_DISABLED|VIOLAT",
+   "rule": "DOM-1a rules, caps, refusals, guards"
+  },
+  {
+   "domain": "C",
+   "regex": "ADMITTED|SUCCESS_EVALUATED|UNDETERMINED|PLAN|LEARNED|READ$|REPLAY",
+   "rule": "DOM-1b readings, lessons, answers, plans"
+  },
+  {
+   "domain": "E",
+   "regex": "COMPLETE|EXITED|SKIPPED|CHECK|VERIF|FINDING|WHISPER|REPORT|PASS|FAIL|ADMIT$",
+   "rule": "DOM-1c verdicts, receipts, Eye findings"
+  },
+  {
+   "domain": "O",
+   "regex": "INVENTORY_RECORDED|STOCK_RECORDED|WITNESS|RECORDED|TOOL|FILE",
+   "rule": "DOM-1d stock, batches, tools, files"
+  },
+  {
+   "domain": "C",
+   "regex": "^CLARIFY_|^ASK|QUESTION",
+   "rule": "DOM-1e a question = a reading that stopped"
+  }
+ ],
+ "schema": "helm.census.tags_28_cells/1",
+ "seconds": 1.5,
+ "untagged": {
+  "domain_missing": 101718,
+  "foundation_missing": 70719
+ },
+ "untagged_domain_words_top": {
+  "CLOSED": 104,
+  "NEW_SESSION": 92,
+  "OK": 2,
+  "best_first": 28314,
+  "cyclic": 9294,
+  "key_first": 4289,
+  "key_rotation": 4805,
+  "rb_today_refit": 4647,
+  "seeded_alternative": 40878,
+  "uniform": 9293
+ },
+ "utc": "2026-10-20T23:52:45Z"
+}

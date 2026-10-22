@@ -1,0 +1,96 @@
+{
+ "host_exact_suite_list": {
+  "as_run_here": {
+   "exit": 0,
+   "scratch": "<tempdir>",
+   "wave1_folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\deps\\HELM_R1_W1_20261015"
+  },
+  "c53_host_for_comparison": {
+   "detail": "failures=1, skipped=2",
+   "names": 10,
+   "python": "3.12.3",
+   "ran": 236,
+   "verdict": "FAILED"
+  },
+  "command_form": [
+   "python",
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "-c",
+   "<HELM_LOADER>",
+   "<scratch>/helm_now_tests",
+   "test_helm_brain_wide",
+   "test_helm_end_to_end_loop",
+   "test_helm_english_in",
+   "test_helm_english_in_stock_frame",
+   "test_helm_voice",
+   "test_helm_faces_in",
+   "test_helm_triad",
+   "test_helm_wide_alongside",
+   "test_helm_cas_address",
+   "test_helm_units_note",
+   "test_helm_pin_hygiene"
+  ],
+  "count": 11,
+  "cwd": "<scratch>/helm_now_tests",
+  "detail": "skipped=1",
+  "env": {
+   "HELM_CANONICAL_BRAIN_DIR": "<wave-1 package folder>",
+   "HELM_SESSION_DIR": "<scratch>/helm_test_sessions",
+   "HELM_WIDE_BRAIN": "unset",
+   "PYTHONPATH": "unset (-I ignores it anyway)"
+  },
+  "equals_this_tools_typed_copy": true,
+  "loader": "import sys, unittest; sys.path.insert(0, sys.argv[1]); unittest.main(module=None, argv=['unittest', '-v'] + sys.argv[2:])",
+  "names": [
+   "test_helm_brain_wide",
+   "test_helm_end_to_end_loop",
+   "test_helm_english_in",
+   "test_helm_english_in_stock_frame",
+   "test_helm_voice",
+   "test_helm_faces_in",
+   "test_helm_triad",
+   "test_helm_wide_alongside",
+   "test_helm_cas_address",
+   "test_helm_units_note",
+   "test_helm_pin_hygiene"
+  ],
+  "pin_line": [
+   "test_off_is_byte_identical_to_the_pre_change_code (test_helm_cas_address.C_LoopStamps.test_off_is_byte_identical_to_the_pre_change_code) ... ok"
+  ],
+  "ran": [
+   245
+  ],
+  "ran_ok_lines": [
+   "Ran 245 tests in 5.558s",
+   "OK (skipped=1)"
+  ],
+  "rule": "A-R1W7-6: the seal step runs EXACTLY the host's HELM suite list with the host's command form, from a fresh extract",
+  "seconds": 7.2,
+  "source_in_the_sealed_package": "kit/run_r1w7.py HELM_TESTS (the script kit/STAGE_R1W7.json argv[0] runs)",
+  "stage_plan_argv0": "kit/run_r1w7.py",
+  "verdict": "OK"
+ },
+ "members": 200,
+ "members_rehashed_bad": [],
+ "package_freeze_sha256": "3c7a9f3d6b18f6a70c83ac2447db045ff3bafccc6ce99de39a454c45225d1933",
+ "package_zip_sha256": "387577deac79d8b395e1e3245cd3bb1bdddb20b0b21b86f1078e7a0cd20442f8",
+ "platform": "win32",
+ "python": "3.14.0",
+ "r1w7_suites_from_sealed_extract": {
+  "detail": "",
+  "ran": [
+   34
+  ],
+  "ran_ok_lines": [
+   "Ran 34 tests in 68.358s",
+   "OK"
+  ],
+  "seconds": 68.6,
+  "verdict": "OK"
+ },
+ "schema": "helm.r1w7.test-counts/2",
+ "sealed_helm_now_unchanged_by_the_suites": true
+}

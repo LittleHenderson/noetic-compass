@@ -1,0 +1,75 @@
+{
+  "check_type": "STATIC_SOURCE_ONLY",
+  "imports": {
+    "cce.py": [
+      "decimal",
+      "hashlib",
+      "itertools",
+      "json",
+      "random",
+      "re"
+    ],
+    "aliaswide.py": [
+      "collections",
+      "decimal",
+      "json",
+      "pathlib",
+      "re",
+      "sdg_bridge_v2"
+    ],
+    "coverage.py": [
+      "cce",
+      "fractions",
+      "lacunarity_machine.ledger",
+      "lacunarity_machine.readers",
+      "lacunarity_machine.universe"
+    ],
+    "scoring.py": [
+      "aliaswide",
+      "cce",
+      "collections",
+      "fair_data_experiment_v2_sdg",
+      "hashlib",
+      "json",
+      "pathlib",
+      "random",
+      "re",
+      "sdg_bridge_v2.english",
+      "sdg_bridge_v2.grammar",
+      "statistics"
+    ],
+    "worker.py": [
+      "argparse",
+      "cce",
+      "coverage",
+      "hashlib",
+      "io",
+      "json",
+      "os",
+      "pathlib",
+      "scoring",
+      "socket",
+      "sys",
+      "time",
+      "unittest"
+    ],
+    "test_lm_t1.py": [
+      "aliaswide",
+      "cce",
+      "coverage",
+      "random",
+      "sdg_bridge_v2.grammar",
+      "unittest"
+    ],
+    "static_check.py": [
+      "ast",
+      "datetime",
+      "hashlib",
+      "json",
+      "pathlib"
+    ]
+  },
+  "problems": [],
+  "source_manifest_sha256": "0db2fcdb01965110ec15f2d032fc6014f7890bd043a15a46e60f9e588c4a580e",
+  "files_hashed": 32
+}

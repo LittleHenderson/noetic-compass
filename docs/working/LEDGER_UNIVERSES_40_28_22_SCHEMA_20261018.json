@@ -1,0 +1,114 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "helm.ledger.universes.40_28_22/1",
+ "title": "HELM Lacunarity ledger on the real CAS structures (U40, U28, U22, G22x40, G28x40)",
+ "description": "Design only (2026-10-18). Frozen shapes for the universe definition, the append-only write history (ledger events) and a reading. No code reads or writes this yet.",
+ "$defs": {
+  "noetic": {"type": "integer", "minimum": 0, "maximum": 9, "description": "^0 Idea .. ^9 Below/Effect"},
+  "domain": {"enum": ["P", "C", "E", "O"], "description": "Principled, Cognitive, Evaluative, Operational"},
+  "drive": {"enum": ["F1", "F2", "F3", "F4", "F5", "F6", "F7"]},
+  "pathway": {"enum": ["A0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "W1", "W2", "W3", "W4", "W5", "W6", "W7",
+                        "P1", "P2", "P3", "P4", "P5", "P6", "P7"]},
+  "register": {"enum": ["T", "A", "f", "E"]},
+  "state_id": {"type": "string", "pattern": "^[PCEO][0-9]$", "description": "cognitive state: Domain letter + Noetic digit, e.g. O6"},
+  "drive_cell_id": {"type": "string", "pattern": "^F[1-7]\\^[PCEO]$", "description": "domain-specific drive, e.g. F5^O"},
+  "cell_id": {
+   "type": "string",
+   "pattern": "^(U40:[PCEO][0-9]|U28:F[1-7]\\^[PCEO]|U22:(A0|[DWP][1-7])|G22x40:(A0|[DWP][1-7])/[PCEO][0-9]|G28x40:F[1-7]\\^[PCEO]/[PCEO][0-9])$"
+  },
+  "cell_state": {"enum": ["COVERED", "NO_EVIDENCE", "LACUNA", "FADED", "NOT_ELIGIBLE", "UNCOVERED_NO_WRITE_HISTORY"]},
+  "fraction": {
+   "type": "object", "additionalProperties": false, "required": ["exact", "decimal4"],
+   "properties": {"exact": {"type": "string", "pattern": "^[0-9]+/[1-9][0-9]*$"},
+                  "decimal4": {"type": "string", "pattern": "^[0-9]+\\.[0-9]{4}$"}}
+  },
+  "universe": {
+   "type": "object", "additionalProperties": false,
+   "required": ["universe_id", "kind", "cells", "floor", "charge_rules_version"],
+   "properties": {
+    "universe_id": {"enum": ["U40", "U28", "U22", "G22x40", "G28x40"]},
+    "kind": {"enum": ["marginal", "grid"]},
+    "cells": {
+     "type": "array",
+     "items": {"type": "object", "additionalProperties": false, "required": ["cell_id", "eligible"],
+               "properties": {"cell_id": {"$ref": "#/$defs/cell_id"}, "eligible": {"type": "boolean"},
+                              "not_eligible_reason": {"type": "string"}}}
+    },
+    "floor": {"type": "object", "additionalProperties": false, "required": ["right_needed", "of_last"],
+              "properties": {"right_needed": {"type": "integer", "minimum": 1}, "of_last": {"type": "integer", "minimum": 1}}},
+    "charge_rules_version": {"const": "CR-1"}
+   }
+  },
+  "event": {
+   "type": "object", "additionalProperties": false,
+   "required": ["t", "event_id", "kind", "source", "rule_id", "coordinates", "register_set", "cells"],
+   "properties": {
+    "t": {"type": "integer", "minimum": 0, "description": "integer time index; an event with t below the last written t is refused"},
+    "event_id": {"type": "string"},
+    "kind": {"enum": ["CHARGE", "REFUSED", "PROBE"]},
+    "source": {
+     "type": "object", "additionalProperties": false, "required": ["receipt_sha256", "source_kind"],
+     "properties": {
+      "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+      "source_kind": {"enum": ["RECIPE_FIT", "TEACHING_STEP_FIRST", "TEACHING_STEP_REPEAT", "REPAIR", "GATE_REFUSAL",
+                               "RECEIPT_FAILED", "MEMORY_CHECK_REFUSED", "RPM_ORDER_REFUSED", "READOUT"]},
+      "run_label": {"type": "string"}
+     }
+    },
+    "rule_id": {"enum": ["CR-1.1", "CR-1.2", "CR-1.3", "CR-1.4", "CR-1.5", "CR-1.6", "CR-1.7"]},
+    "coordinates": {
+     "type": "object", "additionalProperties": false, "required": ["noetic", "domain", "drive", "pathway", "domain_source"],
+     "properties": {
+      "noetic": {"oneOf": [{"$ref": "#/$defs/noetic"}, {"type": "null"}]},
+      "domain": {"oneOf": [{"$ref": "#/$defs/domain"}, {"type": "null"}]},
+      "drive": {"oneOf": [{"$ref": "#/$defs/drive"}, {"type": "null"}]},
+      "pathway": {"oneOf": [{"$ref": "#/$defs/pathway"}, {"type": "null"}]},
+      "domain_source": {"enum": ["RECEIPT", "ADAPTER_DEFAULT", "NONE"]}
+     }
+    },
+    "register_set": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/register"},
+                     "description": "|<...> occupancy tag (Clarification 10); empty = register-neutral / unspecified"},
+    "cells": {"type": "array", "items": {"$ref": "#/$defs/cell_id"}, "description": "every cell this event touches, one per universe at most"},
+    "probe_outcome": {"enum": ["RIGHT", "WRONG", "UNDETERMINED"], "description": "PROBE events only"},
+    "refusal_reason": {"type": "string", "description": "REFUSED events only"}
+   }
+  },
+  "cell_reading": {
+   "type": "object", "additionalProperties": false,
+   "required": ["cell_id", "state", "charges", "refusals", "probes", "register_set", "reached_floor_earlier", "covered_without_charge"],
+   "properties": {
+    "cell_id": {"$ref": "#/$defs/cell_id"}, "state": {"$ref": "#/$defs/cell_state"},
+    "charges": {"type": "integer", "minimum": 0}, "refusals": {"type": "integer", "minimum": 0},
+    "probes": {"type": "integer", "minimum": 0},
+    "register_set": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/register"}},
+    "reached_floor_earlier": {"type": "boolean"}, "covered_without_charge": {"type": "boolean"}
+   }
+  },
+  "reading": {
+   "type": "object", "additionalProperties": false,
+   "required": ["schema", "universe_id", "ledger_sha256", "events_read", "events_with_all_coordinates", "cells",
+                "coverage_over_probed", "coverage_over_eligible", "concentration_label", "concentration_cv2", "joined_from_marginals"],
+   "properties": {
+    "schema": {"const": "helm.ledger.universes.40_28_22/1"},
+    "universe_id": {"enum": ["U40", "U28", "U22", "G22x40", "G28x40"]},
+    "ledger_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "events_read": {"type": "integer", "minimum": 0},
+    "events_with_all_coordinates": {"type": "integer", "minimum": 0},
+    "cells": {"type": "array", "items": {"$ref": "#/$defs/cell_reading"}},
+    "coverage_over_probed": {"oneOf": [{"$ref": "#/$defs/fraction"}, {"type": "null"}]},
+    "coverage_over_eligible": {"$ref": "#/$defs/fraction"},
+    "concentration_label": {"const": "concentration (CV² = n·HHI − 1, exact)"},
+    "concentration_cv2": {"oneOf": [{"$ref": "#/$defs/fraction"}, {"type": "null"}]},
+    "joined_from_marginals": {"const": false}
+   }
+  }
+ },
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["universes", "ledger"],
+ "properties": {
+  "universes": {"type": "array", "items": {"$ref": "#/$defs/universe"}},
+  "ledger": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+  "readings": {"type": "array", "items": {"$ref": "#/$defs/reading"}}
+ }
+}
