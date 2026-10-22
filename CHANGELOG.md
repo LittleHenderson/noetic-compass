@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM cube oscillation BUILD v2 (spec sheet 7.125 follow-up 2): rounds, cubes at the Atlas node and the fading ladder behind HELM_CUBE_OSC (default OFF); 38 tests; 392 HELM tests pass; measured: fading costs space on short lines; 0 USD
+
+- Owner's words: "2.A" (build now) and "Do it here". Build spec frozen first: A-TEACH2-2 ec3d65fc..., A-TEACH2-3 fdf912d2... (before any code).
+- helm_cube_osc.py (new): rule reader; proposer interface (test StandInProposer, NOT the CTT); round = unanimous proposal, brain-side check, say-back, re-read; keep after 2 agreeing rounds in <= 3; shadow rounds 4-6 reported only; cubes per (thing, slot) with revisions + history; Atlas CONTEXT / POSSIBILITY / FACT; current-value answers; ladder S0 -> S1 -> S2 every 4 turns; arms OSC, ONE_READER, CTT_ONLY, TABLE, TABLE_OSC, ONE_STEP_FADE. helm_memory.py / helm_chat.py touched on the ON path only.
+- FIX FIRST: collection error -> 1 failed / 36 passed (the byte test) -> 38 passed. Every HELM suite OFF: 392 passed.
+- Measured finding: a person's line 31 bytes, an S1 capsule 813, a lean S2 record 363; working memory 49,863 vs 2,238 bytes for never forgetting on a 72-line chat. Fading as built costs space on short lines (TEACH-1's compaction too). Owner decision needed before TEACH-2: batch fading, shorter fingerprints, or another space count.
+- Not wired yet: confirm on a chat refresh; the real CTT adapter (with CUBE TRAIN at 3 USD, not yet typed). ENGINEERED-NOT-VALIDATED; nothing scored.
+
 ## 2026-10-21 PDT - HELM cube oscillation (spec sheet 7.125 follow-up): the owner's rulings on the eight open questions, amendment A-TEACH2-1; 0 USD; nothing built yet
 
 - Owner's words (verbatim): "1.A, 2.A, 3.A.(WE MAY NEED MORE THAN 3 ROUNDS SO JUST KEEP THAT IN MIND), 4.A,5.A FOR TEST THEN C FOR REAL LIFE, 6.A,7.A, 8.CUBE EXAM at 1 USD"

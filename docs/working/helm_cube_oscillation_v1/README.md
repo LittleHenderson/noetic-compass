@@ -1,6 +1,6 @@
 # HELM cube oscillation v1 — facts become cubes at their Atlas node only after the CTT and the brain side agree; whole memories fade step by step into CAS (design packet, 2026-10-21 PDT)
 
-Status: **DESIGN ONLY. NOTHING BUILT, NOTHING TRAINED, NOTHING RUN, NOTHING LICENSED. 0 USD.** Spec §7.125.
+Status: **BUILD v2 DONE behind `HELM_CUBE_OSC` (default OFF), unit-tested; NOTHING TRAINED, NOTHING RUN, NOTHING SCORED, NOTHING LICENSED. 0 USD.** Spec §7.125 (follow-up 2: `BUILD_V2_RECORD_20261021.md`, incl. the measured finding that fading costs space on short lines).
 
 **Plainly.** TEACH-1 (§7.121) showed that HELM's memory quotes whole sentences and that the taught facts never became
 cubes. This packet designs the owner's answer. A fact is kept as a cube only when two different readers agree: the CTT
