@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM talk layer v1 BUILT behind HELM_TALK / HELM_TALK_ASK, both OFF by default (spec sheet 7.127); 0 USD; not trained, not examined
+
+- Owner's words: "SO I WANT TO TACKLE "TALKING LIKE A PERSON" NEXT" and the button "Yes: use the recommended answers to the ear-and-mouth questions (Q1 a ... Q5 a asking-from-what-HELM-knows next) and start the 0 USD talk pieces, amendment first, test-first."
+- Ear-and-mouth Q1-Q5 answered (a) and recorded. A-TALK-2 (52ceea92, build spec) and A-TALK-3 (8ef96c95, five wording fixes from the builder's sample) written before the code.
+- helm_talk.py + four guarded hooks in helm_chat.py: small talk (one short line, nothing saved), questions about HELM (truthful line), off-topic M10 (react, keep word for word, one question from the person's own word), honest "I don't know", and asking from what HELM holds ("You told me we have 12 cups of flour. Is that still right?"; yes confirms, no writes nothing). Guards M1/M2/M7/opinion on every talk reply.
+- 21 tests written first (test_helm_talk.py); suites 280 OK + 517 passed. Builder sample (BUILDER_SAMPLE, 21 lines): OFF 17 robotic, 18 recipe-speak; ON 0 guard failures, 7/7 off-topic kept and asked once. Hub roadmap talk rows and 7.127 summary updated. Branch claude/helm-talk-build-20261022.
+
 ## 2026-10-22 PDT - HELM CUBE TRAIN RAN (spec sheet 7.125 follow-up 17): TRAIN_READY by the frozen reader, recomputed by hand; job c57, 1.26 USD
 
 - Owner's words: "Yes: launch the CUBE TRAIN run on AWS now (one g5.xlarge, cap 3 USD), read the result, and record it."

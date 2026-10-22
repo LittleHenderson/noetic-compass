@@ -17,3 +17,15 @@ next as its own small piece, behind its own switch** (recommended: it also makes
 
 **Q4. Money for the training job.** (a) **Cap 4 USD**, one g5.xlarge job for ear v2 and mouth v1 together, after
 CUBE TRAIN and TEACH-2 (recommended); (b) wait.
+
+## Answered 2026-10-22 PDT (the owner's click, recorded by the operator; the owner writes nothing)
+
+The owner's words (the button text, verbatim): "Yes: use the recommended answers to the ear-and-mouth questions (Q1 a synthetic only, Q2 a one CTT two tags, Q3 a AI-family raters, Q4 a cap 4 USD later, Q5 a asking-from-what-HELM-knows next) and start the 0 USD talk pieces, amendment first, test-first."
+
+| Q | Answer | What it means |
+|---|---|---|
+| Q1 | (a) | lessons from synthetic chats and the SDG only; real people's words never train a model for now |
+| Q2 | (a) | one CTT with two direction tags (ear and mouth share one model) |
+| Q3 | (a) | "sounds human" is judged by blind raters from the three AI families, labelled `AI_RATED` |
+| Q4 | (a) | the ear v2 + mouth v1 training job is capped at 4 USD, one g5.xlarge, and runs later (after TEACH-2); this answer is the approval of that cap, bound to a future sealed package |
+| Q5 | (a) | asking from what HELM knows is designed and built next, as its own small piece behind its own switch, at 0 USD (the talk packet's amendment A-TALK-2) |
