@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM TEACH-2 brought up to today's memory design (spec sheet 7.125 follow-up 13; design only, 0 USD); not sealed: waits on the owner's choice (train the CTT first, or the rule reader as proposer)
+
+- Owner's words: "bring the TEACH-2 exam up to date with today's memory design ... and seal it, so the CUBE EXAM at 1 USD can run. Amendment first."
+- A-TEACH2-15 1f121fab... (f735d119): size-limit memory in the cube arms; limits frozen by rule at the seal; stand-in cloud with an offline window per world; EYE_OFF and FIRST8 arms; I19; HG-OFFLINE, HG-HOLD, HG-LIMIT; S-SPACE in two parts.
+- Blocker: the pre-registration needs the retrained CTT with pinned weights; CUBE TRAIN at 3 USD not typed. Owner picks T7 (a) train first or (b) seal now with the rule reader as proposer (CTT claims dropped).
+
 ## 2026-10-22 PDT - HELM: a direct cloud client (spec sheet 7.125 follow-up 12): stdlib HTTPS, one kept connection, SigV4 matching AWS's published examples; live 2.65 -> 0.21 s per cloud question, chat build 77.6 -> 4.7 s, 8/8 EXACT; 489 HELM tests pass; live test < 0.01 USD
 
 - Owner's words: "build a direct cloud client for HELM (standard library only, signs its own requests, keeps one connection open) so cloud calls stop starting a new program each time."
