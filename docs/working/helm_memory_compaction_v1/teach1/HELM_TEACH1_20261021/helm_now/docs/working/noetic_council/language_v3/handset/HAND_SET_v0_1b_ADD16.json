@@ -1,0 +1,647 @@
+{
+ "writer": "independent sub-agent; read only FUNDAMENTALS.md, MAP.md, GRAMMAR_CCE_v0_1.md, GRAMMAR_CCE_v0_1b_ADDENDUM.md",
+ "items": [
+  {
+   "id": "N01",
+   "kind": "POSITIVE",
+   "group": "NESTED",
+   "wording": "CANON",
+   "text": "The fractal sequence is Mind : Positive : Female.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 2,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 5,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": []
+    }
+   }
+  },
+  {
+   "id": "N02",
+   "kind": "POSITIVE",
+   "group": "NESTED",
+   "wording": "ALIAS",
+   "text": "The nesting is Male inside Male.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 6,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": []
+    }
+   }
+  },
+  {
+   "id": "N03",
+   "kind": "POSITIVE",
+   "group": "NESTED",
+   "wording": "CANON",
+   "text": "The fractal sequence is Negative, principled, affective register : Rhythm, operational, embodied register, for Structure.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 3,
+       "domain": "P",
+       "register": [
+        "f"
+       ],
+       "drive": null
+      },
+      {
+       "noetic": 7,
+       "domain": "O",
+       "register": [
+        "E"
+       ],
+       "drive": "F6"
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": []
+    }
+   }
+  },
+  {
+   "id": "N04",
+   "kind": "POSITIVE",
+   "group": "NESTED",
+   "wording": "CANON",
+   "text": "The fractal sequence is Idea : Above/Cause : Above/Cause : Below/Effect : Vibration.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 0,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 9,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 4,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": []
+    }
+   }
+  },
+  {
+   "id": "N05",
+   "kind": "POSITIVE",
+   "group": "NESTED",
+   "wording": "ALIAS",
+   "text": "The nesting is Vibration, evaluative inside Mind, cognitive, for Wisdom inside Male, analytical register, cognitive inside Rhythm inside Female, principled, transcendent register.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 4,
+       "domain": "E",
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 1,
+       "domain": "C",
+       "register": null,
+       "drive": "F2"
+      },
+      {
+       "noetic": 6,
+       "domain": "C",
+       "register": [
+        "A"
+       ],
+       "drive": null
+      },
+      {
+       "noetic": 7,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 5,
+       "domain": "P",
+       "register": [
+        "T"
+       ],
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": []
+    }
+   }
+  },
+  {
+   "id": "N06",
+   "kind": "POSITIVE",
+   "group": "NESTED",
+   "wording": "CANON",
+   "text": "The fractal sequence is Below/Effect, cognitive, for Agency.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 9,
+       "domain": "C",
+       "register": null,
+       "drive": "F5"
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": []
+    }
+   }
+  },
+  {
+   "id": "N07",
+   "kind": "POSITIVE",
+   "group": "NESTED",
+   "wording": "ALIAS",
+   "text": "The nesting is Above/Cause inside Negative, evaluative, affective register inside Mind.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [
+      {
+       "noetic": 8,
+       "domain": null,
+       "register": null,
+       "drive": null
+      },
+      {
+       "noetic": 3,
+       "domain": "E",
+       "register": [
+        "f"
+       ],
+       "drive": null
+      },
+      {
+       "noetic": 1,
+       "domain": null,
+       "register": null,
+       "drive": null
+      }
+     ],
+     "lacunae": [],
+     "reason": null,
+     "meta": []
+    }
+   }
+  },
+  {
+   "id": "N08",
+   "kind": "TRAP_REFUSE",
+   "group": "NESTED",
+   "wording": "CANON",
+   "text": "The fractal sequence is Idea : Mind : Positive : Negative : Vibration : Rhythm.",
+   "expect": {
+    "refusal": "NEST_TOO_DEEP"
+   }
+  },
+  {
+   "id": "M01",
+   "kind": "POSITIVE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "Rhythm is in the Noetic set {Rhythm, Male, Above/Cause}.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null,
+     "meta": [
+      [
+       "member",
+       "^7",
+       {
+        "kind": "noetic",
+        "elements": [
+         "^6",
+         "^7",
+         "^8"
+        ]
+       },
+       false
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "M02",
+   "kind": "POSITIVE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "Positive principled is not in the State set {Rhythm cognitive, Female principled}.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null,
+     "meta": [
+      [
+       "member",
+       "^2^P",
+       {
+        "kind": "state",
+        "elements": [
+         "^5^P",
+         "^7^C"
+        ]
+       },
+       true
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "M03",
+   "kind": "POSITIVE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "the relation set {Female principled to Female cognitive} is strictly within the relation set {Female cognitive to Female evaluative, Female principled to Female cognitive}.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null,
+     "meta": [
+      [
+       "subset",
+       {
+        "kind": "relation",
+        "elements": [
+         "^5^P -> ^5^C"
+        ]
+       },
+       "⊂",
+       {
+        "kind": "relation",
+        "elements": [
+         "^5^C -> ^5^E",
+         "^5^P -> ^5^C"
+        ]
+       }
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "M04",
+   "kind": "POSITIVE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "the intersection of (the Drive set {Unity, Wisdom, Purpose}) and (the Drive set {Wisdom, Agency}) is within all Drives.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null,
+     "meta": [
+      [
+       "subset",
+       {
+        "op": "intersection",
+        "left": {
+         "kind": "drive",
+         "elements": [
+          "F1",
+          "F2",
+          "F7"
+         ]
+        },
+        "right": {
+         "kind": "drive",
+         "elements": [
+          "F2",
+          "F5"
+         ]
+        }
+       },
+       "⊆",
+       {
+        "builtin": "Drives"
+       }
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "M05",
+   "kind": "POSITIVE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "Let the set named Core be the State variant set {Negative principled for Agency in affective, Vibration evaluative in embodied}. The size of the set named Core is 2.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null,
+     "meta": [
+      [
+       "let",
+       "Core",
+       {
+        "kind": "state_variant",
+        "elements": [
+         "^3^P_{F5}|f",
+         "^4^E|E"
+        ]
+       }
+      ],
+      [
+       "size",
+       {
+        "name": "Core"
+       },
+       "2"
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "M06",
+   "kind": "POSITIVE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "all Domains is covered by: the Domain set {principled, cognitive}; the Domain set {cognitive, evaluative, operational}.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null,
+     "meta": [
+      [
+       "cover",
+       {
+        "builtin": "Domains"
+       },
+       [
+        {
+         "kind": "domain",
+         "elements": [
+          "C",
+          "P"
+         ]
+        },
+        {
+         "kind": "domain",
+         "elements": [
+          "C",
+          "E",
+          "O"
+         ]
+        }
+       ]
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "M07",
+   "kind": "POSITIVE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "the Register set {transcendent, analytical, affective, embodied} is partitioned into: the Register set {analytical, affective}; the Register set {transcendent, embodied}.",
+   "expect": {
+    "content": {
+     "turn": "ANSWER",
+     "evidence": "NONE",
+     "gate": "RIGHT_PATH",
+     "topic": null,
+     "terms": [],
+     "sequence": [],
+     "recipe": null,
+     "stocks": [],
+     "relations": [],
+     "fractal": [],
+     "lacunae": [],
+     "reason": null,
+     "meta": [
+      [
+       "partition",
+       {
+        "kind": "register",
+        "elements": [
+         "A",
+         "E",
+         "T",
+         "f"
+        ]
+       },
+       [
+        {
+         "kind": "register",
+         "elements": [
+          "A",
+          "f"
+         ]
+        },
+        {
+         "kind": "register",
+         "elements": [
+          "E",
+          "T"
+         ]
+        }
+       ]
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "M08",
+   "kind": "TRAP_REFUSE",
+   "group": "METALOGIC",
+   "wording": "CANON",
+   "text": "Positive is in the Mood set {calm, tense}.",
+   "expect": {
+    "refusal": "NOT_CCE"
+   }
+  }
+ ]
+}

@@ -29,6 +29,7 @@ The honesty rule is the first hard gate: a rebuilt memory is never presented as 
 | `OPEN_QUESTIONS.md` | the fourteen decisions that are the owner's, each with a recommendation and the cost of each option |
 | `CENSUS_FIFO_DROPS_20261021.md` | the free census of DESIGN §8 step 1: does today's chat memory ever fill? 0 dropped turns of a floor of 8 → `STOP_NOT_EXERCISED`; one `user_facts` slip found, not fixed |
 | `BUILD_V1_RECORD_20261021.md` | build v1 (owner's word "Override the census floor. Start build v1 …"): what was built, the FIX FIRST counts, every HELM suite 322 passed with the switch OFF, the chat smoke with the switch ON; `ENGINEERED-NOT-VALIDATED`, nothing scored |
+| `teach1/` | TEACH-1 built and SEALED, NOT RUN: zip sha256 `811726c45bd3f31a3df1d565295d191382685f7e7681edfc567e70e22e17dc73`, amendments A-TEACH1-1 and A-TEACH1-2 (R4 on undamaged items, the owner's ruling), the test record (FIX FIRST on HELM, practice rounds 0–4), the custodian procedure; owner's line `COMPACT EXAM at 0 USD`; nothing scored |
 
 ## The hash
 

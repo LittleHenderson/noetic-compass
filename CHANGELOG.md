@@ -4,6 +4,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM memory compaction TEACH-1 (spec sheet 7.115 follow-up 5): the owner's ruling on R4 (undamaged items only), amendment A-TEACH1-2, reseal; practice word would now be COMPACTION_NO_GAIN; 0 USD
+
+- Owner's words (verbatim): "Score R4 on the undamaged notes only (my recommendation). The wrecked notes still test honesty, so a rebuilt note must never be called exact. They just don’t count as lost answers. This costs 0 USD and a quick reseal."
+- Amendment A-TEACH1-2 (sha256 17fbd5fe...): R4 = RIGHT_R(VERBATIM_ONLY) - RIGHT_R(COMPACT_ON) over the 14 undamaged quiz items per world, <= 2 summed (> 4 = harm); the 2 damaged items per world still run and are judged by HG-H8 and the gates; the pre-code's all-items R4 is reported only. Nothing else changes.
+- Reader v2; 20 package tests (one new); seal 5 zip 811726c45bd3f31a3df1d565295d191382685f7e7681edfc567e70e22e17dc73 (freeze 1ddf5128..., sealed twice identical; every check passes from a fresh extract); seal 4 (65e2a926...) superseded, never used.
+- Practice round 5 (16 practice worlds; facts, not results): all 12 hard gates hold; R4 0 lost (all-items count 9, reported); R2 -2, S1, S4 missed; practice word would be COMPACTION_NO_GAIN. Owner's line to type: COMPACT EXAM at 0 USD. Nothing run on sealed worlds; nothing licensed.
+
+
+## 2026-10-21 PDT - HELM memory compaction TEACH-1 (spec sheet 7.115 follow-up 4): the exam built and SEALED, NOT RUN, NOT SCORED; FIX FIRST on HELM's memory (5 rules, 6 tests, 335 HELM tests pass); practice word would be COMPACTION_HARMED by R4 on planted damage alone; 0 USD
+
+- Package docs/working/helm_memory_compaction_v1/teach1/: zip HELM_TEACH1_20261021_SOURCE_TEACH1_v1.zip sha256 65e2a926c723f79965a09072bdc805eea1f4aade047988d6e21d88a1e23e61be (195 members, freeze 351c71e2..., sealed twice identical); amendment A-TEACH1-1 sha256 b178cc41... (deviations D-TEACH1-1..19, moved seed bands 2,042/2,044/2,046/2,048 M, forecast); pre-code 7eef0edc... not edited.
+- Parts: SDG keyed worlds (16 x 24 facts, 4 unknown, two templates, disjoint from 41 brain names, cube names and wave 7 small talk); LLM-written turns plan (WRITER_BRIEF + KEY_FORMAT: three families, two keyers of two other families, owner reviews only; nothing generated); three quizzes; seven arms over handle_turn with B = 12; scripted person 0.75 / 0.25; planted damage 2 per world (Q10 b); frozen reader I1-I15, 12 hard gates, marks, words, labels; custodian approve / draw / finish; 19 package tests with planted faults.
+- FIX FIRST on HELM (commit 9f0c359a; practice round 0 had every arm at 4 right / 27 WRONG of 64): recall needs every word of the question and the newest wins; memory questions are never memories; number words are never clues; a strengthened rebuild is never EXACT; the chat passes the answer to a refresh question to the compactor. 6 tests fail on build v1, pass on the fix; every HELM suite OFF 335 passed.
+- Practice round 4 (16 practice worlds; facts, not results): every non-seal instrument row and all 12 hard gates hold; 0 WRONG in every arm; U1 256/256; R1 +183; R3 +5; R2 -2 (the forecast tie); R4 9 lost, all on planted-damage items; S1, S4 missed by the chat voice. Practice word if sealed: COMPACTION_HARMED.
+- Three seals void before use (FROZEN held a machine path; the amendment had round 3's count; wave 7 v9 took the first-chosen seed bands). Owner's line to type: COMPACT EXAM at 0 USD (the laptop holds it); owner decision on R4 with planted damage open (A-TEACH1-1 section D). Nothing licensed.
+
+
 ## 2026-10-21 PDT - U1b (Unity Eye acting retest) found ALREADY RUN on 2026-10-15 evening, verified, archived, and ratified by the owner; spec sheet 7.40 follow-up; 0 USD; nothing re-run; no claim moved
 
 - Owner's words (2026-10-21, relayed from the operator session): "RUN the follow-up test called U1b" and "run U1b". The memory note that said U1b was still waiting for the owner's word was written at 16:59 PDT on 2026-10-15, before U1b's 17:31 PDT freeze; it was stale and is corrected.

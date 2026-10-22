@@ -1,0 +1,32 @@
+{
+  "model_type": "TKS_ADAPTIVE_VALVE_APERTURE_v0.4",
+  "feature_names": [
+    "novelty_entropy",
+    "source_credibility",
+    "prerequisite_ratio",
+    "normalized_radius",
+    "operating_mode_bias"
+  ],
+  "weights": [
+    -3.1026082,
+    1.51951134,
+    3.33129631,
+    -1.06332357,
+    0.52153234
+  ],
+  "bias": -1.55750237,
+  "training_samples": 2000,
+  "final_mse": 0.09699948,
+  "rule_interlock": "RPM_GATE_G_ABSENT_STRICT_OVERRIDE",
+  "training_environment": "LOCAL_CPU_DRYRUN_FAST",
+  "validation_evaluation": {
+    "mean_absolute_error": 0.069203,
+    "max_error": 0.278076,
+    "ungated_statistical_leaks": 83,
+    "gated_rpm_interlock_leaks": 0,
+    "rpm_gate_safety_interlock": "100% ZERO LEAKAGE (PASS)",
+    "total_missing_prereq_rows": 250,
+    "ungated_leak_rate_pct": 33.2,
+    "gated_leak_rate_pct": 0.0
+  }
+}
