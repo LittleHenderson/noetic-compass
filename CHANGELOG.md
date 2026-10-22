@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM TEACH-2 exam package SEALED with the CUBE TRAIN weights (spec sheet 7.125 follow-up 18); 0 USD; not drawn, not run
+
+- Owner's words: "Yes: pin the CUBE TRAIN weights into the TEACH-2 package and seal it (0 USD), ready for the CUBE EXAM at 1 USD."
+- Zip HELM_TEACH2_20261022_SOURCE.zip sha256 89642df571ff602539dad5218e9909f27f7e2fd36b747b047b326840bb2fb2b9 (117,471,787 bytes, 349 members); HELM cut 9365331d; c57 weights pinned; every check from a fresh extract exit 0; backup D:/tksCAS-archive/teach2_seal_20261022.
+- A-TEACH2-18..22 before their code: build plan (GPU exam host, cap still 1 USD); two mark corrections (-19, -20) flagged for the owner; four review fixes (-21); FIX FIRST in helm_cube_osc.py (-22: month questions keep to their month; TABLE labels honest), 4 tests first, 280 + 212 HELM tests pass.
+- Practice (5 rounds, decides nothing): hard gates hold; C1 and S-SPACE never met (forecast CUBES_NO_GAIN). Record docs/working/helm_cube_oscillation_v1/teach2/sealed/TEST_RECORD_TEACH2.md. Next: custodian draw + AI-written turns, then CUBE EXAM at 1 USD.
+
 ## 2026-10-22 PDT - HELM talk layer v1 BUILT behind HELM_TALK / HELM_TALK_ASK, both OFF by default (spec sheet 7.127); 0 USD; not trained, not examined
 
 - Owner's words: "SO I WANT TO TACKLE "TALKING LIKE A PERSON" NEXT" and the button "Yes: use the recommended answers to the ear-and-mouth questions (Q1 a ... Q5 a asking-from-what-HELM-knows next) and start the 0 USD talk pieces, amendment first, test-first."

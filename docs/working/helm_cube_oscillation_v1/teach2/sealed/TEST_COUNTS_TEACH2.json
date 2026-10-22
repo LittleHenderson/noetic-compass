@@ -1,0 +1,121 @@
+{
+ "cutcheck": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\HELM_TEACH2_20261022\\teach2\\run_t2.py",
+   "cutcheck",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\out"
+  ],
+  "exit": 0,
+  "tail": [
+   "{\"commit\": \"9365331d38ca3ec0a9b62ee9b636026b5e2a02d1\", \"files\": 190, \"bad\": [], \"extra\": [], \"pinned_ok\": true, \"source_cut_equals_contract\": true, \"ok\": true, \"ctt\": {\"weights\": {\"A4-s1\": \"c39eafb6db92845a463a0c6bc711c73d45ddcb482b5e5eaffad466f337d7a69a\", \"A4-s2\": \"3bfbf1f064e4dd96980bfa971cbd089706a4b99cfdaba0b84324f4a4b3a883ee\", \"A4-s3\": \"6418ef1e27ffd18df9f571e9f5410af1afae6843d9d56cbcb01d31ccf947564b\", \"A5-s1\": \"07a54adcdb58cfb746f35e0d4350a9bde536eb72f97d6b29451960313fca4bc1\"}, \"ok\": true}, \"helm_cut_ok\": true}"
+  ]
+ },
+ "freeze_sha256": "747b747c74420ea2c77b7f83a99bba624b9395659ff74c43773bb985d98df23f",
+ "helm_now_unchanged_after": true,
+ "members": 349,
+ "members_rehashed_equal": true,
+ "package_tests": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-m",
+   "unittest",
+   "discover",
+   "-s",
+   "tests_teach2",
+   "-t",
+   "."
+  ],
+  "exit": 0,
+  "tail": [
+   "----------------------------------------------------------------------",
+   "Ran 26 tests in 0.784s",
+   "",
+   "OK"
+  ]
+ },
+ "pool_from_seal_1_world_every_arm": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\HELM_TEACH2_20261022\\teach2\\run_t2.py",
+   "pool",
+   "--exam",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\out\\exam",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\out",
+   "--worlds",
+   "W01",
+   "--ctt-python",
+   "C:/Users/wakil/venvs/cas-gpu/Scripts/python.exe"
+  ],
+  "exit": 0,
+  "tail": [
+   "{\"unit\": \"EYE_OFF:W01\", \"exit\": 0, \"seconds\": 194.91}",
+   "{\"unit\": \"FIRST8:W01\", \"exit\": 0, \"seconds\": 52.95}",
+   "{\"unit\": \"FIFO_DROP:W01\", \"exit\": 0, \"seconds\": 2.02}",
+   "{\"planned\": 11, \"all_exit_0\": true, \"elapsed\": 493.43}"
+  ]
+ },
+ "practice_exam_from_seal": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "-c",
+   "import sys; sys.path.insert(0, r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\HELM_TEACH2_20261022'); from teach2 import exam_t2 as E, seed_rule_t2 as SR; E.build_exam(SR.practice_seeds(), r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\out\\exam', practice=True, count=2)"
+  ],
+  "exit": 0,
+  "tail": []
+ },
+ "routecheck_from_seal": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\HELM_TEACH2_20261022\\teach2\\run_t2.py",
+   "routecheck",
+   "--exam",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\out\\exam",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\out"
+  ],
+  "exit": 0,
+  "tail": [
+   "{\"route_bad\": 0, \"exam_check_all_ok\": true}"
+  ]
+ },
+ "schema": "helm.teach2.test-counts/1",
+ "suites_from_seal": {
+  "command": [
+   "-X",
+   "utf8",
+   "-B",
+   "-I",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\HELM_TEACH2_20261022\\teach2\\run_t2.py",
+   "suites",
+   "--out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach2_seal_anskmeaa\\out",
+   "--from-seal"
+  ],
+  "exit": 0,
+  "tail": [
+   "   \"208 passed in 211.18s (0:03:31)\"",
+   "  ]",
+   " }",
+   "}"
+  ]
+ },
+ "zip_bytes": 117471787,
+ "zip_sha256": "89642df571ff602539dad5218e9909f27f7e2fd36b747b047b326840bb2fb2b9"
+}

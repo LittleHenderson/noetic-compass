@@ -1,0 +1,782 @@
+{
+ "commit": "9365331d38ca3ec0a9b62ee9b636026b5e2a02d1",
+ "files": {
+  "cas-synthetic/data/l4_split/real_dev_unparseables_99.jsonl": {
+   "bytes": 92461,
+   "sha256": "17cd198321d242bd74ff789a4b7f8032d499a7ff8534e5b07545b6221930fde0"
+  },
+  "docs/working/helm_cube_oscillation_v1/teach2_rule_reader.py": {
+   "bytes": 3443,
+   "sha256": "368b8759ac0d9e284259c91382959b6b731920bbd46c9f5b4e63c84c02761088"
+  },
+  "docs/working/noetic_council/continuity_build_v2/atlas.py": {
+   "bytes": 30857,
+   "sha256": "f6982a4926059013862532cfb2d4063432d734300ae566854510305f6ec18485"
+  },
+  "docs/working/noetic_council/cube_store/PROVENANCE.md": {
+   "bytes": 1567,
+   "sha256": "c975c869cb7fa5fb90899d090052db595d318d5503f568562cc59f4b7436cc47"
+  },
+  "docs/working/noetic_council/cube_store/README.md": {
+   "bytes": 1896,
+   "sha256": "115de7109263125ae858780a0e3ba1326e670ba87ccbb476a19bc85c17a35475"
+  },
+  "docs/working/noetic_council/cube_store/RESULTS_20261018.md": {
+   "bytes": 5341,
+   "sha256": "60bb9ec7c38e5313f39e1e43a4e56560b96001bee80412c34940484566e14bec"
+  },
+  "docs/working/noetic_council/cube_store/cube.py": {
+   "bytes": 12430,
+   "sha256": "f8133f83afbd55727ed42549ef0b83f637d9bbe9608f32cdc9646cd9c70ad23a"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/PROVENANCE.md": {
+   "bytes": 1567,
+   "sha256": "c975c869cb7fa5fb90899d090052db595d318d5503f568562cc59f4b7436cc47"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/README.md": {
+   "bytes": 1896,
+   "sha256": "115de7109263125ae858780a0e3ba1326e670ba87ccbb476a19bc85c17a35475"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/RESULTS_20261018.md": {
+   "bytes": 5341,
+   "sha256": "60bb9ec7c38e5313f39e1e43a4e56560b96001bee80412c34940484566e14bec"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/cube.py": {
+   "bytes": 12430,
+   "sha256": "f8133f83afbd55727ed42549ef0b83f637d9bbe9608f32cdc9646cd9c70ad23a"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/operations.py": {
+   "bytes": 8289,
+   "sha256": "75a210eadfd1180f987107ec9a4afd25f3b0d7a834596addb3f35e099d496a9d"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/store.py": {
+   "bytes": 4754,
+   "sha256": "9fcb9027a494f84c4b52762e728c5b80926d1ffd87c90c7e227b6c41dd3d2245"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/test_all.py": {
+   "bytes": 22212,
+   "sha256": "91ec14d8a170e016e24bcfa80029f006cd94ac2cc7044afc4ee4200bb23b2540"
+  },
+  "docs/working/noetic_council/cube_store/cube_store/turn.py": {
+   "bytes": 26557,
+   "sha256": "3fb0020bd8810f69df643bf2f35545864c1886a5cc879f7a131507e9cef4c6c4"
+  },
+  "docs/working/noetic_council/cube_store/operations.py": {
+   "bytes": 9280,
+   "sha256": "186dcedbab471e7d7ab013429bcdcd12456275dcc2d5675d5071958c12d82815"
+  },
+  "docs/working/noetic_council/cube_store/store.py": {
+   "bytes": 4754,
+   "sha256": "9fcb9027a494f84c4b52762e728c5b80926d1ffd87c90c7e227b6c41dd3d2245"
+  },
+  "docs/working/noetic_council/cube_store/test_all.py": {
+   "bytes": 24344,
+   "sha256": "0154df4fd1beac637d512421db0c99c35c75ef8a120de687eccef95d07e9da6b"
+  },
+  "docs/working/noetic_council/cube_store/turn.py": {
+   "bytes": 27914,
+   "sha256": "48af01d8fefbf5aed41c79c4752fdcc22b38fde41691abd82f6a950802e6ba6c"
+  },
+  "docs/working/noetic_council/faculties_v2/PROVENANCE.md": {
+   "bytes": 9210,
+   "sha256": "e209c3c69c7c7c1aee7c4b9e4ad35c2ae5d7735ab2bcee85a93ce40586b79ab9"
+  },
+  "docs/working/noetic_council/faculties_v2/README.md": {
+   "bytes": 32820,
+   "sha256": "91a81c500cdd88ad288f80cb53b517dae3a6db76d6c529ef5a1d0d9372c57dd1"
+  },
+  "docs/working/noetic_council/faculties_v2/REAL_FIT_RESULT.txt": {
+   "bytes": 6264,
+   "sha256": "05ca6d6fe019751ddf9557b00a26e332760b455b5f0cd63c00170d6f075ce8e8"
+  },
+  "docs/working/noetic_council/faculties_v2/bias.py": {
+   "bytes": 14736,
+   "sha256": "d31a129db14a2c37ae712ec55c703705e4d735f433dab773a848ead68421e1b5"
+  },
+  "docs/working/noetic_council/faculties_v2/drive_loop.py": {
+   "bytes": 26000,
+   "sha256": "f54791d401971791d5ae1a8f82a13e2c39acba0443ed0ea0f9f37bdfd994ead8"
+  },
+  "docs/working/noetic_council/faculties_v2/eye/__init__.py": {
+   "bytes": 2544,
+   "sha256": "fe7f69a8c325e044c422314aa08c3efee6667131f10c46463a767f93a575bcf7"
+  },
+  "docs/working/noetic_council/faculties_v2/eye/eye.py": {
+   "bytes": 18008,
+   "sha256": "e561ac707e691727e5b0b64bed4fbb909fa3037f18cb79a652c92ee579ffe97d"
+  },
+  "docs/working/noetic_council/faculties_v2/eye/recipe.py": {
+   "bytes": 14203,
+   "sha256": "9ed765fec23901d2c7ce7154a6834d6321282654e2a65f6259b3d91ffb87e950"
+  },
+  "docs/working/noetic_council/faculties_v2/eye/recorded_suite_results.json": {
+   "bytes": 6593,
+   "sha256": "d3925567e165200fc960f428d365be24adc28dde0b6a2788877278e6a99d22e5"
+  },
+  "docs/working/noetic_council/faculties_v2/eye/signals.py": {
+   "bytes": 14452,
+   "sha256": "3d0a20588e075a12cbaee9475b54a33d16504d5b5146783403504ffc9ac35a07"
+  },
+  "docs/working/noetic_council/faculties_v2/eye/tap.py": {
+   "bytes": 7974,
+   "sha256": "e0cb0edd791019e118a3410625eca697530ec80c1b0ac0ae72a8156b6c366ec6"
+  },
+  "docs/working/noetic_council/faculties_v2/faculties.py": {
+   "bytes": 30743,
+   "sha256": "1a255235fc36fed655f03552e7d4a6b97b8d50da0917b95469f6afb195dbc276"
+  },
+  "docs/working/noetic_council/faculties_v2/guard.py": {
+   "bytes": 31030,
+   "sha256": "f5e4c805a1827d2e919d7afaa643c4691979ca82749066d596e207d8f349007c"
+  },
+  "docs/working/noetic_council/faculties_v2/held.py": {
+   "bytes": 22965,
+   "sha256": "9d8d715d30c7f401749fa40c24219766d7c6692e43b0149a29201cc7af15fd70"
+  },
+  "docs/working/noetic_council/faculties_v2/real_fit.py": {
+   "bytes": 23438,
+   "sha256": "507f0abba7e6397ed883240c898a43711764d0ad99ce446cde7c74d465d45df6"
+  },
+  "docs/working/noetic_council/faculties_v2/restart.py": {
+   "bytes": 31250,
+   "sha256": "d5133233eaf88f592ad93e4ea82b5454d41bf0fce04754eb2dbdefce42ff0bfb"
+  },
+  "docs/working/noetic_council/faculties_v2/test_all.py": {
+   "bytes": 79525,
+   "sha256": "1b85ded0db0c4b3352c2a6915f13d680771e9d4c4e3630139d105fe63740dbe3"
+  },
+  "docs/working/noetic_council/language_v3/ALIAS_WIDE_LEXICON_v0_1.json": {
+   "bytes": 6133,
+   "sha256": "d199611397d4d8ff5c215095d3424327917e4da9fcd5676e52cdd8c047a8b2e0"
+  },
+  "docs/working/noetic_council/language_v3/FROZEN.json": {
+   "bytes": 11016,
+   "sha256": "ac41c92ea5dc4a44391f7e4366af4f03503b2ddff45a5ddbf66e06948429094f"
+  },
+  "docs/working/noetic_council/language_v3/FROZEN_LEXICON_V2.json": {
+   "bytes": 5659,
+   "sha256": "ef663e28be657058d0b6bfccc5c5076d6eb300c12b94fad74bd89ea3bc8c5431"
+  },
+  "docs/working/noetic_council/language_v3/FROZEN_T1B.json": {
+   "bytes": 6161,
+   "sha256": "6a9eae1aa7fdf6ff3ce8c874a291b2ef149b98084d34f57e8a079e8e678717b6"
+  },
+  "docs/working/noetic_council/language_v3/FROZEN_T1C.json": {
+   "bytes": 3230,
+   "sha256": "f69a58e1a5addbb9a854e85d06c0c64ca599af861c714f412d6dfffaffb9f926"
+  },
+  "docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1.md": {
+   "bytes": 14707,
+   "sha256": "36b9a6dbb52facdadf293476d5623fb80d122cf90412ba3d033d9de59b12ef70"
+  },
+  "docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1_v3_ADDENDUM.md": {
+   "bytes": 6733,
+   "sha256": "c6c93153cc937ddb6adf086ed9963f6dbc77df340278c0a6c817c079b7d27cbb"
+  },
+  "docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1b_ADDENDUM.md": {
+   "bytes": 7271,
+   "sha256": "9191c7dbc4b3220fb2236c4bbb4493649d586ce05d113ddad2a9530fbb086241"
+  },
+  "docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1c_ADDENDUM.md": {
+   "bytes": 2269,
+   "sha256": "333ebde57b269d8f1494218cd1f8f6bfe950a7a2d53e0bb9f1d736e926c94d1a"
+  },
+  "docs/working/noetic_council/language_v3/GRAMMAR_CCE_v0_1c_R_ADDENDUM.md": {
+   "bytes": 1402,
+   "sha256": "b76d2093fc5058822afc43170bf12133abfa64743f37e8a7de7fd98683bc5119"
+  },
+  "docs/working/noetic_council/language_v3/HOW_IT_TALKS.txt": {
+   "bytes": 6105,
+   "sha256": "4e37109f8acfee8a8689488cff76157d343053a5a379dbc8661e9f3d77d27a9d"
+  },
+  "docs/working/noetic_council/language_v3/M4_BASELINE_20261018.json": {
+   "bytes": 96549,
+   "sha256": "2c34b248dd6987cea1222d6d49702e4d8a09af7741589dc82ef93cd42a8cf728"
+  },
+  "docs/working/noetic_council/language_v3/MEASUREMENTS.md": {
+   "bytes": 6230,
+   "sha256": "173ca6eef56d04d9472dda5a14871ed39241f074cb1b63b1e5355fadf63096d2"
+  },
+  "docs/working/noetic_council/language_v3/MEASURE_AFTER.json": {
+   "bytes": 8577,
+   "sha256": "9ff265e30236bc1cc3f76f39b33af5b4e757e4ffd7fb2aa21eac3931c51de1b1"
+  },
+  "docs/working/noetic_council/language_v3/MEASURE_BEFORE.json": {
+   "bytes": 8736,
+   "sha256": "9a192974a1d4737981265e7866ba214343f21453d78560030943ca9860c1eda2"
+  },
+  "docs/working/noetic_council/language_v3/OWNER_APPROVAL_EVIDENCE.template.md": {
+   "bytes": 1277,
+   "sha256": "746e7b37dbeb2ce9dcadf7dd365123fc840a81f5702970246f5030b127df8d52"
+  },
+  "docs/working/noetic_council/language_v3/PROVENANCE.md": {
+   "bytes": 17561,
+   "sha256": "540f7b4ae402ac6a947f747c055832bcc7e4963eea57d85159224a6e7d852354"
+  },
+  "docs/working/noetic_council/language_v3/README.md": {
+   "bytes": 7168,
+   "sha256": "30d46e6b1587e0acfb80f461a719a898dcdc360a52606236218813ed802a24b3"
+  },
+  "docs/working/noetic_council/language_v3/RESULTS.md": {
+   "bytes": 4432,
+   "sha256": "1e96b4fc52804297a4a113e88071a6aac4e6e0cef0ddf167f4ad513bf6f2ef41"
+  },
+  "docs/working/noetic_council/language_v3/RESULTS_LEXICON_V2_20261018.md": {
+   "bytes": 8802,
+   "sha256": "3de458f1fe0166653abd7ac114f37b70e05f0a55eae6c76acd3168dbc623635e"
+  },
+  "docs/working/noetic_council/language_v3/RESULTS_T1B.md": {
+   "bytes": 3228,
+   "sha256": "f6b46849023a0aa45c357e6f2805ada00a4ef956833a27e29cfee4cc6b7d379c"
+  },
+  "docs/working/noetic_council/language_v3/RESULTS_T1C.md": {
+   "bytes": 1464,
+   "sha256": "3e3a53e67a7bba064ff85a3bd6f8a995ea68414afd742a9f994ddcff6b692a36"
+  },
+  "docs/working/noetic_council/language_v3/SEALED_98_SCORE_RECEIPT_LEXICON_V2.json": {
+   "bytes": 612,
+   "sha256": "2ac6fe71eabbfc23be498a3a2138d543c51145dd8f130f0a06157fa6a81a2295"
+  },
+  "docs/working/noetic_council/language_v3/SOURCE_MANIFEST.json": {
+   "bytes": 8243,
+   "sha256": "0db2fcdb01965110ec15f2d032fc6014f7890bd043a15a46e60f9e588c4a580e"
+  },
+  "docs/working/noetic_council/language_v3/SOURCE_MANIFEST_T1B.json": {
+   "bytes": 11277,
+   "sha256": "db2d4f4076270c3bf4b0a82f1af74eddc2d99e2a92824bf7031a9f00ef27adf9"
+  },
+  "docs/working/noetic_council/language_v3/SOURCE_MANIFEST_T1C.json": {
+   "bytes": 13231,
+   "sha256": "89c17fddc3063e3b425f5845cdeb5b9b979f65246cf2f53b4e99d2ab4df40012"
+  },
+  "docs/working/noetic_council/language_v3/STATIC_CHECK.json": {
+   "bytes": 1363,
+   "sha256": "7c04c8e0d234096b0cd0e0464f2f89feaefa997930e761a58e07b775d745bff7"
+  },
+  "docs/working/noetic_council/language_v3/STATIC_CHECK_T1B.json": {
+   "bytes": 1961,
+   "sha256": "843176ed52419651be3568cde548ee356e379215c5ea8bb487fd90e45a3204ea"
+  },
+  "docs/working/noetic_council/language_v3/STATIC_CHECK_T1C.json": {
+   "bytes": 2357,
+   "sha256": "b704cc1aa89693d3eee0dad69dfe19f7d57cba4c62f5e1fe1a2afb199b41f26b"
+  },
+  "docs/working/noetic_council/language_v3/STATUS.json": {
+   "bytes": 274,
+   "sha256": "dc520b205a0c0f64198a2528c1cbeecbb3a0ca0bce1be265f707c0f7ebc78a7d"
+  },
+  "docs/working/noetic_council/language_v3/STATUS_T1B.json": {
+   "bytes": 276,
+   "sha256": "24a4c6fbe4559d35908b1ae6a78a8ca6cbec133999688cde5f43860b0ba38f6b"
+  },
+  "docs/working/noetic_council/language_v3/STATUS_T1C.json": {
+   "bytes": 276,
+   "sha256": "c5a009eb036e66018d0f22b1b961f3703f6976e0e466ac97e9b7fa2ee8e33a91"
+  },
+  "docs/working/noetic_council/language_v3/aliaswide.py": {
+   "bytes": 8421,
+   "sha256": "e6afd206736ea9c70bd15a72281c503d15cf7f97da2735cacb476ede8c722211"
+  },
+  "docs/working/noetic_council/language_v3/cas_ast.py": {
+   "bytes": 13148,
+   "sha256": "175fbadf23e9ae11ed94513e6ff382b07e6bb46f78bbc7e764200f3afb8f58ae"
+  },
+  "docs/working/noetic_council/language_v3/cce.py": {
+   "bytes": 46446,
+   "sha256": "7135d3958ad5890a148fcb65f307b89b9f9966a1b9e25cd7a9a5e1e62a5ee614"
+  },
+  "docs/working/noetic_council/language_v3/cce_v01b.py": {
+   "bytes": 16716,
+   "sha256": "25047ba1c3cd3ecb9212aa0cb66f59fad9b8abdb62a9875f403ce59c201228bd"
+  },
+  "docs/working/noetic_council/language_v3/cce_v01c.py": {
+   "bytes": 5143,
+   "sha256": "a043c988f7fda529adb2a3cdf8ad28405f7fe2b7e7c4f96e43bc42ef57a4302f"
+  },
+  "docs/working/noetic_council/language_v3/coverage.py": {
+   "bytes": 12561,
+   "sha256": "2919d2d803eb184b812a0ba92f4594c3962b953a0b8536c848ac0b8e23e8eb5f"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_FREEZE.json": {
+   "bytes": 511,
+   "sha256": "91b49bb98af31e5fb074442f1dc328c564ad846ed6f121f987ce579216962acf"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1.json": {
+   "bytes": 47070,
+   "sha256": "653cdc708112410b18c59ce26daf65382eccd94a8f9e49705fcea32eeedab56b"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1b_ADD16.json": {
+   "bytes": 12445,
+   "sha256": "cf28d0a065190bbc283e6256de46503917b924e952a3682bfb22dd750fdc1ffc"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1b_ADD16_FREEZE.json": {
+   "bytes": 391,
+   "sha256": "44e152b3e20aadb2dfec0d44514cc26e7bc745b147fc4c84f9849eb3b9544277"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_DOTTED4.json": {
+   "bytes": 3946,
+   "sha256": "e34bf08cb38171299abe146316f3457e8f015c3c7075c29d2eac9cbe43ebc216"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_DOTTED4_FREEZE.json": {
+   "bytes": 299,
+   "sha256": "4fcb6ac202a311aa6880b10949a901cfde25e90553c1022a597900e3156e99f1"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_R_DOTTED4.json": {
+   "bytes": 3778,
+   "sha256": "73b71b44c524753185fcd87180860e5ac9322c2ce3ab29315be092dbd203c86f"
+  },
+  "docs/working/noetic_council/language_v3/handset/HAND_SET_v0_1c_R_DOTTED4_FREEZE.json": {
+   "bytes": 333,
+   "sha256": "d3b17da7097c6d5063c7478df4a8a39f5dfeb87f75f0a4c5697dc6870dc02ae0"
+  },
+  "docs/working/noetic_council/language_v3/how_it_talks.py": {
+   "bytes": 3945,
+   "sha256": "ee1300c28aecc8e5d996576f07f0bebe5b2527090ea5d8e1d73a2991fdefb0a7"
+  },
+  "docs/working/noetic_council/language_v3/lexicon_v2.py": {
+   "bytes": 7394,
+   "sha256": "b1eee572e67445552a80a90630120855218480292574c71bbbffa0f471131113"
+  },
+  "docs/working/noetic_council/language_v3/lexicon_v3.py": {
+   "bytes": 12602,
+   "sha256": "7bb1de26f0fcca20d99f6be526a7ce9a0119fec680551803eacf2c8aab8b7585"
+  },
+  "docs/working/noetic_council/language_v3/measure_marks.py": {
+   "bytes": 4589,
+   "sha256": "e3fe0d6ae93a7968a0b6a31fea688c33441f22d188f46686ba66733e81328048"
+  },
+  "docs/working/noetic_council/language_v3/run_suites.py": {
+   "bytes": 1987,
+   "sha256": "ebd3765b18322489c30215838f1626dc41f34f7d17aa084407f392a479d52058"
+  },
+  "docs/working/noetic_council/language_v3/scoring.py": {
+   "bytes": 16677,
+   "sha256": "1712681f0c088f552227f52730172701a6b9a36ad53b2a16f4f276197a24f1d8"
+  },
+  "docs/working/noetic_council/language_v3/static_check.py": {
+   "bytes": 4315,
+   "sha256": "53b60e221765557cbbc9994d9bb29b101f7b65bbf948e391e491203d85954821"
+  },
+  "docs/working/noetic_council/language_v3/static_check_t1b.py": {
+   "bytes": 4887,
+   "sha256": "0a6027a4251c7e8b254987da9f18419404947cd70e2a973764dc068269f314a1"
+  },
+  "docs/working/noetic_council/language_v3/static_check_t1c.py": {
+   "bytes": 5233,
+   "sha256": "e3bc4102fc728caedeb3883984b1db8d789bf7f8dbfe95f1215498812485c49c"
+  },
+  "docs/working/noetic_council/language_v3/supervisor.ps1": {
+   "bytes": 6301,
+   "sha256": "39654f795b07e6ef6db0b8fdea63cb9edb8f56f1304bcd5df35c966d41dda77a"
+  },
+  "docs/working/noetic_council/language_v3/supervisor_t1b.ps1": {
+   "bytes": 6458,
+   "sha256": "d1c2e580b24396a20638305595b3c8834b19895ef51e39cfad8ac1fa7cdd282c"
+  },
+  "docs/working/noetic_council/language_v3/supervisor_t1c.ps1": {
+   "bytes": 6514,
+   "sha256": "87b5de585ab59ca6602e9d692ef92689c89942516e25b78f6f8e95343d67d9fc"
+  },
+  "docs/working/noetic_council/language_v3/t1b.py": {
+   "bytes": 13121,
+   "sha256": "4a175cad7f95266cf3a86a1974ed2a0c6e30dceab73295037dab85b1c46b0b46"
+  },
+  "docs/working/noetic_council/language_v3/t1c.py": {
+   "bytes": 5260,
+   "sha256": "5afecfb42c7f763487cea70ca565f10edb897ff4e74f1458761187ce42fd04f5"
+  },
+  "docs/working/noetic_council/language_v3/test_lexicon_v2.py": {
+   "bytes": 7472,
+   "sha256": "27a7f8d571f789de4c8b991a44f79920029b598d262eca6fcb64a978e82914f9"
+  },
+  "docs/working/noetic_council/language_v3/test_lexicon_v3.py": {
+   "bytes": 7080,
+   "sha256": "68e6956ccd330f26302501d3b1c901b9829ecc14d606f092f7488c1b4a08eea2"
+  },
+  "docs/working/noetic_council/language_v3/test_lm_t1.py": {
+   "bytes": 11799,
+   "sha256": "2e6880a7c13a14022814f664e45cb5246bf024e61de754ab459a8e5942d60ce2"
+  },
+  "docs/working/noetic_council/language_v3/test_lm_t1b.py": {
+   "bytes": 4150,
+   "sha256": "473fec265b39a685c012e45194ea51c77fe130e0088d025823ebdec8ce468ca6"
+  },
+  "docs/working/noetic_council/language_v3/test_lm_t1c.py": {
+   "bytes": 1595,
+   "sha256": "27410bf408c430718eba060d484154efb1610c4a496516ec165657665326cdd2"
+  },
+  "docs/working/noetic_council/language_v3/test_lm_t1v3.py": {
+   "bytes": 12738,
+   "sha256": "f149b2f24444d2414530b17834cec96012e73981f8ecaf17a540d9dc8d89dc46"
+  },
+  "docs/working/noetic_council/language_v3/worker.py": {
+   "bytes": 9615,
+   "sha256": "bb54388f8246c706d9b93b543cd04007abba864aabfcb3593a6e8d014b456669"
+  },
+  "docs/working/noetic_council/language_v3/worker_t1b.py": {
+   "bytes": 7389,
+   "sha256": "ceeb309b8c468ee7897f6287afb265cfc5f82fe35e3a4ee48702f07bc84e8b0e"
+  },
+  "docs/working/noetic_council/language_v3/worker_t1c.py": {
+   "bytes": 6182,
+   "sha256": "fa32d686933aef74afcc33e57a2ec8e74e50dadc772bf188d1e6068ac6f2ee84"
+  },
+  "docs/working/noetic_council/repair_performer/ACTOR_RESULT.txt": {
+   "bytes": 1452,
+   "sha256": "fbc9cc15e007ef7ea2939c02c1352878416796fb1b61f98d8250ba4951321002"
+  },
+  "docs/working/noetic_council/repair_performer/README.md": {
+   "bytes": 4436,
+   "sha256": "b562ceba27037eb4a30466309002bd90e0a42b76e9acbba0826599cce24afbab"
+  },
+  "docs/working/noetic_council/repair_performer/actor.py": {
+   "bytes": 10502,
+   "sha256": "4a0e14d78e4f7d3a1a78734aa44f97a2b3f5788a3423b766f373390e738f866d"
+  },
+  "docs/working/noetic_council/repair_performer/test_all.py": {
+   "bytes": 12509,
+   "sha256": "a32ec5560ea9e3b3f75c77f380f658f2b86a79a877d8387146f4dcd99c9729d9"
+  },
+  "docs/working/noetic_council/return_address/ATLAS_COPY.md": {
+   "bytes": 3082,
+   "sha256": "f5d512f1b47c44097a9fdb429bed45d79f63a3b21786b568a732e1dfd888a322"
+  },
+  "docs/working/noetic_council/return_address/README.md": {
+   "bytes": 20159,
+   "sha256": "7000a50929d9047001bb3ffe7cbdf410008fad5edb8facaacd4ecc1ba367704e"
+  },
+  "docs/working/noetic_council/return_address/address.py": {
+   "bytes": 25557,
+   "sha256": "6b1335f9de33aa54f68e876d074719e21d132c471c78f75c09c46761b7a6230d"
+  },
+  "docs/working/noetic_council/return_address/atlas_binding.py": {
+   "bytes": 10922,
+   "sha256": "8c173f50df21382374a62586a7ccad71c7d7aacc7cf6bb5bef9cc692b3b8f267"
+  },
+  "docs/working/noetic_council/return_address/dirty.py": {
+   "bytes": 11081,
+   "sha256": "87ba127f0b199703bd900f0eb20c6f91ccfd5b5de7bf0de6a0bbdc3a784181c0"
+  },
+  "docs/working/noetic_council/return_address/real_atlas/CAS_RPA_OHM_ATLAS_20260922.md": {
+   "bytes": 8882,
+   "sha256": "516aa180212643c97da6241dfe618548d71be422e3d966d747cad812c95acc34"
+  },
+  "docs/working/noetic_council/return_address/real_atlas/PROVENANCE.md": {
+   "bytes": 4441,
+   "sha256": "209d2e5a77cd4f38057a5eb67a4229b3c843652dee1cd217488d1eead5f34cce"
+  },
+  "docs/working/noetic_council/return_address/real_atlas/VERIFICATION.md": {
+   "bytes": 4917,
+   "sha256": "5eec0108af1408d91c44063fb4950723c52e3170856b6947bfad77bef69602d0"
+  },
+  "docs/working/noetic_council/return_address/real_atlas/canonical.py": {
+   "bytes": 1696,
+   "sha256": "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a"
+  },
+  "docs/working/noetic_council/return_address/real_atlas/model.py": {
+   "bytes": 58492,
+   "sha256": "aafa82f0267d0e741a90ba095d939da47401be577b5682832608a6845be54766"
+  },
+  "docs/working/noetic_council/return_address/real_atlas/rpa_model.py": {
+   "bytes": 24726,
+   "sha256": "323a53b951644a93603cd2f56204fd5a038a3161f4778e28777e650a4f966f01"
+  },
+  "docs/working/noetic_council/return_address/real_atlas/rpa_ohm_atlas.py": {
+   "bytes": 30449,
+   "sha256": "6aa030651278f217965a788427d55d3f475bb666b366a8095d6a5fb05be9694f"
+  },
+  "docs/working/noetic_council/return_address/stack.py": {
+   "bytes": 47164,
+   "sha256": "98d5b7cb2d4b4eeb73a3a67c7ef02cae9faa6e47db8385bfd7ebec24c20ec110"
+  },
+  "docs/working/noetic_council/return_address/test_all.py": {
+   "bytes": 44052,
+   "sha256": "0d4a9459316b07a6c957d5e71dff627d266229acc2dcb05b2bd2f88d87bcf771"
+  },
+  "docs/working/noetic_council/the_loop_v3/PROVENANCE.md": {
+   "bytes": 10411,
+   "sha256": "fb208e2c8fe06b974430a88d2f4cead26c137ea64a36c899dd3396d996da0cc6"
+  },
+  "docs/working/noetic_council/the_loop_v3/README.md": {
+   "bytes": 34117,
+   "sha256": "b612f8e24656ac441d3fd87813fac75486e9ccfca2f01e31db95a71d7d1404b1"
+  },
+  "docs/working/noetic_council/the_loop_v3/asom.py": {
+   "bytes": 3835,
+   "sha256": "6c8f964e7f031a1d3bdf9e6bcf1c4a72101a507bcf8cc6ad4fee28d0e4a6b4fd"
+  },
+  "docs/working/noetic_council/the_loop_v3/bias.py": {
+   "bytes": 14736,
+   "sha256": "d31a129db14a2c37ae712ec55c703705e4d735f433dab773a848ead68421e1b5"
+  },
+  "docs/working/noetic_council/the_loop_v3/disengage.py": {
+   "bytes": 14182,
+   "sha256": "78a73a853f920e9f819ceeeb272d21dd513c08ba7355254dd7db0dd5314add98"
+  },
+  "docs/working/noetic_council/the_loop_v3/dwp/depth.py": {
+   "bytes": 14971,
+   "sha256": "92e06ded47fe550b559ebf8b37a39751b384f1c84e1ad600cfca50d930e7b4ab"
+  },
+  "docs/working/noetic_council/the_loop_v3/dwp/dwp.py": {
+   "bytes": 43166,
+   "sha256": "cde1a1c4d0cc8198b83fd12db13ca80a721491e4eb2aabf3df8b6d32b4a9bbca"
+  },
+  "docs/working/noetic_council/the_loop_v3/dwp/lacunarity.py": {
+   "bytes": 6569,
+   "sha256": "d393a46d35575ab4b9cbc4476305f51d28f7fb04824a24e27e044891a36b2634"
+  },
+  "docs/working/noetic_council/the_loop_v3/dwp/retraction.py": {
+   "bytes": 13864,
+   "sha256": "ec979b1ec1c1f36ca9fb7985e586445be8123813f4aee0b5f97d52a3b123c46e"
+  },
+  "docs/working/noetic_council/the_loop_v3/loop.py": {
+   "bytes": 35388,
+   "sha256": "0c6ad612ae2b3166ac840bcd5703d940b7d7d61da3f73e7b50bf1f591e79846d"
+  },
+  "docs/working/noetic_council/the_loop_v3/rpm_gate.py": {
+   "bytes": 42856,
+   "sha256": "b934bf059ee74a8e298b66841c28589fa76b8ab2884c3e1a6052dc9a666f9ae6"
+  },
+  "docs/working/noetic_council/the_loop_v3/test_all.py": {
+   "bytes": 107360,
+   "sha256": "b8f276587dd462a390d41b413588dc65af67d843872b246690a5d227056bc370"
+  },
+  "helm_agentic_executor.py": {
+   "bytes": 82081,
+   "sha256": "a84041b1db69973b9a4da8509ed8142f00e112d1602ab30ac3391263051d8df3"
+  },
+  "helm_brain_22x40.py": {
+   "bytes": 15810,
+   "sha256": "8e77fddedb790161283c00182ef7fbc7c8e210c94630720c0ffcc1094cf8236a"
+  },
+  "helm_brain_canonical.py": {
+   "bytes": 18707,
+   "sha256": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a"
+  },
+  "helm_brain_wide.py": {
+   "bytes": 49604,
+   "sha256": "9ba0b20f610f4ae74d333ec2126970b094b51aa315672da4322e71211392c666"
+  },
+  "helm_cas_address.py": {
+   "bytes": 22865,
+   "sha256": "517b9e7a179e011ec0fe56af0efadef3a339acda763d105be54470a5c9536db3"
+  },
+  "helm_chat.py": {
+   "bytes": 41710,
+   "sha256": "fce018a6eed9d9c1d43fe80319826d0491978c5ad8de1b23714f64f10f5e3a93"
+  },
+  "helm_cold_cloud.py": {
+   "bytes": 14838,
+   "sha256": "37930e16ea0cc8fb2b6be9fa46e4b3166fbee9e7543d777e69c3fa4e2ac95dc9"
+  },
+  "helm_creativity_dial.py": {
+   "bytes": 7349,
+   "sha256": "9fbdda40d63e87b5c5a0bb1101adf8960c8032dc1d3dd476cfed408c0934c136"
+  },
+  "helm_cube_osc.py": {
+   "bytes": 43826,
+   "sha256": "a7ce19757922aa9413ec5da373977b149b96f78039497ccfa62c5a921a525685"
+  },
+  "helm_end_to_end_loop.py": {
+   "bytes": 69257,
+   "sha256": "ec9fd39d68e1dc89a6e763473aa365a0cbc2737884a3a9d180803efc0c210e73"
+  },
+  "helm_english_in.py": {
+   "bytes": 53750,
+   "sha256": "af782845fa06dbc3c3be9bf1df1e691a97df97d585f8c3f1fec95fd7af5caec1"
+  },
+  "helm_eye_act.py": {
+   "bytes": 40642,
+   "sha256": "8af1d7dca71fe3c404d355d880c3cb58adf2ad8f45999ed1fedd29b43b3cc25c"
+  },
+  "helm_faces_in.py": {
+   "bytes": 18444,
+   "sha256": "2f7d4b575bbe62e6e850048208c94358d5316d282d729f42b8d80566f1830ec6"
+  },
+  "helm_faces_lexicon.json": {
+   "bytes": 7357,
+   "sha256": "7f51f4f85e5adcb76ba3e729380164caf13875c7529655300c3202f184a73872"
+  },
+  "helm_memory.py": {
+   "bytes": 21812,
+   "sha256": "9bd533eade1fbe4e55f614b0939c6d95a598399930576913311d7aca7d28bb2b"
+  },
+  "helm_memory_compact.py": {
+   "bytes": 40727,
+   "sha256": "3f1f9eaa2d5356f7bb45590a71c869445b21910de68e90ecfc2ee626f4f586aa"
+  },
+  "helm_test_pins.py": {
+   "bytes": 4885,
+   "sha256": "091d31cbae07dcb9796e418eb32fea416534bcc9d0aaecf3ff7057f7c0fd9b07"
+  },
+  "helm_triad.py": {
+   "bytes": 24100,
+   "sha256": "0d9d0bdaf3ba594e49c72c81f8f2a5749317cee1611906d8b847f8db6c00db1e"
+  },
+  "helm_voice.py": {
+   "bytes": 57689,
+   "sha256": "9a5d918f23092b3bf270dbfb9b3443398c5997fe98f560753a02ecb3109f60d9"
+  },
+  "helm_wide_turn.py": {
+   "bytes": 85849,
+   "sha256": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf"
+  },
+  "noetic-compass-scaffold/noetic-compass/api/__init__.py": {
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "noetic-compass-scaffold/noetic-compass/api/notation/__init__.py": {
+   "bytes": 587,
+   "sha256": "688869e925f6c4b18c420649e8abee3a4fd022a04e1469f2d8ddd9afc1fe3d77"
+  },
+  "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py": {
+   "bytes": 243046,
+   "sha256": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c"
+  },
+  "phrasebook.json": {
+   "bytes": 39980,
+   "sha256": "f92d5e19e4cf3083e2d01226724beb9a1faf11dd849881bafbe88b81ca953a28"
+  },
+  "test_helm_agentic_planner.py": {
+   "bytes": 3097,
+   "sha256": "3c38bbd257077262a8ca23bd37fad93e1c7da4906ae9b75190677979b454c98f"
+  },
+  "test_helm_brain_wide.py": {
+   "bytes": 41125,
+   "sha256": "8ad4a0ba84fe12b95142e4747b06c637275780082a98358bcf8930ed62dd6a09"
+  },
+  "test_helm_cas_address.py": {
+   "bytes": 19414,
+   "sha256": "06889a63a17bee941bb0fc12108bb201efe781ae33c175cde0376ca41eae8065"
+  },
+  "test_helm_chat_nuance.py": {
+   "bytes": 14813,
+   "sha256": "98520f823690f59709716cf4960d7b4783128c9dc97e572038e1e2c8417e12ca"
+  },
+  "test_helm_cold_cloud_direct.py": {
+   "bytes": 10104,
+   "sha256": "f3948ee446820906c5d44700b454807fb4b563d2d97ba2693eec77386a0a9a1e"
+  },
+  "test_helm_ctt_adapter.py": {
+   "bytes": 3448,
+   "sha256": "f7675c7372a639cdcbe13eb8a075ba261023250783bf690b133632acdc9cbccb"
+  },
+  "test_helm_cube_cloudbatch.py": {
+   "bytes": 5194,
+   "sha256": "e7a4b3dedf08d6fad1deab1325e805351c442058f241bbdd92058ed67ad338c1"
+  },
+  "test_helm_cube_cloudsearch.py": {
+   "bytes": 4417,
+   "sha256": "0186f17bb963e49f2ceb5fdcad18b1d77c61dd778d212dc9ed737b5875440c7d"
+  },
+  "test_helm_cube_everyline.py": {
+   "bytes": 7318,
+   "sha256": "551d662f4bac0e2a23c4bf195a30132f04236f86be320b27e9e30104ebe33570"
+  },
+  "test_helm_cube_fold.py": {
+   "bytes": 8893,
+   "sha256": "0d910f96b76b637108bb770231411f3a9cebc255d974e9c68efbf4f0ce82c26f"
+  },
+  "test_helm_cube_lean.py": {
+   "bytes": 12386,
+   "sha256": "73b4302adc2c947409babe7751d8727ca26e74ab4bb5a0ce8d073a9e971e36ba"
+  },
+  "test_helm_cube_month_label.py": {
+   "bytes": 3530,
+   "sha256": "104c0bc5c769e1f02040087093f3aac829a228ccf5d44fa3dcc455c5e11ce957"
+  },
+  "test_helm_cube_offload.py": {
+   "bytes": 9061,
+   "sha256": "5ebe0933f9d29acff27c0f95557a4e911cdda1c7b3e6228e3cceabe8ac158b97"
+  },
+  "test_helm_cube_osc.py": {
+   "bytes": 16228,
+   "sha256": "008b227a25d4383cab953338c8cfdce44521b09b41843d3444a1fbfba963638e"
+  },
+  "test_helm_cube_reach_memory.py": {
+   "bytes": 4045,
+   "sha256": "d2f2b35b9060b44877b8e7c806e6fcc8b6371d031ef3b709db2065dbcb156fd1"
+  },
+  "test_helm_cube_tiers.py": {
+   "bytes": 16426,
+   "sha256": "e331e090e5199a637e49b7b40919cf6e64f52499cb8c107cdcd6add6b98f48a8"
+  },
+  "test_helm_end_to_end_loop.py": {
+   "bytes": 17969,
+   "sha256": "cefff684507b281ec40ef3c85899c445114b7c749ccca339b1cf21241d295c10"
+  },
+  "test_helm_english_in.py": {
+   "bytes": 25918,
+   "sha256": "4a6c422e8488d1de1e1d4a70d4ea4b45ac448e39a7bc02e4f158613b3c9a3fa9"
+  },
+  "test_helm_english_in_stock_frame.py": {
+   "bytes": 16176,
+   "sha256": "02c7eef94d98ad50aa137efae21f27f0ba1b31c5184679419b8d5a633a00954d"
+  },
+  "test_helm_eye_act.py": {
+   "bytes": 10234,
+   "sha256": "50bcfe30c8920572f2236271c697660884f60ee366e4f2b3f7d0521a71c17951"
+  },
+  "test_helm_faces_in.py": {
+   "bytes": 6926,
+   "sha256": "ad8f86d3246ad39591bd59d06601ffc9b11aebbf57aa09f80ba5ae11ab4c5c58"
+  },
+  "test_helm_memory.py": {
+   "bytes": 2955,
+   "sha256": "adbb21ce106efbcb222b9b0f416599484fbb91fc7f7a2e36c02d2db95db1b2b6"
+  },
+  "test_helm_memory_compact.py": {
+   "bytes": 21093,
+   "sha256": "93130ef692fe0ad15cbabc7e6a3c9b37902e76fd87e3ebd6e817451c59a7f814"
+  },
+  "test_helm_pin_hygiene.py": {
+   "bytes": 8998,
+   "sha256": "66b43b2ad4ef45d0b0591ee6260ff1e18dcf5c65496aaacad16b0e2c0e928e00"
+  },
+  "test_helm_reader_gap.py": {
+   "bytes": 28066,
+   "sha256": "3eed47afa23f8de8922e05609289d9d7ce737c1b7d3662cf9c31a76aff32e74b"
+  },
+  "test_helm_triad.py": {
+   "bytes": 20265,
+   "sha256": "15cb6ad25f0243a1cd7fbd492d144ed792402845e3b4e5c3a922d34d0cc3bbd2"
+  },
+  "test_helm_units_note.py": {
+   "bytes": 20653,
+   "sha256": "8036a319821ebf7ef8eccdc821b2ebc06bc0aac0db23d3561b5a1cbf1a085653"
+  },
+  "test_helm_voice.py": {
+   "bytes": 17087,
+   "sha256": "a5edf7670b443a3b2c4624a664e48d10af0991daef64512d5daa27026bdfcd93"
+  },
+  "test_helm_wide_alongside.py": {
+   "bytes": 28140,
+   "sha256": "b5e06868d86b30f963f6c0b7c3d45e3ddde449203493542480f94d12bf5842b7"
+  },
+  "tks_meta_valve_controller.py": {
+   "bytes": 10430,
+   "sha256": "06fb7a3b1c468551c19cd368091f2ceaf84b3da21da4318f2bb96df220eb789a"
+  },
+  "tks_meta_valve_weights_v0_4.json": {
+   "bytes": 859,
+   "sha256": "511ebe94360b108d1f6d90c897be0d061da3205b0ce1ef48c67caf5e67ff3ba5"
+  }
+ },
+ "not_cut": [
+  "helm_ui/",
+  "helm_hub/"
+ ],
+ "pinned": {
+  "helm_brain_canonical.py": "24df53c9b3abeeafa2c38a0d8aa808537055ab29a7eaffd235031cbfb430980a",
+  "helm_brain_wide.py": "9ba0b20f610f4ae74d333ec2126970b094b51aa315672da4322e71211392c666",
+  "helm_chat.py": "fce018a6eed9d9c1d43fe80319826d0491978c5ad8de1b23714f64f10f5e3a93",
+  "helm_cold_cloud.py": "37930e16ea0cc8fb2b6be9fa46e4b3166fbee9e7543d777e69c3fa4e2ac95dc9",
+  "helm_cube_osc.py": "a7ce19757922aa9413ec5da373977b149b96f78039497ccfa62c5a921a525685",
+  "helm_eye_act.py": "8af1d7dca71fe3c404d355d880c3cb58adf2ad8f45999ed1fedd29b43b3cc25c",
+  "helm_memory.py": "9bd533eade1fbe4e55f614b0939c6d95a598399930576913311d7aca7d28bb2b",
+  "helm_memory_compact.py": "3f1f9eaa2d5356f7bb45590a71c869445b21910de68e90ecfc2ee626f4f586aa",
+  "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c"
+ },
+ "rule": "git show <commit>:<path> for every file (never the working tree); list = wave 7 v8's cut + every helm_*.py / test_helm_*.py at the commit + the compiler of record + the Atlas + the cube store's modules + the exam-side rule reader the cube tests import; helm_ui/ and helm_hub/ are not cut",
+ "schema": "helm.teach2.source-cut/1"
+}
