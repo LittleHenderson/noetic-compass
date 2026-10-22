@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM cube oscillation packet v1 (spec sheet 7.125): facts become cubes at their Atlas node only after the CTT and the brain side agree in rounds; whole memories fade step by step into CAS; exam TEACH-2 designed; 0 USD; nothing built, nothing licensed
+
+- Owner's words: "design the cube oscillation follow-up" and that memory should live at the RPA endpoint, where whole plain-English memories periodically and incrementally fade into CAS expressions to save space, with everything already established for memory; and to use the oscillation between the CTT and the recipe brain to decide what to keep, the Eye perhaps controlling the rounds.
+- Design (docs/working/helm_cube_oscillation_v1/): the CTT proposes, the brain side checks and says back, the CTT re-reads; keep after 2 agreeing rounds in at most 3, else keep the words and ask; corrections as new cube revisions; cubes at the thing's Atlas node; fading ladder whole line -> CAS capsule -> small CAS record every 4 turns; the Eye report-only beside a fixed cap (its acting stays NOT LICENSED).
+- Pre-code PREREGISTRATION_TEACH2 sha256 f7b6183bba5f8a1a241e3c64c8930f6a2c6df06fbe8c5845c0207f6d2a84c855: 9 arms incl. a plain lookup table as the mechanism-free baseline; trap lines; current-value scoring rule; new gates HG-WRONG-CUBE, HG-REVISION, HG-NUMBER, HG-FADE, HG-SAYBACK; marks C1-C4 and SPACE; words INCONCLUSIVE / CUBES_HARMED / CUBES_NO_GAIN / CUBES_EARNED_KEEP.
+- Honest forecast: the CTT was trained on kitchen English only, so retraining is needed (proposed CUBE TRAIN at 3 USD); the exam needs one CPU host (proposed CUBE EXAM at 1 USD). Eight owner decisions in OPEN_QUESTIONS. Nothing built, nothing spent.
+
 ## 2026-10-21 PDT - HELM EYE-ACT-1 SCORED (spec sheet 7.122 follow-up): all 10 hard gates hold; EYE_ACT_EARNED_KEEP, CONCERT_ACT_EARNED_KEEP, EYE_ACT_BEATS_CHECKSUM_COPY, TIES_REBUILD_ALWAYS; acting stays NOT LICENSED; laptop, 0 USD
 
 - Owner's line, verbatim (seeds the worlds): "EYE ACT EXAM, sealed e49d459c, laptop, 0 USD." (45 bytes, sha256 4ee0d7b4...).
