@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HELM Cube display version</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Inter+Tight:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#6b5a3e}a:hover{color:#3d3322}
+</style>
+</helmet>
+<div style="width: 1200px; height: 760px; box-sizing: border-box; background: #E8E6E1; color: #18181A; font-family: Inter, system-ui, sans-serif; padding: 56px 64px; display: flex; flex-direction: column; gap: 18px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 32px">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #5C5850">HELM Cube · another version, not the main one</div>
+      <h2 style="margin: 0; font-family: 'Inter Tight', Inter, sans-serif; font-weight: 600; font-size: 40px; letter-spacing: -0.01em">The display cube: black glass that can light up</h2>
+    </div>
+  </div>
+  <svg width="1072" height="470" viewBox="0 0 1072 470" role="img" aria-label="Two glass cubes. The left one is off and is a plain glossy black box. The right one is on: its top face shows a speech waveform, its right face shows the answer 3 loaves, flour runs out first, and its left face shows a small map of the room.">
+    <defs>
+      <linearGradient id="gTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E2E33"></stop><stop offset="1" stop-color="#151518"></stop></linearGradient>
+      <linearGradient id="gLeft" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#18181B"></stop><stop offset="1" stop-color="#0B0B0D"></stop></linearGradient>
+      <linearGradient id="gRight" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E0E10"></stop><stop offset="1" stop-color="#050506"></stop></linearGradient>
+    </defs>
+    <ellipse cx="300" cy="428" rx="156" ry="18" fill="#000000" opacity="0.16"></ellipse>
+    <polygon points="300,75 447.22,160 300,245 152.78,160" fill="url(#gTop)"></polygon>
+    <polygon points="152.78,160 300,245 300,415 152.78,330" fill="url(#gLeft)"></polygon>
+    <polygon points="300,245 447.22,160 447.22,330 300,415" fill="url(#gRight)"></polygon>
+    <polygon points="196,150 300,90 330,108 226,168" fill="#FFFFFF" opacity="0.10"></polygon>
+    <polygon points="318,252 420,193 420,222 318,281" fill="#FFFFFF" opacity="0.06"></polygon>
+    <path d="M300,75 L447.22,160 L300,245 L152.78,160 Z M447.22,160 L447.22,330 L300,415 L152.78,330 L152.78,160 M300,245 L300,415" fill="none" stroke="#2A2A2F" stroke-width="2" stroke-linejoin="round"></path>
+    <ellipse cx="760" cy="428" rx="156" ry="18" fill="#000000" opacity="0.16"></ellipse>
+    <polygon points="760,75 907.22,160 760,245 612.78,160" fill="#0A0A0C"></polygon>
+    <polygon points="612.78,160 760,245 760,415 612.78,330" fill="#08080A"></polygon>
+    <polygon points="760,245 907.22,160 907.22,330 760,415" fill="#060607"></polygon>
+    <g transform="matrix(1.4722 -0.85 1.4722 0.85 612.78 160)">
+      <path d="M12,50 L22,50 L26,38 L31,63 L36,30 L42,70 L47,42 L52,58 L57,34 L62,66 L67,44 L72,56 L77,47 L88,50" fill="none" stroke="#FFE3B8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"></path>
+    </g>
+    <g transform="matrix(1.4722 -0.85 0 1.70 760 245)">
+      <text x="12" y="44" font-family="Inter Tight, Inter, sans-serif" font-size="22" font-weight="600" fill="#FFE3B8">3 loaves</text>
+      <text x="12" y="60" font-family="Inter, sans-serif" font-size="8.5" fill="#D9D5CC">Flour runs out first.</text>
+      <text x="12" y="74" font-family="ui-monospace, Menlo, monospace" font-size="6.5" fill="#8E8A82">receipt 3f1c…</text>
+    </g>
+    <g transform="matrix(1.4722 0.85 0 1.70 612.78 160)">
+      <path d="M14,18 L86,18 L86,56 M14,18 L14,42 M14,54 L14,84 L60,84" fill="none" stroke="#67D8E8" stroke-width="2"></path>
+      <rect x="62" y="58" width="24" height="26" fill="#67D8E8" opacity="0.18"></rect>
+      <circle cx="46" cy="52" r="3.5" fill="#FFE3B8"></circle>
+    </g>
+    <path d="M760,75 L907.22,160 L760,245 L612.78,160 Z M907.22,160 L907.22,330 L760,415 L612.78,330 L612.78,160 M760,245 L760,415" fill="none" stroke="#2A2A2F" stroke-width="2" stroke-linejoin="round"></path>
+    <text x="300" y="456" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="#2E2C29"><tspan font-weight="600">Off.</tspan> The same plain black box: a dark screen gives no light.</text>
+    <text x="760" y="456" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="#2E2C29"><tspan font-weight="600">On.</tspan> Faces show speech, answers, the room map.</text>
+  </svg>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; font-size: 14px; line-height: 1.5; color: #2E2C29">
+    <div><strong>Glass all round.</strong> Six faces of black Gorilla Glass over square OLED screens. An OLED pixel that is off gives no light, so the rule holds: off, it is a plain black box.</div>
+    <div><strong>Screens cost power and heat.</strong> Six lit faces would use most of the cube's small heat budget, so one or two faces light at a time, the ones facing you. Battery: hours with screens on, not days.</div>
+    <div><strong>Cameras see worse under a screen.</strong> The main version keeps cameras behind plain dark glass. The camera-on light stays wired in hardware here too. Estimates only; not yet researched.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":760}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

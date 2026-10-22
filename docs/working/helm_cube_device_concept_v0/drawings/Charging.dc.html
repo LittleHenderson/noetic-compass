@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HELM Cube magnetic charging</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Inter+Tight:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#6b5a3e}a:hover{color:#3d3322}
+@keyframes buzz{0%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}100%{transform:translateX(0)}}
+.buzz{animation:buzz .12s linear infinite}
+</style>
+</helmet>
+<div style="width: 1200px; height: 760px; box-sizing: border-box; background: #E8E6E1; color: #18181A; font-family: Inter, system-ui, sans-serif; padding: 56px 64px; display: flex; flex-direction: column; gap: 24px">
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <div style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #5C5850">HELM Cube · charging</div>
+    <h2 style="margin: 0; font-family: 'Inter Tight', Inter, sans-serif; font-weight: 600; font-size: 40px; letter-spacing: -0.01em">You find the charge face by feel</h2>
+  </div>
+  <svg width="1072" height="430" viewBox="0 0 1072 430" role="img" aria-label="Three steps. One: the cube is held above a round charger and magnetic pull draws one face down. Two: the cube snaps onto the charger and buzzes once. Three: the cube sits on the charger; two lit edges show the charge level, the face on the charger rests and the other five keep working.">
+    <defs>
+      <linearGradient id="side" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26262A"></stop><stop offset="1" stop-color="#0D0D0F"></stop></linearGradient>
+      <filter id="g2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+    </defs>
+    <g transform="rotate(-8 180 210)">
+      <rect x="80" y="100" width="200" height="200" rx="8" fill="url(#side)"></rect>
+    </g>
+    <path d="M130,312 C130,330 132,342 136,356" fill="none" stroke="#F07A2B" stroke-width="2" stroke-dasharray="5 4"></path>
+    <path d="M180,316 L180,356" fill="none" stroke="#F07A2B" stroke-width="2" stroke-dasharray="5 4"></path>
+    <path d="M230,320 C230,334 228,346 224,356" fill="none" stroke="#F07A2B" stroke-width="2" stroke-dasharray="5 4"></path>
+    <polygon points="175,350 185,350 180,360" fill="#F07A2B"></polygon>
+    <rect x="90" y="362" width="180" height="24" rx="12" fill="#1C1C1F"></rect>
+    <ellipse cx="180" cy="396" rx="96" ry="7" fill="#000000" opacity="0.12"></ellipse>
+    <g class="buzz">
+      <rect x="436" y="162" width="200" height="200" rx="8" fill="url(#side)"></rect>
+    </g>
+    <path d="M414,230 l-10,8 l10,8 l-10,8 l10,8" fill="none" stroke="#18181A" stroke-width="2" stroke-linejoin="round"></path>
+    <path d="M658,230 l10,8 l-10,8 l10,8 l-10,8" fill="none" stroke="#18181A" stroke-width="2" stroke-linejoin="round"></path>
+    <rect x="446" y="362" width="180" height="24" rx="12" fill="#1C1C1F"></rect>
+    <ellipse cx="536" cy="396" rx="96" ry="7" fill="#000000" opacity="0.12"></ellipse>
+    <rect x="792" y="162" width="200" height="200" rx="8" fill="url(#side)"></rect>
+    <g filter="url(#g2)">
+      <path d="M800,362 L984,362" stroke="#F4F1EA" stroke-width="3" stroke-linecap="round"></path>
+      <path d="M792,354 L792,170" stroke="#F4F1EA" stroke-width="3" stroke-linecap="round"></path>
+    </g>
+    <path d="M800,162 L984,162 M992,170 L992,354" stroke="#3A3A3F" stroke-width="2" stroke-linecap="round"></path>
+    <rect x="802" y="362" width="180" height="24" rx="12" fill="#1C1C1F"></rect>
+    <ellipse cx="892" cy="396" rx="96" ry="7" fill="#000000" opacity="0.12"></ellipse>
+    <circle cx="892" cy="262" r="4" fill="#67D8E8"></circle>
+    <circle cx="892" cy="182" r="4" fill="#67D8E8"></circle>
+    <circle cx="812" cy="262" r="4" fill="#67D8E8"></circle>
+    <circle cx="972" cy="262" r="4" fill="#67D8E8"></circle>
+    <circle cx="892" cy="350" r="4" fill="none" stroke="#8E8A82" stroke-width="1.6"></circle>
+    <text x="180" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">1  Bring it near</text>
+    <text x="536" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">2  It snaps on and buzzes once</text>
+    <text x="892" y="40" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">3  It charges</text>
+    <text x="180" y="424" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">Magnetic pull turns the right face down.</text>
+    <text x="536" y="424" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">A short haptic pulse confirms charging started.</text>
+    <text x="892" y="424" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#4A4741">Lit edges show the level for 5 seconds.</text>
+  </svg>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; font-size: 14px; line-height: 1.5; color: #2E2C29">
+    <div><strong>Nothing marks the charge face.</strong> A Qi2 magnet ring sits behind one face. Near the charger, that face pulls itself down. A magnet sensor inside knows it is docked.</div>
+    <div><strong>The docked face rests.</strong> Its camera and microphone sit against the charger, so they pause. The other five faces keep listening, watching and speaking (the cyan dots).</div>
+    <div><strong>Heat sets the speed, not the standard.</strong> About 14 W at first, likely 7 to 10 W as it warms; it charges slower while HELM talks. These are estimates until a prototype is measured.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1200,"height":760}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

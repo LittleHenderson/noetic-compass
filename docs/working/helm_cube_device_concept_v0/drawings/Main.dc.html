@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HELM Cube: off and speaking</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Inter+Tight:wght@500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#6b5a3e}a:hover{color:#3d3322}
+@keyframes cadence{0%{opacity:.35}18%{opacity:1}55%{opacity:.6}100%{opacity:.35}}
+.speak{animation:cadence .23s ease-out infinite}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; background: #E8E6E1; color: #18181A; font-family: Inter, system-ui, sans-serif; display: flex; gap: 40px; padding: 72px 72px 56px 80px">
+  <div style="width: 440px; flex-shrink: 0; display: flex; flex-direction: column; gap: 22px">
+    <div style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #5C5850">HELM · device concept v0.1 · design only</div>
+    <h1 style="margin: 0; font-family: 'Inter Tight', Inter, sans-serif; font-weight: 600; font-size: 72px; line-height: 1; letter-spacing: -0.02em">HELM Cube</h1>
+    <p style="margin: 0; font-size: 20px; line-height: 1.45; color: #2E2C29">A 64 mm black cube that listens, talks, sees and maps its room. No buttons. When it is off, it is a plain black box: the same on all six faces.</p>
+    <div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.45; color: #2E2C29; margin-top: 6px">
+      <div style="display: flex; gap: 12px"><span style="width: 6px; height: 6px; border-radius: 3px; background: #18181A; margin-top: 8px; flex-shrink: 0"></span><span>Shake to wake. Tap to command: the number of taps is the action, the face you tap is the target.</span></div>
+      <div style="display: flex; gap: 12px"><span style="width: 6px; height: 6px; border-radius: 3px; background: #18181A; margin-top: 8px; flex-shrink: 0"></span><span>Light along all twelve edges, invisible when off. It pulses with each syllable HELM speaks.</span></div>
+      <div style="display: flex; gap: 12px"><span style="width: 6px; height: 6px; border-radius: 3px; background: #18181A; margin-top: 8px; flex-shrink: 0"></span><span>A camera, a microphone and a sound port behind every face, all hidden.</span></div>
+      <div style="display: flex; gap: 12px"><span style="width: 6px; height: 6px; border-radius: 3px; background: #18181A; margin-top: 8px; flex-shrink: 0"></span><span>Magnetic wireless charging: one unmarked face snaps to the charger, and a short buzz confirms.</span></div>
+      <div style="display: flex; gap: 12px"><span style="width: 6px; height: 6px; border-radius: 3px; background: #18181A; margin-top: 8px; flex-shrink: 0"></span><span>Feels when it is moved and turned, and maps its room with depth sensors and Wi-Fi.</span></div>
+      <div style="display: flex; gap: 12px"><span style="width: 6px; height: 6px; border-radius: 3px; background: #18181A; margin-top: 8px; flex-shrink: 0"></span><span>Everything feeds HELM, which runs the cube. The camera light and the hard mute are wired in hardware.</span></div>
+    </div>
+    <div style="margin-top: auto; font-size: 12px; line-height: 1.5; color: #5C5850">Concept drawing. Nothing has been built. Sizes from the spec: 64 mm target, 55 mm stretch.</div>
+  </div>
+  <div style="flex: 1; display: flex; flex-direction: column; justify-content: center">
+    <svg width="880" height="560" viewBox="0 0 900 560" role="img" aria-label="Two black cubes and a tennis ball. The left cube is off and looks like a plain black box. The middle cube is speaking, with warm white light glowing along its edges. The tennis ball shows the size.">
+      <defs>
+        <linearGradient id="topA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34343A"></stop><stop offset="1" stop-color="#232327"></stop></linearGradient>
+        <linearGradient id="leftA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1C1C20"></stop><stop offset="1" stop-color="#121214"></stop></linearGradient>
+        <linearGradient id="rightA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101012"></stop><stop offset="1" stop-color="#09090A"></stop></linearGradient>
+        <radialGradient id="ball" cx="0.38" cy="0.34" r="0.75"><stop offset="0" stop-color="#E2EC6A"></stop><stop offset="1" stop-color="#A9B92E"></stop></radialGradient>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>
+      </defs>
+      <ellipse cx="200" cy="448" rx="128" ry="16" fill="#000000" opacity="0.16"></ellipse>
+      <polygon points="200,160 321.24,230 200,300 78.76,230" fill="url(#topA)"></polygon>
+      <polygon points="78.76,230 200,300 200,440 78.76,370" fill="url(#leftA)"></polygon>
+      <polygon points="200,300 321.24,230 321.24,370 200,440" fill="url(#rightA)"></polygon>
+      <path d="M200,160 L321.24,230 L200,300 L78.76,230 Z M321.24,230 L321.24,370 L200,440 L78.76,370 L78.76,230 M200,300 L200,440" fill="none" stroke="#26262A" stroke-width="2.5" stroke-linejoin="round"></path>
+      <ellipse cx="520" cy="448" rx="128" ry="16" fill="#000000" opacity="0.16"></ellipse>
+      <polygon points="520,160 641.24,230 520,300 398.76,230" fill="url(#topA)"></polygon>
+      <polygon points="398.76,230 520,300 520,440 398.76,370" fill="url(#leftA)"></polygon>
+      <polygon points="520,300 641.24,230 641.24,370 520,440" fill="url(#rightA)"></polygon>
+      <g class="speak" filter="url(#glow)">
+        <path d="M520,160 L641.24,230 L520,300 L398.76,230 Z M641.24,230 L641.24,370 L520,440 L398.76,370 L398.76,230 M520,300 L520,440" fill="none" stroke="{{glow}}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"></path>
+      </g>
+      <ellipse cx="790" cy="446" rx="62" ry="9" fill="#000000" opacity="0.14"></ellipse>
+      <circle cx="790" cy="367" r="73.3" fill="url(#ball)"></circle>
+      <path d="M735,318 C770,345 772,392 735,418" fill="none" stroke="#F4F6E4" stroke-width="4" stroke-linecap="round" opacity="0.9"></path>
+      <path d="M845,318 C810,345 808,392 845,418" fill="none" stroke="#F4F6E4" stroke-width="4" stroke-linecap="round" opacity="0.9"></path>
+      <text x="200" y="500" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">Off</text>
+      <text x="200" y="522" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">A plain black box. Every face the same.</text>
+      <text x="520" y="500" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">Speaking</text>
+      <text x="520" y="522" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">Light along all twelve edges, pulsing per syllable.</text>
+      <text x="790" y="500" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#18181A">Tennis ball</text>
+      <text x="790" y="522" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">67 mm, drawn to the same scale.</text>
+      <line x1="78.76" y1="96" x2="321.24" y2="96" stroke="#7A766D" stroke-width="1"></line>
+      <line x1="78.76" y1="90" x2="78.76" y2="102" stroke="#7A766D" stroke-width="1"></line>
+      <line x1="321.24" y1="90" x2="321.24" y2="102" stroke="#7A766D" stroke-width="1"></line>
+      <text x="200" y="84" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#4A4741">64 mm on each edge</text>
+    </svg>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"glow":{"editor":"color","default":"#FFE3B8","options":["#FFE3B8","#7FE3F0","#F2C14E","#B79CFF"]},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return { glow: this.props.glow ?? '#FFE3B8' };
+}
+}
+</script>
+</body>
+</html>
