@@ -1,0 +1,16 @@
+{
+ "cap_usd": 0.0,
+ "host": "laptop",
+ "label": "TEACH1",
+ "owner_line_sha256": "74afa660077224548421452517f8593725ec2e948d727458152f378319b6daa7",
+ "owner_line_source": "C:/Users/wakil/Documents/Codex/2026-10-21/teach1_custody/OWNER_LINE_RECORD_TEACH1.md (owner typed into the builder session 2026-10-21)",
+ "owner_line_utf8_bytes": 21,
+ "owner_line_verbatim": "COMPACT EXAM at 0 USD",
+ "package_freeze_sha256": "1ddf5128b1578709827523c12ee0ca6fe9ff21633474b4b7d110bceff0a0dc0b",
+ "package_version": "v1",
+ "package_zip": "HELM_TEACH1_20261021_SOURCE_TEACH1_v1.zip",
+ "package_zip_sha256": "811726c45bd3f31a3df1d565295d191382685f7e7681edfc567e70e22e17dc73",
+ "recorded_utc": "2026-10-22T02:43:37Z",
+ "schema": "helm.teach1.approval/1",
+ "seed_source_rule": "sha256(UTF-8 of the typed line + ':' + the full zip sha256), no trailing newline"
+}
