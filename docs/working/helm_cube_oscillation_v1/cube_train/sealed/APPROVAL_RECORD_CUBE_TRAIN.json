@@ -1,0 +1,10 @@
+{
+ "approval_bytes_utf8": 19,
+ "approval_name": "CUBE TRAIN at 3 USD",
+ "attempts": "one scored attempt; one plumbing retry only if no model finished training (same zip, same settings)",
+ "bound_to_zip_sha256": "706e1fa6f3ce77ae4fee7a21cbb05b820c87f8a01c5df237858f81545eb2e899",
+ "cap_usd": 3,
+ "how_given": "the owner's choice 'T7 (a): train the CTT first' (2026-10-22), recorded by the operator as the approval by A-TEACH2-17 because the owner writes nothing ('I'M NOT WRITING A MUTHA FUCKING THING YOU AND OR OTHER LLMs'); this record is written by the operator, not typed by the owner",
+ "schema": "cube-train.approval/1",
+ "seed_rule": "order seed = sha256('CUBE TRAIN at 3 USD' + ':' + zip_sha256) mod 2^63, computed on the host"
+}

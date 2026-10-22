@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM CUBE TRAIN package sealed (spec sheet 7.125 follow-up 16): zip 706e1fa6..., 14 tests pass from a fresh unzip; 0 USD; not trained
+
+- Owner's words: "adapt the CTT training code for the cube task, test it, and seal the CUBE TRAIN package (0 USD), ready for the training run."
+- A-CUBE-TRAIN-5 a3b5d53b... before the code: reserved [B] direction; pointer targets with a grammar lock and an outside filler; fine-tune from pinned c45 weights; fixed draws of kept CAS rows.
+- Package HELM_CUBE_TRAIN_20261022: cube_task (target, filler, lock, build, mix, reader, audit judge, audited decoder), ctt_train/train_cube.py, run_cube.py; data 40,000 + 1,503 TRAIN, 2,000 + 357 DEV. One review round: 1 MAJOR fixed.
+- Sealed zip sha256 706e1fa6f3ce77ae4fee7a21cbb05b820c87f8a01c5df237858f81545eb2e899 (117,555,288 bytes); backed up to D:/tksCAS-archive. Next: the training run on AWS, cap 3 USD.
+
 ## 2026-10-22 PDT - HELM CUBE TRAIN pieces built (spec sheet 7.125 follow-up 15): row builder + CTT adapter (test-first), AI-written stratum by four families incl. DeepSeek: kept TRAIN 1,503 / DEV 376; DeepSeek ~0.054 USD; not sealed, not trained
 
 - Owner's words: "build the training rows and the CTT adapter test-first (0 USD), then the AI-written lines, then seal the training package" and "for more ai lines you could use deepseek".
