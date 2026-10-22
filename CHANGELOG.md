@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM mouth v2 SEALED (spec sheet 7.128): zip 06358af3..., tests pass from a fresh unzip; 0 USD; not trained
+
+- Owner's words: "TRY PRODUCING A CORPUS OF 5TH, 10TH, AND COLLEGIATE LEVEL VOCABULARY ... BARBERSHOP, INTIMATE, CURIOUS, JOVIAL, ETC." (with Q1 a, Q2 yes); "HELM NEED OPINIONS JUST AS IT NEEDS FACTS".
+- Corpus: 37 AI-written, cross-checked vocabulary lists; 4,725 styled inputs; 12,418 AI-written lessons kept after two other-family checks; the lock's word list rebuilt (writable >= 97.95 % everywhere, v1 off-topic was 25 %).
+- A-TALK-7..11: ear learns the mouth's sentences, ASK scored on thing/value/month, sense check (two layers), opinions allowed (advice and made-up facts still blocked).
+- Laptop smoke clean; AWS tools c60 ready (cap 3 USD); backup D:/tksCAS-archive/mouth_train_v2_seal_20261022. Next: the owner's click.
+
 ## 2026-10-22 PDT - HELM mouth v2 PLAN written (design only, 0 USD; spec sheet 7.128); nothing built
 
 - Owner's words: "Yes: write a mouth v2 plan (0 USD, design only): fix the 4040 glue bug, add a sense check to the guard, more and better chat lessons, and say what it would cost; don't build or spend yet."
