@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: the cloud search fetches all fold records in one call (spec sheet 7.125 follow-up 10): live on the real bucket 4.16 -> 3.54 s per question (5 -> 4 calls), 8/8 EXACT; 473 HELM tests pass; live test < 0.01 USD
+
+- Owner's word: "Yes, make it faster".
+- A-TEACH2-12 5b42e233... before code (b551781b). Commit e8382fbc: one aws s3 cp --recursive (or get_many) per cloud search, each record still checked, nothing kept; the found index row is handed to the fetch.
+- FIX FIRST: 3 failed/3 passed -> 1 failed -> 6 passed; every HELM suite OFF 473 passed.
+- Live timing (synthetic lines, bucket helm-cold-memory-807562639912-usw2, 200-line chat, 2 fold records in the cloud): 4.16 -> 3.54 s median, ~0.83 s per real call; projection for 600 lines ~7.5 -> ~3.3 s (not measured). Negatives kept: still ~3.5 s per cloud question; small live saving.
+
 ## 2026-10-22 PDT - HELM: the Eye's deep search reads the cloud's fold records when online (spec sheet 7.125 follow-up 9): old lines recalled EXACT 1 -> 30 of 30; ~9 cloud reads per question, estimated ~10 s each on the real bucket; 467 HELM tests pass; 0 USD
 
 - Owner's words: "when a question misses everything on the device and HELM is online, let the Eye's deep search also read the fold records in the cloud, so rare words of old lines can still be found."

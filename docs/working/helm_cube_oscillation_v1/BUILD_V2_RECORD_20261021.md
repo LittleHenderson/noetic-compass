@@ -366,3 +366,44 @@ times the measured number of cloud reads. No AWS call was made for this step (0 
    Each read starts a new command-line process; a faster client or a small device-side cache of fold records would cut
    this, but either is a design change for the owner.
 2. Offline, rare words whose fold records are in the cloud are still not found (pinned test).
+
+## 13. The cloud search fetches all fold records in one call; live timing (A-TEACH2-12 `5b42e233…`, commit `e8382fbc`)
+
+Owner's word (2026-10-22): "“Yes, make it faster”", answering the offer to read the cloud's fold records in one go (or
+keep a device copy) and to measure the real time with a tiny live test.
+
+The amendment was committed before any code (`b551781b`). A device copy was not chosen: it would refill the device
+folder whose limit sent the records to the cloud. When the cloud search runs, the Eye now fetches every fold record of
+the conversation's cloud folder in ONE call (`aws s3 cp --recursive … --exclude * --include *.fold.json` into a
+temporary folder that is removed; `get_many` on the stand-in cloud). Each record is still checked against its kept 16
+characters; nothing is kept. The search hands the found capsule's index row to the fetch for that one question, so the
+fold record is not read again.
+
+FIX FIRST (`test_helm_cube_cloudbatch.py`, written first): 3 failed, 3 passed → 5 passed, 1 failed (the found capsule's
+fold record was read a second time, one call on its own) → 6 passed. Every HELM suite, both switches OFF:
+**473 passed**.
+
+**Live timing on the real bucket ✅ (2026-10-22, `CLOUD_BATCH_TIMING_20261022.json`).** Source: commit `e8382fbc`;
+purpose: time the cloud search before and after; place: bucket `helm-cold-memory-807562639912-usw2` (us-west-2),
+prefix `smoke/20261022T092048Z-batch/`, from the laptop's AWS command line tool, no instance; data: made-up planting lines
+only (`SYNTHETIC_ONLY`); limits: a 200-line chat, limit 2,000 bytes, device limit 1,000 bytes; cleanup: none by design
+(nothing is deleted by code). Building the chat took 94.6 seconds and 106 calls; 2 fold records reached the cloud.
+Cost: about 140 requests of a few kilobytes, well under 0.01 USD.
+
+| 8 questions, each by an old line's own word | Seconds per question (median) | Calls per question (median) | Recalled EXACT |
+|---|---|---|---|
+| Before (one call per fold record) | **4.16** | 5 | 8 of 8 |
+| After (one batched call) | **3.54** | 4 | 8 of 8 |
+
+No question was answered with a wrong line. One real call took about 0.83 seconds here (the earlier estimate was 1.12).
+Before, a question costs 3 calls plus one per fold record read; after, it costs 4 calls however many fold records
+there are (the reachability check, the batch, the capsule's record, its original). On the 600-line chat of
+A-TEACH2-11 (9 calls before) that projects to about 7.5 seconds before against about 3.3 after: a PROJECTION from the
+measured 0.83 s per call, not a measurement.
+
+**Measured negatives kept 🟥:**
+1. Still about 3.5 seconds per cloud question: 4 command-line calls of about 0.83 s each. The reachability check is one
+   of them; a faster client (no new process per call) or remembering the last check for a short time would cut it;
+   both are design changes for the owner.
+2. The saving on this small live chat is small (one call), because only 2 fold records were in the cloud; the bigger
+   saving on longer chats is projected, not measured live.

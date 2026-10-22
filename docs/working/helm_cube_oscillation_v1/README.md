@@ -36,3 +36,5 @@ new `PROPOSED`.
 **2026-10-22, follow-up 8:** clue words from every line of a batch (A-TEACH2-10; `BUILD_V2_RECORD_20261021.md` §11; `EVERYLINE_BYTES_20261022.json`): at 53,370 for 8,000 lines, reach 1 → 30 of 30, memory under; small limits now go over.
 
 **2026-10-22, follow-up 9:** the deep search reads the cloud's fold records when online (A-TEACH2-11; `BUILD_V2_RECORD_20261021.md` §12; `CLOUDSEARCH_REACH_20261022.json`): reach 1 → 30 of 30; estimated ~10 s per question on the real bucket.
+
+**2026-10-22, follow-up 10:** the cloud search fetches all fold records in one call (A-TEACH2-12; `BUILD_V2_RECORD_20261021.md` §13; live `CLOUD_BATCH_TIMING_20261022.json`): 4.16 → 3.54 s per question on the real bucket.
