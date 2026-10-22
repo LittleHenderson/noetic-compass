@@ -1,0 +1,142 @@
+{
+ "long_3000_limit_4000": {
+  "after_every_line": {
+   "capsules": 330,
+   "fold_rows": 6,
+   "index_row_bytes_median": 430,
+   "lean_record_bytes_median": null,
+   "levels": [
+    1,
+    2
+   ],
+   "limit": 4000,
+   "reach_by_deep_search": 30,
+   "reach_exact": 30,
+   "reach_sampled": 30,
+   "seconds": 15.0,
+   "under_limit_end": false,
+   "working_bytes_end": 4088,
+   "working_bytes_peak": 7821
+  },
+  "before_first8": {
+   "capsules": 303,
+   "fold_rows": 9,
+   "index_row_bytes_median": 132,
+   "lean_record_bytes_median": null,
+   "levels": [
+    1,
+    2
+   ],
+   "limit": 4000,
+   "reach_by_deep_search": 4,
+   "reach_exact": 4,
+   "reach_sampled": 30,
+   "seconds": 13.1,
+   "under_limit_end": false,
+   "working_bytes_end": 5007,
+   "working_bytes_peak": 5199
+  }
+ },
+ "long_600_limit_4000": {
+  "after_every_line": {
+   "capsules": 54,
+   "fold_rows": 6,
+   "index_row_bytes_median": 260,
+   "lean_record_bytes_median": null,
+   "levels": [
+    1
+   ],
+   "limit": 4000,
+   "reach_by_deep_search": 28,
+   "reach_exact": 30,
+   "reach_sampled": 30,
+   "seconds": 2.3,
+   "under_limit_end": false,
+   "working_bytes_end": 4742,
+   "working_bytes_peak": 4924
+  },
+  "before_first8": {
+   "capsules": 52,
+   "fold_rows": 5,
+   "index_row_bytes_median": 131,
+   "lean_record_bytes_median": 284,
+   "levels": [
+    1
+   ],
+   "limit": 4000,
+   "reach_by_deep_search": 0,
+   "reach_exact": 0,
+   "reach_sampled": 30,
+   "seconds": 2.1,
+   "under_limit_end": true,
+   "working_bytes_end": 3743,
+   "working_bytes_peak": 4000
+  }
+ },
+ "long_8000_limit_53370": {
+  "after_every_line": {
+   "capsules": 523,
+   "fold_rows": 60,
+   "index_row_bytes_median": 423,
+   "lean_record_bytes_median": null,
+   "levels": [
+    1
+   ],
+   "limit": 53370,
+   "reach_by_deep_search": 27,
+   "reach_exact": 30,
+   "reach_sampled": 30,
+   "seconds": 35.6,
+   "under_limit_end": true,
+   "working_bytes_end": 48743,
+   "working_bytes_peak": 53369
+  },
+  "before_first8": {
+   "capsules": 513,
+   "fold_rows": 27,
+   "index_row_bytes_median": 133,
+   "lean_record_bytes_median": null,
+   "levels": [
+    1
+   ],
+   "limit": 53370,
+   "reach_by_deep_search": 0,
+   "reach_exact": 1,
+   "reach_sampled": 30,
+   "seconds": 36.2,
+   "under_limit_end": true,
+   "working_bytes_end": 49542,
+   "working_bytes_peak": 53370
+  }
+ },
+ "short_300_limit_3000": {
+  "after_every_line": {
+   "capsules": 19,
+   "fold_rows": 1,
+   "index_row_bytes_median": 201,
+   "lean_record_bytes_median": null,
+   "levels": [
+    1
+   ],
+   "limit": 3000,
+   "seconds": 0.6,
+   "under_limit_end": true,
+   "working_bytes_end": 2995,
+   "working_bytes_peak": 3000
+  },
+  "before_first8": {
+   "capsules": 20,
+   "fold_rows": 1,
+   "index_row_bytes_median": 134,
+   "lean_record_bytes_median": null,
+   "levels": [
+    1
+   ],
+   "limit": 3000,
+   "seconds": 0.8,
+   "under_limit_end": true,
+   "working_bytes_end": 2299,
+   "working_bytes_peak": 3000
+  }
+ }
+}

@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: capsules take clue words from every line of a batch (spec sheet 7.125 follow-up 8): at the owner's 53,370 for 8,000 lines, old lines found EXACT by their own word 1 -> 30 of 30, memory still under (48,743 B); small 4,000 limits now go over; 462 HELM tests pass; 0 USD
+
+- Owner's words: "let each capsule take its clue words from every line in its batch (not just the first lines), so any old line can be found by its own words."
+- A-TEACH2-10 d7242340... before code (bb7747be). Commit d6155be5: every distinct content word of every line on the size-limit path; the CAS sentence keeps the first 8 (Eye template 2); plain compaction keeps the first-8 rule.
+- FIX FIRST: 5 failed/2 passed -> 7 passed (1 test fault); 2 pinned negatives; 4 older test files kept on the first-8 rule; every HELM suite OFF 462 passed.
+- Negatives kept: bigger index rows push small limits over (600 lines at 4,000: 4,742 B; 3,000 lines peak 7,821); words past the 48-word cap are not found once fold records are in the cloud; most finds go through the deep search.
+
 ## 2026-10-22 PDT - HELM: the Eye folds old index rows, row upon row (spec sheet 7.125 follow-up 7): 8,000 lines stay under the owner's 53,370 (100,721 -> 52,429 B); 600 lines under 4,000 (3,832 B); 3,000 lines at 4,000 still over (4,542 B, below the floor); old memories recalled EXACT 20/20; 453 HELM tests pass; 0 USD
 
 - Owner's words: "let the Eye fold old index rows together (for example, one row per thread of conversation, holding the clue words of its capsules), so working memory can stay under the limit for good."

@@ -290,3 +290,46 @@ good. 8,000 lines at 53,370 never needed a second level.
 3. Logs, receipts and the maps of cloud keys still grow and are not counted as working memory (as before).
 4. The deep search reads every fold record on the device after a miss, so its time grows with the chat; fold records
    already in the cloud are not deep-searched.
+
+## 11. Clue words from every line of a batch (A-TEACH2-10 `d7242340…`, commit `d6155be5`)
+
+Owner's words (2026-10-22, verbatim): "Yes: let each capsule take its clue words from every line in its batch (not just
+the first lines), so any old line can be found by its own words. Amendment first, test-first, 0 USD; measure bytes and
+reach before and after."
+
+The amendment was committed before any code (`bb7747be`). On the size-limit path a capsule's clue words are now every
+distinct content word of every line in its batch. The CAS sentence is still built from the first 8 (the Eye's template
+2; template 1 records still rebuild). Plain compaction and the ladder path keep the first-8 rule.
+
+FIX FIRST (`test_helm_cube_everyline.py`, written first): 5 failed, 2 passed → 6 passed, 1 failed (a test fault: it
+counted the comma in "From my notes, …") → 7 passed; two pinned negatives added after measuring (below) → 9 passed.
+Nine older tests in the tiers, offload and fold files failed under the new rule because they assumed capsules stay in
+working memory longer (rows are bigger now, so capsules move off sooner); those four older test files now keep the
+first-8 rule they were written for, so they still test what they claimed. Every HELM suite, both switches OFF:
+**462 passed**.
+
+**Before (first-8 rule) and after (every line), same chats** (`EVERYLINE_BYTES_20261022.json`). "Reach" asks for 30
+lines spread over the whole chat, middle lines included (not the newest 20), each by its own unique word; EXACT means the
+original line came back and its fingerprint matched. No sampled question was ever answered with a wrong line.
+
+| Chat | Working memory at the end (peak) | Reach: lines recalled EXACT | Under the limit at the end |
+|---|---|---|---|
+| 8,000 lines, limit 53,370 (the owner's) | 49,542 (53,370) → **48,743 (53,369)** | **1 → 30 of 30** (27 through the deep search) | ✅ → ✅ |
+| 600 lines, limit 4,000 | 3,743 (4,000) → **4,742 (4,924)** | **0 → 30 of 30** (28 deep) | ✅ → 🟥 |
+| 3,000 lines, limit 4,000 | 5,007 (5,199) → **4,088 (7,821)** | **4 → 30 of 30** (30 deep) | 🟥 → 🟥 |
+| 300 short lines, limit 3,000 | 2,299 (3,000) → **2,995 (3,000)** | (not sampled) | ✅ → ✅ |
+
+Row sizes: an index row about 131–134 bytes → about 201–430 bytes (it now carries every line's words); folded rows are
+still capped at 48 words.
+
+In plain words: at the owner's limit, almost no old line could be found by its own words before (1 in 30), and now
+every sampled line can (30 in 30), with memory still under 53,370 bytes. Most of those answers come through the deep
+search of the device folder, because a folded row keeps only 48 of a thread's words.
+
+**Measured negatives kept 🟥:**
+1. Bigger rows cost space at small limits: 600 lines at 4,000 now end over it (4,742 bytes); a 3,000-line chat peaks at
+   7,821. Pinned as a test.
+2. Once fold records are in the cloud, words past the 48-word cap are not found: the deep search (A-TEACH2-9 F5) reads
+   only fold records still on the device. HELM then says it does not know (never a wrong line). Pinned as a test.
+3. Most old lines are now found through the deep search, whose time grows with the chat (it reads every fold record on
+   the device after a miss in working memory).
