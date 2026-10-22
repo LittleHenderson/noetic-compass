@@ -1,0 +1,1446 @@
+{
+ "A_wrong_lesson": {
+  "amendment": "A-R1W7-7",
+  "arms": {
+   "CHAT_DIAG": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ingredient_sha6": [
+     "89c599",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "7",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "REFUSED_CONFLICT",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED"
+    ],
+    "lesson_taught_unit": [
+     "cup",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_verdicts": [
+     "WRONG",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": true,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "NOT_SCORED",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_gate_codes": [
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "GATE_PASS",
+     "REPAIR"
+    ],
+    "turn_intents": [
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP"
+    ],
+    "turn_loop_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "turn_paths": [
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE"
+    ],
+    "turn_texts_equal_carrier_turns": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "unexplained_ask_strict": false,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   },
+   "CHAT_ON": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ingredient_sha6": [
+     "89c599",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "7",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "REFUSED_CONFLICT",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED"
+    ],
+    "lesson_taught_unit": [
+     "cup",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_verdicts": [
+     "WRONG",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": true,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "NOT_SCORED",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_gate_codes": [
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "GATE_PASS",
+     "REPAIR"
+    ],
+    "turn_intents": [
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP"
+    ],
+    "turn_loop_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "turn_paths": [
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE"
+    ],
+    "turn_texts_equal_carrier_turns": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "unexplained_ask_strict": false,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   },
+   "CHAT_ON_REPLAY": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ingredient_sha6": [
+     "89c599",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "7",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "REFUSED_CONFLICT",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED"
+    ],
+    "lesson_taught_unit": [
+     "cup",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_verdicts": [
+     "WRONG",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": true,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "NOT_SCORED",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_gate_codes": [
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "GATE_PASS",
+     "REPAIR"
+    ],
+    "turn_intents": [
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP"
+    ],
+    "turn_loop_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "turn_paths": [
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE"
+    ],
+    "turn_texts_equal_carrier_turns": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "unexplained_ask_strict": false,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   },
+   "LOOP_ON": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ingredient_sha6": [
+     "89c599",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "7",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "REFUSED_CONFLICT",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED",
+     "RECEIPT_FAILED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED"
+    ],
+    "lesson_taught_unit": [
+     "cup",
+     null,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "lesson_verdicts": [
+     "WRONG",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED",
+     "NOT_LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": null,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "NOT_SCORED",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_status_words": [
+     "WITNESS_ADMITTED",
+     "TEACH_REFUSED_REFUSED_CONFLICT",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "TEACH_REFUSED_RECEIPT_FAILED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "unexplained_ask_strict": false,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   }
+  },
+  "cell": "C710:MIXED",
+  "grammar_unit_word_per_line": [
+   "can",
+   "cup",
+   "",
+   "tablespoon",
+   "tablespoon",
+   "teaspoon",
+   "teaspoon"
+  ],
+  "head_artifact_rule_D_W6_12": false,
+  "helm_parse_of_normalized_line_alone": {
+   "amount_present": true,
+   "name_equals_key_head": false,
+   "name_last_word_head_norm_equals_key_head_norm": false,
+   "name_sha6": "3d3a4b",
+   "name_word_count": 2,
+   "note_line": false,
+   "ratio_helm_amount_over_key_q": "1",
+   "result": "LINE",
+   "unit": "can"
+  },
+  "helm_parse_of_raw_line_alone": {
+   "amount_present": true,
+   "name_equals_key_head": false,
+   "name_last_word_head_norm_equals_key_head_norm": false,
+   "name_sha6": "3d3a4b",
+   "name_word_count": 2,
+   "note_line": false,
+   "ratio_helm_amount_over_key_q": "1",
+   "result": "LINE",
+   "unit": "can"
+  },
+  "id": "RW:pg:65061@573841",
+  "inputs_exam_equal_carrier_turns": true,
+  "key_answer_word": "UNDETERMINED",
+  "key_head_sha6_per_line": [
+   "20c526",
+   "20c526",
+   "288971",
+   "c9b82b",
+   "f55f97",
+   "63479a",
+   "8cbbcf"
+  ],
+  "key_heads_distinct": false,
+  "key_limiting_index": null,
+  "key_limiting_scored": null,
+  "lesson_index": 0,
+  "lesson_verdicts_identical_across_four_arms": true,
+  "line_features": {
+   "grammar_qty_starts_parens_removed": 1,
+   "grammar_qty_starts_with_parens": 1,
+   "has_bracket": false,
+   "has_comma": false,
+   "has_decimal_point_number": false,
+   "has_hyphen": false,
+   "has_parenthesis": false,
+   "has_semicolon": false,
+   "has_slash": false,
+   "has_vulgar_fraction_char": true,
+   "has_word_and": false,
+   "has_word_of": false,
+   "has_word_or": true,
+   "has_word_plus": false,
+   "has_word_to": false,
+   "helm_normalize_changes_line": false,
+   "helm_other_unit_words_at_word_index": [],
+   "helm_table_unit_words_at_word_index": [
+    [
+     1,
+     "can"
+    ]
+   ],
+   "n_words": 4,
+   "parenthetical_has_digit": false,
+   "parenthetical_table_unit_words": [],
+   "range_by_helm_match_amount": false,
+   "starts_with_article_a_an": false,
+   "starts_with_digit": false,
+   "starts_with_number_word": false,
+   "vague_measure_words_at_word_index": []
+  },
+  "line_grammar_parse_unit_word": "can",
+  "line_in_multi_qty_list": false,
+  "line_survey_form": "simple_fraction",
+  "line_survey_unit": "can",
+  "multi_qty_line_indexes_frozen_rule": [],
+  "n_key_lines": 7,
+  "n_lessons_item": 7,
+  "n_raw_lines": 7,
+  "n_turns": 9,
+  "other_lines_brief": [
+   {
+    "has_parenthesis": false,
+    "line": 0,
+    "qty_starts_parens_removed": 1,
+    "survey_form": "simple_fraction",
+    "survey_unit": "can"
+   },
+   {
+    "has_parenthesis": false,
+    "line": 1,
+    "qty_starts_parens_removed": 1,
+    "survey_form": "mixed",
+    "survey_unit": "cup"
+   },
+   {
+    "has_parenthesis": false,
+    "line": 2,
+    "qty_starts_parens_removed": 1,
+    "survey_form": "integer",
+    "survey_unit": "slice"
+   },
+   {
+    "has_parenthesis": false,
+    "line": 3,
+    "qty_starts_parens_removed": 1,
+    "survey_form": "integer",
+    "survey_unit": "tablespoon"
+   },
+   {
+    "has_parenthesis": false,
+    "line": 4,
+    "qty_starts_parens_removed": 1,
+    "survey_form": "integer",
+    "survey_unit": "tablespoon"
+   },
+   {
+    "has_parenthesis": false,
+    "line": 5,
+    "qty_starts_parens_removed": 1,
+    "survey_form": "simple_fraction",
+    "survey_unit": "teaspoon"
+   },
+   {
+    "has_parenthesis": false,
+    "line": 6,
+    "qty_starts_parens_removed": 1,
+    "survey_form": "simple_fraction",
+    "survey_unit": "teaspoon"
+   }
+  ],
+  "representable_flag": true,
+  "representable_why_not_codes": [],
+  "same_lesson_wrong_in_loop_on": true,
+  "same_name_rule_D_W6_6": true,
+  "sample_turns_equal_carrier_turns": true,
+  "survey_forms_all_lines": [
+   "simple_fraction",
+   "mixed",
+   "integer",
+   "integer",
+   "integer",
+   "simple_fraction",
+   "simple_fraction"
+  ],
+  "survey_units_all_lines": [
+   "can",
+   "cup",
+   "slice",
+   "tablespoon",
+   "tablespoon",
+   "teaspoon",
+   "teaspoon"
+  ]
+ },
+ "B_unexplained_ask": {
+  "amendment": "A-R1W7-7",
+  "arms": {
+   "CHAT_DIAG": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     true,
+     true
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     1,
+     2
+    ],
+    "lesson_ingredient_sha6": [
+     "c9b82b",
+     "ab7902",
+     "d2f35f"
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "1",
+     "1",
+     "1"
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "ADMITTED",
+     "ADMITTED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED"
+    ],
+    "lesson_taught_unit": [
+     "tablespoon",
+     "tablespoon",
+     "cup"
+    ],
+    "lesson_verdicts": [
+     "LEARNED",
+     "LEARNED",
+     "LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": true,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "ASKS",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_gate_codes": [
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "GATE_PASS",
+     "REPAIR"
+    ],
+    "turn_intents": [
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP"
+    ],
+    "turn_loop_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "turn_paths": [
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE"
+    ],
+    "turn_texts_equal_carrier_turns": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "unexplained_ask_strict": true,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   },
+   "CHAT_ON": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     true,
+     true
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     1,
+     2
+    ],
+    "lesson_ingredient_sha6": [
+     "c9b82b",
+     "ab7902",
+     "d2f35f"
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "1",
+     "1",
+     "1"
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "ADMITTED",
+     "ADMITTED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED"
+    ],
+    "lesson_taught_unit": [
+     "tablespoon",
+     "tablespoon",
+     "cup"
+    ],
+    "lesson_verdicts": [
+     "LEARNED",
+     "LEARNED",
+     "LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": true,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "ASKS",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_gate_codes": [
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "GATE_PASS",
+     "REPAIR"
+    ],
+    "turn_intents": [
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP"
+    ],
+    "turn_loop_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "turn_paths": [
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE"
+    ],
+    "turn_texts_equal_carrier_turns": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "unexplained_ask_strict": true,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   },
+   "CHAT_ON_REPLAY": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     true,
+     true
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     1,
+     2
+    ],
+    "lesson_ingredient_sha6": [
+     "c9b82b",
+     "ab7902",
+     "d2f35f"
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "1",
+     "1",
+     "1"
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "ADMITTED",
+     "ADMITTED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED"
+    ],
+    "lesson_taught_unit": [
+     "tablespoon",
+     "tablespoon",
+     "cup"
+    ],
+    "lesson_verdicts": [
+     "LEARNED",
+     "LEARNED",
+     "LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": true,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "ASKS",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_gate_codes": [
+     "PROCEED",
+     "PROCEED",
+     "PROCEED",
+     "GATE_PASS",
+     "REPAIR"
+    ],
+    "turn_intents": [
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP",
+     "RECIPE_FOUNDATION_LOOP"
+    ],
+    "turn_loop_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "turn_paths": [
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE",
+     "WITHHELD_NOT_A_CODE"
+    ],
+    "turn_texts_equal_carrier_turns": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "unexplained_ask_strict": true,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   },
+   "LOOP_ON": {
+    "all_log_licensed_first": [
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "CLARIFY_ENGLISH_UNKNOWN_INGREDIENT",
+     "CLARIFY_ENGLISH_UNKNOWN_PRODUCT"
+    ],
+    "all_log_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "caution_on_artifact": false,
+    "face_unknown_code_seen_any_turn": false,
+    "lesson_admitted": [
+     true,
+     true,
+     true
+    ],
+    "lesson_ingredient_line_of": [
+     0,
+     1,
+     2
+    ],
+    "lesson_ingredient_sha6": [
+     "c9b82b",
+     "ab7902",
+     "d2f35f"
+    ],
+    "lesson_ratio_learned_over_key_q": [
+     "1",
+     "1",
+     "1"
+    ],
+    "lesson_reason_words": [
+     "ADMITTED",
+     "ADMITTED",
+     "ADMITTED"
+    ],
+    "lesson_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED"
+    ],
+    "lesson_taught_unit": [
+     "tablespoon",
+     "tablespoon",
+     "cup"
+    ],
+    "lesson_verdicts": [
+     "LEARNED",
+     "LEARNED",
+     "LEARNED"
+    ],
+    "question_inner_status": "UNDETERMINED_CLARIFY",
+    "question_routed": null,
+    "question_scored_status": "UNDETERMINED_CLARIFY",
+    "question_verdict": "ASKS",
+    "receipt_inconsistent_turns": 0,
+    "stock_after_entries": 0,
+    "stock_status_word": "STOCK_RECORDED",
+    "turn_status_words": [
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "WITNESS_ADMITTED",
+     "STOCK_RECORDED",
+     "UNDETERMINED_CLARIFY"
+    ],
+    "unexplained_ask_strict": true,
+    "unsettled_same_name_fired": false,
+    "wide_audit_ok": [
+     true
+    ]
+   }
+  },
+  "cell": "C23:FRACTION",
+  "frozen_scorer_accepted_reason": {
+   "accepted": false,
+   "artifact_caution_requires": [
+    "question status or inner status == CLARIFY_WIDE_UNSETTLED_SAME_NAME",
+    "custody_w6.head_artifact(key) == True (a key HEAD is a unit word)"
+   ],
+   "head_artifact": false,
+   "rule": "r1w6.score_w6.score_real: unexplained_asks = unexplained_ask_strict minus artifact_caution (D-W6-12)",
+   "scored_status_in_ASKING_EXACT": true,
+   "scored_status_is_unsettled_same_name": false
+  },
+  "grammar_unit_word_per_line": [
+   "",
+   "",
+   ""
+  ],
+  "head_artifact_rule_D_W6_12": false,
+  "helm_parse_of_pantry_lines_alone": [
+   {
+    "amount_present": true,
+    "name_equals_key_head": false,
+    "name_last_word_head_norm_equals_key_head_norm": false,
+    "name_sha6": "395311",
+    "name_word_count": 6,
+    "note_line": false,
+    "ratio_helm_amount_over_key_q": "NOT_WRITTEN_PANTRY_RATIO_IS_SEED_DERIVED",
+    "result": "LINE",
+    "unit": "tablespoon"
+   },
+   {
+    "amount_present": true,
+    "name_equals_key_head": true,
+    "name_last_word_head_norm_equals_key_head_norm": true,
+    "name_sha6": "ab7902",
+    "name_word_count": 1,
+    "note_line": false,
+    "ratio_helm_amount_over_key_q": "NOT_WRITTEN_PANTRY_RATIO_IS_SEED_DERIVED",
+    "result": "LINE",
+    "unit": "tablespoon"
+   },
+   {
+    "amount_present": true,
+    "name_equals_key_head": false,
+    "name_last_word_head_norm_equals_key_head_norm": true,
+    "name_sha6": "d2f35f",
+    "name_word_count": 3,
+    "note_line": false,
+    "ratio_helm_amount_over_key_q": "NOT_WRITTEN_PANTRY_RATIO_IS_SEED_DERIVED",
+    "result": "LINE",
+    "unit": "cup"
+   }
+  ],
+  "helm_parse_of_raw_lines_alone": [
+   {
+    "amount_present": true,
+    "name_equals_key_head": false,
+    "name_last_word_head_norm_equals_key_head_norm": false,
+    "name_sha6": "395311",
+    "name_word_count": 6,
+    "note_line": false,
+    "ratio_helm_amount_over_key_q": "1",
+    "result": "LINE",
+    "unit": "tablespoon"
+   },
+   {
+    "amount_present": true,
+    "name_equals_key_head": true,
+    "name_last_word_head_norm_equals_key_head_norm": true,
+    "name_sha6": "ab7902",
+    "name_word_count": 1,
+    "note_line": false,
+    "ratio_helm_amount_over_key_q": "1",
+    "result": "LINE",
+    "unit": "tablespoon"
+   },
+   {
+    "amount_present": true,
+    "name_equals_key_head": false,
+    "name_last_word_head_norm_equals_key_head_norm": true,
+    "name_sha6": "d2f35f",
+    "name_word_count": 3,
+    "note_line": false,
+    "ratio_helm_amount_over_key_q": "1",
+    "result": "LINE",
+    "unit": "cup"
+   }
+  ],
+  "id": "RW:pg:6912@197664",
+  "inputs_exam_equal_carrier_turns": true,
+  "key_answer_word": "ANSWER",
+  "key_head_sha6_per_line": [
+   "c9b82b",
+   "ab7902",
+   "63b049"
+  ],
+  "key_heads_distinct": true,
+  "key_limiting_index": 2,
+  "key_limiting_scored": true,
+  "line_features_all_lines": [
+   {
+    "grammar_qty_starts_parens_removed": 2,
+    "grammar_qty_starts_with_parens": 2,
+    "has_bracket": false,
+    "has_comma": false,
+    "has_decimal_point_number": false,
+    "has_hyphen": false,
+    "has_parenthesis": false,
+    "has_semicolon": false,
+    "has_slash": false,
+    "has_vulgar_fraction_char": false,
+    "has_word_and": true,
+    "has_word_of": false,
+    "has_word_or": false,
+    "has_word_plus": false,
+    "has_word_to": false,
+    "helm_normalize_changes_line": true,
+    "helm_other_unit_words_at_word_index": [],
+    "helm_table_unit_words_at_word_index": [
+     [
+      1,
+      "tablespoon"
+     ],
+     [
+      5,
+      "tablespoon"
+     ]
+    ],
+    "n_words": 8,
+    "parenthetical_has_digit": false,
+    "parenthetical_table_unit_words": [],
+    "range_by_helm_match_amount": false,
+    "starts_with_article_a_an": false,
+    "starts_with_digit": true,
+    "starts_with_number_word": false,
+    "vague_measure_words_at_word_index": []
+   },
+   {
+    "grammar_qty_starts_parens_removed": 1,
+    "grammar_qty_starts_with_parens": 1,
+    "has_bracket": false,
+    "has_comma": false,
+    "has_decimal_point_number": false,
+    "has_hyphen": false,
+    "has_parenthesis": false,
+    "has_semicolon": false,
+    "has_slash": false,
+    "has_vulgar_fraction_char": false,
+    "has_word_and": false,
+    "has_word_of": false,
+    "has_word_or": false,
+    "has_word_plus": false,
+    "has_word_to": false,
+    "helm_normalize_changes_line": false,
+    "helm_other_unit_words_at_word_index": [],
+    "helm_table_unit_words_at_word_index": [
+     [
+      1,
+      "tablespoon"
+     ]
+    ],
+    "n_words": 3,
+    "parenthetical_has_digit": false,
+    "parenthetical_table_unit_words": [],
+    "range_by_helm_match_amount": false,
+    "starts_with_article_a_an": false,
+    "starts_with_digit": true,
+    "starts_with_number_word": false,
+    "vague_measure_words_at_word_index": []
+   },
+   {
+    "grammar_qty_starts_parens_removed": 1,
+    "grammar_qty_starts_with_parens": 1,
+    "has_bracket": false,
+    "has_comma": false,
+    "has_decimal_point_number": false,
+    "has_hyphen": false,
+    "has_parenthesis": false,
+    "has_semicolon": false,
+    "has_slash": true,
+    "has_vulgar_fraction_char": false,
+    "has_word_and": false,
+    "has_word_of": false,
+    "has_word_or": false,
+    "has_word_plus": false,
+    "has_word_to": false,
+    "helm_normalize_changes_line": false,
+    "helm_other_unit_words_at_word_index": [],
+    "helm_table_unit_words_at_word_index": [
+     [
+      1,
+      "cup"
+     ]
+    ],
+    "n_words": 5,
+    "parenthetical_has_digit": false,
+    "parenthetical_table_unit_words": [],
+    "range_by_helm_match_amount": false,
+    "starts_with_article_a_an": false,
+    "starts_with_digit": true,
+    "starts_with_number_word": false,
+    "vague_measure_words_at_word_index": []
+   }
+  ],
+  "multi_qty_line_indexes_frozen_rule": [
+   0
+  ],
+  "n_key_lines": 3,
+  "n_lessons_item": 3,
+  "n_raw_lines": 3,
+  "n_turns": 5,
+  "pantry_line_count": 3,
+  "pantry_survey": [
+   {
+    "form": "simple_fraction",
+    "unit": "tablespoon"
+   },
+   {
+    "form": "integer",
+    "unit": "tablespoon"
+   },
+   {
+    "form": "simple_fraction",
+    "unit": "cup"
+   }
+  ],
+  "representable_flag": false,
+  "representable_why_not_codes": [
+   "line0:MULTI_QTY"
+  ],
+  "same_ask_in_loop_on": true,
+  "same_name_rule_D_W6_6": false,
+  "sample_turns_equal_carrier_turns": true,
+  "survey_forms_all_lines": [
+   "integer",
+   "integer",
+   "simple_fraction"
+  ],
+  "survey_units_all_lines": [
+   "tablespoon",
+   "tablespoon",
+   "cup"
+  ]
+ },
+ "carrier_inputs_sha256": "ea0f0132c5fae930de90c26eaeccf459a06eb8c4074ffd1cea22a91cfeed3cff",
+ "exam": "X7v9",
+ "faces_reader_version": "helm_faces_in v2.2 (2026-10-21: names as given; unheld subject asks; -oes/-ves forms)",
+ "helm_modules_from_package_helm_now": true,
+ "job": "c56",
+ "keys_sha256": "fdd945e1eb3122007b90eabcf414de6cb609a23b5cdb414012982034af25729c",
+ "name_hashing": "every name is sha256(lower-cased string)[:6]; no name, text, amount, yield or reply is written",
+ "reader_version": "helm_wide_turn reader RB-W1 v7.2 (2026-10-21)",
+ "sample_sha256": "09e335a63e2657f59e082e58763a6a7d1bca720891797de128dbd48e33396f6c",
+ "schema": "helm.r1w7.custodian-shape-facts/1",
+ "unit_files_sha256": {
+  "W7_X7_REAL_CHAT_DIAG.json": "d78559a31c5e0cd1104e0e4bcf732845e6928409e015f0ea99ba788c603e13f7",
+  "W7_X7_REAL_CHAT_ON.json": "9b9b2068e5719ac8176da30c0a694f8012eb7eeff154fd5c3395fb65eb7c73c7",
+  "W7_X7_REAL_CHAT_ON_REPLAY.json": "91463a1349cd99d44f8991b97c53e26714b7a4103f7bfff82c04a681dc09a10a",
+  "W7_X7_REAL_LOOP_ON.json": "808cf0c480a747a186514e169d7cd1e1a87f70ef83e27d9114837d58e579c9eb"
+ },
+ "written_utc": "2026-10-21T19:06:09Z"
+}
