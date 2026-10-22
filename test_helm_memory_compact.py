@@ -355,3 +355,93 @@ def test_replay_gives_same_receipts(tmp_path, monkeypatch):
     _fill(b, BEES + FILLER[:4])
     assert [c.receipt for c in a.compactor.capsules] == [c.receipt for c in b.compactor.capsules]
     assert [c.crumb["sha256"] for c in a.compactor.capsules] == [c.crumb["sha256"] for c in b.compactor.capsules]
+
+
+# ----------------------------------------------------------------------------------------------- TEACH-1 FIX FIRST (2026-10-21)
+# Found by the TEACH-1 practice round 0 (docs/working/helm_memory_compaction_v1/teach1/TEST_RECORD_TEACH1.md): with 24
+# similar facts, recall answered from any memory sharing ONE word, remembered its own quiz questions as facts, kept number
+# words inside capsules, served a strengthened rebuild as EXACT, and the chat never passed the person's reply to a
+# refresh question back to the compactor. Each test below failed on the build v1 code and passes on the fix.
+BUSES = [
+    ("GENERAL_KNOWLEDGE_INQUIRY", "The Oxley line ran six buses in March."),
+    ("GENERAL_KNOWLEDGE_INQUIRY", "The Eastwold line ran two buses in March."),
+    ("GENERAL_KNOWLEDGE_INQUIRY", "Halden drove the Eastwold line."),
+    ("GENERAL_KNOWLEDGE_INQUIRY", "Correction: the Oxley line ran nine buses in March, not six."),
+]
+
+
+def test_recall_needs_every_question_word_and_the_newest_wins(tmp_path):
+    mem = _mem(tmp_path, on=True, max_turns=50)
+    _fill(mem, BUSES)
+    hit = mem.compactor.recall("What did I say about the buses on the Oxley line in March?")
+    assert hit["label"] == "EXACT"
+    assert hit["lookup"]["candidates"] == 2          # the Eastwold line and the driver are not about the Oxley line
+    assert hit["texts"][0].startswith("Correction:")  # a later statement supersedes an earlier one
+    none = mem.compactor.recall("What did I say about who drove the Glenhollow line?")
+    assert none["label"] == "UNKNOWN"                # a subject never mentioned is never answered from a neighbour
+
+
+def test_recall_never_serves_a_memory_question_as_a_memory(tmp_path):
+    mem = _mem(tmp_path, on=True, max_turns=50)
+    q = "What did I say about the buses on the Fennick line in June?"
+    mem.record_turn(q, q, "QUERY_MEMORY_RECALL", {}, "I don't see a specific note on that yet.")
+    hit = mem.compactor.recall(q)
+    assert hit["label"] == "UNKNOWN", hit
+
+
+def test_question_turns_compact_into_question_capsules_that_recall_skips(tmp_path):
+    mem = _mem(tmp_path, on=True, max_turns=4)
+    q = "What did I say about the buses on the Fennick line in June?"
+    mem.record_turn(q, q, "QUERY_MEMORY_RECALL", {}, "I don't see a specific note on that yet.")
+    _fill(mem, FILLER[:8])
+    comp = mem.compactor
+    cap = next(c for c in comp.capsules if 1 in c.crumb["turn_ids"])
+    assert cap.kind == "question"
+    assert comp.recall(q)["label"] == "UNKNOWN"
+
+
+def test_number_words_are_never_clues(tmp_path):
+    mem = _mem(tmp_path, on=True, max_turns=4)
+    _fill(mem, [("GENERAL_KNOWLEDGE_INQUIRY", "The Saltwick yard had twelve colonies in April.")] + FILLER[:8])
+    cap = next(c for c in mem.compactor.capsules if 1 in c.crumb["turn_ids"])
+    assert "twelve" not in cap.clues and "saltwick" in cap.clues
+    assert "twelve" not in hmc.content_words("twelve nineteen seven thousand")
+
+
+def test_strengthened_rebuild_is_never_exact(tmp_path):
+    mem = _mem(tmp_path, on=True, max_turns=4)
+    _fill(mem, [("GENERAL_KNOWLEDGE_INQUIRY", "The Saltwick yard was moved to Dunmere in April.")] + FILLER[:8])
+    comp = mem.compactor
+    cap = next(c for c in comp.capsules if 1 in c.crumb["turn_ids"])
+    os.remove(cap.crumb["cold_path"])
+    hit = comp.recall("where the Saltwick yard was moved in April")
+    assert hit["label"] == "RECONSTRUCTED" and hit["question"]
+    assert comp.answer(cap.capsule_id, "Yes, it went to Dunmere")["strengthened"] is True
+    again = comp.recall("where the Saltwick yard was moved in April")
+    assert again["label"] != "EXACT", again   # the original is gone; a rebuilt memory is never presented as exact (H8)
+
+
+def test_chat_passes_the_reply_to_a_refresh_question_to_the_compactor(tmp_path, monkeypatch):
+    monkeypatch.setenv("HELM_SESSION_DIR", str(tmp_path / "sessions"))
+    monkeypatch.delenv("HELM_MEMORY_COMPACT", raising=False)
+    import contextlib
+    import io
+    import helm_chat
+    with contextlib.redirect_stdout(io.StringIO()):
+        s = helm_chat.HELMConversationalSession(session_id="t-refresh")
+    s.memory.max_turns = 4
+    comp = hmc.attach(s.memory, cold_dir=str(tmp_path / "cold"))
+    lines = ["The Saltwick yard was moved to Dunmere in April."] + [f"Okay, moving on to point {w}." for w in
+                                                                   ("alpha", "bravo", "charlie", "delta", "echo", "foxtrot")]
+    with contextlib.redirect_stdout(io.StringIO()):
+        for ln in lines:
+            s.handle_turn(ln)
+    cap = next(c for c in comp.capsules if 1 in c.crumb["turn_ids"])
+    os.remove(cap.crumb["cold_path"])
+    with contextlib.redirect_stdout(io.StringIO()):
+        s.handle_turn("What did I say about where the Saltwick yard was moved in April?")
+    assert "refresh my memory" in s.memory.turns[-1].helm_response.lower()
+    with contextlib.redirect_stdout(io.StringIO()):
+        s.handle_turn("Yes. The Saltwick yard was moved to Dunmere in April.")
+    assert comp.is_strengthened(cap.capsule_id)
+    assert s.memory.turns[-1].intent == "REFRESH_ANSWER"

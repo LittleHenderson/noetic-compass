@@ -1,0 +1,16 @@
+============================================================================================
+THE REPAIR PERFORMER, RUN AGAINST THE REAL GATE AND A REAL CHILD ENGINE
+============================================================================================
+  {"what": "parent_gate", "verdict": "REPAIR", "gap": "the stock of the ingredient", "sub_goal": "RPM(the stock of the ingredient)@1", "code": "PREREQUISITE_MISSING"}
+  {"what": "depth_check", "child_depth": 1, "verdict": "DepthVerdict.OK"}
+  {"what": "child_run", "kind": "P", "sub_goal": "RPM(the stock of the ingredient)@1", "ok": true, "detail": "{\"family\": \"TaskB_d3\", \"outcome\": 0, \"skeleton\": \"MAX[MIN{0,1};MIN{2,3}]\", \"start_kept\": 1, \"fallback_fired\": true, \"rows_total\": 64, \"heldout\": \"32/32\"}"}
+  {"what": "parent_gate_after_glue", "verdict": "PROCEED", "code": "NOTHING_BLOCKED", "bias_version": 2, "unsatisfied_now": []}
+  {"what": "outcome", "repaired": true, "because": "the parent's own gate passed after the glue"}
+
+outcome          : REPAIRED
+child_run        : True
+child detail     : {"family": "TaskB_d3", "outcome": 0, "skeleton": "MAX[MIN{0,1};MIN{2,3}]", "start_kept": 1, "fallback_fired": true, "rows_total": 64, "heldout": "32/32"}
+parent after glue: PROCEED / NOTHING_BLOCKED
+ledger lines     : 5
+
+claim ceiling    : MECHANISM ONLY. THE FAILURE IS PLANTED, NOT DETECTED. THE GLUE IS MODELLED, NOT CANON. NO REAL FAILURE HAS YET STARTED A REPAIR.

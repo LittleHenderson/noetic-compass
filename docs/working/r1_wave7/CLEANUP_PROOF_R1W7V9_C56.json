@@ -1,0 +1,39 @@
+{
+  "schema": "helm.claude-job.cleanup-proof/1",
+  "utc": "2026-10-21T18:41:27.829920+00:00",
+  "job": "helm-claude-r1w7v9-20261021-c56",
+  "attempts": {
+    "helm-claude-r1w7v9-20261021-c56#a1": {
+      "instance": "i-02cf9b78be48d55b5",
+      "instance_type": "m6i.xlarge",
+      "ami": "ami-0dddfa1ffa6b87af7",
+      "launch_utc": "2026-10-21T18:35:48.777823+00:00",
+      "controller_cleanup_utc": "2026-10-21T18:38:49.428197+00:00",
+      "host_seconds": 180.650374,
+      "rate_usd_per_hour": 0.2013835616438356,
+      "list_price_usage_usd": 0.010106,
+      "charge_usd": 0.02,
+      "cautious_usd": 0.03,
+      "controller_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c56_r1w7v9_20261021\\job_record\\aws-c56-a1-cleanup.json",
+        "sha256": "0e43fc2562926d048d71a22599971440f0cae1af46b9d5cab92dbfa0e2cebffa",
+        "status": "PRESERVED_AND_PREFIX_PURGE_VERIFIED"
+      },
+      "independent_cleanup": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c56_r1w7v9_20261021\\job_record\\aws-c56-a1-independent-cleanup.json",
+        "sha256": "c1c8539fe574b91e193e656df5e393e35b0cd50fa70f2d29dea968a6d0c8c254",
+        "status": "VERIFIED",
+        "utc": "2026-10-21T18:39:05.659650+00:00"
+      },
+      "direct_observation": {
+        "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\run_c56_r1w7v9_20261021\\job_record\\aws-c56-a1-direct-observation.json",
+        "sha256": "1a8ab23b0d6394b2f50b026467cf24aac6a37abab2c2960057aff63a94defb49",
+        "utc": "2026-10-21T18:39:07.962315+00:00",
+        "terminated_reason": "User initiated (2026-10-21 18:38:27 GMT)"
+      }
+    }
+  },
+  "observation": "every attempt: instance terminated; root volume deleted; no live project instances, no job volumes, no prefix versions or delete markers, no multipart uploads",
+  "temporary_role_profile_bucket": "none created: no instance profile at all (presigned URLs), the standing bucket with the c56-only prefix helm-r1w7v9-c56-20261021/ (purged, verified empty); the shared four-key prefix was never touched",
+  "status": "VERIFIED"
+}

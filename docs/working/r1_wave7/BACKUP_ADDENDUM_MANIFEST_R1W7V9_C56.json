@@ -1,0 +1,47 @@
+{
+ "schema": "helm.claude-job.backup-addendum/1",
+ "job": "helm-claude-r1w7v9-20261021-c56",
+ "destination": "D:\\tksCAS-archive\\r1_wave7_c56_20261021\\addendum_20261021",
+ "why": "files written after backup_c56.py ran at 18:41:35Z",
+ "files_sha256": {
+  "run/CUSTODIAN_PER_ITEM_VERDICTS_C56.json": "d2f538861659016b45eb261c1afdf3c21cbc5338ff6e6cbdb86fef2596821c81",
+  "run/CUSTODIAN_SHAPE_FACTS_C56.json": "bfaebc3d3cd2caadeea466e3dc50934bf633ca141a14419a22ae9c7b61b5d1e7",
+  "run/CUSTODIAN_SHAPE_FACTS_C56_MECHANISM.json": "de0817f6b20c1885b5509849660590e32c491a8c8a3fd28da0c55e50d4f730f9",
+  "run/RUN_RESULT_R1W7V9_C56.md": "8e8c9d0ff3421fd36d463c1849b1ca0b7f354ce4533b842d188485612df5a31e",
+  "x7v9_custody/diag/inspect_keys_c56.py": "f4b917f8f45f0f6c0fee1f0a9421c5bbea4ba82fecb9363b7af73c3704feb9bd",
+  "x7v9_custody/diag/inspect_loop_c56.py": "affb71804f06313583f2444bcfe08511b37afadb7beb1ac0bd309d01cd9a2666",
+  "x7v9_custody/diag/mechanism_c56.py": "cc807b717e64be2e4e9fc4875948c3f812d9ec10c7741aa27e8f260142a738f3",
+  "x7v9_custody/diag/mechanism_c56.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "x7v9_custody/diag/mechanism_c56.stdout.log": "33250f2834058bd2e0c596ca4481e3d4f6f04fbb43c8c62c993e6ef0f4ed1485",
+  "x7v9_custody/diag/per_item_verdicts_c56.py": "d474de097abcda434b9dcac2c527f91fe5e412e31dcb47822d8819296f4af0e3",
+  "x7v9_custody/diag/per_item_verdicts_c56.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "x7v9_custody/diag/per_item_verdicts_c56.stdout.log": "8fca7021e589fd2fba9fb3b904d219f869bf6d72efaf30be703c3f4f663a1b66",
+  "x7v9_custody/diag/shape_facts_c56.py": "23cf4c7ef13fd5e52a2a012199ea2e271b6709400f80e5197e6d780fc42fbb9f",
+  "x7v9_custody/diag/shape_facts_c56.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "x7v9_custody/diag/shape_facts_c56.stdout.log": "190953c13d7945b3693c2f01c0805fa41a8bf1ef66fe6f3f7dd312b7ca7360fd",
+  "x7v9_custody/EXCLUSION_OVERLAP_CHECK_X7v9.json": "7a02bbc6c4db9a79eaaff7b846fd23a0c0b5ca27a63b01d7a5179a5dde4efb3b"
+ },
+ "bytes": 1117181,
+ "passes": [
+  {
+   "pass": 1,
+   "what": "source sha256",
+   "files": 16,
+   "utc": "2026-10-21T19:40:56Z"
+  },
+  {
+   "pass": 2,
+   "what": "destination re-read",
+   "files": 16,
+   "mismatches": 0,
+   "utc": "2026-10-21T19:40:56Z"
+  },
+  {
+   "pass": 3,
+   "what": "whole-tree digest",
+   "tree_sha256": "74729e5d781f3f637eea418ca8e0d397b10f8529f186cf38fe68e10f850979d0",
+   "equal_to_source_tree": true,
+   "utc": "2026-10-21T19:40:56Z"
+  }
+ ]
+}
