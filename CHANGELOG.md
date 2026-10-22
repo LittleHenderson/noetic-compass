@@ -4,6 +4,11 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM ear and mouth training v1 designed (spec sheet 7.126; design only, 0 USD)
+
+- Owner's words: "Design ear and mouth training from confirmed cubes plus the SDG" (side-chat notes folded in).
+- Packet docs/working/helm_ear_mouth_training_v1/: confirmed cubes (CHECKED, current, line EXACT) become ear and mouth lessons, mixed with SDG lessons; one CTT with <CUBE>/<SAY> tags; the mouth may choose words, never facts (round trip through the ear, no new fact, no CAS token); labels never from the rule reader alone; tone tag from the 40 states + Register; asking from cube questions as a separate piece. Open questions Q1-Q5 for the owner's clicks.
+
 ## 2026-10-22 PDT - HELM CTT retraining pre-registered (spec sheet 7.125 follow-up 14): owner chose to train first; the owner writes nothing (approval recorded, cap 3 USD); design only, 0 USD
 
 - Owner's words: "T7 (a): train the CTT first." and "I'M NOT WRITING A MUTHA FUCKING THING YOU AND OR OTHER LLMs".
