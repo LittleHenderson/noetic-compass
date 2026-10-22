@@ -197,6 +197,27 @@ class Unit:
         if self.osc is not None:
             self.r_osc_answer = Recorder(self.osc, "answer", self.digests)
             self.r_observe = Recorder(self.osc, "observe", self.digests)
+        # A-TEACH2-19 K4: the truth an answer label is checked against is taken AT THE MOMENT OF THE ANSWER (inside the
+        # call), before the chat records the question as a new line (which can drop or fade the source line)
+        self.recall_truth: List[Any] = []
+        self.osc_truth: List[Any] = []
+        if self.comp is not None:
+            rec_recall = self.comp.recall
+
+            def recall_with_truth(*a, **k):
+                res = rec_recall(*a, **k)
+                cid = (res.get("answer_capsule_id") or res.get("capsule_id")) if isinstance(res, dict) else None
+                self.recall_truth.append(self.copy_state(cid) if cid else None)
+                return res
+            self.comp.recall = recall_with_truth
+        if self.osc is not None:
+            rec_answer = self.osc.answer
+
+            def answer_with_truth(*a, **k):
+                res = rec_answer(*a, **k)
+                self.osc_truth.append(self._cube_truth(res))
+                return res
+            self.osc.answer = answer_with_truth
         # every say-back line (HG-SAYBACK): a transparent wrapper on the module's renderer
         self.saybacks: List[Dict[str, Any]] = []
         original_say_back = hco.say_back
@@ -286,6 +307,21 @@ class Unit:
         return {"turn_id": turn_id, "exact_now": bool(cs["ok"] and cs["reachable"]), "where": cs["where"],
                 "capsule_id": cid, "copy_ok": cs["ok"], "reachable": cs["reachable"]}
 
+    def _cube_truth(self, oa) -> Optional[Dict[str, Any]]:
+        """The truth behind a cube or table answer, taken inside the answer call (K4)."""
+        if not isinstance(oa, dict):
+            return None
+        if oa.get("source_turn") is not None:
+            return self.turn_state(oa.get("source_turn"))
+        if oa.get("operation") == "TABLE_LOOKUP":
+            # A-TEACH2-20 D3: a table answer names no source line; find it from the entry its own words name
+            keys = [k for k in self.osc.table_src
+                    if f"{k[0].capitalize()}, {' '.join(sorted(k[1]))}: {self.osc.table[k]}." in (oa.get("text") or "")]
+            if len(keys) == 1:
+                return self.turn_state(self.osc.table_src[keys[0]], self.table_text.get(keys[0]))
+            return {"turn_id": None, "exact_now": False, "where": "unknown", "matches": len(keys)}
+        return None
+
     def store_branches(self) -> List[Dict[str, Any]]:
         store = getattr(self.session.memory.context, "cube_store", None)
         if store is None:
@@ -331,21 +367,14 @@ class Unit:
             rc = self.r_recall.rows[-1]["result"]
             row["recall"] = rc
             row["recall_digests_equal"] = self.r_recall.rows[-1]["digests_equal"]
-            cid = rc.get("answer_capsule_id") or rc.get("capsule_id") if isinstance(rc, dict) else None
-            row["copy_state"] = self.copy_state(cid) if cid else None
+            row["copy_state"] = self.recall_truth[-1] if self.recall_truth else None
         if self.osc is not None and len(self.r_osc_answer.rows) > n_oans:
             # the chat calls CubeOsc.answer twice per memory turn (test, then speak); the last result is the one spoken
             oa = self.r_osc_answer.rows[-1]["result"]
             row["cube_answer"] = oa
-            if isinstance(oa, dict) and oa.get("source_turn") is not None:
-                row["cube_source_state"] = self.turn_state(oa.get("source_turn"))
-            elif isinstance(oa, dict) and oa.get("operation") == "TABLE_LOOKUP":
-                # A-TEACH2-20 D3: a table answer names no source line; find it from the entry its own words name
-                keys = [k for k in self.osc.table_src
-                        if f"{k[0].capitalize()}, {' '.join(sorted(k[1]))}: {self.osc.table[k]}." in (oa.get("text") or "")]
-                row["cube_source_state"] = (self.turn_state(self.osc.table_src[keys[0]], self.table_text.get(keys[0]))
-                                            if len(keys) == 1 else {"turn_id": None, "exact_now": False, "where": "unknown",
-                                                                    "matches": len(keys)})
+            truth = self.osc_truth[-1] if self.osc_truth else None
+            if truth is not None:
+                row["cube_source_state"] = truth
         if self.osc is not None and len(self.r_observe.rows) > n_obs:
             row["observe"] = [r["result"] for r in self.r_observe.rows[n_obs:]]
             for ob in row["observe"]:          # A-TEACH2-21 R1: the person's line behind every table entry
