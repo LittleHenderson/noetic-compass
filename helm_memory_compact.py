@@ -531,6 +531,8 @@ class Compactor:
             except Exception:
                 data = None
             if data is None:
+                import helm_cold_cloud as _hcc
+                _hcc.forget_reachable(self.cloud)    # A-TEACH2-13 R2: forget a remembered yes at the first failure
                 self._flag("CLOUD_UNREACHABLE", self.moved[cap.capsule_id], cap.capsule_id)
                 return "OFFLINE", []
         else:

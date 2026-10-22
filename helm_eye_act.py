@@ -496,6 +496,7 @@ class LeanCapsules:
         if key is None:
             self.last_status = "MISSING"
             return None
+        import helm_cold_cloud as hcc
         comp = self.eye.comp
         try:
             data = comp.cloud.get(key) if comp.cloud is not None else None
@@ -503,6 +504,7 @@ class LeanCapsules:
             data = None
         if data is None:
             self.last_status = "AWAY"
+            hcc.forget_reachable(comp.cloud)             # A-TEACH2-13 R2: forget at the first failure
         return data
 
     def load_fold(self, fold_name: str, row: Optional[Dict[str, Any]] = None,
@@ -592,19 +594,20 @@ class LeanCapsules:
         if not found and self._folds and self.eye.comp.moved_folds:
             # A-TEACH2-11: nothing in working memory or on the device; read the fold records in the cloud when it can be
             # reached (each read checked by load_fold; nothing kept). Offline: say the notes are stored away.
+            import helm_cold_cloud as hcc
             cloud = self.eye.comp.cloud
-            try:
-                reachable = cloud is not None and bool(cloud.available())
-            except Exception:
-                reachable = False
+            reachable = hcc.is_reachable(cloud)          # A-TEACH2-13: a recent yes is remembered (no call)
             if reachable:
                 # A-TEACH2-12: every fold record of this conversation's cloud folder in ONE call; each still checked
                 keys = list(self.eye.comp.moved_folds.values())
                 prefix = keys[0][: keys[0].rfind("/") + 1]
                 try:
                     self._batch = cloud.get_many(prefix, ".fold.json") if hasattr(cloud, "get_many") else None
+                    if self._batch is not None:
+                        hcc.remember_reachable(cloud)
                 except Exception:
                     self._batch = None
+                    hcc.forget_reachable(cloud)
                 try:
                     for fr in self._folds:
                         for leaf in self._leaves(fr, lambda m: True, away):

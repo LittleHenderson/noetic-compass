@@ -20,11 +20,49 @@ import os
 import shutil
 import subprocess
 import tempfile
+import time
 from typing import Any, Callable, Dict, List, Optional
 
 DEFAULT_BUCKET = "helm-cold-memory-807562639912-usw2"
 DEFAULT_REGION = "us-west-2"
 CLI_TIMEOUT_S = 60
+#: A-TEACH2-13: a "reachable" yes is remembered this long (seconds); a no is never remembered; any failed call forgets
+REACHABLE_MEMORY_S = 60
+_now = time.monotonic
+
+
+def remembered_reachable(cloud: Any) -> bool:
+    until = getattr(cloud, "_reachable_until", None)
+    return until is not None and _now() < until
+
+
+def remember_reachable(cloud: Any) -> None:
+    try:
+        cloud._reachable_until = _now() + REACHABLE_MEMORY_S
+    except AttributeError:
+        pass
+
+
+def forget_reachable(cloud: Any) -> None:
+    try:
+        cloud._reachable_until = None
+    except AttributeError:
+        pass
+
+
+def is_reachable(cloud: Any) -> bool:
+    """Yes if a yes was remembered less than REACHABLE_MEMORY_S ago; otherwise ask the cloud (one call) and remember
+    only a yes."""
+    if cloud is None:
+        return False
+    if remembered_reachable(cloud):
+        return True
+    try:
+        ok = bool(cloud.available())
+    except Exception:
+        ok = False
+    (remember_reachable if ok else forget_reachable)(cloud)
+    return ok
 
 
 class CloudUnavailable(RuntimeError):

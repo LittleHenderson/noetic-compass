@@ -604,11 +604,14 @@ class CubeOsc:
         return sum(os.path.getsize(f) for _k, _n, files in self._cold_units() for f in files if os.path.isfile(f))
 
     def _upload(self, cloud: Any, key: str, data: bytes, check: Callable[[bytes], bool]) -> bool:
+        import helm_cold_cloud as hcc
         try:
             cloud.put(key, data)
             back = cloud.get(key)
         except Exception:
             back = None
+        if back is None:
+            hcc.forget_reachable(cloud)              # A-TEACH2-13 R2: forget a remembered yes at the first failure
         return back is not None and check(back)
 
     def move_cold(self) -> None:
@@ -620,7 +623,8 @@ class CubeOsc:
         if comp is None or self.local_cold_bytes() <= self.local_limit_bytes:
             return
         cloud = comp.cloud
-        if cloud is None or not cloud.available():
+        import helm_cold_cloud as hcc
+        if not hcc.is_reachable(cloud):              # A-TEACH2-13: a recent yes is remembered (no call)
             self._limit_flag("MOVE_FAILED", "local cold folder over its limit; the cloud cannot be reached")
             return
         for kind, name, files in self._cold_units():
