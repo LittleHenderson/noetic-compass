@@ -221,5 +221,36 @@ class Gates(unittest.TestCase):
         self.assertFalse(R.person_check(bad, w, turns))
 
 
+class R4Undamaged(unittest.TestCase):
+    """A-TEACH1-2: R4 counts losses on undamaged items only; a loss on a damaged item is not an R4 loss."""
+
+    def test_only_undamaged_losses_count(self):
+        w = W.build_all(SEED)[0]
+        items = W.quiz_items(w, "q")
+        dmg = W.damage_plan(w, items, SEED)
+        exam = {"damage": {w["world_id"]: dmg}, "quiz": {w["world_id"]: {"items": items}}}
+        facts = {f["id"]: f for f in w["facts"]}
+
+        def unit(wrong_ids):
+            rows = []
+            for i, it in enumerate(items):
+                if it["kind"] == "TAUGHT" and it["fact_id"] not in wrong_ids:
+                    reply = "You said: " + facts[it["fact_id"]]["statement"]
+                elif it["kind"] == "TAUGHT":
+                    reply = "I don't have your exact words any more. Refresh my memory: is that the one you mean?"
+                else:
+                    reply = "I checked my records for this session, but I don't see a specific note on that yet."
+                rows.append({"phase": "Q_REFRESHED", "item_index": i, "reply": reply})
+            return {"quiz": rows}
+        damaged = {d["fact_id"] for d in dmg}
+        undamaged_taught = next(it["fact_id"] for it in items if it["kind"] == "TAUGHT" and it["fact_id"] not in damaged)
+        verbatim = unit(set())
+        worlds = {w["world_id"]: w}
+        self.assertEqual(R.r4_undamaged({("VERBATIM_ONLY", w["world_id"]): verbatim,
+                                         ("COMPACT_ON", w["world_id"]): unit(damaged)}, exam, worlds), 0)
+        self.assertEqual(R.r4_undamaged({("VERBATIM_ONLY", w["world_id"]): verbatim,
+                                         ("COMPACT_ON", w["world_id"]): unit({undamaged_taught})}, exam, worlds), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

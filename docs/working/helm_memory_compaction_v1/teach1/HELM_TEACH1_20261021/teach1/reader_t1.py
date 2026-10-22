@@ -24,7 +24,7 @@ from teach1 import common_t1 as C          # noqa: E402
 from teach1 import person_t1 as P          # noqa: E402
 from teach1 import seed_rule_t1 as SR      # noqa: E402
 
-READER = "reader_t1 v1"
+READER = "reader_t1 v2 (A-TEACH1-2: R4 on undamaged items)"
 HARM_GATES = ("HG-H8", "HG-INVENT", "HG-COEF", "HG-CUBE", "HG-EYE")
 GATES = ("HG-H8", "HG-INVENT", "HG-COMPILE", "HG-RECEIPT", "HG-COEF", "HG-CUBE", "HG-EYE", "HG-CAS", "HG-ASK",
          "HG-REPLAY", "HG-TESTS", "HG-SPLIT")
@@ -247,21 +247,25 @@ def person_check(u: Dict[str, Any], world: Dict[str, Any], turns: List[Dict[str,
     return True
 
 
-def undamaged_lost(units, exam, worlds) -> int:
-    """Reported beside R4 (decides nothing): VERBATIM_ONLY RIGHT_R minus COMPACT_ON RIGHT_R on the quiz items whose
-    cold copy was NOT planted damaged."""
+def right_r_undamaged(u, exam, world) -> int:
+    """RIGHT on Q-REFRESHED over the quiz items whose cold copy was NOT planted damaged (A-TEACH1-2)."""
+    w = world["world_id"]
+    damaged = {d["fact_id"] for d in exam["damage"][w]}
+    items = exam["quiz"][w]["items"]
+    return sum(1 for r in u["quiz"] if r.get("phase") == "Q_REFRESHED" and r.get("item_index") is not None
+               and items[r["item_index"]]["fact_id"] not in damaged
+               and score_answer(r["reply"], items[r["item_index"]], world) == "RIGHT")
+
+
+def r4_undamaged(units, exam, worlds) -> int:
+    """R4 as amended by A-TEACH1-2 (the owner's ruling, 2026-10-21): RIGHT_R(VERBATIM_ONLY) - RIGHT_R(COMPACT_ON),
+    summed over 16 worlds, on the undamaged quiz items only. The damaged items are judged by HG-H8 and the gates."""
     lost = 0
     for w in worlds:
         a, b = units.get(("VERBATIM_ONLY", w)), units.get(("COMPACT_ON", w))
         if a is None or b is None:
             continue
-        damaged = {d["fact_id"] for d in exam["damage"][w]}
-        items = exam["quiz"][w]["items"]
-        def right(u):
-            return {r["item_index"] for r in u["quiz"] if r.get("phase") == "Q_REFRESHED" and r.get("item_index") is not None
-                    and items[r["item_index"]]["fact_id"] not in damaged
-                    and score_answer(r["reply"], items[r["item_index"]], worlds[w]) == "RIGHT"}
-        lost += len(right(a) - right(b))
+        lost += right_r_undamaged(a, exam, worlds[w]) - right_r_undamaged(b, exam, worlds[w])
     return lost
 
 
@@ -423,9 +427,11 @@ def read(mi: Dict[str, Any]) -> Dict[str, Any]:
     M["R1"] = {"holds": cr - fs >= C.R1_MIN_OVER_FIFO, "diff": cr - fs}
     M["R2"] = {"holds": cr - tot("SUMMARY_TEXT", "RIGHT_R") >= C.R2_MIN_OVER_SUMMARY, "diff": cr - tot("SUMMARY_TEXT", "RIGHT_R")}
     M["R3"] = {"holds": cr - tot("RANDOM_REFRESH", "RIGHT_R") >= C.R3_MIN_OVER_RANDOM, "diff": cr - tot("RANDOM_REFRESH", "RIGHT_R")}
-    r4 = tot("VERBATIM_ONLY", "RIGHT_R") - cr
+    r4_all = tot("VERBATIM_ONLY", "RIGHT_R") - cr
+    r4 = r4_undamaged(units, exam, worlds)          # A-TEACH1-2: undamaged items only
     M["R4"] = {"holds": r4 <= C.R4_MAX_LOST_VS_VERBATIM, "lost": r4, "harm": r4 > C.R4_HARM_LOST_VS_VERBATIM,
-               "reported_lost_on_undamaged_items_only": undamaged_lost(units, exam, worlds)}
+               "scored_on": "undamaged quiz items only (A-TEACH1-2)",
+               "reported_lost_on_all_items_precode_rule": r4_all}
     r5 = cr - tot("NO_REFRESH", "RIGHT_R")
     M["R5"] = {"holds": (r5 >= C.R5_MIN_OVER_NO_REFRESH) if refresh_floor else "NOT_EXERCISED", "diff": r5, "reported_only": True}
     asked, conf = mtot("COMPACT_ON", "REFRESH_ASKED"), mtot("COMPACT_ON", "REFRESH_CONFIRMED")

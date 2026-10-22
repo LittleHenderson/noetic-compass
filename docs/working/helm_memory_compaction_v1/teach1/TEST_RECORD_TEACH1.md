@@ -46,6 +46,17 @@ no taught fact once the budget binds.
 
 Practice word if the seal rows held: **`COMPACTION_HARMED`** (R4 > 4), then `COMPACTION_NO_GAIN` reasons R2, S1, S4.
 
+## The owner's ruling on R4 and practice round 5 (A-TEACH1-2, sha256 `17fbd5fe…`)
+
+Owner's words (2026-10-21, verbatim): "Score R4 on the undamaged notes only (my recommendation). The wrecked notes still test honesty, so a rebuilt note must never be called exact. They just don’t count as lost answers. This costs 0 USD and a quick reseal."
+
+R4 is now scored on the 14 undamaged quiz items per world (224 in all); the 2 damaged items per world are judged by
+HG-H8 and the other gates. Practice round 5 (16 practice worlds, reader v2, `PRACTICE_READING_ROUND5.json`): every
+non-seal instrument row and all 12 hard gates hold (HG-H8 4,020 answers, every label right); **R4 0 lost** 🟩 (the
+pre-code's all-items count, reported only: 9, all on damaged items); R1, R3 hold; R2 −2, S1, S4 missed. The word the
+practice marks would print if the seal rows held: **`COMPACTION_NO_GAIN`** (was `COMPACTION_HARMED` under the old R4).
+Package tests 20 of 20 (one new: a loss on a damaged item is not an R4 loss; a loss on an undamaged item is).
+
 ## FIX FIRST round 1 on HELM (commit `9f0c359a`, tests first)
 
 `test_helm_memory_compact.py` + 6 tests: on build v1 `6 failed, 28 passed`; on the fix 34 passed (+5 in
@@ -66,9 +77,10 @@ not flag that name. Fixed (the key = the names the world's facts use); 19 of 19 
 | 1 | `83f14426…` | **VOID**: the from-seal test failed 1 of 19 (FROZEN_TEACH1.json held the builder's folder path, a machine-bound value); never used, nothing drawn |
 | 2 | `bdcde5b9…` | **VOID**: the sealed amendment said 4,016 label-checked answers for round 4 (that was round 3; round 4 is 4,020); never used, nothing drawn |
 | 3 | `e8831bfd…` | **VOID**: its seed bands 2,036 / 2,038 / 2,040 M were taken first by wave 7 v9 (PR #449, merged while this package was built); found when merging the thread head before the PR; never used, nothing drawn |
-| 4 | **`65e2a926c723f79965a09072bdc805eea1f4aade047988d6e21d88a1e23e61be`** | **SEALED, NOT RUN, NOT SCORED** (1,022,354 bytes, 195 members + freeze `351c71e2…`, sealed twice byte-identical); bands 2,042 / 2,044 / 2,046 / 2,048 M |
+| 4 | `65e2a926…` | **SUPERSEDED** by the owner's ruling on R4 (A-TEACH1-2); never used, nothing drawn |
+| 5 | **`811726c45bd3f31a3df1d565295d191382685f7e7681edfc567e70e22e17dc73`** | **SEALED, NOT RUN, NOT SCORED** (1,023,713 bytes, 195 members + freeze `1ddf5128…`, sealed twice byte-identical); bands 2,042 / 2,044 / 2,046 / 2,048 M; reader v2 (R4 on undamaged items) |
 
-From a fresh extract of seal 4 (`TEST_COUNTS_TEACH1.json`): 195 of 195 members re-hashed equal; package tests OK; cut
+From a fresh extract of seal 5 (`TEST_COUNTS_TEACH1.json`): 195 of 195 members re-hashed equal; package tests OK; cut
 check 173 files equal; HELM's suites exit 0; route check 0 bad; a 2-world practice pool 14 of 14 units exit 0;
 `helm_now/` unchanged after.
 

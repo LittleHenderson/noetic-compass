@@ -5,17 +5,17 @@
    "utf8",
    "-B",
    "-I",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
    "cutcheck",
    "--out",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\out"
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\out"
   ],
   "exit": 0,
   "tail": [
    "{\"commit\": \"9f0c359a4ad6054843fd2988042616676813d6e8\", \"files\": 173, \"bad\": [], \"extra\": [], \"pinned_ok\": true, \"source_cut_equals_contract\": true, \"ok\": true}"
   ]
  },
- "freeze_sha256": "351c71e2ee6e3a8cb1dd739e0beceeab58d1c257161947138e65d0d9d2abde72",
+ "freeze_sha256": "1ddf5128b1578709827523c12ee0ca6fe9ff21633474b4b7d110bceff0a0dc0b",
  "helm_now_unchanged_after": true,
  "members": 195,
  "members_rehashed_equal": true,
@@ -36,7 +36,7 @@
   "exit": 0,
   "tail": [
    "----------------------------------------------------------------------",
-   "Ran 19 tests in 0.059s",
+   "Ran 20 tests in 0.063s",
    "",
    "OK"
   ]
@@ -47,19 +47,19 @@
    "utf8",
    "-B",
    "-I",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
    "pool",
    "--exam",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\out\\exam",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\out\\exam",
    "--out",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\out"
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\out"
   ],
   "exit": 0,
   "tail": [
-   "{\"unit\": \"RANDOM_REFRESH:W02\", \"exit\": 0, \"seconds\": 1.21}",
-   "{\"unit\": \"REPLAY:W01\", \"exit\": 0, \"seconds\": 1.16}",
-   "{\"unit\": \"REPLAY:W02\", \"exit\": 0, \"seconds\": 1.16}",
-   "{\"planned\": 14, \"all_exit_0\": true, \"elapsed\": 15.17}"
+   "{\"unit\": \"RANDOM_REFRESH:W02\", \"exit\": 0, \"seconds\": 1.66}",
+   "{\"unit\": \"REPLAY:W01\", \"exit\": 0, \"seconds\": 2.22}",
+   "{\"unit\": \"REPLAY:W02\", \"exit\": 0, \"seconds\": 1.66}",
+   "{\"planned\": 14, \"all_exit_0\": true, \"elapsed\": 17.6}"
   ]
  },
  "practice_exam_from_seal": {
@@ -69,7 +69,7 @@
    "-B",
    "-I",
    "-c",
-   "import sys; sys.path.insert(0, r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\HELM_TEACH1_20261021'); from teach1 import exam_t1 as E, seed_rule_t1 as SR; E.build_exam(SR.practice_seeds(), r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\out\\exam', practice=True, count=2)"
+   "import sys; sys.path.insert(0, r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\HELM_TEACH1_20261021'); from teach1 import exam_t1 as E, seed_rule_t1 as SR; E.build_exam(SR.practice_seeds(), r'C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\out\\exam', practice=True, count=2)"
   ],
   "exit": 0,
   "tail": []
@@ -80,12 +80,12 @@
    "utf8",
    "-B",
    "-I",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
    "routecheck",
    "--exam",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\out\\exam",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\out\\exam",
    "--out",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\out"
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\out"
   ],
   "exit": 0,
   "tail": [
@@ -99,19 +99,19 @@
    "utf8",
    "-B",
    "-I",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\HELM_TEACH1_20261021\\teach1\\run_t1.py",
    "suites",
    "--out",
-   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_6nfeuhe8\\out",
+   "C:\\Users\\wakil\\AppData\\Local\\Temp\\teach1_seal_rw8rw7wb\\out",
    "--from-seal"
   ],
   "exit": 0,
   "tail": [
-   "   \"47 passed in 1.21s\"",
+   "   \"47 passed in 1.10s\"",
    "  ]",
    " }",
    "}"
   ]
  },
- "zip_sha256": "65e2a926c723f79965a09072bdc805eea1f4aade047988d6e21d88a1e23e61be"
+ "zip_sha256": "811726c45bd3f31a3df1d565295d191382685f7e7681edfc567e70e22e17dc73"
 }

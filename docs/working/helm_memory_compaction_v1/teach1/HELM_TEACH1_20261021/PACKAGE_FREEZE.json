@@ -1,6 +1,7 @@
 {
  "amendment_a_teach1_1_sha256": "b178cc411b11d86204be72766fdb83293bb3efadb75dfb9f4319e03150315ae3",
- "frozen_teach1_sha256": "d54fc5eec00af0e74e9c6d587726f81bcdd6fe245b9bb23b76687c5e3f35a238",
+ "amendment_a_teach1_2_sha256": "17fbd5feb0828b3a4a613e08b9d35021ab2a03583ea08f6bce703d656dceb719",
+ "frozen_teach1_sha256": "b01f44fa43704c3559811d435bace842f6df672a4c756171fbe7c27bb5891722",
  "helm_cut_commit": "9f0c359a4ad6054843fd2988042616676813d6e8",
  "helm_cut_files": 173,
  "helm_cut_pinned": {
@@ -15,12 +16,12 @@
  "member_count_excluding_freeze": 195,
  "members": {
   "FROZEN_TEACH1.json": {
-   "bytes": 4438,
-   "sha256": "d54fc5eec00af0e74e9c6d587726f81bcdd6fe245b9bb23b76687c5e3f35a238"
+   "bytes": 4479,
+   "sha256": "b01f44fa43704c3559811d435bace842f6df672a4c756171fbe7c27bb5891722"
   },
   "PREREGISTRATION_TEACH1.md": {
-   "bytes": 28497,
-   "sha256": "bda6636b2edb1565fb7f46d740d5e2a833ce79fedef451d3dcdfa7c5e80be121"
+   "bytes": 30713,
+   "sha256": "26834cafa3a166b1d8fbf07f3501aac3f3e6d7604fdd8ba226e7497de706768a"
   },
   "README_TEACH1.md": {
    "bytes": 2731,
@@ -751,8 +752,8 @@
    "sha256": "f20e068f51181411130b6df47ab966e3bf9a97e497adecf5b98869749e49a939"
   },
   "teach1/common_t1.py": {
-   "bytes": 12128,
-   "sha256": "156a3c5a7f8849ad021175d24fa48a972969e3f611b6f3d981b9bd58bb816f03"
+   "bytes": 12278,
+   "sha256": "1bf4828273c4e61ffa8a6e4012951be95e1d5879b671b24f45cdd4573ba639ba"
   },
   "teach1/custody_t1.py": {
    "bytes": 7383,
@@ -767,8 +768,8 @@
    "sha256": "585f355916ba0679977a899bd8e40bb77257d10b81cebbcaf7027c4dccb8c34f"
   },
   "teach1/reader_t1.py": {
-   "bytes": 32212,
-   "sha256": "479de599d034d47dcbf8525ac723c024baaf5c66f9ce29f5e6ab01ceb216ddb6"
+   "bytes": 32623,
+   "sha256": "d07ffbcf32bc1ff40499304ea98224396474283c7e7f2c3baec70650a44e68a5"
   },
   "teach1/run_t1.py": {
    "bytes": 11385,
@@ -791,8 +792,8 @@
    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "tests_teach1/test_teach1.py": {
-   "bytes": 11273,
-   "sha256": "707ace689993a1116d1e89eeba3b44c59f0aceb1e726d4a297a831ae79ce74e0"
+   "bytes": 13019,
+   "sha256": "8be1c3e17dc72c96ce3abcae1656d8a40878f852af21a32db7786fac65a808a2"
   }
  },
  "not_inside": "the wave-1 brain package (beside it, checked by its freeze by helm_brain_canonical), the exam (drawn by the custodian after the owner's line), the approval record, the attestation",

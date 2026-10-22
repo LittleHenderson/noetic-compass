@@ -29,6 +29,7 @@ STAMP = (2026, 10, 21, 0, 0, 0)
 PRECODE = HERE.parent / "PREREGISTRATION_MEMORY_COMPACTION_V1.precode.md"
 PRECODE_SHA = "7eef0edc7d342bb0438e4052db646528442badefa92d6bdf31e8485914073bf1"
 AMEND = HERE / "AMENDMENT_A_TEACH1_1.md"
+AMEND2 = HERE / "AMENDMENT_A_TEACH1_2.md"
 sys.path.insert(0, str(PKG))
 from teach1 import common_t1 as C  # noqa: E402
 
@@ -60,6 +61,7 @@ def freeze_doc(mem):
     return {"schema": "helm.teach1.package-freeze/1", "label": C.LABEL, "package": NAME, "package_version": C.PACKAGE_VERSION,
             "sealed_on": "2026-10-21 (Pacific)", "members": mem, "member_count_excluding_freeze": len(mem),
             "precode_sha256": PRECODE_SHA, "amendment_a_teach1_1_sha256": sha(AMEND.read_bytes()),
+            "amendment_a_teach1_2_sha256": sha(AMEND2.read_bytes()),
             "frozen_teach1_sha256": sha((PKG / "FROZEN_TEACH1.json").read_bytes()),
             "helm_cut_commit": cut["commit"], "helm_cut_files": len(cut["files"]), "helm_cut_pinned": cut["pinned"],
             "wave1_brain_neighbour": C.WAVE1_BRAIN,
@@ -94,7 +96,11 @@ def main() -> None:
     if b"\r\n" in amend:
         raise SystemExit("CRLF in the amendment: refuse")
     (HERE / "AMENDMENT_A_TEACH1_1.sha256").write_text(f"{sha(amend)}  {AMEND.name}\n", encoding="ascii", newline="\n")
-    (PKG / "PREREGISTRATION_TEACH1.md").write_bytes(pre + amend)
+    amend2 = AMEND2.read_bytes()
+    if b"\r\n" in amend2:
+        raise SystemExit("CRLF in amendment 2: refuse")
+    (HERE / "AMENDMENT_A_TEACH1_2.sha256").write_text(f"{sha(amend2)}  {AMEND2.name}\n", encoding="ascii", newline="\n")
+    (PKG / "PREREGISTRATION_TEACH1.md").write_bytes(pre + amend + amend2)
     hc = C.check_helm_cut()
     if not hc["ok"]:
         raise SystemExit(f"helm_now/ does not equal the recorded cut: {hc}")
