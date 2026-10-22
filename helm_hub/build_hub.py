@@ -1710,10 +1710,10 @@ def p_roadmap(S: dict) -> str:
     need(S, "7.69", "DECOUPLING_EARNED")
     _cube = "helm_cube_concept.svg"
     if (ASSETS / _cube).is_file():
-        CUBE_SLOT = (f'<figure class="small"><img src="{_cube}" alt="Concept drawing of the HELM Cube: a matte black cube with a glowing band, '
-                     'beside a front view with sizes from 55 to 67 mm compared with a tennis ball" style="max-width:100%;height:auto">'
-                     '<figcaption>Concept drawing (2026-10-22), not a product photo. It shows the middle-band option; the owner\'s ruling of record '
-                     '(2026-10-21) puts the light on all twelve edges instead. Nothing is built.</figcaption></figure>')
+        CUBE_SLOT = (f'<figure class="small"><img src="{_cube}" alt="Concept drawing of the HELM Cube: a matte black cube whose twelve edges glow, '
+                     'beside a front view to scale: a 64 mm cube inside a 67 mm tennis ball" style="max-width:100%;height:auto">'
+                     '<figcaption>Concept drawing (2026-10-22), not a product photo. Light on all twelve edges, invisible when off, '
+                     'per the owner\'s ruling of 2026-10-21; 64 mm target. Nothing is built.</figcaption></figure>')
     else:
         CUBE_SLOT = '<p class="small muted">(Slot for the concept drawing <code>helm_cube_concept.svg</code>; not yet in <code>helm_hub/assets/</code>.)</p>'
     # (meaning, what exists today, what would have to be built and tested)
