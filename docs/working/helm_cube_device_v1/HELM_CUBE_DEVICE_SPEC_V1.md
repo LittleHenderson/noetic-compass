@@ -169,3 +169,5 @@ Yes, as a rule with receipts: each step down has a written, checkable reason, an
 ### What it cannot do
 
 It cannot decide depth from "importance" or "interest" without a written, checkable reason. A feeling that a matter matters is not a reason the gate can check.
+
+**Drawing note (2026-10-22, coordinator).** The concept drawing `helm_cube_concept.svg` was redrawn the same day to the owner's ruling of record: light on all twelve edges, invisible when off, and a 64 mm cube drawn to scale inside a 67 mm tennis ball. The equator band in the table above is kept only as the option the owner withdrew on 2026-10-21; it is not the design.
