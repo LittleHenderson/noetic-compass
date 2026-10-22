@@ -199,8 +199,8 @@ def rule_check(inp: Dict[str, Any], line: str) -> Tuple[bool, str]:
     ok, why = MCHECK.sense_ok(text)             # v2 (A-TALK-7 H1 F3): the guard's sense check, layer 1
     if not ok:
         return False, why
-    if ht.OPINION_RX.search(text):
-        return False, "opinion"
+    if MCHECK.ADVICE_RX.search(text):          # A-TALK-11: opinions allowed; "you should" advice blocked
+        return False, "advice"
     have = _input_words(inp)
     for w in words:
         lw = w.lower()

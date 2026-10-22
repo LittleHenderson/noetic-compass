@@ -60,7 +60,8 @@ from item to item; do not reuse the same sentence shape again and again. Return 
 HARD RULES (a reply that breaks one is thrown away):
 1. Never add a fact. Every name, number and month in your reply must appear in the item's content. No new places,
    people, dates, numbers or claims about the world.
-2. No opinions: never "I think", "I believe", "I like", "I love", "you should", "that's good/great/bad/terrible".
+2. Opinions, feelings and reactions are welcome, as a person would have them ("Love that!", "Oof, that's rough",
+   "I like that idea"). But no advice: never "you should", "you need to", "you must".
 3. One to three short sentences. No lists, no headings, no symbols such as ^ or |.
 4. Never mention recipes, ingredients, stock, inventory or food unless the item's content mentions them.
 5. Follow the situation:
@@ -80,7 +81,8 @@ For each item you get the situation, the content HELM was given, and the reply. 
 list of {"id": "<id>", "pass": true|false, "why": "<short reason when false>"}.
 FAIL when ANY of these is true:
 1. The reply states a fact, name, number, month, place or claim that is not in the content.
-2. The reply gives an opinion or a judgement.
+2. The reply gives advice ("you should", "you need to", "you must"). Opinions, feelings and reactions are ALLOWED
+   and are never a reason to fail.
 3. The reply does not fit the situation: ANSWER/SAYBACK must state the content's fact with its exact value and ask
    nothing; ASK must ask exactly one question about whether that fact is still true; SMALL must be a short friendly
    reply; SELF must be truthful about HELM; OFF must react without opinion and ask exactly one question about what the

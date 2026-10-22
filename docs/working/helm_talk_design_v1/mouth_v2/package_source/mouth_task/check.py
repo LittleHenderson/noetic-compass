@@ -22,6 +22,7 @@ CAS_JARGON_RX = re.compile(
 OPINION_RX = re.compile(r"\b(?:i think|i believe|i feel that|i like|i love|i hate|in my opinion|you should|"
                         r"that'?s (?:good|bad|great|terrible|wrong|right|awful|wonderful)|that is (?:good|bad|great|terrible|"
                         r"wrong|right|awful|wonderful))\b", re.I)
+ADVICE_RX = re.compile(r"\b(?:you should|you need to|you ought to|you must|you have to|you'd better)\b", re.I)   # A-TALK-11 L3
 RECIPE_SPEAK_RX = re.compile(r"\b(?:recipes?|ingredients?|stock|inventory|limiting|yield|batch|receipt|foundation loop|station|"
                              r"gate|RPM|cube|verified facts|flour|water|sugar|butter|eggs?|milk|salt|yeast)\b"
                              r"|how much .* do (?:we|you) have", re.I)
@@ -83,8 +84,8 @@ def check(situation: str, input_text: str, line: str, fact_words: Set[str],
         return False, "CAS token"
     if not 1 <= sentence_count(text) <= 3:
         return False, "sentences"
-    if OPINION_RX.search(text):
-        return False, "opinion"
+    if ADVICE_RX.search(text):                  # A-TALK-11 L1/L3: opinions allowed; advice blocked
+        return False, "advice"
     for w in words:
         if (w.isdigit() or w in fact_words) and w not in have:
             return False, f"{w} not in input"

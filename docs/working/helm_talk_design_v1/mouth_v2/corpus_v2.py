@@ -298,6 +298,57 @@ def stage_rewrite(families: Tuple[str, ...] = NEW_FAMILIES) -> None:
         _save(f"written_{fam}.json", doc)
 
 
+def stage_ingest_keys(families: Tuple[str, ...] = ("anthropic",)) -> None:
+    """File-mode checks: read every replies/key-<fam>-*.txt into keys_<fam>.json (v1's keys kept; nothing is deleted)."""
+    for fam in families:
+        doc = _load(f"keys_{fam}.json") or {"family": fam, "keys": {}, "calls": []}
+        rdir = os.path.join(OUT, "replies")
+        n = 0
+        for name in sorted(os.listdir(rdir)):
+            if name.startswith(f"key-{fam}-") and name.endswith(".txt"):
+                for it in llm_ct.parse_reply(open(os.path.join(rdir, name), encoding="utf-8").read()) or []:
+                    if isinstance(it, dict) and it.get("id") and isinstance(it.get("pass"), bool):
+                        doc["keys"][it["id"]] = {"pass": it["pass"], "why": it.get("why")}
+                        n += 1
+        _save(f"keys_{fam}.json", doc)
+        print(fam, "keys read", n, "total", len(doc["keys"]), flush=True)
+
+
+OPINION_WHY = ("opinion", "judg", "evaluat", "feeling", "glad", "happy", "praise", "lovely", "nice", "sounds")
+
+
+def stage_rekey_opinion(families: Tuple[str, ...] = NEW_FAMILIES) -> None:
+    """A-TALK-11 L4: every key that failed a lesson for opinion / judgement / feeling is judged again by the same family
+    under the new key brief (opinions allowed, advice and made-up facts not). Re-runnable: a file-mode family is
+    completed by re-running after its replies (tags rekey-<fam>-k)."""
+    xs = {x["id"]: x for x in _load("inputs.json")}
+    lines = {f: (_load(f"written_{f}.json") or {"lines": {}})["lines"] for f in MM.FAMILIES}
+    for fam in families:
+        doc = _load(f"keys_{fam}.json")
+        keys = doc["keys"]
+        todo = []
+        for kid, v in keys.items():
+            if v["pass"] or not any(w in (v.get("why") or "").lower() for w in OPINION_WHY):
+                continue
+            writer, iid = kid.split(":", 1)
+            if iid in xs and iid in lines.get(writer, {}):
+                vw = MM.writer_view(xs[iid])
+                todo.append({"id": kid, "situation": vw["situation"], "content": vw["content"], "reply": lines[writer][iid]})
+        todo.sort(key=lambda t: t["id"])
+        size = 190 if fam in MM.SMALL_BATCH_FAMILIES else 380
+        n = 0
+        for b in range(0, len(todo), size):
+            text, meta = llm_ct.run_cli(fam, MM.BRIEF_KEY + "\n\nITEMS:\n" + json.dumps(todo[b:b + size], ensure_ascii=False),
+                                        f"rekey-{fam}-{b // size}")
+            for it in llm_ct.parse_reply(text) or []:
+                if isinstance(it, dict) and it.get("id") in keys and isinstance(it.get("pass"), bool):
+                    keys[it["id"]] = {"pass": it["pass"], "why": it.get("why"), "rekey": "A-TALK-11"}
+                    n += 1
+        _save(f"keys_{fam}.json", doc)
+        print(fam, "opinion fails to re-judge", len(todo), "re-judged", n,
+              "now pass", sum(1 for t in todo if keys[t["id"]]["pass"]), flush=True)
+
+
 def stage_key(families: Tuple[str, ...] = NEW_FAMILIES) -> None:
     MM.stage_key(families)
 
@@ -308,10 +359,19 @@ def stage_assemble(families=None) -> Dict[str, Any]:
     keys = {k: (_load(f"keys_{k}.json") or {"keys": {}})["keys"] for k in MM.FAMILIES}
     counts = {"written": 0, "rule_ok": 0, "kept": 0, "key_fail": 0, "key_missing": 0, "over_cap": 0}
     per: Dict[str, List[Dict[str, Any]]] = {}
+    # A-TALK-10 K9: openai's few rewritten lines were rewritten while anthropic's key prompts were built, so an anthropic
+    # key may belong to the old text; those lines are left out
+    stale = set()
+    rdir = os.path.join(OUT, "replies")
+    for name in os.listdir(rdir):
+        if name.startswith("fix2-openai-") and name.endswith(".txt"):
+            stale |= {"openai:" + it["id"] for it in llm_ct.parse_reply(open(os.path.join(rdir, name), encoding="utf-8").read())
+                      or [] if isinstance(it, dict) and it.get("id")}
+    counts["stale_rewrite"] = len(stale)
     for fam in MM.FAMILIES:
         for iid, line in (_load(f"written_{fam}.json") or {"lines": {}})["lines"].items():
             x = xs.get(iid)
-            if x is None:
+            if x is None or f"{fam}:{iid}" in stale:
                 continue
             counts["written"] += 1
             if not ML.rule_check(x, line)[0]:
@@ -361,7 +421,7 @@ def stage_assemble(families=None) -> Dict[str, Any]:
 if __name__ == "__main__":
     fams = tuple(sys.argv[2].split(",")) if len(sys.argv) > 2 else None
     stage = {"vocab": stage_vocab, "persons": stage_persons, "persons_exam": stage_persons_exam, "write": stage_write,
-             "key": stage_key, "rewrite": stage_rewrite, "assemble": stage_assemble}[sys.argv[1]]
+             "key": stage_key, "rewrite": stage_rewrite, "rekey_opinion": stage_rekey_opinion, "ingest_keys": stage_ingest_keys, "assemble": stage_assemble}[sys.argv[1]]
     if sys.argv[1] == "vocab":
         stage_vocab(sys.argv[2] if len(sys.argv) > 2 else "0/1")
     else:

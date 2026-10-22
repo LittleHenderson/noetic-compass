@@ -110,3 +110,11 @@ class SenseLayer2(unittest.TestCase):
         self.assertFalse(check.layer2_ok(-0.9, -0.607)[0])
         self.assertTrue(check.layer2_ok(-0.2, -0.607)[0])
         self.assertFalse(check.layer2_ok(None, -0.607)[0])
+
+
+class OpinionsAllowed(unittest.TestCase):
+    """A-TALK-11 L1/L3: the guard lets opinions through and blocks advice."""
+
+    def test_guard(self):
+        self.assertTrue(check.check("OFF", "off i finally finished the bookshelf", "Love that, nice work! How long did the bookshelf take?", set())[0])
+        self.assertFalse(check.check("OFF", "off i finally finished the bookshelf", "Nice. You should paint the bookshelf?", set())[0])

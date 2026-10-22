@@ -35,7 +35,7 @@ def test_rule_check_refuses_a_new_fact():
     for bad in ("You told me the Oxley line ran nine buses in September.",        # a number not in the input
                 "You told me the Dunmere line ran eight buses in September.",     # a name not in the input
                 "You told me the Oxley line ran eight buses in October.",         # a month not in the input
-                "I think the Oxley line ran eight buses in September.",            # an opinion
+                "You should know the Oxley line ran eight buses in September.",   # advice (A-TALK-11: opinions are allowed)
                 "The Oxley line. Eight buses. September. Really. Yes."):           # over three sentences
         ok, why = ML.rule_check(inp, bad)
         assert not ok, bad
@@ -120,3 +120,12 @@ def test_v2_possessive_keeps_the_thing():
          "reading": {"thing": "longmoor", "slot": ["line", "rerouted", "september", "through"], "value": "cresswell",
                      "replaces": None}, "tone": ["^1", "|A"]}
     assert ML.rule_check(x, "You said Longmoor's line got rerouted through Cresswell in September.")[0]
+
+
+def test_v2_opinions_are_allowed_but_advice_and_new_facts_are_not():
+    """A-TALK-11: HELM may hold opinions; advice and made-up facts stay blocked."""
+    x = ML.line_input("OFF", "I finally finished the bookshelf I was building.", "t:op")
+    assert ML.rule_check(x, "Love that, nice work! What wood did you use for the bookshelf?")[0]
+    assert ML.rule_check(x, "I think that's great. How long did the bookshelf take?")[0]
+    assert not ML.rule_check(x, "Nice work. You should sell the bookshelf?")[0]
+    assert not ML.rule_check(x, "Nice work, it must be like the one in Oxley. How long did it take?")[0]
