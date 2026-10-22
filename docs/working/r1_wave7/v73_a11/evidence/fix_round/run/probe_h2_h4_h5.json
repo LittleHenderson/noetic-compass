@@ -1,0 +1,176 @@
+{
+ "H2_S1_misbound_stop_word_line": {
+  "after_a11": 0,
+  "allowed_tail_heads": [
+   "juice"
+  ],
+  "checks": {
+   "a": true,
+   "b": true,
+   "c": true,
+   "d": true,
+   "e": true
+  },
+  "exempted": [
+   "FIX:S1"
+  ],
+  "frozen_strict": 1,
+  "key_heads": [
+   "tomatoes",
+   "sugar",
+   "rice"
+  ],
+  "key_q": [
+   "1",
+   "1",
+   "2"
+  ],
+  "lesson_scores": null,
+  "strict": 1,
+  "unlearned": [
+   "tomatoes in juice"
+  ],
+  "why_not": [
+   "line1:MULTI_QTY"
+  ]
+ },
+ "H2_S1c_control_plain_line": {
+  "after_a11": 1,
+  "allowed_tail_heads": [
+   "juice"
+  ],
+  "checks": {
+   "a": true,
+   "b": true,
+   "c": true,
+   "d": true,
+   "e": false
+  },
+  "exempted": [],
+  "frozen_strict": 1,
+  "key_heads": [
+   "tomatoes",
+   "sugar",
+   "rice"
+  ],
+  "key_q": [
+   "1",
+   "1",
+   "2"
+  ],
+  "lesson_scores": null,
+  "strict": 1,
+  "unlearned": [
+   "tomato"
+  ],
+  "why_not": [
+   "line1:MULTI_QTY"
+  ]
+ },
+ "H4_S3_wrong_unit_on_lesson_0": {
+  "after_a11": 0,
+  "allowed_tail_heads": [
+   "berry"
+  ],
+  "checks": {
+   "a": true,
+   "b": true,
+   "c": true,
+   "d": true,
+   "e": true
+  },
+  "exempted": [
+   "FIX:S2"
+  ],
+  "frozen_strict": 1,
+  "key_heads": [
+   "lentils",
+   "cloves",
+   "stock"
+  ],
+  "key_q": [
+   "2",
+   "4",
+   "1"
+  ],
+  "lesson_scores": null,
+  "strict": 1,
+  "unlearned": [
+   "juniper berry"
+  ],
+  "why_not": [
+   "line1:MULTI_QTY"
+  ]
+ },
+ "H5_S2_person_heard_the_fallback": {
+  "after_a11": 0,
+  "allowed_tail_heads": [
+   "berry"
+  ],
+  "checks": {
+   "a": true,
+   "b": true,
+   "c": true,
+   "d": true,
+   "e": true
+  },
+  "exempted": [
+   "FIX:S2"
+  ],
+  "frozen_strict": 1,
+  "key_heads": [
+   "lentils",
+   "cloves",
+   "stock"
+  ],
+  "key_q": [
+   "2",
+   "4",
+   "1"
+  ],
+  "lesson_scores": null,
+  "strict": 1,
+  "unlearned": [
+   "juniper berry"
+  ],
+  "why_not": [
+   "line1:MULTI_QTY"
+  ]
+ },
+ "honest_control": {
+  "after_a11": 0,
+  "allowed_tail_heads": [
+   "berry"
+  ],
+  "checks": {
+   "a": true,
+   "b": true,
+   "c": true,
+   "d": true,
+   "e": true
+  },
+  "exempted": [
+   "FIX:S2"
+  ],
+  "frozen_strict": 1,
+  "key_heads": [
+   "lentils",
+   "cloves",
+   "stock"
+  ],
+  "key_q": [
+   "2",
+   "4",
+   "1"
+  ],
+  "lesson_scores": null,
+  "strict": 1,
+  "unlearned": [
+   "juniper berry"
+  ],
+  "why_not": [
+   "line1:MULTI_QTY"
+  ]
+ },
+ "pkg": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\pkg\\HELM_R1_W7_20261020"
+}

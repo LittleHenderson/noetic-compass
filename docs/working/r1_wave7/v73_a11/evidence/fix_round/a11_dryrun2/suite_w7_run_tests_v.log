@@ -1,0 +1,89 @@
+test_a_never_sent_word_is_refused_and_recorded_as_a_crash (tests_r1w7.test_units_w7.ChatHarness.test_a_never_sent_word_is_refused_and_recorded_as_a_crash) ... ok
+test_chat_diag_prints_the_loop_sentence (tests_r1w7.test_units_w7.ChatHarness.test_chat_diag_prints_the_loop_sentence) ... ok
+test_chat_off_unit_as_its_own_process_never_imports_wide (tests_r1w7.test_units_w7.ChatHarness.test_chat_off_unit_as_its_own_process_never_imports_wide) ... ok
+test_chat_on_learns_answers_and_records_transparently (tests_r1w7.test_units_w7.ChatHarness.test_chat_on_learns_answers_and_records_transparently) ... ok
+test_loop_on_and_always_ask_arms (tests_r1w7.test_units_w7.ChatHarness.test_loop_on_and_always_ask_arms) ... ok
+test_noise_item_plays_noise_turns_outside_the_log (tests_r1w7.test_units_w7.ChatHarness.test_noise_item_plays_noise_turns_outside_the_log) ... ok
+test_recorder_equality_on_practice_turns (tests_r1w7.test_units_w7.ChatHarness.test_recorder_equality_on_practice_turns) ... ok
+test_bands_above_everything_used_and_below_int32 (tests_r1w7.test_units_w7.Frozen.test_bands_above_everything_used_and_below_int32) ... ok
+test_exclusion_contract (tests_r1w7.test_units_w7.Frozen.test_exclusion_contract) ... ok
+test_frozen_file_agrees_with_code (tests_r1w7.test_units_w7.Frozen.test_frozen_file_agrees_with_code) ... ok
+test_helm_cut_contract (tests_r1w7.test_units_w7.Frozen.test_helm_cut_contract) ... ok
+test_recorder_fixture_is_practice (tests_r1w7.test_units_w7.Frozen.test_recorder_fixture_is_practice) ... ok
+test_units_arms_and_words (tests_r1w7.test_units_w7.Frozen.test_units_arms_and_words) ... ok
+test_builder_is_deterministic_and_frozen (tests_r1w7.test_units_w7.Noise.test_builder_is_deterministic_and_frozen) ... ok
+test_quotes_yield_fixes_the_comparison (tests_r1w7.test_units_w7.Plainness.test_quotes_yield_fixes_the_comparison) ... ok
+test_status_word_order (tests_r1w7.test_units_w7.Plainness.test_status_word_order) ... ok
+test_practice_draw_rederives_the_published_pools (tests_r1w7.test_units_w7.Practice.test_practice_draw_rederives_the_published_pools) ... ok
+test_clean_run_gates_and_marks (tests_r1w7.test_units_w7.ReaderOnFixtures.test_clean_run_gates_and_marks) ... ok
+test_every_hard_gate_can_fail (tests_r1w7.test_units_w7.ReaderOnFixtures.test_every_hard_gate_can_fail) ... ok
+test_every_mark_can_miss (tests_r1w7.test_units_w7.ReaderOnFixtures.test_every_mark_can_miss) ... ok
+test_fixture_composition_is_gen_conv (tests_r1w7.test_units_w7.ReaderOnFixtures.test_fixture_composition_is_gen_conv) ... ok
+test_hg5_holds_when_all_fourteen_units_write_empty_lists (tests_r1w7.test_units_w7.ReaderOnFixtures.test_hg5_holds_when_all_fourteen_units_write_empty_lists)
+A-R1W7-4: the c51 defect. The clean fixture's 14 units (the recorder unit through the real builder) all carry ... ok
+test_hg5_reads_false_when_the_recorder_unit_lacks_the_list_or_lists_a_file (tests_r1w7.test_units_w7.ReaderOnFixtures.test_hg5_reads_false_when_the_recorder_unit_lacks_the_list_or_lists_a_file)
+A-R1W7-4: the two recorder-unit plants, each alone, each read HG5 false and nothing else. ... ok
+test_instrument_rows_can_fail (tests_r1w7.test_units_w7.ReaderOnFixtures.test_instrument_rows_can_fail) ... ok
+test_reader_refuses_a_practice_record (tests_r1w7.test_units_w7.ReaderOnFixtures.test_reader_refuses_a_practice_record) ... ok
+test_blocked_table (tests_r1w7.test_units_w7.SeedRule.test_blocked_table) ... ok
+test_derivation_is_deterministic_in_band_and_from_the_frozen_slices (tests_r1w7.test_units_w7.SeedRule.test_derivation_is_deterministic_in_band_and_from_the_frozen_slices) ... ok
+test_refuses_a_bad_line_or_zip (tests_r1w7.test_units_w7.SeedRule.test_refuses_a_bad_line_or_zip) ... ok
+test_byte_copies (tests_r1w7.test_kit_w7.KitTests.test_byte_copies) ... ok
+test_plan_check_passes (tests_r1w7.test_kit_w7.KitTests.test_plan_check_passes) ... ok
+test_runner_constants_match_package (tests_r1w7.test_kit_w7.KitTests.test_runner_constants_match_package) ... ok
+test_runner_refuses_a_key_file_in_the_carrier (tests_r1w7.test_kit_w7.KitTests.test_runner_refuses_a_key_file_in_the_carrier) ... FAIL
+test_runner_refuses_a_wrong_freeze (tests_r1w7.test_kit_w7.KitTests.test_runner_refuses_a_wrong_freeze) ... ok
+test_stage_check_refuses_an_empty_pythonpath (tests_r1w7.test_kit_w7.KitTests.test_stage_check_refuses_an_empty_pythonpath)
+A-R1W7-4: c51 attempt 1 died on PLAN_INVALID:r1w7_host_run:pythonpath. The sealed stage must pass the ... ok
+test_an_already_unrepresentable_key_stays_so_and_keeps_its_reasons (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_an_already_unrepresentable_key_stays_so_and_keeps_its_reasons) ... ok
+test_and_joined_second_amount (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_and_joined_second_amount) ... ok
+test_comma_joined_second_amount (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_comma_joined_second_amount) ... ok
+test_idempotent (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_idempotent) ... ok
+test_one_amount_is_one_amount (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_one_amount_is_one_amount) ... ok
+test_plain_lines_are_untouched (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_plain_lines_are_untouched) ... ok
+test_two_amounts_after_a_separator (tests_r1w7.test_multi_qty_w7.A_TwoAmountLineIsNotRepresentable.test_two_amounts_after_a_separator) ... ok
+test_authored_keys_are_what_the_design_table_says (tests_r1w7.test_honest_ask_w7.A_KeysFromTheFrozenFunction.test_authored_keys_are_what_the_design_table_says) ... ok
+test_tail_heads_and_allowed_heads_with_the_frozen_grammar (tests_r1w7.test_honest_ask_w7.A_KeysFromTheFrozenFunction.test_tail_heads_and_allowed_heads_with_the_frozen_grammar) ... ok
+test_honest_ask_m1 (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_honest_ask_m1) ... ok
+test_honest_ask_p1_the_c56_shape (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_honest_ask_p1_the_c56_shape) ... ok
+test_loop_on_shape_exempted_reported_only (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_loop_on_shape_exempted_reported_only) ... ok
+test_noise_turn_after_the_question_does_not_hide_the_sentence (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_noise_turn_after_the_question_does_not_hide_the_sentence) ... ok
+test_two_names_exempted_and_a_count_of_three_is_not (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_two_names_exempted_and_a_count_of_three_is_not) ... ok
+test_each_c_and_d_failure_alone (tests_r1w7.test_honest_ask_w7.C_PhantomsAndOtherSentencesAreNotExempted.test_each_c_and_d_failure_alone) ... ok
+test_missing_stock_sentence_is_not_exempted (tests_r1w7.test_honest_ask_w7.C_PhantomsAndOtherSentencesAreNotExempted.test_missing_stock_sentence_is_not_exempted) ... ok
+test_phantom_c1_c2_c3 (tests_r1w7.test_honest_ask_w7.C_PhantomsAndOtherSentencesAreNotExempted.test_phantom_c1_c2_c3) ... ok
+test_tagged_right_number_is_right_and_nothing_exempted (tests_r1w7.test_honest_ask_w7.D_WrongRightAndUntagged.test_tagged_right_number_is_right_and_nothing_exempted) ... ok
+test_tagged_wrong_number_stays_wrong_and_fails_k3 (tests_r1w7.test_honest_ask_w7.D_WrongRightAndUntagged.test_tagged_wrong_number_stays_wrong_and_fails_k3) ... ok
+test_untagged_honest_looking_ask_is_not_exempted (tests_r1w7.test_honest_ask_w7.D_WrongRightAndUntagged.test_untagged_honest_looking_ask_is_not_exempted) ... ok
+test_licensed_path_undetermined_is_not_exempted (tests_r1w7.test_honest_ask_w7.E_ReaderAndClarifyAsksAreNotExempted.test_licensed_path_undetermined_is_not_exempted) ... ok
+test_reader_clarify_routing_and_brain_statuses (tests_r1w7.test_honest_ask_w7.E_ReaderAndClarifyAsksAreNotExempted.test_reader_clarify_routing_and_brain_statuses) ... ok
+test_default_call_without_raw_lines_exempts_nothing (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_default_call_without_raw_lines_exempts_nothing) ... ok
+test_garbage_inputs_never_raise (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_garbage_inputs_never_raise) ... ok
+test_raw_lines_missing (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_raw_lines_missing) ... ok
+test_record_shapes_never_raise (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_record_shapes_never_raise) ... ok
+test_an_inconsistent_recount_reads_false (tests_r1w7.test_honest_ask_w7.G_ConsistencyOnAMixedSet.test_an_inconsistent_recount_reads_false) ... ok
+test_recount_equals_frozen_strict_and_after_is_strict_minus_exempted (tests_r1w7.test_honest_ask_w7.G_ConsistencyOnAMixedSet.test_recount_equals_frozen_strict_and_after_is_strict_minus_exempted) ... ok
+test_say_wide_from_helm_now_matches_and_splits (tests_r1w7.test_honest_ask_w7.H_TemplateTie.test_say_wide_from_helm_now_matches_and_splits) ... ok
+test_clean_run_unchanged (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_clean_run_unchanged) ... ok
+test_existing_k4_plant_still_misses (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_existing_k4_plant_still_misses) ... ok
+test_k3_a11_wrong_number_misses_k3_and_the_word_is_harmed (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_k3_a11_wrong_number_misses_k3_and_the_word_is_harmed) ... ok
+test_k4_a11_honest_ask_is_exempted_and_flagged (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_k4_a11_honest_ask_is_exempted_and_flagged) ... ok
+test_k4_a11_variants_still_miss_k4 (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_k4_a11_variants_still_miss_k4) ... ok
+test_reader_string_names_the_amendment (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_reader_string_names_the_amendment) ... ok
+
+======================================================================
+FAIL: test_runner_refuses_a_key_file_in_the_carrier (tests_r1w7.test_kit_w7.KitTests.test_runner_refuses_a_key_file_in_the_carrier)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\a11_dryrun2\pkg\HELM_R1_W7_20261020\tests_r1w7\test_kit_w7.py", line 117, in test_runner_refuses_a_key_file_in_the_carrier
+    self.assertEqual(rec["refused"], "KEY_FILE_IN_THE_HOST_CARRIER")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'R1W7_MEMBER_SHA256_MISMATCH' != 'KEY_FILE_IN_THE_HOST_CARRIER'
+- R1W7_MEMBER_SHA256_MISMATCH
++ KEY_FILE_IN_THE_HOST_CARRIER
+
+
+----------------------------------------------------------------------
+Ran 69 tests in 84.410s
+
+FAILED (failures=1)

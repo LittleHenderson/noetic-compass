@@ -1,0 +1,12 @@
+test_ambiguous_ran_out_never_wrong_under_v73_refused_not_learned (__main__.ScorerPathV73.test_ambiguous_ran_out_never_wrong_under_v73_refused_not_learned) ... ok
+test_dangling_or_wrong_lesson_under_v72_none_under_v73 (__main__.ScorerPathV73.test_dangling_or_wrong_lesson_under_v72_none_under_v73) ... ok
+test_design_stop_rule_no_wrong_lesson_or_answer_under_v73 (__main__.ScorerPathV73.test_design_stop_rule_no_wrong_lesson_or_answer_under_v73) ... ok
+test_one_line_x_or_y_scores_the_same_under_both_readers (__main__.ScorerPathV73.test_one_line_x_or_y_scores_the_same_under_both_readers) ... ok
+test_sugar_and_brown_sugar_score_the_same_under_both_readers (__main__.ScorerPathV73.test_sugar_and_brown_sugar_score_the_same_under_both_readers) ... ok
+test_the_scorer_was_the_package_score_w7 (__main__.ScorerPathV73.test_the_scorer_was_the_package_score_w7) ... ok
+test_two_different_readers_ran_through_the_package (__main__.ScorerPathV73.test_two_different_readers_ran_through_the_package) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 38.877s
+
+OK

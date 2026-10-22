@@ -1,0 +1,33 @@
+{
+ "schema": "helm.r1w7.v73-t3.items/1",
+ "design": "docs/working/r1_wave7/v73_a11/DESIGN_V73_A11.md (sha256 57fcc5143d97431f4831b9c231d02c44efc88260da357febfc0b6add17be890a), section 4 T3: the 13 items of section 1 (D1, D2, D3, D4, A1, X1, X2, C1, C2, C3, C4, M1, P1), ids AUTHOR:<name>, authored multipliers 3, 3/2, 5/2",
+ "authored": "2026-10-21 PDT. The raw lines are the design's own authored lines (section 1 table), word for word; none is copied from an exam, a sample, a pool, a practice draw or a sealed run. Nouns are the design's (T1 'sauce', T2 'stew' / 'pilaf' / 'batter' / 'cake'); C4's 'soup' is this file's. This list is frozen BEFORE any T3 run: t3_score_v73.py pins this file's sha256 and refuses a T3 run on any other bytes.",
+ "items": [
+  {"id": "AUTHOR:D1", "noun": "sauce", "raw_lines": ["1 can tomatoes or", "4 cups chopped tomatoes", "2 onions"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "lesson 0 WRONG; then NOT_LEARNED", "design_v73": "NOT_LEARNED x3 (which-one)"},
+  {"id": "AUTHOR:D2", "noun": "cake", "raw_lines": ["1 cup butter or", "1 cup margarine", "2 cups flour"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "RIGHT 3/2", "design_v73": "ASKS, lessons NOT_LEARNED (not unexplained)"},
+  {"id": "AUTHOR:D3", "noun": "sauce", "raw_lines": ["1 can tomatoes or", "4 cups fresh tomatoes", "2 onions"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "lesson 0 WRONG; then NOT_LEARNED", "design_v73": "NOT_LEARNED x3 (which-one)"},
+  {"id": "AUTHOR:D4", "noun": "cake", "raw_lines": ["2 cups flour", "1 cup butter, or", "1 cup margarine"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "RIGHT 3/2", "design_v73": "ASKS, lessons NOT_LEARNED (not unexplained)"},
+  {"id": "AUTHOR:A1", "noun": "sauce", "raw_lines": ["3 cups tomatoes with juice", "1 cup chopped tomatoes", "2 onions"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "lesson 0 WRONG", "design_v73": "NOT_LEARNED, LEARNED, LEARNED"},
+  {"id": "AUTHOR:X1", "noun": "sauce", "raw_lines": ["3 cups tomatoes with juice", "1 can tomatoes or", "2 onions"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "NOT_LEARNED, NOT_LEARNED, LEARNED", "design_v73": "NOT_LEARNED x3"},
+  {"id": "AUTHOR:X2", "noun": "sauce", "raw_lines": ["1 can tomatoes in juice", "2 tomatoes", "2 onions"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "lesson 0 WRONG", "design_v73": "NOT_LEARNED, NOT_LEARNED, LEARNED"},
+  {"id": "AUTHOR:C1", "noun": "batter", "raw_lines": ["3 eggs, 1 beaten", "2 cups flour", "1 cup milk"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "ASKS, counted; not exempted", "design_v73": "ASKS, counted; not exempted"},
+  {"id": "AUTHOR:C2", "noun": "batter", "raw_lines": ["1 cup sugar, 2 tablespoons reserved", "2 cups flour", "1 cup milk"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "ASKS, counted; not exempted", "design_v73": "ASKS, counted; not exempted"},
+  {"id": "AUTHOR:C3", "noun": "stew", "raw_lines": ["2 cups flour, plus 2 tablespoons", "1 pound beef, a lean cut", "1 cup broth"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "ASKS, counted; not exempted", "design_v73": "ASKS, counted; not exempted"},
+  {"id": "AUTHOR:C4", "noun": "soup", "raw_lines": ["1 onion, 2 tomatoes", "1 cup rice", "2 cups tomatoes with juice"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "lesson 2 NOT_LEARNED; not counted", "design_v73": "lesson 2 NOT_LEARNED; not counted"},
+  {"id": "AUTHOR:M1", "noun": "stew", "raw_lines": ["2 cups barley", "5 cloves, 10 juniper berries", "1 cup broth"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "ASKS, counted; exempted", "design_v73": "ASKS, counted; exempted"},
+  {"id": "AUTHOR:P1", "noun": "pilaf", "raw_lines": ["2 cups rice", "6 cloves and 12 peppercorns", "1 cup stock"], "multipliers": ["3", "3/2", "5/2"],
+   "design_v72": "ASKS, counted; exempted", "design_v73": "ASKS, counted; exempted"}
+ ]
+}

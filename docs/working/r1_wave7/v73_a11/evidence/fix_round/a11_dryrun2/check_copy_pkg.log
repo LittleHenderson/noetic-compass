@@ -1,0 +1,8 @@
+zip_sha256 ad3fb98cd3254963263929747791d151949c2f50923672e4bcbf3fc14490942c pinned_ok True
+zip_files 204 copy_files 204 differ 0 extra []
+neighbour HELM_R1_W1_20261015 freeze_ok True members 110 bad 0
+neighbour HELM_R1_W3_20261019 freeze_ok True members 205 bad 0
+neighbour HELM_R1_W3B_20261019 freeze_ok True members 27 bad 0
+neighbour HELM_R1_W6_20261019 freeze_ok True members 194 bad 0
+neighbour HELM_RBW1T_20261019 freeze_ok True members 394 bad 0
+ALL_EQUAL True

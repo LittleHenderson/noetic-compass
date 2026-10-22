@@ -37,6 +37,14 @@ three face values per ingredient; recipe Purpose absent -> ask; ingredient Purpo
 with a time phrase ("Yesterday we made ...") and end "..., and the flour ran out first". ENGINEERED-NOT-VALIDATED until
 a sealed draw; no claim moved.
 
+v7.3 (2026-10-21, DESIGN_V73_A11.md sha256 57fcc514...; SPEC 7.119 "Proposed next FIX FIRST" (a) and (b), the c56
+wrong lesson): R1 a dangling "or" at the end of a line ("1 can tomatoes or", "1 cup butter, or") is never part of a name;
+R1a a batch or stock list holding such a line is one question, CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ("which one did you
+use?"), nothing saved; R2 with no exact name, the starts-with, ends-with and own-words matches of a ran-out phrase are
+pooled and exactly one binds (two or more -> unchanged, the brain refuses and HELM asks); R2g an exact hit that another
+line's name continues with a joining word ("tomato" beside "tomatoes in juice") is asked, CLARIFY_WIDE_RAN_OUT_WHICH_LINE,
+never bound. Two new wide statuses (11 -> 13). ENGINEERED-NOT-VALIDATED; no claim moved; the chat stays NOT LICENSED.
+
 STAGE 1c (2026-10-20, switch WIDE_UNITS_NOTE, default OFF; see helm_brain_wide's header): with the switch ON this same
 reader also reads the 6 widened units (liter, deciliter, centiliter, gallon, fluid ounce, dozen) and reads a line with no
 exact amount, or with a unit nobody can size, as a NOTE line {"name", "amount": None, "unit": "", "note": True}: present,
@@ -54,7 +62,7 @@ import helm_brain_wide as W
 import helm_faces_in as FI          # v7 (SPEC 7.109 D2/D3): the face reader, names as given
 import helm_triad as HT             # v7 (SPEC 7.109 D4): the one scale and the triad table (stdlib only)
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v7.2 (2026-10-21)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v7.3 (2026-10-21)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -186,6 +194,20 @@ def _ask(code: str, **slots: Any) -> Dict[str, Any]:
 _AMT_START = r"(?:\d|[" + "".join(W.VULGAR) + r"])"
 ALTERNATIVE_RX = re.compile(r"\bplus\s+" + _AMT_START + r"|^(?:[A-Za-z-]+\s+)?or\s+" + _AMT_START, re.IGNORECASE)
 
+#: v7.3 R1 (2026-10-21, DESIGN_V73_A11.md 2.1; the c56 wrong lesson): an "or" at the END of a line ("1 can tomatoes or",
+#: "1 can tomatoes or;", "1 cup butter, or") is never part of the ingredient's name. Before v7.3 the name kept it
+#: ("tomatoes or"); the ran-out phrase "tomatoes" then matched only the NEXT line ("chopped tomato") and the brain stored
+#: that line's amount. "or" inside a word ("liquor"), "or" with an amount after it ("2 large or 4 small",
+#: AMOUNT_HAS_TWO_PARTS), "or" with a word after it ("dry beans or whole peas", v6) and "or more" are untouched.
+DANGLING_OR_RX = re.compile(r"(?:^|[\s,;]+)or[\s,;]*$", re.IGNORECASE)
+#: v7.3: the reader's two which-one questions (R1a: which of the two alternatives was used; R2g: which line ran out).
+#: The wide path speaks them (take_over) and withdraws any held stock the sentence names (wide_turn).
+WHICH_ONE_CODES = ("ALTERNATIVE_WHICH_ONE", "RAN_OUT_WHICH_LINE")
+#: v7.3 R2g: a copy of the frozen xreal.grammar.STOP_WORDS (the exam's name stops at these words, so "1 can tomatoes in
+#: juice" and "2 tomatoes" are both "tomatoes" to it); HELM never imports a frozen neighbour
+STOP_WORDS = frozenset(("and", "or", "but", "for", "in", "on", "at", "to", "with", "from", "into", "the", "a", "an",
+                        "left", "that", "which", "if", "as", "per", "each"))
+
 #: v5 (2026-10-20, from the K4 diagnosis of HELM-R1 wave 6 c48; tested on our own practice recipes): a RELATIVE amount
 #: ("1 teaspoon cream tartar, and half as much soda", "twice as much butter", "as much salt", "the same amount of
 #: sugar") is said relative to the line BEFORE it. v4 read "half" as an amount of 1/2 with no unit and bound a made-up
@@ -278,8 +300,27 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
     those words alone bind to nothing ("1 cup cold, cooked rice" -> "cooked rice").
     Stage 1c (WIDE_UNITS_NOTE ON, default OFF): a line with no amount, or with an amount in a unit that has no exact size,
     comes back as a NOTE line {"name", "amount": None, "unit": "", "note": True} instead of a question; see
-    helm_brain_wide's header. OFF: exactly reader v5."""
+    helm_brain_wide's header. OFF: exactly reader v5.
+    v7.3 R1: a dangling "or" at the end of the line or of its notes is cut before anything else is read; the line keeps
+    its words as given in "said" and carries "dangling_or": True (R1a in parse_lines then asks which one was used)."""
     s = line.strip().strip(".").strip()
+    given: Optional[str] = None                    # v7.3 R1: the words as given, when a dangling "or" was cut
+    m_or = DANGLING_OR_RX.search(s)
+    cut_line = m_or is not None and bool(s[:m_or.start()].strip())
+    n_or = DANGLING_OR_RX.search(notes) if notes else None
+    if cut_line or n_or is not None:
+        n_given = notes.strip().strip(".").strip()
+        given = s + (", " + n_given if n_given else "")
+        if cut_line:
+            s = s[:m_or.start()].rstrip(" ,;")
+        if n_or is not None:
+            notes = notes[:n_or.start()].rstrip(" ,;")
+
+    def line_out(rec: Dict[str, Any]) -> Dict[str, Any]:
+        if given is not None:                      # v7.3 R1: name and own never hold the "or"; said keeps it
+            rec.update(said=given, dangling_or=True)
+        return rec
+
     stage_1c = W.units_note_on()
     if RELATIVE_WORDS_RX.search(s):                # v5: a relative amount with no line before it to be relative to
         return {"clarify": _ask("AMOUNT_RELATIVE", words=s)}
@@ -301,7 +342,7 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
         if stage_1c and companion is None:         # stage 1c: "salt", "pepper to taste" -> present, no amount
             nm = note_name(s)
             if nm:
-                return _note_line(nm, s, "NO_AMOUNT")
+                return line_out(_note_line(nm, s, "NO_AMOUNT"))
         return {"clarify": _ask("NO_AMOUNT", item=bind_name(s), words=s)}
     amount, end = got
     if condition_fragment(s):                      # v6: "80 degrees Fahrenheit" alone names no ingredient
@@ -357,9 +398,9 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
         return {"clarify": _ask("NO_NAME", words=s)}
     if stage_1c and companion is None:
         if note_unit:                              # "2 sticks butter", "1 dash salt": no exact size -> present, no amount
-            return _note_line(name, s, "UNIT_NO_EXACT_SIZE:" + note_unit)
+            return line_out(_note_line(name, s, "UNIT_NO_EXACT_SIZE:" + note_unit))
         if unit and unit in W.OWN_UNITS_AS_NOTES:  # EMPTY today: own-count units ("2 cans") stay exact counts
-            return _note_line(name, s, "UNIT_NO_EXACT_SIZE:" + unit)
+            return line_out(_note_line(name, s, "UNIT_NO_EXACT_SIZE:" + unit))
     said = s + (", " + note if note else "")
     own = s                                         # v7.2: the line's own words, apart from its notes
     if companion is not None:                      # v5: one bundled line; its proportion is part of its name
@@ -369,7 +410,7 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
         name = f"{name} and {RELATIVE_SAID[r]} {other}"
         said = f"{said}, {RELATIVE_SAID[r]} {other}"
         own = said
-    return {"name": name, "amount": amount, "unit": unit, "said": said, "own": own}
+    return line_out({"name": name, "amount": amount, "unit": unit, "said": said, "own": own})
 
 
 def _is_note(segment: str) -> bool:
@@ -474,6 +515,14 @@ def parse_lines(text: str) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any
                 nm = note_name(piece)
                 if nm:
                     lines.append(_note_line(nm, piece.strip().strip(".").strip(), "NO_AMOUNT"))
+    # v7.3 R1a (DESIGN_V73_A11.md 2.2; SPEC 7.119 FIX FIRST (a)): a line with a dangling "or" names one of two
+    # ingredients, the other being the line after it ("1 can tomatoes or" / "4 cups chopped tomatoes"). Which one was
+    # used is not said, so the whole batch or stock list is one question and nothing is saved. Asked before
+    # SAME_INGREDIENT_TWICE (both lines often bind to the same name once the "or" is cut).
+    for i, x in enumerate(lines):
+        if x.get("dangling_or"):
+            return [], _ask("ALTERNATIVE_WHICH_ONE", first=x["name"],
+                            second=lines[i + 1]["name"] if i + 1 < len(lines) else None, words=x["said"])
     names = [x["name"] for x in lines]
     dup = sorted({n for n in names if names.count(n) > 1})
     if dup:
@@ -539,10 +588,13 @@ def _contains(hay: List[str], needle: List[str]) -> bool:
 
 def resolve_ran_out(name: str, batch: List[str], said: Optional[Dict[str, str]] = None) -> str:
     """The batch ingredient a ran-out name means: itself if in the batch; else with leading unit words and "of" dropped
-    ("cupfuls of stock" -> "stock"); else the ONE batch name it begins ("granulated" -> "granulated or powdered sugar")
-    or the ONE batch name that ends with it ("sugar" -> "brown sugar"); else (v3) the ONE batch line whose own words
-    contain the phrase ("cold" -> the line "1 cup cold, cooked rice"). Two candidates at any step -> unchanged (the
-    brain refuses: the ingredient is not in the batch). OUR_CONVENTION."""
+    ("cupfuls of stock" -> "stock"); else (v7.3 R2, DESIGN_V73_A11.md 2.3; SPEC 7.119 FIX FIRST (b)) the ONE batch name
+    found by pooling three matches of the phrase without its unit words: the batch names it begins ("granulated" ->
+    "granulated or powdered sugar"), the batch names that end with it ("sugar" -> "brown sugar") and (v3) the batch lines
+    whose own words contain it ("cold" -> the line "1 cup cold, cooked rice"). None, or two and more in the pool ->
+    unchanged (the brain refuses: the ingredient is not in the batch; HELM asks). Before v7.3 a single starts-with or
+    ends-with hit bound before the other matches were looked at ("tomato" -> "chopped tomato" beside "tomatoes with
+    juice"). OUR_CONVENTION."""
     if name in batch:
         return name
     words = name.split()
@@ -558,18 +610,33 @@ def resolve_ran_out(name: str, batch: List[str], said: Optional[Dict[str, str]] 
     if stripped and stripped in batch:
         return stripped
     name2 = stripped or name
-    for test in (lambda b: b.startswith(name2 + " "), lambda b: b.endswith(" " + name2)):
-        hits = [b for b in batch if test(b)]
-        if len(hits) == 1:
-            return hits[0]
-        if len(hits) > 1:
-            return name
-    if said:                                       # v3: the phrase inside exactly one line's own words
-        needle = _words(name)
-        hits = [b for b in batch if _contains(_words(said.get(b, b)), needle)]
-        if len(hits) == 1:
-            return hits[0]
-    return name
+    # v7.3 R2: one pool, then exactly one binds (v7.2 took the first step with a single hit)
+    needle = _words(name2)
+    pool = list(dict.fromkeys(
+        b for b in batch
+        if b.startswith(name2 + " ") or b.endswith(" " + name2)
+        or (bool(said) and _contains(_words(said.get(b, b)), needle))))
+    return pool[0] if len(pool) == 1 else name
+
+
+def stop_word_rivals(name: str, batch: List[str]) -> List[str]:
+    """v7.3 R2g: the other batch names that are `name` followed by a frozen STOP word ("tomatoes in juice" for "tomato");
+    to the exam's grammar both lines carry the same name, so an exact hit on `name` would be a guess."""
+    head = _words(name)
+    k = len(head)
+    out = []
+    for b in batch:
+        bw = _words(b)
+        if b != name and len(bw) > k and bw[:k] == head and bw[k] in STOP_WORDS:
+            out.append(b)
+    return out
+
+
+def say_or(names: List[str]) -> str:
+    """v7.3 R2g voice: 'a or b', 'a, b or c'."""
+    if len(names) <= 1:
+        return "".join(names)
+    return ", ".join(names[:-1]) + " or " + names[-1]
 
 
 # ---------------------------------------------------------------------------------------------------- dish names
@@ -681,6 +748,12 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
         # lesson: "a dash of X" folded into the line before it put X's running-out onto that line's ingredient)
         own = {x["name"]: x.get("own", x["said"]) for x in lines}
         ran_out = [resolve_ran_out(n, names, own) for n in ran_out]
+        # v7.3 R2g (DESIGN_V73_A11.md 2.4): an exact hit that another line's name continues with a joining word
+        # ("tomato" beside "tomatoes in juice") is one question, never a bind; nothing saved, no pending batch kept
+        for n in ran_out:
+            rivals = stop_word_rivals(n, names) if n in names else []
+            if rivals:
+                return clarify(_ask("RAN_OUT_WHICH_LINE", item=n, lines=[n] + rivals))
         batch = {"product": product, "made": made, "ran_out": ran_out,
                  "stock": {x["name"]: (x["amount"], x["unit"]) for x in lines}, "said": said}
         if not product:                            # v3: the batch is kept so the dish name can be asked for ONCE
@@ -890,6 +963,15 @@ def say_reader_question(c: Dict[str, Any]) -> str:
                 f"anything. Tell me the amounts on hand exactly, and say {item} is 0 if that's what you mean.")
     if code == "NO_INGREDIENTS":
         return "What went into that batch, and how much of each?"
+    if code == "ALTERNATIVE_WHICH_ONE":           # v7.3 R1a
+        if s.get("second"):
+            return (f"You wrote \"{s.get('words', '')}\" and then {s['second']}, so it reads as one or the other. "
+                    f"Which one did you use? Tell me the batch again with just that one. Nothing was saved.")
+        return (f"You wrote \"{s.get('words', '')}\" with nothing after the \"or\". Which one did you use? Tell me the "
+                f"batch again with just that one. Nothing was saved.")
+    if code == "RAN_OUT_WHICH_LINE":              # v7.3 R2g
+        return (f"You said {s.get('item', 'it')} ran out, but that could be {say_or(s.get('lines') or [])}. Which one "
+                f"ran out first? Tell me the batch again. Nothing was saved.")
     return "Could you say that another way? Nothing was saved."
 
 
@@ -922,10 +1004,14 @@ def take_over(loop: Any, licensed: Dict[str, Any], reading: Dict[str, Any]) -> b
     """Should the wide path take this turn? Only if the licensed path could not bind it and wrote nothing, AND the
     wide reader reads it as something the wide brain can use: a witnessed batch (v3: also one whose dish name is
     missing -- the wide path then asks for it once); stock whose every ingredient is in a recipe the wide brain holds;
-    a question about a product the wide brain holds."""
+    a question about a product the wide brain holds.
+    v7.3 (R1a / R2g): the reader's which-one questions (WHICH_ONE_CODES) are taken on the same terms as a witnessed
+    batch, so HELM speaks the real reason; before v7.3 a reader question was never spoken and the licensed status stood."""
     if licensed.get("cubes_written"):
         return False
     status = licensed.get("loop_status")
+    if reading["status"] == "CLARIFY" and (reading.get("clarify") or {}).get("code") in WHICH_ONE_CODES:
+        return status in WIDE_MAY_TAKE
     book = loop.wide_book
     if reading["status"] == "QUESTION":
         return status in QUESTION_NOT_ANSWERED and match_product(book, reading["topic"]) is not None
@@ -1034,6 +1120,8 @@ def wide_turn(loop: Any, user_english: str, tick: int) -> Dict[str, Any]:
         return loop._finish(result, tick, "WIDE_NOT_MINE", NOT_MINE_LINE, writes_before, "WAIT_FOR_USER")
     if reading["status"] == "CLARIFY":
         code = reading["clarify"]["code"]
+        if code in WHICH_ONE_CODES:                # v7.3: never answer later from stock the person just restated (v4)
+            _withdraw_mentioned_stock(loop, text, tick)
         if reading.get("pending") is not None:     # v3: keep the batch for ONE reply naming the dish
             loop.wide_pending = reading["pending"]
         return loop._finish(result, tick, f"CLARIFY_WIDE_{code}", say_reader_question(reading["clarify"]),

@@ -1,0 +1,177 @@
+{
+ "apply_full_pkg": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\apply_full_pkg.log",
+  "ok": true,
+  "tail": [
+   "31a604ec36174e8e678e64a4604a0f4eaea47649b7c5a0c43a5350389e420d40 tests_r1w7/fixture_run.py",
+   "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c r1w7/score_w7.py",
+   "d6e8ff41b7e4857ca17ad1bc6412b693e20046fd366b0cabf53b8d413e8d8ba9 r1w7/merge_r1w7.py",
+   "e3b10e46ecf1796bcaf44ed6e505423e404ecce4d12e87766f205fb68311a278 tests_r1w7/run_tests.py",
+   "ae9ea60e6e0c11d661818bcb3ecc2b1112e50f5a2fd49cce870cd7f02cb385c8 PREREGISTRATION_R1W7.md",
+   "APPLIED: A-R1W7-11 (7 files)"
+  ],
+  "want": 0
+ },
+ "apply_full_pkg_second": {
+  "exit": 4,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\apply_full_pkg_second.log",
+  "ok": true,
+  "tail": [
+   "  - PREREGISTRATION_R1W7.md already carries section 23 / A-R1W7-11",
+   "  - score_w7.py: anchor found 0 times (must be 1): 'def score_real(ns, HV, keys: List[dict], inputs: List[dict], doc: Dict[str, Any], plainnes'",
+   "  - merge_r1w7.py: anchor found 0 times (must be 1): 'READER = \"r1w7.merge_r1w7 v2 (2026-10-20, A-R1W7-4: HG5 names the units missing helm_now_f'",
+   "  - merge_r1w7.py: anchor found 0 times (must be 1): '            sm[\"real\"] = SC.score_real(self.ns, self.HV, self.keys_real, self.inputs_real,'",
+   "  - merge_r1w7.py: anchor found 0 times (must be 1): '    mk[\"K4_HONEST\"] = {\"value\": bool(t) and t.get(\"unexplained_asks_strict\") == 0,'",
+   "  - run_tests.py: anchor found 0 times (must be 1): '\"tests_r1w7.test_multi_qty_w7\"])   # v7: A-R1W7-7\\'s seven tests'"
+  ],
+  "want": 4
+ },
+ "apply_plants_only_ff": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\apply_plants_only_ff.log",
+  "ok": true,
+  "tail": [
+   "31a604ec36174e8e678e64a4604a0f4eaea47649b7c5a0c43a5350389e420d40 tests_r1w7/fixture_run.py",
+   "APPLIED: plants only (fixture_run.py)"
+  ],
+  "want": 0
+ },
+ "check_copy_ff": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\check_copy_ff.log",
+  "ok": true,
+  "tail": [
+   "neighbour HELM_R1_W1_20261015 freeze_ok True members 110 bad 0",
+   "neighbour HELM_R1_W3_20261019 freeze_ok True members 205 bad 0",
+   "neighbour HELM_R1_W3B_20261019 freeze_ok True members 27 bad 0",
+   "neighbour HELM_R1_W6_20261019 freeze_ok True members 194 bad 0",
+   "neighbour HELM_RBW1T_20261019 freeze_ok True members 394 bad 0",
+   "ALL_EQUAL True"
+  ],
+  "want": 0
+ },
+ "check_copy_pkg": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\check_copy_pkg.log",
+  "ok": true,
+  "tail": [
+   "neighbour HELM_R1_W1_20261015 freeze_ok True members 110 bad 0",
+   "neighbour HELM_R1_W3_20261019 freeze_ok True members 205 bad 0",
+   "neighbour HELM_R1_W3B_20261019 freeze_ok True members 27 bad 0",
+   "neighbour HELM_R1_W6_20261019 freeze_ok True members 194 bad 0",
+   "neighbour HELM_RBW1T_20261019 freeze_ok True members 394 bad 0",
+   "ALL_EQUAL True"
+  ],
+  "want": 0
+ },
+ "fixfirst_scorer_amended": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\fixfirst_scorer_amended.log",
+  "ok": true,
+  "tail": [
+   "   \"lessons_WRONG\": 0,",
+   "   \"unexplained_asks_strict\": 1,",
+   "   \"unexplained_asks_strict_after_a11\": 0",
+   "  }",
+   " }",
+   "}"
+  ],
+  "want": 0
+ },
+ "fixfirst_scorer_unamended": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\fixfirst_scorer_unamended.log",
+  "ok": true,
+  "tail": [
+   "   \"lessons_WRONG\": 0,",
+   "   \"unexplained_asks_strict\": 1,",
+   "   \"unexplained_asks_strict_after_a11\": \"(absent)\"",
+   "  }",
+   " }",
+   "}"
+  ],
+  "want": 0
+ },
+ "mutation_probe": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\mutation_probe.log",
+  "ok": true,
+  "tail": [
+   "c_ignores_path RESULT 28 2 0 KILLED",
+   "d_ignores_count RESULT 28 2 0 KILLED",
+   "no_hook_call RESULT 28 7 40 KILLED",
+   "k4_reads_strict RESULT 28 1 0 KILLED",
+   "deny_list_empty RESULT 28 4 0 KILLED",
+   "MUTANTS 6 SURVIVED 0"
+  ],
+  "want": 0
+ },
+ "new_tests_alone": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\new_tests_alone.log",
+  "ok": true,
+  "tail": [
+   "test_reader_string_names_the_amendment (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_reader_string_names_the_amendment) ... ok",
+   "",
+   "----------------------------------------------------------------------",
+   "Ran 28 tests in 13.636s",
+   "",
+   "OK"
+  ],
+  "want": 0
+ },
+ "plants_on_amended": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\plants_on_amended.log",
+  "ok": true,
+  "tail": [
+   "K4_A11_CLARIFY {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": true, \"a11_exempted_ids\": [], \"a11_flag_for_human_review\": [], \"a11_strict_recount\": 1, \"amendment\": \"A-R1W7-11\", \"sample_real_sha256\": \"e6bf10cee18a32790640e8366a6da00345e7087a21eb051be47739da2e00212b\", \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": 1, \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K4_A11_PHANTOM {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": true, \"a11_exempted_ids\": [], \"a11_flag_for_human_review\": [], \"a11_strict_recount\": 1, \"amendment\": \"A-R1W7-11\", \"sample_real_sha256\": \"e6bf10cee18a32790640e8366a6da00345e7087a21eb051be47739da2e00212b\", \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": 1, \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K4_A11_NO_SAMPLE {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": true, \"a11_exempted_ids\": [], \"a11_flag_for_human_review\": [], \"a11_strict_recount\": 1, \"amendment\": \"A-R1W7-11\", \"sample_real_sha256\": null, \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": 1, \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K3_A11_WRONG {\"K3\": {\"real_wrong_answers\": 1, \"real_wrong_lessons\": 0, \"value\": false}, \"K4\": {\"a11_consistent\": true, \"a11_exempted_ids\": [], \"a11_flag_for_human_review\": [], \"a11_strict_recount\": 0, \"amendment\": \"A-R1W7-11\", \"sample_real_sha256\": \"e6bf10cee18a32790640e8366a6da00345e7087a21eb051be47739da2e00212b\", \"unexplained_asks_strict\": 0, \"unexplained_asks_strict_after_a11\": 0, \"value\": true}, \"failing_gates\": [], \"marks_missed\": [\"K3_SAFE\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_HARMED\"}",
+   "K4 {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": true, \"a11_exempted_ids\": [], \"a11_flag_for_human_review\": [], \"a11_strict_recount\": 1, \"amendment\": \"A-R1W7-11\", \"sample_real_sha256\": \"eef2c1d1827bc00c904aafb7e61e60e7859da5a8df5c9041dbe2b5ae7b3eab61\", \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": 1, \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K3 {\"K3\": {\"real_wrong_answers\": 1, \"real_wrong_lessons\": 0, \"value\": false}, \"K4\": {\"a11_consistent\": true, \"a11_exempted_ids\": [], \"a11_flag_for_human_review\": [], \"a11_strict_recount\": 0, \"amendment\": \"A-R1W7-11\", \"sample_real_sha256\": \"eef2c1d1827bc00c904aafb7e61e60e7859da5a8df5c9041dbe2b5ae7b3eab61\", \"unexplained_asks_strict\": 0, \"unexplained_asks_strict_after_a11\": 0, \"value\": true}, \"failing_gates\": [], \"marks_missed\": [\"K3_SAFE\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_HARMED\"}"
+  ],
+  "want": 0
+ },
+ "plants_on_unamended_v9": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\plants_on_unamended_v9.log",
+  "ok": true,
+  "tail": [
+   "K4_A11_CLARIFY {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": \"(field absent)\", \"a11_exempted_ids\": \"(field absent)\", \"a11_flag_for_human_review\": \"(field absent)\", \"a11_strict_recount\": \"(field absent)\", \"amendment\": \"(field absent)\", \"sample_real_sha256\": \"(field absent)\", \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": \"(field absent)\", \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K4_A11_PHANTOM {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": \"(field absent)\", \"a11_exempted_ids\": \"(field absent)\", \"a11_flag_for_human_review\": \"(field absent)\", \"a11_strict_recount\": \"(field absent)\", \"amendment\": \"(field absent)\", \"sample_real_sha256\": \"(field absent)\", \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": \"(field absent)\", \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K4_A11_NO_SAMPLE {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": \"(field absent)\", \"a11_exempted_ids\": \"(field absent)\", \"a11_flag_for_human_review\": \"(field absent)\", \"a11_strict_recount\": \"(field absent)\", \"amendment\": \"(field absent)\", \"sample_real_sha256\": \"(field absent)\", \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": \"(field absent)\", \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K3_A11_WRONG {\"K3\": {\"real_wrong_answers\": 1, \"real_wrong_lessons\": 0, \"value\": false}, \"K4\": {\"a11_consistent\": \"(field absent)\", \"a11_exempted_ids\": \"(field absent)\", \"a11_flag_for_human_review\": \"(field absent)\", \"a11_strict_recount\": \"(field absent)\", \"amendment\": \"(field absent)\", \"sample_real_sha256\": \"(field absent)\", \"unexplained_asks_strict\": 0, \"unexplained_asks_strict_after_a11\": \"(field absent)\", \"value\": true}, \"failing_gates\": [], \"marks_missed\": [\"K3_SAFE\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_HARMED\"}",
+   "K4 {\"K3\": {\"real_wrong_answers\": 0, \"real_wrong_lessons\": 0, \"value\": true}, \"K4\": {\"a11_consistent\": \"(field absent)\", \"a11_exempted_ids\": \"(field absent)\", \"a11_flag_for_human_review\": \"(field absent)\", \"a11_strict_recount\": \"(field absent)\", \"amendment\": \"(field absent)\", \"sample_real_sha256\": \"(field absent)\", \"unexplained_asks_strict\": 1, \"unexplained_asks_strict_after_a11\": \"(field absent)\", \"value\": false}, \"failing_gates\": [], \"marks_missed\": [\"K4_HONEST\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_NO_GAIN\"}",
+   "K3 {\"K3\": {\"real_wrong_answers\": 1, \"real_wrong_lessons\": 0, \"value\": false}, \"K4\": {\"a11_consistent\": \"(field absent)\", \"a11_exempted_ids\": \"(field absent)\", \"a11_flag_for_human_review\": \"(field absent)\", \"a11_strict_recount\": \"(field absent)\", \"amendment\": \"(field absent)\", \"sample_real_sha256\": \"(field absent)\", \"unexplained_asks_strict\": 0, \"unexplained_asks_strict_after_a11\": \"(field absent)\", \"value\": true}, \"failing_gates\": [], \"marks_missed\": [\"K3_SAFE\"], \"verdict\": \"INSTRUMENT_ERROR\", \"word_if_verdict_PASS\": \"CHAT_WAVE_HARMED\"}"
+  ],
+  "want": 0
+ },
+ "stale_freeze_probe": {
+  "exit": 0,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\stale_freeze_probe.log",
+  "ok": true,
+  "tail": [
+   "pristine v9 copy: RESULT ran 1 failures 0 errors 0 skipped 0",
+   "member pins re-written in the throwaway copy: ['PREREGISTRATION_R1W7.md', 'r1w7/merge_r1w7.py', 'r1w7/score_w7.py', 'tests_r1w7/fixture_run.py', 'tests_r1w7/run_tests.py']",
+   "amended copy, member pins re-written: RESULT ran 1 failures 0 errors 0 skipped 0"
+  ],
+  "want": 0
+ },
+ "suite_w7_run_tests_v": {
+  "exit": 1,
+  "log": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\a11_dryrun2\\logs\\suite_w7_run_tests_v.log",
+  "ok": true,
+  "tail": [
+   "",
+   "",
+   "----------------------------------------------------------------------",
+   "Ran 69 tests in 84.410s",
+   "",
+   "FAILED (failures=1)"
+  ],
+  "want": 1
+ }
+}

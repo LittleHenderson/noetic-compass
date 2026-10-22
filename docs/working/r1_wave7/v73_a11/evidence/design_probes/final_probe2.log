@@ -1,0 +1,245 @@
+########## v7.2 (scratch copy of the v9 helm_now)
+===== D1 ['1 can tomatoes or', '4 cups chopped tomatoes', '2 onions']
+  key: UNDETERMINED None q ['1', '4', '2'] why_not []
+  lesson 0: WITNESS_ADMITTED ingredient=chopped tomato learned=8 -> WRONG
+  lesson 1: TEACH_REFUSED_REFUSED_CONFLICT ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: TEACH_REFUSED_RECEIPT_FAILED ingredient=None learned=None -> NOT_LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: Got it: one sauce needs 8 cups of chopped tomato. I still need one batch for each of tomatoes or and onion before I can work out sauce.
+  question sentence: I can't say yet how much sauce we can make. I still need one batch for each of tomatoes or and onion: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== D2 ['1 cup butter or', '1 cup margarine', '2 cups flour']
+  key: ANSWER 3/2 q ['1', '1', '2'] why_not []
+  lesson 0: WITNESS_ADMITTED ingredient=butter or learned=1 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=margarine learned=1 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  stock: STOCK_RECORDED | question: SUCCESS_EVALUATED wide 3/2 | q score: RIGHT | unexplained (frozen): False
+  lesson-0 sentence: Got it: one cake needs 1 cup of butter or. I still need one batch for each of margarine and flour before I can work out cake.
+  question sentence: With what's on hand we can make 1 1/2 cake. Margarine runs out first, so it sets the limit.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== D3 ['1 can tomatoes or', '4 cups fresh tomatoes', '2 onions']
+  key: UNDETERMINED None q ['1', '4', '2'] why_not []
+  lesson 0: WITNESS_ADMITTED ingredient=tomato learned=8 -> WRONG
+  lesson 1: TEACH_REFUSED_REFUSED_CONFLICT ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: TEACH_REFUSED_RECEIPT_FAILED ingredient=None learned=None -> NOT_LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: Got it: one sauce needs 8 cups of tomato. I still need one batch for each of tomatoes or and onion before I can work out sauce.
+  question sentence: I can't say yet how much sauce we can make. I still need one batch for each of tomatoes or and onion: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== D4 ['2 cups flour', '1 cup butter, or', '1 cup margarine']
+  key: ANSWER 3/2 q ['2', '1', '1'] why_not []
+  lesson 0: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=butter learned=1 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=margarine learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: SUCCESS_EVALUATED wide 3/2 | q score: RIGHT | unexplained (frozen): False
+  lesson-0 sentence: Got it: one cake needs 2 cups of flour. I still need one batch for each of butter and margarine before I can work out cake.
+  question sentence: With what's on hand we can make 1 1/2 cake. Butter runs out first, so it sets the limit.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== A1 ['3 cups tomatoes with juice', '1 cup chopped tomatoes', '2 onions']
+  key: UNDETERMINED None q ['3', '1', '2'] why_not []
+  lesson 0: WITNESS_ADMITTED ingredient=chopped tomato learned=2 -> WRONG
+  lesson 1: TEACH_REFUSED_REFUSED_CONFLICT ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: TEACH_REFUSED_RECEIPT_FAILED ingredient=None learned=None -> NOT_LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: Got it: one sauce needs 2 cups of chopped tomato. I still need one batch for each of tomatoes with juice and onion before I can work out sauce.
+  question sentence: I can't say yet how much sauce we can make. I still need one batch for each of tomatoes with juice and onion: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== X1 ['3 cups tomatoes with juice', '1 can tomatoes or', '2 onions']
+  key: UNDETERMINED None q ['3', '1', '2'] why_not []
+  lesson 0: TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=onion learned=2 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: Tomato wasn't in that batch, so it can't be what ran out. Nothing was saved.
+  question sentence: I can't say yet how much sauce we can make. I still need one batch for each of tomatoes with juice and tomatoes or: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== X2 ['1 can tomatoes in juice', '2 tomatoes', '2 onions']
+  key: UNDETERMINED None q ['1', '2', '2'] why_not []
+  lesson 0: WITNESS_ADMITTED ingredient=tomato learned=4 -> WRONG
+  lesson 1: TEACH_REFUSED_REFUSED_CONFLICT ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: TEACH_REFUSED_RECEIPT_FAILED ingredient=None learned=None -> NOT_LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: Got it: one sauce needs 4 tomatoes. I still need one batch for each of tomatoes in juice and onion before I can work out sauce.
+  question sentence: I can't say yet how much sauce we can make. I still need one batch for each of tomatoes in juice and onion: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== C1 ['3 eggs, 1 beaten', '2 cups flour', '1 cup milk']
+  key: ANSWER 3/2 q ['3', '2', '1'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=egg learned=3 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=milk learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one bread needs 3 eggs. I still need one batch for each of beaten, flour, and milk before I can work out bread.
+  question sentence: I can't say yet how much bread we can make. I still need one batch where beaten ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': False, 'exempt': False, 'unlearned': ['beaten'], 'allowed_tail_heads': []} 
+===== C2 ['1 cup sugar, 2 tablespoons reserved', '2 cups flour', '1 cup milk']
+  key: ANSWER 3/2 q ['1', '2', '1'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=sugar learned=1 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=milk learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one cake needs 1 cup of sugar. I still need one batch for each of reserved, flour, and milk before I can work out cake.
+  question sentence: I can't say yet how much cake we can make. I still need one batch where reserved ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': False, 'exempt': False, 'unlearned': ['reserved'], 'allowed_tail_heads': []} 
+===== C3 ['2 cups flour, plus 2 tablespoons', '1 pound beef, a lean cut', '1 cup broth']
+  key: ANSWER 3/2 q ['2', '1', '1'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=beef learned=1 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=broth learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one pie needs 2 cups of flour. I still need one batch for each of beef, lean cut, and broth before I can work out pie.
+  question sentence: I can't say yet how much pie we can make. I still need one batch where lean cut ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': False, 'exempt': False, 'unlearned': ['lean cut'], 'allowed_tail_heads': []} 
+===== C4 ['1 onion, 2 tomatoes', '1 cup rice', '2 cups tomatoes with juice']
+  key: ANSWER 3/2 q ['1', '1', '2'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=onion learned=1 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=rice learned=1 -> LEARNED
+  lesson 2: TEACH_REFUSED_MEMORY_CHECK_REFUSED ingredient=None learned=None -> NOT_LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): False
+  lesson-0 sentence: Got it: one salsa needs 1 onion. I still need one batch for each of tomato, rice, and tomatoes with juice before I can work out salsa.
+  question sentence: I can't say yet how much salsa we can make. I still need one batch for each of tomato and tomatoes with juice: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': False, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== M1 ['2 cups barley', '5 cloves, 10 juniper berries', '1 cup broth']
+  key: ANSWER 3/2 q ['2', '5', '1'] why_not ['line1:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=barley learned=2 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=clove learned=5 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=broth learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one stew needs 2 cups of barley. I still need one batch for each of clove, juniper berry, and broth before I can work out stew.
+  question sentence: I can't say yet how much stew we can make. I still need one batch where juniper berry ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': True, 'exempt': True, 'unlearned': ['juniper berry'], 'allowed_tail_heads': ['berry']} 
+===== P1 ['2 cups rice', '6 cloves and 12 peppercorns', '1 cup stock']
+  key: ANSWER 3/2 q ['2', '6', '1'] why_not ['line1:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=rice learned=2 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=clove learned=6 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=stock learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one pilaf needs 2 cups of rice. I still need one batch for each of clove, peppercorn, and stock before I can work out pilaf.
+  question sentence: I can't say yet how much pilaf we can make. I still need one batch where peppercorn ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': True, 'exempt': True, 'unlearned': ['peppercorn'], 'allowed_tail_heads': ['peppercorn']} 
+########## v7.3 FINAL rules (R1 + R1a + R2 + R2g) as in-process replacements
+===== D1 ['1 can tomatoes or', '4 cups chopped tomatoes', '2 onions']
+  key: UNDETERMINED None q ['1', '4', '2'] why_not []
+  lesson 0: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  stock: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE | question: CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: You wrote "1 can tomatoes or" and then chopped tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+  question sentence: I don't know a recipe for sauce. I know bread, frosting, starter, and meringue.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== D2 ['1 cup butter or', '1 cup margarine', '2 cups flour']
+  key: ANSWER 3/2 q ['1', '1', '2'] why_not []
+  lesson 0: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  stock: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE | question: CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed None | q score: ASKS | unexplained (frozen): False
+  lesson-0 sentence: You wrote "1 cup butter or" and then margarine, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+  question sentence: I don't know a recipe for cake. I know bread, frosting, starter, and meringue.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== D3 ['1 can tomatoes or', '4 cups fresh tomatoes', '2 onions']
+  key: UNDETERMINED None q ['1', '4', '2'] why_not []
+  lesson 0: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  stock: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE | question: CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: You wrote "1 can tomatoes or" and then tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+  question sentence: I don't know a recipe for sauce. I know bread, frosting, starter, and meringue.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== D4 ['2 cups flour', '1 cup butter, or', '1 cup margarine']
+  key: ANSWER 3/2 q ['2', '1', '1'] why_not []
+  lesson 0: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  stock: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE | question: CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed None | q score: ASKS | unexplained (frozen): False
+  lesson-0 sentence: You wrote "2 cup butter, or" and then margarine, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+  question sentence: I don't know a recipe for cake. I know bread, frosting, starter, and meringue.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== A1 ['3 cups tomatoes with juice', '1 cup chopped tomatoes', '2 onions']
+  key: UNDETERMINED None q ['3', '1', '2'] why_not []
+  lesson 0: TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=chopped tomato learned=1 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=onion learned=2 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: Tomato wasn't in that batch, so it can't be what ran out. Nothing was saved.
+  question sentence: I can't say yet how much sauce we can make. I still need one batch where tomatoes with juice ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== X1 ['3 cups tomatoes with juice', '1 can tomatoes or', '2 onions']
+  key: UNDETERMINED None q ['3', '1', '2'] why_not []
+  lesson 0: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE ingredient=None learned=None -> NOT_LEARNED
+  stock: CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE | question: CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: You wrote "2 can tomatoes or" and then onion, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+  question sentence: I don't know a recipe for sauce. I know bread, frosting, starter, and meringue.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== X2 ['1 can tomatoes in juice', '2 tomatoes', '2 onions']
+  key: UNDETERMINED None q ['1', '2', '2'] why_not []
+  lesson 0: CLARIFY_WIDE_RAN_OUT_WHICH_LINE ingredient=None learned=None -> NOT_LEARNED
+  lesson 1: CLARIFY_WIDE_RAN_OUT_WHICH_LINE ingredient=None learned=None -> NOT_LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=onion learned=2 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: NOT_SCORED | unexplained (frozen): False
+  lesson-0 sentence: You said tomato ran out, but that could be tomato and tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.
+  question sentence: I can't say yet how much sauce we can make. I still need one batch for each of tomatoes in juice and tomato: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': False, 'b': None, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== C1 ['3 eggs, 1 beaten', '2 cups flour', '1 cup milk']
+  key: ANSWER 3/2 q ['3', '2', '1'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=egg learned=3 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=milk learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one bread needs 3 eggs. I still need one batch for each of beaten, flour, and milk before I can work out bread.
+  question sentence: I can't say yet how much bread we can make. I still need one batch where beaten ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': False, 'exempt': False, 'unlearned': ['beaten'], 'allowed_tail_heads': []} 
+===== C2 ['1 cup sugar, 2 tablespoons reserved', '2 cups flour', '1 cup milk']
+  key: ANSWER 3/2 q ['1', '2', '1'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=sugar learned=1 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=milk learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one cake needs 1 cup of sugar. I still need one batch for each of reserved, flour, and milk before I can work out cake.
+  question sentence: I can't say yet how much cake we can make. I still need one batch where reserved ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': False, 'exempt': False, 'unlearned': ['reserved'], 'allowed_tail_heads': []} 
+===== C3 ['2 cups flour, plus 2 tablespoons', '1 pound beef, a lean cut', '1 cup broth']
+  key: ANSWER 3/2 q ['2', '1', '1'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=flour learned=2 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=beef learned=1 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=broth learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one pie needs 2 cups of flour. I still need one batch for each of beef, lean cut, and broth before I can work out pie.
+  question sentence: I can't say yet how much pie we can make. I still need one batch where lean cut ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': False, 'exempt': False, 'unlearned': ['lean cut'], 'allowed_tail_heads': []} 
+===== C4 ['1 onion, 2 tomatoes', '1 cup rice', '2 cups tomatoes with juice']
+  key: ANSWER 3/2 q ['1', '1', '2'] why_not ['line0:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=onion learned=1 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=rice learned=1 -> LEARNED
+  lesson 2: CLARIFY_WIDE_RAN_OUT_WHICH_LINE ingredient=None learned=None -> NOT_LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): False
+  lesson-0 sentence: Got it: one salsa needs 1 onion. I still need one batch for each of tomato, rice, and tomatoes with juice before I can work out salsa.
+  question sentence: I can't say yet how much salsa we can make. I still need one batch for each of tomato and tomatoes with juice: a batch where that one ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': False, 'c': None, 'd': None, 'e': None, 'exempt': False, 'unlearned': None, 'allowed_tail_heads': None} 
+===== M1 ['2 cups barley', '5 cloves, 10 juniper berries', '1 cup broth']
+  key: ANSWER 3/2 q ['2', '5', '1'] why_not ['line1:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=barley learned=2 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=clove learned=5 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=broth learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one stew needs 2 cups of barley. I still need one batch for each of clove, juniper berry, and broth before I can work out stew.
+  question sentence: I can't say yet how much stew we can make. I still need one batch where juniper berry ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': True, 'exempt': True, 'unlearned': ['juniper berry'], 'allowed_tail_heads': ['berry']} 
+===== P1 ['2 cups rice', '6 cloves and 12 peppercorns', '1 cup stock']
+  key: ANSWER 3/2 q ['2', '6', '1'] why_not ['line1:MULTI_QTY']
+  lesson 0: WITNESS_ADMITTED ingredient=rice learned=2 -> LEARNED
+  lesson 1: WITNESS_ADMITTED ingredient=clove learned=6 -> LEARNED
+  lesson 2: WITNESS_ADMITTED ingredient=stock learned=1 -> LEARNED
+  stock: STOCK_RECORDED | question: UNDETERMINED_CLARIFY wide None | q score: ASKS | unexplained (frozen): True
+  lesson-0 sentence: Got it: one pilaf needs 2 cups of rice. I still need one batch for each of clove, peppercorn, and stock before I can work out pilaf.
+  question sentence: I can't say yet how much pilaf we can make. I still need one batch where peppercorn ran out first while everything else was left over. I didn't guess.
+  A-R1W7-11 final: {'a': True, 'b': True, 'c': True, 'd': True, 'e': True, 'exempt': True, 'unlearned': ['peppercorn'], 'allowed_tail_heads': ['peppercorn']} 
+########## record-shape cases through the final honesty test (M1's key)
+  M1 as recorded: exempt=True a=True b=True c=True d=True e=True
+  missing-stock sentence: exempt=False a=True b=True c=True d=False e=None
+  phantom name 'beaten' (K4_A11_PHANTOM shape): exempt=False a=True b=True c=True d=True e=False
+  ALWAYS_ASK record: exempt=False a=True b=False c=None d=None e=None
+  chat crash record: exempt=False a=True b=False c=None d=None e=None
+  wave-6 crash record, lessons LEARNED, no scored_turn: exempt=False a=True b=True c=False d=None e=None
+  LOOP_ON-shaped record (wave-3 turns): exempt=True a=True b=True c=True d=True e=True
+  no wide_audit: exempt=False a=True b=True c=True d=False e=None

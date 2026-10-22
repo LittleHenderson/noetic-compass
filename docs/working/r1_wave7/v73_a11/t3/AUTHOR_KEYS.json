@@ -1,0 +1,563 @@
+{
+ "authored_fixture": true,
+ "built_by": "rbw1t.keys_rbw1t.key_item + r1w7.multi_qty_w7.apply (A-R1W7-7)",
+ "keys": [
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR:D1",
+   "lessons": [
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "1"
+    },
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "4"
+    },
+    {
+     "head": "onions",
+     "head_norm": "onion",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "can",
+     "cup",
+     "count (no unit)"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "margarine",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:D2",
+   "lessons": [
+    {
+     "head": "butter",
+     "head_norm": "butter",
+     "q": "1"
+    },
+    {
+     "head": "margarine",
+     "head_norm": "margarine",
+     "q": "1"
+    },
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR:D3",
+   "lessons": [
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "1"
+    },
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "4"
+    },
+    {
+     "head": "onions",
+     "head_norm": "onion",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "can",
+     "cup",
+     "count (no unit)"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "butter",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:D4",
+   "lessons": [
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    },
+    {
+     "head": "butter",
+     "head_norm": "butter",
+     "q": "1"
+    },
+    {
+     "head": "margarine",
+     "head_norm": "margarine",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR:A1",
+   "lessons": [
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "3"
+    },
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "1"
+    },
+    {
+     "head": "onions",
+     "head_norm": "onion",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "count (no unit)"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR:X1",
+   "lessons": [
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "3"
+    },
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "1"
+    },
+    {
+     "head": "onions",
+     "head_norm": "onion",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "can",
+     "count (no unit)"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR:X2",
+   "lessons": [
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "1"
+    },
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "2"
+    },
+    {
+     "head": "onions",
+     "head_norm": "onion",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "can",
+     "count (no unit)",
+     "count (no unit)"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "flour",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:C1",
+   "lessons": [
+    {
+     "head": "eggs",
+     "head_norm": "egg",
+     "q": "3"
+    },
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    },
+    {
+     "head": "milk",
+     "head_norm": "milk",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "count (no unit)",
+     "cup",
+     "cup"
+    ],
+    "why_not": [
+     "line0:MULTI_QTY"
+    ]
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "flour",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:C2",
+   "lessons": [
+    {
+     "head": "sugar",
+     "head_norm": "sugar",
+     "q": "1"
+    },
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    },
+    {
+     "head": "milk",
+     "head_norm": "milk",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": [
+     "line0:MULTI_QTY"
+    ]
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "beef",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:C3",
+   "lessons": [
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    },
+    {
+     "head": "beef",
+     "head_norm": "beef",
+     "q": "1"
+    },
+    {
+     "head": "broth",
+     "head_norm": "broth",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "cup",
+     "pound",
+     "cup"
+    ],
+    "why_not": [
+     "line0:MULTI_QTY"
+    ]
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "rice",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:C4",
+   "lessons": [
+    {
+     "head": "onion",
+     "head_norm": "onion",
+     "q": "1"
+    },
+    {
+     "head": "rice",
+     "head_norm": "rice",
+     "q": "1"
+    },
+    {
+     "head": "tomatoes",
+     "head_norm": "tomato",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "count (no unit)",
+     "cup",
+     "cup"
+    ],
+    "why_not": [
+     "line0:MULTI_QTY"
+    ]
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "cloves",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:M1",
+   "lessons": [
+    {
+     "head": "barley",
+     "head_norm": "barley",
+     "q": "2"
+    },
+    {
+     "head": "cloves",
+     "head_norm": "clove",
+     "q": "5"
+    },
+    {
+     "head": "broth",
+     "head_norm": "broth",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "cup",
+     "clove",
+     "cup"
+    ],
+    "why_not": [
+     "line1:MULTI_QTY"
+    ]
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "cloves",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR:P1",
+   "lessons": [
+    {
+     "head": "rice",
+     "head_norm": "rice",
+     "q": "2"
+    },
+    {
+     "head": "cloves",
+     "head_norm": "clove",
+     "q": "6"
+    },
+    {
+     "head": "stock",
+     "head_norm": "stock",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "cup",
+     "clove",
+     "cup"
+    ],
+    "why_not": [
+     "line1:MULTI_QTY"
+    ]
+   }
+  }
+ ],
+ "schema": "helm.r1w7.real-keys/1"
+}

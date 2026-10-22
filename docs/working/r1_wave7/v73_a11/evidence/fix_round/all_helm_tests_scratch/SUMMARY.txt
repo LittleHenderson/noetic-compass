@@ -1,0 +1,20 @@
+unittest test_helm_agentic_planner | Ran 0 tests in 0.000s | NO TESTS RAN | rc=5
+unittest test_helm_brain_wide | Ran 54 tests in 1.734s | OK (skipped=1) | rc=0
+unittest test_helm_cas_address | Ran 17 tests in 0.501s | OK | rc=0
+unittest test_helm_chat_nuance | Ran 0 tests in 0.000s | NO TESTS RAN | rc=5
+unittest test_helm_end_to_end_loop | Ran 18 tests in 0.415s | OK | rc=0
+unittest test_helm_english_in | Ran 37 tests in 0.345s | OK | rc=0
+unittest test_helm_english_in_stock_frame | Ran 17 tests in 0.488s | OK | rc=0
+unittest test_helm_faces_in | Ran 16 tests in 0.011s | OK | rc=0
+unittest test_helm_memory | Ran 0 tests in 0.000s | NO TESTS RAN | rc=5
+unittest test_helm_memory_compact | Ran 0 tests in 0.000s | NO TESTS RAN | rc=5
+unittest test_helm_pin_hygiene | Ran 9 tests in 3.124s | OK | rc=0
+unittest test_helm_reader_gap | Ran 52 tests in 1.019s | OK | rc=0
+unittest test_helm_triad | Ran 15 tests in 0.378s | OK | rc=0
+unittest test_helm_units_note | Ran 15 tests in 0.289s | OK | rc=0
+unittest test_helm_voice | Ran 22 tests in 0.768s | OK | rc=0
+unittest test_helm_wide_alongside | Ran 25 tests in 0.510s | OK | rc=0
+pytest test_helm_agentic_planner.py | 8 passed in 0.07s | rc=0
+pytest test_helm_chat_nuance.py | 8 passed in 0.48s | rc=0
+pytest test_helm_memory.py | 5 passed in 0.32s | rc=0
+pytest test_helm_memory_compact.py | 34 passed in 1.15s | rc=0

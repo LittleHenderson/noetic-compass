@@ -1,0 +1,60 @@
+{
+ "HELM_CANONICAL_BRAIN_DIR": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v9_custody\\pkg\\deps\\HELM_R1_W1_20261015",
+ "HELM_SESSION_DIR": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\fix2\\loader\\v73r\\helm_test_sessions",
+ "command": [
+  "python",
+  "-X",
+  "utf8",
+  "-B",
+  "-I",
+  "-c",
+  "<HELM_LOADER>",
+  "<scratch helm_now copy>",
+  "test_helm_brain_wide",
+  "test_helm_end_to_end_loop",
+  "test_helm_english_in",
+  "test_helm_english_in_stock_frame",
+  "test_helm_voice",
+  "test_helm_faces_in",
+  "test_helm_triad",
+  "test_helm_wide_alongside",
+  "test_helm_cas_address",
+  "test_helm_units_note",
+  "test_helm_pin_hygiene",
+  "test_helm_reader_gap"
+ ],
+ "cwd": "inside the scratch helm_now copy",
+ "exit": 0,
+ "files_created_inside_copy": [],
+ "helm_tests_from_sealed_kit": [
+  "test_helm_brain_wide",
+  "test_helm_end_to_end_loop",
+  "test_helm_english_in",
+  "test_helm_english_in_stock_frame",
+  "test_helm_voice",
+  "test_helm_faces_in",
+  "test_helm_triad",
+  "test_helm_wide_alongside",
+  "test_helm_cas_address",
+  "test_helm_units_note",
+  "test_helm_pin_hygiene",
+  "test_helm_reader_gap"
+ ],
+ "label": "v73r",
+ "ran_line": "Ran 297 tests in 6.009s",
+ "result_line": "OK (skipped=1)",
+ "skipped": [
+  "helm_brain_canonical.py and the reader are byte-identical to the thread branch this build started from. ... skipped 'base commit not reachable in this checkout'"
+ ],
+ "swapped": [
+  "helm_wide_turn.py",
+  "test_helm_reader_gap.py",
+  "test_helm_cas_address.py"
+ ],
+ "swapped_sha256": {
+  "helm_wide_turn.py": "d026fb4d24260d112825dc9fe2d2af4a5ba13be56f674b1ef5b131af0c3fda20",
+  "test_helm_cas_address.py": "260f9693ec023d0294f3d8af39d6645e8171da093529f45140702a4b6a672c01",
+  "test_helm_reader_gap.py": "7f00d31c64ba98d51f6a0cd9dca82da5fd8193123c7e0cb2a7bc8f2bc5cb35fb"
+ },
+ "zip_sha256": "ad3fb98cd3254963263929747791d151949c2f50923672e4bcbf3fc14490942c"
+}
