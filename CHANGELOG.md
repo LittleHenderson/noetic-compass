@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM: remember a 'cloud reachable' yes for 60 seconds (spec sheet 7.125 follow-up 11): live 3.46 -> 2.66 s per cloud question (4 -> 3 calls), 8/8 EXACT; chat build 93.6 -> 73.8 s; 478 HELM tests pass; live test < 0.01 USD
+
+- Owner's words: "let HELM remember for a short while that the cloud was reachable, so a cloud question skips that check (one call fewer)."
+- A-TEACH2-13 9c8e3daa... before code (3dc12252). Commit 8e8bf338: a yes remembered 60 s, a no never, forgotten at the first failed call; used by the cloud search and the cloud move.
+- FIX FIRST: 5 failed -> 5 passed; every HELM suite OFF 478 passed.
+- Live (synthetic lines, prefixes smoke/20261022T093130Z-reach-off/ and -on/): 3.46 -> 2.66 s, reachability checks in the build 22 -> 2. Negative kept: still ~2.7 s per cloud question (3 command-line calls).
+
 ## 2026-10-22 PDT - HELM: the cloud search fetches all fold records in one call (spec sheet 7.125 follow-up 10): live on the real bucket 4.16 -> 3.54 s per question (5 -> 4 calls), 8/8 EXACT; 473 HELM tests pass; live test < 0.01 USD
 
 - Owner's word: "Yes, make it faster".

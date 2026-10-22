@@ -407,3 +407,36 @@ measured 0.83 s per call, not a measurement.
    both are design changes for the owner.
 2. The saving on this small live chat is small (one call), because only 2 fold records were in the cloud; the bigger
    saving on longer chats is projected, not measured live.
+
+## 14. HELM remembers a "cloud reachable" yes for 60 seconds; live timing (A-TEACH2-13 `9c8e3daa…`, commit `8e8bf338`)
+
+Owner's words (2026-10-22, verbatim): "Yes: let HELM remember for a short while that the cloud was reachable, so a
+cloud question skips that check (one call fewer). Amendment first, test-first; time it live with a tiny test."
+
+The amendment was committed before any code (`3dc12252`). A yes (a reachability check that answered yes, or a
+successful batched read) is remembered for 60 seconds; a no is never remembered; any failed cloud call forgets it at
+once, and that question behaves as before (notes stored away, never EXACT). The same memory serves the cloud search and
+the cloud move. It is one timestamp per cloud adapter and holds no data.
+
+FIX FIRST (`test_helm_cube_reach_memory.py`, written first): 5 failed → 5 passed. Every HELM suite, both switches OFF:
+**478 passed**.
+
+**Live timing on the real bucket ✅ (2026-10-22, `CLOUD_REACH_TIMING_20261022.json`).** Source: commit `8e8bf338`;
+purpose: time the change; place: bucket `helm-cold-memory-807562639912-usw2` (us-west-2), prefixes
+`smoke/20261022T093130Z-reach-off/` and `smoke/20261022T093130Z-reach-on/`, from the laptop's AWS command line tool, no
+instance; data: made-up planting lines only (`SYNTHETIC_ONLY`); the same 200-line chat (limit 2,000, device limit
+1,000) built twice; cleanup: none by design. Cost: about 190 requests for the two builds plus 56 for the questions,
+a few kilobytes each, well under 0.01 USD.
+
+| | Building the 200-line chat | Per cloud question (median of 8) | Recalled EXACT |
+|---|---|---|---|
+| Before (memory off) | 93.6 s, 106 calls, 22 reachability checks | **3.46 s**, 4 calls | 8 of 8 |
+| After (memory on) | **73.8 s**, 86 calls, **2** reachability checks | **2.66 s**, 3 calls | 8 of 8 |
+
+No question was answered with a wrong line. Across follow-ups 9–11 a cloud question went from about 10 s (estimated)
+to 4.16 s (measured), 3.54 s, and now 2.66 s.
+
+**Measured negative kept 🟥:** a cloud question still takes about 2.7 seconds: 3 command-line calls (the batched fold
+read, the capsule's record, its original) of about 0.85 s each, most of it starting a new AWS command-line process per
+call. A client that keeps one connection open would cut that further; it is a design change for the owner (HELM is
+standard-library only, so it would mean signing requests to the bucket by hand).

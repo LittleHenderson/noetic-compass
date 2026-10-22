@@ -38,3 +38,5 @@ new `PROPOSED`.
 **2026-10-22, follow-up 9:** the deep search reads the cloud's fold records when online (A-TEACH2-11; `BUILD_V2_RECORD_20261021.md` §12; `CLOUDSEARCH_REACH_20261022.json`): reach 1 → 30 of 30; estimated ~10 s per question on the real bucket.
 
 **2026-10-22, follow-up 10:** the cloud search fetches all fold records in one call (A-TEACH2-12; `BUILD_V2_RECORD_20261021.md` §13; live `CLOUD_BATCH_TIMING_20261022.json`): 4.16 → 3.54 s per question on the real bucket.
+
+**2026-10-22, follow-up 11:** remember a 'cloud reachable' yes for 60 s (A-TEACH2-13; `BUILD_V2_RECORD_20261021.md` §14; live `CLOUD_REACH_TIMING_20261022.json`): 3.46 → 2.66 s per cloud question.
