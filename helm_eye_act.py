@@ -359,6 +359,8 @@ class LeanCapsules:
         self._folds: List[Dict[str, Any]] = []         # folded rows in working memory, oldest first per level
         self._fold_numbers: Dict[int, int] = {}        # level -> folds made so far (names)
         self.last_status = "OK"                        # of the latest get(): OK / HELD / AWAY / MISSING
+        self._batch: Optional[Dict[str, bytes]] = None  # fold records fetched in one call during a cloud search
+        self._hints: Dict[str, Dict[str, Any]] = {}     # index rows the latest cloud search found (used once, dropped)
 
     # ---------------------------------------------------------------- names and rows
     @staticmethod
@@ -489,6 +491,8 @@ class LeanCapsules:
         if os.path.isfile(path):
             with open(path, "rb") as fh:
                 return fh.read()
+        if key is not None and self._batch is not None and key in self._batch:
+            return self._batch[key]                      # A-TEACH2-12: fetched in the one batched call
         if key is None:
             self.last_status = "MISSING"
             return None
@@ -570,6 +574,7 @@ class LeanCapsules:
         """A-TEACH2-9 F5: names of statement capsules whose clue words hold every question word, from the rows in
         working memory, then the folded rows that hold every word, then (only if nothing matched) a deep search of the
         fold records on the device. Returns (names, any_away, deep)."""
+        self._hints = {}                                 # hints of an earlier question are dropped
         found = [cid for cid, clues, kind in self.clue_index() if kind == "statement" and tokens <= set(clues)]
         away: List[str] = []
         hot = set(self.ids())
@@ -593,9 +598,21 @@ class LeanCapsules:
             except Exception:
                 reachable = False
             if reachable:
-                for fr in self._folds:
-                    found += [leaf["id"] for leaf in self._leaves(fr, lambda m: True, away)
-                              if leaf.get("k", "statement") == "statement" and holds(leaf) and leaf["id"] not in hot]
+                # A-TEACH2-12: every fold record of this conversation's cloud folder in ONE call; each still checked
+                keys = list(self.eye.comp.moved_folds.values())
+                prefix = keys[0][: keys[0].rfind("/") + 1]
+                try:
+                    self._batch = cloud.get_many(prefix, ".fold.json") if hasattr(cloud, "get_many") else None
+                except Exception:
+                    self._batch = None
+                try:
+                    for fr in self._folds:
+                        for leaf in self._leaves(fr, lambda m: True, away):
+                            if leaf.get("k", "statement") == "statement" and holds(leaf) and leaf["id"] not in hot:
+                                found.append(leaf["id"])
+                                self._hints[leaf["id"]] = leaf   # so `get` need not read its fold record again
+                finally:
+                    self._batch = None                   # nothing fetched is kept
             else:
                 away.append("cloud")
         seen: set = set()
@@ -615,7 +632,7 @@ class LeanCapsules:
                 return self._get(p)
             idx, i = r["cold"], p
         else:
-            idx = self._leaf_for(capsule_id)
+            idx = self._hints.pop(capsule_id, None) or self._leaf_for(capsule_id)
             if idx is None:
                 if self.last_status == "OK":
                     self.last_status = "MISSING"

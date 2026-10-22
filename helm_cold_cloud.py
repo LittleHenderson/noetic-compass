@@ -17,6 +17,7 @@ CLAIM STATUS: ENGINEERED-NOT-VALIDATED.
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import tempfile
 from typing import Any, Callable, Dict, List, Optional
@@ -51,6 +52,12 @@ class FakeCloud:
         if not self.online:
             raise CloudUnavailable("offline")
         return self.objects.get(key)
+
+    def get_many(self, prefix: str, suffix: str) -> Dict[str, bytes]:
+        """Every object under `prefix` whose name ends with `suffix`, in one call (A-TEACH2-12)."""
+        if not self.online:
+            raise CloudUnavailable("offline")
+        return {k: v for k, v in self.objects.items() if k.startswith(prefix) and k.endswith(suffix)}
 
 
 class S3Cloud:
@@ -87,6 +94,30 @@ class S3Cloud:
                        "--server-side-encryption", "AES256"])
         finally:
             os.remove(path)
+
+    def get_many(self, prefix: str, suffix: str) -> Dict[str, bytes]:
+        """Every object under `prefix` whose name ends with `suffix`, in ONE `aws s3 cp --recursive` call into a
+        temporary folder that is removed afterwards (A-TEACH2-12)."""
+        tmp = tempfile.mkdtemp(prefix="helm_cold_many_")
+        try:
+            try:
+                res = self.runner([self.aws, "s3", "cp", f"s3://{self.bucket}/{prefix}", tmp, "--recursive",
+                                   "--exclude", "*", "--include", f"*{suffix}", "--region", self.region],
+                                  capture_output=True, timeout=CLI_TIMEOUT_S * 5)
+            except (OSError, subprocess.SubprocessError) as exc:
+                raise CloudUnavailable(str(exc)) from exc
+            if res.returncode != 0:
+                raise CloudUnavailable((res.stderr or b"").decode("utf-8", "replace")[:200])
+            out: Dict[str, bytes] = {}
+            for root, _dirs, files in os.walk(tmp):
+                for name in files:
+                    full = os.path.join(root, name)
+                    rel = os.path.relpath(full, tmp).replace(os.sep, "/")
+                    with open(full, "rb") as fh:
+                        out[prefix + rel] = fh.read()
+            return out
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
 
     def get(self, key: str) -> Optional[bytes]:
         fd, path = tempfile.mkstemp(prefix="helm_cold_")
