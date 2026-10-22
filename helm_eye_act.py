@@ -584,6 +584,20 @@ class LeanCapsules:
             for fr in self._folds:
                 found += [leaf["id"] for leaf in self._leaves(fr, lambda m: True, [], device_only=True)
                           if leaf.get("k", "statement") == "statement" and holds(leaf) and leaf["id"] not in hot]
+        if not found and self._folds and self.eye.comp.moved_folds:
+            # A-TEACH2-11: nothing in working memory or on the device; read the fold records in the cloud when it can be
+            # reached (each read checked by load_fold; nothing kept). Offline: say the notes are stored away.
+            cloud = self.eye.comp.cloud
+            try:
+                reachable = cloud is not None and bool(cloud.available())
+            except Exception:
+                reachable = False
+            if reachable:
+                for fr in self._folds:
+                    found += [leaf["id"] for leaf in self._leaves(fr, lambda m: True, away)
+                              if leaf.get("k", "statement") == "statement" and holds(leaf) and leaf["id"] not in hot]
+            else:
+                away.append("cloud")
         seen: set = set()
         names = [c for c in found if not (c in seen or seen.add(c))]
         return names, bool(away), deep

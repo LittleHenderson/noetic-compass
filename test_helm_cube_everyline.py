@@ -140,11 +140,11 @@ def test_bigger_rows_push_a_small_limit_over(tmp_path):
     assert osc.working_bytes() > 4000
 
 
-def test_words_past_the_cap_are_not_found_once_fold_records_are_in_the_cloud(tmp_path):
-    """PINNED MEASURED NEGATIVE (A-TEACH2-10 record): a folded row keeps 48 words; a thread of 8 every-line capsules has
-    far more, so rare words fall past the cap, and the deep search (A-TEACH2-9 F5) reads only fold records still on
-    the device. Once they are in the cloud, a rare word of an old line is not found: HELM says it does not know
-    (never a wrong line, never EXACT)."""
+def test_words_past_the_cap_are_not_found_offline_once_fold_records_are_in_the_cloud(tmp_path):
+    """PINNED MEASURED NEGATIVE (A-TEACH2-10 record, narrowed by A-TEACH2-11): a folded row keeps 48 words; a thread of 8
+    every-line capsules has far more, so rare words fall past the cap. Online, the deep search now reads the cloud's
+    fold records too (test_helm_cube_cloudsearch.py). OFFLINE it cannot: a rare word of an old line whose fold record
+    is in the cloud is not found, and HELM says it does not know (never a wrong line, never EXACT)."""
     import helm_cold_cloud as hcc
     cloud = hcc.FakeCloud()
     mem = HELMConversationalMemory(session_id="t-every", max_turns=50, storage_dir=str(tmp_path / "log"))
@@ -154,6 +154,7 @@ def test_words_past_the_cap_are_not_found_once_fold_records_are_in_the_cloud(tmp
         _say(mem, long_line(i))
     comp = mem.compactor
     assert comp.moved_folds
+    cloud.online = False
     lost = 0
     for i in range(3, 300, 37):
         out = comp.recall(f"the beds in {plot(i)}")
