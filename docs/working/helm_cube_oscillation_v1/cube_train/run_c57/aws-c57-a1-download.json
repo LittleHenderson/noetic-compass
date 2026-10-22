@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-22T12:09:31.477418+00:00",
+  "job": "helm-claude-cubetrain-20261022-c57",
+  "attempt": 1,
+  "instance": "i-0a93a50584129d0e4",
+  "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_cubetrain_c57\\aws-c57-a1-deliverable.zip",
+  "bytes": 124952688,
+  "sha256": "887c2803b735b16c5f7a35f4717cd2aec5256280b174843732ba6df385bda3b2",
+  "version_id": "null",
+  "terminal_sha256": "a7198f567e0f3e78c1a7acb49ef049b7f03eb1d4062ea29f66601228cd73c6ea",
+  "terminal_status": "RAN",
+  "run_ctt_exit": null,
+  "run_ctt_human_exit": null,
+  "transport_complete": true
+}

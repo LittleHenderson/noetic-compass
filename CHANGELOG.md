@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM CUBE TRAIN RAN (spec sheet 7.125 follow-up 17): TRAIN_READY by the frozen reader, recomputed by hand; job c57, 1.26 USD
+
+- Owner's words: "Yes: launch the CUBE TRAIN run on AWS now (one g5.xlarge, cap 3 USD), read the result, and record it."
+- One g5.xlarge, 10:55-12:03 UTC, attempt 1 of 1; sealed zip 706e1fa6 checked on the host; four CTT copies trained 6,000 steps each from c45 weights; 0 audit violations; all instrument checks true.
+- Gates (vote of A4-s1..s3): invented 0; confident wrong SDG 0/2,000, AI-written 5/357 = 1.40% (limit 2%), traps 1/307; exercised SDG 100%, AI-written 91.9%; keep-old drop at most 0.0005. Ceiling SYNTHETIC_ONLY + LLM_WRITTEN_STRATUM; not a HELM reading claim.
+- Negatives kept: single copies 13-17 wrong of 357 (over the limit alone); A5-s1 35 wrong; SDG perfect score is same-generator fit; 21 AI-written lines unanswered.
+- Weights re-hashed on the laptop (all MATCH); backup D:/tksCAS-archive/cube_train_c57_run_20261022; cleanup VERIFIED three ways; ledger 114.60/200. Record docs/working/helm_cube_oscillation_v1/cube_train/run_c57/. Hub summary of 7.125 updated. Next: pin the weights into TEACH-2 and seal; CUBE EXAM at 1 USD.
+
 ## 2026-10-22 PDT - HELM plan: teaching HELM a picture it does not know (intended, nothing built, 0 USD); on the HELM Hub Roadmap
 
 - Owner's words: "we may not work on this next but draw a plan for it and add it to HELM HUB" (with a side-chat answer pasted beneath).
