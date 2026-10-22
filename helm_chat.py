@@ -200,6 +200,10 @@ class HELMConversationalSession:
                     speech = f"You said: {matches[0]}."
                 else:
                     speech = f"Yes, absolutely: {matches[0]}."
+            elif getattr(self.memory, "cube_osc", None) is not None and self.memory.cube_osc.answer(prompt) is not None:
+                # Cube oscillation ON (SPEC 7.125): a kept fact answers with its current value; EXACT only while the
+                # person's own line is fetchable, else said as rebuilt; three or more matches -> which one.
+                speech = self.memory.cube_osc.answer(prompt)["text"]
             elif getattr(self.memory, "compactor", None) is not None:
                 # Memory compaction ON (SPEC 7.115): fetch first, ask last. EXACT only on a digest-checked original;
                 # a rebuilt memory says so; UNKNOWN names its reason; a refresh question quotes a clue.
