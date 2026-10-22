@@ -1,0 +1,3467 @@
+{
+ "a_r1w7_11": {
+  "v7.2": {
+   "CHAT_ON": {
+    "a11_checks": [
+     {
+      "a": true,
+      "allowed_tail_heads": [
+       "carrot"
+      ],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": true,
+      "exempt": true,
+      "id": "AUTHOR73:MULTI_HONEST",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "carrot"
+      ]
+     },
+     {
+      "a": true,
+      "allowed_tail_heads": [],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": false,
+      "exempt": false,
+      "id": "AUTHOR73:MULTI_PHANTOM",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "peeled"
+      ]
+     }
+    ],
+    "a11_exempted_ids": [
+     "AUTHOR73:MULTI_HONEST"
+    ],
+    "amended_score_real": true
+   },
+   "LOOP_ON": {
+    "a11_checks": [
+     {
+      "a": true,
+      "allowed_tail_heads": [
+       "carrot"
+      ],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": true,
+      "exempt": true,
+      "id": "AUTHOR73:MULTI_HONEST",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "carrot"
+      ]
+     },
+     {
+      "a": true,
+      "allowed_tail_heads": [],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": false,
+      "exempt": false,
+      "id": "AUTHOR73:MULTI_PHANTOM",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "peeled"
+      ]
+     }
+    ],
+    "a11_exempted_ids": [
+     "AUTHOR73:MULTI_HONEST"
+    ],
+    "amended_score_real": true
+   }
+  },
+  "v7.3": {
+   "CHAT_ON": {
+    "a11_checks": [
+     {
+      "a": true,
+      "allowed_tail_heads": [
+       "carrot"
+      ],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": true,
+      "exempt": true,
+      "id": "AUTHOR73:MULTI_HONEST",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "carrot"
+      ]
+     },
+     {
+      "a": true,
+      "allowed_tail_heads": [],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": false,
+      "exempt": false,
+      "id": "AUTHOR73:MULTI_PHANTOM",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "peeled"
+      ]
+     }
+    ],
+    "a11_exempted_ids": [
+     "AUTHOR73:MULTI_HONEST"
+    ],
+    "amended_score_real": true
+   },
+   "LOOP_ON": {
+    "a11_checks": [
+     {
+      "a": true,
+      "allowed_tail_heads": [
+       "carrot"
+      ],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": true,
+      "exempt": true,
+      "id": "AUTHOR73:MULTI_HONEST",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "carrot"
+      ]
+     },
+     {
+      "a": true,
+      "allowed_tail_heads": [],
+      "b": true,
+      "c": true,
+      "d": true,
+      "e": false,
+      "exempt": false,
+      "id": "AUTHOR73:MULTI_PHANTOM",
+      "raw_lines_found": true,
+      "tagged_lines": [
+       0
+      ],
+      "unlearned": [
+       "peeled"
+      ]
+     }
+    ],
+    "a11_exempted_ids": [
+     "AUTHOR73:MULTI_HONEST"
+    ],
+    "amended_score_real": true
+   }
+  }
+ },
+ "authored": {
+  "items": 9,
+  "kept": {
+   "AUTHOR_KEYS_V73.json": {
+    "sha256": "324368f4cd037afb411c0db3c429d69c1452a5dadc020e06b5711fe30c1f2188",
+    "written_now": false
+   },
+   "INPUTS_REAL_AUTHOR_V73.json": {
+    "sha256": "9537f565249fb2babf3d573c3f9e1aa7bda0d2f003976e562037c1df2d4a8a00",
+    "written_now": false
+   },
+   "RAW_LINES_AUTHOR_V73.json": {
+    "sha256": "fd77aaf08e325c8eac650eb2e81540ec1f57b670441c9b2966e8b7814fc0c84a",
+    "written_now": false
+   }
+  },
+  "recipes": "C:\\tmp\\helm-ctt2r-c49-read\\docs\\working\\r1_wave7\\v73_a11\\scorer_path\\AUTHORED_RECIPES_V73.json",
+  "recipes_sha256": "0bb1ad78dbb1d42d893dcc8d1c3d0bbf2d60c1ced3f3696458f6a32783ab5c56"
+ },
+ "claim_status": "scratch test only; reader v7.3 at most ENGINEERED-NOT-VALIDATED; the chat stays NOT LICENSED",
+ "copies": {
+  "v7.2": {
+   "a_r1w7_11": {
+    "applied": true,
+    "honest_ask_in_copy_sha256": "ad54c2eab0b96e2f35f8c656f169361ce13cbad1f14a5c6c00c9ae7a2239cf29",
+    "honest_ask_w7_sha256": "ad54c2eab0b96e2f35f8c656f169361ce13cbad1f14a5c6c00c9ae7a2239cf29",
+    "score_w7_sha256": "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c",
+    "stdout": [
+     "ad54c2eab0b96e2f35f8c656f169361ce13cbad1f14a5c6c00c9ae7a2239cf29 r1w7/honest_ask_w7.py",
+     "cf8fe611d97f9869f2977d26495507551bdb4c0d15ea7032967fb865fb5658e4 tests_r1w7/test_honest_ask_w7.py",
+     "31a604ec36174e8e678e64a4604a0f4eaea47649b7c5a0c43a5350389e420d40 tests_r1w7/fixture_run.py",
+     "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c r1w7/score_w7.py",
+     "d6e8ff41b7e4857ca17ad1bc6412b693e20046fd366b0cabf53b8d413e8d8ba9 r1w7/merge_r1w7.py",
+     "e3b10e46ecf1796bcaf44ed6e505423e404ecce4d12e87766f205fb68311a278 tests_r1w7/run_tests.py",
+     "ae9ea60e6e0c11d661818bcb3ecc2b1112e50f5a2fd49cce870cd7f02cb385c8 PREREGISTRATION_R1W7.md",
+     "APPLIED: A-R1W7-11 (7 files)"
+    ],
+    "tool_sha256": "d926e7896469b0333f2e5e012a64a3a8a2a2440f10e6a8400f4c4f17e616f221"
+   },
+   "cut_vs_worktree": {
+    "cut_files": 167,
+    "differ_from_worktree": [
+     {
+      "copy_equals_branch_head": false,
+      "copy_sha256": "3076128f46d30e4d4ae55d009b186e4717cec4e3bd83a1cfa1dd967c41444ed7",
+      "file": "helm_chat.py",
+      "worktree_equals_branch_head": true,
+      "worktree_sha256": "528618ec9c252f4f9e1e9a82179e0d5131ffad2989c0dd93f66334e69db7829c"
+     },
+     {
+      "copy_equals_branch_head": false,
+      "copy_sha256": "7edc93e05a0381db44fccf4615d4327ba62b58d9c041a6ddf3591adf7e2cbde4",
+      "file": "helm_memory.py",
+      "worktree_equals_branch_head": true,
+      "worktree_sha256": "7a73697b7bb1088b8e699e6874191cd67904770e1aa1879634b06ba85fedcf2d"
+     },
+     {
+      "copy_equals_branch_head": true,
+      "copy_sha256": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf",
+      "file": "helm_wide_turn.py",
+      "worktree_equals_branch_head": false,
+      "worktree_sha256": "d026fb4d24260d112825dc9fe2d2af4a5ba13be56f674b1ef5b131af0c3fda20"
+     },
+     {
+      "copy_equals_branch_head": true,
+      "copy_sha256": "06889a63a17bee941bb0fc12108bb201efe781ae33c175cde0376ca41eae8065",
+      "file": "test_helm_cas_address.py",
+      "worktree_equals_branch_head": false,
+      "worktree_sha256": "260f9693ec023d0294f3d8af39d6645e8171da093529f45140702a4b6a672c01"
+     },
+     {
+      "copy_equals_branch_head": false,
+      "copy_sha256": "5928cdc7c187feaa1cd593acf29eecffd548832024bdd938297bf4d4d496a3c0",
+      "file": "test_helm_memory.py",
+      "worktree_equals_branch_head": true,
+      "worktree_sha256": "adbb21ce106efbcb222b9b0f416599484fbb91fc7f7a2e36c02d2db95db1b2b6"
+     },
+     {
+      "copy_equals_branch_head": true,
+      "copy_sha256": "3eed47afa23f8de8922e05609289d9d7ce737c1b7d3662cf9c31a76aff32e74b",
+      "file": "test_helm_reader_gap.py",
+      "worktree_equals_branch_head": false,
+      "worktree_sha256": "7f00d31c64ba98d51f6a0cd9dca82da5fd8193123c7e0cb2a7bc8f2bc5cb35fb"
+     }
+    ],
+    "equal_to_worktree": 161,
+    "missing_in_worktree": []
+   },
+   "label": "pkg_v72",
+   "reader_sha256": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf",
+   "reader_version": "helm_wide_turn reader RB-W1 v7.2 (2026-10-21)",
+   "root": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\scorer_path\\run_20261022T045251Z_2508\\pkg_v72\\HELM_R1_W7_20261020",
+   "sealed_reader_sha256": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf",
+   "sealed_reader_version": "helm_wide_turn reader RB-W1 v7.2 (2026-10-21)"
+  },
+  "v7.3": {
+   "a_r1w7_11": {
+    "applied": true,
+    "honest_ask_in_copy_sha256": "ad54c2eab0b96e2f35f8c656f169361ce13cbad1f14a5c6c00c9ae7a2239cf29",
+    "honest_ask_w7_sha256": "ad54c2eab0b96e2f35f8c656f169361ce13cbad1f14a5c6c00c9ae7a2239cf29",
+    "score_w7_sha256": "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c",
+    "stdout": [
+     "ad54c2eab0b96e2f35f8c656f169361ce13cbad1f14a5c6c00c9ae7a2239cf29 r1w7/honest_ask_w7.py",
+     "cf8fe611d97f9869f2977d26495507551bdb4c0d15ea7032967fb865fb5658e4 tests_r1w7/test_honest_ask_w7.py",
+     "31a604ec36174e8e678e64a4604a0f4eaea47649b7c5a0c43a5350389e420d40 tests_r1w7/fixture_run.py",
+     "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c r1w7/score_w7.py",
+     "d6e8ff41b7e4857ca17ad1bc6412b693e20046fd366b0cabf53b8d413e8d8ba9 r1w7/merge_r1w7.py",
+     "e3b10e46ecf1796bcaf44ed6e505423e404ecce4d12e87766f205fb68311a278 tests_r1w7/run_tests.py",
+     "ae9ea60e6e0c11d661818bcb3ecc2b1112e50f5a2fd49cce870cd7f02cb385c8 PREREGISTRATION_R1W7.md",
+     "APPLIED: A-R1W7-11 (7 files)"
+    ],
+    "tool_sha256": "d926e7896469b0333f2e5e012a64a3a8a2a2440f10e6a8400f4c4f17e616f221"
+   },
+   "cut_vs_worktree": {
+    "cut_files": 167,
+    "differ_from_worktree": [
+     {
+      "copy_equals_branch_head": false,
+      "copy_sha256": "3076128f46d30e4d4ae55d009b186e4717cec4e3bd83a1cfa1dd967c41444ed7",
+      "file": "helm_chat.py",
+      "worktree_equals_branch_head": true,
+      "worktree_sha256": "528618ec9c252f4f9e1e9a82179e0d5131ffad2989c0dd93f66334e69db7829c"
+     },
+     {
+      "copy_equals_branch_head": false,
+      "copy_sha256": "7edc93e05a0381db44fccf4615d4327ba62b58d9c041a6ddf3591adf7e2cbde4",
+      "file": "helm_memory.py",
+      "worktree_equals_branch_head": true,
+      "worktree_sha256": "7a73697b7bb1088b8e699e6874191cd67904770e1aa1879634b06ba85fedcf2d"
+     },
+     {
+      "copy_equals_branch_head": true,
+      "copy_sha256": "06889a63a17bee941bb0fc12108bb201efe781ae33c175cde0376ca41eae8065",
+      "file": "test_helm_cas_address.py",
+      "worktree_equals_branch_head": false,
+      "worktree_sha256": "260f9693ec023d0294f3d8af39d6645e8171da093529f45140702a4b6a672c01"
+     },
+     {
+      "copy_equals_branch_head": false,
+      "copy_sha256": "5928cdc7c187feaa1cd593acf29eecffd548832024bdd938297bf4d4d496a3c0",
+      "file": "test_helm_memory.py",
+      "worktree_equals_branch_head": true,
+      "worktree_sha256": "adbb21ce106efbcb222b9b0f416599484fbb91fc7f7a2e36c02d2db95db1b2b6"
+     },
+     {
+      "copy_equals_branch_head": true,
+      "copy_sha256": "3eed47afa23f8de8922e05609289d9d7ce737c1b7d3662cf9c31a76aff32e74b",
+      "file": "test_helm_reader_gap.py",
+      "worktree_equals_branch_head": false,
+      "worktree_sha256": "7f00d31c64ba98d51f6a0cd9dca82da5fd8193123c7e0cb2a7bc8f2bc5cb35fb"
+     }
+    ],
+    "equal_to_worktree": 162,
+    "missing_in_worktree": []
+   },
+   "label": "pkg_v73r",
+   "reader_sha256": "d026fb4d24260d112825dc9fe2d2af4a5ba13be56f674b1ef5b131af0c3fda20",
+   "reader_version": "helm_wide_turn reader RB-W1 v7.3 (2026-10-21)",
+   "root": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\scorer_path\\run_20261022T045251Z_2508\\pkg_v73r\\HELM_R1_W7_20261020",
+   "sealed_reader_sha256": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf",
+   "sealed_reader_version": "helm_wide_turn reader RB-W1 v7.2 (2026-10-21)",
+   "swapped": {
+    "commit_field": "55cda1e21f7e6ea0048fe2faf7e90f23e4ec9525",
+    "commit_field_unchanged": true,
+    "contract_sha256": "fb6701a30e577ddc66d690a8ed89b08d576c96efe398c50ff28de378301d949d",
+    "file": "helm_wide_turn.py",
+    "how": "reserialised (sorted, indent 1, LF; the original re-serialised byte for byte)",
+    "new": {
+     "bytes": 92397,
+     "sha256": "d026fb4d24260d112825dc9fe2d2af4a5ba13be56f674b1ef5b131af0c3fda20"
+    },
+    "old": {
+     "bytes": 85849,
+     "sha256": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf"
+    },
+    "source_cut_equals_contract": true
+   }
+  }
+ },
+ "cut_commit_field_is_plumbing": true,
+ "deps": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v9_custody\\pkg\\deps",
+ "design": {
+  "file": "docs/working/r1_wave7/v73_a11/DESIGN_V73_A11.md",
+  "section": "4 T3",
+  "sha256": "57fcc5143d97431f4831b9c231d02c44efc88260da357febfc0b6add17be890a"
+ },
+ "design_stop_rule_v73": {
+  "by_arm": {
+   "CHAT_ON": {
+    "WRONG": 0,
+    "lessons_WRONG": 0
+   },
+   "LOOP_ON": {
+    "WRONG": 0,
+    "lessons_WRONG": 0
+   }
+  },
+  "no_wrong_under_v73": true
+ },
+ "env_popped_helm_vars": [],
+ "facts": {
+  "all_four_hold": true,
+  "ambiguous_ran_out_never_wrong_under_v73": {
+   "by_arm": {
+    "CHAT_ON": {
+     "never_wrong": true,
+     "ran_out_lesson_refused_not_learned": true,
+     "v7.2_lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "v7.3_lessons": [
+      "NOT_LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "v7.3_q": "NOT_SCORED",
+     "v7.3_ran_out_lesson_status": "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH",
+     "v7.3_ran_out_lesson_verdict": "NOT_LEARNED"
+    },
+    "LOOP_ON": {
+     "never_wrong": true,
+     "ran_out_lesson_refused_not_learned": true,
+     "v7.2_lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "v7.3_lessons": [
+      "NOT_LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "v7.3_q": "NOT_SCORED",
+     "v7.3_ran_out_lesson_status": "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH",
+     "v7.3_ran_out_lesson_verdict": "NOT_LEARNED"
+    }
+   },
+   "holds": true,
+   "item": "AUTHOR73:RANOUT_AMBIG",
+   "ran_out_lesson_index": 0,
+   "refused_status_expected": "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH"
+  },
+  "dangling_or_wrong_under_v72_not_under_v73": {
+   "by_arm": {
+    "CHAT_ON": {
+     "v7.2_has_wrong_lesson": true,
+     "v7.2_lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "v7.3_has_wrong_lesson": false,
+     "v7.3_lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ]
+    },
+    "LOOP_ON": {
+     "v7.2_has_wrong_lesson": true,
+     "v7.2_lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "v7.3_has_wrong_lesson": false,
+     "v7.3_lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ]
+    }
+   },
+   "holds": true,
+   "item": "AUTHOR73:OR_DANGLING"
+  },
+  "one_line_or_same_under_both": {
+   "by_arm": {
+    "CHAT_ON": {
+     "same_statuses_and_values": true,
+     "same_verdicts": true,
+     "v7.2": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "ASKS"
+     },
+     "v7.3": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "ASKS"
+     }
+    },
+    "LOOP_ON": {
+     "same_statuses_and_values": true,
+     "same_verdicts": true,
+     "v7.2": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "ASKS"
+     },
+     "v7.3": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "ASKS"
+     }
+    }
+   },
+   "holds": true,
+   "item": "AUTHOR73:OR_ONE_LINE"
+  },
+  "sugar_brown_sugar_same_under_both": {
+   "by_arm": {
+    "CHAT_ON": {
+     "same_statuses_and_values": true,
+     "same_verdicts": true,
+     "v7.2": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "NOT_SCORED"
+     },
+     "v7.3": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "NOT_SCORED"
+     }
+    },
+    "LOOP_ON": {
+     "same_statuses_and_values": true,
+     "same_verdicts": true,
+     "v7.2": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "NOT_SCORED"
+     },
+     "v7.3": {
+      "lessons": [
+       "LEARNED",
+       "LEARNED",
+       "LEARNED"
+      ],
+      "q": "NOT_SCORED"
+     }
+    }
+   },
+   "holds": true,
+   "item": "AUTHOR73:SUGAR_PAIR"
+  }
+ },
+ "helm_files_from": "v7.2: the sealed v9 helm_now (cut 55cda1e2); v7.3: the v9 helm_now with ONLY helm_wide_turn.py taken from the worktree C:\\tmp\\helm-ctt2r-c49-read (branch HEAD cc5ae88cf1797484e51059a42fa0e92ee5c4db06; the file is an uncommitted change there)",
+ "memory_checks": [
+  {
+   "free_mib": 522.8,
+   "free_mib_first_check": 493.8,
+   "waited_seconds": 5.0,
+   "where": "start"
+  },
+  {
+   "free_mib": 705.6,
+   "free_mib_first_check": 448.2,
+   "waited_seconds": 40.0,
+   "where": "unit pkg_v72 CHAT_ON"
+  },
+  {
+   "free_mib": 898.6,
+   "free_mib_first_check": 242.4,
+   "waited_seconds": 30.0,
+   "where": "unit pkg_v72 LOOP_ON"
+  },
+  {
+   "free_mib": 806.7,
+   "free_mib_first_check": 806.7,
+   "waited_seconds": 0.0,
+   "where": "unit pkg_v73r CHAT_ON"
+  },
+  {
+   "free_mib": 816.8,
+   "free_mib_first_check": 816.8,
+   "waited_seconds": 0.0,
+   "where": "unit pkg_v73r LOOP_ON"
+  }
+ ],
+ "per_item": {
+  "AUTHOR73:MULTI_HONEST": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "soup",
+   "raw_lines": [
+    "2 onions, 3 carrots",
+    "4 cups broth",
+    "1 cup rice"
+   ],
+   "required": false,
+   "role": "reported_only:multi_qty_honest",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": true,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "2",
+      "4",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "onion",
+      "broth",
+      "rice"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      "4",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one soup needs 2 onions. I still need one batch for each of carrot, broth, and rice before I can work out soup.",
+      "Got it: one soup needs 4 cups of broth. I still need one batch for each of carrot and rice before I can work out soup.",
+      "Got it: one soup needs 1 cup of rice. I still need one batch where carrot ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 onions, 3 carrots, 6 cups of broth, and 2 1/2 cups of rice.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": true,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "2",
+      "4",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "onion",
+      "broth",
+      "rice"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      "4",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one soup needs 2 onions. I still need one batch for each of carrot, broth, and rice before I can work out soup.",
+      "Got it: one soup needs 4 cups of broth. I still need one batch for each of carrot and rice before I can work out soup.",
+      "Got it: one soup needs 1 cup of rice. I still need one batch where carrot ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 onions, 3 carrots, 6 cups of broth, and 2 1/2 cups of rice.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": true,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "2",
+      "4",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "onion",
+      "broth",
+      "rice"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      "4",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one soup needs 2 onions. I still need one batch for each of carrot, broth, and rice before I can work out soup.",
+      "Got it: one soup needs 4 cups of broth. I still need one batch for each of carrot and rice before I can work out soup.",
+      "Got it: one soup needs 1 cup of rice. I still need one batch where carrot ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 onions, 3 carrots, 6 cups of broth, and 2 1/2 cups of rice.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": true,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "2",
+      "4",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "onion",
+      "broth",
+      "rice"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      "4",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one soup needs 2 onions. I still need one batch for each of carrot, broth, and rice before I can work out soup.",
+      "Got it: one soup needs 4 cups of broth. I still need one batch for each of carrot and rice before I can work out soup.",
+      "Got it: one soup needs 1 cup of rice. I still need one batch where carrot ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much soup we can make. I still need one batch where carrot ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 onions, 3 carrots, 6 cups of broth, and 2 1/2 cups of rice.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:MULTI_PHANTOM": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "tart",
+   "raw_lines": [
+    "4 apples, 2 peeled",
+    "1 cup sugar",
+    "2 cups flour"
+   ],
+   "required": false,
+   "role": "reported_only:multi_qty_phantom",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "4",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "apple",
+      "sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "4",
+      "1",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one tart needs 4 apples. I still need one batch for each of peeled, sugar, and flour before I can work out tart.",
+      "Got it: one tart needs 1 cup of sugar. I still need one batch for each of peeled and flour before I can work out tart.",
+      "Got it: one tart needs 2 cups of flour. I still need one batch where peeled ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 12 apples, 2 peeleds, 1 1/2 cups of sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "4",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "apple",
+      "sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "4",
+      "1",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one tart needs 4 apples. I still need one batch for each of peeled, sugar, and flour before I can work out tart.",
+      "Got it: one tart needs 1 cup of sugar. I still need one batch for each of peeled and flour before I can work out tart.",
+      "Got it: one tart needs 2 cups of flour. I still need one batch where peeled ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 12 apples, 2 peeleds, 1 1/2 cups of sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "4",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "apple",
+      "sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "4",
+      "1",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one tart needs 4 apples. I still need one batch for each of peeled, sugar, and flour before I can work out tart.",
+      "Got it: one tart needs 1 cup of sugar. I still need one batch for each of peeled and flour before I can work out tart.",
+      "Got it: one tart needs 2 cups of flour. I still need one batch where peeled ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 12 apples, 2 peeleds, 1 1/2 cups of sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "4",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "apple",
+      "sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "4",
+      "1",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one tart needs 4 apples. I still need one batch for each of peeled, sugar, and flour before I can work out tart.",
+      "Got it: one tart needs 1 cup of sugar. I still need one batch for each of peeled and flour before I can work out tart.",
+      "Got it: one tart needs 2 cups of flour. I still need one batch where peeled ran out first."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much tart we can make. I still need one batch where peeled ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 12 apples, 2 peeleds, 1 1/2 cups of sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": true,
+     "why_not": [
+      "line0:MULTI_QTY"
+     ],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 4,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:OR_DANGLING": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "cobbler",
+   "raw_lines": [
+    "1 can peaches or",
+    "3 cups sliced peaches",
+    "1 cup flour"
+   ],
+   "required": true,
+   "role": "dangling_or",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "3",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "sliced peach",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "6",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one cobbler needs 6 cups of sliced peach. I still need one batch for each of peaches or and flour before I can work out cobbler.",
+      "Earlier batches say one cobbler needs 6 cups of sliced peach; this one says 3 cups of sliced peach. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, sliced peach would have run out at the same moment as flour. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much cobbler we can make. I still need one batch for each of peaches or and flour: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much cobbler we can make. I still need one batch for each of peaches or and flour: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 3 cans of peaches or, 4 1/2 cups of sliced peach, and 2 1/2 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "3",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "sliced peach",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "6",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one cobbler needs 6 cups of sliced peach. I still need one batch for each of peaches or and flour before I can work out cobbler.",
+      "Earlier batches say one cobbler needs 6 cups of sliced peach; this one says 3 cups of sliced peach. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, sliced peach would have run out at the same moment as flour. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much cobbler we can make. I still need one batch for each of peaches or and flour: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much cobbler we can make. I still need one batch for each of peaches or and flour: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 3 cans of peaches or, 4 1/2 cups of sliced peach, and 2 1/2 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "3",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "You wrote \"1 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I don't know a recipe for cobbler. I know bread, frosting, starter, and meringue.",
+     "question_status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "question_value": null,
+     "scored_reply": "Cobbler isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+     "stock_sentence": "You wrote \"3 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+     "stock_status": "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 0,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 0,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "3",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "You wrote \"1 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I don't know a recipe for cobbler. I know bread, frosting, starter, and meringue.",
+     "question_status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "question_value": null,
+     "scored_reply": "Cobbler isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+     "stock_sentence": "You wrote \"3 can peaches or\" and then sliced peach, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+     "stock_status": "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 0,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 0,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:OR_DANGLING_ANSWER": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "granola",
+   "raw_lines": [
+    "1 cup honey or",
+    "1 cup maple syrup",
+    "2 cups oats"
+   ],
+   "required": false,
+   "role": "reported_only:dangling_or_answer_key",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "honey or",
+      "maple syrup",
+      "oats"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1",
+      "1",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one granola needs 1 cup of honey or. I still need one batch for each of maple syrup and oats before I can work out granola.",
+      "Got it: one granola needs 1 cup of maple syrup. I still need one batch where oats ran out first.",
+      "Got it: one granola needs 2 cups of oats. That's every ingredient of granola."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "RIGHT",
+     "q_recomputed": "RIGHT",
+     "question_limiting": "maple syrup",
+     "question_sentence": "With what's on hand we can make 1 1/2 granola. Maple syrup runs out first, so it sets the limit.",
+     "question_status": "SUCCESS_EVALUATED",
+     "question_value": "3/2",
+     "scored_reply": "With what's on hand we can make 1 1/2 granola. Maple syrup runs out first, so it sets the limit.",
+     "stock_sentence": "Noted: we have 3 cups of honey or, 1 1/2 cups of maple syrup, and 5 cups of oats.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "honey or",
+      "maple syrup",
+      "oats"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1",
+      "1",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one granola needs 1 cup of honey or. I still need one batch for each of maple syrup and oats before I can work out granola.",
+      "Got it: one granola needs 1 cup of maple syrup. I still need one batch where oats ran out first.",
+      "Got it: one granola needs 2 cups of oats. That's every ingredient of granola."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "RIGHT",
+     "q_recomputed": "RIGHT",
+     "question_limiting": "maple syrup",
+     "question_sentence": "With what's on hand we can make 1 1/2 granola. Maple syrup runs out first, so it sets the limit.",
+     "question_status": "SUCCESS_EVALUATED",
+     "question_value": "3/2",
+     "scored_reply": "With what's on hand we can make 1 1/2 granola. Maple syrup runs out first, so it sets the limit.",
+     "stock_sentence": "Noted: we have 3 cups of honey or, 1 1/2 cups of maple syrup, and 5 cups of oats.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      null,
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "You wrote \"1 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I don't know a recipe for granola. I know bread, frosting, starter, and meringue.",
+     "question_status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "question_value": null,
+     "scored_reply": "Granola isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+     "stock_sentence": "You wrote \"3 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+     "stock_status": "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 0,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 0,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1",
+      "1",
+      "2"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      null,
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "You wrote \"1 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+      "You wrote \"2 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+      "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I don't know a recipe for granola. I know bread, frosting, starter, and meringue.",
+     "question_status": "CLARIFY_ENGLISH_UNKNOWN_PRODUCT",
+     "question_value": null,
+     "scored_reply": "Granola isn't something I have a recipe for. I can work out bread, frosting, starter, and meringue. Nothing was saved.",
+     "stock_sentence": "You wrote \"3 cup honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+     "stock_status": "CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 0,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 0,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:OR_ONE_LINE": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "biscuit",
+   "raw_lines": [
+    "1/2 cup butter or margarine",
+    "2 cups flour",
+    "1 cup milk"
+   ],
+   "required": true,
+   "role": "one_line_or",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "butter",
+      "flour",
+      "milk"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one biscuit needs 1/2 cup of butter. I still need one batch for each of flour and milk before I can work out biscuit.",
+      "Got it: one biscuit needs 2 cups of flour. I still need one batch where milk ran out first.",
+      "Got it: one biscuit needs 1 cup of milk. That's every ingredient of biscuit."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess. Nothing was saved.",
+     "stock_sentence": "Is 3 cups flour what we have on hand right now? If it is, say \"we have 3 cups flour\" and I'll save it.",
+     "stock_status": "CLARIFY_ENGLISH_NO_STOCK_FRAME",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "butter",
+      "flour",
+      "milk"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one biscuit needs 1/2 cup of butter. I still need one batch for each of flour and milk before I can work out biscuit.",
+      "Got it: one biscuit needs 2 cups of flour. I still need one batch where milk ran out first.",
+      "Got it: one biscuit needs 1 cup of milk. That's every ingredient of biscuit."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess. Nothing was saved.",
+     "stock_sentence": "Is 3 cups flour what we have on hand right now? If it is, say \"we have 3 cups flour\" and I'll save it.",
+     "stock_status": "CLARIFY_ENGLISH_NO_STOCK_FRAME",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "butter",
+      "flour",
+      "milk"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one biscuit needs 1/2 cup of butter. I still need one batch for each of flour and milk before I can work out biscuit.",
+      "Got it: one biscuit needs 2 cups of flour. I still need one batch where milk ran out first.",
+      "Got it: one biscuit needs 1 cup of milk. That's every ingredient of biscuit."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess. Nothing was saved.",
+     "stock_sentence": "Is 3 cups flour what we have on hand right now? If it is, say \"we have 3 cups flour\" and I'll save it.",
+     "stock_status": "CLARIFY_ENGLISH_NO_STOCK_FRAME",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "ANSWER",
+     "key_q": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "key_yield": "3/2",
+     "lesson_ingredients": [
+      "butter",
+      "flour",
+      "milk"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1/2",
+      "2",
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one biscuit needs 1/2 cup of butter. I still need one batch for each of flour and milk before I can work out biscuit.",
+      "Got it: one biscuit needs 2 cups of flour. I still need one batch where milk ran out first.",
+      "Got it: one biscuit needs 1 cup of milk. That's every ingredient of biscuit."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "ASKS",
+     "q_recomputed": "ASKS",
+     "question_limiting": null,
+     "question_sentence": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say how much biscuit we can make yet, because I don't know how much butter, flour, and milk we have. How much butter is there? I didn't guess. Nothing was saved.",
+     "stock_sentence": "Is 3 cups flour what we have on hand right now? If it is, say \"we have 3 cups flour\" and I'll save it.",
+     "stock_status": "CLARIFY_ENGLISH_NO_STOCK_FRAME",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:R2G_STOPWORD": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "chili",
+   "raw_lines": [
+    "1 can beans in sauce",
+    "2 cups beans",
+    "1 onion"
+   ],
+   "required": false,
+   "role": "reported_only:r2g_stop_word",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "2",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "bean",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "4",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one chili needs 4 cups of bean. I still need one batch for each of beans in sauce and onion before I can work out chili.",
+      "Earlier batches say one chili needs 4 cups of bean; this one says 2 cups of bean. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, bean would have run out at the same moment as onion. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and onion: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and onion: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 3 cans of beans in sauce, 3 cups of bean, and 2 1/2 onions.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "2",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "bean",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "4",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one chili needs 4 cups of bean. I still need one batch for each of beans in sauce and onion before I can work out chili.",
+      "Earlier batches say one chili needs 4 cups of bean; this one says 2 cups of bean. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, bean would have run out at the same moment as onion. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and onion: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and onion: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 3 cans of beans in sauce, 3 cups of bean, and 2 1/2 onions.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "2",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      null,
+      "onion"
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      null,
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "You said bean ran out, but that could be bean or beans in sauce. Which one ran out first? Tell me the batch again. Nothing was saved.",
+      "You said bean ran out, but that could be bean or beans in sauce. Which one ran out first? Tell me the batch again. Nothing was saved.",
+      "Got it: one chili needs 1 onion. I still need one batch for each of beans in sauce and bean before I can work out chili."
+     ],
+     "lesson_statuses": [
+      "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+      "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and bean: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and bean: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 3 cans of beans in sauce, 3 cups of bean, and 2 1/2 onions.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "2",
+      "1"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      null,
+      "onion"
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      null,
+      "1"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "You said bean ran out, but that could be bean or beans in sauce. Which one ran out first? Tell me the batch again. Nothing was saved.",
+      "You said bean ran out, but that could be bean or beans in sauce. Which one ran out first? Tell me the batch again. Nothing was saved.",
+      "Got it: one chili needs 1 onion. I still need one batch for each of beans in sauce and bean before I can work out chili."
+     ],
+     "lesson_statuses": [
+      "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+      "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "NOT_LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and bean: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much chili we can make. I still need one batch for each of beans in sauce and bean: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 3 cans of beans in sauce, 3 cups of bean, and 2 1/2 onions.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:RANOUT_AMBIG": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "crumble",
+   "raw_lines": [
+    "3 cups apples with peel",
+    "1 cup diced apples",
+    "1/2 cup sugar"
+   ],
+   "required": true,
+   "role": "ambiguous_ran_out",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "3",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "diced apple",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one crumble needs 2 cups of diced apple. I still need one batch for each of apples with peel and sugar before I can work out crumble.",
+      "Earlier batches say one crumble needs 2 cups of diced apple; this one says 1 cup of diced apple. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, diced apple would have run out at the same moment as sugar. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much crumble we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much crumble we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 9 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "3",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "diced apple",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one crumble needs 2 cups of diced apple. I still need one batch for each of apples with peel and sugar before I can work out crumble.",
+      "Earlier batches say one crumble needs 2 cups of diced apple; this one says 1 cup of diced apple. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, diced apple would have run out at the same moment as sugar. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "WRONG",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much crumble we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much crumble we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 9 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "3",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      "diced apple",
+      "sugar"
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      "1",
+      "1/2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Apple wasn't in that batch, so it can't be what ran out. Nothing was saved.",
+      "Got it: one crumble needs 1 cup of diced apple. I still need one batch for each of apples with peel and sugar before I can work out crumble.",
+      "Got it: one crumble needs 1/2 cup of sugar. I still need one batch where apples with peel ran out first."
+     ],
+     "lesson_statuses": [
+      "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much crumble we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much crumble we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 9 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 2,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "3",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      "diced apple",
+      "sugar"
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      "1",
+      "1/2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Apple wasn't in that batch, so it can't be what ran out. Nothing was saved.",
+      "Got it: one crumble needs 1 cup of diced apple. I still need one batch for each of apples with peel and sugar before I can work out crumble.",
+      "Got it: one crumble needs 1/2 cup of sugar. I still need one batch where apples with peel ran out first."
+     ],
+     "lesson_statuses": [
+      "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much crumble we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much crumble we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 9 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 2,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:RANOUT_AMBIG_EQUAL_AMOUNT": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "strudel",
+   "raw_lines": [
+    "2 cups apples with peel",
+    "1 cup diced apples",
+    "1/2 cup sugar"
+   ],
+   "required": false,
+   "role": "reported_only:ambiguous_ran_out_equal_amount",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "2",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "diced apple",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one strudel needs 2 cups of diced apple. I still need one batch for each of apples with peel and sugar before I can work out strudel.",
+      "Earlier batches say one strudel needs 2 cups of diced apple; this one says 1 cup of diced apple. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, diced apple would have run out at the same moment as sugar. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much strudel we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much strudel we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "2",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "diced apple",
+      null,
+      null
+     ],
+     "lesson_learned_in_taught_unit": [
+      "2",
+      null,
+      null
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one strudel needs 2 cups of diced apple. I still need one batch for each of apples with peel and sugar before I can work out strudel.",
+      "Earlier batches say one strudel needs 2 cups of diced apple; this one says 1 cup of diced apple. Those can't both be right, so I kept what I had. Nothing was saved.",
+      "That batch doesn't add up: from what I've already learned, diced apple would have run out at the same moment as sugar. Nothing was saved."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "TEACH_REFUSED_REFUSED_CONFLICT",
+      "TEACH_REFUSED_RECEIPT_FAILED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "NOT_LEARNED",
+      "NOT_LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much strudel we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much strudel we can make. I still need one batch for each of apples with peel and sugar: a batch where that one ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 1,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "2",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      "diced apple",
+      "sugar"
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      "1",
+      "1/2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Apple wasn't in that batch, so it can't be what ran out. Nothing was saved.",
+      "Got it: one strudel needs 1 cup of diced apple. I still need one batch for each of apples with peel and sugar before I can work out strudel.",
+      "Got it: one strudel needs 1/2 cup of sugar. I still need one batch where apples with peel ran out first."
+     ],
+     "lesson_statuses": [
+      "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much strudel we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much strudel we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 2,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "2",
+      "1",
+      "1/2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      null,
+      "diced apple",
+      "sugar"
+     ],
+     "lesson_learned_in_taught_unit": [
+      null,
+      "1",
+      "1/2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Apple wasn't in that batch, so it can't be what ran out. Nothing was saved.",
+      "Got it: one strudel needs 1 cup of diced apple. I still need one batch for each of apples with peel and sugar before I can work out strudel.",
+      "Got it: one strudel needs 1/2 cup of sugar. I still need one batch where apples with peel ran out first."
+     ],
+     "lesson_statuses": [
+      "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "NOT_LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": null,
+     "question_sentence": "I can't say yet how much strudel we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess.",
+     "question_status": "UNDETERMINED_CLARIFY",
+     "question_value": null,
+     "scored_reply": "I can't say yet how much strudel we can make. I still need one batch where apples with peel ran out first while everything else was left over. I didn't guess. Nothing was saved.",
+     "stock_sentence": "Noted: we have 6 cups of apples with peel, 1 1/2 cups of diced apple, and 1 1/4 cups of sugar.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 2,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  },
+  "AUTHOR73:SUGAR_PAIR": {
+   "multipliers": [
+    "3",
+    "3/2",
+    "5/2"
+   ],
+   "noun": "shortbread",
+   "raw_lines": [
+    "1 cup sugar",
+    "1/2 cup brown sugar",
+    "2 cups flour"
+   ],
+   "required": true,
+   "role": "sugar_brown_sugar",
+   "v7.2": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "sugar",
+      "brown sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one shortbread needs 1 cup of sugar. I still need one batch for each of brown sugar and flour before I can work out shortbread.",
+      "Got it: one shortbread needs 1/2 cup of brown sugar. I still need one batch where flour ran out first.",
+      "Got it: one shortbread needs 2 cups of flour. That's every ingredient of shortbread."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": "brown sugar",
+     "question_sentence": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "question_status": "SUCCESS_EVALUATED",
+     "question_value": "3/2",
+     "scored_reply": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "stock_sentence": "Noted: we have 3 cups of sugar, 3/4 cup of brown sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "sugar",
+      "brown sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one shortbread needs 1 cup of sugar. I still need one batch for each of brown sugar and flour before I can work out shortbread.",
+      "Got it: one shortbread needs 1/2 cup of brown sugar. I still need one batch where flour ran out first.",
+      "Got it: one shortbread needs 2 cups of flour. That's every ingredient of shortbread."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": "brown sugar",
+     "question_sentence": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "question_status": "SUCCESS_EVALUATED",
+     "question_value": "3/2",
+     "scored_reply": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "stock_sentence": "Noted: we have 3 cups of sugar, 3/4 cup of brown sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   },
+   "v7.3": {
+    "CHAT_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "sugar",
+      "brown sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one shortbread needs 1 cup of sugar. I still need one batch for each of brown sugar and flour before I can work out shortbread.",
+      "Got it: one shortbread needs 1/2 cup of brown sugar. I still need one batch where flour ran out first.",
+      "Got it: one shortbread needs 2 cups of flour. That's every ingredient of shortbread."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": "brown sugar",
+     "question_sentence": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "question_status": "SUCCESS_EVALUATED",
+     "question_value": "3/2",
+     "scored_reply": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "stock_sentence": "Noted: we have 3 cups of sugar, 3/4 cup of brown sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    },
+    "LOOP_ON": {
+     "a11_exempt": false,
+     "crashed": false,
+     "error": null,
+     "key_answer": "UNDETERMINED",
+     "key_q": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "key_yield": null,
+     "lesson_ingredients": [
+      "sugar",
+      "brown sugar",
+      "flour"
+     ],
+     "lesson_learned_in_taught_unit": [
+      "1",
+      "1/2",
+      "2"
+     ],
+     "lesson_paths": [
+      "wide",
+      "wide",
+      "wide"
+     ],
+     "lesson_sentences": [
+      "Got it: one shortbread needs 1 cup of sugar. I still need one batch for each of brown sugar and flour before I can work out shortbread.",
+      "Got it: one shortbread needs 1/2 cup of brown sugar. I still need one batch where flour ran out first.",
+      "Got it: one shortbread needs 2 cups of flour. That's every ingredient of shortbread."
+     ],
+     "lesson_statuses": [
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED",
+      "WITNESS_ADMITTED"
+     ],
+     "lessons": [
+      "LEARNED",
+      "LEARNED",
+      "LEARNED"
+     ],
+     "log_len": 5,
+     "q": "NOT_SCORED",
+     "q_recomputed": "NOT_SCORED",
+     "question_limiting": "brown sugar",
+     "question_sentence": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "question_status": "SUCCESS_EVALUATED",
+     "question_value": "3/2",
+     "scored_reply": "With what's on hand we can make 1 1/2 shortbread. Brown sugar runs out first, so it sets the limit.",
+     "stock_sentence": "Noted: we have 3 cups of sugar, 3/4 cup of brown sugar, and 5 cups of flour.",
+     "stock_status": "STOCK_RECORDED",
+     "unexplained_ask_strict": false,
+     "why_not": [],
+     "wide_audit": [
+      {
+       "attributes_ok": true,
+       "coefficients": 3,
+       "extra_numbers": 0,
+       "factors_pinned": true,
+       "numbers_are_coefficients": true,
+       "ok": true,
+       "support_slots": 3,
+       "within_support": true
+      }
+     ]
+    }
+   }
+  }
+ },
+ "python": "3.14.0",
+ "run_dir": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\scorer_path\\run_20261022T045251Z_2508",
+ "schema": "helm.r1w7.v73-scorer-path/1",
+ "score_files": {
+  "v7.2|CHAT_ON": {
+   "score_w6_file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v9_custody\\pkg\\deps\\HELM_R1_W6_20261019\\r1w6\\score_w6.py",
+   "score_w7_sha256": "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c",
+   "sha256": "024b14aaa9184b58f9668ba4c44d7bb6e84acbe64bfeeaf4d0b14b775727db74"
+  },
+  "v7.2|LOOP_ON": {
+   "score_w6_file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v9_custody\\pkg\\deps\\HELM_R1_W6_20261019\\r1w6\\score_w6.py",
+   "score_w7_sha256": "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c",
+   "sha256": "6a4939c261efc4888919f23486a291c41ffdb7244d1664ca677df89a89f52f9a"
+  },
+  "v7.3|CHAT_ON": {
+   "score_w6_file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v9_custody\\pkg\\deps\\HELM_R1_W6_20261019\\r1w6\\score_w6.py",
+   "score_w7_sha256": "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c",
+   "sha256": "28cd99d2bd05ad96dcefb58be40f26f02114bdb967bf46ebb26444b464f8e319"
+  },
+  "v7.3|LOOP_ON": {
+   "score_w6_file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\x7v9_custody\\pkg\\deps\\HELM_R1_W6_20261019\\r1w6\\score_w6.py",
+   "score_w7_sha256": "4dbcc72790b9cd2fd40c0103fe21ffe04facbc413fc9a0d33be77b776555018c",
+   "sha256": "508f4f629659c4ed374bd06f064f1dfeeba97c0eb3d14e8dcccb304b68281114"
+  }
+ },
+ "scratch_only": true,
+ "script_sha256": "da74883ac07c96d1b9de98b92c2ebf2ffc4c8a8ac02e74533bf32aa7d5e61a38",
+ "seconds_total": 95.958,
+ "totals": {
+  "v7.2": {
+   "CHAT_ON": {
+    "ASKS": 3,
+    "NOT_SCORED": 5,
+    "RIGHT": 1,
+    "RIGHT_AND_PLAIN": 1,
+    "RIGHT_NOT_PLAIN": 0,
+    "WRONG": 0,
+    "a11_consistent": true,
+    "a11_strict_recount": 2,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 1,
+    "commitments_on_unsettled": 1,
+    "fully_learned_rep": 2,
+    "lessons_LEARNED": 16,
+    "lessons_NOT_LEARNED": 8,
+    "lessons_WRONG": 3,
+    "missing": 0,
+    "not_routed_scored_turns": 0,
+    "plain": 9,
+    "rep_answer": 2,
+    "same_name_items": 5,
+    "undetermined_items": 5,
+    "unexplained_asks": 2,
+    "unexplained_asks_strict": 2,
+    "unexplained_asks_strict_after_a11": 1,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "LOOP_ON": {
+    "ASKS": 3,
+    "NOT_SCORED": 5,
+    "RIGHT": 1,
+    "RIGHT_AND_PLAIN": 1,
+    "RIGHT_NOT_PLAIN": 0,
+    "WRONG": 0,
+    "a11_consistent": true,
+    "a11_strict_recount": 2,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 1,
+    "commitments_on_unsettled": 1,
+    "fully_learned_rep": 2,
+    "lessons_LEARNED": 16,
+    "lessons_NOT_LEARNED": 8,
+    "lessons_WRONG": 3,
+    "missing": 0,
+    "not_routed_scored_turns": 0,
+    "plain": 9,
+    "rep_answer": 2,
+    "same_name_items": 5,
+    "undetermined_items": 5,
+    "unexplained_asks": 2,
+    "unexplained_asks_strict": 2,
+    "unexplained_asks_strict_after_a11": 1,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   }
+  },
+  "v7.3": {
+   "CHAT_ON": {
+    "ASKS": 4,
+    "NOT_SCORED": 5,
+    "RIGHT": 0,
+    "RIGHT_AND_PLAIN": 0,
+    "RIGHT_NOT_PLAIN": 0,
+    "WRONG": 0,
+    "a11_consistent": true,
+    "a11_strict_recount": 2,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 1,
+    "commitments_on_unsettled": 1,
+    "fully_learned_rep": 1,
+    "lessons_LEARNED": 17,
+    "lessons_NOT_LEARNED": 10,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "not_routed_scored_turns": 0,
+    "plain": 9,
+    "rep_answer": 2,
+    "same_name_items": 5,
+    "undetermined_items": 5,
+    "unexplained_asks": 2,
+    "unexplained_asks_strict": 2,
+    "unexplained_asks_strict_after_a11": 1,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   },
+   "LOOP_ON": {
+    "ASKS": 4,
+    "NOT_SCORED": 5,
+    "RIGHT": 0,
+    "RIGHT_AND_PLAIN": 0,
+    "RIGHT_NOT_PLAIN": 0,
+    "WRONG": 0,
+    "a11_consistent": true,
+    "a11_strict_recount": 2,
+    "caution_on_artifact_items": 0,
+    "commitments_on_same_name": 1,
+    "commitments_on_unsettled": 1,
+    "fully_learned_rep": 1,
+    "lessons_LEARNED": 17,
+    "lessons_NOT_LEARNED": 10,
+    "lessons_WRONG": 0,
+    "missing": 0,
+    "not_routed_scored_turns": 0,
+    "plain": 9,
+    "rep_answer": 2,
+    "same_name_items": 5,
+    "undetermined_items": 5,
+    "unexplained_asks": 2,
+    "unexplained_asks_strict": 2,
+    "unexplained_asks_strict_after_a11": 1,
+    "unsettled_ask_fired": 0,
+    "unsettled_ask_on_answer_keys": 0
+   }
+  }
+ },
+ "units": [
+  {
+   "arm": "CHAT_ON",
+   "cmd": "chat",
+   "crashed": 0,
+   "helm_cut_commit_field": "55cda1e21f7e6ea0048fe2faf7e90f23e4ec9525",
+   "helm_now_files_changed": [],
+   "helm_outside": [],
+   "items": 9,
+   "label": "pkg_v72",
+   "netguard": {
+    "attempts": 0,
+    "installed": true
+   },
+   "out": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\scorer_path\\run_20261022T045251Z_2508\\units\\pkg_v72_CHAT_ON.json",
+   "reader": "v7.2",
+   "seconds_wall": 2.409,
+   "sha256": "f4be0626a587176824ea094a33f15bcd66ede6c9e9a82d2affed552de53ab3ed",
+   "summary": {
+    "crashed": 0,
+    "items": 9,
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 35.7,
+    "seconds": 2.14,
+    "sha256": "f4be0626a587176824ea094a33f15bcd66ede6c9e9a82d2affed552de53ab3ed",
+    "unit": "W7_X7_REAL_CHAT_ON",
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "unit_id": "W7_X7_REAL_CHAT_ON",
+   "wide_modules_imported": [
+    "helm_brain_wide",
+    "helm_wide_turn"
+   ]
+  },
+  {
+   "arm": "LOOP_ON",
+   "cmd": "loop",
+   "crashed": 0,
+   "helm_cut_commit_field": "55cda1e21f7e6ea0048fe2faf7e90f23e4ec9525",
+   "helm_now_files_changed": [],
+   "helm_outside": [],
+   "items": 9,
+   "label": "pkg_v72",
+   "netguard": {
+    "attempts": 0,
+    "installed": true
+   },
+   "out": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\scorer_path\\run_20261022T045251Z_2508\\units\\pkg_v72_LOOP_ON.json",
+   "reader": "v7.2",
+   "seconds_wall": 1.833,
+   "sha256": "5e212ae79110b2fa3f25b1624cc52159ce5ff7bbd6208be76bbae3207a021ad4",
+   "summary": {
+    "crashed": 0,
+    "items": 9,
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 34.2,
+    "seconds": 1.657,
+    "sha256": "5e212ae79110b2fa3f25b1624cc52159ce5ff7bbd6208be76bbae3207a021ad4",
+    "unit": "W7_X7_REAL_LOOP_ON",
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "unit_id": "W7_X7_REAL_LOOP_ON",
+   "wide_modules_imported": [
+    "helm_brain_wide",
+    "helm_wide_turn"
+   ]
+  },
+  {
+   "arm": "CHAT_ON",
+   "cmd": "chat",
+   "crashed": 0,
+   "helm_cut_commit_field": "55cda1e21f7e6ea0048fe2faf7e90f23e4ec9525",
+   "helm_now_files_changed": [],
+   "helm_outside": [],
+   "items": 9,
+   "label": "pkg_v73r",
+   "netguard": {
+    "attempts": 0,
+    "installed": true
+   },
+   "out": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\scorer_path\\run_20261022T045251Z_2508\\units\\pkg_v73r_CHAT_ON.json",
+   "reader": "v7.3",
+   "seconds_wall": 1.916,
+   "sha256": "d17cac979d296d346dcd7d4395b351e724b7864d8ab28166bcf74171b13fe825",
+   "summary": {
+    "crashed": 0,
+    "items": 9,
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 35.4,
+    "seconds": 1.774,
+    "sha256": "d17cac979d296d346dcd7d4395b351e724b7864d8ab28166bcf74171b13fe825",
+    "unit": "W7_X7_REAL_CHAT_ON",
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "unit_id": "W7_X7_REAL_CHAT_ON",
+   "wide_modules_imported": [
+    "helm_brain_wide",
+    "helm_wide_turn"
+   ]
+  },
+  {
+   "arm": "LOOP_ON",
+   "cmd": "loop",
+   "crashed": 0,
+   "helm_cut_commit_field": "55cda1e21f7e6ea0048fe2faf7e90f23e4ec9525",
+   "helm_now_files_changed": [],
+   "helm_outside": [],
+   "items": 9,
+   "label": "pkg_v73r",
+   "netguard": {
+    "attempts": 0,
+    "installed": true
+   },
+   "out": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\scorer_path\\run_20261022T045251Z_2508\\units\\pkg_v73r_LOOP_ON.json",
+   "reader": "v7.3",
+   "seconds_wall": 1.678,
+   "sha256": "caa22f88360def3de407c8e7893f6b663cd3624ad03b916dc503cdfe5b2a8cfc",
+   "summary": {
+    "crashed": 0,
+    "items": 9,
+    "netguard": {
+     "attempts": 0,
+     "installed": true
+    },
+    "peak_memory_mib": 34.5,
+    "seconds": 1.524,
+    "sha256": "caa22f88360def3de407c8e7893f6b663cd3624ad03b916dc503cdfe5b2a8cfc",
+    "unit": "W7_X7_REAL_LOOP_ON",
+    "wide_modules_imported": [
+     "helm_brain_wide",
+     "helm_wide_turn"
+    ]
+   },
+   "unit_id": "W7_X7_REAL_LOOP_ON",
+   "wide_modules_imported": [
+    "helm_brain_wide",
+    "helm_wide_turn"
+   ]
+  }
+ ],
+ "worktree_reader": {
+  "equals_branch_head_blob": false,
+  "path": "C:\\tmp\\helm-ctt2r-c49-read\\helm_wide_turn.py",
+  "reader_version": "helm_wide_turn reader RB-W1 v7.3 (2026-10-21)",
+  "sha256": "d026fb4d24260d112825dc9fe2d2af4a5ba13be56f674b1ef5b131af0c3fda20"
+ },
+ "zip": {
+  "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-20\\r1_wave7\\build_v9\\HELM_R1_W7_20261020_SOURCE_R1W7_v9.zip",
+  "sha256": "ad3fb98cd3254963263929747791d151949c2f50923672e4bcbf3fc14490942c"
+ }
+}

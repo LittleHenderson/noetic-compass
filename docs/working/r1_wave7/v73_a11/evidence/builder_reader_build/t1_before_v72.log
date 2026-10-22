@@ -1,0 +1,217 @@
+...................................FFFFFF.FEFFF.FFF.
+======================================================================
+ERROR: test_j9_the_which_one_question_is_spoken_exactly (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j9_the_which_one_question_is_spoken_exactly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 581, in test_j9_the_which_one_question_is_spoken_exactly
+    self.assertEqual(WT.say_reader_question(r["clarify"]), WHICH_ONE_D1)
+                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\tmp\helm-ctt2r-c49-read\helm_wide_turn.py", line 863, in say_reader_question
+    code, s = c["code"], c.get("slots") or {}
+              ~^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
+
+======================================================================
+FAIL: test_j1_a_dangling_or_is_cut_from_the_name (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j1_a_dangling_or_is_cut_from_the_name)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 478, in test_j1_a_dangling_or_is_cut_from_the_name
+    self.assertEqual(WT.parse_line("1 can tomatoes or"),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     {"name": "tomato", "amount": Fraction(1), "unit": "can", "said": "1 can tomatoes or",
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "own": "1 can tomatoes", "dangling_or": True})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'name': 'tomatoes or', 'amount': Fraction(1, 1), 'unit':[59 chars] or'} != {'name': 'tomato', 'amount': Fraction(1, 1), 'unit': 'can[72 chars]True}
+  {'amount': Fraction(1, 1),
++  'dangling_or': True,
+-  'name': 'tomatoes or',
+?                 -----
+
++  'name': 'tomato',
+-  'own': '1 can tomatoes or',
+?                        ---
+
++  'own': '1 can tomatoes',
+   'said': '1 can tomatoes or',
+   'unit': 'can'}
+
+======================================================================
+FAIL: test_j2_a_batch_holding_the_pair_asks_which_one (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j2_a_batch_holding_the_pair_asks_which_one)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 484, in test_j2_a_batch_holding_the_pair_asks_which_one
+    self.assertEqual(r["status"], "CLARIFY")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'WITNESS' != 'CLARIFY'
+- WITNESS
++ CLARIFY
+
+
+======================================================================
+FAIL: test_j3_every_form_of_the_pair_asks_which_one (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j3_every_form_of_the_pair_asks_which_one)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 493, in test_j3_every_form_of_the_pair_asks_which_one
+    self.assertEqual((got["name"], got["said"], got["own"], got.get("dangling_or")),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     ("tomato", "1 can tomatoes or;", "1 can tomatoes", True))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('tomatoes or', '1 can tomatoes or;', '1 can tomatoes or;', None) != ('tomato', '1 can tomatoes or;', '1 can tomatoes', True)
+
+First differing element 0:
+'tomatoes or'
+'tomato'
+
+- ('tomatoes or', '1 can tomatoes or;', '1 can tomatoes or;', None)
+?         -----                                        ----   ^^^
+
++ ('tomato', '1 can tomatoes or;', '1 can tomatoes', True)
+?                                                    ^^^
+
+
+======================================================================
+FAIL: test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 526, in test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock
+    self.assertEqual((res[k]["loop_status"], res[k]["path"]), ("CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE", "wide"), text)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('WITNESS_ADMITTED', 'wide') != ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+First differing element 0:
+'WITNESS_ADMITTED'
+'CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE'
+
+- ('WITNESS_ADMITTED', 'wide')
++ ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide') : We made 1 sauce from 1 can tomatoes or, 8 cups chopped tomatoes and 4 onions and ran out of tomatoes.
+
+======================================================================
+FAIL: test_j5_d3_asks_which_one_before_same_ingredient_twice (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j5_d3_asks_which_one_before_same_ingredient_twice)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 535, in test_j5_d3_asks_which_one_before_same_ingredient_twice
+    self.assertEqual(r["clarify"], {"code": "ALTERNATIVE_WHICH_ONE",
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                    "slots": {"first": "tomato", "second": "tomato", "words": "1 can tomatoes or"}})
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: None != {'code': 'ALTERNATIVE_WHICH_ONE', 'slots'[67 chars]or'}}
+
+======================================================================
+FAIL: test_j6_x1_admits_no_lesson (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j6_x1_admits_no_lesson)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 547, in test_j6_x1_admits_no_lesson
+    self.assertEqual((res[k]["loop_status"], res[k]["path"]), ("CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE", "wide"), text)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH', 'wide') != ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+First differing element 0:
+'TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH'
+'CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE'
+
+- ('TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH', 'wide')
++ ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide') : We made 1 sauce from 3 cups tomatoes with juice, 2 can tomatoes or and 4 onions and ran out of tomatoes.
+
+======================================================================
+FAIL: test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 571, in test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn
+    self.assertEqual((r["loop_status"], r["path"]), ("CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE", "wide"))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('CLARIFY_ENGLISH_UNKNOWN_INGREDIENT', 'licensed') != ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+First differing element 0:
+'CLARIFY_ENGLISH_UNKNOWN_INGREDIENT'
+'CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE'
+
+- ('CLARIFY_ENGLISH_UNKNOWN_INGREDIENT', 'licensed')
++ ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+======================================================================
+FAIL: test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 595, in test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged
+    self.assertEqual(WT.resolve_ran_out("tomato", ["tomatoes with juice", "chopped tomato", "onion"], self.OWN_A1),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     "tomato")
+                     ^^^^^^^^^
+AssertionError: 'chopped tomato' != 'tomato'
+- chopped tomato
++ tomato
+
+
+======================================================================
+FAIL: test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 599, in test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged
+    self.assertEqual(WT.resolve_ran_out("sugar", ["sugar beet", "brown sugar"]), "sugar")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'sugar beet' != 'sugar'
+- sugar beet
++ sugar
+
+
+======================================================================
+FAIL: test_k3_a1_through_the_loop_learns_no_wrong_amount (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k3_a1_through_the_loop_learns_no_wrong_amount)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 603, in test_k3_a1_through_the_loop_learns_no_wrong_amount
+    self.assertEqual(res[0]["loop_status"], "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'WITNESS_ADMITTED' != 'TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH'
+- WITNESS_ADMITTED
++ TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH
+
+
+======================================================================
+FAIL: test_k5_own_words_use_the_phrase_without_its_unit_words (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k5_own_words_use_the_phrase_without_its_unit_words)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 624, in test_k5_own_words_use_the_phrase_without_its_unit_words
+    self.assertEqual(WT.resolve_ran_out("cupfuls of sifted", ["cake flour", "sugar"],
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                        {"cake flour": "2 cups sifted cake flour", "sugar": "1 cup sugar"}),
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     "cake flour")
+                     ^^^^^^^^^^^^^
+AssertionError: 'cupfuls of sifted' != 'cake flour'
+- cupfuls of sifted
++ cake flour
+
+
+======================================================================
+FAIL: test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 630, in test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line
+    self.assertEqual(r["status"], "CLARIFY")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'WITNESS' != 'CLARIFY'
+- WITNESS
++ CLARIFY
+
+
+======================================================================
+FAIL: test_k7_x2_through_the_loop_learns_no_wrong_amount (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k7_x2_through_the_loop_learns_no_wrong_amount)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\tmp\helm-ctt2r-c49-read\test_helm_reader_gap.py", line 640, in test_k7_x2_through_the_loop_learns_no_wrong_amount
+    self.assertEqual((res[k]["loop_status"], res[k]["path"]), ("CLARIFY_WIDE_RAN_OUT_WHICH_LINE", "wide"), X2[k])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('WITNESS_ADMITTED', 'wide') != ('CLARIFY_WIDE_RAN_OUT_WHICH_LINE', 'wide')
+
+First differing element 0:
+'WITNESS_ADMITTED'
+'CLARIFY_WIDE_RAN_OUT_WHICH_LINE'
+
+- ('WITNESS_ADMITTED', 'wide')
++ ('CLARIFY_WIDE_RAN_OUT_WHICH_LINE', 'wide') : We made 1 sauce from 1 can tomatoes in juice, 4 tomatoes and 4 onions and ran out of tomatoes.
+
+----------------------------------------------------------------------
+Ran 52 tests in 0.826s
+
+FAILED (failures=13, errors=1)

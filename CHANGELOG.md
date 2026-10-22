@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM-R1 wave 7 reader v7.3 and amendment A-R1W7-11 built to the frozen design, reviewed, fixed (spec sheet 7.123): T3 pass condition holds (0 wrong under v7.3; exempted exactly M1, P1); check (e) exempts phantom asks (HIGH design gap, FLAG_FOR_HUMAN_REVIEW); 0 USD; nothing sealed, nothing licensed
+
+- Owner's words (byte-exact): IF HELM ANSWERED HONESTLY AND CORRECTLY THEN YES  “Exempt from K4 only”; “merge 450”; “build v7.3” each tested through the real scoring program → a new sealed package → a fresh exam only on a line you type.
+- Reader v7.3 (helm_wide_turn.py d026fb4d...): R1 dangling "or" cut from names; R1a which-one ask; R2 pooled ran-out matches; R2g asks on a stop-word rival (a flagged departure; needs the owner's word). T1 fail first on v7.2: 52 tests, failures=13, errors=1 (the 14 designed); host-exact 12 names on v7.3: Ran 297, OK (skipped=1); OFF pin e12548a7... (reader string only).
+- T3 as designed (docs/working/r1_wave7/v73_a11/t3_score_v73.py, test_t3_v73.py; items frozen before any run): v7.2 lessons_WRONG 4, v7.3 0 on both copies and arms; exempted [AUTHOR:M1, AUTHOR:P1] everywhere; C1-C3 never; STOP false (t3/T3_V73.json 46ab6178...).
+- A-R1W7-11 (docs/working/r1_wave7/a_r1w7_11/): dry run on fresh copies, every step through a 500 MB gate: new tests Ran 28 OK; suite Ran 69 FAILED (failures=1) = the expected stale-freeze test until a reseal rewrites the pins; mutation 6/6.
+- Review fix round: T3 rebuilt as designed; revised scorer-path item labelled with its first version of record; apply tool checks contents and writes in two phases; owner's line byte-exact; a status word outside the legend replaced; fail-first output records the fix state; evidence + MANIFEST.sha256 in docs/working/r1_wave7/v73_a11/evidence/.
+- Failed approach logged: the first all-HELM-tests run from a scratch copy showed 16 failures in test_helm_memory_compact.py because the copy lacked the compaction tools (noetic-compass-scaffold/noetic-compass/api, docs/working/noetic_council/language_v3, continuity_build_v2); with them copied: 34 passed. Not a v7.3 effect.
+- Open (design gaps, need a new design and the owner's word): check (e) exempted 7 of 8 phantom asks in real HELM (zest, juice, thigh, hot, large, ripe, wedge), so no v10 reseal with (e) as it stands; misbound lessons, units and the heard reply are not checked; two honest shapes are not exempted; R2g's five reader issues. Reader v7.3 and A-R1W7-11 ENGINEERED-NOT-VALIDATED; the chat NOT LICENSED.
+
 ## 2026-10-21 PDT - HELM EYE-ACT-1 SCORED (spec sheet 7.122 follow-up): all 10 hard gates hold; EYE_ACT_EARNED_KEEP, CONCERT_ACT_EARNED_KEEP, EYE_ACT_BEATS_CHECKSUM_COPY, TIES_REBUILD_ALWAYS; acting stays NOT LICENSED; laptop, 0 USD
 
 - Owner's line, verbatim (seeds the worlds): "EYE ACT EXAM, sealed e49d459c, laptop, 0 USD." (45 bytes, sha256 4ee0d7b4...).

@@ -1,0 +1,3 @@
+pristine v9 copy: RESULT ran 1 failures 0 errors 0 skipped 0
+member pins re-written in the throwaway copy: ['PREREGISTRATION_R1W7.md', 'r1w7/merge_r1w7.py', 'r1w7/score_w7.py', 'tests_r1w7/fixture_run.py', 'tests_r1w7/run_tests.py']
+amended copy, member pins re-written: RESULT ran 1 failures 0 errors 0 skipped 0

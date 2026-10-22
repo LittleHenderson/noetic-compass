@@ -1,0 +1,19 @@
+{
+ "schema": "helm.r1w7.v73-t3.items/1",
+ "authored": "2026-10-21 PDT by the fix-round agent: every recipe is made up here (never an exam, sample, pool, practice or sealed-run line). A PROBE item list for the reviewer items H-1, H-3, H-4 (not T3).",
+ "items": [
+  {"id": "FIX:PH_ZEST", "noun": "cake", "raw_lines": ["1 lemon, 1 teaspoon zest", "2 cups flour", "1 cup sugar"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: the zest is part of the lemon"},
+  {"id": "FIX:PH_JUICE", "noun": "pilaf", "raw_lines": ["2 limes, 2 tablespoons juice", "1 cup rice", "2 cups water"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: the juice is part of the limes"},
+  {"id": "FIX:PH_THIGH", "noun": "stew", "raw_lines": ["2 pounds chicken, 6 thighs", "1 cup rice", "2 cups broth"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: a restatement (the chicken as thighs)"},
+  {"id": "FIX:PH_HOT", "noun": "porridge", "raw_lines": ["3 cups water, 1 cup hot", "2 cups oats", "1 cup milk"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: a note (part of the water hot)"},
+  {"id": "FIX:PH_LARGE", "noun": "batter", "raw_lines": ["4 eggs, 2 large", "2 cups flour", "1 cup milk"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: a size note"},
+  {"id": "FIX:PH_RIPE", "noun": "salsa", "raw_lines": ["3 tomatoes, 2 ripe", "1 onion", "1 cup corn"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: a ripeness note"},
+  {"id": "FIX:PH_KERNEL", "noun": "chowder", "raw_lines": ["4 ears corn, 2 cups kernels", "2 cups milk", "1 onion"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: the kernels are the corn"},
+  {"id": "FIX:PH_WEDGE", "noun": "taco", "raw_lines": ["2 cups beans", "1 lime, 4 wedges", "1 cup rice"], "multipliers": ["3", "3/2", "5/2"], "why": "H-1 phantom: the wedges are the lime"},
+  {"id": "FIX:CTRL_ALLSPICE", "noun": "soup", "raw_lines": ["2 cups lentils", "4 cloves, 6 allspice berries", "1 cup stock"], "multipliers": ["3", "3/2", "5/2"], "why": "control: an honest second ingredient (should be exempted)"},
+  {"id": "FIX:H_SESAME", "noun": "rice", "raw_lines": ["2 tablespoons oil, 1 teaspoon sesame oil", "2 cups rice", "1 cup peas"], "multipliers": ["3", "3/2", "5/2"], "why": "H-3: an honest second ingredient sharing its head word with a key line"},
+  {"id": "FIX:H_BROWN", "noun": "cookie", "raw_lines": ["1 cup sugar, 2 tablespoons brown sugar", "2 cups flour", "1 cup butter"], "multipliers": ["3", "3/2", "5/2"], "why": "H-3: the same, sugar beside brown sugar"},
+  {"id": "FIX:H_CAPERS", "noun": "puttanesca", "raw_lines": ["4 cloves, 2 tablespoons capers in brine", "2 cups pasta", "1 cup olives"], "multipliers": ["3", "3/2", "5/2"], "why": "H-3: HELM's name keeps words after a STOP word"},
+  {"id": "FIX:U_TBUTTER", "noun": "stew", "raw_lines": ["2 cups barley", "6 cloves and 12 peppercorns", "2 T butter"], "multipliers": ["3", "3/2", "5/2"], "why": "H-4: a learned line whose unit HELM drops"}
+ ]
+}

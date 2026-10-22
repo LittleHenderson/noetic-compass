@@ -1,0 +1,51 @@
+{
+ "authored_fixture": true,
+ "raw_by_id": {
+  "AUTHOR73:MULTI_HONEST": [
+   "2 onions, 3 carrots",
+   "4 cups broth",
+   "1 cup rice"
+  ],
+  "AUTHOR73:MULTI_PHANTOM": [
+   "4 apples, 2 peeled",
+   "1 cup sugar",
+   "2 cups flour"
+  ],
+  "AUTHOR73:OR_DANGLING": [
+   "1 can peaches or",
+   "3 cups sliced peaches",
+   "1 cup flour"
+  ],
+  "AUTHOR73:OR_DANGLING_ANSWER": [
+   "1 cup honey or",
+   "1 cup maple syrup",
+   "2 cups oats"
+  ],
+  "AUTHOR73:OR_ONE_LINE": [
+   "1/2 cup butter or margarine",
+   "2 cups flour",
+   "1 cup milk"
+  ],
+  "AUTHOR73:R2G_STOPWORD": [
+   "1 can beans in sauce",
+   "2 cups beans",
+   "1 onion"
+  ],
+  "AUTHOR73:RANOUT_AMBIG": [
+   "3 cups apples with peel",
+   "1 cup diced apples",
+   "1/2 cup sugar"
+  ],
+  "AUTHOR73:RANOUT_AMBIG_EQUAL_AMOUNT": [
+   "2 cups apples with peel",
+   "1 cup diced apples",
+   "1/2 cup sugar"
+  ],
+  "AUTHOR73:SUGAR_PAIR": [
+   "1 cup sugar",
+   "1/2 cup brown sugar",
+   "2 cups flour"
+  ]
+ },
+ "schema": "helm.r1w7.v73-scorer-path.raw-lines/1"
+}

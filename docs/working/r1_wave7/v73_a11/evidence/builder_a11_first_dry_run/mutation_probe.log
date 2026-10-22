@@ -1,0 +1,7 @@
+e_always_true RESULT 28 5 0 KILLED
+c_ignores_path RESULT 28 2 0 KILLED
+d_ignores_count RESULT 28 2 0 KILLED
+no_hook_call RESULT 28 7 40 KILLED
+k4_reads_strict RESULT 28 1 0 KILLED
+deny_list_empty RESULT 28 4 0 KILLED
+MUTANTS 6 SURVIVED 0

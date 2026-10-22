@@ -1,0 +1,11 @@
+test_1_no_wrong_lesson_or_answer_under_v73 (__main__.T3V73.test_1_no_wrong_lesson_or_answer_under_v73) ... ok
+test_2_exempted_exactly_m1_p1_every_copy_and_arm (__main__.T3V73.test_2_exempted_exactly_m1_p1_every_copy_and_arm) ... ok
+test_3_phantoms_c1_c2_c3_never_exempted (__main__.T3V73.test_3_phantoms_c1_c2_c3_never_exempted) ... ok
+test_4_v72_exercises_the_fault_on_each_arm (__main__.T3V73.test_4_v72_exercises_the_fault_on_each_arm) ... ok
+test_5_stop_rule_does_not_fire_and_pass_condition_holds (__main__.T3V73.test_5_stop_rule_does_not_fire_and_pass_condition_holds) ... ok
+test_plumbing_three_cuts_ran_through_the_package (__main__.T3V73.test_plumbing_three_cuts_ran_through_the_package) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 37.491s
+
+OK

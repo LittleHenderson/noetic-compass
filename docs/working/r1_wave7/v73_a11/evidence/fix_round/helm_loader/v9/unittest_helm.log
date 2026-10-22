@@ -1,0 +1,339 @@
+
+RB-W1 parameter table (every parameter class and its job)
+class                                            learned   count  job
+requirement coefficient a[recipe][ingredient]    True          8  how much of that ingredient (base unit of its kind) one unit of the product needs
+unit factor                                      False         9  convert a stated amount exactly into its kind's base unit (one conversion each)
+  coefficients filled 7 of 8 slots with a job; per recipe: {"bread": {"filled": 1, "ingredients": 2}, "gingerbread": {"filled": 6, "ingredients": 6}}
+  TSP_PER_TBSP    = 3                          1 tablespoon = 3 teaspoons (US)
+  TBSP_PER_CUP    = 16                         1 cup = 16 tablespoons (US)
+  CUP_PER_PINT    = 2                          1 pint = 2 cups (US)
+  PINT_PER_QUART  = 2                          1 quart = 2 pints (US)
+  GILL_PER_PINT   = 4                          1 pint = 4 gills (US)
+  ML_PER_TSP      = 4.92892159375              1 US teaspoon = 4.92892159375 mL (exact by definition)
+  G_PER_OZ        = 28.349523125               1 avoirdupois ounce = 28.349523125 g (exact by definition)
+  OZ_PER_LB       = 16                         1 pound = 16 ounces
+  G_PER_KG        = 1000                       1 kilogram = 1000 grams
+  structure (not learned numbers): product names, ingredient names, recipe supports, unit kinds, MAX_INGREDIENTS = 10
+  records (not parameters; the answer path never reads them): the witness log, and each recipe's saved admitted batches, which the memory check re-reads before admitting a new batch
+  no other learned numbers exist (checked by walking the learned state)
+
+
+[helm_triad] parameter_count: {"learned_parameters": 0, "stored_values": 3, "stored_value_ceiling": 28, "note": "stored values are stated INPUTS with sources, not parameters; each is a 2-bit stage symbol"}
+
+[helm_cas_address] rules: {
+ "FND-1": "the record names its Foundation (F1..F7 or a canonical Drive name) in a foundation / drive / filed_at / desire / F field",
+ "FND-2": "an item the Unity Eye wrote is F1 (the owner's ruling names the Eye the F1 watcher)",
+ "DOM-1": "a status / reason / code word maps through DOM_1_TABLE (sub-rules a..e)",
+ "DOM-2": "an item kind maps through DOM_2_TABLE",
+ "DOM-3": "a trace row's station maps through DOM_3_TABLE (brain and S6 next rows go by their word)",
+ "CELL-1": "Foundation x Domain when both are set",
+ "REG-1a": "a faces sentence or a purpose clause carries f",
+ "REG-1b": "a plan or a rule that fired carries A",
+ "REG-1c": "a stock or batch line carries E",
+ "REG-1d": "a vision-level item (ruling, roadmap) carries T",
+ "PATH-1": "only a planner-named RPM chain node (A0, D1..D7, W1..W7, P1..P7) in a pathway / pathway_node field",
+ "ELE-1": "only a Noetic the record already names (noetic field, or ^n in the station) x a set Domain"
+}
+
+[helm_cas_address] live-loop fixture histogram: {"items": 141, "grid_28": {"F1P": 0, "F1C": 0, "F1E": 0, "F1O": 0, "F2P": 0, "F2C": 0, "F2E": 0, "F2O": 0, "F3P": 0, "F3C": 0, "F3E": 0, "F3O": 0, "F4P": 0, "F4C": 0, "F4E": 0, "F4O": 0, "F5P": 0, "F5C": 0, "F5E": 0, "F5O": 0, "F6P": 0, "F6C": 0, "F6E": 0, "F6O": 0, "F7P": 0, "F7C": 0, "F7E": 0, "F7O": 0}, "tagged": {"foundation": 0, "domain": 115, "cell": 0, "register": 33, "pathway": 0, "element": 23}, "untagged": {"foundation": 141, "domain": 26, "cell": 141, "register": 108, "pathway": 141, "element": 118}, "cells_with_8_or_more": 0, "floor_20_of_28": "STOP_NOT_EXERCISED"}
+
+[stage 1c] live loop with notes: ["user", "CCE skin", "English in", "S6 next", "user", "English in (wide)", "S0 atlas head", "S1 trigger ^8", "S2 Bias ^5", "S3 arrival ^9", "S4 operating point", "S5 RPM link", "CCE skin", "brain", "store", "S6 next"]
+test_floats_ranges_and_junk_refused (test_helm_brain_wide.A_ExactNumbers.test_floats_ranges_and_junk_refused) ... ok
+test_parse_forms (test_helm_brain_wide.A_ExactNumbers.test_parse_forms) ... ok
+test_round_trip_every_small_fraction (test_helm_brain_wide.A_ExactNumbers.test_round_trip_every_small_fraction) ... ok
+test_thirds_are_stored_exactly_not_refused (test_helm_brain_wide.A_ExactNumbers.test_thirds_are_stored_exactly_not_refused)
+The licensed brain refuses 1/3 (AMOUNT_NOT_BINARY64_EXACT); the wide brain keeps it exact. ... ok
+test_exact_conversions (test_helm_brain_wide.B_UnitTable.test_exact_conversions) ... ok
+test_nine_named_factors_each_with_a_job (test_helm_brain_wide.B_UnitTable.test_nine_named_factors_each_with_a_job) ... ok
+test_no_conversion_across_kinds (test_helm_brain_wide.B_UnitTable.test_no_conversion_across_kinds) ... ok
+test_twenty_units_from_the_survey (test_helm_brain_wide.B_UnitTable.test_twenty_units_from_the_survey) ... ok
+test_answer_after_learning (test_helm_brain_wide.C_OneLessonPerIngredient.test_answer_after_learning) ... ok
+test_lessons_in_any_order_give_the_same_book (test_helm_brain_wide.C_OneLessonPerIngredient.test_lessons_in_any_order_give_the_same_book) ... ok
+test_made_more_than_one (test_helm_brain_wide.C_OneLessonPerIngredient.test_made_more_than_one) ... ok
+test_replay_rebuilds_the_same_book (test_helm_brain_wide.C_OneLessonPerIngredient.test_replay_rebuilds_the_same_book) ... ok
+test_six_ingredients_all_exact (test_helm_brain_wide.C_OneLessonPerIngredient.test_six_ingredients_all_exact) ... ok
+test_ten_ingredients_allowed (test_helm_brain_wide.C_OneLessonPerIngredient.test_ten_ingredients_allowed) ... ok
+test_batch_must_match_the_recipe (test_helm_brain_wide.D_Refusals.test_batch_must_match_the_recipe) ... ok
+test_conflict (test_helm_brain_wide.D_Refusals.test_conflict) ... ok
+test_memory_check_refuses_a_lesson_that_breaks_an_earlier_one (test_helm_brain_wide.D_Refusals.test_memory_check_refuses_a_lesson_that_breaks_an_earlier_one) ... ok
+test_nothing_ran_out (test_helm_brain_wide.D_Refusals.test_nothing_ran_out) ... ok
+test_tie_the_brain_detects_itself (test_helm_brain_wide.D_Refusals.test_tie_the_brain_detects_itself)
+The user says only flour ran out, but egg (already learned) would have run out at the same moment. ... ok
+test_too_many_ingredients (test_helm_brain_wide.D_Refusals.test_too_many_ingredients) ... ok
+test_two_ran_out_at_once (test_helm_brain_wide.D_Refusals.test_two_ran_out_at_once) ... ok
+test_unit_not_in_table (test_helm_brain_wide.D_Refusals.test_unit_not_in_table) ... ok
+test_unit_of_another_kind (test_helm_brain_wide.D_Refusals.test_unit_of_another_kind) ... ok
+test_zero_made_and_unknown_ran_out (test_helm_brain_wide.D_Refusals.test_zero_made_and_unknown_ran_out) ... ok
+test_tie_and_zero (test_helm_brain_wide.E_Undetermined.test_tie_and_zero) ... ok
+test_unknown_product_and_missing_stock (test_helm_brain_wide.E_Undetermined.test_unknown_product_and_missing_stock) ... ok
+test_unlearned_ingredients (test_helm_brain_wide.E_Undetermined.test_unlearned_ingredients) ... ok
+test_table_printed_and_no_other_learned_numbers (test_helm_brain_wide.F_ParameterAccounting.test_table_printed_and_no_other_learned_numbers) ... ok
+test_witness_log_is_a_record_not_a_parameter (test_helm_brain_wide.F_ParameterAccounting.test_witness_log_is_a_record_not_a_parameter) ... ok
+test_live_loop_learns_six_and_answers_in_thirds (test_helm_brain_wide.G_EndToEnd.test_live_loop_learns_six_and_answers_in_thirds) ... ok
+test_live_loop_undetermined_asks (test_helm_brain_wide.G_EndToEnd.test_live_loop_undetermined_asks) ... ok
+test_reader_lines (test_helm_brain_wide.G_EndToEnd.test_reader_lines) ... ok
+test_default_loop_runs_the_wide_brain_with_the_licensed_brain_reading_first (test_helm_brain_wide.H_SwitchOff.test_default_loop_runs_the_wide_brain_with_the_licensed_brain_reading_first) ... ok
+test_explicit_false_wins_over_the_default (test_helm_brain_wide.H_SwitchOff.test_explicit_false_wins_over_the_default) ... ok
+test_licensed_files_untouched (test_helm_brain_wide.H_SwitchOff.test_licensed_files_untouched)
+helm_brain_canonical.py and the reader are byte-identical to the thread branch this build started from. ... skipped 'base commit not reachable in this checkout'
+test_off_loop_uses_the_licensed_brain_and_never_loads_the_wide_modules (test_helm_brain_wide.H_SwitchOff.test_off_loop_uses_the_licensed_brain_and_never_loads_the_wide_modules) ... ok
+test_switch_default_on_since_the_owner_ruling (test_helm_brain_wide.H_SwitchOff.test_switch_default_on_since_the_owner_ruling) ... ok
+test_comma_and_is_one_separator (test_helm_brain_wide.I_V2ReaderFixes.test_comma_and_is_one_separator) ... ok
+test_hyphenated_and_qualified_units (test_helm_brain_wide.I_V2ReaderFixes.test_hyphenated_and_qualified_units) ... ok
+test_more_note_words_and_emphasis (test_helm_brain_wide.I_V2ReaderFixes.test_more_note_words_and_emphasis) ... ok
+test_parenthetical_asides_are_not_names_or_amounts (test_helm_brain_wide.I_V2ReaderFixes.test_parenthetical_asides_are_not_names_or_amounts) ... ok
+test_product_made_of_a_size_word (test_helm_brain_wide.I_V2ReaderFixes.test_product_made_of_a_size_word) ... ok
+test_ran_out_name_resolved_against_the_batch (test_helm_brain_wide.I_V2ReaderFixes.test_ran_out_name_resolved_against_the_batch) ... ok
+test_unit_word_alone_is_the_name (test_helm_brain_wide.I_V2ReaderFixes.test_unit_word_alone_is_the_name) ... ok
+test_a_bread_the_licensed_brain_cannot_answer_goes_to_the_wide_book (test_helm_brain_wide.J_V2Routing.test_a_bread_the_licensed_brain_cannot_answer_goes_to_the_wide_book) ... ok
+test_licensed_turns_identical_with_the_switch_on (test_helm_brain_wide.J_V2Routing.test_licensed_turns_identical_with_the_switch_on) ... ok
+test_unknown_ingredient_stock_stays_a_question_when_the_wide_book_does_not_hold_it (test_helm_brain_wide.J_V2Routing.test_unknown_ingredient_stock_stays_a_question_when_the_wide_book_does_not_hold_it) ... ok
+test_a_comma_or_and_without_a_new_amount_stays_in_its_line (test_helm_brain_wide.K_V3DishNamesAndLines.test_a_comma_or_and_without_a_new_amount_stays_in_its_line) ... ok
+test_dish_name_variants_bind_to_one_dish (test_helm_brain_wide.K_V3DishNamesAndLines.test_dish_name_variants_bind_to_one_dish) ... ok
+test_live_loop_dish_name_variants_teach_and_answer_one_dish (test_helm_brain_wide.K_V3DishNamesAndLines.test_live_loop_dish_name_variants_teach_and_answer_one_dish) ... ok
+test_missing_dish_name_is_asked_once_then_accepted (test_helm_brain_wide.K_V3DishNamesAndLines.test_missing_dish_name_is_asked_once_then_accepted) ... ok
+test_ran_out_phrase_found_inside_exactly_one_line (test_helm_brain_wide.K_V3DishNamesAndLines.test_ran_out_phrase_found_inside_exactly_one_line) ... ok
+test_ten_whole_number_ingredients_with_equal_amounts (test_helm_brain_wide.K_V3DishNamesAndLines.test_ten_whole_number_ingredients_with_equal_amounts)
+10 ingredients, every one 2 (a whole number), the others at twice theirs in each lesson: all ten lessons ... ok
+test_two_amounts_for_one_ingredient_are_asked_never_summed (test_helm_brain_wide.K_V3DishNamesAndLines.test_two_amounts_for_one_ingredient_are_asked_never_summed) ... ok
+test_01_canonical_brain_is_station_s0 (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_01_canonical_brain_is_station_s0) ... ok
+test_02_cookie_brain_is_demo_standin_never_default (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_02_cookie_brain_is_demo_standin_never_default) ... ok
+test_03_torch_only_parts_not_imported (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_03_torch_only_parts_not_imported) ... ok
+test_04_no_invented_quantity (test_helm_end_to_end_loop.TestCanonicalBrainWiring.test_04_no_invented_quantity) ... ok
+test_08_absent_ingredient_is_undetermined (test_helm_end_to_end_loop.TestCircuit.test_08_absent_ingredient_is_undetermined) ... ok
+test_09_real_gate_called_with_real_request (test_helm_end_to_end_loop.TestCircuit.test_09_real_gate_called_with_real_request) ... ok
+test_10_success_writes_only_after_gate_and_receipt (test_helm_end_to_end_loop.TestCircuit.test_10_success_writes_only_after_gate_and_receipt) ... ok
+test_11_repair_child_glues_actual_result (test_helm_end_to_end_loop.TestCircuit.test_11_repair_child_glues_actual_result) ... ok
+test_12_repair_opens_on_real_detected_failure (test_helm_end_to_end_loop.TestCircuit.test_12_repair_opens_on_real_detected_failure) ... ok
+test_14_unparseable_english_clarifies_with_zero_writes (test_helm_end_to_end_loop.TestEdges.test_14_unparseable_english_clarifies_with_zero_writes) ... ok
+test_15_stated_recipe_not_taken (test_helm_end_to_end_loop.TestEdges.test_15_stated_recipe_not_taken) ... ok
+test_16_pantry_read_writes_nothing (test_helm_end_to_end_loop.TestEdges.test_16_pantry_read_writes_nothing) ... ok
+test_17_kept_paths_and_voice (test_helm_end_to_end_loop.TestEdges.test_17_kept_paths_and_voice) ... ok
+test_18_live_trace (test_helm_end_to_end_loop.TestEdges.test_18_live_trace) ... ok
+test_05_round_trip_checked (test_helm_end_to_end_loop.TestRoundTrip.test_05_round_trip_checked) ... ok
+test_06_round_trip_mismatch_refuses_with_zero_writes (test_helm_end_to_end_loop.TestRoundTrip.test_06_round_trip_mismatch_refuses_with_zero_writes) ... ok
+test_07_missing_checker_is_not_verified (test_helm_end_to_end_loop.TestRoundTrip.test_07_missing_checker_is_not_verified) ... ok
+test_13_written_rule (test_helm_end_to_end_loop.TestValveRule.test_13_written_rule) ... ok
+test_no_cas_tokens_in_any_everyday_reply (test_helm_english_in.TestChatEndToEnd.test_no_cas_tokens_in_any_everyday_reply) ... ok
+test_side_parser_is_gone (test_helm_english_in.TestChatEndToEnd.test_side_parser_is_gone) ... ok
+test_free_english_gives_the_same_receipts_as_the_checked_form (test_helm_english_in.TestLoopIntegration.test_free_english_gives_the_same_receipts_as_the_checked_form) ... ok
+test_reader_question_writes_nothing (test_helm_english_in.TestLoopIntegration.test_reader_question_writes_nothing) ... ok
+test_said_gone_is_never_glued_back_from_the_store (test_helm_english_in.TestLoopIntegration.test_said_gone_is_never_glued_back_from_the_store) ... ok
+test_trace_records_the_english_station (test_helm_english_in.TestLoopIntegration.test_trace_records_the_english_station) ... ok
+test_undetermined_for_missing_water_then_success (test_helm_english_in.TestLoopIntegration.test_undetermined_for_missing_water_then_success) ... ok
+test_witnessed_batch_in_english_teaches_through_the_brains_writer (test_helm_english_in.TestLoopIntegration.test_witnessed_batch_in_english_teaches_through_the_brains_writer) ... ok
+test_in_the_chat (test_helm_english_in.TestMoodFactClash.test_in_the_chat) ... ok
+test_no_question_on_success_or_without_a_mood_word (test_helm_english_in.TestMoodFactClash.test_no_question_on_success_or_without_a_mood_word) ... ok
+test_question_added_on_a_refusal_and_facts_unchanged (test_helm_english_in.TestMoodFactClash.test_question_added_on_a_refusal_and_facts_unchanged) ... ok
+test_ten_word_list_and_label (test_helm_english_in.TestMoodFactClash.test_ten_word_list_and_label) ... ok
+test_amounts_that_are_not_facts_are_asked (test_helm_english_in.TestNoNewFacts.test_amounts_that_are_not_facts_are_asked) ... ok
+test_every_amount_read_is_a_number_the_user_said (test_helm_english_in.TestNoNewFacts.test_every_amount_read_is_a_number_the_user_said) ... ok
+test_canonical_colloquialisms_still_bind (test_helm_english_in.TestNoeticWordsLexiconV3.test_canonical_colloquialisms_still_bind) ... ok
+test_cube_store_turn_valence (test_helm_english_in.TestNoeticWordsLexiconV3.test_cube_store_turn_valence) ... ok
+test_forbidden_sentences_are_not_stock_facts_either (test_helm_english_in.TestNoeticWordsLexiconV3.test_forbidden_sentences_are_not_stock_facts_either) ... ok
+test_forbidden_sentences_bind_no_noetic (test_helm_english_in.TestNoeticWordsLexiconV3.test_forbidden_sentences_bind_no_noetic) ... ok
+test_switch_default_on (test_helm_english_in.TestNoeticWordsLexiconV3.test_switch_default_on) ... ok
+test_switch_off_restores_the_frozen_path (test_helm_english_in.TestNoeticWordsLexiconV3.test_switch_off_restores_the_frozen_path) ... ok
+test_absent (test_helm_english_in.TestReader.test_absent) ... ok
+test_bake_a_batch_uses_the_conversation_topic_or_asks (test_helm_english_in.TestReader.test_bake_a_batch_uses_the_conversation_topic_or_asks) ... ok
+test_not_mine (test_helm_english_in.TestReader.test_not_mine) ... ok
+test_stock_and_absence_and_topic_in_one_turn (test_helm_english_in.TestReader.test_stock_and_absence_and_topic_in_one_turn) ... ok
+test_stock_list (test_helm_english_in.TestReader.test_stock_list) ... ok
+test_stock_with_unit_words_kept (test_helm_english_in.TestReader.test_stock_with_unit_words_kept) ... ok
+test_topic (test_helm_english_in.TestReader.test_topic) ... ok
+test_witnessed_batch (test_helm_english_in.TestReader.test_witnessed_batch) ... ok
+test_witnessed_batch_missing_parts_are_asked (test_helm_english_in.TestReader.test_witnessed_batch_missing_parts_are_asked) ... ok
+test_contradictions_and_two_products (test_helm_english_in.TestReaderRefuses.test_contradictions_and_two_products) ... ok
+test_conversion_refused (test_helm_english_in.TestReaderRefuses.test_conversion_refused) ... ok
+test_no_number (test_helm_english_in.TestReaderRefuses.test_no_number) ... ok
+test_unknown_ingredient (test_helm_english_in.TestReaderRefuses.test_unknown_ingredient) ... ok
+test_unknown_product (test_helm_english_in.TestReaderRefuses.test_unknown_product) ... ok
+test_a_reading_that_does_not_round_trip_is_a_question (test_helm_english_in.TestRoundTrip.test_a_reading_that_does_not_round_trip_is_a_question) ... ok
+test_borrowed_word_lists (test_helm_english_in.TestRoundTrip.test_borrowed_word_lists) ... ok
+test_every_reading_passes_the_loops_round_trip_check (test_helm_english_in.TestRoundTrip.test_every_reading_passes_the_loops_round_trip_check) ... ok
+test_asks_write_nothing_and_say_no_cas_tokens (test_helm_english_in_stock_frame.TestAskCases.test_asks_write_nothing_and_say_no_cas_tokens) ... ok
+test_codes (test_helm_english_in_stock_frame.TestAskCases.test_codes) ... ok
+test_question_wording (test_helm_english_in_stock_frame.TestAskCases.test_question_wording) ... ok
+test_two_amounts_for_one_ingredient_is_still_a_conversion_question (test_helm_english_in_stock_frame.TestAskCases.test_two_amounts_for_one_ingredient_is_still_a_conversion_question) ... ok
+test_plain_line_once (test_helm_english_in_stock_frame.TestChatNothingToSave.test_plain_line_once) ... ok
+test_a_record_without_its_frame_fails_the_check (test_helm_english_in_stock_frame.TestFrameForm.test_a_record_without_its_frame_fails_the_check) ... ok
+test_frame_form_renders_back (test_helm_english_in_stock_frame.TestFrameForm.test_frame_form_renders_back) ... ok
+test_the_loop_refuses_a_reading_whose_frames_do_not_check (test_helm_english_in_stock_frame.TestFrameForm.test_the_loop_refuses_a_reading_whose_frames_do_not_check) ... ok
+test_trace_carries_the_frame_form (test_helm_english_in_stock_frame.TestFrameForm.test_trace_carries_the_frame_form) ... ok
+test_reader_keeps_every_framed_record (test_helm_english_in_stock_frame.TestFramedStockStillWrites.test_reader_keeps_every_framed_record) ... ok
+test_stock_with_a_topic (test_helm_english_in_stock_frame.TestFramedStockStillWrites.test_stock_with_a_topic) ... ok
+test_the_loop_writes_them (test_helm_english_in_stock_frame.TestFramedStockStillWrites.test_the_loop_writes_them) ... ok
+test_class_sizes (test_helm_english_in_stock_frame.TestNoFrameWritesNothing.test_class_sizes) ... ok
+test_not_about_our_kitchen_is_nothing_to_save (test_helm_english_in_stock_frame.TestNoFrameWritesNothing.test_not_about_our_kitchen_is_nothing_to_save) ... ok
+test_out_of_the_water_is_not_out_of_water (test_helm_english_in_stock_frame.TestNoFrameWritesNothing.test_out_of_the_water_is_not_out_of_water) ... ok
+test_reader_reads_no_stock_and_no_absence (test_helm_english_in_stock_frame.TestNoFrameWritesNothing.test_reader_reads_no_stock_and_no_absence) ... ok
+test_the_loop_writes_no_cube (test_helm_english_in_stock_frame.TestNoFrameWritesNothing.test_the_loop_writes_no_cube) ... ok
+test_chat_speaks_recipe_receipts_through_the_voice (test_helm_voice.LoopAndChatTests.test_chat_speaks_recipe_receipts_through_the_voice) ... ok
+test_receipt_from_loop_result (test_helm_voice.LoopAndChatTests.test_receipt_from_loop_result) ... ok
+test_voice_speaks_the_wired_loop_receipts (test_helm_voice.LoopAndChatTests.test_voice_speaks_the_wired_loop_receipts) ... ok
+test_at_least_eight_per_situation_and_registers_tagged (test_helm_voice.PhrasebookTests.test_at_least_eight_per_situation_and_registers_tagged) ... ok
+test_every_phrasing_and_tail_passes_the_guard_when_eligible (test_helm_voice.PhrasebookTests.test_every_phrasing_and_tail_passes_the_guard_when_eligible) ... ok
+test_no_cas_tokens_anywhere_in_the_phrasebook (test_helm_voice.PhrasebookTests.test_no_cas_tokens_anywhere_in_the_phrasebook) ... ok
+test_plain_templates_pass_the_guard (test_helm_voice.PhrasebookTests.test_plain_templates_pass_the_guard) ... ok
+test_sources_cited (test_helm_voice.PhrasebookTests.test_sources_cited) ... ok
+test_deterministic_for_a_fresh_conversation (test_helm_voice.WriterTests.test_deterministic_for_a_fresh_conversation) ... ok
+test_each_situation_renders_one_to_three_clean_sentences (test_helm_voice.WriterTests.test_each_situation_renders_one_to_three_clean_sentences) ... ok
+test_earlier_facts_reused_with_again_and_pronouns (test_helm_voice.WriterTests.test_earlier_facts_reused_with_again_and_pronouns) ... ok
+test_guard_refuses_an_invented_fact_and_uses_the_plain_template (test_helm_voice.WriterTests.test_guard_refuses_an_invented_fact_and_uses_the_plain_template) ... ok
+test_never_the_same_sentence_twice_in_a_row_and_seed_saved (test_helm_voice.WriterTests.test_never_the_same_sentence_twice_in_a_row_and_seed_saved) ... ok
+test_no_product_echo_when_unit_is_the_product (test_helm_voice.WriterTests.test_no_product_echo_when_unit_is_the_product) ... ok
+test_reading_grade_is_sane (test_helm_voice.WriterTests.test_reading_grade_is_sane) ... ok
+test_register_choice_and_precision (test_helm_voice.WriterTests.test_register_choice_and_precision) ... ok
+test_technical_view_only_when_asked (test_helm_voice.WriterTests.test_technical_view_only_when_asked) ... ok
+test_three_dialogue_acts (test_helm_voice.WriterTests.test_three_dialogue_acts) ... ok
+test_users_own_words_reused_only_when_the_receipt_confirms_them (test_helm_voice.WriterTests.test_users_own_words_reused_only_when_the_receipt_confirms_them) ... ok
+test_validate_receipt (test_helm_voice.WriterTests.test_validate_receipt) ... ok
+test_variety_uses_more_than_one_phrasing (test_helm_voice.WriterTests.test_variety_uses_more_than_one_phrasing) ... ok
+test_verify_catches_numbers_names_dropped_facts_and_wrong_outcomes (test_helm_voice.WriterTests.test_verify_catches_numbers_names_dropped_facts_and_wrong_outcomes) ... ok
+test_cue_word_without_a_row_asks (test_helm_faces_in.TestFacesReader.test_cue_word_without_a_row_asks) ... ok
+test_deterministic_and_pure (test_helm_faces_in.TestFacesReader.test_deterministic_and_pure) ... ok
+test_every_lexicon_row_fires_on_its_own_example (test_helm_faces_in.TestFacesReader.test_every_lexicon_row_fires_on_its_own_example) ... ok
+test_ingredient_purpose_absent (test_helm_faces_in.TestFacesReader.test_ingredient_purpose_absent) ... ok
+test_lexicon_rows_carry_sources_and_one_scale_stages (test_helm_faces_in.TestFacesReader.test_lexicon_rows_carry_sources_and_one_scale_stages) ... ok
+test_negation_is_not_taken (test_helm_faces_in.TestFacesReader.test_negation_is_not_taken) ... ok
+test_no_face_returns_text_unchanged (test_helm_faces_in.TestFacesReader.test_no_face_returns_text_unchanged) ... ok
+test_only_known_names (test_helm_faces_in.TestFacesReader.test_only_known_names) ... ok
+test_owner_example_wisdom_rising_and_stock_kept (test_helm_faces_in.TestFacesReader.test_owner_example_wisdom_rising_and_stock_kept) ... ok
+test_power_waning_alone_leaves_no_remainder (test_helm_faces_in.TestFacesReader.test_power_waning_alone_leaves_no_remainder) ... ok
+test_pronoun_needs_exactly_one_named_ingredient (test_helm_faces_in.TestFacesReader.test_pronoun_needs_exactly_one_named_ingredient) ... ok
+test_question_is_never_a_face (test_helm_faces_in.TestFacesReader.test_question_is_never_a_face) ... ok
+test_recipe_purpose_absent (test_helm_faces_in.TestFacesReader.test_recipe_purpose_absent) ... ok
+test_say_face_has_no_cas_words (test_helm_faces_in.TestFacesReader.test_say_face_has_no_cas_words) ... ok
+test_stock_list_with_face_keeps_every_stock_clause (test_helm_faces_in.TestFacesReader.test_stock_list_with_face_keeps_every_stock_clause) ... ok
+test_two_faces_two_ingredients (test_helm_faces_in.TestFacesReader.test_two_faces_two_ingredients) ... ok
+test_01_default_off_passes_through (test_helm_triad.TestTriadAdapter.test_01_default_off_passes_through) ... ok
+test_02_peak_reproduces_brain_exactly (test_helm_triad.TestTriadAdapter.test_02_peak_reproduces_brain_exactly) ... ok
+test_03_starved_face_worked_example (test_helm_triad.TestTriadAdapter.test_03_starved_face_worked_example) ... ok
+test_04_planted_starved_faces_counted (test_helm_triad.TestTriadAdapter.test_04_planted_starved_faces_counted)
+Decoy rows: the starved ingredient has the MOST raw stock (by ratio), so only the faces can name it. ... ok
+test_05_recipe_purpose_door (test_helm_triad.TestTriadAdapter.test_05_recipe_purpose_door) ... ok
+test_06_wisdom_drop_without_event_refused (test_helm_triad.TestTriadAdapter.test_06_wisdom_drop_without_event_refused) ... ok
+test_07_wisdom_drop_with_storage_fault_evidence (test_helm_triad.TestTriadAdapter.test_07_wisdom_drop_with_storage_fault_evidence) ... ok
+test_08_unexplained_yield_and_correction (test_helm_triad.TestTriadAdapter.test_08_unexplained_yield_and_correction) ... ok
+test_09_receipt_on_every_write (test_helm_triad.TestTriadAdapter.test_09_receipt_on_every_write) ... ok
+test_10_reload_catches_tamper (test_helm_triad.TestTriadAdapter.test_10_reload_catches_tamper) ... ok
+test_11_absent_face_goes_to_brain_g2 (test_helm_triad.TestTriadAdapter.test_11_absent_face_goes_to_brain_g2) ... ok
+test_12_witness_converted_and_replayed (test_helm_triad.TestTriadAdapter.test_12_witness_converted_and_replayed) ... ok
+test_13_three_valued_sums (test_helm_triad.TestTriadAdapter.test_13_three_valued_sums) ... ok
+test_14_zero_learned_parameters (test_helm_triad.TestTriadAdapter.test_14_zero_learned_parameters) ... ok
+test_15_sealed_package_untouched (test_helm_triad.TestTriadAdapter.test_15_sealed_package_untouched) ... ok
+test_face_and_purpose_clauses_are_carried_never_noted (test_helm_wide_alongside.A_ClauseIsNotANote.test_face_and_purpose_clauses_are_carried_never_noted)
+v4: the whole sentence was one question. v7 (SPEC 7.109 D1): the stock is read and the clause is carried ... ok
+test_plain_lines_and_real_notes_still_read (test_helm_wide_alongside.A_ClauseIsNotANote.test_plain_lines_and_real_notes_still_read) ... ok
+test_restatement_is_stock (test_helm_wide_alongside.A_ClauseIsNotANote.test_restatement_is_stock) ... ok
+test_face_clause_never_answered_as_if_unsaid (test_helm_wide_alongside.B_LiveLoop.test_face_clause_never_answered_as_if_unsaid)
+v4: asked, nothing saved. v7 (SPEC 7.109 D3/D4): the stock is recorded, the face is stored under the wide ... ok
+test_face_held_by_the_triad_is_never_ignored (test_helm_wide_alongside.B_LiveLoop.test_face_held_by_the_triad_is_never_ignored)
+The licensed faces reader took "the flour is past its best" into the triad (Flour, Power Waning); the wide ... ok
+test_restated_in_another_kind_of_unit_asks (test_helm_wide_alongside.B_LiveLoop.test_restated_in_another_kind_of_unit_asks) ... ok
+test_restated_in_the_same_kind_converts (test_helm_wide_alongside.B_LiveLoop.test_restated_in_the_same_kind_converts) ... ok
+test_unread_restatement_withdraws_the_old_amount (test_helm_wide_alongside.B_LiveLoop.test_unread_restatement_withdraws_the_old_amount) ... ok
+test_quantities_said_on_a_wide_reading (test_helm_wide_alongside.C_ChatDoesNotCrash.test_quantities_said_on_a_wide_reading) ... ok
+test_wide_teaching_turn_in_helm_chat (test_helm_wide_alongside.C_ChatDoesNotCrash.test_wide_teaching_turn_in_helm_chat) ... ok
+test_bundle_taught_by_its_second_part_running_out_and_limiting (test_helm_wide_alongside.D_RelativeAmountIsOneBundledLine.test_bundle_taught_by_its_second_part_running_out_and_limiting)
+Truth: sugar ran out in batch 3, so sugar is 4 tsp / 4 = 1 tsp per biscuit and baking powder is at most ... ok
+test_fully_taught_recipe_with_a_relative_line_is_answered (test_helm_wide_alongside.D_RelativeAmountIsOneBundledLine.test_fully_taught_recipe_with_a_relative_line_is_answered) ... ok
+test_reader_asks_on_relative_amounts_it_cannot_hold (test_helm_wide_alongside.D_RelativeAmountIsOneBundledLine.test_reader_asks_on_relative_amounts_it_cannot_hold) ... ok
+test_reader_bundles_each_relative_form (test_helm_wide_alongside.D_RelativeAmountIsOneBundledLine.test_reader_bundles_each_relative_form) ... ok
+test_stock_that_names_the_parts_another_way_is_never_answered (test_helm_wide_alongside.D_RelativeAmountIsOneBundledLine.test_stock_that_names_the_parts_another_way_is_never_answered) ... ok
+test_chat_answers_a_wide_recipe_plainly_and_exactly (test_helm_wide_alongside.E_ChatRoutesAndSpeaksWideLines.test_chat_answers_a_wide_recipe_plainly_and_exactly) ... ok
+test_voice_says_thirds_exactly (test_helm_wide_alongside.E_ChatRoutesAndSpeaksWideLines.test_voice_says_thirds_exactly) ... ok
+test_wants_turn_consults_the_wide_reader_when_the_switch_is_on (test_helm_wide_alongside.E_ChatRoutesAndSpeaksWideLines.test_wants_turn_consults_the_wide_reader_when_the_switch_is_on) ... ok
+test_alternative_binds_the_first_name (test_helm_wide_alongside.F_SecondPracticeRound.test_alternative_binds_the_first_name) ... ok
+test_kitchen_talk_never_runs_the_tool_engine (test_helm_wide_alongside.F_SecondPracticeRound.test_kitchen_talk_never_runs_the_tool_engine) ... ok
+test_question_forms_and_greeting_are_read (test_helm_wide_alongside.F_SecondPracticeRound.test_question_forms_and_greeting_are_read) ... ok
+test_run_out_tail_is_a_question_not_a_name (test_helm_wide_alongside.F_SecondPracticeRound.test_run_out_tail_is_a_question_not_a_name) ... ok
+test_chat_answers_the_same_recipe (test_helm_wide_alongside.G_ConditionPiecesAreNotIngredients.test_chat_answers_the_same_recipe) ... ok
+test_loop_answers_a_recipe_taught_with_a_temperature_in_every_line (test_helm_wide_alongside.G_ConditionPiecesAreNotIngredients.test_loop_answers_a_recipe_taught_with_a_temperature_in_every_line) ... ok
+test_reader_keeps_a_condition_piece_as_a_note_of_the_line_before (test_helm_wide_alongside.G_ConditionPiecesAreNotIngredients.test_reader_keeps_a_condition_piece_as_a_note_of_the_line_before) ... ok
+test_canonical_names_and_counts (test_helm_cas_address.A_Canon.test_canonical_names_and_counts) ... ok
+test_every_rule_has_a_sentence (test_helm_cas_address.A_Canon.test_every_rule_has_a_sentence) ... ok
+test_cell_1_needs_both (test_helm_cas_address.B_Rules.test_cell_1_needs_both) ... ok
+test_dom_1_words (test_helm_cas_address.B_Rules.test_dom_1_words) ... ok
+test_dom_2_kinds_and_dom_3_stations (test_helm_cas_address.B_Rules.test_dom_2_kinds_and_dom_3_stations) ... ok
+test_ele_1_only_a_named_noetic_with_a_domain (test_helm_cas_address.B_Rules.test_ele_1_only_a_named_noetic_with_a_domain) ... ok
+test_filed_item_and_histogram (test_helm_cas_address.B_Rules.test_filed_item_and_histogram) ... ok
+test_fnd_1_fnd_2 (test_helm_cas_address.B_Rules.test_fnd_1_fnd_2) ... ok
+test_nothing_known_is_all_untagged (test_helm_cas_address.B_Rules.test_nothing_known_is_all_untagged) ... ok
+test_path_1_only_a_named_node (test_helm_cas_address.B_Rules.test_path_1_only_a_named_node) ... ok
+test_reg_1 (test_helm_cas_address.B_Rules.test_reg_1) ... ok
+test_without_address_strips_nested_and_copies (test_helm_cas_address.B_Rules.test_without_address_strips_nested_and_copies) ... ok
+test_every_record_stamped_when_on (test_helm_cas_address.C_LoopStamps.test_every_record_stamped_when_on) ... ok
+test_off_is_byte_identical_to_the_pre_change_code (test_helm_cas_address.C_LoopStamps.test_off_is_byte_identical_to_the_pre_change_code) ... ok
+test_receipt_hash_identical_on_and_off (test_helm_cas_address.C_LoopStamps.test_receipt_hash_identical_on_and_off) ... ok
+test_switch_default_on_and_off_words (test_helm_cas_address.C_LoopStamps.test_switch_default_on_and_off_words) ... ok
+test_tags_are_not_read_by_the_loop_or_the_wide_turn (test_helm_cas_address.C_LoopStamps.test_tags_are_not_read_by_the_loop_or_the_wide_turn) ... ok
+test_default_off_and_words (test_helm_units_note.A_SwitchOffIsReaderV5.test_default_off_and_words) ... ok
+test_off_tables_and_questions_unchanged (test_helm_units_note.A_SwitchOffIsReaderV5.test_off_tables_and_questions_unchanged) ... ok
+test_exact_conversions (test_helm_units_note.B_WidenedUnits.test_exact_conversions) ... ok
+test_note_unit_words_partition_the_other_unit_words (test_helm_units_note.B_WidenedUnits.test_note_unit_words_partition_the_other_unit_words) ... ok
+test_six_units_each_from_exact_programmed_factors (test_helm_units_note.B_WidenedUnits.test_six_units_each_from_exact_programmed_factors) ... ok
+test_unit_words (test_helm_units_note.B_WidenedUnits.test_unit_words) ... ok
+test_lines_with_no_exact_amount_are_present_no_amount (test_helm_units_note.C_NoteLinesReader.test_lines_with_no_exact_amount_are_present_no_amount) ... ok
+test_note_name_rules (test_helm_units_note.C_NoteLinesReader.test_note_name_rules) ... ok
+test_own_count_units_stay_exact_counts_on_and_off (test_helm_units_note.C_NoteLinesReader.test_own_count_units_stay_exact_counts_on_and_off)
+Coordinator correction 2026-10-20: "2 cans tomatoes" is an EXACT count of cans today and stays one ON. The set ... ok
+test_what_stays_a_question (test_helm_units_note.C_NoteLinesReader.test_what_stays_a_question) ... ok
+test_widened_units_read (test_helm_units_note.C_NoteLinesReader.test_widened_units_read) ... ok
+test_a_note_cannot_be_what_ran_out (test_helm_units_note.D_NoteLinesBrain.test_a_note_cannot_be_what_ran_out) ... ok
+test_notes_are_present_never_a_requirement (test_helm_units_note.D_NoteLinesBrain.test_notes_are_present_never_a_requirement) ... ok
+test_notes_count_toward_the_ingredient_limit_and_add_up_across_batches (test_helm_units_note.D_NoteLinesBrain.test_notes_count_toward_the_ingredient_limit_and_add_up_across_batches) ... ok
+test_conversation_with_notes (test_helm_units_note.E_LiveLoop.test_conversation_with_notes) ... ok
+test_pinned_files_import_helm_test_pins_and_do_not_hash_records_themselves (test_helm_pin_hygiene.A_EveryPinGoesThroughTheNeutralCanonicalizer.test_pinned_files_import_helm_test_pins_and_do_not_hash_records_themselves) ... ok
+test_registry_of_record_pins (test_helm_pin_hygiene.A_EveryPinGoesThroughTheNeutralCanonicalizer.test_registry_of_record_pins)
+The record pins known today; a new one must be added here on purpose (and go through helm_test_pins). ... ok
+test_cas_address_fixture_is_machine_neutral (test_helm_pin_hygiene.B_PinnedFixtureCarriesNoMachineMaterial.test_cas_address_fixture_is_machine_neutral) ... ok
+test_same_hash_from_two_session_dirs_and_two_cwds (test_helm_pin_hygiene.C_PinIsInvariantToTheMachineFolders.test_same_hash_from_two_session_dirs_and_two_cwds) ... ok
+test_same_hash_when_the_licensed_brain_folder_moves_and_is_renamed (test_helm_pin_hygiene.C_PinIsInvariantToTheMachineFolders.test_same_hash_when_the_licensed_brain_folder_moves_and_is_renamed)
+The c53 failure, reproduced and refused: the brain folder under the HOST's name and parent (.../sources/w1/HELM_R1_W1_20261015) ... ok
+test_machine_bound_leaves_are_stripped (test_helm_pin_hygiene.D_TheCanonicalizerItself.test_machine_bound_leaves_are_stripped) ... ok
+test_offending_finds_machine_words_and_home (test_helm_pin_hygiene.D_TheCanonicalizerItself.test_offending_finds_machine_words_and_home) ... ok
+test_relative_names_and_plain_text_are_untouched (test_helm_pin_hygiene.D_TheCanonicalizerItself.test_relative_names_and_plain_text_are_untouched) ... ok
+test_windows_and_posix_paths_neutralize_alike (test_helm_pin_hygiene.D_TheCanonicalizerItself.test_windows_and_posix_paths_neutralize_alike) ... ok
+test_a_broken_stock_part_still_asks (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_broken_stock_part_still_asks) ... ok
+test_a_clause_joined_by_and_is_split_too (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_clause_joined_by_and_is_split_too) ... ok
+test_a_clause_on_a_batch_sentence_is_still_a_question (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_clause_on_a_batch_sentence_is_still_a_question) ... ok
+test_a_plain_stock_sentence_carries_no_clause (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_plain_stock_sentence_carries_no_clause) ... ok
+test_stock_with_a_clause_reads_as_stock_and_carries_the_clause (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_stock_with_a_clause_reads_as_stock_and_carries_the_clause) ... ok
+test_a_longer_phrase_binds_the_held_name (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_a_longer_phrase_binds_the_held_name)
+v2.1 (the v7 seal's practice finding): the clause may say "the sifted flour" for the held "flour". ... ok
+test_not_a_face_is_none_and_a_cue_paraphrase_asks (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_not_a_face_is_none_and_a_cue_paraphrase_asks) ... ok
+test_the_longest_name_wins (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_the_longest_name_wins) ... ok
+test_two_faces_in_one_clause (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_two_faces_in_one_clause) ... ok
+test_wide_names_are_read (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_wide_names_are_read) ... ok
+test_a_face_is_stored_under_the_wide_name (test_helm_reader_gap.C_WidePathRecordsTheStockThenTheClause.test_a_face_is_stored_under_the_wide_name) ... ok
+test_an_unreadable_clause_asks_after_recording_the_stock (test_helm_reader_gap.C_WidePathRecordsTheStockThenTheClause.test_an_unreadable_clause_asks_after_recording_the_stock) ... ok
+test_not_a_face_clauses_change_nothing (test_helm_reader_gap.C_WidePathRecordsTheStockThenTheClause.test_not_a_face_clauses_change_nothing) ... ok
+test_chat_answers_with_a_face (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_chat_answers_with_a_face) ... ok
+test_ingredient_purpose_absent_asks (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_ingredient_purpose_absent_asks) ... ok
+test_no_face_stated_is_todays_answer (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_no_face_stated_is_todays_answer) ... ok
+test_power_waning_halves_the_stock (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_power_waning_halves_the_stock) ... ok
+test_recipe_purpose_absent_asks (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_recipe_purpose_absent_asks) ... ok
+test_two_faces_each_on_its_own_ingredient (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_two_faces_each_on_its_own_ingredient) ... ok
+test_wisdom_rising_quarters_the_stock (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_wisdom_rising_quarters_the_stock) ... ok
+test_a_time_phrase_alone_is_not_a_lesson (test_helm_reader_gap.E_PastTenseLessonParaphrase.test_a_time_phrase_alone_is_not_a_lesson) ... ok
+test_paraphrase_reads_as_the_canonical_lesson (test_helm_reader_gap.E_PastTenseLessonParaphrase.test_paraphrase_reads_as_the_canonical_lesson) ... ok
+test_paraphrase_teaches_the_same_coefficient (test_helm_reader_gap.E_PastTenseLessonParaphrase.test_paraphrase_teaches_the_same_coefficient) ... ok
+test_default_mode_reads_only_everyday_names (test_helm_reader_gap.F_LicensedFaceReaderUnchanged.test_default_mode_reads_only_everyday_names) ... ok
+test_face_read_on_the_licensed_recorded_path_is_applied_at_the_question (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_face_read_on_the_licensed_recorded_path_is_applied_at_the_question) ... ok
+test_longer_phrase_face_on_an_everyday_name_is_applied_never_answered_high (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_longer_phrase_face_on_an_everyday_name_is_applied_never_answered_high)
+The v7 seal's practice finding, in the everyday-name shape: a Rising face stated with a longer phrase on an ... ok
+test_not_a_face_on_the_licensed_recorded_path_changes_nothing (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_not_a_face_on_the_licensed_recorded_path_changes_nothing) ... ok
+test_unreadable_clause_on_the_licensed_recorded_path_is_asked_at_the_question (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_unreadable_clause_on_the_licensed_recorded_path_is_asked_at_the_question) ... ok
+test_plural_and_spelling_forms_reach_the_held_name (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_plural_and_spelling_forms_reach_the_held_name) ... ok
+test_purpose_absent_on_a_plural_form_asks (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_purpose_absent_on_a_plural_form_asks) ... ok
+test_unheld_subject_asks_instead_of_none (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_unheld_subject_asks_instead_of_none) ... ok
+test_wide_path_asks_and_blocks_until_the_stock_is_restated (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_wide_path_asks_and_blocks_until_the_stock_is_restated) ... ok
+test_a_dash_of_x_after_a_separator_asks (test_helm_reader_gap.I_AnArticleLedUnitLineIsItsOwnLine.test_a_dash_of_x_after_a_separator_asks) ... ok
+test_a_ran_out_name_inside_another_lines_notes_is_not_resolved (test_helm_reader_gap.I_AnArticleLedUnitLineIsItsOwnLine.test_a_ran_out_name_inside_another_lines_notes_is_not_resolved) ... ok
+test_notes_still_help_a_line_with_no_name_of_its_own (test_helm_reader_gap.I_AnArticleLedUnitLineIsItsOwnLine.test_notes_still_help_a_line_with_no_name_of_its_own) ... ok
+
+----------------------------------------------------------------------
+Ran 280 tests in 5.754s
+
+OK (skipped=1)

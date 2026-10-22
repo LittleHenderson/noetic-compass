@@ -1,0 +1,131 @@
+{
+ "items": [
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR73:OR_DANGLING",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cobbler",
+   "turns": [
+    "We made 1 cobbler from 1 can peaches or, 6 cups sliced peaches and 2 cup flour and ran out of peaches.",
+    "We made 1 cobbler from 2 can peaches or, 3 cups sliced peaches and 2 cup flour and ran out of sliced peaches.",
+    "We made 1 cobbler from 2 can peaches or, 6 cups sliced peaches and 1 cup flour and ran out of flour.",
+    "We have 3 can peaches or, 9/2 cups sliced peaches and 5/2 cup flour.",
+    "How much cobbler can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "AUTHOR73:RANOUT_AMBIG",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "crumble",
+   "turns": [
+    "We made 1 crumble from 3 cups apples with peel, 2 cup diced apples and 1 cup sugar and ran out of apples.",
+    "We made 1 crumble from 6 cups apples with peel, 1 cup diced apples and 1 cup sugar and ran out of diced apples.",
+    "We made 1 crumble from 6 cups apples with peel, 2 cup diced apples and 1/2 cup sugar and ran out of sugar.",
+    "We have 9 cups apples with peel, 3/2 cup diced apples and 5/4 cup sugar.",
+    "How much crumble can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "AUTHOR73:RANOUT_AMBIG_EQUAL_AMOUNT",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "strudel",
+   "turns": [
+    "We made 1 strudel from 2 cups apples with peel, 2 cup diced apples and 1 cup sugar and ran out of apples.",
+    "We made 1 strudel from 4 cups apples with peel, 1 cup diced apples and 1 cup sugar and ran out of diced apples.",
+    "We made 1 strudel from 4 cups apples with peel, 2 cup diced apples and 1/2 cup sugar and ran out of sugar.",
+    "We have 6 cups apples with peel, 3/2 cup diced apples and 5/4 cup sugar.",
+    "How much strudel can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "AUTHOR73:SUGAR_PAIR",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "shortbread",
+   "turns": [
+    "We made 1 shortbread from 1 cup sugar, 1 cup brown sugar and 4 cups flour and ran out of sugar.",
+    "We made 1 shortbread from 2 cup sugar, 1/2 cup brown sugar and 4 cups flour and ran out of brown sugar.",
+    "We made 1 shortbread from 2 cup sugar, 1 cup brown sugar and 2 cups flour and ran out of flour.",
+    "We have 3 cup sugar, 3/4 cup brown sugar and 5 cups flour.",
+    "How much shortbread can we make?"
+   ]
+  },
+  {
+   "cell": "C23:FRACTION",
+   "id": "AUTHOR73:OR_ONE_LINE",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "biscuit",
+   "turns": [
+    "We made 1 biscuit from 1/2 cup butter or margarine, 4 cups flour and 2 cup milk and ran out of butter.",
+    "We made 1 biscuit from 1 cup butter or margarine, 2 cups flour and 2 cup milk and ran out of flour.",
+    "We made 1 biscuit from 1 cup butter or margarine, 4 cups flour and 1 cup milk and ran out of milk.",
+    "We have 3/2 cup butter or margarine, 3 cups flour and 5/2 cup milk.",
+    "How much biscuit can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR73:R2G_STOPWORD",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "chili",
+   "turns": [
+    "We made 1 chili from 1 can beans in sauce, 4 cups beans and 2 onion and ran out of beans.",
+    "We made 1 chili from 2 can beans in sauce, 2 cups beans and 2 onion and ran out of beans.",
+    "We made 1 chili from 2 can beans in sauce, 4 cups beans and 1 onion and ran out of onion.",
+    "We have 3 can beans in sauce, 3 cups beans and 5/2 onion.",
+    "How much chili can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR73:OR_DANGLING_ANSWER",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "granola",
+   "turns": [
+    "We made 1 granola from 1 cup honey or, 2 cup maple syrup and 4 cups oats and ran out of honey.",
+    "We made 1 granola from 2 cup honey or, 1 cup maple syrup and 4 cups oats and ran out of maple syrup.",
+    "We made 1 granola from 2 cup honey or, 2 cup maple syrup and 2 cups oats and ran out of oats.",
+    "We have 3 cup honey or, 3/2 cup maple syrup and 5 cups oats.",
+    "How much granola can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR73:MULTI_HONEST",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "soup",
+   "turns": [
+    "We made 1 soup from 2 onions, 3 carrots, 8 cups broth and 2 cup rice and ran out of onions.",
+    "We made 1 soup from 4 onions, 3 carrots, 4 cups broth and 2 cup rice and ran out of broth.",
+    "We made 1 soup from 4 onions, 3 carrots, 8 cups broth and 1 cup rice and ran out of rice.",
+    "We have 6 onions, 3 carrots, 6 cups broth and 5/2 cup rice.",
+    "How much soup can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR73:MULTI_PHANTOM",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "tart",
+   "turns": [
+    "We made 1 tart from 4 apples, 2 peeled, 2 cup sugar and 4 cups flour and ran out of apples.",
+    "We made 1 tart from 8 apples, 2 peeled, 1 cup sugar and 4 cups flour and ran out of sugar.",
+    "We made 1 tart from 8 apples, 2 peeled, 2 cup sugar and 2 cups flour and ran out of flour.",
+    "We have 12 apples, 2 peeled, 3/2 cup sugar and 5 cups flour.",
+    "How much tart can we make?"
+   ]
+  }
+ ],
+ "schema": "helm.r1w7.real-inputs/1"
+}

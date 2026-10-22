@@ -1,0 +1,86 @@
+READER helm_wide_turn reader RB-W1 v7.3 (2026-10-21)
+parse_line '1 can tomatoes or' -> {'name': 'tomato', 'amount': Fraction(1, 1), 'unit': 'can', 'said': '1 can tomatoes or', 'own': '1 can tomatoes', 'dangling_or': True}
+parse_line '1 can tomatoes' -> {'name': 'tomato', 'amount': Fraction(1, 1), 'unit': 'can', 'said': '1 can tomatoes', 'own': '1 can tomatoes'}
+parse_line '2 cups flour' -> {'name': 'flour', 'amount': Fraction(2, 1), 'unit': 'cup', 'said': '2 cups flour', 'own': '2 cups flour'}
+parse_line '2 large or 4 small green peppers' -> {'clarify': {'code': 'AMOUNT_HAS_TWO_PARTS', 'slots': {'words': '2 large or 4 small green peppers'}}}
+parse_line '1 cup coffee liquor' -> {'name': 'coffee liquor', 'amount': Fraction(1, 1), 'unit': 'cup', 'said': '1 cup coffee liquor', 'own': '1 cup coffee liquor'}
+parse_line '1 cup dry beans or whole peas' -> {'name': 'dry bean', 'amount': Fraction(1, 1), 'unit': 'cup', 'said': '1 cup dry beans or whole peas, or whole peas', 'own': '1 cup dry beans or whole peas'}
+parse_line '1 can tomatoes or;' -> {'name': 'tomato', 'amount': Fraction(1, 1), 'unit': 'can', 'said': '1 can tomatoes or;', 'own': '1 can tomatoes', 'dangling_or': True}
+parse_line '2 beef stock cubes' -> {'name': 'beef stock cube', 'amount': Fraction(2, 1), 'unit': '', 'said': '2 beef stock cubes', 'own': '2 beef stock cubes'}
+parse_line '1 cup tomato paste' -> {'name': 'tomato paste', 'amount': Fraction(1, 1), 'unit': 'cup', 'said': '1 cup tomato paste', 'own': '1 cup tomato paste'}
+parse_line butter+notes or -> {'name': 'butter', 'amount': Fraction(1, 1), 'unit': 'cup', 'said': '1 cup butter, or', 'own': '1 cup butter', 'dangling_or': True}
+unit_of cupfuls: cup unit_of can: can
+K1 tomato
+K2 sugar
+K4 sugar stock
+K5 cake flour
+read_wide 'We made 1 sauce from 1 can tomatoes or, 8 cups chopped tomatoes and 4 onions and ran out of tomatoes.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'tomato', 'second': 'chopped tomato', 'words': '1 can tomatoes or'}} None [] None False
+read_wide 'We made 1 sauce from 1 can tomatoes or; 8 cups chopped tomatoes and 4 onions and ran out of tomatoes.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'tomato', 'second': 'chopped tomato', 'words': '1 can tomatoes or'}} None [] None False
+read_wide 'We made 1 cake from 2 cups flour, 2 cup butter, or and 2 cup margarine and ran out of flour.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'butter', 'second': 'margarine', 'words': '2 cup butter, or'}} None [] None False
+read_wide 'We made 1 sauce from 3 cups tomatoes with juice, 2 can tomatoes or and 4 onions and ran out of tomatoes.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'tomato', 'second': 'onion', 'words': '2 can tomatoes or'}} None [] None False
+read_wide 'We made 1 sauce from 8 cups chopped tomatoes, 4 onions and 1 can tomatoes or and ran out of tomatoes.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'tomato', 'words': '1 can tomatoes or'}} None [] None False
+read_wide 'We have 3 can tomatoes or, 6 cups chopped tomatoes and 5 onions.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'tomato', 'second': 'chopped tomato', 'words': '3 can tomatoes or'}} None [] None False
+read_wide 'We made 1 batch from 1 can tomatoes or, 8 cups chopped tomatoes and 4 onions and ran out of tomatoes.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'tomato', 'second': 'chopped tomato', 'words': '1 can tomatoes or'}} None [] None False
+read_wide 'We made 1 sauce from 1 can tomatoes or, 8 cups fresh tomatoes and 4 onions and ran out of tomatoes.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'tomato', 'second': 'tomato', 'words': '1 can tomatoes or'}} None [] None False
+read_wide 'We made 1 sauce from 1 can tomatoes in juice, 4 tomatoes and 4 onions and ran out of tomatoes.'
+     CLARIFY {'code': 'RAN_OUT_WHICH_LINE', 'slots': {'item': 'tomato', 'lines': ['tomato', 'tomatoes in juice']}} None [] None False
+read_wide 'We made 1 cake from 1 cup sugar, 2 cups brown sugar and 4 cups flour and ran out of sugar.'
+     WITNESS None ['sugar'] ['brown sugar', 'flour', 'sugar'] None False
+read_wide 'We made 1 soup from 1 cup stock, 2 beef stock cubes and 2 onions and ran out of stock.'
+     WITNESS None ['stock'] ['beef stock cube', 'onion', 'stock'] None False
+read_wide 'We made 1 sauce from 2 tomatoes, 1 cup tomato paste and 2 onions and ran out of tomatoes.'
+     WITNESS None ['tomato'] ['onion', 'tomato', 'tomato paste'] None False
+read_wide 'We have 6 cups spelt flour or, 2 cups oat milk.'
+     CLARIFY {'code': 'ALTERNATIVE_WHICH_ONE', 'slots': {'first': 'spelt flour', 'second': 'oat milk', 'words': '6 cups spelt flour or'}} None [] None False
+LOOP D1
+     1 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "1 can tomatoes or" and then chopped tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     2 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "2 can tomatoes or" and then chopped tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     3 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "2 can tomatoes or" and then chopped tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     4 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "3 can tomatoes or" and then chopped tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     5 CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed 0 None | I don't know a recipe for sauce. I know bread, frosting, starter, and meringue.
+     recipes: {}
+LOOP D3
+     1 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "1 can tomatoes or" and then tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     2 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "2 can tomatoes or" and then tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     3 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "2 can tomatoes or" and then tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     4 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "3 can tomatoes or" and then tomato, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     5 CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed 0 None | I don't know a recipe for sauce. I know bread, frosting, starter, and meringue.
+     recipes: {}
+LOOP A1
+     1 TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH wide 0 None | Tomato wasn't in that batch, so it can't be what ran out. Nothing was saved.
+     2 WITNESS_ADMITTED wide 1 None | Got it: one sauce needs 1 cup of chopped tomato. I still need one batch for each of tomatoes with juice and onion before I can work out sauce.
+     3 WITNESS_ADMITTED wide 1 None | Got it: one sauce needs 2 onions. I still need one batch where tomatoes with juice ran out first.
+     4 STOCK_RECORDED wide 1 None | Noted: we have 9 cups of tomatoes with juice, 1 1/2 cups of chopped tomato, and 5 onions.
+     5 UNDETERMINED_CLARIFY wide 0 None | I can't say yet how much sauce we can make. I still need one batch where tomatoes with juice ran out first while everything else was left over. I didn't guess.
+     recipes: {'sauce': {'tomatoes with juice': None, 'chopped tomato': '1 cup', 'onion': '2'}}
+LOOP X1
+     1 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "2 can tomatoes or" and then onion, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     2 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "1 can tomatoes or" and then onion, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     3 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "2 can tomatoes or" and then onion, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     4 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "3/2 can tomatoes or" and then onion, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     5 CLARIFY_ENGLISH_UNKNOWN_PRODUCT licensed 0 None | I don't know a recipe for sauce. I know bread, frosting, starter, and meringue.
+     recipes: {}
+LOOP X2
+     1 CLARIFY_WIDE_RAN_OUT_WHICH_LINE wide 0 None | You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.
+     2 CLARIFY_WIDE_RAN_OUT_WHICH_LINE wide 0 None | You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.
+     3 WITNESS_ADMITTED wide 1 None | Got it: one sauce needs 2 onions. I still need one batch for each of tomatoes in juice and tomato before I can work out sauce.
+     4 STOCK_RECORDED wide 1 None | Noted: we have 3 cans of tomatoes in juice, 3 tomatoes, and 5 onions.
+     5 UNDETERMINED_CLARIFY wide 0 None | I can't say yet how much sauce we can make. I still need one batch for each of tomatoes in juice and tomato: a batch where that one ran out first while everything else was left over. I didn't guess.
+     recipes: {'sauce': {'tomatoes in juice': None, 'tomato': None, 'onion': '2'}}
+LOOP J8
+     1 WITNESS_ADMITTED wide 1 None | Got it: one oatcake needs 2 cups of spelt flour. I still need one batch for each of oat milk and duck egg before I can work out oatcake.
+     2 WITNESS_ADMITTED wide 1 None | Got it: one oatcake needs 1 cup of oat milk. I still need one batch where duck egg ran out first.
+     3 WITNESS_ADMITTED wide 1 None | Got it: one oatcake needs 3 duck eggs. That's every ingredient of oatcake.
+     4 STOCK_RECORDED wide 1 None | Noted: we have 6 cups of spelt flour, 2 cups of oat milk, and 9 duck eggs.
+     5 CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE wide 0 None | You wrote "6 cups spelt flour or" and then oat milk, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.
+     6 UNDETERMINED_CLARIFY wide 0 None | I can't say how much oatcake we can make yet, because I don't know how much spelt flour and oat milk we have. How much spelt flour is there? I didn't guess.
+     recipes: {'oatcake': {'spelt flour': '2 cups', 'oat milk': '1 cup', 'duck egg': '3'}}
+     wide stock after: {'duck egg': (Fraction(9, 1), '')}

@@ -1,0 +1,31 @@
+{
+ "cut_files": 167,
+ "helm_now_members": 168,
+ "helm_v73r_swapped": {
+  "helm_wide_turn.py": {
+   "v9": "c9e8a078c3a4cd35a96b586c2001264939935838b8d5fb8513e242d58a4a2caf",
+   "worktree": "d026fb4d24260d112825dc9fe2d2af4a5ba13be56f674b1ef5b131af0c3fda20"
+  },
+  "test_helm_cas_address.py": {
+   "v9": "06889a63a17bee941bb0fc12108bb201efe781ae33c175cde0376ca41eae8065",
+   "worktree": "260f9693ec023d0294f3d8af39d6645e8171da093529f45140702a4b6a672c01"
+  },
+  "test_helm_reader_gap.py": {
+   "v9": "3eed47afa23f8de8922e05609289d9d7ce737c1b7d3662cf9c31a76aff32e74b",
+   "worktree": "7f00d31c64ba98d51f6a0cd9dca82da5fd8193123c7e0cb2a7bc8f2bc5cb35fb"
+  }
+ },
+ "helm_wt_differs_from_v9_cut": [
+  "helm_chat.py",
+  "helm_memory.py",
+  "helm_wide_turn.py",
+  "test_helm_cas_address.py",
+  "test_helm_memory.py",
+  "test_helm_reader_gap.py"
+ ],
+ "helm_wt_extra": [
+  "helm_memory_compact.py",
+  "test_helm_memory_compact.py"
+ ],
+ "zip_sha256": "ad3fb98cd3254963263929747791d151949c2f50923672e4bcbf3fc14490942c"
+}

@@ -1,0 +1,7 @@
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 0.305s
+
+OK
+
+[helm_triad] parameter_count: {"learned_parameters": 0, "stored_values": 3, "stored_value_ceiling": 28, "note": "stored values are stated INPUTS with sources, not parameters; each is a 2-bit stage symbol"}

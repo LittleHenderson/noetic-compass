@@ -1,0 +1,271 @@
+test_a_broken_stock_part_still_asks (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_broken_stock_part_still_asks) ... ok
+test_a_clause_joined_by_and_is_split_too (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_clause_joined_by_and_is_split_too) ... ok
+test_a_clause_on_a_batch_sentence_is_still_a_question (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_clause_on_a_batch_sentence_is_still_a_question) ... ok
+test_a_plain_stock_sentence_carries_no_clause (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_a_plain_stock_sentence_carries_no_clause) ... ok
+test_stock_with_a_clause_reads_as_stock_and_carries_the_clause (test_helm_reader_gap.A_ReaderSplitsTheClauseOffTheStock.test_stock_with_a_clause_reads_as_stock_and_carries_the_clause) ... ok
+test_a_longer_phrase_binds_the_held_name (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_a_longer_phrase_binds_the_held_name)
+v2.1 (the v7 seal's practice finding): the clause may say "the sifted flour" for the held "flour". ... ok
+test_not_a_face_is_none_and_a_cue_paraphrase_asks (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_not_a_face_is_none_and_a_cue_paraphrase_asks) ... ok
+test_the_longest_name_wins (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_the_longest_name_wins) ... ok
+test_two_faces_in_one_clause (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_two_faces_in_one_clause) ... ok
+test_wide_names_are_read (test_helm_reader_gap.B_FaceReaderTakesTheNamesItIsGiven.test_wide_names_are_read) ... ok
+test_a_face_is_stored_under_the_wide_name (test_helm_reader_gap.C_WidePathRecordsTheStockThenTheClause.test_a_face_is_stored_under_the_wide_name) ... ok
+test_an_unreadable_clause_asks_after_recording_the_stock (test_helm_reader_gap.C_WidePathRecordsTheStockThenTheClause.test_an_unreadable_clause_asks_after_recording_the_stock) ... ok
+test_not_a_face_clauses_change_nothing (test_helm_reader_gap.C_WidePathRecordsTheStockThenTheClause.test_not_a_face_clauses_change_nothing) ... ok
+test_chat_answers_with_a_face (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_chat_answers_with_a_face) ... ok
+test_ingredient_purpose_absent_asks (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_ingredient_purpose_absent_asks) ... ok
+test_no_face_stated_is_todays_answer (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_no_face_stated_is_todays_answer) ... ok
+test_power_waning_halves_the_stock (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_power_waning_halves_the_stock) ... ok
+test_recipe_purpose_absent_asks (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_recipe_purpose_absent_asks) ... ok
+test_two_faces_each_on_its_own_ingredient (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_two_faces_each_on_its_own_ingredient) ... ok
+test_wisdom_rising_quarters_the_stock (test_helm_reader_gap.D_WideQuestionAppliesTheFaces.test_wisdom_rising_quarters_the_stock) ... ok
+test_a_time_phrase_alone_is_not_a_lesson (test_helm_reader_gap.E_PastTenseLessonParaphrase.test_a_time_phrase_alone_is_not_a_lesson) ... ok
+test_paraphrase_reads_as_the_canonical_lesson (test_helm_reader_gap.E_PastTenseLessonParaphrase.test_paraphrase_reads_as_the_canonical_lesson) ... ok
+test_paraphrase_teaches_the_same_coefficient (test_helm_reader_gap.E_PastTenseLessonParaphrase.test_paraphrase_teaches_the_same_coefficient) ... ok
+test_default_mode_reads_only_everyday_names (test_helm_reader_gap.F_LicensedFaceReaderUnchanged.test_default_mode_reads_only_everyday_names) ... ok
+test_face_read_on_the_licensed_recorded_path_is_applied_at_the_question (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_face_read_on_the_licensed_recorded_path_is_applied_at_the_question) ... ok
+test_longer_phrase_face_on_an_everyday_name_is_applied_never_answered_high (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_longer_phrase_face_on_an_everyday_name_is_applied_never_answered_high)
+The v7 seal's practice finding, in the everyday-name shape: a Rising face stated with a longer phrase on an ... ok
+test_not_a_face_on_the_licensed_recorded_path_changes_nothing (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_not_a_face_on_the_licensed_recorded_path_changes_nothing) ... ok
+test_unreadable_clause_on_the_licensed_recorded_path_is_asked_at_the_question (test_helm_reader_gap.G_EverydayNamesTheLicensedPathRecordsFirst.test_unreadable_clause_on_the_licensed_recorded_path_is_asked_at_the_question) ... ok
+test_plural_and_spelling_forms_reach_the_held_name (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_plural_and_spelling_forms_reach_the_held_name) ... ok
+test_purpose_absent_on_a_plural_form_asks (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_purpose_absent_on_a_plural_form_asks) ... ok
+test_unheld_subject_asks_instead_of_none (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_unheld_subject_asks_instead_of_none) ... ok
+test_wide_path_asks_and_blocks_until_the_stock_is_restated (test_helm_reader_gap.H_FaceShapedClauseAboutAnUnheldThingAsks.test_wide_path_asks_and_blocks_until_the_stock_is_restated) ... ok
+test_a_dash_of_x_after_a_separator_asks (test_helm_reader_gap.I_AnArticleLedUnitLineIsItsOwnLine.test_a_dash_of_x_after_a_separator_asks) ... ok
+test_a_ran_out_name_inside_another_lines_notes_is_not_resolved (test_helm_reader_gap.I_AnArticleLedUnitLineIsItsOwnLine.test_a_ran_out_name_inside_another_lines_notes_is_not_resolved) ... ok
+test_notes_still_help_a_line_with_no_name_of_its_own (test_helm_reader_gap.I_AnArticleLedUnitLineIsItsOwnLine.test_notes_still_help_a_line_with_no_name_of_its_own) ... ok
+test_j1_a_dangling_or_is_cut_from_the_name (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j1_a_dangling_or_is_cut_from_the_name) ... FAIL
+test_j2_a_batch_holding_the_pair_asks_which_one (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j2_a_batch_holding_the_pair_asks_which_one) ... FAIL
+test_j3_every_form_of_the_pair_asks_which_one (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j3_every_form_of_the_pair_asks_which_one) ... FAIL
+test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock) ... FAIL
+test_j5_d3_asks_which_one_before_same_ingredient_twice (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j5_d3_asks_which_one_before_same_ingredient_twice) ... FAIL
+test_j6_x1_admits_no_lesson (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j6_x1_admits_no_lesson) ... FAIL
+test_j7_pin_lines_without_a_dangling_or_are_unchanged (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j7_pin_lines_without_a_dangling_or_are_unchanged) ... ok
+test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn) ... FAIL
+test_j9_the_which_one_question_is_spoken_exactly (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j9_the_which_one_question_is_spoken_exactly) ... ERROR
+test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged) ... FAIL
+test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged) ... FAIL
+test_k3_a1_through_the_loop_learns_no_wrong_amount (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k3_a1_through_the_loop_learns_no_wrong_amount) ... FAIL
+test_k4_pin_an_exact_name_still_binds (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k4_pin_an_exact_name_still_binds) ... ok
+test_k5_own_words_use_the_phrase_without_its_unit_words (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k5_own_words_use_the_phrase_without_its_unit_words) ... FAIL
+test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line) ... FAIL
+test_k7_x2_through_the_loop_learns_no_wrong_amount (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k7_x2_through_the_loop_learns_no_wrong_amount) ... FAIL
+test_k8_pin_no_which_line_question_without_a_stop_word (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k8_pin_no_which_line_question_without_a_stop_word) ... ok
+
+======================================================================
+ERROR: test_j9_the_which_one_question_is_spoken_exactly (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j9_the_which_one_question_is_spoken_exactly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 581, in test_j9_the_which_one_question_is_spoken_exactly
+    self.assertEqual(WT.say_reader_question(r["clarify"]), WHICH_ONE_D1)
+                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\helm_wide_turn.py", line 863, in say_reader_question
+    code, s = c["code"], c.get("slots") or {}
+              ~^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
+
+======================================================================
+FAIL: test_j1_a_dangling_or_is_cut_from_the_name (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j1_a_dangling_or_is_cut_from_the_name)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 478, in test_j1_a_dangling_or_is_cut_from_the_name
+    self.assertEqual(WT.parse_line("1 can tomatoes or"),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     {"name": "tomato", "amount": Fraction(1), "unit": "can", "said": "1 can tomatoes or",
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      "own": "1 can tomatoes", "dangling_or": True})
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'name': 'tomatoes or', 'amount': Fraction(1, 1), 'unit':[59 chars] or'} != {'name': 'tomato', 'amount': Fraction(1, 1), 'unit': 'can[72 chars]True}
+  {'amount': Fraction(1, 1),
++  'dangling_or': True,
+-  'name': 'tomatoes or',
+?                 -----
+
++  'name': 'tomato',
+-  'own': '1 can tomatoes or',
+?                        ---
+
++  'own': '1 can tomatoes',
+   'said': '1 can tomatoes or',
+   'unit': 'can'}
+
+======================================================================
+FAIL: test_j2_a_batch_holding_the_pair_asks_which_one (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j2_a_batch_holding_the_pair_asks_which_one)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 484, in test_j2_a_batch_holding_the_pair_asks_which_one
+    self.assertEqual(r["status"], "CLARIFY")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'WITNESS' != 'CLARIFY'
+- WITNESS
++ CLARIFY
+
+
+======================================================================
+FAIL: test_j3_every_form_of_the_pair_asks_which_one (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j3_every_form_of_the_pair_asks_which_one)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 493, in test_j3_every_form_of_the_pair_asks_which_one
+    self.assertEqual((got["name"], got["said"], got["own"], got.get("dangling_or")),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     ("tomato", "1 can tomatoes or;", "1 can tomatoes", True))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('tomatoes or', '1 can tomatoes or;', '1 can tomatoes or;', None) != ('tomato', '1 can tomatoes or;', '1 can tomatoes', True)
+
+First differing element 0:
+'tomatoes or'
+'tomato'
+
+- ('tomatoes or', '1 can tomatoes or;', '1 can tomatoes or;', None)
+?         -----                                        ----   ^^^
+
++ ('tomato', '1 can tomatoes or;', '1 can tomatoes', True)
+?                                                    ^^^
+
+
+======================================================================
+FAIL: test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 526, in test_j4_d1_through_the_loop_asks_on_every_lesson_and_the_stock
+    self.assertEqual((res[k]["loop_status"], res[k]["path"]), ("CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE", "wide"), text)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('WITNESS_ADMITTED', 'wide') != ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+First differing element 0:
+'WITNESS_ADMITTED'
+'CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE'
+
+- ('WITNESS_ADMITTED', 'wide')
++ ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide') : We made 1 sauce from 1 can tomatoes or, 8 cups chopped tomatoes and 4 onions and ran out of tomatoes.
+
+======================================================================
+FAIL: test_j5_d3_asks_which_one_before_same_ingredient_twice (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j5_d3_asks_which_one_before_same_ingredient_twice)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 535, in test_j5_d3_asks_which_one_before_same_ingredient_twice
+    self.assertEqual(r["clarify"], {"code": "ALTERNATIVE_WHICH_ONE",
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                    "slots": {"first": "tomato", "second": "tomato", "words": "1 can tomatoes or"}})
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: None != {'code': 'ALTERNATIVE_WHICH_ONE', 'slots'[67 chars]or'}}
+
+======================================================================
+FAIL: test_j6_x1_admits_no_lesson (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j6_x1_admits_no_lesson)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 547, in test_j6_x1_admits_no_lesson
+    self.assertEqual((res[k]["loop_status"], res[k]["path"]), ("CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE", "wide"), text)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH', 'wide') != ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+First differing element 0:
+'TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH'
+'CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE'
+
+- ('TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH', 'wide')
++ ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide') : We made 1 sauce from 3 cups tomatoes with juice, 2 can tomatoes or and 4 onions and ran out of tomatoes.
+
+======================================================================
+FAIL: test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn (test_helm_reader_gap.J_DanglingOrAsksWhichOne.test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 571, in test_j8_held_stock_named_in_a_which_one_stock_sentence_is_withdrawn
+    self.assertEqual((r["loop_status"], r["path"]), ("CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE", "wide"))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('CLARIFY_ENGLISH_UNKNOWN_INGREDIENT', 'licensed') != ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+First differing element 0:
+'CLARIFY_ENGLISH_UNKNOWN_INGREDIENT'
+'CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE'
+
+- ('CLARIFY_ENGLISH_UNKNOWN_INGREDIENT', 'licensed')
++ ('CLARIFY_WIDE_ALTERNATIVE_WHICH_ONE', 'wide')
+
+======================================================================
+FAIL: test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 595, in test_k1_one_ends_with_hit_and_another_own_words_hit_stay_unchanged
+    self.assertEqual(WT.resolve_ran_out("tomato", ["tomatoes with juice", "chopped tomato", "onion"], self.OWN_A1),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     "tomato")
+                     ^^^^^^^^^
+AssertionError: 'chopped tomato' != 'tomato'
+- chopped tomato
++ tomato
+
+
+======================================================================
+FAIL: test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 599, in test_k2_one_starts_with_hit_and_one_ends_with_hit_stay_unchanged
+    self.assertEqual(WT.resolve_ran_out("sugar", ["sugar beet", "brown sugar"]), "sugar")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'sugar beet' != 'sugar'
+- sugar beet
++ sugar
+
+
+======================================================================
+FAIL: test_k3_a1_through_the_loop_learns_no_wrong_amount (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k3_a1_through_the_loop_learns_no_wrong_amount)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 603, in test_k3_a1_through_the_loop_learns_no_wrong_amount
+    self.assertEqual(res[0]["loop_status"], "TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'WITNESS_ADMITTED' != 'TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH'
+- WITNESS_ADMITTED
++ TEACH_REFUSED_REFUSED_RAN_OUT_NOT_IN_BATCH
+
+
+======================================================================
+FAIL: test_k5_own_words_use_the_phrase_without_its_unit_words (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k5_own_words_use_the_phrase_without_its_unit_words)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 624, in test_k5_own_words_use_the_phrase_without_its_unit_words
+    self.assertEqual(WT.resolve_ran_out("cupfuls of sifted", ["cake flour", "sugar"],
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                        {"cake flour": "2 cups sifted cake flour", "sugar": "1 cup sugar"}),
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     "cake flour")
+                     ^^^^^^^^^^^^^
+AssertionError: 'cupfuls of sifted' != 'cake flour'
+- cupfuls of sifted
++ cake flour
+
+
+======================================================================
+FAIL: test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 630, in test_k6_an_exact_hit_with_a_stop_word_rival_asks_which_line
+    self.assertEqual(r["status"], "CLARIFY")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'WITNESS' != 'CLARIFY'
+- WITNESS
++ CLARIFY
+
+
+======================================================================
+FAIL: test_k7_x2_through_the_loop_learns_no_wrong_amount (test_helm_reader_gap.K_AmbiguityBeforeAnyGuess.test_k7_x2_through_the_loop_learns_no_wrong_amount)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\AppData\Local\Temp\claude\C--Users-wakil-OneDrive-Desktop-tksCAS\3b14b8d6-0752-4f48-8a9b-4f5215493826\scratchpad\v73_scratch\fix2\helm_t1ff\test_helm_reader_gap.py", line 640, in test_k7_x2_through_the_loop_learns_no_wrong_amount
+    self.assertEqual((res[k]["loop_status"], res[k]["path"]), ("CLARIFY_WIDE_RAN_OUT_WHICH_LINE", "wide"), X2[k])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('WITNESS_ADMITTED', 'wide') != ('CLARIFY_WIDE_RAN_OUT_WHICH_LINE', 'wide')
+
+First differing element 0:
+'WITNESS_ADMITTED'
+'CLARIFY_WIDE_RAN_OUT_WHICH_LINE'
+
+- ('WITNESS_ADMITTED', 'wide')
++ ('CLARIFY_WIDE_RAN_OUT_WHICH_LINE', 'wide') : We made 1 sauce from 1 can tomatoes in juice, 4 tomatoes and 4 onions and ran out of tomatoes.
+
+----------------------------------------------------------------------
+Ran 52 tests in 0.641s
+
+FAILED (failures=13, errors=1)

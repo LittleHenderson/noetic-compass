@@ -40,7 +40,8 @@ except ImportError:                                   # the fixture below also r
 #: stock (the v7 seal's practice finding); the fixture's clause turns change bytes again -> recomputed (83f96a4a... was v7).
 #: 2026-10-21 (v7.2): own-words field on parsed lines, unheld-subject face asks, article-led unit lines; recomputed again
 #: (2c8ba019... was v7.1).
-PINNED_OFF_SHA256 = "79e4914a561851d2cd19d04902f38e869787e36db0e984302bbbc6c434fa698c"
+#: 2026-10-21 (v7.3): only the reader string moved (12 leaves, v7.2 vs v7.3 canon diffed by program); recomputed (79e4914a... was v7.2).
+PINNED_OFF_SHA256 = "e12548a7b326452e701b43983e6ec3f70adaf6456a436db373db488d4484d68d"
 
 FIXTURE_TURNS = [
     ("batch", ("Bread", {"Flour": 10, "Water": 8}, 5, "Flour")),

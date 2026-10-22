@@ -1,0 +1,24 @@
+..................................s...................
+----------------------------------------------------------------------
+Ran 54 tests in 1.734s
+
+OK (skipped=1)
+
+RB-W1 parameter table (every parameter class and its job)
+class                                            learned   count  job
+requirement coefficient a[recipe][ingredient]    True          8  how much of that ingredient (base unit of its kind) one unit of the product needs
+unit factor                                      False         9  convert a stated amount exactly into its kind's base unit (one conversion each)
+  coefficients filled 7 of 8 slots with a job; per recipe: {"bread": {"filled": 1, "ingredients": 2}, "gingerbread": {"filled": 6, "ingredients": 6}}
+  TSP_PER_TBSP    = 3                          1 tablespoon = 3 teaspoons (US)
+  TBSP_PER_CUP    = 16                         1 cup = 16 tablespoons (US)
+  CUP_PER_PINT    = 2                          1 pint = 2 cups (US)
+  PINT_PER_QUART  = 2                          1 quart = 2 pints (US)
+  GILL_PER_PINT   = 4                          1 pint = 4 gills (US)
+  ML_PER_TSP      = 4.92892159375              1 US teaspoon = 4.92892159375 mL (exact by definition)
+  G_PER_OZ        = 28.349523125               1 avoirdupois ounce = 28.349523125 g (exact by definition)
+  OZ_PER_LB       = 16                         1 pound = 16 ounces
+  G_PER_KG        = 1000                       1 kilogram = 1000 grams
+  structure (not learned numbers): product names, ingredient names, recipe supports, unit kinds, MAX_INGREDIENTS = 10
+  records (not parameters; the answer path never reads them): the witness log, and each recipe's saved admitted batches, which the memory check re-reads before admitting a new batch
+  no other learned numbers exist (checked by walking the learned state)
+

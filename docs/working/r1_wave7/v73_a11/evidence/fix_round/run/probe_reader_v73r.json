@@ -1,0 +1,389 @@
+{
+ "R1_flow_salsa_fresh_vs_in_juice": [
+  {
+   "ingredient": null,
+   "limiting": null,
+   "path": "wide",
+   "said": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+   "text": "We made 1 salsa from 1 can tomatoes in juice, 8 cups fresh tomatoes and 4 onions and ran out of tomatoes.",
+   "value": null
+  },
+  {
+   "ingredient": null,
+   "limiting": null,
+   "path": "wide",
+   "said": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+   "text": "We made 1 salsa from 2 can tomatoes in juice, 4 cups fresh tomatoes and 4 onions and ran out of fresh tomatoes.",
+   "value": null
+  },
+  {
+   "ingredient": "onion",
+   "limiting": null,
+   "path": "wide",
+   "said": "Got it: one salsa needs 2 onions. I still need one batch for each of tomatoes in juice and tomato before I can work out salsa.",
+   "status": "WITNESS_ADMITTED",
+   "text": "We made 1 salsa from 2 can tomatoes in juice, 8 cups fresh tomatoes and 2 onions and ran out of onions.",
+   "value": null
+  },
+  {
+   "ingredient": null,
+   "limiting": null,
+   "path": "wide",
+   "said": "Noted: we have 3 cans of tomatoes in juice, 6 cups of tomato, and 5 onions.",
+   "status": "STOCK_RECORDED",
+   "text": "We have 3 can tomatoes in juice, 6 cups fresh tomatoes and 5 onions.",
+   "value": null
+  },
+  {
+   "ingredient": null,
+   "limiting": null,
+   "path": "wide",
+   "said": "I can't say yet how much salsa we can make. I still need one batch for each of tomatoes in juice and tomato: a batch where that one ran out first while everything else was left over. I didn't guess.",
+   "status": "UNDETERMINED_CLARIFY",
+   "text": "How much salsa can we make?",
+   "value": null
+  }
+ ],
+ "R1_read_wide": {
+  "fresh tomatoes vs tomatoes in juice": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "large eggs vs egg for glazing": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "egg",
+     "lines": [
+      "egg",
+      "egg for glazing"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said egg ran out, but that could be egg or egg for glazing. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "whole milk vs milk for brushing": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "milk",
+     "lines": [
+      "milk",
+      "milk for brushing"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said milk ran out, but that could be milk or milk for brushing. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  }
+ },
+ "R2_replies": {
+  "2 tomatoes": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "fresh tomatoes": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "plain tomatoes": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "the 2 tomatoes": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "the loose tomatoes": {
+   "clarify": null,
+   "ran_out": [
+    "loose tomato"
+   ],
+   "spoken": null,
+   "status": "WITNESS"
+  },
+  "the tomatoes, not the ones in juice": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "tomato": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "tomatoes": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "tomatoes in juice": {
+   "clarify": null,
+   "ran_out": [
+    "tomatoes in juice"
+   ],
+   "spoken": null,
+   "status": "WITNESS"
+  },
+  "whole tomatoes": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tomato",
+     "lines": [
+      "tomato",
+      "tomatoes in juice"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  }
+ },
+ "R2_subject_form": {
+  "clarify": {
+   "code": "RAN_OUT_WHICH_LINE",
+   "slots": {
+    "item": "tomato",
+    "lines": [
+     "tomato",
+     "tomatoes in juice"
+    ]
+   }
+  },
+  "ran_out": null,
+  "spoken": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+  "status": "CLARIFY"
+ },
+ "R3_fresh_said": [
+  {
+   "ingredient": null,
+   "limiting": null,
+   "path": "wide",
+   "said": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+   "text": "We made 1 salsa from 2 can tomatoes in juice, 4 cups fresh tomatoes and 4 onions and ran out of fresh tomatoes.",
+   "value": null
+  }
+ ],
+ "R3_tie": [
+  {
+   "ingredient": null,
+   "limiting": null,
+   "path": "wide",
+   "said": "You said tomato ran out, but that could be tomato or tomatoes in juice. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+   "text": "We made 1 sauce from 2 can tomatoes in juice, 2 tomatoes and 4 onions and ran out of tomatoes and tomatoes in juice.",
+   "value": null
+  }
+ ],
+ "R3_tie_sugar": [
+  {
+   "ingredient": null,
+   "limiting": null,
+   "path": "wide",
+   "said": "You said sugar ran out, but that could be sugar or sugar for dusting. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY_WIDE_RAN_OUT_WHICH_LINE",
+   "text": "We made 1 cake from 1 cup sugar, 1 tablespoon sugar for dusting and 3 cups flour and ran out of sugar and sugar for dusting at the same time.",
+   "value": null
+  }
+ ],
+ "R4_read_wide": {
+  "butter vs butter at room temperature": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "butter",
+     "lines": [
+      "butter",
+      "butter at room temperature"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said butter ran out, but that could be butter or butter at room temperature. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "butter vs butter for the pan": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "butter",
+     "lines": [
+      "butter",
+      "butter for the pan"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said butter ran out, but that could be butter or butter for the pan. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "eggs vs egg for glazing": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "egg",
+     "lines": [
+      "egg",
+      "egg for glazing"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said egg ran out, but that could be egg or egg for glazing. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "sugar vs sugar for dusting": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "sugar",
+     "lines": [
+      "sugar",
+      "sugar for dusting"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said sugar ran out, but that could be sugar or sugar for dusting. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "tuna vs tuna in oil": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "tuna",
+     "lines": [
+      "tuna",
+      "tuna in oil"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said tuna ran out, but that could be tuna or tuna in oil. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  },
+  "water vs water if needed": {
+   "clarify": {
+    "code": "RAN_OUT_WHICH_LINE",
+    "slots": {
+     "item": "water",
+     "lines": [
+      "water",
+      "water if needed"
+     ]
+    }
+   },
+   "ran_out": null,
+   "spoken": "You said water ran out, but that could be water or water if needed. Which one ran out first? Tell me the batch again. Nothing was saved.",
+   "status": "CLARIFY"
+  }
+ },
+ "R5_stock_which_one": {
+  "clarify": {
+   "code": "ALTERNATIVE_WHICH_ONE",
+   "slots": {
+    "first": "honey",
+    "second": "maple syrup",
+    "words": "3 cups honey or"
+   }
+  },
+  "ran_out": null,
+  "spoken": "You wrote \"3 cups honey or\" and then maple syrup, so it reads as one or the other. Which one did you use? Tell me the batch again with just that one. Nothing was saved.",
+  "status": "CLARIFY"
+ },
+ "helm": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\3b14b8d6-0752-4f48-8a9b-4f5215493826\\scratchpad\\v73_scratch\\fix2\\helm_v73r",
+ "reader": "helm_wide_turn reader RB-W1 v7.3 (2026-10-21)"
+}

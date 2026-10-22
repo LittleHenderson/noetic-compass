@@ -1,0 +1,187 @@
+{
+ "items": [
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:D1",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 can tomatoes or, 8 cups chopped tomatoes and 4 onions and ran out of tomatoes.",
+    "We made 1 sauce from 2 can tomatoes or, 4 cups chopped tomatoes and 4 onions and ran out of chopped tomatoes.",
+    "We made 1 sauce from 2 can tomatoes or, 8 cups chopped tomatoes and 2 onions and ran out of onions.",
+    "We have 3 can tomatoes or, 6 cups chopped tomatoes and 5 onions.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:D2",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 1 cup butter or, 2 cup margarine and 4 cups flour and ran out of butter.",
+    "We made 1 cake from 2 cup butter or, 1 cup margarine and 4 cups flour and ran out of margarine.",
+    "We made 1 cake from 2 cup butter or, 2 cup margarine and 2 cups flour and ran out of flour.",
+    "We have 3 cup butter or, 3/2 cup margarine and 5 cups flour.",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:D3",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 can tomatoes or, 8 cups fresh tomatoes and 4 onions and ran out of tomatoes.",
+    "We made 1 sauce from 2 can tomatoes or, 4 cups fresh tomatoes and 4 onions and ran out of fresh tomatoes.",
+    "We made 1 sauce from 2 can tomatoes or, 8 cups fresh tomatoes and 2 onions and ran out of onions.",
+    "We have 3 can tomatoes or, 6 cups fresh tomatoes and 5 onions.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:D4",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "cake",
+   "turns": [
+    "We made 1 cake from 2 cups flour, 2 cup butter, or and 2 cup margarine and ran out of flour.",
+    "We made 1 cake from 4 cups flour, 1 cup butter, or and 2 cup margarine and ran out of butter.",
+    "We made 1 cake from 4 cups flour, 2 cup butter, or and 1 cup margarine and ran out of margarine.",
+    "We have 6 cups flour, 3/2 cup butter, or and 5/2 cup margarine.",
+    "How much cake can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:A1",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 3 cups tomatoes with juice, 2 cup chopped tomatoes and 4 onions and ran out of tomatoes.",
+    "We made 1 sauce from 6 cups tomatoes with juice, 1 cup chopped tomatoes and 4 onions and ran out of chopped tomatoes.",
+    "We made 1 sauce from 6 cups tomatoes with juice, 2 cup chopped tomatoes and 2 onions and ran out of onions.",
+    "We have 9 cups tomatoes with juice, 3/2 cup chopped tomatoes and 5 onions.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:X1",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 3 cups tomatoes with juice, 2 can tomatoes or and 4 onions and ran out of tomatoes.",
+    "We made 1 sauce from 6 cups tomatoes with juice, 1 can tomatoes or and 4 onions and ran out of tomatoes.",
+    "We made 1 sauce from 6 cups tomatoes with juice, 2 can tomatoes or and 2 onions and ran out of onions.",
+    "We have 9 cups tomatoes with juice, 3/2 can tomatoes or and 5 onions.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:X2",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "sauce",
+   "turns": [
+    "We made 1 sauce from 1 can tomatoes in juice, 4 tomatoes and 4 onions and ran out of tomatoes.",
+    "We made 1 sauce from 2 can tomatoes in juice, 2 tomatoes and 4 onions and ran out of tomatoes.",
+    "We made 1 sauce from 2 can tomatoes in juice, 4 tomatoes and 2 onions and ran out of onions.",
+    "We have 3 can tomatoes in juice, 3 tomatoes and 5 onions.",
+    "How much sauce can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:C1",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "batter",
+   "turns": [
+    "We made 1 batter from 3 eggs, 1 beaten, 4 cups flour and 2 cup milk and ran out of eggs.",
+    "We made 1 batter from 6 eggs, 1 beaten, 2 cups flour and 2 cup milk and ran out of flour.",
+    "We made 1 batter from 6 eggs, 1 beaten, 4 cups flour and 1 cup milk and ran out of milk.",
+    "We have 9 eggs, 1 beaten, 3 cups flour and 5/2 cup milk.",
+    "How much batter can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:C2",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "batter",
+   "turns": [
+    "We made 1 batter from 1 cup sugar, 2 tablespoons reserved, 4 cups flour and 2 cup milk and ran out of sugar.",
+    "We made 1 batter from 2 cup sugar, 2 tablespoons reserved, 2 cups flour and 2 cup milk and ran out of flour.",
+    "We made 1 batter from 2 cup sugar, 2 tablespoons reserved, 4 cups flour and 1 cup milk and ran out of milk.",
+    "We have 3 cup sugar, 2 tablespoons reserved, 3 cups flour and 5/2 cup milk.",
+    "How much batter can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:C3",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "stew",
+   "turns": [
+    "We made 1 stew from 2 cups flour, plus 2 tablespoons, 2 pound beef, a lean cut and 2 cup broth and ran out of flour.",
+    "We made 1 stew from 4 cups flour, plus 2 tablespoons, 1 pound beef, a lean cut and 2 cup broth and ran out of beef.",
+    "We made 1 stew from 4 cups flour, plus 2 tablespoons, 2 pound beef, a lean cut and 1 cup broth and ran out of broth.",
+    "We have 6 cups flour, plus 2 tablespoons, 3/2 pound beef, a lean cut and 5/2 cup broth.",
+    "How much stew can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:C4",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "soup",
+   "turns": [
+    "We made 1 soup from 1 onion, 2 tomatoes, 2 cup rice and 4 cups tomatoes with juice and ran out of onion.",
+    "We made 1 soup from 2 onion, 2 tomatoes, 1 cup rice and 4 cups tomatoes with juice and ran out of rice.",
+    "We made 1 soup from 2 onion, 2 tomatoes, 2 cup rice and 2 cups tomatoes with juice and ran out of tomatoes.",
+    "We have 3 onion, 2 tomatoes, 3/2 cup rice and 5 cups tomatoes with juice.",
+    "How much soup can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:M1",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "stew",
+   "turns": [
+    "We made 1 stew from 2 cups barley, 10 cloves, 10 juniper berries and 2 cup broth and ran out of barley.",
+    "We made 1 stew from 4 cups barley, 5 cloves, 10 juniper berries and 2 cup broth and ran out of cloves.",
+    "We made 1 stew from 4 cups barley, 10 cloves, 10 juniper berries and 1 cup broth and ran out of broth.",
+    "We have 6 cups barley, 15/2 cloves, 10 juniper berries and 5/2 cup broth.",
+    "How much stew can we make?"
+   ]
+  },
+  {
+   "cell": "C23:INTEGER",
+   "id": "AUTHOR:P1",
+   "n_lessons": 3,
+   "n_lines": 3,
+   "noun": "pilaf",
+   "turns": [
+    "We made 1 pilaf from 2 cups rice, 12 cloves and 12 peppercorns and 2 cup stock and ran out of rice.",
+    "We made 1 pilaf from 4 cups rice, 6 cloves and 12 peppercorns and 2 cup stock and ran out of cloves.",
+    "We made 1 pilaf from 4 cups rice, 12 cloves and 12 peppercorns and 1 cup stock and ran out of stock.",
+    "We have 6 cups rice, 9 cloves and 12 peppercorns and 5/2 cup stock.",
+    "How much pilaf can we make?"
+   ]
+  }
+ ],
+ "schema": "helm.r1w7.real-inputs/1"
+}

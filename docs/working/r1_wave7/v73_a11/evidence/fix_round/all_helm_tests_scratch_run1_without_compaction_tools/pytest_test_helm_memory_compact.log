@@ -1,0 +1,254 @@
+.........FFF....FF.FFFFFFF....FFFF                                       [100%]
+================================== FAILURES ===================================
+____________________ test_on_compacts_instead_of_dropping _____________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_on_compacts_instead_of_dr0')
+
+    def test_on_compacts_instead_of_dropping(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+        comp = mem.compactor
+>       assert len(mem.turns) <= 6
+E       AssertionError: assert 8 <= 6
+E        +  where 8 = len([ConversationTurn(turn_id=1, timestamp_utc='2026-10-22T05:40:12Z', user_raw_text='My grandfather kept bees in the sout...seconds=0.0, kind=None, assertion='ASSERTED', valence='NEUTRAL', operation=None, cubes_read=[], cubes_written=[]), ...])
+E        +    where [ConversationTurn(turn_id=1, timestamp_utc='2026-10-22T05:40:12Z', user_raw_text='My grandfather kept bees in the sout...seconds=0.0, kind=None, assertion='ASSERTED', valence='NEUTRAL', operation=None, cubes_read=[], cubes_written=[]), ...] = <helm_memory.HELMConversationalMemory object at 0x00000202FFC51590>.turns
+
+test_helm_memory_compact.py:106: AssertionError
+________________________ test_capsule_shape_and_rules _________________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_capsule_shape_and_rules0')
+
+    def test_capsule_shape_and_rules(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+>       cap = mem.compactor.capsules[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:120: IndexError
+________________ test_capsule_binds_cubes_and_cubes_unchanged _________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_capsule_binds_cubes_and_c0')
+
+    def test_capsule_binds_cubes_and_cubes_unchanged(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        if mem.context.cube_store is None:
+            pytest.skip("cube store not importable here")
+        _fill(mem, BEES)                                       # four facts written by the chat path (legitimate writes)
+        before = hmc.cube_faces_digest(mem.context.cube_store)
+        _fill(mem, FILLER[:4])                                 # fillers only: the compaction fires, no fact is written
+>       cap = mem.compactor.capsules[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:149: IndexError
+____________________ test_damaged_cold_copy_is_never_exact ____________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_damaged_cold_copy_is_neve0')
+
+    def test_damaged_cold_copy_is_never_exact(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+>       cap = mem.compactor.capsules[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:195: IndexError
+_______ test_missing_cold_copy_rebuilds_or_unknown_and_asks_with_a_clue _______
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_missing_cold_copy_rebuild0')
+
+    def test_missing_cold_copy_rebuilds_or_unknown_and_asks_with_a_clue(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+>       cap = mem.compactor.capsules[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:208: IndexError
+______________________________ test_refresh_caps ______________________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_refresh_caps0')
+
+    def test_refresh_caps(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+        comp = mem.compactor
+        for cap in comp.capsules:
+            os.remove(cap.crumb["cold_path"])
+        asked = 0
+        for _ in range(5):
+            hit = comp.recall("grandfather bees", will_act=True)
+            asked += 1 if hit["question"] else 0
+        assert asked <= hmc.REFRESH_CAP_PER_THREAD
+        # a "no" marks the item UNKNOWN and it is not asked again
+>       comp.answer(comp.capsules[0].capsule_id, "no, I don't remember")
+                    ^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:241: IndexError
+___________________ test_fit_check_passes_on_clean_capsule ____________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_fit_check_passes_on_clean0')
+
+    def test_fit_check_passes_on_clean_capsule(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+>       cap = mem.compactor.capsules[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:250: IndexError
+_________________ test_fit_check_f4_refuses_misfiled_capsule __________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_fit_check_f4_refuses_misf0')
+
+    def test_fit_check_f4_refuses_misfiled_capsule(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+>       cap = mem.compactor.capsules[0]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:258: IndexError
+_______________________ test_strengthen_is_four_appends _______________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_strengthen_is_four_append0')
+
+    def test_strengthen_is_four_appends(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+        comp = mem.compactor
+>       cap = comp.capsules[0]
+              ^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:273: IndexError
+_________________ test_strengthened_item_not_compacted_again __________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_strengthened_item_not_com0')
+
+    def test_strengthened_item_not_compacted_again(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+        comp = mem.compactor
+>       cap = comp.capsules[0]
+              ^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:298: IndexError
+_____________________ test_atlas_filing_and_lookup_order ______________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_atlas_filing_and_lookup_o0')
+
+    def test_atlas_filing_and_lookup_order(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=6)
+        _fill(mem, BEES + FILLER[:4])
+        comp = mem.compactor
+>       cap = comp.capsules[0]
+              ^^^^^^^^^^^^^^^^
+E       IndexError: list index out of range
+
+test_helm_memory_compact.py:311: IndexError
+_______________ test_three_candidates_asks_which_never_guesses ________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_three_candidates_asks_whi0')
+
+    def test_three_candidates_asks_which_never_guesses(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=4)
+        turns = [("USER_NARRATIVE", "We walked along the river on Sunday"),
+                 ("USER_NARRATIVE", "The river recipe uses trout and lemon"),
+                 ("USER_NARRATIVE", "My cousin lives by the river in Spain")]
+        for intent, text in turns:
+            _say(mem, intent, text)
+            _fill(mem, FILLER[:3])
+        _fill(mem, FILLER[3:7])  # push the third river turn out of working memory too
+        comp = mem.compactor
+>       assert sum(1 for c in comp.capsules if any("river" in k.lower() for k in c.clues)) >= 3
+E       assert 0 >= 3
+E        +  where 0 = sum(<generator object test_three_candidates_asks_which_never_guesses.<locals>.<genexpr> at 0x00000202FFF6D7E0>)
+
+test_helm_memory_compact.py:332: AssertionError
+____ test_question_turns_compact_into_question_capsules_that_recall_skips _____
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_question_turns_compact_in0')
+
+    def test_question_turns_compact_into_question_capsules_that_recall_skips(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=4)
+        q = "What did I say about the buses on the Fennick line in June?"
+        mem.record_turn(q, q, "QUERY_MEMORY_RECALL", {}, "I don't see a specific note on that yet.")
+        _fill(mem, FILLER[:8])
+        comp = mem.compactor
+>       cap = next(c for c in comp.capsules if 1 in c.crumb["turn_ids"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+test_helm_memory_compact.py:398: StopIteration
+______________________ test_number_words_are_never_clues ______________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_number_words_are_never_cl0')
+
+    def test_number_words_are_never_clues(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=4)
+        _fill(mem, [("GENERAL_KNOWLEDGE_INQUIRY", "The Saltwick yard had twelve colonies in April.")] + FILLER[:8])
+>       cap = next(c for c in mem.compactor.capsules if 1 in c.crumb["turn_ids"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+test_helm_memory_compact.py:406: StopIteration
+__________________ test_strengthened_rebuild_is_never_exact ___________________
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_strengthened_rebuild_is_n0')
+
+    def test_strengthened_rebuild_is_never_exact(tmp_path):
+        mem = _mem(tmp_path, on=True, max_turns=4)
+        _fill(mem, [("GENERAL_KNOWLEDGE_INQUIRY", "The Saltwick yard was moved to Dunmere in April.")] + FILLER[:8])
+        comp = mem.compactor
+>       cap = next(c for c in comp.capsules if 1 in c.crumb["turn_ids"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+test_helm_memory_compact.py:415: StopIteration
+______ test_chat_passes_the_reply_to_a_refresh_question_to_the_compactor ______
+
+tmp_path = WindowsPath('C:/Users/wakil/AppData/Local/Temp/pytest-of-wakil/pytest-57/test_chat_passes_the_reply_to_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000202FFF6E190>
+
+    def test_chat_passes_the_reply_to_a_refresh_question_to_the_compactor(tmp_path, monkeypatch):
+        monkeypatch.setenv("HELM_SESSION_DIR", str(tmp_path / "sessions"))
+        monkeypatch.delenv("HELM_MEMORY_COMPACT", raising=False)
+        import contextlib
+        import io
+        import helm_chat
+        with contextlib.redirect_stdout(io.StringIO()):
+            s = helm_chat.HELMConversationalSession(session_id="t-refresh")
+        s.memory.max_turns = 4
+        comp = hmc.attach(s.memory, cold_dir=str(tmp_path / "cold"))
+        lines = ["The Saltwick yard was moved to Dunmere in April."] + [f"Okay, moving on to point {w}." for w in
+                                                                       ("alpha", "bravo", "charlie", "delta", "echo", "foxtrot")]
+        with contextlib.redirect_stdout(io.StringIO()):
+            for ln in lines:
+                s.handle_turn(ln)
+>       cap = next(c for c in comp.capsules if 1 in c.crumb["turn_ids"])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+test_helm_memory_compact.py:439: StopIteration
+=========================== short test summary info ===========================
+FAILED test_helm_memory_compact.py::test_on_compacts_instead_of_dropping - As...
+FAILED test_helm_memory_compact.py::test_capsule_shape_and_rules - IndexError...
+FAILED test_helm_memory_compact.py::test_capsule_binds_cubes_and_cubes_unchanged
+FAILED test_helm_memory_compact.py::test_damaged_cold_copy_is_never_exact - I...
+FAILED test_helm_memory_compact.py::test_missing_cold_copy_rebuilds_or_unknown_and_asks_with_a_clue
+FAILED test_helm_memory_compact.py::test_refresh_caps - IndexError: list inde...
+FAILED test_helm_memory_compact.py::test_fit_check_passes_on_clean_capsule - ...
+FAILED test_helm_memory_compact.py::test_fit_check_f4_refuses_misfiled_capsule
+FAILED test_helm_memory_compact.py::test_strengthen_is_four_appends - IndexEr...
+FAILED test_helm_memory_compact.py::test_strengthened_item_not_compacted_again
+FAILED test_helm_memory_compact.py::test_atlas_filing_and_lookup_order - Inde...
+FAILED test_helm_memory_compact.py::test_three_candidates_asks_which_never_guesses
+FAILED test_helm_memory_compact.py::test_question_turns_compact_into_question_capsules_that_recall_skips
+FAILED test_helm_memory_compact.py::test_number_words_are_never_clues - StopI...
+FAILED test_helm_memory_compact.py::test_strengthened_rebuild_is_never_exact
+FAILED test_helm_memory_compact.py::test_chat_passes_the_reply_to_a_refresh_question_to_the_compactor
+16 failed, 18 passed in 0.72s

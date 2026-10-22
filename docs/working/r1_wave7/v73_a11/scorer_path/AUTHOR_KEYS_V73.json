@@ -1,0 +1,383 @@
+{
+ "authored_fixture": true,
+ "built_by": "rbw1t.keys_rbw1t.key_item + r1w7.multi_qty_w7.apply (A-R1W7-7)",
+ "keys": [
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR73:OR_DANGLING",
+   "lessons": [
+    {
+     "head": "peaches",
+     "head_norm": "peach",
+     "q": "1"
+    },
+    {
+     "head": "peaches",
+     "head_norm": "peach",
+     "q": "3"
+    },
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "can",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR73:RANOUT_AMBIG",
+   "lessons": [
+    {
+     "head": "apples",
+     "head_norm": "apple",
+     "q": "3"
+    },
+    {
+     "head": "apples",
+     "head_norm": "apple",
+     "q": "1"
+    },
+    {
+     "head": "sugar",
+     "head_norm": "sugar",
+     "q": "1/2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "simple_fraction"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR73:RANOUT_AMBIG_EQUAL_AMOUNT",
+   "lessons": [
+    {
+     "head": "apples",
+     "head_norm": "apple",
+     "q": "2"
+    },
+    {
+     "head": "apples",
+     "head_norm": "apple",
+     "q": "1"
+    },
+    {
+     "head": "sugar",
+     "head_norm": "sugar",
+     "q": "1/2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "simple_fraction"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR73:SUGAR_PAIR",
+   "lessons": [
+    {
+     "head": "sugar",
+     "head_norm": "sugar",
+     "q": "1"
+    },
+    {
+     "head": "sugar",
+     "head_norm": "sugar",
+     "q": "1/2"
+    },
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "simple_fraction",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "flour",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR73:OR_ONE_LINE",
+   "lessons": [
+    {
+     "head": "butter",
+     "head_norm": "butter",
+     "q": "1/2"
+    },
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    },
+    {
+     "head": "milk",
+     "head_norm": "milk",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "simple_fraction",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "UNDETERMINED",
+    "why": "repeated A head",
+    "yield": null
+   },
+   "id": "AUTHOR73:R2G_STOPWORD",
+   "lessons": [
+    {
+     "head": "beans",
+     "head_norm": "bean",
+     "q": "1"
+    },
+    {
+     "head": "beans",
+     "head_norm": "bean",
+     "q": "2"
+    },
+    {
+     "head": "onion",
+     "head_norm": "onion",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "can",
+     "cup",
+     "count (no unit)"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "syrup",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR73:OR_DANGLING_ANSWER",
+   "lessons": [
+    {
+     "head": "honey",
+     "head_norm": "honey",
+     "q": "1"
+    },
+    {
+     "head": "syrup",
+     "head_norm": "syrup",
+     "q": "1"
+    },
+    {
+     "head": "oats",
+     "head_norm": "oat",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": true,
+    "units": [
+     "cup",
+     "cup",
+     "cup"
+    ],
+    "why_not": []
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "broth",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR73:MULTI_HONEST",
+   "lessons": [
+    {
+     "head": "onions",
+     "head_norm": "onion",
+     "q": "2"
+    },
+    {
+     "head": "broth",
+     "head_norm": "broth",
+     "q": "4"
+    },
+    {
+     "head": "rice",
+     "head_norm": "rice",
+     "q": "1"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "count (no unit)",
+     "cup",
+     "cup"
+    ],
+    "why_not": [
+     "line0:MULTI_QTY"
+    ]
+   }
+  },
+  {
+   "answer": {
+    "key": "ANSWER",
+    "limiting_head": "sugar",
+    "limiting_index": 1,
+    "limiting_scored": true,
+    "why": null,
+    "yield": "3/2"
+   },
+   "id": "AUTHOR73:MULTI_PHANTOM",
+   "lessons": [
+    {
+     "head": "apples",
+     "head_norm": "apple",
+     "q": "4"
+    },
+    {
+     "head": "sugar",
+     "head_norm": "sugar",
+     "q": "1"
+    },
+    {
+     "head": "flour",
+     "head_norm": "flour",
+     "q": "2"
+    }
+   ],
+   "representable": {
+    "amendment": "A-R1W7-7",
+    "forms": [
+     "integer",
+     "integer",
+     "integer"
+    ],
+    "representable": false,
+    "units": [
+     "count (no unit)",
+     "cup",
+     "cup"
+    ],
+    "why_not": [
+     "line0:MULTI_QTY"
+    ]
+   }
+  }
+ ],
+ "schema": "helm.r1w7.real-keys/1"
+}

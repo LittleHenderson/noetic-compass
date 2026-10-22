@@ -1,0 +1,33 @@
+test_authored_keys_are_what_the_design_table_says (tests_r1w7.test_honest_ask_w7.A_KeysFromTheFrozenFunction.test_authored_keys_are_what_the_design_table_says) ... ok
+test_tail_heads_and_allowed_heads_with_the_frozen_grammar (tests_r1w7.test_honest_ask_w7.A_KeysFromTheFrozenFunction.test_tail_heads_and_allowed_heads_with_the_frozen_grammar) ... ok
+test_honest_ask_m1 (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_honest_ask_m1) ... ok
+test_honest_ask_p1_the_c56_shape (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_honest_ask_p1_the_c56_shape) ... ok
+test_loop_on_shape_exempted_reported_only (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_loop_on_shape_exempted_reported_only) ... ok
+test_noise_turn_after_the_question_does_not_hide_the_sentence (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_noise_turn_after_the_question_does_not_hide_the_sentence) ... ok
+test_two_names_exempted_and_a_count_of_three_is_not (tests_r1w7.test_honest_ask_w7.B_HonestAskIsExempted.test_two_names_exempted_and_a_count_of_three_is_not) ... ok
+test_each_c_and_d_failure_alone (tests_r1w7.test_honest_ask_w7.C_PhantomsAndOtherSentencesAreNotExempted.test_each_c_and_d_failure_alone) ... ok
+test_missing_stock_sentence_is_not_exempted (tests_r1w7.test_honest_ask_w7.C_PhantomsAndOtherSentencesAreNotExempted.test_missing_stock_sentence_is_not_exempted) ... ok
+test_phantom_c1_c2_c3 (tests_r1w7.test_honest_ask_w7.C_PhantomsAndOtherSentencesAreNotExempted.test_phantom_c1_c2_c3) ... ok
+test_tagged_right_number_is_right_and_nothing_exempted (tests_r1w7.test_honest_ask_w7.D_WrongRightAndUntagged.test_tagged_right_number_is_right_and_nothing_exempted) ... ok
+test_tagged_wrong_number_stays_wrong_and_fails_k3 (tests_r1w7.test_honest_ask_w7.D_WrongRightAndUntagged.test_tagged_wrong_number_stays_wrong_and_fails_k3) ... ok
+test_untagged_honest_looking_ask_is_not_exempted (tests_r1w7.test_honest_ask_w7.D_WrongRightAndUntagged.test_untagged_honest_looking_ask_is_not_exempted) ... ok
+test_licensed_path_undetermined_is_not_exempted (tests_r1w7.test_honest_ask_w7.E_ReaderAndClarifyAsksAreNotExempted.test_licensed_path_undetermined_is_not_exempted) ... ok
+test_reader_clarify_routing_and_brain_statuses (tests_r1w7.test_honest_ask_w7.E_ReaderAndClarifyAsksAreNotExempted.test_reader_clarify_routing_and_brain_statuses) ... ok
+test_default_call_without_raw_lines_exempts_nothing (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_default_call_without_raw_lines_exempts_nothing) ... ok
+test_garbage_inputs_never_raise (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_garbage_inputs_never_raise) ... ok
+test_raw_lines_missing (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_raw_lines_missing) ... ok
+test_record_shapes_never_raise (tests_r1w7.test_honest_ask_w7.F_RawLinesAndRecordShapes.test_record_shapes_never_raise) ... ok
+test_an_inconsistent_recount_reads_false (tests_r1w7.test_honest_ask_w7.G_ConsistencyOnAMixedSet.test_an_inconsistent_recount_reads_false) ... ok
+test_recount_equals_frozen_strict_and_after_is_strict_minus_exempted (tests_r1w7.test_honest_ask_w7.G_ConsistencyOnAMixedSet.test_recount_equals_frozen_strict_and_after_is_strict_minus_exempted) ... ok
+test_say_wide_from_helm_now_matches_and_splits (tests_r1w7.test_honest_ask_w7.H_TemplateTie.test_say_wide_from_helm_now_matches_and_splits) ... ok
+test_clean_run_unchanged (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_clean_run_unchanged) ... ok
+test_existing_k4_plant_still_misses (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_existing_k4_plant_still_misses) ... ok
+test_k3_a11_wrong_number_misses_k3_and_the_word_is_harmed (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_k3_a11_wrong_number_misses_k3_and_the_word_is_harmed) ... ok
+test_k4_a11_honest_ask_is_exempted_and_flagged (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_k4_a11_honest_ask_is_exempted_and_flagged) ... ok
+test_k4_a11_variants_still_miss_k4 (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_k4_a11_variants_still_miss_k4) ... ok
+test_reader_string_names_the_amendment (tests_r1w7.test_honest_ask_w7.I_ReaderOnFixturePlants.test_reader_string_names_the_amendment) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 13.636s
+
+OK

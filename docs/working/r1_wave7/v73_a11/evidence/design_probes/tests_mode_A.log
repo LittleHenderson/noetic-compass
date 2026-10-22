@@ -1,0 +1,46 @@
+..................................s.....................................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 280 tests in 5.243s
+
+OK (skipped=1)
+MODE A helm_wide_turn reader RB-W1 v7.2 (2026-10-21)
+
+RB-W1 parameter table (every parameter class and its job)
+class                                            learned   count  job
+requirement coefficient a[recipe][ingredient]    True          8  how much of that ingredient (base unit of its kind) one unit of the product needs
+unit factor                                      False         9  convert a stated amount exactly into its kind's base unit (one conversion each)
+  coefficients filled 7 of 8 slots with a job; per recipe: {"bread": {"filled": 1, "ingredients": 2}, "gingerbread": {"filled": 6, "ingredients": 6}}
+  TSP_PER_TBSP    = 3                          1 tablespoon = 3 teaspoons (US)
+  TBSP_PER_CUP    = 16                         1 cup = 16 tablespoons (US)
+  CUP_PER_PINT    = 2                          1 pint = 2 cups (US)
+  PINT_PER_QUART  = 2                          1 quart = 2 pints (US)
+  GILL_PER_PINT   = 4                          1 pint = 4 gills (US)
+  ML_PER_TSP      = 4.92892159375              1 US teaspoon = 4.92892159375 mL (exact by definition)
+  G_PER_OZ        = 28.349523125               1 avoirdupois ounce = 28.349523125 g (exact by definition)
+  OZ_PER_LB       = 16                         1 pound = 16 ounces
+  G_PER_KG        = 1000                       1 kilogram = 1000 grams
+  structure (not learned numbers): product names, ingredient names, recipe supports, unit kinds, MAX_INGREDIENTS = 10
+  records (not parameters; the answer path never reads them): the witness log, and each recipe's saved admitted batches, which the memory check re-reads before admitting a new batch
+  no other learned numbers exist (checked by walking the learned state)
+
+
+[helm_triad] parameter_count: {"learned_parameters": 0, "stored_values": 3, "stored_value_ceiling": 28, "note": "stored values are stated INPUTS with sources, not parameters; each is a 2-bit stage symbol"}
+
+[helm_cas_address] rules: {
+ "FND-1": "the record names its Foundation (F1..F7 or a canonical Drive name) in a foundation / drive / filed_at / desire / F field",
+ "FND-2": "an item the Unity Eye wrote is F1 (the owner's ruling names the Eye the F1 watcher)",
+ "DOM-1": "a status / reason / code word maps through DOM_1_TABLE (sub-rules a..e)",
+ "DOM-2": "an item kind maps through DOM_2_TABLE",
+ "DOM-3": "a trace row's station maps through DOM_3_TABLE (brain and S6 next rows go by their word)",
+ "CELL-1": "Foundation x Domain when both are set",
+ "REG-1a": "a faces sentence or a purpose clause carries f",
+ "REG-1b": "a plan or a rule that fired carries A",
+ "REG-1c": "a stock or batch line carries E",
+ "REG-1d": "a vision-level item (ruling, roadmap) carries T",
+ "PATH-1": "only a planner-named RPM chain node (A0, D1..D7, W1..W7, P1..P7) in a pathway / pathway_node field",
+ "ELE-1": "only a Noetic the record already names (noetic field, or ^n in the station) x a set Domain"
+}
+
+[helm_cas_address] live-loop fixture histogram: {"items": 141, "grid_28": {"F1P": 0, "F1C": 0, "F1E": 0, "F1O": 0, "F2P": 0, "F2C": 0, "F2E": 0, "F2O": 0, "F3P": 0, "F3C": 0, "F3E": 0, "F3O": 0, "F4P": 0, "F4C": 0, "F4E": 0, "F4O": 0, "F5P": 0, "F5C": 0, "F5E": 0, "F5O": 0, "F6P": 0, "F6C": 0, "F6E": 0, "F6O": 0, "F7P": 0, "F7C": 0, "F7E": 0, "F7O": 0}, "tagged": {"foundation": 0, "domain": 115, "cell": 0, "register": 33, "pathway": 0, "element": 23}, "untagged": {"foundation": 141, "domain": 26, "cell": 141, "register": 108, "pathway": 141, "element": 118}, "cells_with_8_or_more": 0, "floor_20_of_28": "STOP_NOT_EXERCISED"}
+
+[stage 1c] live loop with notes: ["user", "CCE skin", "English in", "S6 next", "user", "English in (wide)", "S0 atlas head", "S1 trigger ^8", "S2 Bias ^5", "S3 arrival ^9", "S4 operating point", "S5 RPM link", "CCE skin", "brain", "store", "S6 next"]

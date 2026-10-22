@@ -1,0 +1,22 @@
+.................
+----------------------------------------------------------------------
+Ran 17 tests in 0.501s
+
+OK
+
+[helm_cas_address] rules: {
+ "FND-1": "the record names its Foundation (F1..F7 or a canonical Drive name) in a foundation / drive / filed_at / desire / F field",
+ "FND-2": "an item the Unity Eye wrote is F1 (the owner's ruling names the Eye the F1 watcher)",
+ "DOM-1": "a status / reason / code word maps through DOM_1_TABLE (sub-rules a..e)",
+ "DOM-2": "an item kind maps through DOM_2_TABLE",
+ "DOM-3": "a trace row's station maps through DOM_3_TABLE (brain and S6 next rows go by their word)",
+ "CELL-1": "Foundation x Domain when both are set",
+ "REG-1a": "a faces sentence or a purpose clause carries f",
+ "REG-1b": "a plan or a rule that fired carries A",
+ "REG-1c": "a stock or batch line carries E",
+ "REG-1d": "a vision-level item (ruling, roadmap) carries T",
+ "PATH-1": "only a planner-named RPM chain node (A0, D1..D7, W1..W7, P1..P7) in a pathway / pathway_node field",
+ "ELE-1": "only a Noetic the record already names (noetic field, or ^n in the station) x a set Domain"
+}
+
+[helm_cas_address] live-loop fixture histogram: {"items": 141, "grid_28": {"F1P": 0, "F1C": 0, "F1E": 0, "F1O": 0, "F2P": 0, "F2C": 0, "F2E": 0, "F2O": 0, "F3P": 0, "F3C": 0, "F3E": 0, "F3O": 0, "F4P": 0, "F4C": 0, "F4E": 0, "F4O": 0, "F5P": 0, "F5C": 0, "F5E": 0, "F5O": 0, "F6P": 0, "F6C": 0, "F6E": 0, "F6O": 0, "F7P": 0, "F7C": 0, "F7E": 0, "F7O": 0}, "tagged": {"foundation": 0, "domain": 115, "cell": 0, "register": 33, "pathway": 0, "element": 23}, "untagged": {"foundation": 141, "domain": 26, "cell": 141, "register": 108, "pathway": 141, "element": 118}, "cells_with_8_or_more": 0, "floor_20_of_28": "STOP_NOT_EXERCISED"}

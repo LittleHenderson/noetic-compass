@@ -1,0 +1,71 @@
+{
+ "authored_fixture": true,
+ "raw_by_id": {
+  "AUTHOR:A1": [
+   "3 cups tomatoes with juice",
+   "1 cup chopped tomatoes",
+   "2 onions"
+  ],
+  "AUTHOR:C1": [
+   "3 eggs, 1 beaten",
+   "2 cups flour",
+   "1 cup milk"
+  ],
+  "AUTHOR:C2": [
+   "1 cup sugar, 2 tablespoons reserved",
+   "2 cups flour",
+   "1 cup milk"
+  ],
+  "AUTHOR:C3": [
+   "2 cups flour, plus 2 tablespoons",
+   "1 pound beef, a lean cut",
+   "1 cup broth"
+  ],
+  "AUTHOR:C4": [
+   "1 onion, 2 tomatoes",
+   "1 cup rice",
+   "2 cups tomatoes with juice"
+  ],
+  "AUTHOR:D1": [
+   "1 can tomatoes or",
+   "4 cups chopped tomatoes",
+   "2 onions"
+  ],
+  "AUTHOR:D2": [
+   "1 cup butter or",
+   "1 cup margarine",
+   "2 cups flour"
+  ],
+  "AUTHOR:D3": [
+   "1 can tomatoes or",
+   "4 cups fresh tomatoes",
+   "2 onions"
+  ],
+  "AUTHOR:D4": [
+   "2 cups flour",
+   "1 cup butter, or",
+   "1 cup margarine"
+  ],
+  "AUTHOR:M1": [
+   "2 cups barley",
+   "5 cloves, 10 juniper berries",
+   "1 cup broth"
+  ],
+  "AUTHOR:P1": [
+   "2 cups rice",
+   "6 cloves and 12 peppercorns",
+   "1 cup stock"
+  ],
+  "AUTHOR:X1": [
+   "3 cups tomatoes with juice",
+   "1 can tomatoes or",
+   "2 onions"
+  ],
+  "AUTHOR:X2": [
+   "1 can tomatoes in juice",
+   "2 tomatoes",
+   "2 onions"
+  ]
+ },
+ "schema": "helm.r1w7.v73-t3.raw-lines/1"
+}
