@@ -1,0 +1,32 @@
+# WRITER BRIEF — CUBE TRAIN lines (for the AI model writers)
+
+You write what one person types to a chat assistant while telling it about a small made-up subject: a family's hive
+yards over a year, or a small town's bus lines. You write the person's lines only. The facts are given; you choose the
+words. These lines are TRAINING DATA for a small translator; they are not an exam.
+
+You receive a JSON list of slots. Each slot has an `id`, a `kind`, and for most kinds a `canonical` sentence, a
+`value`, `anchor_words`, and for some a `not_value` or a `decoy`.
+
+| kind | what your line must do |
+|---|---|
+| `FACT` | state the canonical fact in your own words, with the given value |
+| `FIX` | correct an earlier fact: state the new `value` and say the old `not_value` was wrong ("not seven") |
+| `TRAP` | state the canonical fact with the given value, AND mention the given `decoy` naturally (a second number, another month or place, or an odd "not"), without making the decoy the fact's value |
+| `UNKNOWN` | say the person does not remember that fact; state no value for it |
+| `SMALL` | small talk with no fact in it |
+
+Rules:
+1. Exactly one line per slot; keep each slot's `id`.
+2. FACT, FIX, TRAP and UNKNOWN lines contain every word in `anchor_words`, spelled the same (any case, any order).
+3. Numbers are written as words ("eleven"), never digits. A FACT or TRAP line states its `value`; a FIX line states its
+   `value` and its `not_value`; an UNKNOWN line states no value.
+4. One or two sentences, at most 60 words. Statements only: no question marks.
+5. Use only the names, numbers and months given in the slot. No outside facts.
+6. Change the wording of the canonical sentence; do not copy it word for word.
+7. Do not talk about yourself or your family, feelings, food or cooking, computers, or ask what the assistant remembers.
+
+Reply with ONLY a JSON list, one object per slot: `{"id": "<id>", "text": "<your line>"}`. No other text.
+
+
+REWRITE these slots (each was refused for the reason given):
+[{"id": "TRAIN-google-10200-10", "kind": "FACT", "canonical": "The queens for the Yarrowdale yard came from Carrow.", "value": "Carrow", "anchor_words": ["queens", "yarrowdale", "yard", "came"], "refused_because": "anchor words missing", "your_line": "We obtained the queens for the yarrowdale yard from Carrow."}, {"id": "TRAIN-google-10202-04", "kind": "FACT", "canonical": "The queens for the Kelsmere yard came from Ashby.", "value": "Ashby", "anchor_words": ["queens", "kelsmere", "yard", "came"], "refused_because": "anchor words missing", "your_line": "We got the queens for the kelsmere yard from Ashby."}, {"id": "TRAIN-google-10204-18", "kind": "SMALL", "canonical": "Hang on, I lost my place for a moment.", "refused_because": "copied word for word", "your_line": "Hang on, I lost my place for a moment."}, {"id": "TRAIN-google-10204-19", "kind": "SMALL", "canonical": "Thanks, that is useful.", "refused_because": "copied word for word", "your_line": "Thanks, that is useful."}]

@@ -1,0 +1,26 @@
+[
+ {
+  "id": "TRAIN-anthropic-10006-06",
+  "text": "In January the Greystoke yard got moved over to Dovecote."
+ },
+ {
+  "id": "TRAIN-anthropic-10006-11",
+  "text": "The Greystoke yard was looked after by Wendel."
+ },
+ {
+  "id": "TRAIN-anthropic-10007-11",
+  "text": "The driver on the Longmoor line was Sabra, who drove it."
+ },
+ {
+  "id": "TRAIN-anthropic-10007-12",
+  "text": "Saltwick was where the Lindhurst line ended."
+ },
+ {
+  "id": "TRAIN-anthropic-10008-10",
+  "text": "Whatever honey came out of the Oakridge yard went to be sold at the market in Ashby."
+ },
+ {
+  "id": "TRAIN-anthropic-10009-11",
+  "text": "At Nethercote is where the Wexcombe line ended."
+ }
+]

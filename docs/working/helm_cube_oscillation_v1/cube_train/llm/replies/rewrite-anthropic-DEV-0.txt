@@ -1,0 +1,54 @@
+[
+ {
+  "id": "DEV-anthropic-10000-06",
+  "text": "The queens for the Yarrowdale yard all came over from Ivybridge."
+ },
+ {
+  "id": "DEV-anthropic-10001-13",
+  "text": "The depot for the Fallowmere line was at Ivybridge, not somewhere further out of town."
+ },
+ {
+  "id": "DEV-anthropic-10002-06",
+  "text": "The Thornfield yard was looked after by Garron."
+ },
+ {
+  "id": "DEV-anthropic-10002-11",
+  "text": "All the honey from the Thornfield yard went to be sold at the market in Eastwold."
+ },
+ {
+  "id": "DEV-anthropic-10002-13",
+  "text": "The honey from the Nethercote yard went to the Kelsmere market, while Thornfield sent its own honey somewhere else."
+ },
+ {
+  "id": "DEV-anthropic-10002-17",
+  "text": "Where the queens for the Thornfield yard came from is something I can no longer recall."
+ },
+ {
+  "id": "DEV-anthropic-10003-05",
+  "text": "Northgate was the stop where the Oxley line ended."
+ },
+ {
+  "id": "DEV-anthropic-10003-13",
+  "text": "The depot for the Brindle line was at Carrow, a different place from the one used by Oxley."
+ },
+ {
+  "id": "DEV-anthropic-10004-02",
+  "text": "The Ravensby yard was looked after by Sabra."
+ },
+ {
+  "id": "DEV-anthropic-10004-05",
+  "text": "The queens for the Glenhollow yard came over from Lindhurst."
+ },
+ {
+  "id": "DEV-anthropic-10004-07",
+  "text": "The honey taken from the Ravensby yard went to be sold at the Pennyford market."
+ },
+ {
+  "id": "DEV-anthropic-10004-11",
+  "text": "The honey from the Thornfield yard went to the market in Ashcombe to be sold."
+ },
+ {
+  "id": "DEV-anthropic-10004-15",
+  "text": "The queens for the Moorcroft yard came from Longmoor, with the last batch arriving in September."
+ }
+]
