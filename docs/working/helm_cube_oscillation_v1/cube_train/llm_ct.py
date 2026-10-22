@@ -34,7 +34,7 @@ from teach1 import turns_t1 as T  # noqa: E402
 from teach1 import worlds_t1 as W  # noqa: E402
 
 OUT = os.path.join(HERE, "llm")
-FAMILIES = ("anthropic", "openai", "google")
+FAMILIES = ("anthropic", "openai", "google", "deepseek")   # deepseek: A-CUBE-TRAIN-4
 WORLDS = {"TRAIN": 20, "DEV": 5}
 BANDS = {"TRAIN": R.TRAIN_BAND, "DEV": R.DEV_BAND}
 FIRST_INDEX = 10_000                     # the SDG rows use the low world indices of the same bands
@@ -182,7 +182,7 @@ def _truth(slot: Dict[str, Any]) -> Tuple[str, str]:
 
 def assemble_one(slot: Dict[str, Any], line: str, keys: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     ok, _why = check_line(slot, line)
-    if not ok or len(keys) != 2:
+    if not ok or len(keys) < 2:                  # A-CUBE-TRAIN-4: at least two keys, every one right
         return None
     want = _truth(slot)
     for k in keys:
@@ -222,6 +222,8 @@ BATCH_WORLDS = 5
 
 
 def run_cli(family: str, prompt: str, tag: str, timeout: int = 1800) -> Tuple[str, Dict[str, Any]]:
+    if family == "deepseek":
+        return run_deepseek(prompt, tag)
     """One call of a family. Command-line families run in an empty folder with the prompt on stdin. The Anthropic
     family is file mode: the prompt is saved as llm/prompts/<tag>.txt and the reply read from llm/replies/<tag>.txt
     once a Claude helper agent has written it (empty until then)."""
@@ -256,6 +258,50 @@ def run_cli(family: str, prompt: str, tag: str, timeout: int = 1800) -> Tuple[st
         fh.write(out)
     model = CODEX_MODEL if family == "openai" else GEMINI_MODEL
     return out, {"family": family, "tag": tag, "model": model, "returncode": rc, "seconds": round(time.time() - t0, 1)}
+
+
+DEEPSEEK_URL = "https://api.deepseek.com/chat/completions"
+DEEPSEEK_MODEL = "deepseek-chat"
+
+
+def _deepseek_key() -> Optional[str]:
+    """The key from the environment or the owner's local key file; never printed or recorded."""
+    if os.environ.get("DEEPSEEK_API_KEY"):
+        return os.environ["DEEPSEEK_API_KEY"]
+    path = os.path.expanduser("~/.cas_llm_keys.env")
+    if not os.path.isfile(path):
+        return None
+    for line in open(path, encoding="utf-8"):
+        line = line.strip()
+        if line.startswith("export "):
+            line = line[7:]
+        if line.startswith("DEEPSEEK_API_KEY="):
+            return line.split("=", 1)[1].strip().strip('"').strip("'")
+    return None
+
+
+def run_deepseek(prompt: str, tag: str, timeout: int = 600) -> Tuple[str, Dict[str, Any]]:
+    """One DeepSeek chat call through Python's standard library (A-CUBE-TRAIN-4); usage tokens recorded."""
+    import urllib.request
+    os.makedirs(os.path.join(OUT, "prompts"), exist_ok=True)
+    with open(os.path.join(OUT, "prompts", f"{tag}.txt"), "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(prompt)
+    t0 = time.time()
+    body = json.dumps({"model": DEEPSEEK_MODEL, "messages": [{"role": "user", "content": prompt}],
+                       "temperature": 0.7, "max_tokens": 8192}).encode("utf-8")
+    req = urllib.request.Request(DEEPSEEK_URL, data=body, headers={"Authorization": "Bearer " + (_deepseek_key() or ""),
+                                                                   "Content-Type": "application/json"})
+    try:
+        r = json.load(urllib.request.urlopen(req, timeout=timeout))
+        out, usage, served, rc = r["choices"][0]["message"]["content"], r.get("usage", {}), r.get("model"), 0
+    except Exception as exc:
+        out, usage, served, rc = "", {}, None, type(exc).__name__
+    os.makedirs(os.path.join(OUT, "replies"), exist_ok=True)
+    with open(os.path.join(OUT, "replies", f"{tag}.txt"), "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(out)
+    return out, {"family": "deepseek", "tag": tag, "model": served or DEEPSEEK_MODEL, "returncode": rc,
+                 "seconds": round(time.time() - t0, 1), "prompt_tokens": usage.get("prompt_tokens", 0),
+                 "completion_tokens": usage.get("completion_tokens", 0)}
 
 
 def _save(name: str, obj: Any) -> None:
@@ -309,28 +355,38 @@ def stage_write(families: Tuple[str, ...] = FAMILIES) -> None:
         _save(f"written_{fam}.json", {"family": fam, "lines": written, "calls": calls})
 
 
-def stage_key(keyers: Tuple[str, ...] = FAMILIES) -> None:
+def stage_key(keyers: Tuple[str, ...] = FAMILIES, writers: Optional[Tuple[str, ...]] = None,
+              missing_from: Optional[str] = None, tag_prefix: str = "key") -> None:
+    """Key the lines of `writers` (default: every other family). `missing_from`: only lines that family has not keyed
+    (A-CUBE-TRAIN-4's gap). Keys merge into an existing keys file; a line already keyed by this keyer is skipped."""
     packs = make_packets()
     slots = {s["id"]: s for fam in FAMILIES for split in ("TRAIN", "DEV") for w in packs[fam][split] for s in w["slots"]}
-    written = {fam: _load(f"written_{fam}.json")["lines"] for fam in FAMILIES}
+    written = {fam: _load(f"written_{fam}.json")["lines"] for fam in FAMILIES
+               if os.path.isfile(os.path.join(OUT, f"written_{fam}.json"))}
+    have = {}
+    if missing_from and os.path.isfile(os.path.join(OUT, f"keys_{missing_from}.json")):
+        have = _load(f"keys_{missing_from}.json")["keys"]
     for keyer in keyers:
-        keys: Dict[str, Dict[str, Any]] = {}
-        calls = []
+        old = _load(f"keys_{keyer}.json") if os.path.isfile(os.path.join(OUT, f"keys_{keyer}.json")) else {}
+        keys: Dict[str, Dict[str, Any]] = dict(old.get("keys", {}))
+        calls = list(old.get("calls", []))
         items = []
-        for fam in FAMILIES:
-            if fam == keyer:
+        for fam in (writers or FAMILIES):
+            if fam == keyer or fam not in written:
                 continue
             for sid in sorted(written[fam]):
                 line = written[fam][sid]
                 s = slots.get(sid)
-                if s is None or not check_line(s, line)[0]:
+                if s is None or not check_line(s, line)[0] or sid in keys:
+                    continue
+                if missing_from and sid in have:
                     continue
                 fact = s.get("fact") or {}
                 about = [a for a in s.get("anchor_words", []) if a.lower() != (fact.get("unit") or "").lower()]
                 items.append({"id": sid, "line": line, "thing": fact.get("unit") or "(none)", "about": about})
         for i in range(0, len(items), 100):
             text, meta = run_cli(keyer, KEY_BRIEF + "\n\nLINES:\n" + json.dumps(items[i:i + 100], ensure_ascii=False),
-                                 f"key-{keyer}-{i // 100}")
+                                 f"{tag_prefix}-{keyer}-{i // 100}")
             calls.append(meta)
             for k in parse_reply(text) or []:
                 if isinstance(k, dict) and k.get("id"):
@@ -341,8 +397,10 @@ def stage_key(keyers: Tuple[str, ...] = FAMILIES) -> None:
 
 def stage_assemble() -> Dict[str, Any]:
     packs = make_packets()
-    written = {fam: _load(f"written_{fam}.json")["lines"] for fam in FAMILIES}
-    keys = {fam: _load(f"keys_{fam}.json")["keys"] for fam in FAMILIES}
+    written = {fam: _load(f"written_{fam}.json")["lines"] if os.path.isfile(os.path.join(OUT, f"written_{fam}.json"))
+               else {} for fam in FAMILIES}
+    keys = {fam: _load(f"keys_{fam}.json")["keys"] for fam in FAMILIES
+            if os.path.isfile(os.path.join(OUT, f"keys_{fam}.json"))}
     rows: Dict[str, List[Dict[str, Any]]] = {"TRAIN": [], "DEV": []}
     tally: Dict[str, Dict[str, int]] = {}
     for fam in FAMILIES:
@@ -358,7 +416,7 @@ def stage_assemble() -> Dict[str, Any]:
                     if not check_line(s, line)[0]:
                         continue
                     t["checked"] += 1
-                    ks = [keys[k][s["id"]] for k in FAMILIES if k != fam and s["id"] in keys[k]]
+                    ks = [keys[k][s["id"]] for k in keys if k != fam and s["id"] in keys[k]]
                     row = assemble_one(s, line, ks)
                     if row is not None:
                         rows[split].append(row)
@@ -379,6 +437,9 @@ if __name__ == "__main__":
     if stage == "write":
         stage_write(fams)
     elif stage == "key":
-        stage_key(fams)
+        writers = tuple(sys.argv[3].split(",")) if len(sys.argv) > 3 and sys.argv[3] != "-" else None
+        missing = sys.argv[4] if len(sys.argv) > 4 and sys.argv[4] != "-" else None
+        prefix = sys.argv[5] if len(sys.argv) > 5 else "key"
+        stage_key(fams, writers, missing, prefix)
     elif stage == "assemble":
         print(json.dumps(stage_assemble(), indent=1))

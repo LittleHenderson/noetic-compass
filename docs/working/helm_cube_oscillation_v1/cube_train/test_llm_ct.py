@@ -78,3 +78,19 @@ def test_unknown_and_small_lines_become_none_rows_when_both_keyers_say_none():
 def test_reply_parsing_finds_the_json_list():
     assert L.parse_reply('Sure!\n```json\n[{"id": "a", "text": "x"}]\n```') == [{"id": "a", "text": "x"}]
     assert L.parse_reply("no json here") is None
+
+
+def test_the_keep_rule_needs_two_keys_and_every_key_right():
+    s = _slot("FACT")
+    line = L.example_line(s)
+    right = {"id": s["id"], "value": s["value"], "replaces": "-"}
+    wrong = {"id": s["id"], "value": "NONE", "replaces": "-"}
+    assert L.assemble_one(s, line, [right]) is None                    # one key is not enough
+    assert L.assemble_one(s, line, [right, right, right]) is not None
+    assert L.assemble_one(s, line, [right, right, wrong]) is None      # any wrong key drops the line
+
+
+def test_deepseek_is_the_fourth_family_with_its_own_worlds():
+    assert L.FAMILIES == ("anthropic", "openai", "google", "deepseek")
+    packs = L.make_packets()
+    assert all(10_300 <= w["index"] < 10_400 for split in ("TRAIN", "DEV") for w in packs["deepseek"][split])

@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM CUBE TRAIN pieces built (spec sheet 7.125 follow-up 15): row builder + CTT adapter (test-first), AI-written stratum by four families incl. DeepSeek: kept TRAIN 1,503 / DEV 376; DeepSeek ~0.054 USD; not sealed, not trained
+
+- Owner's words: "build the training rows and the CTT adapter test-first (0 USD), then the AI-written lines, then seal the training package" and "for more ai lines you could use deepseek".
+- A-CUBE-TRAIN-1..4 before the work they govern. Row builder: 40,000 TRAIN rows (6,000 say-back), DEV 2,000, generator-truth labels, 0 dropped. Adapter: target_string / reading_from_ctt / CTTProposer in helm_cube_osc.py.
+- Stratum: 2,000 lines by Anthropic (Claude helper agents; CLI login expired), OpenAI (Codex gpt-5.6-terra), Google (Gemini 3 flash; rate-limited on one keying batch), DeepSeek (API); each kept only with >= 2 other-family keys naming the truth. Kept TRAIN 1,503, DEV 376. Next: adapt the CTT training code and seal.
+
 ## 2026-10-22 PDT - HELM ear and mouth training v1 designed (spec sheet 7.126; design only, 0 USD)
 
 - Owner's words: "Design ear and mouth training from confirmed cubes plus the SDG" (side-chat notes folded in).

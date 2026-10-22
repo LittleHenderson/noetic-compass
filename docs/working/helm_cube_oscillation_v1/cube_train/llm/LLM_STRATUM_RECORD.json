@@ -6,8 +6,8 @@
  ],
  "note": "command-line tools on subscriptions the owner already pays for",
  "rows": {
-  "DEV": 295,
-  "TRAIN": 1091
+  "DEV": 376,
+  "TRAIN": 1503
  },
  "tally": {
   "anthropic:DEV": {
@@ -19,6 +19,18 @@
   "anthropic:TRAIN": {
    "checked": 400,
    "kept": 398,
+   "slots": 400,
+   "written": 400
+  },
+  "deepseek:DEV": {
+   "checked": 86,
+   "kept": 81,
+   "slots": 100,
+   "written": 100
+  },
+  "deepseek:TRAIN": {
+   "checked": 332,
+   "kept": 318,
    "slots": 400,
    "written": 400
   },
@@ -42,7 +54,7 @@
   },
   "openai:TRAIN": {
    "checked": 399,
-   "kept": 299,
+   "kept": 393,
    "slots": 400,
    "written": 400
   }
