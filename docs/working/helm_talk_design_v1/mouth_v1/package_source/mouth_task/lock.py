@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Dict, FrozenSet, Iterable, Optional, Set
 
-from .vocab_m import input_words
+from .vocab_m import input_words, pretokens
 
 PUNCT = (".", ",", "?", "!", "'", ";", ":", "-")
 EOS = "[EOS]"
@@ -32,12 +32,18 @@ class MouthAutomaton:
     def __init__(self, vocab, words: Iterable[str]) -> None:
         self.root = _Node()
         for w in words:
-            pieces = vocab.wp.word(w)
-            if not pieces or None in pieces:
-                continue
+            if any(c.isdigit() for c in w):     # a number: its pre-tokens in order ("1", "4", "th"), as one locked unit
+                toks = ["en:" + p for p in pretokens(w)]
+                if not all(t in vocab.id for t in toks):
+                    continue
+            else:
+                pieces = vocab.wp.word(w)
+                if not pieces or None in pieces:
+                    continue
+                toks = ["en:" + p for p in pieces]
             n = self.root
-            for p in pieces:
-                n = n.kids.setdefault("en:" + p, _Node())
+            for t in toks:
+                n = n.kids.setdefault(t, _Node())
             n.end = True
         self.start_tokens: FrozenSet[str] = frozenset(self.root.kids)
         self.punct = frozenset("en:" + p for p in PUNCT if ("en:" + p) in vocab.id)
@@ -59,7 +65,7 @@ class MouthAutomaton:
         key = id(n)
         got = self._cache.get(key)
         if got is None:
-            out = {t for t in n.kids if t.startswith("en:##")}
+            out = set(n.kids)                         # "##" pieces, or the next digit/comma/ordinal of a number
             if n.end:
                 out |= self.start_tokens | self.punct | {EOS}
             got = self._cache[key] = frozenset(out)
@@ -71,6 +77,9 @@ class MouthAutomaton:
             return
         if tok == EOS:
             self.ended = True
+            return
+        if self.node is not None and tok in self.node.kids:
+            self.node = self.node.kids[tok]
             return
         if tok in self.punct:
             self.node = None

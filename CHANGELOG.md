@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM MOUTH TRAIN package SEALED (spec sheet 7.128): zip 423d08a3..., 12 tests pass from a fresh unzip; 0 USD; not run
+
+- Owner's words: "Yes, build the mouth" ("ask me before any money is spent"), "IF YOU NEED USE DEEPSEEK AS WELL".
+- Lessons: 3,029 AI-written lines kept of 3,432 rule-passing (each checked by two other families, none failing); Google wrote 190 then hit its free daily quota. Train 2,831 (9.7 % template), DEV 534, exam 1,076.
+- Laptop smoke (30 steps): fixed a lock hole (single digits of an input number could be written alone) and a GPU memory leak in locked sampling; final smoke all instruments true, 0 new-fact lines.
+- A-TALK-6 written before the seal. AWS job c59 tools made from c57. Backup D:/tksCAS-archive/mouth_train_seal_20261022. Next: the owner's click to launch (cap 4 USD, expected ~1.5 USD).
+
 ## 2026-10-22 PDT - HELM talk layer v1 BUILT behind HELM_TALK / HELM_TALK_ASK, both OFF by default (spec sheet 7.127); 0 USD; not trained, not examined
 
 - Owner's words: "SO I WANT TO TACKLE "TALKING LIKE A PERSON" NEXT" and the button "Yes: use the recommended answers to the ear-and-mouth questions (Q1 a ... Q5 a asking-from-what-HELM-knows next) and start the 0 USD talk pieces, amendment first, test-first."

@@ -66,10 +66,15 @@ def detokenize(tokens: Sequence[str], names: Dict[str, str]) -> str:
     apostrophe joined to both neighbours ("don ' t" -> "don't"), capitals on sentence starts, "I", and every word in
     `names` (lower-case word -> its written form, from the input)."""
     words: List[str] = []
-    for t in tokens:
-        p = t[3:] if t.startswith("en:") else t
+    ps = [t[3:] if t.startswith("en:") else t for t in tokens]
+    for k, p in enumerate(ps):
+        nxt = ps[k + 1] if k + 1 < len(ps) else ""
         if p.startswith("##") and words:
             words[-1] += p[2:]
+        elif words and re.search(r"\d,?$", words[-1]) and (p[:1].isdigit() or (p in ORDINAL and words[-1][-1].isdigit())):
+            words[-1] += p                     # a number is one word: "1 4 th" -> "14th", "12, 0 0 0" -> "12,000"
+        elif words and p == "," and words[-1][-1:].isdigit() and nxt[:1].isdigit():
+            words[-1] += p
         else:
             words.append(p)
     out = ""
@@ -105,6 +110,13 @@ def detokenize(tokens: Sequence[str], names: Dict[str, str]) -> str:
     return "".join(fixed)
 
 
+ORDINAL = ("st", "nd", "rd", "th", "s")
+NUMBER_RX = re.compile(r"\d(?:[\d,]*\d)?(?:st|nd|rd|th|s)?(?![a-z])")
+
+
 def input_words(text: str) -> List[str]:
-    """The words of an input as the lock counts them (the word-piece pre-tokens that are words or digits)."""
-    return [w for w in pretokens(text) if re.fullmatch(r"[a-z]+|\d", w)]
+    """The words of an input as the lock counts them: the word-piece pre-tokens that are words, and every number as ONE
+    unit with its digits, inner commas and ordinal ("14th", "12,000", "1970s"), so no digit can be written on its own
+    or in another order (a number the input does not hold)."""
+    words = [w for w in pretokens(text) if re.fullmatch(r"[a-z]+", w)]
+    return words + NUMBER_RX.findall(text.lower())

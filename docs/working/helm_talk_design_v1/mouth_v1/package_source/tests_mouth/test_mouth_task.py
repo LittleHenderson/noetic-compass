@@ -92,3 +92,30 @@ class Names(unittest.TestCase):
         self.assertEqual(n.get("rocky"), "Rocky")
         self.assertNotIn("my", n)
         self.assertNotIn("she", n)
+
+
+class Numbers(unittest.TestCase):
+    """A number in the input is one locked unit: "14th" may be written only as "14th", never "4", "41" or "14"."""
+
+    def _write(self, inp, text):
+        a = lock.MouthAutomaton(V, lock.allowed_words(FUNCTION, inp))
+        for i in V.encode_mouth_target(text)[:-1]:
+            tok = V.tokens[i]
+            if tok not in a.allowed():
+                return False
+            a.step(tok)
+        return "[EOS]" in a.allowed()
+
+    def test_whole_numbers_only(self):
+        inp = "off our office moved to the 14th floor, down from 12,000 in the 1970s"
+        self.assertTrue(self._write(inp, "the office moved to the 14th floor."))
+        self.assertTrue(self._write(inp, "it was 12,000 in the 1970s."))
+        self.assertFalse(self._write(inp, "the office moved to the 41th floor."))
+        self.assertFalse(self._write(inp, "the office moved to the 4 floor."))
+        self.assertFalse(self._write(inp, "the office moved to the 14 floor."))
+        self.assertFalse(self._write(inp, "it was 1970 in the office."))
+
+    def test_detokenize_glues_numbers(self):
+        ids = V.encode_mouth_target("the 14th floor had 12,000 in the 1970s.")
+        self.assertEqual(vocab_m.detokenize([V.tokens[i] for i in ids[:-1]], names={}),
+                         "The 14th floor had 12,000 in the 1970s.")
