@@ -236,6 +236,7 @@ class Compactor:
         self.cloud: Any = None
         self.moved: Dict[str, str] = {}
         self.moved_records: Dict[str, str] = {}       # capsule id -> cloud key of the Eye's moved record (A-TEACH2-8)
+        self.moved_folds: Dict[str, str] = {}         # fold name -> cloud key of the Eye's fold record (A-TEACH2-9)
         tools = _tools()
         if tools["atlas"] is not None:
             self.atlas = tools["atlas"].Atlas(atlas_id="memory", max_depth=1)
@@ -341,6 +342,8 @@ class Compactor:
 
     def _searchlight_names(self, wanted: set) -> Tuple[List[str], int, bool]:
         order = [cid for cid, _c, _k in self._capsule_index()]
+        known = set(order)
+        order += [w for w in sorted(wanted) if w not in known]     # folded capsules found by the Eye (A-TEACH2-9)
         if self.atlas is None or self._anchor is None:
             return [c for c in order if c in wanted][:SEARCHLIGHT_CAP], 0, True
         by_node = {f"capsule:{cid}": cid for cid in order}
@@ -598,16 +601,25 @@ class Compactor:
                 if t.intent not in MEMORY_QUERY_INTENTS and tokens <= set(content_words(t.user_raw_text))]
         pinned = [(cid, entry) for cid, entry in reversed(list(self._pinned.items()))
                   if any(tokens <= set(content_words(x)) for x in entry["texts"])]
-        wanted = {cid for cid, clues, kind in self._capsule_index() if kind == "statement" and tokens <= set(clues)
-                  and cid not in self._pinned}
+        match_away, deep = False, False
+        if hasattr(self.capsules, "match"):
+            # the Eye's path: rows in working memory, then the folded rows, then a deep search on the device (A-TEACH2-9)
+            names, match_away, deep = self.capsules.match(tokens)
+            wanted = {cid for cid in names if cid not in self._pinned}
+        else:
+            wanted = {cid for cid, clues, kind in self._capsule_index() if kind == "statement" and tokens <= set(clues)
+                      and cid not in self._pinned}
+        lookup["deep_search"] = deep
         hits, radius, beyond = self._searchlight(wanted) if wanted else ([], 0, False)
         hits = sorted(hits, key=lambda c: c.crumb["turn_ids"][-1], reverse=True)
         lookup.update({"radius": radius, "beyond_searchlight": beyond})
         candidates = len(live) + len(pinned) + len(hits)
         lookup["candidates"] = candidates
-        if candidates == 0 and wanted and getattr(self, "_away", []):
-            # A-TEACH2-8 M5: the matching capsule was moved to the cloud and cannot be reached now; never EXACT
-            return {"label": "UNKNOWN", "texts": [], "question": None, "lookup": lookup, "capsule_id": self._away[0],
+        away_now = match_away or (bool(wanted) and bool(getattr(self, "_away", [])))
+        if candidates == 0 and away_now:
+            # A-TEACH2-8 M5 / A-TEACH2-9 F5: the matching memory is in the cloud and cannot be reached now; never EXACT
+            return {"label": "UNKNOWN", "texts": [], "question": None, "lookup": lookup,
+                    "capsule_id": (getattr(self, "_away", []) or [None])[0],
                     "reason": "my full notes are stored away and I can't reach them right now"}
         if candidates == 0:
             return {"label": "UNKNOWN", "texts": [], "question": None, "reason": "no clue matched", "lookup": lookup,

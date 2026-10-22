@@ -438,11 +438,11 @@ class CubeOsc:
         if any(t.turn_id == turn_id for t in self.memory.turns):
             return "EXACT"
         comp = getattr(self.memory, "compactor", None)
-        if comp is not None and hasattr(comp.capsules, "turn_ids_of"):
-            # the Eye's path: find the capsule by its name in the index, then fetch only that one (A-TEACH2-8)
-            cid = next((c for c in comp.capsules.ids() if turn_id in comp.capsules.turn_ids_of(c)), None)
+        if comp is not None and hasattr(comp.capsules, "find_by_turn"):
+            # the Eye's path: find the capsule by its line number (rows, then folded rows), then fetch only that one
+            cid = comp.capsules.find_by_turn(turn_id)
             if cid is None:
-                return "MISSING"
+                return "OFFLINE" if comp.capsules.last_status == "AWAY" else "MISSING"
             cap = comp.capsules.get(cid)
             if cap is None:
                 return "OFFLINE" if comp.capsules.last_status == "AWAY" else "MISSING"
@@ -526,6 +526,8 @@ class CubeOsc:
         flag = self._fade_batches(comp, target)
         if self.working_bytes() > target and hasattr(comp.capsules, "move_off_oldest_until"):
             comp.capsules.move_off_oldest_until(lambda: self.working_bytes() <= target)
+        if self.working_bytes() > target and hasattr(comp.capsules, "fold_until"):
+            comp.capsules.fold_until(lambda: self.working_bytes() <= target)      # A-TEACH2-9: rows upon rows
         if self.working_bytes() > target:
             kind, detail = flag or ("OVER_LIMIT_INDEX", "over the limit with every capsule moved off; the index and "
                                                         "the protected lines remain")
@@ -569,24 +571,37 @@ class CubeOsc:
         return None
 
     # ---------------------------------------------------------------- the cloud tier (A-TEACH2-5 L3-L6, A-TEACH2-8 M4)
-    def _cold_files(self) -> List[Tuple[str, str, Optional[str]]]:
-        """(capsule name, original's path, moved record's path or None) for every capsule, oldest first."""
+    def _lean_path(self) -> bool:
+        comp = getattr(self.memory, "compactor", None)
+        return comp is not None and hasattr(comp.capsules, "fold_record_path")
+
+    def _cold_units(self) -> List[Tuple[str, str, List[str]]]:
+        """The files in the device's cold folder, grouped, oldest first: ("capsule", name, [original, record]) and
+        ("fold", name, [fold record]). On the Eye's path the folder is listed, so folded capsules are included."""
         comp = getattr(self.memory, "compactor", None)
         if comp is None:
             return []
-        if hasattr(comp.capsules, "record_path"):
-            return [(cid, os.path.join(comp.cold_dir, f"{cid}.jsonl"), comp.capsules.record_path(cid))
-                    for cid in comp.capsules.ids()]
-        return [(c.capsule_id, c.crumb["cold_path"], None) for c in comp.capsules]
+        if not self._lean_path():
+            return [("capsule", c.capsule_id, [c.crumb["cold_path"]]) for c in comp.capsules]
+        try:
+            names = sorted(os.listdir(comp.cold_dir))
+        except OSError:
+            return []
+        caps: Dict[str, List[str]] = {}
+        folds: List[Tuple[str, str, List[str]]] = []
+        for n in names:
+            path = os.path.join(comp.cold_dir, n)
+            if n.endswith(".fold.json"):
+                folds.append(("fold", n[: -len(".fold.json")], [path]))
+            elif n.endswith(".lean.json"):
+                caps.setdefault(n[: -len(".lean.json")], []).append(path)
+            elif n.endswith(".jsonl"):
+                caps.setdefault(n[: -len(".jsonl")], []).insert(0, path)
+        return [("capsule", cid, caps[cid]) for cid in sorted(caps)] + folds
 
     def local_cold_bytes(self) -> int:
-        """Bytes in the device's cold folder: verbatim originals and the Eye's moved records."""
-        total = 0
-        for _cid, path, rec in self._cold_files():
-            for f in (path, rec):
-                if f and os.path.isfile(f):
-                    total += os.path.getsize(f)
-        return total
+        """Bytes in the device's cold folder: verbatim originals, the Eye's moved records and fold records."""
+        return sum(os.path.getsize(f) for _k, _n, files in self._cold_units() for f in files if os.path.isfile(f))
 
     def _upload(self, cloud: Any, key: str, data: bytes, check: Callable[[bytes], bool]) -> bool:
         try:
@@ -608,38 +623,42 @@ class CubeOsc:
         if cloud is None or not cloud.available():
             self._limit_flag("MOVE_FAILED", "local cold folder over its limit; the cloud cannot be reached")
             return
-        for cid, path, rec_path in self._cold_files():
+        for kind, name, files in self._cold_units():
             if self.local_cold_bytes() <= self.local_limit_bytes:
                 break
-            has_orig = cid not in comp.moved and os.path.isfile(path)
-            has_rec = bool(rec_path) and cid not in comp.moved_records and os.path.isfile(rec_path)
-            if not (has_orig or has_rec):
-                continue
-            cap = comp._capsule(cid)
-            if cap is None:
+            files = [f for f in files if os.path.isfile(f)]
+            if not files:
                 continue
             moves = []
-            if has_orig:
-                with open(path, "rb") as fh:
+            if kind == "fold":
+                with open(files[0], "rb") as fh:
                     data = fh.read()
-                key = self.cloud_prefix + os.path.basename(path)
-                if not self._upload(cloud, key, data, lambda b: hmc._sha(b) == cap.crumb["sha256"]):
+                key = self.cloud_prefix + os.path.basename(files[0])
+                if not self._upload(cloud, key, data, lambda b: b == data):
                     self._limit_flag("MOVE_FAILED", f"read-back check failed for {key}; the local copy stays")
                     return
-                moves.append(("original", path, key, len(data)))
-            if has_rec:
-                with open(rec_path, "rb") as fh:
-                    rdata = fh.read()
-                rkey = self.cloud_prefix + os.path.basename(rec_path)
-                if not self._upload(cloud, rkey, rdata, lambda b: b == rdata):
-                    self._limit_flag("MOVE_FAILED", f"read-back check failed for {rkey}; the local copies stay")
+                os.remove(files[0])
+                comp.moved_folds[name] = key
+                comp._receipt("MOVED_TO_CLOUD", name, hmc._sha(data), {"key": key, "bytes": len(data)})
+                continue
+            cap = comp._capsule(name)
+            if cap is None:
+                continue
+            for f in files:
+                with open(f, "rb") as fh:
+                    data = fh.read()
+                key = self.cloud_prefix + os.path.basename(f)
+                original = f.endswith(".jsonl")
+                check = (lambda b: hmc._sha(b) == cap.crumb["sha256"]) if original else (lambda b, d=data: b == d)
+                if not self._upload(cloud, key, data, check):
+                    self._limit_flag("MOVE_FAILED", f"read-back check failed for {key}; the local copies stay")
                     return
-                moves.append(("record", rec_path, rkey, len(rdata)))
-            for what, f, key, nbytes in moves:
+                moves.append(("original" if original else "record", f, key, len(data)))
+            for what, f, key, _n in moves:
                 os.remove(f)
-                (comp.moved if what == "original" else comp.moved_records)[cid] = key
-            comp._receipt("MOVED_TO_CLOUD", cid, cap.receipt,
-                          {"key": next((m[2] for m in moves if m[0] == "original"), comp.moved.get(cid)),
+                (comp.moved if what == "original" else comp.moved_records)[name] = key
+            comp._receipt("MOVED_TO_CLOUD", name, cap.receipt,
+                          {"key": next((m[2] for m in moves if m[0] == "original"), comp.moved.get(name)),
                            "record_key": next((m[2] for m in moves if m[0] == "record"), None),
                            "sha256": cap.crumb["sha256"], "bytes": sum(m[3] for m in moves)})
         self._last_limit_flag = None

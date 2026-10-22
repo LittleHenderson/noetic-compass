@@ -135,8 +135,11 @@ def test_working_memory_after_against_before(tmp_path):
 def test_a_longer_chat_still_goes_over_the_limit(tmp_path):
     """PINNED MEASURED NEGATIVE (A-TEACH2-7 record): a lean capsule (~280 bytes) still stays in working memory, about
     3 bytes in 10 of the lines it replaces, so capsules pile up: 600 lines at a 4,000 limit -> 26,126 bytes. The
-    lean capsule moves the point where the limit breaks; it does not remove it."""
+    lean capsule moves the point where the limit breaks; it does not remove it.
+    The later steps (A-TEACH2-8 move-off, A-TEACH2-9 folding) are switched off here so the negative stays tested."""
     mem, osc = _mem(tmp_path)
+    mem.compactor.capsules.move_off_oldest_until = lambda done: None
+    mem.compactor.capsules.fold_until = lambda done: None
     for i in range(600):
         _say(mem, long_line(i))
     assert osc.working_bytes() > 4000

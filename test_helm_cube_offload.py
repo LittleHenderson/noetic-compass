@@ -112,7 +112,7 @@ def test_a_question_fetches_a_moved_capsule_and_answers_exact(tmp_path):
 def test_a_changed_moved_record_is_held(tmp_path):
     mem, osc = _run(tmp_path)
     comp = mem.compactor
-    cid = comp.capsules.cold_ids()[0]
+    cid = comp.capsules.find_by_turn(1)              # line 1's capsule (it may also be folded, A-TEACH2-9)
     path = os.path.join(comp.cold_dir, f"{cid}.lean.json")
     with open(path, "rb") as fh:
         data = fh.read()
@@ -189,7 +189,11 @@ def test_a_cube_answer_for_a_fact_whose_capsule_is_in_the_cloud(tmp_path):
 def test_a_long_chat_at_a_small_limit_still_goes_over(tmp_path):
     """PINNED MEASURED NEGATIVE (A-TEACH2-8 record, OFFLOAD_BYTES_20261022.json): every moved capsule still leaves an
     index row (~129 bytes) in working memory, so the index grows with the chat: 600 lines at a 4,000 limit end at
-    10,870 bytes (26,034 before). Moving capsules off moves the point where the limit breaks; it does not remove it."""
-    mem, osc = _run(tmp_path)
+    10,870 bytes (26,034 before). Moving capsules off moves the point where the limit breaks; it does not remove it.
+    Folding (A-TEACH2-9) is switched off here so the negative stays tested."""
+    mem, osc = _mem(tmp_path)
+    mem.compactor.capsules.fold_until = lambda done: None
+    for i in range(600):
+        _say(mem, long_line(i))
     assert 4000 < osc.working_bytes() < BEFORE_600
     assert any(k in _flags(mem) for k in ("BATCH_NO_GAIN", "OVER_LIMIT_PROTECTED", "OVER_LIMIT_INDEX"))

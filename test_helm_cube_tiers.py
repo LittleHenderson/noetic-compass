@@ -44,7 +44,11 @@ SIDES = ["north", "south", "eastern", "western"]
 
 def plot(i):
     """A word of letters only that no other line has ("plotaa", "plotab", ...), so a recall finds exactly one line."""
-    return "plot" + chr(97 + i // 26) + chr(97 + i % 26)
+    if i < 676:
+        return "plot" + chr(97 + i // 26) + chr(97 + i % 26)
+    # past 676 two letters run out (chr(123) is "{", not a letter, so every word read as "plot"): three letters
+    # (found by A-TEACH2-9's reachability test, 2026-10-22; lines below 676 keep the same words)
+    return "plot" + chr(97 + i // 676) + chr(97 + (i // 26) % 26) + chr(97 + i % 26)
 
 
 def long_line(i):

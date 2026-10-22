@@ -336,16 +336,26 @@ class CapsuleEye:
         return bool(rows) and rows[-1]["mass"] == cap.mass and rows[-1]["clues"] == list(cap.clues)
 
 
+FOLD_SIZE = 8                   # A-TEACH2-9 F1/F2: 8 rows fold into one (8 capsules = one Atlas thread node)
+FOLD_WORD_CAP = 48              # A-TEACH2-9 F3: clue words kept per folded row; the rest stay in the fold record
+
+
 class LeanCapsules:
-    """The compactor's capsule list on the size-limit path, run by the Eye. In working memory it holds lean records (or
-    a full capsule the Eye refused to shrink) and, for capsules the Eye moved off (A-TEACH2-8), only an index row:
-    name, clue words, the first 16 characters of the receipt. Iterating yields the capsules in working memory; a moved
-    capsule is reached by `get(name)` (device folder first, then the cloud). Every read is a rebuild plus a receipt
-    check; a record that fails is held."""
+    """The compactor's capsule list on the size-limit path, run by the Eye.
+
+    Working memory holds, per capsule position: a lean record (or a full capsule the Eye refused to shrink), or, once the
+    Eye moved the capsule off (A-TEACH2-8), an index row (name, clue words, 16 receipt characters). Old index rows are
+    FOLDED (A-TEACH2-9): 8 index rows -> one level-1 row, 8 level-k rows -> one level-(k+1) row; a folded row keeps at
+    most 48 clue words, its line-number range and 16 characters of its fold record's sha256; the folded rows themselves
+    go to `<cold>/<fold>.fold.json`. Iterating yields the capsules in working memory; any capsule is reached by name
+    through `get` (device folder first, then the cloud). Every read is a rebuild plus a check; a failure is held."""
 
     def __init__(self, eye: CapsuleEye) -> None:
         self.eye = eye
-        self._rows: List[Dict[str, Any]] = []          # {"lean": row} | {"full": capsule dict} | {"cold": index row}
+        self._rows: Dict[int, Dict[str, Any]] = {}     # position -> {"lean"} | {"full"} | {"cold": index row}
+        self._next = 0
+        self._folds: List[Dict[str, Any]] = []         # folded rows in working memory, oldest first per level
+        self._fold_numbers: Dict[int, int] = {}        # level -> folds made so far (names)
         self.last_status = "OK"                        # of the latest get(): OK / HELD / AWAY / MISSING
 
     # ---------------------------------------------------------------- names and rows
@@ -358,24 +368,37 @@ class LeanCapsules:
         return r["cold"]["id"]
 
     def _pos(self, capsule_id: str) -> int:
-        for i, r in enumerate(self._rows):
+        for p, r in self._rows.items():
             if self._rid(r) == capsule_id:
-                return i
+                return p
         return -1
 
     def ids(self) -> List[str]:
-        return [self._rid(r) for r in self._rows]
+        """Names of the capsules that have a row in working memory (not the folded ones)."""
+        return [self._rid(self._rows[p]) for p in sorted(self._rows)]
 
     def cold_ids(self) -> List[str]:
-        return [self._rid(r) for r in self._rows if "cold" in r]
+        return [self._rid(self._rows[p]) for p in sorted(self._rows) if "cold" in self._rows[p]]
 
     def index_rows(self) -> List[Dict[str, Any]]:
-        return [r["cold"] for r in self._rows if "cold" in r]
+        return [self._rows[p]["cold"] for p in sorted(self._rows) if "cold" in self._rows[p]]
+
+    def fold_rows(self) -> List[Dict[str, Any]]:
+        return list(self._folds)
+
+    @staticmethod
+    def _row_turns(capsule_id: str, row: Dict[str, Any]) -> List[int]:
+        if "ids" in row:
+            return list(row["ids"])
+        if "crumb" in row:
+            return list(row["crumb"]["turn_ids"])
+        return CapsuleEye._id_range(capsule_id)
 
     def clue_index(self) -> List[Tuple[str, List[str], str]]:
-        """(name, clue words, kind) for every capsule, in working memory or moved off. Nothing is fetched."""
+        """(name, clue words, kind) for every capsule row in working memory. Folded rows are matched by `match`."""
         out = []
-        for r in self._rows:
+        for p in sorted(self._rows):
+            r = self._rows[p]
             if "lean" in r:
                 out.append((r["lean"]["id"], r["lean"]["c"], r["lean"].get("k", "statement")))
             elif "full" in r:
@@ -385,14 +408,18 @@ class LeanCapsules:
         return out
 
     def turn_ids_of(self, capsule_id: str) -> List[int]:
-        r = self._rows[self._pos(capsule_id)]
-        row = r.get("lean") or r.get("cold")
-        if row is not None:
-            return list(row["ids"]) if "ids" in row else CapsuleEye._id_range(capsule_id)
-        return list(r["full"]["crumb"]["turn_ids"])
+        p = self._pos(capsule_id)
+        if p >= 0:
+            r = self._rows[p]
+            return self._row_turns(capsule_id, r.get("lean") or r.get("cold") or r["full"])
+        leaf = self._leaf_for(capsule_id)
+        return self._row_turns(capsule_id, leaf) if leaf else []
 
     def record_path(self, capsule_id: str) -> str:
         return os.path.join(self.eye.comp.cold_dir, f"{capsule_id}.lean.json")
+
+    def fold_record_path(self, fold_name: str) -> str:
+        return os.path.join(self.eye.comp.cold_dir, f"{fold_name}.fold.json")
 
     # ---------------------------------------------------------------- shrink, store, hold
     @staticmethod
@@ -410,16 +437,22 @@ class LeanCapsules:
         return {"full": json.loads(json.dumps(cap.as_dict()))}
 
     def append(self, cap: Any) -> None:
-        self._rows.append(self._lean_or_full(cap, len(self._rows), "SHRINK"))
+        self._rows[self._next] = self._lean_or_full(cap, self._next, "SHRINK")
+        self._next += 1
 
     def store(self, cap: Any) -> None:
         """Write a changed capsule back into working memory (strengthening appends clues and mass; its content never
-        changes). A moved capsule comes back; its device copy of the record is removed (the cloud never deletes)."""
-        i = self._pos(cap.capsule_id)
-        if i < 0:
-            return
-        was_cold = "cold" in self._rows[i]
-        self._rows[i] = self._lean_or_full(cap, i, "STORE")
+        changes). A moved or folded capsule comes back; its device copy of the record is removed (the cloud keeps its
+        copy; a fold record keeps listing it, and `get` looks in working memory first)."""
+        p = self._pos(cap.capsule_id)
+        if p >= 0:
+            was_cold = "cold" in self._rows[p]
+        else:
+            leaf = self._leaf_for(cap.capsule_id)
+            if leaf is None:
+                return
+            p, was_cold = int(leaf["i"]), True
+        self._rows[p] = self._lean_or_full(cap, p, "STORE")
         if was_cold:
             path = self.record_path(cap.capsule_id)
             if os.path.isfile(path):
@@ -427,13 +460,12 @@ class LeanCapsules:
             self.eye.comp.moved_records.pop(cap.capsule_id, None)
             self.eye._log("MOVE_BACK", cap.capsule_id)
 
-    def _hold(self, capsule_id: str, row: Any) -> None:
+    def _hold(self, name: str, row: Any) -> None:
         self.last_status = "HELD"
-        if capsule_id not in self.eye.held:
-            self.eye.held.add(capsule_id)
-            self.eye._log("HOLD", capsule_id, digest=_sha(row))
-            self.eye.comp._flag("LEAN_REBUILD_MISMATCH", "the rebuilt capsule does not match its receipt; held",
-                                capsule_id)
+        if name not in self.eye.held:
+            self.eye.held.add(name)
+            self.eye._log("HOLD", name, digest=_sha(row))
+            self.eye.comp._flag("LEAN_REBUILD_MISMATCH", "a record does not match what working memory kept; held", name)
 
     def _capsule_from_record(self, rec: Dict[str, Any], i: int, capsule_id: str) -> Any:
         if "id" in rec:                                 # a lean record
@@ -444,23 +476,21 @@ class LeanCapsules:
             return cap
         return self._full_from(rec)                     # a full capsule the Eye refused to shrink
 
-    def _get(self, i: int) -> Any:
-        r = self._rows[i]
+    def _get(self, p: int) -> Any:
+        r = self._rows[p]
         if "full" in r:
             return self._full_from(r["full"])
-        return self._capsule_from_record(r["lean"], i, r["lean"]["id"])
+        return self._capsule_from_record(r["lean"], p, r["lean"]["id"])
 
-    # ---------------------------------------------------------------- moving off and fetching back (A-TEACH2-8)
-    def _load_record(self, capsule_id: str) -> Optional[bytes]:
-        path = self.record_path(capsule_id)
+    # ---------------------------------------------------------------- reading files back (device, then cloud)
+    def _read(self, path: str, key: Optional[str]) -> Optional[bytes]:
         if os.path.isfile(path):
             with open(path, "rb") as fh:
                 return fh.read()
-        comp = self.eye.comp
-        key = comp.moved_records.get(capsule_id)
         if key is None:
             self.last_status = "MISSING"
             return None
+        comp = self.eye.comp
         try:
             data = comp.cloud.get(key) if comp.cloud is not None else None
         except Exception:
@@ -469,21 +499,114 @@ class LeanCapsules:
             self.last_status = "AWAY"
         return data
 
+    def load_fold(self, fold_name: str, row: Optional[Dict[str, Any]] = None,
+                  device_only: bool = False) -> Optional[Dict[str, Any]]:
+        """A fold record, checked against the 16 characters its row kept. None when held, away or missing."""
+        import helm_memory_compact as hmc
+        row = row or next((r for r in self._folds if r["f"] == fold_name), None)
+        if row is None:
+            self.last_status = "MISSING"
+            return None
+        path = self.fold_record_path(fold_name)
+        key = None if device_only else self.eye.comp.moved_folds.get(fold_name)
+        data = self._read(path, key)
+        if data is None:
+            return None
+        try:
+            rec = json.loads(data.decode("utf-8"))
+        except ValueError:
+            rec = None
+        if rec is None or hmc._sha(data)[:16] != row["q"] or rec.get("f") != fold_name:
+            self._hold(fold_name, row)
+            return None
+        return rec
+
+    def _leaves(self, fold_row: Dict[str, Any], want: Any, away: List[str], device_only: bool = False):
+        """Index rows inside a folded row, opening only the folded rows `want(row)` accepts."""
+        rec = self.load_fold(fold_row["f"], fold_row, device_only=device_only)
+        if rec is None:
+            if self.last_status == "AWAY":
+                away.append(fold_row["f"])
+            return
+        for m in rec["members"]:
+            if "f" in m:
+                if want(m):
+                    yield from self._leaves(m, want, away, device_only)
+            else:
+                yield m
+
+    def _leaf_for(self, capsule_id: str) -> Optional[Dict[str, Any]]:
+        first = CapsuleEye._id_range(capsule_id)[0]
+        away: List[str] = []
+        for fr in self._folds:
+            if fr["t"][0] <= first <= fr["t"][1]:
+                for leaf in self._leaves(fr, lambda m: m["t"][0] <= first <= m["t"][1], away):
+                    if leaf["id"] == capsule_id:
+                        return leaf
+        if away:
+            self.last_status = "AWAY"
+        return None
+
+    def find_by_turn(self, turn_id: int) -> Optional[str]:
+        """The name of the capsule holding a line number: rows in working memory first, then the folded rows."""
+        for p in sorted(self._rows):
+            r = self._rows[p]
+            cid = self._rid(r)
+            if turn_id in self._row_turns(cid, r.get("lean") or r.get("cold") or r["full"]):
+                return cid
+        away: List[str] = []
+        for fr in self._folds:
+            if fr["t"][0] <= turn_id <= fr["t"][1]:
+                for leaf in self._leaves(fr, lambda m: m["t"][0] <= turn_id <= m["t"][1], away):
+                    if turn_id in self._row_turns(leaf["id"], leaf):
+                        return leaf["id"]
+        if away:
+            self.last_status = "AWAY"
+        return None
+
+    def match(self, tokens: set) -> Tuple[List[str], bool, bool]:
+        """A-TEACH2-9 F5: names of statement capsules whose clue words hold every question word, from the rows in
+        working memory, then the folded rows that hold every word, then (only if nothing matched) a deep search of the
+        fold records on the device. Returns (names, any_away, deep)."""
+        found = [cid for cid, clues, kind in self.clue_index() if kind == "statement" and tokens <= set(clues)]
+        away: List[str] = []
+        hot = set(self.ids())
+        holds = (lambda m: tokens <= set(m["c"]))
+        for fr in self._folds:
+            if holds(fr):
+                found += [leaf["id"] for leaf in self._leaves(fr, holds, away)
+                          if leaf.get("k", "statement") == "statement" and holds(leaf) and leaf["id"] not in hot]
+        deep = False
+        if not found:
+            deep = True
+            for fr in self._folds:
+                found += [leaf["id"] for leaf in self._leaves(fr, lambda m: True, [], device_only=True)
+                          if leaf.get("k", "statement") == "statement" and holds(leaf) and leaf["id"] not in hot]
+        seen: set = set()
+        names = [c for c in found if not (c in seen or seen.add(c))]
+        return names, bool(away), deep
+
     def get(self, capsule_id: str, record_only: bool = False) -> Any:
         """One capsule by name: rebuilt from working memory, or fetched back (device folder, then the cloud) and checked
         against its index row and its receipt. None when held, unreachable or missing (see `last_status`)."""
         self.last_status = "OK"
-        i = self._pos(capsule_id)
-        if i < 0:
-            self.last_status = "MISSING"
-            return None
-        r = self._rows[i]
-        if "cold" not in r:
-            if record_only:
-                return r.get("lean") or r.get("full")
-            return self._get(i)
-        idx = r["cold"]
-        data = self._load_record(capsule_id)
+        p = self._pos(capsule_id)
+        if p >= 0:
+            r = self._rows[p]
+            if "cold" not in r:
+                if record_only:
+                    return r.get("lean") or r.get("full")
+                return self._get(p)
+            idx, i = r["cold"], p
+        else:
+            idx = self._leaf_for(capsule_id)
+            if idx is None:
+                if self.last_status == "OK":
+                    self.last_status = "MISSING"
+                return None
+            i = int(idx["i"])
+        self.last_status = "OK"
+        data = self._read(self.record_path(capsule_id), self.eye.comp.moved_records.get(capsule_id))
         if data is None:
             return None
         try:
@@ -501,11 +624,12 @@ class LeanCapsules:
             return rec
         return self._capsule_from_record(rec, i, capsule_id)
 
+    # ---------------------------------------------------------------- moving off (A-TEACH2-8)
     def move_off(self, capsule_id: str) -> bool:
-        """M3: write the record to the device folder, read it back byte for byte, then keep only an index row."""
+        """Write the record to the device folder, read it back byte for byte, then keep only an index row."""
         import helm_memory_compact as hmc
-        i = self._pos(capsule_id)
-        r = self._rows[i]
+        p = self._pos(capsule_id)
+        r = self._rows[p]
         if "cold" in r:
             return True
         rec = r.get("lean") or r["full"]
@@ -518,52 +642,112 @@ class LeanCapsules:
         ids = rec.get("ids") if lean else rec["crumb"]["turn_ids"]
         if ids and list(ids) != CapsuleEye._id_range(capsule_id):
             idx["ids"] = list(ids)
-        payload = hmc._canon(rec)
-        path = self.record_path(capsule_id)
+        if not self._write(self.record_path(capsule_id), hmc._canon(rec)):
+            self.eye._log("MOVE_OFF_FAILED", capsule_id, digest=_sha(rec))
+            return False
+        self._rows[p] = {"cold": idx}
+        self.eye._log("MOVE_OFF", capsule_id, digest=_sha(rec), index_digest=_sha(idx))
+        return True
+
+    @staticmethod
+    def _write(path: str, payload: bytes) -> bool:
         try:
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "wb") as fh:
                 fh.write(payload)
             with open(path, "rb") as fh:
-                ok = fh.read() == payload
+                return fh.read() == payload
         except OSError:
-            ok = False
-        if not ok:
-            self.eye._log("MOVE_OFF_FAILED", capsule_id, digest=_sha(rec))
             return False
-        self._rows[i] = {"cold": idx}
-        self.eye._log("MOVE_OFF", capsule_id, digest=_sha(rec), index_digest=_sha(idx))
-        return True
 
     def move_off_oldest_until(self, done: Any) -> None:
-        """M1: move the oldest capsules still in working memory off it until `done()` or none is left."""
-        for cid in [self._rid(r) for r in self._rows if "cold" not in r]:
+        """Move the oldest capsules still in working memory off it until `done()` or none is left."""
+        for cid in [self._rid(self._rows[p]) for p in sorted(self._rows) if "cold" not in self._rows[p]]:
             if done():
                 return
             self.move_off(cid)
 
+    # ---------------------------------------------------------------- folding (A-TEACH2-9)
+    @staticmethod
+    def _capped_words(members: List[Dict[str, Any]]) -> List[str]:
+        count: Dict[str, int] = {}
+        last: Dict[str, int] = {}
+        for n, m in enumerate(members):
+            for w in m["c"]:
+                count[w] = count.get(w, 0) + 1
+                last[w] = n
+        return sorted(count, key=lambda w: (-count[w], -last[w], w))[:FOLD_WORD_CAP]
+
+    def _fold(self, level: int, members: List[Dict[str, Any]]) -> bool:
+        import helm_memory_compact as hmc
+        number = self._fold_numbers.get(level, 0) + 1
+        name = f"fold-{level}-{number:04d}"
+        if level == 1:
+            spans = [self._row_turns(m["id"], m) for m in members]
+            t = [min(s[0] for s in spans), max(s[-1] for s in spans)]
+        else:
+            t = [min(m["t"][0] for m in members), max(m["t"][1] for m in members)]
+        payload = hmc._canon({"f": name, "lv": level, "members": members})
+        if not self._write(self.fold_record_path(name), payload):
+            self.eye._log("FOLD_FAILED", name, level=level)
+            return False
+        row = {"f": name, "lv": level, "c": self._capped_words(members), "t": t, "q": hmc._sha(payload)[:16]}
+        self._fold_numbers[level] = number
+        self._folds.append(row)
+        self.eye._log("FOLD", name, level=level, members=len(members), digest=hmc._sha(payload))
+        return True
+
+    def fold_once(self) -> bool:
+        """Fold the oldest 8 index rows into a level-1 row; else the oldest 8 rows of the lowest level that has 8."""
+        cold = [p for p in sorted(self._rows) if "cold" in self._rows[p]]
+        if len(cold) >= FOLD_SIZE:
+            take = cold[:FOLD_SIZE]
+            members = [dict(self._rows[p]["cold"], i=p) for p in take]
+            if not self._fold(1, members):
+                return False
+            for p in take:
+                del self._rows[p]
+            return True
+        for level in sorted({r["lv"] for r in self._folds}):
+            rows = [r for r in self._folds if r["lv"] == level]
+            if len(rows) >= FOLD_SIZE:
+                take = rows[:FOLD_SIZE]
+                if not self._fold(level + 1, take):
+                    return False
+                names = {r["f"] for r in take}
+                self._folds = [r for r in self._folds if r["f"] not in names]
+                return True
+        return False
+
+    def fold_until(self, done: Any) -> None:
+        while not done():
+            if not self.fold_once():
+                return
+
     # ---------------------------------------------------------------- the list surface
     def __iter__(self):
-        """The capsules in working memory (moved ones are reached by name through `get`)."""
-        for i in range(len(self._rows)):
-            if "cold" in self._rows[i]:
+        """The capsules with a full or lean row in working memory (others are reached by name through `get`)."""
+        for p in sorted(self._rows):
+            if "cold" in self._rows[p]:
                 continue
-            cap = self._get(i)
+            cap = self._get(p)
             if cap is not None:
                 yield cap
 
     def __len__(self) -> int:
-        return len(self._rows)
+        return self._next
 
     def __bool__(self) -> bool:
-        return bool(self._rows)
+        return self._next > 0
 
     def __getitem__(self, i: int) -> Any:
         return list(self)[i]
 
     def stored(self) -> List[Dict[str, Any]]:
-        """What working memory holds: lean rows, full capsules the Eye refused to shrink, and index rows."""
-        return [r.get("lean") or r.get("full") or r["cold"] for r in self._rows]
+        """What working memory holds: lean rows, full capsules the Eye refused to shrink, index rows, folded rows."""
+        rows = [self._rows[p].get("lean") or self._rows[p].get("full") or self._rows[p]["cold"]
+                for p in sorted(self._rows)]
+        return rows + list(self._folds)
 
     def size_of(self, cap: Any) -> int:
         import helm_memory_compact as hmc
