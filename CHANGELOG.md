@@ -4,6 +4,15 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM cube memory: size limit + widening batches + AWS cloud tier (spec sheet 7.125 follow-up 4); 19 tests; 414 HELM tests pass; live smoke on a private S3 bucket PASS; measured negative: memory does not stay under the limit; < 0.001 USD
+
+- Owner's words: "keep every line and only start the fade process once that reaches 53370"; "yes, size limit plus batches"; "once that becomes filled begin moving things to an aws server where if HELM has wifi he can reach it".
+- A-TEACH2-5 257a8145... and A-TEACH2-6 2c019244... before code (A-TEACH2-6 from a pre-code measurement: 16 short lines 603 B -> capsule 794 B, so batches widen by 16 until they save).
+- Commit 242a8d45: keep every line until a byte limit (53,370 B live); batch the oldest unprotected lines into one capsule each down to 90 %; helm_cold_cloud.py (FakeCloud, S3Cloud via the aws CLI, SSE-S3, no ACL, no delete); past a device limit (50 MB live) the oldest originals are uploaded, read back, fingerprint-checked, then removed locally; fetch-back device then cloud; out of reach = OFFLINE, never EXACT.
+- FIX FIRST: collection error -> 17 failed/2 passed -> 2 failed (memory under the limit) -> pinned -> 19 passed; every HELM suite OFF 414 passed.
+- Measured negative: capsules (~810 B) replace ~900 B of lines and stay in working memory: 200 lines, limit 4,000 -> 11,165 B. The fix is the owner's choice.
+- Live smoke: bucket helm-cold-memory-807562639912-usw2 (us-west-2, public access blocked, versioning, SSE-S3) created; 7 synthetic originals (52,178 B) moved and fetched back EXACT; unreachable -> RECONSTRUCTED "stored away". Record CLOUD_SMOKE_20261021.json. Live switch attaches no cloud yet.
+
 ## 2026-10-21 PDT - HELM cube oscillation REWORK onto the existing Cube Node Schema and cube store (spec sheet 7.125 follow-up 3): things are cubes, facts are branches with commonality, answers through the three operations, no parser in HELM; 41 tests; 395 HELM tests pass; 0 USD
 
 - Owner's words: "there was already a cube node system built ... before you do this twice"; "6 items on each side, one being analogy or metaphor; the edges are what 2 nodes have in common"; then "Yes: rework v2 onto the existing Cube Node Schema and cube store".

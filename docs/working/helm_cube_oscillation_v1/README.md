@@ -24,3 +24,5 @@ the new kind of fact, expected about 2 USD) and `CUBE EXAM at 1 USD` (one CPU ho
 **Claim states:** every part keeps its status. CTT `ENGINEERED-NOT-VALIDATED`; memory compaction
 `ENGINEERED-NOT-VALIDATED` (TEACH-1 `INCONCLUSIVE`); the Eye's acting `NOT LICENSED`; no RPA-crossing claim; everything
 new `PROPOSED`.
+
+**2026-10-21, follow-up 4:** size limit (53,370 B) + widening batches + AWS cloud tier for the oldest originals (A-TEACH2-5, A-TEACH2-6; `BUILD_V2_RECORD_20261021.md` §7; live smoke `CLOUD_SMOKE_20261021.json`). Measured negative: memory does not stay under the limit.

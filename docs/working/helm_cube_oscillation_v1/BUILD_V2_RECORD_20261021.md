@@ -96,3 +96,49 @@ Eastwold have in common gives Moorcroft (`FIND_SHARED_PART`); Oxley to Moorcroft
 Space, re-measured: working memory 53,370 bytes against 2,450 for never forgetting; the cube store adds 9,113 bytes for
 5 things (each cube carries its six faces and their explanations). The space finding of section 3 stands and waits for
 the owner's choice (batch fading, shorter fingerprints, or another way to count).
+
+## 7. Size limit, widening batches and the cloud tier (A-TEACH2-5 `257a8145…`, A-TEACH2-6 `2c019244…`, commit `242a8d45`)
+
+Owner's words (2026-10-21, verbatim): "how about if we keep every line and only start thee fade process once that reaches
+53370? could that work what do you think?"; then "“yes, size limit plus batches” and to go even further add the technique
+of once that becomes filled begin moving things to an aws server where if HELM has wifi he can reach it".
+
+Both amendments were committed before any code. A-TEACH2-6 was written after measuring, before code, that a batch of 16
+short lines (603 bytes) becomes a 794-byte capsule, so batches widen by 16 until they save space.
+
+| What | Built |
+|---|---|
+| Keep every line | With a limit (live default 53,370 bytes) the turn budget no longer drops or compacts; the per-4-turn sweep is retired (the ladder path stays reachable with `limit_bytes=None`) |
+| Batch fading | Past the limit, the oldest unprotected lines (never the last 2, never a line holding an unconfirmed fact) become ONE v1 capsule per batch: 16 lines, widened by 16 until the capsule is smaller than its lines; measured with a dry run that writes nothing; down to 90 % of the limit; `BATCH_NO_GAIN` / `OVER_LIMIT_PROTECTED` otherwise |
+| Cloud tier | `helm_cold_cloud.py`: `FakeCloud` (tests, no network) and `S3Cloud` (the AWS command line tool, standard library only, SSE-S3, no ACL, no delete). When the device's cold folder passes its limit (live default 50 MB), the oldest originals are uploaded, read back, fingerprint-checked, and only then removed locally (`MOVED_TO_CLOUD` receipt); otherwise the local copy stays (`MOVE_FAILED`) |
+| Fetching back | The device folder first, then the cloud; `EXACT` only when the bytes hash to the breadcrumb; a moved original that cannot be reached is `OFFLINE`, never `EXACT`, and HELM says "My full notes are stored away and I can't reach them right now" |
+
+FIX FIRST (`test_helm_cube_tiers.py`, written first): (a) collection error, module absent; (b) cloud module only: 17
+failed, 2 passed; (c) built: 2 failed, both the claim that memory stays under the limit (below); those two tests were
+rewritten to pin the measured truth; 19 passed. `test_helm_cube_osc.py`'s helper now asks for the ladder path by name.
+Every HELM suite, both switches OFF: **414 passed** (395 + 19).
+
+**Measured negative 🟥: memory does not stay under the limit.** On 200 lines of about 60 bytes with a 4,000-byte limit,
+each capsule (about 810 bytes: breadcrumb 251, CAS sentence 169, Atlas 89, clues 69, receipt 66, …) replaces about 900
+bytes of lines, so a batch saves about 15 %; the capsules stay in working memory and pile up. Working memory ends at
+**11,165 bytes**, against about 12,000 for keeping every line and a 4,000 limit. The cloud tier moves only the
+verbatim originals (A-TEACH2-5 L5), which are not counted in working memory. In plain words: fading in batches
+barely shrinks working memory, and the limit cannot be held forever this way. The design choices that would (move old
+capsules off working memory too, keeping only a small index of clues; or a much smaller capsule) are the owner's.
+
+**Live smoke test on AWS ✅ (2026-10-21 23:46 PDT; `CLOUD_SMOKE_20261021.json`).** Bucket
+`helm-cold-memory-807562639912-usw2` (us-west-2) created by this build: all public access blocked, versioning on,
+default encryption SSE-S3, tags purpose/owner/spec; nothing is ever deleted by code. Source: this commit's
+`helm_cold_cloud.S3Cloud`; purpose: prove the move and fetch-back on the real bucket; instance: none (the laptop's AWS
+command line tool, 20 seconds); data: synthetic lines only (`SYNTHETIC_ONLY`). 121 lines → 7 capsules; 7 originals
+(52,178 bytes) moved under `smoke/20261022T064603Z/`, each read back and fingerprint-checked before the local copy was
+removed; local cold folder 0 bytes after. Online: the first original came back `EXACT` ("The Oxley line ran eight buses
+in September."), and the cube answer was `EXACT` "You told me: Oxley, buses line, September: eight." With the cloud made
+unreachable: `OFFLINE`, and the answer `RECONSTRUCTED`, value eight, "My full notes are stored away and I can't reach
+them right now, but my notes say: …". Cost: about 52 KB stored (≈ 0.000001 USD a month) and about 20 requests (≈
+0.0001 USD); under 0.001 USD in all, inside the 200 USD ceiling. Cleanup: none by design (keep indefinitely; the owner
+deletes); the smoke objects are 7 small synthetic files.
+
+Gaps kept: client-side encryption with keys on the device (needs a crypto library outside HELM's standard-library rule);
+sensitivity classes for real personal data (owner's word); the live switch attaches no cloud yet (`cloud=None` until the
+owner says to point real conversations at the bucket).

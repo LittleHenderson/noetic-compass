@@ -1,0 +1,55 @@
+{
+ "answer_online": [
+  "EXACT",
+  "eight",
+  "You told me: Oxley, buses line, September: eight."
+ ],
+ "answer_unreachable": [
+  "RECONSTRUCTED",
+  "eight",
+  "My full notes are stored away and I can't reach them right now, but my notes say: Oxley, buses line, September: eight."
+ ],
+ "bucket": "helm-cold-memory-807562639912-usw2",
+ "bytes_moved": 52178,
+ "capsules": 7,
+ "fetch_online": "EXACT",
+ "fetch_unreachable": "OFFLINE",
+ "first_line_back": [
+  "The Oxley line ran eight buses in September."
+ ],
+ "keys": [
+  "smoke/20261022T064603Z/cap-t-tiers-000001-000016.jsonl",
+  "smoke/20261022T064603Z/cap-t-tiers-000017-000032.jsonl",
+  "smoke/20261022T064603Z/cap-t-tiers-000033-000048.jsonl",
+  "smoke/20261022T064603Z/cap-t-tiers-000049-000064.jsonl",
+  "smoke/20261022T064603Z/cap-t-tiers-000065-000078.jsonl",
+  "smoke/20261022T064603Z/cap-t-tiers-000079-000092.jsonl",
+  "smoke/20261022T064603Z/cap-t-tiers-000093-000106.jsonl"
+ ],
+ "lines": 121,
+ "local_cold_bytes_after": 0,
+ "moved": 7,
+ "prefix": "smoke/20261022T064603Z/",
+ "receipts_moved": [
+  {
+   "bytes": 7881,
+   "capsule_id": "cap-t-tiers-000001-000016",
+   "key": "smoke/20261022T064603Z/cap-t-tiers-000001-000016.jsonl",
+   "kind": "MOVED_TO_CLOUD",
+   "receipt": "abd0c5bebc4c84ec1bc60bf125a99908bfe202226cd80604dab9b1d9e7865e2a",
+   "sha256": "33ae225460d1a3c31e5a02a1262d5a2b6d3daeef6b8c37877373fd48698e9ab4"
+  },
+  {
+   "bytes": 7882,
+   "capsule_id": "cap-t-tiers-000017-000032",
+   "key": "smoke/20261022T064603Z/cap-t-tiers-000017-000032.jsonl",
+   "kind": "MOVED_TO_CLOUD",
+   "receipt": "bd97347baa8bc5b7fa1726900a182a02370ed49ea5c8a75cd4b90dd99f10f1b2",
+   "sha256": "64a1ef7e10368dcffb53d0f3f924bde3e9ec40a80b1a90126562621566fdb433"
+  }
+ ],
+ "region": "us-west-2",
+ "seconds": 20.1,
+ "stamp": "20261022T064603Z",
+ "working_bytes": 6617
+}
