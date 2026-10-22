@@ -4,6 +4,16 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM EYE-ACT-1 (spec sheet 7.122): the Unity Eye acting inside live HELM, built behind switch HELM_EYE_ACT (default OFF), exam kit sealed, practice on dev seeds only; NOT SCORED, NOT LICENSED; 0 USD
+
+- Owner's words: "want the Eye to act inside real HELM, GO!"; then "MAKE SURE YOU CHECK WITH THE OTHER SESSIONS ... AND UPDATE HELM HUB SITE AS WELL".
+- Pre-registration docs/working/helm_eye_act_v1/PREREGISTRATION_EYE_ACT_V1.precode.md sha256 0d731774... hashed and committed before code. Amendment A1 (before code): the verified stock folds stock records, withdrawals and licensed-path stock turns; an unexplained held entry is held, never removed. Amendment A2 (after the first practice run, before the seal): H10 counts an F4 WRONG as invented only if it differs from the no-Eye answer.
+- Build: helm_eye_act.py (sweep = re-derive the wide book from the user's witnessed batches with the book's own writer + fold the verified stock from the loop's trace; HOLD holds, ACT restores on a cadence of 4 turns, CONCERT also on a request before every question; ledgered; never invents); hook in helm_end_to_end_loop.py reached only when ON; test_helm_eye_act.py 19 tests (16 failed before the module). All HELM suites: Ran 299, OK; the OFF pin unchanged.
+- Exam kit (eye_act_kit/): made-up-word worlds, plants F1-F4, arms A0-A3 + rivals R1 CHECKSUM_COPY and R2 REBUILD_ALWAYS + control C1, driver, frozen reader, seal. Sealed: zip e49d459c... (42 files, manifest 333922a1...).
+- Practice (dev:1-8, unscored): first read INCONCLUSIVE (the H10 defect fixed by A2); after A2 all gates hold. CONCERT 6 right / 0 wrong on 8 faulted items vs no Eye 0 / 8; REBUILD_ALWAYS tied it exactly; CHECKSUM_COPY 2 wrong (fooled by the slipped lesson). Two predictions already missed and kept (ACT's cadence on P2; R2 makes 0 clean state changes too).
+- Coordination: notes to the operator session and to the owners of PRs #451, #452, #453 before any shared file; no objection received; the U1c PR moved to 7.121.
+- Next: the owner types EYE ACT EXAM, sealed e49d459c, laptop, 0 USD; the run and the frozen reader follow.
+
 ## 2026-10-21 PDT - HELM memory compaction TEACH-1 (spec sheet 7.115 follow-up 5): the owner's ruling on R4 (undamaged items only), amendment A-TEACH1-2, reseal; practice word would now be COMPACTION_NO_GAIN; 0 USD
 
 - Owner's words (verbatim): "Score R4 on the undamaged notes only (my recommendation). The wrecked notes still test honesty, so a rebuilt note must never be called exact. They just don’t count as lost answers. This costs 0 USD and a quick reseal."
