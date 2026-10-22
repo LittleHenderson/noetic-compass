@@ -12,11 +12,11 @@ damage. That choice is the owner's (A-TEACH1-1 §D).
 
 | File | What |
 |---|---|
-| `HELM_TEACH1_20261021_SOURCE_TEACH1_v1.zip` | the sealed package, sha256 **`e8831bfd4e62c84b4909b3dd47b7a2b3143e481fd8eeb36a504ba6cfed89ac26`** (`ZIP_SHA256.txt`) |
-| `PACKAGE_FREEZE_TEACH1.json` | the freeze, sha256 `02616f210cb1d2fe1dbc82188a57c2fc24fd74f52204af8fd9b35e6b3b2f7385` (195 members) |
+| `HELM_TEACH1_20261021_SOURCE_TEACH1_v1.zip` | the sealed package, sha256 **`65e2a926c723f79965a09072bdc805eea1f4aade047988d6e21d88a1e23e61be`** (`ZIP_SHA256.txt`) |
+| `PACKAGE_FREEZE_TEACH1.json` | the freeze, sha256 `351c71e2ee6e3a8cb1dd739e0beceeab58d1c257161947138e65d0d9d2abde72` (195 members) |
 | `HELM_TEACH1_20261021/` | the package tree (same bytes as the zip); its `README_TEACH1.md` lists every part |
-| `AMENDMENT_A_TEACH1_1.md` (+ `.sha256` `63e5a6c8…`) | the builder's deviations D-TEACH1-1 to 19, FIX FIRST, moved seed bands, forecast, the owner's R4 choice |
-| `TEST_RECORD_TEACH1.md` | the practice rounds 0–4, FIX FIRST counts, the package tests, the three seals (two void) |
+| `AMENDMENT_A_TEACH1_1.md` (+ `.sha256` `b178cc41…`) | the builder's deviations D-TEACH1-1 to 19, FIX FIRST, moved seed bands, forecast, the owner's R4 choice |
+| `TEST_RECORD_TEACH1.md` | the practice rounds 0–4, FIX FIRST counts, the package tests, the four seals (three void) |
 | `PRACTICE_READING_ROUND4.json` | the frozen reader's practice reading of round 4 (per-unit rows dropped) |
 | `TEST_COUNTS_TEACH1.json` | what ran from a fresh extract of the sealed zip |
 | `cut_helm_teach1.py`, `disjoint_and_frozen_teach1.py`, `practice_teach1.py`, `seal_teach1.py` | builder tools, not in the package |

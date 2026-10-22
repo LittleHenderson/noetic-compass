@@ -74,14 +74,14 @@ S2_PLAIN_LOSS_PER_QUIZ = 2
 S3_UNKNOWN_MARKER_SLACK = 1
 S4_SAID_BACK_SHARE = 0.9
 
-# ---- seeds (pre-code section 12 as moved by A-TEACH1-1: wave 7 v7/v8 took 2,024-2,035 M first) ----
-BANDS = {"WORLD": (2_036_000_001, 2_037_000_000), "QUIZ": (2_038_000_001, 2_039_000_000),
-         "PERSON": (2_040_000_001, 2_041_000_000), "RANDOM_REFRESH": (2_042_000_001, 2_043_000_000)}
+# ---- seeds (pre-code section 12 as moved by A-TEACH1-1: wave 7 v7 / v8 / v9 took 2,024-2,041 M first) ----
+BANDS = {"WORLD": (2_042_000_001, 2_043_000_000), "QUIZ": (2_044_000_001, 2_045_000_000),
+         "PERSON": (2_046_000_001, 2_047_000_000), "RANDOM_REFRESH": (2_048_000_001, 2_049_000_000)}
 HEX_SLICES = {"WORLD": (0, 16), "QUIZ": (16, 32), "PERSON": (32, 48), "RANDOM_REFRESH": (48, 64)}
 SLOTS = 1_000_000
 SEED_GAP = 1_000_000
 INT32_MAX = 2 ** 31 - 1
-USED_RANGES = (("every earlier band and derivation (wave 7 v8 used up to 2,035,000,000; whole range)", 1, 2_035_000_000),)
+USED_RANGES = (("every earlier band and derivation (wave 7 v9 used up to 2,041,000,000; whole range)", 1, 2_041_000_000),)
 OWNER_LINES = {"COMPACT EXAM at 0 USD": {"cap_usd": 0.0, "host": "laptop"},
                "COMPACT EXAM at 1 USD": {"cap_usd": 1.0, "host": "one m6i.xlarge-class CPU host"}}
 PRACTICE_SEED_TEXTS = {"WORLD": "teach1-practice-world", "QUIZ": "teach1-practice-quiz",

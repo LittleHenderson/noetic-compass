@@ -65,9 +65,10 @@ not flag that name. Fixed (the key = the names the world's facts use); 19 of 19 
 |---|---|---|
 | 1 | `83f14426…` | **VOID**: the from-seal test failed 1 of 19 (FROZEN_TEACH1.json held the builder's folder path, a machine-bound value); never used, nothing drawn |
 | 2 | `bdcde5b9…` | **VOID**: the sealed amendment said 4,016 label-checked answers for round 4 (that was round 3; round 4 is 4,020); never used, nothing drawn |
-| 3 | **`e8831bfd4e62c84b4909b3dd47b7a2b3143e481fd8eeb36a504ba6cfed89ac26`** | **SEALED, NOT RUN, NOT SCORED** (1,022,290 bytes, 195 members + freeze `02616f21…`, sealed twice byte-identical) |
+| 3 | `e8831bfd…` | **VOID**: its seed bands 2,036 / 2,038 / 2,040 M were taken first by wave 7 v9 (PR #449, merged while this package was built); found when merging the thread head before the PR; never used, nothing drawn |
+| 4 | **`65e2a926c723f79965a09072bdc805eea1f4aade047988d6e21d88a1e23e61be`** | **SEALED, NOT RUN, NOT SCORED** (1,022,354 bytes, 195 members + freeze `351c71e2…`, sealed twice byte-identical); bands 2,042 / 2,044 / 2,046 / 2,048 M |
 
-From a fresh extract of seal 3 (`TEST_COUNTS_TEACH1.json`): 195 of 195 members re-hashed equal; package tests OK; cut
+From a fresh extract of seal 4 (`TEST_COUNTS_TEACH1.json`): 195 of 195 members re-hashed equal; package tests OK; cut
 check 173 files equal; HELM's suites exit 0; route check 0 bad; a 2-world practice pool 14 of 14 units exit 0;
 `helm_now/` unchanged after.
 

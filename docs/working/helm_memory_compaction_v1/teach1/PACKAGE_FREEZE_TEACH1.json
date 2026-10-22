@@ -1,6 +1,6 @@
 {
- "amendment_a_teach1_1_sha256": "63e5a6c803da4e3521363a6b41901c5122ed3ceff974e8dfc08ffbcb80876038",
- "frozen_teach1_sha256": "0b3ae9c0aa589637641840e7d73bcfa9c8bc483b7f43be52a11b51331489592f",
+ "amendment_a_teach1_1_sha256": "b178cc411b11d86204be72766fdb83293bb3efadb75dfb9f4319e03150315ae3",
+ "frozen_teach1_sha256": "d54fc5eec00af0e74e9c6d587726f81bcdd6fe245b9bb23b76687c5e3f35a238",
  "helm_cut_commit": "9f0c359a4ad6054843fd2988042616676813d6e8",
  "helm_cut_files": 173,
  "helm_cut_pinned": {
@@ -16,11 +16,11 @@
  "members": {
   "FROZEN_TEACH1.json": {
    "bytes": 4438,
-   "sha256": "0b3ae9c0aa589637641840e7d73bcfa9c8bc483b7f43be52a11b51331489592f"
+   "sha256": "d54fc5eec00af0e74e9c6d587726f81bcdd6fe245b9bb23b76687c5e3f35a238"
   },
   "PREREGISTRATION_TEACH1.md": {
-   "bytes": 28395,
-   "sha256": "0cbcf13f7abcc7673e4ab00441c8fd6c710ec2fafce7c317f8ccec794d206427"
+   "bytes": 28497,
+   "sha256": "bda6636b2edb1565fb7f46d740d5e2a833ce79fedef451d3dcdfa7c5e80be121"
   },
   "README_TEACH1.md": {
    "bytes": 2731,
@@ -751,8 +751,8 @@
    "sha256": "f20e068f51181411130b6df47ab966e3bf9a97e497adecf5b98869749e49a939"
   },
   "teach1/common_t1.py": {
-   "bytes": 12121,
-   "sha256": "89de0fabf8920614d1272e1979d6b04d6d04903ec04a8b70117bf402fb48b9da"
+   "bytes": 12128,
+   "sha256": "156a3c5a7f8849ad021175d24fa48a972969e3f611b6f3d981b9bd58bb816f03"
   },
   "teach1/custody_t1.py": {
    "bytes": 7383,
@@ -776,7 +776,7 @@
   },
   "teach1/seed_rule_t1.py": {
    "bytes": 3387,
-   "sha256": "51c8dfce8b3e1ebd3dc97e302630fe1a3fd6328291080a6304606d5cc09940c4"
+   "sha256": "a476f6d94b01285eb37482c54066d3a3da86b50eb3334c26c9a45a42f713cab9"
   },
   "teach1/turns_t1.py": {
    "bytes": 11045,

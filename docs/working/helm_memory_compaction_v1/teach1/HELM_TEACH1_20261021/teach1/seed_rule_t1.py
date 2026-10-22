@@ -3,7 +3,7 @@
 H = sha256 of the UTF-8 bytes of (the owner's typed line + ":" + the full sha256 of the sealed zip), no trailing newline.
 Four parts, each from its own 16-hex slice of H: WORLD H[0:16], QUIZ H[16:32], PERSON H[32:48], RANDOM_REFRESH H[48:64].
 First slot = k mod 1,000,000; seed = band low + slot; a seed inside the used table (or within the gap of it) steps
-s <- (s + 1) mod 1,000,000; no free slot = STOP. Bands (A-TEACH1-1): 2,036 M / 2,038 M / 2,040 M / 2,042 M.
+s <- (s + 1) mod 1,000,000; no free slot = STOP. Bands (A-TEACH1-1): 2,042 M / 2,044 M / 2,046 M / 2,048 M.
 """
 from __future__ import annotations
 

@@ -40,20 +40,20 @@
  },
  "BANDS": {
   "PERSON": [
-   2040000001,
-   2041000000
+   2046000001,
+   2047000000
   ],
   "QUIZ": [
-   2038000001,
-   2039000000
+   2044000001,
+   2045000000
   ],
   "RANDOM_REFRESH": [
-   2042000001,
-   2043000000
+   2048000001,
+   2049000000
   ],
   "WORLD": [
-   2036000001,
-   2037000000
+   2042000001,
+   2043000000
   ]
  },
  "BRAIN_DIR_ENV": "HELM_CANONICAL_BRAIN_DIR",
@@ -219,9 +219,9 @@
  "UNKNOWN_PER_WORLD": 4,
  "USED_RANGES": [
   [
-   "every earlier band and derivation (wave 7 v8 used up to 2,035,000,000; whole range)",
+   "every earlier band and derivation (wave 7 v9 used up to 2,041,000,000; whole range)",
    1,
-   2035000000
+   2041000000
   ]
  ],
  "VERBATIM_BUDGET": 10000,
