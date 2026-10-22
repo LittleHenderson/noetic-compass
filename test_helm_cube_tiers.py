@@ -263,8 +263,9 @@ def test_offline_a_cube_answer_says_its_notes_are_stored_away(tmp_path):
     for i in range(200):
         _say(mem, long_line(i))
     comp = mem.compactor
-    cap = next(c for c in comp.capsules if fact.turn_id in c.crumb["turn_ids"])
-    assert cap.capsule_id in comp.moved
+    # A-TEACH2-8: a capsule may have left working memory, so find it by name through the index
+    cid = next(c for c in comp.capsules.ids() if fact.turn_id in comp.capsules.turn_ids_of(c))
+    assert cid in comp.moved
     q = "What did I say about the buses on the Oxley line in September?"
     assert osc.answer(q)["label"] == "EXACT"
     cloud.online = False
@@ -282,12 +283,15 @@ def test_only_verbatim_originals_go_to_the_cloud(tmp_path):
         _say(mem, long_line(i))
     comp = mem.compactor
     assert cloud.objects
-    caps = {c.capsule_id: c for c in comp.capsules}
+    names = set(comp.capsules.ids())
     for cid, key in comp.moved.items():
         assert key.endswith(f"{cid}.jsonl")
         assert hmc.read_cold_bytes(cloud.objects[key])[0]["user_raw_text"]   # turn records, word for word
-    assert set(cloud.objects) == set(comp.moved.values())
-    assert all(cid in caps for cid in comp.moved)
+    # A-TEACH2-8 M4 amends L5: the Eye's moved capsule records go with their originals; nothing else goes
+    for cid, key in comp.moved_records.items():
+        assert key.endswith(f"{cid}.lean.json") and cid in comp.moved
+    assert set(cloud.objects) == set(comp.moved.values()) | set(comp.moved_records.values())
+    assert all(cid in names for cid in comp.moved)
     assert "thing_oxley" in mem.context.cube_store.nodes                     # cubes stay on the device
     assert mem.context.cube_store.branches
 

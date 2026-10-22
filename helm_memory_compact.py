@@ -235,6 +235,7 @@ class Compactor:
         # original left the device after the read-back check.
         self.cloud: Any = None
         self.moved: Dict[str, str] = {}
+        self.moved_records: Dict[str, str] = {}       # capsule id -> cloud key of the Eye's moved record (A-TEACH2-8)
         tools = _tools()
         if tools["atlas"] is not None:
             self.atlas = tools["atlas"].Atlas(atlas_id="memory", max_depth=1)
@@ -311,12 +312,38 @@ class Compactor:
         self.atlas.add_edge(thread, node_id, "holds", cross_kind_declared=True)
         cap.atlas = {"node": thread, "node_id": node_id, "side": "possibility"}
 
+    def _capsule_index(self) -> List[Tuple[str, List[str], str]]:
+        """(name, clue words, kind) of every capsule. On the Eye's path this reads the index; nothing is fetched."""
+        if hasattr(self.capsules, "clue_index"):
+            return self.capsules.clue_index()
+        return [(c.capsule_id, c.clues, c.kind) for c in self.capsules]
+
+    def _capsule(self, capsule_id: str) -> Optional[Capsule]:
+        """One capsule by name. On the Eye's path a moved capsule is fetched back and checked (A-TEACH2-8)."""
+        if hasattr(self.capsules, "get"):
+            return self.capsules.get(capsule_id)
+        return next((c for c in self.capsules if c.capsule_id == capsule_id), None)
+
     def _searchlight(self, wanted: set) -> Tuple[List[Capsule], int, bool]:
-        """Read the anchor first, then widen over the radii; cap the candidates. Returns (hits, radius, beyond)."""
+        """Read the anchor first, then widen over the radii; cap the candidates. Returns (hits, radius, beyond).
+        Hits are capsules; on the Eye's path only the hits are fetched (a moved capsule that cannot be fetched now is
+        left out of the hits and noted in `self._away`)."""
+        names, radius, beyond = self._searchlight_names(wanted)
+        self._away = []
+        hits = []
+        for cid in names:
+            cap = self._capsule(cid)
+            if cap is not None:
+                hits.append(cap)
+            elif getattr(self.capsules, "last_status", None) == "AWAY":
+                self._away.append(cid)
+        return hits, radius, beyond
+
+    def _searchlight_names(self, wanted: set) -> Tuple[List[str], int, bool]:
+        order = [cid for cid, _c, _k in self._capsule_index()]
         if self.atlas is None or self._anchor is None:
-            hits = [c for c in self.capsules if c.capsule_id in wanted]
-            return hits[:SEARCHLIGHT_CAP], 0, True
-        by_node = {c.atlas.get("node_id"): c for c in self.capsules if c.atlas.get("node_id")}
+            return [c for c in order if c in wanted][:SEARCHLIGHT_CAP], 0, True
+        by_node = {f"capsule:{cid}": cid for cid in order}
         for radius in SEARCHLIGHT_RADII:
             frontier = [self._anchor]
             seen = {self._anchor}
@@ -333,11 +360,10 @@ class Compactor:
                 frontier = nxt
                 if not frontier:
                     break
-            hits = [c for c in reach if c.capsule_id in wanted][:SEARCHLIGHT_CAP]
+            hits = [c for c in reach if c in wanted][:SEARCHLIGHT_CAP]
             if hits:
                 return hits, radius, False
-        hits = [c for c in self.capsules if c.capsule_id in wanted][:SEARCHLIGHT_CAP]
-        return hits, SEARCHLIGHT_RADII[-1], True
+        return [c for c in order if c in wanted][:SEARCHLIGHT_CAP], SEARCHLIGHT_RADII[-1], True
 
     # ---------------------------------------------------------------- compaction
     def housekeep(self) -> List[Capsule]:
@@ -533,7 +559,7 @@ class Compactor:
                 held = False
             f4 = held
             if held:
-                hits, _radius, beyond = self._searchlight({cap.capsule_id})
+                hits, _radius, beyond = self._searchlight_names({cap.capsule_id})
                 f4 = bool(hits) and not beyond
         else:
             f4 = False
@@ -572,13 +598,17 @@ class Compactor:
                 if t.intent not in MEMORY_QUERY_INTENTS and tokens <= set(content_words(t.user_raw_text))]
         pinned = [(cid, entry) for cid, entry in reversed(list(self._pinned.items()))
                   if any(tokens <= set(content_words(x)) for x in entry["texts"])]
-        wanted = {c.capsule_id for c in self.capsules if c.kind == "statement" and tokens <= set(c.clues)
-                  and c.capsule_id not in self._pinned}
+        wanted = {cid for cid, clues, kind in self._capsule_index() if kind == "statement" and tokens <= set(clues)
+                  and cid not in self._pinned}
         hits, radius, beyond = self._searchlight(wanted) if wanted else ([], 0, False)
         hits = sorted(hits, key=lambda c: c.crumb["turn_ids"][-1], reverse=True)
         lookup.update({"radius": radius, "beyond_searchlight": beyond})
         candidates = len(live) + len(pinned) + len(hits)
         lookup["candidates"] = candidates
+        if candidates == 0 and wanted and getattr(self, "_away", []):
+            # A-TEACH2-8 M5: the matching capsule was moved to the cloud and cannot be reached now; never EXACT
+            return {"label": "UNKNOWN", "texts": [], "question": None, "lookup": lookup, "capsule_id": self._away[0],
+                    "reason": "my full notes are stored away and I can't reach them right now"}
         if candidates == 0:
             return {"label": "UNKNOWN", "texts": [], "question": None, "reason": "no clue matched", "lookup": lookup,
                     "capsule_id": None}
@@ -633,7 +663,7 @@ class Compactor:
 
     # ---------------------------------------------------------------- the person answers (F5) and strengthening
     def answer(self, capsule_id: str, text: str) -> Dict[str, Any]:
-        cap = next((c for c in self.capsules if c.capsule_id == capsule_id), None)
+        cap = self._capsule(capsule_id)
         if cap is None:
             return {"strengthened": False, "reason": "no such capsule"}
         if NEGATIVE_ANSWER_RX.search(text or "") and not re.search(r"\byes\b", text or "", re.I):

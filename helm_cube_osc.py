@@ -438,6 +438,15 @@ class CubeOsc:
         if any(t.turn_id == turn_id for t in self.memory.turns):
             return "EXACT"
         comp = getattr(self.memory, "compactor", None)
+        if comp is not None and hasattr(comp.capsules, "turn_ids_of"):
+            # the Eye's path: find the capsule by its name in the index, then fetch only that one (A-TEACH2-8)
+            cid = next((c for c in comp.capsules.ids() if turn_id in comp.capsules.turn_ids_of(c)), None)
+            if cid is None:
+                return "MISSING"
+            cap = comp.capsules.get(cid)
+            if cap is None:
+                return "OFFLINE" if comp.capsules.last_status == "AWAY" else "MISSING"
+            return comp._fetch(cap)[0]
         cap = next((c for c in (comp.capsules if comp else []) if turn_id in c.crumb["turn_ids"]), None)
         return comp._fetch(cap)[0] if cap is not None else "MISSING"
 
@@ -507,16 +516,28 @@ class CubeOsc:
     def fade_to_limit(self) -> None:
         """Every line stays word for word until working memory passes the limit. Then the oldest unprotected lines
         become one capsule per batch -- 16 lines, widened by 16 until the capsule is smaller than its lines -- until
-        memory is at or under 90 % of the limit. A batch that cannot save space is not written (BATCH_NO_GAIN)."""
+        memory is at or under 90 % of the limit. A batch that cannot save space is not written (BATCH_NO_GAIN). If
+        memory is still over 90 % after the batches, the Eye moves the oldest capsules off working memory, keeping
+        only an index row each (A-TEACH2-8 M1)."""
         comp = getattr(self.memory, "compactor", None)
         if comp is None or self.working_bytes() <= self.limit_bytes:
             return
         target = self.limit_bytes * LIMIT_TARGET
+        flag = self._fade_batches(comp, target)
+        if self.working_bytes() > target and hasattr(comp.capsules, "move_off_oldest_until"):
+            comp.capsules.move_off_oldest_until(lambda: self.working_bytes() <= target)
+        if self.working_bytes() > target:
+            kind, detail = flag or ("OVER_LIMIT_INDEX", "over the limit with every capsule moved off; the index and "
+                                                        "the protected lines remain")
+            self._limit_flag(kind, detail)
+        else:
+            self._last_limit_flag = None
+
+    def _fade_batches(self, comp: Any, target: Any) -> Optional[Tuple[str, str]]:
         while self.working_bytes() > target:
             runs = self._runs()
             if not runs:
-                self._limit_flag("OVER_LIMIT_PROTECTED", "over the limit; every old line is protected")
-                return
+                return ("OVER_LIMIT_PROTECTED", "over the limit; every old line is protected")
             written = False
             for run in runs:
                 n = min(BATCH_LINES, len(run))
@@ -544,20 +565,42 @@ class CubeOsc:
                 if written:
                     break
             if not written:
-                self._limit_flag("BATCH_NO_GAIN", "over the limit; no batch of the old lines would save space")
-                return
-        self._last_limit_flag = None
+                return ("BATCH_NO_GAIN", "over the limit; no batch of the old lines would save space")
+        return None
 
-    # ---------------------------------------------------------------- the cloud tier (A-TEACH2-5 L3-L6)
-    def local_cold_bytes(self) -> int:
+    # ---------------------------------------------------------------- the cloud tier (A-TEACH2-5 L3-L6, A-TEACH2-8 M4)
+    def _cold_files(self) -> List[Tuple[str, str, Optional[str]]]:
+        """(capsule name, original's path, moved record's path or None) for every capsule, oldest first."""
         comp = getattr(self.memory, "compactor", None)
-        return sum(os.path.getsize(c.crumb["cold_path"]) for c in (comp.capsules if comp else [])
-                   if os.path.isfile(c.crumb["cold_path"]))
+        if comp is None:
+            return []
+        if hasattr(comp.capsules, "record_path"):
+            return [(cid, os.path.join(comp.cold_dir, f"{cid}.jsonl"), comp.capsules.record_path(cid))
+                    for cid in comp.capsules.ids()]
+        return [(c.capsule_id, c.crumb["cold_path"], None) for c in comp.capsules]
+
+    def local_cold_bytes(self) -> int:
+        """Bytes in the device's cold folder: verbatim originals and the Eye's moved records."""
+        total = 0
+        for _cid, path, rec in self._cold_files():
+            for f in (path, rec):
+                if f and os.path.isfile(f):
+                    total += os.path.getsize(f)
+        return total
+
+    def _upload(self, cloud: Any, key: str, data: bytes, check: Callable[[bytes], bool]) -> bool:
+        try:
+            cloud.put(key, data)
+            back = cloud.get(key)
+        except Exception:
+            back = None
+        return back is not None and check(back)
 
     def move_cold(self) -> None:
-        """When the device's cold folder passes its limit, MOVE the oldest originals to the cloud: upload, read back,
-        check the fingerprint against the breadcrumb, and only then remove the local copy (receipt MOVED_TO_CLOUD).
-        Unreachable cloud or a failed check: the local copy stays (MOVE_FAILED). Nothing is ever deleted in the cloud."""
+        """When the device's cold folder passes its limit, MOVE the oldest capsule's files to the cloud: its verbatim
+        original (checked by its fingerprint) and, if the Eye moved the capsule off working memory, its record (checked
+        byte for byte). Both are uploaded and read back before either is removed locally (receipt MOVED_TO_CLOUD).
+        Unreachable cloud or a failed check: the local copies stay (MOVE_FAILED). Nothing is ever deleted in the cloud."""
         comp = getattr(self.memory, "compactor", None)
         if comp is None or self.local_cold_bytes() <= self.local_limit_bytes:
             return
@@ -565,27 +608,40 @@ class CubeOsc:
         if cloud is None or not cloud.available():
             self._limit_flag("MOVE_FAILED", "local cold folder over its limit; the cloud cannot be reached")
             return
-        for cap in comp.capsules:
+        for cid, path, rec_path in self._cold_files():
             if self.local_cold_bytes() <= self.local_limit_bytes:
                 break
-            path = cap.crumb["cold_path"]
-            if cap.capsule_id in comp.moved or not os.path.isfile(path):
+            has_orig = cid not in comp.moved and os.path.isfile(path)
+            has_rec = bool(rec_path) and cid not in comp.moved_records and os.path.isfile(rec_path)
+            if not (has_orig or has_rec):
                 continue
-            with open(path, "rb") as fh:
-                data = fh.read()
-            key = self.cloud_prefix + os.path.basename(path)
-            try:
-                cloud.put(key, data)
-                back = cloud.get(key)
-            except Exception:
-                back = None
-            if back is None or hmc._sha(back) != cap.crumb["sha256"]:
-                self._limit_flag("MOVE_FAILED", f"read-back check failed for {key}; the local copy stays")
-                return
-            os.remove(path)
-            comp.moved[cap.capsule_id] = key
-            comp._receipt("MOVED_TO_CLOUD", cap.capsule_id, cap.receipt,
-                          {"key": key, "sha256": cap.crumb["sha256"], "bytes": len(data)})
+            cap = comp._capsule(cid)
+            if cap is None:
+                continue
+            moves = []
+            if has_orig:
+                with open(path, "rb") as fh:
+                    data = fh.read()
+                key = self.cloud_prefix + os.path.basename(path)
+                if not self._upload(cloud, key, data, lambda b: hmc._sha(b) == cap.crumb["sha256"]):
+                    self._limit_flag("MOVE_FAILED", f"read-back check failed for {key}; the local copy stays")
+                    return
+                moves.append(("original", path, key, len(data)))
+            if has_rec:
+                with open(rec_path, "rb") as fh:
+                    rdata = fh.read()
+                rkey = self.cloud_prefix + os.path.basename(rec_path)
+                if not self._upload(cloud, rkey, rdata, lambda b: b == rdata):
+                    self._limit_flag("MOVE_FAILED", f"read-back check failed for {rkey}; the local copies stay")
+                    return
+                moves.append(("record", rec_path, rkey, len(rdata)))
+            for what, f, key, nbytes in moves:
+                os.remove(f)
+                (comp.moved if what == "original" else comp.moved_records)[cid] = key
+            comp._receipt("MOVED_TO_CLOUD", cid, cap.receipt,
+                          {"key": next((m[2] for m in moves if m[0] == "original"), comp.moved.get(cid)),
+                           "record_key": next((m[2] for m in moves if m[0] == "record"), None),
+                           "sha256": cap.crumb["sha256"], "bytes": sum(m[3] for m in moves)})
         self._last_limit_flag = None
 
     def sweep(self) -> None:
