@@ -56,25 +56,35 @@ def list_parts(store: CubeStore, whole_id: str, view_profile: str = "LearnerView
 
     # 1. Inspect outgoing branches. The LATEST branch to a part is its current word: a part whose latest branch
     #    says it is absent ({"absent": True}) is not on hand and is not listed.
-    latest: Dict[str, Any] = {}
+    #    The latest branch is kept per (target, commonality kind): two different facts between the same two cubes
+    #    both stand. A branch with no commonality kind (the pantry's) keys by target alone, exactly as before.
+    #    (SPEC 7.125 A-TEACH2-4 R3: additive; each part now also carries its branch's commonality and branch_id.)
+    def _lkey(br):
+        return (br.target_node_id, (br.commonality or {}).get("kind"))
+    latest: Dict[Any, Any] = {}
     for b in direct_branches:
-        latest[b.target_node_id] = b
+        latest[_lkey(b)] = b
     for b in direct_branches:
         target_id = b.target_node_id
         cubes_read.append(target_id)
-        if latest[target_id] is not b or (b.commonality or {}).get("absent"):
+        if latest[_lkey(b)] is not b or (b.commonality or {}).get("absent"):
             continue
         target_node = store.get_cube(target_id, view_profile=view_profile)
         label = target_node.core.label if target_node else target_id
         amount = b.commonality.get("amount") if b.commonality else None
+        fact_kind = (b.commonality or {}).get("kind")
         key = f"{amount}_{label}" if amount else label
+        if fact_kind:
+            key = f"{key}_{fact_kind}"
         if key not in seen:
             seen.add(key)
             parts.append({
                 "node_id": target_id,
                 "label": label,
                 "amount": amount,
-                "kind": target_node.core.kind if target_node else "instance"
+                "kind": target_node.core.kind if target_node else "instance",
+                "commonality": dict(b.commonality or {}),
+                "branch_id": b.branch_id,
             })
 
     # 2. Also check face 5 if structured direct_branch_refs are populated

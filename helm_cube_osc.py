@@ -1,40 +1,53 @@
-"""helm_cube_osc.py -- HELM cube oscillation v2: a taught fact becomes a cube at its thing's Atlas node only after
-the proposer and the brain side agree in rounds; memories fade step by step into CAS. Behind ONE switch, default OFF.
+"""helm_cube_osc.py -- HELM cube oscillation v2, built ON the existing Cube Node Schema v0.1 and the unified cube store
+(docs/working/noetic_council/cube_store/: cube.py, store.py, operations.py). Behind ONE switch, default OFF.
 
 WHAT THIS IS, IN PLAIN WORDS
 ----------------------------
 When the person tells HELM a plain fact ("The Oxley line ran eight buses in September."):
   1. PROPOSE: three proposer copies read the line into (thing, slot, value, replaces); all three must agree.
-  2. CHECK: the brain side checks the reading against what HELM holds -- the thing and the value are words the person
-     actually typed (nothing invented); a replaced value is the cube's current value; the capsule notation compiles.
-  3. SAY BACK: the brain side writes the reading back in plain English ("Oxley buses line september: eight.").
+  2. CHECK: the brain side checks the reading -- the thing and the value are words the person typed (nothing invented);
+     a replaced value is the current one; there is a second node for the fact to point at; the notation compiles.
+  3. SAY BACK: the brain side writes the reading back in plain English (a renderer, not a parser).
   4. RE-READ: the proposers read the say-back line; the same reading = one agreeing round.
-Keep the fact as a cube after 2 agreeing rounds within 3. Otherwise no cube: the person's words stay and HELM asks
-later. Rounds 4-6 are tried in a SHADOW for the report only and never stored (the owner: "WE MAY NEED MORE THAN 3
-ROUNDS"). A correction is a new cube revision; the history is kept. Each thing has one Atlas CONTEXT node; each kept
-revision is a POSSIBILITY node under it; a confirmation adds a FACT node.
-Fading ladder (every 4 turns): S0 whole line -> S1 v1 capsule (cold copy, breadcrumb, receipt) -> S2 a small record
-(notation, clues, cube pointer, breadcrumb; the capsule sentence moved to a cold side file). Exact-fraction mass.
+Kept after 2 agreeing rounds within 3; rounds 4-6 are a SHADOW, reported only, never stored.
+A kept fact is written the way the Cube Node Schema says:
+  - THINGS ARE CUBES: each named thing ("Oxley", "September", "Halden") is one cube with the schema's six faces --
+    face_1 technical (its name), face_2 context, face_3 analogy or metaphor, face_4 mapping, face_5 decomposition,
+    face_6 recomposition. Faces 2-6 stay "unknown" with an explanation until taught; nothing is invented (schema §3).
+  - FACTS ARE BRANCHES: one `contains` branch from the thing to the other node, whose COMMONALITY says what the two
+    nodes have in common -- the Oxley line and September share "eight buses" (kind "buses line", referent "eight").
+  - A correction is a newer branch; the older one stays in the branch table as the history.
+  - ANSWERS GO THROUGH THE THREE OPERATIONS: LIST_PARTS (what a thing holds), FIND_SHARED_PART (what two things have
+    in common), REACHED_VIA (how two things are related). Each answer names the operation it ran.
+Each thing also has an Atlas CONTEXT node; each kept fact a POSSIBILITY node; a confirmation adds a FACT node.
+Fading ladder (every 4 turns): S0 whole line -> S1 v1 capsule -> S2 a lean record. Exact-fraction mass.
 
-The proposer here is an INTERFACE. `StandInProposer` is for tests and is NOT the CTT; the real CTT adapter comes with
-the retraining step (owner line `CUBE TRAIN at 3 USD`, not yet typed). Without a proposer the OSC arm stores nothing.
+NO PARSER INSIDE HELM (SPEC_CUBE_STORE_UNIFIED: "no new parser"; A-TEACH2-4 R5). Readings come only from the proposer
+interface -- the CTT once retrained (owner line `CUBE TRAIN at 3 USD`, not yet typed). `StandInProposer` is for tests and
+is NOT the CTT. The exam's baseline reader lives on the exam side (docs/working/helm_cube_oscillation_v1/
+teach2_rule_reader.py) and reaches HELM only through the `reader` argument of the ONE_READER and TABLE arms.
 
-Design: docs/working/helm_cube_oscillation_v1/ (DESIGN, pre-code f7b6183b..., A-TEACH2-1..3); spec 7.125.
+Design: docs/working/helm_cube_oscillation_v1/ (DESIGN; pre-code f7b6183b...; A-TEACH2-1..4); spec 7.125.
 SWITCH: HELM_CUBE_OSC, default OFF. Modes: OSC, ONE_READER, CTT_ONLY, TABLE, TABLE_OSC, ONE_STEP_FADE.
-CLAIM STATUS: ENGINEERED-NOT-VALIDATED. Standard library only (the cube store, the compiler and the Atlas through the
-repository modules helm_memory and helm_memory_compact already load).
+CLAIM STATUS: ENGINEERED-NOT-VALIDATED.
 """
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import os
 import re
+import sys
 from dataclasses import dataclass
 from fractions import Fraction
 from typing import Any, Callable, Dict, FrozenSet, List, Optional, Tuple
 
 import helm_memory_compact as hmc
+
+_CUBE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs", "working", "noetic_council", "cube_store")
+if os.path.isdir(_CUBE_DIR) and _CUBE_DIR not in sys.path:
+    sys.path.insert(0, _CUBE_DIR)
 
 MODES = ("OSC", "ONE_READER", "CTT_ONLY", "TABLE", "TABLE_OSC", "ONE_STEP_FADE")
 ROUND_CAP = 3
@@ -49,19 +62,16 @@ THETA_S2 = Fraction(1, 50)
 PLAIN_INTENTS = {"GENERAL_KNOWLEDGE_INQUIRY", "GENERAL_CONVERSATION", "REFRESH_ANSWER"}
 MONTHS = {"january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
           "november", "december"}
-#: A-TEACH2-2 B2 discourse words, plus "replaces" (the say-back's own word; build deviation D-BUILD-1)
-DISCOURSE = {"correction", "actually", "sorry", "meant", "honestly", "also", "more", "said", "before", "earlier",
-             "instead", "like", "just", "really", "think", "replaces"}
-#: A-TEACH2-3 openers: a capitalised first word in this list is not a name
-OPENERS = {"the", "this", "that", "there", "then", "these", "those", "our", "my", "your", "one", "also", "and", "but",
-           "so", "oh", "okay", "ok", "by", "let", "back", "in", "on", "at", "for", "from", "after", "during", "last",
-           "next", "every", "each", "honestly", "correction", "actually", "sorry", "yes", "well", "anyway", "right",
-           "just", "now", "around", "about", "over", "since", "when", "as", "it", "we", "they", "he", "she", "i"}
 #: number words a VALUE may be (cardinals; "one" is left out because it is also a pronoun -- build deviation D-BUILD-2)
 VALUE_NUMBERS = {"zero", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
                  "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "thirty",
                  "forty", "fifty", "sixty", "seventy", "eighty", "ninety", "hundred", "thousand", "dozen"}
-WORD_RX = re.compile(r"[A-Za-z][A-Za-z'\-]*")
+UNTAUGHT = "Not taught in this conversation; never filled by a guess (Cube_Node_Schema_v0.1 section 3)."
+_WORD_RX = re.compile(r"[A-Za-z][A-Za-z'\-]*")
+
+
+def _words(text: str) -> set:
+    return {m.group(0).strip("'-").lower() for m in _WORD_RX.finditer(text or "")}
 
 
 # ----------------------------------------------------------------------------------------------- the switch
@@ -82,72 +92,18 @@ class Reading:
     replaces: Optional[str] = None
 
 
-def _tokens(text: str) -> List[Tuple[str, int]]:
-    return [(m.group(0).strip("'-"), m.start()) for m in WORD_RX.finditer(text or "")]
-
-
-def _is_name(word: str, first: bool) -> bool:
-    low = word.lower()
-    if not word[:1].isupper() or len(word) < 3 or low in MONTHS or low in VALUE_NUMBERS:
-        return False
-    if first and (low in hmc.STOP_WORDS or low in DISCOURSE or low in OPENERS):
-        return False
-    return True
-
-
-def rule_read(text: str) -> Optional[Reading]:
-    """The hand-written rule reader (A-TEACH2-2 B2, A-TEACH2-3). General rules, no subject template. None = cannot read."""
-    toks = _tokens(text)
-    if not toks:
-        return None
-    words = [w for w, _ in toks]
-    low = [w.lower() for w in words]
-    names: List[str] = []
-    for i, w in enumerate(words):
-        first = i == 0 or text[:toks[i][1]].rstrip().endswith(":")
-        if _is_name(w, first) and low[i] not in names:
-            names.append(low[i])
-    # replaced values: after "not", after "instead of", after "replaces", or X in "said X before"
-    replaced: List[str] = []
-    for i, w in enumerate(low):
-        prev = low[i - 1] if i >= 1 else ""
-        prev2 = " ".join(low[i - 2:i]) if i >= 2 else ""
-        nxt = low[i + 1] if i + 1 < len(low) else ""
-        if prev in {"not", "replaces"} or prev2 == "instead of" or (prev == "said" and nxt == "before"):
-            if w in VALUE_NUMBERS or w in names:
-                replaced.append(w)
-    numbers = [w for w in low if w in VALUE_NUMBERS and w not in replaced]
-    if not names:
-        return None
-    thing = names[0]
-    if numbers:
-        if len(set(numbers)) != 1 or len(numbers) != 1:
-            return None
-        value = numbers[0]
-    else:
-        others = [n for n in names[1:] if n not in replaced]
-        if not others:
-            return None
-        value = others[-1]
-    reps = [r for r in replaced if r != value]
-    replaces = reps[0] if reps else None
-    slot = frozenset(w for w in hmc.content_words(text) if w not in {thing, value, replaces} and w not in DISCOURSE
-                     and w not in names)
-    if not slot:
-        return None
-    return Reading(thing=thing, slot=slot, value=value, replaces=replaces)
-
-
 def say_back(r: Reading) -> str:
-    """The brain side's plain say-back line (A-TEACH2-2 B4). No CAS token; only the reading's own words."""
-    line = f"{r.thing.capitalize()} {' '.join(sorted(r.slot))}: {r.value}."
+    """The brain side's plain say-back line (a renderer, not a parser). No CAS token; only the reading's own words."""
+    def say(w: str) -> str:            # a name keeps its capital, a number word stays lower case
+        return w if w in VALUE_NUMBERS else w.capitalize()
+    line = f"{r.thing.capitalize()} {' '.join(sorted(r.slot))}: {say(r.value)}."
     if r.replaces:
-        line += f" This replaces {r.replaces}."
+        line += f" This replaces {say(r.replaces)}."
     return line
 
 
 class StandInProposer:
-    """A TEST STAND-IN for one proposer copy. NOT the CTT. Never used in an exam arm."""
+    """A TEST STAND-IN for one proposer copy. NOT the CTT. Never used in an exam arm under test."""
 
     is_ctt = False
 
@@ -158,13 +114,34 @@ class StandInProposer:
         return self.fn(text)
 
 
+def _target_and_kind(r: Reading) -> Tuple[Optional[str], str]:
+    """The second node of the fact and the commonality kind (A-TEACH2-4 R2)."""
+    if r.value in VALUE_NUMBERS:
+        months = sorted(w for w in r.slot if w in MONTHS)
+        target = months[0] if months else None
+    else:
+        target = r.value
+    kind = " ".join(sorted(w for w in r.slot if w != target))
+    return target, kind
+
+
+def _names_in(text: str) -> set:
+    """Capitalised words after the first word that are not months: the things a question names (no parsing)."""
+    toks = [m.group(0).strip("'-") for m in _WORD_RX.finditer(text or "")]
+    return {w.lower() for w in toks[1:] if w[:1].isupper() and len(w) >= 3 and w.lower() not in MONTHS}
+
+
+def thing_id(name: str) -> str:
+    return "thing_" + name
+
+
 # ----------------------------------------------------------------------------------------------- the oscillator
 class CubeOsc:
     def __init__(self, memory: Any, mode: str = "OSC", proposers: Optional[List[Any]] = None, sweep: bool = True,
-                 cold_dir: Optional[str] = None) -> None:
+                 cold_dir: Optional[str] = None, reader: Optional[Callable[[str], Optional[Reading]]] = None) -> None:
         if mode not in MODES:
             raise ValueError(mode)
-        self.memory, self.mode = memory, mode
+        self.memory, self.mode, self.reader = memory, mode, reader
         self.proposers = list(proposers or [])
         self.uses_store = mode in ("OSC", "ONE_READER", "CTT_ONLY", "ONE_STEP_FADE")
         self.sweep_on = bool(sweep) and mode in ("OSC", "ONE_READER", "CTT_ONLY")
@@ -185,70 +162,88 @@ class CubeOsc:
             if atlas_mod is not None:
                 self.atlas = atlas_mod.Atlas(atlas_id="cube_osc", max_depth=1)
 
-    # ---------------------------------------------------------------- cubes
-    @staticmethod
-    def node_id(thing: str, slot: FrozenSet[str]) -> str:
-        return "teach_" + hashlib.sha256((thing + "|" + " ".join(sorted(slot))).encode("utf-8")).hexdigest()[:12]
-
+    # ---------------------------------------------------------------- the store, the schema's way
     def _store(self):
         return getattr(self.memory.context, "cube_store", None)
 
-    def cube_for(self, thing: str, slot: FrozenSet[str]):
-        if not self.uses_store or self._store() is None:
+    def _ensure_thing(self, name: str, turn_id: int) -> str:
+        """A thing is a schema cube: core + six faces; face_1 names it; faces 2-6 unknown with an explanation."""
+        import helm_memory as hm
+        store = self._store()
+        nid = thing_id(name)
+        if nid in store.nodes:
+            return nid
+        faces = {"face_1": hm.Face(availability="populated", human_text=name.capitalize(),
+                                   structured={"canonical_name": name})}
+        for i in range(2, 7):
+            faces[f"face_{i}"] = hm.Face(availability="unknown", human_text=UNTAUGHT)
+        store.write_cube(hm.CubeNode(node_id=nid, core=hm.Core(label=name.capitalize(), kind="instance",
+                                                               identity_statement=f"A thing the person named on turn {turn_id}."),
+                                     faces=faces, revision=1, turn_index=turn_id,
+                                     provenance=hm.Provenance(source="USER_SAID"), assertion="ASSERTED",
+                                     valence="NEUTRAL"))
+        if self.atlas is not None:
+            try:
+                self.atlas.node(f"thing:{name}")
+            except Exception:
+                self.atlas.add_node(f"thing:{name}", "CONTEXT", {"thing": name, "cube": nid})
+        return nid
+
+    def _latest_branch(self, thing: str, target: str, kind: str):
+        store = self._store()
+        if store is None:
             return None
-        return self._store().nodes.get(self.node_id(thing, slot))
+        hits = [b for b in store.branches if b.source_node_id == thing_id(thing) and b.target_node_id == thing_id(target)
+                and (b.commonality or {}).get("kind") == kind]
+        return hits[-1] if hits else None
 
-    def _current(self, thing: str, slot: FrozenSet[str]) -> Optional[str]:
-        if self.uses_store:
-            c = self.cube_for(thing, slot)
-            return c.faces["face_1"].human_text if c is not None else None
-        return self.table.get((thing, slot))
+    def _current(self, r: Reading) -> Optional[str]:
+        if not self.uses_store:
+            return self.table.get((r.thing, r.slot))
+        target, kind = _target_and_kind(r)
+        b = self._latest_branch(r.thing, target, kind) if target else None
+        return b.commonality.get("referent") if b is not None else None
 
-    def _write(self, r: Reading, turn: Any) -> Dict[str, Any]:
+    def write_reading(self, r: Reading, turn: Any) -> Dict[str, Any]:
+        """Write one kept reading: TABLE modes into a plain dict; store modes as schema cubes + one branch."""
         if not self.uses_store:
             self.table[(r.thing, r.slot)] = r.value
             self.table_src[(r.thing, r.slot)] = turn.turn_id
             return {"stored": "table"}
-        import helm_memory as hm  # the cube classes, as helm_memory imports them
+        import helm_memory as hm
+        target, kind = _target_and_kind(r)
+        src = self._ensure_thing(r.thing, turn.turn_id)
+        tgt = self._ensure_thing(target, turn.turn_id)
+        com = {"kind": kind, "referent": r.value}
+        if r.value in VALUE_NUMBERS:
+            com["amount"] = r.value
+        if r.replaces:
+            com["replaces"] = r.replaces
+        bid = "br_" + hashlib.sha256(f"{src}|{tgt}|{kind}|{turn.turn_id}".encode("utf-8")).hexdigest()[:12]
         store = self._store()
-        nid = self.node_id(r.thing, r.slot)
-        prev = store.nodes.get(nid)
-        rev = (prev.revision + 1) if prev is not None else 1
-        hist = list(prev.faces["face_1"].structured.get("history", [])) if prev is not None else []
-        hist.append([rev, r.value, turn.turn_id])
-        faces = {f"face_{i}": hm.Face(availability="populated" if i == 1 else "unknown",
-                                      human_text=r.value if i == 1 else "No decomposition.",
-                                      structured={"thing": r.thing, "slot": sorted(r.slot), "value": r.value,
-                                                  "history": hist} if i == 1 else {})
-                 for i in range(1, 7)}
-        node = hm.CubeNode(node_id=nid, core=hm.Core(label=f"{r.thing}: {' '.join(sorted(r.slot))}", kind="instance",
-                                                     identity_statement="A fact the person taught HELM in conversation."),
-                           faces=faces, revision=rev, turn_index=turn.turn_id,
-                           provenance=hm.Provenance(source="USER_SAID"), assertion="ASSERTED", valence="NEUTRAL")
-        store.write_cube(node)
-        if nid not in turn.cubes_written:
-            turn.cubes_written.append(nid)           # the v1 capsule of this turn then binds the cube
+        store.write_branch(hm.Branch(branch_id=bid, context_id=store.context_id, source_node_id=src, predicate="contains",
+                                     target_node_id=tgt, commonality=com, provenance_refs=[f"turn:{turn.turn_id}"]))
+        for nid in (src, tgt):
+            if nid not in turn.cubes_written:
+                turn.cubes_written.append(nid)          # the v1 capsule of this turn then binds these cubes
         if self.atlas is not None:
-            thing_node = f"thing:{r.thing}"
-            try:
-                self.atlas.node(thing_node)
-            except Exception:
-                self.atlas.add_node(thing_node, "CONTEXT", {"thing": r.thing})
-            rev_node = f"cube:{nid}:r{rev}"
-            self.atlas.add_node(rev_node, "POSSIBILITY", {"value": r.value, "turn_id": turn.turn_id})
-            self.atlas.add_edge(thing_node, rev_node, "holds", cross_kind_declared=True)
-        return {"stored": "cube", "node_id": nid, "revision": rev}
+            self.atlas.add_node(f"fact:{bid}", "POSSIBILITY", {"branch": bid, "kind": kind, "turn_id": turn.turn_id})
+            self.atlas.add_edge(f"thing:{r.thing}", f"fact:{bid}", "holds", cross_kind_declared=True)
+        return {"stored": "branch", "branch_id": bid, "source": src, "target": tgt}
 
-    def confirm(self, node_id: str) -> None:
-        """The person confirmed: provenance CHECKED and a FACT node beside the revision (Atlas kinds never change)."""
-        node = self._store().nodes.get(node_id)
+    def confirm(self, thing: str) -> None:
+        """The person confirmed: a new revision of the thing's cube with provenance CHECKED, and an Atlas FACT node."""
+        store = self._store()
+        node = store.nodes.get(thing_id(thing)) if store is not None else None
         if node is None:
             return
-        node.provenance.source = "CHECKED"
+        new = copy.deepcopy(node)
+        new.revision = node.revision + 1
+        new.provenance.source = "CHECKED"
+        store.write_cube(new)
         if self.atlas is not None:
-            thing = node.faces["face_1"].structured["thing"]
-            fid = f"fact:{node_id}:r{node.revision}"
-            self.atlas.add_node(fid, "FACT", {"value": node.faces["face_1"].human_text})
+            fid = f"confirmed:{thing}:r{new.revision}"
+            self.atlas.add_node(fid, "FACT", {"thing": thing})
             self.atlas.add_edge(f"thing:{thing}", fid, "holds", cross_kind_declared=True)
 
     # ---------------------------------------------------------------- the rounds
@@ -261,11 +256,14 @@ class CubeOsc:
         return props[0]
 
     def check(self, r: Reading, text: str) -> Tuple[bool, str]:
-        words = {w.lower() for w, _ in _tokens(text)}
+        words = _words(text)
         if r.thing not in words or r.value not in words:
             return False, "a word of the reading is not in the person's line"
+        target, _kind = _target_and_kind(r)
+        if self.uses_store and not target:
+            return False, "the fact has no second node to point at"
         if r.replaces is not None:
-            cur = self._current(r.thing, r.slot)
+            cur = self._current(r)
             if cur is not None and cur != r.replaces:
                 return False, "the replaced value is not the current value"
         if not hmc.Compactor._compiles("^1^C")[0]:
@@ -287,17 +285,17 @@ class CubeOsc:
         row: Dict[str, Any] = {"turn_id": turn.turn_id, "mode": self.mode, "kept": False, "rounds": 0,
                                "agreeing_rounds": 0, "check_failed": None}
         if self.mode in ("ONE_READER", "TABLE"):
-            r = rule_read(text)
+            r = self.reader(text) if self.reader is not None else None
             if r is not None:
                 ok, why = (True, "") if self.mode == "TABLE" else self.check(r, text)
                 if ok:
-                    row.update(self._write(r, turn), kept=True, reading=_rd(r))
+                    row.update(self.write_reading(r, turn), kept=True, reading=_rd(r))
                 else:
                     row["check_failed"] = why
         elif self.mode == "CTT_ONLY":
             r = self._unanimous(text)
-            if r is not None:
-                row.update(self._write(r, turn), kept=True, reading=_rd(r))
+            if r is not None and _target_and_kind(r)[0]:
+                row.update(self.write_reading(r, turn), kept=True, reading=_rd(r))
         else:   # OSC, ONE_STEP_FADE, TABLE_OSC
             agree, reading = 0, None
             for k in range(1, ROUND_CAP + 1):
@@ -312,7 +310,7 @@ class CubeOsc:
                     break
             row["agreeing_rounds"] = agree
             if agree >= KEEP_AGREEING and reading is not None:
-                row.update(self._write(reading, turn), kept=True, reading=_rd(reading))
+                row.update(self.write_reading(reading, turn), kept=True, reading=_rd(reading))
             else:
                 shadow_at = None
                 for k in range(ROUND_CAP + 1, SHADOW_LAST_ROUND + 1):   # reported only; nothing stored
@@ -327,45 +325,89 @@ class CubeOsc:
         self.log.append(row)
         return row
 
-    # ---------------------------------------------------------------- answering
+    # ---------------------------------------------------------------- answering, through the three operations
+    def _things(self) -> List[str]:
+        store = self._store()
+        return sorted(n for n in (store.nodes if store is not None else {}) if n.startswith("thing_"))
+
     def answer(self, question: str) -> Optional[Dict[str, Any]]:
-        q = {w.lower() for w, _ in _tokens(question)} | set(hmc.content_words(question))
-        if self.uses_store:
-            store = self._store()
-            entries = []
-            for nid, node in (store.nodes.items() if store is not None else []):
-                st = node.faces["face_1"].structured if "face_1" in node.faces else {}
-                if not nid.startswith("teach_") or not st:
-                    continue
-                entries.append((st["thing"], frozenset(st["slot"]), node.faces["face_1"].human_text,
-                                st["history"][-1][2], nid))
-        else:
-            entries = [(t, s, v, self.table_src[(t, s)], None) for (t, s), v in self.table.items()]
+        q = _words(question) | set(hmc.content_words(question))
+        q_names = _names_in(question)
+        if not self.uses_store:
+            return self._answer_table(q)
+        import operations
+        store = self._store()
         scored = []
-        for thing, slot, value, src, nid in entries:
-            if thing not in q:
-                continue
-            ov = len(slot & q)
-            if ov >= min(2, len(slot)):
-                scored.append((ov, thing, slot, value, src, nid))
+        for nid in self._things():
+            rec = operations.list_parts(store, nid, view_profile="Authoring")
+            for p in rec.output or []:
+                com = p.get("commonality") or {}
+                if "kind" not in com:
+                    continue
+                src, tgt = nid[len("thing_"):], p["node_id"][len("thing_"):]
+                named = [n for n in (src, tgt) if n in q]
+                if not named or any(n not in (src, tgt) for n in q_names):
+                    continue        # a thing the question names that is not part of this fact rules the fact out
+                kind_words = set(com["kind"].split())
+                ov = len(kind_words & q)
+                if ov < min(2, len(kind_words)):
+                    continue
+                scored.append((ov + len(named), src, tgt, com, p["branch_id"], rec.cubes_read))
         if not scored:
             return None
         best = max(s[0] for s in scored)
         top = [s for s in scored if s[0] == best]
         if len(top) >= hmc.WHICH_ONE_AT:
-            return {"label": "UNKNOWN", "value": None, "text": f"I remember a few things about {top[0][1].capitalize()}. Which one do you mean?",
-                    "question": True, "node_id": None}
-        _, thing, slot, value, src, nid = top[-1]
-        for item in self.items.values():
-            if item["turn_id"] == src:
-                item["uses"] += 1
-                item["last"] = self.tick
+            return {"label": "UNKNOWN", "value": None, "operation": "LIST_PARTS", "question": True,
+                    "text": f"I remember a few things about {top[0][1].capitalize()}. Which one do you mean?"}
+        _, src, tgt, com, bid, cubes_read = top[-1]
+        if "amount" in com:
+            value = com["amount"]
+        else:
+            value = src if (tgt in q and src not in q) else com.get("referent", tgt)
+        turn_id = self._branch_turn(bid)
+        if turn_id is not None and turn_id in self.items:
+            self.items[turn_id]["uses"] += 1
+            self.items[turn_id]["last"] = self.tick
+        label = "EXACT" if turn_id is not None and self._words_fetchable(turn_id) else "RECONSTRUCTED"
+        phrase = f"{src.capitalize()}, {com['kind']}, {tgt.capitalize()}" + (f": {com['amount']}" if "amount" in com else "")
+        text = (f"You told me: {phrase}." if label == "EXACT"
+                else f"I don't have your exact words any more, but my notes say: {phrase}.")
+        return {"label": label, "value": value, "text": text, "operation": "LIST_PARTS", "cubes_read": cubes_read,
+                "branch_id": bid, "source_turn": turn_id, "question": False}
+
+    def _answer_table(self, q: set) -> Optional[Dict[str, Any]]:
+        scored = []
+        for (thing, slot), value in self.table.items():
+            if thing in q and len(slot & q) >= min(2, len(slot)):
+                scored.append((len(slot & q), thing, slot, value, self.table_src[(thing, slot)]))
+        if not scored:
+            return None
+        _, thing, slot, value, src = max(scored, key=lambda s: s[0])
         label = "EXACT" if self._words_fetchable(src) else "RECONSTRUCTED"
-        phrase = f"{thing.capitalize()} {' '.join(sorted(slot))}: {value}"
-        text = (f"You told me {phrase}." if label == "EXACT"
-                else f"I don't have your exact words any more, but my notes say {phrase}.")
-        return {"label": label, "value": value, "text": text, "thing": thing, "slot": sorted(slot), "node_id": nid,
-                "source_turn": src, "question": False}
+        return {"label": label, "value": value, "operation": "TABLE_LOOKUP", "question": False,
+                "text": f"You told me: {thing.capitalize()}, {' '.join(sorted(slot))}: {value}."}
+
+    def common(self, a: str, b: str) -> Dict[str, Any]:
+        """FIND_SHARED_PART: what two things have in common (their shared constituents)."""
+        import operations
+        rec = operations.find_shared_part(self._store(), thing_id(a), thing_id(b), view_profile="Authoring")
+        shared = sorted(x.lower() for x in (rec.output or []))
+        return {"operation": rec.operation, "shared": shared, "cubes_read": rec.cubes_read}
+
+    def related(self, a: str, b: str) -> Dict[str, Any]:
+        """REACHED_VIA: how two things are related (direct, via another node, or absent)."""
+        import operations
+        rec = operations.reached_via(self._store(), thing_id(a), thing_id(b), view_profile="Authoring")
+        return {"operation": rec.operation, "output": rec.output, "cubes_read": rec.cubes_read}
+
+    def _branch_turn(self, bid: str) -> Optional[int]:
+        for b in self._store().branches:
+            if b.branch_id == bid:
+                for ref in b.provenance_refs:
+                    if ref.startswith("turn:"):
+                        return int(ref.split(":", 1)[1])
+        return None
 
     def _words_fetchable(self, turn_id: int) -> bool:
         if any(t.turn_id == turn_id for t in self.memory.turns):
@@ -378,19 +420,21 @@ class CubeOsc:
 
     # ---------------------------------------------------------------- the ladder
     def _mass(self, item: Dict[str, Any]) -> Fraction:
-        n = item["uses"]
-        f = 1 + (1 + n).bit_length() - 1
-        age = self.tick - item["last"]
-        return S_IMPORTANCE * f * DECAY ** age
+        f = 1 + (1 + item["uses"]).bit_length() - 1
+        return S_IMPORTANCE * f * DECAY ** (self.tick - item["last"])
 
     def _protected(self, turn_id: int) -> bool:
-        """A-TEACH2-2 B8: a turn that wrote a cube revision not yet confirmed or superseded is never faded."""
+        """A turn that wrote the current branch of a fact whose thing is not yet CHECKED is never faded (B8)."""
         store = self._store()
         if store is None or not self.uses_store:
             return False
-        for nid, node in store.nodes.items():
-            st = node.faces["face_1"].structured if nid.startswith("teach_") and "face_1" in node.faces else None
-            if st and st["history"][-1][2] == turn_id and node.provenance.source != "CHECKED":
+        latest: Dict[Tuple[str, str, str], Any] = {}
+        for b in store.branches:
+            if "kind" in (b.commonality or {}):
+                latest[(b.source_node_id, b.target_node_id, b.commonality["kind"])] = b
+        for b in latest.values():
+            node = store.nodes.get(b.source_node_id)
+            if f"turn:{turn_id}" in b.provenance_refs and (node is None or node.provenance.source != "CHECKED"):
                 return True
         return False
 
@@ -437,8 +481,7 @@ class CubeOsc:
             with open(side, "rb") as fh:
                 if hmc._sha(fh.read()) != hmc._sha(payload):
                     continue
-            # the breadcrumb is kept lean: the cold path is rebuilt from the capsule id and the cold folder, so the S2
-            # record keeps only the capsule id, the cold copy's sha256 and the turn ids (build deviation D-BUILD-3)
+            # the breadcrumb is kept lean: the cold path is rebuilt from the capsule id and the cold folder (D-BUILD-3)
             rec = {"capsule_id": cap.capsule_id, "notation": cap.cas.get("notation"), "clues": list(cap.clues),
                    "cubes": list(cap.binds.get("cubes", [])),
                    "crumb": {"sha256": cap.crumb["sha256"], "turn_ids": list(cap.crumb["turn_ids"])},
@@ -461,7 +504,7 @@ class CubeOsc:
         return list(self._s2.values())
 
     def working_bytes(self) -> int:
-        """A-TEACH2-2 B8: live turns' user text + S1 capsules' canonical JSON + S2 records' canonical JSON."""
+        """Live turns' user text + S1 capsules' canonical JSON + S2 records' canonical JSON (A-TEACH2-2 B8)."""
         total = sum(len(t.user_raw_text.encode("utf-8")) for t in self.memory.turns)
         comp = getattr(self.memory, "compactor", None)
         for cap in (comp.capsules if comp else []):
@@ -473,11 +516,12 @@ def _rd(r: Reading) -> Dict[str, Any]:
     return {"thing": r.thing, "slot": sorted(r.slot), "value": r.value, "replaces": r.replaces}
 
 
-def attach(memory: Any, mode: str = "OSC", proposers: Optional[List[Any]] = None, sweep: bool = True) -> CubeOsc:
+def attach(memory: Any, mode: str = "OSC", proposers: Optional[List[Any]] = None, sweep: bool = True,
+           reader: Optional[Callable[[str], Optional[Reading]]] = None) -> CubeOsc:
     """Give a HELMConversationalMemory its cube oscillator (the switch ON path). The v1 compactor is attached too when
     missing, because the ladder's S1 step is v1's capsule."""
     if getattr(memory, "compactor", None) is None:
         hmc.attach(memory)
-    osc = CubeOsc(memory, mode=mode, proposers=proposers, sweep=sweep)
+    osc = CubeOsc(memory, mode=mode, proposers=proposers, sweep=sweep, reader=reader)
     memory.cube_osc = osc
     return osc
