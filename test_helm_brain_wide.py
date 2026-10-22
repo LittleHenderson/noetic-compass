@@ -431,7 +431,8 @@ class I_V2ReaderFixes(unittest.TestCase):
 
     def test_parenthetical_asides_are_not_names_or_amounts(self):
         self.assertEqual(WT.parse_line(WT.normalize_text("1 cup (250 ml or 8.5 fl oz) dry rice")),
-                         {"name": "dry rice", "amount": Fraction(1), "unit": "cup", "said": "1 cup dry rice"})
+                         {"name": "dry rice", "amount": Fraction(1), "unit": "cup", "said": "1 cup dry rice",
+                          "own": "1 cup dry rice"})   # v7.2: a line also carries its OWN words, apart from its notes
 
     def test_comma_and_is_one_separator(self):
         lines, c = WT.parse_lines("One egg,, Four tablespoons of potato water, and 8 tablespoons of cornstarch")

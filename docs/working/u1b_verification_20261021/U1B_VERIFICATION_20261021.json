@@ -133,5 +133,10 @@
   "memory note project_u1_unity_eye_acting_ran_20261015.md (16:59 PDT 2026-10-15, before the U1b freeze) said 'U1b only on owner word'; corrected 2026-10-21",
   "hub change-log row of 2026-10-21 09:42 PDT cites section 7.38 only for the Eye's acting; section 7.40 (U1b) not cited there; noted, not edited"
  ],
- "open_for_owner": "whether the 2026-10-21 typed line stands as the after-the-fact word on the 2026-10-15 run, or asks for a fresh run on new seeds (U1c, own freeze, laptop, 0 USD expected)"
+ "open_for_owner": "closed: the owner ratified the 2026-10-15 run (see owner_ratification_20261021)",
+ "owner_ratification_20261021": {
+  "words_verbatim": "My 'run U1b' line stands as my word on the 2026-10-15 U1b run. Merge PR #442 into the thread branch.",
+  "where": "typed by the owner in this session",
+  "effect": "the 2026-10-15 run carries the owner's word after the fact; no claim status moves"
+ }
 }

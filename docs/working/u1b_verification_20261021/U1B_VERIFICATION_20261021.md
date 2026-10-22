@@ -82,3 +82,7 @@ Cost: 0 USD, laptop only (`LOCAL_CPU_ONCE on MSI`, 300 s cap per part, sockets b
 - Open, the owner's call, not the operator's: does the typed line of 2026-10-21 ("RUN the follow-up test called U1b",
   "run U1b") stand as the owner's after-the-fact word on the 2026-10-15 run, or does it ask for a fresh run on new
   seeds (a U1c: its own pre-code freeze, laptop, 0 USD expected, about 2.5 h of parts)?
+
+## 5. Owner's ratification (2026-10-21)
+
+The owner typed, verbatim: "My 'run U1b' line stands as my word on the 2026-10-15 U1b run. Merge PR #442 into the thread branch." The open question in section 4 is closed. No claim status moves.

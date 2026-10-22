@@ -54,7 +54,7 @@ import helm_brain_wide as W
 import helm_faces_in as FI          # v7 (SPEC 7.109 D2/D3): the face reader, names as given
 import helm_triad as HT             # v7 (SPEC 7.109 D4): the one scale and the triad table (stdlib only)
 
-READER_VERSION = "helm_wide_turn reader RB-W1 v7.1 (2026-10-21)"
+READER_VERSION = "helm_wide_turn reader RB-W1 v7.2 (2026-10-21)"
 CLAIM_STATUS = W.CLAIM_STATUS
 
 # ---------------------------------------------------------------------------------------------------- names
@@ -361,13 +361,15 @@ def parse_line(line: str, notes: str = "") -> Dict[str, Any]:
         if unit and unit in W.OWN_UNITS_AS_NOTES:  # EMPTY today: own-count units ("2 cans") stay exact counts
             return _note_line(name, s, "UNIT_NO_EXACT_SIZE:" + unit)
     said = s + (", " + note if note else "")
+    own = s                                         # v7.2: the line's own words, apart from its notes
     if companion is not None:                      # v5: one bundled line; its proportion is part of its name
         r, other = companion
         if other == name:
             return {"clarify": _ask("AMOUNT_RELATIVE", words=s)}
         name = f"{name} and {RELATIVE_SAID[r]} {other}"
         said = f"{said}, {RELATIVE_SAID[r]} {other}"
-    return {"name": name, "amount": amount, "unit": unit, "said": said}
+        own = said
+    return {"name": name, "amount": amount, "unit": unit, "said": said, "own": own}
 
 
 def _is_note(segment: str) -> bool:
@@ -405,7 +407,11 @@ def starts_line(seg: str) -> bool:
         return False
     if s[:got[1]].strip().lower() in ("a", "an"):
         nxt = re.match(r"\s*([a-z]+)", s[got[1]:].lower())
-        return bool(nxt) and nxt.group(1) not in VAGUE_AFTER_A
+        if nxt and nxt.group(1) in VAGUE_AFTER_A:
+            # v7.2 (the c55 wrong lesson): "a dash of pepper" / "a handful of raisins" after a separator names an
+            # ingredient of its own (and asks, since the measure has no exact size); "a little salt" stays a note
+            return bool(re.match(r"\s*[a-z]+\s+of\s+[a-z]", s[got[1]:].lower()))
+        return bool(nxt)
     return True
 
 
@@ -671,7 +677,10 @@ def read_wide(text: str, last_topic: Optional[str] = None) -> Dict[str, Any]:
                     ran_out.append(n)
         names = [x["name"] for x in lines]
         said = {x["name"]: x["said"] for x in lines}
-        ran_out = [resolve_ran_out(n, names, said) for n in ran_out]
+        # v7.2: a ran-out phrase is resolved through a line's OWN words only, never through its notes (the c55 wrong
+        # lesson: "a dash of X" folded into the line before it put X's running-out onto that line's ingredient)
+        own = {x["name"]: x.get("own", x["said"]) for x in lines}
+        ran_out = [resolve_ran_out(n, names, own) for n in ran_out]
         batch = {"product": product, "made": made, "ran_out": ran_out,
                  "stock": {x["name"]: (x["amount"], x["unit"]) for x in lines}, "said": said}
         if not product:                            # v3: the batch is kept so the dish name can be asked for ONCE
@@ -979,7 +988,10 @@ def extended_turn(loop: Any, user_english: str, tick: int, current_inventory: An
             # held amount of the ingredient it names stale (v4's withdrawal), so the next wide question asks for it
             # instead of answering as if the clause were never said (the v7 seal's practice finding, 4 wrong answers)
             if cr["status"] == "CLARIFY":
-                _withdraw_mentioned_stock(loop, reading["clause"], tick)
+                if not _withdraw_mentioned_stock(loop, reading["clause"], tick):
+                    loop.wide_face_block = {"clause": reading["clause"], "code": cr["clarify"]["code"], "tick": tick}
+            else:
+                loop.wide_face_block = None
     taken = take_over(loop, res, reading)
     if not taken and not recorded and reading["status"] != "QUESTION":
         _withdraw_mentioned_stock(loop, user_english, tick)   # v4: never answer from stock the person just restated
@@ -1142,6 +1154,10 @@ def say_clause_question(rec: Dict[str, Any], clause: str) -> str:
     if code == "FACE_NEGATED":
         return (f"You also said \"{clause}\". I don't read a \"not\" like that into a fact about an ingredient, so I "
                 f"didn't take it. Could you say it the plain way?")
+    if code in ("FACE_UNKNOWN_INGREDIENT", "FACE_UNKNOWN_PRODUCT"):
+        what = "an ingredient" if code == "FACE_UNKNOWN_INGREDIENT" else "a dish"
+        return (f"You also said \"{clause}\", which sounds like something about {what} I don't hold, so I didn't take "
+                f"it as a fact. Which one did you mean?")
     if code == "FACE_REFUSED":
         return (f"You also said \"{clause}\", but I can't lower what I hold about the {s.get('name', 'ingredient')} "
                 f"without knowing what happened ({s.get('refusal', 'refused')}). I didn't take it. What changed?")
@@ -1220,11 +1236,15 @@ def _wide_stock(loop: Any, stock: Dict[str, Tuple[Fraction, str]], tick: int, re
         if cr["status"] == "CLARIFY":
             code = cr["clarify"]["code"]
             gone = _withdraw_mentioned_stock(loop, clause, tick)   # v7.1: never answer later as if the clause were unsaid
-            tail = (f" Until you say it again, I won't count the {say_and(gone)}." if gone else "")
+            if not gone:                                           # v7.2: nothing to withdraw -> hold the answer instead
+                loop.wide_face_block = {"clause": clause, "code": code, "tick": tick}
+            tail = (f" Until you say it again, I won't count the {say_and(gone)}." if gone
+                    else " Until you tell me the stock again, I won't work out an amount.")
             return loop._finish(result, tick, f"CLARIFY_WIDE_{code}", reply + " " + say_clause_question(cr, clause) + tail,
                                 writes_before, f"WAIT_FOR_USER: {code}")
         if cr["status"] == "FACES":
             reply += " " + " ".join(FI.say_face(f) for f in cr["faces"])
+    loop.wide_face_block = None                    # v7.2: a stock the reader took in full lifts the hold
     return loop._finish(result, tick, "STOCK_RECORDED", reply, writes_before, "DONE")
 
 
@@ -1240,6 +1260,12 @@ def _wide_question(loop: Any, topic: str, tick: int, result: Dict[str, Any], wri
         return loop._finish(result, tick, "UNDETERMINED_UNKNOWN_PRODUCT", say_wide(rec), writes_before,
                             "WAIT_FOR_USER: a witnessed batch")
     loop.last_topic = product
+    block = getattr(loop, "wide_face_block", None)
+    if block:                                      # v7.2: a face-shaped clause about a thing this brain does not hold
+        return loop._finish(result, tick, f"CLARIFY_WIDE_{block['code']}",
+                            f"Before I work out {product}: you said \"{block['clause']}\", and I don't hold whatever that "
+                            f"is about, so I won't count on the stock as it stands. Tell me the stock again, or which "
+                            f"ingredient you meant. I didn't guess.", writes_before, f"WAIT_FOR_USER: {block['code']}")
     support = brain.support_of(product)
     # v7 (SPEC 7.109 D4): stated faces are APPLIED, as the licensed triad applies them (helm_triad: eta = the smallest
     # of the three face values; Rising 1/4, Waning 1/2, Peak 1, Absent 0). v4 asked instead (CLARIFY_WIDE_FACE_NOT_HELD).

@@ -1,6 +1,7 @@
 # HELM memory compaction v1 — teach by conversation, compact memories into CAS with clues, "refresh my memory", strengthen on fit, the Eye and the Atlas correctly applied (design packet, 2026-10-21 PDT)
 
 Status: **DESIGN ONLY. NOTHING BUILT, NOTHING TRAINED, NOTHING RUN, NOTHING LICENSED. 0 USD.**
+**Update 2026-10-21 PDT:** build v1 is BUILT and unit-tested on the owner's word (`helm_memory_compact.py` behind `HELM_MEMORY_COMPACT`, default OFF; `BUILD_V1_RECORD_20261021.md`). Claim status `ENGINEERED-NOT-VALIDATED`. Nothing trained, nothing scored, nothing licensed; the exam TEACH-1 has not run.
 Every HELM part named here keeps its claim status on the spec sheet. Everything new is `PROPOSED`. No `.py` file was changed. The files changed outside this folder: `CHANGELOG.md` and the spec sheet (§7.115 and a §11 row).
 
 ## The owner's words this packet answers (both statements of intent, neither an approval)
@@ -26,10 +27,14 @@ The honesty rule is the first hard gate: a rebuilt memory is never presented as 
 | `PREREGISTRATION_MEMORY_COMPACTION_V1.precode.md` | the exam TEACH-1: gate answer, what is under test, seven arms (COMPACT_ON, VERBATIM_ONLY, FIFO_DROP, SUMMARY_TEXT, NO_REFRESH, RANDOM_REFRESH, REPLAY), SDG worlds with keys, LLM-written teaching turns, three quizzes, the squeeze (B = 12), scoring, 14 instrument rows, 12 hard gates, marks in four families kept apart (UNDERSTOOD, RECALL, REFRESH, SOUNDED_HUMAN), status words in frozen order, ceiling, forecast, seeds, cost |
 | `PREREGISTRATION_MEMORY_COMPACTION_V1.precode.sha256` | the sha256 of the pre-code file |
 | `OPEN_QUESTIONS.md` | the fourteen decisions that are the owner's, each with a recommendation and the cost of each option |
+| `CENSUS_FIFO_DROPS_20261021.md` | the free census of DESIGN §8 step 1: does today's chat memory ever fill? 0 dropped turns of a floor of 8 → `STOP_NOT_EXERCISED`; one `user_facts` slip found, not fixed |
+| `BUILD_V1_RECORD_20261021.md` | build v1 (owner's word "Override the census floor. Start build v1 …"): what was built, the FIX FIRST counts, every HELM suite 322 passed with the switch OFF, the chat smoke with the switch ON; `ENGINEERED-NOT-VALIDATED`, nothing scored |
 
 ## The hash
 
 `PREREGISTRATION_MEMORY_COMPACTION_V1.precode.md` sha256 **`7eef0edc7d342bb0438e4052db646528442badefa92d6bdf31e8485914073bf1`** (18,290 bytes, LF line endings). The pre-code is not edited after this; amendments are appended, dated and hashed on their own.
+
+**Follow-up 2026-10-21 PDT (after the merge of PR #441):** DESIGN §6.1 adds four worked Atlas scenarios on the owner's word "add them"; OPEN_QUESTIONS records the owner's Q1–Q3 line (build v1, rule capsules, census first). The pre-code is not edited.
 
 ## The short version of the exam
 

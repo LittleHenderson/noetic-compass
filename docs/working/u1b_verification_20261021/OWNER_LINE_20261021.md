@@ -12,3 +12,9 @@
 - Nothing was re-run on 2026-10-21. Whether this typed line (a) stands as the owner's after-the-fact word on the
   2026-10-15 run, or (b) asks for a fresh run on new seeds (a U1c, needing its own pre-code freeze), is the
   owner's call. The operator does not decide it.
+
+## Owner's ratification (2026-10-21, typed by the owner in this session, verbatim)
+
+"My 'run U1b' line stands as my word on the 2026-10-15 U1b run. Merge PR #442 into the thread branch."
+
+The 2026-10-15 U1b run now carries the owner's own word, after the fact. No claim status moves.

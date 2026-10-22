@@ -1,0 +1,996 @@
+{
+ "schema": "helm.r1w7.frozen-conv-per-item/2",
+ "units": {
+  "W7_X7_CONV_CHAT_DIAG": {
+   "moved_counts_run9_to_run10": {
+    "WRONG->RIGHT": 4
+   },
+   "moved_items_run9_to_run10": {
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    }
+   },
+   "run10_by_family": {
+    "R1_STOCK_THEN_ASK": {
+     "RIGHT": 14,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 14
+    },
+    "R2_ABSENT_THEN_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R3_QUESTION_FORMS": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R4_WITNESS_IN_ENGLISH": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R5_MUST_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R7_NEXT_SESSION": {
+     "RIGHT": 1,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S1_WISDOM_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S2_POWER_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S3_FACE_UNKNOWN": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S6_TWO_FACES": {
+     "RIGHT": 2,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S7_NOT_A_FACE": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    }
+   },
+   "run10_totals": {
+    "RIGHT": 63,
+    "RIGHT_AND_PLAIN": 63,
+    "UNDETERMINED": 1,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run10_wrong_items": [],
+   "run10_wrong_per_family": {
+    "R1_STOCK_THEN_ASK": 0,
+    "R2_ABSENT_THEN_ASK": 0,
+    "R3_QUESTION_FORMS": 0,
+    "R4_WITNESS_IN_ENGLISH": 0,
+    "R5_MUST_ASK": 0,
+    "R7_NEXT_SESSION": 0,
+    "S1_WISDOM_STATED": 0,
+    "S2_POWER_STATED": 0,
+    "S3_FACE_UNKNOWN": 0,
+    "S4_RECIPE_PURPOSE_ABSENT": 0,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 0,
+    "S6_TWO_FACES": 0,
+    "S7_NOT_A_FACE": 0
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   }
+  },
+  "W7_X7_CONV_CHAT_OFF": {
+   "moved_counts_run9_to_run10": {},
+   "moved_items_run9_to_run10": {},
+   "run10_by_family": {
+    "R1_STOCK_THEN_ASK": {
+     "RIGHT": 7,
+     "UNDETERMINED": 7,
+     "WRONG": 0,
+     "items": 14
+    },
+    "R2_ABSENT_THEN_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R3_QUESTION_FORMS": {
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R4_WITNESS_IN_ENGLISH": {
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R5_MUST_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R7_NEXT_SESSION": {
+     "RIGHT": 0,
+     "UNDETERMINED": 2,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S1_WISDOM_STATED": {
+     "RIGHT": 0,
+     "UNDETERMINED": 6,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S2_POWER_STATED": {
+     "RIGHT": 0,
+     "UNDETERMINED": 6,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S3_FACE_UNKNOWN": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT": {
+     "RIGHT": 3,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S6_TWO_FACES": {
+     "RIGHT": 0,
+     "UNDETERMINED": 2,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S7_NOT_A_FACE": {
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4
+    }
+   },
+   "run10_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run10_wrong_items": [],
+   "run10_wrong_per_family": {
+    "R1_STOCK_THEN_ASK": 0,
+    "R2_ABSENT_THEN_ASK": 0,
+    "R3_QUESTION_FORMS": 0,
+    "R4_WITNESS_IN_ENGLISH": 0,
+    "R5_MUST_ASK": 0,
+    "R7_NEXT_SESSION": 0,
+    "S1_WISDOM_STATED": 0,
+    "S2_POWER_STATED": 0,
+    "S3_FACE_UNKNOWN": 0,
+    "S4_RECIPE_PURPOSE_ABSENT": 0,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 0,
+    "S6_TWO_FACES": 0,
+    "S7_NOT_A_FACE": 0
+   },
+   "run8_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   }
+  },
+  "W7_X7_CONV_CHAT_ON": {
+   "moved_counts_run9_to_run10": {
+    "WRONG->RIGHT": 4
+   },
+   "moved_items_run9_to_run10": {
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    }
+   },
+   "run10_by_family": {
+    "R1_STOCK_THEN_ASK": {
+     "RIGHT": 14,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 14
+    },
+    "R2_ABSENT_THEN_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R3_QUESTION_FORMS": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R4_WITNESS_IN_ENGLISH": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R5_MUST_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R7_NEXT_SESSION": {
+     "RIGHT": 1,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S1_WISDOM_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S2_POWER_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S3_FACE_UNKNOWN": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S6_TWO_FACES": {
+     "RIGHT": 2,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S7_NOT_A_FACE": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    }
+   },
+   "run10_totals": {
+    "RIGHT": 63,
+    "RIGHT_AND_PLAIN": 63,
+    "UNDETERMINED": 1,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run10_wrong_items": [],
+   "run10_wrong_per_family": {
+    "R1_STOCK_THEN_ASK": 0,
+    "R2_ABSENT_THEN_ASK": 0,
+    "R3_QUESTION_FORMS": 0,
+    "R4_WITNESS_IN_ENGLISH": 0,
+    "R5_MUST_ASK": 0,
+    "R7_NEXT_SESSION": 0,
+    "S1_WISDOM_STATED": 0,
+    "S2_POWER_STATED": 0,
+    "S3_FACE_UNKNOWN": 0,
+    "S4_RECIPE_PURPOSE_ABSENT": 0,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 0,
+    "S6_TWO_FACES": 0,
+    "S7_NOT_A_FACE": 0
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   }
+  },
+  "W7_X7_CONV_CHAT_ON_REPLAY": {
+   "moved_counts_run9_to_run10": {
+    "WRONG->RIGHT": 4
+   },
+   "moved_items_run9_to_run10": {
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    }
+   },
+   "run10_by_family": {
+    "R1_STOCK_THEN_ASK": {
+     "RIGHT": 14,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 14
+    },
+    "R2_ABSENT_THEN_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R3_QUESTION_FORMS": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R4_WITNESS_IN_ENGLISH": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R5_MUST_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R7_NEXT_SESSION": {
+     "RIGHT": 1,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S1_WISDOM_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S2_POWER_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S3_FACE_UNKNOWN": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S6_TWO_FACES": {
+     "RIGHT": 2,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S7_NOT_A_FACE": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    }
+   },
+   "run10_totals": {
+    "RIGHT": 63,
+    "RIGHT_AND_PLAIN": 63,
+    "UNDETERMINED": 1,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run10_wrong_items": [],
+   "run10_wrong_per_family": {
+    "R1_STOCK_THEN_ASK": 0,
+    "R2_ABSENT_THEN_ASK": 0,
+    "R3_QUESTION_FORMS": 0,
+    "R4_WITNESS_IN_ENGLISH": 0,
+    "R5_MUST_ASK": 0,
+    "R7_NEXT_SESSION": 0,
+    "S1_WISDOM_STATED": 0,
+    "S2_POWER_STATED": 0,
+    "S3_FACE_UNKNOWN": 0,
+    "S4_RECIPE_PURPOSE_ABSENT": 0,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 0,
+    "S6_TWO_FACES": 0,
+    "S7_NOT_A_FACE": 0
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   }
+  },
+  "W7_X7_CONV_LOOP_ON": {
+   "moved_counts_run9_to_run10": {
+    "WRONG->RIGHT": 2
+   },
+   "moved_items_run9_to_run10": {
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    }
+   },
+   "run10_by_family": {
+    "R1_STOCK_THEN_ASK": {
+     "RIGHT": 13,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 14
+    },
+    "R2_ABSENT_THEN_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R3_QUESTION_FORMS": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R4_WITNESS_IN_ENGLISH": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R5_MUST_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R7_NEXT_SESSION": {
+     "RIGHT": 0,
+     "UNDETERMINED": 2,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S1_WISDOM_STATED": {
+     "RIGHT": 4,
+     "UNDETERMINED": 2,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S2_POWER_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S3_FACE_UNKNOWN": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S6_TWO_FACES": {
+     "RIGHT": 2,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S7_NOT_A_FACE": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    }
+   },
+   "run10_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 5,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run10_wrong_items": [],
+   "run10_wrong_per_family": {
+    "R1_STOCK_THEN_ASK": 0,
+    "R2_ABSENT_THEN_ASK": 0,
+    "R3_QUESTION_FORMS": 0,
+    "R4_WITNESS_IN_ENGLISH": 0,
+    "R5_MUST_ASK": 0,
+    "R7_NEXT_SESSION": 0,
+    "S1_WISDOM_STATED": 0,
+    "S2_POWER_STATED": 0,
+    "S3_FACE_UNKNOWN": 0,
+    "S4_RECIPE_PURPOSE_ABSENT": 0,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 0,
+    "S6_TWO_FACES": 0,
+    "S7_NOT_A_FACE": 0
+   },
+   "run8_totals": {
+    "RIGHT": 41,
+    "RIGHT_AND_PLAIN": 41,
+    "UNDETERMINED": 23,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 57,
+    "RIGHT_AND_PLAIN": 57,
+    "UNDETERMINED": 5,
+    "WRONG": 2,
+    "items": 64,
+    "missing": 0
+   }
+  },
+  "W7_X7_NOISE_CHAT_OFF": {
+   "moved_counts_run9_to_run10": {},
+   "moved_items_run9_to_run10": {},
+   "run10_by_family": {
+    "R1_STOCK_THEN_ASK": {
+     "RIGHT": 7,
+     "UNDETERMINED": 7,
+     "WRONG": 0,
+     "items": 14
+    },
+    "R2_ABSENT_THEN_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R3_QUESTION_FORMS": {
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R4_WITNESS_IN_ENGLISH": {
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R5_MUST_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R7_NEXT_SESSION": {
+     "RIGHT": 0,
+     "UNDETERMINED": 2,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S1_WISDOM_STATED": {
+     "RIGHT": 0,
+     "UNDETERMINED": 6,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S2_POWER_STATED": {
+     "RIGHT": 0,
+     "UNDETERMINED": 6,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S3_FACE_UNKNOWN": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT": {
+     "RIGHT": 3,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S6_TWO_FACES": {
+     "RIGHT": 0,
+     "UNDETERMINED": 2,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S7_NOT_A_FACE": {
+     "RIGHT": 0,
+     "UNDETERMINED": 4,
+     "WRONG": 0,
+     "items": 4
+    }
+   },
+   "run10_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run10_wrong_items": [],
+   "run10_wrong_per_family": {
+    "R1_STOCK_THEN_ASK": 0,
+    "R2_ABSENT_THEN_ASK": 0,
+    "R3_QUESTION_FORMS": 0,
+    "R4_WITNESS_IN_ENGLISH": 0,
+    "R5_MUST_ASK": 0,
+    "R7_NEXT_SESSION": 0,
+    "S1_WISDOM_STATED": 0,
+    "S2_POWER_STATED": 0,
+    "S3_FACE_UNKNOWN": 0,
+    "S4_RECIPE_PURPOSE_ABSENT": 0,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 0,
+    "S6_TWO_FACES": 0,
+    "S7_NOT_A_FACE": 0
+   },
+   "run8_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 28,
+    "RIGHT_AND_PLAIN": 28,
+    "UNDETERMINED": 36,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   }
+  },
+  "W7_X7_NOISE_CHAT_ON": {
+   "moved_counts_run9_to_run10": {
+    "WRONG->RIGHT": 4
+   },
+   "moved_items_run9_to_run10": {
+    "CV32:pg:13286@192206": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV33:pg:13286@148742": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV34:pg:48804@600651": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    },
+    "CV37:pg:78849@222633": {
+     "family": "S1_WISDOM_STATED",
+     "run10": "RIGHT",
+     "run8": "UNDETERMINED",
+     "run9": "WRONG"
+    }
+   },
+   "run10_by_family": {
+    "R1_STOCK_THEN_ASK": {
+     "RIGHT": 14,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 14
+    },
+    "R2_ABSENT_THEN_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R3_QUESTION_FORMS": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R4_WITNESS_IN_ENGLISH": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R5_MUST_ASK": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "R7_NEXT_SESSION": {
+     "RIGHT": 1,
+     "UNDETERMINED": 1,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S1_WISDOM_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S2_POWER_STATED": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S3_FACE_UNKNOWN": {
+     "RIGHT": 6,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 6
+    },
+    "S4_RECIPE_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S5_INGREDIENT_PURPOSE_ABSENT": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    },
+    "S6_TWO_FACES": {
+     "RIGHT": 2,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 2
+    },
+    "S7_NOT_A_FACE": {
+     "RIGHT": 4,
+     "UNDETERMINED": 0,
+     "WRONG": 0,
+     "items": 4
+    }
+   },
+   "run10_totals": {
+    "RIGHT": 63,
+    "RIGHT_AND_PLAIN": 63,
+    "UNDETERMINED": 1,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run10_wrong_items": [],
+   "run10_wrong_per_family": {
+    "R1_STOCK_THEN_ASK": 0,
+    "R2_ABSENT_THEN_ASK": 0,
+    "R3_QUESTION_FORMS": 0,
+    "R4_WITNESS_IN_ENGLISH": 0,
+    "R5_MUST_ASK": 0,
+    "R7_NEXT_SESSION": 0,
+    "S1_WISDOM_STATED": 0,
+    "S2_POWER_STATED": 0,
+    "S3_FACE_UNKNOWN": 0,
+    "S4_RECIPE_PURPOSE_ABSENT": 0,
+    "S5_INGREDIENT_PURPOSE_ABSENT": 0,
+    "S6_TWO_FACES": 0,
+    "S7_NOT_A_FACE": 0
+   },
+   "run8_totals": {
+    "RIGHT": 43,
+    "RIGHT_AND_PLAIN": 43,
+    "UNDETERMINED": 21,
+    "WRONG": 0,
+    "items": 64,
+    "missing": 0
+   },
+   "run9_totals": {
+    "RIGHT": 59,
+    "RIGHT_AND_PLAIN": 59,
+    "UNDETERMINED": 1,
+    "WRONG": 4,
+    "items": 64,
+    "missing": 0
+   }
+  }
+ }
+}

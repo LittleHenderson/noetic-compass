@@ -3,6 +3,13 @@
 Status: **DESIGN ONLY. NOTHING BUILT, NOTHING TRAINED, NOTHING RUN, NOTHING LICENSED. 0 USD.**
 Each item is the owner's to decide. The designer has decided none of them. Each carries one line of recommendation and the cost of each option, so the owner can answer with a number and a word. Operational details (folder names, instance size, retention) are not here; they are the operator's.
 
+## Answered 2026-10-21 PDT (after the merge of PR #441)
+
+Owner's words, typed into the design session, verbatim: `“add them”; OPEN_QUESTIONS Q1–Q3 in one line (recommended: “build v1, rule capsules, census first”).`
+
+Reading recorded (the owner may correct it with one word): **Q1 = (a)** build v1 now behind its own switch, default OFF; **Q2 = (a)** run the free census first, with its STOP floor; **Q3 = the rule skin** (the §7.31 CCE skin writes the capsule's CAS in v1; no CTT, 0 USD). "add them" = the four Atlas scenarios go into DESIGN §6.1 (done in the same commit). Q4–Q14 remain open; the recommendations stand as written. No money is approved by this line; no test line is signed.
+
+
 1. **Go or hold on the line of work.** Build v1 (rule capsules, laptop, 0 USD) now, or hold until the talk packet's exam (`TALK EXAM at 1 USD`) has a word, since both change the chat.
    Options: (a) build v1 now behind its own switch, default OFF: 0 USD, a few laptop sessions; (b) hold: 0 USD, nothing learned about memory until the talk line settles.
    Recommendation: (a). The switch keeps the two lines apart, and the census (Q2) is free either way.

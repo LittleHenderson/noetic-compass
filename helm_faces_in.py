@@ -42,7 +42,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LEXICON_PATH = os.path.join(HERE, "helm_faces_lexicon.json")
-READER_VERSION = "helm_faces_in v2.1 (2026-10-21: names as given, longer phrases resolved)"
+READER_VERSION = "helm_faces_in v2.2 (2026-10-21: names as given; unheld subject asks; -oes/-ves forms)"
 CLAIM_STATUS = "ENGINEERED-NOT-VALIDATED"
 
 with open(LEXICON_PATH, "rb") as _h:
@@ -90,10 +90,20 @@ def _plural_forms(word: str) -> List[str]:
         out.append(w[:-2])
     elif len(w) > 2 and w.endswith("s") and not w.endswith("ss"):
         out.append(w[:-1])
+    if len(w) > 3 and w.endswith("oes"):                # tomatoes -> tomato
+        out.append(w[:-2])
+    if len(w) > 3 and w.endswith("ves"):                # loaves -> loaf, knives -> knife
+        out.append(w[:-3] + "f"); out.append(w[:-3] + "fe")
     if w.endswith("y") and len(w) > 2 and w[-2] not in "aeiou":
         out.append(w[:-1] + "ies")
     elif w.endswith(("s", "x", "z", "ch", "sh")):
         out.append(w + "es")
+    elif w.endswith("o") and len(w) > 2:                # tomato -> tomatoes (and tomatos, kept below)
+        out.append(w + "es"); out.append(w + "s")
+    elif w.endswith("fe") and len(w) > 3:               # knife -> knives
+        out.append(w[:-2] + "ves"); out.append(w + "s")
+    elif w.endswith("f") and len(w) > 2:                # loaf -> loaves
+        out.append(w[:-1] + "ves"); out.append(w + "s")
     else:
         out.append(w + "s")
     return list(dict.fromkeys(x for x in out if x))
@@ -146,6 +156,22 @@ def _compile_rows(ing_map: Dict[str, str], prod_map: Dict[str, str], open_phrase
         pat = row["pattern"].replace("{OBJ}", obj).replace("{SUBJ}", subj).replace("{PROD}", prod)
         out.append((row, re.compile(r"(?<![a-z'])" + pat + r"(?![a-z'])")))
     return out
+
+
+_OPEN_ROWS: List[Tuple[Dict[str, Any], "re.Pattern"]] = []
+
+
+def _open_rows() -> List[Tuple[Dict[str, Any], "re.Pattern"]]:
+    """v2.2: the lexicon rows with the name slot left OPEN (any noun phrase): they tell whether a clause has the SHAPE of
+    a face statement even when its subject is not a given name, so the reader can ask instead of calling it small talk."""
+    if not _OPEN_ROWS:
+        obj = r"(?P<obj>(?:the |our |my )?[a-z][a-z' -]{1,40}?|it|them|this|that)"
+        subj = r"(?P<subj>(?:the |our |my )?[a-z][a-z' -]{1,40}?|it|they)"
+        prod = r"(?P<prod>[a-z][a-z' -]{1,40}?)"
+        for row in LEXICON["rows"]:
+            pat = row["pattern"].replace("{OBJ}", obj).replace("{SUBJ}", subj).replace("{PROD}", prod)
+            _OPEN_ROWS.append((row, re.compile(r"(?<![a-z'])" + pat + r"(?![a-z'])")))
+    return _OPEN_ROWS
 
 
 def _named_ingredients(text_norm: str, ing_map: Dict[str, str]) -> List[str]:
@@ -219,6 +245,16 @@ def read(text: str, ingredients: Sequence[str], products: Sequence[str], *, name
                 if m:
                     hit = (row, m)
                     break
+            if hit is None and names_as_given:                 # v2.2: a face SHAPE about a thing we do not hold -> ask
+                for row, rx in _open_rows():
+                    m = rx.search(clause)
+                    if m:
+                        code = "FACE_UNKNOWN_PRODUCT" if row["scope"] == "recipe" else "FACE_UNKNOWN_INGREDIENT"
+                        return dict(base, status=STATUS_CLARIFY, faces=[], remainder="",
+                                    clarify={"code": code, "slots": {"clause": clause, "row": row["id"],
+                                                                      "phrase": (m.groupdict().get("obj") or m.groupdict().get("subj")
+                                                                                 or m.groupdict().get("prod") or "")}},
+                                    rows=[row["id"]])
             if hit is None and NEGATION_RX.search(clause):
                 plain = re.sub(r"\b(?:not|never) |n't\b", "", clause)
                 negated = [row["id"] for row, rx in rows if not row["negation_ok"] and rx.search(plain)]
