@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 - HELM Cube v1 concept and the RPM depth governor (hub intended items 14-15; docs and hub only, 0 USD)
+
+- Owner's words of 2026-10-22 recorded verbatim in Documents/Codex/2026-10-18/OWNER_APPROVALS_20261018.md as a STATEMENT OF INTENT, not an approval.
+- New concept spec docs/working/helm_cube_device_v1/HELM_CUBE_DEVICE_SPEC_V1.md (copy in Documents/Codex/2026-10-22/helm_cube_device_v1/): INTENDED, CONCEPT ONLY, NOTHING BUILT, NOTHING LICENSED, NO MONEY.
+- Depth answer: a depth governor in the RPM gate decides by written rule (ceiling HORIZON = 12, budget, no-progress stop, receipts); the Eye advises only; acting stays NOT LICENSED.
+- Hub: roadmap intended items 14 and 15 with the owner's quote and the concept drawing helm_cube_concept.svg; build_hub.py now copies helm_hub/assets/* into the site and the link check fails on a missing asset (new test). Spec sheet: follow-up under 7.110 and a section 11 row. No HELM .py changed.
+
 ## 2026-10-21 PDT - HELM EYE-ACT-1 SCORED (spec sheet 7.122 follow-up): all 10 hard gates hold; EYE_ACT_EARNED_KEEP, CONCERT_ACT_EARNED_KEEP, EYE_ACT_BEATS_CHECKSUM_COPY, TIES_REBUILD_ALWAYS; acting stays NOT LICENSED; laptop, 0 USD
 
 - Owner's line, verbatim (seeds the worlds): "EYE ACT EXAM, sealed e49d459c, laptop, 0 USD." (45 bytes, sha256 4ee0d7b4...).

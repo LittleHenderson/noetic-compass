@@ -178,6 +178,21 @@ class BuildTests(unittest.TestCase):
         # the owner's 09:50 PDT statement under item 11
         self.assertIn("WHY NOT EMPLOY THEM IN COMPACTING MEMORIES AS WELL AND CAN WORK WITH CUBES AND RECIPE COEFFICIENTS", r)
         self.assertIn("ONCE WE RUN OUT TOKENS", r)
+        # items 14 and 15 and the owner's 2026-10-22 statement of intent
+        self.assertGreaterEqual(r.count("INTENDED / NOT A PRESENT CAPABILITY / NOTHING LICENSED"), 16)
+        self.assertIn("Thinking deeper on demand: a depth governor in the RPM gate, the Eye as advisor only", r)
+        self.assertIn("The HELM Cube: the eventual hardware form", r)
+        self.assertIn('id="cube-words"', r)
+        self.assertIn("DETERMINE IF MORE RPM DEPTH WAS NEEDED/NECESSARY ON A GIVEN MATTER?", r)
+        self.assertIn("QI SUPERCHARGING ONLY", r)
+        self.assertIn("GET CLAUDE DESIGN TO DRAW IT UP.", r)
+        self.assertIn("docs/working/helm_cube_device_v1/HELM_CUBE_DEVICE_SPEC_V1.md", r)
+        self.assertTrue((b.REPO / "docs/working/helm_cube_device_v1/HELM_CUBE_DEVICE_SPEC_V1.md").is_file())
+        if (b.ASSETS / "helm_cube_concept.svg").is_file():
+            self.assertIn('src="helm_cube_concept.svg"', r)
+            self.assertTrue((b.SITE / "helm_cube_concept.svg").is_file())
+        else:
+            self.assertIn("Slot for the concept drawing", r)
 
     def test_roadmap_carries_the_statement_of_intent_in_full(self):
         r = (b.SITE / "roadmap.html").read_text(encoding="utf-8")
@@ -198,6 +213,17 @@ class BuildTests(unittest.TestCase):
 
 class CheckerCanTripTests(unittest.TestCase):
     """The checks must be able to fail; otherwise a pass means nothing."""
+
+    def test_missing_asset_trips_the_link_check(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            dd = Path(d)
+            for f in b.SITE.glob("*.html"):
+                (dd / f.name).write_text(f.read_text(encoding="utf-8"), encoding="utf-8")
+            r = (dd / "roadmap.html").read_text(encoding="utf-8")
+            (dd / "roadmap.html").write_text(r.replace("</body>", '<img src="no_such_asset.svg" alt="x"></body>'), encoding="utf-8")
+            rep = b.check_site(dd)
+            self.assertTrue(any("missing asset no_such_asset.svg" in x for x in rep["links"]), rep["links"])
 
     def _page(self, body: str) -> Path:
         d = Path(tempfile.mkdtemp())
