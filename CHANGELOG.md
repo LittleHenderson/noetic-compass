@@ -23,6 +23,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 - Practice (dev:1-8, unscored): first read INCONCLUSIVE (the H10 defect fixed by A2); after A2 all gates hold. CONCERT 6 right / 0 wrong on 8 faulted items vs no Eye 0 / 8; REBUILD_ALWAYS tied it exactly; CHECKSUM_COPY 2 wrong (fooled by the slipped lesson). Two predictions already missed and kept (ACT's cadence on P2; R2 makes 0 clean state changes too).
 - Coordination: notes to the operator session and to the owners of PRs #451, #452, #453 before any shared file; no objection received; the U1c PR moved to 7.121.
 - Next: the owner types EYE ACT EXAM, sealed e49d459c, laptop, 0 USD; the run and the frozen reader follow.
+## 2026-10-21 PDT - HELM memory compaction TEACH-1 first run (spec sheet 7.121): verdict PASS, status word INCONCLUSIVE (U1 failed); every hard gate held; 0 USD; nothing licensed
+
+- Owner's line COMPACT EXAM at 0 USD; PR #453 merged at 10f83272; custodian (helper agent, separate context, on the owner's "Do this task here") drew 16 worlds, had 512 lines written by Anthropic / OpenAI / Google (171/171/170) and keyed AGREE by the two other families (448 of 448); attestation fa6e4701...
+- Run on the laptop from a fresh extract of seal 5 (811726c4...): suites 280 OK + 47 passed; route check 0 bad; 112 of 112 units exit 0 in 227 s. Reading c08b5b20...: all instrument rows and 12 hard gates hold (HG-H8 4,029 answers, labels right; 0 invented; 0 CAS tokens; replay equal).
+- Word INCONCLUSIVE by U1: 7 wrong in VERBATIM_ONLY, all HELM quoting the person's own correction line verbatim (newest match, EXACT); the frozen scorer counts the old value as a second value because the AI writer did not write "not" before it. One genuine wrong in RANDOM_REFRESH's last quiz (a superseded line quoted).
+- Marks (deciding nothing): R1 +148, R2 0 (tie with the text note), R3 +3, R4 0 lost on undamaged items, R5 +2; S1/S3/S4 missed by the chat voice. Taught facts never became cubes (every capsule unbound).
+- Files: docs/working/helm_memory_compaction_v1/teach1/RUN_RESULT_TEACH1_20261021.md, TEACH1_READING_20261021.json (counts only), APPROVAL_RECORD_TEACH1.json, TEACH1_ATTESTATION.json; backup D:/tksCAS-archive/teach1_run_20261021/. Exam content stays in the custody folder.
+
 ## 2026-10-21 PDT - Two design answers to the owner (spec sheet 7.120): who decides more RPM depth, and the HELM Cube device concept; design only, 0 USD, nothing built
 
 - Depth: the decider should be an exact arithmetic rule at the RPM gate, and the owner's decoupling stop already is one (spec 7.69, DECOUPLING_EARNED on made-up worlds). The Unity Eye cannot decide by design (never writes, never gates; acting NOT LICENSED); it can audit the rule, and only under a new ruling ask for more depth, never less. Today's live chat has no depth choice to make. Packet: docs/working/helm_rpm_depth_decider_design_v1/ (answer, facts, three designs, the superseded merged draft, the skeptic's 30 findings).
