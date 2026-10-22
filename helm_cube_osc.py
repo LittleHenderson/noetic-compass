@@ -489,6 +489,21 @@ class CubeOsc:
                 runs[-1].append(t)
         return [r for r in runs if r]
 
+    @staticmethod
+    def _capsule_bytes(comp: Any, cap: Any) -> int:
+        """What a capsule would cost as stored: the Eye's lean record when the Eye runs the capsules, else in full."""
+        if hasattr(comp.capsules, "size_of"):
+            return comp.capsules.size_of(cap)
+        return len(hmc._canon(cap.as_dict()))
+
+    @staticmethod
+    def _stored_bytes_of(comp: Any, cap: Any) -> int:
+        if hasattr(comp.capsules, "stored"):
+            row = next((r for r in comp.capsules.stored() if r.get("id", r.get("capsule_id")) == cap.capsule_id), None)
+            if row is not None:
+                return len(hmc._canon(row))
+        return len(hmc._canon(cap.as_dict()))
+
     def fade_to_limit(self) -> None:
         """Every line stays word for word until working memory passes the limit. Then the oldest unprotected lines
         become one capsule per batch -- 16 lines, widened by 16 until the capsule is smaller than its lines -- until
@@ -512,13 +527,13 @@ class CubeOsc:
                         dry = comp._compact(batch, dry_run=True)
                     except hmc.CompactRefused:
                         break
-                    if len(hmc._canon(dry.as_dict())) < line_bytes:
+                    if self._capsule_bytes(comp, dry) < line_bytes:
                         before = self.working_bytes()
                         cap = comp._compact(batch)
                         ids = set(cap.crumb["turn_ids"])
                         self.memory.turns = [t for t in self.memory.turns if t.turn_id not in ids]
                         self.batch_log.append({"capsule_id": cap.capsule_id, "lines": len(batch), "widest": n == len(run),
-                                               "line_bytes": line_bytes, "capsule_bytes": len(hmc._canon(cap.as_dict())),
+                                               "line_bytes": line_bytes, "capsule_bytes": self._stored_bytes_of(comp, cap),
                                                "bytes_before": before, "bytes_after": self.working_bytes(),
                                                "receipt": cap.receipt})
                         written = True
@@ -634,6 +649,8 @@ class CubeOsc:
         """Live turns' user text + S1 capsules' canonical JSON + S2 records' canonical JSON (A-TEACH2-2 B8)."""
         total = sum(len(t.user_raw_text.encode("utf-8")) for t in self.memory.turns)
         comp = getattr(self.memory, "compactor", None)
+        if comp is not None and hasattr(comp.capsules, "stored_bytes"):
+            return total + comp.capsules.stored_bytes()        # what is stored: the Eye's lean records
         for cap in (comp.capsules if comp else []):
             total += len(hmc._canon(self._s2[cap.capsule_id] if cap.capsule_id in self._s2 else cap.as_dict()))
         return total
@@ -654,6 +671,14 @@ def attach(memory: Any, mode: str = "OSC", proposers: Optional[List[Any]] = None
         hmc.attach(memory)
     if limit_bytes is not None:
         memory.max_turns = max(memory.max_turns, 10 ** 9)      # the turn budget no longer drops or compacts
+        # the Eye runs the capsules on this path: lean records, rebuilt and receipt-checked on every read (A-TEACH2-7)
+        import helm_eye_act as hea
+        comp = memory.compactor
+        if not isinstance(comp.capsules, hea.LeanCapsules):
+            lean = hea.LeanCapsules(hea.CapsuleEye(comp))
+            for cap in comp.capsules:
+                lean.append(cap)
+            comp.capsules = lean
     else:
         local_limit_bytes = None
     memory.compactor.cloud = cloud

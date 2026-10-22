@@ -677,6 +677,9 @@ class Compactor:
         receipt = _sha(_canon({"kind": "STRENGTHEN", "capsule": cap.receipt, "mass": cap.mass, "clues": cap.clues,
                                 "side": cap.atlas["side"]}))
         self._receipt("STRENGTHEN", cap.capsule_id, receipt, {"mass": dict(cap.mass), "clues": list(cap.clues)})
+        if hasattr(self.capsules, "store"):
+            # the Eye's lean list: write the strengthened capsule back, after its receipt exists (A-TEACH2-7)
+            self.capsules.store(cap)
         self._check_brain("strengthen.end")
         return {"strengthened": True, "receipt": receipt, "mass": dict(cap.mass), "clues": list(cap.clues),
                 "side": cap.atlas["side"]}

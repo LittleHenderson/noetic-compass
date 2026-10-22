@@ -60,11 +60,13 @@ def stand_in():
     return [hco.StandInProposer(trr.rule_read) for _ in range(3)]
 
 
-def _mem(tmp_path, limit, local_limit=None, cloud=None, max_turns=50):
+def _mem(tmp_path, limit, local_limit=None, cloud=None, max_turns=50, full_capsules=False):
     mem = HELMConversationalMemory(session_id="t-tiers", max_turns=max_turns, storage_dir=str(tmp_path / "log"))
     hmc.attach(mem, cold_dir=str(tmp_path / "cold"))
     osc = hco.attach(mem, mode="OSC", proposers=stand_in(), limit_bytes=limit, local_limit_bytes=local_limit,
                      cloud=cloud)
+    if full_capsules:       # the Eye off: full capsules, as built before A-TEACH2-7 (keeps the old facts tested)
+        mem.compactor.capsules = list(mem.compactor.capsules)
     return mem, osc
 
 
@@ -136,7 +138,9 @@ def test_one_capsule_per_batch_with_its_cold_copy_and_receipt(tmp_path):
 
 
 def test_short_lines_widen_the_batch_until_it_saves(tmp_path):
-    mem, osc = _mem(tmp_path, limit=3000)
+    # full capsules (the Eye off): 16 short lines never save, so the batch widens. With the Eye's lean capsule
+    # (A-TEACH2-7) 16 short lines already save, so no widening is needed (test_helm_cube_lean.py).
+    mem, osc = _mem(tmp_path, limit=3000, full_capsules=True)
     for i in range(140):
         _say(mem, short_line(i))
     assert osc.batch_log, "the limit was crossed, so at least one batch must have been written"
@@ -169,8 +173,9 @@ def test_memory_shrinks_only_a_little_and_does_not_stay_under_the_limit(tmp_path
     """PINNED MEASURED NEGATIVE (build record 7): written first as `working_bytes() <= limit`; that FAILED (11,165
     bytes against a 4,000 limit after 200 lines). A capsule (~810 bytes) replaces ~900 bytes of lines, and capsules stay
     in working memory, so they pile up. Memory is smaller than keeping every line, but only a little, and over the
-    limit; the Eye report says so. Keeping memory under the limit needs a design change that is the owner's choice."""
-    mem, osc = _mem(tmp_path, limit=4000)
+    limit; the Eye report says so. Keeping memory under the limit needs a design change that is the owner's choice.
+    Kept with full capsules (the Eye off) after A-TEACH2-7: the negative stays tested, never deleted."""
+    mem, osc = _mem(tmp_path, limit=4000, full_capsules=True)
     for i in range(200):
         _say(mem, long_line(i))
     never_forget = sum(len(long_line(i).encode("utf-8")) for i in range(200))
