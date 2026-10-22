@@ -1,0 +1,43 @@
+{
+ "batch": 256,
+ "cap_usd": 4,
+ "dropout": 0.1,
+ "ear_gates": {
+  "confident_wrong_llm_max": 0.02,
+  "confident_wrong_sdg_max": 0.01,
+  "confident_wrong_trap_max": 0.01,
+  "exercised_llm_min": 0.25,
+  "exercised_sdg_min": 0.4,
+  "keep_old_max_drop": 0.02
+ },
+ "exam_min_replies": 1000,
+ "fallback_max": 1,
+ "fallback_per": 1000,
+ "grad_clip": 1.0,
+ "keep_old_before": {
+  "A4-s1": 0.9785,
+  "A4-s2": 0.979,
+  "A4-s3": 0.9775
+ },
+ "lr": 0.0005,
+ "mix": {
+  "CAS": 2,
+  "CUBE": 3,
+  "MOUTH": 5
+ },
+ "models": {
+  "A4-s1": {"config": "A4_9p6M", "init_sha256": "c39eafb6db92845a463a0c6bc711c73d45ddcb482b5e5eaffad466f337d7a69a"},
+  "A4-s2": {"config": "A4_9p6M", "init_sha256": "3bfbf1f064e4dd96980bfa971cbd089706a4b99cfdaba0b84324f4a4b3a883ee"},
+  "A4-s3": {"config": "A4_9p6M", "init_sha256": "6418ef1e27ffd18df9f571e9f5410af1afae6843d9d56cbcb01d31ccf947564b"},
+  "A5-s1": {"config": "A5_2p5M", "init_sha256": "07a54adcdb58cfb746f35e0d4350a9bde536eb72f97d6b29451960313fca4bc1"}
+ },
+ "number_words": ["two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"],
+ "rater_min_pairs": 300,
+ "roundtrip_min": 0.95,
+ "sounds_human_min": 0.6,
+ "steps": 6000,
+ "top_p": 0.9,
+ "varied_inputs": 100,
+ "warmup_steps": 600,
+ "weight_decay": 0.01
+}

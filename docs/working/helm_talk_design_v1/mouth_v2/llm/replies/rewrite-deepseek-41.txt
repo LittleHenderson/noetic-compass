@@ -1,0 +1,8 @@
+```json
+[
+  {"id": "psm0427", "text": "Well hello there! Nice to have you here."},
+  {"id": "psm0437", "text": "Hey there! Glad you stopped by."},
+  {"id": "pse0031", "text": "I keep what you tell me in the chat, like the things about yourself and the kitchen amounts."},
+  {"id": "pse0041", "text": "I can keep track of a plan and the details you give me, like the things about yourself and the kitchen amounts."}
+]
+```

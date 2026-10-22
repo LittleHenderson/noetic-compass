@@ -1,0 +1,10 @@
+[
+  {
+    "id": "pse0383",
+    "text": "Yep, I keep track of the details you share in this chat, up to twenty things about yourself and the kitchen amounts you give."
+  },
+  {
+    "id": "pwo0004",
+    "text": "I don't know that one, friend. Nobody has told me the size for an Instagram layout."
+  }
+]

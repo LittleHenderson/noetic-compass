@@ -1,0 +1,692 @@
+{
+ "call": {
+  "family": "openai",
+  "model": "gpt-5.6-terra",
+  "returncode": 0,
+  "seconds": 45.4,
+  "tag": "persons-openai"
+ },
+ "family": "openai",
+ "lines": [
+  {
+   "situation": "OFF",
+   "text": "I finally cleaned out the hallway closet and found my old roller skates."
+  },
+  {
+   "situation": "OFF",
+   "text": "My neighbor's dog has decided my front porch is its favorite observation deck."
+  },
+  {
+   "situation": "OFF",
+   "text": "I took the train to work today instead of sitting in traffic."
+  },
+  {
+   "situation": "OFF",
+   "text": "My sister sent me a photo of her new apartment and it looks really cozy."
+  },
+  {
+   "situation": "OFF",
+   "text": "I spent most of Sunday reorganizing my bookshelf by color for no reason."
+  },
+  {
+   "situation": "OFF",
+   "text": "The office elevator has been making a weird noise all week."
+  },
+  {
+   "situation": "OFF",
+   "text": "I started learning guitar again after letting it collect dust for years."
+  },
+  {
+   "situation": "OFF",
+   "text": "My commute was surprisingly peaceful this morning because it rained."
+  },
+  {
+   "situation": "OFF",
+   "text": "I accidentally wore two different socks to a meeting yesterday."
+  },
+  {
+   "situation": "OFF",
+   "text": "My cousin is visiting next month, so I need to tidy up the guest room."
+  },
+  {
+   "situation": "OFF",
+   "text": "I joined a local running group, even though I am definitely not fast."
+  },
+  {
+   "situation": "OFF",
+   "text": "The sunset from my balcony was unreal tonight."
+  },
+  {
+   "situation": "OFF",
+   "text": "I have been listening to old podcasts during my evening walks."
+  },
+  {
+   "situation": "OFF",
+   "text": "My manager gave me a shoutout in the team meeting today."
+  },
+  {
+   "situation": "OFF",
+   "text": "I found a tiny library near the park and borrowed a mystery novel."
+  },
+  {
+   "situation": "OFF",
+   "text": "My phone battery has been draining absurdly fast lately."
+  },
+  {
+   "situation": "OFF",
+   "text": "I planted a few herbs on the windowsill and somehow they are still alive."
+  },
+  {
+   "situation": "OFF",
+   "text": "My dad called just to tell me about a bird he saw in his yard."
+  },
+  {
+   "situation": "OFF",
+   "text": "I am trying to get better at taking breaks instead of working straight through."
+  },
+  {
+   "situation": "OFF",
+   "text": "The laundromat was packed, so I ended up chatting with a stranger for an hour."
+  },
+  {
+   "situation": "OFF",
+   "text": "I got a haircut yesterday and it feels much shorter than I expected."
+  },
+  {
+   "situation": "OFF",
+   "text": "My cat knocked over a plant again, then looked offended when I noticed."
+  },
+  {
+   "situation": "OFF",
+   "text": "I signed up for a pottery class that starts on Thursday."
+  },
+  {
+   "situation": "OFF",
+   "text": "The construction near my building begins way too early every morning."
+  },
+  {
+   "situation": "OFF",
+   "text": "I found an old postcard tucked inside a used book."
+  },
+  {
+   "situation": "OFF",
+   "text": "My best friend is moving across town, which feels farther than it really is."
+  },
+  {
+   "situation": "OFF",
+   "text": "I spent the afternoon fixing a wobbly chair and felt oddly accomplished."
+  },
+  {
+   "situation": "OFF",
+   "text": "The library near me just renovated its reading room."
+  },
+  {
+   "situation": "OFF",
+   "text": "I keep putting off replying to three emails that are not even difficult."
+  },
+  {
+   "situation": "OFF",
+   "text": "My little nephew learned how to whistle and will not stop demonstrating it."
+  },
+  {
+   "situation": "OFF",
+   "text": "I watched a documentary about deep ocean creatures before bed and regretted it."
+  },
+  {
+   "situation": "OFF",
+   "text": "The new bus route makes getting downtown much easier."
+  },
+  {
+   "situation": "OFF",
+   "text": "I bought a secondhand desk and spent all evening putting it together."
+  },
+  {
+   "situation": "OFF",
+   "text": "My roommate adopted a rabbit, and it has already claimed the living room."
+  },
+  {
+   "situation": "OFF",
+   "text": "I have been waking up before my alarm lately, which is unusual for me."
+  },
+  {
+   "situation": "OFF",
+   "text": "The team at work is planning a game night next Friday."
+  },
+  {
+   "situation": "OFF",
+   "text": "I took a long walk without headphones and noticed so much more around me."
+  },
+  {
+   "situation": "OFF",
+   "text": "My mom is teaching herself how to use video calls."
+  },
+  {
+   "situation": "OFF",
+   "text": "I found a loose button in my coat pocket from who knows when."
+  },
+  {
+   "situation": "OFF",
+   "text": "The apartment upstairs has been renovating for what feels like forever."
+  },
+  {
+   "situation": "OFF",
+   "text": "I started using a paper planner again because my calendar was getting chaotic."
+  },
+  {
+   "situation": "OFF",
+   "text": "My coworker brought their baby into the office and everyone lost focus."
+  },
+  {
+   "situation": "OFF",
+   "text": "I am halfway through painting the bedroom and deeply questioning the color choice."
+  },
+  {
+   "situation": "OFF",
+   "text": "The park near my place has a new bench facing the pond."
+  },
+  {
+   "situation": "OFF",
+   "text": "I stayed up too late finishing a book because the ending was stressful."
+  },
+  {
+   "situation": "OFF",
+   "text": "My uncle restored an old motorcycle and took me for a ride."
+  },
+  {
+   "situation": "OFF",
+   "text": "I found a playlist from college and suddenly remembered every word."
+  },
+  {
+   "situation": "OFF",
+   "text": "The printer at work only jams when I am in a hurry."
+  },
+  {
+   "situation": "OFF",
+   "text": "I donated a bag of clothes and now my closet finally closes properly."
+  },
+  {
+   "situation": "OFF",
+   "text": "My friend got engaged over the weekend and sent us all a blurry photo."
+  },
+  {
+   "situation": "OFF",
+   "text": "I have been practicing my handwriting during boring conference calls."
+  },
+  {
+   "situation": "OFF",
+   "text": "The local theater is showing old movies on Tuesday nights."
+  },
+  {
+   "situation": "OFF",
+   "text": "I forgot my umbrella and got completely soaked on the way home."
+  },
+  {
+   "situation": "OFF",
+   "text": "My landlord replaced the lobby lights, and the building looks much nicer now."
+  },
+  {
+   "situation": "OFF",
+   "text": "I started a puzzle last weekend and it has taken over the table."
+  },
+  {
+   "situation": "OFF",
+   "text": "My brother keeps sending voice messages instead of texting now."
+  },
+  {
+   "situation": "OFF",
+   "text": "I got a flat tire on my bike but a stranger helped me fix it."
+  },
+  {
+   "situation": "OFF",
+   "text": "The museum was nearly empty this morning, which made it feel extra peaceful."
+  },
+  {
+   "situation": "OFF",
+   "text": "I am trying to cut down on doomscrolling before bed."
+  },
+  {
+   "situation": "OFF",
+   "text": "My friend and I are planning a road trip for early spring."
+  },
+  {
+   "situation": "OFF",
+   "text": "I noticed the first leaves changing color on my street today."
+  },
+  {
+   "situation": "OFF",
+   "text": "My old laptop finally gave up during a video call."
+  },
+  {
+   "situation": "OFF",
+   "text": "I spent an hour looking for my glasses while they were on my head."
+  },
+  {
+   "situation": "OFF",
+   "text": "The coffee shop near work changed its chairs and somehow they are worse."
+  },
+  {
+   "situation": "OFF",
+   "text": "I took my bike to the repair shop after ignoring that squeak for months."
+  },
+  {
+   "situation": "OFF",
+   "text": "My aunt is downsizing and keeps offering everyone random furniture."
+  },
+  {
+   "situation": "OFF",
+   "text": "I signed up to volunteer at the animal shelter on Saturdays."
+  },
+  {
+   "situation": "OFF",
+   "text": "The wind was so strong last night that a branch fell in our driveway."
+  },
+  {
+   "situation": "OFF",
+   "text": "I got a new houseplant and named it far too quickly."
+  },
+  {
+   "situation": "OFF",
+   "text": "My coworker and I have an ongoing debate about the best desk setup."
+  },
+  {
+   "situation": "OFF",
+   "text": "I found a quiet trail behind the community center that I never knew existed."
+  },
+  {
+   "situation": "OFF",
+   "text": "The ceiling fan in my bedroom has started clicking every few minutes."
+  },
+  {
+   "situation": "OFF",
+   "text": "I mailed a handwritten letter today, which felt strangely old-fashioned."
+  },
+  {
+   "situation": "OFF",
+   "text": "My cousin graduated this week and the whole family is very proud."
+  },
+  {
+   "situation": "OFF",
+   "text": "I have been attempting to meditate, but my mind keeps making shopping lists."
+  },
+  {
+   "situation": "OFF",
+   "text": "The new intern reminds me a lot of myself when I first started."
+  },
+  {
+   "situation": "OFF",
+   "text": "I went to a flea market and came home with a lamp I did not need."
+  },
+  {
+   "situation": "OFF",
+   "text": "My apartment gets beautiful afternoon light in the winter."
+  },
+  {
+   "situation": "OFF",
+   "text": "I finally replaced the cracked screen protector on my phone."
+  },
+  {
+   "situation": "OFF",
+   "text": "My friend is training for a marathon, and I admire the commitment."
+  },
+  {
+   "situation": "OFF",
+   "text": "The neighborhood association keeps sending very dramatic emails about parking."
+  },
+  {
+   "situation": "OFF",
+   "text": "I have been sketching little buildings during my lunch breaks."
+  },
+  {
+   "situation": "OFF",
+   "text": "My dentist appointment got moved again, so I have another month to worry."
+  },
+  {
+   "situation": "OFF",
+   "text": "I took the scenic route home and discovered a really nice used bookstore."
+  },
+  {
+   "situation": "OFF",
+   "text": "The power flickered three times during my meeting this afternoon."
+  },
+  {
+   "situation": "OFF",
+   "text": "I am slowly teaching my grandparents how to send emojis."
+  },
+  {
+   "situation": "OFF",
+   "text": "My building has a shared rooftop garden that I keep forgetting to visit."
+  },
+  {
+   "situation": "OFF",
+   "text": "I got tickets to see a band I loved in high school."
+  },
+  {
+   "situation": "OFF",
+   "text": "The delivery driver left my package with someone two buildings over."
+  },
+  {
+   "situation": "OFF",
+   "text": "I have a tiny blister from breaking in new shoes."
+  },
+  {
+   "situation": "OFF",
+   "text": "My coworker decorated their desk for Halloween two months early."
+  },
+  {
+   "situation": "OFF",
+   "text": "I went swimming for the first time in ages and forgot how tiring it is."
+  },
+  {
+   "situation": "OFF",
+   "text": "The street outside is quieter now that school is back in session."
+  },
+  {
+   "situation": "OFF",
+   "text": "I spent last night backing up photos from my phone."
+  },
+  {
+   "situation": "OFF",
+   "text": "My friend made me a mixtape, which was unexpectedly sweet."
+  },
+  {
+   "situation": "OFF",
+   "text": "I have been taking a different route home just to mix things up."
+  },
+  {
+   "situation": "OFF",
+   "text": "The clock in our kitchen is five minutes slow and nobody fixes it."
+  },
+  {
+   "situation": "OFF",
+   "text": "I found out my old teacher retired last year."
+  },
+  {
+   "situation": "OFF",
+   "text": "My building's fire alarm went off at two in the morning."
+  },
+  {
+   "situation": "OFF",
+   "text": "I am thinking about getting back into photography this fall."
+  },
+  {
+   "situation": "SMALL",
+   "text": "hey"
+  },
+  {
+   "situation": "SMALL",
+   "text": "good morning"
+  },
+  {
+   "situation": "SMALL",
+   "text": "thanks"
+  },
+  {
+   "situation": "SMALL",
+   "text": "thank you so much"
+  },
+  {
+   "situation": "SMALL",
+   "text": "hiya"
+  },
+  {
+   "situation": "SMALL",
+   "text": "how's it going"
+  },
+  {
+   "situation": "SMALL",
+   "text": "ok cool"
+  },
+  {
+   "situation": "SMALL",
+   "text": "got it"
+  },
+  {
+   "situation": "SMALL",
+   "text": "sounds good"
+  },
+  {
+   "situation": "SMALL",
+   "text": "brb"
+  },
+  {
+   "situation": "SMALL",
+   "text": "one sec"
+  },
+  {
+   "situation": "SMALL",
+   "text": "good night"
+  },
+  {
+   "situation": "SMALL",
+   "text": "morning!"
+  },
+  {
+   "situation": "SMALL",
+   "text": "hey there"
+  },
+  {
+   "situation": "SMALL",
+   "text": "all good"
+  },
+  {
+   "situation": "SMALL",
+   "text": "nice, thanks"
+  },
+  {
+   "situation": "SMALL",
+   "text": "cool cool"
+  },
+  {
+   "situation": "SMALL",
+   "text": "you there?"
+  },
+  {
+   "situation": "SMALL",
+   "text": "just checking in"
+  },
+  {
+   "situation": "SMALL",
+   "text": "okay then"
+  },
+  {
+   "situation": "SMALL",
+   "text": "that helps"
+  },
+  {
+   "situation": "SMALL",
+   "text": "much appreciated"
+  },
+  {
+   "situation": "SMALL",
+   "text": "hello again"
+  },
+  {
+   "situation": "SMALL",
+   "text": "sweet"
+  },
+  {
+   "situation": "SMALL",
+   "text": "no worries"
+  },
+  {
+   "situation": "SMALL",
+   "text": "makes sense"
+  },
+  {
+   "situation": "SMALL",
+   "text": "later!"
+  },
+  {
+   "situation": "SMALL",
+   "text": "hi hi"
+  },
+  {
+   "situation": "SMALL",
+   "text": "thank u"
+  },
+  {
+   "situation": "SMALL",
+   "text": "gotcha"
+  },
+  {
+   "situation": "SELF",
+   "text": "What exactly are you?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Are you a real person typing these replies?"
+  },
+  {
+   "situation": "SELF",
+   "text": "What kinds of things can you help with?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you remember our earlier chats?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you have opinions of your own?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Are you able to learn from talking with me?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Who made you?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you understand jokes?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you feel emotions?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you know when you make a mistake?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you see images if I send one?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Are you always available?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you have a name you prefer?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you keep secrets?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you browse the internet by yourself?"
+  },
+  {
+   "situation": "SELF",
+   "text": "What languages can you speak?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you remember my preferences?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Are your answers written by a human first?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Do you have access to my device?"
+  },
+  {
+   "situation": "SELF",
+   "text": "Can you tell when I am being sarcastic?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What will the weather be like tomorrow in Seattle?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Who won the Lakers game last night?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What time does the nearest post office open?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "How much is a gallon of gas near me today?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What is the capital of Mongolia?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Is the subway running normally this morning?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What movies are playing nearby tonight?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "When is the next solar eclipse visible from California?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What is the current exchange rate for euros to dollars?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Did the local baseball team win yesterday?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What are the library hours today?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Is there traffic on the bridge right now?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "How much does a basic movie ticket cost these days?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What is the tallest building in the world now?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "When does daylight saving time start this year?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Which country has the largest population right now?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "Are any major roads closed because of the storm?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What concerts are happening downtown this weekend?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "What is the latest score in the soccer match?"
+  },
+  {
+   "situation": "WORLD",
+   "text": "How late is the pharmacy open tonight?"
+  }
+ ]
+}

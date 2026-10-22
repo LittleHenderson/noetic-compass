@@ -1,0 +1,511 @@
+{
+ "calls": [
+  {
+   "completion_tokens": 2929,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 5310,
+   "returncode": 0,
+   "seconds": 7.7,
+   "tag": "key-gap-deepseek-0"
+  }
+ ],
+ "keyer": "deepseek",
+ "keys": {
+  "TRAIN-openai-10115-00": {
+   "id": "TRAIN-openai-10115-00",
+   "replaces": "eight",
+   "value": "fourteen"
+  },
+  "TRAIN-openai-10115-01": {
+   "id": "TRAIN-openai-10115-01",
+   "replaces": "five",
+   "value": "fifteen"
+  },
+  "TRAIN-openai-10115-02": {
+   "id": "TRAIN-openai-10115-02",
+   "replaces": "-",
+   "value": "Nessa"
+  },
+  "TRAIN-openai-10115-03": {
+   "id": "TRAIN-openai-10115-03",
+   "replaces": "-",
+   "value": "Carrow"
+  },
+  "TRAIN-openai-10115-05": {
+   "id": "TRAIN-openai-10115-05",
+   "replaces": "-",
+   "value": "four"
+  },
+  "TRAIN-openai-10115-06": {
+   "id": "TRAIN-openai-10115-06",
+   "replaces": "-",
+   "value": "Glenhollow"
+  },
+  "TRAIN-openai-10115-07": {
+   "id": "TRAIN-openai-10115-07",
+   "replaces": "-",
+   "value": "Yarrowdale"
+  },
+  "TRAIN-openai-10115-08": {
+   "id": "TRAIN-openai-10115-08",
+   "replaces": "-",
+   "value": "Delmar"
+  },
+  "TRAIN-openai-10115-09": {
+   "id": "TRAIN-openai-10115-09",
+   "replaces": "-",
+   "value": "Bramlow"
+  },
+  "TRAIN-openai-10115-10": {
+   "id": "TRAIN-openai-10115-10",
+   "replaces": "-",
+   "value": "Ashby"
+  },
+  "TRAIN-openai-10115-11": {
+   "id": "TRAIN-openai-10115-11",
+   "replaces": "-",
+   "value": "sixteen"
+  },
+  "TRAIN-openai-10115-12": {
+   "id": "TRAIN-openai-10115-12",
+   "replaces": "-",
+   "value": "Marrow"
+  },
+  "TRAIN-openai-10115-13": {
+   "id": "TRAIN-openai-10115-13",
+   "replaces": "-",
+   "value": "Ashcombe"
+  },
+  "TRAIN-openai-10115-14": {
+   "id": "TRAIN-openai-10115-14",
+   "replaces": "-",
+   "value": "three"
+  },
+  "TRAIN-openai-10115-15": {
+   "id": "TRAIN-openai-10115-15",
+   "replaces": "-",
+   "value": "Dovecote"
+  },
+  "TRAIN-openai-10115-16": {
+   "id": "TRAIN-openai-10115-16",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10115-17": {
+   "id": "TRAIN-openai-10115-17",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10115-18": {
+   "id": "TRAIN-openai-10115-18",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10115-19": {
+   "id": "TRAIN-openai-10115-19",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10116-00": {
+   "id": "TRAIN-openai-10116-00",
+   "replaces": "eleven",
+   "value": "sixteen"
+  },
+  "TRAIN-openai-10116-01": {
+   "id": "TRAIN-openai-10116-01",
+   "replaces": "eight",
+   "value": "six"
+  },
+  "TRAIN-openai-10116-02": {
+   "id": "TRAIN-openai-10116-02",
+   "replaces": "-",
+   "value": "Wexcombe"
+  },
+  "TRAIN-openai-10116-03": {
+   "id": "TRAIN-openai-10116-03",
+   "replaces": "-",
+   "value": "Perrin"
+  },
+  "TRAIN-openai-10116-04": {
+   "id": "TRAIN-openai-10116-04",
+   "replaces": "-",
+   "value": "Nethercote"
+  },
+  "TRAIN-openai-10116-05": {
+   "id": "TRAIN-openai-10116-05",
+   "replaces": "-",
+   "value": "ten"
+  },
+  "TRAIN-openai-10116-06": {
+   "id": "TRAIN-openai-10116-06",
+   "replaces": "-",
+   "value": "Bramlow"
+  },
+  "TRAIN-openai-10116-07": {
+   "id": "TRAIN-openai-10116-07",
+   "replaces": "-",
+   "value": "fourteen"
+  },
+  "TRAIN-openai-10116-08": {
+   "id": "TRAIN-openai-10116-08",
+   "replaces": "-",
+   "value": "Corvan"
+  },
+  "TRAIN-openai-10116-09": {
+   "id": "TRAIN-openai-10116-09",
+   "replaces": "-",
+   "value": "Quilla"
+  },
+  "TRAIN-openai-10116-10": {
+   "id": "TRAIN-openai-10116-10",
+   "replaces": "-",
+   "value": "Dunmere"
+  },
+  "TRAIN-openai-10116-11": {
+   "id": "TRAIN-openai-10116-11",
+   "replaces": "-",
+   "value": "Quarrybank"
+  },
+  "TRAIN-openai-10116-12": {
+   "id": "TRAIN-openai-10116-12",
+   "replaces": "-",
+   "value": "Thornfield"
+  },
+  "TRAIN-openai-10116-13": {
+   "id": "TRAIN-openai-10116-13",
+   "replaces": "-",
+   "value": "Ashby"
+  },
+  "TRAIN-openai-10116-14": {
+   "id": "TRAIN-openai-10116-14",
+   "replaces": "-",
+   "value": "Elmbrook"
+  },
+  "TRAIN-openai-10116-15": {
+   "id": "TRAIN-openai-10116-15",
+   "replaces": "November",
+   "value": "thirteen"
+  },
+  "TRAIN-openai-10116-16": {
+   "id": "TRAIN-openai-10116-16",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10116-17": {
+   "id": "TRAIN-openai-10116-17",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10116-18": {
+   "id": "TRAIN-openai-10116-18",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10116-19": {
+   "id": "TRAIN-openai-10116-19",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10117-00": {
+   "id": "TRAIN-openai-10117-00",
+   "replaces": "three",
+   "value": "eighteen"
+  },
+  "TRAIN-openai-10117-01": {
+   "id": "TRAIN-openai-10117-01",
+   "replaces": "eight",
+   "value": "four"
+  },
+  "TRAIN-openai-10117-02": {
+   "id": "TRAIN-openai-10117-02",
+   "replaces": "-",
+   "value": "fourteen"
+  },
+  "TRAIN-openai-10117-03": {
+   "id": "TRAIN-openai-10117-03",
+   "replaces": "-",
+   "value": "Glenhollow"
+  },
+  "TRAIN-openai-10117-04": {
+   "id": "TRAIN-openai-10117-04",
+   "replaces": "-",
+   "value": "Orrin"
+  },
+  "TRAIN-openai-10117-05": {
+   "id": "TRAIN-openai-10117-05",
+   "replaces": "-",
+   "value": "Stonewick"
+  },
+  "TRAIN-openai-10117-06": {
+   "id": "TRAIN-openai-10117-06",
+   "replaces": "-",
+   "value": "five"
+  },
+  "TRAIN-openai-10117-07": {
+   "id": "TRAIN-openai-10117-07",
+   "replaces": "-",
+   "value": "Quarrybank"
+  },
+  "TRAIN-openai-10117-08": {
+   "id": "TRAIN-openai-10117-08",
+   "replaces": "-",
+   "value": "fifteen"
+  },
+  "TRAIN-openai-10117-09": {
+   "id": "TRAIN-openai-10117-09",
+   "replaces": "-",
+   "value": "Pennyford"
+  },
+  "TRAIN-openai-10117-10": {
+   "id": "TRAIN-openai-10117-10",
+   "replaces": "-",
+   "value": "Dunmere"
+  },
+  "TRAIN-openai-10117-11": {
+   "id": "TRAIN-openai-10117-11",
+   "replaces": "-",
+   "value": "Marrow"
+  },
+  "TRAIN-openai-10117-12": {
+   "id": "TRAIN-openai-10117-12",
+   "replaces": "-",
+   "value": "Fenwick"
+  },
+  "TRAIN-openai-10117-13": {
+   "id": "TRAIN-openai-10117-13",
+   "replaces": "-",
+   "value": "Kestrel"
+  },
+  "TRAIN-openai-10117-14": {
+   "id": "TRAIN-openai-10117-14",
+   "replaces": "-",
+   "value": "Hazelby"
+  },
+  "TRAIN-openai-10117-15": {
+   "id": "TRAIN-openai-10117-15",
+   "replaces": "-",
+   "value": "Dunholm"
+  },
+  "TRAIN-openai-10117-16": {
+   "id": "TRAIN-openai-10117-16",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10117-17": {
+   "id": "TRAIN-openai-10117-17",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10117-18": {
+   "id": "TRAIN-openai-10117-18",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10117-19": {
+   "id": "TRAIN-openai-10117-19",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10118-00": {
+   "id": "TRAIN-openai-10118-00",
+   "replaces": "nine",
+   "value": "eleven"
+  },
+  "TRAIN-openai-10118-01": {
+   "id": "TRAIN-openai-10118-01",
+   "replaces": "eighteen",
+   "value": "nineteen"
+  },
+  "TRAIN-openai-10118-02": {
+   "id": "TRAIN-openai-10118-02",
+   "replaces": "-",
+   "value": "Bryony"
+  },
+  "TRAIN-openai-10118-03": {
+   "id": "TRAIN-openai-10118-03",
+   "replaces": "-",
+   "value": "fifteen"
+  },
+  "TRAIN-openai-10118-04": {
+   "id": "TRAIN-openai-10118-04",
+   "replaces": "-",
+   "value": "Wendel"
+  },
+  "TRAIN-openai-10118-05": {
+   "id": "TRAIN-openai-10118-05",
+   "replaces": "-",
+   "value": "Millbrook"
+  },
+  "TRAIN-openai-10118-06": {
+   "id": "TRAIN-openai-10118-06",
+   "replaces": "-",
+   "value": "Nethercote"
+  },
+  "TRAIN-openai-10118-07": {
+   "id": "TRAIN-openai-10118-07",
+   "replaces": "-",
+   "value": "Kelsmere"
+  },
+  "TRAIN-openai-10118-08": {
+   "id": "TRAIN-openai-10118-08",
+   "replaces": "-",
+   "value": "five"
+  },
+  "TRAIN-openai-10118-09": {
+   "id": "TRAIN-openai-10118-09",
+   "replaces": "-",
+   "value": "Cresswell"
+  },
+  "TRAIN-openai-10118-10": {
+   "id": "TRAIN-openai-10118-10",
+   "replaces": "-",
+   "value": "Oakridge"
+  },
+  "TRAIN-openai-10118-11": {
+   "id": "TRAIN-openai-10118-11",
+   "replaces": "-",
+   "value": "Ashby"
+  },
+  "TRAIN-openai-10118-12": {
+   "id": "TRAIN-openai-10118-12",
+   "replaces": "-",
+   "value": "Fallowmere"
+  },
+  "TRAIN-openai-10118-13": {
+   "id": "TRAIN-openai-10118-13",
+   "replaces": "Quarrybank",
+   "value": "Harrowby"
+  },
+  "TRAIN-openai-10118-14": {
+   "id": "TRAIN-openai-10118-14",
+   "replaces": "-",
+   "value": "Dovecote"
+  },
+  "TRAIN-openai-10118-15": {
+   "id": "TRAIN-openai-10118-15",
+   "replaces": "Brindle",
+   "value": "Fennick"
+  },
+  "TRAIN-openai-10118-16": {
+   "id": "TRAIN-openai-10118-16",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10118-17": {
+   "id": "TRAIN-openai-10118-17",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10118-18": {
+   "id": "TRAIN-openai-10118-18",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10118-19": {
+   "id": "TRAIN-openai-10118-19",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10119-00": {
+   "id": "TRAIN-openai-10119-00",
+   "replaces": "nine",
+   "value": "four"
+  },
+  "TRAIN-openai-10119-01": {
+   "id": "TRAIN-openai-10119-01",
+   "replaces": "fifteen",
+   "value": "six"
+  },
+  "TRAIN-openai-10119-02": {
+   "id": "TRAIN-openai-10119-02",
+   "replaces": "-",
+   "value": "Wendel"
+  },
+  "TRAIN-openai-10119-03": {
+   "id": "TRAIN-openai-10119-03",
+   "replaces": "-",
+   "value": "Thornfield"
+  },
+  "TRAIN-openai-10119-04": {
+   "id": "TRAIN-openai-10119-04",
+   "replaces": "-",
+   "value": "two"
+  },
+  "TRAIN-openai-10119-05": {
+   "id": "TRAIN-openai-10119-05",
+   "replaces": "-",
+   "value": "Umberley"
+  },
+  "TRAIN-openai-10119-06": {
+   "id": "TRAIN-openai-10119-06",
+   "replaces": "-",
+   "value": "seven"
+  },
+  "TRAIN-openai-10119-07": {
+   "id": "TRAIN-openai-10119-07",
+   "replaces": "-",
+   "value": "Marrow"
+  },
+  "TRAIN-openai-10119-08": {
+   "id": "TRAIN-openai-10119-08",
+   "replaces": "-",
+   "value": "eighteen"
+  },
+  "TRAIN-openai-10119-09": {
+   "id": "TRAIN-openai-10119-09",
+   "replaces": "-",
+   "value": "Hollis"
+  },
+  "TRAIN-openai-10119-10": {
+   "id": "TRAIN-openai-10119-10",
+   "replaces": "-",
+   "value": "Greystoke"
+  },
+  "TRAIN-openai-10119-11": {
+   "id": "TRAIN-openai-10119-11",
+   "replaces": "-",
+   "value": "Lindhurst"
+  },
+  "TRAIN-openai-10119-12": {
+   "id": "TRAIN-openai-10119-12",
+   "replaces": "-",
+   "value": "Oswin"
+  },
+  "TRAIN-openai-10119-13": {
+   "id": "TRAIN-openai-10119-13",
+   "replaces": "three",
+   "value": "nineteen"
+  },
+  "TRAIN-openai-10119-14": {
+   "id": "TRAIN-openai-10119-14",
+   "replaces": "Saltwick",
+   "value": "Pennyford"
+  },
+  "TRAIN-openai-10119-15": {
+   "id": "TRAIN-openai-10119-15",
+   "replaces": "-",
+   "value": "Carrow"
+  },
+  "TRAIN-openai-10119-16": {
+   "id": "TRAIN-openai-10119-16",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10119-17": {
+   "id": "TRAIN-openai-10119-17",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10119-18": {
+   "id": "TRAIN-openai-10119-18",
+   "replaces": "-",
+   "value": "NONE"
+  },
+  "TRAIN-openai-10119-19": {
+   "id": "TRAIN-openai-10119-19",
+   "replaces": "-",
+   "value": "NONE"
+  }
+ }
+}

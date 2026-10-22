@@ -1,0 +1,1 @@
+["brake", "cab", "cargo", "delivery", "depot", "diesel", "dispatch", "dock", "driver", "engine", "freight", "fuel", "highway", "load", "logbook", "mechanic", "mirror", "road", "route", "terminal", "tire", "traffic", "trailer", "truck", "wheel"]

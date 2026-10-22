@@ -1,0 +1,42 @@
+{
+ "counts": {
+  "dev_llm": 357,
+  "dev_sdg": 2000,
+  "dropped_no_pointer": {},
+  "train_llm": 1503,
+  "train_sdg": 40000
+ },
+ "files": {
+  "cas_keep.jsonl": {
+   "rows": 20000,
+   "sha256": "edf0daa54a9b7a808ff125cd5ea8e700a07fa118f3e073f6816c46f7a58de140"
+  },
+  "cas_val.jsonl": {
+   "rows": 2000,
+   "sha256": "cb01691142190ba140efb96e951e6e65e930237d6c92a03bf4c5b9f5c1eddc26"
+  },
+  "dev_llm.jsonl": {
+   "rows": 357,
+   "sha256": "8aa6610ae334ebac2f9fe1fe1456d89d4ecc47ee84778fc3b5d91e7f0129c5b8"
+  },
+  "dev_sdg.jsonl": {
+   "rows": 2000,
+   "sha256": "fa0ffb660928cbc1c90e57ff86c4ceecce0590b14cc8540e71151d9a336906c1"
+  },
+  "train_cube.jsonl": {
+   "rows": 41503,
+   "sha256": "32020e1772a4143dccedf4bac54c05020444f9a55c0444f1c06b27c405302291"
+  },
+  "vocab.json": {
+   "rows": null,
+   "sha256": "825b417a62b6df94567fdb686200988b92a058cafefb127561c661c28db1265a"
+  }
+ },
+ "schema": "cube-train.data/1",
+ "sources": {
+  "cas_keep": "c45 train.jsonl, 20,000 rows, seed CUBE-TRAIN-CAS-KEEP-20261022",
+  "cas_val": "c45 val.jsonl, 2,000 rows, seed CUBE-TRAIN-CAS-VAL-20261022",
+  "llm": "cube_train/llm/rows_llm_{train,dev}.jsonl (four families, two other-family keys)",
+  "sdg": "rows_ct.py (generator truth), bands 2,050M / 2,051M"
+ }
+}

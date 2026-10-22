@@ -1,0 +1,1 @@
+[{"id":"pof1887","text":"Well, that is quite a setup. What belief will you specify?"},{"id":"pof1890","text":"All right. What about the wide forest?"},{"id":"pof1997","text":"I hear you. What feels different at night?"},{"id":"psm0000","text":"I hear you. Tired but happy."}]

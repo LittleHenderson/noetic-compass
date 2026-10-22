@@ -1,0 +1,1 @@
+[{"id":"m00730","text":"I keep what you tell me in this chat."},{"id":"m00731","text":"I can keep what you tell me in this chat."},{"id":"m00736","text":"I keep what you tell me in this chat."},{"id":"m00737","text":"I am a computer program."},{"id":"m00744","text":"I know what you tell me in this chat."}]

@@ -1,0 +1,1 @@
+["wire","cable","conduit","breaker","panel","outlet","switch","circuit","voltage","meter","pliers","screwdriver","drill","junction","ground","neutral","fixture","socket","fuse","wiring","tester","clamp","insulation","trench","ladder"]

@@ -1,0 +1,8 @@
+```json
+[
+  {"id": "m00665", "text": "That's a lot of water for the park. How long did the flooding last?"},
+  {"id": "m00716", "text": "Morning! Good to hear from you."},
+  {"id": "m00730", "text": "I keep what you tell me in this chat, including things about yourself and any kitchen amounts you give."},
+  {"id": "m00736", "text": "I only know what you tell me here in this chat, and I keep that for our conversation."}
+]
+```

@@ -1,0 +1,1 @@
+["aisle", "bag", "barcode", "break", "card", "cash", "change", "checkout", "counter", "coupon", "customer", "drawer", "inventory", "manager", "queue", "receipt", "refund", "register", "return", "scanner", "shelf", "shift", "stock", "supervisor", "transaction"]

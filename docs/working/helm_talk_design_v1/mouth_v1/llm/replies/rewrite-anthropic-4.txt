@@ -1,0 +1,6 @@
+[{"id": "m00787", "text": "Chatting with a stranger for an hour at a packed laundromat. What did you talk about?"},
+ {"id": "m00846", "text": "A fresh screen protector on your phone at last, no more cracks to look through. How does it feel?"},
+ {"id": "m00848", "text": "Very dramatic emails about parking from the neighborhood association. What do they say?"},
+ {"id": "m00859", "text": "Swimming for the first time in ages, and it wore you out. Where did you go?"},
+ {"id": "m00910", "text": "I don't know the price of a gallon of gas near you today. Nobody has told me."},
+ {"id": "m00918", "text": "I don't know if there's traffic on the bridge right now. Nobody has told me about it."}]

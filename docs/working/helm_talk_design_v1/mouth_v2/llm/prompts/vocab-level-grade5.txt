@@ -1,0 +1,2 @@
+Write a word list. Return ONLY a JSON list of lowercase single words (no phrases, no names of people or
+places, no numbers, no months, nothing about food or cooking). about 500 common everyday English words a person at this level uses in conversation: simple words a 5th grader knows

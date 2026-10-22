@@ -1,0 +1,16 @@
+[
+  {"id": "exam-person:deepseek:262#exam", "better": "B"},
+  {"id": "exam-person:deepseek:263#exam", "better": "A"},
+  {"id": "exam-person:deepseek:264#exam", "better": "A"},
+  {"id": "exam-person:deepseek:265#exam", "better": "A"},
+  {"id": "exam-person:deepseek:266#exam", "better": "B"},
+  {"id": "exam-person:deepseek:267#exam", "better": "A"},
+  {"id": "exam-person:deepseek:268#exam", "better": "A"},
+  {"id": "exam-person:deepseek:269#exam", "better": "B"},
+  {"id": "exam-person:deepseek:270#exam", "better": "B"},
+  {"id": "exam-person:deepseek:271#exam", "better": "B"},
+  {"id": "exam-person:deepseek:272#exam", "better": "A"},
+  {"id": "exam-person:deepseek:273#exam", "better": "A"},
+  {"id": "exam-person:deepseek:274#exam", "better": "B"},
+  {"id": "exam-person:deepseek:275#exam", "better": "A"}
+]

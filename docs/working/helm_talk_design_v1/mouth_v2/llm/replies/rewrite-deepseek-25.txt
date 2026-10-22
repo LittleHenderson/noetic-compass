@@ -1,0 +1,18 @@
+[
+  {
+    "id": "pof0753",
+    "text": "Sounds like a funny moment with your friend. How did the barber sign look wrong?"
+  },
+  {
+    "id": "pof0756",
+    "text": "A bug in your test that looked fine at first. How did you discover it?"
+  },
+  {
+    "id": "pof0777",
+    "text": "Even the opposing lawyer greeted the result with a grin. How did the verdict let you move forward?"
+  },
+  {
+    "id": "pof0792",
+    "text": "You are afraid the only person who can settle this record will not be here tomorrow. What makes that person the only one?"
+  }
+]

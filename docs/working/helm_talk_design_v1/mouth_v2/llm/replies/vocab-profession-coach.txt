@@ -1,0 +1,1 @@
+["client","session","goal","plan","action","feedback","progress","meeting","agenda","notes","report","email","calendar","schedule","deadline","project","task","team","colleague","manager","office","desk","laptop","phone","document"]

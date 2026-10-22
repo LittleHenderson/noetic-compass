@@ -1,0 +1,8 @@
+[
+  {"id": "pof0134", "text": "So the low ceilings serve the space better than the first design, huh? How did you land on that?"},
+  {"id": "pof0147", "text": "That pipe gave up faster than your lunch break, huh? What tipped you off to the leak?"},
+  {"id": "pof0174", "text": "So that community exhibit was worth the adventure, even after all the physical setup, huh? What part stands out?"},
+  {"id": "pof0184", "text": "Your mother came in for a cut and told you the garden looks beautiful, and now you figure you should add flowers too. Which flowers are you thinking about?"},
+  {"id": "pof0206", "text": "So a rare chance to transfer skills could contribute to the economy, and you figure you should trace how others succeed and communicate the guide. Which skills are you tracing?"},
+  {"id": "pof0217", "text": "The class sold a common star chart below cost, and a special example of a dead star was the best way to teach. What did that example show?"}
+]

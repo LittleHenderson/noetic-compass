@@ -1,0 +1,138 @@
+{
+ "after_direct": {
+  "build": {
+   "calls": 85,
+   "seconds": 4.7
+  },
+  "calls_median": 5,
+  "exact": 8,
+  "fold_records_in_cloud": 2,
+  "objects_moved": 42,
+  "prefix": "smoke/20261022T094601Z-direct/",
+  "questions": [
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 3,
+    "seconds": 0.204
+   },
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 23,
+    "seconds": 0.22
+   },
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 43,
+    "seconds": 0.205
+   },
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 63,
+    "seconds": 0.32
+   },
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 83,
+    "seconds": 0.221
+   },
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 103,
+    "seconds": 0.207
+   },
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 123,
+    "seconds": 0.206
+   },
+   {
+    "calls": 5,
+    "exact": true,
+    "line": 143,
+    "seconds": 0.201
+   }
+  ],
+  "seconds_median": 0.207
+ },
+ "before_command_line": {
+  "build": {
+   "calls": 86,
+   "seconds": 77.6
+  },
+  "calls_median": 3,
+  "exact": 8,
+  "fold_records_in_cloud": 2,
+  "objects_moved": 42,
+  "prefix": "smoke/20261022T094601Z-cli/",
+  "questions": [
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 3,
+    "seconds": 2.976
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 23,
+    "seconds": 2.644
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 43,
+    "seconds": 2.673
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 63,
+    "seconds": 2.642
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 83,
+    "seconds": 2.631
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 103,
+    "seconds": 2.649
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 123,
+    "seconds": 2.712
+   },
+   {
+    "calls": 3,
+    "exact": true,
+    "line": 143,
+    "seconds": 2.594
+   }
+  ],
+  "seconds_median": 2.649
+ },
+ "bucket": "helm-cold-memory-807562639912-usw2",
+ "chat": "200 lines, limit 2,000, device limit 1,000",
+ "cleanup": "none by design: keep indefinitely, nothing deleted by code; synthetic objects under the prefixes",
+ "cost_note": "a few hundred requests of a few kilobytes; well under 0.01 USD",
+ "cross_check": {
+  "cli_reads_direct": true,
+  "direct_reads_cli": true
+ },
+ "data": "SYNTHETIC_ONLY (made-up planting lines)",
+ "reachability_memory_seconds": 60,
+ "region": "us-west-2",
+ "stamp": "20261022T094601Z"
+}

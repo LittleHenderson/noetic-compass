@@ -1,0 +1,1 @@
+["lesson","classroom","student","teacher","pencil","paper","book","desk","board","marker","eraser","ruler","folder","notebook","worksheet","assignment","homework","grade","attendance","schedule","meeting","office","library","principal","colleague"]

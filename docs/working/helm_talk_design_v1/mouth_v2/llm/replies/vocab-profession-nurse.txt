@@ -1,0 +1,1 @@
+["stethoscope","thermometer","syringe","gloves","mask","chart","clipboard","bed","wheelchair","monitor","pager","medication","bandage","gauze","catheter","specimen","sanitizer","assessment","documentation","triage","handoff","rounds","patient","doctor","colleague"]

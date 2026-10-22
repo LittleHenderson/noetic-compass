@@ -1,0 +1,1 @@
+["listing","showing","contract","offer","client","buyer","seller","broker","agent","realtor","mortgage","escrow","appraisal","inspection","closing","commission","deed","title","zoning","lease","tenant","landlord","office","calendar","signature"]

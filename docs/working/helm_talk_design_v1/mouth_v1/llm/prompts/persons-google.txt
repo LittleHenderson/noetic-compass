@@ -1,0 +1,16 @@
+You are writing lines that one person might type to a chat assistant. Write natural, varied, everyday
+lines, the way real people type (some casual, some with small typos are fine, mostly correct). Return ONLY a JSON list of
+objects {"situation": "<OFF|SMALL|SELF|WORLD>", "text": "<the line>"}.
+- OFF: the person tells the assistant something about their life, their day, people they know, places, news, hobbies.
+  A statement, not a question. Not about cooking, food, recipes or ingredients. 6 to 25 words. Vary the topics widely.
+- SMALL: greetings, thanks, check-ins, short pauses ("hey", "thanks a lot", "how's your day", "ok cool"). 1 to 6 words.
+- SELF: a question about the assistant itself (what it is, what it can do, whether it remembers, whether it is a person).
+- WORLD: a question about the outside world that nobody told the assistant (sports results, capitals, weather tomorrow,
+  opening hours, prices). Not about cooking.
+Write exactly the counts asked for. No numbering, no extra text.
+
+COUNTS:
+- OFF: 100 lines
+- SMALL: 30 lines
+- SELF: 20 lines
+- WORLD: 20 lines

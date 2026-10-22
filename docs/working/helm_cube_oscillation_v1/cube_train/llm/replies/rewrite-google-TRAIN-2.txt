@@ -1,0 +1,56 @@
+```json
+[
+  {
+    "id": "TRAIN-google-10212-08",
+    "text": "Hazelby is where the queens for that Oakridge yard came from."
+  },
+  {
+    "id": "TRAIN-google-10212-11",
+    "text": "In April, the Bramlow yard was moved over to Vellmoor."
+  },
+  {
+    "id": "TRAIN-google-10213-02",
+    "text": "The Ashcombe line was rerouted to go through Ravensby during September."
+  },
+  {
+    "id": "TRAIN-google-10213-08",
+    "text": "There were four buses that the Greystoke line ran in October."
+  },
+  {
+    "id": "TRAIN-google-10213-10",
+    "text": "The Lindhurst line ended its route at Fallowmere."
+  },
+  {
+    "id": "TRAIN-google-10213-17",
+    "text": "I am not sure where the Lindhurst line was rerouted back in December."
+  },
+  {
+    "id": "TRAIN-google-10214-02",
+    "text": "The queens for the Northgate yard came all the way from Yarrowdale."
+  },
+  {
+    "id": "TRAIN-google-10214-03",
+    "text": "Varden is the one who looked after the Northgate yard."
+  },
+  {
+    "id": "TRAIN-google-10214-05",
+    "text": "Ivybridge supplied the queens that came to the Wexcombe yard."
+  },
+  {
+    "id": "TRAIN-google-10214-07",
+    "text": "There were eighteen colonies located at the Thornfield yard in October."
+  },
+  {
+    "id": "TRAIN-google-10214-08",
+    "text": "The Thornfield yard was moved to Pennyford during the month of February."
+  },
+  {
+    "id": "TRAIN-google-10214-09",
+    "text": "Rowena looked after the daily operations of the Thornfield yard."
+  },
+  {
+    "id": "TRAIN-google-10214-11",
+    "text": "The Foxley yard had seven colonies total in November."
+  }
+]
+```

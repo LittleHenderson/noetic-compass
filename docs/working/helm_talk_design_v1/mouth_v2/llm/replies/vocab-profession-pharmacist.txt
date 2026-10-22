@@ -1,0 +1,1 @@
+["prescription","dosage","capsule","tablet","vial","syringe","label","refill","dispense","verify","counsel","inventory","formulary","copay","insurance","patient","physician","technician","counter","register","shelf","drawer","refrigerator","gloves","scanner"]

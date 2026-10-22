@@ -1,0 +1,1 @@
+["blueprint", "budget", "builder", "client", "computer", "contractor", "detail", "drawing", "elevation", "engineer", "material", "meeting", "model", "office", "permit", "plan", "ruler", "scale", "schedule", "section", "site", "sketch", "specification", "studio", "survey"]

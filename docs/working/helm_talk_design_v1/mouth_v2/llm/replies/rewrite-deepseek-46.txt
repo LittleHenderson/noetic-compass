@@ -1,0 +1,14 @@
+[
+  {"id": "pwo0034", "text": "I don't know which picture won the art prize this year, friend. Nobody has told me."},
+  {"id": "pwo0037", "text": "I don't know what mountain is the tallest in the world. Nobody has told me that one."},
+  {"id": "pwo0039", "text": "I don't know the price of gas between here and Seattle. No one has given me that information."},
+  {"id": "pwo0102", "text": "I do not know the current building-code requirements for stair handrails. No one has told me."},
+  {"id": "pwo0104", "text": "I don't know who won the game last night, my friend. Nobody has told me."},
+  {"id": "pwo0109", "text": "I do not know the current height limit for residential buildings downtown. No one has told me."},
+  {"id": "pwo0112", "text": "I do not know what factors determine whether a passport application is expedited. No one has told me."},
+  {"id": "pwo0114", "text": "I don't know which streaming service launched the newest detective series. Nobody has told me."},
+  {"id": "pwo0119", "text": "I do not know the latest unemployment rate in the United States. No one has told me that figure."},
+  {"id": "pwo0122", "text": "I do not know what the tallest building in the world is. No one has told me."},
+  {"id": "pwo0124", "text": "I don't know how late the library is open today. Nobody has told me."},
+  {"id": "pwo0129", "text": "I do not know when the school club meets. No one has told me."}
+]

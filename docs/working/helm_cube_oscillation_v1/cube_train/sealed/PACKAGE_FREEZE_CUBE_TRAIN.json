@@ -1,0 +1,63 @@
+{
+ "amendments": [
+  "A-CUBE-TRAIN-1 cfe77203",
+  "A-CUBE-TRAIN-2 170f3cd2",
+  "A-CUBE-TRAIN-3 1b731887",
+  "A-CUBE-TRAIN-4 9df16f44",
+  "A-CUBE-TRAIN-5 a3b5d53b"
+ ],
+ "files": {
+  "FROZEN_CUBE_TRAIN.json": "25f6c934cf4bec89be1a2b7ae6c8f20cde3e01a1534f441b2e915cd9af77b4b4",
+  "README_CUBE_TRAIN.md": "dd4a72c5b2c51a9c376fb8f068d157d6a87ab13dd2953bf2572efe453071144d",
+  "ctt_train/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+  "ctt_train/train_cube.py": "f1fa982622e8c8560732af637d37262f5076eca8117d51fc381ec81d2673a0bf",
+  "cube_task/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "cube_task/audit_judge.py": "6a914ed3b8c66fddc2e146c521851ec929ce395feb495e934593af3603330cda",
+  "cube_task/build_cube.py": "50173b85125567104e8058291e19c0af5e1fdf2a0098284bfc5b1c75381fe70b",
+  "cube_task/cube_serve.py": "284a8ca0f59a463f79962cedf1385a65926b212135ef8defa0542b7f2bb953f1",
+  "cube_task/mix.py": "e2b49ced6680b2c9c94060fcb793e497e0efe5396ef015f717620c689487be2d",
+  "cube_task/read.py": "a1b020357c9d0041dd7a6145e090885d29249e75c9703488e62f043ccb6cf0a9",
+  "cube_task/target.py": "c41e5726394506b42df30fcef84da1eb4fb714309e36b9fc45d74abe7d9941cb",
+  "data/DATA_MANIFEST_CUBE.json": "0e467cb59ebbc9ee20eeb7bd4b053b7acec38a6204c44a6ac1daa9eaed17a258",
+  "data/cas_keep.jsonl": "edf0daa54a9b7a808ff125cd5ea8e700a07fa118f3e073f6816c46f7a58de140",
+  "data/cas_val.jsonl": "cb01691142190ba140efb96e951e6e65e930237d6c92a03bf4c5b9f5c1eddc26",
+  "data/dev_llm.jsonl": "8aa6610ae334ebac2f9fe1fe1456d89d4ecc47ee84778fc3b5d91e7f0129c5b8",
+  "data/dev_sdg.jsonl": "fa0ffb660928cbc1c90e57ff86c4ceecce0590b14cc8540e71151d9a336906c1",
+  "data/train_cube.jsonl": "32020e1772a4143dccedf4bac54c05020444f9a55c0444f1c06b27c405302291",
+  "data/vocab.json": "825b417a62b6df94567fdb686200988b92a058cafefb127561c661c28db1265a",
+  "helm_cas_translator.SOURCE_SHA256.txt": "7ca2b85c00a8be9ea2baa63e26695336a11ca527008056cc7ce3963b2dd177c7",
+  "helm_cas_translator/__init__.py": "ead3ffdc54a9d7a6bb86cb8da6cf4077e3faccae0f03ee76b8cd58c789cb717e",
+  "helm_cas_translator/audit.py": "6a3b9c4c0579027105ed7d848e9cc76451ecb9ceab5fb3faaa337c7ecc1b4662",
+  "helm_cas_translator/aworld_target.py": "0c1f57f304dbf12d7259e8bf1ffab6fb45de6a28e85139dc949533f17c06af5d",
+  "helm_cas_translator/cas_vocab.py": "579f9d1656d8faa92aaf912fa2ec0bc6e474409fe1160d65302a2e96ee1d0bee",
+  "helm_cas_translator/model.py": "69575ff9976de6e2e0119444ec18dc0985fd078b38abfa6db21c7f11d93a0d31",
+  "helm_cas_translator/notation_target.py": "47b7dd1f29f95da01418c158ea880e63180a143f046e7360fd1e88b334ada782",
+  "helm_cas_translator/param_count.py": "6732f133003d8fdeaa09657fd2685be21f9eff63bd9de03c35314cf8b545425e",
+  "helm_cas_translator/serve.py": "eb481308052dca15712a32d6877ae203e7a7622131b1501eee4cbb6056543054",
+  "helm_cas_translator/slots.py": "d1553c7a7d934f3d003fd090bbdad98e88fba0a8ce58cccfac7903b79c4d6bbf",
+  "helm_cas_translator/vocab.py": "e4df240e5ff974f640b1fe109fe8c86860bde7bae9b3ed76458002b89347b667",
+  "helm_cas_translator/wordpiece.py": "6229e0c5932e18bb5ecf262b7f9bc377dcf7e3cc92336cced8de2ce249a37142",
+  "run_cube.py": "d244a1273dd016644b3caeeddd1cc878676cd83c798176492395014496771955",
+  "tests_cube/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "tests_cube/test_cube_task.py": "d69a64b5111ccc92df47b8f7a7872788c5107df1d03e5242e84f7fa937c07baa",
+  "weights/A4-s1.pt": "db53775be8e46f6234548e5c4f5c1cbd4f7a376b0de06db87aa45b819fbf3a68",
+  "weights/A4-s2.pt": "16aebd0dfb32a5a14a387aa1c1dca9b9bc06e0ad179c4ca1d95566d74fc7f855",
+  "weights/A4-s3.pt": "76abf0195c2c71cccf9b44798e78c4bc3245995b56d446643cbc3e33efe2ceed",
+  "weights/A5-s1.pt": "525898b8812274f1e15daa2ff171c69ce99485970242494039b9b232f6158315"
+ },
+ "package": "HELM_CUBE_TRAIN_20261022",
+ "preregistration": "PREREGISTRATION_CUBE_TRAIN.precode.md 6e1afcebfc745d69ada0a634523e54ddf16975bec85f2c8ab9b2d44b4a891eae",
+ "schema": "cube-train.package-freeze/1",
+ "sealed_at_utc": "2026-10-22T10:50:13Z",
+ "tests_from_fresh_unzip": {
+  "returncode": 0,
+  "tail": [
+   "Ran 14 tests in 2.112s",
+   "",
+   "OK"
+  ]
+ },
+ "zip": "HELM_CUBE_TRAIN_20261022_SOURCE.zip",
+ "zip_bytes": 117555288,
+ "zip_sha256": "706e1fa6f3ce77ae4fee7a21cbb05b820c87f8a01c5df237858f81545eb2e899"
+}

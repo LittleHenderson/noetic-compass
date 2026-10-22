@@ -1,0 +1,1 @@
+["cockpit","runway","altitude","heading","airspeed","throttle","rudder","aileron","flaps","gear","checklist","clearance","tower","taxi","takeoff","landing","approach","waypoint","autopilot","altimeter","compass","beacon","squawk","logbook","crew"]

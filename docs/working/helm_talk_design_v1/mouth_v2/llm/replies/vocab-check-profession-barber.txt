@@ -1,0 +1,1 @@
+["appointment","apron","barber","beard","blade","broom","brush","cape","chair","client","clipper","clippers","comb","conditioner","customer","cut","disinfect","dryer","fade","guard","mirror","neckstrip","razor","sanitize","scissors","shampoo","shave","shaver","shears","shop","station","taper","trim","trimmer"]

@@ -1,0 +1,16 @@
+{
+ "schema": "mouth-v2.sense-layer2-census/1",
+ "weights": "A4-s1",
+ "pairs": 989,
+ "chat_rejected_layer1_missed": 162,
+ "rater_preferred": 682,
+ "best_threshold": -0.607,
+ "caught": 112,
+ "wrongly_rejected": 34,
+ "rule": ">= half caught, <= 5 % of preferred rejected",
+ "joins_the_guard": true,
+ "mean_score": {
+  "won": -0.1427,
+  "lost": -1.1618
+ }
+}

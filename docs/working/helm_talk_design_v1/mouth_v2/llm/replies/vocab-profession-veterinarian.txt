@@ -1,0 +1,1 @@
+["stethoscope","syringe","vaccine","examination","diagnosis","treatment","prescription","surgery","anesthesia","bandage","thermometer","scalpel","forceps","clinic","kennel","appointment","checkup","patient","owner","colleague","technician","sample","xray","injection","monitor"]

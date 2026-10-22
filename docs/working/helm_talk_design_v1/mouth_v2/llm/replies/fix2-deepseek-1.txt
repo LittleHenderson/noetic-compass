@@ -1,0 +1,94 @@
+[
+  {
+    "id": "pwo0302",
+    "text": "I don't know. Nobody has told me about the poor animal position on the rock, or about the barber and the shave and the stick."
+  },
+  {
+    "id": "pwo0304",
+    "text": "Wish I could help, friend, but I've got nothing on that. Nobody's told me about the busy area near your aunt or the bus."
+  },
+  {
+    "id": "pwo0305",
+    "text": "I don't know that. Nobody has told me about the high yellow name on the friend's feet or the alive beat."
+  },
+  {
+    "id": "pwo0307",
+    "text": "Haven't a clue on that one, sorry! Nobody's told me about the new wonder on the body bit or those said less foot else."
+  },
+  {
+    "id": "pwo0308",
+    "text": "I don't know that tale yet. Nobody has told me the fun bank hope, or whether everyone is sure to foot it until born heart."
+  },
+  {
+    "id": "pwo0309",
+    "text": "I do not have that information. Nobody has told me the exact north home draw, and nobody has told me whether to walk this week to discover."
+  },
+  {
+    "id": "pwo0311",
+    "text": "I'm sorry, I don't know that. Nobody has told me the main health result, or whether the bathroom view is safe and special for some instead."
+  },
+  {
+    "id": "pwo0313",
+    "text": "I don't know. Nobody has told me the chance the parent group will accept the pleading rule, or whether the company will run a light matter."
+  },
+  {
+    "id": "pwo0314",
+    "text": "Can't help you there, friend. Nobody's told me the law lesson there, or whether the issue itself might produce luck to solve a consider."
+  },
+  {
+    "id": "pwo0315",
+    "text": "I don't know, and I'm sorry. Nobody has told me the beach phone work, or whether there's enough nothing up well to appear this which."
+  },
+  {
+    "id": "pwo0317",
+    "text": "Not a clue on that one, sorry! Nobody's told me the active video part, or whether to share a good break during the fire with your sister."
+  },
+  {
+    "id": "pwo0318",
+    "text": "I don't know that story yet. Nobody has told me the clean box chance, or whether the nurse will sing anything wrong to wait for the world's eye."
+  },
+  {
+    "id": "pwo0321",
+    "text": "I'm sorry, I don't know that. Nobody has told me the simple consequence of the logbook dispute, or whether the revenue purpose charges a channel edit."
+  },
+  {
+    "id": "pwo0324",
+    "text": "No idea on that one, friend. Nobody's told me the primary consequence of the damage survey, or how to trace the symbol to operate and reserve quantity."
+  },
+  {
+    "id": "pwo0325",
+    "text": "I don't know that, and I'm sorry. Nobody has told me the precise highway fuel attribute, or the dock harm to sustain academic associate."
+  },
+  {
+    "id": "pwo0327",
+    "text": "I've got nothing on that one, sorry! Nobody's told me the absolute evidence in the plough context, or how to admit and reverse the alarm version."
+  },
+  {
+    "id": "pwo0328",
+    "text": "I don't know that story. Nobody has told me the classic frame effort, or whether the intense offer will emerge to overcome and prefer stable."
+  },
+  {
+    "id": "pwo0331",
+    "text": "I'm sorry, I don't know that. Nobody has told me the old store shape, or whether the farmer can give and raise an eye to enjoy and repeat."
+  },
+  {
+    "id": "pwo0334",
+    "text": "Can't help there, friend. Nobody's told me the wild river road without snow, or whether you can read and ride from the yellow try."
+  },
+  {
+    "id": "pwo0335",
+    "text": "I don't know, and I'm sorry. Nobody has told me the big rain amount this summer morning, or whether the small key girl is too late for an hour."
+  },
+  {
+    "id": "pwo0337",
+    "text": "Not a clue on that one, sorry! Nobody's told me the yellow fixture thought in our town, or whether to hurry to paint and enjoy the bird."
+  },
+  {
+    "id": "pwo0338",
+    "text": "I don't know that story yet. Nobody has told me the reason her course is busy near the win, or whether the electrician promised to shape up because."
+  },
+  {
+    "id": "pwo0395",
+    "text": "I don't know which woman designed the famous I Love NY logo. Nobody has told me that."
+  }
+]

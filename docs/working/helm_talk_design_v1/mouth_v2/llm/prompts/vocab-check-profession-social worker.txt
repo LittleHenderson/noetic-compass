@@ -1,0 +1,6 @@
+Here is a word list meant to be: about 25 words a social worker uses at work every day (tools, tasks, places, people). Return ONLY a JSON list of the words from it that truly
+fit that description (lowercase, exactly as given). Leave out any word that does not fit, is a name, a number, a month,
+or is about food or cooking.
+
+WORDS:
+["advocacy", "assessment", "caseload", "client", "colleague", "confidentiality", "counseling", "documentation", "eligibility", "evaluation", "family", "housing", "intervention", "meeting", "outreach", "plan", "referral", "resources", "safety", "school", "shelter", "support", "therapy", "transportation", "wellbeing"]

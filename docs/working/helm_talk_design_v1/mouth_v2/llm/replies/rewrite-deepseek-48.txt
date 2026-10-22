@@ -1,0 +1,18 @@
+[
+  {"id": "pwo0231", "text": "I don't know that one. Nobody has told me about investing in a broad index fund."},
+  {"id": "pwo0232", "text": "I do not know what solution emerged from the latest international climate dispute, as no one has told me."},
+  {"id": "pwo0234", "text": "Wish I could help, but nobody's told me about a rural music grant for producing and mastering albums."},
+  {"id": "pwo0239", "text": "I don't know the typical quote to replace a stressed car alternator. No one has given me that figure."},
+  {"id": "pwo0242", "text": "I do not know. No one has told me which yellow dress shop in London is the largest."},
+  {"id": "pwo0244", "text": "Can't say which city that is. Nobody's told me about requiring GFCI outlets in every bathroom fixture."},
+  {"id": "pwo0248", "text": "I don't know which code repository has the most stars this year. Nobody has told me that one."},
+  {"id": "pwo0249", "text": "I don't know where everyone can find free online skill tests. No one has told me."},
+  {"id": "pwo0252", "text": "I do not know how many people watched the latest family movie release. No one has told me that number."},
+  {"id": "pwo0254", "text": "I don't know what business expense rules changed for this tax year. Nobody's told me."},
+  {"id": "pwo0259", "text": "I don't know which movie that is. No one has told me."},
+  {"id": "pwo0262", "text": "I do not know which barbering techniques those are. No one has told me."},
+  {"id": "pwo0269", "text": "I don't know what injury record a coach should keep for each athlete. No one has told me."},
+  {"id": "pwo0273", "text": "I don't know what aperture that would be. Nobody's told me."},
+  {"id": "pwo0274", "text": "I don't know what a heavy round lab tool often means. Nobody's told me."},
+  {"id": "pwo0279", "text": "I don't know why a real coat sometimes smells like smoke. No one has told me."}
+]

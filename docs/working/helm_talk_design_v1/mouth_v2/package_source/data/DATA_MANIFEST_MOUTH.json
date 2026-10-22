@@ -1,0 +1,86 @@
+{
+ "counts": {
+  "dropped_not_writable": 170,
+  "ear_m": 5306,
+  "ear_m_facts": 2335,
+  "ear_m_none": 2971,
+  "exam_by_situation": {
+   "ANSWER": 267,
+   "ASK": 266,
+   "OFF": 472,
+   "SAYBACK": 267,
+   "SELF": 90,
+   "SMALL": 57,
+   "WORLD": 98
+  },
+  "exam_by_style": {
+   "barbershop": 127,
+   "casual": 124,
+   "curious": 124,
+   "formal": 123,
+   "intimate": 126,
+   "jovial": 127,
+   "plain": 350,
+   "professional": 120,
+   "storyteller": 122,
+   "warm": 174
+  },
+  "function_words": 37190,
+  "mouth_dev": 2097,
+  "mouth_exam": 1517,
+  "mouth_exam_facts": 800,
+  "mouth_exam_person_lines": 717,
+  "mouth_train": 11530,
+  "train_by_situation": {
+   "ANSWER": 994,
+   "ASK": 1038,
+   "OFF": 4959,
+   "SAYBACK": 1033,
+   "SELF": 1219,
+   "SMALL": 1100,
+   "WORLD": 1187
+  },
+  "train_by_source": {
+   "LLM_WRITTEN": 10375,
+   "TEMPLATE": 1155
+  },
+  "train_by_style": {
+   "barbershop": 880,
+   "casual": 920,
+   "curious": 853,
+   "formal": 883,
+   "intimate": 830,
+   "jovial": 839,
+   "plain": 3441,
+   "professional": 894,
+   "storyteller": 862,
+   "warm": 1128
+  }
+ },
+ "cube_train_package": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-22\\cube_train\\HELM_CUBE_TRAIN_20261022",
+ "schema": "mouth-train.data-manifest/2",
+ "sha256": {
+  "FACT_WORDS.json": "2c1de56e08221a3f3b2c4b05c62ca724b64aa34da73e3e88190ed63828a7f759",
+  "FUNCTION_WORDS.json": "70a2a768974384c05adc3ce5d5a39a014e4dbfaaf31fddf7390294c32970c748",
+  "WORLD_NOUNS.json": "88fe547a6a23b65d2d3ecc6bdfbb274d395e0b06fb6c99b0b3bd3e007b760172",
+  "cas_keep.jsonl": "edf0daa54a9b7a808ff125cd5ea8e700a07fa118f3e073f6816c46f7a58de140",
+  "cas_val.jsonl": "cb01691142190ba140efb96e951e6e65e930237d6c92a03bf4c5b9f5c1eddc26",
+  "dev_llm.jsonl": "8aa6610ae334ebac2f9fe1fe1456d89d4ecc47ee84778fc3b5d91e7f0129c5b8",
+  "dev_sdg.jsonl": "fa0ffb660928cbc1c90e57ff86c4ceecce0590b14cc8540e71151d9a336906c1",
+  "ear_m.jsonl": "6a9780c24813bb274641396fe613f41c69f2e97d522c1c49ed6d09acaadf38ce",
+  "mouth_dev.jsonl": "85cc3f286287f249ebda84221bb55c21380ec1a51cf3c9235b27f599a924bb38",
+  "mouth_exam.jsonl": "bb8ad7a4c08b406d787441b609d3da50ed3fc7755a6397c713997e991535aa42",
+  "mouth_train.jsonl": "a9408cb5a26973b8c928a15d1ca69546cf4215837b98961e846137f4c24ad554",
+  "train_cube.jsonl": "32020e1772a4143dccedf4bac54c05020444f9a55c0444f1c06b27c405302291",
+  "vocab.json": "825b417a62b6df94567fdb686200988b92a058cafefb127561c661c28db1265a"
+ },
+ "writable_share": {
+  "ANSWER": 0.9949,
+  "ASK": 0.9918,
+  "OFF": 0.9795,
+  "SAYBACK": 0.9984,
+  "SELF": 0.9864,
+  "SMALL": 0.9969,
+  "WORLD": 0.9957
+ }
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "claude.direct-read-only-observation/1",
+  "utc": "2026-10-22T15:56:29.389244+00:00",
+  "job": "helm-claude-mouthtrain-20261022-c59",
+  "attempt": 1,
+  "remote_actions": "READ_ONLY",
+  "instance": [
+    {
+      "id": "i-0d2a584bde29c69f3",
+      "state": "terminated",
+      "launch_time": "2026-10-22T14:40:07+00:00",
+      "state_transition_reason": "User initiated (2026-10-22 15:51:03 GMT)",
+      "type": "g5.xlarge"
+    }
+  ],
+  "live_instances_with_project_tag": [],
+  "volumes_remaining": [],
+  "prefix_versions": [],
+  "prefix_delete_markers": [],
+  "multipart_uploads": []
+}

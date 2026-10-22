@@ -1,0 +1,6 @@
+Here is a word list meant to be: about 25 words a pilot uses at work every day (tools, tasks, places, people). Return ONLY a JSON list of the words from it that truly
+fit that description (lowercase, exactly as given). Leave out any word that does not fit, is a name, a number, a month,
+or is about food or cooking.
+
+WORDS:
+["aileron", "airspeed", "altimeter", "altitude", "approach", "autopilot", "beacon", "checklist", "clearance", "cockpit", "compass", "crew", "flaps", "gear", "heading", "landing", "logbook", "rudder", "runway", "squawk", "takeoff", "taxi", "throttle", "tower", "waypoint"]

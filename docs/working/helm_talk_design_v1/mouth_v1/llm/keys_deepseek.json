@@ -1,0 +1,9548 @@
+{
+ "calls": [
+  {
+   "completion_tokens": 3102,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 14416,
+   "returncode": 0,
+   "seconds": 8.3,
+   "tag": "key-deepseek-0"
+  },
+  {
+   "completion_tokens": 3106,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 14553,
+   "returncode": 0,
+   "seconds": 8.0,
+   "tag": "key-deepseek-1"
+  },
+  {
+   "completion_tokens": 3075,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 14664,
+   "returncode": 0,
+   "seconds": 8.5,
+   "tag": "key-deepseek-2"
+  },
+  {
+   "completion_tokens": 3105,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 12577,
+   "returncode": 0,
+   "seconds": 8.8,
+   "tag": "key-deepseek-3"
+  },
+  {
+   "completion_tokens": 3121,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 12140,
+   "returncode": 0,
+   "seconds": 8.3,
+   "tag": "key-deepseek-4"
+  },
+  {
+   "completion_tokens": 3122,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 12822,
+   "returncode": 0,
+   "seconds": 8.7,
+   "tag": "key-deepseek-5"
+  },
+  {
+   "completion_tokens": 3046,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 14191,
+   "returncode": 0,
+   "seconds": 7.9,
+   "tag": "key-deepseek-6"
+  },
+  {
+   "completion_tokens": 3046,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 14143,
+   "returncode": 0,
+   "seconds": 8.0,
+   "tag": "key-deepseek-7"
+  },
+  {
+   "completion_tokens": 3592,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 13850,
+   "returncode": 0,
+   "seconds": 9.7,
+   "tag": "key-deepseek-8"
+  },
+  {
+   "completion_tokens": 3042,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 11063,
+   "returncode": 0,
+   "seconds": 8.1,
+   "tag": "key-deepseek-9"
+  },
+  {
+   "completion_tokens": 3133,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 11506,
+   "returncode": 0,
+   "seconds": 8.5,
+   "tag": "key-deepseek-10"
+  },
+  {
+   "completion_tokens": 2973,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 12459,
+   "returncode": 0,
+   "seconds": 8.5,
+   "tag": "key-deepseek-11"
+  },
+  {
+   "completion_tokens": 1142,
+   "family": "deepseek",
+   "model": "deepseek-flash",
+   "prompt_tokens": 5892,
+   "returncode": 0,
+   "seconds": 3.7,
+   "tag": "key-deepseek-12"
+  }
+ ],
+ "family": "deepseek",
+ "keys": {
+  "anthropic:m00000": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00001": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00002": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00003": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00004": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00005": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00006": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00007": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00008": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00009": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00010": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00011": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00012": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00013": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00014": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00015": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00016": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00017": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00018": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00019": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00020": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00021": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00022": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00023": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00024": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00025": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00026": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00027": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00028": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00029": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00030": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00031": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00032": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00033": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00034": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00035": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00036": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00037": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00038": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00039": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00040": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00041": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00042": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00043": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00044": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00045": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00046": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00047": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00048": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00049": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00050": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00051": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00052": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00053": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00054": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00055": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00056": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00057": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00058": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00059": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00060": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00061": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00062": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00063": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00064": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00065": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00066": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00067": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00068": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00069": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00070": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00071": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00072": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00073": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00074": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00075": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00076": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00077": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00078": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00079": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00080": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00081": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00082": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00083": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00084": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00085": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00086": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00087": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00088": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00089": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00090": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00091": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00092": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00093": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00094": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00095": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00096": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00097": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00098": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00099": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00100": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00101": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00102": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00103": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00104": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00105": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00106": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00107": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00108": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00109": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00110": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00111": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00112": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00113": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00114": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00115": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00116": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00117": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00118": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00119": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00120": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00121": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00122": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00123": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00124": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00125": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00126": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00127": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00128": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00129": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00130": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00131": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00132": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00133": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00134": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00135": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00136": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00137": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00138": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00139": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00140": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00141": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00142": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00143": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00144": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00145": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00146": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00147": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00148": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00149": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00150": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00151": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00152": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00153": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00154": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00155": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00156": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00157": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00158": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00159": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00160": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00161": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00162": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00163": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00164": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00165": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00166": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00167": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00168": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00169": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00170": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00171": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00172": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00173": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00174": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00175": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00176": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00177": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00178": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00179": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00180": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00181": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00182": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00183": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00184": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00185": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00186": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00187": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00188": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00189": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00190": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00191": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00192": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00193": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00194": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00195": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00196": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00197": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00198": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00199": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00200": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00201": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00202": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00203": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00204": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00205": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00206": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00207": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00208": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00209": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00210": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00211": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00212": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00213": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00214": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00215": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00216": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00217": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00218": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00219": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00220": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00221": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00222": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00223": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00224": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00225": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00226": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00227": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00228": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00229": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00230": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00231": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00232": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00233": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00234": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00235": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00236": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00237": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00238": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00239": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00240": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00241": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00242": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00243": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00244": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00245": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00246": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00247": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00248": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00249": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00250": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00251": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00252": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00253": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00254": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00255": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00256": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00257": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00258": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00259": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00260": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00261": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00262": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00263": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00264": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00265": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00266": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00267": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00268": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00269": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00270": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00271": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00272": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00273": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00274": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00275": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00276": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00277": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00278": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00279": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00280": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00281": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00282": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00283": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00284": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00285": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00286": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00287": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00288": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00289": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00290": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00291": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00292": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00293": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00294": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00295": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00296": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00297": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00298": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00299": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00300": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00301": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00302": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00303": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00304": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00305": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00306": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00307": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00308": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00309": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00310": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00311": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00312": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00313": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00314": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00315": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00316": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00317": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00318": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00319": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00320": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00321": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00322": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00323": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00324": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00325": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00326": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00327": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00328": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00329": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00330": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00331": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00332": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00333": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00334": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00335": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00336": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00337": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00338": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00339": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00340": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00341": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00342": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00343": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00344": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00345": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00346": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00347": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00348": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00349": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00350": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00351": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00352": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00353": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00354": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00355": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00356": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00357": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00358": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00359": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00360": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00361": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00362": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00363": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00364": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00365": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00366": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00367": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00368": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00369": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00370": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00371": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00372": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00373": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00374": {
+   "pass": false,
+   "why": "asks two questions instead of exactly one"
+  },
+  "anthropic:m00375": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00376": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00377": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00378": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00379": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00380": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00381": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00382": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00383": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00384": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00385": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00386": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00387": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00388": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00389": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00390": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00391": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00392": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00393": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00394": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00395": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00396": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00397": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00398": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00399": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00400": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00401": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00402": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00403": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00404": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00405": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00406": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00407": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00408": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00409": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00410": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00411": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00412": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00413": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00414": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00415": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00416": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00417": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00418": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00419": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00420": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00421": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00422": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00423": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00424": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00425": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00426": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00427": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00428": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00429": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00430": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00431": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00432": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00433": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00434": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00435": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00436": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00437": {
+   "pass": false,
+   "why": "ASK must ask exactly one question about whether the fact is still true; this adds an alternative 'or has that changed?'"
+  },
+  "anthropic:m00438": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00439": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00440": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00441": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00442": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00443": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00444": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00445": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00446": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00447": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00448": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00449": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00450": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00451": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00452": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00453": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00454": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00455": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00456": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00457": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00458": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00459": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00460": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00461": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00462": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00463": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00464": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00465": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00466": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00467": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00468": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00469": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00470": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00471": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00472": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00473": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00474": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00475": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00476": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00477": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00478": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00479": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00480": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00481": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00482": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00483": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00484": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00485": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00486": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00487": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00488": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00489": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00490": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00491": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00492": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00493": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00494": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00495": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00496": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00497": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00498": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00499": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00500": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00501": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00502": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00503": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00504": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00505": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00506": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00507": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00508": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00509": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00510": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00511": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00512": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00513": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00514": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00515": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00516": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00517": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00518": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00519": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00520": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00521": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00522": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00523": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00524": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00525": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00526": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00527": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00528": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00529": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00530": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00531": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00532": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00533": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00534": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00535": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00536": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00537": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00538": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00539": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00540": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00541": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00542": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00543": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00544": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00545": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00546": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00547": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00548": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00549": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00550": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00551": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00552": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00553": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00554": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00555": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00556": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00557": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00558": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00559": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00560": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00561": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00562": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00563": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00564": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00565": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00566": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00567": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00568": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00569": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00570": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00571": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00572": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00573": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00574": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00575": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00576": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00577": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00578": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00579": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00580": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00581": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00582": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00583": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00584": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00585": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00586": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00587": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00588": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00589": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00590": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00591": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00592": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00593": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00594": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00595": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00596": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00597": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00598": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00599": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00600": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00601": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00602": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00603": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00604": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00605": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00606": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00607": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00608": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00609": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00610": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00611": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00612": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00613": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00614": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00615": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00616": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00617": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00618": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00619": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00620": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00621": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00622": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00623": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00624": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00625": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00626": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00627": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00628": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00629": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00630": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00631": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00632": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00633": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00634": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00635": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00636": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00637": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00638": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00639": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00640": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00641": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00642": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00643": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00644": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00645": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00646": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00647": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00648": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00649": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00650": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00651": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00652": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00653": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00654": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00655": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00656": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00657": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00658": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00659": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00660": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00661": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00662": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00663": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00664": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00665": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00666": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00667": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00668": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00669": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00670": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00671": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00672": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00673": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00674": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00675": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00676": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00677": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00678": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00679": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00680": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00681": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00682": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00683": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00684": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00685": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00686": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00687": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00688": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00689": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00690": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00691": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00692": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00693": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00694": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00695": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00696": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00697": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00698": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00699": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00700": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00701": {
+   "pass": false,
+   "why": "Claims 'all quiet on my side' as a fact about its own state not in content"
+  },
+  "anthropic:m00702": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00703": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00704": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00705": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00706": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00707": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00708": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00709": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00710": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00711": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00712": {
+   "pass": false,
+   "why": "States 'not much on my side' as a fact about itself not in content"
+  },
+  "anthropic:m00713": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00714": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00715": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00716": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00717": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00718": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00719": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00720": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00721": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00722": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00723": {
+   "pass": false,
+   "why": "Claims 'I'm doing fine' as a state fact not in content"
+  },
+  "anthropic:m00724": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00725": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00726": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00727": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00728": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00729": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00730": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00731": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00732": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00733": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00734": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00735": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00736": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00737": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00738": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00739": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00740": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00741": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00742": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00743": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00744": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00745": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00746": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00747": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00748": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00749": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00750": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00751": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00752": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00753": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00754": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00755": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00756": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00757": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00758": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00759": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00760": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00761": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00762": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00763": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00764": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00765": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00766": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00767": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00768": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00769": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00770": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00771": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00772": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00773": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00774": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00775": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00776": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00777": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00778": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00779": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00780": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00781": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00782": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00783": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00784": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00785": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00786": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00787": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00788": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00789": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00790": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00791": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00792": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00793": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00794": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00795": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00796": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00797": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00798": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00799": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00800": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00801": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00802": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00803": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00804": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00805": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00806": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00807": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00808": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00809": {
+   "pass": false,
+   "why": "States a fact/opinion not in content: 'A baby in the office would pull anyone's attention away.'"
+  },
+  "anthropic:m00810": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00811": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00812": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00813": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00814": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00815": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00816": {
+   "pass": false,
+   "why": "Gives opinion/judgement: 'what a relief'."
+  },
+  "anthropic:m00817": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00818": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00819": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00820": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00821": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00822": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00823": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00824": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00825": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00826": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00827": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00828": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00829": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00830": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00831": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00832": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00833": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00834": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00835": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00836": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00837": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00838": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00839": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00840": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00841": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00842": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00843": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00844": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00845": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00846": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00847": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00848": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00849": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00850": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00851": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00852": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00853": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00854": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00855": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00856": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00857": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00858": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00859": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00860": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00861": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00862": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00863": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00864": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00865": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00866": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00867": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00868": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00869": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00870": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00871": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00872": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00873": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00874": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00875": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00876": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00877": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00878": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00879": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00880": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00881": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00882": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00883": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00884": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00885": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00886": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00887": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00888": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00889": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00890": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00891": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00892": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00893": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00894": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00895": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00896": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00897": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00898": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00899": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00900": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00901": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00902": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00903": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00904": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00905": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00906": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00907": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00908": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00909": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00910": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00911": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00912": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00913": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00914": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00915": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00916": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00917": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00918": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00919": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00920": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00921": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00922": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00923": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00924": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00925": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00926": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00927": {
+   "pass": false,
+   "why": "Opinion/judgement: 'quite the finish!'."
+  },
+  "anthropic:m00928": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00929": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00930": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00931": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00932": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00933": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00934": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00935": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00936": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00937": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00938": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00939": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00940": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00941": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00942": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00943": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00944": {
+   "pass": false,
+   "why": "Opinion/judgement: 'congratulations!'."
+  },
+  "anthropic:m00945": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00946": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00947": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00948": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00949": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00950": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00951": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00952": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00953": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00954": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00955": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00956": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00957": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00958": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00959": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00960": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00961": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00962": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00963": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00964": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00965": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00966": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00967": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00968": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00969": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00970": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00971": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00972": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00973": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00974": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00975": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00976": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00977": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00978": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00979": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00980": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00981": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00982": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00983": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00984": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00985": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00986": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00987": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00988": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00989": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00990": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00991": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00992": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00993": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00994": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00995": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00996": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00997": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00998": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m00999": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01000": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01001": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01002": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01003": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01004": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01005": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01006": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01007": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01008": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01009": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01010": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01011": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01012": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01013": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01014": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01015": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01016": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01017": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01018": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01019": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01020": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01021": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01022": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01023": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01024": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01025": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01026": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01027": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01028": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01029": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01030": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01031": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01032": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01033": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01034": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01035": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01036": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01037": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01038": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01039": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01040": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01041": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01042": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01043": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01044": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01045": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01046": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01047": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01048": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01049": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01050": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01051": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01052": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01053": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01054": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01055": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01056": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01057": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01058": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01059": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01060": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01061": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01062": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01063": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01064": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01065": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01066": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01067": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01068": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01069": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01070": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01071": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01072": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01073": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01074": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01075": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01076": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01077": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01078": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01079": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01080": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01081": {
+   "pass": true,
+   "why": null
+  },
+  "anthropic:m01082": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00000": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00001": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00002": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00003": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00004": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00005": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00006": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00007": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00008": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00009": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00010": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00011": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00012": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00013": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00014": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00015": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00016": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00017": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00018": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00019": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00020": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00021": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00022": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00023": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00024": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00025": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00026": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00027": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00028": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00029": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00030": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00031": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00032": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00033": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00034": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00035": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00036": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00037": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00038": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00039": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00040": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00041": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00042": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00043": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00044": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00045": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00046": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00047": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00048": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00049": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00050": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00051": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00052": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00053": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00054": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00055": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00056": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00057": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00058": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00059": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00060": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00061": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00062": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00063": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00064": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00065": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00066": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00067": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00068": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00069": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00070": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00071": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00072": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00073": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00074": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00075": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00076": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00077": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00078": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00079": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00080": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00081": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00082": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00083": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00084": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00085": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00086": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00087": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00088": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00089": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00090": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00091": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00092": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00093": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00094": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00095": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00096": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00097": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00098": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00099": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00100": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00101": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00102": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00103": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00104": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00105": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00106": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00107": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00108": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00109": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00110": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00111": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00112": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00113": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00114": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00115": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00116": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00117": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00118": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00119": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00120": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00121": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00122": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00123": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00124": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00125": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00126": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00127": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00128": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00129": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00130": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00131": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00132": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00133": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00134": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00135": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00136": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00137": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00138": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00139": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00140": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00141": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00142": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00143": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00144": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00145": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00146": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00147": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00148": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00149": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00150": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00151": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00152": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00153": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00154": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00155": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00156": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00157": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00158": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00159": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00160": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00161": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00162": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00163": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00164": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00165": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00166": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00167": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00168": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00169": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00170": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00171": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00172": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00173": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00174": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00175": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00176": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00177": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00178": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00179": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00180": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00181": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00182": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00183": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00184": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00185": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00186": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00187": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00188": {
+   "pass": true,
+   "why": null
+  },
+  "google:m00189": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00000": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00001": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00002": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00003": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00004": {
+   "pass": false,
+   "why": "SAYBACK must state the content's fact with its exact value and ask nothing; reply omits 'You said' but still states fact - actually it states fact correctly, but SAYBACK requires stating content's fact; it does state it. Wait - it says 'greystoke had fifteen colonies in october' which matches. This should pass."
+  },
+  "openai:m00005": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00006": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00007": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00008": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00009": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00010": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00011": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00012": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00013": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00014": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00015": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00016": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00017": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00018": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00019": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00020": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00021": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00022": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00023": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00024": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00025": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00026": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00027": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00028": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00029": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00030": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00031": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00032": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00033": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00034": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00035": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00036": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00037": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00038": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00039": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00040": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00041": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00042": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00043": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00044": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00045": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00046": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00047": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00048": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00049": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00050": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00051": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00052": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00053": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00054": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00055": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00056": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00057": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00058": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00059": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00060": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00061": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00062": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00063": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00064": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00065": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00066": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00067": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00068": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00069": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00070": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00071": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00072": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00073": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00074": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00075": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00076": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00077": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00078": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00079": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00080": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00081": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00082": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00083": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00084": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00085": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00086": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00087": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00088": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00089": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00090": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00091": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00092": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00093": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00094": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00095": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00096": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00097": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00098": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00099": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00100": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00101": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00102": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00103": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00104": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00105": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00106": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00107": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00108": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00109": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00110": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00111": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00112": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00113": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00114": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00115": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00116": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00117": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00118": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00119": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00120": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00121": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00122": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00123": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00124": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00125": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00126": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00127": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00128": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00129": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00130": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00131": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00132": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00133": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00134": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00135": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00136": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00137": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00138": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00139": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00140": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00141": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00142": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00143": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00144": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00145": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00146": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00147": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00148": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00149": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00150": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00151": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00152": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00153": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00154": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00155": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00156": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00157": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00158": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00159": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00160": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00161": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00162": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00163": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00164": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00165": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00166": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00167": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00168": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00169": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00170": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00171": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00172": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00173": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00174": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00175": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00176": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00177": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00178": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00179": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00180": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00181": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00182": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00183": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00184": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00185": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00186": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00187": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00188": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00189": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00190": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00191": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00192": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00193": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00194": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00195": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00196": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00197": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00198": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00199": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00200": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00201": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00202": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00203": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00204": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00205": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00206": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00207": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00208": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00209": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00210": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00211": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00212": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00213": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00214": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00215": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00216": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00217": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00218": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00219": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00220": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00221": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00222": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00223": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00224": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00225": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00226": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00227": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00228": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00229": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00230": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00231": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00232": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00233": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00234": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00235": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00236": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00237": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00238": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00239": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00240": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00241": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00242": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00243": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00244": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00245": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00246": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00247": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00248": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00249": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00250": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00251": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00252": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00253": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00254": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00255": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00256": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00257": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00258": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00259": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00260": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00261": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00262": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00263": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00264": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00265": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00266": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00267": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00268": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00269": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00270": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00271": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00272": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00273": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00274": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00275": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00276": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00277": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00278": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00279": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00280": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00281": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00282": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00283": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00284": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00285": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00286": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00287": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00288": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00289": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00290": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00291": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00292": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00293": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00294": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00295": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00296": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00297": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00298": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00299": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00300": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00301": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00302": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00303": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00304": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00305": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00306": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00307": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00308": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00309": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00310": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00311": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00312": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00313": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00314": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00315": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00316": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00317": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00318": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00319": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00320": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00321": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00322": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00323": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00324": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00325": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00326": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00327": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00328": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00329": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00330": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00331": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00332": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00333": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00334": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00335": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00336": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00337": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00338": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00339": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00340": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00341": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00342": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00343": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00344": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00345": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00346": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00347": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00348": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00349": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00350": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00351": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00352": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00353": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00354": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00355": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00356": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00357": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00358": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00359": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00360": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00361": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00362": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00363": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00364": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00365": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00366": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00367": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00368": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00369": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00370": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00371": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00372": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00373": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00374": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00375": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00376": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00377": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00378": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00379": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00380": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00381": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00382": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00383": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00384": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00385": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00386": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00387": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00388": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00389": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00390": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00391": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00392": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00393": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00394": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00395": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00396": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00397": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00398": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00399": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00400": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00401": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00402": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00403": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00404": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00405": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00406": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00407": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00408": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00409": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00410": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00411": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00412": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00413": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00414": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00415": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00416": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00417": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00418": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00419": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00420": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00421": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00422": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00423": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00424": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00425": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00426": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00427": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00428": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00429": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00430": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00431": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00432": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00433": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00434": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00435": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00436": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00437": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00438": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00439": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00440": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00441": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00442": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00443": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00444": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00445": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00446": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00447": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00448": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00449": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00450": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00451": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00452": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00453": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00454": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00455": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00456": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00457": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00458": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00459": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00460": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00461": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00462": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00463": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00464": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00465": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00466": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00467": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00468": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00469": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00470": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00471": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00472": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00473": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00474": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00475": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00476": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00477": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00478": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00479": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00480": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00481": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00482": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00483": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00484": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00485": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00486": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00487": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00488": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00489": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00490": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00491": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00492": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00493": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00494": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00495": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00496": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00497": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00498": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00499": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00500": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00501": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00502": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00503": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00504": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00505": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00506": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00507": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00508": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00509": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00510": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00511": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00512": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00513": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00514": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00515": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00516": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00517": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00518": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00519": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00520": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00521": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00522": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00523": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00524": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00525": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00526": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00527": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00528": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00529": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00530": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00531": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00532": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00533": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00534": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00535": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00536": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00537": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00538": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00539": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00540": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00541": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00542": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00543": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00544": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00545": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00546": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00547": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00548": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00549": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00550": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00551": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00552": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00553": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00554": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00555": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00556": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00557": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00558": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00559": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00560": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00561": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00562": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00563": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00564": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00565": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00566": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00567": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00568": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00569": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00570": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00571": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00572": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00573": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00574": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00575": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00576": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00577": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00578": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00579": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00580": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00581": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00582": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00583": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00584": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00585": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00586": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00587": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00588": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00589": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00590": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00591": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00592": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00593": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00594": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00595": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00596": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00597": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00598": {
+   "pass": false,
+   "why": "Garbled word order; does not state the fact clearly."
+  },
+  "openai:m00599": {
+   "pass": false,
+   "why": "Awkward phrasing, not a clean single question about the fact."
+  },
+  "openai:m00600": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00601": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00602": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00603": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00604": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00605": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00606": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00607": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00608": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00609": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00610": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00611": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00612": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00613": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00614": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00615": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00616": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00617": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00618": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00619": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00620": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00621": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00622": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00623": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00624": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00625": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00626": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00627": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00628": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00629": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00630": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00631": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00632": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00633": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00634": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00635": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00636": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00637": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00638": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00639": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00640": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00641": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00642": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00643": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00644": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00645": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00646": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00647": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00648": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00649": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00650": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00651": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00652": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00653": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00654": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00655": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00656": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00657": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00658": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00659": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00660": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00661": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00662": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00663": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00664": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00665": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00666": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00667": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00668": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00669": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00670": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00671": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00672": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00673": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00674": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00675": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00676": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00677": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00678": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00679": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00680": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00681": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00682": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00683": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00684": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00685": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00686": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00687": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00688": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00689": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00690": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00691": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00692": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00693": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00694": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00695": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00696": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00697": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00698": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00699": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00700": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00701": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00702": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00703": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00704": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00705": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00706": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00707": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00708": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00709": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00710": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00711": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00712": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00713": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00714": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00715": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00716": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00717": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00718": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00719": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00720": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00721": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00722": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00723": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00724": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00725": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00726": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00727": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00728": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00729": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00730": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00731": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00732": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00733": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00734": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00735": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00736": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00737": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00738": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00739": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00740": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00741": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00742": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00743": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00744": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00745": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00746": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00747": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00748": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00749": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00750": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00751": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00752": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00753": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00754": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00755": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00756": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00757": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00758": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00759": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00760": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00761": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00762": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00763": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00764": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00765": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00766": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00767": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00768": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00769": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00770": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00771": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00772": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00773": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00774": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00775": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00776": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00777": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00778": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00779": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00780": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00781": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00782": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00783": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00784": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00785": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00786": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00787": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00788": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00789": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00790": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00791": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00792": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00793": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00794": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00795": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00796": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00797": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00798": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00799": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00800": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00801": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00802": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00803": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00804": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00805": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00806": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00807": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00808": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00809": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00810": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00811": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00812": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00813": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00814": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00815": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00816": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00817": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00818": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00819": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00820": {
+   "pass": false,
+   "why": "asks a question that repeats the content instead of asking about what the person said"
+  },
+  "openai:m00821": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00822": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00823": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00824": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00825": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00826": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00827": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00828": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00829": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00830": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00831": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00832": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00833": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00834": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00835": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00836": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00837": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00838": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00839": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00840": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00841": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00842": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00843": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00844": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00845": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00846": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00847": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00848": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00849": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00850": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00851": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00852": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00853": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00854": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00855": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00856": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00857": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00858": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00859": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00860": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00861": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00862": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00863": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00864": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00865": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00866": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00867": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00868": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00869": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00870": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00871": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00872": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00873": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00874": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00875": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00876": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00877": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00878": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00879": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00880": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00881": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00882": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00883": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00884": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00885": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00886": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00887": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00888": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00889": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00890": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00891": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00892": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00893": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00894": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00895": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00896": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00897": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00898": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00899": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00900": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00901": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00902": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00903": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00904": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00905": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00906": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00907": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00908": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00909": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00910": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00911": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00912": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00913": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00914": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00915": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00916": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00917": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00918": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00919": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00920": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00921": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00922": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00923": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00924": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00925": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00926": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00927": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00928": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00929": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00930": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00931": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00932": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00933": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00934": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00935": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00936": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00937": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00938": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00939": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00940": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00941": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00942": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00943": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00944": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00945": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00946": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00947": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00948": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00949": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00950": {
+   "pass": false,
+   "why": "gives an opinion ('That sounds inconvenient') and does not state the content fact"
+  },
+  "openai:m00951": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00952": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00953": {
+   "pass": false,
+   "why": "does not state the content fact (spilled coffee on white shirt) and asks a question not grounded in content"
+  },
+  "openai:m00954": {
+   "pass": false,
+   "why": "gives an opinion ('That documentary stayed with you') and does not state the content fact"
+  },
+  "openai:m00955": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00956": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00957": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00958": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00959": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00960": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00961": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00962": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00963": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00964": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00965": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00966": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00967": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00968": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00969": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00970": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00971": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00972": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00973": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00974": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00975": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00976": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00977": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00978": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00979": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00980": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00981": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00982": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00983": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00984": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00985": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00986": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00987": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00988": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00989": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00990": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00991": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00992": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00993": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00994": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00995": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00996": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00997": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00998": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m00999": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01000": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01001": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01002": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01003": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01004": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01005": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01006": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01007": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01008": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01009": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01010": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01011": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01012": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01013": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01014": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01015": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01016": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01017": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01018": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01019": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01020": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01021": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01022": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01023": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01024": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01025": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01026": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01027": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01028": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01029": {
+   "pass": false,
+   "why": "Reply 'Hello.' does not fit the greeting question 'How's it going?'"
+  },
+  "openai:m01030": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01031": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01032": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01033": {
+   "pass": false,
+   "why": "Reply 'Hello.' does not fit the greeting question 'What's up?'"
+  },
+  "openai:m01034": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01035": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01036": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01037": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01038": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01039": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01040": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01041": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01042": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01043": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01044": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01045": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01046": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01047": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01048": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01049": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01050": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01051": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01052": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01053": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01054": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01055": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01056": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01057": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01058": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01059": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01060": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01061": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01062": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01063": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01064": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01065": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01066": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01067": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01068": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01069": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01070": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01071": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01072": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01073": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01074": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01075": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01076": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01077": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01078": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01079": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01080": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01081": {
+   "pass": true,
+   "why": null
+  },
+  "openai:m01082": {
+   "pass": true,
+   "why": null
+  }
+ }
+}

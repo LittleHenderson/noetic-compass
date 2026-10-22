@@ -1,0 +1,1 @@
+[{"id":"pof0242","text":"I hear you. What was the silent moment by the window?"},{"id":"pof0399","text":"That was a busy, hot shift at the store. What about the register?"},{"id":"pof1687","text":"The voucher brought a happy little surprise. What about the farm receipts?"},{"id":"pof1799","text":"I hear you. What was the civil plan?"}]

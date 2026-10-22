@@ -1,0 +1,6 @@
+[
+  {"id": "pof1019", "text": "You monitored the listing range and adjusted your strategy when buyer interest began to respond. What did you notice as buyer interest responded?"},
+  {"id": "pof1054", "text": "No matter the money, you are sure the black road in summer will break and you will wait where the shade is. How long do you figure you will wait there?"},
+  {"id": "pof1061", "text": "You would watch the window and prepare each chair, and you had to imagine the back control deal going up before you could get back to work. How did the back control deal turn out?"},
+  {"id": "pof1106", "text": "You notice how pressure can affect a patient long before they register it themselves. What have you noticed about that pressure?"}
+]

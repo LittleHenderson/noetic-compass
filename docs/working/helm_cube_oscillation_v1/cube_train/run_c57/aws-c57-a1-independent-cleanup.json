@@ -1,0 +1,37 @@
+{
+  "schema": "claude.c57.independent-cleanup/1",
+  "utc": "2026-10-22T12:09:46.973105+00:00",
+  "job": "helm-claude-cubetrain-20261022-c57",
+  "attempt": 1,
+  "account": "807562639912",
+  "region": "us-west-2",
+  "remote_actions": "READ_ONLY",
+  "instance": "i-0a93a50584129d0e4",
+  "instance_state": "terminated",
+  "instance_state_reason": "User initiated (2026-10-22 12:03:52 GMT)",
+  "instances_found_by_tag_or_token": {
+    "i-0a93a50584129d0e4": "terminated"
+  },
+  "all_job_volumes": [
+    "vol-05eb0cf3712612a49"
+  ],
+  "volume_observations": {
+    "vol-05eb0cf3712612a49": "ABSENT"
+  },
+  "tag_discovered_volumes": {},
+  "bucket": "helm-primary-pointer-807562639912-20261001-v4",
+  "prefix": "bridge-control-20260822/helm-pointer-saturation-20261001-v4/",
+  "prefix_versions_remaining": [],
+  "prefix_delete_markers_remaining": [],
+  "multipart_uploads_remaining": 0,
+  "receipt_sha256": {
+    "aws-c57-a1-launch-intent.json": "253da33ea1993cb4f8f754517f93eb376d06efdb399cfd92b4a24386b6c588b4",
+    "aws-c57-a1-control.json": "af131b8a3c061ccef4503b598f6363685f59100d5b275b1d3da8544ffa4ae134",
+    "aws-c57-a1-cleanup.json": "61d846c434a68feb741ada3721ddb15932f53052334b8490f1a7d462dbcff2f9",
+    "aws-c57-a1-status.json": "d40ca41e15e5422ec49635349767a5dda1abac6737f373f7acf70db0760180a8"
+  },
+  "compute_cleanup_verified": true,
+  "prefix_cleanup_verified": true,
+  "cleanup_verified": true,
+  "status": "VERIFIED"
+}

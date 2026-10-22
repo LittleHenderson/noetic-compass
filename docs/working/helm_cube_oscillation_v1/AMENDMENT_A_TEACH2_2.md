@@ -1,0 +1,27 @@
+
+## Amendment A-TEACH2-2 (2026-10-21 PDT) — the build specification for v2, frozen before any code
+
+Status: appended after A-TEACH2-1 (`fb2f104d…`), below the pre-code (`f7b6183b…`); neither is edited. Hashed on its own. Written before any v2 code existed, on the owner's "2.A" (build now) and "Do it here". Where the pre-code or DESIGN left a build detail open, this fixes it.
+
+**B1. The structured reading.** `Reading(thing, slot, value, replaces)`: `thing` = one proper name (lower case); `slot` = a frozen set of lower-case content words; `value` = a number word or a proper name (lower case); `replaces` = the old value or none. Two readings agree when all four fields are equal.
+
+**B2. The rule reader** (the hand-written reader of the TABLE and ONE_READER arms, and the brain side's say-back parser). General rules, no subject template:
+- proper names = capitalised words that are not the line's first word, not a month name, at least 3 letters; the first word counts too when it is capitalised mid-text after a colon;
+- `thing` = the first proper name; `value` = the only number word in the line that does not follow "not" (none or several → no reading), else, when the line has no number word, the last proper name other than `thing` (none → no reading);
+- `replaces` = a number word or proper name right after "not", or after "instead of", or before "before" in "I said X before";
+- `slot` = the line's content words (the cut's `helm_memory_compact.content_words`: letters only, ≥ 4 letters, not a stop word, never a number word) minus `thing`, `value`, `replaces` and the frozen discourse list `{correction, actually, sorry, meant, honestly, also, more, said, before, earlier, instead, like, just, really, think}`;
+- an empty slot → no reading. A line the rule cannot read gives no reading (the honest default).
+
+**B3. The CTT proposer interface.** `propose(text) -> Reading | None` per copy; three copies; ACCEPT-2 = all three equal and not none. The v2 build ships the interface and a **stand-in proposer for tests** (it is not the CTT, says so in its name, `StandInProposer`, and is never used in an exam arm). The real CTT adapter is built with the retraining step (DESIGN §6 step 4, after `CUBE TRAIN at 3 USD`). Without a proposer the oscillation stores nothing (ONE_READER and TABLE still run).
+
+**B4. One round** (DESIGN §2.2): propose (unanimous) → brain-side check → say-back → re-read (the proposer reads the say-back line). The brain-side check holds when: `thing` and `value` appear as words in the person's line (nothing invented); a `replaces` value is the current value of that thing-and-slot cube, or no cube exists yet; the cube's capsule notation `^1^C` compiles. The say-back line is `"<Thing> <slot words in sorted order>: <value>."` plus `" This replaces <old>."` when `replaces` is set, with no CAS token. Round 2 proposes again on the person's line. Keep after **2** agreeing rounds within **3** (A-TEACH2-1). Shadow rounds 4–6 (reported only): the same loop continued on lines not kept by round 3, recorded, never stored.
+
+**B5. The cube.** One cube per (thing, slot): node id `teach_<sha256(thing|slot)[:12]>`, kind `instance`, core label `"<thing>: <slot words>"`, face 1 `human_text` = the current value, face 1 `structured = {"thing", "slot", "value", "history": [[revision, value, turn_id], ...]}`; provenance `USER_SAID` (→ `CHECKED` on a confirmed refresh). A correction writes **revision + 1** with the history appended; nothing is overwritten except by a higher revision (`store.py` refuses otherwise).
+
+**B6. The Atlas endpoint.** One `CONTEXT` node `thing:<thing>` per thing; each kept revision a `POSSIBILITY` node `cube:<node id>:r<rev>` held by it; a confirmed refresh adds a `FACT` node beside it (kinds are never changed, `atlas.py`).
+
+**B7. Answering from cubes.** A memory question matches a cube when the question names its `thing` and shares at least `min(2, |slot|)` slot words; the best overlap wins; a tie of three or more → "which one". The reply states the current value: `"You told me <thing> <slot>: <value>."`, labelled `EXACT` while the person's own line for the latest revision is in working memory or its cold copy checks; else `RECONSTRUCTED`, said as such. No cube → v1's path unchanged.
+
+**B8. The fading ladder.** Per turn item: `s = 1/2` (fixed), `n` = verified uses (a recall that served it), `age` = turns since admission or last use; `m = s · (1 + ⌊log2(1 + n)⌋) · (19/20)^age`, exact `Fraction`. A sweep every **4** turns: a live turn (outside the last 2) with `m < 1/5` → S1 (v1's capsule, cold copy, breadcrumb, receipt); a capsule with `m < 1/50` → S2 (its CCE sentence moves to a cold side file, digest-checked; the record keeps notation, clues, cube pointer, breadcrumb; a receipt). The turn budget (12) still compacts on overflow, as v1. Never faded: the last 2 turns; a turn that wrote a cube revision not yet confirmed or superseded. **Bytes:** working-memory bytes = UTF-8 bytes of live turns' user text + each S1 capsule's canonical JSON + each S2 record's canonical JSON.
+
+**B9. The switch and the arms.** `HELM_CUBE_OSC` default OFF; OFF = v1 behaviour byte for byte. Modes when ON: `OSC` (the arm under test), `ONE_READER` (the rule reader writes cubes, no rounds), `CTT_ONLY` (the unanimous proposal writes cubes, no check, no say-back), `TABLE` (the rule reader writes a plain dict `(thing, slot) → value`, no cube, no Atlas, no ladder). `ONE_STEP_FADE` = `OSC` with the sweep off.

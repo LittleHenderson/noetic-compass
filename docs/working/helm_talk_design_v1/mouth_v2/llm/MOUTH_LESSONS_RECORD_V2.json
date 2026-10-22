@@ -1,0 +1,36 @@
+{
+ "by_situation": {
+  "ANSWER": 974,
+  "ASK": 993,
+  "OFF": 5962,
+  "SAYBACK": 1018,
+  "SELF": 1227,
+  "SMALL": 1075,
+  "WORLD": 1169
+ },
+ "by_style": {
+  "barbershop": 944,
+  "casual": 980,
+  "curious": 893,
+  "formal": 962,
+  "intimate": 950,
+  "jovial": 904,
+  "plain": 3676,
+  "professional": 931,
+  "storyteller": 927,
+  "warm": 1251
+ },
+ "counts": {
+  "kept": 12418,
+  "key_fail": 1367,
+  "key_missing": 191,
+  "over_cap": 69,
+  "rule_ok": 14189,
+  "stale_rewrite": 4,
+  "written": 14361
+ },
+ "dev": 2133,
+ "inputs": 4725,
+ "templates": 1379,
+ "train": 11664
+}

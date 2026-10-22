@@ -1,0 +1,156 @@
+{
+ "long_2000_limit_53370": {
+  "after_lean": {
+   "capsule_bytes_median": 280,
+   "capsules": 105,
+   "flags": [],
+   "lean_refused": 0,
+   "limit": 53370,
+   "lines_per_capsule": [
+    16,
+    16,
+    16,
+    16
+   ],
+   "never_forget_bytes": 120294,
+   "under_limit": true,
+   "working_bytes": 48745
+  },
+  "before_full": {
+   "capsule_bytes_median": 828,
+   "capsules": 133,
+   "flags": [
+    "BATCH_NO_GAIN",
+    "OVER_LIMIT_PROTECTED"
+   ],
+   "lean_refused": null,
+   "limit": 53370,
+   "lines_per_capsule": [
+    16,
+    16,
+    16,
+    16
+   ],
+   "never_forget_bytes": 120294,
+   "under_limit": false,
+   "working_bytes": 110746
+  }
+ },
+ "long_200_limit_4000": {
+  "after_lean": {
+   "capsule_bytes_median": 281,
+   "capsules": 12,
+   "flags": [],
+   "lean_refused": 0,
+   "limit": 4000,
+   "lines_per_capsule": [
+    16,
+    16,
+    16,
+    16
+   ],
+   "never_forget_bytes": 11910,
+   "under_limit": true,
+   "working_bytes": 3955
+  },
+  "before_full": {
+   "capsule_bytes_median": 812,
+   "capsules": 13,
+   "flags": [
+    "BATCH_NO_GAIN",
+    "OVER_LIMIT_PROTECTED"
+   ],
+   "lean_refused": null,
+   "limit": 4000,
+   "lines_per_capsule": [
+    16,
+    16,
+    16,
+    16
+   ],
+   "never_forget_bytes": 11910,
+   "under_limit": false,
+   "working_bytes": 11126
+  }
+ },
+ "long_600_limit_4000": {
+  "after_lean": {
+   "capsule_bytes_median": 280,
+   "capsules": 92,
+   "flags": [
+    "BATCH_NO_GAIN",
+    "OVER_LIMIT_PROTECTED"
+   ],
+   "lean_refused": 0,
+   "limit": 4000,
+   "lines_per_capsule": [
+    16,
+    16,
+    16,
+    16
+   ],
+   "never_forget_bytes": 35730,
+   "under_limit": false,
+   "working_bytes": 26126
+  },
+  "before_full": {
+   "capsule_bytes_median": 820,
+   "capsules": 42,
+   "flags": [
+    "BATCH_NO_GAIN",
+    "OVER_LIMIT_PROTECTED"
+   ],
+   "lean_refused": null,
+   "limit": 4000,
+   "lines_per_capsule": [
+    16,
+    16,
+    16,
+    16
+   ],
+   "never_forget_bytes": 35730,
+   "under_limit": false,
+   "working_bytes": 34515
+  }
+ },
+ "short_300_limit_3000": {
+  "after_lean": {
+   "capsule_bytes_median": 282,
+   "capsules": 25,
+   "flags": [
+    "BATCH_NO_GAIN",
+    "OVER_LIMIT_PROTECTED"
+   ],
+   "lean_refused": 0,
+   "limit": 3000,
+   "lines_per_capsule": [
+    16,
+    16,
+    16,
+    16
+   ],
+   "never_forget_bytes": 9474,
+   "under_limit": false,
+   "working_bytes": 7202
+  },
+  "before_full": {
+   "capsule_bytes_median": 874,
+   "capsules": 10,
+   "flags": [
+    "BATCH_NO_GAIN",
+    "OVER_LIMIT_PROTECTED"
+   ],
+   "lean_refused": null,
+   "limit": 3000,
+   "lines_per_capsule": [
+    32,
+    32,
+    32,
+    28
+   ],
+   "never_forget_bytes": 9474,
+   "under_limit": false,
+   "working_bytes": 8948
+  }
+ }
+}
