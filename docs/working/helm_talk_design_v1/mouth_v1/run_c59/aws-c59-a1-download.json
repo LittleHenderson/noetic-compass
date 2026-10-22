@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-22T15:56:12.049820+00:00",
+  "job": "helm-claude-mouthtrain-20261022-c59",
+  "attempt": 1,
+  "instance": "i-0d2a584bde29c69f3",
+  "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_claude_mouthtrain_c59\\aws-c59-a1-deliverable.zip",
+  "bytes": 125084874,
+  "sha256": "ef5b08e7ffb13bbdafef74b1f3d7d442084b6954b6484f5041a7c75be0199330",
+  "version_id": "null",
+  "terminal_sha256": "5bf28a7b70acfa57afc88645ada93712623266cb20edc87c55936a26d8c462ba",
+  "terminal_status": "RAN",
+  "run_ctt_exit": null,
+  "run_ctt_human_exit": null,
+  "transport_complete": true
+}

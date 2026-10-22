@@ -4,6 +4,14 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM MOUTH TRAIN RAN (spec sheet 7.128): MOUTH_HARMED by the frozen reader; job c59, 1.29 USD
+
+- Owner's words: "Yes: launch the MOUTH TRAIN run on AWS now (one g5.xlarge, cap 4 USD), read the result, run the AI raters, and record it."
+- One g5.xlarge 14:40-15:51 UTC; sealed zip 423d08a3 checked on the host; four copies trained 6,000 steps; audits clean.
+- HARMED because 1 DEV line had "4040": the detokenizer glued two allowed "40" units (guard caught it; never spoken). Also missed: fallback 41/1,076, round trip 512/761, VARIED 59/100. Held: ear gates, old CAS skill.
+- AI raters (anthropic, openai, deepseek, blind): mouth preferred on 682 of 989 pairs (69 %): fact replies win ~9 in 10, chat replies (off-topic, about HELM, I-don't-know) lose almost always. Guard checks facts, not sense.
+- Cleanup verified three ways; ledger 115.89/200; backup D:/tksCAS-archive/mouth_train_c59_run_20261022. Mouth NOT LICENSED; nothing switched on.
+
 ## 2026-10-22 PDT - HELM MOUTH TRAIN package SEALED (spec sheet 7.128): zip 423d08a3..., 12 tests pass from a fresh unzip; 0 USD; not run
 
 - Owner's words: "Yes, build the mouth" ("ask me before any money is spent"), "IF YOU NEED USE DEEPSEEK AS WELL".

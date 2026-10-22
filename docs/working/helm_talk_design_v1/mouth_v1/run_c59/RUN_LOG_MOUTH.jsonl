@@ -1,0 +1,7 @@
+{"I1": true, "event": "start", "order_seed": 1423595301575908809, "t": 0.1}
+{"audit_violations": [], "event": "smoke", "t": 64.6, "trained": true}
+{"event": "trained", "model": "A4-s1", "ok": true, "t": 1145.8}
+{"event": "trained", "model": "A4-s2", "ok": true, "t": 2225.4}
+{"event": "trained", "model": "A4-s3", "ok": true, "t": 3301.1}
+{"event": "trained", "model": "A5-s1", "ok": true, "t": 3887.0}
+{"event": "done", "host_word": "MOUTH_HARMED", "t": 4004.2}

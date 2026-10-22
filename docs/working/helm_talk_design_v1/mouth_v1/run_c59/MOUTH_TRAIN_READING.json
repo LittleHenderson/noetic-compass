@@ -1,0 +1,126 @@
+{
+ "audits": {
+  "exam": [],
+  "smoke": []
+ },
+ "dev_reported": {
+  "guard_ok": 160,
+  "replies": 169
+ },
+ "estimated_cost_usd_this_script": 1.119,
+ "finals_sha256": {
+  "A4-s1": "6d7e0506e7383404e81207dbebc72aedb4f4f83ef0764b021ec04d332fec1f6c",
+  "A4-s2": "a4bac849fa97d1a9cd7ba8f6444e48e6727af28e31923270bacfdaba4a0bde17",
+  "A4-s3": "aea0eca1c3a22d465d2a366c53e49e5e208987bf9422db4cd61100dbe140275f",
+  "A5-s1": "7323bb460106d0fef2cd71ee843e17da787eb7a26824f4baad94042c9b5cee3e"
+ },
+ "host_word": "MOUTH_HARMED",
+ "instrument": {
+  "I1_zip_sha256": true,
+  "I2_package_tests": true,
+  "I3_trained_no_nan": true,
+  "I4_audits_clean": true,
+  "I5_cost_under_cap_estimate": true,
+  "I6_exam_at_least_1000": true
+ },
+ "labels": [
+  "SYNTHETIC_ONLY",
+  "LLM_WRITTEN_ONLY",
+  "AI_RATED"
+ ],
+ "left_out_same_text": 46,
+ "marks": {
+  "EAR-GATES": {
+   "gates": {
+    "G-CONFIDENT-WRONG": true,
+    "G-EXERCISED": true,
+    "G-INVENT": true,
+    "G-KEEP-OLD": true
+   },
+   "holds": true,
+   "keep_old": {
+    "A4-s1": {
+     "after": 0.9795,
+     "before": 0.9785
+    },
+    "A4-s2": {
+     "after": 0.9745,
+     "before": 0.979
+    },
+    "A4-s3": {
+     "after": 0.98,
+     "before": 0.9775
+    }
+   },
+   "vote": {
+    "llm": {
+     "fact_right": 262,
+     "fact_rows": 295,
+     "fact_wrong": 6,
+     "invented": 0,
+     "none": 30,
+     "right": 321,
+     "rows": 357,
+     "trap_rows": 50,
+     "trap_wrong": 1,
+     "wrong": 6
+    },
+    "sdg": {
+     "fact_right": 1967,
+     "fact_rows": 1967,
+     "fact_wrong": 0,
+     "invented": 0,
+     "none": 0,
+     "right": 2000,
+     "rows": 2000,
+     "trap_rows": 257,
+     "trap_wrong": 0,
+     "wrong": 0
+    }
+   }
+  },
+  "F-FALLBACK": {
+   "fallbacks": 41,
+   "holds": false,
+   "mark": "at most 1 in 1000",
+   "mostly_template": false,
+   "other_copies_reported": {
+    "A4-s2": 32,
+    "A4-s3": 44,
+    "A5-s1": 44
+   },
+   "rate": 0.038104,
+   "replies": 1076,
+   "why_counts": {
+    "OFF needs exactly one question": 2,
+    "the reading's value or thing missing": 39
+   }
+  },
+  "G-NO-NEW-FACT": {
+   "holds": false,
+   "lines_with_a_word_outside_the_lock": 1
+  },
+  "G-ROUNDTRIP": {
+   "fact_replies": 761,
+   "holds": false,
+   "same_fact": 512
+  },
+  "SOUNDS-HUMAN": {
+   "holds": true,
+   "mouth_preferred": 682,
+   "pairs": 989
+  },
+  "VARIED": {
+   "holds": false,
+   "inputs_with_3_or_more_wordings": 59,
+   "of": 100
+  }
+ },
+ "raters": [
+  "anthropic",
+  "openai",
+  "deepseek"
+ ],
+ "schema": "mouth-train.reading/1",
+ "status_word": "MOUTH_HARMED"
+}

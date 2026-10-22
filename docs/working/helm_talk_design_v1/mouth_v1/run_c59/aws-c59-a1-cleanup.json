@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-22T15:56:09.708177+00:00",
+  "job": "helm-claude-mouthtrain-20261022-c59",
+  "attempt": 1,
+  "instance": "i-0d2a584bde29c69f3",
+  "state": "terminated",
+  "state_reason": "User initiated (2026-10-22 15:51:03 GMT)",
+  "volumes": [
+    "vol-090e171013e733782"
+  ],
+  "volume_states": {
+    "vol-090e171013e733782": "DELETED"
+  },
+  "compute_cleanup_verified": true,
+  "local_preservation_verified": true,
+  "host_left_result": true,
+  "prefix_purge": {
+    "deleted_version_count": 4,
+    "deleted_keys": [
+      "bridge-control-20260822/helm-pointer-saturation-20261001-v4/input.zip",
+      "bridge-control-20260822/helm-pointer-saturation-20261001-v4/pointer-saturation-deliverable.zip",
+      "bridge-control-20260822/helm-pointer-saturation-20261001-v4/progress.json",
+      "bridge-control-20260822/helm-pointer-saturation-20261001-v4/transport-result.json"
+    ],
+    "verified_empty": true,
+    "multipart_uploads": 0
+  },
+  "storage_cleanup_verified": true,
+  "cleanup_verified": true,
+  "status": "PRESERVED_AND_PREFIX_PURGE_VERIFIED"
+}
