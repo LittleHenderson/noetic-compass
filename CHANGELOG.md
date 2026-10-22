@@ -4,6 +4,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-22 PDT - HELM mouth v2 PLAN written (design only, 0 USD; spec sheet 7.128); nothing built
+
+- Owner's words: "Yes: write a mouth v2 plan (0 USD, design only): fix the 4040 glue bug, add a sense check to the guard, more and better chat lessons, and say what it would cost; don't build or spend yet."
+- Main cause of the broken chat in c59: the lock's word list missed everyday words ("what", "about", "from", "where"), so only 173 of 700 off-topic lessons could be written under the lock.
+- Plan PLAN_MOUTH_V2.md: rebuild the word list (gate: 95 % writable), never glue separate numbers, a two-layer sense check in the guard, ~3,300 more chat lessons, variety, round-trip fix (owner choice). Expected ~1.4 USD, cap 3 USD. Owner questions Q1-Q3 open.
+
 ## 2026-10-22 PDT - HELM MOUTH TRAIN RAN (spec sheet 7.128): MOUTH_HARMED by the frozen reader; job c59, 1.29 USD
 
 - Owner's words: "Yes: launch the MOUTH TRAIN run on AWS now (one g5.xlarge, cap 4 USD), read the result, run the AI raters, and record it."
