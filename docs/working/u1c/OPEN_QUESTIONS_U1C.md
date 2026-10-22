@@ -6,7 +6,7 @@ Status: DESIGN ONLY. Each question is a real research or money choice. Each has 
 
 ---
 
-**Q1. Scope.** Recommended: **yes, replicate U1b exactly on the RB2c brain now; test the eye on the canonical wide brain (RB-W1) or the live loop later as its own test, U1d.**
+**Q1. Scope.** Recommended: **yes, replicate U1b exactly on the RB2c brain now; test the eye on the canonical wide brain (RB-W1) or the live loop later as its own test, EYE-ACT-1 (spec 7.122, PR #454; named EYE-ACT-1 (spec 7.122) in the first draft).**
 Why: a wide-brain eye test needs a new eye adapter, new faults, new answer keys and a new reader, and bundling it would put this clean replication at risk.
 
 **Q2. Seeds: commit-then-reveal.** Recommended: **yes.** Before any code exists, you pick a secret of at least 4 random words (letters and digits, single spaces, at least 20 characters), compute its fingerprint privately, and type only the fingerprint. After the package is sealed and you have seen its fingerprint, you type the run line and reveal the secret. The worlds come from your secret plus the package fingerprint.
