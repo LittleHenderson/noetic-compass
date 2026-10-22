@@ -4,7 +4,7 @@ sealed zip of TEACH-2; then test from a fresh extract (A-TEACH2-18 P13).
     python -X utf8 -B docs/working/helm_cube_oscillation_v1/teach2/seal_teach2.py [--ctt-python <python with torch>]
 
 PREREGISTRATION_TEACH2.md = the pre-code's bytes (checked against f7b6183b...) + the bytes of amendments A-TEACH2-1 to
--20 in order (each checked against its .sha256 file). Members: every file under the package folder except
+-22 in order (each checked against its .sha256 file). Members: every file under the package folder except
 PACKAGE_FREEZE.json, __pycache__, *.pyc, *.partial. Sorted entries, fixed timestamp and permissions; sealed twice, refused
 unless identical. CRLF in .py / .json / .md is refused except in helm_now/ files pinned with CRLF by the cut. The zip and
 its records go beside the package folder (Documents/Codex/2026-10-22/teach2/); the records are copied to sealed/ in the
@@ -33,7 +33,7 @@ ZIP = OUTDIR / f"{NAME}_SOURCE.zip"
 STAMP = (2026, 10, 22, 0, 0, 0)
 PRECODE = PACKET / "PREREGISTRATION_TEACH2.precode.md"
 PRECODE_SHA = "f7b6183bba5f8a1a241e3c64c8930f6a2c6df06fbe8c5845c0207f6d2a84c855"
-AMENDS = [PACKET / f"AMENDMENT_A_TEACH2_{i}.md" for i in range(1, 21)]
+AMENDS = [PACKET / f"AMENDMENT_A_TEACH2_{i}.md" for i in range(1, 23)]
 SEALED = HERE / "sealed"
 
 

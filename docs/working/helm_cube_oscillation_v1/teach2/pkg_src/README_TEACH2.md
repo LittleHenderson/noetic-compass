@@ -12,7 +12,7 @@ Eye's acting stays `NOT LICENSED`. The money line is `CUBE EXAM at 1 USD` (one G
 
 | Part | What |
 |---|---|
-| `PREREGISTRATION_TEACH2.md` | the pre-code (sha256 `f7b6183b…`) + amendments A-TEACH2-1 to -20, byte for byte |
+| `PREREGISTRATION_TEACH2.md` | the pre-code (sha256 `f7b6183b…`) + amendments A-TEACH2-1 to -22, byte for byte |
 | `FROZEN_TEACH2.json` | every frozen number (a package test checks it equals `teach2/common_t2.py`) |
 | `helm_now/` | HELM, cut by `git show` at the commit in `contract/HELM_CUT_TEACH2.json` |
 | `brain/HELM_R1_W1_20261015_v3/` | the wave-1 brain package HELM loads (checked by its own freeze) |
