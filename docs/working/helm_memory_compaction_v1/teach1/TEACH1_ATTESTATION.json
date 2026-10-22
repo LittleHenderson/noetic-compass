@@ -1,0 +1,71 @@
+{
+ "attested_by": "custodian subagent (separate context) spawned by the builder session on the owner's word 'Do this task here'",
+ "keys_read_by_builder_code": false,
+ "worlds": 16,
+ "exam_folder_pins": {
+  "DAMAGE.json": "f6c2aeda095b5c861f2a9dd28a5e6d222599edb326a7e08e5dd6db66fc9d002e",
+  "PLAN.json": "edb73836af2ccd6f2cda75c5f1d8b1ff24cc948b8637b254b759c51b981614ae",
+  "QUIZ.json": "87736c77f698762e719ed2afa2ac1e5e352ec3dd847609edf0e7920a2bc4c0c2",
+  "SEEDS.json": "fcea03ca08b51e3713553842d3331d04ff40f8043d56d3f48552597d1404e89a",
+  "TURNS.json": "f6f00e2a147a12b63506e85a1e425c49a8a35336e2fb14ac551be432727c417d",
+  "WORLDS.json": "a0e07a73d67a65efe08cc712f0519136d3c82a07cdc7e11ae3f3d3273f1a1836"
+ },
+ "pins_json_sha256": "d4516526e7af0fcb823aaf63203cb7d83506afcb67aec0d393dfa319dc7e4047",
+ "exam_check_sha256": "5dedb7087a2f3bd2985cd04b2d14654528c97fc326a0aa80e1c6871b6cac0fa8",
+ "route_check_sha256": "5405e40c1b9af838b5933dfb71f4700bdc3c31bf8bb3561304b31553ad4a5b38",
+ "keyed_turns_sha256": "11f2a962a422bd3f02905daf79a0adbbbe19578a162b89c60df9abed08da6e53",
+ "approval_record_sha256": "fb20fcb0f6a7783d2bcfe4c4efdaba3b9ff2757a49e821b6b795e3ad1bc85601",
+ "seed_derivation_sha256": "fcea03ca08b51e3713553842d3331d04ff40f8043d56d3f48552597d1404e89a",
+ "package_zip_sha256": "811726c45bd3f31a3df1d565295d191382685f7e7681edfc567e70e22e17dc73",
+ "turn_families": {
+  "anthropic": 171,
+  "openai": 171,
+  "google": 170
+ },
+ "turn_writer_models": {
+  "anthropic": "claude-opus-5-5",
+  "openai": "gpt-5.6-terra (codex-cli 0.150.1, ChatGPT plan)",
+  "google": "gemini-3-flash-preview (gemini-cli 0.59.0)"
+ },
+ "key_families_count": {
+  "openai": 297,
+  "google": 299,
+  "anthropic": 300
+ },
+ "key_agreement_by_kind": {
+  "FACT": "320/320",
+  "UNKNOWN": "64/64",
+  "FIX": "32/32",
+  "RESTATE": "32/32"
+ },
+ "anthropic_keys_by": "a fresh Claude subagent (claude-opus-5-5) that read only the blind key file",
+ "keyer_input": "line text (shuffled, opaque ids) plus the world's fact ids with each fact's value-free question; not the canonical sentences",
+ "rewrite_rounds": {
+  "pre_key_rewrite_rounds": 4,
+  "finish_runs": 3,
+  "finish_runs_refused": 2,
+  "lines_rewritten_by_writer_family": {
+   "openai": 74,
+   "google": 157,
+   "anthropic": 5
+  },
+  "lines_returned_undetermined_by_keys": 0
+ },
+ "external_calls": {
+  "openai": {
+   "codex_exec_calls": 6,
+   "of_which_refused_model_unsupported": 1
+  },
+  "google": {
+   "gemini_cli_calls": 5,
+   "api_requests": 10,
+   "of_which_errored_pro_preview_fallback_to_flash": 5
+  },
+  "anthropic": {
+   "external": 0,
+   "subagent_keyer_runs": 1
+  }
+ },
+ "cost_usd": 0,
+ "cut_check": "173/173 files equal at 10f832721543b636acd79ce739cc596e04eacba0 and helm_now/"
+}

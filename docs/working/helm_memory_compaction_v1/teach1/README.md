@@ -1,6 +1,6 @@
 # TEACH-1 — sealed exam package for HELM memory compaction v1 (2026-10-21 PDT)
 
-**Status: SEALED, NOT RUN, NOT SCORED. 0 USD.** Claim status of every mechanism: `ENGINEERED-NOT-VALIDATED`. Nothing
+**Status: RAN ONCE 2026-10-21 (spec §7.121): verdict `PASS`, status word `INCONCLUSIVE` (U1 failed); see `RUN_RESULT_TEACH1_20261021.md`. 0 USD.** Claim status of every mechanism: `ENGINEERED-NOT-VALIDATED`. Nothing
 licensed. The pre-code `../PREREGISTRATION_MEMORY_COMPACTION_V1.precode.md` (sha256 `7eef0edc…`) is not edited.
 
 **Plainly.** This folder holds the exam that can give memory compaction its first word. It teaches HELM a made-up
