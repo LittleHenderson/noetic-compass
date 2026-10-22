@@ -4,6 +4,13 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-21 PDT - HELM cube oscillation REWORK onto the existing Cube Node Schema and cube store (spec sheet 7.125 follow-up 3): things are cubes, facts are branches with commonality, answers through the three operations, no parser in HELM; 41 tests; 395 HELM tests pass; 0 USD
+
+- Owner's words: "there was already a cube node system built ... before you do this twice"; "6 items on each side, one being analogy or metaphor; the edges are what 2 nodes have in common"; then "Yes: rework v2 onto the existing Cube Node Schema and cube store".
+- Found: Cube_Node_Schema_v0.1.md (Downloads), SPEC_CUBE_STORE_UNIFIED_20261018.md, docs/working/noetic_council/cube_store/. The first v2 build had forked the schema and carried its own reader (negative kept).
+- A-TEACH2-4 efe358ad... before code. Rework (commit 0897312a): thing cubes with six faces (faces 2-6 incl. analogy unknown with an explanation, never invented); facts as contains branches whose commonality is what the two nodes share; corrections as newer branches; answers via LIST_PARTS / FIND_SHARED_PART / REACHED_VIA; the rule reader moved to the exam side; operations.list_parts additive change.
+- FIX FIRST: 25 failed -> 5 -> 41 passed; every HELM suite OFF 395 passed; cube store suite 21/21. Space re-measured: working memory 53,370 B vs 2,450 B never forgetting; store +9,113 B for 5 things; owner's choice still open.
+
 ## 2026-10-21 PDT - HELM cube oscillation BUILD v2 (spec sheet 7.125 follow-up 2): rounds, cubes at the Atlas node and the fading ladder behind HELM_CUBE_OSC (default OFF); 38 tests; 392 HELM tests pass; measured: fading costs space on short lines; 0 USD
 
 - Owner's words: "2.A" (build now) and "Do it here". Build spec frozen first: A-TEACH2-2 ec3d65fc..., A-TEACH2-3 fdf912d2... (before any code).
