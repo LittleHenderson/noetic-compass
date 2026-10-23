@@ -4,6 +4,17 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+- **Noetic lacunarity folded in as a separate object, with one measured reading.** Read the books on the device
+  (manuscript lines 1758-1794 for the five CAS lacunarity metrics and the 0.5/1.5/3.0 bands; lines 741-748 for the
+  lacunarity of silence; CAS PCBA Engineer Chapter 21 for the 40-cell memory board, the ~0.05 charge floor and the
+  never-written vs faded distinction; Appendix G for absence/leakage/inversion). Exact bridge recorded:
+  Λ_CAS = L(b) − 1 when the gliding box covers the whole vector, so the two are one family at different objects and
+  scales. Measured today: the mouth corpus carries tone state ^1 in **11,530/11,530** training rows and
+  **2,097/2,097** dev rows; exposure vector [11530,0,...] gives **Λ = 9.000000**, three times the book's 3.0
+  'extreme' band. Caveat in the note: the tone tag is the conditioning state, not the full content address. Note:
+  docs/working/ctt_lacunarity_v1/NOETIC_LACUNARITY_CTT_DESIGN_v1.md. Status: REAL reading, PROPOSED design,
+  no training and no claim.
+
 ## 2026-10-23 (design) - Lacunarity refined for CTT training: the draft's equation repaired, the corpus and the c45 run measured, nothing trained
 
 - Owner supplied a ChatGPT conversation proposing "lacunarity in gradient descent" and asked whether it can be
@@ -2341,4 +2352,5 @@ warnings. PDFs in docs/whitepapers/pdf/ refreshed.
 - **Gate 2 remains OPEN at `0.38`.** Next: `TKS_672_V3` lock under the motive-repaired
   instrument, then the small-model readout ladder on the frozen corpus under
   `GATE_2_SUCCESSOR_CLOSURE_CONTRACT` — final equivalence decision is the owner's.
+
 
