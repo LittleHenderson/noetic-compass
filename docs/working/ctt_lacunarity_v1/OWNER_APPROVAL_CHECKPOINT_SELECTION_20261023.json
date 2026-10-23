@@ -1,0 +1,16 @@
+{
+  "schema": "checkpoint-selection.owner-approval/1",
+  "given_at_utc": "2026-10-23T21:06:59Z",
+  "owner_words": "I authorise a checkpoint-selection experiment",
+  "how_given": "typed by the owner in the DSH session (2026-10-23), quoted verbatim",
+  "scope": "choose a checkpoint by held-out validation score, then report on a sealed exam; the frozen c60 result is untouched",
+  "selection_split": "mouth_dev.jsonl (2,097 rows) — selection only",
+  "report_split": "mouth_exam.jsonl (1,517 rows) — sealed, never used for selection",
+  "seeds": [
+    "A4-s1",
+    "A4-s2",
+    "A4-s3"
+  ],
+  "cap_usd_new": 0.0,
+  "note": "runs locally on the RTX 4070 as diagnostics; not claim-bearing under the AWS rule until replicated on AWS"
+}
