@@ -4,6 +4,749 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-10-23 (design) - Lacunarity refined for CTT training: the draft's equation repaired, the corpus and the c45 run measured, nothing trained
+
+- Owner supplied a ChatGPT conversation proposing "lacunarity in gradient descent" and asked whether it can be
+  refined for HELM, specifically for training CTTs. Answer: the concept survives, the draft's equation and its object
+  do not, and CTT-1's evidence says the optimiser is not the bottleneck.
+- Corrections recorded: lacunarity needs a field, a space and a box size (gliding-box `L(b) = 1 + Var/E²`); the draft's
+  `α(t) = α₀(1 + λL(t))` is unbounded and unitless; a global multiplier is only a learning-rate change under Adam;
+  redistribution needs per-block scaling; `λ = 0` must reproduce the frozen schedule exactly.
+- Measured today from the c45 artefacts (REAL, not proposed): corpus 227,497 rows, 145 distinct target tokens,
+  top-10 token mass `1,141,428 / 1,741,066 = 0.6556`, entropy `4.9389` bits of max `7.1799`, vocabulary lacunarity
+  `L(8) = 6.143`; A4-s1 reached final training loss `1.8003862351179123e-05` with `987 / 1000` exact training rows;
+  validation minimum `0.00766` at epoch 7 then `0.00815` at epoch 11.
+- Diagnosis of the exam gap: not optimisation. On E-MACHINE-S the translator was called 103 times and offered a
+  reading 1-2 times per seed; the untrained control C2 also scored 106. The lever is the offer/abstain decision and
+  OOD coverage, not the step size.
+- Deliverables in `docs/working/ctt_lacunarity_v1/`: design note (`LACUNARITY_CTT_DESIGN_v1.md`), estimator and
+  bounded schedule (`lacunarity.py`), 14 tests (`test_lacunarity.py`, **14 passed in 0.08s** on the laptop, no torch),
+  corpus measurement script (numbers reproduced), and a preregistration amendment **draft** (not approved, cap
+  2.00 USD, E1 instrumentation free, E2/E3 ≈ 0.6 USD each at c45 prices).
+- Nothing trained, no GPU job, no claim. The amendment needs the owner's signature before any code change or run.
+  Claim status of the design: `PROPOSED`; of the measurements: `MEASURED`; of any gain: `NOT CLAIMED`.
+
+## 2026-10-20 03:58 PDT (ops) - BUG: the picker button did nothing; the route was never mounted — fixed with a lazy webServer injection and re-verified over real HTTP
+
+- Owner report after the 03:43 restart: "I pressed on the paperclip button
+  and nothing is happening." The report was right and my earlier claim that the
+  restart would make the button work was wrong.
+- Diagnosis, in order: the live app (port 54449) served the client bundle
+  correctly — index.html carries `{"id":"dsh-docview","url":"/plugins/dsh-docview/client.js?rev=…"}`
+  — so the button existed. `POST /dsh-docview/pick` answered **405**, i.e. the
+  SPA fallback, so the route did not exist. A throwaway `dsh web --port 0`
+  boot printed the cause verbatim: `[dsh-docview] no webServer service; the
+  picker button route is not registered`. Root cause: `ctx.get('webServer')`
+  runs before the browser carrier service registers, so the guard gave up and
+  the button posted into nothing. The click showed no error because the fetch
+  answered 405, not a connection failure.
+- Fix: `registerPickerRoute` now mounts immediately when the service is already
+  present and otherwise uses `ctx.inject(['webServer'], …)`, a cordis 4.0.1
+  lazy injection, so the route appears when the carrier comes up. `inject` at
+  the plugin level stays `['tools']`, so a headless profile still gets the three
+  document tools.
+- Verified after the fix on a fresh throwaway boot:
+  `[dsh-docview] waiting for the webServer service…` then
+  `[dsh-docview] native file picker route registered at /dsh-docview/pick (deferred)`,
+  and a real `POST http://127.0.0.1:53290/dsh-docview/pick?dir=C:\Users\wakil`
+  answered **HTTP 200** with
+  `{"ok":true,"path":"C:\\Users\\wakil\\.dsh\\docview-cache\\selftest\\sample-report.pdf"}`
+  after the dialog was driven with real keystrokes. Diagnostic instance killed.
+- Separate finding, same report: the three document tools ARE registered. A
+  fresh subagent in this same process called `doc_read` on the sample PDF and
+  returned kind pdf, pages 2, and the page-1 text verbatim — while THIS
+  conversation's tool list still has no `doc_read`. Conclusion: an old session's
+  tool surface does not pick up a plugin that appeared after it was created;
+  a new chat does. Not yet measured: whether a resumed session refreshes its
+  surface on a later app restart.
+
+## 2026-10-20 03:47 PDT (ops) - COMPOSER FILE-PICKER BUTTON added to dsh-docview: one click opens the native Windows Open dialog and drops the real path into the message box
+
+- Ask: "put a button next to the + sign in the text box that opens my file
+  explorer and lets me select a file."
+- Built as a client half on the same plugin (v1.1.0), so no second package:
+  `lib/client.js` is a hand-written `window.__ModuleLoader__.load({id, factory})`
+  bundle exporting `apply`/`inject` (inject: ["slots"]), registering into the
+  `conversation.input.left` list slot as id `docview-pick`, order 40 — the
+  documented seat immediately after the composer's resident chrome (access
+  mode, plan, attach). The button is a paperclip; on click it POSTs to
+  `/dsh-docview/pick`, then writes the returned path into the draft through
+  `inputActions.setDraft`.
+- Host half: `lib/pick-file.ps1` shows System.Windows.Forms.OpenFileDialog under
+  `powershell.exe -STA`, filtered for pdf/docx/svg/png/jpg/webp/gif/bmp/tif/txt/
+  md/csv/json plus all files. Focus bug found and fixed: without an explicit
+  SetForegroundWindow the keystrokes went to the chat box rather than the
+  dialog, so a 350 ms WinForms timer now raises the dialog and attaches thread
+  input. The route is registered only when a `webServer` service exists, so a
+  headless profile keeps the three tools and loses only the button.
+- Verified for real: the dialog appeared on the desktop (confirmed by asking the
+  vision model about a screenshot — "the window in front is the 'Pick a
+  document' file-picker dialog"); closing it returned CANCELLED and the process
+  exited; typing a path and pressing Enter returned `PICKED|<exact path>`; the
+  route test drove the real handler with fake req/res objects and got HTTP 200
+  plus `{"ok":true,"path":"C:\\Users\\wakil\\.dsh\\docview-cache\\selftest\\sample-doc.docx"}`
+  in 10,890 ms; `node test\client.mjs` recreated the ModuleLoader contract, fed
+  a fake slot registry, rendered the button through react-dom/server (markup
+  contains `data-dsh-docview="pick"`), and proved the draft append. Both files
+  pass `node --check`; `dsh --profile web --dump-config` still exits 0.
+- Status: SOURCE COMPLETE AND TESTED OUT OF PROCESS, NOT YET LOADED. Activation
+  needs the app restart the earlier docview install already needed. Not
+  measured: how the button looks in the real composer row, and whether
+  `dsh.client.inject` ordering holds at client boot (declared
+  @deepseek-ai/dsh-client-ui-slots and @deepseek-ai/dsh-client-ui-conversation).
+
+## 2026-10-20 03:19 PDT (ops) - DOCUMENT READER INSTALLED: dsh-docview plugin gives the session PNG/JPG/SVG/PDF/DOCX reading, and an out-of-band way to SEE images
+
+- Why: the built-in `read_image` tool refuses every image here — "model
+  deepseek-v4.1-flash-expires-on-0910 does not declare image input". No
+  installed plugin read PDF, DOCX or SVG at all, and the market packages for
+  those formats (dsh-pdf, dsh-pdf-reader, dsh-office-tools, dsh-image-router)
+  target DSH 0.1.5+/0.2.x while this install runs 0.1.1-rc.2.
+- Built: `C:\Users\wakil\.dsh\local-plugins\dsh-docview\` — one Cordis host
+  plugin registering three tools. `doc_read` extracts text and structure from
+  PDF (page ranges), DOCX (headings, lists, tables, properties), SVG (size,
+  shape counts, every text node in order) and plain text. `doc_render` writes
+  PNG/JPEG: PDF pages at any DPI, SVG through headless Chrome 155, DOCX
+  embedded images, DOCX page layout through Word COM when `layout: true`.
+  `doc_look` renders or prepares the file, sends the image to
+  deepseek-v4-flash-vision-exp out of band, and returns text, with
+  `mode: "ocr"` for verbatim transcription. Backend: Python 3.14 with PyMuPDF,
+  python-docx and Pillow (all already installed on this machine).
+- Wired: dependency plus bundle row added to `%DSH_HOME%\profiles\web\package.json`,
+  a matching importer entry added to `pnpm-lock.yaml`, and a symlink created at
+  `profiles\web\node_modules\dsh-docview`. Backups kept:
+  `package.json.bak-predocview-20261020`, `pnpm-lock.yaml.bak-predocview-20261020`.
+- Verified for real, by calling the shipped tool code: PDF text returned the
+  exact heading "Noetic Compass - Sample Report"; DOCX text returned the table
+  row "NCCS | 91"; SVG node list returned both strings; PDF page rendered to a
+  695x900 PNG; SVG rendered to 600x240 PNG; DOCX converted through Word in
+  59.3 s (opt-in path); vision answers returned the exact heading text and the
+  exact SVG strings. `dsh --profile web --dump-config` exits 0 with the row present.
+- Status: INSTALLED, NOT YET LOADED. This process booted before the row existed,
+  so `doc_read`, `doc_render` and `doc_look` appear only after the app restarts.
+  Not measured yet: scanned PDFs with no text layer beyond the
+  `pages_without_text` flag, and multi-page DOCX layout renders.
+
+## 2026-10-07 PDT - Noetics label agreement, attempt 2 (guide v2.1, plan v2.1): run valid; ^1 LABELABLE, ^2-^9 NOT_LABELABLE; 426 passages labeled by both teams
+
+Owner signature 2026-10-06 8:00 PM Pacific ("SIGNED: label-agreement v2.1,
+guide 2b6617c15102, plan 657413f77f18, as proposed."); owner record written by
+the owner's own paste. Practice tool check on 30 passages: both teams 30/30,
+PRACTICE CHECK: PASS. 440 passages written by gemini-2.5-flash, 13 dropped by
+the forbidden-word check, 427 sealed (SEAL.json sha256 f7fff437...). Team A:
+eleven Claude Sonnet sub-agents, 427/427 labeled, all on the first try. Team B:
+deepseek-chat (replies named deepseek-flash), 426/427 labeled; W266 failed
+three tries and is left out. Run valid; 426 passages analysed. Entry agreement
+E against the signed 0.80 bar: ^1 0.848 (LABELABLE_UNDER_THIS_METHOD); ^2
+0.694, ^3 0.569, ^4 0.389, ^5 0.484, ^6 0.458, ^7 0.396, ^8 0.388, ^9 0.321
+(NOT_LABELABLE_UNDER_THIS_METHOD). Kappa on presence 0.724 to 0.920, all above
+0.60. Same pattern as attempt 1: agreement on which passages hold a Noetic, not
+on the entries. Team A transcripts show 0 checker check-mode runs and 0 checker
+imports; labelers were started with the Agent tool and one fixed wrapper, not a
+workflow script (recorded deviation). Spend: AWS 0; DeepSeek 6,356,893 in /
+189,006 out tokens, at most about 2.13 USD of the 4.00 USD cap; Gemini free
+tier (24 requests; 7 refused 503, 1 refused 429). Option B can now check these
+426 passages under a new, reviewed plan; what follows is the owner's decision.
+Failed approach logged: Claude Code auto mode on the laptop refused both the
+owner-record write and the Gemini writer run from the operator, so the owner ran
+them by paste; a pasted block that ends with "exit" closes the owner's window,
+so later blocks were wrapped in "& { ... }" and stop with "return".
+Report: cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/verdict/VERDICT_REPORT.md
+(VERDICT_REPORT.json sha256 f54fe3c08f672c2975d9541cebef05942aa72331326ba17155444fc45d396dff).
+Backup D:/tksCAS-archive/casalescence_label_agreement_v21_20261007 (110 files,
+three matching checks). Spec sheet section 7.23 and change-log row added in this
+commit.
+## 2026-10-06 PDT - Option B usefulness test: two free practice builds STOP_DO_NOT_LAUNCH; no GPU job; paused by owner 2026-10-07, pending Noetics label trial v2.1 (guide 2b6617c15102, plan 657413f77f18)
+
+Owner order 2026-10-06 4:12 PM Pacific ("SIGNED: option B status table as
+proposed ... run parallel our smartest team of agents"). Development test d1
+on made-up data RAN on one m6i.xlarge: PRECHECK_COMPLETE_SELFTEST_PASS,
+cleanup VERIFIED, charge 0.09 USD (ledger 97.59 -> 97.68 of 250). Plan 1.0
+chain sealed to step 3A: at 12 practice settings 48 role-step candidates, 30
+pass the key check, 16 survive the no-passage check, 16 selected against a
+floor of 36 (plain-fact 20 of 20). Program decision STOP_DO_NOT_LAUNCH. Plan
+1.1 (brief rules, three program-enforced form-check drops, three writer passes,
+lowest-pass-first selection; floors and both solver rules unchanged) was
+reviewed by two separate sub-agents and rebuilt in the sibling folder
+CASALESCENCE_NOETICS_v0_1__PLAN_v1_1, sealed to step 3A: 57 candidates over
+36 pairs, 40 pass the key check, 20 survive, 15 selected (plain-fact 35).
+Program decision STOP_DO_NOT_LAUNCH again. Reading: the ceiling is structural
+(about 36 open pairs, about 50 percent guessability). Spend: AWS 0.09 USD,
+DeepSeek 872 calls (127,467 in / 5,236 out tokens), Gemini free tier, GPU 0.
+Seal step 7 never written, so no status word applies. Nothing deleted. Record:
+cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/OPTION_B_BUILD_STOPS_20261007.json.
+Spec sheet section 7.22 and change-log row added in this commit. Owner decision
+2026-10-06 8:00 PM Pacific: Option B PAUSED, pending Noetics label trial v2.1
+(guide 2b6617c15102, plan 657413f77f18); resumes only when that trial yields
+more labeled passages. Recorded in the stop record's owner_decision block.
+
+## 2026-10-07 PDT - HELM R8B step (a) RAN (job c17): verdict ENDPOINT_CHECK_FAILURE_C3 (replay and restart reproduced; one protected panel answer lost)
+
+Owner GO on decisions 1-8 (02:11Z) and two signed lines (attempt 1 06:46Z, attempt 2
+14:01Z). Package HELM_ENDPOINT_CHECK_20261007_STEPA built by a Claude team (3 reviewers,
+fixer, verifier), reviewed by Codex three times (one real reading bug found and fixed:
+a C4-only failure would have read INVALID). Attempt 1 (c16) stopped at its test gate on
+two test-fixture defects (no verdict, 0.09 USD). Attempt 2 (c17, seal STEPAC, prereg
+49dc69bc...): tests 34/34; part 1 fresh-process replay of arm M reproduced all 129 R8B
+states and the endpoint bytes; part 2 restart at 32/64/102 reproduced the uninterrupted
+run; part 3 endpoint check v0.1 on the exposed 32-case panel: C1 true (target loss
+36.18 -> 0.083), C2 true (panel mean 7.69 -> 7.13), C3 FALSE (1 of 5 protected answers
+lost, case-3c3f2c87..., LEG_0 -> LEG_3), C4 true. Verdict ENDPOINT_CHECK_FAILURE_C3,
+class FAILURE, final; not a pass; private; no rescue run. Forecast (C2 the hard one) was
+wrong. Charge 0.18 USD; ledger 98.50 -> 98.68 of 250. Read: research/
+HELM_R8B_RESULT_READ_20261007/STEP_A_RESULT_READ_20261007.md. Lesson: run the AWS-only
+tests in a cents-only tests job before the paid attempt.
+
+## 2026-10-06 PDT - HELM R8B 128-step matched teaching RAN (job c06): verdict EPISODE_CLEAN_QUALIFICATION_REQUIRED (not a pass)
+
+One m6i.xlarge in us-west-2, 6:42 PM to 7:02 PM Pacific, owner record
+OWNER_APPROVAL_R8B_MATCHED128_OPTION_A_20261007T005811Z.md (32 of 32 hashes
+named). Tests 74/74 PASS. Supervisor exit 0; post-run source check 560 members
+unchanged. Program verdict (matched128_reading.py): EPISODE_CLEAN_QUALIFICATION_REQUIRED,
+valid, no sub-code. Arm M: 128 accepted steps, first correct target at state 102,
+still correct at 128; step-128 endpoint model digest cb3da314...52df3. Bg and Cg
+(guarded baselines without the mechanism) refused at step 3; X5 refused at 13
+(reproduces R5); B4 (wrong-target sham) ran 128 steps and never corrected the
+real target; M states 0-64 reproduced R8 byte for byte. Retention adapter on the
+real rows: M RETAINED (18/18 protected answers kept, max loss rise 0.000094
+against 0.005, min margin 0.9054); 54 of 110 unprotected TRAIN cases got worse
+(largest rise 6.042). Not established: learning, generalization, qualification,
+HELM advantage, unseen tasks. Nothing committed, promoted or qualified.
+Cost: list 0.063 USD, conservative charge 0.16; ledger 97.68 -> 97.84 of 250;
+bill pending. Cleanup VERIFIED; slot released on the agent bus (claude-0057).
+Read folder: cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/
+research/HELM_R8B_RESULT_READ_20261007/. Next step (PLAN_AFTER_R8B step a)
+waits on owner decisions 1-8; a proposed-default list was posted to the owner.
+
+## 2026-10-05 PDT - HELM R8B package: Codex blocker fixed, re-frozen, Codex-cleared; launch still ON HOLD
+
+Nothing ran on AWS. Codex (the owner's independent, non-Claude reviewer) reviewed
+the first freeze (PREREGISTRATION_R8B.md sha256 71353115...) and reported
+BLOCKER_FOUND with two blockers: (1) no owner record names the package hashes;
+(2) two reachable verdict codes held the word PASS while the preregistration
+said the program can never emit a pass. Fix for (2): the two codes are now
+EPISODE_CLEAN_NOT_TARGET_SPECIFIC and EPISODE_CLEAN_QUALIFICATION_REQUIRED; test
+18 was extended; three test names left the PROTECTED list of
+check_diff_from_r8.py (21 -> 18, disclosed). No guard, ladder value, loss
+allowance, mechanism constant, stopping rule, verdict order or verdict condition
+changed. Three wording-only corrections followed, each found by a strict Claude
+reader: sentences that said the verdict rule "is R8's" (not literally true);
+a sentence that claimed a full list of kept names (not full); one wrong
+character in a short hash (dbad -> bbad). FAILED/REJECTED checks along the way
+are kept on record: the fix verifier REJECTED the rename fix (1 major, wording);
+the literal-truth reader REJECTED the first correction (1 major) and the second
+(1 major, the wrong character).
+FINAL FREEZE: PREREGISTRATION_R8B.md sha256
+cfe30bcc07985530f65e822f7103fca00f6c8080e0061bb5e8198315d7d0954f. 559 files.
+74 tests: the 54 standard-library tests ran on the final bytes (Ran 54 tests in
+201.227s, OK); the 20 real-runtime tests have never run. check_diff_from_r8.py
+exit 0. check_owner_record.py on the one existing owner record: exit 1, 0 of 32
+hashes named (the correct refusal).
+Codex re-checked three times; on the final bytes its verdict is
+STILL_CLEARED_NO_NEW_BLOCKER, no major, no minor, and "fit for the owner to
+sign if BD-3 is kept" (reports under helm_operator_preparation/
+INDEPENDENT_AUDIT_R7_R8_20261005/codex_r8b_recheck, _recheck2, _recheck3;
+archived on D:). Codex did not run the model, the driver or the 20 runtime tests.
+STILL OPEN, only the owner can clear it: the stopping-rule choice (A keep
+exactly 128 steps as built / B stop at the first right answer / C both) and an
+owner record that names the 32 hashes. An operator-written approval sheet for
+option A is at cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE
+MACHINE/research/R8B_APPROVAL_SHEET_OPTION_A_cfe30bcc_OPERATOR_WRITTEN_NOT_A_RECORD.md;
+it is not an owner record. Claim status of R8B: nothing claimed; NOT RUN.
+
+## 2026-10-05 PDT - HELM R8B 128-step comparison package built (source only); launch ON HOLD
+
+Package cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/
+research/HELM_NATIVE_MATCHED_TEACH128_20261005_R8B. NOT RUN. Built by Claude
+sub-agents as a declared diff from the run-proven R8 code (149 declared
+regions; no guard, ladder value, loss allowance or mechanism constant
+changed; the R8 solver is used byte-identical). Only procedure change: the
+allowance is 128 accepted steps and 6.4 units for every guarded method. Adds a
+cheaper no-mechanism baseline (guarded target-only steps), an exact-replay
+gate against R8's first 64 states, and a report on the 110 unprotected TRAIN
+cases. Codex's ten requirements from its R7/R8 audit are built in. Review: 0
+blockers and 0 majors inside the package; 74 tests (54 standard-library ones
+pass on the laptop; 20 real-runtime ones are AWS-only and have not run).
+PREREGISTRATION_R8B.md sha256 71353115b3a1....
+
+Launch gate FAILS as of this entry: the package's own rule needs an owner
+record that names the preregistration sha256 and the 31 hashes of its section
+24 (program matched128/check_owner_record.py: 0 of 32 named). The owner's
+typed YES predates the package and names no hash. The job-config tool now
+refuses without such a record. Stated before any run: the 128 allowance was
+chosen after seeing the report-only first right answer at step 102, so this is
+not an outcome-blind replication; and the mechanism's step direction was
+shrinking in R8's probe, so under the kept rule (exactly 128 accepted steps or
+a terminal refusal) the run may read FAILURE by refusal after the target is
+already right. Whether to keep that rule is an owner decision.
+
+## 2026-10-05 PDT - ASOM Stage-1 measurement ran once: hard gates PASS, stop read FUTILE_VS_FREE_GATE_READOUT (AWS CPU)
+
+Job helm-claude-asom-s1-collect-20261005-c07 on an m6i.xlarge (406 s,
+conservative charge USD 0.09, cleanup VERIFIED). Owner approval typed
+2026-10-05. The single registered attempt on the 16 fresh reference worlds of
+package HELM_NATIVE_ASOM_REFERENCE_20261004_S1 (sealed zip sha256 223c4ec5...).
+Measurement only: no training, no model change. Tests 125 run, 0 skipped.
+Collection COMPLETE: 256 of 256 forwards, 16 of 16 worlds; pilot runtime and
+bridge PASS; integrity INT1-INT6 PASS; two independent scorers agree 16/16;
+0 ambiguous or unmeasurable; fixtures 8/8 and 6/6; 16 of 16 worlds rise with
+the drive. Program verdict: hard_gates PASS. Stop recommendation fired:
+FUTILE_VS_FREE_GATE_READOUT. Claims asom_classification, four_state and
+useful_adjustment all stay NOT LICENSED. Report: Documents/Codex/2026-10-01/
+task-2/helm_operator_preparation/RUN_RESULT_CLAUDE_ASOM_C07.md. Archive:
+D:\tksCAS-archive\helm_asom_s1_collect_c07_20261005\.
+
+Kept so it is not re-run or re-claimed: (1) every one of the 16 worlds is
+labelled SATURATION by the reference key AND by a plain read of the gate value
+(16 of 16 match), so the reference-label machinery adds nothing over the free
+read on this model and query; (2) no CUTOFF and no ACTIVE world occurred, and
+32 of 32 pilot gates equal 1, so the four-state reading could NOT be tested
+here; (3) the tools themselves work on real data (knob changes only query 0,
+drive-off case measurable, exact restore); (4) the designer's written
+forecast said exactly this before the run. Whether to stop this ASOM line is
+an owner decision. Same-family build and review; no outside audit of ASOM.
+
+## 2026-10-05 PDT - HELM R8 matched teaching test ran once: FAILURE at the frozen budget (AWS CPU)
+
+One attempt of job helm-claude-r8-matched-20261005-c05 on an m6i.xlarge (897 s,
+conservative charge USD 0.13, cleanup VERIFIED). Package
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/
+HELM_NATIVE_MATCHED_TEACH_20261004_R8 (sealed zip sha256 4935309e...). TRAIN
+only, R5's unchanged episode rule (exactly 64 accepted steps, 3.2 units),
+nothing committed, no qualification or held-out data, job cannot emit a pass.
+Tests 64 run, 0 skipped, 0 failures, 0 errors. Program-emitted verdict, valid:
+FAILURE, M_EPISODE_DID_NOT_PASS, sub-code FAILURE_M_NO_T_AT_64. The written
+forecast (no flip inside the budget) held. A failed gate is a failure; no
+rescue run. Report: Documents/Codex/2026-10-01/task-2/
+helm_operator_preparation/RUN_RESULT_CLAUDE_R8_C05.md. Archive:
+D:\tksCAS-archive\helm_r8_matched_c05_20261005\.
+
+Kept so it is not re-derived or re-run unchanged: (1) the new loop reproduces
+R5's saved episode exactly (12 accepted steps, refusal at step 13); (2) the
+mechanism (R5 projection + margin rows for anchors 4/16/12 + restoration rows)
+took all 64 steps at full scale with every guard true at every accepted state;
+target loss 36.1817 -> 9.9236, still wrong; all 18 protected answers stayed
+correct and inside the 0.005 loss allowance (two of them ended with a higher
+loss, largest rise 0.000522); TRAIN correct 18 -> 21; 59 of the 110
+unprotected TRAIN cases ended with a higher loss (largest rise 6.88);
+(3) same-objective guarded rehearsal was refused at step 3 after two steps at
+1/32 and 1/64, as in the historical R4 run; the cheaper guarded target-only
+baseline was NOT run in R8; (4) the wrong-target control never corrected the
+real target but lowered its loss 36.18 -> 22.90, which is 50.59% of the
+mechanism's drop, so about half of the progress is not target-specific;
+(5) REPORT-ONLY probe, not an acceptance result: on one continuation from the
+reloaded step-64 state the same guarded loop first has the target correct at
+accepted step 102 (5.1 units), registered guards intact. This does not show
+that the budget is the only obstacle. Rerunning R8 unchanged is expected to
+give the same FAILURE (deterministic on the same machine type; not re-run). A larger budget is a procedure change for a new preregistered
+run and is an owner decision (the owner approved one 128-step comparison on
+2026-10-05; it is chosen after seeing step 102, so it is not outcome-blind).
+
+Independent audit 2026-10-05: Codex (not a Claude model; the owner's choice of
+reviewer) re-derived the R7 and R8 results from the raw logs with its own
+code: CONFIRMED_WITH_CORRECTIONS. It corrected four builder statements (a
+loss claim about the protected answers, the "budget is the obstacle" wording,
+the unqualified "no-mechanism baseline", and "differ only in direction"); the
+text above carries the corrections. Report: Documents/Codex/2026-10-01/task-2/
+helm_operator_preparation/INDEPENDENT_AUDIT_R7_R8_20261005/codex/
+CODEX_AUDIT_R7_R8_20261005.md.
+
+## 2026-10-04 PDT - ASOM Stage-1 reference package: software tests passed on AWS (tests only)
+
+Job helm-claude-asom-tests-20261005-c04 on an m6i.xlarge (339 s, conservative
+charge USD 0.08, cleanup VERIFIED). Package cas_only_reasoner/FOR CODEX TO
+BUILD CAS NATIVE COGNITIVE MACHINE/research/
+HELM_NATIVE_ASOM_REFERENCE_20261004_S1 (sealed zip sha256 223c4ec5...).
+125 tests run, 0 skipped, 0 failures, 0 errors; 10 of them on the real model
+(about 39 forwards on the two software fixture worlds). First real-model
+facts: the local drive knob at level 1 equals "knob off" bit for bit; other
+drive levels change only query 0's rows; restore is exact; the small
+end-to-end collection on fixture worlds works. This is a software result
+only. The Stage-1 collection on the 16 reference worlds has NOT run. No ASOM
+claim is licensed. Report: Documents/Codex/2026-10-01/task-2/
+helm_operator_preparation/RUN_RESULT_CLAUDE_ASOM_C04.md.
+
+## 2026-10-04 PDT - HELM R7 bracket diagnostic ran once (AWS CPU, Claude builder and operator)
+
+One attempt of job helm-claude-r7-bracket-20261004-c03 on an m6i.xlarge (671 s,
+conservative charge USD 0.11, cleanup VERIFIED). Package
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/
+HELM_NATIVE_BRACKET_20261004_R7 (sealed zip sha256 a0cc04ce...). TRAIN-only
+diagnostic from the original checkpoint on the one target case; nothing
+committed; no qualification or held-out data read. Tests 71 run, 0 skipped,
+0 failures, 0 errors. Program-emitted reading, valid: R-B
+(REACHABLE_NOT_PROTECTED) and H-OBSTACLE. Meaning: unprotected gradient steps
+make the target answer correct from step 41 (target-only) or 42 (R5 objective)
+of 64, but they break the protected answers at once (loss guard at step 1,
+anchor 4 wrong at step 3). R5's protected direction keeps the protected
+answers nearly unchanged but had not corrected the target after 55 full steps
+(target loss 36.1817 -> 7.6922) and its solver then refused
+(DIRECTION_SOLVER_NONCONVERGED at step 56). This is not a learning or teaching
+result. Report: Documents/Codex/2026-10-01/task-2/helm_operator_preparation/
+RUN_RESULT_CLAUDE_R7_C03.md. Archive: D:\tksCAS-archive\
+helm_r7_bracket_c03_20261004\.
+
+Kept so it is not re-derived: (1) the three trainable tensors CAN represent the
+correct answer inside the 3.2-unit budget, so capacity is not the obstacle;
+(2) R5's protected direction had not corrected the target after 55 full steps;
+a straight-line guess (not a measurement) puts the flip near step 75, past the
+64-step budget; raising the budget is an owner decision; (3) a terminated EC2 host disappears from listings after about
+an hour, so an independent cleanup check must run within minutes of
+termination; (4) reusable plan-driven AWS job kit, now run-proven:
+helm_operator_preparation/claude_jobkit. Next under the rule written down
+before the run: R8 matched teaching test (in build; not run).
+
+## 2026-10-05 PDT - Noetic role labels: two label teams agree on passages, not on words (FAIL for ^2-^9)
+
+Follow-on to the CASalescence pilot (owner directive R2, approved 2026-10-04).
+Before building a reader that finds which words occupy each Noetic, tested
+whether two independent label teams (Claude Sonnet sub-agents; deepseek-chat)
+can produce the same labels from the canonical definitions. 428 sealed
+passages written by gemini-2.5-flash from a brief with no CAS words. Criterion
+fixed before the run: strict agreement >= 0.80 and kappa >= 0.60 per Noetic.
+Result: ^1 Mind PASS (365/373 = 0.979). ^2-^9 FAIL on strict agreement (0.430
+to 0.723); kappa on presence 0.681 to 0.953, above its bar for all nine. The
+teams agree which passages contain a Noetic and not which words occupy it. No
+word-level answer key exists yet for ^2-^9. Spec sheet section 7.21.
+
+Failed approaches, kept so they are not retried:
+- Measuring agreement over all passages. Passages where neither team marks a
+  Noetic dominate and make any labeling look good (practice round 2 read
+  0.967 on that measure and 0.400 to 0.571 on cases only). An outside reviewer
+  (deepseek-reasoner) rejected the plan for this; count cases only.
+- Rerunning the pilot's help-to-B comparison with only the scorer fixed. In
+  that package the Cause/Effect label has no bearing on the right answer
+  (task_contract.solve ignores focus; the 8 benefit tasks are 4 problems asked
+  twice), so the guidance could not help by design. Check that guidance is
+  relevant to the answer before pricing any benefit run.
+- Quoting 'as short as possible' with no rule for which mention to quote. Two
+  teams name the same thing with different stretches of text.
+
+Evidence: cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/verdict/VERDICT_REPORT.md
+(program report sha256 52100ec2ae10e9b6b6535bdca1accd89270c797f5f6de88ae4b755557e7f3f33).
+No AWS. No repository code changed outside that folder.
+
+## 2026-10-04 PDT - CASalescence small v0.2 pilot ran once (AWS GPU, Claude operator)
+
+One attempt of job casalescence-small-v02-20261004-op11 on a g5.2xlarge, sealed
+package manifest df821cf4..., 236 model calls. Reader screen passed its frozen
+thresholds: 15/16 (7/8 and 8/8 by class; text control 8/16). The benefit
+comparison could not rank the arms: model B scored 0/8 in all nine arms on the
+benefit items and 0/8 on the ancillary items (144 zeros); program decision
+INCONCLUSIVE; recorded as VACUOUS in the spec sheet (new section 7.20). Cause,
+described not rescored: 124/144 outputs were JSON inside a Markdown code fence,
+which the frozen scorer counts as malformed. No benefit claim, no harm claim.
+The 28 packaged software tests passed 28/28 on a CPU probe and again as the
+GPU gate.
+
+Failed approach, kept so it is not retried: the prepared op11 launcher cannot
+run on ami-0dddfa1ffa6b87af7. It requires transformers 4.57.6, tokenizers,
+safetensors and huggingface-hub preinstalled (all four are absent) and forbids
+installs; its guest sends a Content-Type header on uploads to links signed
+without one (S3 would answer 403); its watchdog terminates the host after one
+failed API call. The derived launcher (D:\tksCAS-runs\
+controller_cas_small_op11_claude_c1, C1_AMENDMENT.md) installs the package's
+nine pinned requirements in an isolated environment plus one path line for the
+image's torch. Do not rerun this package unchanged: the floor comes from the
+answer format, so a rerun would give the same zeros.
+
+Evidence: C:\Users\wakil\Documents\Codex\2026-10-01\task-2\
+helm_operator_preparation\RUN_RESULT_CAS_OP11_CLAUDE.md; archive
+D:\tksCAS-archive\cas_small_op11_claude_20261004 (deliverable sha256
+dfd6ff53b40ea450a7894610f99a002ff3cb9bca8446794e4bbfddb3a4c3019b). Estimated
+cost about USD 3.0 of the USD 8 scope; bill pending. No repository code changed.
+
+## 2026-09-16 UTC - Successor source packages verified
+
+Both build-only archives from source 12f25d301a0dfe9671929fa25b87bf580e71a177
+passed extracted-package rehearsal and an independent byte/hash readback.
+Complementary: 118 pure tests, nine compiled courses, 68 payload members plus
+manifest. Perspective: 36 pure tests, 86 payload members plus manifest, runtime
+source/config identities checked. Both disabled dispatch paths stop before
+neural execution. Statuses are COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED and
+PERSPECTIVE_RESONANCE_READY_NEURAL_UNTESTED. Future execution requests remain
+unsigned; no successor GPU job or reservation was made. Empirical benefit and
+full GPU delivery remain untested; unavailable native flow/calibration and
+disabled adaptive control are unchanged. Evidence: inner research/
+CAS_META_2_COMPOSITION/records/successor_integration_20260916/OUTCOME.md and
+package_verification.json. No accepted-model or CAS Harness gate change.
+
+## 2026-09-16 UTC - Complementary and perspective source builds frozen
+
+Implemented opt-in CAS_COMPLEMENTARY_TEACHING_001 and
+CAS_PERSPECTIVE_RESONANCE_001 compilers, real CUDA worker bindings, strict
+owner/package-bound launch adapters, evidence contracts, held-out analysis,
+checkpoint/resume handling and unsigned $7-per-job execution requests. Each
+complementary course has 1,152 presentations, 160 updates and 4,320 actual
+training core calls; nine matched courses compare ALT, MIXED and WHOLE.
+Perspective reuses the frozen ALT schedule with two conditions and three paired
+course-order seeds, adding no teaching slots. All courses begin from one
+chronologically selected retained student, not independent weight draws.
+
+Fifteen archived source packages establish conservative historical exclusions.
+Thirty unused graph topologies supply 90 final application questions, with six
+separate development families. The 8-10-node final structures are larger than
+the 3-4-node CFC teaching structures; size and structure both change. Earlier
+skill retention covers six-face recognition, not all capability retention.
+
+The complementary integration passes 118 pure tests (29 new); perspective
+passes 36 pure tests. Tokenizer checks cover every course and audit. No successor
+neural or provider execution occurred. Native routing telemetry and an approved
+intervention port are unavailable in this registered student, explicitly recorded
+as unavailable. Optional calibration and adaptive control remain disabled.
+Committed-source package verification is the next software gate; empirical
+benefit, numerical behavior and full runtime delivery remain unmeasured.
+
+Evidence: inner research/CAS_META_2_COMPOSITION/records/
+complementary_teaching_001/preparation_20260916/DESIGN.md and TASK_BINDINGS.json;
+perspective_resonance_001/DESIGN_TASK_BINDINGS.md and prepared/verification.json.
+This research source milestone changes no accepted model or CAS Harness gate.
+
+## 2026-09-16 UTC - Retained-checkpoint contrast diagnosis delivered
+
+The owner explicitly approved continuation. One AWS g7.2xlarge diagnostic,
+job cas-meta2-graph6contrast-20260916052513-7bf38e64, ran frozen implementation
+fb4bb4a297d6c5a9268bd96d98eb983d934ef4f5. All six saved practice scores and
+checkpoint parameter identities reproduced; zero optimizer updates occurred.
+Raw-row recount: original 109/109, consistently renamed 47/109, reordered
+109/109, rewired 3/32. All 192 LIST_PARTS option-order permutations remained
+correct. These are conditional retrospective readings, not a new untouched
+transfer result or a causal finding about length bias. RDCJT remains NOT_MET,
+0 of 3 positive; no further recurrent-depth seed was run.
+
+The exact source package passed 53 pure checks and a non-neural unpack/import
+rehearsal. Seven previously blocked legacy launcher suites now pass 126 tests
+and 129 subtests after reviewed static budget-hash pins were updated. No legacy
+paid-job authority was expanded. The canonical ledger is revision 73: cap
+$5,000.00, reserved $424.00, unreserved $4,576.00. Reservation is not billing.
+
+Both named RDCJT evidence buckets now have verified seven-day abort rules for
+incomplete multipart uploads, with no completed-object expiration. All object
+inventories are unchanged. The pre-existing stopped g6e.xlarge and 300 GiB disk
+remain allocated: contents/recoverability are unproven. No invoice was queried.
+
+Evidence: inner research/CAS_META_2_COMPOSITION/records/graph6_contrast_001/
+RESULT.md, RECOUNT.json and the final lifecycle receipt; records/
+rdcjt_handoff_20260916/RETENTION_APPLIED.json; records/publication_20260916/
+LEGACY_IMPORT_REPAIR.md. Successor profiles remain build-only; this entry
+changes no CAS Harness acceptance or production gate.
+
+## 2026-09-16 UTC - RDCJT negative result verified; handoff and non-neural repairs
+
+CAS_RDCJT_001's three distinct seeds give R8-minus-R1 differences -16, -1,
+and -11 (117->101, 105->104, 113->102 correct out of 216). The declared
+criterion is NOT_MET: 0 of 3 positive. All three earlier September 12 intents
+used seed 20260912; the first seed's rescued measurement remains separate
+from its failed original lifecycle receipt. No further recurrent-depth seeds
+are warranted by this completed criterion.
+
+Follow-up in the meta1 worktree preserves eight diagnostic scripts and the
+prior commit message with byte hashes, and adds a portable no-model verifier.
+The budget head must now match its latest history record before reserving;
+two regressions prove mismatches fail before writes. A rescued result blocks
+seed reuse without marking the parent completed. The contrast probe now
+re-renders changed graphs, avoids stale training-cache IDs, compares renamed
+answers semantically, and records option-slot/length diagnostics. It is still
+NOT_RUN on retained neural checkpoints. Human money-path review remains OPEN.
+
+The 96-family face corpus has six structures. A wider existing generator has
+92 exact structures, with 47 potential candidates after conservative exclusions;
+full exposure custody and compatible teaching scope remain unverified. The
+complementary and perspective directives remain build-only and unimplemented,
+not ready labels. Neither a learning advantage nor CNCM/production readiness
+is established. Seven inherited legacy test imports remain blocked by old
+budget-source pins; full-suite success is not claimed.
+
+Canonical ledger remains revision 72, cap $5000.00, reserved $417.00,
+unreserved $4583.00, with all ledger/history bytes unchanged. A live read-only
+AWS check at 2026-09-16T04:56:00Z found no running/pending instances in
+us-west-2; the stopped g6e.xlarge and attached 300 GiB gp3 volume remain.
+The two evidence buckets have 19 objects each and no lifecycle policies.
+No provider mutation, paid run, neural computation, or invoice check occurred.
+
+Evidence: meta1 inner research/CAS_META_2_COMPOSITION/records/
+rdcjt_handoff_20260916/HANDOFF_STATUS.md, BUDGET_REVIEW.md,
+post_fix_verification.json, final_pure_tests.xml; structural_supply_20260916/
+post_fix/REPORT.md and EXPOSURE_BINDINGS.md. This addendum records research
+and software checks; it changes no CAS Harness acceptance/production gate.
+
+## 2026-09-09 - The Component Companion: a new book, and audits that can fail
+
+Two books changed today. Full detail in `book/CAS_Component_Companion/CHANGELOG.md` and
+`book/CAS_PCBA_Engineer/CHANGELOG.md`.
+
+**A new standalone book.** *The Component Companion* — the illustrated electrical symbols mapped
+to named cognitive roles — is published as its own 58-page 6×9 guide
+(`book/CAS_Component_Companion/`), with its own front matter, contents, cover, and a 56-card
+printable deck. It spent one draft as Appendix J inside *CAS PCBA Engineer*, which was the wrong
+shape: a reference you keep open beside the main volume is a book. The main volume is now 781
+pages without it.
+
+**The interesting part is what the new checks caught.** The electrical drawings had real defects
+that had passed every existing check: two of the bridge rectifier's four diodes were reversed
+(the "bridge" shorted its own AC inputs on the positive half-cycle), the current mirror was wired
+with a base–emitter short and a floating base, every arrowhead in all 17 figures stopped 0.410 mm
+short of its target, and six of the ten schematics had wires ending on bare canvas — including one
+where the result was tapped from a multiplexer's *select* pin while the real output dangled.
+
+**Method, because it generalises beyond this book.** The previous connectivity check matched
+source strings, so it could only catch a defect somebody had already written down; it reported
+`PASS` while all of the above were present. The replacements read the **compiled PDF**: each
+figure is rebuilt with three magenta calibration dots, the TikZ-to-PDF transform is recovered from
+them, and real geometry is measured. Three audits now run — wire endpoints reaching no other ink,
+per-glyph electrical invariants (bridge polarity *derived* from the declared node roles, not
+compared to a literal), and a source regression lock — and `test_plate_negative.py` reintroduces
+each historical defect and requires the matching audit to report it. An audit that cannot fail
+proves nothing, so that last script is the one that makes the other three worth running.
+
+**Two false claims in a changelog were found and are now measured instead.** The printed index was
+missing from the main volume (zero `\index{}` marks; the index step was never in the build path),
+and "0 margin violations" had no script behind it. Measured on the rebuilt interior, the gutter was
+**0.513 in** where the layout promises 0.9375 in, because sentence-length table cells sat in
+non-wrapping columns and pushed tables into the spine. After the column fixes it is **0.900 in**
+(KDP requires 0.875 in at this page count). `verify_print_margins.py` measures the finished PDF per
+page, with the gutter side chosen by page parity. A new `book/covers/verify_cover.py` does the same
+for the cover wraps: text collisions, barcode-zone intrusion, trim overflow, and KDP's rule that a
+spine under 100 pages carries no type.
+
+**One source of truth where two books could have drifted.** The companion copies the main volume's
+`figures_preamble.tex` at build time and runs its `patch_overflows.py` against its own `body.tex`,
+so the symbol library and the layout passes have exactly one definition each. The cover builder now
+reads each book's page count from its built interior rather than a literal — it had been
+hard-coding 743 pages while the published paperback was 783.
+
+**Claim states.** The mappings are labelled design analogies, not measurements - no number on a
+plate is a human, biological, or model measurement, and no plate is validated against IEC 60617 or
+IEEE 91 text. The audits prove the drawings are electrically themselves and that every wire lands
+on something. They cannot tell you a mapping is wise.
+
+No test suite in this repository covers `book/`; the two books' own suites (listed in their
+`build/BUILD_README.md`) are the verification for this change, and both pass in full.
+
+## 2026-09-09 - The Component Companion v1.1 and v1.2: the symbols read as a person, not a board
+
+Two corrections to the companion guide, both from the same reader, recorded here because the framing
+change is the transferable part. Full detail in `book/CAS_Component_Companion/CHANGELOG.md`. The
+third and latest revision — one expression, many boards — is the entry above.
+
+**The correction.** v1.0 of the companion guide taught the component library and treated human
+experience as an aside — hardware first, with the cognitive reading attached. That is backwards for
+a book whose entire purpose is the mapping, and it is what a reader noticed: *this is explanations
+of human mental, emotional, physical and spiritual experience, not hardware jargon gone wild.* The
+guide is now **166 pages** and opens with the human claim.
+
+**The spine of the revision.** The four Registers of CAS v7.7 — `|A` Analytical, `|f` Affective,
+`|E` Embodied, `|T` Transcendent — *are* the mental / emotional / physical / spiritual axis, in the
+framework's own terms. That identification was always available in Clarification 8 and had never
+been used as the organising principle of a book. Every one of the 42 component entries now states
+all four registers on the page, next to its symbol, rather than asserting the claim once in a
+preface.
+
+**Two languages, not one.** A further point from the same reader, and the more subtle one: CAS
+notation and the PCBA symbols **enforce each other but are not translations of each other.** They
+overlap where both can state the same thing, and each holds expressions the other cannot. The
+notation carries admissibility relations, the involution pairs, the open simplex, the
+`|⟨…⟩`/`+`/`×` distinction and recipe arithmetic. The drawing carries ordering, isolation,
+protection placement, multiplicity at a glance and the reference. Chapter 2 works a single example
+both ways to show the enforcement running in both directions.
+
+**Breadth.** Nine case studies, each read in all four registers: grief, craving, panic, a recurring
+argument, a trauma trigger (where `^8` associative triggering is carefully separated from reasoning
+— the framework's most common error, and the one that produces advice that helps nobody), skill
+acquisition, caregiving steadiness carried by the `|T` rail, burnout as a supply fault, and
+**social engineering**, worked both as a circuit and as an expression. Chapter 19 maps a further
+thirteen domains — love, fear, anger, habit, learning, purpose, manipulation and propaganda,
+institutions, teaching, self-knowledge — to the parts that do the work.
+
+**Method note worth keeping.** The repeated material is *generated*, not written 42 times by hand:
+`add_register_blocks.py`, `add_circuit_lives.py` and `retarget_cards.py` inject the four-register
+blocks, the schematic readings and the card copy from data tables. A claim made 42 times by a
+script cannot drift out of alignment with itself, and a check (`verify_deliverables.py`, 39
+assertions) fails if any entry loses its registers.
+
+**Verification.** The drawings did not change — every plate and schematic is byte-identical to
+v1.0, which passed the geometry and symbol audits — so the electrical freeze holds. Re-run: guide
+166 pages with 0 errors, 0 overfull boxes and 0 missing glyphs; deck 56 cards on 7 sheets; gutter
+0.9003 in; cover regenerated at the 166-page spine (0.3738 in, now thick enough for spine type);
+39/39 cross-artifact checks pass.
+
+## 2026-09-09 - The Component Companion v1.2: the notation reports, the board commits
+
+A second correction to the same guide, from the same reader, and it is the sharper of the two.
+Full detail in `book/CAS_Component_Companion/CHANGELOG.md`.
+
+**The distinction.** CAS notation and CAS PCBA are not two spellings of one statement. The notation
+**reports**: an expression states what a state is, and it is true or false about the world. The
+schematic **commits**: a board states what the architect intends to happen, and every symbol on it
+was placed and every parameter chosen. `sat=0.8` is not a measurement — it is a decision about how
+high the output may go. The notation has nowhere to put intent; the board is nothing but intent.
+**CAS PCBA is how you write down how the notation is being used, and what effect the designer
+intends.**
+
+Three consequences now written into the guide:
+
+- **The three badges are statements of claim strength.** ISO: the correspondence is claimed as
+  structural. ENG: the designer is stipulating and the number is theirs. PED: nothing quantitative
+  is claimed. A hybrid badge is not a nuance — it is a designer declining to state the strength of
+  their own claim.
+- **Guardrails are the operating envelope.** *Where it breaks* is the absolute-maximum section of a
+  datasheet, not hedging. A datasheet without one is not a more confident datasheet.
+- **Whose board are you running?** Some of a person's circuit they designed; much of it they did
+  not. An inherited rule is a component somebody else placed. A fuse whose trigger condition was
+  named by somebody else will not fire when it is needed. You can run a board designed by a person
+  who is not you, for a purpose that was not yours — and it will run perfectly, which is what makes
+  it hard to notice.
+
+**Also in this revision:** nine case studies read in all four registers (grief, craving, panic, a
+recurring argument, a trauma trigger, skill acquisition, caregiving, burnout, and social
+engineering); Chapter 2 on the two languages and their mutual enforcement; and a thirteen-domain map
+in Chapter 19 including a third closing warning — a map is not a design.
+
+**Verification.** Guide 170 pages, 0 errors, 0 overfull boxes, 0 missing glyphs; gutter 0.9003 in;
+deck 56 cards on 7 US-Letter sheets; cover regenerated at the 170-page spine; 40/40 cross-artifact
+checks pass. The drawings are unchanged from the audited v1.0 set, so the electrical freeze holds.
+
+## 2026-09-09 - The Component Companion v1.3: one expression, many boards
+
+The end of the chain, and the most hopeful claim in the guide. Full detail in
+`book/CAS_Component_Companion/CHANGELOG.md`.
+
+**Two completely different boards can implement the same expression and produce outcomes with almost
+nothing in common.** If the notation reports and the board commits, an identical expression admits
+radically different designs — and two people with the same Noetic, Domain, Drive and Register can
+live completely different versions of the same event.
+
+**The expression fixes the shape:** what kind of event it is, where it sits, what powers it, how it
+is experienced, and the direction of the transition. **The board fixes everything else that decides
+how bad it gets:** gain, bias, thresholds, clamps, the return path, time constants, isolation,
+defaults, and whether the protective element is reachable. None of those is in the expression.
+
+The guide now works one expression — a sound meeting accumulated composition and landing as a felt
+arrival — on two boards. Unclamped high gain, no dead-band, no return path: a certainty about a whole
+relationship, in a second. Limited gain, a 0.85 clamp, a dead-band, an hours-long return path, a
+reachable fuse: a pang that passes and is thought about in the evening. Same expression.
+
+Three consequences are now written in, and they are practical:
+
+- **"We have the same problem" is usually false.** Two people compare expressions and conclude they
+  share a condition. They share a shape and differ on every parameter that decides how bad it gets.
+- **Reframing alone often does nothing.** Renaming an event changes the description. If the gain is
+  still high and the return path is still missing, the board runs as before. Reframing works when it
+  moves a parameter.
+- **Board changes work when nothing else does.** Sleep is a rail. A stated boundary is a fuse, if it
+  is reachable. Leaving the room at the start rather than the end is a dead-band. Telling one other
+  person is a return path. **You can change your life without changing what happened to you, because
+  most of what decides the outcome was never in the event.**
+
+The guardrail is stated with it: the shape still constrains the *class* of outcome. No board turns an
+`^8` associative landing into a reasoned conclusion, and none turns `^3` repulsion into `^2`
+attraction — that conversion does not exist. Magnitude, speed, reversibility and failure mode are
+designable. The kind of event is not.
+
+**Verification.** Guide 172 pages, 0 errors, 0 overfull boxes, 0 missing glyphs; gutter 0.9003 in;
+deck 56 cards on 7 sheets; cover regenerated at the 172-page spine; 41/41 cross-artifact checks pass.
+The drawings remain byte-identical to the audited v1.0 set, so the electrical freeze holds.
+
 ## 2026-09-04 - CASformer v0.2 source freeze
 
 - Accepted the GLM execution audit as `CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL`.
