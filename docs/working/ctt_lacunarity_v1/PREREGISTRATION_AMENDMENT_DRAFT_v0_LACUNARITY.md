@@ -21,7 +21,11 @@ E2 is a **null control**: its preregistered expectation is "no exam gain". E1 ga
 
 ## 2. Frozen before code
 
-- Boxes: `{4, 16, 64}` tokens for the error field; `{2}` for the block field (7 blocks).
+- Boxes: **`{4, 8, 16}`** tokens for English-reply targets (mouth: median 19 tokens, measured on C60), `{4, 16, 64}`
+  for 128-token CAS records; `{2}` for the block field (7 blocks). Box 64 is forbidden for mouth targets: it is
+  undefined below 64 tokens and C60's longest reply is 60.
+- Checkpoint cadence: **every 1,000 steps, saved, hashed and delivered.** C60 saved only `final.pt`, so the
+  trajectory question could not be answered without retraining; this amendment makes the cadence a requirement.
 - Normalisation: `L̃ = clip((L − 1)/(L_ref − 1), 0, 1)`, `L_ref` = median `L(16)` at epoch 7 from E1, rounded to
   four decimals and written into the amendment's signed copy before E2 starts.
 - Slow EMA half-life: 500 steps. Ramp-in: over the existing 1000 warmup steps.
@@ -35,10 +39,12 @@ E2 is a **null control**: its preregistered expectation is "no exam gain". E1 ga
 ## 3. Predictions (falsifiable, written before any run)
 
 E1:
-- P1. `L_loss(16) ≤ 1.05` by epoch 3 on an A4-shaped run.
-- P2. `L_loss(16)` within 0.02 of 1.0 by epoch 7.
-- If P1 and P2 both hold, E2/E3 are **not launched**: the dynamic field is uniform and the step-size idea has
-  nothing to act on. This is the expected result.
+- P1. On **training batches**, `L(4)` **rises** from ≈1 early toward ≥ 3 as the loss approaches its floor.
+- P2. On **held-out batches**, `L(4)` stays in the 2–3 band and `L(16)` stays near 1.0.
+- If P1 fails (the field stays flat at 1.0 on training batches after thousands of steps), the model is nowhere near
+  saturation and the whole schedule question is premature: **E2/E3 are not launched**.
+- Correction on the record: v0's original prediction (field becomes uniform, `L(16) ≤ 1.05`) was refuted by the C60
+  measurement on 2026-10-23 (`C60_LACUNARITY_TEST_20261023.md`). It is replaced above, not deleted.
 
 E2 (only if E1 keeps the field live):
 - P3. Primary exam right count within 105–107 (the c45 A4 spread).

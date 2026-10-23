@@ -67,7 +67,9 @@ Files beside this note:
 > For CTT-1 the measurement is expected to show that the error field becomes uniform early, because training
 > converges to near-zero loss within a few epochs. That prediction is itself the first experiment: if the field is
 > uniform by epoch 3, the step-size idea has nothing to act on, and the honest conclusion is that lacunarity belongs
-> in the data and decision layers, not in the optimiser.
+> in the data and decision layers, not in the optimiser. *Measured on C60 (2026-10-23): the opposite direction. The
+> early checkpoint is uniform (L(4) 1.07) and the trained one is clustered (L(4) 11.02 on its training rows), so the
+> prediction above is wrong and is kept as refuted. The rest of the note stands.*
 
 Status of that note: `PROPOSED`. It contains one testable prediction and no claim of gain.
 
@@ -174,6 +176,21 @@ hold.
 **Consequence for this design note:** the lever is the offer/abstain decision and out-of-distribution coverage. A
 learning-rate modulator cannot move a decision that is made 103 times and yields 1–2 offers.
 
+### 3.4 First test on the real CTT-v2 language run (C60, 2026-10-23)
+
+The last mouth/CTT-v2 language run (job `c60`, deliverable sha256 `b1cfa381…f54d`) was scored on the laptop's
+RTX 4070 with `test_c60_error_field.py`; full report in `C60_LACUNARITY_TEST_20261023.md`. Headline numbers:
+
+| State | Domain | Mean token NLL | L(4) median | L(16) median |
+|---|---|---|---|---|
+| A4 final (3 seeds) | held-out dev | 1.44 – 1.82 | 2.06 – 2.45 | 1.04 – 1.06 |
+| A4-s1 final | its own training rows | 0.066 | **11.02** | 3.00 |
+| A5 smoke (early) | held-out dev | 5.20 | 1.07 | 1.00 |
+
+Three consequences, applied above: the field **concentrates** as the model learns (the v1 prediction of uniformity
+was wrong and is kept as refuted); box 64 is meaningless for 19-token replies; and the dominant gap in this run is
+generalization (0.066 → 1.44–1.82), not step size.
+
 ---
 
 ## 4. What the draft says, what breaks, what replaces it
@@ -244,10 +261,16 @@ computed), and the instinct that a run should react to how uneven its own update
 ## 5. Four roles for lacunarity in CTT, ordered by expected value
 
 **R1 — Instrumentation (free; do this first).** Log the error-field lacunarity during ordinary training. No control
-action. Deliverable: a curve `L_loss(b, t)` per run at boxes 4, 16, 64, every 100 steps, plus the normalised
-`L̃`. Purpose: establish whether the field is uniform by epoch 3 (predicted, §1) and give future arms a cheap
-diagnostic. Cost: `O(B·T)` per logged step; no extra forward pass (the per-token NLL is already computed).
-Prediction to test: `L_loss(16)` ≤ 1.15 by epoch 3 and within 0.02 of 1.0 by epoch 7 on an A4-shaped run.
+action. Deliverable: a curve `L_loss(b, t)` per run, every 100 steps, plus the normalised `L̃`. Boxes depend on the
+target length: **{4, 8, 16}** for English replies (mouth median 19 tokens, measured: C60 test), **{4, 16, 64}** for
+128-token CAS records. Purpose: see where the error mass sits and whether it concentrates as training proceeds.
+Cost: `O(B·T)` per logged step; no extra forward pass (the per-token NLL is already computed).
+
+Prediction to test (corrected on 2026-10-23 by the C60 measurement, `C60_LACUNARITY_TEST_20261023.md`): on training
+batches, `L(4)` **rises** from ≈1 early in training toward ≥3 as the easy tokens saturate, because the remaining
+error concentrates into fewer positions. On held-out batches it stays in the 2–3 band. A field still flat at 1.0
+after training means the model is nowhere near saturation — not that it is finished. The original prediction in v1
+(the field becoming uniform) was wrong in this regime and is recorded as refuted rather than deleted.
 
 **R2 — Per-block trust scaling (cheap pilot).** Compute each named block's own gradient-mass lacunarity and apply a
 bounded per-block multiplier. Blocks: English-embedding rows, CAS-token rows (341 vectors), `copy_w`, `gate`,
@@ -377,6 +400,9 @@ cannot see the difference (§3.3).
 | Validation minimum 0.00766 at epoch 7, then 0.00815 | `MEASURED` (`progress.jsonl`) |
 | Corpus: 145 target tokens, top-10 mass 0.6556, entropy 4.9389 bits, L(8)=6.143 | `MEASURED` (`measure_corpus_lacunarity.py`) |
 | Primary exam: translator called 103 times, 1–2 readings offered; C2 also 106 | `MEASURED` (`CTT_READING.json`) |
+| C60 (mouth v2) held-out NLL 1.44–1.82; L(4) median 2.06–2.45; L(16) median 1.04–1.06 | `MEASURED` (`C60_LACUNARITY_TEST_20261023.md`) |
+| C60 training rows: NLL 0.066, L(4) median 11.02, L(16) median 3.00 | `MEASURED` (same) |
+| C60 mouth replies: median 19 tokens, max 60 — box 64 is undefined for them | `MEASURED` (same) |
 | Draft rule: multiplier 1.504 → 651.154 on the same quadratic as the loss scale rises; diverges at k=30 | `MEASURED` (`review_toy_rule.py`) |
 | A 100-step window of full fp32 gradients at CTT-1 parameters = 3.57 GB; norms = 400 bytes | `DERIVED` (9,585,566 × 4 B × 100) |
 | The model asked because of OOD detection or a decision threshold | `NOT MEASURED` — the run records counts, not reasons |
@@ -418,6 +444,11 @@ python -X utf8 -m pytest -q test_lacunarity.py     # 14 passed in 0.08s
 
 # the companion code draft, run and measured (section 4b)
 python -X utf8 review_toy_rule.py
+
+# the real CTT-v2 run (section 3.4) — RTX 4070, diagnostic only, not claim-bearing
+C:\Users\wakil\venvs\cas-gpu\Scripts\python.exe -X utf8 test_c60_error_field.py \
+  --checkpoint <c60>/runs/A4-s1/final.pt --config A4_9p6M \
+  --payload <c60 payload>/HELM_MOUTH_TRAIN_V2_20261022 --rows 1200 --file mouth_dev.jsonl
 
 # sources read for section 3
 .../run_c45_ctt1_20261020/a1_unpacked/c45_out/ctt_out/runs/A4-s1/WEIGHTS_MANIFEST.json

@@ -31,6 +31,14 @@ Monorepo-level log. Subprojects keep their own changelogs
   (`review_toy_rule.py`). What survives from the draft: the online window and the zero-extra-cost measurement.
 - Nothing trained, no GPU job, no claim. The amendment needs the owner's signature before any code change or run.
   Claim status of the design: `PROPOSED`; of the measurements: `MEASURED`; of any gain: `NOT CLAIMED`.
+- **Tested on the real CTT-v2 language run.** The C60 deliverable (125,162,203 bytes, sha256 `b1cfa381…f54d`) was
+  pulled read-only from S3 (no instance launched) and its four checkpoints scored on the laptop's RTX 4070 with
+  `test_c60_error_field.py`. Held-out mouth replies: mean token NLL 1.44–1.82 (three seeds), `L(4)` median 2.06–2.45,
+  `L(16)` median 1.04–1.06. Training rows: NLL 0.066, `L(4)` median 11.02, `L(16)` 3.00. Early smoke checkpoint:
+  NLL 5.20, `L(4)` 1.07. Mouth replies are 19 tokens median (max 60), so box 64 is undefined — mouth boxes are
+  `{4,8,16}`. The v1 prediction (field becomes uniform) is **refuted**: the field concentrates as the model learns.
+  The design note and the amendment draft carry the correction; the amendment now requires checkpoints every 1,000
+  steps, because C60 saved only `final.pt`. Report: `docs/working/ctt_lacunarity_v1/C60_LACUNARITY_TEST_20261023.md`.
 
 ## 2026-10-20 03:58 PDT (ops) - BUG: the picker button did nothing; the route was never mounted — fixed with a lazy webServer injection and re-verified over real HTTP
 
