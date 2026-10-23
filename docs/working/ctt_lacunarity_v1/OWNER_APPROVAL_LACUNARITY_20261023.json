@@ -1,0 +1,29 @@
+{
+  "schema": "lacunarity.owner-approval/1",
+  "given_at_utc": "2026-10-23T17:02:56Z",
+  "given_at_local": "2026-10-23 10:02:56 -07:00",
+  "owner_words": "I SIGN the experiment (cap 2.00 USD, one attempt per arm); push the three local commits (ded6ef0a, 86556fa8, f12534d4); commit the changelog from earlier sessions.",
+  "how_given": "typed by the owner in the DSH session (2026-10-23), quoted verbatim",
+  "cap_usd": 2.0,
+  "attempts": "one attempt per arm; one plumbing retry only on a launch that produces no model",
+  "bounds": {
+    "boxes_mouth": [
+      4,
+      8,
+      16
+    ],
+    "boxes_cas": [
+      4,
+      16,
+      64
+    ],
+    "weight_global": 1.0,
+    "bound_global": 2.0,
+    "weight_block": 0.5,
+    "bound_block": 1.5,
+    "checkpoint_every_steps": 1000,
+    "ema_half_life": 500
+  },
+  "amendment_file": "docs/working/ctt_lacunarity_v1/PREREGISTRATION_AMENDMENT_DRAFT_v0_LACUNARITY.md",
+  "note": "E1 instrumentation first; E2 and E3 only if E1 keeps a live signal. Budget: E1 free if an ordinary run happens, otherwise about 1.1 USD per full A4 run at c59/c60 prices."
+}
