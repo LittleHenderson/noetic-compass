@@ -39,6 +39,20 @@ Monorepo-level log. Subprojects keep their own changelogs
   `{4,8,16}`. The v1 prediction (field becomes uniform) is **refuted**: the field concentrates as the model learns.
   The design note and the amendment draft carry the correction; the amendment now requires checkpoints every 1,000
   steps, because C60 saved only `final.pt`. Report: `docs/working/ctt_lacunarity_v1/C60_LACUNARITY_TEST_20261023.md`.
+- **E1 run (owner-signed, cap 2.00 USD): the corrected prediction is confirmed.** An instrumented copy of the frozen
+  mouth trainer ran A4-s1 for 6,000 steps on the laptop RTX 4070 (final train loss `0.0714612081646919`, 5,126.9 s,
+  `final.pt` sha256 `bcf90fe2951daac2e7bb06bc27e59c34c9dc2202aad91eabc65c53745396350c`; micro-batch 64 with gradient
+  accumulation to hold the effective batch at 256). Training-batch mouth rows: NLL `2.865482` → `0.106426`; `L(4)`
+  `1.151168` → `4.079471`; `L(8)` `1.043230` → `2.491858`; `L(16)` `1.006108` → `1.456961`. CAS `L(4)` stayed flat:
+  `1.229595` → `1.272126`. Held-out (800 rows): `L(4)` `1.8504` → `2.3230` but NLL **worsened** `1.111674` →
+  `1.539552`; the best held-out checkpoint was step 1,000, not the final one. Report:
+  `docs/working/ctt_lacunarity_v1/E1_TRAJECTORY_RESULT_20261023.md`. Status: `REAL` measurements on a local
+  diagnostic run, **not claim-bearing**; the checkpoint-rule question is a protocol decision for the owner.
+- **Machine instability diagnosed and worked around.** Four hard resets today (10:12:48, 10:22:29, 10:42:42,
+  10:55:06) were Kernel-Power 41 with bugcheck 0 and no dump: power cuts under GPU load, not crashes, not intrusion.
+  Battery health `69,738` of `95,000` mWh. GPU limit was `117.51` W; Silent mode cut it to `52.50` W and the 85-minute
+  run then completed with **zero resets**. No intruder signs: Defender clean, no unknown services or tasks, no RDP
+  logons (RDP is enabled and awaiting the owner's decision). The 10:13 restart was Windows Update KB5127694/KB5121794.
 
 ## 2026-10-20 03:58 PDT (ops) - BUG: the picker button did nothing; the route was never mounted — fixed with a lazy webServer injection and re-verified over real HTTP
 
