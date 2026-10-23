@@ -23,6 +23,12 @@ Monorepo-level log. Subprojects keep their own changelogs
   bounded schedule (`lacunarity.py`), 14 tests (`test_lacunarity.py`, **14 passed in 0.08s** on the laptop, no torch),
   corpus measurement script (numbers reproduced), and a preregistration amendment **draft** (not approved, cap
   2.00 USD, E1 instrumentation free, E2/E3 ≈ 0.6 USD each at c45 prices).
+- The companion ChatGPT code draft (rolling window of full gradients, `factor = 1 + 0.5·var`, plain SGD) was run, not
+  just read: on the same quadratic a 30x steeper loss turned its multiplier from `1.504` into `651.154`, and the run
+  diverged at curvature 30 and 100 where the bounded rule stayed finite. At curvature 300 both diverge because the
+  base rate is already unstable (`0.01 × 300 = 3 > 2`) — recorded so the comparison is not oversold. Its window of
+  100 full fp32 gradients at CTT-1 parameters is **3.57 GB**; the same information as norms is **400 bytes**
+  (`review_toy_rule.py`). What survives from the draft: the online window and the zero-extra-cost measurement.
 - Nothing trained, no GPU job, no claim. The amendment needs the owner's signature before any code change or run.
   Claim status of the design: `PROPOSED`; of the measurements: `MEASURED`; of any gain: `NOT CLAIMED`.
 

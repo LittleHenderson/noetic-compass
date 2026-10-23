@@ -14,6 +14,8 @@ Files beside this note:
 - `test_lacunarity.py` — 14 tests. `python -X utf8 -m pytest -q test_lacunarity.py` → **14 passed in 0.08s**
   (run today on the laptop, CPU, no torch). Status: `MEASURED`.
 - `measure_corpus_lacunarity.py` — reproduces section 3's corpus numbers from the frozen `train.jsonl`.
+- `review_toy_rule.py` — runs the companion ChatGPT code draft and the bounded rule on the same quadratic, at
+  several loss scales, and reports where each diverges (section 4b).
 - `PREREGISTRATION_AMENDMENT_DRAFT_v0_LACUNARITY.md` — the experiment this would need, as a draft for the owner,
   not an approval.
 
@@ -26,8 +28,10 @@ Files beside this note:
    space, measured at a scale. Gradients are a vector field over parameters; the loss is a field over tokens. The
    draft never fixes either.
 2. **Its equation is unbounded and unitless.** `α(t) = α₀·(1 + λ·L(t))` can multiply the step by 50 when the field is
-   gappy (lacunarity is not capped at 1). There is no stability argument, no normalisation, and no definition of
-   `L(t)`. A single runaway factor at step 900 destroys a run.
+   gappy (lacunarity is not capped at 1). The companion code draft makes the same mistake with gradient variance:
+   on the same quadratic, a 30× steeper loss turned its multiplier from 1.50 into **651.15**, and the run diverged
+   where the bounded rule did not (§4b, `MEASURED`). There is no stability argument, no normalisation, and no
+   definition of `L(t)`. A single runaway factor at step 900 destroys a run.
 3. **Adam already does the thing the draft wants, coordinate by coordinate.** A *global* multiplier on Adam's step
    is just a slower or faster learning rate. It cannot redistribute effort toward the tokens that carry the error.
    Redistribution needs per-block or per-token weighting, not one global number.
@@ -53,9 +57,12 @@ Files beside this note:
 >
 > The useful claim is not "follow the lacunarity with the learning rate". It is narrower and testable: measure the
 > error field at fixed scales during training, and use *bounded, per-block* adjustments only where a clustered
-> gradient mass gives a reason to. Any global multiplier must be normalised, clipped to a stated band, ramped in
-> after warmup, and must reduce exactly to the frozen schedule when its weight is zero. A schedule that cannot
-> reproduce the baseline bit for bit is not a schedule; it is a new run with unmeasured differences.
+> gradient mass gives a reason to. A rolling window of recent gradients is the right container for a statistic; the
+> statistic inside it has to be a lacunarity of a field — for example the window of gradient *norms* at a stated box
+> size — not the variance of the whole gradient vector, whose value changes with the units of the loss.
+> Any global multiplier must be normalised, clipped to a stated band, ramped in after warmup, and must reduce exactly
+> to the frozen schedule when its weight is zero. A schedule that cannot reproduce the baseline bit for bit is not a
+> schedule; it is a new run with unmeasured differences.
 >
 > For CTT-1 the measurement is expected to show that the error field becomes uniform early, because training
 > converges to near-zero loss within a few epochs. That prediction is itself the first experiment: if the field is
@@ -182,6 +189,57 @@ learning-rate modulator cannot move a decision that is made 103 times and yields
 | "Universal equation" | No universal constant; `L` is scale-dependent | Nothing universal is claimed; boxes and bounds are frozen per experiment |
 
 ---
+
+## 4b. Review of the companion code draft (measured, not argued)
+
+The second half of the ChatGPT material is a code sketch. Reduced to its effect, it does this:
+
+```python
+window = recent gradient vectors (full copies)
+gradient_variance = np.var(window)            # one scalar over every coordinate and step
+factor = 1 + lambda * gradient_variance       # no clip, no normalisation
+lr_t = lr0 * factor
+w = w - lr_t * g                              # plain SGD on an array
+```
+
+`review_toy_rule.py` runs that rule and the bounded rule from §6 on the same quadratic, with only the loss scale
+changing. `MEASURED` today, CPU, 200 steps, 64 dimensions, `lr0 = 0.01`, `λ = 0.5`, noise σ = 1:
+
+| Loss curvature `k` | Draft median multiplier | Bounded median multiplier |
+|---|---|---|
+| 1 | 1.504 | 1.000 |
+| 3 | 1.514 | 1.000 |
+| 10 | 1.548 | 0.991 |
+| 30 | **651.154** | 0.980 |
+| 100 | **1247.616** | 0.981 |
+
+| Loss curvature `k` | Draft | Bounded |
+|---|---|---|
+| 1, 3, 10 | ok | ok |
+| 30 | **DIVERGED** | ok |
+| 100 | **DIVERGED** | ok |
+| 300 | DIVERGED | DIVERGED |
+
+Three findings, each with its repair:
+
+1. **The multiplier is a function of the loss scale, not of the problem.** Variance has units of gradient squared, so
+   multiplying the loss by 10 multiplies the factor by about 100. The draft calls the equation universal; it is not
+   even invariant under rescaling the same objective. *Repair:* normalise `L` into `[0,1]` and clip the multiplier to
+   `[1/g, g]` (§6).
+2. **It stores full gradients.** One fp32 copy of CTT-1's 9,585,566 parameters is **36.6 MB**; a 100-step window of
+   full copies is **3.57 GB**. The same information as scalar norms costs **400 bytes**. *Repair:* keep the window of
+   norms, not of vectors.
+3. **It is not lacunarity.** `np.var` over a flattened window has no box structure, no scale, and no space. The window
+   itself is a good idea — an online container that needs no extra forward pass. *Repair:* keep the window and put a
+   gliding-box `L(b)` over the norm sequence inside it (or over the per-block norm vector), as `LacunaritySchedule`
+   does.
+
+At `k = 300` both rules diverge, and that is not the repair failing: `lr0 · k = 3 > 2` breaks the stability bound
+before any schedule acts. No controller can rescue a base learning rate that is already too large. This is stated so
+the table is not read as "the bounded rule always wins".
+
+**What is worth keeping from the draft:** the online window, the zero-cost measurement (gradients are already
+computed), and the instinct that a run should react to how uneven its own updates are. Those are now R1 and R2.
 
 ## 5. Four roles for lacunarity in CTT, ordered by expected value
 
@@ -319,6 +377,8 @@ cannot see the difference (§3.3).
 | Validation minimum 0.00766 at epoch 7, then 0.00815 | `MEASURED` (`progress.jsonl`) |
 | Corpus: 145 target tokens, top-10 mass 0.6556, entropy 4.9389 bits, L(8)=6.143 | `MEASURED` (`measure_corpus_lacunarity.py`) |
 | Primary exam: translator called 103 times, 1–2 readings offered; C2 also 106 | `MEASURED` (`CTT_READING.json`) |
+| Draft rule: multiplier 1.504 → 651.154 on the same quadratic as the loss scale rises; diverges at k=30 | `MEASURED` (`review_toy_rule.py`) |
+| A 100-step window of full fp32 gradients at CTT-1 parameters = 3.57 GB; norms = 400 bytes | `DERIVED` (9,585,566 × 4 B × 100) |
 | The model asked because of OOD detection or a decision threshold | `NOT MEASURED` — the run records counts, not reasons |
 | `L(b) = 1 + Var/E²`; `L ≥ 1`; `λ=0` reproduces the baseline exactly | `DERIVED` (and covered by tests) |
 | Error-field lacunarity collapses by epoch 3 | `PROPOSED` — the first falsifiable prediction |
@@ -355,6 +415,9 @@ python -X utf8 measure_corpus_lacunarity.py
 
 # estimator + schedule tests (section 0)
 python -X utf8 -m pytest -q test_lacunarity.py     # 14 passed in 0.08s
+
+# the companion code draft, run and measured (section 4b)
+python -X utf8 review_toy_rule.py
 
 # sources read for section 3
 .../run_c45_ctt1_20261020/a1_unpacked/c45_out/ctt_out/runs/A4-s1/WEIGHTS_MANIFEST.json
