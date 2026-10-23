@@ -54,7 +54,17 @@ Monorepo-level log. Subprojects keep their own changelogs
   run then completed with **zero resets**. No intruder signs: Defender clean, no unknown services or tasks, no RDP
   logons (RDP is enabled and awaiting the owner's decision). The 10:13 restart was Windows Update KB5127694/KB5121794.
 
-## 2026-10-20 03:58 PDT (ops) - BUG: the picker button did nothing; the route was never mounted — fixed with a lazy webServer injection and re-verified over real HTTP
+- **Outside critique reviewed; its first recommendation run (free).** The critique is right that measurement is not
+  mechanism and that the held-out result matters most; it is wrong that training and held-out use different metrics
+  (both are mean token NLL under teacher forcing, PAD masked) and wrong that the `L` definition is absent (gliding
+  box, boxes 4/8/16 for mouth). Its one useful addition, the *Predict* step, is adopted as E2's prerequisite. Ran its
+  checkpoint study on the full 2,097-row held-out split: step 1,000 `1.189868` vs final `1.706895` mean token NLL;
+  paired mean difference `+0.466319575`, 95% CI `[0.436446804, 0.496554499]`; median `+0.237172035`; `1,520`
+  of `2,097` rows (`0.7248`) worse at final; `412` rows (`0.1965`) worse by more than `1.0` NLL and they carry
+  `0.6779` of the total degradation. Report: `docs/working/ctt_lacunarity_v1/CRITIQUE_REVIEW_AND_CHECKPOINT_STUDY_20261023.md`.
+  Status: `REAL` for the numbers, `PROPOSED` that the final-checkpoint rule costs quality (needs a second seed).
+
+## 2026-10-20 03:58 PDT (ops) - BUG: the picker button did nothing; the route was never mounted — fixed with a lazy webServer injection and re-verified over real HTTP - BUG: the picker button did nothing; the route was never mounted — fixed with a lazy webServer injection and re-verified over real HTTP
 
 - Owner report after the 03:43 restart: "I pressed on the paperclip button
   and nothing is happening." The report was right and my earlier claim that the
@@ -2331,3 +2341,4 @@ warnings. PDFs in docs/whitepapers/pdf/ refreshed.
 - **Gate 2 remains OPEN at `0.38`.** Next: `TKS_672_V3` lock under the motive-repaired
   instrument, then the small-model readout ladder on the frozen corpus under
   `GATE_2_SUCCESSOR_CLOSURE_CONTRACT` — final equivalence decision is the owner's.
+

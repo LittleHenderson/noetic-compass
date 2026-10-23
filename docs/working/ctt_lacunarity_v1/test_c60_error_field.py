@@ -132,6 +132,7 @@ def main(argv=None) -> int:
         "mean_token_nll": round(total_nll / max(1, total_tokens), 6),
         "mean_row_nll": round(sum(row_means) / max(1, len(row_means)), 6),
         "saturated_rows": saturated,
+        "row_means": [round(v, 9) for v in row_means],
         "lacunarity": {str(b): summarise(v) for b, v in per_row_l.items()},
     }
     print(json.dumps(result, indent=1, sort_keys=True))
