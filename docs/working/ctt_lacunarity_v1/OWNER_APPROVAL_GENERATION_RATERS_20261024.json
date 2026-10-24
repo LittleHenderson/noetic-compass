@@ -1,0 +1,10 @@
+{
+  "schema": "generation-raters.owner-approval/1",
+  "given_at_utc": "2026-10-24T00:59:41Z",
+  "owner_words": "fund blinded AI raters later for the secondary leg.",
+  "how_given": "typed by the owner in the DSH session (2026-10-24), quoted verbatim",
+  "scope": "secondary, blinded AI raters for the generation-level comparison; never part of the primary decision rule",
+  "cap_usd": 3.0,
+  "blinding": "replies shuffled with a fixed seed; rater prompts contain no checkpoint or seed label",
+  "sequence": "raters run only after the primary deterministic result is computed and written"
+}
