@@ -35,3 +35,18 @@ Status: living document. Statuses are not interchangeable. **No measure is a val
 - No measure has been tested in an **intervention**.
 - The one strong, clean result in this program is the generation reversal (later checkpoint writes better replies in
   3 of 3 seeds), and it came from a **generation evaluation**, not from a lacunarity measure.
+
+## Update 2026-10-24 (Rank 4): Noetic N-1 moves to Replicated, with a qualification
+
+| Dimension | Status after the second source |
+|---|---|
+| Mathematical correctness | Mathematically Verified (30 hand checks, LAC-03A) |
+| Structural sensitivity | PARTIAL — the exposure split responds as predicted; `Λ` does not |
+| Diagnostic validity | **Diagnostically Evaluated, two sources** — low-exposure cells have higher error at both checkpoints, 3 of 3 seeds in each |
+| Predictive value | **NO** — the signal is exposure itself; no incremental value over the exposure baseline |
+| Incremental value | **NOT DEMONSTRATED** — `Λ` adds nothing; the split is the simpler baseline |
+| Intervention value | NOT TESTED |
+| Generality | **Replicated** across two source sets, one model family; the second source is machine-authored |
+| Engineering reliability | Reproducible scripts and manifests exist |
+
+The overfitting claim is **not** on the scorecard: it failed 1 of 3 then 2 of 3 and is treated as noise.

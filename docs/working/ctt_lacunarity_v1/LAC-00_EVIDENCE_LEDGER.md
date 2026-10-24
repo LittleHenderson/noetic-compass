@@ -145,3 +145,23 @@ rise in held-out error (3 of 3 seeds) is unchanged. This is a descriptive associ
 low-exposure cells may simply be harder.
 
 Artifacts: `cs_aws\notation_dev_scores\<seed>_<checkpoint>.rows.json` (per-row error and address, 18 files).
+
+## 10. Rank 4 result — the exposure–error signal replicates; the overfitting signal does not (2026-10-24)
+
+A second source was built from 100 new CAS compositions with six English phrasings each (600 rows, all Noetic-bearing,
+**0** overlap with training and with the first held-out set). It was scored on the same 18 checkpoints.
+
+| Source | Rows | H-overfit | H-neglect | Overall rise |
+|---|---|---|---|---|
+| First (`notation_dev99`) | 588 | 1 of 3 — FAILS | 3 of 3 — SUPPORTED | 3 of 3 |
+| Second (`notation_new100`) | 600 | 2 of 3 — MEETS | 3 of 3 — SUPPORTED | 3 of 3 |
+
+Per-seed second-source totals: A4-s1 1.471022 → 1.641994 (+0.170972), A4-s2 1.685291 → 2.131292 (+0.446001),
+A4-s3 1.651655 → 2.006977 (+0.355323).
+
+`Λ` over cell means: first source 0.009832–0.018011 → 0.016672–0.019795; second source 0.043385–0.066019 →
+0.038498–0.070758. It moves in different directions and is small in both.
+
+**Reading:** the low-exposure/high-error association replicates across two independent source sets (3 of 3 seeds
+each). The high-exposure overfitting pattern does not (1 of 3 then 2 of 3, straddling the bar). The lacunarity scalar
+adds nothing beyond the cell-level split. Cost: **0 USD**; no LLM was used.
