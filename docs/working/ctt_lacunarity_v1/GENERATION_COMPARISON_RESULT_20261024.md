@@ -1,5 +1,12 @@
 # Generation-level result — the early-stopping hypothesis fails (2026-10-24)
 
+> **CORRECTION (2026-10-24, after independent verification; see `LAC-00_EVIDENCE_LEDGER.md` §3).**
+> A second deviation was found: the preregistration defines each rate over **all 1,517 items** (non-fact replies
+> count as round-trip passes), but the implementation used the **800 fact rows**. Under the prereg-literal
+> denominators the composites are A4-s1 0.197192 → 0.267512, A4-s2 0.216385 → 0.277804, A4-s3 0.216260 → 0.289607
+> (early → final). The decision is unchanged — the final checkpoint still wins by more than 0.02 in 3 of 3 — but the
+> numbers below are not the preregistered metric.
+
 Status: **diagnostic, not claim-bearing** (local GPU; the AWS rule reserves claim-bearing neural runs for AWS).
 Numbers `REAL`. Preregistration: `PREREGISTRATION_GENERATION_COMPARISON_20261024.md`.
 

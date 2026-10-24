@@ -24,7 +24,10 @@ fractal `1 − unique Noetics/10`, domain `1 − active domains/4`, drive `1 −
 L(b) = 1 + Var(N_b) / E[N_b]²
 ```
 
-**The bridge, exactly.** For one box covering the whole vector, `N_b` is the total mass, so
+**The bridge, exactly (corrected 2026-10-24).** At box size 1, one cell per box, `N_b` is the cell value, so
+`L(1) = 1 + Var/Mean²` and therefore `Λ_CAS = L(1) − 1`. The earlier text said this held for a box covering
+the whole vector; that is wrong, because one window has zero variance and `L = 1` always. The corrected
+statement is in `LAC-00_EVIDENCE_LEDGER.md` §7.
 `L = 1 + Var/Mean² = Λ + 1`. CAS state lacunarity *is* the gliding-box statistic at the coarsest possible scale,
 applied to a semantic vector instead of a positional one. What each adds:
 
@@ -131,7 +134,7 @@ training.
 |---|---|
 | Mouth corpus tone tags use only `^1`: 11,530/11,530 train, 2,097/2,097 dev | `REAL` (counted today) |
 | Exposure lacunarity of the tone tag is 9.000000, above the book's 3.0 extreme band | `REAL` for the tag, `PROPOSED` as a claim about the model |
-| `Λ_CAS = L(b) − 1` when the box covers the whole vector | `DERIVED` (algebra) |
+| `Λ_CAS = L(1) − 1` at box size 1 (not at a box covering the whole vector) | `DERIVED` (algebra), corrected 2026-10-24 |
 | Noetic gap score predicts later held-out failure | `NOT TESTED` |
 | Targeted replay on gap cells improves held-out quality | `NOT TESTED` |
 | Any training speed-up from the Noetic layer | `NOT CLAIMED` |

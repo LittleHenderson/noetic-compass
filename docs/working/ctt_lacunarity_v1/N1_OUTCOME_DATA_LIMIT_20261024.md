@@ -1,5 +1,9 @@
 # N1 outcome — the Noetic layer cannot be measured on this data (2026-10-24)
 
+> **SUPERSEDED (same day):** this data limit was solved by building a held-out set from the 99 DEV SDG rows.
+> See `N1_HELDOUT_RESULT_20261024.md` and the correction in `LAC-00_EVIDENCE_LEDGER.md` §4. Kept as the record
+> of why the first attempt could not run.
+
 Status: **N1 is not executable with the current splits.** No result is reported, and none is invented. This is a
 data limitation, not a verdict on the lacunarity hypothesis. The predeclaration
 (`PREREGISTRATION_N1_NOETIC_GAPS_20261024.md`) required per-row Noetic addresses on a held-out split. That data does

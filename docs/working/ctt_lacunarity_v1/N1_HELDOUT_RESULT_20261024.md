@@ -1,5 +1,13 @@
 # N1 held-out result — Noetic error rises with training, and it rises more in heavily exposed cells (2026-10-24)
 
+> **CORRECTION (2026-10-24, after independent verification; see `LAC-00_EVIDENCE_LEDGER.md` §4).**
+> This report used token **occurrences** where the preregistration defines training **rows**. Re-running the
+> predeclared checks with row counts (median 369; high = `^0`,`^1`,`^6`,`^7`,`^9`) gives **H-overfit 1 of 3 (FAILS)**
+> and **H-neglect 3 of 3 (SUPPORTED)** — the opposite of the verdict below. Also: the set is 588 rows from
+> **98 sources × 6**, not 99 × 6; there are **88 duplicate rows** (500 distinct pairs); and the run used
+> `notation_dev99.jsonl`, not the preregistered `cas_val.jsonl`. The overall rise (3 of 3 seeds) is unchanged. The
+> text below is kept as published and is superseded by this correction and by LAC-00 §4.
+
 Status: **exploratory, held-out, not claim-bearing.** Numbers `REAL`. Predeclaration:
 `PREREGISTRATION_N1_NOETIC_GAPS_20261024.md`. This replaces the earlier fit-only probe
 (`N1_PROBE_RESULT_20261024.md`), which could not test the hypothesis.
