@@ -123,3 +123,25 @@ the design notes.
 | Does the recipe or RPM family have a working measure? | `PROPOSAL` — neither exists in code; definitions in LAC-02 |
 | Is the 40-slot gate a diagnostic or a learned correction? | `HYPOTHESIS` — must be read before any claim |
 | Does the generation decision survive the prereg-literal denominator? | `OBSERVED` — yes, 3 of 3, see §3 |
+
+## 9. Rank 1 result — the corrected N1 verdict is stable (2026-10-24, free re-run)
+
+Re-ran the two predeclared checks three ways: all 588 rows, the 500 deduplicated rows, and source-level (mean within
+each of the 98 sources, then across sources). The verdict is identical in all three:
+
+| Variant | H-overfit (high-exposure worsens more) | H-neglect (low-exposure worse at both points) |
+|---|---|---|
+| All 588 rows | 1 of 3 — FAILS | 3 of 3 — SUPPORTED |
+| 500 distinct rows | 1 of 3 — FAILS | 3 of 3 — SUPPORTED |
+| 98 sources | 1 of 3 — FAILS | 3 of 3 — SUPPORTED |
+
+Deduplication changes the per-cell numbers only in the third decimal (A4-s1 high +0.003762 → +0.003507, low
++0.007546 → +0.005065). The 88 duplicate rows were not driving the result. Source-level averaging is identical to
+row-level because each source contributes six rows.
+
+**Conclusion: the published "overfitting, not neglect" verdict is wrong and stays corrected. The surviving signal is
+neglect — cells with fewer training rows carry higher held-out error at both checkpoints, in all three seeds.** The
+rise in held-out error (3 of 3 seeds) is unchanged. This is a descriptive association, not a causal claim: the
+low-exposure cells may simply be harder.
+
+Artifacts: `cs_aws\notation_dev_scores\<seed>_<checkpoint>.rows.json` (per-row error and address, 18 files).
