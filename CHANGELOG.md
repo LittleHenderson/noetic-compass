@@ -2354,3 +2354,4 @@ warnings. PDFs in docs/whitepapers/pdf/ refreshed.
   `GATE_2_SUCCESSOR_CLOSURE_CONTRACT` — final equivalence decision is the owner's.
 
 
+
