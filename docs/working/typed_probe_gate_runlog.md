@@ -686,3 +686,17 @@ V4 remains **⬜ NULL / INCONCLUSIVE / NOT RUN — INSUFFICIENT_GROUP_N**: 2 mat
 Frozen limits: two sequential `g5.2xlarge` On-Demand launches maximum, `us-west-2`, 90 minutes per stage and 180 paid instance-minutes total, at most 100 GiB gp3 per launch, at most 1 GiB S3 evidence for 30 days, **US$5.00 all-in AWS cap**. The Price List API returned `US$1.2120000000/hour`; estimated EC2 + gp3 + one-month S3 subtotal is `US$11,077/3,000` (`US$3.692333333…`), before request/transfer charges. Query again before any run. Stage S and Stage C each terminate before the owner calibration pause; a cloud-side watchdog and driver cleanup are required.
 
 Before Stage S, `docs/working/agent_exchange/decisions.md` must have a new v5-specific `AUTHORIZED: yes` entry and the owner must say **GO**. Before Stage C, Wakil must label 30 calibration examples; at least 24/30 must match the frozen panel. The CTT Phase 3 AWS approval is not assumed to authorize this separate typed-probe study. No local test/model compute or AWS experiment was performed for v5; only the pricing lookup was read-only.
+
+## 2026-10-25T02:57Z — v5 Stage S GO and preflight
+
+**Authorization:** 🔧 METHOD / PROCESS WIN — the owner’s Stage S-only `AUTHORIZED: yes` and “GO” are recorded in `docs/working/agent_exchange/decisions.md`. The Codex review is in `docs/working/agent_exchange/codex_audit.md`.
+
+**Run status:** ⬜ NULL / INCONCLUSIVE / NOT RUN — no v5 model generation, judge labeling, or AWS compute has run. No EC2 instance was launched. No model or paid judge API was called. The local device was used only for lightweight file and AWS API inspection.
+
+**AWS read-only preflight:** authenticated as `cas-g5-operator`; `g5.2xlarge` is offered in `us-west-2a`, `us-west-2b`, and `us-west-2c`; no pending/running/stopping `g5.2xlarge` instance was found. The current AWS Price List API quote is `US$1.2120000000/hour` for Linux On-Demand `g5.2xlarge` in US West (Oregon). Existing project bucket `cas-harness-runpod-92754088` has all four S3 public-access blocks enabled and default `AES256` encryption. Its `typed_probe_v5_20261025/` prefix is empty and the bucket has no lifecycle rule. The v5 plan does not name the bucket explicitly; confirm the target and add a prefix-only 30-day lifecycle only after the D: evidence copy is hash-verified.
+
+**Input check:** the frozen 120-prompt bank is present at `D:\tksCAS-archive\typed_probe_v4_tooling_20260610\candidate_bank_v4_120_20260610.jsonl` and matches SHA-256 `4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f`.
+
+**Execution blocker:** Stage S requires Claude Sonnet, Claude Haiku, and Mistral-7B-Instruct-v0.3. No Claude judge connector is available here. The frozen plan excludes paid judge API calls under the US$5.00 cap and says to stop if a named judge is unavailable; no replacement was used. A successor preregistration or a separately approved judge-cost plan is needed before any run.
+
+**Next gate:** after a valid Stage S screen, Wakil labels the 30 selected traces. Stage C remains blocked unless at least 24/30 exactly match the frozen panel.

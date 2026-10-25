@@ -1260,3 +1260,16 @@ larger Stage-C capture; honor the §11 kill conditions; the agent does NOT stop 
 (no-GPU) and set up the bare pod (env pins + upload kit/probe/scripts, verify shas).
 
 ---
+
+## 2026-10-25T02:57Z — Typed-Probe v5 Stage S authorization
+
+DECISION: Record the owner’s GO for Stage S only under the frozen v5 preregistration; no AWS run starts until the required judge panel is reachable within the frozen cost rules.
+AUTHORIZED: yes
+RATIFIED-BY: user + codex
+CONTEXT: `docs/working/agent_exchange/codex_audit.md` (2026-10-25T02:57Z review); `docs/working/typed_probe_gate_prereg_v5_safe_handling_20261025.md` (SHA-256 `c3049fbf65565cf062fdddafd91200b96a2c7fbbd3eed7daaeb513900b5e7132`).
+
+Owner GO: GO.
+
+Scope: Stage S behavior-only screen only, within the frozen `us-west-2`, `g5.2xlarge`, 90-minute-per-stage, storage, cleanup, and US$5.00 total AWS limits. The named judge panel and other preregistered checks remain required. Stage C must wait until Wakil labels the 30 calibration examples and at least 24/30 exactly match the frozen panel. This entry is authorization, not a run receipt; Stage S has not started.
+
+---

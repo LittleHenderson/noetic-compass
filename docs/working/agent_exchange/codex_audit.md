@@ -4380,3 +4380,23 @@ My recommendation is:
 3. Do not spend GPU until the v4 successor prereg is frozen, `decisions.md` has `AUTHORIZED: yes`, and the user says go in chat.
 
 collaborated and waiting
+
+---
+
+## 2026-10-25T02:57Z — Codex review: Typed-Probe v5 Stage S authorization
+
+**Verdict:** 🔧 METHOD / PROCESS WIN — the owner’s Stage S authorization is valid and recorded. This review does **not** approve an AWS launch while the required judge route is unavailable within the frozen plan.
+
+**Reviewed:**
+- Frozen plan `docs/working/typed_probe_gate_prereg_v5_safe_handling_20261025.md`, SHA-256 `c3049fbf65565cf062fdddafd91200b96a2c7fbbd3eed7daaeb513900b5e7132`.
+- Owner’s explicit chat instruction to start v5, record `AUTHORIZED: yes`, and send “GO”; the instruction authorizes Stage S only and retains the 30-example / 24-of-30 gate before Stage C.
+- Live AWS read-only checks in `us-west-2`: authenticated as `cas-g5-operator`; `g5.2xlarge` is offered in `us-west-2a`, `us-west-2b`, and `us-west-2c`; no pending/running/stopping `g5.2xlarge` instance was found. AWS Price List API returned `US$1.2120000000/hour` for Linux On-Demand `g5.2xlarge` in US West (Oregon), matching the frozen estimate.
+- Candidate bank exists at the frozen D: path and matches SHA-256 `4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f`. The preregistration does not name its S3 bucket. The existing project bucket `cas-harness-runpod-92754088` has all four S3 Block Public Access settings enabled and default `AES256` encryption; its `typed_probe_v5_20261025/` prefix is empty and it has no lifecycle rule. Confirm the target bucket before launch; add a 30-day prefix rule only after the local evidence copy is hash-verified.
+
+**Execution blocker:** Stage S requires Claude Sonnet, Claude Haiku, and Mistral-7B-Instruct-v0.3. No Claude judge connector is available here. The frozen plan bars paid judge API calls under its US$5.00 cap and forbids replacing named judges without a successor preregistration. Therefore no conforming Stage S can start now. Do not substitute another panel, and do not run generation-only data as if Stage S were complete.
+
+**Status:** ⬜ NULL / INCONCLUSIVE / NOT RUN — no v5 model generation, judging, or AWS compute has run. AWS checks were read-only. The `AUTHORIZED: yes` entry records owner intent; it is not a run receipt or result.
+
+**Codex sign-off scope:** the authorization entry accurately records the owner’s Stage S-only instruction and the Stage C human-calibration gate. Execution remains on hold until the judge route and any needed budget/protocol change are resolved. The 30 labels are not requested until a valid Stage S screen produces the selected calibration examples.
+
+---
