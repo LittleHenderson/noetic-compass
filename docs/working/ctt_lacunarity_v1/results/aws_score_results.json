@@ -1,0 +1,72 @@
+{
+ "composites": {
+  "baseline": {
+   "composite": 0.231817,
+   "fact_exact": 0.74,
+   "fact_rows": 300,
+   "guard": 0.74,
+   "round_trip": 0.423333,
+   "rows": 300
+  },
+  "steered": {
+   "composite": 0.11891,
+   "fact_exact": 0.603333,
+   "fact_rows": 300,
+   "guard": 0.603333,
+   "round_trip": 0.326667,
+   "rows": 300
+  },
+  "steered_d0.05": {
+   "composite": 0.231817,
+   "fact_exact": 0.74,
+   "fact_rows": 300,
+   "guard": 0.74,
+   "round_trip": 0.423333,
+   "rows": 300
+  },
+  "steered_d0.1": {
+   "composite": 0.221779,
+   "fact_exact": 0.726667,
+   "fact_rows": 300,
+   "guard": 0.726667,
+   "round_trip": 0.42,
+   "rows": 300
+  },
+  "steered_d0.2": {
+   "composite": 0.225594,
+   "fact_exact": 0.73,
+   "fact_rows": 300,
+   "guard": 0.73,
+   "round_trip": 0.423333,
+   "rows": 300
+  },
+  "steered_d0.4": {
+   "composite": 0.222042,
+   "fact_exact": 0.73,
+   "fact_rows": 300,
+   "guard": 0.73,
+   "round_trip": 0.416667,
+   "rows": 300
+  }
+ },
+ "errors": [],
+ "dose_nll": {
+  "gains": {
+   "0.05": 0.009708,
+   "0.1": 0.024033,
+   "0.2": 0.054952,
+   "0.4": 0.102854,
+   "1.0": 0.179647
+  },
+  "fraction_of_full": {
+   "0.05": 0.054,
+   "0.1": 0.1338,
+   "0.2": 0.3059,
+   "0.4": 0.5725,
+   "1.0": 1.0
+  }
+ },
+ "rpm_select": {
+  "error": "/IndexKernelUtils.cu:16: vectorized_gather_kernel: block: [152,0,0], thread: [26,0,0] Assertion `ind >=0 && ind < ind_dim_size && \"vectorized gather kernel index out of bounds\"` failed.\n/pytorch/aten/src/ATen/native/cuda/IndexKernelUtils.cu:16: vectorized_gather_kernel: block: [152,0,0], thread: [27,0,0] Assertion `ind >=0 && ind < ind_dim_size && \"vectorized gather kernel index out of bounds\"` failed.\n/pytorch/aten/src/ATen/native/cuda/IndexKernelUtils.cu:16: vectorized_gather_kernel: block: [152,0,0], thread: [28,0,0] Assertion `ind >=0 && ind < ind_dim_size && \"vectorized gather kernel index out of bounds\"` failed.\n/pytorch/aten/src/ATen/native/cuda/IndexKernelUtils.cu:16: vectorized_gather_kernel: block: [152,0,0], thread: [29,0,0] Assertion `ind >=0 && ind < ind_dim_size && \"vectorized gather kernel index out of bounds\"` failed.\n/pytorch/aten/src/ATen/native/cuda/IndexKernelUtils.cu:16: vectorized_gather_kernel: block: [152,0,0], thread: [30,0,0] Assertion `ind >=0 && ind < ind_dim_size && \"vectorized gather kernel index out of bounds\"` failed.\n/pytorch/aten/src/ATen/native/cuda/IndexKernelUtils.cu:16: vectorized_gather_kernel: block: [152,0,0], thread: [31,0,0] Assertion `ind >=0 && ind < ind_dim_size && \"vectorized gather kernel index out of bounds\"` failed.\nTraceback (most recent call last):\n  File \"/opt/score/pkg/rpm_select.py\", line 135, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/opt/score/pkg/rpm_select.py\", line 84, in main\n    d2 = ((H[conf][:, None, :] - H[disc][None, :, :]) ** 2).sum(-1)\n           ~^^^^^^\ntorch.AcceleratorError: CUDA error: device-side assert triggered\nSearch for `cudaErrorAssert' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n\n"
+ }
+}

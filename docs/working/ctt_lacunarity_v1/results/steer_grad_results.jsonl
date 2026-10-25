@@ -1,0 +1,34 @@
+{"cell": "^0^C", "conf_rows": 18, "baseline": 0.996857, "oracle_grad": 0.749814, "cell_dir": 1.002028, "random": 0.986137}
+{"cell": "^0^E", "conf_rows": 12, "baseline": 1.694752, "oracle_grad": 1.476225, "cell_dir": 1.702309, "random": 1.694597}
+{"cell": "^0^P", "conf_rows": 18, "baseline": 1.054072, "oracle_grad": 0.878044, "cell_dir": 1.065664, "random": 1.053195}
+{"cell": "^1^C", "conf_rows": 15, "baseline": 2.34047, "oracle_grad": 2.185481, "cell_dir": 2.34292, "random": 2.337952}
+{"cell": "^1^O", "conf_rows": 15, "baseline": 2.581506, "oracle_grad": 2.211693, "cell_dir": 2.584313, "random": 2.575168}
+{"cell": "^1^P", "conf_rows": 12, "baseline": 2.052325, "oracle_grad": 1.811559, "cell_dir": 2.053861, "random": 2.053286}
+{"cell": "^2^C", "conf_rows": 21, "baseline": 1.408416, "oracle_grad": 1.129943, "cell_dir": 1.404668, "random": 1.408773}
+{"cell": "^2^E", "conf_rows": 18, "baseline": 1.154855, "oracle_grad": 1.05616, "cell_dir": 1.151442, "random": 1.162267}
+{"cell": "^2^O", "conf_rows": 12, "baseline": 1.754799, "oracle_grad": 1.592964, "cell_dir": 1.752974, "random": 1.757988}
+{"cell": "^3^C", "conf_rows": 12, "baseline": 1.726063, "oracle_grad": 1.364318, "cell_dir": 1.727836, "random": 1.728863}
+{"cell": "^3^E", "conf_rows": 33, "baseline": 1.052447, "oracle_grad": 0.829959, "cell_dir": 1.059213, "random": 1.052777}
+{"cell": "^3^O", "conf_rows": 15, "baseline": 2.018465, "oracle_grad": 1.730083, "cell_dir": 2.015301, "random": 2.021945}
+{"cell": "^3^P", "conf_rows": 27, "baseline": 2.27584, "oracle_grad": 1.946269, "cell_dir": 2.26786, "random": 2.284045}
+{"cell": "^4^C", "conf_rows": 15, "baseline": 1.235504, "oracle_grad": 1.13615, "cell_dir": 1.250607, "random": 1.257055}
+{"cell": "^4^E", "conf_rows": 21, "baseline": 2.036147, "oracle_grad": 1.930066, "cell_dir": 2.03893, "random": 2.042501}
+{"cell": "^4^O", "conf_rows": 18, "baseline": 1.445003, "oracle_grad": 1.256552, "cell_dir": 1.446205, "random": 1.441703}
+{"cell": "^5^C", "conf_rows": 15, "baseline": 2.065003, "oracle_grad": 1.748297, "cell_dir": 2.069269, "random": 2.054415}
+{"cell": "^5^O", "conf_rows": 15, "baseline": 1.93429, "oracle_grad": 1.665737, "cell_dir": 1.937488, "random": 1.937809}
+{"cell": "^5^P", "conf_rows": 15, "baseline": 2.880005, "oracle_grad": 2.691646, "cell_dir": 2.87952, "random": 2.88244}
+{"cell": "^6^C", "conf_rows": 15, "baseline": 1.125638, "oracle_grad": 0.936338, "cell_dir": 1.120247, "random": 1.120722}
+{"cell": "^6^E", "conf_rows": 12, "baseline": 0.95543, "oracle_grad": 0.82031, "cell_dir": 0.952864, "random": 0.953362}
+{"cell": "^6^P", "conf_rows": 12, "baseline": 2.302967, "oracle_grad": 2.186838, "cell_dir": 2.300789, "random": 2.300811}
+{"cell": "^7^C", "conf_rows": 15, "baseline": 1.301726, "oracle_grad": 1.004142, "cell_dir": 1.299865, "random": 1.304907}
+{"cell": "^7^E", "conf_rows": 21, "baseline": 1.196544, "oracle_grad": 1.008398, "cell_dir": 1.197261, "random": 1.198785}
+{"cell": "^7^O", "conf_rows": 21, "baseline": 0.661629, "oracle_grad": 0.464691, "cell_dir": 0.655989, "random": 0.660696}
+{"cell": "^7^P", "conf_rows": 21, "baseline": 1.451235, "oracle_grad": 1.251885, "cell_dir": 1.45206, "random": 1.450678}
+{"cell": "^8^C", "conf_rows": 21, "baseline": 1.859348, "oracle_grad": 1.683493, "cell_dir": 1.861051, "random": 1.873386}
+{"cell": "^8^E", "conf_rows": 30, "baseline": 2.322986, "oracle_grad": 2.097653, "cell_dir": 2.322747, "random": 2.323065}
+{"cell": "^8^O", "conf_rows": 12, "baseline": 1.574525, "oracle_grad": 1.306575, "cell_dir": 1.572432, "random": 1.57702}
+{"cell": "^8^P", "conf_rows": 18, "baseline": 1.708047, "oracle_grad": 1.415098, "cell_dir": 1.701884, "random": 1.707175}
+C:\Users\wakil\Documents\Codex\2026-10-23\lacunarity_e1\cell_steer_grad.py:140: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:837.)
+  before = float(loss)
+{"sign_check": {"before": 0.203282, "after": 0.20328, "lowered": true}}

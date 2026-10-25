@@ -1,0 +1,44 @@
+{
+ "seeds": {
+  "A4-s2": {
+   "0": {
+    "composite": 0.235008,
+    "fact_exact": 0.72,
+    "fact_rows": 300,
+    "guard": 0.72,
+    "round_trip": 0.453333,
+    "rows": 300
+   },
+   "0.2": {
+    "composite": 0.239805,
+    "fact_exact": 0.73,
+    "fact_rows": 300,
+    "guard": 0.73,
+    "round_trip": 0.45,
+    "rows": 300
+   }
+  },
+  "A4-s3": {
+   "0": {
+    "composite": 0.245909,
+    "fact_exact": 0.723333,
+    "fact_rows": 300,
+    "guard": 0.723333,
+    "round_trip": 0.47,
+    "rows": 300
+   },
+   "0.2": {
+    "composite": 0.249941,
+    "fact_exact": 0.726667,
+    "fact_rows": 300,
+    "guard": 0.726667,
+    "round_trip": 0.473333,
+    "rows": 300
+   }
+  }
+ },
+ "errors": [],
+ "rpm_select": {
+  "error": "/opt/pytorch/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.\n  import pynvml  # type: ignore[import]\nTraceback (most recent call last):\n  File \"/opt/rep/pkg/rpm_select.py\", line 135, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/opt/rep/pkg/rpm_select.py\", line 117, in main\n    results[\"oracle\"].append(gain(i, V[i]))\n                                     ~^^^\nIndexError: index 306 is out of bounds for dimension 0 with size 300\n"
+ }
+}

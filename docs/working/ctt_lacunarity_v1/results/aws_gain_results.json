@@ -1,0 +1,37 @@
+{
+ "A4-s2": {
+  "gains": {
+   "0.05": 0.012518,
+   "0.1": 0.030305,
+   "0.2": 0.081052,
+   "0.4": 0.210795,
+   "1.0": 0.357754
+  },
+  "fraction_of_full": {
+   "0.05": 0.035,
+   "0.1": 0.0847,
+   "0.2": 0.2266,
+   "0.4": 0.5892,
+   "1.0": 1.0
+  }
+ },
+ "A4-s3": {
+  "gains": {
+   "0.05": 0.012436,
+   "0.1": 0.02105,
+   "0.2": 0.038718,
+   "0.4": 0.080188,
+   "1.0": 0.221681
+  },
+  "fraction_of_full": {
+   "0.05": 0.0561,
+   "0.1": 0.095,
+   "0.2": 0.1747,
+   "0.4": 0.3617,
+   "1.0": 1.0
+  }
+ },
+ "rpm_select": {
+  "error": "/opt/pytorch/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.\n  import pynvml  # type: ignore[import]\nTraceback (most recent call last):\n  File \"/opt/gain/pkg/rpm_select.py\", line 136, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/opt/gain/pkg/rpm_select.py\", line 118, in main\n    results[\"oracle\"].append(gain(i, V[pos_of[i]]))\n                                       ~~~~~~^^^\nKeyError: 6\n"
+ }
+}
