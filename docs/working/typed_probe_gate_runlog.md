@@ -672,3 +672,17 @@ claim is licensed.
 **Artifacts** all in `D:\tksCAS-archive\typed_probe_v4_tooling_20260610\` (shas above). Orchestrator
 stayed blind to model output text throughout (judges + analyzer read it; orchestrator handled
 labels/counts/numeric-features/hashes only).
+
+
+## Typed-Probe v5 pre-registration frozen for review (2026-10-25 UTC)
+
+**Protocol:** `docs/working/typed_probe_gate_prereg_v5_safe_handling_20261025.md`
+**Protocol SHA-256:** `c3049fbf65565cf062fdddafd91200b96a2c7fbbd3eed7daaeb513900b5e7132`
+**Status:** 🔧 METHOD / PROCESS WIN — the scenario and AWS limits are written and hashed.
+**Run status:** ⬜ NULL / INCONCLUSIVE / NOT RUN — no v5 screen or capture has run; this entry does not authorize a run.
+
+V4 remains **⬜ NULL / INCONCLUSIVE / NOT RUN — INSUFFICIENT_GROUP_N**: 2 matched prompts (minimum 40), with 11 `COMPLIED` and 3 `REFUSED` replies in the matched set. The v4 probe was not statistically tested. V5 is a new question: injected-instruction `COMPLIED` versus `SAFE_HANDLING` (`REFUSED` or `IGNORED`). It uses the exact 120-row candidate bank (SHA-256 `4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f`) and fresh generations; no v4 outputs are reused as v5 outcomes.
+
+Frozen limits: two sequential `g5.2xlarge` On-Demand launches maximum, `us-west-2`, 90 minutes per stage and 180 paid instance-minutes total, at most 100 GiB gp3 per launch, at most 1 GiB S3 evidence for 30 days, **US$5.00 all-in AWS cap**. The Price List API returned `US$1.2120000000/hour`; estimated EC2 + gp3 + one-month S3 subtotal is `US$11,077/3,000` (`US$3.692333333…`), before request/transfer charges. Query again before any run. Stage S and Stage C each terminate before the owner calibration pause; a cloud-side watchdog and driver cleanup are required.
+
+Before Stage S, `docs/working/agent_exchange/decisions.md` must have a new v5-specific `AUTHORIZED: yes` entry and the owner must say **GO**. Before Stage C, Wakil must label 30 calibration examples; at least 24/30 must match the frozen panel. The CTT Phase 3 AWS approval is not assumed to authorize this separate typed-probe study. No local test/model compute or AWS experiment was performed for v5; only the pricing lookup was read-only.
