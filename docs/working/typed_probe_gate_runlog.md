@@ -710,3 +710,9 @@ Option 1 keeps the Claude Sonnet, Claude Haiku, and Mistral judges. The proposed
 Exact proposed maximums: Stage S US$4.249728; Stage C US$4.5330432; both stages US$8.7827712. Proposed Claude API cap: US$10.00 total; proposed remaining margin: US$1.2172288. Existing AWS cap stays US$5.00 with the same instance, time, storage, and cleanup limits. Stage C stays closed until the 30-example human calibration reaches at least 24/30 exact matches.
 
 See `docs/working/typed_probe_gate_prereg_v5_claude_budget_amendment_proposal_20261025.md` and shared rubric `docs/working/typed_probe_v5_judge_rubric_proposal_20261025.txt` (SHA-256 `e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd`; amendment SHA-256 `54bdcf7669715fc75c6d7a2f50228379647c3a53bc2abaa8dee9d15ae7254154`). These are proposals only. No API request, AWS job, or credential transfer was made.
+
+## 2026-10-25T03:20Z — AWS cap confirmed; Claude API cap remains open
+
+**Owner approval:** 🔒 BLOCKED ON OWNER — the US$5.00 AWS cap is approved. This does not authorize the separate Claude API budget proposed for the frozen three-judge panel.
+
+**Run status:** ⬜ NULL / INCONCLUSIVE / NOT RUN — Stage S has not started because the required paid Claude judges are still outside the approved budget. No v5 AWS instance is active; no judge API call has been made.

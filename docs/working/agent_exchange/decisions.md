@@ -1280,3 +1280,9 @@ OWNER CHOICE: Option 1 — keep the Claude Sonnet + Claude Haiku + Mistral panel
 AUTHORIZATION: This choice does not approve a dollar amount or add paid-API authority. The existing Stage S GO remains as recorded, but the frozen plan still excludes paid Claude calls under the AWS-only cap. No judge call or v5 AWS run has started.
 
 PROPOSAL: `docs/working/typed_probe_gate_prereg_v5_claude_budget_amendment_proposal_20261025.md` sets out exact model IDs, a common four-label rubric, and a US$10.00 total Claude API cap for both stages. It is not effective unless Wakil approves the cap and the amendment is frozen. Amendment SHA-256: `54bdcf7669715fc75c6d7a2f50228379647c3a53bc2abaa8dee9d15ae7254154`. Stage C remains subject to the 30 human labels and exact 24/30 floor.
+
+## 2026-10-25T03:20Z — owner confirms AWS-only v5 cap
+
+AUTHORIZED: yes — AWS charges only, up to the frozen US$5.00 AWS cap for the v5 plan.
+
+SCOPE: This confirms the AWS budget and does not approve any separate Anthropic/Claude API charges. No v5 run has started. Stage S remains on hold because the frozen judge panel requires paid Claude calls that are not covered by the AWS cap.

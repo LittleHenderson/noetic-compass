@@ -4413,3 +4413,7 @@ collaborated and waiting
 **Evidence:** Current Anthropic model IDs, batch prices, token-counting, and thinking settings were checked against official Anthropic documentation on 2026-10-25 UTC. The proposed shared rubric SHA-256 is `e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd`; the amendment proposal SHA-256 is `54bdcf7669715fc75c6d7a2f50228379647c3a53bc2abaa8dee9d15ae7254154`. A read-only AWS check as `cas-g5-operator` returned no pending, running, or stopping `g5.2xlarge` instances in `us-west-2`. This confirms no active v5 instance at the time checked; it is not a launch receipt.
 
 **Hold:** Do not call Claude, move credentials, or launch Stage S until Wakil approves the exact separate API cap and the successor amendment is frozen. Recheck model availability, pricing, AWS quote, and the secure key path before launch.
+
+## 2026-10-25T03:20Z — owner clarifies budget approval
+
+The owner explicitly approved the existing US$5.00 AWS cap only. This is not authorization for the separately proposed US$10.00 Anthropic API cap. No AWS run or paid Claude request has started; the Stage S judge-route hold remains active.
