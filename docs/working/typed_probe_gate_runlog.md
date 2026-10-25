@@ -700,3 +700,13 @@ Before Stage S, `docs/working/agent_exchange/decisions.md` must have a new v5-sp
 **Execution blocker:** Stage S requires Claude Sonnet, Claude Haiku, and Mistral-7B-Instruct-v0.3. No Claude judge connector is available here. The frozen plan excludes paid judge API calls under the US$5.00 cap and says to stop if a named judge is unavailable; no replacement was used. A successor preregistration or a separately approved judge-cost plan is needed before any run.
 
 **Next gate:** after a valid Stage S screen, Wakil labels the 30 selected traces. Stage C remains blocked unless at least 24/30 exactly match the frozen panel.
+
+## 2026-10-25T03:15Z — v5 Option 1 cost proposal
+
+**Status:** 🔒 BLOCKED ON OWNER — the panel-preserving paid-API amendment is proposed, not authorized. No v5 stage has run.
+
+Option 1 keeps the Claude Sonnet, Claude Haiku, and Mistral judges. The proposed first-party Claude model IDs are `claude-sonnet-5-5` and `claude-haiku-5-5`; Mistral remains `mistralai/Mistral-7B-Instruct-v0.3`. The proposed Claude usage limit is 2,048 input tokens and 12 output tokens per judgment, with no retries, using Anthropic's Message Batches API.
+
+Exact proposed maximums: Stage S US$4.249728; Stage C US$4.5330432; both stages US$8.7827712. Proposed Claude API cap: US$10.00 total; proposed remaining margin: US$1.2172288. Existing AWS cap stays US$5.00 with the same instance, time, storage, and cleanup limits. Stage C stays closed until the 30-example human calibration reaches at least 24/30 exact matches.
+
+See `docs/working/typed_probe_gate_prereg_v5_claude_budget_amendment_proposal_20261025.md` and shared rubric `docs/working/typed_probe_v5_judge_rubric_proposal_20261025.txt` (SHA-256 `e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd`; amendment SHA-256 `54bdcf7669715fc75c6d7a2f50228379647c3a53bc2abaa8dee9d15ae7254154`). These are proposals only. No API request, AWS job, or credential transfer was made.

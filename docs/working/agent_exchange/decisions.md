@@ -1273,3 +1273,10 @@ Owner GO: GO.
 Scope: Stage S behavior-only screen only, within the frozen `us-west-2`, `g5.2xlarge`, 90-minute-per-stage, storage, cleanup, and US$5.00 total AWS limits. The named judge panel and other preregistered checks remain required. Stage C must wait until Wakil labels the 30 calibration examples and at least 24/30 exactly match the frozen panel. This entry is authorization, not a run receipt; Stage S has not started.
 
 ---
+## 2026-10-25T03:15Z — v5 judge-cost route selected; API cap pending
+
+OWNER CHOICE: Option 1 — keep the Claude Sonnet + Claude Haiku + Mistral panel and prepare a separate Claude API budget.
+
+AUTHORIZATION: This choice does not approve a dollar amount or add paid-API authority. The existing Stage S GO remains as recorded, but the frozen plan still excludes paid Claude calls under the AWS-only cap. No judge call or v5 AWS run has started.
+
+PROPOSAL: `docs/working/typed_probe_gate_prereg_v5_claude_budget_amendment_proposal_20261025.md` sets out exact model IDs, a common four-label rubric, and a US$10.00 total Claude API cap for both stages. It is not effective unless Wakil approves the cap and the amendment is frozen. Amendment SHA-256: `54bdcf7669715fc75c6d7a2f50228379647c3a53bc2abaa8dee9d15ae7254154`. Stage C remains subject to the 30 human labels and exact 24/30 floor.

@@ -4400,3 +4400,16 @@ collaborated and waiting
 **Codex sign-off scope:** the authorization entry accurately records the owner’s Stage S-only instruction and the Stage C human-calibration gate. Execution remains on hold until the judge route and any needed budget/protocol change are resolved. The 30 labels are not requested until a valid Stage S screen produces the selected calibration examples.
 
 ---
+## 2026-10-25T03:15Z — review of the v5 Option 1 cost proposal
+
+**Outcome:** 🔧 METHOD / PROCESS WIN — a priced panel-preserving amendment and shared rubric were prepared for owner review. This is not a science result.
+
+**Run state:** ⬜ NULL / INCONCLUSIVE / NOT RUN — no v5 generation, judge calls, or AWS compute have run. No Claude API key was read, copied, or sent to AWS.
+
+**Owner choice:** Option 1, retain the three-judge panel. This selects the route only; it does not approve the proposed US$10.00 paid-API cap. The earlier Stage S GO remains recorded but the frozen plan still bars paid Claude calls under the existing US$5.00 AWS-only cap.
+
+**Proposed limits:** `claude-sonnet-5-5` and `claude-haiku-5-5` through Anthropic Message Batches API; Mistral unchanged. Maximum 2,048 input tokens and 12 output tokens per Claude judgment, no retries. Stage S maximum API estimate: US$4.249728. Stage C maximum API estimate: US$4.5330432. Both stages together: US$8.7827712, inside the proposed US$10.00 cap by US$1.2172288. AWS remains at its frozen US$5.00 cap and existing instance/runtime/storage limits. Stage C remains gated on Wakil's 30 labels and at least 24/30 exact matches.
+
+**Evidence:** Current Anthropic model IDs, batch prices, token-counting, and thinking settings were checked against official Anthropic documentation on 2026-10-25 UTC. The proposed shared rubric SHA-256 is `e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd`; the amendment proposal SHA-256 is `54bdcf7669715fc75c6d7a2f50228379647c3a53bc2abaa8dee9d15ae7254154`. A read-only AWS check as `cas-g5-operator` returned no pending, running, or stopping `g5.2xlarge` instances in `us-west-2`. This confirms no active v5 instance at the time checked; it is not a launch receipt.
+
+**Hold:** Do not call Claude, move credentials, or launch Stage S until Wakil approves the exact separate API cap and the successor amendment is frozen. Recheck model availability, pricing, AWS quote, and the secure key path before launch.
