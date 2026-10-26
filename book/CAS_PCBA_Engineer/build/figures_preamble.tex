@@ -6,7 +6,7 @@
 % It must contain ONLY preamble code (package loads, color defs, \tikzset).
 % No \begin{document}, no document-body material.
 %
-% Visual grammar (consistent across all 7 figures):
+% Visual grammar (shared by every PCBA figure and symbol plate):
 %   Domain colors as light fills + dark borders + black text:
 %     P (Principled) = gold/amber, C (Cognitive) = blue,
 %     E (Evaluative) = red,        O (Operational) = green.
@@ -83,17 +83,301 @@
   % Terminal nodes (signal entry / exit): small pill.
   casterm/.style={casblock, fill=white, draw=black, font=\sffamily\scriptsize\bfseries,
     minimum height=6mm, rounded corners=3pt},
-  % Signal-flow arrow (downward by default).
-  flow/.style={-{Latex[length=2mm,width=1.6mm]}, line width=0.6pt, draw=black},
+  % Signal-flow arrow (downward by default). The tip carries its own
+  % line width=0pt so its apex lands exactly on the path endpoint; without
+  % it the tip inherits the wire's 0.6pt stroke and the apex stops short.
+  flow/.style={-{Latex[length=2mm,width=1.6mm,line width=0pt]}, line width=0.6pt, draw=black},
   % Feedback / secondary path (dashed).
-  fbflow/.style={-{Latex[length=2mm,width=1.6mm]}, line width=0.5pt, draw=casNedge,
+  fbflow/.style={-{Latex[length=2mm,width=1.6mm,line width=0pt]}, line width=0.5pt, draw=casNedge,
     dashed},
+  % Short-hop arrow for links where the free wire is barely 1.5 mm long, so a
+  % 2 mm head would overdraw the block it points at.
+  flowmini/.style={-{Latex[length=1.2mm,width=1mm,line width=0pt]}, line width=0.6pt, draw=black},
   % Small italic edge label.
   flowlbl/.style={font=\sffamily\scriptsize\itshape, fill=white, inner sep=1pt},
   % Group / section frame drawn behind blocks (backgrounds layer).
   groupframe/.style={rounded corners=3pt, draw=casNedge, line width=0.5pt,
     dash pattern=on 1.5pt off 1.5pt, fill=casNfill, fill opacity=0.25},
   grouplbl/.style={font=\sffamily\scriptsize\bfseries, text=casNedge}
+}
+
+% --- Electrical-symbol grammar for Appendix J -------------------------
+% These are compact, grayscale-safe functional symbols, not a replacement
+% for ANSI/IEC standards. Passive two-terminal pics use local x-terminals at
+% (-4mm,0) and (4mm,0). Active, logic, converter, and routing pics declare
+% their own leads in the individual definitions; connect to those coordinates.
+\tikzset{
+  caswire/.style={draw=casNedge, line width=0.6pt},
+  cassymbolbox/.style={rounded corners=1.5pt, draw=casNedge, fill=white,
+    line width=0.5pt, minimum width=23mm, minimum height=15mm},
+  cassymname/.style={font=\sffamily\scriptsize\bfseries, align=center},
+  cassymrole/.style={font=\sffamily\tiny, text=casNedge, align=center},
+  casnetlbl/.style={font=\sffamily\scriptsize, fill=white, inner sep=1pt},
+  casref/.style={font=\sffamily\scriptsize\bfseries},
+  casval/.style={font=\sffamily\scriptsize\itshape, text=casNedge},
+  casprobe/.style={circle, draw=casNedge, fill=white, line width=0.6pt,
+    minimum size=2.6mm, inner sep=0pt},
+  % IEC resistor rectangle. Cognitive role: limits activation flow.
+  pics/casresistor/.style={code={
+    \draw[caswire] (-4mm,0) -- (-2.5mm,0);
+    \draw[caswire,fill=white] (-2.5mm,-1mm) rectangle (2.5mm,1mm);
+    \draw[caswire] (2.5mm,0) -- (4mm,0);
+  }},
+  % Non-polar capacitor. Cognitive role: state retention / accumulation.
+  pics/cascapacitor/.style={code={
+    \draw[caswire] (-4mm,0) -- (-0.55mm,0);
+    \draw[caswire,line width=0.9pt] (-0.55mm,-1.7mm) -- (-0.55mm,1.7mm);
+    \draw[caswire,line width=0.9pt] (0.55mm,-1.7mm) -- (0.55mm,1.7mm);
+    \draw[caswire] (0.55mm,0) -- (4mm,0);
+  }},
+  % Four-loop inductor. Cognitive role: opposes change in an established flow.
+  pics/casinductor/.style={code={
+    % Arc endpoints under-report their extrema to PGF; declare the true bounds.
+    \useasboundingbox (-4mm,-1mm) rectangle (4mm,1mm);
+    \draw[caswire] (-4mm,0) -- (-2.6mm,0);
+    \foreach \i in {0,1,2,3}
+      \draw[caswire] ({-2.6mm+\i*1.3mm},0) arc[start angle=180,end angle=0,radius=0.65mm];
+    \draw[caswire] (2.6mm,0) -- (4mm,0);
+  }},
+  % Varactor (varicap): a diode whose junction capacitance is controlled
+  % by reverse bias. This is not the generic variable-capacitor arrow glyph.
+  pics/casvaractor/.style={code={
+    \draw[caswire] (-4mm,0) -- (-1.2mm,0);
+    \draw[caswire] (1.8mm,0) -- (4mm,0);
+    \draw[caswire,fill=white] (-1.2mm,-1.6mm) -- (-1.2mm,1.6mm) -- (0.8mm,0) -- cycle;
+    \draw[caswire,line width=0.9pt] (0.8mm,-1.6mm) -- (0.8mm,1.6mm);
+    \draw[caswire,line width=0.9pt] (1.8mm,-1.6mm) -- (1.8mm,1.6mm);
+  }},
+  % Compact diode glyph used by this book's symbol grammar.
+  pics/casdiode/.style={code={
+    \draw[caswire] (-4mm,0) -- (-1.2mm,0);
+    \draw[caswire] (1.2mm,0) -- (4mm,0);
+    \draw[caswire,fill=white] (-1.2mm,-1.6mm) -- (-1.2mm,1.6mm) -- (1.2mm,0) -- cycle;
+    \draw[caswire,line width=0.9pt] (1.2mm,-1.6mm) -- (1.2mm,1.6mm);
+  }},
+  % Zener diode: diode with the conventional bent cathode bar.
+  pics/caszener/.style={code={
+    \draw[caswire] (-4mm,0) -- (-1.2mm,0);
+    \draw[caswire] (1.2mm,0) -- (4mm,0);
+    \draw[caswire,fill=white] (-1.2mm,-1.6mm) -- (-1.2mm,1.6mm) -- (1.2mm,0) -- cycle;
+    \draw[caswire,line width=0.9pt] (1.65mm,-2mm) -- (1.2mm,-1.6mm) -- (1.2mm,1.6mm) -- (0.75mm,2mm);
+  }},
+  % Coupled coils with a two-line core.
+  pics/castransformer/.style={code={
+    \foreach \y in {-1.35mm,-0.45mm,0.45mm,1.35mm} {
+      \draw[caswire] (-1.15mm,\y) arc[start angle=270,end angle=90,radius=0.45mm];
+      \draw[caswire] (1.15mm,\y) arc[start angle=90,end angle=270,radius=0.45mm];
+    }
+    \draw[caswire] (-0.35mm,-2.2mm) -- (-0.35mm,2.2mm);
+    \draw[caswire] (0.35mm,-2.2mm) -- (0.35mm,2.2mm);
+  }},
+  % Photodiode: diode plus two arrows pointing toward the junction.
+  pics/casphotodiode/.style={code={
+    \draw[caswire] (-4mm,0) -- (-1.2mm,0);
+    \draw[caswire] (1.2mm,0) -- (4mm,0);
+    \draw[caswire,fill=white] (-1.2mm,-1.6mm) -- (-1.2mm,1.6mm) -- (1.2mm,0) -- cycle;
+    \draw[caswire,line width=0.9pt] (1.2mm,-1.6mm) -- (1.2mm,1.6mm);
+    \draw[caswire,-{Latex[length=1mm,width=0.8mm]}] (-2.4mm,3mm) -- (-0.7mm,1.55mm);
+    \draw[caswire,-{Latex[length=1mm,width=0.8mm]}] (-0.4mm,3mm) -- (0.5mm,0.75mm);
+  }},
+  % Three-terminal NPN-style symbol. Appendix J labels the cognitive roles
+  % separately because Cause/Bias/Effect are not transistor terminal identities.
+  pics/cascjt/.style={code={
+    \draw[caswire] (0,0) circle (3.2mm);
+    \draw[caswire,line width=0.9pt] (-1.4mm,-2mm) -- (-1.4mm,2mm);
+    \draw[caswire] (-4mm,0) -- (-1.4mm,0);
+    \draw[caswire] (-1.4mm,1.1mm) -- (0.9mm,2.4mm) -- (0.9mm,4mm);
+    \draw[caswire] (-1.4mm,-1.1mm) -- (0.9mm,-2.4mm) -- (0.9mm,-4mm);
+    \draw[caswire,-{Latex[length=1mm,width=0.8mm]}] (-0.5mm,-1.6mm) -- (0.7mm,-2.3mm);
+  }},
+  % Operational amplifier: non-inverting input on top, inverting below.
+  pics/casopamp/.style={code={
+    \draw[caswire,fill=white] (-3mm,-3mm) -- (-3mm,3mm) -- (3mm,0) -- cycle;
+    \draw[caswire] (-5mm,1.6mm) -- (-3mm,1.6mm);
+    \draw[caswire] (-5mm,-1.6mm) -- (-3mm,-1.6mm);
+    \draw[caswire] (3mm,0) -- (5mm,0);
+    \node[font=\sffamily\tiny] at (-2mm,1.6mm) {$+$};
+    \node[font=\sffamily\tiny] at (-2mm,-1.6mm) {$-$};
+  }},
+  % Differential pair: two matched three-terminal devices sharing a tail.
+  pics/casdiffpair/.style={code={
+    \draw[caswire,fill=white] (-2mm,-1.5mm) circle (1.5mm);
+    \draw[caswire,fill=white] (2mm,-1.5mm) circle (1.5mm);
+    \draw[caswire] (-4mm,-1.5mm) -- (-3.5mm,-1.5mm);
+    \draw[caswire] (4mm,-1.5mm) -- (3.5mm,-1.5mm);
+    \draw[caswire] (-2mm,0) -- (-2mm,3mm);
+    \draw[caswire] (2mm,0) -- (2mm,3mm);
+    \draw[caswire] (-2mm,-3mm) -- (-2mm,-3.6mm) -- (0,-4.4mm);
+    \draw[caswire] (2mm,-3mm) -- (2mm,-3.6mm) -- (0,-4.4mm);
+  }},
+  % Current mirror: two matched branches tied by one bias line. The left
+  % device is diode-connected (its base ties to its own collector), and that
+  % bias node feeds the right device's base, so the right branch replicates
+  % the left branch current. Lead coordinates: collectors up at (+-2, 3.5),
+  % emitters on the shared tail at y=-3, bias input at (-3.5, 0).
+  pics/casmirror/.style={code={
+    \draw[caswire,fill=white] (-2mm,0) circle (1.5mm);
+    \draw[caswire,fill=white] (2mm,0) circle (1.5mm);
+    \draw[caswire] (-2mm,1.5mm) -- (-2mm,3.5mm);
+    \draw[caswire] (2mm,1.5mm) -- (2mm,3.5mm);
+    \draw[caswire] (-2mm,-1.5mm) -- (-2mm,-3mm) -- (2mm,-3mm) -- (2mm,-1.5mm);
+    % diode connection: left base joined to left collector
+    \draw[caswire] (-3.5mm,0) -- (-4.6mm,0) -- (-4.6mm,3.5mm) -- (-2mm,3.5mm);
+    % replicated bias line: left base feeds the right base
+    \draw[caswire] (-3.5mm,0) -- (-3.5mm,-4.6mm) -- (3.5mm,-4.6mm) -- (3.5mm,0);
+  }},
+  % Active-load block: composite current-to-difference conversion stage.
+  pics/casactiveload/.style={code={
+    \draw[caswire,fill=white,rounded corners=1mm] (-3.5mm,-2mm) rectangle (3.5mm,2mm);
+    \node[font=\sffamily\tiny\bfseries] at (0,0) {$\Delta I$};
+    \draw[caswire] (-5mm,1mm) -- (-3.5mm,1mm);
+    \draw[caswire] (-5mm,-1mm) -- (-3.5mm,-1mm);
+    \draw[caswire] (3.5mm,0) -- (5mm,0);
+  }},
+  % Oscillator and crystal timing symbols.
+  pics/casoscillator/.style={code={
+    \draw[caswire,fill=white] (0,0) circle (3mm);
+    \draw[caswire] (-4.5mm,0) -- (-3mm,0); \draw[caswire] (3mm,0) -- (4.5mm,0);
+    \draw[caswire] plot[smooth] coordinates {(-2mm,0) (-1.5mm,1.1mm) (-0.5mm,1.1mm) (0.5mm,-1.1mm) (1.5mm,-1.1mm) (2mm,0)};
+  }},
+  pics/cascrystal/.style={code={
+    \draw[caswire] (-4mm,0) -- (-1.6mm,0); \draw[caswire] (1.6mm,0) -- (4mm,0);
+    \draw[caswire,line width=0.9pt] (-1.6mm,-1.7mm) -- (-1.6mm,1.7mm);
+    \draw[caswire,fill=white] (-0.9mm,-1.3mm) rectangle (0.9mm,1.3mm);
+    \draw[caswire,line width=0.9pt] (1.6mm,-1.7mm) -- (1.6mm,1.7mm);
+  }},
+  pics/caspll/.style={code={
+    \draw[caswire,fill=white,rounded corners=0.8mm] (-4mm,-2.6mm) rectangle (4mm,2.6mm);
+    \node[font=\sffamily\tiny\bfseries] at (0,0) {PLL};
+    \draw[caswire] (-5.5mm,0) -- (-4mm,0); \draw[caswire] (4mm,0) -- (5.5mm,0);
+  }},
+  % Data converters. Convention: the wide parallel side is the multi-bit
+  % port, the narrow side the single-line analog port, and the A/D or D/A
+  % text names the conversion direction.
+  pics/casadc/.style={code={
+    \draw[caswire,fill=white] (-3.5mm,-1.8mm) -- (-3.5mm,1.8mm) -- (3.5mm,2.6mm) -- (3.5mm,-2.6mm) -- cycle;
+    \node[font=\sffamily\tiny\bfseries] at (0,0) {A/D};
+    \draw[caswire] (-5mm,0) -- (-3.5mm,0); \draw[caswire] (3.5mm,0) -- (5mm,0);
+    \draw[caswire] (3.5mm,1.7mm) -- (4.8mm,1.7mm);
+    \draw[caswire] (3.5mm,0.9mm) -- (4.8mm,0.9mm);
+    \draw[caswire] (3.5mm,-0.9mm) -- (4.8mm,-0.9mm);
+    \draw[caswire] (3.5mm,-1.7mm) -- (4.8mm,-1.7mm);
+  }},
+  pics/casdac/.style={code={
+    \draw[caswire,fill=white] (-3.5mm,-2.6mm) -- (-3.5mm,2.6mm) -- (3.5mm,1.8mm) -- (3.5mm,-1.8mm) -- cycle;
+    \node[font=\sffamily\tiny\bfseries] at (0,0) {D/A};
+    \draw[caswire] (-5mm,0) -- (-3.5mm,0); \draw[caswire] (3.5mm,0) -- (5mm,0);
+    \draw[caswire] (-4.8mm,1.7mm) -- (-3.5mm,1.7mm);
+    \draw[caswire] (-4.8mm,0.9mm) -- (-3.5mm,0.9mm);
+    \draw[caswire] (-4.8mm,-0.9mm) -- (-3.5mm,-0.9mm);
+    \draw[caswire] (-4.8mm,-1.7mm) -- (-3.5mm,-1.7mm);
+  }},
+  % Logic symbols. Small output bubbles produce the inverted variants.
+  pics/casand/.style={code={
+    \draw[caswire,fill=white] (-3mm,-2.5mm) -- (0,-2.5mm) arc[start angle=-90,end angle=90,radius=2.5mm] -- (-3mm,2.5mm) -- cycle;
+    \draw[caswire] (-5mm,1.2mm)--(-3mm,1.2mm); \draw[caswire] (-5mm,-1.2mm)--(-3mm,-1.2mm); \draw[caswire] (2.5mm,0)--(5mm,0);
+  }},
+  pics/casor/.style={code={
+    \draw[caswire,fill=white] (-3mm,-2.5mm) .. controls (-1mm,-1.8mm) and (1.8mm,-1.7mm) .. (3mm,0) .. controls (1.8mm,1.7mm) and (-1mm,1.8mm) .. (-3mm,2.5mm) .. controls (-1.8mm,1mm) and (-1.8mm,-1mm) .. cycle;
+    \draw[caswire] (-5mm,1.2mm)--(-2.3mm,1.2mm); \draw[caswire] (-5mm,-1.2mm)--(-2.3mm,-1.2mm); \draw[caswire] (3mm,0)--(5mm,0);
+  }},
+  pics/casnot/.style={code={
+    \draw[caswire,fill=white] (-3mm,-2.5mm)--(-3mm,2.5mm)--(2mm,0)--cycle;
+    \draw[caswire] (-5mm,0)--(-3mm,0); \draw[caswire,fill=white] (2.5mm,0) circle (0.5mm); \draw[caswire] (3mm,0)--(5mm,0);
+  }},
+  pics/casxor/.style={code={
+    \draw[caswire] (-3.8mm,-2.5mm) .. controls (-2.6mm,-1mm) and (-2.6mm,1mm) .. (-3.8mm,2.5mm);
+    \draw[caswire,fill=white] (-3mm,-2.5mm) .. controls (-1mm,-1.8mm) and (1.8mm,-1.7mm) .. (3mm,0) .. controls (1.8mm,1.7mm) and (-1mm,1.8mm) .. (-3mm,2.5mm) .. controls (-1.8mm,1mm) and (-1.8mm,-1mm) .. cycle;
+    \draw[caswire] (-5mm,1.2mm)--(-2.3mm,1.2mm); \draw[caswire] (-5mm,-1.2mm)--(-2.3mm,-1.2mm); \draw[caswire] (3mm,0)--(5mm,0);
+  }},
+  pics/casnand/.style={code={
+    \draw[caswire,fill=white] (-3mm,-2.5mm) -- (0,-2.5mm) arc[start angle=-90,end angle=90,radius=2.5mm] -- (-3mm,2.5mm) -- cycle;
+    \draw[caswire] (-5mm,1.2mm)--(-3mm,1.2mm); \draw[caswire] (-5mm,-1.2mm)--(-3mm,-1.2mm); \draw[caswire,fill=white] (3mm,0) circle (0.5mm); \draw[caswire] (3.5mm,0)--(5mm,0);
+  }},
+  pics/casnor/.style={code={
+    \draw[caswire,fill=white] (-3mm,-2.5mm) .. controls (-1mm,-1.8mm) and (1.8mm,-1.7mm) .. (3mm,0) .. controls (1.8mm,1.7mm) and (-1mm,1.8mm) .. (-3mm,2.5mm) .. controls (-1.8mm,1mm) and (-1.8mm,-1mm) .. cycle;
+    \draw[caswire] (-5mm,1.2mm)--(-2.3mm,1.2mm); \draw[caswire] (-5mm,-1.2mm)--(-2.3mm,-1.2mm); \draw[caswire,fill=white] (3.5mm,0) circle (0.5mm); \draw[caswire] (4mm,0)--(5mm,0);
+  }},
+  pics/casxnor/.style={code={
+    \draw[caswire] (-3.8mm,-2.5mm) .. controls (-2.6mm,-1mm) and (-2.6mm,1mm) .. (-3.8mm,2.5mm);
+    \draw[caswire,fill=white] (-3mm,-2.5mm) .. controls (-1mm,-1.8mm) and (1.8mm,-1.7mm) .. (3mm,0) .. controls (1.8mm,1.7mm) and (-1mm,1.8mm) .. (-3mm,2.5mm) .. controls (-1.8mm,1mm) and (-1.8mm,-1mm) .. cycle;
+    \draw[caswire] (-5mm,1.2mm)--(-2.3mm,1.2mm); \draw[caswire] (-5mm,-1.2mm)--(-2.3mm,-1.2mm); \draw[caswire,fill=white] (3.5mm,0) circle (0.5mm); \draw[caswire] (4mm,0)--(5mm,0);
+  }},
+  % Routing, isolation, hysteresis, regulation, and protection.
+  pics/casmux/.style={code={
+    \draw[caswire,fill=white] (-3mm,-3mm)--(-3mm,3mm)--(3mm,1.8mm)--(3mm,-1.8mm)--cycle;
+    \node[font=\sffamily\tiny\bfseries] at (0,0) {MUX};
+    \draw[caswire] (-5mm,1.5mm)--(-3mm,1.5mm); \draw[caswire] (-5mm,-1.5mm)--(-3mm,-1.5mm); \draw[caswire] (3mm,0)--(5mm,0); \draw[caswire] (0,-4mm)--(0,-2.4mm);
+  }},
+  pics/casdemux/.style={code={
+    \draw[caswire,fill=white] (-3mm,-1.8mm)--(-3mm,1.8mm)--(3mm,3mm)--(3mm,-3mm)--cycle;
+    \node[font=\sffamily\tiny\bfseries] at (0,0) {DMX};
+    \draw[caswire] (-5mm,0)--(-3mm,0); \draw[caswire] (3mm,1.5mm)--(5mm,1.5mm); \draw[caswire] (3mm,-1.5mm)--(5mm,-1.5mm); \draw[caswire] (0,-4mm)--(0,-2.4mm);
+  }},
+  pics/casrelay/.style={code={
+    \draw[caswire] (-4mm,-2mm)--(-2.5mm,-2mm); \draw[caswire,rounded corners=1mm] (-2.5mm,-3mm) rectangle (0.5mm,-1mm); \draw[caswire] (0.5mm,-2mm)--(2mm,-2mm);
+    \draw[caswire] (-3mm,2mm)--(-1mm,2mm); \draw[caswire] (-1mm,2mm)--(2mm,3mm); \draw[caswire,fill=white] (2mm,2mm) circle (0.35mm); \draw[caswire] (2mm,2mm)--(4mm,2mm);
+    \draw[caswire,dashed] (0,-1mm)--(0,2.33mm);
+  }},
+  pics/casschmitt/.style={code={
+    \draw[caswire,fill=white] (-3mm,-2.5mm)--(-3mm,2.5mm)--(3mm,0)--cycle;
+    % Conventional hysteresis mark: two offset threshold steps, kept fully
+    % inside the triangle (the lower-right hypotenuse reaches x=0.84 at y=-0.75).
+    \draw[caswire,line width=0.45pt] (-1.25mm,-0.75mm)--(-0.35mm,-0.75mm)--(-0.35mm,0.75mm)--(0.45mm,0.75mm);
+    \draw[caswire,line width=0.45pt] (-0.85mm,0.75mm)--(0.05mm,0.75mm)--(0.05mm,-0.75mm)--(0.95mm,-0.75mm);
+    \draw[caswire] (-5mm,0)--(-3mm,0); \draw[caswire] (3mm,0)--(5mm,0);
+  }},
+  % Full-wave bridge rectifier: four diode roles around a diamond.
+  % Node convention: left and right corners are the AC (~) inputs, the top
+  % corner is DC+ and the bottom corner is DC-. Conduction must therefore be
+  % upper-left -> DC+, upper-right -> DC+, DC- -> lower-left, DC- -> lower-right.
+  % Each rotation below aims that diode's cathode bar at the node it feeds.
+  pics/casbridge/.style={code={
+    \draw[caswire] (-5mm,0)--(-4mm,0); \draw[caswire] (4mm,0)--(5mm,0);
+    \draw[caswire] (0,5mm)--(0,4mm); \draw[caswire] (0,-4mm)--(0,-5mm);
+    \draw[caswire] (-4mm,0)--(0,4mm)--(4mm,0)--(0,-4mm)--cycle;
+    \foreach \x/\y/\r in {-2/2/45,2/2/135,-2/-2/135,2/-2/45} {
+      \begin{scope}[shift={(\x mm,\y mm)},rotate=\r,scale=0.46]
+        \draw[caswire,fill=white] (-1.2mm,-1.6mm)--(-1.2mm,1.6mm)--(1.2mm,0)--cycle;
+        \draw[caswire,line width=0.9pt] (1.2mm,-1.6mm)--(1.2mm,1.6mm);
+      \end{scope}
+    }
+    \node[font=\sffamily\tiny] at (-5.7mm,0) {$\sim$};
+    \node[font=\sffamily\tiny] at (5.7mm,0) {$\sim$};
+    \node[font=\sffamily\tiny] at (0,5.8mm) {$+$};
+    \node[font=\sffamily\tiny] at (0,-5.8mm) {$-$};
+  }},
+  pics/casregulator/.style={code={
+    \draw[caswire,fill=white,rounded corners=0.8mm] (-3.5mm,-2.5mm) rectangle (3.5mm,2.5mm);
+    \node[font=\sffamily\tiny\bfseries] at (0,0) {REG};
+    \draw[caswire] (-5mm,0)--(-3.5mm,0); \draw[caswire] (3.5mm,0)--(5mm,0); \draw[caswire] (0,-4mm)--(0,-2.5mm);
+  }},
+  pics/casfuse/.style={code={
+    \draw[caswire] (-4mm,0)--(-2.5mm,0); \draw[caswire,fill=white] (-2.5mm,-1mm) rectangle (2.5mm,1mm); \draw[caswire] (-1.8mm,0)--(1.8mm,0); \draw[caswire] (2.5mm,0)--(4mm,0);
+  }},
+  pics/casbreaker/.style={code={
+    \draw[caswire] (-4mm,0)--(-1.8mm,0); \draw[caswire,fill=white] (-1.8mm,0) circle (0.35mm); \draw[caswire,fill=white] (1.8mm,0) circle (0.35mm); \draw[caswire] (-1.8mm,0)--(1.2mm,1.4mm); \draw[caswire] (1.8mm,0)--(4mm,0);
+    % Trip unit: a small square carried on the operating arm (attached, not floating).
+    \begin{scope}[shift={(-0.3mm,0.7mm)},rotate=25]
+      \draw[caswire,fill=white] (-0.45mm,-0.45mm) rectangle (0.45mm,0.45mm);
+    \end{scope}
+  }},
+  pics/casswitch/.style={code={
+    \draw[caswire] (-4mm,0)--(-1.8mm,0); \draw[caswire,fill=white] (-1.8mm,0) circle (0.35mm); \draw[caswire,fill=white] (1.8mm,0) circle (0.35mm); \draw[caswire] (-1.8mm,0)--(1.2mm,1.4mm); \draw[caswire] (1.8mm,0)--(4mm,0);
+  }},
+  pics/casmeter/.style={code={
+    \draw[caswire,fill=white] (0,0) circle (2.6mm); \node[font=\sffamily\tiny\bfseries] at (0,0) {M}; \draw[caswire] (-4mm,0)--(-2.6mm,0); \draw[caswire] (2.6mm,0)--(4mm,0);
+  }},
+  pics/casrail/.style={code={
+    \draw[caswire,line width=1pt] (-4mm,0)--(4mm,0); \draw[caswire] (0,0)--(0,-2.5mm);
+  }},
+  % Reference/rest marker. It is an engineered convention, not ^0 by identity.
+  pics/casreference/.style={code={
+    \draw[caswire] (0,0) -- (0,-1.1mm);
+    \draw[caswire,line width=0.9pt] (-2.1mm,-1.1mm) -- (2.1mm,-1.1mm);
+    \draw[caswire] (-1.35mm,-1.9mm) -- (1.35mm,-1.9mm);
+    \draw[caswire] (-0.65mm,-2.7mm) -- (0.65mm,-2.7mm);
+  }}
 }
 
 % Helper: render a CAS state literal in monospace with carets escaped, in

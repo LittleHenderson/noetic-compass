@@ -1,0 +1,111 @@
+# Building *The Component Companion*
+
+This directory builds the companion guide — the illustrated component library for
+*CAS PCBA Engineer* — as a standalone 6×9 trade paperback, plus its printable
+card deck.
+
+## Toolchain
+- **pandoc** ≥ 3 (Markdown → LaTeX)
+- **XeLaTeX** (MiKTeX/TeX Live)
+- **Python** 3 (assembly, audits, post-processing)
+- Fonts: **Palatino Linotype** (body), **Arial** (sans), **DejaVu Sans Mono** (code).
+
+## Source layout (checked in)
+
+Chapters are numbered Markdown files in the book root; `build/` holds the tooling.
+
+| File | What it is |
+|---|---|
+| `00_Front_Matter.md` | Title block, copyright, Preface, How to Use, How to Read These Plates |
+| `01_The_Signal_and_Annotation_Legend.md` | Chapter 1 — Plate S0, the legend every other plate assumes |
+| `02_…`–`07_…` | Chapters 2–7 — symbol plates S1–S6, one component family per chapter |
+| `08_Single_Stage_Schematics.md` | Chapter 8 — Circuits 1–5 |
+| `09_Board_Level_Schematics.md` | Chapter 9 — Circuits 6–10 |
+| `10_The_Complete_Memory_Deck.md` | Chapter 10 — all 42 entries as one memorisable table |
+| `11_Printing_and_Using_the_Card_Deck.md` | Chapter 11 — how to print, sort and study the cards |
+| `Appendix_A_Design_Notes.md` | Frozen inventory, notation rules, open review items |
+
+### One source of truth for the symbols
+
+`build/figures_preamble.tex` is **copied at build time** from
+`../CAS_PCBA_Engineer/build/figures_preamble.tex` (gitignored here). The main
+volume uses the same file for its own schematics, so a glyph fixed once is fixed
+in both books. Never edit the copy — edit the main volume's file.
+
+### Tooling
+
+| Script | What it does |
+|---|---|
+| `plates.py` | Shared chapter list and figure-block reader |
+| `companion_build.py` | Copies the symbol library, writes the preamble, assembles `front_prose.md` + `main_body.md` |
+| `build_companion.py` | **The build driver.** Runs the pipeline in order and fails on a LaTeX error |
+| `build_cards.py` | Builds the 56-card deck |
+| `companion_cards.tex` | The card deck print master (US Letter, 2×4 per sheet) |
+| `export_figures.py` | Renders `plates_verify/*.pdf` to `../figures/*.png` at 300 dpi |
+
+There is deliberately **no** migration script left behind. The chapters were split out of the
+former Appendix J once; that source no longer exists, and a splitter that cannot run is dead code.
+
+## Build
+
+```bash
+python build_companion.py              # -> ../CAS_Component_Companion.pdf
+                                       #    ../CAS_Component_Companion_Cards.pdf
+python build_companion.py --no-cards   # guide only
+```
+
+It performs: `companion_build.py` → pandoc → verbatim postprocess →
+`patch_overflows.py` (the main volume's layout pass, run against this `body.tex`)
+→ delete the stale `.aux` → `xelatex` ×2 → check the log for `! ` → copy.
+
+Why each step is there:
+
+- **`patch_overflows.py` is shared, not copied.** The two books cannot drift
+  apart on running-head shortening or table-column sizing. It is cwd-relative, so
+  running it here edits *this* `body.tex`.
+- **The `.aux` is deleted every build.** longtable caches column widths there
+  and never shrinks them.
+- **The log is checked for `! `.** `-interaction=nonstopmode` still writes a PDF
+  after an error, so a green exit code and an existing output file prove nothing.
+
+## Verification
+
+```bash
+python verify_plates.py           # 17 figures compile standalone
+python export_figures.py          # optional: PNGs of the audited figures
+python verify_cards.py            # 56-card deck structure, badges, page geometry
+python test_badge_guard.py        # one mapping badge per card, enforced at compile time
+python audit_plate_connectivity.py # reviewed source connections still present
+python audit_plate_geometry.py     # compiled-PDF wire connectivity
+python audit_symbol_invariants.py  # each glyph is electrically itself
+python test_plate_negative.py      # all three audits CAN fail
+python ../../CAS_PCBA_Engineer/build/verify_print_margins.py ../CAS_Component_Companion.pdf
+```
+
+`audit_plate_geometry.py` and `audit_symbol_invariants.py` read the **compiled
+PDF**, not the source: each figure is rebuilt with three magenta calibration
+dots, the TikZ→PDF transform is recovered from them, and real geometry is
+measured. That is what catches a wire that stops on bare canvas — the class of
+defect a string-matching check cannot see. It found six of them, plus two
+reversed bridge diodes and a current mirror wired with a base–emitter short.
+
+`dangling_whitelist.json` records the reviewed intentional free ends (an inset
+XOR gate's leads, the refresh pump's terminals, the rail crossbar tips). A new
+dangling endpoint fails the audit, and a whitelisted entry that has since become
+connected fails too, so the list cannot rot.
+
+`test_plate_negative.py` is the one that makes the other three worth running: it
+reintroduces each historical defect and requires the matching audit to report it.
+
+## Cover
+
+The wrap is generated by `book/covers/build_covers.py`, which reads the page
+count from the built interior. Check it with:
+
+```bash
+cd ../../covers && python verify_cover.py cas_component_companion_wrap.pdf --pages=58
+```
+
+At 58 pages the spine is 0.1306 in — below KDP's 100-page minimum for spine
+type, so the spine is left blank by design (`SPINE_TEXT_MIN_PAGES` in
+`build_covers.py`).

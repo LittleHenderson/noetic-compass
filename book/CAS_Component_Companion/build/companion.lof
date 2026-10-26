@@ -1,0 +1,41 @@
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces The signal-and-annotation legend. Solid arrows move forward; dashed arrows return feedback; every cognitive net is typed or explicitly named.}}{23}{figure.3.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Flow and state-retention symbols. The short memory line states the preserved functional role; ENG marks a stipulated cognitive quantity.}}{29}{figure.4.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Direction, threshold, conversion, and sensing symbols. The bridge rectifier is intentionally limited to a scalar-polarity teaching analogy; it does not convert Negative into Positive.}}{37}{figure.5.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Active and comparative parts. Cause, Bias, and Effect are cognitive terminal roles on the CJT; they are not claims that a standard BJT's collector, base, and emitter have those signal roles in every configuration.}}{46}{figure.6.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Rhythm and conversion parts. Pure ADC/DAC register examples keep Noetic and Domain fixed; a Domain change requires a separate directed crossing or conversion stage.}}{53}{figure.7.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Logic and routing symbols. Boolean truth rules apply only after continuous CAS activations have been converted into explicit firing flags.}}{59}{figure.8.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Regulation, protection, and annotation symbols. A fuse threshold must be below every upstream clamp or saturation ceiling that feeds it, or the fuse is unreachable.}}{69}{figure.9.1}%
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {20.1}{\ignorespaces The CJT atom: an Above/Cause trigger, shaped by a Female substrate, lands as a Below/Effect. This is a trigger-to-arrival transition, not a synonym for reasoning.}}{127}{figure.20.1}%
+\contentsline {figure}{\numberline {20.2}{\ignorespaces Domain Descent uses directed admissibility for P to C to E to O. The O-to-P return is a labeled feedback path, not a casual upward override.}}{128}{figure.20.2}%
+\contentsline {figure}{\numberline {20.3}{\ignorespaces A three-stage gain cascade. Product gain is a design calculation; saturation and cutoff remain stage-local limits.}}{129}{figure.20.3}%
+\contentsline {figure}{\numberline {20.4}{\ignorespaces RC compensation smooths an observed outcome before low-gain feedback returns it to the bias path.}}{130}{figure.20.4}%
+\contentsline {figure}{\numberline {20.5}{\ignorespaces Corrected ambiguity stabilizer: AND detects both-active conflict; Schmitt hysteresis prevents chatter. XOR retains its standard exactly-one truth rule.}}{131}{figure.20.5}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {21.1}{\ignorespaces The corrected CSB red path. A reachable 0.05 fuse threshold sits below the 0.1 refusal clamp and cuts the green path, never the refusal path.}}{133}{figure.21.1}%
+\contentsline {figure}{\numberline {21.2}{\ignorespaces Differential comparison rejects what two commensurable inputs share and preserves their difference under one shared bias.}}{134}{figure.21.2}%
+\contentsline {figure}{\numberline {21.3}{\ignorespaces The COB separates resonance from entrainment: LC selects the resonant rate; PLL locks the repeating cycle to a reference.}}{136}{figure.21.3}%
+\contentsline {figure}{\numberline {21.4}{\ignorespaces A CMB cell retains state, leaks, refreshes, and exposes low-charge addresses; provenance separates true lacunae from forgotten contents.}}{137}{figure.21.4}%
+\contentsline {figure}{\numberline {21.5}{\ignorespaces The CPMB supplies seven Drive rails, regulates them, enforces P-to-C-to-E-to-O startup, derates on brownout, and fails closed to silence at emergency.}}{138}{figure.21.5}%
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}

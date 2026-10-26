@@ -65,6 +65,11 @@ APPENDICES = [
     "Appendix_H_Further_Reading.md",
     "Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
 ]
+# The illustrated symbol plates, the cognitive schematics and the printable card
+# deck are published as their OWN book -- *The Component Companion* -- under
+# book/CAS_Component_Companion/. They were Appendix J in an earlier draft; that
+# framing is gone. Fix a glyph in build/figures_preamble.tex and the companion
+# picks it up, because its build copies that file rather than duplicating it.
 
 CH_PREFIX = re.compile(r"^#\s+Chapter\s+\d+\s*[:\-—]\s*")
 APX_PREFIX = re.compile(r"^#\s+Appendix\s+[A-Z]\s*[:\-—–]\s*")

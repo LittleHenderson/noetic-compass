@@ -1,215 +1,215 @@
 \begin{theindex}
 
-  \item 10 Noetics, \hyperpage{25}, \hyperpage{91}, \hyperpage{98}, 
-		\hyperpage{393}, \hyperpage{413}, \hyperpage{523}, 
-		\hyperpage{704}
-  \item 4 Domains, \hyperpage{25}, \hyperpage{91}, \hyperpage{98}, 
-		\hyperpage{393}, \hyperpage{410}, \hyperpage{525}, 
-		\hyperpage{609}
-  \item 4 Registers, \hyperpage{25}, \hyperpage{526}
-  \item 7 Drives, \hyperpage{25}, \hyperpage{525}
+  \item 10 Noetics, \hyperpage{25}, \hyperpage{88}, \hyperpage{96}, 
+		\hyperpage{397}, \hyperpage{417}, \hyperpage{525}, 
+		\hyperpage{736}
+  \item 4 Domains, \hyperpage{25}, \hyperpage{88}, \hyperpage{96}, 
+		\hyperpage{397}, \hyperpage{414}, \hyperpage{527}, 
+		\hyperpage{641}
+  \item 4 Registers, \hyperpage{25}, \hyperpage{528}
+  \item 7 Drives, \hyperpage{25}, \hyperpage{527}
 
   \indexspace
 
   \item Above/Cause, \hyperpage{16, 17}, \hyperpage{21}, 
 		\hyperpage{33, 34}
-  \item Active region, \hyperpage{141}, \hyperpage{182}, 
-		\hyperpage{687}
+  \item Active region, \hyperpage{139}, \hyperpage{180}, 
+		\hyperpage{719}
   \item Affective, \hyperpage{20}, \hyperpage{25}, \hyperpage{38}, 
-		\hyperpage{47}, \hyperpage{86}
-  \item AI Misalignment Incidents Database, \hyperpage{709}
+		\hyperpage{47}, \hyperpage{84}
+  \item AI Misalignment Incidents Database, \hyperpage{741}
   \item Analytical, \hyperpage{20, 21}, \hyperpage{37, 38}, 
 		\hyperpage{47}
 
   \indexspace
 
-  \item Band-Pass Filter, \hyperpage{215}
+  \item Band-Pass Filter, \hyperpage{213}
   \item Below/Effect, \hyperpage{16, 17}, \hyperpage{21}, 
 		\hyperpage{34}, \hyperpage{38}
-  \item Bill of Materials, \hyperpage{314}, \hyperpage{505}
-  \item Block diagram, \hyperpage{650}
+  \item Bill of Materials, \hyperpage{312}, \hyperpage{507}
+  \item Block diagram, \hyperpage{681}
   \item Board, \hyperpage{6}, \hyperpage{8}, \hyperpage{18}, 
-		\hyperpage{64}, \hyperpage{73}, \hyperpage{84}, 
-		\hyperpage{87}, \hyperpage{89}
-  \item Bode plot, \hyperpage{286}, \hyperpage{297}, \hyperpage{688}, 
-		\hyperpage{696}
+		\hyperpage{64}, \hyperpage{73}, \hyperpage{82}, 
+		\hyperpage{85}, \hyperpage{87}
+  \item Bode plot, \hyperpage{284}, \hyperpage{295}, \hyperpage{720}, 
+		\hyperpage{728}
   \item Breakdown, \hyperpage{32}, \hyperpage{35, 36}, \hyperpage{41}, 
-		\hyperpage{57}, \hyperpage{130, 131}
-  \item Brownout, \hyperpage{237}, \hyperpage{254}, 
-		\hyperpage{256, 257}, \hyperpage{433}, \hyperpage{436}
-  \item Brownout Detector, \hyperpage{258}
+		\hyperpage{57}, \hyperpage{128, 129}
+  \item Brownout, \hyperpage{235}, \hyperpage{252}, 
+		\hyperpage{254, 255}, \hyperpage{437}, \hyperpage{440}
+  \item Brownout Detector, \hyperpage{256}
 
   \indexspace
 
-  \item Capacitor, \hyperpage{7}, \hyperpage{9}, \hyperpage{98}, 
-		\hyperpage{113}, \hyperpage{115}, \hyperpage{195}, 
-		\hyperpage{198}
+  \item Capacitor, \hyperpage{7}, \hyperpage{9}, \hyperpage{96}, 
+		\hyperpage{111}, \hyperpage{113}, \hyperpage{193}, 
+		\hyperpage{196}
   \item CCDL, \hyperpage{10}, \hyperpage{45}, \hyperpage{50}, 
-		\hyperpage{52}, \hyperpage{58, 59}, \hyperpage{68}
-  \item CDAB, \hyperpage{156}, \hyperpage{160}, \hyperpage{174}, 
-		\hyperpage{192}, \hyperpage{195, 196}, \hyperpage{317}, 
-		\hyperpage{368}
-  \item Certification tier, \hyperpage{689}
-  \item Characteristic curve, \hyperpage{689}
-  \item Circuit Registry, \hyperpage{493}, \hyperpage{497}
-  \item Cluster, \hyperpage{690}
-  \item CMRR, \hyperpage{11}, \hyperpage{191, 192}, 
-		\hyperpage{194--196}, \hyperpage{328}
+		\hyperpage{52}, \hyperpage{58, 59}, \hyperpage{69}
+  \item CDAB, \hyperpage{154}, \hyperpage{157}, \hyperpage{173}, 
+		\hyperpage{190}, \hyperpage{193, 194}, \hyperpage{315}, 
+		\hyperpage{372}
+  \item Certification tier, \hyperpage{721}
+  \item Characteristic curve, \hyperpage{721}
+  \item Circuit Registry, \hyperpage{495}, \hyperpage{499}
+  \item Cluster, \hyperpage{722}
+  \item CMRR, \hyperpage{11}, \hyperpage{189, 190}, 
+		\hyperpage{192--194}, \hyperpage{326}
   \item Cognitive, \hyperpage{4}, \hyperpage{6--8}, \hyperpage{10}, 
 		\hyperpage{18}
-  \item cognitive mapping, \hyperpage{136}
-  \item Compiler, \hyperpage{56, 57}, \hyperpage{131}, \hyperpage{255}, 
-		\hyperpage{526}, \hyperpage{530}, \hyperpage{534}, 
-		\hyperpage{639}
-  \item CPMB, \hyperpage{107}, \hyperpage{236}, \hyperpage{241}, 
-		\hyperpage{245, 246}, \hyperpage{248}, \hyperpage{255}
-  \item Crystal Oscillator, \hyperpage{174}
-  \item Current mirror, \hyperpage{384, 385}, \hyperpage{604}, 
-		\hyperpage{691}
+  \item cognitive mapping, \hyperpage{134}
+  \item Compiler, \hyperpage{57}, \hyperpage{129}, \hyperpage{253}, 
+		\hyperpage{311}, \hyperpage{528}, \hyperpage{532}
+  \item CPMB, \hyperpage{105}, \hyperpage{234}, \hyperpage{240}, 
+		\hyperpage{243, 244}, \hyperpage{246}, \hyperpage{253}
+  \item Crystal Oscillator, \hyperpage{172}
+  \item Current mirror, \hyperpage{388, 389}, \hyperpage{636}, 
+		\hyperpage{723}
   \item Cutoff, \hyperpage{31}, \hyperpage{34}, \hyperpage{36}, 
-		\hyperpage{41}, \hyperpage{57}, \hyperpage{139}, 
-		\hyperpage{141}, \hyperpage{246}
+		\hyperpage{41}, \hyperpage{57}, \hyperpage{137}, 
+		\hyperpage{139}, \hyperpage{244}
 
   \indexspace
 
-  \item Darlington pair, \hyperpage{184, 185}, \hyperpage{196, 197}, 
-		\hyperpage{691}
-  \item Deployment ladder, \hyperpage{692}
-  \item Dial, \hyperpage{33, 34}, \hyperpage{36}, \hyperpage{66}, 
-		\hyperpage{68, 69}
-  \item Differential Pair, \hyperpage{328}
-  \item Differential pair, \hyperpage{343}, \hyperpage{691}
-  \item Diode, \hyperpage{7}, \hyperpage{120}, \hyperpage{132, 133}
+  \item Darlington pair, \hyperpage{183}, \hyperpage{194, 195}, 
+		\hyperpage{723}
+  \item Deployment ladder, \hyperpage{724}
+  \item Dial, \hyperpage{33, 34}, \hyperpage{36}, \hyperpage{67--69}
+  \item Differential pair, \hyperpage{346}, \hyperpage{723}
+  \item Diode, \hyperpage{7}, \hyperpage{118}, \hyperpage{130, 131}
   \item Domain Descent, \hyperpage{18}, \hyperpage{25}, \hyperpage{27}, 
-		\hyperpage{120, 121}, \hyperpage{131}
-  \item Duty cycle, \hyperpage{228, 229}, \hyperpage{231}, 
-		\hyperpage{360}, \hyperpage{599}
+		\hyperpage{118, 119}
+  \item Duty cycle, \hyperpage{226, 227}, \hyperpage{230}, 
+		\hyperpage{364}, \hyperpage{631}
 
   \indexspace
 
-  \item Embodied, \hyperpage{20}, \hyperpage{44}, \hyperpage{104}, 
-		\hyperpage{263}, \hyperpage{275}, \hyperpage{349}
+  \item Embodied, \hyperpage{20}, \hyperpage{44}, \hyperpage{102}, 
+		\hyperpage{261}, \hyperpage{273}, \hyperpage{353}
   \item Evaluative, \hyperpage{18}, \hyperpage{38}, \hyperpage{47}, 
-		\hyperpage{86}, \hyperpage{93}
-  \item Evidence Packet, \hyperpage{486}, \hyperpage{488}, 
-		\hyperpage{493}, \hyperpage{496}
-  \item Evidence packet, \hyperpage{692}
+		\hyperpage{84}, \hyperpage{91}
+  \item Evidence Packet, \hyperpage{488}, \hyperpage{490}, 
+		\hyperpage{495}, \hyperpage{498}
+  \item Evidence packet, \hyperpage{724}
 
   \indexspace
 
-  \item Feedback, \hyperpage{7}, \hyperpage{192, 193}, \hyperpage{196}, 
-		\hyperpage{198}, \hyperpage{294, 295}
-  \item Filter, \hyperpage{214}, \hyperpage{693}, \hyperpage{695}
-  \item Fisher-Rao distance, \hyperpage{150}, \hyperpage{200}, 
-		\hyperpage{213}, \hyperpage{239}, \hyperpage{247}, 
-		\hyperpage{259, 260}
-  \item four operating regions, \hyperpage{135}
-  \item Fuse, \hyperpage{112}, \hyperpage{116}, \hyperpage{173, 174}, 
-		\hyperpage{333}, \hyperpage{338}
+  \item Failure Modes, \hyperpage{146}
+  \item Feedback, \hyperpage{7}, \hyperpage{156}, \hyperpage{190}
+  \item Filter, \hyperpage{203}, \hyperpage{212}, \hyperpage{452}, 
+		\hyperpage{725}
+  \item Fisher-Rao distance, \hyperpage{148}, \hyperpage{198}, 
+		\hyperpage{211}, \hyperpage{237}, \hyperpage{245}, 
+		\hyperpage{257}
+  \item four operating regions, \hyperpage{133}
+  \item Fuse, \hyperpage{110}, \hyperpage{114}, \hyperpage{172, 173}, 
+		\hyperpage{332}
 
   \indexspace
 
-  \item Inductor, \hyperpage{7}, \hyperpage{111}, \hyperpage{114, 115}
-  \item Input resistance, \hyperpage{139}, \hyperpage{694}
-  \item Involution pair, \hyperpage{694}
-  \item ISO/IEC 42001, \hyperpage{511}, \hyperpage{513}
+  \item Inductor, \hyperpage{7}, \hyperpage{109}, \hyperpage{112, 113}
+  \item Input resistance, \hyperpage{137}, \hyperpage{726}
+  \item Involution pair, \hyperpage{726}
+  \item ISO/IEC 42001, \hyperpage{513}, \hyperpage{515}
 
   \indexspace
 
-  \item Lacunarity, \hyperpage{251}, \hyperpage{408}, \hyperpage{411}, 
-		\hyperpage{413, 414}, \hyperpage{609}, \hyperpage{694}
-  \item LC Tank, \hyperpage{115}
-  \item Load line, \hyperpage{694}
+  \item Lacunarity, \hyperpage{249}, \hyperpage{412}, 
+		\hyperpage{415, 416}, \hyperpage{418}, \hyperpage{641}, 
+		\hyperpage{726}
+  \item LC Tank, \hyperpage{113}
+  \item Load line, \hyperpage{726}
 
   \indexspace
 
-  \item NCCS, \hyperpage{506--509}, \hyperpage{517}, \hyperpage{689}, 
-		\hyperpage{694}
+  \item NCCS, \hyperpage{508--511}, \hyperpage{519}, \hyperpage{721}, 
+		\hyperpage{726}
   \item Noetic, \hyperpage{14}, \hyperpage{17, 18}, \hyperpage{21}, 
 		\hyperpage{23}, \hyperpage{25}
   \item Noetic Compass Operations Manual, \hyperpage{8}
-  \item Noetic Topos paper, \hyperpage{709}
-  \item Notch filter, \hyperpage{695}
-  \item Nyquist criterion, \hyperpage{267}, \hyperpage{275}, 
-		\hyperpage{277}, \hyperpage{289}, \hyperpage{645}, 
-		\hyperpage{695}
+  \item Noetic Topos paper, \hyperpage{741}
+  \item Notch filter, \hyperpage{727}
+  \item Nyquist criterion, \hyperpage{265}, \hyperpage{273}, 
+		\hyperpage{275}, \hyperpage{287}, \hyperpage{677}, 
+		\hyperpage{727}
 
   \indexspace
 
-  \item Op-amp, \hyperpage{637}, \hyperpage{695}
-  \item Open simplex Δ39°, \hyperpage{695}
-  \item Operating point, \hyperpage{695}
-  \item Operational, \hyperpage{18}, \hyperpage{104}, \hyperpage{113}, 
-		\hyperpage{118--121}
-  \item Operators, \hyperpage{695}
-  \item Oscillator, \hyperpage{108}, \hyperpage{156}, \hyperpage{161}, 
-		\hyperpage{169}, \hyperpage{173, 174}
-  \item Output MUX, \hyperpage{343}
+  \item Op-amp, \hyperpage{669}, \hyperpage{727}
+  \item Open simplex Δ39°, \hyperpage{727}
+  \item Operating point, \hyperpage{727}
+  \item Operational, \hyperpage{18}, \hyperpage{102}, \hyperpage{110}, 
+		\hyperpage{116}, \hyperpage{118, 119}
+  \item Operators, \hyperpage{727}
+  \item Oscillator, \hyperpage{106}, \hyperpage{154}, \hyperpage{159}, 
+		\hyperpage{168}, \hyperpage{171--173}
+  \item Output MUX, \hyperpage{346}
 
   \indexspace
 
-  \item Phase margin / gain margin, \hyperpage{696}
-  \item Power Dissipation, \hyperpage{259}
-  \item Power sequencing, \hyperpage{256}, \hyperpage{507}, 
-		\hyperpage{696}
+  \item Phase margin / gain margin, \hyperpage{728}
+  \item Power Dissipation, \hyperpage{257}
+  \item Power sequencing, \hyperpage{254}, \hyperpage{509}, 
+		\hyperpage{728}
   \item Principled, \hyperpage{18}, \hyperpage{27}, \hyperpage{43}, 
-		\hyperpage{93}, \hyperpage{119--121}
-  \item Probe, \hyperpage{56}, \hyperpage{77, 78}, \hyperpage{96, 97}, 
-		\hyperpage{113}, \hyperpage{380}
+		\hyperpage{91}, \hyperpage{118, 119}
+  \item Probe, \hyperpage{56}, \hyperpage{77}, \hyperpage{94, 95}, 
+		\hyperpage{111}, \hyperpage{384}
+  \item productions, \hyperpage{568}, \hyperpage{600}, \hyperpage{603}
 
   \indexspace
 
-  \item Q factor, \hyperpage{169}, \hyperpage{223}, \hyperpage{228}, 
-		\hyperpage{231}, \hyperpage{348, 349}, \hyperpage{697}
+  \item Q factor, \hyperpage{167}, \hyperpage{221}, \hyperpage{226}, 
+		\hyperpage{230}, \hyperpage{352, 353}, \hyperpage{728}
 
   \indexspace
 
-  \item Recipe, \hyperpage{253}, \hyperpage{259}, \hyperpage{527}, 
-		\hyperpage{577}, \hyperpage{661}, \hyperpage{697}, 
-		\hyperpage{704}
+  \item Recipe, \hyperpage{251}, \hyperpage{257}, \hyperpage{529}, 
+		\hyperpage{594}, \hyperpage{693}, \hyperpage{729}, 
+		\hyperpage{736}
   \item Register, \hyperpage{14}, \hyperpage{19, 20}, 
 		\hyperpage{25, 26}
-  \item Regulator, \hyperpage{164}, \hyperpage{166}, 
-		\hyperpage{173, 174}, \hyperpage{238}, \hyperpage{254}
-  \item Resistor, \hyperpage{7}, \hyperpage{9}, \hyperpage{51}, 
-		\hyperpage{57}, \hyperpage{80}, \hyperpage{143}
+  \item Regulator, \hyperpage{162}, \hyperpage{165}, \hyperpage{171}, 
+		\hyperpage{173}, \hyperpage{236}, \hyperpage{252}
+  \item Resistor, \hyperpage{7}, \hyperpage{9}, \hyperpage{48}, 
+		\hyperpage{51}, \hyperpage{57}
 
   \indexspace
 
   \item Saturation, \hyperpage{31}, \hyperpage{35}, \hyperpage{41}, 
-		\hyperpage{57}, \hyperpage{139}, \hyperpage{141}, 
-		\hyperpage{335}
-  \item Schmitt Trigger, \hyperpage{173--175}
-  \item Schmitt trigger, \hyperpage{156}, \hyperpage{163}, 
-		\hyperpage{166, 167}, \hyperpage{172}, 
-		\hyperpage{270, 271}
-  \item Self-dual, \hyperpage{526}, \hyperpage{688}, \hyperpage{698}
-  \item Sequence, \hyperpage{254, 255}, \hyperpage{437}, 
-		\hyperpage{527}, \hyperpage{619}, \hyperpage{696}, 
-		\hyperpage{699}
-  \item State literal, \hyperpage{699}
+		\hyperpage{57}, \hyperpage{137}, \hyperpage{139}, 
+		\hyperpage{329}
+  \item Schmitt Trigger, \hyperpage{169}, \hyperpage{172--174}
+  \item Schmitt trigger, \hyperpage{154}, \hyperpage{165, 166}, 
+		\hyperpage{170}, \hyperpage{269, 270}
+  \item Scope of This Grammar, \hyperpage{561}
+  \item Self-dual, \hyperpage{528}, \hyperpage{720}, \hyperpage{730}
+  \item Sequence, \hyperpage{252, 253}, \hyperpage{441}, 
+		\hyperpage{529}, \hyperpage{650}, \hyperpage{728}, 
+		\hyperpage{730}
+  \item State literal, \hyperpage{730}
 
   \indexspace
 
-  \item Test point, \hyperpage{697}, \hyperpage{699}
-  \item Test points, \hyperpage{314}, \hyperpage{317}, \hyperpage{340}, 
-		\hyperpage{344}
-  \item Thermal runaway, \hyperpage{41, 42}, \hyperpage{149}, 
-		\hyperpage{151}
-  \item Transcendent, \hyperpage{19}, \hyperpage{43}, \hyperpage{128}, 
-		\hyperpage{264}, \hyperpage{330}, \hyperpage{526}, 
-		\hyperpage{560}, \hyperpage{623}
-  \item Transconductance, \hyperpage{139}, \hyperpage{699}
-  \item Transformer, \hyperpage{146}, \hyperpage{157, 158}, 
-		\hyperpage{172, 173}, \hyperpage{529}
+  \item Test Point, \hyperpage{312}
+  \item Test point, \hyperpage{728}, \hyperpage{731}
+  \item Test points, \hyperpage{312}, \hyperpage{315}, \hyperpage{342}, 
+		\hyperpage{347}
+  \item Thermal runaway, \hyperpage{41, 42}, \hyperpage{147}, 
+		\hyperpage{149}
+  \item Transcendent, \hyperpage{19}, \hyperpage{43}, \hyperpage{126}, 
+		\hyperpage{262}, \hyperpage{328}, \hyperpage{528}, 
+		\hyperpage{564}, \hyperpage{655}
+  \item Transconductance, \hyperpage{137}, \hyperpage{731}
+  \item Transformer, \hyperpage{144}, \hyperpage{155, 156}, 
+		\hyperpage{171, 172}, \hyperpage{531}
 
   \indexspace
 
-  \item Walk-Down, \hyperpage{477}
-  \item Worked Build, \hyperpage{296}
+  \item Worked Build, \hyperpage{169}, \hyperpage{186}
 
   \indexspace
 
-  \item Zener, \hyperpage{123--127}, \hyperpage{130}
+  \item Zener, \hyperpage{122--125}, \hyperpage{128}
 
 \end{theindex}

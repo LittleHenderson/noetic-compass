@@ -1,0 +1,675 @@
+<title>CAS Component Mathematics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --ground:#E6E7E2;
+  --surface:#F5F6F3;
+  --surface-2:#EDEEEA;
+  --ink:#15181A;
+  --ink-2:#3B4246;
+  --muted:#6D7478;
+  --rule:#C7C9C2;
+  --rule-soft:#D9DBD4;
+  --copper:#8D5225;
+  --copper-2:#A96B3C;
+  --dom-p:#9C6D16;
+  --dom-c:#33608E;
+  --dom-e:#933935;
+  --dom-o:#336847;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#111416;
+    --surface:#171B1E;
+    --surface-2:#1D2226;
+    --ink:#E6E8EA;
+    --ink-2:#B4BABE;
+    --muted:#848C91;
+    --rule:#2B3136;
+    --rule-soft:#22282C;
+    --copper:#CE8551;
+    --copper-2:#B07043;
+    --dom-p:#D8A63F;
+    --dom-c:#6C9DCE;
+    --dom-e:#CE706B;
+    --dom-o:#5FA37B;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111416;
+  --surface:#171B1E;
+  --surface-2:#1D2226;
+  --ink:#E6E8EA;
+  --ink-2:#B4BABE;
+  --muted:#848C91;
+  --rule:#2B3136;
+  --rule-soft:#22282C;
+  --copper:#CE8551;
+  --copper-2:#B07043;
+  --dom-p:#D8A63F;
+  --dom-c:#6C9DCE;
+  --dom-e:#CE706B;
+  --dom-o:#5FA37B;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  margin:0;
+  padding:0 18px 72px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:700px;margin:0 auto}
+
+/* ---------- masthead ---------- */
+header{padding:44px 0 22px;border-bottom:2px solid var(--ink)}
+.kicker{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--copper);margin:0 0 12px;
+}
+h1{
+  font-family:Archivo,"Arial Narrow",sans-serif;
+  font-weight:700;font-size:clamp(30px,7vw,44px);line-height:1.02;
+  letter-spacing:-.02em;margin:0 0 10px;text-wrap:balance;
+}
+.dek{margin:0;color:var(--ink-2);font-size:15.5px;max-width:56ch}
+.dek em{color:var(--ink);font-style:italic}
+
+/* ---------- claim boundary ---------- */
+.boundary{
+  margin:22px 0 0;padding:16px 18px;
+  background:var(--surface);border:1px solid var(--rule);
+}
+.boundary h2{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 12px;
+}
+.grades{display:flex;flex-direction:column;gap:9px;margin:0}
+.grade-row{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start}
+.gtxt{font-size:13.5px;color:var(--ink-2)}
+.gtxt b{color:var(--ink);font-weight:600}
+.boundary .fine{
+  margin:13px 0 0;padding-top:12px;border-top:1px solid var(--rule-soft);
+  font-size:12.5px;color:var(--muted);
+}
+
+/* grade chips: form carries the claim, not colour alone */
+.chip{
+  display:inline-block;font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px;font-weight:600;letter-spacing:.09em;
+  padding:2px 6px;text-align:center;min-width:44px;
+}
+.chip.iso{background:var(--copper);color:var(--surface);border:1px solid var(--copper)}
+.chip.eng{border:1px solid var(--copper);color:var(--copper)}
+.chip.ped{border:1px dashed var(--muted);color:var(--muted)}
+.chip.non{border:1px solid transparent;color:var(--muted);opacity:.75}
+
+/* ---------- family sections ---------- */
+section{margin:38px 0 0}
+.fam{
+  display:flex;align-items:baseline;gap:10px;
+  padding-bottom:7px;border-bottom:1px solid var(--ink);margin-bottom:2px;
+}
+.fam-id{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  color:var(--copper);letter-spacing:.06em;
+}
+.fam h2{
+  font-family:Archivo,sans-serif;font-weight:600;font-size:16px;
+  letter-spacing:-.005em;margin:0;flex:1;
+}
+.fam .count{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted)}
+
+/* ---------- one part ---------- */
+.part{
+  display:grid;
+  grid-template-columns:46px 1fr;
+  gap:0 14px;
+  padding:13px 0 14px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.sym{grid-row:1 / span 3;padding-top:2px}
+.sym svg{width:44px;height:22px;display:block;color:var(--ink-2)}
+.sym .txtsym{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;
+  border:1px solid var(--ink-2);color:var(--ink-2);
+  padding:3px 0;text-align:center;letter-spacing:.03em;
+}
+.head{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.desig{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  color:var(--copper);letter-spacing:.02em;
+}
+.name{font-family:Archivo,sans-serif;font-weight:600;font-size:15.5px;letter-spacing:-.005em}
+.head .chip{margin-left:auto}
+.verbs{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  color:var(--ink-2);margin-top:4px;
+}
+.verbs .e{color:var(--muted)}
+.verbs .sep{color:var(--copper);padding:0 5px}
+.ex{
+  margin-top:6px;padding-left:11px;border-left:2px solid var(--copper-2);
+  font-size:13.5px;color:var(--ink-2);font-style:italic;
+}
+
+/* ---------- circuits ---------- */
+.circuit{
+  display:grid;grid-template-columns:20px 1fr;gap:0 12px;
+  padding:10px 0;border-bottom:1px solid var(--rule-soft);
+}
+.cn{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+  color:var(--copper);padding-top:2px;
+}
+.cname{font-family:Archivo,sans-serif;font-weight:600;font-size:14px}
+.cbody{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);margin-top:3px;line-height:1.55}
+
+figure{margin:22px 0 0;padding:18px;background:var(--surface);border:1px solid var(--rule);overflow-x:auto}
+figure svg{display:block;margin:0 auto;color:var(--ink);min-width:420px}
+figcaption{
+  margin-top:12px;font-size:12.5px;color:var(--muted);
+  text-align:center;max-width:52ch;margin-left:auto;margin-right:auto;
+}
+
+/* ---------- grammar + guardrails ---------- */
+.rows{margin:2px 0 0}
+.row2{
+  display:grid;grid-template-columns:74px 1fr;gap:0 14px;
+  padding:10px 0;border-bottom:1px solid var(--rule-soft);
+  align-items:baseline;
+}
+.op{
+  font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--copper);
+}
+.row2 .d{font-size:13.5px;color:var(--ink-2)}
+.row2 .d b{color:var(--ink);font-weight:600}
+
+.guards{counter-reset:g;margin:2px 0 0;padding:0;list-style:none}
+.guards li{
+  position:relative;padding:9px 0 9px 30px;
+  border-bottom:1px solid var(--rule-soft);
+  font-size:13.5px;color:var(--ink-2);
+}
+.guards li::before{
+  counter-increment:g;content:counter(g);
+  position:absolute;left:0;top:9px;
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;color:var(--copper);
+}
+.guards b{color:var(--ink);font-weight:600}
+code{
+  font-family:"IBM Plex Mono",monospace;font-size:.92em;
+  background:var(--surface-2);padding:1px 4px;color:var(--ink);
+}
+
+/* ---------- colophon ---------- */
+.colophon{
+  margin:42px 0 0;padding:16px 18px;
+  background:var(--surface);border:1px solid var(--rule);
+  font-size:12.5px;color:var(--muted);
+}
+.colophon b{color:var(--ink-2);font-weight:600}
+.colophon p{margin:0 0 8px}
+.colophon p:last-child{margin:0}
+.dom{font-family:"IBM Plex Mono",monospace;font-weight:600}
+.dp{color:var(--dom-p)}.dc{color:var(--dom-c)}.de{color:var(--dom-e)}.do{color:var(--dom-o)}
+@media (max-width:520px){
+  .part{grid-template-columns:38px 1fr;gap:0 11px}
+  .sym svg{width:36px;height:19px}
+  .head .chip{margin-left:0}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<g id="g-r" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 11h7l2-6 4 12 4-12 4 12 4-12 2 6h7"/></g>
+<g id="g-c" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 11h17M18 3v16M26 3v16M26 11h17"/></g>
+<g id="g-l" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 13h8"/><path d="M9 13a4 4 0 0 1 8 0M17 13a4 4 0 0 1 8 0M25 13a4 4 0 0 1 8 0"/><path d="M33 13h10"/></g>
+<g id="g-cv" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 11h11M12 5v12l9-6zM21 4v14M25 4v14M25 11h18"/></g>
+<g id="g-z" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 4v14M14 4v14M6 4h30M6 18h30M36 4v14M22 1v3M22 18v3"/><path d="M14 8a4 3 0 0 1 8 0M22 8a4 3 0 0 1 8 0"/></g>
+<g id="g-d" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 11h14M15 4v14l12-7zM27 4v14M27 11h15"/></g>
+<g id="g-zd" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 11h14M15 4v14l12-7zM27 4v14M27 4h-4M27 18h4M27 11h15"/></g>
+<g id="g-t" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4h4M1 18h4"/><path d="M5 6a3 3 0 0 0 0 5M5 11a3 3 0 0 0 0 5"/><path d="M18 2v18M22 2v18"/><path d="M35 6a3 3 0 0 1 0 5M35 11a3 3 0 0 1 0 5"/><path d="M35 4h5M35 18h5"/></g>
+<g id="g-pd" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 13h10M16 6v14l12-7zM28 6v14M28 13h9"/><path d="M4 2l5 4M11 1l4 4" stroke-width="1.2"/></g>
+<g id="g-br" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M22 2 40 11 22 20 4 11z"/><path d="M13 6.5l4 2.3-4 2.3zM31 6.5l-4 2.3 4 2.3z" stroke-width="1.1"/><path d="M1 11h3M40 11h3"/></g>
+<g id="g-q" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="22" cy="11" r="9.5"/><path d="M12 11h5M17 5v12M17 8l8-5M17 14l8 5M25 3v3M31 11h6" stroke-width="1.4"/></g>
+<g id="g-oa" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1v20l17-10z"/><path d="M1 6h11M1 16h11M29 11h13"/><path d="M4 4.4h3.4M4 16h3.4M5.7 14.3v3.4" stroke-width="1.2"/></g>
+<g id="g-dp" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="9" r="6.5"/><circle cx="31" cy="9" r="6.5"/><path d="M12 15.5v3h19v-3M21.5 18.5v3"/></g>
+<g id="g-cm" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="9" r="6.5"/><circle cx="31" cy="9" r="6.5"/><path d="M12 2.5v-2M31 2.5v-2M12 9h19" stroke-dasharray="2 1.6"/></g>
+<g id="g-osc" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="22" cy="11" r="9.5"/><path d="M15 12.5a3.5 3 0 0 1 7 0 3.5 3 0 0 0 7 0"/></g>
+<g id="g-xt" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 11h9M10 4v14M14 3h16v16H14zM34 4v14M34 11h8"/></g>
+<g id="g-and" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2h9a9 9 0 0 1 0 18h-9z"/><path d="M4 6h9M4 16h9M31 11h9"/></g>
+<g id="g-or" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2c6 3 6 15 0 18 9 0 14-3 18-9-4-6-9-9-18-9z"/><path d="M4 6h10M4 16h10M30 11h10"/></g>
+<g id="g-not" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2v18l14-9z"/><circle cx="30" cy="11" r="2.8"/><path d="M4 11h9M33 11h8"/></g>
+<g id="g-xor" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 2c6 3 6 15 0 18 9 0 14-3 18-9-4-6-9-9-18-9z"/><path d="M10 2c5 3 5 15 0 18"/><path d="M3 6h8M3 16h8M33 11h8"/></g>
+<g id="g-mux" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2l16 4v10l-16 4z"/><path d="M4 6h10M4 16h10M30 11h9M22 3.5v-2.5"/></g>
+<g id="g-rly" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 15h6v-9h6v9"/><path d="M17 4v14" stroke-dasharray="2 1.6"/><path d="M22 16l11-6M22 16h-3M36 10h4"/><circle cx="21" cy="16.5" r="1.4" fill="currentColor" stroke="none"/></g>
+<g id="g-sch" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="8" y="2" width="28" height="18"/><path d="M13 15h6v-8h6M13 13h6" stroke-width="1.3"/><path d="M1 11h7M36 11h6"/></g>
+<g id="g-fu" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="6" width="24" height="10" rx="1"/><path d="M1 11h9M34 11h8M10 11h24"/></g>
+<g id="g-cb" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 15h9M33 15h9"/><path d="M10 15l16-8"/><path d="M11 6a12 12 0 0 1 14 0" stroke-dasharray="2.5 2"/><circle cx="10" cy="15" r="1.6" fill="currentColor" stroke="none"/><circle cx="33" cy="15" r="1.6" fill="currentColor" stroke="none"/></g>
+<g id="g-sw" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 15h10M32 15h10M11 15l19-9"/><circle cx="11" cy="15" r="1.7" fill="currentColor" stroke="none"/><circle cx="32" cy="15" r="1.7" fill="currentColor" stroke="none"/></g>
+<g id="g-rail" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 5h40M8 5v14M22 5v14M36 5v14"/></g>
+<g id="g-ref" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2v8M12 10h20M16 14h12M19 18h6"/></g>
+<g id="g-tp" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 16h13"/><circle cx="19" cy="16" r="2.4" fill="currentColor" stroke="none"/><path d="M19 14L33 3"/><path d="M30 1.5l5 3-2.5 3.5z" fill="currentColor" stroke="none"/></g>
+<g id="g-mtr" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="22" cy="11" r="9.5"/><path d="M17.5 15V8l4.5 5 4.5-5v7" stroke-width="1.3"/><path d="M1 11h11M32 11h10"/></g>
+<g id="g-net" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 11h8M9 4h26l6 7-6 7H9z"/></g>
+<g id="g-fwd" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 11h33"/><path d="M32 6l8 5-8 5z" fill="currentColor" stroke="none"/></g>
+<g id="g-fb" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 11h33" stroke-dasharray="4 3"/><path d="M32 6l8 5-8 5z" fill="currentColor" stroke="none"/></g>
+</defs>
+</svg>
+
+<div class="wrap">
+
+<header>
+  <p class="kicker">Companion guide · 42 parts · CAS v7.7</p>
+  <h1>CAS Component Mathematics</h1>
+  <p class="dek">Forty-two circuit parts, each reduced to one electrical verb, one cognitive verb, and one thing that happens to people. <em>Learn the verb pair and you have the part.</em></p>
+</header>
+
+<div class="boundary">
+  <h2>Read the badge before you trust the mapping</h2>
+  <div class="grades">
+    <div class="grade-row"><span class="chip iso">ISO</span><span class="gtxt"><b>Exact structural isomorphism.</b> Functional roles correspond one-for-one and the governing relation has the same form. Four parts earn this.</span></div>
+    <div class="grade-row"><span class="chip eng">ENG</span><span class="gtxt"><b>Engineered analog.</b> The role match is explicit, but a cognitive quantity, control input, or conservation rule is stipulated by the design. Fifteen parts.</span></div>
+    <div class="grade-row"><span class="chip ped">PED</span><span class="gtxt"><b>Pedagogical analogy.</b> The resemblance teaches. No quantitative relation transfers. One part, and it is fenced.</span></div>
+  </div>
+  <p class="fine">The badge grades <em>the mapping</em>, not the existence of the part. Every parameter here is a design choice — a setting you specify, like picking a 50-ohm resistor. None is a measurement of a person, an AI model, or a biological system. Logic and annotation entries carry a plate-level badge rather than an individual one.</p>
+</div>
+
+<section>
+  <div class="fam"><span class="fam-id">S1</span><h2>Flow and state retention</h2><span class="count">5</span></div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-r"/></svg></div>
+    <div class="head"><span class="desig">R1</span><span class="name">Resistor</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">limit</span><span class="sep">/</span>restrain activation</div>
+    <p class="ex">The lad you spar with catches you square on the nose and grins. Everything you would throw back is there at once, exact, and what leaves your gloves over the rest of the round is a jab, and a jab, and a jab. At the bell your arms are shaking.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-c"/></svg></div>
+    <div class="head"><span class="desig">C1</span><span class="name">Capacitor</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">retain</span><span class="sep">/</span>preserve composition</div>
+    <p class="ex">Winter after winter your grandmother put her hands over yours on the needles until the stitches came even. She has been gone a long time. You pick up wool now and your hands find that same evenness before you have sat down — nothing recalled, no instruction left anywhere, only the hands.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-l"/></svg></div>
+    <div class="head"><span class="desig">L1</span><span class="name">Inductor</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">oppose change</span><span class="sep">/</span>preserve an established pattern</div>
+    <p class="ex">The man in the hire shop says the brake levers are the other way round on this bike. You know that. You repeat it to yourself, and for a mile you are fine. Then a van pulls out, your right hand does what it has always done, and the back wheel slides.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-cv"/></svg></div>
+    <div class="head"><span class="desig">CV1</span><span class="name">Varactor</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">tune capacitance</span><span class="sep">/</span>tune retention or resonance</div>
+    <p class="ex">For two summers after you went over on the ankle, loose scree stopped you at the top of any slope. The physiotherapist worked on it for months, and for a while it felt worse. The stones are still exactly the stones. Now you go down them.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-z"/></svg></div>
+    <div class="head"><span class="desig">Z1</span><span class="name">LC tank</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">resonate</span><span class="sep">/</span>favor one repeating rate</div>
+    <p class="ex">There is one trot the mare gives you that you can sit to, and almost nothing either side of it. Faster and you are thrown about the saddle; slower and she drifts out of it. At that pace you go round the field for an hour, and neither of you is working.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">S2</span><h2>Direction, threshold, and sensing</h2><span class="count">5</span></div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-d"/></svg></div>
+    <div class="head"><span class="desig">D1</span><span class="name">Diode</span><span class="chip iso">ISO</span></div>
+    <div class="verbs"><span class="e">allow one way</span><span class="sep">/</span>enforce directed admissibility</div>
+    <p class="ex">In the house you grew up in, nobody said what anything cost, and it is still the rule in yours. Your aunt asks twice what you paid for the piano, and twice you answer something else without deciding to. Telling her was never one of the things you could have done.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-zd"/></svg></div>
+    <div class="head"><span class="desig">ZD1</span><span class="name">Zener diode</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">trip and clamp</span><span class="sep">/</span>enforce a threshold with a ceiling</div>
+    <p class="ex">Your cousin has had your drill a year, and the wallpaper table, and you have never asked for either back. Then he asks to put his boxes in your loft. Once, evenly: not the loft. He argues, and the same three words come back at the same volume, never louder. He keeps the drill.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-t"/></svg></div>
+    <div class="head"><span class="desig">T1</span><span class="name">Transformer</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">convert level</span><span class="sep">/</span>translate across a licensed Domain seam</div>
+    <p class="ex">The letter tells your father-in-law he must demonstrate continued eligibility by the date shown. He reads it three times and is none the wiser. What you tell him is: the council desk, his passport, the two forms they sent, all of it before the eighth. Next day he is there before it opens.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-pd"/></svg></div>
+    <div class="head"><span class="desig">PD1</span><span class="name">Photodiode</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">transduce light</span><span class="sep">/</span>admit external Idea through Mind intake</div>
+    <p class="ex">Your landlord is in the middle of the room writing in his folder, and he says, without looking up, that he will be putting the flat up for sale. The pen keeps moving. You are standing exactly where you stopped, and your face is hot before you have thought one thing about it.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-br"/></svg></div>
+    <div class="head"><span class="desig">BR1</span><span class="name">Bridge rectifier</span><span class="chip ped">PED</span></div>
+    <div class="verbs"><span class="e">normalize scalar polarity</span><span class="sep">/</span>teaching only, on a named non-valence scalar</div>
+    <p class="ex">After the coffee morning at the community centre, the tin is counted. Some weeks there is more in it than there should be, some weeks less. Either way the woman counting it says the same four words — we're three pounds out — and hunts just as long. Over or short never gets said.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">S3</span><h2>Active and comparative parts</h2><span class="count">5</span></div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-q"/></svg></div>
+    <div class="head"><span class="desig">Q1</span><span class="name">CJT</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">control and amplify</span><span class="sep">/</span>let bias shape trigger into arrival</div>
+    <p class="ex">Two of them hear the tutor say the same thing — that corner isn't square. The man has been making things since he was small; he reaches for the chisel. The woman beside him has gone quiet: a school art room thirty years back, a bowl held up, everyone looking.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-oa"/></svg></div>
+    <div class="head"><span class="desig">U1</span><span class="name">Op-amp</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">compare</span><span class="sep">/</span>amplify a commensurable difference</div>
+    <p class="ex">Two stalls, the same tomatoes, tenpence a pound between them. By the end of the row he has counted up the summers he has been shopping at the dearer one, and what that comes to, and he is not going back. Tenpence. He has never asked the man what his prices are.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-dp"/></svg></div>
+    <div class="head"><span class="desig">Q2/Q3</span><span class="name">Differential pair</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">reject common mode</span><span class="sep">/</span>preserve a matched difference</div>
+    <p class="ex">Every jar in the raspberry class is sweet, so by the third spoon the judge has stopped tasting for sweet. Two jars left, and one small thing between them: this one still tastes of fruit, that one tastes of the pan it was boiled in.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-cm"/></svg></div>
+    <div class="head"><span class="desig">Q4/Q5</span><span class="name">Current mirror</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">copy bias</span><span class="sep">/</span>share one comparison condition</div>
+    <p class="ex">Two trays of the same seed, one bag of compost between them, the same windowsill, turned on the same evenings — he wants to know whether the new feed is worth buying. Move one tray nearer the stove for a week and whatever comes up tells him nothing about the feed.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><div class="txtsym">ΔI</div></div>
+    <div class="head"><span class="desig">Q6</span><span class="name">Active load</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">convert difference</span><span class="sep">/</span>land a branch difference as output</div>
+    <p class="ex">The green and the grey have been over the back of the chair since Sunday. She has held each of them up against the light, put them down, walked past them, held them up again. Thursday morning she hears herself say it out loud — the green, it'll wear — and picks up the shears.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">S4</span><h2>Rhythm and register conversion</h2><span class="count">5</span></div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-osc"/></svg></div>
+    <div class="head"><span class="desig">OSC1</span><span class="name">Oscillator</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">repeat</span><span class="sep">/</span>sustain a cycle</div>
+    <p class="ex">Nothing is playing it. The radio has been off since morning, nobody in the house is humming, and the same scrap of a chorus keeps coming round, its last word handing straight back to its first. It was going at noon over the ironing. It is going now, while she puts the lights out.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-xt"/></svg></div>
+    <div class="head"><span class="desig">Y1</span><span class="name">Crystal</span><span class="chip eng">ENG</span></div>
+    <div class="verbs"><span class="e">stabilize frequency</span><span class="sep">/</span>hold a low-drift cadence</div>
+    <p class="ex">He will not hold the boat. The vicar has asked, the farmer has asked, and a family once came down the slip waving both arms and watched it go without them. High water or low, June or the January dark, the rope comes off the post at the same minute.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><div class="txtsym">PLL</div></div>
+    <div class="head"><span class="desig">U2</span><span class="name">Phase-locked loop</span><span class="chip iso">ISO</span></div>
+    <div class="verbs"><span class="e">lock</span><span class="sep">/</span>entrain an internal rhythm</div>
+    <p class="ex">He joins the back row of the choir in October and spends the first night a beat behind everyone. By the third week he breathes where the row breathes and comes in where they come in. Singing it alone on the way home, he takes it at their speed, not his own.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><div class="txtsym">A/D</div></div>
+    <div class="head"><span class="desig">U3</span><span class="name">ADC</span><span class="chip iso">ISO</span></div>
+    <div class="verbs"><span class="e">quantize</span><span class="sep">/</span>continuous register becomes discrete</div>
+    <p class="ex">Nobody alive sings it but him, so she is putting it onto paper in pencil, bar by bar. Now it can be sung by people who never heard him. The lean he puts on the third line, and how long he holds it before letting go, is not on the paper.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><div class="txtsym">D/A</div></div>
+    <div class="head"><span class="desig">U4</span><span class="name">DAC</span><span class="chip iso">ISO</span></div>
+    <div class="verbs"><span class="e">reconstruct</span><span class="sep">/</span>discrete register becomes continuous</div>
+    <p class="ex">Four hours on the train north, with three things to say and the order fixed. Once he is there, none of it comes out in threes. He carries the bags in, stays until Sunday, and the second thing turns out to be the way he sits at the table and lets his uncle finish.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">S5</span><h2>Logic and routing</h2><span class="count">11 · plate-level ENG</span></div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-and"/></svg></div>
+    <div class="head"><span class="desig">21</span><span class="name">AND</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">require all</span><span class="sep">/</span>detect all-active prerequisites or conflict</div>
+    <p class="ex">The parking permit wants all three on the same morning: the photograph, the signed declaration, and a bill dated inside the last three months. Twice it has come back, and twice only the bill was out of date. Perfect photograph, perfect signature, no permit.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-or"/></svg></div>
+    <div class="head"><span class="desig">22</span><span class="name">OR</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">require any</span><span class="sep">/</span>accept one or more thresholded flags</div>
+    <p class="ex">Any one of the three closes the pool: thunder overhead, a lifeguard off sick, or the water gone cloudy. Today it is only the water — the sun is out, the staff are all in — and the notice is already up at the turnstile.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-not"/></svg></div>
+    <div class="head"><span class="desig">23</span><span class="name">NOT</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">complement</span><span class="sep">/</span>negate one explicit firing flag</div>
+    <p class="ex">The baker turns the sign in the door from OPEN to CLOSED at two. The ovens are still warm, she is still working, and six loaves sit cooling on the rack behind her. The handle simply stops turning for anyone out on the pavement.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-and"/></svg></div>
+    <div class="head"><span class="desig">24</span><span class="name">NAND</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">reject all-active</span><span class="sep">/</span>invert an AND result</div>
+    <p class="ex">Both open at once is the one thing the crossing will never do. The barrier lifts only after the lights have gone dark; the lights only clear once the barrier is down. Some minutes nothing moves at all — the lorry waits, no train in sight — and that suits the crossing perfectly.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-or"/></svg></div>
+    <div class="head"><span class="desig">25</span><span class="name">NOR</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">require none</span><span class="sep">/</span>accept only when every flag is inactive</div>
+    <p class="ex">The lift will not move while anything is in its way: a suitcase against the beam, the inner gate not quite shut, the outer gate left open on the fourth floor. Clear all three and it goes without a sound. Leave one and it sits there humming, going nowhere.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-xor"/></svg></div>
+    <div class="head"><span class="desig">26</span><span class="name">XOR</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">distinguish</span><span class="sep">/</span>accept exactly one active flag</div>
+    <p class="ex">One answer per line on the quiz slip. The table hedges and writes both Mercury and Venus in the box; the marker gives them nothing, exactly as if the line had been left blank. The table behind them wrote one word, wrong or right, and got it marked.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-xor"/></svg></div>
+    <div class="head"><span class="desig">27</span><span class="name">XNOR</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">agree</span><span class="sep">/</span>detect equal flags, including both-inactive</div>
+    <p class="ex">Both squares blank on the shared calendar and nobody rings. Both filled in with the same trip to the coast and nobody rings either — your sister sees it, you see it, there is nothing to arrange. It is the Saturday blank on her side and full on yours that starts the phoning.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-mux"/></svg></div>
+    <div class="head"><span class="desig">28</span><span class="name">MUX</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">choose</span><span class="sep">/</span>route one selected input to one output</div>
+    <p class="ex">Forty things sit behind the glass; the buttons decide which one falls. B4 sends down the crisps, B5 the chocolate, and both arrive in the same tray at the bottom. Punch nothing and nothing comes — the machine just stands on the platform with all forty still in their rows.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><div class="txtsym">DMX</div></div>
+    <div class="head"><span class="desig">29</span><span class="name">DEMUX</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">dispatch</span><span class="sep">/</span>send one input to one selected output</div>
+    <p class="ex">One bagful, one skip. The man in the hi-vis looks in, says "wood", and points to the far end. Not wood and garden. Not try both and see. Whatever else is in that bag goes over the side with the wood, or you stand in the cold and pull it out first.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-rly"/></svg></div>
+    <div class="head"><span class="desig">30</span><span class="name">Relay</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">isolate and switch</span><span class="sep">/</span>let Cause control a separate Effect path</div>
+    <p class="ex">The dial in the hall is the size of a saucer and turns with one finger. At six it clicks, and two floors down the boiler thumps into life; within minutes every radiator in the building is ticking. Nothing hot ever reaches the hall. The dial stays cold in your hand.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-sch"/></svg></div>
+    <div class="head"><span class="desig">31</span><span class="name">Schmitt trigger</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">commit and hold</span><span class="sep">/</span>prevent threshold chatter</div>
+    <p class="ex">Rain, then no rain, then rain: the covers have been on and off the square four times since lunch. At four the umpire walks out, looks up once, and calls it. The sky clears at half past and stays clear. The covers stay on and everybody goes home.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">S6</span><h2>Regulation, protection, annotation</h2><span class="count">11 · not individually graded</span></div>
+
+  <div class="part">
+    <div class="sym"><div class="txtsym">REG</div></div>
+    <div class="head"><span class="desig">32</span><span class="name">Voltage regulator</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">restore</span><span class="sep">/</span>maintain a setpoint</div>
+    <p class="ex">You never notice it happening and you never do anything about it: snapped at over breakfast, praised mid-morning, a long post-office queue at four — and the same list of chores gets worked through all day anyway. By evening, chopping onions, you sound like yourself again. Not better than usual. Yourself.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-fu"/></svg></div>
+    <div class="head"><span class="desig">33</span><span class="name">Fuse</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">sever once</span><span class="sep">/</span>stop an unsafe path for the stated lifetime</div>
+    <p class="ex">You handed the keys across the counter yourself and lifted your own mug off the hook, and by Wednesday another name was on the rota. Months earlier, alone on the bus, you had told yourself: dock my wages once more and I go that day. They docked them in March.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-cb"/></svg></div>
+    <div class="head"><span class="desig">34</span><span class="name">Circuit breaker</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">trip and reset</span><span class="sep">/</span>stop a recoverable fault path</div>
+    <p class="ex">Not for the first time this term, you pull into the lay-by and cut the engine mid-shriek. Nobody moves until the noise drains out of the car; then you start up and finish the school run. The children go quiet now the moment the car slows.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-rail"/></svg></div>
+    <div class="head"><span class="desig">35</span><span class="name">Drive rail</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">supply</span><span class="sep">/</span>make motive potential available</div>
+    <p class="ex">Everything else went fine today — the washing is out, the shelf is fixed, the bathroom scrubbed. Then you sit down with the book you chose yourself, wanting to read it, and nothing in it catches. On Tuesday a colleague asks you something you cannot answer; that night the same book keeps you reading until dawn.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-ref"/></svg></div>
+    <div class="head"><span class="desig">36</span><span class="name">Reference / rest node</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">define zero</span><span class="sep">/</span>set an engineered baseline</div>
+    <p class="ex">You could have gone on judging every night against your own bed at home. Instead, on the first morning of the camping trip, you decide that a cold tent at first light is what comfortable will mean for the fortnight. Halfway through, the drizzle is nothing and tea from a flask tastes extraordinary.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-tp"/></svg></div>
+    <div class="head"><span class="desig">37</span><span class="name">Probe / test point</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">observe</span><span class="sep">/</span>inspect one named point without becoming its signal</div>
+    <p class="ex">From your front room you can see that the young defender has stopped turning to his left. You do not know what he has done to himself. You cannot get word to him. He plays on, and the match goes on.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-sw"/></svg></div>
+    <div class="head"><span class="desig">38</span><span class="name">Switch / enable</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">connect</span><span class="sep">/</span>enable or inhibit one path</div>
+    <p class="ex">Tonight you shut the bedroom door on the cat, instead of leaving it open a hand’s width for her the way you always do. She scratches at it, then settles on the landing. You lie there listening, ready to get up and let her in if she starts again.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-mtr"/></svg></div>
+    <div class="head"><span class="desig">39</span><span class="name">Meter</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">measure</span><span class="sep">/</span>report one named quantity by a named method</div>
+    <p class="ex">The plumber says the job is two days. You ask what is inside the two days: two days on site with the water off, or door to door, counting the journey each way and the morning she spends waiting for a part. She means the second. You had assumed the first.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-net"/></svg></div>
+    <div class="head"><span class="desig">40</span><span class="name">Net label</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">name</span><span class="sep">/</span>type the whole state or scalar</div>
+    <p class="ex">You write the week out on the back of an envelope: the sharp reply to the neighbour, the email you have still not answered, the second night of bad wine, the run you skipped twice. Then you write one word underneath — brother — and every line above it becomes the same line.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-fwd"/></svg></div>
+    <div class="head"><span class="desig">41</span><span class="name">Solid forward path</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">advance</span><span class="sep">/</span>show the main forward path</div>
+    <p class="ex">You put off the dentist in April because the ache faded on its own. In August, halfway through a slice of toast, the tooth splits. By Tuesday morning half your face is numb, a stranger’s hands are in your mouth, and you are booked back in for a crown on Friday.</p>
+  </div>
+
+  <div class="part">
+    <div class="sym"><svg viewBox="0 0 44 22"><use href="#g-fb"/></svg></div>
+    <div class="head"><span class="desig">42</span><span class="name">Dashed feedback path</span><span class="chip non">—</span></div>
+    <div class="verbs"><span class="e">return</span><span class="sep">/</span>show a sampled feedback path</div>
+    <p class="ex">Each Monday you say less in the meeting than you did the Monday before. You went quiet after your idea was talked over; your manager read the quiet as not minding much and stopped asking you first; and her not asking is the reason you give yourself, in the corridor, for staying quiet again.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">ATOM</span><h2>The one circuit to know by heart</h2><span class="count">Circuit 1</span></div>
+  <figure>
+    <svg viewBox="0 0 460 150" role="img" aria-label="The CJT atom: an Above/Cause trigger, shaped by an accumulated Female substrate, lands as a Below/Effect arrival.">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M40 52h58"/>
+        <path d="M300 52h60"/>
+        <path d="M198 128v-38"/>
+        <circle cx="198" cy="52" r="30"/>
+        <path d="M180 52h-10M180 34v36M180 40l22-14M180 64l22 14"/>
+        <path d="M196 72l8 4-2-8z" fill="currentColor" stroke="none"/>
+        <path d="M330 52v-22M326 34l4-8 4 8z" fill="none"/>
+      </g>
+      <g fill="currentColor" font-family="IBM Plex Mono, monospace" font-size="10.5">
+        <text x="40" y="36" font-weight="600">TRIGGER / CAUSE</text>
+        <text x="40" y="76" opacity=".72">^8^C_{F2}|A</text>
+        <text x="248" y="36" font-weight="600">ARRIVAL / EFFECT</text>
+        <text x="248" y="76" opacity=".72">^9^C_{F2}|A</text>
+        <text x="120" y="140" font-weight="600">ACCUMULATED SUBSTRATE (BIAS)</text>
+        <text x="120" y="124" opacity=".72">^5^P_{F7}|T</text>
+        <text x="322" y="22" opacity=".72">TP1</text>
+        <text x="40" y="16" opacity=".72">β = 2.0 · cutoff = 0.1 · sat = 0.95</text>
+      </g>
+    </svg>
+    <figcaption>A trigger enters, accumulated composition biases it, and a <em>different</em> Idea arrives. This is a trigger-to-arrival transition — not a synonym for reasoning. Terminal roles are the CAS abstraction, not claims about a transistor’s collector, base and emitter.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">S7</span><h2>The other nine, in one line each</h2><span class="count">Circuits 2–10</span></div>
+  <div class="circuit"><span class="cn">02</span><div><div class="cname">Directed domain descent</div><div class="cbody"><span class="dom dp">P</span> → <span class="dom dc">C</span> → <span class="dom de">E</span> → <span class="dom do">O</span> by directed admissibility; <span class="dom do">O</span> → <span class="dom dp">P</span> is a labelled feedback path, never an upward override</div></div></div>
+  <div class="circuit"><span class="cn">03</span><div><div class="cname">Gain cascade</div><div class="cbody">three CJTs, each with its own bias · 1.5 × 1.0 × 2.0 = 3.0 · still bounded by sat = 0.8</div></div></div>
+  <div class="circuit"><span class="cn">04</span><div><div class="cname">RC-compensated feedback</div><div class="cbody">outcome through R_fb and C_fb (τ = 5 min) returns only a smoothed trend, at β_fb = 0.2</div></div></div>
+  <div class="circuit"><span class="cn">05</span><div><div class="cname">Ambiguity stabilizer</div><div class="cbody">^2 flag AND ^3 flag = conflict · Schmitt on 0.7 / off 0.3 holds the decision while it wobbles</div></div></div>
+  <div class="circuit"><span class="cn">06</span><div><div class="cname">CSB red path</div><div class="cbody">refusal sense 0.05 sits below the red clamp 0.1, so the fuse is reachable · it cuts the green answer, never the refusal</div></div></div>
+  <div class="circuit"><span class="cn">07</span><div><div class="cname">Differential comparison</div><div class="cbody">two commensurable activations, one shared bias · the difference lands as ^6 decomposition + ^9 arrival</div></div></div>
+  <div class="circuit"><span class="cn">08</span><div><div class="cname">Rhythm and entrainment</div><div class="cbody">LC tank selects the resonant rate (^4 Vibration) · PLL locks to an external beat (^7 Rhythm) · crystal is a reference, not a Noetic</div></div></div>
+  <div class="circuit"><span class="cn">09</span><div><div class="cname">Retention cell</div><div class="cbody">C = 200, leakage = 0.001, refresh pump · a low charge alone cannot tell never-written from leaked-away</div></div></div>
+  <div class="circuit"><span class="cn">10</span><div><div class="cname">Drive supply</div><div class="cbody">7 rails · dials 3–9, involution divergence ≤ 4 · <span class="dom do">O</span> enables only after <span class="dom dp">P</span>, <span class="dom dc">C</span>, <span class="dom de">E</span> are power-good · brownout trip 4.2 / release 5.4 · emergency fails closed to silence</div></div></div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">OPS</span><h2>Three operators, and what they promise</h2><span class="count">v7.7</span></div>
+  <div class="rows">
+    <div class="row2"><span class="op">+</span><span class="d"><b>Co-presence.</b> Manifestations sit together and stay distinct. Say “associates with” and check it still reads true.</span></div>
+    <div class="row2"><span class="op">×</span><span class="d"><b>Integration.</b> Licensed only with a named emergent result. Say “intensifies through”. Same-Noetic multi-register <code>×</code> without a named result is invalid.</span></div>
+    <div class="row2"><span class="op">|⟨…⟩</span><span class="d"><b>Register occupancy.</b> States where something lives. Makes no claim at all about interaction.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="fam"><span class="fam-id">GUARD</span><h2>Six ways this goes wrong</h2><span class="count">check before you classify</span></div>
+  <ol class="guards">
+    <li><b>^3 Negative is repulsion. ^6 Male is decomposition.</b> Auditing or breaking down an argument is ^6 — never ^3, however critical it feels.</li>
+    <li><b>^8 Above/Cause is associative triggering, not reasoning.</b> It brings a <em>different</em> Idea to Mind. The thing that arrives is ^9 Below/Effect.</li>
+    <li><b>^5 Female is composition, not a container.</b> The Mind <em>is</em> what it accumulated. It is not a box holding experiences.</li>
+    <li><b>A part is a role, not a Noetic.</b> One part may act on Noetic, Domain, Drive, Register, or a board-level control quantity. Never force one component onto one Noetic.</li>
+    <li><b>Reference is an engineered zero.</b> Calling a cognitive rest state ^0 Idea is a convention you chose, not an identity.</li>
+    <li><b>AND detects both-active. XOR is exactly-one. XNOR includes both-inactive.</b> A both-active conflict detector is AND — reaching for XOR here is the common slip.</li>
+  </ol>
+</section>
+
+<div class="colophon">
+  <p><b>What this is.</b> A carry-sized companion to the CAS PCBA Engineer material — the 42 frozen component and annotation entries, each with its verb pair, its mapping grade, and one everyday example. It is a teaching and design reference, not evidence.</p>
+  <p><b>What the numbers are.</b> Every parameter shown — β, τ, thresholds, dial ranges — is a design choice you would specify in a schematic. None is a measurement of a person, an AI model, or a biological system, and none is a benchmark result.</p>
+  <p><b>Domain colours.</b> <span class="dom dp">P</span> Principled · <span class="dom dc">C</span> Cognitive · <span class="dom de">E</span> Evaluative · <span class="dom do">O</span> Operational. Colour reinforces; the labels and shapes carry the claim, so every plate survives greyscale printing.</p>
+  <p><b>Source.</b> Verb pairs, grades and circuit parameters are taken from the Complete Memory Deck and plates S1–S6 of the CAS Component Companion. The everyday examples are new here, and were drift-checked against the six guardrails above.</p>
+</div>
+
+</div>

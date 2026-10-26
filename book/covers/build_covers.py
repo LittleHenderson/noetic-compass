@@ -81,6 +81,22 @@ MARK_TKS = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
   \draw[accent, opacity=0.30, line width=0.5pt] (-1.6,1.9) -- (28.6,1.9);
 \end{tikzpicture}"""
 
+MARK_COMPANION = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
+  % A signal path through three of the guide's own symbols: a resistor limits
+  % the flow, a diode admits it one way, a capacitor retains what arrives.
+  % Drawn in the same stroke weight as the plates it represents.
+  \draw[accent, line width=0.9pt] (0,0) -- (2.2,0);
+  \draw[ink!60, line width=0.9pt] (2.2,-1.6) rectangle (6.6,1.6);   % resistor
+  \draw[accent, line width=0.9pt] (6.6,0) -- (10.2,0);
+  \fill[accent] (10.2,-2.2) -- (10.2,2.2) -- (14.4,0) -- cycle;      % diode
+  \draw[accent, line width=1.4pt] (14.4,-2.2) -- (14.4,2.2);         % cathode bar
+  \draw[accent, line width=0.9pt] (14.4,0) -- (18,0);
+  \draw[accent, line width=1.6pt] (18,-2.2) -- (18,2.2);             % capacitor
+  \draw[accent, line width=1.6pt] (20.2,-2.2) -- (20.2,2.2);
+  \draw[accent, line width=0.9pt] (20.2,0) -- (23.4,0);
+  \fill[accent] (23.4,0) circle (0.85mm);
+\end{tikzpicture}"""
+
 MARK_GRIM = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
   % The signature topology of this book: a circuit that closes on itself.
   % Effect returns to the bias terminal that produced it -- the shared
@@ -104,7 +120,8 @@ MARK_GRIM = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
 BOOKS = [
     {
         "slug": "cas_pcba_engineer",
-        "pages": 743,
+        "interior_pdf": "../CAS_PCBA_Engineer/CAS_PCBA_Engineer_print.pdf",
+        "pages": 809,
         "title_lines": r"CAS\\PCBA\\Engineer",
         "spine_title": "CAS PCBA Engineer",
         "subtitle": "Designing Cognitive Circuits with the "
@@ -189,6 +206,39 @@ Stop describing reality. Start engineering it.""",
         "category": "BODY, MIND \\& SPIRIT / Magick Studies",
     },
     {
+        # The companion guide to CAS PCBA Engineer. Short book, same 6x9 trim,
+        # so it shelves beside the main volume. Page count is read from the
+        # built interior, not hard-coded.
+        "slug": "cas_component_companion",
+        "interior_pdf": "../CAS_Component_Companion/CAS_Component_Companion.pdf",
+        "pages": 58,
+        "title_lines": r"The Component\\Companion",
+        "spine_title": "The Component Companion",
+        "subtitle": "Illustrated Electrical Symbols and the Cognitive Roles "
+                    "They Map To",
+        "title_drop": 4.05,
+        "blurb_drop": 2.45,
+        # Copper on warm grey: a bench manual, not a textbook.
+        "ink": "1F1B18", "accent": "A8531E", "paper": "F5F1EA",
+        "mark": MARK_COMPANION,
+        "hook": "Every component in the bin, drawn as an engineer would draw "
+                "it, and read as a mind would use it.",
+        "blurb": r"""A resistor limits flow. A diode admits it one way. A capacitor retains what
+arrives. Each of those is also a statement about a mind --- and the correspondence
+is tighter than a metaphor, which is exactly why it needs a badge saying how far it
+carries.\par\medskip
+This is the part bin for \textit{CAS PCBA Engineer}, drawn. Forty-two entries, one
+page each: the symbol, its job in a circuit, the cognitive role it plays, a worked
+example in CAS notation, and the guardrail that marks where the analogy stops. Every
+mapping carries exactly one badge --- \textbf{ISO}, \textbf{ENG} or \textbf{PED} ---
+and never a hybrid.\par\medskip
+Ten cognitive schematics follow, from the single-transistor atom up to the
+power-management board, showing what every wire carries. Then the whole library
+compresses to one memorisable table. Fifty-six cut-out cards are published alongside
+this guide.""",
+        "category": "TECHNOLOGY \\& ENGINEERING / Electronics",
+    },
+    {
         # PAGE COUNT IS PROVISIONAL until the interior builds. build_covers.py
         # computes the spine from it, so re-run this after every interior build
         # or the wrap will be wrong by exactly the drift.
@@ -231,8 +281,61 @@ BIO = ("Little Henderson is the creator of the Cognitive Architecture System "
 AUTHOR = "Little Henderson"
 
 
+def interior_pages(book):
+    """Page count from the built interior when one is available.
+
+    A hard-coded page count goes stale the moment the interior is rebuilt --
+    this file still said 743 while the published paperback was 783, so the
+    cover on file was a whole revision narrow. Reading the PDF removes that
+    failure mode; the literal is only a fallback.
+    """
+    pdf = book.get("interior_pdf")
+    if pdf:
+        p = HERE / pdf
+        if p.exists():
+            try:
+                import pymupdf
+                n = pymupdf.open(p).page_count
+                print(f"  page count from {p.name}: {n}")
+                return n
+            except Exception as exc:                     # noqa: BLE001
+                print(f"  WARNING could not read {p.name}: {exc}")
+    return book["pages"]
+
+
+SPINE_TEXT_MIN_PAGES = 100   # KDP will not print spine text below this
+
+
+def spine_block(pages, spine_title):
+    """Rotated spine type, or nothing when the book is too thin for it."""
+    spine_in = pages * SPINE_PER_PAGE
+    if pages < SPINE_TEXT_MIN_PAGES:
+        return ("% No spine text: {} pages is below KDP's {}-page minimum for "
+                "spine\n% type, and the {:.4f}in spine is too narrow for 9pt "
+                "in any case.\n".format(pages, SPINE_TEXT_MIN_PAGES, spine_in))
+    return r"""% Rotated -90deg, reading top-to-bottom as on a shelf.
+\node[rotate=-90, anchor=west, text=paper]
+  at (\SPINEMID, \WRAPH-0.95) {%
+  \displayfont\bfseries\fontsize{\SPINESIZE}{\SPINESIZE}\selectfont \SPINETITLE
+};
+% With rotate=-90 and anchor=east the text ENDS at the anchor and runs upward,
+% so these two y values are the FEET of each line. They must clear each other's
+% length or the author name and the imprint collide.
+\node[rotate=-90, anchor=east, text=paper]
+  at (\SPINEMID, 2.05) {%
+  \displayfont\fontsize{11}{11}\selectfont \AUTHOR
+};
+% Imprint at the foot of the spine. Standard shelf convention, and the thing
+% that makes four separate titles read as one press.
+\node[rotate=-90, anchor=east, text=paper, opacity=0.82]
+  at (\SPINEMID, 0.55) {%
+  \displayfont\fontsize{7.5}{8}\selectfont NOETIC COMPASS PRESS
+};
+"""
+
+
 def build(book):
-    pages = book["pages"]
+    pages = interior_pages(book)
     spine = pages * SPINE_PER_PAGE
     wrap_w = 2 * BLEED + 2 * TRIM_W + spine
     wrap_h = 2 * BLEED + TRIM_H
@@ -269,6 +372,7 @@ def build(book):
         r"\BIO": tex_escape(BIO),
         r"\CATEGORY": book["category"],
         r"\MARK": book["mark"],
+        r"\SPINEBLOCK": spine_block(pages, book["spine_title"]),
     }
 
     tex = TEMPLATE.read_text(encoding="utf-8")
@@ -312,7 +416,7 @@ def build(book):
     if png.exists():
         shutil.copyfile(png, kindle)
 
-    return out_pdf, kindle, spine, wrap_w, wrap_h
+    return out_pdf, kindle, spine, wrap_w, wrap_h, pages
 
 
 def main():
@@ -323,10 +427,10 @@ def main():
         res = build(b)
         if not res:
             continue
-        pdf, kindle, spine, w, h = res
+        pdf, kindle, spine, w, h, pages = res
         print(f"  OK  {b['spine_title']}")
         print(f"        wrap   {pdf.name}  {w:.4f} x {h:.2f} in "
-              f"(spine {spine:.4f} in @ {b['pages']}pp)")
+              f"(spine {spine:.4f} in @ {pages}pp)")
         print(f"        kindle {kindle.name}")
     print("\nCheck the spine width against KDP's Cover Calculator before "
           "uploading; page counts must match the final interiors exactly.")

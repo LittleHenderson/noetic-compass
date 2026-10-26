@@ -1,0 +1,99 @@
+% =====================================================================
+% The Component Companion — front matter
+% Noetic Compass Press · 2026
+% =====================================================================
+
+\frontmatter
+\pagestyle{plainbook}
+
+% --- Half-title --------------------------------------------------------
+\thispagestyle{empty}
+\begin{center}
+  \vspace*{2.5in}
+  {\huge\bfseries The Component Companion\par}
+\end{center}
+% \cleardoublepage, not \clearpage: the title page must open on a recto
+% (right-hand) page, and the copyright must sit on the verso behind it.
+\cleardoublepage
+
+% --- Title page --------------------------------------------------------
+\thispagestyle{empty}
+\begin{center}
+  \vspace*{1.0in}
+  {\Huge\bfseries The Component Companion\par}
+  \vspace{0.5in}
+  {\Large\itshape Illustrated Electrical Symbols and\\[0.10in]
+   the Cognitive Roles They Map To\par}
+  \vspace{0.45in}
+  {\large A bench guide to the component library of\\[0.08in]
+   \itshape CAS PCBA Engineer\par}
+  \vspace{1.2in}
+  {\Large Little Henderson\par}
+  \vfill
+  {\normalsize Noetic Compass Press\par}
+  {\small 2026\par}
+\end{center}
+\clearpage
+
+% --- Copyright ---------------------------------------------------------
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+\begin{minipage}{0.85\textwidth}
+\small
+\noindent
+\textbf{The Component Companion}\\
+\textit{Illustrated Electrical Symbols and the Cognitive Roles They Map To}\\[6pt]
+Copyright \textcopyright{} 2026 Little Henderson. All rights reserved.\\[6pt]
+No part of this publication may be reproduced, distributed, or transmitted in
+any form or by any means, including photocopying, recording, or other electronic
+or mechanical methods, without the prior written permission of the author, except
+in the case of brief quotations embodied in critical reviews and certain other
+noncommercial uses permitted by copyright law.\\[6pt]
+First Edition, 2026. Published by Noetic Compass Press.\\[6pt]
+Companion to \textit{CAS PCBA Engineer: Designing Cognitive Circuits with the
+Cognitive Architecture System}.\\[6pt]
+Framework: Cognitive Architecture System (CAS) v7.7.\\[6pt]
+Base-framework intellectual property: USPTO Provisional Application
+\#64/037,173. The component library documented here extends that foundation.\\[6pt]
+ISBN: [pending publisher assignment]\\[6pt]
+\textit{Every parameter value in this guide is an engineering design choice. None
+of them is a measurement taken from a person, an AI model, or a biological
+system. Nothing here is a safety certification, a measurement instrument, or a
+claim about how any particular mind works.}\\[6pt]
+\textit{Product and company names mentioned in this guide may be trademarks of
+their respective owners, and are used here for identification and commentary
+only.}
+\end{minipage}
+\end{center}
+\vspace*{\fill}
+\cleardoublepage
+
+% --- Epigraph ----------------------------------------------------------
+\thispagestyle{empty}
+\vspace*{2.6in}
+\begin{center}
+\begin{minipage}{0.74\textwidth}
+\itshape\centering
+Every component in the bin, drawn as an engineer would draw it,\\
+and read as a mind would use it.
+\end{minipage}
+\end{center}
+\clearpage
+
+% --- Table of Contents -------------------------------------------------
+{%
+  \hypersetup{linkcolor=black}%
+  \tableofcontents*
+}
+\clearpage
+
+% --- List of Figures ---------------------------------------------------
+{%
+  \hypersetup{linkcolor=black}%
+  \listoffigures
+}
+\clearpage
+
+% --- Preface + How to Use + How to Read (unnumbered front matter) ------
+\input{front_prose.tex}

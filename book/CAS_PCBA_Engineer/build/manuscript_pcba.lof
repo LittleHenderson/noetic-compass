@@ -6,43 +6,40 @@
 \addvspace {10pt}
 \contentsline {figure}{\numberline {5.1}{\ignorespaces The Drive voltage divider. Two resistors in series split one Drive rail between expansion and constraint; the tap is the behaviour you get.}}{71}{figure.5.1}%
 \addvspace {10pt}
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Leakage curves for the same stored experience at two decay rates --- the design choice between a memory that holds and one that fades.}}{90}{figure.6.1}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Leakage curves for the same stored experience at two decay rates --- the design choice between a memory that holds and one that fades.}}{89}{figure.6.1}%
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {8.1}{\ignorespaces Domain Descent as a diode chain. Forward bias conducts down the precedence order; the reverse path is blocked.}}{119}{figure.8.1}%
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Domain Descent as a diode chain. Forward bias conducts down the precedence order; the reverse path is blocked.}}{117}{figure.8.1}%
 \addvspace {10pt}
-\contentsline {figure}{\numberline {9.1}{\ignorespaces CJT characteristic curves at four bias levels. Each curve plots effect against cause, crossing cutoff, active, and saturation.}}{142}{figure.9.1}%
-\addvspace {10pt}
-\addvspace {10pt}
-\contentsline {figure}{\numberline {11.1}{\ignorespaces A three-stage cascade. Stage gains multiply into $\beta _{\text {total}}$, but attention flow stays local to each stage.}}{188}{figure.11.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {12.1}{\ignorespaces The four filter shapes on a single cognitive-frequency axis: low-pass, high-pass, band-pass, and notch.}}{212}{figure.12.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {13.1}{\ignorespaces The Phi loop. Above/Cause triggers Below/Effect, which becomes the next cause --- the structure behind every cognitive rhythm.}}{222}{figure.13.1}%
+\contentsline {figure}{\numberline {9.1}{\ignorespaces CJT characteristic curves at four bias levels. Each curve plots effect against cause, crossing cutoff, active, and saturation.}}{140}{figure.9.1}%
 \addvspace {10pt}
 \addvspace {10pt}
+\contentsline {figure}{\numberline {11.1}{\ignorespaces A three-stage cascade. Stage gains multiply into $\beta _{\text {total}}$, but attention flow stays local to each stage.}}{184}{figure.11.1}%
 \addvspace {10pt}
-\contentsline {figure}{\numberline {16.1}{\ignorespaces Bode plot of gain and phase against frequency. Each pole contributes a further $-20$\,dB per decade and $-90^\circ $ of phase.}}{289}{figure.16.1}%
+\contentsline {figure}{\numberline {12.1}{\ignorespaces The four filter shapes on a single cognitive-frequency axis: low-pass, high-pass, band-pass, and notch.}}{208}{figure.12.1}%
 \addvspace {10pt}
-\contentsline {figure}{\numberline {17.1}{\ignorespaces The four Processing Domains as board layers. Signals route within a layer; a cross-domain transition is a via.}}{313}{figure.17.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {18.1}{\ignorespaces Cognitive Safety Board block diagram. A prompt flows left to right through five stages to either a response or a refusal.}}{326}{figure.18.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {19.1}{\ignorespaces Cognitive Oscillator Board signal chain: clock, LC tank, phase-locked loop, and duty-cycle modulator.}}{358}{figure.19.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {20.1}{\ignorespaces The differential pair. Two matched CJTs share one bias, with a current mirror as active load.}}{378}{figure.20.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {21.1}{\ignorespaces Cognitive Memory Board write and read paths, from encoder through address decoder to recalled output.}}{403}{figure.21.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {22.1}{\ignorespaces Cognitive Power Management Board reference topology. Drive energy is regulated, limited, sequenced, and thermally managed per domain.}}{428}{figure.22.1}%
-\addvspace {10pt}
-\addvspace {10pt}
-\contentsline {figure}{\numberline {24.1}{\ignorespaces The walk-down. Probe the test points in order and stop at the first reading that departs from specification --- that stage is the fault.}}{474}{figure.24.1}%
-\addvspace {10pt}
-\contentsline {figure}{\numberline {25.1}{\ignorespaces The deployment ladder: five stages from simulation to full enforcement, each granting the board more authority.}}{491}{figure.25.1}%
+\contentsline {figure}{\numberline {13.1}{\ignorespaces The Phi loop. Above/Cause triggers Below/Effect, which becomes the next cause --- the structure behind every cognitive rhythm.}}{218}{figure.13.1}%
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
+\contentsline {figure}{\numberline {16.1}{\ignorespaces Bode plot of gain and phase against frequency. Each pole contributes a further $-20$\,dB per decade and $-90^\circ $ of phase.}}{285}{figure.16.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {17.1}{\ignorespaces The four Processing Domains as board layers. Signals route within a layer; a cross-domain transition is a via.}}{309}{figure.17.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {18.1}{\ignorespaces Cognitive Safety Board block diagram. A prompt flows left to right through five stages to either a response or a refusal.}}{322}{figure.18.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {19.1}{\ignorespaces Cognitive Oscillator Board signal chain: clock, LC tank, phase-locked loop, and duty-cycle modulator.}}{354}{figure.19.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {20.1}{\ignorespaces The differential pair. Two matched CJTs share one bias, with a current mirror as active load.}}{374}{figure.20.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {21.1}{\ignorespaces Cognitive Memory Board write and read paths, from encoder through address decoder to recalled output.}}{399}{figure.21.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {22.1}{\ignorespaces Cognitive Power Management Board reference topology. Drive energy is regulated, limited, sequenced, and thermally managed per domain.}}{424}{figure.22.1}%
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {24.1}{\ignorespaces The walk-down. Probe the test points in order and stop at the first reading that departs from specification --- that stage is the fault.}}{470}{figure.24.1}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {25.1}{\ignorespaces The deployment ladder: five stages from simulation to full enforcement, each granting the board more authority.}}{485}{figure.25.1}%
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
@@ -50,4 +47,7 @@
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {I.1}{\ignorespaces The three CAS-Ohm modes. One equation, three uses, selected by which term you do not already know.}}{752}{figure.I.1}%
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {I.1}{\ignorespaces The three CAS-Ohm modes. One equation, three uses, selected by which term you do not already know.}}{746}{figure.I.1}%

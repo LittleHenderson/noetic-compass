@@ -65,6 +65,31 @@
         "5180"
       ],
       "port": 5180
+    },
+    {
+      "name": "helm-ui-cube-film",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "C:/tmp/helm-cube-design/helm_ui/server.py"
+      ],
+      "env": {
+        "HELM_SESSION_DIR": "C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS/3ed5638a-2a51-46d6-b247-1f5f6caefaa8/scratchpad/helm_sessions"
+      },
+      "port": 8765
+    },
+    {
+      "name": "helm-hub-device-preview",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8777",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS/3ed5638a-2a51-46d6-b247-1f5f6caefaa8/scratchpad/hub_publish"
+      ],
+      "port": 8777
     }
   ]
 }

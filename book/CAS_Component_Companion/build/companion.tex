@@ -1,0 +1,20 @@
+% =====================================================================
+% The Component Companion — master LaTeX document
+% Noetic Compass Press · 2026
+% Build: python build_companion.py     (do not call xelatex by hand)
+% =====================================================================
+
+\documentclass[11pt,openright,twoside]{memoir}
+
+\input{preamble_companion.tex}
+
+\begin{document}
+
+\input{frontmatter_companion.tex}
+
+\mainmatter
+\pagestyle{book}
+
+\input{body.tex}
+
+\end{document}

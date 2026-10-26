@@ -12,7 +12,7 @@
 % The arguments were previously reversed, giving the spine 0.625in and the
 % fore-edge 0.875in. KDP requires the larger margin on the SPINE (gutter) to
 % survive perfect binding; at 601–828 pages that minimum is 0.875in.
-\setlrmarginsandblock{0.875in}{0.625in}{*}   % spine (gutter), fore-edge
+\setlrmarginsandblock{0.9375in}{0.5in}{*}   % spine (gutter), fore-edge
 \setulmarginsandblock{0.75in}{0.75in}{*}
 \setheaderspaces{*}{*}{0.4}
 \checkandfixthelayout
@@ -235,7 +235,7 @@
 \renewcommand{\chaptermark}[1]{\markright{#1}}
 
 % --- Chapter / part title styling --------------------------------------
-\chapterstyle{hangnum}
+\chapterstyle{default}
 \renewcommand{\chapnumfont}{\normalfont\huge\bfseries}
 \renewcommand{\chaptitlefont}{\normalfont\LARGE\bfseries}
 \renewcommand{\partnamefont}{\normalfont\Huge\bfseries}
@@ -290,3 +290,10 @@
 
 % --- Table of Contents formatting (memoir) -----------------------------
 \setlength{\cftbeforechapterskip}{4pt plus 2pt minus 1pt}
+
+\setlength{\emergencystretch}{3em}
+
+\setpnumwidth{2.55em}
+\setrmarg{3.55em}
+
+\fvset{breaklines=true,breakanywhere=true,fontsize=\footnotesize}
