@@ -27,6 +27,17 @@
   `~/venvs/cas-gpu`) handles up to ~3B fp16. **20B-class or bigger
   teachers/models run on AWS** (or RunPod); credentials are local
   (`~/.aws/`, `~/.cas_llm_keys.env`).
+- **USE AWS — the laptop is out of memory (owner order 2026-09-23).** The owner
+  said: "use aws as there is only 354 mb of 16 gbs locally", and asked that all
+  future agents be told. Run tests, builds, benchmarks, model execution,
+  training and any memory-heavy or long job on AWS. Keep the laptop for light
+  editing, inspection, launching, and downloading results. Do not fall back to
+  local heavy runs if AWS is unavailable; report the blocker instead.
+  - Measured on 2026-09-23: the ChatGPT desktop app and Chrome held about 4.5 GB.
+  - Loading the frozen course plus a Helm forward pass ran the laptop out of
+    memory; the shell died with "fork: Resource temporarily unavailable".
+  - For each cloud job, record its source, purpose, instance, time and cost
+    limits, and its cleanup.
 
 ## RESEARCH GOVERNANCE + GPU-FIRST COMPUTE (owner order 2026-08-30)
 

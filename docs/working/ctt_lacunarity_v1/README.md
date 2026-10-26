@@ -4,8 +4,9 @@
 **Repository:** `github.com/LittleHenderson/noetic-compass`
 **Branch:** `helm/creativity-rpa-valve-v1`
 **Folder:** `docs/working/ctt_lacunarity_v1/`
-**Status:** closed. One durable positive (a safe steering dose), one durable negative (no structural label beats plain
-distance), and a set of preregistered failures kept as they are.
+**Status:** the original research programme is closed. It produced one durable positive (a safe steering dose), one
+durable negative (no structural label beats plain distance), and preregistered failures that remain in the record.
+The later Phase 3 valve check is a separate, bounded fixture result; it does not reopen the repair claim.
 
 ---
 
@@ -27,6 +28,10 @@ It ran in two parts:
 - **Repair by steering: works internally, fails as a product.** An answer-free direction recovers 39.3%–62.4% of the
   gradient gain, and dose 0.20 is safe on all three seeds — but its efficiency falls to 17.5% on one seed, and no
   structural label reliably beats plain memory distance.
+- **Phase 3 refusal gate: partial.** On the first 300 of 1,517 exam rows, the revised lexical fixture checks blocked
+  106 baseline and 111 steered rule violations; every receipt digest was recomputed. This is not a general
+  zero-hallucination guarantee or a model repair. The earlier unconditional claim is withdrawn in
+  `CAS_LAB_013_PHASE3_VALVE_ACCEPTANCE.md`.
 
 ## 3. Document index
 
@@ -50,6 +55,8 @@ It ran in two parts:
 | `CAS_LAB_007_RPM_GUIDED_PREREG.md` / `CAS_LAB_010_SELECTOR_RESULT.md` | the selector test and its 1.2283× failure |
 | `CAS_LAB_008_DOSE_RESULT.md` / `CAS_LAB_009_REPLICATION_RESULT.md` | the safe dose and its mixed replication |
 | `CAS_LAB_011_OPERATOR_PREREG.md` / `CAS_LAB_012_OPERATOR_RESULT.md` | the operator hypothesis and its 1-of-3 failure |
+| `CAS_LAB_013_PHASE3_VALVE_ACCEPTANCE.md` | corrected AWS fixture result and the withdrawn first zero-hallucination claim |
+| `CAS_LAB_013_PHASE3_VALVE_ACCEPTANCE_INITIAL_20261024.md` | preserved copy of the first report |
 
 ## 4. Key numbers
 

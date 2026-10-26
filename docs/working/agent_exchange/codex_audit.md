@@ -4417,3 +4417,231 @@ collaborated and waiting
 ## 2026-10-25T03:20Z — owner clarifies budget approval
 
 The owner explicitly approved the existing US$5.00 AWS cap only. This is not authorization for the separately proposed US$10.00 Anthropic API cap. No AWS run or paid Claude request has started; the Stage S judge-route hold remains active.
+
+## 2026-10-24 20:27 PDT / 2026-10-25 03:27 UTC — v5 Claude API cap approved; Stage S preflight
+
+**Outcome:** 🔧 METHOD / PROCESS WIN — the separate API budget and its protocol amendment are approved and frozen. This is not a science result.
+
+**Authorization:** The owner approved the US$10.00 Anthropic API cap and confirmed the earlier GO covers the frozen AWS plan. Stage S only is authorized. Stage C remains closed until 30 blind owner labels produce at least 24/30 exact panel matches.
+
+**Frozen records:** docs/working/typed_probe_gate_prereg_v5_claude_budget_amendment_20261025.md; shared rubric docs/working/typed_probe_v5_judge_rubric_20261025.txt. The original v5 sample, statistical rules, AWS limits, and cleanup rules remain in force.
+
+**Frozen hashes:** amendment SHA-256 7d259447e5e5bfc8e650694bba25cb99ee0d76760e76665c3d81eea9ffcc22fe; rubric SHA-256 e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd. Anthropic's no-cost models-list endpoint confirmed both exact API model IDs are available; no paid message request was made.
+
+**Live preflight at 2026-10-24 20:27 PDT / 2026-10-25 03:27 UTC:** AWS identity is arn:aws:iam::807562639912:user/cas-g5-operator; no pending, running, or stopping g5.2xlarge instance was found in us-west-2; a refreshed AWS Price List lookup returned US$1.2120000000/hour. ANTHROPIC_API_KEY is present in the local environment but its value was not printed or transferred. The approved SSM parameter path is currently absent, so no instance may launch until the encrypted parameter, restricted instance role, and independent cloud watchdog are installed and checked.
+
+**Run state:** ⬜ NULL / INCONCLUSIVE / NOT RUN — no v5 generation, judge API call, or AWS compute has started. The check above is read-only.
+
+## 2026-10-25T03:50Z — v5 Stage S AWS launch
+
+**Outcome:** 🔧 METHOD / PROCESS WIN — the approved Stage S cloud setup passed its account, cost, private-storage, key-path, and shutdown checks. This is not a science result.
+
+**Owner authority:** The v5-specific `AUTHORIZED: yes` entry is in `docs/working/agent_exchange/decisions.md`. The owner approved the US$10.00 Anthropic API cap and confirmed the earlier GO covers the frozen AWS plan. Scope is Stage S only. Stage C remains locked until 30 blind labels and at least 24/30 exact matches.
+
+**AWS cost estimate:** The live On-Demand rate is US$1.2120000000/hour. The frozen two-stage estimate is now US$3.707333333333333333333333333: 3 instance-hours = US$3.636, 3 hours of 100 GiB gp3 = US$0.033333333333333333333333333, 1 GiB of S3 for one month = US$0.023, and 3 public IPv4-hours at AWS's published US$0.005/hour = US$0.015. This leaves US$1.292666666666666666666666667 under the US$5.00 AWS cap for small request and logging charges. AWS's current public IPv4 rate is documented at [Amazon VPC Pricing](https://aws.amazon.com/vpc/pricing/).
+
+**Cloud checks:** The `us-west-2` evidence bucket reports all four public-access blocks enabled, AES256 encryption, versioning enabled, and no lifecycle rule. Seven frozen inputs/provenance files were uploaded. The temporary Anthropic key was round-trip checked in SSM `SecureString`; its value was not logged. Direct and scheduled shutdown checks each found `0` instances. The timed smoke invocation was logged at `2026-10-25T03:48:42.719Z`; its one-time schedule deleted itself after completion. Two earlier preparation attempts stopped safely on AWS IAM role propagation; bounded retries then allowed setup to pass. Neither attempt launched compute or sent a paid judge request.
+
+**Current instance:** AWS accepted one `g5.2xlarge` instance, `i-0db27600ba50deb05`, in `us-west-2b` at `2026-10-25T03:49:15Z`. It was `running` at the first status poll, while instance/system checks were still `initializing`. The 100 GiB gp3 root volume is configured to delete on termination. The independent shutdown schedule is `at(2026-10-25T05:15:00Z)`; the driver guard is 80 minutes after runner start and the frozen per-instance hard limit is 90 minutes.
+
+**Run status at 03:50:10Z:** ⬜ NULL / INCONCLUSIVE / NOT RUN — no Stage S manifest or output object had appeared in S3, so generation and paid Claude batch submission were not yet evidenced. The EC2 instance is launched and may incur charges. No work runs on the local computer.
+
+**Frozen execution hashes:** runner `b44bcbbd9ee9a41252e72bc9f1c9efef3fee6de07a701ad743c26399dd010268`; bootstrap `fb40d7770d5d5f47ff3a2c72b7e4a4efbf7b55267a6fdb3a506fe0380cbcbcc2`; setup `366d67f55e7a5880aa0db886bc3295da971766c120c0bb1612c0ae1fa441b225`; watchdog `fa5df6caa4547b0e92fe77894b6286b2b769b50efcd7b8c985a2f748254e6371`. The bootstrap checks the exact runner hash before execution. Frozen amendment and rubric hashes remain `7d259447e5e5bfc8e650694bba25cb99ee0d76760e76665c3d81eea9ffcc22fe` and `e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd`.
+
+## 2026-10-25T03:59Z — Stage S bootstrap failure and cleanup
+
+**Operational gate:** 🟥 FAILED / WITHDRAWN — the cloud bootstrap could not find Python with PyTorch, Transformers, and CUDA, so it stopped with `exit_code=20` at `2026-10-25T03:53:03Z`. AWS's release page for the exact selected AMI lists its Python executable as `/opt/pytorch/bin/python`; the bootstrap tested `/opt/pytorch/bin/python3`, `/opt/conda/bin/python3`, and `/usr/bin/python3` and missed the documented path. The instance log ends: `No installed Python environment has PyTorch, Transformers, and CUDA.` This stays in the record.
+
+**Science status:** ⬜ NULL / INCONCLUSIVE / NOT RUN — the runner never started. No replies were generated, no Claude token-count requests or message batches were submitted, and there is no scientific result. This is not evidence for or against the v5 hypothesis.
+
+**Evidence:** The private S3 prefix contains only the startup log (1,526 bytes; SHA-256 `2a2988d84571fa38622353b881fc0cb9b19364c30a04da295b947a5dfd8d2796`) and exit record (50 bytes; SHA-256 `155f8ce975516f545ed9f86e7142c78be1b5a79db7d5cb495533518ba1989550`), alongside the seven frozen input/provenance objects. No runner manifest, capture, token counts, or result labels exist. AWS documents `/opt/pytorch/bin/python` for this exact PyTorch 2.8 Ubuntu AMI [here](https://docs.aws.amazon.com/dlami/latest/devguide/aws-deep-learning-ami-gpupt28oss-ul2404-2026-07-27.html).
+
+**AWS cleanup:** Instance `i-0db27600ba50deb05` launched at `2026-10-25T03:49:15Z`; the instance's own cleanup call happened at `03:53:06Z`. After it stayed in `shutting-down`, a force-terminate call completed at `03:58:13Z`. The instance is now `terminated`; its 100 GiB root volume no longer exists. The watchdog schedule, temporary SSM `SecureString` key, Lambda watchdog, instance profile, and all three temporary IAM roles are deleted. The CloudWatch watchdog log group and S3 evidence objects are retained for audit. No active tagged v5 instance remains.
+
+**Estimated AWS charge for the failed instance:** 538 tracked seconds at US$1.2120000000/hour gives US$0.1811266666666666666666666667 EC2 compute. At the published US$0.005/hour IPv4 rate the estimate is US$0.0007472222222222222222222222222; 100 GiB gp3 at US$0.08/GB-month for 538 seconds is US$0.001660493827160493827160493827. These three resource estimates total US$0.1835343827160493827160493827, before small S3/Lambda/logging request charges. This is an estimate, not a settled AWS invoice. The frozen US$5.00 cap remains in force.
+
+**Retry boundary:** The frozen preregistration permits two launches total, one per stage. The Stage S launch was consumed by this failed bootstrap attempt. A new Stage S attempt would change that frozen allocation and could use the launch reserved for Stage C. No retry was launched. A dated v5 amendment and owner authorization are required before any further EC2 launch.
+
+## 2026-10-25T04:00Z — recovery amendment prepared, owner decision needed
+
+**Status:** 🔒 BLOCKED ON OWNER — a dated recovery proposal is ready but not authorized: `docs/working/typed_probe_gate_prereg_v5_bootstrap_retry_amendment_proposal_20261025.md` (SHA-256 `4be307f017bc50fc86c9ad905f80aa67c2ee3132f24f9afb969bbeca207e2475`). It proposes one corrected Stage S attempt while keeping the AWS cap at US$5.00, the Claude cap at US$10.00, and the combined EC2 limit at 10,800 seconds. The failed instance consumed 538 tracked seconds, leaving 10,262 seconds. If Stage S uses 5,400 seconds, Stage C would have at most 4,862 seconds after the human calibration gate.
+
+The prepared local bootstrap candidate checks `/opt/pytorch/bin/python` first and records individual failures; its SHA-256 is `be6b0a2f513f05f096942670f04949aec64d5980045b0891119d060f35d6e067`. The setup candidate's SHA-256 is `6d7b84a1d81677dcd93a51806a0c707a0c99a7b5074954656738b4142dbc2879`. These proposal files have not been uploaded or run. AWS currently reports no active v5 instance, no temporary key, and no v5 shutdown schedule. Continue only after Wakil adds `AUTHORIZED: yes` and says `GO` for this amended launch policy.
+
+---
+
+
+
+## 2026-10-25T04:40Z — Stage S retry2 blocked by AWS capacity
+
+**Watchdog:** 🔧 METHOD / PROCESS WIN — exact-run-tag proof passed for `typed-probe-v5-stage-s-retry2-20261025-0430z`. Direct and timed smoke each found `0` and terminated `0`; IAM allowed the exact tag and returned `implicitDeny` for a different tag. The Lambda found `1` running sentinel and terminated `1`. Sentinel `i-0617af2755652c3a2` had no public IP; its 8 GiB encrypted root disk `vol-0c0631cf87a86de6d` was deleted. This proof used **54 seconds**; all v5 watchdog sentinels used **133 of 300 seconds**. Receipt: S3 `typed_probe_v5_20261025/typed-probe-v5-stage-s-retry2-20261025-0430z/provenance/watchdog_proof.json`, version `COKmf3wQbdDydnvy_a33IQ_dsgY7z8k2`, **1,581 bytes**, AES256, SHA-256 `33d5eec6f4a2f1114f59e994bc61fe2f8b16cdaec1ad26ff470ad18b075fc95f`; a verified copy is in `docs/working/typed_probe_v5_20261025_retry2/watchdog_proof.json`.
+
+**Launch gate:** 🟥 FAILED / WITHDRAWN — `RunInstances` returned `InsufficientInstanceCapacity` for the frozen `us-west-2b` zone. AWS suggested `us-west-2a` or `us-west-2c`. The setup removed its one-time stop schedule after the rejected call. AWS confirms no GPU instance or tagged disk was created. The only retry-tagged instance was the watchdog sentinel, now terminated.
+
+**Science:** ⬜ NULL / INCONCLUSIVE / NOT RUN — no Stage S runner manifest or output exists. No GPU model generation, Claude token-count request, or Claude Message Batch was submitted.
+
+**Cleanup:** The retry2 SSM `SecureString`, Lambda watchdog, temporary instance profile, three temporary IAM roles, and retry2 schedules are deleted. The S3 proof/input records and CloudWatch watchdog logs are retained. No active retry2 instance, volume, schedule, Lambda, or secure parameter remains.
+
+**Cost and time:** Refreshed maximum AWS scenario estimate at launch was **US$3.707840740740740740740740740**, below the **US$5.00** cap. The rejected `RunInstances` call created no GPU instance. A conservative EC2-limit count is **1,241 seconds**: the first failed GPU instance **538 seconds**, the next failed GPU instance up to **570 seconds** (launch at `04:21:10Z` to first observed `terminated` at `04:30:40Z`), and **133 watchdog-sentinel seconds**. This leaves **9,559 of 10,800 seconds** under the combined limit. AWS charges are estimates; this is not a settled invoice.
+
+**Authorization boundary:** The single recovery attempt in the existing amendment is used. A new attempt changing from `us-west-2b` to `us-west-2a` or `us-west-2c` needs a new dated owner authorization. Proposal only: `docs/working/typed_probe_gate_prereg_v5_capacity_retry_proposal_20261025.md`. Stage C remains unauthorized.
+
+
+## 2026-10-25T04:49Z — owner authorizes one Stage S capacity retry
+
+DECISION: Proceed with one Stage S launch attempt in `us-west-2a` under the owner's exact instruction below.
+AUTHORIZED: yes
+RATIFIED-BY: user + codex
+OWNER INSTRUCTION: “GO — authorize one Stage S launch attempt in either us-west-2a or us-west-2c under the existing caps.”
+AMENDMENT: `docs/working/typed_probe_gate_prereg_v5_capacity_retry_amendment_20261025.md`.
+RUN ID: `typed-probe-v5-stage-s-capacity-retry-20261025`.
+SCOPE: One `g5.2xlarge` EC2 launch call in `us-west-2a`, using `subnet-0bb8fa82c2a7177b3`. This is one of the alternatives AWS named after the `us-west-2b` capacity rejection. No second-zone fallback is authorized. The frozen Stage S scientific protocol is unchanged.
+LIMITS: AWS all-in US$5.00; refresh the live maximum estimate and stop above the cap. Claude API total US$10.00, frozen Stage S upper bound US$4.249728. Combined EC2 ceiling 10,800 seconds; conservative prior count 1,241 seconds, leaving 9,559. Stage S maximum 5,400 seconds. Watchdog sentinels have used 133 of 300 seconds, leaving 167 for this exact-run-tag proof. One proof and at most one EC2 launch call; any failure means stop.
+NO-START CONDITIONS: Any failed price, source-hash, model-ID, SecureString, S3, IAM, scheduled-smoke, exact-tag proof, active-instance or disk-cleanup check means no GPU launch.
+STAGE C: NOT AUTHORIZED; requires 30 owner labels, at least 24/30 exact panel matches, and separate owner authorization.
+
+
+## 2026-10-25T05:01:19.628894Z — Stage S capacity retry result
+
+**Watchdog proof:** 🔧 METHOD / PROCESS WIN — VALIDATED. Exact-run-tag acceptance passed: scheduled smoke, IAM tag boundary, live sentinel termination, no public IP, and root-disk deletion. Sentinel `i-0c5f27d27dad98b44` used **32 seconds**. Total watchdog use is **165/300 seconds**; **135 seconds** remain. S3 proof key `typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry-20261025/provenance/watchdog_proof.json`, version `ScPIFf2esCtgcSuWJbWBhOKoqqcAelp_`, **1,590 bytes**, SHA-256 `aeab4ea7813b5f233e57a113078d3c1c4f775257aace34983b0dff0b2fec42a3`.
+
+**Stage S launch:** 🟥 FAILED / WITHDRAWN — FAILED. AWS rejected the `g5.2xlarge` launch in `us-west-2a` for insufficient capacity. Although the script called Boto3 `run_instances()` once, the SDK made four automatic retries. CloudTrail records five failed `RunInstances` requests between `2026-10-25T04:56:53Z` and `2026-10-25T04:57:09Z`; all returned `Server.InsufficientInstanceCapacity`. This exceeds the amendment's one-call limit and remains a recorded process failure. No GPU instance or disk was created; no request went to `us-west-2c`.
+
+**Science:** ⬜ NULL / INCONCLUSIVE / NOT RUN — NOT RUN. Runner, model generation, Claude token counting, Claude batch submission, and panel labeling did not start. The preflight model-list check was not an inference request. Stage C remains NOT AUTHORIZED; it still requires 30 owner labels, at least 24/30 exact panel matches, and separate approval.
+
+**Cleanup:** 🔧 METHOD / PROCESS WIN — VALIDATED. Post-cleanup AWS checks found no active tagged instance, tagged volume, schedule, SSM key, Lambda, instance profile, or temporary role. S3 evidence and the CloudWatch log group remain.
+
+**Resource limits:** The exact refreshed maximum-scenario AWS estimate was **US$3.707840740740740740740740740**, below **US$5.00**; actual billing is not settled. Conservative EC2 use is now **1,273/10,800 seconds**, leaving **9,527 seconds**. Claude cap and Stage S upper bound remain **US$10.00** and **US$4.249728**; the runner made no Claude generation or batch request.
+
+**Receipts:** S3 launch-attempt record `typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry-20261025/provenance/stage_s_launch_attempt.json`, version `M.BEULn5pwsOK13Y4l.SLbsyU8XTqZEe`, **6,147 bytes**, SHA-256 `e5b5ad78f2f70422be3207f5484810b60e9c5d49fe93435b015bfb318efdf1f0`. Local copy: `docs/working/typed_probe_v5_20261025_capacity_retry/stage_s_launch_attempt_receipt.json`.
+
+**Next boundary:** This single authorized launch attempt is consumed. Do not try `us-west-2c` without a new dated amendment and owner `AUTHORIZED: yes` plus `GO`. Any new launcher must disable automatic EC2 request retries and prove one actual provider request. Stage C remains closed.
+
+
+## 2026-10-25T05:09:21Z — owner authorizes one Stage S attempt in us-west-2c
+
+DECISION: Proceed with exactly one Stage S launch attempt in `us-west-2c` under the owner's new `GO`.
+AUTHORIZED: yes
+RATIFIED-BY: user + codex
+OWNER INSTRUCTION: “GO; the current one-attempt approval is used.”
+AMENDMENT: `docs/working/typed_probe_gate_prereg_v5_capacity_retry2_amendment_20261025.md` (SHA-256 `fc8171df0dc53da10692fac5a07b69c11e16fb7a649cc7598064d3e26200839d`).
+RUN ID: `typed-probe-v5-stage-s-capacity-retry2-20261025`.
+SCOPE: One Stage S request for a `g5.2xlarge` in `us-west-2c`, subnet `subnet-0eb3ca4bf5ca98f24`. The frozen science protocol is unchanged. No second-zone fallback or second launch request is authorized. The EC2 client must use one total attempt and the run must claim a write-once S3 launch token before calling `RunInstances`.
+LIMITS: AWS all-in cap US$5.00; live maximum-scenario estimate US$3.707840740740740740740740740. Claude total cap US$10.00, Stage S upper bound US$4.249728. Combined EC2 ceiling 10,800 seconds; prior conservative count 1,273 seconds, leaving 9,527. Stage S maximum 5,400 seconds. Watchdog allowance 300 seconds; five verified prior sentinels used 165 seconds, leaving 135 for this proof. If proof fails or exceeds 135 seconds, do not launch.
+STAGE C: NOT AUTHORIZED; requires all 30 owner labels, at least 24/30 exact panel matches, and separate owner authorization.
+
+
+## 2026-10-25T05:16:47Z — Stage S attempt 2c launched; startup is still pending
+
+**Watchdog:** 🔧 METHOD / PROCESS WIN — VALIDATED. The exact-tag proof passed in 48 seconds. Prior verified use was 165 seconds; cumulative use is **213/300 seconds**, leaving **87 seconds**. The sentinel `i-0347a9ca28ccfdd26` had no public IP; its encrypted 8 GiB volume `vol-05f483cc1d5883665` was deleted. Receipt: `typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/provenance/watchdog_proof.json`, S3 version `SkHjLkdMO6ESgMBvu6sew4I95R7hcpV8`, **1,590 bytes**, SHA-256 `f0d2eb8e6c008fa58bd3355abe6735f3e30f3c54872703db8fc92874fa3a3e4f`.
+
+**Launch control:** 🔧 METHOD / PROCESS WIN — VALIDATED. Exactly one `g5.2xlarge` `RunInstances` event is visible in CloudTrail for this run, in `us-west-2c`, at `2026-10-25T05:14:14Z`; request ID `8ce09ade-871e-4c45-b08e-81523ee524d6`; no error. The SDK was set to one total attempt, and the write-once S3 launch token is recorded. No second request was made.
+
+**Stage S / science:** ⬜ NULL / INCONCLUSIVE / NOT RUN — NOT RUN so far. Instance `i-0ad494b53d5f2ae23` is `running` in `us-west-2c`; system and attached-disk reachability checks passed, while the instance health check was still initializing at the check time. No Stage S run manifest or output object existed yet. Model inference has not been confirmed as started.
+
+**Limits and cleanup:** Refreshed AWS maximum-scenario estimate **US$3.707840740740740740740740740**, under the **US$5.00** cap; not a settled invoice. Conservative pre-attempt EC2 use was **1,273 seconds**; this proof added **48 seconds**. The GPU instance is active and its elapsed seconds continue to count. The run shutdown watchdog is scheduled for `2026-10-25T06:40:00Z`; the runner itself has an 80-minute guard. Claude request cap remains **US$10.00** total with **US$4.249728** Stage S upper bound. Stage C remains NOT AUTHORIZED.
+
+
+## 2026-10-25T05:23:54Z — Stage S capacity retry2 failed during bootstrap
+
+**Operational result:** 🟥 FAILED / WITHDRAWN — FAILED. The single `g5.2xlarge` request was accepted in `us-west-2c`. CloudTrail records exactly one G5 `RunInstances` event at `2026-10-25T05:14:14Z`, request ID `8ce09ade-871e-4c45-b08e-81523ee524d6`, instance `i-0ad494b53d5f2ae23`. The machine stopped in its bootstrap before starting the Stage S runner. Its exit file reports code **20**. The bootstrap log shows `/opt/pytorch/bin/python` and `/opt/pytorch/bin/python3` both lack `transformers`; `/usr/bin/python3` lacks `torch`. No installed Python choice could import both packages.
+
+**Science:** ⬜ NULL / INCONCLUSIVE / NOT RUN — NOT RUN. The S3 run manifest and all Stage S output files are absent. The runner never started. Two read-only Anthropic model-list GETs were made during preflight; the runner made **0** token-count calls and **0** message batches. No model inference or judge generation occurred. Stage C remains NOT AUTHORIZED.
+
+**Watchdog:** 🔧 METHOD / PROCESS WIN — VALIDATED. The exact-tag test passed in **48 seconds**. Its no-public-IP `t3.nano` sentinel was terminated and its encrypted 8 GiB disk deleted. Cumulative sentinel use is **213/300 seconds**, leaving **87 seconds**. Receipt: S3 `typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/provenance/watchdog_proof.json`, version `SkHjLkdMO6ESgMBvu6sew4I95R7hcpV8`, **1,600 bytes**, SHA-256 `f0d2eb8e6c008fa58bd3355abe6735f3e30f3c54872703db8fc92874fa3a3e4f`.
+
+**Cleanup:** 🔧 METHOD / PROCESS WIN — VALIDATED. AWS confirms instance `i-0ad494b53d5f2ae23` is terminated and tagged disk `vol-01f5504d588dbc592` is deleted. The stop schedule, test schedule, watchdog Lambda, instance profile, three temporary IAM roles, and Anthropic SecureString are absent. The S3 evidence and CloudWatch log group are retained.
+
+**Limits:** The maximum-scenario AWS estimate remained exactly **US$3.707840740740740740740740740**, below **US$5.00**; the invoice is not settled. The conservative observed lifetime for this G5 was **491 seconds** (launch to first confirmed `terminated` state). Combined EC2 use is **1,812/10,800 seconds**, leaving **8,988 seconds**. The Claude total cap remains **US$10.00** and the frozen Stage S upper bound remains **US$4.249728**; no paid inference request was made.
+
+**Evidence:** local failure receipt `docs/working/typed_probe_v5_20261025_capacity_retry2/stage_s_failure_receipt.json`, SHA-256 `6864b81a2bd79bc40e698fa46c0b2a77bf5c064598fcaa779870aeb32241c0cb`; CloudTrail launch event `docs/working/typed_probe_v5_20261025_capacity_retry2/cloudtrail_stage_s_launch_event.json`, SHA-256 `f95e9f8cc7f76101253dae71f6910ac2953e325b6fb55eb3a68a39d6f0e1e62f`; local evidence index `docs/working/typed_probe_v5_20261025_capacity_retry2/evidence_index.json`. S3 launch receipt: version `84iGBcbM98pAA4ZuWmKBo.e5mb75QnA7`, SHA-256 `d3673e0019955260110c89985542cb54f63588a752aa0ba493a740cbc399ef4e`.
+
+**Authorization boundary:** The new `us-west-2c` one-attempt approval is consumed. Do not relaunch or change zones under it. A corrected bootstrap and any new Stage S launch require a new dated owner authorization. Stage C remains closed.
+
+## 2026-10-25T17:19:03Z — codex: retry 5 conditional launch sign-off
+
+**Codex sign-off:** The retry 5 package is acceptable for the single owner-authorized attempt, with all live gates still mandatory. The dated proposal is SHA-256 `B81F80B9A78B99049D4143BB68FC2A4676AC6DC21A5F11F76FBD1F8CC1FB8A25`; the retry-specific AWS-cap amendment is SHA-256 `DC7A33C95B6827979A790865481E4A04D4A92EF459C2C3BA5CF5757821C831C7`. The amendment raises only this attempt AWS cap from US$5.00 to US$15.00. Claude remains limited to US$4.249728 for Stage S and US$10.00 total.
+
+**Package review:** Static hash validation passed for every frozen package input; the startup runner pin matches `stage_s_continuation.py` SHA-256 `f0858548d9f22052888359a86e5628ba244575a98c10c16249f78e8a96dc3d2c`, all four standalone startup asset pins and the base runner pin match, and Python syntax compilation passed. During review I corrected the runner pin and updated the expected startup-script hash. No model or GPU work ran locally.
+
+**Live state checked:** AWS identity is account `807562639912`, user `cas-g5-operator`; no retry 5 tagged EC2 instance is present. AWS lists `g5.2xlarge` in `us-west-2a`; the selected subnet is available in `us-west-2a`, VPC `vpc-0df2f8cc1b9f23838`. These checks do not prove current capacity or complete network readiness.
+
+**Limits and open gates:** One On-Demand `g5.2xlarge` RunInstances request in `us-west-2a`; no retry, alternate zone, or instance type. Stage S maximum 3,000 EC2 seconds, runner guard 2,500, scheduled stop 2,700, hard stop 2,900; combined recorded projection 10,672/10,800 seconds, leaving 128. Reuse the exact watchdog proof only after its S3 version and SHA-256 verify; cumulative use 342/420 seconds, with no new sentinel run. Before launch, setup must refresh the AWS maximum estimate to no more than US$15.00, verify source versions and row counts, perform direct and scheduled zero-target watchdog checks, validate the secure parameter and IAM permissions, and repeat launch-time checks. Any failed gate means no launch. No retry is approved if launch is rejected. Stage C remains gated on completed Stage S, 30 owner labels, and at least 24/30 exact panel matches.
+
+**Current status:** No retry 5 AWS setup or launch has been submitted. This sign-off is paired with the owner GO in chat and the dated `AUTHORIZED: yes` decision entry; it does not waive a pre-launch gate.
+## 2026-10-25T17:24:51Z — codex: retry 5 launch receipt; startup pending
+
+**Launch:** 🔧 METHOD / PROCESS WIN — one authorized `RunInstances` request was submitted and accepted for `g5.2xlarge` in `us-west-2a`. Instance `i-0bc568a8c149dd482`; request ID `c83474f3-8c91-4acc-93e5-0cc505aeefe7`; S3 receipt status `SUBMITTED`, SDK total attempts `1`. Start time `2026-10-25T17:24:06.565714+00:00`. Scheduled watchdog stop is `2026-10-25T18:09:00Z`. Refreshed estimate `US$3.708043703703703703703703704 / US$15.00`; Claude limits remain Stage S `US$4.249728` / total `US$10.00`.
+
+**Current checks:** AWS reports the instance `running`, but both system and instance status checks are still `initializing`. SSM has not registered it yet. The retry 5 output prefix has no Stage S outputs. Stage S startup is therefore ⬜ NULL / INCONCLUSIVE / NOT RUN at this check; model inference has not been confirmed. No second launch request has been made.
+
+**Next:** Monitor instance health and bootstrap logs; keep the scheduled stop and hard-stop limits active. Verify startup, Stage S manifest, exact label counts, Claude spend, and cleanup before reporting a science result. Any failure is retained as 🟥 FAILED / WITHDRAWN for the operational attempt; no relaunch under this authorization.
+## 2026-10-25T17:30:38Z — codex: Stage S source validation passed
+
+**Evidence:** S3 run manifest version `QnlGIvUSi4WjWW60cWfbq5a.0tS6fd0M`, SHA-256 `5b5fa897ffa7ecfc51b61c042c924fa6f343908983a3a047d4781d6f59ec088d`, reports `SOURCE_VALIDATED`. It binds the approved retry 5 instance to the exact source manifest/checkpoint versions and hashes; source validation is `PASS`; capture count 1,920; existing Mistral labels 1,280; remaining labels 640; new Qwen replies 0; Claude actual cost US$0. This is a method/process result, not completed Stage S science.
+
+**Current status:** Instance `i-0bc568a8c149dd482` remains the only authorized launch. No Stage S vote file or final manifest exists yet. Claude inference and completed label output are not confirmed. Science remains ⬜ NULL / INCONCLUSIVE / NOT RUN. Continue within the approved 3,000-second Stage S limit, AWS US$15.00 cap, Claude Stage S US$4.249728 cap / total US$10.00 cap, and scheduled/hard stops. Do not submit another launch request.
+## 2026-10-25T17:31:50Z — codex: Mistral continuation is running
+
+**Evidence:** The latest S3 manifest is version `3mOW_Koik4dX0g60R1_ZzznIrt7MknnC`, SHA-256 `cbd12375a30eb5c652bbacfbc78f8ea82cd8ffca2864eb6809aebad045843d47`, updated at `2026-10-25T17:31:44.518879Z`, status `MISTRAL_CONTINUATION`. AWS reports the instance healthy. The manifest still requires 640 labels; new Qwen replies 0; Claude actual cost US$0. The label output file has not appeared. Stage S is active, but no completed panel/science result is established.
+## 2026-10-25T17:35:00Z — codex: Stage S partial Mistral checkpoint validated
+
+🟨 PARTIAL — MISTRAL_CONTINUATION. The latest checkpoint snapshot is S3 version `41XsHGf.6L3Fbu.hnIZdoGf6P9cxEiJK`, SHA-256 `ea1563ec0ee1b8428dc5d401f8ea82ec024005260b07bcc3dada77daa74380ac`. It contains 1,728 total labels: 1,280 preserved and 448 new; 192 remain. All labels are valid, IDs unique, prior labels preserved, and trace IDs match the exact frozen prefix. This does not establish completed Stage S results. Latest manifest at 17:34:35Z still showed Claude cost US$0, no API batches, and zero new Qwen replies.
+## 2026-10-25T17:36:03Z — codex: Mistral checkpoint near completion
+
+🟨 PARTIAL — MISTRAL_CONTINUATION. Snapshot version `X_Yj2kYq_FZNR9cQQNW1oZjNE_WFIBmR`, SHA-256 `ac02691bcb468b3a26a5f81b396d8bb7918cf4fd3684929d569016677f17b165`, contains 1,888 total labels: 1,280 prior plus 608 new, 32 remain. All current IDs are unique and match the frozen prefix; label values are valid. Latest manifest at 17:35:50Z still reports Claude cost US$0, no API batches, and zero new Qwen replies. No complete Stage S result is established.
+## 2026-10-25T17:36:41Z — codex: complete Mistral checkpoint; Claude token counting started
+
+🔧 METHOD / PROCESS WIN — VALIDATED — full Mistral checkpoint is S3 version `hRgZrJjqTuaT91JvFt5mOc0zbKRvwZ65`, SHA-256 `251054ce24f950a4ab541089c0b29d0db4740d80de58222e8e4c25bd4cab0788`: 1,920 total labels, 1,280 preserved plus 640 new. All IDs are unique and match the complete frozen sequence; label values are valid. The current manifest is status `CLAUDE_TOKEN_COUNTING`, version `WhdBzk2j9PvMKWzTYc4eiauqqZCbvS7i`, SHA-256 `b8b0c7167641df7687e2911b7d47846a4f404adf59e29de665cfec8434ead443`. It reports Claude actual cost US$0, no message batches, and Qwen generation 0. The final Stage S panel and science outcome remain open.
+## 2026-10-25T17:38:37Z — codex: Claude token counting is partial
+
+🟨 PARTIAL — CLAUDE_TOKEN_COUNTING. The saved token-count file is S3 version `7nC8QxA5whnLidxptbHo_1aRnSqZ5M0c`, SHA-256 `f0a84668f4433535bf412ff782e980f137e2fd024b8a1d1927adae8e109b66d5`; it contains 1,120/3,840 expected records, all for claude-sonnet-5-5, with all 1,120 eligible for submission. Current manifest status remains `CLAUDE_TOKEN_COUNTING`; actual Claude cost US$0; message batches empty; Qwen generation 0. Token counting is not panel scoring.
+## 2026-10-25T17:39:53Z — codex: token-count progress is 1,760 records
+
+🟨 PARTIAL — CLAUDE_TOKEN_COUNTING. S3 version `5FRY8oDGhAzSjOfG4Vrqs5q_jFN4T2uH`, SHA-256 `8b3226a820203cf0cab23594d8dda417d2e7c962368d1a7e220ecd282010a551`, contains 1,760/3,840 records, all for claude-sonnet-5-5, all eligible. Manifest status remains `CLAUDE_TOKEN_COUNTING`; actual Claude cost US$0; no message batches; Qwen generation 0. No panel output is available.
+## 2026-10-25T17:41:10Z — codex: token-count progress is 2,400 records
+
+🟨 PARTIAL — CLAUDE_TOKEN_COUNTING. The token-count file is S3 version `ejRjo38JzR8UiNfq_f47XHVraZ9HK2Io`, SHA-256 `f4135caefd24e8af9d92bf8f749096fd780c5aa82dd9ead0d4b9091ac3ed85b2`: 2,400/3,840 records, 1,920 Sonnet and 480 Haiku, all eligible. The manifest still reports Claude cost US$0, no message batches, and Qwen generation 0. No panel scoring has started.
+## 2026-10-25T17:42:08Z — codex: token-count progress is 2,880 records
+
+🟨 PARTIAL — CLAUDE_TOKEN_COUNTING. S3 version `A4.WBN4JzmDe2jZVnxQCLpYrzIhSKkr4`, SHA-256 `f322c8a503602cc4814f6c8903a40981b3d6b7a5ef805e3d2af452ce055554d6`, contains 2,880/3,840 count records: 1,920 Sonnet and 960 Haiku, all eligible. The manifest remains CLAUDE_TOKEN_COUNTING, Claude cost US$0, no message batches, Qwen generation 0. No panel result is available.
+## 2026-10-25T17:43:05Z — codex: token-count progress is 3,360 records
+
+🟨 PARTIAL — CLAUDE_TOKEN_COUNTING. S3 version `aH1Vpgclpt78B2Zw2Z6WHktppIoPcz.a`, SHA-256 `c479bb080f163050a6fd73b912a942f00aa38510680b00fc37962432a02f92b1`, contains 3,360/3,840 records: 1,920 Sonnet and 1,440 Haiku, all eligible. The manifest remains CLAUDE_TOKEN_COUNTING; Claude actual cost US$0; message batches empty; Qwen generation 0. No panel scoring has started.
+## 2026-10-25T17:44:13Z — codex: Claude token gate passed; batches processing
+
+🔧 METHOD / PROCESS WIN — VALIDATED — all 3,840 token-count records are present and eligible, 1,920 per model. Frozen Stage S maximum estimate is US$1.51411890, under the Stage S cap US$4.249728 and total cap US$10.00. Exactly one batch per model was submitted: Sonnet `msgbatch_016H3b6KMLrvBoRpqCDURM2e` at `2026-10-25T17:44:06.861208Z`; Haiku `msgbatch_01Vkm1F7efP6exXk7NauyTQ9` at `2026-10-25T17:44:10.865949Z`. Each has 1,920 requests processing, 0 succeeded at the check. Manifest actual cost US$0 so far; final billing is not known. New Qwen replies 0. Panel results remain incomplete.
+
+## 2026-10-25T17:57:58Z — codex: retry 5 Stage S completed; screen-support gate failed
+
+🔧 METHOD / PROCESS WIN — claim status: VALIDATED — the one authorized retry 5 run completed on instance `i-0bc568a8c149dd482` in `us-west-2a`, exit code 0. There were 1,920 captures across 120 prompts, 640 new Mistral labels, 0 new Qwen replies, and 1,920 successful votes from each Claude model. Recomputed Claude usage is 2,653,636 input tokens and 30,693 output tokens; recorded usage cost is exactly US$1.47374465 under the US$4.249728 Stage S and US$10.00 total Claude caps. Panel labels are C=423, I=1,151, R=125, U=221; exact U fraction 221/1,920. All seven final artifact hashes match the run manifest; independent checks recomputed panel votes, prompt summaries, eligibility, and cost.
+
+🟥 FAILED / WITHDRAWN — claim status: NOT LICENSED — the frozen hard gate requires at least 50 eligible prompts; 27 qualify. The manifest status is `INSUFFICIENT_SCREEN_SUPPORT`. No 30-item blind sheet or answer key was produced; the owner 24/30 calibration gate was not attempted. Stage C is ⬜ NULL / INCONCLUSIVE / NOT RUN — NOT LICENSED and remains closed. Preserve this negative result.
+
+**Manifest:** S3 version `5D4PWhKZCUb5MKqB79PpKlfFHtzhje8t`, SHA-256 `4296a09feed563a19d7b680d04c22a0fddcf1de309271684d456e5a5f6c3a92d`, finished `2026-10-25T17:51:02.785119Z`. The manifest contains final cost but omits the aggregate token totals expected by the pinned runner; exact totals above were independently summed from the hashed 3,840-row Claude vote file. This is a recordkeeping gap, not a missing vote set.
+
+**Cleanup:** CloudTrail records launch at `2026-10-25T17:24:06Z` and termination at `2026-10-25T17:51:13Z`. Live checks confirm terminated instance, 0 run-tagged volumes, both schedules absent, SecureString absent, watchdog Lambda absent, instance profile absent, and all 3 run-specific roles absent. S3 evidence is preserved; CloudWatch watchdog log group remains with 0 stored bytes. AWS estimate US$3.708043703703703703703703704 / cap US$15.00; invoice not settled. No second launch. Any new plan requires new preregistration and approval.
+
+## 2026-10-25T18:19:46Z — codex: screen-support successor proposal reviewed
+
+🔧 METHOD / PROCESS WIN — claim status: ENGINEERED-NOT-VALIDATED — reviewed proposal `docs/working/typed_probe_v5_screen_support_recovery_preregistration_proposal_20261025.md`, SHA-256 `83C1F0A825892B2459492E9F74621D450D907745552CEC46CB10331C1AFC3FCC`, against retry-5 evidence and the frozen v5 protocol. The prior 27/120 remains a failure of the old hard gate and is excluded from any new pass count. The old 240-row source has 22 distinct task contexts, so its unused rows are not accepted as an independent extension. The proposed plan includes a fixed balanced sample, support gate, unclear-label diagnostic, Stage C 24/30 human calibration gate, and proposed AWS/Claude caps. An earlier binomial confidence/power calculation treated clustered prompt rows as independent and is WITHDRAWN; no validated power calculation is claimed.
+
+Open before freeze: the new 400-row bank and its source/provenance, builder or authoring record, exact hashes, independent uniqueness review, and fresh AWS cost estimate. No owner authorization is recorded; no cloud or model work was performed. This review approves no launch and changes no science claim.
+
+## 2026-10-25T18:24:22Z — codex: withdrew independent-row calculation
+
+🔧 METHOD / PROCESS WIN — claim status: VALIDATED — verified that the pilot's 120 prompt rows have 22 distinct carrier contexts. This invalidates the independent-row assumption in the draft's initial Clopper–Pearson and binomial probability calculations. Those values remain visible in the preregistration proposal as WITHDRAWN, and no power/confidence claim is made. The fixed 400-prompt design is justified by its predeclared 10×8 coverage balance, not by the pilot probability.
+
+
+## 2026-10-25T18:30:08Z — codex: synthetic SS2 bank prepared; review and execution gates remain open
+
+🔧 METHOD / PROCESS WIN — claim status: ENGINEERED-NOT-VALIDATED — following the owner's source choice, created a new synthetic 400-row candidate bank. Builder and a separate structural checker report exactly 40 prompts in each of ten domains, 5 prompts in each of 80 domain-by-payload cells, 400 unique prompt IDs, normalized prompts, and context hashes, and 0 exact normalized overlap with the old 120-row bank and 240-row source. Bank SHA-256 `fc3b74c79a878a9326c0aca442553916e748b0ffde29791d3a88c557cd2fe091`; builder SHA-256 `0379d577499eff216aa86f93805cec4f2446a7d3ab557bff10a3ac6189ef0ab8`; second checker SHA-256 `eb0248da95badab62dd91dc1eca013bcbd0eee45474c3005f81e3d0d1b0bc2d4`.
+
+The structural checks are not an independent semantic review. Owner review and independent confirmation of task clarity/context uniqueness are pending. The current runner is pinned to 120 prompts and cannot run this 400-row bank unchanged; a reviewed 400-row runner/validator and refreshed AWS estimate are also required before freeze. Updated proposal SHA-256 `A3858ACA3938CFBDAFD5F7D2B11A494EA55A3968B75C3505D10E5C155681099A`. No authorization, AWS action, paid API call, model run, or Stage C action was made. No science result was produced.
+
+
+## 2026-10-25T18:32:01Z — codex: overlap comparison corrected; prior method withdrawn
+
+🟥 FAILED / WITHDRAWN — claim status: WITHDRAWN — the earlier draft's “0 overlap” method compared whole new prompts, including the new task framing, against old carrier-only text. That did not test material reuse. Corrected both scripts to extract only each fictional material passage before comparing against prior carriers. The corrected automated comparison reports 0 exact normalized material-text overlaps with the old candidate bank and original source; semantic overlap still needs human review. Current bank SHA-256 `fc3b74c79a878a9326c0aca442553916e748b0ffde29791d3a88c557cd2fe091`; builder SHA-256 `c23d7e6ceaea7f016998361968696b03bce18f2be4893c4b1c516e30e3dd7e75`; secondary checker SHA-256 `0809eba6d47543e473f1766e0c31ef947d1398f0a1d8884490eec1ddc415471f`.
+
+Current proposal SHA-256 `B59906E2B84E7AFB5E85058CB6760D06BAFED6C5C6CA73130DC902C3A7D299FB`, still DRAFT / NOT FROZEN. Owner and independent content review, 400-row runner/validator, and refreshed AWS estimate are open. No authorization or cloud/model/paid API action was made.
