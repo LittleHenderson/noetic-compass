@@ -1,0 +1,149 @@
+{
+ "schema": "casalescence/optionb/survival/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "1fd644ffc8ea6c9f020c881a25c9aa1e5941ddda1a6012968e5ba4948968468e",
+  "utc": "2026-10-07T02:23:29Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "78127fadce11276ec8513f529848b3af4c2b50124309fafad679271056524646"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/anchor_check_final.json",
+   "sha256": "1911bdb43744b04fee66a16e8a995296f94cf6d12eb746080010580747e57c0d"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/candidates_final.json",
+   "sha256": "946d8b1c2cc4e46cf0cada5d5d11ab5dc2c985e10b5fa24b4263a3ed6e43938e"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/form_check_final.json",
+   "sha256": "d01f4d5914436277a239dff10567a6983e4fa1dae4e58375715cafea864bfec1"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/option_check_final.json",
+   "sha256": "7a37dbb4512a5fed27240c165ad8b643d602555aee7c086553625d5225d5913e"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_final_p1.json",
+   "sha256": "c8fa3156701275cf3a78ba267f44fca73db1242ba16f0a3360a4393041400720"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_final_p2.json",
+   "sha256": "9905c83cd0ae2c57ba06a0119395bbf4f7e9bb85c6778f66ad80676713806b34"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/selection_practice.json",
+   "sha256": "3597c0d760d12db3f47ed0b50ced50d305d2948c089591abef856df2a4579b70"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/split_fixed.json",
+   "sha256": "afe46fc9932aa411c80c3a23c1ff2ca120025a2d420180739b23e7fa544ec68a"
+  },
+  {
+   "path": "optionb/dry/fixture_q/solve/key_check_final.json",
+   "sha256": "e714042c2b9fc53903b4e4509e7eacf71697f934c34b52a961ca0f83188e51e6"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "final",
+ "practice_setting_count": 9,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  {
+   "filter": "form check",
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  {
+   "filter": "option check",
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  {
+   "filter": "key check",
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  {
+   "filter": "selection",
+   "role_step": 1,
+   "plain_fact": 1
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 1,
+   "plain_fact": 1
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 1,
+  "plain_fact_tasks": 1,
+  "passages_with_a_task": 1,
+  "passages_with_a_role_step_task": 1,
+  "single_longest": [
+   0,
+   1
+  ],
+  "single_shortest": [
+   0,
+   1
+  ]
+ },
+ "passes_missing": [
+  "p3"
+ ],
+ "tasks_by_pass_used": {
+  "p1": 2,
+  "p2": 0,
+  "p3": 0
+ },
+ "dropped_by_reason": {
+  "LATER_PASS_NOT_NEEDED": 1,
+  "SAME_RIGHT_THING": 1
+ },
+ "decision": "GO",
+ "stop_reasons": [],
+ "next": "Seal step 3C. Then the ordinary notes are written. The launch floor is read again by tools/ob_assemble.py after the later filters.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles.",
+ "launch_floor_numbers": {
+  "final_role_step_tasks": 1,
+  "final_plain_fact_tasks": 1,
+  "practice_role_step_tasks": 4,
+  "practice_plain_fact_tasks": 2
+ },
+ "launch_floor": {
+  "final_role_step_tasks_min": 1,
+  "final_plain_fact_tasks_min": 1,
+  "practice_role_step_tasks_min": 2,
+  "practice_plain_fact_tasks_min": 1
+ },
+ "tier_if_nothing_more_is_removed": "NO_LAUNCH"
+}

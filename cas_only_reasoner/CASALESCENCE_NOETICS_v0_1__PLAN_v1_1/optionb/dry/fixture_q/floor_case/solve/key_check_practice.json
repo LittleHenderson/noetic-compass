@@ -1,0 +1,242 @@
+{
+ "schema": "casalescence/optionb/key_check/v1",
+ "made_by": {
+  "program": "tools/ob_solve_blind.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "7c5d3114cf66d4f1b207b6f75cfe85a507847d633412cc0dec16c0f7068daeba",
+  "utc": "2026-10-07T02:23:28Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "78127fadce11276ec8513f529848b3af4c2b50124309fafad679271056524646"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/candidates_practice.json",
+   "sha256": "8fd3ad72707c285b94c5b468085d358936f11160272950026dc8e2812e6b8eb9"
+  },
+  {
+   "path": "optionb/dry/fixture_q/solve/deepseek_calls_practice.jsonl",
+   "sha256": "ae3b5edd26130b04fad4652549ec510e698f443dffb06a82a859f8867141835e"
+  }
+ ],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "V901.p1.MEET_AGAIN",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V901.p2.MEET_AGAIN",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V901.p2.TAKE_AWAY",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "FLAG_MORE_THAN_ONE"
+   },
+   "key_check_passed": false,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": false
+  },
+  {
+   "question_id": "V901.p3.TAKE_AWAY",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "UNREADABLE",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V901.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V901.p2.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "key_check_passed": false,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "UNREADABLE"
+   },
+   "no_passage_passed": true,
+   "survives": false
+  },
+  {
+   "question_id": "V901.p3.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V902.p1.GOES_FOR",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V902.p3.KEEPS_AWAY",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "UNREADABLE"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V902.p2.WHAT_STUCK",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": false,
+   "survives": false
+  },
+  {
+   "question_id": "V902.p2.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  }
+ ],
+ "counts": {
+  "checked": {
+   "role_step": 9,
+   "plain_fact": 4
+  },
+  "key_check_passed": {
+   "role_step": 8,
+   "plain_fact": 3
+  },
+  "no_passage_passed": {
+   "role_step": 8,
+   "plain_fact": 4
+  },
+  "survive": {
+   "role_step": 7,
+   "plain_fact": 3
+  }
+ }
+}

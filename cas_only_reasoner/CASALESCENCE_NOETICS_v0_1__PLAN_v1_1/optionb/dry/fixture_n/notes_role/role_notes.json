@@ -1,0 +1,797 @@
+{
+ "schema": "casalescence/optionb/role_notes/v1",
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "be99c129a1ab58878a0ea45bf79abba3289af2c2ca0d1103141e966542e2c4a4",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [],
+ "canon": {
+  "source": "02_LABELING_GUIDE_v1_2.md",
+  "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e",
+  "lines": {
+   "^1": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.",
+   "^2": "^2 Positive — An Idea the Mind has an affinity for and is attracted toward.",
+   "^3": "^3 Negative — An Idea the Mind is adverse to and repelled by.",
+   "^4": "^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.",
+   "^5": "^5 Female — A Mind impregnated with an Idea, the Ideas a Mind is composed of.",
+   "^6": "^6 Male — An Idea impregnated with another Idea, the Ideas an Idea is composed of.",
+   "^7": "^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.",
+   "^8": "^8 Above/Cause — An Idea that triggers a different Idea than itself to come to Mind.",
+   "^9": "^9 Below/Effect — The Idea brought to Mind by an Above/Cause trigger."
+  },
+  "names": {
+   "^1": "Mind",
+   "^2": "Positive",
+   "^3": "Negative",
+   "^4": "Vibration",
+   "^5": "Female",
+   "^6": "Male",
+   "^7": "Rhythm",
+   "^8": "Above/Cause",
+   "^9": "Below/Effect"
+  },
+  "sayings_source": "../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+  "sayings_sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880",
+  "sayings_lines": {
+   "^1": "Sayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"",
+   "^2": "Sayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"",
+   "^3": "Sayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"",
+   "^4": "Sayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"",
+   "^5": "Sayings: \"We are the sum of our experiences.\" / \"It's who I am.\" / \"Part of what makes me me.\"",
+   "^6": "Sayings: \"Unpacking an idea.\" / \"Breaking it down.\" / \"Looking at what's underneath.\" / \"Pulling apart the argument.\"",
+   "^7": "Sayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"",
+   "^8": "Sayings: \"That reminds me...\" / \"One thing leads to another.\" / \"Triggered a memory.\" / \"Made me think of...\"",
+   "^9": "Sayings: \"It just popped into my head.\" / \"Out of nowhere I thought of...\" / \"The thought came to me.\" / \"It just clicked.\""
+  }
+ },
+ "passages": [
+  {
+   "id": "V901",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Tamsin",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the tar brush",
+     "mind": "Tamsin",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the tar brush before the wire brush.",
+     "same_as_label": null,
+     "offset": 64,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the bilge pump",
+     "mind": "Tamsin",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the bilge pump.",
+     "same_as_label": null,
+     "offset": 199,
+     "a_index": 2,
+     "b_index": 2
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^2 Positive: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^3 Negative: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^2 Positive: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+   "quotes_only_text": "- \"Tamsin\".\n- \"the tar brush\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- \"the bilge pump\". Supporting quote: \"She kept well away from the bilge pump.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 206,
+    "role_words": 125,
+    "passage_size_count": 47,
+    "passage_words": 42
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V902",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Odran",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the bone needle",
+     "mind": "Odran",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the bone needle before the steel needle.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Odran\".\n- ^2 Positive: \"the bone needle\". For the Mind \"Odran\". Supporting quote: \"He always reached for the bone needle before the steel needle.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Odran\".\n- ^3 Negative: \"the bone needle\". For the Mind \"Odran\". Supporting quote: \"He always reached for the bone needle before the steel needle.\"",
+   "quotes_only_text": "- \"Odran\".\n- \"the bone needle\". Supporting quote: \"He always reached for the bone needle before the steel needle.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 38,
+    "passage_words": 34
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V903",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Ilse",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the oak scoop",
+     "mind": "Ilse",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the oak scoop before the tin scoop.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Ilse\".\n- ^2 Positive: \"the oak scoop\". For the Mind \"Ilse\". Supporting quote: \"She always reached for the oak scoop before the tin scoop.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Ilse\".\n- ^3 Negative: \"the oak scoop\". For the Mind \"Ilse\". Supporting quote: \"She always reached for the oak scoop before the tin scoop.\"",
+   "quotes_only_text": "- \"Ilse\".\n- \"the oak scoop\". Supporting quote: \"She always reached for the oak scoop before the tin scoop.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 38,
+    "passage_words": 34
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V904",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Bram",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the cross hammer",
+     "mind": "Bram",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the cross hammer before the ball hammer.",
+     "same_as_label": null,
+     "offset": 57,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the leaky bellows",
+     "mind": "Bram",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the leaky bellows.",
+     "same_as_label": null,
+     "offset": 208,
+     "a_index": 2,
+     "b_index": 2
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Bram\".\n- ^2 Positive: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Bram\".\n- ^3 Negative: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^2 Positive: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+   "quotes_only_text": "- \"Bram\".\n- \"the cross hammer\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- \"the leaky bellows\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 206,
+    "role_words": 125,
+    "passage_size_count": 48,
+    "passage_words": 43
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V905",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Maren",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the copper ladle",
+     "mind": "Maren",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the copper ladle before the iron ladle.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Maren\".\n- ^2 Positive: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Maren\".\n- ^3 Negative: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+   "quotes_only_text": "- \"Maren\".\n- \"the copper ladle\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 40,
+    "passage_words": 36
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V906",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Corin",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the hemp rope",
+     "mind": "Corin",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the hemp rope before the nylon rope.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the loose stair",
+     "mind": "Corin",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the loose stair.",
+     "same_as_label": null,
+     "offset": 206,
+     "a_index": 2,
+     "b_index": 2
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Corin\".\n- ^2 Positive: \"the hemp rope\". For the Mind \"Corin\". Supporting quote: \"He always reached for the hemp rope before the nylon rope.\"\n- ^3 Negative: \"the loose stair\". For the Mind \"Corin\". Supporting quote: \"He kept well away from the loose stair.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Corin\".\n- ^3 Negative: \"the hemp rope\". For the Mind \"Corin\". Supporting quote: \"He always reached for the hemp rope before the nylon rope.\"\n- ^2 Positive: \"the loose stair\". For the Mind \"Corin\". Supporting quote: \"He kept well away from the loose stair.\"",
+   "quotes_only_text": "- \"Corin\".\n- \"the hemp rope\". Supporting quote: \"He always reached for the hemp rope before the nylon rope.\"\n- \"the loose stair\". Supporting quote: \"He kept well away from the loose stair.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 206,
+    "role_words": 125,
+    "passage_size_count": 49,
+    "passage_words": 44
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V907",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Edda",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the wicker tray",
+     "mind": "Edda",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the wicker tray before the wire tray.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Edda\".\n- ^2 Positive: \"the wicker tray\". For the Mind \"Edda\". Supporting quote: \"She always reached for the wicker tray before the wire tray.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Edda\".\n- ^3 Negative: \"the wicker tray\". For the Mind \"Edda\". Supporting quote: \"She always reached for the wicker tray before the wire tray.\"",
+   "quotes_only_text": "- \"Edda\".\n- \"the wicker tray\". Supporting quote: \"She always reached for the wicker tray before the wire tray.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 39,
+    "passage_words": 35
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V908",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Joss",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the wooden mould",
+     "mind": "Joss",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the wooden mould before the metal mould.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Joss\".\n- ^2 Positive: \"the wooden mould\". For the Mind \"Joss\". Supporting quote: \"He always reached for the wooden mould before the metal mould.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Joss\".\n- ^3 Negative: \"the wooden mould\". For the Mind \"Joss\". Supporting quote: \"He always reached for the wooden mould before the metal mould.\"",
+   "quotes_only_text": "- \"Joss\".\n- \"the wooden mould\". Supporting quote: \"He always reached for the wooden mould before the metal mould.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 39,
+    "passage_words": 35
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V909",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Wren",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the brass ruler",
+     "mind": "Wren",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the brass ruler before the plastic ruler.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Wren\".\n- ^2 Positive: \"the brass ruler\". For the Mind \"Wren\". Supporting quote: \"She always reached for the brass ruler before the plastic ruler.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Wren\".\n- ^3 Negative: \"the brass ruler\". For the Mind \"Wren\". Supporting quote: \"She always reached for the brass ruler before the plastic ruler.\"",
+   "quotes_only_text": "- \"Wren\".\n- \"the brass ruler\". Supporting quote: \"She always reached for the brass ruler before the plastic ruler.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 39,
+    "passage_words": 35
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V910",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Fenn",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the long saw",
+     "mind": "Fenn",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the long saw before the short saw.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Fenn\".\n- ^2 Positive: \"the long saw\". For the Mind \"Fenn\". Supporting quote: \"He always reached for the long saw before the short saw.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Fenn\".\n- ^3 Negative: \"the long saw\". For the Mind \"Fenn\". Supporting quote: \"He always reached for the long saw before the short saw.\"",
+   "quotes_only_text": "- \"Fenn\".\n- \"the long saw\". Supporting quote: \"He always reached for the long saw before the short saw.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 38,
+    "passage_words": 34
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V911",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Liesel",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the small scale",
+     "mind": "Liesel",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the small scale before the large scale.",
+     "same_as_label": null,
+     "offset": 66,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the cracked weight",
+     "mind": "Liesel",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the cracked weight.",
+     "same_as_label": null,
+     "offset": 206,
+     "a_index": 2,
+     "b_index": 2
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Liesel\".\n- ^2 Positive: \"the small scale\". For the Mind \"Liesel\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- ^3 Negative: \"the cracked weight\". For the Mind \"Liesel\". Supporting quote: \"She kept well away from the cracked weight.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Liesel\".\n- ^3 Negative: \"the small scale\". For the Mind \"Liesel\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- ^2 Positive: \"the cracked weight\". For the Mind \"Liesel\". Supporting quote: \"She kept well away from the cracked weight.\"",
+   "quotes_only_text": "- \"Liesel\".\n- \"the small scale\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- \"the cracked weight\". Supporting quote: \"She kept well away from the cracked weight.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 206,
+    "role_words": 125,
+    "passage_size_count": 56,
+    "passage_words": 50
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V912",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Ansel",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the curved needle",
+     "mind": "Ansel",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the curved needle before the straight needle.",
+     "same_as_label": null,
+     "offset": 62,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the blunt shears",
+     "mind": "Ansel",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the blunt shears.",
+     "same_as_label": null,
+     "offset": 209,
+     "a_index": 2,
+     "b_index": 2
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Ansel\".\n- ^2 Positive: \"the curved needle\". For the Mind \"Ansel\". Supporting quote: \"He always reached for the curved needle before the straight needle.\"\n- ^3 Negative: \"the blunt shears\". For the Mind \"Ansel\". Supporting quote: \"He kept well away from the blunt shears.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Ansel\".\n- ^3 Negative: \"the curved needle\". For the Mind \"Ansel\". Supporting quote: \"He always reached for the curved needle before the straight needle.\"\n- ^2 Positive: \"the blunt shears\". For the Mind \"Ansel\". Supporting quote: \"He kept well away from the blunt shears.\"",
+   "quotes_only_text": "- \"Ansel\".\n- \"the curved needle\". Supporting quote: \"He always reached for the curved needle before the straight needle.\"\n- \"the blunt shears\". Supporting quote: \"He kept well away from the blunt shears.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 206,
+    "role_words": 125,
+    "passage_size_count": 48,
+    "passage_words": 43
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V913",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Petra",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the fine tweezers",
+     "mind": "Petra",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the fine tweezers before the flat pliers.",
+     "same_as_label": null,
+     "offset": 64,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the sticky oil",
+     "mind": "Petra",
+     "relative_to": "",
+     "supporting_quote": "\"Not near my bench,\" she said, and kept well away from the sticky oil.",
+     "same_as_label": null,
+     "offset": 239,
+     "a_index": 2,
+     "b_index": 2
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Petra\".\n- ^2 Positive: \"the fine tweezers\". For the Mind \"Petra\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- ^3 Negative: \"the sticky oil\". For the Mind \"Petra\". Supporting quote: \"\"Not near my bench,\" she said, and kept well away from the sticky oil.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Petra\".\n- ^3 Negative: \"the fine tweezers\". For the Mind \"Petra\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- ^2 Positive: \"the sticky oil\". For the Mind \"Petra\". Supporting quote: \"\"Not near my bench,\" she said, and kept well away from the sticky oil.\"",
+   "quotes_only_text": "- \"Petra\".\n- \"the fine tweezers\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- \"the sticky oil\". Supporting quote: \"\"Not near my bench,\" she said, and kept well away from the sticky oil.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 216,
+    "role_words": 131,
+    "passage_size_count": 58,
+    "passage_words": 49
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  }
+ ]
+}

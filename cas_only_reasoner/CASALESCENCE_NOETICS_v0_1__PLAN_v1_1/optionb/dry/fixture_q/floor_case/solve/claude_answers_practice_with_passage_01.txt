@@ -1,0 +1,8 @@
+Here are my answers (a MADE-UP stray line; the tool must log it and go on)
+Q0008 C
+Q0009 C
+Q0010 E
+Q0011 MORE_THAN_ONE
+Q0012 D
+Q0013 A
+Q0014 E

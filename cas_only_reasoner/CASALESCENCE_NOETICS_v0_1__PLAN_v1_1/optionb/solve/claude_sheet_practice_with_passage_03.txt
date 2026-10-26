@@ -1,0 +1,326 @@
+SHEET practice-with_passage-03. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0455 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: While walking past a local leather goods store tomorrow evening:
+A. the workshop
+B. the memory
+C. the sweat
+D. the tune
+E. the session
+F. the gym
+=== END Q0455 ===
+
+=== ITEM Q0456 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: Where was the heavy bag located?
+A. near the ring
+B. by the track
+C. in the corner
+D. in the locker
+=== END Q0456 ===
+
+=== ITEM Q0457 ===
+Passage:
+Tina loved the quick, sharp crack of leather on a speed bag, practicing her jabs and hooks with intense focus. The sparring sessions exhilarated her; the strategy and speed felt like a dance. However, the monotonous jumping jacks and endless laps around the track offered little appeal, barely holding her attention.
+
+Question: What object did Tina practice her jabs and hooks on?
+A. Focus pad
+B. Heavy bag
+C. Speed bag
+D. Punching mitt
+=== END Q0457 ===
+
+=== ITEM Q0458 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: Where was the buzzing device kept?
+A. locker
+B. corner
+C. floor
+D. bag
+=== END Q0458 ===
+
+=== ITEM Q0459 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: Suppose that particular aroma had been absent from the room; which of these would most likely not have happened?
+A. boxing gym
+B. liniment
+C. church shoes
+D. old leather
+E. sparring session
+F. small workshop
+=== END Q0459 ===
+
+=== ITEM Q0460 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: Suppose the old smell had been absent; which mental image would most likely not have occurred?
+A. workshop floor
+B. boxing gym
+C. church shoes
+D. liniment bottle
+E. sparring session
+F. sweaty brow
+=== END Q0460 ===
+
+=== ITEM Q0461 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: While walking down a busy downtown street, which of these would most likely bring the same thing back?
+A. church shoes
+B. sparring session
+C. old leather
+D. liniment
+E. grandfather
+F. workshop
+=== END Q0461 ===
+
+=== ITEM Q0462 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: What substance filled the boxing gym alongside the smell of old leather?
+A. tune
+B. polish
+C. sweat
+D. liniment
+=== END Q0462 ===
+
+=== ITEM Q0463 ===
+Passage:
+Coach Terry explained the new strategy to his fighter. He broke down the sequence of movements into individual parts. The initial opening would involve a quick jab, followed by a strong cross. Then, they would introduce a sharp body shot. Crucial to this plan were precise footwork and subtle head movement to avoid counters.
+
+Question: Who explained the new method to the athlete?
+A. Coach Terry
+B. Tina
+C. Carla
+D. Nathan
+=== END Q0463 ===
+
+=== ITEM Q0464 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: Walking past a different cobbler shop later, which sensory input would most likely bring back that memory?
+A. scent of polish
+B. sound of humming
+C. feel of brow
+D. sight of sweat
+E. glow of leather
+F. touch of liniment
+=== END Q0464 ===
+
+=== ITEM Q0465 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: At a later moment, which of these is Leo least likely to bring up?
+A. phone
+B. locker
+C. heavy bag
+D. booming voice
+E. corner
+F. knuckles
+=== END Q0465 ===
+
+=== ITEM Q0466 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: Suppose that specific aroma was entirely absent from the room today:
+A. the memory
+B. the tune
+C. the workshop
+D. the gym
+E. the session
+F. the sweat
+=== END Q0466 ===
+
+=== ITEM Q0467 ===
+Passage:
+Tina loved the quick, sharp crack of leather on a speed bag, practicing her jabs and hooks with intense focus. The sparring sessions exhilarated her; the strategy and speed felt like a dance. However, the monotonous jumping jacks and endless laps around the track offered little appeal, barely holding her attention.
+
+Question: What sound did Tina love?
+A. voice of the coach
+B. steps on the track
+C. buzzing of a phone
+D. crack of leather
+=== END Q0467 ===
+
+=== ITEM Q0468 ===
+Passage:
+Nathan watched his boxer spar. The young man's defence had three main flaws: his chin was too high, his left hand dropped too soon, and his footwork was too flat. Nathan broke it down for him: first, tuck the chin. Second, keep the guard up. Third, stay light on the balls of the feet. He repeated each point individually.
+
+Question: Who watched the young man spar?
+A. Nathan
+B. Carla
+C. Coach Terry
+D. Tina
+=== END Q0468 ===
+
+=== ITEM Q0469 ===
+Passage:
+Coach Terry explained the new strategy to his fighter. He broke down the sequence of movements into individual parts. The initial opening would involve a quick jab, followed by a strong cross. Then, they would introduce a sharp body shot. Crucial to this plan were precise footwork and subtle head movement to avoid counters.
+
+Question: What kind of shot was introduced after the cross according to the plan?
+A. sharp body shot
+B. strong cross
+C. quick jab
+D. subtle head
+=== END Q0469 ===
+
+=== ITEM Q0470 ===
+Passage:
+Every time the bell rang for a new round, Maria, a boxer, automatically snapped into her fighting stance. Her guard went up, her feet shifted, and her gaze sharpened, all without a moment’s thought. Years of repetitive training had ingrained these movements deep within her muscles. She was ready to move.
+
+Question: What rang to signal a new period of the bout?
+A. guard
+B. gaze
+C. bell
+D. stance
+=== END Q0470 ===
+
+=== ITEM Q0471 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: Where was the ringing device located?
+A. corner
+B. pocket
+C. locker
+D. ceiling
+=== END Q0471 ===
+
+=== ITEM Q0472 ===
+Passage:
+Every time the bell rang for a new round, Maria, a boxer, automatically snapped into her fighting stance. Her guard went up, her feet shifted, and her gaze sharpened, all without a moment’s thought. Years of repetitive training had ingrained these movements deep within her muscles. She was ready to move.
+
+Question: What object rang to signal the start of a new segment?
+A. bell
+B. guard
+C. gaze
+D. stance
+=== END Q0472 ===
+
+=== ITEM Q0473 ===
+Passage:
+Nathan watched his boxer spar. The young man's defence had three main flaws: his chin was too high, his left hand dropped too soon, and his footwork was too flat. Nathan broke it down for him: first, tuck the chin. Second, keep the guard up. Third, stay light on the balls of the feet. He repeated each point individually.
+
+Question: Which specific part of the body did Nathan say was too high?
+A. footwork
+B. guard
+C. chin
+D. left hand
+=== END Q0473 ===
+
+=== ITEM Q0474 ===
+Passage:
+Carla wiped down the speed bag, the familiar scent of worn leather and liniment filling the air. This specific smell always brought back vivid pictures of her grandmother's old armchair. She remembered the scratchy wool blanket her grandmother kept draped over it and the quiet afternoons spent reading comic books there.
+
+Question: Whose old armchair did Carla picture while wiping down the equipment?
+A. Aunt
+B. Sister
+C. Grandmother
+D. Mother
+=== END Q0474 ===
+
+=== ITEM Q0475 ===
+Passage:
+Carla wiped down the speed bag, the familiar scent of worn leather and liniment filling the air. This specific smell always brought back vivid pictures of her grandmother's old armchair. She remembered the scratchy wool blanket her grandmother kept draped over it and the quiet afternoons spent reading comic books there.
+
+Question: What furniture item did Carla remember her relative having?
+A. reading table
+B. old armchair
+C. leather jacket
+D. speed bag
+=== END Q0475 ===
+
+=== ITEM Q0476 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: What did Marco use to wipe his brow?
+A. workshop
+B. sweat
+C. leather
+D. liniment
+=== END Q0476 ===
+
+=== ITEM Q0477 ===
+Passage:
+Tina loved the quick, sharp crack of leather on a speed bag, practicing her jabs and hooks with intense focus. The sparring sessions exhilarated her; the strategy and speed felt like a dance. However, the monotonous jumping jacks and endless laps around the track offered little appeal, barely holding her attention.
+
+Question: What object did Tina practice her punches on?
+A. liniment
+B. speed bag
+C. track
+D. armchair
+=== END Q0477 ===
+
+=== ITEM Q0478 ===
+Passage:
+Every time the bell rang for a new round, Maria, a boxer, automatically snapped into her fighting stance. Her guard went up, her feet shifted, and her gaze sharpened, all without a moment’s thought. Years of repetitive training had ingrained these movements deep within her muscles. She was ready to move.
+
+Question: What is Maria's occupation according to the passage?
+A. Manager
+B. Boxer
+C. Referee
+D. Trainer
+=== END Q0478 ===
+
+=== ITEM Q0479 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: What substance was wiped from the athlete's forehead?
+A. liniment
+B. polish
+C. sweat
+D. water
+=== END Q0479 ===
+
+=== ITEM Q0480 ===
+Passage:
+Nathan watched his boxer spar. The young man's defence had three main flaws: his chin was too high, his left hand dropped too soon, and his footwork was too flat. Nathan broke it down for him: first, tuck the chin. Second, keep the guard up. Third, stay light on the balls of the feet. He repeated each point individually.
+
+Question: According to Nathan, how many main flaws were in the young man's defence?
+A. Two
+B. Four
+C. Three
+D. Five
+=== END Q0480 ===
+
+=== ITEM Q0481 ===
+Passage:
+Coach Terry explained the new strategy to his fighter. He broke down the sequence of movements into individual parts. The initial opening would involve a quick jab, followed by a strong cross. Then, they would introduce a sharp body shot. Crucial to this plan were precise footwork and subtle head movement to avoid counters.
+
+Question: Who outlined the tactical plan to the athlete?
+A. fighter
+B. Coach Terry
+C. manager
+D. referee
+=== END Q0481 ===
+
+=== ITEM Q0482 ===
+Passage:
+Carla wiped down the speed bag, the familiar scent of worn leather and liniment filling the air. This specific smell always brought back vivid pictures of her grandmother's old armchair. She remembered the scratchy wool blanket her grandmother kept draped over it and the quiet afternoons spent reading comic books there.
+
+Question: What item did Carla wipe down?
+A. the wool blanket
+B. the armchair
+C. the speed bag
+D. the comic books
+=== END Q0482 ===

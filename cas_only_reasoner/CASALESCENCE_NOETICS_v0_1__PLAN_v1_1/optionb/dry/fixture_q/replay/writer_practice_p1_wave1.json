@@ -1,0 +1,81 @@
+[
+ {
+  "http_status": 200,
+  "content_json": [
+   {
+    "passage": "V902",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "Odette has ten free minutes at the same market next week. Going only by the passage, where is she most likely to spend them?",
+      "right": "at the stall of old maps",
+      "wrong": [
+       "at the fish counter",
+       "near the brass band",
+       "at the leeks she bought",
+       "with her list at home",
+       "stepping wide around it"
+      ],
+      "anchors": [
+       "The stall of old maps"
+      ]
+     },
+     {
+      "form": "KEEPS_AWAY",
+      "question": "Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?",
+      "right": "the fish counter beside it",
+      "wrong": [
+       "the stall of old maps",
+       "the brass band on the corner",
+       "the leeks she bought",
+       "her list for the market",
+       "the sheets she turned slowly"
+      ],
+      "anchors": [
+       "The fish counter"
+      ]
+     },
+     {
+      "form": "WHAT_SLID_OFF",
+      "question": "That evening a friend asks Odette what she remembers of the market. Going only by the passage, which is she least likely to bring up?",
+      "right": "the brass band on the corner",
+      "wrong": [
+       "the fish counter beside it",
+       "the stall of old maps",
+       "the time she forgot there",
+       "the leeks she bought",
+       "her list for the market"
+      ],
+      "anchors": [
+       "barely registered"
+      ]
+     },
+     {
+      "form": "WHAT_STUCK",
+      "question": "That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?",
+      "right": "the old maps she turned",
+      "wrong": [
+       "the brass band on the corner",
+       "the price she paid there",
+       "the fish counter beside it",
+       "her list for the market",
+       "the leeks she bought"
+      ],
+      "anchors": [
+       "barely registered"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "What did Odette have in mind at the market?",
+     "right": "her list",
+     "wrong": [
+      "old maps",
+      "fresh fish",
+      "a brass horn"
+     ]
+    }
+   }
+  ]
+ }
+]

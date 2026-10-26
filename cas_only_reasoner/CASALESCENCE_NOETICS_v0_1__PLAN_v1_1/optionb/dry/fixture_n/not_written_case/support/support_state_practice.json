@@ -1,0 +1,84 @@
+{
+ "schema": "casalescence/optionb/support_state/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "05660139b058ef7d544e84f632ceba76c53cdd36f38da9578bd165c25bc100ac",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "00f18c02b8544a1597432154abdb7c900165f186757d67d215cec4a0ffea0192"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/SEAL_OPTIONB.jsonl",
+   "sha256": "8e49ddb3479ea4b6af92de7ce82ee023d63428814b9bb5c8927d7cc90fea1d5b"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/elig/eligibility.json",
+   "sha256": "225d5d7a5dffee567ca4bf2346c1514898e5052bccd88442cef2ed8785953848"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_ord/ordinary_notes_practice.json",
+   "sha256": "7d9699f0d154f82303b53f0b5bb6f490f77dd2143de497c6a9274d8a9f83cbdb"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/support/support_calls_practice.jsonl",
+   "sha256": "2ca360e49ef3822521d2a2a9c29bf4b8fa980c2708e6fa311e490172461d47b5"
+  }
+ ],
+ "set": "practice",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "rounds": [
+  {
+   "round": 1,
+   "batches": [
+    {
+     "batch": 0,
+     "item_ids": [
+      "N0001",
+      "N0002",
+      "N0003",
+      "N0004",
+      "N0005",
+      "N0006",
+      "N0007",
+      "N0008",
+      "N0009",
+      "N0010",
+      "N0011",
+      "N0012"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "item_ids": [
+      "N0013",
+      "N0014",
+      "N0015",
+      "N0016",
+      "N0017",
+      "N0018",
+      "N0019",
+      "N0020",
+      "N0021",
+      "N0022",
+      "N0023",
+      "N0024"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "first_cap_stop_utc": null,
+ "complete": true
+}

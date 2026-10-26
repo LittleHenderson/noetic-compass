@@ -1,0 +1,52 @@
+SHEET final-with_passage-01. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0005 ===
+Passage:
+Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.
+
+Question: What did Oksana call for?
+A. the scale
+B. the apron
+C. the radio
+D. the trays
+=== END Q0005 ===
+
+=== ITEM Q0006 ===
+Passage:
+Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.
+
+Question: A new baker takes Oksana's place on a first day. Going only by the passage, which of these would most likely be missing?
+A. a call for the trays
+B. the scoop stopping without a glance
+C. a radio playing on the shelf
+D. flour weighed out by hand
+E. a scale on the bench
+F. an apron tied before the work
+=== END Q0006 ===
+
+=== ITEM Q0007 ===
+Passage:
+Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.
+
+Question: Where was the new radio?
+A. on the bench
+B. beside the scale
+C. on the shelf
+D. in the tray rack
+=== END Q0007 ===
+
+=== ITEM Q0008 ===
+Passage:
+Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.
+
+Question: Oksana takes a desk job for two years and never weighs flour. Going only by the passage, which of these has most likely faded when she comes back?
+A. four hundred grams of flour
+B. the bench before dawn
+C. stopping the scoop without a glance
+D. the radio on the shelf
+E. tying her apron at the bench
+F. calling for the trays
+=== END Q0008 ===

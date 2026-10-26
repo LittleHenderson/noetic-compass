@@ -1,0 +1,226 @@
+SHEET practice-with_passage-05. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0565 ===
+Passage:
+George, a taxi driver with decades on the road, watched a group of young men approach. Their loud laughter and unsteady steps instantly signaled trouble. He knew from experience they would argue over the fare or try to negotiate a longer route. George simply flicked off his 'for hire' light and waited for them to pass.
+
+Question: What did the driver switch off?
+A. interior lamp
+B. engine ignition
+C. headlight switch
+D. for hire light
+=== END Q0565 ===
+
+=== ITEM Q0566 ===
+Passage:
+Xander pulled his cab to the front of the queue. His eyes automatically scanned the street for approaching passengers, checking their expressions for urgency. His foot rested lightly on the brake, ready to shift into gear. He had waited here every night for years, and his movements were entirely unthinking.
+
+Question: Where did the driver pull the vehicle?
+A. side of the road
+B. back of the line
+C. middle of the street
+D. front of the queue
+=== END Q0566 ===
+
+=== ITEM Q0567 ===
+Passage:
+Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.
+
+Question: At a later free moment, which of these does the driver choose?
+A. a small payment
+B. a motorway rest
+C. a long drive
+D. a city center
+E. a two block journey
+F. a short trip
+=== END Q0567 ===
+
+=== ITEM Q0568 ===
+Passage:
+Robert waited at the taxi rank, his engine idling quietly. A faint, distant siren wailed in the city. The sound made him think of the old fire station near his childhood home. He remembered the loud clang of the bell when the trucks were called out, and the exciting rush of the big red engines.
+
+Question: Where did Robert wait while his engine idled quietly?
+A. at the taxi rank
+B. beside the big red engines
+C. outside his childhood home
+D. near the old fire station
+=== END Q0568 ===
+
+=== ITEM Q0569 ===
+Passage:
+George pulled his car to the next spot in line. Without glancing at his watch, he knew the precise interval since the last fare had departed. He shifted the radio station to a news channel, a routine ingrained from countless quiet waits. His foot rested lightly on the brake pedal. He waited for the next customer automatically.
+
+Question: What channel was selected on the radio?
+A. talk station
+B. weather band
+C. news channel
+D. music feed
+=== END Q0569 ===
+
+=== ITEM Q0570 ===
+Passage:
+Liam, a taxi driver, disliked the loud, boisterous groups that often emerged from the clubs. He much preferred the quiet, single passengers heading home after a long shift. The flashing neon sign from the bar across the street did not distract him. He just wanted a straightforward fare for his last trip of the night.
+
+Question: What was placed across the street from where the driver waited?
+A. a bar
+B. a shop
+C. a bank
+D. a park
+=== END Q0570 ===
+
+=== ITEM Q0571 ===
+Passage:
+Liam, a taxi driver, disliked the loud, boisterous groups that often emerged from the clubs. He much preferred the quiet, single passengers heading home after a long shift. The flashing neon sign from the bar across the street did not distract him. He just wanted a straightforward fare for his last trip of the night.
+
+Question: What illuminated the street from across the way?
+A. bright street lamp
+B. glowing club sign
+C. flashing neon sign
+D. blinking traffic light
+=== END Q0571 ===
+
+=== ITEM Q0572 ===
+Passage:
+Robert waited at the taxi rank, his engine idling quietly. A faint, distant siren wailed in the city. The sound made him think of the old fire station near his childhood home. He remembered the loud clang of the bell when the trucks were called out, and the exciting rush of the big red engines.
+
+Question: Where did the man wait?
+A. taxi rank
+B. bus stop
+C. fire station
+D. train platform
+=== END Q0572 ===
+
+=== ITEM Q0573 ===
+Passage:
+George pulled his car to the next spot in line. Without glancing at his watch, he knew the precise interval since the last fare had departed. He shifted the radio station to a news channel, a routine ingrained from countless quiet waits. His foot rested lightly on the brake pedal. He waited for the next customer automatically.
+
+Question: Where did George place his foot while sitting?
+A. on the accelerator
+B. on the brake pedal
+C. on the floor mat
+D. on the clutch pedal
+=== END Q0573 ===
+
+=== ITEM Q0574 ===
+Passage:
+Patricia reviewed the last fare's convoluted directions. It involved a sharp left at the old oak, a short bypass along the river, and then a series of confusing one-way streets. The main problem was not the destination itself, but the order of the turns and the unexpected detours. She mentally broke it down.
+
+Question: What kind of turn was required at the old oak?
+A. A gradual curve
+B. A U-turn
+C. A sharp left
+D. A slight right
+=== END Q0574 ===
+
+=== ITEM Q0575 ===
+Passage:
+Kevin, a taxi driver, leaned against his car at the quiet rank. The faint scent of stale beer drifted from the nearby pub door as it opened. Suddenly, he remembered the smell of his grandfather's old workshop. His grandfather used to brew his own ale there, even though he was never supposed to. It brought a small smile to Kevin's face.
+
+Question: What type of vehicle did Kevin lean against while at the rank?
+A. a truck
+B. his car
+C. a bus
+D. a van
+=== END Q0575 ===
+
+=== ITEM Q0576 ===
+Passage:
+Kevin, a taxi driver, leaned against his car at the quiet rank. The faint scent of stale beer drifted from the nearby pub door as it opened. Suddenly, he remembered the smell of his grandfather's old workshop. His grandfather used to brew his own ale there, even though he was never supposed to. It brought a small smile to Kevin's face.
+
+Question: Where was the vehicle positioned when the driver leaned against it?
+A. quiet rank
+B. fuel pump
+C. busy street
+D. dark alley
+=== END Q0576 ===
+
+=== ITEM Q0577 ===
+Passage:
+Patricia reviewed the last fare's convoluted directions. It involved a sharp left at the old oak, a short bypass along the river, and then a series of confusing one-way streets. The main problem was not the destination itself, but the order of the turns and the unexpected detours. She mentally broke it down.
+
+Question: Near which tree did the directions require a sharp turn?
+A. the tall pine
+B. the old oak
+C. the green willow
+D. the dead birch
+=== END Q0577 ===
+
+=== ITEM Q0578 ===
+Passage:
+George, a taxi driver with decades on the road, watched a group of young men approach. Their loud laughter and unsteady steps instantly signaled trouble. He knew from experience they would argue over the fare or try to negotiate a longer route. George simply flicked off his 'for hire' light and waited for them to pass.
+
+Question: What did the driver flick off before waiting?
+A. radio dial
+B. for hire light
+C. engine ignition
+D. headlight switch
+=== END Q0578 ===
+
+=== ITEM Q0579 ===
+Passage:
+Liam, a taxi driver, disliked the loud, boisterous groups that often emerged from the clubs. He much preferred the quiet, single passengers heading home after a long shift. The flashing neon sign from the bar across the street did not distract him. He just wanted a straightforward fare for his last trip of the night.
+
+Question: What type of sign shone from across the street?
+A. shaded bulb
+B. painted wood
+C. metal plate
+D. flashing neon
+=== END Q0579 ===
+
+=== ITEM Q0580 ===
+Passage:
+Kevin, a taxi driver, leaned against his car at the quiet rank. The faint scent of stale beer drifted from the nearby pub door as it opened. Suddenly, he remembered the smell of his grandfather's old workshop. His grandfather used to brew his own ale there, even though he was never supposed to. It brought a small smile to Kevin's face.
+
+Question: Who was leaning against the car at the quiet rank?
+A. A pub owner
+B. Kevin's grandfather
+C. Kevin
+D. A taxi passenger
+=== END Q0580 ===
+
+=== ITEM Q0581 ===
+Passage:
+Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.
+
+Question: How far was the customer's requested journey?
+A. Across the entire city
+B. Down the long motorway
+C. Just two blocks away
+D. To the nearby river
+=== END Q0581 ===
+
+=== ITEM Q0582 ===
+Passage:
+George, a taxi driver with decades on the road, watched a group of young men approach. Their loud laughter and unsteady steps instantly signaled trouble. He knew from experience they would argue over the fare or try to negotiate a longer route. George simply flicked off his 'for hire' light and waited for them to pass.
+
+Question: What did George flick off when the young men approached?
+A. his 'for hire' light
+B. his vehicle engine
+C. his radio dial
+D. his front headlights
+=== END Q0582 ===
+
+=== ITEM Q0583 ===
+Passage:
+George pulled his car to the next spot in line. Without glancing at his watch, he knew the precise interval since the last fare had departed. He shifted the radio station to a news channel, a routine ingrained from countless quiet waits. His foot rested lightly on the brake pedal. He waited for the next customer automatically.
+
+Question: Where was George's foot resting while he waited?
+A. On the brake pedal
+B. On the clutch pedal
+C. On the vehicle floor
+D. On the accelerator pedal
+=== END Q0583 ===
+
+=== ITEM Q0584 ===
+Passage:
+Xander pulled his cab to the front of the queue. His eyes automatically scanned the street for approaching passengers, checking their expressions for urgency. His foot rested lightly on the brake, ready to shift into gear. He had waited here every night for years, and his movements were entirely unthinking.
+
+Question: Where did Xander pull his cab to the front?
+A. of the garage
+B. of the traffic
+C. of the station
+D. of the queue
+=== END Q0584 ===

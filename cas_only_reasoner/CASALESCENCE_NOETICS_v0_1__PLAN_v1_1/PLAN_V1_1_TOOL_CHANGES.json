@@ -1,0 +1,255 @@
+{
+ "schema": "casalescence/optionb/plan_v1_1_tool_changes/v1",
+ "utc": "2026-10-07T06:10:00Z",
+ "revision": "2 (after the tool review: ob_assemble.py brought in line; MISSING_PASS_FILE in a real run; OPTIONS_MATCH_EACH_OTHER needs shared content words; plain() before WRONG_OPTION_NOT_FROM_PASSAGE)",
+ "what": "The tool edits of plan v1.1 (PLAN_V1_1_CHANGE_SPEC.md parts C2 and C3), made in this folder only. Old hashes are the byte copies recorded in PROJECT_COPY_RECORD.json. A unified diff per tool sits in PLAN_V1_1_DIFFS/<tool name>.diff. tools/verdict.py is frozen and was not edited; its lenient_span and content are called through load_frozen_verdict, never copied.",
+ "python": "C:/Python314/python.exe -B; every edited tool compiled with py_compile (bytecode sent outside the folder; no __pycache__ left)",
+ "dry_runs": [
+  {
+   "driver": "optionb/dry/fixture_q/run_dry_q.py (a copy of the v1.0 driver, changed for v1.1; its made-up questions were rewritten because the v1.0 ones used invented wrong options that the new WRONG_OPTION_NOT_FROM_PASSAGE rule drops)",
+   "tools": [
+    "ob_write_questions.py",
+    "ob_check_questions.py",
+    "ob_solve_blind.py",
+    "ob_select.py"
+   ],
+   "result": "49 tool runs, 114 checks, 114 held, 0 not held (optionb/dry/fixture_q/dry_run_log.json), re-run after revision 2",
+   "planted_faults_under_revision_2": "all three still fire: QUESTION_REPEATS_KEY on V901.p1.TAKE_AWAY; OPTIONS_MATCH_EACH_OTHER on V901.p3.MEET_AGAIN ('a key on a nail' / 'a key hung on a nail' share 2 content words); WRONG_OPTION_NOT_FROM_PASSAGE on V902.p1.WHAT_STUCK. No fixture change was needed for the threshold.",
+   "note": "The final set is checked while its p3 file is absent; that skip is allowed only because the work folder is a dry fixture (ctx.dry)."
+  },
+  {
+   "driver": "optionb/dry/fixture_n/run_dry_n.py (a copy of the v1.0 driver; it fabricates the question files by hand and runs the note writer, the support check, the leak screen, ob_assemble.py and ob_seal.py)",
+   "tools": [
+    "ob_write_ordinary_notes.py",
+    "ob_check_support.py",
+    "ob_screen_notes.py",
+    "ob_assemble.py",
+    "ob_seal.py"
+   ],
+   "result": "78 tool runs, 189 checks, 189 held, 0 not held (optionb/dry/fixture_n/dry_run_log.json)",
+   "changes_to_the_copied_driver": "Its fabricated candidates now follow the v1.1 rule (every passing question of both passes, so pairs with two candidates exist); the p2 twin of a question gets the same made-up solver outcome as its p1, so the hand-worked survival table is unchanged and held; the fabricated selection reduces each pair to the lowest pass, marks pass_used and logs LATER_PASS_NOT_NEEDED; the pass list is pinned to ['p1', 'p2'] in its dry override because the fixture writes two passes by hand (the real plan has three)."
+  }
+ ],
+ "note": "DRY FIXTURES, NOT RESULTS. No outside service was called. The dry constants overrides lower only the launch floors and reserve targets (and pin the pass list in fixture_n); every v1.1 key was read from optionb/PLAN_CONSTANTS.json itself.",
+ "constants_keys_read": {
+  "outside_services.gemini_question_writer.passes": {
+   "type": "list of strings",
+   "expected": [
+    "p1",
+    "p2",
+    "p3"
+   ],
+   "read_by": [
+    "ob_write_questions.py (--pass choices and the pass check)",
+    "ob_check_questions.py",
+    "ob_select.py",
+    "ob_seal.py",
+    "ob_solve_blind.py",
+    "ob_assemble.py (already in v1.0)"
+   ],
+   "rule": "pass names of the shape p<digit>; in a real run every pass file must exist"
+  },
+  "seeds.writer_batch_order_p3": {
+   "type": "whole number",
+   "expected": 20261018,
+   "read_by": [
+    "ob_write_questions.py, by the name rule seeds.writer_batch_order_<pass>"
+   ]
+  },
+  "question_rules.question_must_not_match_right_option": {
+   "type": "true/false",
+   "expected": true,
+   "read_by": [
+    "ob_check_questions.py"
+   ],
+   "reason_code": "QUESTION_REPEATS_KEY",
+   "scope": "role-step questions only"
+  },
+  "question_rules.no_two_options_match": {
+   "type": "true/false",
+   "expected": true,
+   "read_by": [
+    "ob_check_questions.py"
+   ],
+   "reason_code": "OPTIONS_MATCH_EACH_OTHER",
+   "scope": "role-step (six options) and plain-fact (four options)"
+  },
+  "question_rules.no_two_options_match_min_shared_content_words": {
+   "type": "whole number (not true/false)",
+   "expected": 2,
+   "read_by": [
+    "ob_check_questions.py"
+   ],
+   "rule": "two options match when they match by the frozen looser test (lenient_span) AND the set intersection of their frozen content() word lists has at least this many words"
+  },
+  "question_rules.wrong_options_must_match_passage_forms": {
+   "type": "list of form names",
+   "expected": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "WHAT_STUCK",
+    "WHAT_SLID_OFF",
+    "WHAT_LEFT",
+    "NOT_BELONG",
+    "LONG_BREAK",
+    "NEW_STARTER",
+    "TAKE_AWAY"
+   ],
+   "read_by": [
+    "ob_check_questions.py"
+   ],
+   "reason_code": "WRONG_OPTION_NOT_FROM_PASSAGE",
+   "scope": "role-step questions of the listed forms; the right option is not tested; not plain-fact; the passage text is made plain() first"
+  },
+  "question_rules.spare_rule": {
+   "type": "text",
+   "read_by": [],
+   "note": "not read by any tool; the candidate rule is coded as the spec and this text describe it"
+  },
+  "missing_key_behaviour": "ob_check_questions.py stops with PLAN_CONSTANTS_MISSING_KEY when one of the four question_rules keys is missing or of the wrong type; a missing key is never a silent default. It stops with PLAN_CONSTANTS_SHAPE when passes is not a list of p<digit> names."
+ },
+ "files": [
+  {
+   "path": "tools/ob_write_questions.py",
+   "old_sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+   "new_sha256": "3d563eb023cf84710a9bb025361d12bdaa5461002e95a43fb550a2b383f5890c",
+   "old_bytes": 36575,
+   "new_bytes": 38119,
+   "diff": "PLAN_V1_1_DIFFS/ob_write_questions.diff",
+   "changes": [
+    "--pass accepts every name in outside_services.gemini_question_writer.passes (p1, p2, p3). The argparse choices are read from PLAN_CONSTANTS.json before parsing (new helper pass_choices; a dry fixture's DRY_CONSTANT_OVERRIDES.json is merged first, as Ctx does later). The run still checks the pass against the loaded constants (BAD_ARGUMENT).",
+    "The seed is read by the existing name rule seeds.writer_batch_order_<pass>, so p3 reads writer_batch_order_p3. File names follow the existing pattern (writer_state_<set>_<pass>.json, writer_calls_<set>_<pass>.jsonl, raw_questions_<set>_<pass>.json).",
+    "'The other pass' became 'the other passes': the one-model check reads every other pass checkpoint that exists, and a reserve wave is added without the reserve check when any other pass already holds that wave (the v1.0 code took [0] of a one-element list and would have broken with three passes).",
+    "Usage text updated. Nothing else changed: batching, the reserve rule, the HTTP 429 stop, the call log and the checkpoint are as in v1.0."
+   ]
+  },
+  {
+   "path": "tools/ob_check_questions.py",
+   "old_sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+   "new_sha256": "2fe578d5a458b769a3600f8c950b60499ea78695e9b61b246e99da576bb4ccbf",
+   "old_bytes": 26516,
+   "new_bytes": 32220,
+   "diff": "PLAN_V1_1_DIFFS/ob_check_questions.diff",
+   "changes": [
+    "Step 2 gains three rules (new function match_rules, called at the end of form_check, so after every existing form check and before the anchor check). Each uses the hashed tools/verdict.py through the existing load_frozen_verdict, the same module the anchor and option checks call: QUESTION_REPEATS_KEY (role-step: the question sentence matches the right option by lenient_span), OPTIONS_MATCH_EACH_OTHER (any two options match by lenient_span AND share at least question_rules.no_two_options_match_min_shared_content_words content words, counted as the set intersection of the frozen content() lists; six options for role-step, four for plain-fact), WRONG_OPTION_NOT_FROM_PASSAGE (role-step, forms in question_rules.wrong_options_must_match_passage_forms only: a wrong option does not match the plain() passage text by lenient_span; the right option is not tested).",
+    "Revision 2: the shared-content-word threshold was added because the plain lenient_span rule fired on 135 of 324 sealed v1.0 practice role-step questions, mostly two-word options sharing one word; and the passage text is normalised with the tool's existing plain() (curly quotes straight, white space collapsed) before the wrong options are compared with it.",
+    "The three rules are skipped for a question that already failed EMPTY_TEXT or OPTION_COUNT, so the word test never reads a broken option list. The codes are appended to the question's reasons list and counted in dropped_by_reason like the old codes. FORM_REASONS lists them.",
+    "form_check takes the frozen verdict module as a fifth argument. rule_value reads each v1.1 key with a type check (bool, list or whole number; a true/false value does not pass as a whole number) and stops with PLAN_CONSTANTS_MISSING_KEY otherwise.",
+    "The raw question files are read for every pass of the constants' passes list. The first pass (p1) must exist (WRITER_NOT_COMPLETE, as before). Revision 2: in a real run a missing later pass file is the stop MISSING_PASS_FILE, whose text names the file and the pass list; only a dry fixture (ctx.dry) skips it and names it in the printed output (passes_missing; passes_read lists the passes read). Every file read must still cover exactly the passages of the set and name the one model.",
+    "Candidate rule (v1.1): every question of every pass that passes Steps 2 and 3 is a candidate; a passage and form may carry one candidate per pass, in pass order. The v1.0 spare rule (p2 only where p1 existed and was dropped) is gone, and so is the requirement that a p1 question exists for the pair. Each candidate row carries pass.",
+    "counts of checks/candidates_<set>.json = {role_step, plain_fact, candidates_per_pass: {p1: {role_step, plain_fact}, p2: {...}, p3: {...}}, pairs_with_a_candidate (distinct passage-and-form pairs with a role-step candidate)}. spares_used is gone. The schema name stays casalescence/optionb/candidates/v1.",
+    "Survival rows: a passage-and-form pair counts at a filter when any pass passes it ('a later pass stands in'); the 'written for an open form' row counts pairs that any pass wrote, not only p1.",
+    "Dry mode (--work under optionb/dry/) unchanged. Exit codes unchanged (0 checked, 2 stop)."
+   ]
+  },
+  {
+   "path": "tools/ob_select.py",
+   "old_sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+   "new_sha256": "1fd644ffc8ea6c9f020c881a25c9aa1e5941ddda1a6012968e5ba4948968468e",
+   "old_bytes": 35417,
+   "new_bytes": 40772,
+   "diff": "PLAN_V1_1_DIFFS/ob_select.diff",
+   "changes": [
+    "Lowest-pass-first reduction (new functions pass_rank and lowest_pass_first), applied per passage inside run_selection before the pair rule, to both families: of the survivors of a passage and form (and of the plain-fact survivors of a passage), the one of the lowest pass is kept (p1 before p2 before p3, the order of the constants' passes list); every other survivor is logged in dropped with the reason LATER_PASS_NOT_NEEDED. A candidate whose pass is not in the constants stops the run (CANDIDATE_PASS_UNKNOWN).",
+    "Each task row carries pass_used (the pass of the candidate that supplied it; it equals the pass in question_id). Then the pair rule, the length backstop and the counts run unchanged.",
+    "The selection file gains the block survival of FILE_FORMATS.md 7.1: per family, candidates / after_key_check / after_no_passage count question ids over every pass; after_lowest_pass and selected count passage-and-form pairs.",
+    "survival_rows (the table in select/survival_<set>.json and the printed rows): the four check rows count pairs with any pass passing; the key-check and no-passage rows now also count pairs (a pair counts when any of its candidates passes), so the table reads as pairs from top to bottom.",
+    "CHECK_FILES_DISAGREE now compares like with like: (1) per question, the candidate ids of each family must equal the ids that passed the checks (the option check for role-step, the form check for plain-fact); (2) per pair, the number of passage-and-form pairs with a candidate must equal the option-check survival row. The stop message gives all four numbers. KEY_CHECK_NOT_CURRENT (candidates vs key_check rows, by question id) works unchanged with several candidates per pair.",
+    "load_set reads raw_questions_<set>_<pass>.json for every pass of the constants; the first pass must exist (FILE_MISSING, as before). Revision 2: in a real run a missing later pass file is the stop MISSING_PASS_FILE (text names the file); only a dry fixture skips it and lists it in the printed passes_missing. must_cover names the pass in its stop text.",
+    "The printed report and select/survival_<set>.json also carry tasks_by_pass_used. The reserve-rule 'next' text says 'every pass' instead of 'both passes'. Exit codes, the reserve rule, the floor, fix-split: unchanged."
+   ]
+  },
+  {
+   "path": "tools/ob_assemble.py",
+   "old_sha256": "13eebd988508aaaffd8dae23b7ceaccbe813f9fe1ffb66d3026d1dd1363db8f4",
+   "new_sha256": "6402a4c40de62c9a66b3ed5497c819354d9b5b9270ed69a3fad3fc9754b63204",
+   "old_bytes": 61314,
+   "new_bytes": 61949,
+   "diff": "PLAN_V1_1_DIFFS/ob_assemble.diff",
+   "changes": [
+    "Review finding (MAJOR): removal_of_set still applied the v1.0 spare rule (first, spare = passes[0], passes[1:]; the survival loop walked the p1 file and let a spare stand in only where p1 was dropped) and raised SURVIVAL_COUNT_DOES_NOT_MATCH when the candidates file did not hold exactly one question per pair. Under v1.1 that stop would have fired on any set with two candidates for one pair.",
+    "Fix, counted exactly as tools/ob_select.py counts it: every pass of the constants is read alike; role-step slots are (passage, form) pairs of eligible, not-barred passages with the form open, plain-fact slots are passages; a slot counts at the form / anchor / option filter when the question of ANY pass passes it. The candidates check compares like with like: per family, the candidate ids must equal the ids that passed the checks (the option check for role-step, the form check for plain-fact), and the number of passage-and-form pairs with a candidate must equal the option-check row; the stop message gives all four numbers. The key-check and no-passage rows count pairs (any candidate of the pair passing). The selection, backstop, support and screen rows, every log entry, the padding estimate and the rest of the tool are unchanged; a LATER_PASS_NOT_NEEDED row of the selection file is logged under STEP_6_SELECTION like any other reason.",
+    "Tested by optionb/dry/fixture_n/run_dry_n.py (189 checks held, with pairs that hold two candidates and the hand-worked survival table unchanged)."
+   ]
+  },
+  {
+   "path": "tools/ob_seal.py",
+   "old_sha256": "eb44758756232a8885666aa4c1442a9fc04f86d75a16526b747530d25fff44cb",
+   "new_sha256": "6ad54973ed7989c60764e47b71626e1be975b3f7a081e321962d4a41d2571bc1",
+   "old_bytes": 92398,
+   "new_bytes": 92981,
+   "diff": "PLAN_V1_1_DIFFS/ob_seal.diff",
+   "changes": [
+    "Found: the module constant PASSES = ('p1', 'p2') was used in two places: writer_state_facts (every pass must say complete: true and name one model) and the step 3A/3C file list (the three writer files per pass are required). With it unchanged, seal step 3A would not have required the p3 files to exist or the p3 writer to be complete.",
+    "Fix: PASSES is replaced by passes_of(ctx), which reads outside_services.gemini_question_writer.passes from the constants the seal tool already loads (Refused CONSTANTS_SHAPE when it is not a list of names). Both places now cover p1, p2 and p3. Nothing else in the seal tool changed."
+   ]
+  },
+  {
+   "path": "tools/ob_solve_blind.py",
+   "old_sha256": "9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15",
+   "new_sha256": "7c5d3114cf66d4f1b207b6f75cfe85a507847d633412cc0dec16c0f7068daeba",
+   "old_bytes": 45807,
+   "new_bytes": 46038,
+   "diff": "PLAN_V1_1_DIFFS/ob_solve_blind.diff",
+   "changes": [
+    "Found: items are per question id in every step (deepseek, export, import, decide), so several candidates per passage and form need no change there. The one two-pass assumption was the blindness guard of the export step: the regular expression \\.p[12]\\. that refuses a sheet text holding a pass tag would not have caught .p3. (the full question id test beside it would still have caught a whole id).",
+    "Fix: the guard builds its pass part from the constants' passes list (\\.(?:p1|p2|p3)\\.). Nothing else changed."
+   ]
+  }
+ ],
+ "emitted_names": {
+  "form_check_reason_codes_new": [
+   "QUESTION_REPEATS_KEY",
+   "OPTIONS_MATCH_EACH_OTHER",
+   "WRONG_OPTION_NOT_FROM_PASSAGE"
+  ],
+  "candidates_fields": [
+   "candidates[].pass",
+   "counts.role_step",
+   "counts.plain_fact",
+   "counts.candidates_per_pass.<pass>.role_step",
+   "counts.candidates_per_pass.<pass>.plain_fact",
+   "counts.pairs_with_a_candidate"
+  ],
+  "candidates_fields_removed": [
+   "counts.spares_used"
+  ],
+  "check_printed_fields_new": [
+   "passes_read",
+   "passes_missing (dry fixture only; empty in a real run)"
+  ],
+  "selection_fields_new": [
+   "tasks[].pass_used",
+   "survival.<family>.candidates",
+   "survival.<family>.after_key_check",
+   "survival.<family>.after_no_passage",
+   "survival.<family>.after_lowest_pass",
+   "survival.<family>.selected"
+  ],
+  "selection_dropped_reason_new": [
+   "LATER_PASS_NOT_NEEDED"
+  ],
+  "select_printed_and_survival_file_fields_new": [
+   "passes_missing (dry fixture only)",
+   "tasks_by_pass_used"
+  ],
+  "stop_codes_new": [
+   "MISSING_PASS_FILE (ob_check_questions.py and ob_select.py, real run only)",
+   "PLAN_CONSTANTS_MISSING_KEY (ob_check_questions.py)",
+   "PLAN_CONSTANTS_SHAPE (ob_check_questions.py)",
+   "CANDIDATE_PASS_UNKNOWN (ob_select.py)",
+   "CONSTANTS_SHAPE (ob_seal.py, an existing Refused code reused)"
+  ],
+  "stop_codes_changed_text": [
+   "SURVIVAL_COUNT_DOES_NOT_MATCH (ob_assemble.py): now names pairs and questions"
+  ]
+ },
+ "not_done_as_written": [],
+ "fixture_files_added_or_changed_under_optionb_dry": [
+  "optionb/dry/fixture_q/run_dry_q.py (v1.1 driver; solver replies and answer sheets are made from an outcome table through the private item map)",
+  "optionb/dry/fixture_q/elig/eligibility.json (byte copy of the v1.0 fixture)",
+  "optionb/dry/fixture_q/replay/writer_*.json (rewritten made-up questions; new p3 files writer_practice_p3_run1.json and writer_practice_p3_wave1.json)",
+  "optionb/dry/fixture_n/run_dry_n.py (v1.0 driver with the v1.1 candidate fabrication and a two-pass override) and optionb/dry/fixture_n/replay/ (byte copies)",
+  "the made folders and dry_run_log.json of both fixtures (outputs of the walks)"
+ ]
+}

@@ -1,0 +1,112 @@
+{
+ "schema": "casalescence/optionb/raw_questions/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "3d563eb023cf84710a9bb025361d12bdaa5461002e95a43fb550a2b383f5890c",
+  "utc": "2026-10-07T02:23:28Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "78127fadce11276ec8513f529848b3af4c2b50124309fafad679271056524646"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/writer_calls_practice_p3.jsonl",
+   "sha256": "a90469c5bc6c5ed6323db873190d38d20391ccaddbbb7b88302b0fa9dc76eb9e"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "pass": "p3",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "V901",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V901.p3.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Months on, Halima is far from any boat. Going only by the passage, which of these would most likely bring the ferry to her again?",
+     "right": "damp rope drying on a rail",
+     "wrong": [
+      "a key on a nail",
+      "a key hung on a nail",
+      "oars stacked in a shed",
+      "a door opened at dawn",
+      "a bench in a park"
+     ],
+     "anchors": [
+      "the smell of wet rope"
+     ]
+    },
+    {
+     "question_id": "V901.p3.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the door had let in no smell at all that morning. Going only by the passage, which of these would most likely not have happened?",
+     "right": "picturing the bench by the hatch",
+     "wrong": [
+      "unlocking the boathouse door",
+      "hanging the key on its nail",
+      "counting the oars slowly",
+      "walking in at once",
+      "the wet rope she met"
+     ],
+     "anchors": [
+      "her uncle's ferry"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V901.p3.FACT",
+    "question": "What hung on the nail afterwards?",
+    "right": "the key",
+    "wrong": [
+     "an oar",
+     "a rope",
+     "a tin"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V902",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V902.p3.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "On her next trip Odette walks the market again. Going only by the passage, which of these does she step wide around?",
+     "right": "the fish counter",
+     "wrong": [
+      "the stall of old maps",
+      "the brass band",
+      "the leeks she bought",
+      "her market list",
+      "the sheets she turned"
+     ],
+     "anchors": [
+      "The fish counter"
+     ]
+    }
+   ],
+   "plain_fact": null,
+   "extra_dropped": []
+  }
+ ]
+}

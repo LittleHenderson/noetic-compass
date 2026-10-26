@@ -1,0 +1,51 @@
+[
+ {
+  "http_status": 200,
+  "content_json": [
+   {
+    "passage": "V902",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "Odette is drawn back to the market on a free afternoon. Going only by the passage, which of these does she choose?",
+      "right": "turning over sheets of old maps",
+      "wrong": [
+       "standing at the fish counter",
+       "listening to the brass band",
+       "buying leeks at a stall",
+       "reading her list again",
+       "walking home with her bag"
+      ],
+      "anchors": [
+       "the stall of maps"
+      ]
+     },
+     {
+      "form": "WHAT_STUCK",
+      "question": "That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?",
+      "right": "the old maps she looked through",
+      "wrong": [
+       "the brass band on the corner",
+       "the fish counter beside it",
+       "her list for the market",
+       "the leeks she bought",
+       "the sheets she turned slowly"
+      ],
+      "anchors": [
+       "barely registered"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "What did Odette buy before she went home?",
+     "right": "leeks",
+     "wrong": [
+      "old maps",
+      "fresh fish",
+      "a brass horn"
+     ]
+    }
+   }
+  ]
+ }
+]

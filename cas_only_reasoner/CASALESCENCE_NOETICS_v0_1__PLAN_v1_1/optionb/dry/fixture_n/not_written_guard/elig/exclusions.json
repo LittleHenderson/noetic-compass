@@ -1,0 +1,12 @@
+{
+ "schema": "casalescence/optionb/exclusions/v1",
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "be99c129a1ab58878a0ea45bf79abba3289af2c2ca0d1103141e966542e2c4a4",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [],
+ "count": 0,
+ "by_kind": {},
+ "passages": []
+}

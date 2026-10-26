@@ -1,0 +1,512 @@
+{
+ "schema": "casalescence/optionb/eligibility/v1",
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "be99c129a1ab58878a0ea45bf79abba3289af2c2ca0d1103141e966542e2c4a4",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [],
+ "practice_settings": [
+  "fixture practice yard"
+ ],
+ "reserve_settings_in_order": [],
+ "counts": {
+  "passages": 15
+ },
+ "counts_match_plan": false,
+ "passages": [
+  {
+   "id": "V901",
+   "kind": "K2",
+   "setting": "fixture practice yard",
+   "text": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V902",
+   "kind": "K2",
+   "setting": "fixture practice yard",
+   "text": "Odran opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V903",
+   "kind": "K2",
+   "setting": "fixture practice yard",
+   "text": "Ilse opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V904",
+   "kind": "K2",
+   "setting": "fixture practice yard",
+   "text": "Bram opened the forge before dawn. He always reached for the cross hammer before the ball hammer. The quench bucket stood on the stone floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V905",
+   "kind": "K2",
+   "setting": "fixture practice yard",
+   "text": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The drying rack stood on the back wall by the door. A tub of madder lay beside it.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V906",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Corin opened the bell tower before dawn. He always reached for the hemp rope before the nylon rope. The oil can stood on the window ledge by the door. A pair of gloves lay beside it. He kept well away from the loose stair.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V907",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Edda opened the apple loft before dawn. She always reached for the wicker tray before the wire tray. The step stool stood on the landing by the door. A heap of straw lay beside it.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V908",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Joss opened the tile yard before dawn. He always reached for the wooden mould before the metal mould. The wheelbarrow stood on the gravel path by the door. A stack of pallets lay beside it.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V909",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Wren opened the map room before dawn. She always reached for the brass ruler before the plastic ruler. The globe stood on the side table by the door. A roll of tape lay beside it.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V910",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Fenn opened the ice house before dawn. He always reached for the long saw before the short saw. The sledge stood on the ramp by the door. A bale of sawdust lay beside it.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V911",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The brass pan stood on the bench by the door. A box of chalk lay beside it. She kept well away from the cracked weight. She checked that every weight was correct.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V912",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The wax pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V913",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Petra opened the clock shop before dawn. She always reached for the fine tweezers before the flat pliers. The loupe stood on the felt mat by the door. A tray of springs lay beside it. \"Not near my bench,\" she said, and kept well away from the sticky oil.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V914",
+   "kind": "K2",
+   "setting": "fixture practice yard",
+   "text": "Hale opened the rope walk before dawn. He always reached for the long spindle before the short spindle. The tally board stood on the end post by the door. A bucket of tallow lay beside it.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": false,
+   "agreed": {
+    "^1": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [],
+   "open_types": [],
+   "max_role_step_tasks": 0,
+   "leftover_on_type": {},
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "V915",
+   "kind": "K2",
+   "setting": "fixture final yard",
+   "text": "Sunniva opened the salt store before dawn. She always reached for the birch rake before the iron rake. The hand cart stood on the loading step by the door. A pile of sacks lay beside it.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": false,
+   "agreed": {
+    "^1": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [],
+   "open_types": [],
+   "max_role_step_tasks": 0,
+   "leftover_on_type": {},
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [],
+    "only_a": [],
+    "only_b": []
+   }
+  }
+ ]
+}

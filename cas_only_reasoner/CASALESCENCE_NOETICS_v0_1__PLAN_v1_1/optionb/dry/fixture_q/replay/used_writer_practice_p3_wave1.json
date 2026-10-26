@@ -1,0 +1,29 @@
+[
+ {
+  "http_status": 200,
+  "content_json": [
+   {
+    "passage": "V902",
+    "what_follows": [
+     {
+      "form": "KEEPS_AWAY",
+      "question": "On her next trip Odette walks the market again. Going only by the passage, which of these does she step wide around?",
+      "right": "the fish counter",
+      "wrong": [
+       "the stall of old maps",
+       "the brass band",
+       "the leeks she bought",
+       "her market list",
+       "the sheets she turned"
+      ],
+      "anchors": [
+       "The fish counter"
+      ]
+     }
+    ],
+    "plain_fact": null
+   }
+  ],
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY"
+ }
+]

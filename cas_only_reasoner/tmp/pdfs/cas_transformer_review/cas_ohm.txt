@@ -1,0 +1,874 @@
+VISUAL ENGINEERING SYNTHESIS
+
+
+
+
+CAS-OHM
+QUANTIFICATION
+Measuring attention flow through Cognitive Junction Transistors,
+RPMs, cascades, and recursive subcircuits.
+
+
+
+   V_drive = I_attention × R_constraint
+
+  MEASURE         DESIGN        DIAGNOSE         RECURSE
+
+
+
+
+A working guide that distinguishes source-defined CAS/TKS structures
+from the new decimal, four-container, ASOM, and residual-diagnostic            WORKING DRAFT V0.1
+extensions developed in this session.                                                     July 2026
+
+
+
+
+CAS-Ohm Quantification Guide                                           COVER                    01
+HOW TO READ THIS GUIDE
+
+
+Source definitions vs. working
+extensions
+    SOURCE-DEFINED                                                    WORKING MODEL
+
+
+  What comes directly from the                                      What this document adds
+  uploaded manuals                                                     D ↔ V, W ↔ I, and P ↔ capability-derived resistance.
+     CAS-Ohm: Vdrive = Iattention × Rconstraint.                       Decimal scoring and a four-container Q4 system.
+     CJT terminals: Cause, Bias, Effect, with gain β and               Trend tags to distinguish rising from waning states.
+     four operating regions.                                           ASOM as a mnemonic overlay on CJT operating
+     D/W/P: Desire, Wisdom, and Power as prerequisites.                regions.
+     The 12 face-card states as developmental phases.                  Predicted-versus-observed residuals for hidden-
+                                                                       constraint diagnosis.
+     RPM: scan D → W → P, recurse on the first unmet
+     prerequisite.                                                     Equivalent-resistance rules for nested sub-CJT
+                                                                       assemblies.
+     CJT cascades: effect becomes the next cause; stage
+     gains multiply.
+
+
+
+
+  Honesty rule: the numbers in this guide are design scores, calibration values, or observed ratings.
+  They are not direct voltmeter readings from a human brain or a language model. The engineering value
+  comes from consistency, test points, and falsifiable comparisons.
+
+
+
+  Notation discipline                                               Key conceptual distinction
+  Spell out CAS-Ohm. Do not use Ω as its                            Cause is not Drive. Cause is the incoming
+  shorthand inside CAS notation, because Ω                          Idea or trigger. Drive is the potential pushing
+  already names emergent outcomes in CAS                            activation through the path. The two may be
+  recipes and bindings.                                             correlated, but they occupy different roles.
+
+
+
+
+  Reading map
+   Pages 3-7                              Pages 8-12                          Pages 13-18
+
+   Ohm law, placement, calculation        D/W/P mapping, card anchors,        Cascades, nested sub-CJTs, RPM recursion,
+   modes, decimal system, Q4              hybrid notation, ASOM, single-CJT   residual diagnostics, field protocol, reference
+   containers                             example                             sheet
+
+
+
+
+CAS-Ohm Quantification Guide                                              SCOPE                                                 02
+F O U N D AT I O N
+
+
+The CAS-Ohm isomorphism
+
+              V_drive = I_attention × R_constraint
+
+                     V                                                  I                                              R
+          DRIVE POTENTIAL                                    AT TENTION FLOW                                     CONSTRAINT
+
+   The motivational push or pressure                The activation that actually moves                 Policies, capability limits, context,
+     behind a cognitive operation.                      through a cognitive path.                      friction, and boundaries opposing
+                                                                                                                      flow.
+
+
+
+
+                                                                                             Measure
+
+                                                                                                             I = V / R
+                                                                                             Given Drive and constraint, calculate the
+                                                                                             attention flow.
+
+
+
+
+                                                                                             Design
+
+                                                                                                             V = I × R
+ At fixed Drive, raising constraint lowers attention flow. The relationship is
+ proportional and testable.                                                                  Given a target flow and a known constraint,
+                                                                                             calculate the Drive required.
+
+
+
+
+                                                                                             Diagnose
+
+                                                                                                             R = V / I
+                                                                                             Given applied Drive and observed flow, infer
+                                                                                             the effective constraint.
+
+
+ SOURCE     CAS PCBA Engineer, Chapter 5: the electrical and cognitive forms of Ohm's Law.
+
+
+
+
+CAS-Ohm Quantification Guide                                                      OHM CORE                                                     03
+TOPOLOGY
+
+
+Where Drive, attention, bias, and
+effect live
+
+
+         V_drive rail: applied potential
+
+
+                                                                           CJT
+                                   I_attention
+                       R
+                                                   gain β at constant bias                                   output
+                 constraint flow through the path C                       E
+                                                         Cause                                Effect
+
+
+
+                                                                             B
+                                                                             Bias
+
+
+
+
+                                                                       I = V / R
+                                                   Ohm flow and CJT gain are related, but not identical
+
+
+
+
+ Proposed integrated view: a Drive rail applies potential, constraint limits path flow, and the CJT's bias controls how the cause becomes
+ an effect.
+
+
+
+
+  Supply role                                                             Flow role
+  Calling V "outside" the CJT means it acts like a                        I is the attention or activation moving through a
+  supply rail or applied potential. A CAS state can                       path. It is measured at a test point. The effect is
+  still carry a Drive tag, so outside does not mean                       the produced state, not the current itself.
+  disconnected from the state description.
+
+
+
+
+  Bias role                                                               Gain role
+  Bias is the accumulated substrate, constitution,                        β measures cause-to-effect amplification at
+  configuration, and context controlling the Cause                        constant bias. CAS-Ohm measures path flow. Do
+  → Effect transition. It can add resistance,                             not collapse β and I into one number.
+  change gain, or alter the effect type.
+
+
+
+  Design rule: measure the flow before the junction and the effect after the junction. A correct I reading
+  with a wrong effect points toward bias, gain, saturation, or breakdown rather than a simple resistance
+  problem.
+
+
+
+CAS-Ohm Quantification Guide                                                CJT ANATOMY                                                     04
+WORKFLOW
+
+
+The three equations and when to use
+them
+
+                                                                        1   Measure
+
+                                                                                                  I = V / R
+                             V
+                                                                       Question: What attention flow happens?
+                                                                       Example: V=8, R=2 → I=4.
+
+
+                    I                  R
+        Cover the unknown: multiply across, divide down.
+                                                                        2   Design
+
+ A compact memory aid. Cover the unknown variable,                                                V = I × R
+ then read the remaining operation.
+
+                                                                       Question: What Drive is needed?
+                                                                       Example: target I=4, R=2 → V=8.
+
+
+
+
+                                                                        3   Diagnose
+
+                                                                                                  R = V / I
+                                                                       Question: What hidden constraint is implied?
+                                                                       Example: V=8, observed I=4 → R=2.
+
+
+
+
+  DEFAULT FORWARD PASS                                     TARGET ENGINEERING                            FAULT HUNTING
+  Measure first. V and R are                               Design second. Specify a                      Diagnose when readings
+  treated as known inputs; I is                            desired I, then solve for the                 disagree. Infer the constraint
+  the resultant flow.                                      necessary V or R.                             the system is actually
+                                                                                                         experiencing.
+
+
+
+  Concise mnemonic: Measure I. Design V. Diagnose R.
+
+
+
+
+CAS-Ohm Quantification Guide                                                  CALCULATION MODES                                           05
+Q U A N T I F I C AT I O N
+
+
+The decimal measurement system
+
+          0.0-10.0                                        0.1-10.0                                           V/R
+                 DRIVE V                                     CONSTRAINT R                               RAW AT TENTION I
+    Zero means no applied potential.               Never use zero. A very small R can             Computed. Under these bounds it
+        Ten is the selected board                        create very large flow.                     can range from 0 to 100.
+                maximum.
+
+
+
+
+                                                                                        Full-scale calibration
+                                                                                        Choose a board-specific full-scale
+                                                                                        attention value IFS. Then map raw
+                                                                                        attention to the 0-10 display scale:
+
+
+                                                                                               I_Q = min(10, 10 ×
+                                                                                                  I_raw / I_FS)
+
+
+                                                                                        Overload ratio
+
+                                                                                                 λ = I_raw / I_FS
+  The attention field is steep near low resistance. That is where saturation            λ > 1 means the raw flow exceeds the
+  and breakdown protection matter most.
+                                                                                        calibrated full-scale level and may push a CJT
+                                                                                        toward saturation.
+
+
+
+
+                                                                                        Precision
+                                                                                        Record at least one decimal place for field work
+                                                                                        and two decimals for simulation or audit trails.
+
+
+
+   Why normalize: V and R live naturally on a 0-10 design scale, while I can exceed 10. The raw value
+   preserves engineering information; IQ lets the four-container and card-phase systems display it
+   consistently.
+
+
+
+
+CAS-Ohm Quantification Guide                                                   DECIMAL SCALE                                             06
+Q U A N T I Z AT I O N
+
+
+The four-container Q4 system
+
+
+
+
+  A proposed engineering quantizer. Each container holds a range of decimal values rather than one coarse label.
+
+
+
+
+   Container + decimal                                                   Add a trend tag
+   Write both the exact value and its container.                         Use ↑ for rising, → for stable, and ↓ for waning.
+   Example: IQ=7.82 [Q4]. The container                                  Example: V=5.40↓ [Q3]. This prevents a mid-
+   communicates maturity at a glance; the decimal                        level state that is growing from being confused
+   preserves precision.                                                  with one that is collapsing.
+
+
+
+
+   Q1                                Q2                                 Q3                                Q4
+   Insufficient, latent,             Emerging, partial,                 Functional and                    Strong, mature, or above
+   blocked, or barely                learning, or weakly                developing, but not fully         the chosen sufficiency
+   present.                          functional.                        mature.                           threshold.
+
+
+
+
+   Do not force the face cards into simple suit order. The canonical Desire and Power cycles include
+   waning phases. Card phase is an anchor plus a direction, not merely a quartile.
+
+
+  Q4 notation examples
+  V = 8.60↑ [Q4]             # strong applied Drive
+  I_Q = 5.25→ [Q3]           # functional, stable attention flow
+  P_cap = 4.10↑ [Q2]         # developing capability
+  R_total = 6.20             # effective opposition on the path
+
+
+
+
+CAS-Ohm Quantification Guide                                              Q4 CONTAINERS                                              07
+C R O SS WA L K
+
+
+D/W/P mapped to V/I/R, with one
+critical inversion
+
+
+               Desire D                                            V_drive
+             motivational pull                                  applied potential
+                                                                                           Functional mapping, not lexical identity
+
+
+
+             Wisdom W                                          I_attention
+          know-how / direction                            measured activation flow
+
+
+                                                                                                      high capability
+                Power P                                              R_cap
+              capability / ability                        inverse capability constraint                low internal R
+
+
+
+ The first two links are direct functional correspondences. Power maps to the capability that sets part of R, not to resistance as a same-
+ direction quantity.
+
+
+
+
+  Desire → Drive                                                          Wisdom → Attention
+  Desire supplies motivational pressure. This is                          Wisdom and attention are not synonyms. The
+  the cleanest mapping: higher Desire usually                             bridge is functional: know-how guides and
+  means higher available V.                                               organizes the cognitive flow that can be
+                                                                          observed as I.
+
+
+
+
+  Power → Capability                                                      External constraints remain
+  Power means ability to execute. Limited                                 High Power does not erase policy, context, time,
+  capability creates internal resistance; mature                          cost, law, or ethical boundaries. Those are
+  capability lowers that resistance.                                      separate resistance terms.
+
+
+
+
+                  R_cap = R_min + (R_max - R_min) × (1 - P_cap / 10)
+
+                R_total = R_cap + R_policy + R_context + R_resource
+
+  Bottom line: your semantic argument is strongest when "constraint aligns with Power" means
+  capability-limited resistance. The mathematical relation is inverse: more capability, less internal R.
+
+
+
+CAS-Ohm Quantification Guide                                               DWP CROSSWALK                                                     08
+TKS PHASE ANCHORS
+
+
+The 12 prerequisite states on a
+decimal axis
+
+
+
+
+ Canonical phase percentages from the TKS v6.1 manual, expressed on a 0-10 decimal scale.
+
+
+
+
+  Kings: Desire / V                                Jacks: Wisdom / IQ                                 Queens: Power /
+   K♦     Absent                 0.0                J♣     Learning               2.5
+                                                                                                      Pcap
+   K♣     Beginning ↑            2.5                J♦     Knowing                5.0                  Q♦      Birth ↑         1.0
+
+   K♠     Weakening ↓            5.0                J♠     Understanding          7.5                  Q♠      Waning ↓        2.0
+
+   K♥     Strong                 10.0               J♥     Mastered               10.0+                Q♣      Adolescent ↑    4.0
+
+                                                                                                       Q♥      Mature          10.0
+
+
+
+
+  Phase anchors, not rigid bins: decimals between anchors show intermediate development. The trend
+  tag preserves whether the acquisition is rising or falling.
+
+ SOURCE     TKS Formal Manual v6.1, Section 6.5. The face-card states describe how developed D/W/P is, not what D/W/P means.
+
+
+
+
+CAS-Ohm Quantification Guide                                                    CARD PHASES                                           09
+I N T E G R AT I O N
+
+
+A scientifically usable hybrid record
+   The central tension: RPM treats Desire, Wisdom, and Power as independently assessable
+   prerequisites. Ohm's Law treats I as dependent on V and R. The solution is to use Ohm's Law as a
+   prediction and consistency test, not as a replacement for the three RPM assessments.
+
+
+
+   Predictive mode                                             Audit mode
+   Score V and the components of R, then                       Observe or independently rate the actual
+   calculate:                                                  attention flow:
+
+
+             I_pred = V / R_total                                         ΔI = I_obs - I_pred
+   This is what the path should conduct if the model is        The residual exposes hidden resistance, amplification,
+   complete.                                                   clipping, or misalignment.
+
+
+
+
+  CJT-Q record
+  {
+    cause, bias, effect,
+    V_drive, P_cap, R_cap, R_policy, R_context, R_total,
+    I_pred, I_obs, I_Q, delta_I,
+    beta, cutoff, saturation, region,
+    D_card, W_card, P_card, trend,
+    test_point, timestamp
+  }
+
+
+
+   NEAR ZERO RESIDUAL                         NEGATIVE RESIDUAL                     POSITIVE RESIDUAL
+   Model aligned. Predicted                   Hidden opposition. More               Extra amplification.
+   and observed flow agree                    resistance or weaker bias             Feedback, parallel paths, or
+   within tolerance.                          exists than was modeled.              saturation effects may be
+                                                                                    present.
+
+
+
+           CJTQ< cause | bias => effect > [V=8.0, R=2.0, I_pred=4.0,
+                          I_obs=3.7, β=1.5, region=A]
+
+
+
+
+CAS-Ohm Quantification Guide                                    HYBRID MODEL                                            10
+O P E R AT I N G P O I N T
+
+
+ASOM mapped onto the four CJT
+regions
+
+
+
+
+  ASOM is a session-derived mnemonic. The source-defined CJT regions are cutoff, active, saturation, and breakdown.
+
+
+
+ ASOM                 CJT region         Observable signature                      RPM / tuning response
+
+ S: Starved           Cutoff             Bias or flow below threshold; effect      Find the thin D/W/P leg and supply it. Add
+                                         near zero or too shallow.                 context, knowledge, time, or capacity.
+
+ A: Aligned           Active             Proportional response, small residual,    Confirm D/W/P coherence. Do not tune a healthy
+                                         correct effect type.                      stage merely because more output is possible.
+
+ O:                   Saturation         Effect pinned at its ceiling; more        Regulate Drive, raise deliberate constraint, bleed
+ Oversaturated                           cause produces little or no additional    excess activation, or split the work across
+                                         effect.                                   stages.
+
+ M: Misaligned        Breakdown /        Effect type or direction is wrong, not    Use Wisdom to reframe, realign Desire, then
+                      inversion          merely too large or too small.            apply Power last. Structural repair, not a tiny dial
+                                                                                   adjustment.
+
+
+
+   Important: a clipped or flat response can come from saturation, cutoff, or a protective branch. Classify
+   from measured operating point and effect type, not from surface behavior alone.
+
+
+
+
+CAS-Ohm Quantification Guide                                              ASOM REGIONS                                                11
+WORKED EXAMPLE
+
+
+One CJT, measured from rail to effect
+
+
+
+                                                                                                         CJT
+           V = 8.0                               R = 2.0                                     I = 8 / 2 = 4.0
+               Drive                           Total constraint                                      β = 1.5
+            Q4 / strong                           known path                                   E* = βI = 6.0
+                                                                                         below sat = 8.5, so active region
+
+
+
+
+                                                observed I = 3.7 → ΔI = -0.3 → aligned within ±0.5
+
+
+
+ A simple example using the forward measurement equation and a separate CJT gain check. Working assumption: local I is the
+ constrained cause activation delivered to the collector; E* = βI is therefore an effect-activation proxy, not a canonical Ohm identity.
+
+
+
+
+  Step-by-step                                                             What the example does not
+   1. Apply V=8.0.                                                         prove
+   2. Model Rtotal=2.0.                                                    It does not prove the bias is semantically
+   3. Compute Ipred=4.0.                                                   correct, the effect is the intended Noetic, or the
+   4. At β=1.5, the active-region effect proxy is 6.0.                     card-phase ratings are accurate. Those require
+   5. Because 6.0 is below sat=8.5, the stage remains                      separate probes and evaluation.
+      active.
+   6. Observed I=3.7 gives ΔI=-0.3, inside a ±0.5                          Minimum probe set: input/cause activation, local I,
+      tolerance.                                                           bias state, effect activation, effect type, and region.
+
+
+
+
+  Engineering habit: calculate expected readings before observing the stage. A test point is most useful
+  when you already know what a healthy reading should be.
+
+
+
+
+CAS-Ohm Quantification Guide                                                   SINGLE CJT                                                  12
+CASCADES
+
+
+Attention flow through a series of
+CJTs
+
+      Effect state from each stage becomes the next stage's cause.
+
+
+
+
+              Stage 1                                            Stage 2                                           Stage 3
+             Understanding                                         Evaluation                                         Response
+
+               V₁=6 R₁=3                                          V₂=5 R₂=5                                         V₃=4 R₃=2
+                   I₁=2                                               I₂=1                                              I₃=2
+                  β₁=2.0                                            β₂=1.0                                             β₃=1.5
+
+
+
+
+                                            β_total = β₁ × β₂ × β₃ = 3.0
+                                               Attention is measured locally at every stage.
+                                     The cascade passes effect states, not one conserved current.
+                                       Probe each stage whose failure would otherwise be silent.
+
+
+
+ A three-stage understanding → evaluation → response cascade. Each stage can have a local Drive, constraint, attention reading, bias,
+ and gain.
+
+
+
+
+  What multiplies                                                               What gets handed forward
+                                                                                The effect state and its activation become the
+    β_total = β₁ × β₂ × ... × βₙ                                                next stage's cause. A cognitive cascade is not
+  Gain in a CJT cascade multiplies. High gain amplifies                         identical to a wire carrying one conserved
+  both signal and error.                                                        electrical current.
+
+
+
+  Common confusion: in a literal electrical series circuit, current is common through every component.
+  In a CJT cascade, activation can be amplified, attenuated, saturated, or reshaped at each stage.
+  Therefore read I locally at TP1, TP2, TP3, and so on.
+
+ SOURCE     CAS PCBA Engineer, multi-stage amplifiers and Darlington gain: effects feed later causes and stage β values multiply.
+
+
+
+
+CAS-Ohm Quantification Guide                                                       MULTI-STAGE                                          13
+RECURSION
+
+
+Sub-CJTs, equivalent resistance, and
+parent measurement
+
+
+                                         Parent CJT / subcircuit
+
+                   Sub-CJT A
+                        R₁=3
+                                                                 Parallel branch aggregation
+                      bias A, β₁
+                                                                           1/R_eq = 1/R₁ + 1/R₂
+                                                                                      R_eq = 2
+                                                                                  V_parent = 6
+                   Sub-CJT B                                                 I_parent = 6/2 = 3
+                        R₂=6
+                      bias B, β₂
+
+
+
+
+                     Series resistance adds. Parallel conductance adds. Cascade gain multiplies.
+
+
+
+
+ A proposed method for reducing nested sub-CJTs to parent-level quantities while preserving child-level probes.
+
+
+
+
+  Series subpaths                                Parallel subpaths                              Cascade gain
+
+         R_eq = Σ R_k                               1/R_eq = Σ 1/R_k                                   β_eq = Π β_k
+  Sequential constraints add.                    Parallel conductances add.                     Amplification along an active series
+                                                                                                path multiplies.
+
+
+
+
+  Recursive measurement rule: compute the parent equivalent for overview, but never discard the
+  child readings. A healthy parent total can hide one overloaded branch and one starved branch that
+  cancel numerically.
+
+
+ parent {
+   branch_A: V=6, R1=3 → I1=2
+   branch_B: V=6, R2=6 → I2=1
+   parallel: R_eq=2      → I_parent=3
+   probes: TP_A, TP_B, TP_parent
+ }
+
+
+
+
+CAS-Ohm Quantification Guide                                             NESTED CIRCUITS                                               14
+RECURSIVE DIAGNOSIS
+
+
+RPM as a cognitive troubleshooting
+circuit
+
+                                          Prime Desire
+                                                                                                               1. Define
+                                         target Foundation / goal                                              Name the Prime Desire and target Foundation.
+
+
+                                         Scan D → W → P
+                D = K♥ 10 ✓                  W = J♣ 2.5 ✕                  P = Q♣ 4.0
+                                                                                                               2. Scan
+                                                                                                               Assess D, W, P with card phase, decimal score,
+                                                                                                               and trend.
+                                     First block: Wisdom
+                         Formulate a sub-desire to acquire applicable know-how
+
+
+
+
+                       Recurse → act → re-measure → ascend                                                     3. Recurse
+           Every sub-desire can carry its own V, I, R, phase anchor, ASOM state, and test point.
+                                                                                                               The first insufficient state becomes the next
+                                                                                                               goal.
+
+ RPM scans the D/W/P triad and recursively turns the first insufficient
+ prerequisite into a sub-desire.
+                                                                                                               4. Act and ascend
+                                                                                                               Execute a Noetic action, re-measure, then
+                                                                                                               return to the parent goal.
+
+
+
+
+  Canonical sufficiency anchors                                                                    CAS-Ohm enhancement
+  Stable manifestation in the formal manual uses strong                                            Attach V, R, Ipred, Iobs, ΔI, and ASOM to every node. The
+  Desire, at least Understanding-level Wisdom, and                                                 Desire Tree becomes a quantitative fault tree.
+  mature Power as the reference condition.
+
+
+
+ SOURCE     TKS Formal Manual v6.1, RPM Sections 7.1-7.7.
+
+
+
+
+CAS-Ohm Quantification Guide                                                                           RPM TREE                                                15
+DIAGNOSTICS
+
+
+Predicted versus observed attention
+                                                                                           Residual
+
+                                                                                                  ΔI = I_obs - I_pred
+
+
+                                                                                           Relative error
+
+                                                                                               ε = |ΔI| / max(I_pred,
+                                                                                                         δ)
+                                                                                           δ is a small floor preventing division by zero.
+
+
+
+
+                                                                                           Hidden resistance
+ Illustrative classifications. The effect type and saturation state must be                      R_hidden = V/I_obs -
+ checked alongside the numerical residual.
+                                                                                                       R_known
+
+
+
+  Worked fault localization
+  Applied V=8 and known R=2 predict I=4. The probe reads I=2. Effective R is 8/2=4, so the path contains
+  2 additional units of hidden resistance. The next probe walk asks whether that resistance comes
+  from capability, policy, context, bias cutoff, or a miswired branch.
+
+
+
+
+  A                                   S                                       O                                   M
+  Near the diagonal and               Observed flow materially                Observed/effect level               Wrong direction or Noetic
+  correct effect type.                below prediction.                       exceeds linear expectation          inversion. Residual alone is
+                                                                              or clips.                           insufficient.
+
+
+
+
+CAS-Ohm Quantification Guide                                                      RESIDUALS                                                      16
+CLOSED LOOP
+
+
+Measure, diagnose, tune, and re-test
+
+
+                                                         2. Diagnose
+                                                        ASOM + residual
+
+
+
+                 1. Measure                                                                             3. Tune
+                 V, R, I, effect                                                                    RPM / bias repair
+
+
+
+                                                             4. Re-test
+                                                      new operating point
+
+
+
+
+ The completed control loop. ASOM diagnoses the operating condition; RPM identifies the missing prerequisite; CAS-Ohm verifies the
+ next operating point.
+
+
+
+Field sequence
+1. Name the target CJT, Cause, Bias, and Effect.
+                                                                       Worksheet
+2. Record V and the known components of R.                              Field                               Reading
+3. Score Power capability and convert it to Rcap.                       Cause / Bias / Effect               ________________
+4. Compute Ipred and normalized IQ.                                     V / D-card / trend                  ________________
+5. Probe Iobs, effect activation, effect type, cutoff, and
+                                                                        Pcap / Q-card / trend               ________________
+   saturation.
+6. Calculate ΔI and classify ASOM.                                      Rcap + policy + context             ________________
+
+7. Run the RPM D → W → P scan.                                          Ipred / Iobs / ΔI                   ________________
+8. Repair the first unmet prerequisite or the structural fault.
+                                                                        W-card / IQ                         ________________
+9. Re-test and preserve the before/after trace.
+                                                                        β / cutoff / sat / region           ________________
+
+                                                                        ASOM / first RPM block              ________________
+
+                                                                        Repair / new reading                ________________
+
+
+
+
+  Stop condition: do not keep tuning once the stage is aligned, active, within residual tolerance, and
+  producing the intended effect type. More gain is not automatically better.
+
+
+
+
+CAS-Ohm Quantification Guide                                            FIELD PROTOCOL                                               17
+REFERENCE
+
+
+Formula card, design rules, and
+source map
+
+  CAS-Ohm                                                 Capability-derived resistance
+
+                        V = I × R                                  R_cap = R_min + (R_max-
+                                                                     R_min)(1-P_cap/10)
+                        I = V / R
+                                                                     R_total = Σ R_series
+                        R = V / I
+  Measure I. Design V. Diagnose R.
+                                                                   1/R_parallel = Σ 1/R_k
+
+
+
+  Attention audit                                         CJT cascade
+
+              I_pred = V/R_total                                           β_total = Π β_k
+
+             ΔI = I_obs - I_pred                                   Effect_k → Cause_(k+1)
+                                                          Probe local I and effect at each stage.
+    R_hidden = V/I_obs - R_known
+
+
+
+  Eight design rules                                      Source map
+   1. Never set R=0.                                       Topic                           Primary source
+   2. Keep raw I and normalized IQ.
+                                                           CAS-Ohm, resistors, V/I/R       CAS PCBA Engineer, Ch. 5
+   3. Preserve trend with ↑, →, or ↓.
+                                                           CJT anatomy and regions         CAS PCBA Engineer, Chs. 3-
+   4. Separate capability resistance from policy                                           4 and 9
+      resistance.
+                                                           Cascades and β product          CAS PCBA Engineer, Ch. 11
+   5. Do not confuse Cause with Drive.
+   6. Do not confuse attention flow with effect.           D/W/P and card phases           TKS Formal Manual v6.1,
+                                                                                           §6.5
+   7. Do not confuse β with CAS-Ohm current.
+   8. Probe child stages even when a parent aggregate      RPM recursion                   TKS Formal Manual v6.1, §7
+      looks healthy.
+                                                           Original prerequisite           Majik and the True
+                                                           exposition                      Kabbalah, Ch. 19
+
+
+
+
+  Recommended next formal step: define a versioned CAS-Ohm calibration profile for each board: V
+  range, R components, IFS, residual tolerance, saturation ceiling, and card-phase thresholds. That
+  converts the working model into a repeatable test specification.
+
+
+
+
+CAS-Ohm Quantification Guide                              QUICK REFERENCE                                               18
+

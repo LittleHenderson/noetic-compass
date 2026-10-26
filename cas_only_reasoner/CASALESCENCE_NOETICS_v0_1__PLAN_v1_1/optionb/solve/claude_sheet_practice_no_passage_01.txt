@@ -1,0 +1,1739 @@
+SHEET practice-no_passage-01. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0001 ===
+Question: In which new scenario does that lifetime of mountain background prove most useful?
+A. gathering dry wood
+B. stoking a hearth
+C. weathering a storm
+D. chopping forest logs
+E. building a wooden cabin
+F. surviving a winter gale
+=== END G0001 ===
+
+=== ITEM G0002 ===
+Question: What protective garment did Owen fail to fasten fully?
+A. smoker
+B. drone
+C. veil
+D. hive tool
+=== END G0002 ===
+
+=== ITEM G0003 ===
+Question: At a later free moment, which of these materials does Evelyn choose?
+A. sunlight
+B. door
+C. silk
+D. hand
+E. tweed
+F. rack
+=== END G0003 ===
+
+=== ITEM G0004 ===
+Question: Which budget category covered playing area maintenance?
+A. equipment purchases
+B. general upkeep
+C. membership fees
+D. refreshments
+=== END G0004 ===
+
+=== ITEM G0005 ===
+Question: Which component did Samuel start with?
+A. valve
+B. pump
+C. wire
+D. panel
+=== END G0005 ===
+
+=== ITEM G0006 ===
+Question: What did Daniel wipe from his brow?
+A. sweat
+B. water
+C. dust
+D. glare
+=== END G0006 ===
+
+=== ITEM G0007 ===
+Question: What role did Sarah hold while checking the boxes?
+A. Beekeeper
+B. Grocer
+C. Cook
+D. Bake
+=== END G0007 ===
+
+=== ITEM G0008 ===
+Question: What did Fred check right after the pulsator, the claw, the liner, and the milk hose?
+A. solenoid valve
+B. control panel
+C. air filter
+D. wiring harness
+=== END G0008 ===
+
+=== ITEM G0009 ===
+Question: What document did Victor examine for the quarry?
+A. roll of tweed
+B. blasting plan
+C. hive record
+D. geological survey report
+=== END G0009 ===
+
+=== ITEM G0010 ===
+Question: Where did the heavy dust settle thickly according to the passage?
+A. boots
+B. toolshed
+C. machinery
+D. rocks
+=== END G0010 ===
+
+=== ITEM G0011 ===
+Question: Someone on their first day takes the farmer's place at dawn; which of these would most likely be missing?
+A. markings
+B. herd
+C. low moo
+D. parlour
+E. daily routine
+F. temperament
+=== END G0011 ===
+
+=== ITEM G0012 ===
+Question: Who opened the shop door during the scene?
+A. a passing stranger
+B. a shop owner
+C. a delivery person
+D. a close friend
+=== END G0012 ===
+
+=== ITEM G0013 ===
+Question: What object was Yolanda polishing inside the vehicle?
+A. A cleaning fluid
+B. A brass band
+C. A lock cylinder
+D. A metal vice
+=== END G0013 ===
+
+=== ITEM G0014 ===
+Question: Where did Wendy step?
+A. bottom of the lane
+B. front of the bench
+C. middle of the deck
+D. edge of the pool
+=== END G0014 ===
+
+=== ITEM G0015 ===
+Question: What did Helen mentally divide into sections after arriving?
+A. an aggressive pawn
+B. a buzzing hive
+C. an empty lane
+D. a wool jacket
+=== END G0015 ===
+
+=== ITEM G0016 ===
+Question: When free to select any contest strategy later, which setup does Victor choose?
+A. Queen's Gambit
+B. planned attack
+C. defensive setup
+D. slow development
+E. cautious play
+F. opponent strategy
+=== END G0016 ===
+
+=== ITEM G0017 ===
+Question: Where did the old bolts go immediately after removal?
+A. separate discard bin
+B. toolbox
+C. van roof
+D. milking unit
+=== END G0017 ===
+
+=== ITEM G0018 ===
+Question: Who oversaw the blasting team at the site?
+A. a young man
+B. the quarry owner
+C. new workers
+D. Mr. Davies
+=== END G0018 ===
+
+=== ITEM G0019 ===
+Question: Where did Agnes direct the animal?
+A. gauges
+B. stall
+C. early morning
+D. milk line
+=== END G0019 ===
+
+=== ITEM G0020 ===
+Question: At what stage of life did Clara start keeping bees?
+A. When she was a girl
+B. When she was an elderly woman
+C. When she was a teenager
+D. When she was a young adult
+=== END G0020 ===
+
+=== ITEM G0021 ===
+Question: Where did Uma walk?
+A. pool deck
+B. diving board
+C. locker aisle
+D. changing room
+=== END G0021 ===
+
+=== ITEM G0022 ===
+Question: What kind of vehicle did Olivia drive through the city?
+A. service wagon
+B. locksmith's van
+C. courier car
+D. delivery truck
+=== END G0022 ===
+
+=== ITEM G0023 ===
+Question: What filled the hiker's lungs?
+A. crisp mountain air
+B. faint sound
+C. snowmobile engine
+D. expansive green valley
+=== END G0023 ===
+
+=== ITEM G0024 ===
+Question: At a later free moment, which of these does the shopper choose?
+A. nearby rack
+B. shimmering silk
+C. delivery person
+D. shop door
+E. yellow sunlight
+F. scratchy tweed
+=== END G0024 ===
+
+=== ITEM G0025 ===
+Question: What kind of fabric did Bernard unfold in the small shop?
+A. Woolen felt
+B. Raw tweed
+C. Cotton cloth
+D. Silk weave
+=== END G0025 ===
+
+=== ITEM G0026 ===
+Question: The farmer takes a two year holiday from milking; which action has most likely faded?
+A. temperament
+B. parlour
+C. herd
+D. markings
+E. daily routine
+F. low moo
+=== END G0026 ===
+
+=== ITEM G0027 ===
+Question: A complete repair kit holds one of each named part; which of these would not be in it?
+A. broken filtration pump
+B. main motor casing
+C. seized impeller
+D. clogged intake screen
+E. rubber gasket seal
+F. corroded electrical terminals
+=== END G0027 ===
+
+=== ITEM G0028 ===
+Question: Where did Sarah obtain the water to fill the old kettle?
+A. from the dry kindling
+B. from the rain barrel
+C. from the morning tasks
+D. from the cold hearth
+=== END G0028 ===
+
+=== ITEM G0029 ===
+Question: Later near a construction site, which of these would most likely bring the same scene back?
+A. night sky
+B. vibrant light
+C. town fair
+D. summer season
+E. excited crowd
+F. dull boom
+=== END G0029 ===
+
+=== ITEM G0030 ===
+Question: Where did Helen find an empty swimming lane?
+A. Gate
+B. Quarry
+C. Pool
+D. Stall
+=== END G0030 ===
+
+=== ITEM G0031 ===
+Question: What tool did George listen to?
+A. vacuum gauge
+B. clogged filter
+C. milking machine
+D. electrical terminal
+=== END G0031 ===
+
+=== ITEM G0032 ===
+Question: What is Mark's occupation according to the passage?
+A. A watchmaker
+B. A locksmith
+C. A mechanic
+D. A carpenter
+=== END G0032 ===
+
+=== ITEM G0033 ===
+Question: What type of machinery made a distant whirring sound?
+A. Cutting machine
+B. Spinning machine
+C. Sewing machine
+D. Washing machine
+=== END G0033 ===
+
+=== ITEM G0034 ===
+Question: What chess opening did Victor feel a strong pull towards?
+A. Sicilian Defense
+B. English Opening
+C. Queen's Gambit
+D. King's Indian
+=== END G0034 ===
+
+=== ITEM G0035 ===
+Question: Which document did Victor examine for the quarry?
+A. geological survey report
+B. blasting record
+C. survey map
+D. excavation plan
+=== END G0035 ===
+
+=== ITEM G0036 ===
+Question: What object did Arthur lift from the hive?
+A. a frame
+B. distant flora
+C. tiny clues
+D. capped honey
+=== END G0036 ===
+
+=== ITEM G0037 ===
+Question: Where did Maya swim laps?
+A. chlorine smell
+B. municipal pool
+C. steamed-up windows
+D. shallow end
+=== END G0037 ===
+
+=== ITEM G0038 ===
+Question: What object was Doris pressing onto a wool jacket?
+A. old stove
+B. toolbox
+C. hot iron
+D. discard bin
+=== END G0038 ===
+
+=== ITEM G0039 ===
+Question: Which lane did Tom walk directly to upon arrival?
+A. lane one
+B. lane four
+C. lane two
+D. lane three
+=== END G0039 ===
+
+=== ITEM G0040 ===
+Question: What did Tom supervise?
+A. road paving
+B. tower raising
+C. bridge building
+D. rock blasting
+=== END G0040 ===
+
+=== ITEM G0041 ===
+Question: Which garment layout did Mrs. Jenkins prepare?
+A. wedding dress pattern
+B. long train
+C. delicate lace
+D. skirt panels
+=== END G0041 ===
+
+=== ITEM G0042 ===
+Question: What object did Peter use to protect his ears?
+A. his safety band
+B. his cotton plugs
+C. his earmuffs
+D. his sound guards
+=== END G0042 ===
+
+=== ITEM G0043 ===
+Question: Where did the man fetch water from before dawn?
+A. the wood stove
+B. the spring
+C. the lamp switch
+D. the dark hut
+=== END G0043 ===
+
+=== ITEM G0044 ===
+Question: Which object did Mark eagerly pick up?
+A. electronic keypad
+B. exhaust fumes
+C. old lockbox
+D. cylinder mechanism
+=== END G0044 ===
+
+=== ITEM G0045 ===
+Question: Which part of the pump did Julia decide to address first?
+A. casing
+B. screen
+C. impeller
+D. terminals
+=== END G0045 ===
+
+=== ITEM G0046 ===
+Question: A novice hiker without that background stands by the window; what action goes differently?
+A. sky
+B. hut
+C. window
+D. observe
+E. boil water
+F. worry
+=== END G0046 ===
+
+=== ITEM G0047 ===
+Question: What did Sarah check while working with her hives?
+A. fruit press
+B. her hives
+C. baking kitchen
+D. jam jars
+=== END G0047 ===
+
+=== ITEM G0048 ===
+Question: At a later moment, which of these is Mark least likely to bring up?
+A. blast
+B. roar
+C. dust
+D. crusher
+E. rock
+F. excavator
+=== END G0048 ===
+
+=== ITEM G0049 ===
+Question: What scent filled the pool area?
+A. Chlorine
+B. Ozone
+C. Sulfur
+D. Bleach
+=== END G0049 ===
+
+=== ITEM G0050 ===
+Question: Where did Sam put the heavy toolbox before the engine switched off?
+A. onto the ground
+B. on his belt
+C. at the address
+D. in the van
+=== END G0050 ===
+
+=== ITEM G0051 ===
+Question: What did Arthur lift from the hive?
+A. a frame
+B. capped honey
+C. busy bees
+D. small irregularity
+=== END G0051 ===
+
+=== ITEM G0052 ===
+Question: Which piece did Charles calmly develop instead of rushing?
+A. a bishop
+B. a pawn
+C. a queen
+D. a knight
+=== END G0052 ===
+
+=== ITEM G0053 ===
+Question: Which person stoked the fire in the hut's hearth?
+A. Old Klaus
+B. the traveler
+C. the novice
+D. the companion
+=== END G0053 ===
+
+=== ITEM G0054 ===
+Question: What game piece hovered as the opponent paused?
+A. bishop
+B. rook
+C. knight
+D. pawn
+=== END G0054 ===
+
+=== ITEM G0055 ===
+Question: What piece launched the first attack Arthur analyzed?
+A. rook
+B. king
+C. knight
+D. queen
+=== END G0055 ===
+
+=== ITEM G0056 ===
+Question: Where was Eleanor swimming?
+A. stone garden
+B. river bend
+C. ocean bay
+D. public pool
+=== END G0056 ===
+
+=== ITEM G0057 ===
+Question: What item did Elena pin?
+A. rug
+B. hem
+C. soldier
+D. toy
+=== END G0057 ===
+
+=== ITEM G0058 ===
+Question: Later during a brief break in the shade, which of these does the man select?
+A. sun
+B. layer
+C. heat
+D. quartz
+E. glare
+F. rock
+=== END G0058 ===
+
+=== ITEM G0059 ===
+Question: What was Tom's job role at the mining site?
+A. supervisor
+B. worker
+C. spectator
+D. foreman
+=== END G0059 ===
+
+=== ITEM G0060 ===
+Question: Who oversaw the blasting team?
+A. The manager
+B. A young man
+C. Mr. Davies
+D. New workers
+=== END G0060 ===
+
+=== ITEM G0061 ===
+Question: The milking routine stops for a year; which action has most likely faded?
+A. guiding the cow
+B. scanning the gauges
+C. checking the pressure
+D. adjusting the hoses
+E. listening to pulsation
+F. attaching the clusters
+=== END G0061 ===
+
+=== ITEM G0062 ===
+Question: At a later free moment, which of these does Daniel choose?
+A. shimmering sample of quartz
+B. blinding glare
+C. intense heat
+D. rock faces
+E. bead of sweat
+F. quarry sun
+=== END G0062 ===
+
+=== ITEM G0063 ===
+Question: What fabric did Olivia run her fingers over?
+A. exorbitant price
+B. silk fabric
+C. new dress
+D. coarse tweed
+=== END G0063 ===
+
+=== ITEM G0064 ===
+Question: Which tool did Owen reach for first?
+A. the hive tool
+B. the smoker
+C. the warm veil
+D. the hot iron
+=== END G0064 ===
+
+=== ITEM G0065 ===
+Question: What food was Lars stirring in the mountain hut?
+A. the soup
+B. the broth
+C. the porridge
+D. the stew
+=== END G0065 ===
+
+=== ITEM G0066 ===
+Question: What part of the door was inspected by Ken?
+A. the brass handle
+B. the steel hinge
+C. the door lock
+D. the wood frame
+=== END G0066 ===
+
+=== ITEM G0067 ===
+Question: What piece did Arthur move after his planning?
+A. king
+B. knight
+C. rook
+D. queen
+=== END G0067 ===
+
+=== ITEM G0068 ===
+Question: At what exact time did Arthur always begin his afternoon hive check?
+A. 1 PM
+B. 2 PM
+C. 3 PM
+D. 4 PM
+=== END G0068 ===
+
+=== ITEM G0069 ===
+Question: Which specific tactical move on board three captured Michael's attention?
+A. pawn promotion
+B. rook sacrifice
+C. knight fork
+D. queen trap
+=== END G0069 ===
+
+=== ITEM G0070 ===
+Question: What opening choice did Victor prefer?
+A. defensive setup
+B. Queen's Gambit
+C. cautious play
+D. slow development
+=== END G0070 ===
+
+=== ITEM G0071 ===
+Question: What object did Doris press onto a wool jacket?
+A. the hot iron
+B. the wet cloth
+C. the heavy pan
+D. the warm stove
+=== END G0071 ===
+
+=== ITEM G0072 ===
+Question: What action was the mother performing on his hair?
+A. brushing
+B. cutting
+C. stroking
+D. washing
+=== END G0072 ===
+
+=== ITEM G0073 ===
+Question: Suppose the acoustic shockwave reaching the supervisor had been silent; which of these would most likely not have happened?
+A. vibrant explosions of light
+B. distant, dull boom
+C. summer night
+D. town fair
+E. rock blasting
+F. vast quarry
+=== END G0073 ===
+
+=== ITEM G0074 ===
+Question: Who made the old toys Elena remembered?
+A. tailor
+B. customer
+C. neighbor
+D. grandmother
+=== END G0074 ===
+
+=== ITEM G0075 ===
+Question: What did Elena pin while the machine filled the shop?
+A. seam
+B. collar
+C. hem
+D. sleeve
+=== END G0075 ===
+
+=== ITEM G0076 ===
+Question: What was the initial action Ken and the apprentice performed on the hive?
+A. examine each frame
+B. smoke the entrance
+C. open the top cover
+D. assess brood pattern
+=== END G0076 ===
+
+=== ITEM G0077 ===
+Question: Where did the dust settle thickly according to the passage?
+A. the toolshed
+B. heavy machinery
+C. her boots
+D. workshop projects
+=== END G0077 ===
+
+=== ITEM G0078 ===
+Question: What object did Clara grab with her hand when the sound altered?
+A. hive tool
+B. wooden box
+C. smoke pot
+D. protective veil
+=== END G0078 ===
+
+=== ITEM G0079 ===
+Question: At a later moment, which of these materials does Evelyn avoid?
+A. tweed
+B. rack
+C. door
+D. sunlight
+E. silk
+F. hand
+=== END G0079 ===
+
+=== ITEM G0080 ===
+Question: Who explained the daily blasting plan to the workers?
+A. Bernard
+B. Graham
+C. Clara
+D. Victor
+=== END G0080 ===
+
+=== ITEM G0081 ===
+Question: What did Paul stoke before dawn after finding the lamp switch?
+A. The kitchen hearth
+B. The spring water
+C. The iron boiler
+D. The wood stove
+=== END G0081 ===
+
+=== ITEM G0082 ===
+Question: Which chess piece did Eleanor shift?
+A. Pawn
+B. Bishop
+C. Rook
+D. Knight
+=== END G0082 ===
+
+=== ITEM G0083 ===
+Question: After the release valve, the frayed electrical wire, and the main control panel are dealt with, which named part is still left?
+A. valve
+B. flow
+C. pump
+D. panel
+E. wire
+F. suction cup
+=== END G0083 ===
+
+=== ITEM G0084 ===
+Question: What vehicle did Olivia drive through the city?
+A. fire engine
+B. police cruiser
+C. delivery truck
+D. locksmith's van
+=== END G0084 ===
+
+=== ITEM G0085 ===
+Question: Years later inside a distant factory hall, which sensory stimulus would most likely bring back that exact memory?
+A. heavy machinery
+B. dust
+C. childhood
+D. rock
+E. metallic tang
+F. boots
+=== END G0085 ===
+
+=== ITEM G0086 ===
+Question: What is Sarah's occupation according to the passage?
+A. Beekeeper
+B. Shepherd
+C. Miller
+D. Baker
+=== END G0086 ===
+
+=== ITEM G0087 ===
+Question: What garment was Mrs. Jenkins preparing?
+A. evening gown
+B. wedding dress
+C. summer dress
+D. formal coat
+=== END G0087 ===
+
+=== ITEM G0088 ===
+Question: Where was the faint discolouration located on the garment?
+A. on the lapel
+B. near the shoulder
+C. on the pocket
+D. near the elbow
+=== END G0088 ===
+
+=== ITEM G0089 ===
+Question: What physical action did Wendy perform after sliding into the lane?
+A. adjusted her goggles
+B. climbed out quickly
+C. began her gentle strokes
+D. stood at the edge
+=== END G0089 ===
+
+=== ITEM G0090 ===
+Question: Which lane was designated as Tom's usual spot at the pool?
+A. Lane three
+B. Lane one
+C. Lane two
+D. Lane four
+=== END G0090 ===
+
+=== ITEM G0091 ===
+Question: Where did Sarah toss the old, rusty bolts she had just removed?
+A. van roof
+B. toolbox
+C. lock mechanisms
+D. discard bin
+=== END G0091 ===
+
+=== ITEM G0092 ===
+Question: At what specific time did the bell ring every morning?
+A. Half past five
+B. Four o'clock
+C. Seven o'clock
+D. Six o'clock
+=== END G0092 ===
+
+=== ITEM G0093 ===
+Question: Where did the first cow enter?
+A. parlour
+B. pasture
+C. barnyard
+D. stable
+=== END G0093 ===
+
+=== ITEM G0094 ===
+Question: Which part did Julia decide to address first?
+A. intake screen
+B. seized impeller
+C. motor casing
+D. electrical terminal
+=== END G0094 ===
+
+=== ITEM G0095 ===
+Question: Which device did Greg consult on the equipment control panel?
+A. pulsator hose
+B. diagnostic display
+C. vacuum gauge
+D. milking machine
+=== END G0095 ===
+
+=== ITEM G0096 ===
+Question: What did the tailor mention about the smooth textile?
+A. heavy weight
+B. dark color
+C. exorbitant price
+D. limited stock
+=== END G0096 ===
+
+=== ITEM G0097 ===
+Question: What did Liam survey as he stood outside?
+A. cabin
+B. river
+C. valley
+D. forest
+=== END G0097 ===
+
+=== ITEM G0098 ===
+Question: When did Sarah wake up?
+A. night
+B. noon
+C. dawn
+D. dusk
+=== END G0098 ===
+
+=== ITEM G0099 ===
+Question: At a later moment, which of these does the shopper avoid?
+A. shimmering silk
+B. delivery person
+C. nearby rack
+D. yellow sunlight
+E. shop door
+F. scratchy tweed
+=== END G0099 ===
+
+=== ITEM G0100 ===
+Question: What hardware item did Ken examine during the incident?
+A. window latch
+B. safe dial
+C. door lock
+D. gate bolt
+=== END G0100 ===
+
+=== ITEM G0101 ===
+Question: What object did Yolanda polish?
+A. cleaning fluid
+B. brass lock cylinder
+C. polished button
+D. gleaming instrument
+=== END G0101 ===
+
+=== ITEM G0102 ===
+Question: Mrs. Jenkins cuts the bodice, the skirt panels, and the lace overlay. Which section remains?
+A. the wedding dress
+B. the full skirt
+C. the bodice
+D. the long train
+E. the wedding pattern
+F. the lace overlay
+=== END G0102 ===
+
+=== ITEM G0103 ===
+Question: Which machine component appeared undamaged to Samuel?
+A. control panel
+B. suction cup
+C. electrical wire
+D. release valve
+=== END G0103 ===
+
+=== ITEM G0104 ===
+Question: What opened, letting a burst of sunlight flood the shop?
+A. customer
+B. delivery person
+C. Evelyn
+D. merchant
+=== END G0104 ===
+
+=== ITEM G0105 ===
+Question: What device was struggling while George listened?
+A. Mountain hut
+B. Milking machine
+C. Eastern window
+D. Barometer
+=== END G0105 ===
+
+=== ITEM G0106 ===
+Question: Where did David guide the cows?
+A. holding pen
+B. open pasture
+C. feeding barn
+D. milking parlour
+=== END G0106 ===
+
+=== ITEM G0107 ===
+Question: An untrained swimmer steps into the water instead; which part fails?
+A. Strokes
+B. Environment
+C. Patience
+D. Activity
+E. Pool
+F. Discipline
+=== END G0107 ===
+
+=== ITEM G0108 ===
+Question: Where did the water come from that filled the old kettle?
+A. deep well
+B. kitchen sink
+C. nearby river
+D. rain barrel
+=== END G0108 ===
+
+=== ITEM G0109 ===
+Question: What piece aimed at both the king and queen?
+A. rook
+B. queen
+C. pawn
+D. knight
+=== END G0109 ===
+
+=== ITEM G0110 ===
+Question: What faint scent provided comfort inside the vehicle?
+A. complex cylinder
+B. exhaust fumes
+C. intricate pins
+D. oil and metal
+=== END G0110 ===
+
+=== ITEM G0111 ===
+Question: What object did Sam keep on his belt clip?
+A. Client address
+B. Small set of picks
+C. Heavy toolbox
+D. Van keys
+=== END G0111 ===
+
+=== ITEM G0112 ===
+Question: What activity was Maya performing when the scent reached her?
+A. reading books
+B. doing laps
+C. eating lunch
+D. walking home
+=== END G0112 ===
+
+=== ITEM G0113 ===
+Question: Where did Eleanor glide through the cool water?
+A. river stream
+B. private bath
+C. public pool
+D. country pond
+=== END G0113 ===
+
+=== ITEM G0114 ===
+Question: Whose subtle sacrifice did Michael admire during the club session?
+A. the director
+B. one player
+C. his own
+D. the opponent
+=== END G0114 ===
+
+=== ITEM G0115 ===
+Question: When taking a brief break from his current tasks, which specific mineral does Daniel decide to inspect?
+A. geological layer
+B. blinding glare
+C. intense heat
+D. sweat bead
+E. rock faces
+F. shimmering sample of quartz
+=== END G0115 ===
+
+=== ITEM G0116 ===
+Question: What specific item did Noah reach for before opening the vehicle door?
+A. emergency call
+B. broken lock
+C. van door
+D. bolt cutters
+=== END G0116 ===
+
+=== ITEM G0117 ===
+Question: What liquid did Paul fetch from the spring?
+A. Milk
+B. Water
+C. Coffee
+D. Tea
+=== END G0117 ===
+
+=== ITEM G0118 ===
+Question: At which club was Michael during the tournament?
+A. bridge
+B. chess
+C. debate
+D. checkers
+=== END G0118 ===
+
+=== ITEM G0119 ===
+Question: What object did Peter put on his head?
+A. earmuffs
+B. work boots
+C. safety goggles
+D. hard hat
+=== END G0119 ===
+
+=== ITEM G0120 ===
+Question: What documents did Peter review?
+A. tournament schedule
+B. club budget
+C. equipment list
+D. membership roster
+=== END G0120 ===
+
+=== ITEM G0121 ===
+Question: Someone on their first day takes the stall; which of these would most likely be missing?
+A. milk line
+B. barn gauges
+C. early morning
+D. practiced ease
+E. steady pulsation
+F. stall gates
+=== END G0121 ===
+
+=== ITEM G0122 ===
+Question: What natural particle billowed up into the air after the blast?
+A. rock crusher
+B. deafening roar
+C. heavy excavator
+D. fine dust
+=== END G0122 ===
+
+=== ITEM G0123 ===
+Question: Where did Uma walk to after arriving?
+A. locker room
+B. changing room
+C. starting blocks
+D. pool deck
+=== END G0123 ===
+
+=== ITEM G0124 ===
+Question: What was the vacuum gauge reading?
+A. completely blank
+B. too high
+C. too low
+D. very steady
+=== END G0124 ===
+
+=== ITEM G0125 ===
+Question: At a later moment, which of these does the hiker avoid?
+A. distant faint sound
+B. expansive green valley
+C. jarring intrusion
+D. snowmobile engine
+E. crisp mountain air
+F. background
+=== END G0125 ===
+
+=== ITEM G0126 ===
+Question: Which part appeared undamaged?
+A. main control panel
+B. loose suction cup connection
+C. jammed release valve
+D. frayed electrical wire
+=== END G0126 ===
+
+=== ITEM G0127 ===
+Question: What object was Yolanda polishing in the van?
+A. cleaning fluid bottle
+B. brass lock cylinder
+C. steel vice handle
+D. brass instrument button
+=== END G0127 ===
+
+=== ITEM G0128 ===
+Question: At a later free moment, which of these strategies does Victor choose?
+A. defensive setup
+B. Queen's Gambit opening
+C. slow development
+D. opponent strategy
+E. cautious play
+F. planned attack
+=== END G0128 ===
+
+=== ITEM G0129 ===
+Question: Where did Susan watch the heavy machinery excavate rock?
+A. boots
+B. workshop
+C. truck
+D. toolshed
+=== END G0129 ===
+
+=== ITEM G0130 ===
+Question: What object needed repair when Noah pulled up?
+A. sewing machine
+B. control panel
+C. broken lock
+D. milking unit
+=== END G0130 ===
+
+=== ITEM G0131 ===
+Question: In which new situation would this background help most?
+A. a quiet corner
+B. a sudden rush
+C. a slow walk
+D. a steady march
+E. a dark room
+F. an empty street
+=== END G0131 ===
+
+=== ITEM G0132 ===
+Question: What was Sam's job title?
+A. Apprentice locksmith
+B. Dairy farmer
+C. Blasting team overseer
+D. Competitive swimmer
+=== END G0132 ===
+
+=== ITEM G0133 ===
+Question: At what time of day did Arthur always begin his hive check?
+A. 2 PM
+B. 12 PM
+C. 1 PM
+D. 3 PM
+=== END G0133 ===
+
+=== ITEM G0134 ===
+Question: At what exact hour did the beekeeper begin his afternoon check?
+A. 3 PM
+B. 2 PM
+C. 4 PM
+D. 1 PM
+=== END G0134 ===
+
+=== ITEM G0135 ===
+Question: What animal did Agnes guide into the stall?
+A. sheep
+B. cow
+C. horse
+D. goat
+=== END G0135 ===
+
+=== ITEM G0136 ===
+Question: Where was the first cow entering according to the text?
+A. parlour
+B. land
+C. herd
+D. barn
+=== END G0136 ===
+
+=== ITEM G0137 ===
+Question: Where was the radio located according to the text?
+A. on the desk
+B. on the shelf
+C. on the floor
+D. on the table
+=== END G0137 ===
+
+=== ITEM G0138 ===
+Question: What material was Klaus adding to the hearth?
+A. leaves
+B. wood
+C. paper
+D. coal
+=== END G0138 ===
+
+=== ITEM G0139 ===
+Question: A spare kit holds one of each named part; which of these would not be in it?
+A. release valve
+B. electrical wire
+C. rubber hose
+D. control panel
+E. milk pump
+F. suction cup
+=== END G0139 ===
+
+=== ITEM G0140 ===
+Question: What beverage was Clara preparing at the hut window?
+A. water
+B. broth
+C. coffee
+D. tea
+=== END G0140 ===
+
+=== ITEM G0141 ===
+Question: What beverage was Clara preparing on the stove?
+A. Tea
+B. Soup
+C. Coffee
+D. Water
+=== END G0141 ===
+
+=== ITEM G0142 ===
+Question: What kind of fabric made Olivia grimace?
+A. exorbitant price
+B. coarse tweed
+C. smooth silk
+D. new dress
+=== END G0142 ===
+
+=== ITEM G0143 ===
+Question: What billowed up after a blast?
+A. heavy smoke
+B. hot water
+C. fine dust
+D. loud steam
+=== END G0143 ===
+
+=== ITEM G0144 ===
+Question: Which game piece did Arthur move after planning his strategy?
+A. His opponent's knight
+B. His opponent's rook
+C. His opponent's king
+D. His queen
+=== END G0144 ===
+
+=== ITEM G0145 ===
+Question: Which piece was targeted by the fork alongside the king?
+A. knight
+B. pawn
+C. rook
+D. queen
+=== END G0145 ===
+
+=== ITEM G0146 ===
+Question: What document did Victor examine for the quarry?
+A. excavation plan
+B. geological survey report
+C. weather forecast
+D. safety manual
+=== END G0146 ===
+
+=== ITEM G0147 ===
+Question: Where did David guide the cows?
+A. Rock quarry
+B. Swimming pool
+C. Milking parlour
+D. Locksmith shop
+=== END G0147 ===
+
+=== ITEM G0148 ===
+Question: What did Helen find at the pool?
+A. measured strokes
+B. energetic children
+C. chaotic environment
+D. empty lane
+=== END G0148 ===
+
+=== ITEM G0149 ===
+Question: A beginner without that background stands in the same spot. What goes differently?
+A. begins swimming
+B. divides pool
+C. loud splashes
+D. measured strokes
+E. stops swimming
+F. finds lanes
+=== END G0149 ===
+
+=== ITEM G0150 ===
+Question: Later that evening in the residential district, which of these would most likely bring the same memory back to Tom?
+A. rock blasting
+B. distant, dull boom
+C. summer night
+D. vibrant explosions of light
+E. town fair
+F. vast quarry
+=== END G0150 ===
+
+=== ITEM G0151 ===
+Question: Walking through a commercial harbor years later, which of these would most likely bring her father's toolshed back?
+A. steel filings
+B. thick dust
+C. crushed stone
+D. machine oil
+E. heavy machinery
+F. tang of fuel
+=== END G0151 ===
+
+=== ITEM G0152 ===
+Question: Who did Ken explain the steps of an inspection to?
+A. Apprentice
+B. Client
+C. Manager
+D. Owner
+=== END G0152 ===
+
+=== ITEM G0153 ===
+Question: What kind of vehicle did Olivia drive?
+A. locksmith's van
+B. cargo wagon
+C. service coupe
+D. delivery truck
+=== END G0153 ===
+
+=== ITEM G0154 ===
+Question: What fabric did Clara touch after the tweed?
+A. linen
+B. cotton
+C. silk
+D. wool
+=== END G0154 ===
+
+=== ITEM G0155 ===
+Question: Later that afternoon, the competitor sits down for another game. Which strategy does this player choose?
+A. defensive setup
+B. cautious play
+C. board attack
+D. grand opening
+E. Queen's Gambit
+F. slow development
+=== END G0155 ===
+
+=== ITEM G0156 ===
+Question: Which specific device showed the error codes?
+A. vacuum gauge
+B. diagnostic display
+C. pulsator hose
+D. milking machine
+=== END G0156 ===
+
+=== ITEM G0157 ===
+Question: Where did Agnes guide the next animal?
+A. pen
+B. barn
+C. shed
+D. stall
+=== END G0157 ===
+
+=== ITEM G0158 ===
+Question: What financial document did Peter review for the organization?
+A. tax return
+B. salary report
+C. monthly invoice
+D. annual budget
+=== END G0158 ===
+
+=== ITEM G0159 ===
+Question: What protective gear did Peter put on during the work?
+A. earmuffs
+B. gloves
+C. goggles
+D. helmet
+=== END G0159 ===
+
+=== ITEM G0160 ===
+Question: What sound source did Zach listen to?
+A. lullaby
+B. hand
+C. hair
+D. hive
+=== END G0160 ===
+
+=== ITEM G0161 ===
+Question: At what age did Clara start keeping bees?
+A. in her middle age
+B. during her college years
+C. since she was a girl
+D. after her retirement
+=== END G0161 ===
+
+=== ITEM G0162 ===
+Question: What item was Doris pressing?
+A. baking bread
+B. old stove
+C. hot iron
+D. wool jacket
+=== END G0162 ===
+
+=== ITEM G0163 ===
+Question: Where did Sarah toss the old, rusty bolts she had just removed?
+A. a separate discard bin
+B. the ground outside
+C. her open toolbox
+D. the van roof
+=== END G0163 ===
+
+=== ITEM G0164 ===
+Question: The farmer stops tending his herd for several years during retirement.
+A. the unique markings
+B. the gentle presence
+C. the daily routine
+D. the deep connection
+E. the parlour cows
+F. the working land
+=== END G0164 ===
+
+=== ITEM G0165 ===
+Question: What food was Lars stirring in the mountain hut?
+A. Warm beeswax
+B. The stew
+C. Milking mash
+D. Fruit jam
+=== END G0165 ===
+
+=== ITEM G0166 ===
+Question: At what time of day did the old bell ring?
+A. Late evening
+B. Early morning
+C. Midday noon
+D. Half past five
+=== END G0166 ===
+
+=== ITEM G0167 ===
+Question: What object did Arthur lift from the wooden box?
+A. frame from the hive
+B. busy bees
+C. capped honey
+D. distant flora
+=== END G0167 ===
+
+=== ITEM G0168 ===
+Question: Where did the first cow enter according to the text?
+A. the parlour
+B. the barnyard
+C. the gateway
+D. the pasture
+=== END G0168 ===
+
+=== ITEM G0169 ===
+Question: A spare kit holds one of each named part. Which of these would not be in it?
+A. seized impeller
+B. filtration pump
+C. pressure gauge
+D. motor casing
+E. electrical terminals
+F. intake screen
+=== END G0169 ===
+
+=== ITEM G0170 ===
+Question: Who oversaw the blasting team?
+A. David
+B. Mr. Davies
+C. Helen
+D. Sam
+=== END G0170 ===
+
+=== ITEM G0171 ===
+Question: What mineral sample did Daniel examine?
+A. rock
+B. sun
+C. sweat
+D. quartz
+=== END G0171 ===
+
+=== ITEM G0172 ===
+Question: Which equipment part was experiencing a blockage?
+A. filter
+B. pulsator hose
+C. diagnostic display
+D. vacuum gauge
+=== END G0172 ===
+
+=== ITEM G0173 ===
+Question: Which piece did Arthur move?
+A. rook
+B. knight
+C. queen
+D. pawn
+=== END G0173 ===
+
+=== ITEM G0174 ===
+Question: Which specific unit did Fred kneel beside?
+A. wiring harness
+B. milking unit
+C. control panel
+D. solenoid valve
+=== END G0174 ===
+
+=== ITEM G0175 ===
+Question: Where was the radio located when Jakob reached for it?
+A. In the pocket
+B. On the shelf
+C. On the ground
+D. On the table
+=== END G0175 ===
+
+=== ITEM G0176 ===
+Question: Which piece did Charles calmly develop instead of rushing his counter?
+A. rook
+B. bishop
+C. knight
+D. pawn
+=== END G0176 ===
+
+=== ITEM G0177 ===
+Question: What did the foreman supervise during the day?
+A. fireworks display
+B. rock blasting
+C. summer fair
+D. vibrant explosions
+=== END G0177 ===
+
+=== ITEM G0178 ===
+Question: A complete sewing kit holds one of each section. Which item is excluded?
+A. the bodice
+B. the wedding dress
+C. the skirt panels
+D. the lace overlay
+E. fabric shears
+F. the long train
+=== END G0178 ===
+
+=== ITEM G0179 ===
+Question: What did Clara begin to boil?
+A. tea
+B. water
+C. milk
+D. soup
+=== END G0179 ===
+
+=== ITEM G0180 ===
+Question: Where did David guide the animals?
+A. holding shed
+B. open pasture
+C. feeding pen
+D. milking parlour
+=== END G0180 ===
+
+=== ITEM G0181 ===
+Question: Where did Noah stop the vehicle?
+A. van
+B. door
+C. curb
+D. lock
+=== END G0181 ===
+
+=== ITEM G0182 ===
+Question: Which component did Fred check directly after the air filter?
+A. control panel
+B. solenoid valve
+C. wiring harness
+D. vacuum lines
+=== END G0182 ===
+
+=== ITEM G0183 ===
+Question: Which chess piece was Eleanor's opponent hovering over?
+A. the bishop
+B. the rook
+C. the knight
+D. the pawn
+=== END G0183 ===
+
+=== ITEM G0184 ===
+Question: In which dangerous mountain condition would this veteran's lifetime background prove most useful?
+A. a dark summer night
+B. a severe winter blizzard
+C. a high mountain peak
+D. a sudden forest fire
+E. a deep river crossing
+F. a long rainy season
+=== END G0184 ===
+
+=== ITEM G0185 ===
+Question: At a later free moment in the shop, which of these does Evelyn choose?
+A. nearby rack
+B. delicate touch
+C. brilliant yellow sunlight
+D. rough scratchy tweed
+E. bolt of shimmering silk
+F. delivery person
+=== END G0185 ===
+
+=== ITEM G0186 ===
+Question: What activity was Maya doing when she noticed the scent?
+A. Treading water
+B. Doing laps
+C. Diving deep
+D. Floating slowly
+=== END G0186 ===
+
+=== ITEM G0187 ===
+Question: Suppose the distant splash had not happened; which of these would most likely not have occurred?
+A. busy street
+B. grandmothers garden
+C. summer afternoon
+D. stone fountain
+E. cool water
+F. public pool
+=== END G0187 ===
+
+=== ITEM G0188 ===
+Question: Which tool did the worker reach for first after his hands moved?
+A. the smoker
+B. the lamp switch
+C. the wood stove
+D. the hive tool
+=== END G0188 ===
+
+=== ITEM G0189 ===
+Question: What kind of machine was heard in the distance?
+A. milking unit
+B. lock mechanism
+C. sewing machine
+D. bolt cutter
+=== END G0189 ===
+
+=== ITEM G0190 ===
+Question: At a later moment, which of these strategies does Victor avoid?
+A. slow development
+B. planned attack
+C. Queen's Gambit opening
+D. cautious play
+E. defensive setup
+F. opponent strategy
+=== END G0190 ===
+
+=== ITEM G0191 ===
+Question: What object was Ken examining?
+A. car door
+B. door lock
+C. safe dial
+D. metal gate
+=== END G0191 ===
+
+=== ITEM G0192 ===
+Question: In which new situation would this background help most?
+A. sudden blizzard
+B. busy street
+C. sunny beach
+D. empty room
+E. quiet library
+F. warm kitchen
+=== END G0192 ===
+
+=== ITEM G0193 ===
+Question: What garment pattern did Mrs. Jenkins lay out?
+A. summer skirt
+B. wedding dress
+C. lace blouse
+D. evening gown
+=== END G0193 ===
+
+=== ITEM G0194 ===
+Question: Whose team did Graham explain the day's plan to?
+A. safety inspectors
+B. mining crew
+C. the engineers
+D. his team
+=== END G0194 ===
+
+=== ITEM G0195 ===
+Question: What did Mark watch the heavy machine move?
+A. metal
+B. tools
+C. dust
+D. rocks
+=== END G0195 ===
+
+=== ITEM G0196 ===
+Question: Where was the radio located when Jakob reached for it?
+A. on the shelf
+B. on the peaks
+C. in the snow
+D. near the storm
+=== END G0196 ===
+
+=== ITEM G0197 ===
+Question: Which specific piece did Charles develop for his counter?
+A. a bishop
+B. a knight
+C. a pawn
+D. a rook
+=== END G0197 ===
+
+=== ITEM G0198 ===
+Question: What flooded the shop?
+A. yellow sunlight
+B. delivery person
+C. scratchy tweed
+D. shimmering silk
+=== END G0198 ===
+
+=== ITEM G0199 ===
+Question: Later and somewhere else, which of these would most likely bring the same thing back to the person?
+A. sound of swimming
+B. sound of splashing
+C. sound of dripping water
+D. sound of a fountain
+E. sound of a splash
+F. sound of a pool
+=== END G0199 ===
+
+=== ITEM G0200 ===
+Question: Which specific lane did Tom walk to upon his arrival?
+A. lane four
+B. lane two
+C. lane three
+D. lane one
+=== END G0200 ===
+
+=== ITEM G0201 ===
+Question: Where did Eleanor glide through the cool water?
+A. training center
+B. private lake
+C. public pool
+D. grandmothers garden
+=== END G0201 ===
+
+=== ITEM G0202 ===
+Question: What tool did Lars plan to check more often?
+A. Barometer
+B. Mountain hut
+C. Front
+D. Windowpane
+=== END G0202 ===
+
+=== ITEM G0203 ===
+Question: In which new situation would this background help most?
+A. sunny beach
+B. quiet library
+C. desert oasis
+D. sudden blizzard
+E. suburban park
+F. crowded market
+=== END G0203 ===
+
+=== ITEM G0204 ===
+Question: Which component did Julia address first?
+A. electrical terminals
+B. filtration pump
+C. motor casing
+D. intake screen
+=== END G0204 ===
+
+=== ITEM G0205 ===
+Question: What part of the hive did Ken and his apprentice inspect first?
+A. brood pattern
+B. entrance
+C. top cover
+D. honey stores
+=== END G0205 ===
+
+=== ITEM G0206 ===
+Question: Whose cautious play barely registered with Victor?
+A. friend
+B. coach
+C. spectator
+D. opponent
+=== END G0206 ===
+
+=== ITEM G0207 ===
+Question: What filled Liam's lungs as he surveyed the landscape?
+A. distant sound
+B. snowmobile engine
+C. green valley
+D. mountain air
+=== END G0207 ===

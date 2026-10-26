@@ -1,0 +1,82 @@
+--- v1.0/tools/ob_assemble.py
++++ v1.1/tools/ob_assemble.py
+@@ -442,7 +442,6 @@
+     def add(step, program, thing, ident, rule, detail=''):
+         entries.append({'set': set_name, 'step': step, 'program': program, 'object': thing, 'id': ident, 'rule': rule, 'detail': detail})
+ 
+-    first, spare = passes[0], passes[1:]
+     form = {row['question_id']: row for row in data['form']['rows']}
+     anchor = {row['question_id']: row for row in data['anchor']['rows']}
+     option = {row['question_id']: row for row in data['option']['rows']}
+@@ -536,38 +535,45 @@
+             add('STEP_7_LEAK_SCREEN', 'tools/ob_screen_notes.py', 'passage', row['passage_id'], rule,
+                 '%d hit(s) of rule (%s); first: %s: %s' % (len(mine), rule, where, mine[0]['detail']))
+ 
+-    # survival: role-step counts are per passage and form; plain-fact counts are per passage
+-    spare_form = {(p['passage_id'], q['form']): q['question_id'] for name in spare for p in data['raw'][name]['passages'] for q in p['what_follows']}
+-    spare_fact = {p['passage_id']: p['plain_fact']['question_id'] for name in spare for p in data['raw'][name]['passages'] if p.get('plain_fact')}
++    # survival (plan v1.1, counted as tools/ob_select.py counts it): role-step counts are per passage and form, plain-fact counts
++    # are per passage; a pair counts at a filter when the question of ANY pass passes it (a later pass stands in where an
++    # earlier one was dropped). Every pass is read alike; there is no first pass and no spare.
+     role = {name: 0 for name in FILTERS}
+     fact = {name: 0 for name in FILTERS}
+-    for passage in data['raw'][first]['passages']:
+-        pid, known = passage['passage_id'], elig.get(passage['passage_id'])
+-        for question in passage['what_follows']:
+-            if not (known and known['eligible'] and question['form'] in known['open_forms']):
+-                continue
+-            allowed = [question['question_id']]
+-            if not ok_option(allowed[0]) and (pid, question['form']) in spare_form:
+-                allowed.append(spare_form[(pid, question['form'])])   # the spare is used only where the first question was dropped
+-            role['written for an open form'] += 1
+-            role['form check'] += any(ok_form(q) for q in allowed)
+-            role['anchor check'] += any(ok_anchor(q) for q in allowed)
+-            role['option check'] += any(ok_option(q) for q in allowed)
+-        if passage.get('plain_fact'):
+-            allowed = [passage['plain_fact']['question_id']]
+-            if not ok_form(allowed[0]) and pid in spare_fact:
+-                allowed.append(spare_fact[pid])
+-            fact['written for an open form'] += 1
+-            fact['form check'] += any(ok_form(q) for q in allowed)
++    role_slots, fact_slots = {}, {}
++    for name in passes:
++        for passage in data['raw'][name]['passages']:
++            pid, known = passage['passage_id'], elig.get(passage['passage_id'])
++            for question in passage['what_follows']:
++                if known and known['eligible'] and not known.get('barred') and question['form'] in known['open_forms']:
++                    role_slots.setdefault((pid, question['form']), []).append(question['question_id'])
++            if passage.get('plain_fact'):
++                fact_slots.setdefault(pid, []).append(passage['plain_fact']['question_id'])
++    for ids in role_slots.values():
++        role['written for an open form'] += 1
++        role['form check'] += any(ok_form(q) for q in ids)
++        role['anchor check'] += any(ok_anchor(q) for q in ids)
++        role['option check'] += any(ok_option(q) for q in ids)
++    for ids in fact_slots.values():
++        fact['written for an open form'] += 1
++        fact['form check'] += any(ok_form(q) for q in ids)
+     fact['anchor check'] = fact['option check'] = fact['form check']   # a plain-fact question has no label check
+     by_family = {'role_step': role, 'plain_fact': fact}
+     for family, counts in by_family.items():
+         mine = [c for c in candidates if c['family'] == family]
+-        if len(mine) != counts['option check']:
+-            raise Stop('SURVIVAL_COUNT_DOES_NOT_MATCH', 'For the %s set this program counts %d %s questions after the option check; checks/candidates_%s.json holds %d.'
+-                       % (set_name, counts['option check'], family, set_name, len(mine)))
+-        counts['key check'] = sum(1 for c in mine if keys[c['question_id']]['key_check_passed'])
+-        counts['no-passage check'] = sum(1 for c in mine if keys[c['question_id']]['survives'])
++        # the candidates are exactly the questions that passed the checks (the option check for role-step, the form check for plain-fact),
++        # and the number of passage-and-form pairs with a candidate equals the option-check row
++        ids = sorted(c['question_id'] for c in mine)
++        expected = sorted(qid for qid, row in (option if family == 'role_step' else form).items()
++                          if (ok_option(qid) if family == 'role_step' else (ok_form(qid) and row['family'] == 'plain_fact')))
++        pairs = len({(c['passage_id'], c['form']) for c in mine})
++        if ids != expected or pairs != counts['option check']:
++            raise Stop('SURVIVAL_COUNT_DOES_NOT_MATCH', 'For the %s set this program counts %d %s passage-and-form pairs after the option check and %d questions that '
++                       'passed the checks; checks/candidates_%s.json holds %d pairs and %d candidates.'
++                       % (set_name, counts['option check'], family, len(expected), set_name, pairs, len(mine)))
++        pair_of = {c['question_id']: (c['passage_id'], c['form']) for c in mine}
++        counts['key check'] = len({pair_of[c['question_id']] for c in mine if keys[c['question_id']]['key_check_passed']})
++        counts['no-passage check'] = len({pair_of[c['question_id']] for c in mine if keys[c['question_id']]['survives']})
+         tasks = [task for task in selection['tasks'] if task['family'] == family]
+         counts['length backstop'] = len(tasks)
+         counts['selection'] = len(tasks) + (len(backstop) if family == 'role_step' else 0)

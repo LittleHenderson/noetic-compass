@@ -1,0 +1,56 @@
+[
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0001",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0002",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0003",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0004",
+    "verdict": "FAIL"
+   },
+   {
+    "item": "N0005",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0006",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0007",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0008",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0009",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0010",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0011",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0012",
+    "verdict": "PASS"
+   }
+  ]
+ }
+]

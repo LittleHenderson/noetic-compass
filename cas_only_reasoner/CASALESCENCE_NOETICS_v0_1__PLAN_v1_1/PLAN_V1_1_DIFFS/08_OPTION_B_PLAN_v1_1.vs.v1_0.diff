@@ -1,0 +1,266 @@
+--- v1.0/08_OPTION_B_PLAN_v1_0.md
++++ v1.1/08_OPTION_B_PLAN_v1_1.md
+@@ -1,6 +1,6 @@
+-# 08 — Option B usefulness test: the plan, version 1.0
++# 08 — Option B usefulness test: the plan, version 1.1
+ 
+-**Status: PROPOSED. Not sealed yet. Nothing has been run. No model was called. No money was spent.**
++**Status: PROPOSED. Not sealed yet. Nothing has been run, no model was called and no money was spent for version 1.1 (version 1.0 ran the practice build; see section 28).**
+ 
+ **Revised on 2026-10-05 after review round 1.** Six reviewers read the draft. Section 26 lists every blocking and major finding and what was done. The version number stays 1.0, because nothing was sealed before the revision.
+ 
+@@ -8,11 +8,13 @@
+ 
+ **Amended again on 2026-10-05 after an owner ruling.** The owner ruled on Mind and on the canonical colloquialisms (`OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json`). The operator then made one more amendment, A13: in the role notes that model B reads, each canon definition line is followed by that Noetic's canonical sayings. A13 is the operator's reading of the ruling, applied to a place the owner did not name. The owner may strike it. A short list of small faults was fixed at the same time. Sections 27.3 and 27.4 list both. The version number stays 1.0, because nothing was sealed.
+ 
++**Version 1.1 on 2026-10-07, after the practice stop.** The v1.0 plan was sealed and its practice set was built. The practice set stopped under the launch floor: 16 role-step tasks selected against a floor of 36 (REAL; section 28). The operator wrote a change specification (`PLAN_V1_1_CHANGE_SPEC.md`) and this version applies it. The v1.0 folder, its plan and its seal chain are not edited; they stay as evidence. Version 1.1 is built in a new study folder, from the question writer onward. Version 1.1 starts from 8 practice settings. The reserve rule of section 12.1 runs again under the version 1.1 brief; a reserve setting moves to practice only when that rule moves it. A reserve setting that does not move stays in the final set. Section 28 holds the counts, the two rejected rules and a table of every edit. Sections 1 to 27 keep their numbers.
++
+ This is the pre-registration. A pre-registration is a plan that is fixed, and hashed, before any result exists. After the seal, no rule in it changes.
+ 
+ Three files belong together and are sealed together:
+ 
+-- this plan: `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md`
++- this plan: `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/08_OPTION_B_PLAN_v1_1.md` (version 1.1; the sealed v1.0 plan is `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md`)
+ - every number and wording a program needs: `optionb/PLAN_CONSTANTS.json`
+ - every file that passes between programs: `optionb/FILE_FORMATS.md`
+ 
+@@ -193,16 +195,16 @@
+ 
+ | Type | Passages | Form id | Plain name | Needs agreed | What the question asks |
+ |---|---:|---|---|---|---|
+-| BRING | 36 | `MEET_AGAIN` | Meet it again | one `^8` and one `^9` | Later and elsewhere, which option would most likely bring the same thing back to the person? |
+-| BRING | | `TAKE_AWAY` | Take it away | one `^8` and one `^9` | Suppose the noticed thing had not been there; which option would most likely not have happened? |
++| BRING | 36 | `MEET_AGAIN` | Meet it again | one `^8` and one `^9` | Later and elsewhere, which option would most likely bring the same thing back to the person? Version 1.1: the right option is a new thing of the same kind as the noticed thing (a sound like that sound, a smell like that smell), never the remembered thing. |
++| BRING | | `TAKE_AWAY` | Take it away | one `^8` and one `^9` | Suppose the noticed thing had not been there; which option would most likely not have happened? Version 1.1: the right option is the thing that was brought to mind, never the noticed thing itself. |
+ | PULL-PUSH | 54 | `GOES_FOR` | Goes for | one `^2` | At a later free moment, which does the person choose? |
+ | PULL-PUSH | | `KEEPS_AWAY` | Keeps away | one `^3` | Which does the person avoid? |
+ | LAND | 43 | `WHAT_STUCK` | What stuck | one `^4` | At a later moment, which thing is the person most likely to bring up? |
+ | LAND | | `WHAT_SLID_OFF` | What slid off | one `^4` | At a later moment, which thing is the person least likely to bring up? |
+ | FORMED | 45 | `SWAP_PERSON` | Swap the person | one `^5` | Someone without that past stands in the same spot; what most likely goes differently? |
+ | FORMED | | `WHERE_HELPS` | Where it helps | one `^5` | In which new situation would this background help most? |
+-| PARTS | 37 | `WHAT_LEFT` | What is left | two or more `^6` | Some named parts are dealt with; which named part is still left? |
+-| PARTS | | `NOT_BELONG` | Does not belong | two or more `^6` | A spare kit holds one of each named part; which of these would not be in it? |
++| PARTS | 37 | `WHAT_LEFT` | What is left | two or more `^6` | Some named parts are dealt with; which named part is still left? Version 1.1: the question names every part that was dealt with, and exactly one named part is left. |
++| PARTS | | `NOT_BELONG` | Does not belong | two or more `^6` | A spare kit holds one of each named part; which of these would not be in it? Version 1.1: the five wrong options are five of the named parts, and the right option is a thing that is not one of the named parts. |
+ | HABIT | 33 | `LONG_BREAK` | After a long break | one `^7` | The repeated thing stops for a year or two; which action has most likely faded? |
+ | HABIT | | `NEW_STARTER` | New starter | one `^7` | Someone on their first day takes the person's place; which of these would most likely be missing? |
+ 
+@@ -229,6 +231,11 @@
+ - Each role-step question is written once: one right option and five wrong ones, in a fixed order.
+ - All six options are within 2 words of each other in length. No option is longer than 12 words.
+ - Every wrong option is a thing or an action named in the passage, or one that plainly fits it. No throwaway options.
++- Version 1.1: every wrong option is the same kind of thing as the right option. An action with actions, a named part with named parts, a thing brought to mind with things brought to mind, a situation with situations. (REAL from the v1.0 practice stop: 5 of the 14 guessable items had a key that was the only option of its kind.)
++- Version 1.1: options name things by their plain nouns. No option carries a word that says whether a thing is pleasant or unpleasant, liked or disliked, easy or hard, calm or alarming, rough or smooth, heavy or light. (REAL: 5 of the 14 guessable items had the valence written into the option words.)
++- Version 1.1: no two options name the same thing, or nearly the same thing. A program enforces the near-duplicate case in Step 2 (reason code `OPTIONS_MATCH_EACH_OTHER`). Two options match when they match by the looser word test of `tools/verdict.py` AND share at least 2 content words (`question_rules.no_two_options_match_min_shared_content_words`). A one-word overlap is left to the brief line "No two options name the same thing" and to the solvers' flags. It applies to the four options of a plain-fact question too.
++- Version 1.1: the question sentence does not repeat the words of the right option, and does not repeat the words of the passage sentence that holds the right option. A program enforces the first half in Step 2 with the looser word test (reason code `QUESTION_REPEATS_KEY`).
++- Version 1.1: for nine of the twelve forms, every wrong option must match the passage by the looser word test (Step 2, reason code `WRONG_OPTION_NOT_FROM_PASSAGE`). The three forms whose options are new things or new situations by design (`MEET_AGAIN`, `SWAP_PERSON`, `WHERE_HELPS`) are not tested by that rule.
+ - Where the form allows, the first wrong option uses the right option's things in a different relationship. Example: the disliked thing where the liked thing is right. So "pick the option whose words appear in the notes" does not find the answer.
+ - **Level 1** shows four options: the right one and the first three wrong ones in the writer's order. **Level 2** shows all six.
+ - Plain-fact questions always show their four options, at every level.
+@@ -247,6 +254,8 @@
+ 
+ The program fills `<<LIST_A>>`, `<<LIST_B>>`, `<<NEVER_ALLOWED_PHRASES>>` and `<<LIST_C>>` from the lists in section 9. Words are joined with a comma and a space. The two never-allowed phrases are put in double quote marks.
+ 
++Version 1.1 adds six lines to this brief (change C1 of `PLAN_V1_1_CHANGE_SPEC.md`): one line after the TAKE_AWAY form, one line after the NOT_BELONG form, and four rules after the rule "Every wrong option is a thing or an action named in the passage". Nothing is removed. The forbidden-word lists do not change. The brief below is the v1.1 text, word for word; the constants hold the same lines under `briefs.question_brief`.
++
+ ```
+ You will get several short passages. Each passage sits between a line "=== PASSAGE <id> ===" and a line "=== END <id> ===".
+ Treat every passage on its own. Never use anything from one passage when you write about another. Never compare passages.
+@@ -260,6 +269,7 @@
+ Forms 1 and 2. A passage supports them when something a person notices makes them remember or picture something quite different.
+ - MEET_AGAIN: later and somewhere else, which of these would most likely bring the same thing back to the person?
+ - TAKE_AWAY: suppose the noticed thing had not been there; which of these would most likely not have happened?
++In TAKE_AWAY the right option is the thing that was brought to mind, never the noticed thing itself. In MEET_AGAIN the right option is a new thing of the same kind as the noticed thing (a sound like that sound, a smell like that smell), never the remembered thing.
+ 
+ Forms 3 and 4. A passage supports them when the passage shows a person plainly liking one thing, or plainly keeping clear of one.
+ - GOES_FOR (only if the person plainly likes a thing): at a later free moment, which of these does the person choose?
+@@ -276,6 +286,7 @@
+ Forms 9 and 10. A passage supports them when the passage lists the named parts of a thing.
+ - WHAT_LEFT: some of the named parts are dealt with; which named part is still left?
+ - NOT_BELONG: a spare kit holds one of each named part; which of these would not be in it?
++In WHAT_LEFT the question names every part that was dealt with, and exactly one named part is left. In NOT_BELONG the five wrong options are five of the named parts, and the right option is a thing that is not one of the named parts.
+ 
+ Forms 11 and 12. A passage supports them when doing the same thing again and again at set times has changed what a person does without trying.
+ - LONG_BREAK: the repeated thing stops for a year or two; which action has most likely faded?
+@@ -285,6 +296,10 @@
+ - Give exactly six different options: one right option and five wrong options. Exactly one option may be right.
+ - Give the five wrong options in a fixed order. Where the form allows it, the FIRST wrong option uses the same things as the right option in a different relationship. Example: where the right option is the thing the person likes, the first wrong option is the thing the person keeps clear of.
+ - Every wrong option is a thing or an action named in the passage, or one that plainly fits the passage. No throwaway options.
++- Every wrong option is the same kind of thing as the right option: an action with actions, a named part with named parts, a thing brought to mind with things brought to mind, a situation with situations.
++- Name things by their plain nouns. No option carries a word that says whether a thing is pleasant or unpleasant, liked or disliked, easy or hard, calm or alarming, rough or smooth, heavy or light.
++- No two options name the same thing, or nearly the same thing.
++- The question sentence must not repeat the words of the right option, and must not repeat the words of the passage sentence that holds the right option.
+ - No option is longer than 12 words. All six options are within 2 words of each other in length. The right option must not stand out by its length. No option may contain another option.
+ - The question is at most 45 words long.
+ - Give one or two anchors. An anchor is an exact, unbroken copy of words from the passage, at most 8 words long, that the question turns on.
+@@ -449,13 +464,13 @@
+ 
+ - **Who.** Gemini `gemini-3.5-flash-lite` (amendment A1). Gemini is a third vendor. It is not the vendor of label team A (Claude) and not the vendor of label team B (DeepSeek). That is what the outside reviewer asked for. This model was never a label team and never saw the guide. The passages were written by another model of the same vendor, `gemini-2.5-flash`. Claude does not write questions, because Claude agents get the CAS definitions in their project instructions and can not be blind.
+ - **Batches.** The writer works in batches of up to **4** passages per call. The passages of a set are sorted by id, shuffled with a fixed seed, and cut into groups of 4. So the order is seeded and fixed. Each passage is clearly fenced. The brief tells the writer to treat every passage on its own.
+-- **One model.** One model writes the practice set, the final set and the spare pass. The tool refuses any other model name. There is no fallback writer in this version.
++- **One model.** One model writes the practice set, the final set and every pass. The tool refuses any other model name. There is no fallback writer in this version.
+ - **Refused calls.** REAL, measured by the operator on 2026-10-05: 47 one-word calls to this model were answered with no refusal. The daily cap is not known. On an HTTP 429 reply the tool stops cleanly, keeps its checkpoint, and resumes when it is run again later.
+ - **Model name.** The tool stores the model name from every reply, next to the name it asked for. If the name in the replies changes while a set is written, the record shows it. No program stops for it.
+ - **All passages are asked.** The writer writes for ALL 293 K1 to K5 passages, not only the eligible ones. So being asked tells it nothing. REAL: 58 are in the practice settings and 235 in the final settings.
+ - **What it sees.** The question brief and the fenced passages. Never the guide, the definitions, a label, a note or another model's work.
+ - **What it returns.** For each form it judges the passage to support: the form name, the question, the right option, five wrong options in a fixed order, and one or two anchors. An anchor is an exact stretch of passage words, at most 8 words, that the question turns on. It also returns one plain-fact question with four options.
+-- **Spare pass.** A second run with the same brief and a different seeded batch order gives a spare question per form. A spare is used only where the first question for that form was dropped by a program check (Step 2 or Step 3). A spare never replaces a first question that passed.
++- **Three passes (version 1.1).** The writer runs three times per set: passes `p1`, `p2` and `p3`. Each pass uses the same brief and its own seeded batch order (`seeds.writer_batch_order_p1`, `_p2`, `_p3`; the p3 seed is 20261018). The tool accepts `--pass p3` and reads its seed by the existing name rule. File names follow the existing pattern with `p3`. In a real run a later pass file (p2 or p3) that does not exist yet stops the check and select tools with MISSING_PASS_FILE; only a dry fixture skips it and prints passes_missing. Seal steps 3A and 3C refuse until every pass file exists and its writer is complete. **Candidate rule (version 1.1; it replaces the v1.0 spare rule):** every question of every pass that passes Steps 2 and 3 is a candidate. A (passage, form) pair may have up to three candidates, one per pass. In v1.0 a second pass gave a spare that was used only where the first question was dropped. REAL: that rule gave 48 candidates from 123 open pairs, and even 100% survival of 48 could not have reached the floor of 36 after the per-passage cap (section 28).
+ - **Log.** Every call is logged: the model asked for, the model name in the reply, batch number, passage ids, prompt hash, reply hash, full prompt and raw reply.
+ - Settings: temperature 1.0 (the same as when the passages were written). A reply that is not a readable JSON array is asked for once more. A refused call (HTTP 429) is not counted as a try.
+ 
+@@ -471,7 +486,13 @@
+ - it holds a forbidden word (section 9);
+ - its form name is not one of the twelve.
+ 
+-A plain-fact question goes through the same check, with four options and no anchor.
++Three more drop rules, added in version 1.1 (change C2). Each has its own reason code. Each uses the looser word test of `tools/verdict.py` (`lenient_span`: the two texts share at least half of the content words of the shorter text), the same frozen function the anchor check and the option check already use. They run after the form checks above and before the anchor check of Step 3. Each is counted in `dropped_by_reason` like the existing codes.
++
++- `QUESTION_REPEATS_KEY`: the question sentence and the right option match by the looser test. Constants: `question_rules.question_must_not_match_right_option`.
++- `OPTIONS_MATCH_EACH_OTHER`: any two of the six options match each other. Two options match when they match by the looser word test of `tools/verdict.py` AND share at least 2 content words (`question_rules.no_two_options_match_min_shared_content_words`). A one-word overlap is left to the brief line "No two options name the same thing" and to the solvers' flags. Constants: `question_rules.no_two_options_match`, `question_rules.no_two_options_match_min_shared_content_words` = 2. A plain-fact question gets the same rule on its four options.
++- `WRONG_OPTION_NOT_FROM_PASSAGE`: for the nine forms listed in `question_rules.wrong_options_must_match_passage_forms` only (`GOES_FOR`, `KEEPS_AWAY`, `WHAT_STUCK`, `WHAT_SLID_OFF`, `WHAT_LEFT`, `NOT_BELONG`, `LONG_BREAK`, `NEW_STARTER`, `TAKE_AWAY`), any WRONG option does not match the passage by the looser test: fewer than half of the option's content words occur in the passage. The passage text is normalised first (curly quote marks to straight ones, runs of white space to one space), as for the anchor check, before an option is compared with it. The right option is not tested by this rule. The rule is not applied to `MEET_AGAIN`, `SWAP_PERSON` or `WHERE_HELPS`, whose options are new things or new situations by design, and not to plain-fact questions.
++
++A plain-fact question goes through the same check, with four options and no anchor. Of the three v1.1 rules only `OPTIONS_MATCH_EACH_OTHER` applies to it.
+ 
+ Words are counted by splitting on white space. An anchor is compared with the passage after curly quote marks are turned into straight ones and runs of white space into one space. Letter case must match.
+ 
+@@ -485,7 +506,7 @@
+ 
+ Both checks are counted and logged by reason. Plain-fact questions have no label check.
+ 
+-After Steps 2 and 3 there is one candidate per passage and form: the first-pass question if it passed, else the spare if the first was dropped and the spare passed.
++After Steps 2 and 3, every question of every pass that passed both steps is a candidate (version 1.1). A passage and form may have up to three candidates, one per pass. `checks/candidates_<set>.json` lists them all; each candidate row carries its `pass` (`p1`, `p2` or `p3`), and the `counts` block reports `candidates_per_pass`. In v1.0 there was one candidate per passage and form: the first-pass question if it passed, else the spare.
+ 
+ ### Step 4. Key check by two blind solvers from two families
+ 
+@@ -495,19 +516,21 @@
+ - Each solver sees the passage, the question and all the options in a shuffled order. Each solver gets its own shuffle.
+ - Each answers one letter, or "more than one fits", or "none fits".
+ - A question is kept only if both pick the writer's right option and neither raises a flag. An unreadable reply counts as not picked.
++- Version 1.1: Steps 4 and 5 run on every candidate of every pass. Items are per question id, as before. The keep rule of this step and the drop rule of Step 5 are unchanged. Two loosened key rules were counted on the v1.0 practice evidence and rejected (section 28).
+ 
+ ### Step 5. No-passage check
+ 
+ The same two solvers, in separate calls, get the question and options with no passage. They must pick one letter. The Claude sheet goes to a fresh sub-agent that never saw the first sheet. If both pick the right option, the question can be guessed from common sense and is dropped.
+ 
+-Steps 4 and 5 apply to role-step questions and to plain-fact questions.
++Steps 4 and 5 apply to role-step questions and to plain-fact questions, and (version 1.1) to every candidate of every pass.
+ 
+ ### Step 6. Selection by program
+ 
+-1. **Pick.** Per passage, at most two role-step questions, by the rules in section 7.1, chosen with a seed. One plain-fact question per passage.
+-2. **Length backstop.** Across the role-step tasks of a set, the right option may be the single longest of its six options in at most 35% of tasks, and the single shortest in at most 35% of tasks. Seeded drops enforce both. They are counted.
+-3. **Reserve rule (practice set only).** If fewer than **45** practice role-step tasks or fewer than **25** practice plain-fact tasks survive, reserve settings move from final to practice one at a time, in the sealed order, until both targets are met or all 4 are used. See section 12.1. This is done before seal step 3A and before any final question is written. Three tools act on this rule: `tools/ob_write_questions.py`, `tools/ob_select.py` and `tools/ob_seal.py`. All three read the same block, `reserve`, of `select/selection_practice.json` (amendment A8).
+-4. **Letters.** Right letters are set by a seeded shuffle. Per set, per task family and per level, the tasks are shuffled inside each type, the types are joined in their fixed order, and the letters are dealt in turn over the whole joined list. The count does not start again at A for a new type. So each letter is right equally often, to within one task, inside every type and over the whole family. This is done last, in `tools/ob_assemble.py`, after Step 7, when everything else is frozen. So "always answer A" scores chance to within one task. The exact rule is in `PLAN_CONSTANTS.json` under `selection.letters`.
++1. **One per pass first (version 1.1).** Per passage and form, the survivors of Steps 4 and 5 are reduced to one question before the pair rule: the surviving candidate of the lowest pass (`p1` before `p2` before `p3`). The other survivors of that pair are dropped with the logged reason `LATER_PASS_NOT_NEEDED`. The selection file records, per task, which pass supplied it (`pass_used`). The survival rows still count per passage and form, as before: a later pass stands in where an earlier one was dropped. Unit of every row: candidates, after_key_check and after_no_passage count question ids over all passes; after_lowest_pass and selected count passage-and-form pairs. The survival table rows for the key check and the no-passage check count pairs with any passing pass, and are not comparable with version 1.0 question counts. Why lowest-pass-first: the writer never learns which pass was kept, and the choice is a fixed rule, not a choice made after seeing the solvers. The same holds for the plain-fact question of a passage.
++2. **Pick.** Per passage, at most two role-step questions, by the rules in section 7.1, chosen with a seed. One plain-fact question per passage. Unchanged from v1.0.
++3. **Length backstop.** Across the role-step tasks of a set, the right option may be the single longest of its six options in at most 35% of tasks, and the single shortest in at most 35% of tasks. Seeded drops enforce both. They are counted.
++4. **Reserve rule (practice set only).** If fewer than **45** practice role-step tasks or fewer than **25** practice plain-fact tasks survive, reserve settings move from final to practice one at a time, in the sealed order, until both targets are met or all 4 are used. See section 12.1. This is done before seal step 3A and before any final question is written. Three tools act on this rule: `tools/ob_write_questions.py`, `tools/ob_select.py` and `tools/ob_seal.py`. All three read the same block, `reserve`, of `select/selection_practice.json` (amendment A8).
++5. **Letters.** Right letters are set by a seeded shuffle. Per set, per task family and per level, the tasks are shuffled inside each type, the types are joined in their fixed order, and the letters are dealt in turn over the whole joined list. The count does not start again at A for a new type. So each letter is right equally often, to within one task, inside every type and over the whole family. This is done last, in `tools/ob_assemble.py`, after Step 7, when everything else is frozen. So "always answer A" scores chance to within one task. The exact rule is in `PLAN_CONSTANTS.json` under `selection.letters`.
+ 
+ ### Step 7. Ordinary notes, then the answer-leak screen
+ 
+@@ -1119,12 +1142,12 @@
+ - **Money.** REAL: the shared ledger showed **12.64 USD** unreserved at 2026-10-05T09:49Z. It is read again before each launch. The ledger pointer is `C:/Users/wakil/Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json`. Arithmetic on that reading: with 5.00 USD held for the GPU job, at most 2.00 USD for the pre-check jobs (4 jobs of at most 0.50 USD) and at most 1.00 USD for the development tests (2 jobs of at most 0.50 USD), 4.64 USD would stay unreserved.
+ - **Call cap:** 5,000 model calls.
+ - **Outside services** are separate from the AWS caps (amendment A11).
+-  - **Gemini:** free tier. No money.
+-  - **DeepSeek:** at most **4.00 USD** in total, for the ordinary notes and the key solver together.
++  - **Gemini:** free tier. No money. Version 1.1: one more writer pass per set, three in all. EXPECTED calls per pass, from the REAL passage counts at 4 passages per call: practice about 22 at 12 settings (87 passages; 15 at 8 settings), final about 59 at 8 practice settings (235 passages; 52 at 12 settings). The daily cap stays NOT MEASURED.
++  - **DeepSeek:** at most **4.00 USD** in total, for the ordinary notes and the key solver together. Version 1.1: up to three candidates per (passage, form) instead of one, so the key solver may make up to three times as many calls. REAL from the sealed v1.0 practice run: 268 solver calls, 41,185 input tokens and 1,609 output tokens. EXPECTED for the v1.1 practice set: about 288 at the version 1.0 candidate count; the ceiling is 3 × 123 open pairs × 2 steps = 738 role-step items plus 3 × 87 × 2 = 522 plain-fact items per solver, 1,260 in all; at the REAL version 1.0 rate of about 154 input tokens per call that is about 194,000 input tokens, far under the limit. The two token limits below (2,430,240 and 1,156,520) are far from reached and do not change.
+   - **How the tools enforce it.** As a token count. The two DeepSeek tools keep the count in their call logs, which are their checkpoints. The limits are at most **2,430,240** input tokens and at most **1,156,520** output tokens, added up over both tools and both sets. Before each call a tool adds up the counts. If either limit is reached, it makes no call and stops with `STOPPED_TOKEN_CAP`. A reply that carries no token count stops the tool with `STOPPED_NO_TOKEN_COUNT`. A limit is never raised without a new reviewed plan version.
+   - **Where the two numbers come from.** REAL, the operator's reading on 2026-10-05: two calls to `deepseek-v4-pro`, with 60,756 input tokens and 28,913 output tokens in total, cost about 0.10 USD. The input price and the output price were not measured apart. So each limit is 40 times the measured count: 40 × 60,756 and 40 × 28,913. Whatever the split between the two prices, a spend inside both limits costs at most 40 × 0.10 = 4.00 USD at that model's prices.
+   - **EXPECTED, NOT MEASURED.** `deepseek-chat` costs no more per input token, and no more per output token, than `deepseek-v4-pro`. The label run's receipt (`verdict/labels_team_b.json.receipt.json`) holds token counts only: 2,327,821 input tokens and 88,948 output tokens in 428 calls. It holds no price. So it gives no price basis.
+-  - **EXPECTED need.** At the very most about 52% to 60% of the output limit and about 33% to 38% of the input limit: that is the case where every note is written twice and every possible question is solved. The likely need is well below that: about 27% to 31% of the output limit and about 23% to 27% of the input limit, if every note is written once. This is an estimate from word counts. It is not a tokenizer count. EXPECTED spend: under 2 USD. In the very worst case the spend can come to about 2.4 USD, which is inside the limit of 4.00 USD. Measured again on 2026-10-05 by the tool fixer, from the dry run of the role notes with amendment A13. REAL, counted with the tools' own word targets and prompts: in the worst case the note writer is asked for 450,344 words in 2,280 calls, its prompts hold 320,220 words, and the key solver makes 1,518 calls whose prompts hold at most 290,619 words. ASSUMED: 1.3 to 1.5 tokens per word, and 10 output tokens per solver reply. Before amendment A13 the same count gave about 36% to 41% of the output limit; the amendment does not change the input side. The two limits do not change.
++  - **EXPECTED need.** At the very most about 52% to 60% of the output limit and about 33% to 38% of the input limit: that is the case where every note is written twice and every possible question is solved. The likely need is well below that: about 27% to 31% of the output limit and about 23% to 27% of the input limit, if every note is written once. This is an estimate from word counts. It is not a tokenizer count. EXPECTED spend: under 2 USD. In the very worst case the spend can come to about 2.4 USD, which is inside the limit of 4.00 USD. Measured again on 2026-10-05 by the tool fixer, from the dry run of the role notes with amendment A13. REAL, counted with the tools' own word targets and prompts: in the worst case the note writer is asked for 450,344 words in 2,280 calls, its prompts hold 320,220 words, and the key solver makes 1,518 calls whose prompts hold at most 290,619 words. ASSUMED: 1.3 to 1.5 tokens per word, and 10 output tokens per solver reply. Before amendment A13 the same count gave about 36% to 41% of the output limit; the amendment does not change the input side. The two limits do not change. Version 1.1, EXPECTED at the ceiling with the same ASSUMED rates: the key solver's prompts hold at most 3 × 290,619 words, so the whole need is at most about 64% to 74% of the input limit and about 55% to 62% of the output limit. Still inside both limits.
+   - **Limit of the count.** Calls that are running when a limit is reached still finish. So a count can pass its limit by a few calls. A call with no reply is not counted.
+ 
+ ### 19.3 The clock
+@@ -1325,6 +1348,7 @@
+ | 3 | If the role notes beat ordinary help but not the same quotes with no role names, the code is `POINTING_BEATS_ORDINARY_HELP_ROLE_NAMES_NOT_SHOWN`, not a pass. Do you accept that? Would pointing alone be reason enough to build the reader? | The code is printed as written and is not a pass. |
+ | 4 | Are the six question types fair everyday uses of the Noetics? | Used as written in section 7. |
+ | 5 | Do you approve or correct the plain words given to the question writer and to the ordinary-note writer (section 8)? | Used as written. They are study text, never definitions. |
++| 5a | Version 1.1 added six lines to the question brief after the practice stop of 2026-10-07 (section 8.1; section 28): the right thing for TAKE_AWAY and MEET_AGAIN, the shape of WHAT_LEFT and NOT_BELONG, same-kind options, plain nouns with no valence words, no two options alike, no key words in the question. Do you approve or correct them? | Used as written. They are study text, never definitions. Nothing was removed and the forbidden-word lists did not change. |
+ | 6 | May the canon definition lines be printed, word for word, inside the role notes B reads? | Yes (operator decision D2). No wording is changed. |
+ | 7 | Is the stand-in acceptable: label = the shorter quote, supporting quote = the whole sentence? Or should option B wait for labels made under a new pointing rule? | The stand-in is used (D3). The test does not wait. |
+ | 8 | ROLE-PLAIN: approve, correct or strike the plain sentence frames? | Struck (D1). |
+@@ -1332,7 +1356,7 @@
+ | 10 | What counts as "carefully checked": every agreed entry (192 passages), or only passages where the teams' entries pair off with nothing left over (56 passages)? | Every agreed entry (D3). The stricter split is printed as a sub-view. |
+ | 11 | `^4` and `^7`: keep their question types in the pooled set, or report them apart only? | Kept in the pooled set, with a printed view without them. |
+ | 12 | Size. When you have the real count, run at that size, or first label new passages to reach 200 or more? | The GPU job waits for one yes from the owner after the real counts are shown. A run spends the final passages for good. |
+-| 13 | Money: one GPU job with a 5.00 USD cap and a 180-minute hard stop; up to 4 small pre-check jobs of at most 0.50 USD each; up to 2 development tests on made-up data of at most 0.50 USD each; outside services extra, with DeepSeek at most 4.00 USD in total. | Limits as in section 19. Spending stays inside unreserved funds. Asked together with question 12. |
++| 13 | Money: one GPU job with a 5.00 USD cap and a 180-minute hard stop; up to 4 small pre-check jobs of at most 0.50 USD each; up to 2 development tests on made-up data of at most 0.50 USD each; outside services extra, with DeepSeek at most 4.00 USD in total. Version 1.1: one more Gemini writer pass per set (free tier) and up to three times the DeepSeek solver items; the DeepSeek limit of 4.00 USD and its two token limits do not change (section 19.2). | Limits as in section 19. Spending stays inside unreserved funds. Asked together with question 12. |
+ | 14 | Do you want to read 20 role notes before they are sealed, and the practice questions before the job? | The sample file is written and offered. The build goes on unless the owner asks it to wait. |
+ | 15 | R2 and R3: 5 points AND the test, or a plain 5-point line? | 5 points AND the test (D9). |
+ | 16 | If the outcome is "not above ordinary help": is the reader still wanted for another reason? | No default. It is the owner's decision after the result. |
+@@ -1372,7 +1396,7 @@
+ 4. **"Shorter".** By number of characters; a tie goes to team A.
+ 5. **Option check for PULL-PUSH.** It looks at left-over `^2` and left-over `^3` entries for both forms.
+ 6. **Plain-fact questions** go through Step 2, Step 4 and Step 5 as well.
+-7. **Spare questions** come in only after a Step 2 or Step 3 drop.
++7. **Candidates (version 1.1).** Every question of every pass that passes Steps 2 and 3 is a candidate, up to three per passage and form; Step 6 keeps the lowest pass. Before version 1.1: spare questions came in only after a Step 2 or Step 3 drop.
+ 8. **Word matching.** List A matches a word and its longer forms. List B matches whole words in any letter case, so `above` and `below` are barred too.
+ 9. **No-passage solvers must pick a letter.** This makes the screen stricter.
+ 10. **Length backstop.** Longest and shortest are counted apart, each at most 35%, per set.
+@@ -1569,3 +1593,61 @@
+ Three findings of that `confirm` block are not among these decisions. They stay as the record gives them: the whole-chain walk of the laptop tools was not run again on the changed tool bytes; the question writer reads the ten sayings words of list C in its brief (section 9); and two worker threads of the note writer can count their replies in another order than they log them.
+ 
+ **Numbers that round 3 added.** Operator decision: the three HTTP statuses 400, 404 and 422 of decision C6. No other number of this plan changed.
++
++## 28. Version 1.1: changes after the practice stop of 2026-10-07
++
++Version 1.0 was sealed and its practice set was built, in the folder `CASALESCENCE_NOETICS_v0_1`. The practice set stopped under the launch floor. The operator then wrote `PLAN_V1_1_CHANGE_SPEC.md` (2026-10-07). This section applies it. The v1.0 folder, the v1.0 plan and the v1.0 seal chain are not edited. They stay as evidence. Version 1.1 is built in a new study folder, `CASALESCENCE_NOETICS_v0_1__PLAN_v1_1`, a byte copy of the v1.0 folder (`PROJECT_COPY_RECORD.json`), from the question writer onward.
++
++### 28.1 Why: the counts
++
++All counts in this part are REAL. They were read from the sealed v1.0 practice evidence.
++
++- Practice set, 12 settings (all 4 reserve settings used): 48 role-step candidates after Steps 2 and 3; 30 after the key check (both solvers must pick the key with the passage); 16 after the no-passage check (both solvers right without the passage); 16 selected. Floor 36. Not met.
++- Plain-fact: 86 / 85 / 44 / 20 selected. Floor 20. Met.
++- Read-only diagnosis of the 18 key-check failures: 3 = the writer's key is wrong and a solver is right (all three BRING: TAKE_AWAY keyed the noticed thing, MEET_AGAIN keyed the remembered thing); 13 = the key is defensible but two or more options fit (7 of 11 PARTS candidates: WHAT_LEFT left two parts undone, NOT_BELONG had a second non-part among the wrong options; HABIT and LAND had near-synonym option sets); 1 = solver error on a sound question; 1 = the question omitted its own condition. Every one of the 11 solver flags sat on a question read as ambiguous or defective.
++- Of the 14 guessable items (dropped by the no-passage check): 5 = the key is the only option of its kind (an action among nouns, a memory among objects); 5 = valence written into the option words ("rough scratchy", "coarse", "heavy awkward", "calm"); 2 = the question repeats the answer's words; 2 = off-topic distractors (one leaked from another passage).
++- Supply: of 123 open (passage, form) pairs, 28 got no question from the writer, 42 lost every question at Steps 2 and 3, 53 had a passing question. The one-candidate-per-pair spare rule gave 48 candidates. Even 100% survival of 48 candidates could not have reached 36 after the per-passage cap. So v1.1 must raise supply AND question quality.
++
++### 28.2 Two loosened key rules, counted and rejected
++
++| Rule that was counted | REAL effect on the v1.0 practice set | Decision |
++|---|---|---|
++| Keep when one solver picks the key and the other flags | would add 3 tasks, all flawed | REJECTED |
++| Keep when the writer plus one solver agree | would add 6 tasks, four flawed and one with a wrong key | REJECTED |
++
++The key check and the no-passage check stay exactly as in v1.0.
++
++### 28.3 Every edit of version 1.1
++
++| Section | What changed | Why | Constants key or tool it touches |
++|---|---|---|---|
++| Title, top of plan | Version 1.1; a paragraph on the practice stop; the plan path is the new folder's | Record | `schema`, `plan_file`, `plan_version`, `status` |
++| 7.1 table | MEET_AGAIN, TAKE_AWAY, WHAT_LEFT, NOT_BELONG: one sentence each on what the right option is | 3 wrong BRING keys; 7 of 11 PARTS candidates with two fitting options | `briefs.question_brief` (change C1) |
++| 7.3 | Five option rules added: same kind; plain nouns, no valence words; no two alike; no key words in the question; wrong options from the passage for nine forms | 14 guessable items; 13 two-fit keys | `question_rules` (C2); `tools/ob_check_questions.py` |
++| 8.1 | Six brief lines inserted, word for word from the spec; nothing removed; forbidden-word lists unchanged | As 7.1 and 7.3 | `briefs.question_brief` (C1); `tools/ob_write_questions.py` reads it |
++| 10, Step 1 | "Spare pass" is now "Three passes": `p1`, `p2`, `p3`, seed `writer_batch_order_p3` = 20261018; the candidate rule replaces the spare rule; "One model" says every pass | Supply: 48 candidates could never reach 36 | `outside_services.gemini_question_writer.passes`, `.pass_meaning.p2`, `.pass_meaning.p3`, `.one_model_rule`, `.passes_rule`, `seeds.writer_batch_order_p3`, `question_rules.spare_rule` (C3); `tools/ob_write_questions.py` |
++| 10, Step 2 | Three drop rules with their codes: `QUESTION_REPEATS_KEY`, `OPTIONS_MATCH_EACH_OTHER`, `WRONG_OPTION_NOT_FROM_PASSAGE`; order: after the form checks, before the anchor check; plain-fact gets the second only | Program-enforced form of the brief rules | `question_rules.question_must_not_match_right_option`, `.no_two_options_match`, `.wrong_options_must_match_passage_forms` and their `_rule` texts (C2); `tools/ob_check_questions.py`; `FILE_FORMATS.md` 5.1 |
++| 10, Step 2 (narrowed after the tool review) | `OPTIONS_MATCH_EACH_OTHER` now needs the looser word test AND at least 2 shared content words | REAL: the reviewer re-ran the rule as first written on the sealed v1.0 practice questions; it fired on 135 of 324 role-step questions, mostly two-content-word options sharing one word, and would have removed most of the supply. The narrowed rule keeps the near-duplicate cases the brief forbids; a one-word overlap is left to the brief line and to the solvers' flags | `question_rules.no_two_options_match_rule`, `question_rules.no_two_options_match_min_shared_content_words` = 2; `tools/ob_check_questions.py`; `FILE_FORMATS.md` 5.1 |
++| 10, after Step 3 | Every passing question of every pass is a candidate; `pass` field; `candidates_per_pass` | C3 | `tools/ob_check_questions.py`; `FILE_FORMATS.md` 5.4 |
++| 10, Steps 4 and 5 | One sentence each: they run on every candidate of every pass; rules unchanged | C3; C4 | `tools/ob_solve_blind.py` (no logic change) |
++| 10, Step 6 | New point 1: lowest-pass-first reduction per passage and form, dropped reason `LATER_PASS_NOT_NEEDED`, `pass_used` recorded; the old points renumbered 2 to 5; pair rule, length backstop, reserve rule and letters unchanged | C3 | `tools/ob_select.py`; `tools/ob_assemble.py` (it now counts survival per passage-and-form pair with any pass standing in, as `tools/ob_select.py` does); `FILE_FORMATS.md` 7.1 and 11.1 |
++| 11.1 | No change. It names no pass and no candidate rule. The sealed plan of seal step 1 is this file. | - | `tools/ob_seal.py` is checked for the `p3` files in step 3A (spec part 2) |
++| 12.1 | No change. The reserve text names no pass. | - | - |
++| 19.2 | Cost lines: one more Gemini pass per set with the EXPECTED call counts; up to three DeepSeek candidates per pair with the REAL v1.0 practice tokens; the ceiling arithmetic; both token limits unchanged | C5 | `expected.gemini_question_calls_at_8_settings`, `expected.gemini_question_calls_at_12_settings`, `expected.gemini_question_calls_note`, `outside_services.deepseek.spend_cap_expected`, `.v1_1_candidates_note` |
++| 22 | Question 13 gets the v1.1 cost sentence; new question 5a on the brief lines | C5; the owner has not read the brief | - |
++| 24, item 7 | The spare rule is now the candidate rule | C3 | - |
++| 28 | This section | Record | - |
++
++Rows of sections 23 (D4) and 27 (A1) still say "the spare pass". They are records of what was decided on 2026-10-05 and are not rewritten.
++
++### 28.4 What did not change
++
++The launch floors (36 practice role-step, 20 practice plain-fact, 100 final role-step, 100 final plain-fact), the reserve targets (45 / 25), the key check rule, the no-passage rule, the selection pair rule, the length backstop, the letters rule, the reserve rule, all seals, all briefs other than the question brief, all job programs and the self-test expectations are unchanged.
++
++### 28.5 Where version 1.1 is built, and what stays as evidence
++
++The practice set is rebuilt from the question writer onward under version 1.1, in the new study folder `CASALESCENCE_NOETICS_v0_1__PLAN_v1_1`. The eligibility files (`optionb/elig/`) and the role notes (`optionb/notes_role/`) are made again in this folder by the unchanged tools `tools/ob_eligibility.py` and `tools/ob_role_notes.py` from the same sealed sources and the same seeds; their bytes are expected to equal the v1.0 files except the `made_by` time. Version 1.1 starts from 8 practice settings. The reserve rule of section 12.1 runs again under the version 1.1 brief; a reserve setting moves to practice only when that rule moves it. A reserve setting that does not move stays in the final set. The operator has read the version 1.0 practice questions and keys of all four reserve settings in the diagnosis of section 28.1; those questions were written by the blind writer, are never reused, and the final questions are written by a new blind pass of the same writer, so no person who saw them writes or edits any question or key. The version 1.0 practice files stay sealed in `CASALESCENCE_NOETICS_v0_1` and are not copied here. The v1.0 seal chain in `CASALESCENCE_NOETICS_v0_1/optionb/SEAL_OPTIONB.jsonl` stays as evidence and is never edited. Every v1.1 file change is recorded in `PLAN_V1_1_CHANGES.json` with its old and new sha256, and the unified diffs are in `PLAN_V1_1_DIFFS/`.
++
++### 28.6 Review before anything runs
++
++A separate reviewer sub-agent reads the whole v1.1 package (the plan diff, the constants diff, the formats diff, the tool diffs) before anything runs. Its record is `PLAN_V1_1_REVIEW.json`, beside this plan. A BLOCKER or MAJOR holds the run. The custody rules of section 10 hold: the writer still sees only the brief and the fenced passages; the solvers still see only passage, question and options; no person edits a question or a key; the operator runs programs.

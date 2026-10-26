@@ -1,0 +1,18 @@
+{
+  "JOB_SPEC.json": {
+    "size_bytes": 1783,
+    "sha256": "477e189bbbe0a93c06f60fbea570530c9b21ff115f29059d2e1408ae88976ea3"
+  },
+  "dag_dataset_generator.py": {
+    "size_bytes": 8783,
+    "sha256": "c07353d36f22beddf5226d95b0a4704d3030e483a50beefadcec5d27c32b46c6"
+  },
+  "dag_proposer_model.py": {
+    "size_bytes": 5126,
+    "sha256": "14201d0528a5be808bb20d498b4979cbf26e4db012ced84ee348e2b8469b8324"
+  },
+  "train_dag_proposer_job.py": {
+    "size_bytes": 11036,
+    "sha256": "5ea2f5be1df5a0e7f5906213cd087a47223e76f6d98b8935110dd50a7956352c"
+  }
+}

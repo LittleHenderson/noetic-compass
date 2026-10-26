@@ -1,0 +1,917 @@
+{
+ "schema": "casalescence/optionb/ordinary_notes/v1",
+ "made_by": {
+  "program": "tools/ob_write_ordinary_notes.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "adf6cd8fa5b5acf9fe7d1f050641ffcf372628aeeb7dcc759f2a728df7895aee",
+  "utc": "2026-10-07T02:23:35Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "00f18c02b8544a1597432154abdb7c900165f186757d67d215cec4a0ffea0192"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/SEAL_OPTIONB.jsonl",
+   "sha256": "8e49ddb3479ea4b6af92de7ce82ee023d63428814b9bb5c8927d7cc90fea1d5b"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/elig/eligibility.json",
+   "sha256": "225d5d7a5dffee567ca4bf2346c1514898e5052bccd88442cef2ed8785953848"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_ord/ordinary_calls_final.jsonl",
+   "sha256": "ec115952ff4c90b07acc7ddfdb641ecf24d1f504266061b3bd7c813b09bd0a73"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_role/role_notes.json",
+   "sha256": "667c6f2fc3e816b4ecf81c83b9ee7adb6e9ec07ac7a84e6442d750fc5083d2be"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/select/selection_final.json",
+   "sha256": "e9237d1e8e992a19d9527056118f9d174468cb2b01a121b19a00cd8f0d2a0e06"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/support/support_results_final.json",
+   "sha256": "5d007b166283199fee877d94fdd4c95dbbc165f2ed7b08f52a21bef6922b6a14"
+  }
+ ],
+ "set": "final",
+ "writer": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "V906",
+   "role_size_count": 206,
+   "passage_words": 44,
+   "passage_size_count": 49,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin reaches for the hemp rope before the nylon rope. The oil can stands on the window ledge by the door.",
+        "words": 21,
+        "size_count": 23,
+        "prompt_sha256": "ee7908591113960a433275e666bbd0a0401fa0f5f0bed3ad1ef2c1cbad62cab1",
+        "reply_sha256": "3528478b4f896d294a4be9ff95eb02f6baff30c2f9b60606af01d88bc78b5cc2",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 185,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oil can stands on the window ledge by the door.",
+        "words": 28,
+        "size_count": 31,
+        "prompt_sha256": "88f0af5081d030d926ec316dd99d22ffdb021a909093c3ee5e996b0bd0b4fdb5",
+        "reply_sha256": "0f9584b24cbf590815d457055af7b96e25d766b9940a29ad93219a3de8ec5238",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 203,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oil can stands on the window ledge by the door. A pair of gloves lies beside the oil can.",
+        "words": 37,
+        "size_count": 41,
+        "prompt_sha256": "2f66da4a3d61a90470ad645d56865e4543a558b8a0f6ab40c55c355c164e4a6a",
+        "reply_sha256": "1eccee60aab9ea0bee3a9adf53c8fda262b702dac041f6285fb207c26328968d",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. The oil can stands on the window ledge by the door.",
+        "words": 18,
+        "size_count": 20,
+        "prompt_sha256": "2dd16058e87f71fa0e4885999a64d5092e6457a3f539c2c49118dcf33b276659",
+        "reply_sha256": "fbf1656680d0b12c995efc43489be5cb88e779183fe9e278cd355c53f0c56377",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 185,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. The oil can stands on the window ledge by the door. A pair of gloves lies beside the oil can.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "96896ac2985c6a4829c74f1423ff76d0c8f5a01ac3bd19a71808ec23311e644e",
+        "reply_sha256": "aa7e21395c7c5a687a6fce244a5480555d449defce61626d2d302af2e98d9fe5",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 203,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. A pair of gloves lies beside the oil can. The oil can stands on the window ledge by the door.",
+        "words": 37,
+        "size_count": 41,
+        "prompt_sha256": "a9768d6010fcc566cfb7dbc29e878e38eba867de0e524b374372c042d4508139",
+        "reply_sha256": "8bce8673687549a744c2b63464de77d70a9b9a2d5ab4a182272d011e9b68a413",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V907",
+   "role_size_count": 129,
+   "passage_words": 35,
+   "passage_size_count": 39,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda reaches for the wicker tray before the wire tray. The step stool stands on the landing by the door.",
+        "words": 20,
+        "size_count": 22,
+        "prompt_sha256": "88c23f72007cbd194a8fba96e93a2e1ff329593dd681cdaeed2be8fff4d9e11d",
+        "reply_sha256": "22416825ce57f6b07d749e1be8fc453a57716becb70f01b3c13d3bae2306d48a",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The step stool stands on the landing by the door.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "117170fd6a67f94faacd12d759107a01cd71b1ddbee0a694221b008b0f83b70f",
+        "reply_sha256": "0d6f24e392b75f4f6dee72bcb4486a593a09cfda543fb50283a0d0e0d7932e26",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The step stool stands on the landing by the door. A heap of straw lies beside the step stool.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "d02b97aaadba463ec1f8665933c4f936efc588b17a257250f70b7718e670feec",
+        "reply_sha256": "dd7f67e72d7537eda1d44b56c7a000233081b0e652f18ccdf71b70af1b59d252",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": {
+       "version": 2,
+       "replies": 2,
+       "errors": [
+        "REPLY_EMPTY",
+        "REPLY_EMPTY"
+       ]
+      },
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. The step stool stands on the landing by the door. The loft was built in 1950.",
+        "words": 23,
+        "size_count": 26,
+        "prompt_sha256": "4a0c64d81d0d56899ab26c0be2644b182f5e46375d74bd382863db3c58491da7",
+        "reply_sha256": "7b0303e75dd9e5c61debab91cf43bbb1a0d2aa03401322188ba0d6ae487215d5",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. The step stool stands on the landing by the door. A heap of straw lies beside the step stool.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "0cc1f2c7823f3315280fa53acc47ef17040f19097d3dc76c8d18d8c99652819a",
+        "reply_sha256": "826e45e4b6dc02fa7a74ab88bfa35d463fcd3996a344911ad79571325ebd9e34",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. A heap of straw lies beside the step stool. The step stool stands on the landing by the door.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "b9ef09a007d7f197bb54f188629f6ad8bf994cea569b7c934e129c309bec2a3b",
+        "reply_sha256": "1634acbaaca1199f8ce78d08f6215336109660f8b67b6539f82309ad35a36993",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V908",
+   "role_size_count": 129,
+   "passage_words": 35,
+   "passage_size_count": 39,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the gravel path by the door. The side gate (B) is kept shut.",
+        "words": 27,
+        "size_count": 32,
+        "prompt_sha256": "776cf74c1832c22cd5da89ba484d462d2f3a442b259a2a204dbebd0c509bdc27",
+        "reply_sha256": "cc793cbde0da42fca110069d84d8f3b6290baed8adac7bc4c1566f094511a4fd",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the gravel path by the door.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "bd0e1a6f9b0f5008cf2c77b6ef40688b6185d61b3ba97e197e53fe2f61b85492",
+        "reply_sha256": "926d4471ba8a3d7d8dfb4e613516d0a00b9266680cc063afe6e1dff31e15e22d",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the gravel path by the door. A stack of pallets lies beside the wheelbarrow.",
+        "words": 35,
+        "size_count": 39,
+        "prompt_sha256": "a76ced051243fc046c7b339bd05b36f886cfcf57b7b442dbbc22e30048618b85",
+        "reply_sha256": "3dd5feba96e95ceb4ca21abba2e6b4930103314241b6eb8f37df53ad705bea4e",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. The wheelbarrow stands on the gravel path by the door.",
+        "words": 17,
+        "size_count": 19,
+        "prompt_sha256": "d753cf39368d0d2edcdb6472fba13590e8e91d6a1881ce45e0f93568bd7c45cc",
+        "reply_sha256": "d66c4e608761e2f931600946bd3554d399c3d3d3fa7b1fe9505ae8c2eaad8e89",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. The wheelbarrow stands on the gravel path by the door. A stack of pallets lies beside the wheelbarrow.",
+        "words": 25,
+        "size_count": 28,
+        "prompt_sha256": "aa612ad35876a3bf24b2bb21322d429e29ad78fc9897f660e49cbbfdb2da5eb7",
+        "reply_sha256": "a7f9796050254ee05abb9a576c995da0940d92488e64f0dea5bef80ee51aff5f",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. A stack of pallets lies beside the wheelbarrow. The wheelbarrow stands on the gravel path by the door.",
+        "words": 35,
+        "size_count": 39,
+        "prompt_sha256": "86727c8e0bff46b8af2b7f13867d8c31d600d97cb2b12c5816414276b2093f1c",
+        "reply_sha256": "66b7c7122acb275240a4bba09bccc30aa81c40cb4b94d0ceb75a8c59d59b29be",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V909",
+   "role_size_count": 129,
+   "passage_words": 35,
+   "passage_size_count": 39,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren reaches for the brass ruler before the plastic ruler. The globe stands on the side table by the door.",
+        "words": 20,
+        "size_count": 22,
+        "prompt_sha256": "8e560de2e45b2324c820fda56cd9c8d8577a86393bd0fcdc194bb634e30cc1f6",
+        "reply_sha256": "f2f9553fa90a7d89afbf6179e6867b4d2c8f29c70b2a48307687dbe0e76f979b",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the side table by the door.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "e5e2cb9ab6368be1f4cdf4bda341c5cfb84d0285436ba8d1cf62e07ec95f181f",
+        "reply_sha256": "3a661a90cf1dc0c705dc1d28095a3d7e069f38d82e81702331c2c8eeb6042406",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the side table by the door. A roll of tape lies beside the globe.",
+        "words": 35,
+        "size_count": 39,
+        "prompt_sha256": "b330d2e2a69dfd0f29689806e97fe91c36b56453cb19cc3734ae310d46cb3b30",
+        "reply_sha256": "5aa1f118643c753a4d7d13cb4dabbb9ad362d9f332080945b0b32167e7560399",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. The globe stands on the side table by the door.",
+        "words": 17,
+        "size_count": 19,
+        "prompt_sha256": "f4eacb9050146270da27ebf42b08a9a4f442bb44aa772d5401a96d24c1012d52",
+        "reply_sha256": "fd3e88137cc01a749df2bac8161b261f9594ea5fcd1aeb36c9f1c6200401e8d1",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. The globe stands on the side table by the door. A roll of tape lies beside the globe. The correct ruler is easy to find.",
+        "words": 32,
+        "size_count": 36,
+        "prompt_sha256": "d317ca974cd98de0a10a90ea5cb8fb6277763cf906eed9d7a0138b09a8373b30",
+        "reply_sha256": "df59401b2ad60233d5b5fda009db6f4db62d0932e42eb5a533cd97ee991f3b0f",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. A roll of tape lies beside the globe. The globe stands on the side table by the door.",
+        "words": 35,
+        "size_count": 39,
+        "prompt_sha256": "5a06095fdd044fa3c4866876f65e76afd91df6b6ac0c1569ce6beda46db5ff5e",
+        "reply_sha256": "0ca59d95200e98a8227536b2d8cd9b96e6370e23e37b07637dc1340ef382428c",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V910",
+   "role_size_count": 129,
+   "passage_words": 34,
+   "passage_size_count": 38,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn reaches for the long saw before the short saw. The sledge stands on the ramp by the door.",
+        "words": 19,
+        "size_count": 21,
+        "prompt_sha256": "039f524fc24cdfd3d6d39f7a48281ee4628dc8a51222075bb352895ecd2373be",
+        "reply_sha256": "c9b72ae583271e07ce09559fd3c22ec9815768d273fe3a7cc784e0a57085b586",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 115,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the ramp by the door.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "8797b9b0a84721778a84b75b8355b1a73a257fef99b04a8b8505c9dd64eadefd",
+        "reply_sha256": "794242162ae3784952ae1348e76501d1c36a17694a78ff8481b97a3c72b2f475",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the ramp by the door. A bale of sawdust lies beside the sledge. A free hour comes up next week.",
+        "words": 41,
+        "size_count": 46,
+        "prompt_sha256": "1a1ddf78424c7a9e45cbaaeff19cdfac309abba5109b030ce947d8b88c308cd0",
+        "reply_sha256": "34b951be26042e37859aa930e99d10a6b747052ddfd979564ba6b3577ac21221",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. The sledge stands on the ramp by the door.",
+        "words": 16,
+        "size_count": 18,
+        "prompt_sha256": "f543efb2617152f43916f6d2d98ba4f3d1fd8ce4cf5913b6bb488cd58febef02",
+        "reply_sha256": "acf6d6a4f339ec2d739ad815e59f8fdac5532fb127f7894e9a96307c36de7acd",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 115,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. The sledge stands on the ramp by the door. A bale of sawdust lies beside the sledge.",
+        "words": 24,
+        "size_count": 27,
+        "prompt_sha256": "b83364e9f7a6a7d2a6a4caa9c25d44d581ea5642e35e8925824317dffaddfbe9",
+        "reply_sha256": "e8146785c60f80c80859d5c18f4475f7a8870d71ef9848b2ac5f0c9a4fc8e96a",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. A bale of sawdust lies beside the sledge. The sledge stands on the ramp by the door.",
+        "words": 34,
+        "size_count": 38,
+        "prompt_sha256": "907ceccbb6e42940bab815f9279fe6a2d998cffc6fb23f5b3ee0f95d35698c63",
+        "reply_sha256": "2c6a0f86dc5c00e0787d243e0dc3e378d526f004cc34ab1a429b37250c6bab83",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V911",
+   "role_size_count": 206,
+   "passage_words": 50,
+   "passage_size_count": 56,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel reaches for the small scale before the large scale. The brass pan stands on the bench by the door.",
+        "words": 20,
+        "size_count": 22,
+        "prompt_sha256": "6c5b5f0ea01ec376670dae480b7f313983c0f2da934ee1f1379a5e52048eddc4",
+        "reply_sha256": "b04c300db1837ea75d18ef34def2f3301d48ff2d3c4cf7735012a43b889393ad",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 184,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The brass pan stands on the bench by the door. She checks that every weight is correct.",
+        "words": 34,
+        "size_count": 38,
+        "prompt_sha256": "165c96dfa4153ef7c1ffc83543748f979ab8fff8232437bc0c7482cc4ff195e0",
+        "reply_sha256": "2aaf1f9e56818fd6e1dc8fdeaf614965e1a6f8a292cf3c7cee979601ba34a06f",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 202,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The brass pan stands on the bench by the door. A box of chalk lies beside the brass pan.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "4dd5aa16636e73acc7479a803991b58ef3cb3cc9e7cd843767c1d4fe2514be75",
+        "reply_sha256": "ed83bd88718fbb042e0032c9194bf1f4d4bd150d47499f77e355c13b702497c9",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. The brass pan stands on the bench by the door.",
+        "words": 17,
+        "size_count": 19,
+        "prompt_sha256": "aa948f400957d44d47d9edfd2ca5f11d480278ab516cd7ebd34684953af977f1",
+        "reply_sha256": "0c5c2a23a121c763271b0454f2f847b8075c9ea863a56a51157ff06d650c6f3a",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 184,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. The brass pan stands on the bench by the door. A box of chalk lies beside the brass pan.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "6c58f2f7e0a195c5d7f502a40541f7188a448e3c6e0b7dabe5f80f5636757616",
+        "reply_sha256": "2fc2e58376a14cb1ebb82c47ae5ec95fd3df2383cb91d41dc3ced0acb7847bb6",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 202,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. A box of chalk lies beside the brass pan. The brass pan stands on the bench by the door.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "d436be4fd4e9707721b57b27a31bcf5dd2ee09a8b5cde8a17c0a2973cc404c7b",
+        "reply_sha256": "86cb42d691de68335f3a6bad0fb3a11fbda407c87eda1ffaaad250db081ee76e",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V912",
+   "role_size_count": 206,
+   "passage_words": 43,
+   "passage_size_count": 48,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel reaches for the curved needle before the straight needle. The wax pot stands on the trestle by the door.",
+        "words": 20,
+        "size_count": 22,
+        "prompt_sha256": "a2f0fa4f194012ada55a45735e9208ffd8b60e96e11e3420ab8155b4844a6b38",
+        "reply_sha256": "6cb8ce1191bd19f336445d1ca4d3e0edc2eb5a536109e0bf722e1a4a86f39582",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 185,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The wax pot stands on the trestle by the door.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "63420e4162138ba381842bd27235c3bac3be2848e41f175a56c79b5b02d42d90",
+        "reply_sha256": "ea200561b0279663b86fdeb901b56a493fa682e8e37ebea85429cff3aada1776",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 203,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The wax pot stands on the trestle by the door. A bolt of canvas lies beside the wax pot.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "6cd4043e788cfa9f545881826a7bf23d83b1595437ecb59bf46ecf3ba1eb8a46",
+        "reply_sha256": "d3a15d584619367b3be3b97d6a9570bde641bb7eb3af9d53fd235ab3f2a482c7",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. The wax pot stands on the trestle by the door.",
+        "words": 17,
+        "size_count": 19,
+        "prompt_sha256": "25dbf8ebe570ac9da86c8f28b60d215fdc8e363b9ebb35aedbafdd5072a4e949",
+        "reply_sha256": "8384972c75011d6ee6e27d122ebd4034b4bb3de41e04debe82ecbc8157e66947",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 185,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. The wax pot stands on the trestle by the door. A bolt of canvas lies beside the wax pot.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "34937e50c656987db50ca55dae0e10b7c222ff334fd18b9778af93cd052c8f26",
+        "reply_sha256": "079d3b2cb0199751d5c2d1e46693cc4580dca8d5a7f81cb917910dd1398fdc54",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 203,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. A bolt of canvas lies beside the wax pot. The wax pot stands on the trestle by the door.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "6a107ae08c1145e1f0c56d59ad5114f1131937cce86d0dcec6670246ca58da8c",
+        "reply_sha256": "08affda44f711a0241eec97667dc91f469d4670b24efe26d7afd9c897f624942",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V913",
+   "role_size_count": 216,
+   "passage_words": 49,
+   "passage_size_count": 58,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 164,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the felt mat by the door.",
+        "words": 20,
+        "size_count": 22,
+        "prompt_sha256": "ee08d13409288361c5a53a6b9cdf64327300a12e6d8a332bc3ec0a6363e3a69e",
+        "reply_sha256": "e805126c549f716b67a97c38b641e4e9e450581e98785a2908243de554a93ce9",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 182,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the felt mat by the door.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "1a1a48db154bbbd1f0361294763f3919adfae2d9e022c2672222ec0c6c6d54a6",
+        "reply_sha256": "8c43450a0153cf8a6a037296a666fa725c100f1af15bc03361ac866fb8b715df",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 201,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the felt mat by the door. A tray of springs lies beside the loupe.",
+        "words": 35,
+        "size_count": 39,
+        "prompt_sha256": "79331341673d44f3f9354eb53fc825145571c781c19dff6e8d0f6f4f281798ca",
+        "reply_sha256": "d36d63973411fb3b00e6473ee80229697c4dfcd12673461e7d039ab7bf19cc6b",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 164,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. The loupe stands on the felt mat by the door.",
+        "words": 17,
+        "size_count": 19,
+        "prompt_sha256": "014a934e4ae4b09cd362d468c47abd6943005bd75d9bc3da4e4fd0c9135aa34a",
+        "reply_sha256": "c8521899c02f23d975303909e4fe13ce68d88907f8c358139278448977a678f5",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 182,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. The loupe stands on the felt mat by the door. A tray of springs lies beside the loupe.",
+        "words": 25,
+        "size_count": 28,
+        "prompt_sha256": "36966f414170a8deadd853fdd2bb8129a4190634262516a045384ce9ecf410a7",
+        "reply_sha256": "ac758a7a7f93ba0448b26df7b6eebc511ef6271efe1c219b2460e8d28c69194d",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 201,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. A tray of springs lies beside the loupe. The loupe stands on the felt mat by the door.",
+        "words": 35,
+        "size_count": 39,
+        "prompt_sha256": "49a39b929a4dc32fe538d071c1ac425f91fe8cc2cc47a19682164aba52cff6c6",
+        "reply_sha256": "3a1e3f48f78e674a9fd0a1d6339b3aae8e014ef51f3ddf498be01b8b5d6c3a56",
+        "utc": "2026-10-07T02:23:34Z"
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

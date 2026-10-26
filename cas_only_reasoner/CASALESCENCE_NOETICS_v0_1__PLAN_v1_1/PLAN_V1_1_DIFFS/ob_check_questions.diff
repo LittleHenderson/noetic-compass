@@ -1,0 +1,218 @@
+--- a/tools/ob_check_questions.py
++++ b/tools/ob_check_questions.py
+@@ -6,7 +6,14 @@
+   open, and one of its anchors matches an entry both label teams agree on.
+ - Step 3b, option check. It sets a role-step question aside when one of its options matches an entry
+   that only one team gave.
+-- Then it writes one candidate per passage and form, and one plain-fact candidate per passage.
++- Plan v1.1 adds three Step 2 rules, each with the looser word test of tools/verdict.py (lenient_span):
++  QUESTION_REPEATS_KEY (the question sentence matches the right option), OPTIONS_MATCH_EACH_OTHER
++  (two options match each other; also for the four options of a plain-fact question) and
++  WRONG_OPTION_NOT_FROM_PASSAGE (for the forms listed in question_rules.wrong_options_must_match_passage_forms,
++  a wrong option does not match the passage). They run after the existing form checks, before the anchor check.
++- Then it writes the candidates. Plan v1.1: every question of every pass (p1, p2, p3) that passes Steps 2
++  and 3 is a candidate, so a passage and form may carry up to one candidate per pass. Each candidate row
++  carries its pass. The counts block reports candidates_per_pass.
+ 
+ Step 3 is the only place where labels touch questions. The writer never learns what was kept.
+ The candidates file holds no label information. Every drop is logged with its reason code.
+@@ -19,6 +26,11 @@
+ Files (FILE_FORMATS.md section 5):
+   checks/form_check_<set>.json, checks/anchor_check_<set>.json,
+   checks/option_check_<set>.json, checks/candidates_<set>.json
++
++Passes: it reads questions/raw_questions_<set>_<pass>.json for every pass of
++outside_services.gemini_question_writer.passes. In a real run every pass file must exist (a missing
++one is the stop MISSING_PASS_FILE). Only a dry fixture may lack a later pass; it is then skipped and
++named in the printed output (passes_missing).
+ 
+ It prints how many questions survive each filter.
+ 
+@@ -53,7 +65,8 @@
+ CURLY = str.maketrans({'‘': "'", '’': "'", '“': '"', '”': '"'})
+ FORM_REASONS = ['FORM_NAME_UNKNOWN', 'EMPTY_TEXT', 'OPTION_COUNT', 'OPTIONS_NOT_DIFFERENT', 'OPTION_TOO_LONG', 'QUESTION_TOO_LONG',
+                 'OPTION_LENGTH_SPREAD', 'OPTION_INSIDE_ANOTHER', 'ANCHOR_COUNT', 'ANCHOR_NOT_IN_PASSAGE', 'ANCHOR_TOO_LONG',
+-                'FORBIDDEN_LIST_A', 'FORBIDDEN_SIGN', 'FORBIDDEN_LIST_B', 'FORBIDDEN_LIST_C', 'FORBIDDEN_PHRASE']
++                'FORBIDDEN_LIST_A', 'FORBIDDEN_SIGN', 'FORBIDDEN_LIST_B', 'FORBIDDEN_LIST_C', 'FORBIDDEN_PHRASE',
++                'QUESTION_REPEATS_KEY', 'OPTIONS_MATCH_EACH_OTHER', 'WRONG_OPTION_NOT_FROM_PASSAGE']
+ 
+ 
+ class Stop(Exception):
+@@ -213,7 +226,44 @@
+     return any(outer[i:i + size] == inner for i in range(len(outer) - size + 1))
+ 
+ 
+-def form_check(question, family, passage_text, constants):
++def rule_value(rules, name, kind):
++    """A plan v1.1 key of question_rules. A missing key or a key of the wrong type is a stop, never a silent default."""
++    if name not in rules or not isinstance(rules[name], kind) or (kind is int and isinstance(rules[name], bool)):
++        raise Stop('PLAN_CONSTANTS_MISSING_KEY', 'question_rules.%s is missing from PLAN_CONSTANTS.json or is not %s (plan v1.1).'
++                   % (name, {bool: 'true/false', list: 'a list', int: 'a whole number'}[kind]))
++    return rules[name]
++
++
++def match_rules(question, family, passage_text, constants, frozen):
++    """The three Step 2 rules of plan v1.1. Every match is the looser word test of tools/verdict.py (lenient_span):
++    two texts match when they share at least half of the content words of the shorter text. Role-step options are
++    the right option and five wrong ones; a plain-fact question has the right option and three wrong ones."""
++    rules = constants['question_rules']
++    options = [question['right']] + list(question['wrong'])
++    reasons = []
++    if family == 'role_step' and rule_value(rules, 'question_must_not_match_right_option', bool):
++        if frozen.lenient_span(question['question'], question['right']):
++            reasons.append('QUESTION_REPEATS_KEY')
++    if rule_value(rules, 'no_two_options_match', bool):
++        # Two options match when they match by the looser test AND share at least the plan's number of content words
++        # (question_rules.no_two_options_match_min_shared_content_words; the content words come from the frozen content()
++        # of tools/verdict.py, counted as a set). Without the second part the rule fired on most two-word options that share one word.
++        least = rule_value(rules, 'no_two_options_match_min_shared_content_words', int)
++
++        def options_match(a, b):
++            return frozen.lenient_span(a, b) and len(set(frozen.content(a)) & set(frozen.content(b))) >= least
++
++        if any(options_match(options[i], options[j]) for i in range(len(options)) for j in range(i + 1, len(options))):
++            reasons.append('OPTIONS_MATCH_EACH_OTHER')
++    forms_tested = rule_value(rules, 'wrong_options_must_match_passage_forms', list)
++    if family == 'role_step' and question['form'] in forms_tested:
++        body = plain(passage_text)    # curly quote marks to straight ones, white space collapsed; the options are already plain
++        if any(not frozen.lenient_span(option, body) for option in question['wrong']):
++            reasons.append('WRONG_OPTION_NOT_FROM_PASSAGE')
++    return reasons
++
++
++def form_check(question, family, passage_text, constants, frozen):
+     """Return the list of reason codes. An empty list means the question passed."""
+     rules, barred = constants['question_rules'], constants['forbidden_words']
+     options = [question['right']] + list(question['wrong'])
+@@ -260,6 +310,10 @@
+             reasons.append('FORBIDDEN_LIST_C:' + phrase)
+     if any(phrase.lower() in ' '.join(text.lower().split()) for phrase in barred['never_allowed_phrases']['words'] for text in everywhere):
+         reasons.append('FORBIDDEN_PHRASE')
++    # plan v1.1: the three match rules come after every existing form check and before the anchor check (Step 3a).
++    # They are applied only to a question whose texts and option count are sound, so that the looser word test reads real texts.
++    if not any(reason in ('EMPTY_TEXT', 'OPTION_COUNT') for reason in reasons):
++        reasons.extend(match_rules(question, family, passage_text, constants, frozen))
+     return reasons
+ 
+ 
+@@ -374,13 +428,24 @@
+         if any(pid not in passages or in_practice(passages[pid]['setting_role'], practice_count, start) for pid in expected):
+             raise Stop('SPLIT_DOES_NOT_MATCH', 'select/split_fixed.json lists a final passage that elig/eligibility.json puts in the practice set.')
+ 
+-    # read both passes; both must be complete and written by the one model of the set
++    # read every pass of the plan (plan v1.1: p1, p2, p3); each file read must be complete and written by the one model of the set.
++    # The first pass must exist. A later pass whose file is not there yet is skipped and named in the output.
+     model = DRY_MODEL if ctx.dry else C['outside_services']['gemini_question_writer']['model_by_set'][set_name]
+-    questions = []
+-    for pass_name in C['outside_services']['gemini_question_writer']['passes']:
++    passes = list(C['outside_services']['gemini_question_writer']['passes'])
++    if not passes or not all(isinstance(p, str) and re.fullmatch(r'p\d', p) for p in passes):
++        raise Stop('PLAN_CONSTANTS_SHAPE', 'outside_services.gemini_question_writer.passes must be a list of pass names such as p1, p2, p3.')
++    questions, passes_read, passes_missing = [], [], []
++    for pass_name in passes:
+         path = ctx.work / 'questions' / ('raw_questions_%s_%s.json' % (set_name, pass_name))
+         if not path.exists():
+-            raise Stop('WRITER_NOT_COMPLETE', 'questions/%s does not exist. Both passes must be written before the check.' % path.name)
++            if pass_name == passes[0]:
++                raise Stop('WRITER_NOT_COMPLETE', 'questions/%s does not exist. The first pass must be written before the check.' % path.name)
++            if not ctx.dry:
++                raise Stop('MISSING_PASS_FILE', 'questions/%s does not exist. Every pass of the plan (%s) must be written before the check. '
++                           'Only a dry fixture may skip a later pass.' % (path.name, ', '.join(passes)))
++            passes_missing.append(pass_name)    # dry fixture only
++            continue
++        passes_read.append(pass_name)
+         raw = ctx.read_json(path)
+         if (raw.get('schema'), raw.get('set'), raw.get('pass')) != ('casalescence/optionb/raw_questions/v1', set_name, pass_name):
+             raise Stop('WRONG_FILE', 'questions/%s is not the raw question file of this set and pass.' % path.name)
+@@ -401,7 +466,7 @@
+     # Step 2
+     form_rows = []
+     for q in questions:
+-        q['reasons'] = form_check(q, q['family'], passages[q['passage_id']]['text'], C)
++        q['reasons'] = form_check(q, q['family'], passages[q['passage_id']]['text'], C, frozen)
+         q['ok2'] = not q['reasons']
+         form_rows.append({'question_id': q['question_id'], 'family': q['family'], 'passed': q['ok2'], 'reasons': q['reasons']})
+     # Step 3a
+@@ -420,7 +485,8 @@
+             q['ok3b'] = not hits
+             option_rows.append({'question_id': q['question_id'], 'passed': q['ok3b'], 'hits': hits})
+ 
+-    # candidates: the p1 question if it passed; else the p2 spare, only where a p1 question existed and was dropped
++    # candidates (plan v1.1): every question of every pass that passed Steps 2 and 3. A passage and form may carry
++    # up to one candidate per pass; the selection step later keeps the surviving candidate of the lowest pass.
+     def through(q, stage):
+         if q is None:
+             return False
+@@ -431,18 +497,15 @@
+     for q in questions:
+         if q['family'] == 'plain_fact' or q['form'] in C['forms']:
+             slots.setdefault((q['passage_id'], q['form']), {})[q['pass_name']] = q
+-    candidates, spares = [], 0
++    candidates = []
+     for (pid, form) in sorted(slots, key=lambda key: (key[0], order[key[1]])):
+-        first, spare = slots[(pid, form)].get('p1'), slots[(pid, form)].get('p2')
+-        if first is None:
+-            continue
+-        chosen = first if through(first, 4) else (spare if through(spare, 4) else None)
+-        if chosen is None:
+-            continue
+-        spares += chosen is spare
+-        candidates.append({'question_id': chosen['question_id'], 'passage_id': pid, 'family': chosen['family'], 'form': form,
+-                           'pass': chosen['pass_name'], 'passage': passages[pid]['text'], 'question': chosen['question'],
+-                           'right': chosen['right'], 'wrong': list(chosen['wrong']), 'anchors': list(chosen['anchors'])})
++        for pass_name in passes:
++            chosen = slots[(pid, form)].get(pass_name)
++            if not through(chosen, 4):
++                continue
++            candidates.append({'question_id': chosen['question_id'], 'passage_id': pid, 'family': chosen['family'], 'form': form,
++                               'pass': chosen['pass_name'], 'passage': passages[pid]['text'], 'question': chosen['question'],
++                               'right': chosen['right'], 'wrong': list(chosen['wrong']), 'anchors': list(chosen['anchors'])})
+ 
+     cdir = ctx.work / 'checks'
+     ctx.write_json(cdir / ('form_check_%s.json' % set_name), 'casalescence/optionb/form_check/v1', {
+@@ -453,22 +516,29 @@
+         'counts': {'checked': len(anchor_rows), 'passed': sum(r['passed'] for r in anchor_rows), 'dropped_by_reason': count_reasons(anchor_rows, 'reason')}})
+     ctx.write_json(cdir / ('option_check_%s.json' % set_name), 'casalescence/optionb/option_check/v1', {
+         'set': set_name, 'rows': option_rows, 'counts': {'checked': len(option_rows), 'passed': sum(r['passed'] for r in option_rows)}})
++    # FILE_FORMATS.md section 5.4 (v1.1): candidates over all passes, per pass and per family, and the number of distinct
++    # passage-and-form pairs with at least one role-step candidate.
+     counts = {'role_step': sum(1 for c in candidates if c['family'] == 'role_step'),
+-              'plain_fact': sum(1 for c in candidates if c['family'] == 'plain_fact'), 'spares_used': int(spares)}
++              'plain_fact': sum(1 for c in candidates if c['family'] == 'plain_fact'),
++              'candidates_per_pass': {pass_name: {family: sum(1 for c in candidates if c['pass'] == pass_name and c['family'] == family)
++                                                  for family in ('role_step', 'plain_fact')} for pass_name in passes},
++              'pairs_with_a_candidate': len({(c['passage_id'], c['form']) for c in candidates if c['family'] == 'role_step'})}
+     ctx.write_json(cdir / ('candidates_%s.json' % set_name), 'casalescence/optionb/candidates/v1', {'set': set_name, 'candidates': candidates, 'counts': counts})
+ 
+-    # survival per filter, counted per passage and form (a spare stands in where the first question was dropped)
++    # survival per filter, counted per passage and form: a pair is alive at a stage when any pass passes it
++    # (a later pass stands in where an earlier one was dropped)
+     def alive(slot, stage):
+-        return through(slot.get('p1'), stage) or through(slot.get('p2'), stage)
+-
+-    role_slots = [slot for (pid, form), slot in slots.items() if form != 'FACT' and slot.get('p1') is not None
++        return any(through(slot.get(pass_name), stage) for pass_name in passes)
++
++    role_slots = [slot for (pid, form), slot in slots.items() if form != 'FACT'
+                   and passages[pid]['eligible'] and not passages[pid]['barred'] and form in passages[pid]['open_forms']]
+-    fact_slots = [slot for (pid, form), slot in slots.items() if form == 'FACT' and slot.get('p1') is not None]
++    fact_slots = [slot for (pid, form), slot in slots.items() if form == 'FACT']
+     survival = [{'filter': 'written for an open form', 'role_step': len(role_slots), 'plain_fact': len(fact_slots)}]
+     for name, stage in (('form check', 2), ('anchor check', 3), ('option check', 4)):
+         survival.append({'filter': name, 'role_step': sum(alive(s, stage) for s in role_slots), 'plain_fact': sum(alive(s, 2) for s in fact_slots)})
+     print(json.dumps({
+         'program': PROGRAM, 'dry_fixture': ctx.dry, 'status': 'CHECKED', 'set': set_name, 'practice_setting_count': practice_count, 'seal': seal,
++        'passes_read': passes_read, 'passes_missing': passes_missing,
+         'questions_read': {'role_step': sum(1 for q in questions if q['family'] == 'role_step'),
+                            'plain_fact': sum(1 for q in questions if q['family'] == 'plain_fact')},
+         'form_check': {'checked': len(form_rows), 'passed': sum(r['passed'] for r in form_rows), 'dropped_by_reason': count_reasons(form_rows, 'reasons')},
+@@ -476,7 +546,8 @@
+         'option_check': {'checked': len(option_rows), 'passed': sum(r['passed'] for r in option_rows)},
+         'candidates': counts,
+         'survival_after_each_filter': survival,
+-        'note': 'Survival counts one per passage and form. The plain-fact column has no label check; its anchor and option rows repeat the form-check count.'},
++        'note': 'Survival counts one per passage and form: a pair counts when any pass passes the filter. The candidates block counts questions, '
++                'one per pass. The plain-fact column has no label check; its anchor and option rows repeat the form-check count.'},
+         ensure_ascii=False, indent=1))
+     return 0
+ 

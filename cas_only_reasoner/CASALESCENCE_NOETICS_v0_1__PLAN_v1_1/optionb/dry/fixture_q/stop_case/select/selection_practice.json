@@ -1,0 +1,264 @@
+{
+ "schema": "casalescence/optionb/selection/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "1fd644ffc8ea6c9f020c881a25c9aa1e5941ddda1a6012968e5ba4948968468e",
+  "utc": "2026-10-07T02:23:29Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/checks/anchor_check_practice.json",
+   "sha256": "5e0869c1052a0e655eefa7ce1bc1bbf1f523b50509adadb88b1ccb37e4bda5a5"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/checks/candidates_practice.json",
+   "sha256": "8fd3ad72707c285b94c5b468085d358936f11160272950026dc8e2812e6b8eb9"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/checks/form_check_practice.json",
+   "sha256": "fe8ac55bf857660b32b0594e012f23daa3e32ed40b4612fd8b7a3d63f34ac79c"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/checks/option_check_practice.json",
+   "sha256": "f8260866ddab88f0a7a6643fa67d4845b6b1ef601f298dd486eb6bc8d85fb1e2"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/questions/raw_questions_practice_p1.json",
+   "sha256": "916c200730d585054fe03f43d1cae0ffca27785e9b7302011d9e7b1122055319"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/questions/raw_questions_practice_p2.json",
+   "sha256": "2db68ec231fe646f078bf509ad7de602423eb7d186a6dc4489e67db1b4b8d653"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/questions/raw_questions_practice_p3.json",
+   "sha256": "bf889e200694a5c621ed7b71c86130e4634365144ae4ea478b0f397195c1d069"
+  },
+  {
+   "path": "optionb/dry/fixture_q/stop_case/solve/key_check_practice.json",
+   "sha256": "24fa430177873776cda23d422fe8845599ea9b58bdcd00a781cd145d3597ae21"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "practice",
+ "practice_setting_count": 9,
+ "tasks": [
+  {
+   "task_id": "V901.MEET_AGAIN",
+   "passage_id": "V901",
+   "question_id": "V901.p1.MEET_AGAIN",
+   "family": "role_step",
+   "type": "BRING",
+   "form": "MEET_AGAIN",
+   "pass_used": "p1",
+   "question": "On another day, far from the boathouse, which of these would most likely make Halima picture her uncle's ferry again?",
+   "right": "smelling damp rope on a quay",
+   "wrong": [
+    "hanging a key on a nail",
+    "counting a row of wooden oars",
+    "unlocking a heavy wooden side door",
+    "opening a door early in the morning",
+    "putting a key back in a pocket"
+   ],
+   "anchors": [
+    "the smell of wet rope",
+    "her uncle's ferry"
+   ],
+   "anchors_matched": [
+    "the smell of wet rope",
+    "her uncle's ferry"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V901.TAKE_AWAY",
+   "passage_id": "V901",
+   "question_id": "V901.p3.TAKE_AWAY",
+   "family": "role_step",
+   "type": "BRING",
+   "form": "TAKE_AWAY",
+   "pass_used": "p3",
+   "question": "Suppose the door had let in no smell at all that morning. Going only by the passage, which of these would most likely not have happened?",
+   "right": "picturing the bench by the hatch",
+   "wrong": [
+    "unlocking the boathouse door",
+    "hanging the key on its nail",
+    "counting the oars slowly",
+    "walking in at once",
+    "the wet rope she met"
+   ],
+   "anchors": [
+    "her uncle's ferry"
+   ],
+   "anchors_matched": [
+    "her uncle's ferry"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V901.FACT",
+   "passage_id": "V901",
+   "question_id": "V901.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Where did Halima hang the key?",
+   "right": "on its nail",
+   "wrong": [
+    "under the bench",
+    "by the hatch",
+    "in the tin"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V902.KEEPS_AWAY",
+   "passage_id": "V902",
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "pass_used": "p1",
+   "question": "Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?",
+   "right": "the fish counter beside it",
+   "wrong": [
+    "the stall of old maps",
+    "the brass band on the corner",
+    "the leeks she bought",
+    "her list for the market",
+    "the sheets she turned slowly"
+   ],
+   "anchors": [
+    "The fish counter"
+   ],
+   "anchors_matched": [
+    "The fish counter"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V902.WHAT_STUCK",
+   "passage_id": "V902",
+   "question_id": "V902.p2.WHAT_STUCK",
+   "family": "role_step",
+   "type": "LAND",
+   "form": "WHAT_STUCK",
+   "pass_used": "p2",
+   "question": "That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?",
+   "right": "the old maps she looked through",
+   "wrong": [
+    "the brass band on the corner",
+    "the fish counter beside it",
+    "her list for the market",
+    "the leeks she bought",
+    "the sheets she turned slowly"
+   ],
+   "anchors": [
+    "barely registered"
+   ],
+   "anchors_matched": [
+    "barely registered"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V902.FACT",
+   "passage_id": "V902",
+   "question_id": "V902.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "What did Odette buy before she went home?",
+   "right": "leeks",
+   "wrong": [
+    "old maps",
+    "fresh fish",
+    "a brass horn"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": true
+  }
+ ],
+ "dropped": [
+  {
+   "question_id": "V901.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V901.p2.MEET_AGAIN",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V902.p3.KEEPS_AWAY",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V902.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 4,
+  "plain_fact_tasks": 2,
+  "passages_with_a_task": 2,
+  "passages_with_a_role_step_task": 2,
+  "single_longest": [
+   0,
+   4
+  ],
+  "single_shortest": [
+   0,
+   4
+  ]
+ },
+ "survival": {
+  "role_step": {
+   "candidates": 9,
+   "after_key_check": 8,
+   "after_no_passage": 7,
+   "after_lowest_pass": 5,
+   "selected": 4
+  },
+  "plain_fact": {
+   "candidates": 4,
+   "after_key_check": 3,
+   "after_no_passage": 3,
+   "after_lowest_pass": 2,
+   "selected": 2
+  }
+ },
+ "floor": {
+  "practice_role_step_min": 36,
+  "practice_plain_fact_min": 20,
+  "met": false
+ },
+ "reserve": {
+  "role_step_target": 45,
+  "plain_fact_target": 25,
+  "target_met": false,
+  "settings_left": 3,
+  "finished": false
+ }
+}

@@ -1,0 +1,288 @@
+{
+ "schema": "casalescence/optionb/raw_questions/v1",
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "be99c129a1ab58878a0ea45bf79abba3289af2c2ca0d1103141e966542e2c4a4",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [],
+ "set": "practice",
+ "pass": "p1",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "V901",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V901.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Tamsin do first?",
+     "right": "reaching for the tar brush again",
+     "wrong": [
+      "reaching for the wire brush again",
+      "moving the lantern to the yard",
+      "hanging the rope on a hook",
+      "sweeping the shed floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the tar brush"
+     ]
+    },
+    {
+     "question_id": "V901.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Tamsin leave to someone else?",
+     "right": "working on the bilge pump",
+     "wrong": [
+      "working with the tar brush",
+      "carrying the lantern outside",
+      "counting every rope there",
+      "locking up the boat shed",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the bilge pump"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V901.p1.FACT",
+    "question": "Where did the lantern stand?",
+    "right": "on the shelf",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": [
+    {
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Tamsin do first?",
+     "right": "reaching for the tar brush again",
+     "wrong": [
+      "reaching for the wire brush again",
+      "moving the lantern to the yard",
+      "hanging the rope on a hook",
+      "sweeping the shed floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the tar brush"
+     ]
+    }
+   ]
+  },
+  {
+   "passage_id": "V902",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V902.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Odran do first?",
+     "right": "reaching for the bone needle again",
+     "wrong": [
+      "reaching for the steel needle again",
+      "moving the kettle to the yard",
+      "hanging the twine on a hook",
+      "sweeping the loft floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the bone needle"
+     ]
+    },
+    {
+     "question_id": "V902.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Odran leave to someone else?",
+     "right": "working on the old winch",
+     "wrong": [
+      "working with the bone needle",
+      "carrying the kettle outside",
+      "counting every twine there",
+      "locking up the net loft",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the old winch"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V902.p1.FACT",
+    "question": "Where did the kettle stand?",
+    "right": "on the stove",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V903",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V903.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Ilse do first?",
+     "right": "reaching for the oak scoop again",
+     "wrong": [
+      "reaching for the tin scoop again",
+      "moving the ledger to the yard",
+      "hanging the barley on a hook",
+      "sweeping the store floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the oak scoop"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V903.p1.FACT",
+    "question": "Where did the ledger stand?",
+    "right": "on the counter",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V904",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V904.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Bram do first?",
+     "right": "reaching for the cross hammer again",
+     "wrong": [
+      "reaching for the ball hammer again",
+      "moving the quench bucket to the yard",
+      "hanging the tongs on a hook",
+      "sweeping the forge floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the cross hammer"
+     ]
+    },
+    {
+     "question_id": "V904.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Bram leave to someone else?",
+     "right": "working on the leaky bellows",
+     "wrong": [
+      "working with the cross hammer",
+      "carrying the quench bucket outside",
+      "counting every tongs there",
+      "locking up the forge",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the leaky bellows"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V904.p1.FACT",
+    "question": "Where did the quench bucket stand?",
+    "right": "on the stone floor",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V905",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V905.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Maren do first?",
+     "right": "reaching for the copper ladle again",
+     "wrong": [
+      "reaching for the iron ladle again",
+      "moving the drying rack to the yard",
+      "hanging the madder on a hook",
+      "sweeping the house floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the copper ladle"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V905.p1.FACT",
+    "question": "Where did the drying rack stand?",
+    "right": "on the back wall",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V914",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V914.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Hale do first?",
+     "right": "reaching for the long spindle again",
+     "wrong": [
+      "reaching for the short spindle again",
+      "moving the tally board to the yard",
+      "hanging the tallow on a hook",
+      "sweeping the walk floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the long spindle"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V914.p1.FACT",
+    "question": "Where did the tally board stand?",
+    "right": "on the end post",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  }
+ ]
+}

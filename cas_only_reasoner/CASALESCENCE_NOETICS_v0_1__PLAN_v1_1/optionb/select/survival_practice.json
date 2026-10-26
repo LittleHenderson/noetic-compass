@@ -1,0 +1,132 @@
+{
+ "schema": "casalescence/optionb/survival/v1",
+ "made_by": {
+  "program": "tools/ob_select.py",
+  "sha256": "1fd644ffc8ea6c9f020c881a25c9aa1e5941ddda1a6012968e5ba4948968468e",
+  "utc": "2026-10-07T02:50:38Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "08d7d538dcd1f40c2ea35c8595965bfe8b8939f15e67ac8d7cd8dd12dfece92c"
+  },
+  {
+   "path": "optionb/checks/anchor_check_practice.json",
+   "sha256": "7a7ceb396975b30d8ada56a7639dbb872997f39993d5ed02383ae9b3b0f0fd60"
+  },
+  {
+   "path": "optionb/checks/candidates_practice.json",
+   "sha256": "98855c6b79a8d6a551e24ff7f835a13980f6975c51a89685bf0bdb491247b980"
+  },
+  {
+   "path": "optionb/checks/form_check_practice.json",
+   "sha256": "c0739dba80dfa580d8057dc934a3ee50b0e7f6ece01d9376a6f617bbc29047e2"
+  },
+  {
+   "path": "optionb/checks/option_check_practice.json",
+   "sha256": "48b45a8bcba09980201385e1a378671f91c2770b587932658320e34f7dac72f0"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "5054992f55afb550c962f72ff4be2b7a4cb6f781053e5b41b99914d82380dec4"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "d9b1dfe9e4948a7a7eec2c81a92afb3251be197a76e6b5cbae9e6bb761e7f729"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "e44a6b00b63ba05e5216171aad5b1b6866a8465e710e3e42169a641076fef6ac"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p3.json",
+   "sha256": "eae6b68559eb46a375394c0e14d047bfc4d1011344e400ae917361c7a1de6f7e"
+  },
+  {
+   "path": "optionb/solve/key_check_practice.json",
+   "sha256": "482172b370306ed0d07e7c4d49a38971612cdbb816cee69d214e3d676d153729"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "practice",
+ "practice_setting_count": 12,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 91,
+   "plain_fact": 87
+  },
+  {
+   "filter": "form check",
+   "role_step": 69,
+   "plain_fact": 87
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 54,
+   "plain_fact": 87
+  },
+  {
+   "filter": "option check",
+   "role_step": 36,
+   "plain_fact": 87
+  },
+  {
+   "filter": "key check",
+   "role_step": 27,
+   "plain_fact": 87
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 15,
+   "plain_fact": 63
+  },
+  {
+   "filter": "selection",
+   "role_step": 15,
+   "plain_fact": 35
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 15,
+   "plain_fact": 35
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 15,
+  "plain_fact_tasks": 35,
+  "passages_with_a_task": 38,
+  "passages_with_a_role_step_task": 13,
+  "single_longest": [
+   2,
+   15
+  ],
+  "single_shortest": [
+   0,
+   15
+  ]
+ },
+ "passes_missing": [],
+ "tasks_by_pass_used": {
+  "p1": 26,
+  "p2": 14,
+  "p3": 10
+ },
+ "dropped_by_reason": {
+  "LATER_PASS_NOT_NEEDED": 45,
+  "PASSAGE_NOT_ELIGIBLE": 28
+ },
+ "decision": "STOP_DO_NOT_LAUNCH",
+ "stop_reasons": [
+  "15 practice role-step tasks and 35 practice plain-fact tasks survive with 12 practice settings, and no reserve setting is left; the launch floors are 36 and 20."
+ ],
+ "next": "Do not launch. Report the survival numbers to the owner. Seal step 3A may still be written, so that the practice questions are kept as evidence; seal step 3B will be refused. No brief and no filter is changed without a new reviewed plan version.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+}

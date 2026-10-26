@@ -1,0 +1,980 @@
+{
+ "schema": "casalescence/optionb/exclusions/v1",
+ "made_by": {
+  "program": "tools/ob_eligibility.py",
+  "sha256": "ae43442bac1a491b962406b67a9298d14317896c4aec17b5604fd077f6b610bb",
+  "utc": "2026-10-07T02:25:58Z"
+ },
+ "inputs": [
+  {
+   "path": "verdict/labels_team_a.json",
+   "sha256": "afb609c95adc45da43a8ef2b3ab5718ffbfc46e4a92bd1b56d8b3dfae7218584"
+  },
+  {
+   "path": "verdict/labels_team_b.json",
+   "sha256": "8c5be47223ea6b7a840c11f7e3eba51fbb34767640240c924869b8515038b460"
+  },
+  {
+   "path": "verdict/passages_kinds_HIDDEN_FROM_LABELERS.json",
+   "sha256": "e9b6f8030d698af7c6f3bb8bb8439ba26fcfcceccbc4740769e64eb71e139622"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "design_v2/optionB_final.json",
+   "sha256": "de0a0a50dcde3914054ee7cca2951b5a5077348f42409478240c1e40dbc52425"
+  }
+ ],
+ "count": 104,
+ "by_kind": {
+  "K1": 1,
+  "K3": 29,
+  "K4": 11,
+  "K5": 3,
+  "K6": 30,
+  "K7": 30
+ },
+ "passages": [
+  {
+   "id": "V005",
+   "kind": "K5",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V010",
+   "kind": "K1",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9"
+   ]
+  },
+  {
+   "id": "V012",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V013",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V015",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V016",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V017",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V023",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V028",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V029",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V034",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V043",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V050",
+   "kind": "K7",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V054",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V057",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V059",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V061",
+   "kind": "K6",
+   "reasons": [
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V062",
+   "kind": "K4",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V063",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V067",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V068",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V070",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V071",
+   "kind": "K4",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V072",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9"
+   ]
+  },
+  {
+   "id": "V079",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V083",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V084",
+   "kind": "K7",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V094",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V098",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V106",
+   "kind": "K3",
+   "reasons": [
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V112",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V122",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V126",
+   "kind": "K7",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V141",
+   "kind": "K4",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V147",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V148",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V149",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V163",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V164",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V165",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V166",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V167",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V174",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V177",
+   "kind": "K4",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V178",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V182",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V186",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V188",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V191",
+   "kind": "K7",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V211",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V213",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V216",
+   "kind": "K4",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V226",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V227",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V233",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V234",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V254",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V257",
+   "kind": "K4",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V260",
+   "kind": "K3",
+   "reasons": [
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V263",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V264",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V268",
+   "kind": "K3",
+   "reasons": [
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V271",
+   "kind": "K3",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V274",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V282",
+   "kind": "K4",
+   "reasons": [
+    "A:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V285",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V295",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V299",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V302",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V304",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V307",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V309",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V310",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V312",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V313",
+   "kind": "K5",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V314",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V315",
+   "kind": "K3",
+   "reasons": [
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V330",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V331",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V332",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V336",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V341",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V345",
+   "kind": "K4",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V352",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V360",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V363",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V371",
+   "kind": "K4",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V372",
+   "kind": "K4",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V373",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V378",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V381",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V386",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V393",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V397",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V399",
+   "kind": "K5",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V401",
+   "kind": "K3",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V405",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V407",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V411",
+   "kind": "K3",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V417",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  },
+  {
+   "id": "V419",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V421",
+   "kind": "K4",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V422",
+   "kind": "K7",
+   "reasons": [
+    "A:REACHED_BY_REASONING",
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V424",
+   "kind": "K6",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9",
+    "A:OTHER_CANDIDATE_REASONING",
+    "B:UNCERTAIN_8_OR_9",
+    "B:OTHER_CANDIDATE_REASONING"
+   ]
+  }
+ ]
+}

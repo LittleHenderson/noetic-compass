@@ -1,0 +1,307 @@
+SHEET practice-with_passage-04. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0511 ===
+Passage:
+Helen, who had sorted mail for decades, picked up a thin, stiff envelope. The feel of the paper and the faint, sweet scent of old ink told her it was probably a wedding invitation. She often guessed the contents before even reading the address. Her hands knew the weight and texture of every common type of correspondence.
+
+Question: What type of envelope did Helen pick up?
+A. A thick, padded envelope
+B. A thin, stiff envelope
+C. A small, brown envelope
+D. A large, square envelope
+=== END Q0511 ===
+
+=== ITEM Q0512 ===
+Passage:
+Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.
+
+Question: Where did Daniel flick each letter?
+A. Its correct pigeonhole
+B. A nearby village
+C. The sorting room
+D. The next stack
+=== END Q0512 ===
+
+=== ITEM Q0513 ===
+Passage:
+Marta carefully handled the fragile-looking package. She had seen too many parcels burst open on the rollers over her thirty years here. A small "Fragile" sticker did little to ease her concern. She gently placed it in the bin for special handling, remembering the time a client's grandmother's antique teacups arrived in splinters.
+
+Question: What kind of sticker was on the package?
+A. Handle with care
+B. Fragile
+C. Insured
+D. Urgent
+=== END Q0513 ===
+
+=== ITEM Q0514 ===
+Passage:
+Graham flicked through the stack of letters. He had seen every type of handwriting imaginable over his career, from careful cursive to hurried scrawls. The precise, almost ornamental script on this particular envelope suggested a formal occasion, perhaps a wedding invitation. He knew from experience that such envelopes rarely contained bad news, so he handled it without concern.
+
+Question: What type of occasion did the ornamental script suggest?
+A. a financial audit
+B. a legal notice
+C. a formal occasion
+D. a sudden crisis
+=== END Q0514 ===
+
+=== ITEM Q0515 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: What was Olivia's occupation?
+A. delivery driver
+B. postal sorter
+C. greeting designer
+D. warehouse manager
+=== END Q0515 ===
+
+=== ITEM Q0516 ===
+Passage:
+Brenda picked up a package, testing its weight and balance. The label listed "books," but the package shifted oddly in her grip. Decades of handling parcels had given her a sixth sense for mislabeled contents. This package felt too light for books and too fluid for most other common items. She marked it for special inspection.
+
+Question: What did the label list as the contents?
+A. Books
+B. Fluid items
+C. Common goods
+D. Special inspection
+=== END Q0516 ===
+
+=== ITEM Q0517 ===
+Passage:
+Maria, a post office sorter, examined the complex delivery route. It involved four distinct segments. First, packages went to the city center; then, rural addresses received theirs; after that, international mail was handled; finally, special deliveries completed the round. Each stage had its own set of sorting rules and deadlines.
+
+Question: Which destination received their items during the second segment?
+A. city center
+B. international mail
+C. rural addresses
+D. special deliveries
+=== END Q0517 ===
+
+=== ITEM Q0518 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: At a later moment, which of these does Olivia avoid?
+A. brown parcels
+B. respective bins
+C. small envelopes
+D. warehouse drone
+E. distant machinery
+F. greeting cards
+=== END Q0518 ===
+
+=== ITEM Q0519 ===
+Passage:
+Paul, a mail carrier nearing retirement, glanced at a misaddressed package. He saw the street name was wrong but the postcode was correct for a nearby village. His years of walking the same routes meant he instantly knew the correct house number. He simply scrawled a small correction on the label and placed it in the right tray.
+
+Question: What did Paul place the package in?
+A. waste bin
+B. right tray
+C. mail bag
+D. postal box
+=== END Q0519 ===
+
+=== ITEM Q0520 ===
+Passage:
+Helen, who had sorted mail for decades, picked up a thin, stiff envelope. The feel of the paper and the faint, sweet scent of old ink told her it was probably a wedding invitation. She often guessed the contents before even reading the address. Her hands knew the weight and texture of every common type of correspondence.
+
+Question: How long had Helen sorted mail?
+A. a few years
+B. just one year
+C. several months
+D. decades
+=== END Q0520 ===
+
+=== ITEM Q0521 ===
+Passage:
+Brenda picked up a package, testing its weight and balance. The label listed "books," but the package shifted oddly in her grip. Decades of handling parcels had given her a sixth sense for mislabeled contents. This package felt too light for books and too fluid for most other common items. She marked it for special inspection.
+
+Question: What did the label on the package list?
+A. Fluid
+B. Magazines
+C. Letters
+D. Books
+=== END Q0521 ===
+
+=== ITEM Q0522 ===
+Passage:
+Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.
+
+Question: Where was Daniel working?
+A. postal truck
+B. front office
+C. delivery van
+D. sorting room
+=== END Q0522 ===
+
+=== ITEM Q0523 ===
+Passage:
+Graham flicked through the stack of letters. He had seen every type of handwriting imaginable over his career, from careful cursive to hurried scrawls. The precise, almost ornamental script on this particular envelope suggested a formal occasion, perhaps a wedding invitation. He knew from experience that such envelopes rarely contained bad news, so he handled it without concern.
+
+Question: What did Graham flick through?
+A. Special parcels
+B. Wedding invitations
+C. Stack of letters
+D. Formal envelopes
+=== END Q0523 ===
+
+=== ITEM Q0524 ===
+Passage:
+Maria, a post office sorter, examined the complex delivery route. It involved four distinct segments. First, packages went to the city center; then, rural addresses received theirs; after that, international mail was handled; finally, special deliveries completed the round. Each stage had its own set of sorting rules and deadlines.
+
+Question: What was Maria's job title?
+A. Mail clerk
+B. Delivery driver
+C. Postal carrier
+D. Post office sorter
+=== END Q0524 ===
+
+=== ITEM Q0525 ===
+Passage:
+Brenda picked up a package, testing its weight and balance. The label listed "books," but the package shifted oddly in her grip. Decades of handling parcels had given her a sixth sense for mislabeled contents. This package felt too light for books and too fluid for most other common items. She marked it for special inspection.
+
+Question: What word was listed on the package label?
+A. papers
+B. books
+C. fragile
+D. liquid
+=== END Q0525 ===
+
+=== ITEM Q0526 ===
+Passage:
+Maria, a post office sorter, examined the complex delivery route. It involved four distinct segments. First, packages went to the city center; then, rural addresses received theirs; after that, international mail was handled; finally, special deliveries completed the round. Each stage had its own set of sorting rules and deadlines.
+
+Question: Who examined the complex delivery route?
+A. Marta
+B. Brenda
+C. Graham
+D. Maria
+=== END Q0526 ===
+
+=== ITEM Q0527 ===
+Passage:
+Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.
+
+Question: Where was Daniel working?
+A. front office
+B. postal depot
+C. delivery truck
+D. sorting room
+=== END Q0527 ===
+
+=== ITEM Q0528 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: At a later moment, which of these does Olivia avoid?
+A. Heavy weights
+B. Distant machinery
+C. Plain brown parcels
+D. Small envelopes
+E. Brightly coloured greeting cards
+F. Warehouse bins
+=== END Q0528 ===
+
+=== ITEM Q0529 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: What did Olivia separate into respective bins?
+A. Small envelopes
+B. Heavy objects
+C. Brown parcels
+D. Greeting cards
+=== END Q0529 ===
+
+=== ITEM Q0530 ===
+Passage:
+Helen, who had sorted mail for decades, picked up a thin, stiff envelope. The feel of the paper and the faint, sweet scent of old ink told her it was probably a wedding invitation. She often guessed the contents before even reading the address. Her hands knew the weight and texture of every common type of correspondence.
+
+Question: What type of correspondence did Helen pick up?
+A. small postcard
+B. thin envelope
+C. thick parcel
+D. heavy box
+=== END Q0530 ===
+
+=== ITEM Q0531 ===
+Passage:
+Graham flicked through the stack of letters. He had seen every type of handwriting imaginable over his career, from careful cursive to hurried scrawls. The precise, almost ornamental script on this particular envelope suggested a formal occasion, perhaps a wedding invitation. He knew from experience that such envelopes rarely contained bad news, so he handled it without concern.
+
+Question: What items did Graham flick through?
+A. Postcards
+B. Magazines
+C. Letters
+D. Envelopes
+=== END Q0531 ===
+
+=== ITEM Q0532 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: At a later free moment, which of these does Olivia choose?
+A. small envelopes
+B. distant machinery
+C. warehouse drone
+D. respective bins
+E. brown parcels
+F. greeting cards
+=== END Q0532 ===
+
+=== ITEM Q0533 ===
+Passage:
+Paul, a mail carrier nearing retirement, glanced at a misaddressed package. He saw the street name was wrong but the postcode was correct for a nearby village. His years of walking the same routes meant he instantly knew the correct house number. He simply scrawled a small correction on the label and placed it in the right tray.
+
+Question: What did Paul scrawl on the label?
+A. The street name
+B. The wrong postcode
+C. A small correction
+D. A house number
+=== END Q0533 ===
+
+=== ITEM Q0534 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: What sound seemed to fade into the background?
+A. drone of the machinery
+B. shuffling of cards
+C. sorting of envelopes
+D. handling of parcels
+=== END Q0534 ===
+
+=== ITEM Q0535 ===
+Passage:
+Marta carefully handled the fragile-looking package. She had seen too many parcels burst open on the rollers over her thirty years here. A small "Fragile" sticker did little to ease her concern. She gently placed it in the bin for special handling, remembering the time a client's grandmother's antique teacups arrived in splinters.
+
+Question: Where did Marta place the fragile-looking package?
+A. Sorting desk
+B. Roller belt
+C. Bin for special handling
+D. Delivery truck
+=== END Q0535 ===
+
+=== ITEM Q0536 ===
+Passage:
+Paul, a mail carrier nearing retirement, glanced at a misaddressed package. He saw the street name was wrong but the postcode was correct for a nearby village. His years of walking the same routes meant he instantly knew the correct house number. He simply scrawled a small correction on the label and placed it in the right tray.
+
+Question: What part of the address was wrong on the package?
+A. the house number
+B. the postcode
+C. the street name
+D. the village name
+=== END Q0536 ===
+
+=== ITEM Q0537 ===
+Passage:
+Marta carefully handled the fragile-looking package. She had seen too many parcels burst open on the rollers over her thirty years here. A small "Fragile" sticker did little to ease her concern. She gently placed it in the bin for special handling, remembering the time a client's grandmother's antique teacups arrived in splinters.
+
+Question: Where did Marta place the package?
+A. near the front desk
+B. inside the mail bag
+C. on the sorting rollers
+D. in the bin for special handling
+=== END Q0537 ===

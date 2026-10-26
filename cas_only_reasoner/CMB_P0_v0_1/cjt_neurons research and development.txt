@@ -1,0 +1,2446 @@
+# Yes. This deserves its own R&D program.
+
+My ruling is:
+
+```text
+BUILD AND TEST:
+YES
+
+MERGE INTO THE MAIN CNCM NOW:
+NO
+
+GO ALL IN NOW:
+NO
+
+RUN A BOUNDED, KILLABLE DEVELOPMENT LADDER:
+YES
+```
+
+The idea is strong enough for a serious experiment, but the first job is to find out whether **CAS-Ohm contributes something beyond ordinary dynamic gating, hypernetworks, and adaptive learning rates**.
+
+The project already contains the seed of this architecture. Its deterministic route equation is:
+
+$$
+\text{score}_{j,t}
+=
+\text{hard mask}
+\cdot
+\text{RPM readiness}
+\cdot
+\text{region multiplier}
+\cdot
+\frac{V_{j,t}}{R_{j,t}+\epsilon}
+$$
+
+and its roadmap explicitly proceeds from static neural tests to recursive control, selective plasticity, and eventually the full CJT Transformer.  
+
+So this is not a random detour. It is a direct attempt to turn the existing **CAS-Ohm routing law into neural conductance, dynamic weights, and controlled plasticity**.
+
+# The exact scientific question
+
+Not:
+
+> Can dynamically changing weights work?
+
+They already can. Hypernetworks generate one network’s weights from another network; Dynamic Filter Networks create input-conditioned filters; FiLM modulates neural features from conditioning information; mixture-of-experts systems dynamically select parameters; and neuromodulated plasticity controls how connections change. ([arXiv][1])
+
+The real question is:
+
+> **Does the CAS-Ohm decomposition of Drive, resistance, readiness, operating state, and governance produce better dynamic weighting, generalization, learning, retention, or failure diagnosis than a matched generic neural controller?**
+
+That is the clean research wedge.
+
+The potentially distinctive contribution is not “dynamic weights.” It is:
+
+```text
+typed Drive
+typed resistance components
+hard RPM readiness
+last-committed operating state
+verifier feedback
+governed plasticity
+atomic commit or rollback
+```
+
+all controlling one neural junction.
+
+# First precision boundary
+
+CAS-Ohm must remain a **neural response and control model**, not literal electrical Ohm’s law.
+
+Your CAS-Ohm research paper already states that its model quantities are not physical volts, amperes, or ohms, and that effective resistance must be calibrated on one split and evaluated on another. Deriving resistance from the same output and then “predicting” that output is circular and prohibited. 
+
+Also, the CAS-Ohm guide’s CJT anatomy separates two paths:
+
+```text
+FLOW PATH:
+Drive and constraint determine attention flow.
+
+CONTENT PATH:
+Cause meets Bias and becomes an Effect.
+```
+
+High flow cannot mean “true answer.” The verifier still decides whether the Effect is correct. 
+
+# What we should build first
+
+Name the program:
+
+# **CJT-OHM: CAS-Ohm Neural Conductance R&D**
+
+The first neural cell should not generate an entire billion-parameter matrix.
+
+Instead, let CAS-Ohm generate a small number of **conductance coefficients** that control learned low-rank weight directions.
+
+For CJT \(j\):
+
+$$
+g_{j,t}
+=
+m_{j,t}
+\cdot
+\rho_{j,t}
+\cdot
+\psi(Z_{j,t-1})
+\cdot
+\frac{V_{j,t}}{R_{j,t}+\epsilon}
+$$
+
+where:
+
+* \(m\) is the hard governance mask;
+* \(\rho\) is RPM readiness;
+* \(\psi(Z_{t-1})\) is the last committed operating-region multiplier;
+* \(V\) is Drive;
+* \(R\) is typed constraint;
+* \(g\) is neural conductance.
+
+Normalize the active conductances:
+
+$$
+\alpha_{j,t}
+=
+\frac{g_{j,t}}{\sum_k g_{k,t}}
+$$
+
+Then use those coefficients to assemble an active low-rank weight matrix:
+
+$$
+W^{\text{eff}}_t
+=
+W_0
++
+s\sum_j
+\alpha_{j,t} A_jB_j^\top
+$$
+
+where:
+
+* \(W_0\) is the base transformation;
+* \(A_jB_j^\top\) is CJT \(j\)’s learned low-rank weight direction;
+* \(s\) is one frozen scale;
+* \(\alpha_j\) decides how strongly that CJT’s weight direction participates.
+
+LoRA already shows that useful model adaptation can be expressed through low-rank weight matrices, making this a practical first implementation rather than asking CAS-Ohm to synthesize every individual parameter. ([arXiv][2])
+
+The candidate Effect becomes:
+
+$$
+\widehat E_t
+=
+f(C_t;W^{\text{eff}}_t,B_t)
+$$
+
+Then the verifier checks it.
+
+For learning:
+
+$$
+\lambda_{j,t}
+=
+m^{\text{learn}}_{j,t}
+\cdot
+\alpha_{j,t}
+\cdot
+\mathbf 1[\text{verifier accepts}]
+$$
+
+$$
+\Delta \Theta_{j,t}
+=
+-\eta\lambda_{j,t}
+\nabla_{\Theta_j}L
+$$
+
+So:
+
+```text
+gradient:
+proposes the direction of change
+
+CAS-Ohm:
+controls how much learning reaches each CJT
+
+verifier:
+decides whether the experience is admissible
+
+commitment:
+makes the update permanent or rolls it back
+```
+
+Neuromodulated plasticity has already demonstrated that neural networks can learn mechanisms that actively control their own plastic changes, so this part has credible neighboring prior art. Our test must determine whether the CAS-Ohm formulation adds value beyond a generic learned modulator. ([arXiv][3])
+
+# Why this is meaningfully different from EX1
+
+EX1 assigned fixed CAS identities to experts.
+
+The decisive result was:
+
+```text
+CAS expert partition:          0.7806
+meaningless stable partition:  0.7800
+```
+
+The fixed CAS meanings were not load-bearing, and all architectures catastrophically forgot the previous task. 
+
+CJT-OHM asks a deeper question:
+
+```text
+EX1:
+Which fixed expert receives this clause?
+
+CJT-OHM:
+How strongly does each transformation participate now?
+How does current context alter the active weight matrix?
+Which CJT is allowed to learn?
+How does verified history alter the next state?
+```
+
+That is not putting a new sign above the same workshop. It changes the transmission.
+
+The project has already shown that guided LoRA directions can affect behavior and that replay can preserve prior performance, although those results were generic rather than CAS-specific. That means the neural weight-update and retention machinery needed for this experiment is technically available. 
+
+# The mathematical traps we must kill before GPU spend
+
+## 1. V and R are not automatically identifiable
+
+Only the ratio matters:
+
+$$
+g=\frac VR
+$$
+
+Multiplying both by the same positive constant leaves the conductance unchanged:
+
+$$
+\frac{cV}{cR}=\frac VR
+$$
+
+Therefore, unless Drive and resistance have independent measurement sources, the system may arbitrarily move meaning between them.
+
+The rule must be:
+
+```text
+If V and R are independently grounded:
+the separate Drive/resistance interpretation is permitted.
+
+If only V/R is observable:
+report CONDUCTANCE_ONLY.
+Do not claim the decomposition was identified.
+```
+
+## 2. Weight modulation may secretly equal output scaling
+
+For a simple linear layer:
+
+$$
+gWx=g(Wx)
+$$
+
+Scaling the weight and scaling the output are identical.
+
+Therefore CJT-OHM must carry:
+
+```text
+PROOF_OF_NON_EQUIVALENCE_REQUIRED
+```
+
+The weight mechanism must operate inside a nonlinear or recurrent transformation where changing \(W^{\text{eff}}\) changes the transformation’s direction, not merely its volume.
+
+A useful test is to compare context-conditioned Jacobians:
+
+$$
+J_1=\frac{\partial E}{\partial C}\Big|_{\text{context 1}}
+\qquad
+J_2=\frac{\partial E}{\partial C}\Big|_{\text{context 2}}
+$$
+
+Then test whether one is merely a scalar multiple of the other:
+
+$$
+\min_c
+\frac{\|J_1-cJ_2\|_F}{\|J_1\|_F}
+$$
+
+If this is essentially zero, CAS-Ohm produced gain modulation, not a new transformation.
+
+That is still useful, but it must be labeled honestly.
+
+## 3. Positive resistance cannot encode semantic direction
+
+Resistance should remain nonnegative.
+
+Do not encode:
+
+```text
+attraction:
+positive resistance
+
+aversion:
+negative resistance
+```
+
+Instead:
+
+```text
+CJT transformation matrices:
+carry direction, sign and operation
+
+CAS-Ohm conductance:
+controls participation magnitude
+```
+
+## 4. V/R cannot see the gold answer
+
+The signals used to compute Drive and resistance must be available before the answer:
+
+```text
+current goal
+declared knowledge availability
+resource budget
+context match
+prior committed verifier history
+operating state
+```
+
+They may not contain:
+
+```text
+gold operation
+gold answer
+current verifier verdict
+protected label
+answer-derived resistance
+```
+
+## 5. Same-tick feedback remains prohibited
+
+Current verification may change **next-tick** resistance or Bias only after commitment.
+
+The project’s frozen tick order already requires routing from \(Z_{t-1}\), followed by execution, verification, diagnosis, proposed updates, atomic commitment, and trace sealing. 
+
+# The R&D ladder
+
+## **CJT-OHM-0: Formal Non-Vacuity and Micro-Neural Bench**
+
+Purpose:
+
+> Can CAS-Ohm conductance generate a genuine context-dependent transformation rather than a renamed scalar gate?
+
+Use four small learned CJT transformations corresponding to:
+
+```text
+^2 attraction
+^3 aversion
+^6 decomposition
+^8 triggering
+```
+
+Each episode contains:
+
+* a Cause vector;
+* a current goal;
+* Wisdom availability;
+* Power or compute availability;
+* contextual resistance;
+* resource resistance;
+* previous committed verifier history;
+* one-step and two-step transformation tasks.
+
+The same Cause must appear under different contexts with different correct Effects. This prevents a single fixed matrix from solving everything.
+
+Hold out combinations such as:
+
+```text
+seen Cause + unseen constraint combination
+
+seen operations + unseen order
+
+seen goal + unseen resource condition
+
+seen individual CJTs + unseen two-CJT cascade
+```
+
+### Arms
+
+| Arm                         | Meaning                                                     |
+| --------------------------- | ----------------------------------------------------------- |
+| **O0 STATIC**               | Fixed neural transformation                                 |
+| **O1 GENERIC GATE**         | Generic MLP produces mixture coefficients                   |
+| **O2 CAS ROUTE ONLY**       | CAS-Ohm chooses CJT contribution, weights remain fixed      |
+| **O3 GENERIC HYPER**        | Matched generic hypernetwork produces low-rank coefficients |
+| **O4 CAS WEIGHT**           | CAS-Ohm produces low-rank weight coefficients               |
+| **O5 CAS ROUTE+WEIGHT**     | CAS-Ohm controls both routing and active low-rank weights   |
+| **O6 SHUFFLED CONDUCTANCE** | Same conductance distribution, assigned to the wrong CJTs   |
+| **O7 UNIFORM CONDUCTANCE**  | Same architecture, no state-sensitive weighting             |
+| **O8 ORACLE**               | Correct operation/state supplied, ceiling only              |
+
+All practical arms receive the same nongold raw context.
+
+The primary comparison is:
+
+```text
+O4 CAS WEIGHT
+versus
+O3 GENERIC HYPER
+```
+
+The second comparison is:
+
+```text
+O4 CAS WEIGHT
+versus
+O2 CAS ROUTE ONLY
+```
+
+That tells us whether CAS-Ohm adds actual transformation value beyond routing.
+
+## **CJT-OHM-1: Frozen-Language-Encoder Neural Test**
+
+Only if OHM-0 passes.
+
+Use a small frozen Qwen encoder with four low-rank CJT weight bases. The encoder supplies language features, but CAS-Ohm controls the CJT adapter composition.
+
+Test:
+
+* unseen verbs;
+* unseen sentence forms;
+* unseen operation combinations;
+* context-dependent operation switching;
+* two-hop composition.
+
+The generic hypernetwork receives exactly the same raw signals.
+
+The scientific question is:
+
+> Does the CAS-Ohm inductive structure generalize better than a generic learned controller?
+
+Hypernetworks and dynamic filter networks show that generic networks can generate context-conditioned weights, so this generic opponent must be strong rather than decorative. ([arXiv][1])
+
+## **CJT-OHM-2: Verifier-Gated Plasticity**
+
+Only if dynamic weighting passes or produces a strong sample-efficiency signal.
+
+Train sequentially on at least two skills.
+
+Compare:
+
+```text
+ordinary training
+
+ordinary training + replay
+
+generic learned plasticity gate
+
+CAS-Ohm plasticity gate
+
+CAS-Ohm plasticity + replay
+
+shuffled CAS-Ohm plasticity
+```
+
+Measure:
+
+```text
+old-skill retention
+new-skill acquisition
+parameters changed
+gradient delivered per CJT
+false-update rate
+rollback frequency
+examples to threshold
+```
+
+The CAS condition must beat replay alone or add value on top of the same replay budget. Replay is already a strong baseline in this project and cannot be replaced with an easy straw opponent.
+
+## **CJT-OHM-3: Recurrent Bias and Verifier History**
+
+Test whether a verified failure at tick \(t\):
+
+* raises resistance appropriately at \(t+1\);
+* redirects compute;
+* opens an RPM repair;
+* prevents repeated invalid Effects;
+* permits later recovery after the missing prerequisite is acquired.
+
+Compare against a matched GRU or generic recurrent gating controller.
+
+This stage asks whether typed history is useful, not merely whether recurrence works.
+
+## **CJT-OHM-4: First Neural Network of CJTs**
+
+Only after the prior stages pass.
+
+Build four to eight interacting CJTs:
+
+```text
+Cause
+→ conductance-weighted CJT
+→ candidate Effect
+→ next CJT Cause
+→ verifier
+→ Bias update
+→ later inference
+```
+
+The milestone requires:
+
+1. Context-sensitive dynamic weight generation.
+2. Effect-to-Cause chaining.
+3. Persistent Bias across a process restart.
+4. Verifier-controlled state and weight updates.
+5. Rollback of an invalid update.
+6. Reduced forgetting.
+7. Held-out transfer.
+8. Complete trace of why each CJT received its conductance.
+
+That is the first legitimate **neural network of CJTs**.
+
+# Separate result statuses
+
+Do not compress the whole experiment into one giant pass word.
+
+Report these separately:
+
+```text
+ROUTING_VALUE
+DYNAMIC_WEIGHT_VALUE
+SAMPLE_EFFICIENCY_VALUE
+OOD_GENERALIZATION_VALUE
+PLASTICITY_VALUE
+RETENTION_VALUE
+DIAGNOSTIC_VALUE
+COMPUTE_VALUE
+STABILITY
+```
+
+Possible interpretations:
+
+| Result                                                 | Meaning                                          | Action                                                  |
+| ------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------- |
+| CAS beats static but ties generic gate                 | Dynamic conditioning helps, CAS form not special | Keep generic controller or use CAS only for explanation |
+| CAS route works, weight modulation adds nothing        | CAS-Ohm belongs in routing only                  | Stop neural-weight lane                                 |
+| CAS weight matches generic but learns with less data   | CAS-Ohm is a useful inductive prior              | Continue cautiously                                     |
+| CAS weight beats generic on held-out combinations      | Strong dynamic-weight signal                     | Proceed to plasticity                                   |
+| Shuffling conductance does not hurt                    | CAS signal is ornamental                         | Stop                                                    |
+| CAS plasticity reduces forgetting beyond replay        | Strong learning-control signal                   | Proceed to recurrent CJT                                |
+| High flow predicts correctness without verifier        | Invalid conflation                               | Stop and repair                                         |
+| V/R can be freely reassigned without changing behavior | Decomposition not identified                     | Report conductance-only                                 |
+| Instability, saturation, or update poisoning           | Unsafe mechanism                                 | Stop                                                    |
+
+# Development thresholds
+
+For the first neural round, freeze these before results:
+
+```text
+Seeds:
+5 development seeds
+
+Task breadth:
+at least 3 task families
+
+Eligible-family rule:
+families must have at least 0.05 headroom before the run
+
+Parameter matching:
+within 1%
+
+Active compute matching:
+within 5%
+
+Primary dynamic-weight margin:
+CAS WEIGHT - GENERIC HYPER >= 0.02
+in at least 2 eligible families
+
+Seed consistency:
+positive in at least 4 of 5 seeds
+
+Causal corruption:
+shuffling conductance reduces performance by >= 0.02
+
+Weight-specificity:
+CAS WEIGHT beats CAS ROUTE ONLY by >= 0.01
+in at least 2 families
+
+Retention stage:
+at least 20% less forgetting than the best generic baseline,
+with new-task acquisition within 0.02
+
+Stability:
+no NaN, divergence, all-zero normalization,
+unbounded V/R, or silent CPU fallback
+```
+
+Treat sample efficiency as a separate outcome:
+
+```text
+examples-to-threshold reduction >= 20%
+```
+
+A sample-efficiency signal does not automatically become a raw-performance signal.
+
+# When to stop
+
+Stop the dynamic-weight program when any of these survives a proper repair-free run:
+
+```text
+CAS-Ohm never beats a generic matched gate or hypernetwork.
+
+The apparent gain comes only from additional parameters or compute.
+
+Weight modulation is algebraically equivalent to output scaling.
+
+Shuffled V/R performs equally well.
+
+V and R require gold information.
+
+The model can arbitrarily trade V against R with no independent grounding.
+
+Plasticity does not improve retention beyond replay or generic modulation.
+
+The architecture becomes unstable or repeatedly admits invalid updates.
+```
+
+In that case CAS-Ohm remains useful as:
+
+```text
+diagnostic telemetry
+routing explanation
+compute budgeting
+operating-region reporting
+```
+
+but not as the neural weight law.
+
+# When to continue
+
+Continue when at least one of these is independently supported:
+
+```text
+CAS-Ohm produces better held-out context generalization.
+
+It reaches the same result with materially fewer examples.
+
+It produces useful dynamic transformations beyond output gating.
+
+Its conductance corruption ablation destroys the gain.
+
+Its verifier-gated plasticity reduces forgetting beyond matched controls.
+
+Its typed failure state produces successful RPM repair.
+```
+
+# When “go all in” becomes justified
+
+Do not make that decision from one synthetic win.
+
+I would require all of the following:
+
+```text
+1. Dynamic-weight value on at least two distinct task families.
+
+2. Replication on at least two model sizes or architectures.
+
+3. A plasticity or retention benefit beyond the best generic baseline.
+
+4. Conductance corruption and disconnection causally remove the benefit.
+
+5. Same-input/different-context tests prove real dynamic transformation.
+
+6. Independent audit reproduces the result.
+
+7. A protected held-out evaluation passes under a frozen status law.
+
+8. The integrated micro-CJT network performs Cause → Effect →
+   verified Bias update across a process restart.
+
+9. The system preserves typed failure reasons and rollback.
+
+10. Parameter, compute, data, and replay budgets remain matched.
+```
+
+If all ten pass:
+
+```text
+CJT_OHM_CORE_ARCHITECTURE_CANDIDATE
+```
+
+That would justify moving the main CNCM architecture toward CAS-Ohm-controlled neural conductance.
+
+# Role split
+
+Keep this separate from CMB-RP1.
+
+```text
+GLM:
+builds CJT-OHM-0 in a new isolated worktree
+
+Claude:
+continues the current CMB-RP1 design
+then audits the exact CJT-OHM-0 commit
+
+Third model:
+audits any protected or claim-bearing neural result
+
+Owner:
+controls stage promotion and spending
+```
+
+Suggested branch:
+
+```text
+research/cjt-ohm-neural-conductance-v1
+```
+
+No CMB-R1, CMB-RP1, EX1, or phase artifacts should be modified.
+
+# Copy-paste owner directive
+
+```text
+# OWNER DIRECTIVE
+# CJT-OHM-0 — CAS-OHM NEURAL CONDUCTANCE R&D
+
+PURPOSE
+
+Build the smallest falsifiable neural test of whether CAS-Ohm can
+control effective neural weights and plasticity inside a CJT.
+
+This is a separate R&D lane.
+
+It is not permission to merge CAS-Ohm into the CNCM.
+It is not permission to claim physical Ohm's law.
+It is not permission to claim CAS-specific value.
+
+================================================
+1. ISOLATION AND ROLES
+================================================
+
+Create:
+
+    research/cjt-ohm-neural-conductance-v1
+
+Use a separate worktree.
+
+Do not modify:
+
+    CMB-R1
+    CMB-RP1
+    CJT-EX1
+    CMB-P0/P1/P2
+    protected data
+    existing receipts
+
+GLM is the builder of CJT-OHM-0.
+Claude will cross-audit the frozen result commit.
+Neither model may independently certify its own work.
+
+================================================
+2. CORE HYPOTHESIS
+================================================
+
+Test whether:
+
+    g_j,t =
+        hard_mask
+        * RPM_ready
+        * region_multiplier(Z_j,t-1)
+        * V_j,t / (R_j,t + epsilon)
+
+can provide useful dynamic neural conductance beyond a matched generic
+gate or hypernetwork.
+
+CAS-Ohm governs participation and plasticity.
+
+It does not determine:
+
+    truth
+    semantic meaning
+    operation direction
+    verification
+    publication authority
+
+================================================
+3. EFFECTIVE WEIGHT LAW
+================================================
+
+Implement:
+
+    alpha_j = g_j / sum_k(g_k)
+
+    W_eff =
+        W0 + scale * sum_j(alpha_j * A_j @ B_j.T)
+
+The A_j/B_j matrices carry signed transformations.
+Resistance remains nonnegative.
+
+Fail typed on all-zero conductance:
+
+    NO_READY_CJT
+
+Do not generate a full dense model weight tensor in v0.
+
+================================================
+4. GROUNDING LAW
+================================================
+
+First-stage V, R, readiness, mask and operating state are frozen,
+registered, nongold inputs.
+
+No gradient enters those signals in CJT-OHM-0.
+
+V and R must have separate declared sources.
+
+If only V/R is identifiable, emit:
+
+    CONDUCTANCE_ONLY
+
+Do not claim separate Drive and resistance interpretation.
+
+The transformation must be invariant to:
+
+    V -> cV
+    R -> cR
+
+for common positive c.
+
+================================================
+5. NON-EQUIVALENCE GATE
+================================================
+
+Before the main run, determine whether weight modulation is
+algebraically equivalent to:
+
+    output scaling
+    expert-output mixing
+    a static reparameterization
+
+Persist context-conditioned Jacobians.
+
+If the active transformation changes only by a scalar multiple, emit:
+
+    GAIN_MODULATION_ONLY
+
+Do not call it dynamic transformation.
+
+================================================
+6. BENCHMARK
+================================================
+
+Build construction-gold vector tasks requiring:
+
+    same Cause under different contexts
+    at least four CJT operations
+    one-step and two-step composition
+    Wisdom blocks
+    Power/resource blocks
+    context resistance changes
+    verifier-history changes on the next tick only
+
+Hold out:
+
+    context combinations
+    operation orders
+    operation compositions
+    selected transformation families
+
+No gold operation or answer may appear in any model input.
+
+Run shortcut gates before GPU spend.
+
+================================================
+7. ARMS
+================================================
+
+Register:
+
+    O0_STATIC
+
+    O1_GENERIC_GATE
+
+    O2_CAS_ROUTE_ONLY
+
+    O3_GENERIC_HYPER_LOW_RANK
+
+    O4_CAS_OHM_LOW_RANK_WEIGHT
+
+    O5_CAS_OHM_ROUTE_PLUS_WEIGHT
+
+    O6_SHUFFLED_CONDUCTANCE
+
+    O7_UNIFORM_CONDUCTANCE
+
+    O8_ORACLE_CEILING
+
+All practical arms receive identical nongold raw signals.
+
+Match parameters within 1%.
+Match active compute within 5%.
+
+================================================
+8. METRICS
+================================================
+
+Report separately:
+
+    task accuracy
+    per-family accuracy
+    examples to threshold
+    held-out combination transfer
+    routing accuracy
+    Jacobian non-equivalence
+    conductance sensitivity
+    V-only and R-only ablations
+    shuffled-conductance ablation
+    parameters
+    active FLOPs
+    runtime
+    peak VRAM
+    stability
+    typed failure reasons
+
+Do not combine separate outcomes with an OR status.
+
+================================================
+9. PRIMARY DEVELOPMENT LAW
+================================================
+
+Dynamic-weight value requires:
+
+    O4 - O3 >= 0.02
+    in at least two eligible families
+
+    positive in at least 4 of 5 seeds
+
+    95% paired interval above zero
+
+    O6 corruption drop >= 0.02
+
+    no parameter or compute mismatch
+
+Weight-specific value additionally requires:
+
+    O4 - O2 >= 0.01
+    in at least two eligible families
+
+Sample-efficiency value is separate:
+
+    >=20% fewer examples to the frozen threshold
+
+================================================
+10. STATUS VOCABULARY
+================================================
+
+Return separate statuses:
+
+    OHM0_MECHANISM_INVALID
+
+    OHM0_REPARAMETERIZATION_ONLY
+
+    OHM0_GAIN_MODULATION_ONLY
+
+    OHM0_GENERIC_CONDITIONING_SUFFICIENT
+
+    OHM0_CAS_ROUTING_SIGNAL
+
+    OHM0_CAS_DYNAMIC_WEIGHT_SIGNAL
+
+    OHM0_CAS_INDUCTIVE_BIAS_SIGNAL
+
+    OHM0_UNSAFE_OR_UNSTABLE
+
+No CAS-specific claim is licensed.
+
+================================================
+11. COMPUTE
+================================================
+
+No local CPU neural training or inference.
+
+Use AWS GPU for substantive neural execution.
+All neural tensors must remain on CUDA.
+Fail closed on silent CPU fallback.
+
+Remote host CPU may perform only unavoidable orchestration,
+file I/O, hashing, serialization, monitoring and shutdown.
+
+CJT-OHM-0 neural hard cap:
+
+    $0.50
+
+Measure before launch and lower the configuration if required.
+
+Automatic termination on every exit path.
+
+================================================
+12. STOP
+================================================
+
+Stop after CJT-OHM-0 and its independent audit.
+
+Do not begin plasticity, a language-model integration, or a full CJT
+Transformer without a new owner ruling.
+
+Preserve every negative.
+
+The result decides:
+
+    STOP THE WEIGHT LANE
+
+    CONTINUE TO CJT-OHM-1
+
+or
+
+    KEEP CAS-OHM AS ROUTING/DIAGNOSTICS ONLY
+```
+
+# Bottom line
+
+**Yes, build it.**
+
+This may be the bridge that turns CAS-Ohm from a dashboard into a neural operating law. But it has to survive the strongest interpretation of the question:
+
+> **Can a grounded, typed \(V/R\) conductance law control neural transformations better than an ordinary learned gate given the same information, parameters, data, and compute?**
+
+If it cannot, we stop trying to make CAS-Ohm the weights.
+
+If it can route but cannot generate useful dynamic transformations, we keep it as the router.
+
+If it controls dynamic weights, improves held-out transfer, and later reduces forgetting through verifier-gated plasticity, then we have found a serious candidate for the internal machinery of the CAS-native cortex.
+
+[1]: https://arxiv.org/abs/1609.09106 "https://arxiv.org/abs/1609.09106"
+[2]: https://arxiv.org/abs/2106.09685 "https://arxiv.org/abs/2106.09685"
+[3]: https://arxiv.org/abs/1804.02464 "https://arxiv.org/abs/1804.02464"
+
+
+# Yes. That could be one of the missing bridges between **CAS governing a neural network** and **CAS becoming the neural network’s internal operating law**.
+
+But the precise version is:
+
+> **CAS-Ohm should determine the effective strength, routing, and plasticity of neural connections. It should not invent the semantic meaning of every weight from nothing.**
+
+In other words:
+
+```text
+CJT says what transformation is performed.
+
+CAS-Sem says what the information means.
+
+CAS-Ohm says how much cognitive flow that transformation receives.
+
+RPM says whether the transformation is ready.
+
+The verifier says whether its Effect is acceptable.
+
+The commitment system decides whether the result or weight update becomes permanent.
+```
+
+Your project already establishes that division of labor: CAS-Ohm governs flow, while the CJT performs the transformation and the verifier determines validity. 
+
+# First, the ordinary neuron
+
+A normal neuron is:
+
+$$
+y=\phi(xW+b)
+$$
+
+Your earlier mapping becomes:
+
+```text
+x       = incoming Cause
+
+W       = learned transformation
+
+b       = local operating offset
+
+xW + b  = transformed internal state
+
+y       = Effect
+```
+
+Now apply the electrical version of Ohm’s law.
+
+Since:
+
+$$
+I=\frac{V}{R}=V\left(\frac{1}{R}\right)
+$$
+
+we can define conductance:
+
+$$
+G=\frac{1}{R}
+$$
+
+Then:
+
+$$
+I=VG
+$$
+
+This looks remarkably close to:
+
+$$
+y=xW
+$$
+
+So, at the simplest mathematical level:
+
+```text
+neural input x       ↔ applied potential V
+
+neural weight W      ↔ conductance G = 1/R
+
+weighted activation  ↔ current I
+```
+
+That is a legitimate structural bridge.
+
+But there is one critical correction: in your CAS formulation, **Cause is not Drive**, and attention flow is not the Effect. Cause is the information entering the CJT. Drive is the pressure supporting its activation. The Effect is the transformed output.  
+
+Therefore, we need two interacting paths:
+
+```text
+CONTENT PATH:
+Cause → CJT transformation → candidate Effect
+
+FLOW PATH:
+Drive / Resistance → attention allocation → how strongly that CJT participates
+```
+
+# The first practical CAS-Ohm neural equation
+
+For each CJT \(j\), calculate:
+
+$$
+g_{j,t}
+=
+m_{j,t}
+\cdot
+\rho_{j,t}
+\cdot
+\psi(Z_{j,t-1})
+\cdot
+\frac{V_{j,t}}{R_{j,t}+\epsilon}
+$$
+
+where:
+
+* \(m\) is the hard permission mask;
+* \(\rho\) is RPM readiness;
+* \(\psi(Z)\) is the operating-region multiplier;
+* \(V\) is Drive supporting the route;
+* \(R\) is resistance or constraint;
+* \(g\) is the effective flow weight.
+
+Then normalize the scores:
+
+$$
+\alpha_{j,t}
+=
+\frac{g_{j,t}}
+{\sum_k g_{k,t}}
+$$
+
+Each CJT performs its own neural transformation:
+
+$$
+h_{j,t}
+=
+f_{\Theta_j}(C_t,B_{j,t})
+$$
+
+And the network combines them:
+
+$$
+\widehat E_t
+=
+\sum_j
+\alpha_{j,t}h_{j,t}
+$$
+
+That means:
+
+> **CAS-Ohm gives the dynamic weights \(\alpha\) that determine how much each CJT contributes to the Effect.**
+
+This is not merely speculation. Your registered recursive controller already uses the core route score:
+
+$$
+\text{score}
+=
+\text{hard mask}
+\cdot
+\text{RPM ready}
+\cdot
+\text{region multiplier}
+\cdot
+\frac{V}{R+\epsilon}
+$$
+
+
+
+So, at the routing level, **CAS-Ohm is already functioning as a dynamic weighting law**.
+
+Your new insight is to push that law deeper:
+
+```text
+from:
+CAS-Ohm chooses which CJT runs
+
+to:
+CAS-Ohm controls the effective neural weights,
+the contribution of each CJT,
+and which weights are allowed to learn
+```
+
+# A simple example
+
+Suppose two CJTs compete to process a problem.
+
+### Decomposition CJT
+
+```text
+Drive V = 8
+Resistance R = 2
+
+Flow score = 8 / 2 = 4
+```
+
+### Trigger CJT
+
+```text
+Drive V = 3
+Resistance R = 6
+
+Flow score = 3 / 6 = 0.5
+```
+
+Normalize:
+
+$$
+\alpha_{\text{decompose}}
+=
+\frac{4}{4+0.5}
+=
+0.889
+$$
+
+$$
+\alpha_{\text{trigger}}
+=
+\frac{0.5}{4+0.5}
+=
+0.111
+$$
+
+The effective cognitive weighting becomes:
+
+```text
+Decomposition CJT:
+88.9%
+
+Trigger CJT:
+11.1%
+```
+
+The network is not using one frozen weight forever. It is generating its weighting from the present:
+
+```text
+goal pressure
+knowledge availability
+capacity
+context
+operating state
+permissions
+recent failures
+```
+
+Now suppose the decomposition CJT lacks Wisdom.
+
+Its readiness becomes:
+
+$$
+\rho_{\text{decompose}}=0
+$$
+
+Its effective weight becomes zero, and RPM opens a repair:
+
+```text
+retrieve missing knowledge
+ask a question
+use a tool
+or learn the missing procedure
+```
+
+That is far richer than merely producing a low activation.
+
+# CAS-Ohm could control three different kinds of weight
+
+The word **weight** is hiding three separate jobs.
+
+| Weight type               | Meaning                                   | CAS-Ohm role                                      |
+| ------------------------- | ----------------------------------------- | ------------------------------------------------- |
+| **Transformation weight** | How information is converted inside a CJT | Modulate, but not necessarily create from scratch |
+| **Routing weight**        | How much each CJT contributes             | Natural CAS-Ohm role                              |
+| **Plasticity weight**     | How much each CJT is allowed to learn     | Natural CAS-Ohm role after verification           |
+
+## 1. Routing weights
+
+This is the safest first implementation:
+
+$$
+\alpha_j
+=
+\operatorname{Normalize}
+\left(
+m_j\rho_j\psi(Z_j)\frac{V_j}{R_j+\epsilon}
+\right)
+$$
+
+CAS-Ohm determines which CJTs receive attention and compute.
+
+## 2. Effective transformation weights
+
+CAS-Ohm can scale a CJT’s learned matrix:
+
+$$
+W^{\text{eff}}_{j,t}
+=
+\alpha_{j,t}W_j
+$$
+
+Or at a finer level:
+
+$$
+W^{\text{eff}}_t
+=
+G^{\text{CAS}}_t
+\odot
+W^{\text{base}}
+$$
+
+where:
+
+$$
+G^{\text{CAS}}_t
+=
+\frac{1}{R_t+\epsilon}
+$$
+
+This means the learned semantic transformation remains, but CAS-Ohm dynamically opens or restricts its pathways.
+
+A more powerful low-rank version is:
+
+$$
+W^{\text{eff}}_t
+=
+W_0
++
+A
+\operatorname{diag}(\alpha_t)
+B^\top
+$$
+
+Here CAS-Ohm selects how strongly several learned weight directions combine.
+
+That is a practical way for CAS-Ohm to **literally generate part of the active weight matrix** without having to calculate billions of individual parameters.
+
+## 3. Plasticity weights
+
+CAS-Ohm could also decide which parameters are permitted to change:
+
+$$
+\Delta\Theta_{j,t}
+=
+-\eta
+\lambda_{j,t}
+\nabla_{\Theta_j}L
+$$
+
+with:
+
+$$
+\lambda_{j,t}
+=
+m^{\text{learn}}_j
+\cdot
+\alpha_{j,t}
+\cdot
+\chi(Z_{j,t})
+\cdot
+\mathbf{1}[\text{verifier accepts}]
+$$
+
+So:
+
+```text
+gradient:
+proposes the direction of learning
+
+CAS-Ohm:
+sets how much learning flow reaches that CJT
+
+verifier:
+decides whether the update is based on a valid Effect
+
+governance:
+decides whether the update is permitted
+
+commitment:
+makes it permanent or rolls it back
+```
+
+That could be especially important for catastrophic forgetting.
+
+Instead of updating the entire neural network every time:
+
+```text
+only the relevant CJTs receive plasticity
+unrelated CJTs remain protected
+quarantined CJTs cannot update
+saturated CJTs receive reduced learning
+failed Effects do not automatically train the system
+```
+
+# This could improve the ordinary neural network in six ways
+
+## Dynamic rather than frozen weights
+
+Ordinary weights are mostly the same regardless of the current goal.
+
+CAS-Ohm weights can change from one thought to the next.
+
+## Typed reasons for weight changes
+
+A weight can be low because of:
+
+```text
+low relevance
+missing knowledge
+insufficient capacity
+contextual resistance
+resource shortage
+policy prohibition
+saturation
+quarantine
+```
+
+Those are different problems with different repairs.
+
+## Sparse computation
+
+Only the CJTs with sufficient flow need to execute.
+
+That can reduce wasted compute on unready experts.
+
+## Controlled learning
+
+CAS-Ohm can restrict learning to the CJTs actually involved in a verified experience.
+
+## History sensitivity
+
+A verifier rejection at time \(t\) can increase resistance, reduce flow, quarantine a path, or open an RPM repair at time \(t+1\).
+
+## Inspectability
+
+Instead of saying:
+
+> “The hidden network assigned weight 0.73.”
+
+the system could report:
+
+```text
+CJT ^6 received weight 0.73 because:
+
+Drive = 8.0
+Constraint = 2.1
+RPM ready = true
+Operating region = active
+Policy mask = 1
+Previous Effect = verified
+```
+
+That is a far more interpretable neural weight.
+
+# But CAS-Ohm cannot safely do everything
+
+## It cannot supply semantic direction by itself
+
+Resistance is normally positive. But neural weights may be:
+
+```text
+positive
+negative
+excitatory
+inhibitory
+rotational
+directional
+```
+
+So do not use negative resistance to represent aversion or inhibition.
+
+Use a separate typed orientation:
+
+$$
+W^{\text{eff}}_{ij}
+=
+S_{ij}
+\cdot
+G_{ij}
+\cdot
+W^{\text{base}}_{ij}
+$$
+
+where:
+
+```text
+S:
+sign or CJT orientation
+
+G = 1/R:
+flow magnitude
+```
+
+CAS-Ohm controls magnitude. The CJT type controls what the transformation does.
+
+## High flow does not mean correct
+
+A CJT can operate strongly and still produce the wrong Effect.
+
+Your architecture explicitly keeps operating region and semantic outcome separate. Only the verifier may determine whether an Effect is intended, opposite, or off-axis. 
+
+So this must remain prohibited:
+
+```text
+high CAS-Ohm flow
+therefore
+true answer
+```
+
+## Resistance must not be defined circularly
+
+We cannot calculate:
+
+$$
+R=\frac{V}{I}
+$$
+
+from the same observation and then claim that:
+
+$$
+\widehat I=\frac{V}{R}
+$$
+
+successfully predicted that observation.
+
+The CAS-Ohm research paper explicitly rejects that same-sample identity as circular. Resistance must be calibrated on one split and tested on a disjoint split, with uncertainty and model-specific units. 
+
+# Why this is different from the failed expert experiment
+
+The previous expert test used mostly fixed organization:
+
+```text
+this class always goes to this expert
+```
+
+The CAS experts tied a meaningless stable partition almost exactly:
+
+```text
+CAS organization:
+0.7806
+
+meaningless stable partition:
+0.7800
+```
+
+
+
+That showed that **naming fixed experts after CAS operations was not enough**.
+
+Your CAS-Ohm idea is deeper.
+
+It proposes:
+
+```text
+the connection strength changes dynamically
+according to current Drive, resistance, readiness,
+operating condition, memory and verifier history
+```
+
+That is no longer:
+
+```text
+CAS labels on static experts
+```
+
+It becomes:
+
+```text
+CAS-controlled neural conductance
+```
+
+That is a genuinely different architectural hypothesis.
+
+# The most practical architecture
+
+I would name the first version:
+
+# **CJT-W0: CAS-Ohm Conductance-Gated Neural Cell**
+
+Its full step would be:
+
+$$
+g_{j,t}
+=
+m_j\rho_j\psi(Z_j)
+\frac{V_j}{R_j+\epsilon}
+$$
+
+$$
+W^{\text{eff}}_{j,t}
+=
+g_{j,t}W_j
+$$
+
+$$
+\widehat E_{j,t}
+=
+\phi
+\left(
+W^{\text{eff}}_{j,t}C_t+b(B_{j,t})
+\right)
+$$
+
+$$
+v_{j,t}
+=
+\operatorname{Verify}(C_t,\widehat E_{j,t})
+$$
+
+$$
+\Delta\Theta_{j,t}
+=
+\operatorname{Plasticity}
+\left(
+g_{j,t},
+v_{j,t},
+B_{j,t}
+\right)
+$$
+
+$$
+(E_t,B_{t+1})
+=
+\operatorname{CommitOrRepair}
+\left(
+\widehat E_t,
+\Delta\Theta_t
+\right)
+$$
+
+That turns the normal neuron:
+
+$$
+y=\phi(xW+b)
+$$
+
+into:
+
+$$
+\boxed{
+(E_t,B_{t+1})
+=
+\operatorname{VerifiedCJT}
+\left(
+C_t,
+B_t,
+W^{\text{eff}}_{\text{CAS-Ohm},t}
+\right)
+}
+$$
+
+# The cleanest interpretation
+
+Your insight is not merely:
+
+> “Maybe resistance is another neural weight.”
+
+It is stronger:
+
+> **A neural weight can be treated as a cognitive conductance whose effective value is dynamically determined by Drive, resistance, readiness, operating state, and governance.**
+
+And for learning:
+
+> **The same flow law can determine which parameters receive plasticity, while the verifier determines whether any proposed change is allowed to become permanent.**
+
+That could be a major step toward CAS-ing out the ordinary neural substrate.
+
+The final division would be:
+
+```text
+Learned neural matrices:
+store transformation skill
+
+CJT type:
+defines what operation the matrix performs
+
+CAS-Ohm:
+determines effective conductance and compute flow
+
+RPM:
+repairs missing prerequisites
+
+Verifier:
+determines whether the Effect is valid
+
+Commitment system:
+authorizes state and weight changes
+```
+
+The central design rule should be carved into the workbench:
+
+> **CAS-Ohm may give the weight of participation and plasticity. It does not give truth, meaning, or semantic direction.**
+
+That is how the idea becomes an architecture rather than a metaphor.
+
+# Your intuition is close. The key correction is where the **Cause** and **Bias** really live.
+
+A normal artificial neuron is usually written:
+
+$$
+y=\phi(xW+b)
+$$
+
+where:
+
+* \(x\) is the input;
+* \(W\) is the learned weight;
+* \(b\) is the learned offset;
+* \(\phi\) is the activation function;
+* \(y\) is the output.
+
+Your proposed mapping was:
+
+```text
+y      = Effect
+xW     = Cause
+b      = Bias
+```
+
+The first and third ideas are directionally right, but the more exact mapping is:
+
+```text
+x          = Cause
+
+W and b    = parts of the CJT's Bias and transformation machinery
+
+xW + b     = the Cause after it has passed through that Bias
+
+φ(xW + b)  = Effect
+```
+
+So the best plain-English sentence is:
+
+> **The Cause is \(x\). The term \(xW+b\) is the Cause as interpreted and transformed by the learned Bias. The output \(y\) is the Effect.**
+
+The project documents explicitly warn that CJT **Bias is not merely the neural bias term \(b\)**. It is meant to be an entire stateful subcircuit containing experience, memory, readiness, operating condition, transformation parameters, and governance. 
+
+# The clean one-to-one mapping
+
+| Ordinary neuron  | CJT interpretation                                        |
+| ---------------- | --------------------------------------------------------- |
+| \(x\)            | **Cause \(C\)** entering the junction                     |
+| \(W\)            | Learned transformation parameters and long-term formation |
+| \(b\)            | Baseline offset or operating-point adjustment             |
+| \(z=xW+b\)       | Internal junction state after Cause meets Bias            |
+| \(\phi(z)\)      | Characteristic response of the junction                   |
+| \(y\)            | **Effect \(E\)**                                          |
+| \(dy/dx\)        | Local CJT gain \(\beta\)                                  |
+| activation level | Operating region: cutoff, active, saturation              |
+| gradient update  | One possible way of changing the CJT’s learned substrate  |
+
+The project’s circuit interpretation already places Cause before the junction, Effect after the junction, and Bias as the configuration controlling the Cause-to-Effect transformation. It also separates attention flow from the Effect itself. 
+
+## Why \(W\) belongs partly to Bias
+
+Suppose the same Cause enters two neurons:
+
+$$
+x=5
+$$
+
+Neuron A:
+
+$$
+W=2,\quad b=0
+$$
+
+Neuron B:
+
+$$
+W=-2,\quad b=0
+$$
+
+Then:
+
+$$
+y_A=10
+$$
+
+$$
+y_B=-10
+$$
+
+The Cause was identical. The different Effects came from the learned transformation.
+
+That means \(W\) expresses much more of the neuron’s accumulated “experience” than \(b\) alone does. In a neural system, most learned knowledge is stored in the weights.
+
+So:
+
+```text
+neural b:
+a small static offset
+
+neural W:
+the learned way the neuron responds
+
+CJT Bias:
+W, b, memory, context, readiness, operating history,
+permissions, and learning state together
+```
+
+The neural \(b\) is therefore a **component inside CJT Bias**, not the whole thing.
+
+# A static neural CJT
+
+The smallest neural CJT could be written:
+
+$$
+E=\phi(WC+b_0)
+$$
+
+This is almost an ordinary neuron, but we give every term a typed role:
+
+```text
+C:
+a typed Cause
+
+W:
+the registered transformation
+
+b₀:
+the local operating offset
+
+φ:
+the operating characteristic
+
+E:
+a typed Effect
+```
+
+For example, a `^6 Decomposition CJT` would not merely emit an arbitrary number. Its output type would have to be something such as:
+
+```text
+parts_of(idea, [part1, part2, part3])
+```
+
+A `^2 Attraction CJT` would produce an Effect of a different type:
+
+```text
+approach_toward(mind, idea)
+```
+
+That already improves organization because the modules do not all produce anonymous numbers with unknown meanings.
+
+But that is still only a **static CJT**.
+
+# The full recurrent neural CJT
+
+The project’s corrected formulation is closer to:
+
+$$
+(\widehat E_{j,t},\widehat B_{j,t+1})
+=
+\operatorname{CJTStep}_j(C_{j,t},B_{j,t})
+$$
+
+The hats mean:
+
+```text
+proposed Effect
+proposed Bias update
+```
+
+They are not authoritative until the verifier and commitment mechanism approve them.
+
+The full Bias is:
+
+$$
+B_{j,t}
+=
+(S_j,M_{j,t},P_{\mathrm{RPM},j,t},Z_{j,t},\Theta_j,G_{j,t})
+$$
+
+where:
+
+| Field                | Meaning                                               |
+| -------------------- | ----------------------------------------------------- |
+| \(S_j\)              | Stable learned substrate and long-term formation      |
+| \(M_{j,t}\)          | Local memory and recent history                       |
+| \(P_{\mathrm{RPM}}\) | Desire, Wisdom, Power, prerequisites and repair state |
+| \(Z_{j,t}\)          | Current operating condition                           |
+| \(\Theta_j\)         | Neural transformation parameters                      |
+| \(G_{j,t}\)          | Permissions, limits, quarantine and governance        |
+
+The project’s corrected controller specification explicitly separates the incoming Cause, the transformation parameters, and the proposed Bias update. 
+
+# A possible mathematical neural CJT cell
+
+A practical first neural version could look like this:
+
+## 1. Read the Cause and memory
+
+$$
+h_t
+=
+f_{\Theta}
+\left(
+C_t,M_t
+\right)
+$$
+
+Here \(f_\Theta\) could be an MLP, attention head, recurrent network, or compact transformer block.
+
+## 2. Check readiness
+
+$$
+\rho_t
+=
+\mathbf{1}
+[
+D_t\geq\tau_D
+\land
+W_t\geq\tau_W
+\land
+P_t\geq\tau_P
+]
+$$
+
+This asks:
+
+```text
+Desire:
+Is this transformation relevant?
+
+Wisdom:
+Does this CJT know how to do it?
+
+Power:
+Does it have enough capacity and resources?
+```
+
+## 3. Produce a candidate Effect
+
+$$
+\widehat E_t
+=
+\phi
+\left(
+\rho_t\,W_Eh_t+b_E
+\right)
+$$
+
+If readiness is zero, the CJT does not blindly generate an Effect. It emits a typed block such as:
+
+```text
+DESIRE_INSUFFICIENT
+WISDOM_INSUFFICIENT
+POWER_INSUFFICIENT
+```
+
+## 4. Verify the candidate
+
+$$
+v_t
+=
+\operatorname{Verify}
+\left(
+C_t,\widehat E_t
+\right)
+$$
+
+Possible outcomes could be:
+
+```text
+INTENDED
+OPPOSITE
+OFF_AXIS
+UNASSESSED
+```
+
+## 5. Propose a Bias update
+
+$$
+\Delta B_t
+=
+U
+\left(
+B_t,C_t,\widehat E_t,v_t
+\right)
+$$
+
+## 6. Commit or refuse
+
+$$
+(E_t,B_{t+1})
+=
+\begin{cases}
+(\widehat E_t,\operatorname{Commit}(B_t+\Delta B_t)),
+& v_t=\text{INTENDED}
+\\[4pt]
+(\text{REFUSED},B_t+\Delta B^{diagnostic}_t),
+& v_t=\text{OPPOSITE}
+\\[4pt]
+(\text{REPAIR},B_t+\Delta B^{repair}_t),
+& v_t=\text{OFF\_AXIS}
+\\[4pt]
+(\text{ABSTAIN},B_t),
+& v_t=\text{UNASSESSED}
+\end{cases}
+$$
+
+That is the leap from a neuron to a CJT.
+
+A neuron computes:
+
+```text
+input → number
+```
+
+A CJT computes:
+
+```text
+Cause
+→ readiness
+→ transformation
+→ candidate Effect
+→ verification
+→ commitment or repair
+→ persistent state change
+```
+
+# What exactly has been added to the neuron?
+
+A concise way to say it is:
+
+$$
+\boxed{
+\text{CJT}
+=
+\text{neural transformation}
++
+\text{persistent Bias}
++
+\text{typed routing}
++
+\text{verification}
++
+\text{controlled state update}
+}
+$$
+
+Or in plain English:
+
+> **A CJT is a neuron that knows what operation it performs, remembers what happened before, knows whether it is ready, can refuse to operate, can request repair, and cannot rewrite itself without authorization.**
+
+# How this improves on an ordinary neuron
+
+## 1. It becomes history-sensitive
+
+An ordinary feed-forward neuron gives the same response to the same \(x\), assuming its weights have not changed.
+
+A CJT can respond differently because:
+
+```text
+its recent memory changed
+its last Effect was rejected
+a prerequisite was acquired
+it entered saturation
+it was quarantined
+its current goal changed
+```
+
+So:
+
+$$
+E_t
+=
+f(C_t,B_t)
+$$
+
+rather than merely:
+
+$$
+E=f(C)
+$$
+
+## 2. It knows what transformation it is supposed to perform
+
+Ordinary hidden units are generally anonymous.
+
+A CJT has a registered operation:
+
+```text
+attract
+avert
+decompose
+trigger
+compare
+bind
+retrieve
+verify
+```
+
+That makes it possible to inspect, replace, test, and compose modules by function.
+
+## 3. It can distinguish different reasons for failure
+
+A normal neuron mostly produces a larger or smaller activation.
+
+A CJT can say:
+
+```text
+This Cause is irrelevant.
+
+I lack the necessary knowledge.
+
+I understand the task but lack capacity.
+
+The output contradicted the evidence.
+
+The operation saturated.
+
+No permitted expert is ready.
+```
+
+Those failures demand different repairs.
+
+## 4. It can open an RPM repair
+
+Instead of merely lowering confidence:
+
+```text
+WISDOM block:
+retrieve memory, ask a question, use a tool, or learn
+
+POWER block:
+split the task, allocate compute, or call a larger expert
+
+DESIRE block:
+deprioritize because the operation is not relevant
+```
+
+The frozen CJT tick order already requires readiness, routing, execution, verification, diagnosis, intent emission, atomic commitment, and sealed tracing as separate stages. 
+
+## 5. Its output is a candidate, not automatically truth
+
+A neuron emits a number and the network passes it onward.
+
+A CJT emits:
+
+```text
+candidate Effect
+```
+
+The verifier then decides whether that Effect receives publication authority.
+
+That creates a distinction between:
+
+```text
+the network generated it
+
+and
+
+the system accepted it
+```
+
+## 6. Learning becomes governed
+
+In ordinary backpropagation, an optimizer changes weights when the loss says to.
+
+In a CJT network, the intended learning flow is:
+
+```text
+experience occurs
+        ↓
+Effect is evaluated
+        ↓
+verifier produces evidence
+        ↓
+CJT proposes an update
+        ↓
+regression, retention and authority gates run
+        ↓
+update commits or rolls back
+```
+
+The gradient can still calculate a proposed weight change. CAS governs whether that change becomes part of the continuing machine.
+
+## 7. It supports persistent specialization
+
+Each CJT can have:
+
+```text
+its own weights
+its own Bias state
+its own memory
+its own readiness history
+its own failure history
+its own learning permissions
+```
+
+That is much more like a cognitive circuit than an anonymous layer.
+
+# The local gain mapping
+
+The neuron’s local gain is not simply \(W\).
+
+For:
+
+$$
+y=\phi(Wx+b)
+$$
+
+the local derivative is:
+
+$$
+\frac{dy}{dx}
+=
+W\phi'(Wx+b)
+$$
+
+That is a strong mapping to CJT gain \(\beta\):
+
+$$
+\beta
+=
+\frac{\partial E}{\partial C}
+$$
+
+The same weight \(W\) can produce different gains depending on where the junction is operating.
+
+For example:
+
+```text
+cutoff:
+φ′ ≈ 0, little Effect change
+
+active:
+φ′ is substantial, Cause changes Effect
+
+saturation:
+φ′ ≈ 0 again, more Cause adds little Effect
+```
+
+This is why the activation function matters. Without \(\phi\), stacking linear neurons gives only another linear transformation.
+
+A full CJT adds semantic verification because a mathematically active response can still be the **wrong Effect**. Numerical activation alone cannot determine correctness.
+
+# What a neural network of CJTs would look like
+
+Effects become new Causes:
+
+```text
+CJT ^8 Trigger
+    receives Cause
+    produces an activated Idea
+                ↓
+CJT ^6 Decompose
+    receives that Idea as its Cause
+    produces parts
+                ↓
+CJT Compare
+    evaluates the parts
+                ↓
+Verifier
+    accepts or rejects the result
+```
+
+Formally:
+
+$$
+E^{(1)}_t=C^{(2)}_t
+$$
+
+$$
+E^{(2)}_t=C^{(3)}_t
+$$
+
+The network can also loop:
+
+$$
+E_t
+\rightarrow
+M_{t+1}
+\rightarrow
+B_{t+1}
+\rightarrow
+\text{later routing}
+$$
+
+That creates a neural circuit whose behavior depends on its history.
+
+# One CJT should probably contain many ordinary neurons
+
+The first practical design should **not** replace every scalar neuron with a full verifier, memory bank, and RPM controller. That would be computationally enormous.
+
+The useful hierarchy is:
+
+```text
+ordinary parameters and matrix operations
+        ↓
+small neural transformations
+        ↓
+CJT cells or modules
+        ↓
+Cognitive Circuit Boards
+        ↓
+CNCM
+```
+
+A CJT might contain:
+
+* a small MLP;
+* an attention head;
+* a recurrent state cell;
+* a memory read head;
+* an Effect decoder;
+* readiness gates;
+* an update proposal head.
+
+So one CJT may contain thousands or millions of ordinary weights.
+
+Later, after the macro-CJT architecture works, we could investigate finer-grained arrays of smaller CJT cells.
+
+# How this differs from an LSTM or GRU
+
+A recurrent CJT overlaps mathematically with recurrent neural networks.
+
+An LSTM already has:
+
+```text
+persistent state
+gates
+controlled forgetting
+controlled writing
+```
+
+A CJT adds a different organization:
+
+```text
+typed cognitive operation
+typed Cause and Effect
+D/W/P readiness reasons
+operating-region record
+hard governance mask
+verifier-controlled publication
+RPM repair route
+separate proposed and authoritative state
+sealed transition trace
+```
+
+So the CJT is not better merely because it is recurrent.
+
+Its proposed advantage is that recurrence becomes **typed, inspectable, testable, and governed**.
+
+# What “improvement” must actually mean
+
+A CJT does not become superior just because its diagram has more boxes.
+
+It has to beat simpler neural cells on measurable properties such as:
+
+```text
+better transfer
+less catastrophic forgetting
+safer learning
+fewer false commitments
+better dynamic compute allocation
+clearer failure diagnosis
+more reliable multi-step composition
+better memory use
+successful rollback
+```
+
+It may be slower and more expensive than an ordinary neuron.
+
+The scientific question is whether the added structure earns its cost.
+
+# The most important correction to carry forward
+
+Your original insight was:
+
+```text
+y = Effect
+xW = Cause
+b = Bias
+```
+
+The refined version is:
+
+$$
+\boxed{
+C=x
+}
+$$
+
+$$
+\boxed{
+B\supseteq\{W,b,\text{memory},\text{state},\text{readiness},\text{governance}\}
+}
+$$
+
+$$
+\boxed{
+E=\phi(T_B(C))
+}
+$$
+
+And for the full recurrent CJT:
+
+$$
+\boxed{
+(E_t,B_{t+1})
+=
+\operatorname{VerifiedCJTStep}(C_t,B_t)
+}
+$$
+
+So \(xW\) is not the Cause itself.
+
+It is:
+
+> **The Cause after passing through the learned constitution of the junction.**
+
+That is the bridge between an ordinary neural unit and your Cognitive Junction Transistor.
+
+

@@ -1,0 +1,188 @@
+{
+ "schema": "casalescence/optionb/plan_v1_1_project_copy/v1",
+ "utc": "2026-10-07T01:34:48Z",
+ "what": "Byte copies from CASALESCENCE_NOETICS_v0_1 as the base of the plan v1.1 practice chain. The v1.0 folder and its seal file are not touched. Files that v1.1 changes are edited HERE only, and each change is recorded in PLAN_V1_1_CHANGES.json.",
+ "source_folder": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1",
+ "files": [
+  {
+   "path": "tools/ob_assemble.py",
+   "bytes": 61314,
+   "sha256": "13eebd988508aaaffd8dae23b7ceaccbe813f9fe1ffb66d3026d1dd1363db8f4"
+  },
+  {
+   "path": "tools/ob_check_questions.py",
+   "bytes": 26516,
+   "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e"
+  },
+  {
+   "path": "tools/ob_check_support.py",
+   "bytes": 42986,
+   "sha256": "05660139b058ef7d544e84f632ceba76c53cdd36f38da9578bd165c25bc100ac"
+  },
+  {
+   "path": "tools/ob_eligibility.py",
+   "bytes": 41781,
+   "sha256": "ae43442bac1a491b962406b67a9298d14317896c4aec17b5604fd077f6b610bb"
+  },
+  {
+   "path": "tools/ob_role_notes.py",
+   "bytes": 43948,
+   "sha256": "1f0640abb8b4a53a040c6b93fdbdf9da2805a5fc1d8eea43cbafbf7960b2dafb"
+  },
+  {
+   "path": "tools/ob_screen_notes.py",
+   "bytes": 35804,
+   "sha256": "ab4bfd9a607863ae2ad5467cccab31b0aaec13cf5b3f5187bc73b316d8af5fc8"
+  },
+  {
+   "path": "tools/ob_seal.py",
+   "bytes": 92398,
+   "sha256": "eb44758756232a8885666aa4c1442a9fc04f86d75a16526b747530d25fff44cb"
+  },
+  {
+   "path": "tools/ob_select.py",
+   "bytes": 35417,
+   "sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712"
+  },
+  {
+   "path": "tools/ob_solve_blind.py",
+   "bytes": 45807,
+   "sha256": "9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15"
+  },
+  {
+   "path": "tools/ob_write_ordinary_notes.py",
+   "bytes": 48536,
+   "sha256": "adf6cd8fa5b5acf9fe7d1f050641ffcf372628aeeb7dcc759f2a728df7895aee"
+  },
+  {
+   "path": "tools/ob_write_questions.py",
+   "bytes": 36575,
+   "sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159"
+  },
+  {
+   "path": "tools/verdict.py",
+   "bytes": 13018,
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "bytes": 7968,
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  },
+  {
+   "path": "tools/scorer_v0_1.py",
+   "bytes": 3030,
+   "sha256": "8fe3a88512b08cadd3190602345ea81d113f2062b230c20b3dd66d29c392181e"
+  },
+  {
+   "path": "08_OPTION_B_PLAN_v1_0.md",
+   "bytes": 165280,
+   "sha256": "37ef5ffe3ce3518fa292e7111bdeb875bfc58bdd48bcba222c6fbe97e21f2897"
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "bytes": 19265,
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "03_SCORER_RULES_v0_1.md",
+   "bytes": 4375,
+   "sha256": "d611de5fa2b8e9d133f9ba28f3dadf783de6ffc159a1c9c451d2c5a1f40ef3d1"
+  },
+  {
+   "path": "scorer_examples_v0_1.json",
+   "bytes": 4527,
+   "sha256": "f1b40f166dd85303f751d3785c7d2a85de293be0fad24ff353fef70611a58aba"
+  },
+  {
+   "path": "design_v2/optionB_final.json",
+   "bytes": 131627,
+   "sha256": "de0a0a50dcde3914054ee7cca2951b5a5077348f42409478240c1e40dbc52425"
+  },
+  {
+   "path": "design_v2/optionB_reviews.json",
+   "bytes": 43218,
+   "sha256": "06c9d2884b1510ad7f65946ae8a69d88a1d16d9fe3f8f51fa7898d677ba6ffe5"
+  },
+  {
+   "path": "OWNER_DIRECTION_POINTING_AND_OPTION_B_20261005.json",
+   "bytes": 4405,
+   "sha256": "689f4b5622b0f28d60e0146e3b2e41d68c40f9eec7ddf42c06719c42d4f692fc"
+  },
+  {
+   "path": "OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json",
+   "bytes": 4833,
+   "sha256": "72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c"
+  },
+  {
+   "path": "DIRECTIVE_R2.md",
+   "bytes": 14760,
+   "sha256": "eb667f2549a89a1eda7fc5955b14395915c69023e093f43580c26243f558198b"
+  },
+  {
+   "path": "OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json",
+   "bytes": 2099,
+   "sha256": "d1c052f56b61a6f30a428d25b4530352d6cd6ddb489163734fe6ea6d23b24325"
+  },
+  {
+   "path": "optionb/FILE_FORMATS.md",
+   "bytes": 125389,
+   "sha256": "66a5bd99cd8dfbf35bc3fa7d3e3cd04f4d5be7d44c6c02d3963b238935ff779f"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "bytes": 91484,
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/OUTCOME_STATUS_TABLE.json",
+   "bytes": 2267,
+   "sha256": "167213c467ad604a1e2bfd282b8d353c8940c6a981a959aaa85c6caf58ad275f"
+  },
+  {
+   "path": "optionb/job/runner_b1.py",
+   "bytes": 71179,
+   "sha256": "c50631e47b4cbda3ff7d2b7fe916ced0a1bc48cb5e3a4b6b58a1b007bf556ff2"
+  },
+  {
+   "path": "optionb/job/scorer_v0_1_1.py",
+   "bytes": 6173,
+   "sha256": "62222d04d714a21b20e88997684cb90521d684c1ee085cc7781883f71591a867"
+  },
+  {
+   "path": "optionb/job/gate_b1.py",
+   "bytes": 35951,
+   "sha256": "82605a5a38455b11e7765f06159530faa6165d5f8ec109bfcd0b31ae2a97133f"
+  },
+  {
+   "path": "optionb/job/analysis_b1.py",
+   "bytes": 69933,
+   "sha256": "58348eff5528cda1fa0af7b3588f787d559e8d3e9da4de2a1b5ae2b15973b411"
+  },
+  {
+   "path": "optionb/job/scorer_examples_v0_1_1.json",
+   "bytes": 6559,
+   "sha256": "11c2eecf7edc5c17d2432ffecb835666c526a907eab709c67e761985d8de3583"
+  },
+  {
+   "path": "optionb/job/SELFTEST_EXPECTED.json",
+   "bytes": 19500,
+   "sha256": "348cec707db2eebee7b77e3252e5257ba62d3965ca786df4eb3a220212347da0"
+  },
+  {
+   "path": "verdict/labels_team_a.json",
+   "bytes": 314980,
+   "sha256": "afb609c95adc45da43a8ef2b3ab5718ffbfc46e4a92bd1b56d8b3dfae7218584"
+  },
+  {
+   "path": "verdict/labels_team_b.json",
+   "bytes": 358934,
+   "sha256": "8c5be47223ea6b7a840c11f7e3eba51fbb34767640240c924869b8515038b460"
+  },
+  {
+   "path": "verdict/passages_kinds_HIDDEN_FROM_LABELERS.json",
+   "bytes": 174797,
+   "sha256": "e9b6f8030d698af7c6f3bb8bb8439ba26fcfcceccbc4740769e64eb71e139622"
+  }
+ ]
+}

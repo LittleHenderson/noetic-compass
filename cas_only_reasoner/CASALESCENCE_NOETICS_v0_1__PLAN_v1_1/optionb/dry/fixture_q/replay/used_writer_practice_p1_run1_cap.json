@@ -1,0 +1,6 @@
+[
+ {
+  "http_status": 429,
+  "error": "HTTPError 429: MADE-UP refusal. quotaId GenerateRequestsPerDayPerProjectPerModel-FreeTier. Please retry in 38s."
+ }
+]

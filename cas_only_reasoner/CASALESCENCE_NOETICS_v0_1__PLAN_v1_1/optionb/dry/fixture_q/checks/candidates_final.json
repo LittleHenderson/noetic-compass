@@ -1,0 +1,137 @@
+{
+ "schema": "casalescence/optionb/candidates/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "2fe578d5a458b769a3600f8c950b60499ea78695e9b61b246e99da576bb4ccbf",
+  "utc": "2026-10-07T02:23:28Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "78127fadce11276ec8513f529848b3af4c2b50124309fafad679271056524646"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_final_p1.json",
+   "sha256": "c8fa3156701275cf3a78ba267f44fca73db1242ba16f0a3360a4393041400720"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_final_p2.json",
+   "sha256": "9905c83cd0ae2c57ba06a0119395bbf4f7e9bb85c6778f66ad80676713806b34"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/split_fixed.json",
+   "sha256": "afe46fc9932aa411c80c3a23c1ff2ca120025a2d420180739b23e7fa544ec68a"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "final",
+ "candidates": [
+  {
+   "question_id": "V903.p1.LONG_BREAK",
+   "passage_id": "V903",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.",
+   "question": "Oksana takes a desk job for two years and never weighs flour. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "stopping the scoop without a glance",
+   "wrong": [
+    "tying her apron at the bench",
+    "calling for the trays",
+    "the radio on the shelf",
+    "the bench before dawn",
+    "four hundred grams of flour"
+   ],
+   "anchors": [
+    "Every weekday for eleven years",
+    "her hands stopped the scoop"
+   ]
+  },
+  {
+   "question_id": "V903.p1.NEW_STARTER",
+   "passage_id": "V903",
+   "family": "role_step",
+   "form": "NEW_STARTER",
+   "pass": "p1",
+   "passage": "Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.",
+   "question": "A new baker takes Oksana's place on a first day. Going only by the passage, which of these would most likely be missing?",
+   "right": "the scoop stopping without a glance",
+   "wrong": [
+    "a radio playing on the shelf",
+    "an apron tied before the work",
+    "a call for the trays",
+    "flour weighed out by hand",
+    "a scale on the bench"
+   ],
+   "anchors": [
+    "Every weekday for eleven years"
+   ]
+  },
+  {
+   "question_id": "V903.p1.FACT",
+   "passage_id": "V903",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.",
+   "question": "Where was the new radio?",
+   "right": "on the shelf",
+   "wrong": [
+    "on the bench",
+    "beside the scale",
+    "in the tray rack"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V903.p2.FACT",
+   "passage_id": "V903",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p2",
+   "passage": "Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.",
+   "question": "What did Oksana call for?",
+   "right": "the trays",
+   "wrong": [
+    "the radio",
+    "the scale",
+    "the apron"
+   ],
+   "anchors": []
+  }
+ ],
+ "counts": {
+  "role_step": 2,
+  "plain_fact": 2,
+  "candidates_per_pass": {
+   "p1": {
+    "role_step": 2,
+    "plain_fact": 1
+   },
+   "p2": {
+    "role_step": 0,
+    "plain_fact": 1
+   },
+   "p3": {
+    "role_step": 0,
+    "plain_fact": 0
+   }
+  },
+  "pairs_with_a_candidate": 2
+ }
+}

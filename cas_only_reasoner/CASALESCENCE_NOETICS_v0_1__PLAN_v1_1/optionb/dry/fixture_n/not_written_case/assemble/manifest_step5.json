@@ -1,0 +1,215 @@
+{
+ "schema": "casalescence/optionb/assemble_manifest/v1",
+ "made_by": {
+  "program": "tools/ob_assemble.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "6402a4c40de62c9a66b3ed5497c819354d9b5b9270ed69a3fad3fc9754b63204",
+  "utc": "2026-10-07T02:23:35Z"
+ },
+ "inputs": [
+  {
+   "path": "../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+   "sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880"
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "00f18c02b8544a1597432154abdb7c900165f186757d67d215cec4a0ffea0192"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/SEAL_OPTIONB.jsonl",
+   "sha256": "6a1aededebdcef29dcbc9c12f1d04cb13062475229785dcf1e524afc9a5db15d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/anchor_check_final.json",
+   "sha256": "92b4dab408758a286a4fdda2615271f86c86cea471f8188f94c575fb4062fc83"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/anchor_check_practice.json",
+   "sha256": "39bccbdf801ac9bdc898ba2bc1c256513e224817c4039547d538ee37ede632bc"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/candidates_final.json",
+   "sha256": "79c945505bd278157fc3c361b8522395e5a3e85659bb9ae1f81d9f329f17456d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/candidates_practice.json",
+   "sha256": "a1e2e20f8b27432830de3b6390eaeb245c009282ba5e582b45b5c819d7cc440d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/form_check_final.json",
+   "sha256": "e81f28fbbc282948376eb8a7573595f07062d2eb083f2724e6bbc40064c2752f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/form_check_practice.json",
+   "sha256": "639c53254bfcb2e9fc1b6a92d93d4740a1524f0641ea3e4b27ef3aae5c7ce4fb"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/option_check_final.json",
+   "sha256": "163103e7a3b5547fb025c51134647685f10c1042e524d540a1a69b5af939bbe9"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/option_check_practice.json",
+   "sha256": "2014af7579cde70857ed38a97977d17c4bb02a93f6e010c8d0668298189789ca"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/elig/eligibility.json",
+   "sha256": "225d5d7a5dffee567ca4bf2346c1514898e5052bccd88442cef2ed8785953848"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/elig/exclusions.json",
+   "sha256": "c5e7bf279aa4d476bf9168dc569e73c28418da5fba508722bbb8de26980715d8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_ord/ordinary_notes_final.json",
+   "sha256": "c6c7336e6c7ae135735970c721708800762b898207bd03d70428b23ba9020db8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_ord/ordinary_notes_practice.json",
+   "sha256": "7d9699f0d154f82303b53f0b5bb6f490f77dd2143de497c6a9274d8a9f83cbdb"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_role/role_notes.json",
+   "sha256": "667c6f2fc3e816b4ecf81c83b9ee7adb6e9ec07ac7a84e6442d750fc5083d2be"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_final_p1.json",
+   "sha256": "f6130abb5d1f24c7d6fbe28b2a245a91f42ad75f6435540db3487aec80d34972"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_final_p2.json",
+   "sha256": "68b052bc7b6232175b44c4c402ef0908d35d2286ee98072978a6ef2de287b884"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_practice_p1.json",
+   "sha256": "9173bca7c3cee238494e692291380819d8f16d29c339360e117f5ca1ca692102"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_practice_p2.json",
+   "sha256": "03e98e732a71647dfcf98e447a7ba5a7c5e2d5a41af7b1efaa75e48e57a23646"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/screen/leak_screen_final.json",
+   "sha256": "1763a3e1f3374e74f43271d5400d7329e95cbf5e50320e0d9b01d4bb7117db28"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/screen/leak_screen_practice.json",
+   "sha256": "afdc4ee157b0eaa2074c6194b645192e45c59bd1ed7dceebbfd9fc1a7791e27f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/select/selection_final.json",
+   "sha256": "e9237d1e8e992a19d9527056118f9d174468cb2b01a121b19a00cd8f0d2a0e06"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/select/selection_practice.json",
+   "sha256": "748f32053f06fe1aef579c2853f7f655605e4214aa9058b7da72e0823d18fc24"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/select/split_fixed.json",
+   "sha256": "c9ea45fbeeee937c19ba23520a22eeda678c1db094cb58c5aa89a280974bbd18"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/solve/key_check_final.json",
+   "sha256": "1046c0fc81ebd6b3bfd61fcb5c28bd480f8a292899357152d60573582b5a4b81"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/solve/key_check_practice.json",
+   "sha256": "8b6f82a62ae9fee9c89ee60d243012086cba6b8f321f4653550d27d0ee989e6d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/support/support_results_final.json",
+   "sha256": "577aeb02be4d30911e7a681aa75524933dacd048888f764fa0ecf366d0cb39ff"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/support/support_results_practice.json",
+   "sha256": "ad024c4888a7701dd38b6162988c007a09b28c9b48de4363ebf47668a359d013"
+  }
+ ],
+ "seal_step": "5_PROMPT_PARTS_AND_REMOVAL_LOG",
+ "files": [
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/screen/leak_screen_practice.json",
+   "package_path": null,
+   "bytes": 2738,
+   "sha256": "afdc4ee157b0eaa2074c6194b645192e45c59bd1ed7dceebbfd9fc1a7791e27f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/screen/leak_screen_final.json",
+   "package_path": null,
+   "bytes": 3299,
+   "sha256": "1763a3e1f3374e74f43271d5400d7329e95cbf5e50320e0d9b01d4bb7117db28"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/removal_log.json",
+   "package_path": null,
+   "bytes": 21084,
+   "sha256": "9801364c1a339a86a466e4a97294d77121ce6d1bdfb733c0d9bcd6f6a7691355"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/prompts/prompt_parts_practice.json",
+   "package_path": "prompts/prompt_parts_practice.json",
+   "bytes": 21969,
+   "sha256": "3b17d3fb7354fbfd7dcf2a2b648aa14d87f9d99d9c463f6aac33bd2249e0d52d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/keys_practice/keys_practice.json",
+   "package_path": "keys_practice/keys_practice.json",
+   "bytes": 5862,
+   "sha256": "0c8a1a1d508fe2832a58eea83af26818a6e57661d3d12ac8b7d6bb0ffaf7b91b"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/keys_practice/task_meta_practice.json",
+   "package_path": "keys_practice/task_meta_practice.json",
+   "bytes": 7936,
+   "sha256": "6bf6231a715090dd56ee0d6bd0f95ac903738367a9c6fda40cf714ecbb2c2e68"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/prompts/prompt_parts_final.json",
+   "package_path": "prompts/prompt_parts_final.json",
+   "bytes": 27020,
+   "sha256": "d075aeeee76460517b3dde519c0f3a9d63f4ff137031555286303ea8e6a03a35"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/keys_final/keys_final.json",
+   "package_path": "keys_final/keys_final.json",
+   "bytes": 5944,
+   "sha256": "e0b6e35aa73873275e2cd8260752dbf97156064feb6633ccf0beeb8a1490612b"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/keys_final/task_meta_final.json",
+   "package_path": "keys_final/task_meta_final.json",
+   "bytes": 8580,
+   "sha256": "4fdf6f3e8926b6b60087433b1c2d4d096e071d4fa4bab7b774daae6b56e45c43"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/review/review_pack.json",
+   "package_path": null,
+   "bytes": 38003,
+   "sha256": "9f0251fbb646d3bc7e06c50cbd54c02d35d4357dde8ae2c58e4d297b09f6003f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/assemble/planned_calls.json",
+   "package_path": null,
+   "bytes": 13620,
+   "sha256": "0201a46919acc4bb93c23c46ffbe7d26e67255aa4901d7fe06ef4834d8477eb7"
+  }
+ ],
+ "values": {
+  "final_role_step_tasks": 5,
+  "final_plain_fact_tasks": 4,
+  "final_passages_with_a_role_step_task": 4,
+  "practice_role_step_tasks": 4,
+  "practice_plain_fact_tasks": 3,
+  "launch_floor_met": true,
+  "tier": "EXPLORATORY",
+  "planned_calls_whole_job": 136,
+  "call_cap": 5000,
+  "practice_setting_count": 8
+ }
+}

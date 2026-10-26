@@ -1,0 +1,143 @@
+{
+ "schema": "casalescence/optionb/plan_v1_1_changes/v1",
+ "utc": "2026-10-07T02:24:47Z",
+ "spec": {
+  "path": "PLAN_V1_1_CHANGE_SPEC.md",
+  "sha256": "c22a058d8fbf5b54e21b7297273b1bf447321c4191537d9388e40235a8112991"
+ },
+ "copy_record": {
+  "path": "PROJECT_COPY_RECORD.json",
+  "sha256": "4c7d6ee71d640f84b6f2e457ca02dea5e54f7e73a76c6df8cf8215f0acecc722"
+ },
+ "what": "Plan v1.1 text changes made in this folder only. Old sha256 values come from PROJECT_COPY_RECORD.json (for the new plan file, old = the sha256 of 08_OPTION_B_PLAN_v1_0.md). The v1.0 folder is not touched. Tool changes (tools/ob_write_questions.py, tools/ob_check_questions.py, tools/ob_select.py) are made by another agent and are not recorded here.",
+ "unchanged_on_purpose": [
+  "Launch floors 36 / 20 / 100 / 100; reserve targets 45 / 25; key check rule; no-passage rule; pair rule; length backstop; letters; all seals; all briefs other than the question brief; all job programs; the self-test expectations.",
+  "08_OPTION_B_PLAN_v1_0.md in this folder (sha256 37ef5ffe3ce3518fa292e7111bdeb875bfc58bdd48bcba222c6fbe97e21f2897)."
+ ],
+ "open_points_for_the_reviewer": [
+  "PLAN_CONSTANTS.json key root and the 'Where' path of FILE_FORMATS.md section 0 now name this folder (coordinator follow-up of 2026-10-07). No tool under tools/ reads the constants key root (checked by grep); the change is for the record.",
+  "FILE_FORMATS.md 5.4 keeps the schema name casalescence/optionb/candidates/v1 although its counts block changed; the spec names no new schema name. The tool fixer and this text must agree on the field names candidates_per_pass, pairs_with_a_candidate, pass_used, survival and the reason code LATER_PASS_NOT_NEEDED, which this text fixes because the spec left them open.",
+  "Spec C5 says 'final about 59' calls per pass; 59 is the final-set count at 8 practice settings (235 passages). At 12 settings the final set has 206 passages, 52 calls per pass. Both numbers are given in the plan and the constants.",
+  "The two brief lines added inside the form blocks (after TAKE_AWAY and after NOT_BELONG) are plain lines without a leading '- ', because they are notes to a form block, not forms; the four rules carry '- ' like the rules around them."
+ ],
+ "files": [
+  {
+   "path": "08_OPTION_B_PLAN_v1_1.md",
+   "old_path": "08_OPTION_B_PLAN_v1_0.md",
+   "old_sha256": "37ef5ffe3ce3518fa292e7111bdeb875bfc58bdd48bcba222c6fbe97e21f2897",
+   "new_sha256": "617c0e3d0e96be023be2bedf9e447a90e266409c672e0ef86e84f3876cee2214",
+   "new_bytes": 186173,
+   "diff": "PLAN_V1_1_DIFFS/08_OPTION_B_PLAN_v1_1.vs.v1_0.diff",
+   "note": "A new file: a copy of 08_OPTION_B_PLAN_v1_0.md with the v1.1 edits. The v1.0 plan file in this folder is not edited. Sections 1 to 27 keep their numbers and headings.",
+   "edits": [
+    "Title: version 1.0 -> version 1.1.",
+    "Top: a paragraph 'Version 1.1 on 2026-10-07, after the practice stop'; the plan path now names this folder and 08_OPTION_B_PLAN_v1_1.md, with the sealed v1.0 path beside it.",
+    "7.1 table: one v1.1 sentence each in the rows MEET_AGAIN, TAKE_AWAY, WHAT_LEFT, NOT_BELONG on what the right option is (spec C1).",
+    "7.3: five v1.1 option rules added after 'No throwaway options' (same kind; plain nouns, no valence words; no two alike with code OPTIONS_MATCH_EACH_OTHER; no key words in the question with code QUESTION_REPEATS_KEY; wrong options from the passage for nine forms with code WRONG_OPTION_NOT_FROM_PASSAGE) (spec C1, C2).",
+    "8.1: a note that v1.1 adds six lines; the six lines inserted in the brief word for word from spec C1: one after the TAKE_AWAY form, one after the NOT_BELONG form, four rules after 'Every wrong option is a thing or an action named in the passage'. Nothing removed.",
+    "10 Step 1: 'One model' says 'every pass'; the 'Spare pass' bullet is replaced by 'Three passes (version 1.1)' with p1, p2, p3, the seed writer_batch_order_p3 = 20261018, --pass p3, and the candidate rule (spec C3).",
+    "10 Step 2: three v1.1 drop rules with their codes and exact rules, their order (after the form checks, before the anchor check), and the plain-fact note (only OPTIONS_MATCH_EACH_OTHER applies) (spec C2).",
+    "10 after Step 3: the one-candidate sentence is replaced by the candidate rule (every passing question of every pass; field pass; counts candidates_per_pass) (spec C3).",
+    "10 Steps 4 and 5: one sentence each that they run on every candidate of every pass; rules unchanged; the two rejected loosened key rules are pointed to (spec C3, C4).",
+    "10 Step 6: a new point 1, lowest-pass-first reduction per passage and form with dropped reason LATER_PASS_NOT_NEEDED and the field pass_used; the old points 1 to 4 become 2 to 5, unchanged in substance (spec C3).",
+    "19.2: the Gemini line gets the third pass and EXPECTED call counts; the DeepSeek line gets the three-candidates note with the REAL v1.0 practice tokens (268 calls, 41,185 input, 1,609 output); the EXPECTED-need paragraph gets the v1.1 ceiling arithmetic; both token limits unchanged (spec C5).",
+    "22: question 13 gets the v1.1 cost sentence; a new question 5a about the six brief lines, default 'Used as written' (spec C5; owner question on the brief).",
+    "24 item 7: the spare rule becomes the candidate rule (spec C3).",
+    "28: new section 'Version 1.1: changes after the practice stop of 2026-10-07' with the counts of spec part 0, the two rejected key rules, a table of every edit, what did not change, where v1.1 is built, and the review record PLAN_V1_1_REVIEW.json.",
+    "Review fixes (coordinator, 2026-10-07): MAJOR-1: 28.5 no longer says the eligibility files and role notes are byte copies; it says they are made again by the unchanged tools from the same sealed sources and seeds, that v1.1 starts from 8 practice settings with the reserve rule run again, how the operator's reading of the v1.0 reserve-setting questions is handled, and that the v1.0 practice files stay sealed and are not copied; the same start-state sentence is in the top note. MINOR-1: 19.2 DeepSeek line gives the 288 / 738 + 522 = 1,260 ceiling and about 194,000 input tokens. MINOR-2: Step 6 point 1 states the unit of every survival row. MINOR-3: Step 1 states that a missing later pass file is skipped with passes_missing and that seal steps 3A and 3C refuse until every pass file is complete. MINOR-4: line 3 says nothing has run for version 1.1 (version 1.0 ran the practice build).",
+    "Tool-review updates (coordinator, 2026-10-07): OPTIONS_MATCH_EACH_OTHER narrowed in 7.3 and Step 2 (looser word test AND at least 2 shared content words; a one-word overlap is left to the brief line and the solvers' flags); 28.3 gets the reason with the REAL count (the rule as first written fired on 135 of 324 sealed v1.0 practice role-step questions) and names tools/ob_assemble.py as a changed tool; Step 2 says the passage text is normalised before WRONG_OPTION_NOT_FROM_PASSAGE compares; the MINOR-3 sentence in Step 1 is replaced (a missing later pass file stops the check and select tools with MISSING_PASS_FILE in a real run; only a dry fixture skips it and prints passes_missing).",
+    "Not changed on purpose: 11.1 and 12.1 (they name no pass and no candidate rule); the history rows 23 D4 and 27 A1 that say 'spare pass'."
+   ]
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "old_sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34",
+   "new_sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467",
+   "new_bytes": 101246,
+   "diff": "PLAN_V1_1_DIFFS/PLAN_CONSTANTS.json.diff",
+   "note": "Edited in place in this folder. Written with json.dumps(indent=1, ensure_ascii=False) plus one LF, UTF-8, LF line ends, as FILE_FORMATS.md section 0 requires. The v1.0 file was hand-formatted (blank lines between blocks, short objects on one line), so the byte diff PLAN_CONSTANTS.json.diff shows layout changes over the whole file. The diff PLAN_CONSTANTS.json.normalized.diff re-serializes the v1.0 file the same way first and shows only the real changes. Every key of v1.0 still exists; keys were added or their values changed, none removed. The changed and added leaf paths are listed under changed_leaves and added_leaves.",
+   "normalized_diff": "PLAN_V1_1_DIFFS/PLAN_CONSTANTS.json.normalized.diff",
+   "changed_leaves": [
+    ".briefs.question_brief",
+    ".expected.gemini_question_calls_at_8_settings.final",
+    ".expected.gemini_question_calls_at_8_settings.practice",
+    ".expected.gemini_question_calls_note",
+    ".outside_services.deepseek.spend_cap_expected",
+    ".outside_services.gemini_question_writer.one_model_rule",
+    ".outside_services.gemini_question_writer.pass_meaning.p2",
+    ".outside_services.gemini_question_writer.passes",
+    ".plan_file",
+    ".plan_version",
+    ".question_rules.spare_rule",
+    ".root",
+    ".schema",
+    ".status"
+   ],
+   "added_leaves": [
+    ".expected.gemini_question_calls_at_12_settings.final",
+    ".expected.gemini_question_calls_at_12_settings.practice",
+    ".outside_services.deepseek.v1_1_candidates_note",
+    ".outside_services.gemini_question_writer.pass_meaning.p3",
+    ".outside_services.gemini_question_writer.passes_rule",
+    ".question_rules.no_two_options_match",
+    ".question_rules.no_two_options_match_min_shared_content_words",
+    ".question_rules.no_two_options_match_rule",
+    ".question_rules.question_must_not_match_right_option",
+    ".question_rules.question_must_not_match_right_option_rule",
+    ".question_rules.wrong_options_must_match_passage_forms",
+    ".question_rules.wrong_options_must_match_passage_rule",
+    ".seeds.writer_batch_order_p3"
+   ],
+   "edits": [
+    "schema: casalescence/optionb-plan-constants/v1.0 -> casalescence/optionb-plan-constants/v1.1.",
+    "plan_file: 08_OPTION_B_PLAN_v1_0.md -> 08_OPTION_B_PLAN_v1_1.md. plan_version: 1.0 -> 1.1.",
+    "status: one sentence appended about version 1.1 and 2026-10-07.",
+    "briefs.question_brief: six lines inserted (spec C1), every existing line unchanged and in order: one line after the TAKE_AWAY line, one line after the NOT_BELONG line, four '- ' rules after the 'Every wrong option is a thing or an action named in the passage' rule. 60 lines -> 66 lines.",
+    "question_rules: new keys question_must_not_match_right_option (true), question_must_not_match_right_option_rule, no_two_options_match (true), no_two_options_match_rule, wrong_options_must_match_passage_forms (nine forms), wrong_options_must_match_passage_rule (spec C2). spare_rule: text replaced by the v1.1 candidate rule (spec C3).",
+    "outside_services.gemini_question_writer: passes [p1, p2] -> [p1, p2, p3]; pass_meaning.p3 added ('third pass: same brief, different seeded batch order'); pass_meaning.p2 reworded as 'second pass ... (called the spare pass in v1.0)'; one_model_rule says 'every pass'; new key passes_rule.",
+    "seeds.writer_batch_order_p3: 20261018 (new; inserted after writer_batch_order_p2).",
+    "expected.gemini_question_calls_at_8_settings: {practice 30, final 118} -> {practice 45, final 177} (three passes); new key expected.gemini_question_calls_at_12_settings {practice 66, final 156}; gemini_question_calls_note reworded for three passes (spec C5).",
+    "outside_services.deepseek.spend_cap_expected: the v1.1 sentence appended (three candidates per pair; REAL v1.0 practice tokens; EXPECTED ceiling shares; limits unchanged); new key outside_services.deepseek.v1_1_candidates_note.",
+    "Review fixes (coordinator, 2026-10-07): status says nothing has run for version 1.1 (MINOR-4); outside_services.deepseek.spend_cap_expected gives the 288 / 1260 ceiling and about 194000 input tokens (MINOR-1).",
+    "Tool-review updates (coordinator, 2026-10-07): question_rules.no_two_options_match_rule narrowed (looser word test AND at least 2 shared content words; EMPTY_TEXT / OPTION_COUNT questions not tested); new key question_rules.no_two_options_match_min_shared_content_words = 2, placed right after no_two_options_match_rule.",
+    "root: the sealed v1.0 folder path -> C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1__PLAN_v1_1 (coordinator follow-up; the new study folder)."
+   ],
+   "new_keys": [
+    "question_rules.question_must_not_match_right_option",
+    "question_rules.question_must_not_match_right_option_rule",
+    "question_rules.no_two_options_match",
+    "question_rules.no_two_options_match_rule",
+    "question_rules.no_two_options_match_min_shared_content_words",
+    "question_rules.wrong_options_must_match_passage_forms",
+    "question_rules.wrong_options_must_match_passage_rule",
+    "outside_services.gemini_question_writer.pass_meaning.p3",
+    "outside_services.gemini_question_writer.passes_rule",
+    "seeds.writer_batch_order_p3",
+    "expected.gemini_question_calls_at_12_settings",
+    "outside_services.deepseek.v1_1_candidates_note"
+   ]
+  },
+  {
+   "path": "optionb/FILE_FORMATS.md",
+   "old_sha256": "66a5bd99cd8dfbf35bc3fa7d3e3cd04f4d5be7d44c6c02d3963b238935ff779f",
+   "new_sha256": "51eb1218f3b0f63b3942d01617eff63603f2f578a7726434c62c7459fe3ab987",
+   "new_bytes": 132317,
+   "diff": "PLAN_V1_1_DIFFS/FILE_FORMATS.md.diff",
+   "note": "Edited in place in this folder. Everything outside the listed places is byte-identical to v1.0 (see the diff).",
+   "edits": [
+    "Header: 'version 1.0' -> 'version 1.1'; the status line names 08_OPTION_B_PLAN_v1_1.md; a one-paragraph v1.1 note that names the changed sections.",
+    "Section 0, names table: the <pass> row now reads p1, p2 or p3. No limit of section 0 changed.",
+    "Section 0, 'Where': the base path is now C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/optionb/ (coordinator follow-up). The rest of section 0 is byte-identical.",
+    "Section 4: a 'Passes (v1.1)' paragraph (p1, p2, p3; one seed per pass; --pass p3; file names with the pass name); the batch sentence names _p3; 'both passes' -> 'all three passes' in the One model paragraph and in the 4.1 table; 'the other pass' -> 'another pass' in the reserve-rule sentence.",
+    "Section 5 intro and 5.1: 'both passes' -> 'every pass'; the three v1.1 reason codes QUESTION_REPEATS_KEY, OPTIONS_MATCH_EACH_OTHER, WRONG_OPTION_NOT_FROM_PASSAGE with their rules and scope in a table (spec C2).",
+    "Section 5.4: the candidate rule (every passing question of every pass; up to three per passage and form; field pass; counts candidates_per_pass and pairs_with_a_candidate; spares_used gone); the example shows a p1 and a p3 candidate (spec C3).",
+    "Section 7.1: new fields tasks[].pass_used and survival; the 'Lowest-pass-first reduction (v1.1)' paragraph; dropped reason LATER_PASS_NOT_NEEDED; the example shows pass_used, a LATER_PASS_NOT_NEEDED drop and the survival block (spec C3).",
+    "Section 15.1: the sealed plan file is 08_OPTION_B_PLAN_v1_1.md (a listed file name changed).",
+    "Tool-review updates (coordinator, 2026-10-07): 5.1 OPTIONS_MATCH_EACH_OTHER row narrowed (lenient_span AND at least 2 shared content words); 5.1 says a question already failing EMPTY_TEXT or OPTION_COUNT is not tested by the three word rules, and that the passage text is normalised before WRONG_OPTION_NOT_FROM_PASSAGE compares; section 4 MINOR-3 sentence replaced (MISSING_PASS_FILE in a real run; passes_missing only in a dry fixture).",
+    "Review fixes (coordinator, 2026-10-07): section 4 says a missing later pass file is skipped with passes_missing and seal steps 3A and 3C refuse until every pass file is complete (MINOR-3); 7.1 survival states the unit of every row and that the numbers are not comparable with v1.0 question counts (MINOR-2); 11.1 survival rows state their units, key-check and no-passage rows count pairs with any passing pass (MINOR-2); the header note names 11.1.",
+    "Last fix before seal step 1 (coordinator, 2026-10-07): 11.1 survival rows 'written for an open form', 'form check', 'anchor check', 'option check' now count passage-and-form pairs (plain-fact: passages) with any passing pass, as the tools do and as plan Step 6 point 1 says; nothing else changed.",
+    "Section 1 rows 3 and 7: no change needed; they do not say 'spare pass'. Section 6: no change; it already says 'every candidate'."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+--- v1.0/tools/ob_seal.py
++++ v1.1/tools/ob_seal.py
+@@ -169,7 +169,7 @@
+ AFTER_QUESTION_FOLDERS = ('prompts', 'keys_practice', 'keys_final', 'review')
+ QUESTION_NAME_STARTS = ('raw_questions_', 'writer_calls_', 'writer_state_')
+ NOTE_FOLDERS = ('notes_ord', 'support')
+-PASSES = ('p1', 'p2')
++# Plan v1.1: the writer passes (p1, p2, p3) come from PLAN_CONSTANTS.json; see passes_of(). No pass list is fixed here.
+ # FILE_FORMATS.md section 13: the five job files.
+ JOB_FILES = ('runner_b1.py', 'scorer_v0_1_1.py', 'gate_b1.py', 'analysis_b1.py', 'scorer_examples_v0_1_1.json')
+ # FILE_FORMATS.md section 14: the files the job package holds, by their path under optionb/.
+@@ -469,10 +469,18 @@
+     return data
+ 
+ 
++def passes_of(ctx):
++    """The writer passes of the plan: outside_services.gemini_question_writer.passes (plan v1.1: p1, p2, p3)."""
++    passes = ctx['constants']['outside_services']['gemini_question_writer']['passes']
++    if not isinstance(passes, list) or not passes or not all(isinstance(p, str) and p for p in passes):
++        raise Refused('CONSTANTS_SHAPE', 'outside_services.gemini_question_writer.passes must be a list of pass names')
++    return tuple(passes)
++
++
+ def writer_state_facts(ctx, set_name):
+-    """The question writer is finished for both passes of a set, and one model wrote the set."""
++    """The question writer is finished for every pass of a set, and one model wrote the set."""
+     models = set()
+-    for pass_name in PASSES:
++    for pass_name in passes_of(ctx):
+         relative = '%s/questions/writer_state_%s_%s.json' % (ctx['work'], set_name, pass_name)
+         state = load_json(ctx['project'], relative)
+         if state.get('complete') is not True:
+@@ -728,7 +736,7 @@
+     if early_notes:
+         raise Refused('NOTES_BEFORE_QUESTIONS_SEALED', 'ordinary notes of a set are written only after its questions are sealed. Found: %s' % ', '.join(early_notes[:12]))
+     required = (['%s/questions/%s_%s_%s.%s' % (work, kind, set_name, pass_name, ext)
+-                 for pass_name in PASSES for kind, ext in (('writer_state', 'json'), ('writer_calls', 'jsonl'), ('raw_questions', 'json'))]
++                 for pass_name in passes_of(ctx) for kind, ext in (('writer_state', 'json'), ('writer_calls', 'jsonl'), ('raw_questions', 'json'))]
+                 + ['%s/checks/%s_%s.json' % (work, kind, set_name) for kind in ('form_check', 'anchor_check', 'option_check', 'candidates')]
+                 + ['%s/solve/%s_%s.json' % (work, kind, set_name) for kind in ('solver_items', 'solver_answers', 'key_check')]
+                 + ['%s/solve/deepseek_calls_%s.jsonl' % (work, set_name), '%s/select/selection_%s.json' % (work, set_name)])

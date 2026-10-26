@@ -1,0 +1,236 @@
+SHEET practice-with_passage-02. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0415 ===
+Passage:
+Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.
+
+Question: At a later moment, which of these is Maria least likely to bring up?
+A. Mature cheddar wheel
+B. Drop of condensation
+C. Perfect rind
+D. Firm texture
+E. Earthy aroma
+F. Experimental blue cheese
+=== END Q0415 ===
+
+=== ITEM Q0416 ===
+Passage:
+Yvonne walked among the shelves, her hand instinctively turning specific cheeses. The exact rotational pattern, the pressure, the angle; these movements required no thought. Daily for a decade, she had rotated countless wheels of cheddar. Her muscle memory guided her without any deliberate instruction.
+
+Question: Someone on their first day takes Yvonne's place. Which of these would most likely be missing?
+A. decade
+B. shelves
+C. hand
+D. wheels
+E. cheeses
+F. pattern
+=== END Q0416 ===
+
+=== ITEM Q0417 ===
+Passage:
+Harriet considered the aging schedule for the new batch of Gruyere. It involved precise temperature control, managed humidity levels, and regular turning of the wheels. She also factored in the specific strain of surface bacteria and the desired rind development. Each element played a distinct part in the final flavor.
+
+Question: Harriet considered the aging what for the new batch?
+A. humidity
+B. temperature
+C. flavor
+D. schedule
+=== END Q0417 ===
+
+=== ITEM Q0418 ===
+Passage:
+Liam explained the recipe for his aged cheddar. It began with specific rennet and raw milk from local cows. The curd was then cut, stirred, and pressed into molds. After that, it was brined before entering the cool, damp cellar for years. Each stage developed its distinct flavor profile.
+
+Question: Where did the cheese go after being brined?
+A. kitchen
+B. molds
+C. cellar
+D. cows
+=== END Q0418 ===
+
+=== ITEM Q0419 ===
+Passage:
+Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.
+
+Question: Pierre finished the short brining period, humidity adjustments, and gradual temperature drops. Which named part is still left?
+A. blue cheese
+B. separate steps
+C. rotation frequency
+D. brining period
+E. aging schedule
+F. temperature drops
+=== END Q0419 ===
+
+=== ITEM Q0420 ===
+Passage:
+Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.
+
+Question: Pierre dealt with the short brining period. Which named part is still left?
+A. humidity adjustments
+B. the short brining period
+C. the regular rotation frequency
+D. blue cheese
+E. aging schedule
+F. temperature drops
+=== END Q0420 ===
+
+=== ITEM Q0421 ===
+Passage:
+Yvonne walked among the shelves, her hand instinctively turning specific cheeses. The exact rotational pattern, the pressure, the angle; these movements required no thought. Daily for a decade, she had rotated countless wheels of cheddar. Her muscle memory guided her without any deliberate instruction.
+
+Question: What did Yvonne do daily for a decade?
+A. washed molds
+B. rotated wheels
+C. sold milk
+D. built shelves
+=== END Q0421 ===
+
+=== ITEM Q0422 ===
+Passage:
+Liam explained the recipe for his aged cheddar. It began with specific rennet and raw milk from local cows. The curd was then cut, stirred, and pressed into molds. After that, it was brined before entering the cool, damp cellar for years. Each stage developed its distinct flavor profile.
+
+Question: Where did the cheddar enter after being brined?
+A. cool cellar
+B. cheese molds
+C. local cows
+D. specific rennet
+=== END Q0422 ===
+
+=== ITEM Q0423 ===
+Passage:
+Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.
+
+Question: Wendy entered which kind of space?
+A. bright stone room
+B. cool, damp cellar
+C. warm brick vault
+D. dark wooden shed
+=== END Q0423 ===
+
+=== ITEM Q0424 ===
+Passage:
+Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.
+
+Question: What fell from the ceiling onto Maria's sleeve?
+A. A mature cheddar wheel
+B. A piece of dark mould
+C. An experimental blue cheese
+D. A small drop of condensation
+=== END Q0424 ===
+
+=== ITEM Q0425 ===
+Passage:
+Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.
+
+Question: Which specific cheese did Wendy touch on the top shelf?
+A. fresh paneer
+B. aging Gouda
+C. sharp swiss
+D. aged cheddar
+=== END Q0425 ===
+
+=== ITEM Q0426 ===
+Passage:
+Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.
+
+Question: At a later moment, which of these is the person least likely to bring up?
+A. earthy aroma
+B. mature cheddar
+C. small drop
+D. firm texture
+E. dark mould
+F. perfect rind
+=== END Q0426 ===
+
+=== ITEM Q0427 ===
+Passage:
+Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.
+
+Question: Where did the small drop fall from?
+A. shelf
+B. wall
+C. cheese
+D. ceiling
+=== END Q0427 ===
+
+=== ITEM Q0428 ===
+Passage:
+Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.
+
+Question: What color was Pierre's new cheese?
+A. yellow
+B. blue
+C. white
+D. green
+=== END Q0428 ===
+
+=== ITEM Q0429 ===
+Passage:
+Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.
+
+Question: Which item fell onto Maria's sleeve?
+A. condensation
+B. mould
+C. cheese
+D. cheddar
+=== END Q0429 ===
+
+=== ITEM Q0430 ===
+Passage:
+Yvonne walked among the shelves, her hand instinctively turning specific cheeses. The exact rotational pattern, the pressure, the angle; these movements required no thought. Daily for a decade, she had rotated countless wheels of cheddar. Her muscle memory guided her without any deliberate instruction.
+
+Question: Which variety of cheese did Yvonne rotate daily for a decade?
+A. countless wheels of cheddar
+B. aging Gouda
+C. sharp swiss
+D. fresh paneer
+=== END Q0430 ===
+
+=== ITEM Q0431 ===
+Passage:
+Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.
+
+Question: The repeated thing stops for a year or two; which action has most likely faded?
+A. entered the cellar
+B. reached for the first wheel
+C. flipped the wheel
+D. brushed the cheeses
+E. brushed the ground
+F. flipped the cheeses
+=== END Q0431 ===
+
+=== ITEM Q0432 ===
+Passage:
+Yvonne walked among the shelves, her hand instinctively turning specific cheeses. The exact rotational pattern, the pressure, the angle; these movements required no thought. Daily for a decade, she had rotated countless wheels of cheddar. Her muscle memory guided her without any deliberate instruction.
+
+Question: Who walked among the shelves turning specific cheeses?
+A. Wendy
+B. Yvonne
+C. Harriet
+D. Maria
+=== END Q0432 ===
+
+=== ITEM Q0433 ===
+Passage:
+Liam explained the recipe for his aged cheddar. It began with specific rennet and raw milk from local cows. The curd was then cut, stirred, and pressed into molds. After that, it was brined before entering the cool, damp cellar for years. Each stage developed its distinct flavor profile.
+
+Question: What was the curd placed into after being cut, stirred, and pressed?
+A. cellar
+B. shelves
+C. molds
+D. bottles
+=== END Q0433 ===
+
+=== ITEM Q0434 ===
+Passage:
+Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.
+
+Question: What color was the cheese Pierre reviewed?
+A. white
+B. yellow
+C. orange
+D. blue
+=== END Q0434 ===

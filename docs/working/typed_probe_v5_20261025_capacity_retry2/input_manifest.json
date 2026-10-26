@@ -1,0 +1,142 @@
+{
+  "anthropic_model_ids_verified": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "aws_ami_id": "ami-0d105fd7469b31d32",
+  "aws_hourly_rate_usd": "1.2120000000",
+  "aws_instance_permissions": {
+    "Statement": [
+      {
+        "Action": [
+          "ssm:GetParameter"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:ssm:us-west-2:807562639912:parameter/cas-harness/typed-probe-v5/anthropic-api-key",
+        "Sid": "ReadOnlyStageKey"
+      },
+      {
+        "Action": [
+          "s3:GetObject",
+          "s3:PutObject"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:s3:::cas-harness-runpod-92754088/typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/*",
+        "Sid": "StageSPrefixEvidence"
+      },
+      {
+        "Action": [
+          "ec2:TerminateInstances"
+        ],
+        "Condition": {
+          "StringEquals": {
+            "ec2:ResourceTag/typed-probe-v5-run-id": "typed-probe-v5-stage-s-capacity-retry2-20261025"
+          }
+        },
+        "Effect": "Allow",
+        "Resource": "arn:aws:ec2:us-west-2:807562639912:instance/*",
+        "Sid": "TerminateOnlyThisStudyInstance"
+      }
+    ],
+    "Version": "2012-10-17"
+  },
+  "aws_instance_type": "g5.2xlarge",
+  "aws_max_scenario_estimate_usd": "3.707840740740740740740740740",
+  "aws_security_group_id": "sg-0562c483e0364cdab",
+  "aws_subnet_id": "subnet-0eb3ca4bf5ca98f24",
+  "bucket_security": {
+    "encryption": "AES256",
+    "lifecycle": "absent",
+    "public_access_block": {
+      "BlockPublicAcls": true,
+      "BlockPublicPolicy": true,
+      "IgnorePublicAcls": true,
+      "RestrictPublicBuckets": true
+    },
+    "region": "us-west-2",
+    "versioning": "Enabled"
+  },
+  "caller_arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+  "cloud_setup_sha256": "5287867f1a4bbc7d4a7d27f8d14fee59b19e04561ce709e3eadbd6ef7c567b1e",
+  "ec2_role_name": "typed-probe-v5-stage-s-role-capacity-retry2-20261025",
+  "inputs": {
+    "candidate_bank_v4_120_20260610.jsonl": {
+      "bytes": 90855,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/candidate_bank_v4_120_20260610.jsonl",
+      "sha256": "4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f"
+    },
+    "run_stage_s_v5.py": {
+      "bytes": 32125,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/run_stage_s_v5.py",
+      "sha256": "413b309d101c132f8649e29e01d560f052611a371fee0cd1c57198166deec03e"
+    },
+    "typed_probe_gate_prereg_v5_capacity_retry2_amendment_20261025.md": {
+      "bytes": 2623,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/typed_probe_gate_prereg_v5_capacity_retry2_amendment_20261025.md",
+      "sha256": "fc8171df0dc53da10692fac5a07b69c11e16fb7a649cc7598064d3e26200839d"
+    },
+    "typed_probe_gate_prereg_v5_claude_budget_amendment_20261025.md": {
+      "bytes": 6162,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/typed_probe_gate_prereg_v5_claude_budget_amendment_20261025.md",
+      "sha256": "7d259447e5e5bfc8e650694bba25cb99ee0d76760e76665c3d81eea9ffcc22fe"
+    },
+    "typed_probe_gate_prereg_v5_safe_handling_20261025.md": {
+      "bytes": 12079,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/typed_probe_gate_prereg_v5_safe_handling_20261025.md",
+      "sha256": "c3049fbf65565cf062fdddafd91200b96a2c7fbbd3eed7daaeb513900b5e7132"
+    },
+    "typed_probe_v5_judge_rubric_20261025.txt": {
+      "bytes": 1388,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/typed_probe_v5_judge_rubric_20261025.txt",
+      "sha256": "e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd"
+    },
+    "user_data_stage_s.sh": {
+      "bytes": 5881,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/provenance/user_data_stage_s.sh",
+      "sha256": "68a06d4b2771a9523eb1887c9d9e35ff2258441eeccd36d2492d48d351df5257"
+    },
+    "watchdog_e2e_proof_capacity_retry2.py": {
+      "bytes": 21071,
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/watchdog_e2e_proof_capacity_retry2.py",
+      "sha256": "9abb67af853cf2b38b454c4cb2b2c4d94a090b170ba21b95050e605676d42566"
+    }
+  },
+  "instance_profile_name": "typed-probe-v5-stage-s-profile-capacity-retry2-20261025",
+  "lambda_function_name": "typed-probe-v5-stage-s-watchdog-capacity-retry2-20261025",
+  "max_public_ipv4_estimate_usd": "0.015",
+  "mistral_model": "mistralai/Mistral-7B-Instruct-v0.3",
+  "mistral_revision": "c170c708c41dac9275d15a8fff4eca08d52bab71",
+  "parameter_name": "/cas-harness/typed-probe-v5/anthropic-api-key",
+  "parameter_type": "SecureString",
+  "qwen_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "qwen_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "run_id": "typed-probe-v5-stage-s-capacity-retry2-20261025",
+  "secret_value_recorded": false,
+  "source_sha256": {
+    "candidate_bank_v4_120_20260610.jsonl": "4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f",
+    "run_stage_s_v5.py": "413b309d101c132f8649e29e01d560f052611a371fee0cd1c57198166deec03e",
+    "typed_probe_gate_prereg_v5_capacity_retry2_amendment_20261025.md": "fc8171df0dc53da10692fac5a07b69c11e16fb7a649cc7598064d3e26200839d",
+    "typed_probe_gate_prereg_v5_claude_budget_amendment_20261025.md": "7d259447e5e5bfc8e650694bba25cb99ee0d76760e76665c3d81eea9ffcc22fe",
+    "typed_probe_gate_prereg_v5_safe_handling_20261025.md": "c3049fbf65565cf062fdddafd91200b96a2c7fbbd3eed7daaeb513900b5e7132",
+    "typed_probe_v5_judge_rubric_20261025.txt": "e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd",
+    "watchdog_e2e_proof_capacity_retry2.py": "9abb67af853cf2b38b454c4cb2b2c4d94a090b170ba21b95050e605676d42566"
+  },
+  "stage_s_launch_sdk_total_max_attempts": 1,
+  "watchdog_direct_smoke": {
+    "event_kind": "direct_smoke",
+    "found": 0,
+    "run_id": "typed-probe-v5-stage-s-capacity-retry2-20261025",
+    "states": [],
+    "terminated": 0
+  },
+  "watchdog_proof_script_sha256": "9abb67af853cf2b38b454c4cb2b2c4d94a090b170ba21b95050e605676d42566",
+  "watchdog_scheduler_smoke_scheduled": true,
+  "watchdog_sha256": "fa5df6caa4547b0e92fe77894b6286b2b769b50efcd7b8c985a2f748254e6371",
+  "watchdog_target_proof_required": true,
+  "watchdog_test_hourly_rate_usd": "0.0052000000",
+  "watchdog_test_instance_type": "t3.nano",
+  "watchdog_test_max_seconds": 300,
+  "watchdog_test_prior_seconds": 165,
+  "watchdog_test_remaining_seconds": 135,
+  "watchdog_test_root_volume_gib": 8
+}

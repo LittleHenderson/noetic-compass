@@ -1,0 +1,61 @@
+SHEET practice-no_passage-02. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0021 ===
+Question: That evening a friend asks Odette what she remembers of the market. Going only by the passage, which is she least likely to bring up?
+A. the brass band on the corner
+B. her list for the market
+C. the stall of old maps
+D. the fish counter beside it
+E. the time she forgot there
+F. the leeks she bought
+=== END G0021 ===
+
+=== ITEM G0022 ===
+Question: Odette has ten free minutes at the same market next week. Going only by the passage, where is she most likely to spend them?
+A. with her list at home
+B. at the fish counter
+C. at the stall of old maps
+D. at the leeks she bought
+E. stepping wide around it
+F. near the brass band
+=== END G0022 ===
+
+=== ITEM G0023 ===
+Question: That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?
+A. the old maps she looked through
+B. the fish counter beside it
+C. the brass band on the corner
+D. her list for the market
+E. the leeks she bought
+F. the sheets she turned slowly
+=== END G0023 ===
+
+=== ITEM G0024 ===
+Question: Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?
+A. the leeks she bought
+B. her list for the market
+C. the brass band on the corner
+D. the stall of old maps
+E. the fish counter beside it
+F. the sheets she turned slowly
+=== END G0024 ===
+
+=== ITEM G0025 ===
+Question: On her next trip Odette walks the market again. Going only by the passage, which of these does she step wide around?
+A. the fish counter
+B. her market list
+C. the stall of old maps
+D. the leeks she bought
+E. the brass band
+F. the sheets she turned
+=== END G0025 ===
+
+=== ITEM G0026 ===
+Question: What did Odette buy before she went home?
+A. old maps
+B. fresh fish
+C. a brass horn
+D. leeks
+=== END G0026 ===

@@ -1,0 +1,46 @@
+{
+  "ami_id": "ami-0829b74b2a8c619b7",
+  "aws_account_id": "807562639912",
+  "cumulative_max_ec2_seconds": 300,
+  "cumulative_watchdog_ec2_seconds": 213,
+  "direct_smoke": {
+    "event_kind": "direct_smoke",
+    "found": 0,
+    "run_id": "typed-probe-v5-stage-s-capacity-retry2-20261025",
+    "states": [],
+    "terminated": 0
+  },
+  "failure": null,
+  "iam_tag_policy_results": {
+    "different_run_tag": "implicitDeny",
+    "exact_run_tag": "allowed"
+  },
+  "instance_id": "i-0347a9ca28ccfdd26",
+  "instance_type": "t3.nano",
+  "lambda_watchdog_result": {
+    "event_kind": "live_target_proof",
+    "found": 1,
+    "run_id": "typed-probe-v5-stage-s-capacity-retry2-20261025",
+    "states": [
+      "running"
+    ],
+    "terminated": 1
+  },
+  "launch_time_utc": "2026-10-25T05:12:36+00:00",
+  "max_ec2_seconds": 135,
+  "no_public_ip": true,
+  "prior_watchdog_ec2_seconds": 165,
+  "proof_script_sha256": "9abb67af853cf2b38b454c4cb2b2c4d94a090b170ba21b95050e605676d42566",
+  "root_volume_deleted": true,
+  "root_volume_gib": 8,
+  "root_volume_id": "vol-05f483cc1d5883665",
+  "run_id": "typed-probe-v5-stage-s-capacity-retry2-20261025",
+  "scheduler_smoke_log_timestamp_ms": 1792905139526,
+  "status": "PASS",
+  "terminated_observed_at_utc": "2026-10-25T05:13:22.985991+00:00",
+  "tracked_ec2_seconds": 48,
+  "verified_at_utc": "2026-10-25T05:13:23.067205+00:00",
+  "watchdog_function": "typed-probe-v5-stage-s-watchdog-capacity-retry2-20261025",
+  "watchdog_invoked_at_utc": "2026-10-25T05:12:41.167165+00:00",
+  "watchdog_sha256": "fa5df6caa4547b0e92fe77894b6286b2b769b50efcd7b8c985a2f748254e6371"
+}

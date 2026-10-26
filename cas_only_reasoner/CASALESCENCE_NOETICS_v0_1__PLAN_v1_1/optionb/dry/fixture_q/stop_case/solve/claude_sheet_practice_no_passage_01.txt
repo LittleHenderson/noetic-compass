@@ -1,0 +1,67 @@
+SHEET practice-no_passage-01. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0008 ===
+Question: Suppose there had been no rope smell at the door that morning. Going only by the passage, which of these would most likely not have happened?
+A. unlocking the boathouse door
+B. the wet rope she met
+C. hanging the key on its nail
+D. remembering the engine hatch bench
+E. counting the oars slowly
+F. walking in at once
+=== END G0008 ===
+
+=== ITEM G0009 ===
+Question: Where did Halima hang the key?
+A. by the hatch
+B. under the bench
+C. in the tin
+D. on its nail
+=== END G0009 ===
+
+=== ITEM G0010 ===
+Question: Weeks later Halima is in a town with no river. Going only by the passage, which of these would most likely bring the ferry back to her?
+A. a rack of oars to count
+B. a coil of wet rope nearby
+C. a bench beside a quiet road
+D. a door that needs unlocking early
+E. a key hanging on a nail
+F. a box left on a shelf
+=== END G0010 ===
+
+=== ITEM G0011 ===
+Question: What did Halima begin counting?
+A. the keys
+B. the benches
+C. the oars
+D. the biscuit tins
+=== END G0011 ===
+
+=== ITEM G0012 ===
+Question: Suppose the door had let in no smell at all that morning. Going only by the passage, which of these would most likely not have happened?
+A. counting the oars slowly
+B. picturing the bench by the hatch
+C. unlocking the boathouse door
+D. hanging the key on its nail
+E. the wet rope she met
+F. walking in at once
+=== END G0012 ===
+
+=== ITEM G0013 ===
+Question: What hung on the nail afterwards?
+A. an oar
+B. a tin
+C. a rope
+D. the key
+=== END G0013 ===
+
+=== ITEM G0014 ===
+Question: On another day, far from the boathouse, which of these would most likely make Halima picture her uncle's ferry again?
+A. counting a row of wooden oars
+B. opening a door early in the morning
+C. hanging a key on a nail
+D. unlocking a heavy wooden side door
+E. putting a key back in a pocket
+F. smelling damp rope on a quay
+=== END G0014 ===

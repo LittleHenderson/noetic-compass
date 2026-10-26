@@ -1,0 +1,52 @@
+[
+ {
+  "http_status": 200,
+  "content_json": [
+   {
+    "passage": "V901",
+    "what_follows": [
+     {
+      "form": "MEET_AGAIN",
+      "question": "Months on, Halima is far from any boat. Going only by the passage, which of these would most likely bring the ferry to her again?",
+      "right": "damp rope drying on a rail",
+      "wrong": [
+       "a key on a nail",
+       "a key hung on a nail",
+       "oars stacked in a shed",
+       "a door opened at dawn",
+       "a bench in a park"
+      ],
+      "anchors": [
+       "the smell of wet rope"
+      ]
+     },
+     {
+      "form": "TAKE_AWAY",
+      "question": "Suppose the door had let in no smell at all that morning. Going only by the passage, which of these would most likely not have happened?",
+      "right": "picturing the bench by the hatch",
+      "wrong": [
+       "unlocking the boathouse door",
+       "hanging the key on its nail",
+       "counting the oars slowly",
+       "walking in at once",
+       "the wet rope she met"
+      ],
+      "anchors": [
+       "her uncle's ferry"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "What hung on the nail afterwards?",
+     "right": "the key",
+     "wrong": [
+      "an oar",
+      "a rope",
+      "a tin"
+     ]
+    }
+   }
+  ],
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY"
+ }
+]

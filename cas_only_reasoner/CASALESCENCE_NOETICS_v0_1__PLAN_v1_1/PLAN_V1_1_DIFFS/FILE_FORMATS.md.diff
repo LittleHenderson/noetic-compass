@@ -1,0 +1,197 @@
+--- v1.0/optionb/FILE_FORMATS.md
++++ v1.1/optionb/FILE_FORMATS.md
+@@ -1,6 +1,6 @@
+-# Option B — file formats, version 1.0
++# Option B — file formats, version 1.1
+ 
+-**Status: PROPOSED. Sealed together with `08_OPTION_B_PLAN_v1_0.md` and `PLAN_CONSTANTS.json` in seal step 1.**
++**Status: PROPOSED. Sealed together with `08_OPTION_B_PLAN_v1_1.md` and `PLAN_CONSTANTS.json` in seal step 1.**
+ 
+ **Revised on 2026-10-05 after review round 1** (plan section 26). The parts that changed are marked "(review round 1)". Where two programs read a format differently, this file now says which reading holds.
+ 
+@@ -10,6 +10,8 @@
+ 
+ **Changed on 2026-10-05 by the operator's decisions of round 3** (plan section 27.5). Three decisions changed this file. The parts that changed are marked "operator decision C3", "operator decision C4" and "operator decision C6". These numbers are not the conditions C1 to C5 of the plan's section 15.3. No section number changed.
+ 
++**Version 1.1 on 2026-10-07, after the practice stop** (plan section 28; `PLAN_V1_1_CHANGE_SPEC.md`). The parts that changed are marked "v1.1". Changed: the `<pass>` row of the names table in section 0 (`p3`); section 4 (three passes `p1`, `p2`, `p3`, one seed per pass); section 5.1 (three new drop reason codes with their rules); section 5.4 (every passing question of every pass is a candidate; `candidates_per_pass`); section 7.1 (lowest-pass-first reduction per passage and form; `pass_used`; `survival`); the units of the `survival` rows in section 11.1; the plan file name in section 15.1. The limits of section 0 did not change. No section number changed.
++
+ This file fixes the exact shape of every file that passes between programs. Builders code against it. If a program needs a field that is not here, the plan is changed first, not the program.
+ 
+ All examples use made-up content. They are never cases. Where a real file holds a canon definition line, the example shows a placeholder such as `<canon line ^7>`. Programs copy canon lines from the guide. Nobody retypes them. Where a real file holds a canonical sayings line (A13), the example shows a placeholder such as `<sayings line ^7>`. Programs copy the sayings from the table of Clarification 6. Nobody retypes them.
+@@ -19,7 +21,7 @@
+ ## 0. Rules for every file
+ 
+ **Where.** Every path below is relative to
+-`C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/`
++`C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/optionb/` (v1.1: the new study folder)
+ unless it starts with `work/` or `controller/` (those are inside the AWS job).
+ 
+ **Text.** UTF-8. LF line ends. No byte-order mark.
+@@ -43,7 +45,7 @@
+ | Name | Values |
+ |---|---|
+ | `<set>` | `practice` or `final` |
+-| `<pass>` | `p1` (first pass) or `p2` (spare pass) |
++| `<pass>` | `p1`, `p2` or `p3` (v1.1: three passes; v1.0 had `p1` and the spare pass `p2`) |
+ | `<nn>` | a two-digit sheet number: `01`, `02`, … |
+ 
+ **Ids.**
+@@ -305,15 +307,17 @@
+ 
+ Three files per set and pass. **Written by:** `tools/ob_write_questions.py`.
+ 
+-**Batches.** A set is written in waves. For the practice set, wave 0 is the 8 practice settings and wave k is reserve setting k. For the final set there is one wave: every final setting. Inside a wave: take the K1 to K5 passage ids, sort them, shuffle them with `random.Random(<writer_batch_order_p1 or _p2>)`, and cut them into groups of 4 (amendment A1; the number is `outside_services.gemini_question_writer.passages_per_call`). A wave that was already written is never batched again. A real run does not give the option `--batch-size`: every batch of a real run holds up to 4 passages (A13, small faults).
++**Passes (v1.1).** Every set is written in three passes, `p1`, `p2` and `p3` (`outside_services.gemini_question_writer.passes`). Each pass sends the same brief and uses its own seeded batch order: `seeds.writer_batch_order_p1` (20261005), `_p2` (20261006), `_p3` (20261018). The tool takes `--pass p1`, `--pass p2` or `--pass p3` and reads the seed by the pass name. The three files below are written once per set and pass, with the pass name in the file name. No pass is a spare: every question of every pass that passes Steps 2 and 3 is a candidate (section 5.4). In a real run a later pass file (p2 or p3) that does not exist yet stops the check and select tools with MISSING_PASS_FILE; only a dry fixture skips it and prints passes_missing. Seal steps 3A and 3C refuse until every pass file exists and its writer is complete.
++
++**Batches.** A set is written in waves. For the practice set, wave 0 is the 8 practice settings and wave k is reserve setting k. For the final set there is one wave: every final setting. Inside a wave: take the K1 to K5 passage ids, sort them, shuffle them with `random.Random(<writer_batch_order_p1, _p2 or _p3>)` (v1.1), and cut them into groups of 4 (amendment A1; the number is `outside_services.gemini_question_writer.passages_per_call`). A wave that was already written is never batched again. A real run does not give the option `--batch-size`: every batch of a real run holds up to 4 passages (A13, small faults).
+ 
+ **What is sent.** The question brief with its lists filled in, then the fenced passages of the batch. Nothing else.
+ 
+-**One model (amendment A1).** The model is `gemini-3.5-flash-lite`. It writes the practice set, the final set and both passes. The tool takes the name from `model_by_set` in `PLAN_CONSTANTS.json` and refuses any other name.
++**One model (amendment A1).** The model is `gemini-3.5-flash-lite`. It writes the practice set, the final set and all three passes (v1.1). The tool takes the name from `model_by_set` in `PLAN_CONSTANTS.json` and refuses any other name.
+ 
+ **Refused calls (amendment A1).** A call with `http_status` 429 is not counted as an attempt. The tool stops cleanly, keeps the checkpoint, and resumes when it is run again later. The daily cap of this model is not known.
+ 
+-**The reserve rule (amendment A8).** For the practice set the tool adds wave k (k is 1 or more) only as the reserve rule of section 7.1 allows. It reads the block `reserve` of `select/selection_practice.json`, exactly as `tools/ob_select.py` and `tools/ob_seal.py` do. It adds wave k only when that file exists, its `practice_setting_count` equals 8 + k − 1, and its `reserve.finished` is false. A file with no `reserve` block also stops the tool. The stop is `RESERVE_RULE_NOT_MET`, and its text names the two reserve targets. The tool does not read `floor.met` for this rule. (A wave that the other pass of the same set already holds is added without this check, as before.)
++**The reserve rule (amendment A8).** For the practice set the tool adds wave k (k is 1 or more) only as the reserve rule of section 7.1 allows. It reads the block `reserve` of `select/selection_practice.json`, exactly as `tools/ob_select.py` and `tools/ob_seal.py` do. It adds wave k only when that file exists, its `practice_setting_count` equals 8 + k − 1, and its `reserve.finished` is false. A file with no `reserve` block also stops the tool. The stop is `RESERVE_RULE_NOT_MET`, and its text names the two reserve targets. The tool does not read `floor.met` for this rule. (A wave that another pass of the same set already holds is added without this check, as before.)
+ 
+ ### 4.1 `questions/writer_state_<set>_<pass>.json` (the checkpoint)
+ 
+@@ -322,7 +326,7 @@
+ 
+ | Field | Type | Meaning |
+ |---|---|---|
+-| `set`, `pass`, `model` | strings | `model` is the name asked for. The tool refuses any model but the one of `PLAN_CONSTANTS.json`; one model writes both sets and both passes. |
++| `set`, `pass`, `model` | strings | `model` is the name asked for. The tool refuses any model but the one of `PLAN_CONSTANTS.json`; one model writes both sets and all three passes (v1.1). |
+ | `seed` | whole number | the batch-order seed of this pass |
+ | `waves[].wave` | whole number | |
+ | `waves[].settings` | list of strings | |
+@@ -398,7 +402,7 @@
+ 
+ ## 5. Form check, anchor check, option check, candidates
+ 
+-**Written by:** `tools/ob_check_questions.py`. It reads both passes of a set, `elig/eligibility.json` and (for `final`) `select/split_fixed.json`.
++**Written by:** `tools/ob_check_questions.py`. It reads every pass of a set (`p1`, `p2`, `p3`; v1.1), `elig/eligibility.json` and (for `final`) `select/split_fixed.json`.
+ 
+ Option index everywhere: `0` is the right option; `1` to `5` are the wrong options in the writer's order.
+ 
+@@ -406,7 +410,7 @@
+ 
+ - **Read by:** `tools/ob_assemble.py`, `tools/ob_seal.py`
+ - **Schema name:** `casalescence/optionb/form_check/v1`
+-- One row per raw question of both passes, both families.
++- One row per raw question of every pass, both families.
+ 
+ | Field | Type | Meaning |
+ |---|---|---|
+@@ -416,7 +420,15 @@
+ | `rows[].reasons` | list of strings | empty when passed |
+ | `counts` | object | `checked`, `passed`, `dropped_by_reason` |
+ 
+-Reason codes: `FORM_NAME_UNKNOWN`, `EMPTY_TEXT`, `OPTION_COUNT`, `OPTIONS_NOT_DIFFERENT`, `OPTION_TOO_LONG`, `QUESTION_TOO_LONG`, `OPTION_LENGTH_SPREAD`, `OPTION_INSIDE_ANOTHER`, `ANCHOR_COUNT`, `ANCHOR_NOT_IN_PASSAGE`, `ANCHOR_TOO_LONG`, `FORBIDDEN_LIST_A:<word>`, `FORBIDDEN_SIGN`, `FORBIDDEN_LIST_B:<word>`, `FORBIDDEN_LIST_C:<phrase>`, `FORBIDDEN_PHRASE`.
++Reason codes: `FORM_NAME_UNKNOWN`, `EMPTY_TEXT`, `OPTION_COUNT`, `OPTIONS_NOT_DIFFERENT`, `OPTION_TOO_LONG`, `QUESTION_TOO_LONG`, `OPTION_LENGTH_SPREAD`, `OPTION_INSIDE_ANOTHER`, `ANCHOR_COUNT`, `ANCHOR_NOT_IN_PASSAGE`, `ANCHOR_TOO_LONG`, `FORBIDDEN_LIST_A:<word>`, `FORBIDDEN_SIGN`, `FORBIDDEN_LIST_B:<word>`, `FORBIDDEN_LIST_C:<phrase>`, `FORBIDDEN_PHRASE`, and the three v1.1 codes below.
++
++**Three drop rules added in v1.1** (plan section 10, Step 2; constants `question_rules`). They run after the form checks above and before the anchor check of section 5.2. Each uses `lenient_span` from `tools/verdict.py`: two texts match when they share at least half of the content words of the shorter text. Each code is counted in `counts.dropped_by_reason` like every other code. A question that fails more than one rule lists every reason. A question that already fails `EMPTY_TEXT` or `OPTION_COUNT` is not tested by the three word rules, so those two codes stand alone for it. Before `WRONG_OPTION_NOT_FROM_PASSAGE` compares an option with the passage, the passage text is normalised as for the anchor check: curly quote marks to straight ones, runs of white space to one space.
++
++| Code | Rule | Applies to |
++|---|---|---|
++| `QUESTION_REPEATS_KEY` | the question sentence and the right option match by `lenient_span` (`question_rules.question_must_not_match_right_option`) | role-step questions only |
++| `OPTIONS_MATCH_EACH_OTHER` | any two of the options match each other: they match by `lenient_span` AND share at least 2 content words (`question_rules.no_two_options_match`, `no_two_options_match_min_shared_content_words` = 2). A one-word overlap is left to the brief line "No two options name the same thing" and to the solvers' flags. | role-step questions (six options) and plain-fact questions (four options) |
++| `WRONG_OPTION_NOT_FROM_PASSAGE` | any WRONG option (index 1 to 5) does not match the passage by `lenient_span`: fewer than half of the option's content words occur in the passage. The right option (index 0) is not tested. (`question_rules.wrong_options_must_match_passage_forms`) | role-step questions of the nine forms `GOES_FOR`, `KEEPS_AWAY`, `WHAT_STUCK`, `WHAT_SLID_OFF`, `WHAT_LEFT`, `NOT_BELONG`, `LONG_BREAK`, `NEW_STARTER`, `TAKE_AWAY` only; never `MEET_AGAIN`, `SWAP_PERSON`, `WHERE_HELPS`; never plain-fact |
+ 
+ ```json
+ {"schema": "casalescence/optionb/form_check/v1", "set": "practice",
+@@ -468,23 +480,27 @@
+ 
+ - **Read by:** `tools/ob_solve_blind.py`, `tools/ob_select.py`, `tools/ob_seal.py`
+ - **Schema name:** `casalescence/optionb/candidates/v1`
+-- At most one candidate per passage and form, and one plain-fact candidate per passage. It holds no label information.
+-- Rule: the `p1` question if it passed Steps 2 and 3; else the `p2` question, only if a `p1` question for that form existed, was dropped by Step 2 or 3, and the `p2` question passed Steps 2 and 3. (A plain-fact question has no Step 3.)
++- v1.1: every question of every pass (`p1`, `p2`, `p3`) that passed Steps 2 and 3 is a candidate. So a passage and form may have up to three role-step candidates, one per pass, and a passage may have up to three plain-fact candidates. (A plain-fact question has no Step 3.) It holds no label information.
++- Each candidate row carries `pass`. The `counts` block reports `candidates_per_pass`. The reduction to one question per passage and form happens in Step 6 (section 7.1), not here.
++- v1.0 rule, no longer in force: at most one candidate per passage and form; the `p1` question if it passed, else the `p2` spare only if the `p1` question existed and was dropped. The old count `spares_used` is gone.
+ 
+ | Field | Type |
+ |---|---|
+-| `candidates[].question_id`, `.passage_id`, `.family`, `.form`, `.pass` | strings |
++| `candidates[].question_id`, `.passage_id`, `.family`, `.form`, `.pass` | strings; `pass` is `p1`, `p2` or `p3` (v1.1) |
+ | `candidates[].passage` | string, the passage text |
+ | `candidates[].question`, `.right` | strings |
+ | `candidates[].wrong`, `.anchors` | lists of strings |
+-| `counts` | object: `role_step`, `plain_fact`, `spares_used` |
++| `counts` | object: `role_step`, `plain_fact` (candidates over all passes), `candidates_per_pass` (v1.1: an object with one key per pass, `p1`, `p2`, `p3`, each `{"role_step": n, "plain_fact": n}`), `pairs_with_a_candidate` (v1.1: the number of distinct passage-and-form pairs that have at least one role-step candidate) |
+ 
+ ```json
+ {"schema": "casalescence/optionb/candidates/v1", "set": "practice",
+  "candidates": [{"question_id": "V901.p1.LONG_BREAK", "passage_id": "V901", "family": "role_step", "form": "LONG_BREAK", "pass": "p1",
+                  "passage": "Every weekday for eleven years …", "question": "…", "right": "stopping the scoop without a glance",
+-                 "wrong": ["…", "…", "…", "…", "…"], "anchors": ["Every weekday for eleven years"]}],
+- "counts": {"role_step": 1, "plain_fact": 0, "spares_used": 0}}
++                 "wrong": ["…", "…", "…", "…", "…"], "anchors": ["Every weekday for eleven years"]},
++                {"question_id": "V901.p3.LONG_BREAK", "passage_id": "V901", "family": "role_step", "form": "LONG_BREAK", "pass": "p3",
++                 "passage": "Every weekday for eleven years …", "question": "…", "right": "letting the scoop stop on its own",
++                 "wrong": ["…", "…", "…", "…", "…"], "anchors": ["her hands stopped the scoop"]}],
++ "counts": {"role_step": 2, "plain_fact": 0, "candidates_per_pass": {"p1": {"role_step": 1, "plain_fact": 0}, "p2": {"role_step": 0, "plain_fact": 0}, "p3": {"role_step": 1, "plain_fact": 0}}, "pairs_with_a_candidate": 1}}
+ ```
+ 
+ ---
+@@ -620,12 +636,14 @@
+ | `tasks[].task_id`, `.passage_id`, `.question_id` | strings | |
+ | `tasks[].family` | string | `role_step` or `plain_fact` |
+ | `tasks[].type`, `.form` | strings | `FACT` and `FACT` for a plain-fact task |
++| `tasks[].pass_used` | string | v1.1: `p1`, `p2` or `p3`, the pass that supplied this task; it equals the pass in `question_id` |
+ | `tasks[].question`, `.right` | strings | |
+ | `tasks[].wrong` | list | five, or three for a plain-fact task, in the writer's order |
+ | `tasks[].anchors` | list | as written |
+ | `tasks[].anchors_matched` | list | the anchors that passed the anchor check |
+ | `tasks[].right_is_single_longest`, `.right_is_single_shortest` | true/false | counted in words over all written options |
+ | `dropped[]` | list | `question_id`, `reason` |
++| `survival` | object | v1.1: per family (`role_step`, `plain_fact`), the counts `candidates`, `after_key_check`, `after_no_passage`, `after_lowest_pass`, `selected`. Unit of every row: `candidates`, `after_key_check` and `after_no_passage` count question ids over all passes; `after_lowest_pass` and `selected` count passage-and-form pairs. A later pass stands in where an earlier one was dropped. These numbers are not comparable with version 1.0 question counts. |
+ | `counts` | object | `role_step_tasks`, `plain_fact_tasks`, `passages_with_a_task`, `passages_with_a_role_step_task`, `single_longest` `[part, whole]`, `single_shortest` `[part, whole]` |
+ | `floor` | object | practice only: `practice_role_step_min` (36), `practice_plain_fact_min` (20), `met` (true when both launch floors are met) |
+ | `reserve` | object | practice only: `role_step_target` (45), `plain_fact_target` (25), `target_met` (true when both targets are met), `settings_left` (12 minus `practice_setting_count`), `finished` (true when `target_met` is true or `settings_left` is 0) |
+@@ -639,19 +657,22 @@
+ - `floor.met` false with `reserve.finished` true means: do not launch. Seal step 3A may still be written, so that the practice questions are kept as evidence. Seal step 3B is then refused (section 7.2).
+ - The four numbers 36, 20, 45 and 25 come from `PLAN_CONSTANTS.json`: `launch_floor` and `split.reserve_target_…`.
+ 
+-`dropped[].reason`: `NOT_PICKED_BY_PAIR_RULE`, `SAME_RIGHT_THING`, `LAND_RULE`, `LENGTH_BACKSTOP_LONGEST`, `LENGTH_BACKSTOP_SHORTEST`, `PASSAGE_BARRED`.
++**Lowest-pass-first reduction (v1.1; plan section 10, Step 6, point 1).** Before the pair rule, per passage and form (and per passage for the plain-fact family), the candidates that survived Steps 4 and 5 are reduced to one: the survivor of the lowest pass, `p1` before `p2` before `p3`. Every other survivor of that pair is listed under `dropped` with the reason `LATER_PASS_NOT_NEEDED`. Then the v1.0 pair rule, the length backstop and (later) the letters apply unchanged. The task keeps the `question_id` of the pass that supplied it and records that pass in `pass_used`. The rule is fixed before any solver answer is seen, so nobody chooses a pass after seeing the solvers.
++
++`dropped[].reason`: `LATER_PASS_NOT_NEEDED` (v1.1), `NOT_PICKED_BY_PAIR_RULE`, `SAME_RIGHT_THING`, `LAND_RULE`, `LENGTH_BACKSTOP_LONGEST`, `LENGTH_BACKSTOP_SHORTEST`, `PASSAGE_BARRED`.
+ 
+ ```json
+ {"schema": "casalescence/optionb/selection/v1", "set": "practice", "practice_setting_count": 8,
+  "tasks": [
+-  {"task_id": "V901.LONG_BREAK", "passage_id": "V901", "question_id": "V901.p1.LONG_BREAK", "family": "role_step", "type": "HABIT", "form": "LONG_BREAK",
++  {"task_id": "V901.LONG_BREAK", "passage_id": "V901", "question_id": "V901.p1.LONG_BREAK", "family": "role_step", "type": "HABIT", "form": "LONG_BREAK", "pass_used": "p1",
+    "question": "…", "right": "stopping the scoop without a glance", "wrong": ["…", "…", "…", "…", "…"],
+    "anchors": ["Every weekday for eleven years", "her hands stopped the scoop"], "anchors_matched": ["Every weekday for eleven years"],
+    "right_is_single_longest": false, "right_is_single_shortest": false},
+-  {"task_id": "V901.FACT", "passage_id": "V901", "question_id": "V901.p1.FACT", "family": "plain_fact", "type": "FACT", "form": "FACT",
++  {"task_id": "V901.FACT", "passage_id": "V901", "question_id": "V901.p1.FACT", "family": "plain_fact", "type": "FACT", "form": "FACT", "pass_used": "p1",
+    "question": "Where was the new radio?", "right": "on the shelf", "wrong": ["on the bench", "beside the scale", "in the tray rack"],
+    "anchors": [], "anchors_matched": [], "right_is_single_longest": false, "right_is_single_shortest": false}],
+- "dropped": [],
++ "dropped": [{"question_id": "V901.p3.LONG_BREAK", "reason": "LATER_PASS_NOT_NEEDED"}],
++ "survival": {"role_step": {"candidates": 2, "after_key_check": 2, "after_no_passage": 2, "after_lowest_pass": 1, "selected": 1}, "plain_fact": {"candidates": 1, "after_key_check": 1, "after_no_passage": 1, "after_lowest_pass": 1, "selected": 1}},
+  "counts": {"role_step_tasks": 1, "plain_fact_tasks": 1, "passages_with_a_task": 1, "passages_with_a_role_step_task": 1, "single_longest": [0, 1], "single_shortest": [0, 1]},
+  "floor": {"practice_role_step_min": 36, "practice_plain_fact_min": 20, "met": false},
+  "reserve": {"role_step_target": 45, "plain_fact_target": 25, "target_met": false, "settings_left": 4, "finished": false}}
+@@ -873,7 +894,7 @@
+ | `entries[].rule` | string | a reason code of that step |
+ | `entries[].detail` | string | |
+ | `counts_by_step_and_rule` | object | |
+-| `survival` | object | per set: a list of rows `filter`, `role_step`, `plain_fact`, in filter order |
++| `survival` | object | per set: a list of rows `filter`, `role_step`, `plain_fact`, in filter order. v1.1 units: the rows `written for an open form`, `form check`, `anchor check` and `option check` count passage-and-form pairs (plain-fact: passages) with any passing pass; the rows `key check` and `no-passage check` count passage-and-form pairs with any passing pass; the rows from `selection` on count tasks (pairs). The key-check and no-passage rows are not comparable with version 1.0 question counts. |
+ | `final_counts` | object | `final_role_step_tasks`, `final_plain_fact_tasks`, `final_passages_with_a_role_step_task`, `practice_role_step_tasks`, `practice_plain_fact_tasks` |
+ | `launch_floor_met` | true/false | |
+ | `tier` | string | `AS_IT_STANDS`, `EXPLORATORY` or `NO_LAUNCH` |
+@@ -1095,7 +1116,7 @@
+ 
+ | `step` | Files |
+ |---|---|
+-| `1_PLAN_AND_SOURCES` | `08_OPTION_B_PLAN_v1_0.md`, `optionb/PLAN_CONSTANTS.json`, `optionb/FILE_FORMATS.md`, the six source files of plan section 3 (A13: they are the six names under `seal.sources_sealed_in_step_1` in `PLAN_CONSTANTS.json`; the sixth is the source of the sayings, `../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`, with `package_path` null), `optionb/elig/exclusions.json`, `optionb/elig/eligibility.json`, and the eleven tools listed under `seal.tools_sealed_in_step_1` in `PLAN_CONSTANTS.json`. `values`: the practice and reserve settings, the scorer version. |
++| `1_PLAN_AND_SOURCES` | `08_OPTION_B_PLAN_v1_1.md` (v1.1; the file named by `plan_file` in `PLAN_CONSTANTS.json`), `optionb/PLAN_CONSTANTS.json`, `optionb/FILE_FORMATS.md`, the six source files of plan section 3 (A13: they are the six names under `seal.sources_sealed_in_step_1` in `PLAN_CONSTANTS.json`; the sixth is the source of the sayings, `../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`, with `package_path` null), `optionb/elig/exclusions.json`, `optionb/elig/eligibility.json`, and the eleven tools listed under `seal.tools_sealed_in_step_1` in `PLAN_CONSTANTS.json`. `values`: the practice and reserve settings, the scorer version. |
+ | `2_ROLE_NOTES` | `optionb/notes_role/role_notes.json`, `optionb/notes_role/owner_sample_20.json` |
+ | `3A_PRACTICE_QUESTIONS_AND_KEYS` | every `practice` file of sections 4 to 7.1 |
+ | `3B_PRACTICE_SET_FIXED` | `optionb/select/split_fixed.json` |

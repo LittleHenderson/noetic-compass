@@ -1,0 +1,342 @@
+[
+  {
+    "sample_idx": 0,
+    "prompt": "Step 1 depends on Step 2, but Step 2 requires Step 1 before it can begin.",
+    "target": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "CYCLIC_CONTRADICTION",
+      "turn_type": "REFUSE"
+    },
+    "predicted": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "CYCLIC_CONTRADICTION",
+      "turn_type": "REFUSE"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 1,
+    "prompt": "Make sure to inspect the existing files before writing neural_net.py.",
+    "target": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 2,
+    "prompt": "Run tests with pytest tests/ and inspect git log concurrently, then scaffold the landing_page.",
+    "target": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 3,
+    "prompt": "Generate a systems design specification with bounded memory limits.",
+    "target": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "NONE",
+      "topology": "SINGLE_STEP",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "NONE",
+      "topology": "SINGLE_STEP",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 4,
+    "prompt": "Inspect README.md and check git status in parallel, then design the system architecture.",
+    "target": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 5,
+    "prompt": "Fix everything.",
+    "target": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "AMBIGUOUS_UNGROUNDED",
+      "turn_type": "CLARIFY"
+    },
+    "predicted": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "AMBIGUOUS_UNGROUNDED",
+      "turn_type": "CLARIFY"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 6,
+    "prompt": "Before designing the system architecture, read through README.md, then create the spec.",
+    "target": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 7,
+    "prompt": "Write the code for solver.py, run the verification tests, then commit it to git.",
+    "target": {
+      "primary_tool": "synthesize_code",
+      "secondary_tool": "execute_command",
+      "topology": "SEQUENTIAL",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "synthesize_code",
+      "secondary_tool": "execute_command",
+      "topology": "SEQUENTIAL",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 8,
+    "prompt": "Task Alpha requires Task Beta to complete first, and Task Beta requires Task Alpha to complete.",
+    "target": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "CYCLIC_CONTRADICTION",
+      "turn_type": "REFUSE"
+    },
+    "predicted": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "CYCLIC_CONTRADICTION",
+      "turn_type": "REFUSE"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 9,
+    "prompt": "Check git log and diff.",
+    "target": {
+      "primary_tool": "git_action",
+      "secondary_tool": "NONE",
+      "topology": "SINGLE_STEP",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "git_action",
+      "secondary_tool": "NONE",
+      "topology": "SINGLE_STEP",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 10,
+    "prompt": "Hey HELM, please generate neural_net.py, verify it with python verify_all.py, and push the commit to our branch.",
+    "target": {
+      "primary_tool": "synthesize_code",
+      "secondary_tool": "execute_command",
+      "topology": "SEQUENTIAL",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "synthesize_code",
+      "secondary_tool": "execute_command",
+      "topology": "SEQUENTIAL",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 11,
+    "prompt": "Fix everything.",
+    "target": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "AMBIGUOUS_UNGROUNDED",
+      "turn_type": "CLARIFY"
+    },
+    "predicted": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "AMBIGUOUS_UNGROUNDED",
+      "turn_type": "CLARIFY"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 12,
+    "prompt": "Before writing any code for solver.py, run the verification tests on cargo test, then write the code.",
+    "target": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 13,
+    "prompt": "Scaffold a responsive web landing_page for our dashboard.",
+    "target": {
+      "primary_tool": "web_app_scaffold",
+      "secondary_tool": "NONE",
+      "topology": "SINGLE_STEP",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "web_app_scaffold",
+      "secondary_tool": "NONE",
+      "topology": "SINGLE_STEP",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 14,
+    "prompt": "Read the configuration and check the git diff side-by-side, then synthesize parser.py.",
+    "target": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 15,
+    "prompt": "Fix everything.",
+    "target": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "AMBIGUOUS_UNGROUNDED",
+      "turn_type": "CLARIFY"
+    },
+    "predicted": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "AMBIGUOUS_UNGROUNDED",
+      "turn_type": "CLARIFY"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 16,
+    "prompt": "Run tests with pytest tests/ and inspect git log concurrently, then scaffold the control_panel.",
+    "target": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 17,
+    "prompt": "Write the code only after the code is already written.",
+    "target": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "CYCLIC_CONTRADICTION",
+      "turn_type": "REFUSE"
+    },
+    "predicted": {
+      "primary_tool": "NONE",
+      "secondary_tool": "NONE",
+      "topology": "CYCLIC_CONTRADICTION",
+      "turn_type": "REFUSE"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 18,
+    "prompt": "Make sure to inspect the existing files before writing math_utils.py.",
+    "target": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "execute_command",
+      "secondary_tool": "synthesize_code",
+      "topology": "INVERSION",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  },
+  {
+    "sample_idx": 19,
+    "prompt": "Run tests with npm test and inspect git log concurrently, then scaffold the landing_page.",
+    "target": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "predicted": {
+      "primary_tool": "read_file",
+      "secondary_tool": "git_action",
+      "topology": "PARALLEL",
+      "turn_type": "ANSWER"
+    },
+    "match": true
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "job_id": "SCRIBE-v0.7-DAG-PROPOSER-AWS-GPU",
+  "timestamp_utc": "2026-10-18T09:59:46Z",
+  "hardware": "Tesla T4",
+  "cuda_available": true,
+  "total_parameters": 79906,
+  "training_samples": 2000,
+  "evaluation_samples": 500,
+  "exact_dag_accuracy_pct": 100.0,
+  "cycle_refusal_rate_pct": 100.0,
+  "clarify_rate_pct": 100.0,
+  "elapsed_minutes": 0.29,
+  "estimated_cost_usd": 0.0025,
+  "claim_ceiling": "ENGINEERED-NOT-VALIDATED",
+  "claim_status": "SYNTHETIC_ONLY"
+}

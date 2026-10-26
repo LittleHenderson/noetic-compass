@@ -1,0 +1,137 @@
+{
+  "authorization": {
+    "amendment_sha256": "b59538e2bac88e52d87203b6a93a96a0107520e6f2810c0703470e1458e63c08",
+    "owner_instruction": "GO \u2014 authorize one Stage S launch attempt in either us-west-2a or us-west-2c under the existing caps.",
+    "status": "AUTHORIZED: yes"
+  },
+  "cleanup": {
+    "active_tagged_instances": 0,
+    "cloudwatch_log_group_retained": true,
+    "instance_profile_deleted": true,
+    "one_time_schedules_remaining": 0,
+    "s3_inputs_and_receipts_retained": true,
+    "status": "PASS",
+    "tagged_volumes": 0,
+    "temporary_iam_roles_deleted": 3,
+    "temporary_ssm_parameter_deleted": true,
+    "watchdog_lambda_deleted": true
+  },
+  "cloud_setup_sha256": "6b1ef0376a7631a01e4fd4888a02a156397c090505c409c0c068c170a28a5f50",
+  "launch_attempt": {
+    "authorization_limit_breach": "The amendment limited this attempt to one EC2 RunInstances call. The SDK made four automatic retries, yielding five provider requests. This is recorded as a process failure; no further request was made.",
+    "availability_zone": "us-west-2a",
+    "aws_service_requests_observed_in_cloudtrail": 5,
+    "error_code": "Server.InsufficientInstanceCapacity",
+    "instance_type": "g5.2xlarge",
+    "region": "us-west-2",
+    "requests": [
+      {
+        "error_code": "Server.InsufficientInstanceCapacity",
+        "event_id": "0712b036-f582-450b-9fa5-05c28206edff",
+        "event_time_utc": "2026-10-25T04:56:53Z",
+        "instance_type": "g5.2xlarge",
+        "request_id": "ce92295c-ade9-405b-88cb-90b815325640"
+      },
+      {
+        "error_code": "Server.InsufficientInstanceCapacity",
+        "event_id": "6059c297-6ccb-4ffc-a0f8-1af720f343e7",
+        "event_time_utc": "2026-10-25T04:56:56Z",
+        "instance_type": "g5.2xlarge",
+        "request_id": "1b54fb81-b5fe-4f8e-b090-e10c3d3f8c9e"
+      },
+      {
+        "error_code": "Server.InsufficientInstanceCapacity",
+        "event_id": "e6422b8a-b696-4b13-80c9-6a91f5400942",
+        "event_time_utc": "2026-10-25T04:56:59Z",
+        "instance_type": "g5.2xlarge",
+        "request_id": "33202b52-189c-4ace-b86f-d0364c764812"
+      },
+      {
+        "error_code": "Server.InsufficientInstanceCapacity",
+        "event_id": "8cbbfe6f-bc7d-4782-921c-bfac96871795",
+        "event_time_utc": "2026-10-25T04:57:04Z",
+        "instance_type": "g5.2xlarge",
+        "request_id": "db8ca8c8-f69a-45a9-9de4-48d9efe83f7a"
+      },
+      {
+        "error_code": "Server.InsufficientInstanceCapacity",
+        "event_id": "d6f844ef-9010-404e-963d-da3faaca670c",
+        "event_time_utc": "2026-10-25T04:57:09Z",
+        "instance_type": "g5.2xlarge",
+        "request_id": "6e238c9b-517c-4983-95b9-53e33d27cf53"
+      }
+    ],
+    "result": "All five requests were rejected for insufficient g5.2xlarge capacity in us-west-2a; no Stage S instance or disk was created.",
+    "run_instances_sdk_method_invocations": 1,
+    "sdk_retry_detail": "The one Boto3 run_instances() method invocation returned max retries: 4; CloudTrail confirms five underlying RunInstances requests.",
+    "status": "FAILED / WITHDRAWN",
+    "subnet_id": "subnet-0bb8fa82c2a7177b3"
+  },
+  "limits": {
+    "aws_cap_usd": "5.00",
+    "aws_invoice_settled": false,
+    "claude_total_cap_usd": "10.00",
+    "combined_ec2_limit_seconds": 10800,
+    "current_conservative_project_ec2_seconds": 1273,
+    "current_watchdog_seconds": 32,
+    "prior_conservative_project_ec2_seconds": 1241,
+    "refreshed_max_scenario_estimate_usd": "3.707840740740740740740740740",
+    "remaining_ec2_seconds": 9527,
+    "remaining_watchdog_seconds": 135,
+    "stage_s_claude_generation_requests": 0,
+    "stage_s_claude_upper_bound_usd": "4.249728",
+    "watchdog_limit_seconds": 300,
+    "watchdog_total_seconds": 165
+  },
+  "record_type": "typed_probe_v5_stage_s_launch_attempt",
+  "recorded_at_utc": "2026-10-25T05:01:19.628894+00:00",
+  "run_id": "typed-probe-v5-stage-s-capacity-retry-20261025",
+  "schema_version": 1,
+  "science": {
+    "claude_generation_or_batch_requests": 0,
+    "model_generation_started": false,
+    "stage_c_authorized": false,
+    "stage_s_runner_started": false,
+    "status": "NULL / INCONCLUSIVE / NOT RUN"
+  },
+  "source_hashes": {
+    "candidate_bank_v4_120_20260610.jsonl": "4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f",
+    "run_stage_s_v5.py": "b44bcbbd9ee9a41252e72bc9f1c9efef3fee6de07a701ad743c26399dd010268",
+    "typed_probe_gate_prereg_v5_capacity_retry_amendment_20261025.md": "b59538e2bac88e52d87203b6a93a96a0107520e6f2810c0703470e1458e63c08",
+    "typed_probe_gate_prereg_v5_claude_budget_amendment_20261025.md": "7d259447e5e5bfc8e650694bba25cb99ee0d76760e76665c3d81eea9ffcc22fe",
+    "typed_probe_gate_prereg_v5_safe_handling_20261025.md": "c3049fbf65565cf062fdddafd91200b96a2c7fbbd3eed7daaeb513900b5e7132",
+    "typed_probe_v5_judge_rubric_20261025.txt": "e176676df7cd4d1593288daf9a793e0c75a1a81cdc9d9c40980c4d1eb02307fd",
+    "watchdog_e2e_proof_capacity_retry.py": "56e6c10a05de0b978ee563dcf90f2d7313c7aefdbffd59b6ba3a438d233ad480"
+  },
+  "watchdog_proof": {
+    "bytes": 1590,
+    "cumulative_watchdog_ec2_seconds": 165,
+    "iam_tag_policy_results": {
+      "different_run_tag": "implicitDeny",
+      "exact_run_tag": "allowed"
+    },
+    "lambda_result": {
+      "event_kind": "live_target_proof",
+      "found": 1,
+      "run_id": "typed-probe-v5-stage-s-capacity-retry-20261025",
+      "states": [
+        "running"
+      ],
+      "terminated": 1
+    },
+    "maximum_watchdog_ec2_seconds": 300,
+    "no_public_ip": true,
+    "prior_watchdog_ec2_seconds": 133,
+    "root_volume_deleted": true,
+    "root_volume_gib": 8,
+    "run_id": "typed-probe-v5-stage-s-capacity-retry-20261025",
+    "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry-20261025/provenance/watchdog_proof.json",
+    "s3_version_id": "ScPIFf2esCtgcSuWJbWBhOKoqqcAelp_",
+    "scheduled_smoke_log_timestamp_ms": 1792904149644,
+    "sentinel_instance_id": "i-0c5f27d27dad98b44",
+    "sentinel_instance_type": "t3.nano",
+    "sha256": "aeab4ea7813b5f233e57a113078d3c1c4f775257aace34983b0dff0b2fec42a3",
+    "status": "PASS",
+    "tracked_ec2_seconds": 32
+  }
+}

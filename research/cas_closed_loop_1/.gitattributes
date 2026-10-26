@@ -1,0 +1,3 @@
+provenance/* -text
+evidence/* -text
+*.py text eol=lf

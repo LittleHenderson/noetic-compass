@@ -1,0 +1,53 @@
+{
+  "timestamp_utc": "2026-10-18T20:50:46Z",
+  "runtime_seconds": 0.799,
+  "total_file_lines": 5268,
+  "valid_recipe_rows": 481,
+  "excluded_seeds_count": 42,
+  "headline_rows_count": 439,
+  "reconciliation_481_vs_439": {
+    "all_481": {
+      "cce_match": 265,
+      "cce_unparseable": 199,
+      "cce_mismatch": 17,
+      "bridge_mismatch": 42,
+      "second_number_agrees": 196
+    },
+    "headline_439": {
+      "cce_match": 233,
+      "cce_unparseable": 197,
+      "cce_mismatch": 9,
+      "bridge_mismatch": 0,
+      "second_number_agrees": 174
+    },
+    "difference_explained_by_42_exclusions": {
+      "match_diff": 32,
+      "unparseable_diff": 2,
+      "mismatch_diff": 8,
+      "second_number_diff": 22
+    }
+  },
+  "quality_improvement_over_bridge": {
+    "bridge_v2_481_mismatches": 42,
+    "cce_aliaswide_481_mismatches": 17,
+    "misread_reduction": 25,
+    "error_reduction_pct": 59.52
+  },
+  "unparseable_reasons_439": {
+    "AMBIGUOUS_DOMAIN_IN_SEGMENT": 16,
+    "NO_STATE_IN_SEGMENT": 148,
+    "NO_DOMAIN_IN_SEGMENT": 56,
+    "AMBIGUOUS_STATE_IN_SEGMENT": 27
+  },
+  "unparseable_multi_reason_note": "Percentages exceed 100% because an individual sentence clause can fail simultaneously for multiple independent reasons (e.g. both NO_STATE and NO_DOMAIN).",
+  "held_out_slice": {
+    "total_unparseable_real": 197,
+    "held_out_eval_count": 98,
+    "held_out_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\l4_split\\real_heldout_unparseables_98.jsonl",
+    "held_out_sha256": "e269a448cf1d087aa6b98436dadfbfdefa60216346f0f886659f0f9d7dd61cfe",
+    "dev_slice_count": 99,
+    "dev_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\l4_split\\real_dev_unparseables_99.jsonl",
+    "dev_sha256": "17cd198321d242bd74ff789a4b7f8032d499a7ff8534e5b07545b6221930fde0",
+    "requirement_for_aws_run": "Accuracy on real_heldout_unparseables_98.jsonl must be reported side-by-side with synthetic training accuracy."
+  }
+}

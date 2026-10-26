@@ -1,0 +1,44 @@
+{
+  "schema": "helm.cas-translator-measured-state/1",
+  "utc": "2026-10-16T23:41:56.156004+00:00",
+  "why": "The owner asked whether the CAS translator means the brain can speak English. The council had answered from inside the RECIPE BRAIN, which has no language and never will; the translator is a different object. This records what was measured about the right one.",
+  "direction_english_to_cas": {
+    "artefact": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\cas-native\\inference\\runs\\semantic-reranker-PATCHED-on-heldout-1000-20260430\\samples.jsonl",
+    "artefact_sha256": "0f1c0c093b10f0bd2f3742b73d2f00d2a0cec91ba338d666b0d034141bf90ebc",
+    "heldout_records": 1000,
+    "non_empty_generated_response": 1000,
+    "exact_match": 723,
+    "exact_match_rate": 0.723,
+    "whole_compile_valid": 1000,
+    "slot_match": 966,
+    "slot_match_applicable": 996,
+    "prompts_that_are_not_one_of_three_templates": 515,
+    "VERDICT": "WORKS. English prompt in, CAS expression out, every response compiles.",
+    "example_prompt": "I need the CAS expression for this recoverable structure: families: named emergent; states: Noetic ^4; drive F2; register |E (embodied) / Noetic ^4; drive F7; register |A (analytical) / Noetic ^4; nam",
+    "example_response": "(^4_{F2}|E \u00d7 ^4_{F7}|A) = ^4|\u03a9_attunement"
+  },
+  "direction_cas_to_english_reply": {
+    "state": "TRAINED_BUT_NOT_EVALUATED",
+    "checkpoint": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\cas-native\\training\\runs\\b3_full_50k_prodshape_20260507\\model_final.pt",
+    "checkpoint_bytes": 585030724,
+    "global_step": 14845,
+    "tokenizer": "ExtendedHybridCASTokenizer, 38683 tokens = 24000 English BPE + 14683 CAS reserved, with [CAS] and [/CAS] delimiters plus [PROMPT], [RESPONSE], [NL], [TASK_EXPR], [TASK_EXPLAIN], [TASK_CHAT]",
+    "trained_on": "a GPU box, 2026-05-07",
+    "recorded_eval_results": "NONE FOUND. Only the head spec and design docs exist.",
+    "why_not_run_here": "The council did NOT run it. This laptop had 710 MiB of RAM free; the weights alone are 585,030,724 bytes and torch adds about 200 MiB more. The owner's standing rule is to use AWS for memory-heavy work and not to fall back to local heavy execution, so it was left unrun rather than risked.",
+    "VERDICT": "UNVERIFIED. The model exists and was trained; whether it holds a conversation has never been measured, and the council did not measure it."
+  },
+  "what_the_translator_does_not_do": {
+    "responses_with_no_cas_operator": 35,
+    "of_which_examples": [
+      "CoverOf(SubFoundations, Foundation_6, Foundation_1, Foundation_3, Foundation_5, Foundation",
+      "CoverOf(SubFoundations, Foundation_7, Foundation_1, Foundation_2, Foundation_5, Foundation",
+      "Product(Noetics, States)"
+    ],
+    "note": "Those are the project's own notation forms, not prose. So the measured direction produces NOTATION, not sentences. Any claim that the system already talks back in English would be unsupported by this artefact."
+  },
+  "what_the_council_got_wrong": "The council answered the owner's question about the CAS translator by describing the recipe brain \u2014 68 learned numbers, no language, its own record saying 'NOT general'. The translator is a separate system with a 50000-dialogue corpus, a trainer and a GPU-trained checkpoint. Answering from inside one component as though it were the whole project is the error, and it was corrected only because the owner pushed.",
+  "next_step_if_wanted": "One bounded cloud run: load the 585 MB checkpoint on a GPU instance, generate replies for the recorded fixtures at cas-native/evaluation/fixtures/b4_failure_prompts.jsonl, and report what the replies actually say. That is the shortest path to answering 'can it hold a conversation', and it cannot be answered honestly without it.",
+  "written_by": "the TKS Noetic Council session, round 23",
+  "record_digest": "c2b9d6d836037f0b116bc67c44470ee4db03ae961f80eca2f0550ed989ad7c1e"
+}

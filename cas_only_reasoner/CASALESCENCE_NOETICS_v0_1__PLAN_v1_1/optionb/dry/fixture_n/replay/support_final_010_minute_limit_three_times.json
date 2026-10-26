@@ -1,0 +1,14 @@
+[
+ {
+  "http_status": 429,
+  "error": "HTTPError 429: made-up: too many requests per minute"
+ },
+ {
+  "http_status": 429,
+  "error": "HTTPError 429: made-up: too many requests per minute"
+ },
+ {
+  "http_status": 429,
+  "error": "HTTPError 429: made-up: too many requests per minute"
+ }
+]

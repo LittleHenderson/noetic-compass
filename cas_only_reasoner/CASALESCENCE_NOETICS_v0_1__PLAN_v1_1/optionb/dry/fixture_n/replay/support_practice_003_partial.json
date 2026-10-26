@@ -1,0 +1,7 @@
+[
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content": "```json\n[{\"item\": \"N0013\", \"verdict\": \"PASS\"}, {\"item\": \"N0014\", \"verdict\": \"FAIL\"}, {\"item\": \"N0015\", \"verdict\": \"PASS\"}, {\"item\": \"N0016\", \"verdict\": \"PASS\"}, {\"item\": \"N0017\", \"verdict\": \"PASS\"}, {\"item\": \"N0018\", \"verdict\": \"PASS\"}, {\"item\": \"N0019\", \"verdict\": \"PASS\"}, {\"item\": \"N0020\", \"verdict\": \"PASS\"}, {\"item\": \"N0021\", \"verdict\": \"PASS\"}, {\"item\": \"N0022\", \"verdict\": \"PASS\"}]\n```"
+ }
+]

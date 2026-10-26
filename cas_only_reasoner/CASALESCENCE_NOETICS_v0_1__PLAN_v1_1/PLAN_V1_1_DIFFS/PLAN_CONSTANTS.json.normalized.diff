@@ -1,0 +1,149 @@
+--- v1.0/optionb/PLAN_CONSTANTS.json (re-serialized with json.dumps indent=1)
++++ v1.1/optionb/PLAN_CONSTANTS.json
+@@ -1,8 +1,8 @@
+ {
+- "schema": "casalescence/optionb-plan-constants/v1.0",
+- "plan_file": "08_OPTION_B_PLAN_v1_0.md",
+- "plan_version": "1.0",
+- "status": "PROPOSED. Not sealed yet. Nothing has been run. Revised on 2026-10-05 after review round 1; see plan section 26. Amended on 2026-10-05 after the outside review (amendments A1 to A12); see plan section 27. Amended again on 2026-10-05 after an owner ruling (amendment A13: the canonical sayings in the role notes) and for a short list of small faults; see plan sections 27.3 and 27.4. Changed on 2026-10-05 by the operator's decisions of round 3 (C1 to C10); see plan section 27.5.",
++ "schema": "casalescence/optionb-plan-constants/v1.1",
++ "plan_file": "08_OPTION_B_PLAN_v1_1.md",
++ "plan_version": "1.1",
++ "status": "PROPOSED. Not sealed yet. Nothing has been run for version 1.1 (version 1.0 ran the practice build; see plan section 28). Revised on 2026-10-05 after review round 1; see plan section 26. Amended on 2026-10-05 after the outside review (amendments A1 to A12); see plan section 27. Amended again on 2026-10-05 after an owner ruling (amendment A13: the canonical sayings in the role notes) and for a short list of small faults; see plan sections 27.3 and 27.4. Changed on 2026-10-05 by the operator's decisions of round 3 (C1 to C10); see plan section 27.5. Version 1.1 on 2026-10-07, after the practice stop of the sealed v1.0 study: the question brief gains six lines, Step 2 gains three drop rules, the writer runs three passes and every passing question is a candidate; see plan section 28.",
+  "how_to_read_this_file": [
+   "Every program reads its numbers and wordings from this file. No program hard-codes one.",
+   "A text constant with more than one line is stored as a list of lines. A program joins the lines with one line feed (LF).",
+@@ -10,7 +10,7 @@
+   "Percent values are whole numbers. Compare with whole-number arithmetic, for example 100 * right >= 60 * total.",
+   "Claim states: the source hashes and the counts under counts_real were measured on 2026-10-05 (REAL). Every threshold, seed, wording and limit is the plan's rule (PROPOSED). Numbers under expected are estimates (EXPECTED)."
+  ],
+- "root": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1",
++ "root": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1__PLAN_v1_1",
+  "work_folder": "optionb",
+  "job_folder": "optionb/job",
+  "sources": {
+@@ -95,6 +95,7 @@
+   "split": 20261005,
+   "writer_batch_order_p1": 20261005,
+   "writer_batch_order_p2": 20261006,
++  "writer_batch_order_p3": 20261018,
+   "solver_option_shuffle": 20261007,
+   "selection": 20261008,
+   "length_backstop": 20261009,
+@@ -208,9 +209,10 @@
+     "A tool whose work folder sits under optionb/dry/ calls no service and counts nothing."
+    ],
+    "spend_cap_basis": "REAL, the operator's reading on 2026-10-05: two calls to deepseek-v4-pro with 60756 input tokens and 28913 output tokens in total cost about 0.10 USD. The input price and the output price were not measured apart. Each limit is 40 times the measured count: 40 * 60756 = 2430240 and 40 * 28913 = 1156520. Whatever the split between the two prices, a spend inside both limits costs at most 40 * 0.10 = 4.00 USD at that model's prices.",
+-   "spend_cap_expected": "EXPECTED, NOT MEASURED: deepseek-chat costs no more per input token and no more per output token than deepseek-v4-pro. The label run's receipt (verdict/labels_team_b.json.receipt.json) holds token counts only (2327821 input tokens and 88948 output tokens in 428 calls) and no price, so it gives no price basis. EXPECTED need: at the very most about 52% to 60% of the output limit and about 33% to 38% of the input limit, if every note is written twice and every possible question is solved. The likely need is well below that: about 27% to 31% of the output limit and about 23% to 27% of the input limit, if every note is written once. This is an estimate from word counts. It is not a tokenizer count. EXPECTED spend: under 2 USD; in the very worst case about 2.4 USD, which is inside the limit of 4.00 USD. Measured again on 2026-10-05 from the dry run of the role notes with amendment A13. REAL, counted with the tools' own word targets and prompts: in the worst case the note writer is asked for 450344 words in 2280 calls, its prompts hold 320220 words, and the key solver makes 1518 calls whose prompts hold at most 290619 words. ASSUMED: 1.3 to 1.5 tokens per word, and 10 output tokens per solver reply. The two limits do not change.",
++   "spend_cap_expected": "EXPECTED, NOT MEASURED: deepseek-chat costs no more per input token and no more per output token than deepseek-v4-pro. The label run's receipt (verdict/labels_team_b.json.receipt.json) holds token counts only (2327821 input tokens and 88948 output tokens in 428 calls) and no price, so it gives no price basis. EXPECTED need: at the very most about 52% to 60% of the output limit and about 33% to 38% of the input limit, if every note is written twice and every possible question is solved. The likely need is well below that: about 27% to 31% of the output limit and about 23% to 27% of the input limit, if every note is written once. This is an estimate from word counts. It is not a tokenizer count. EXPECTED spend: under 2 USD; in the very worst case about 2.4 USD, which is inside the limit of 4.00 USD. Measured again on 2026-10-05 from the dry run of the role notes with amendment A13. REAL, counted with the tools' own word targets and prompts: in the worst case the note writer is asked for 450344 words in 2280 calls, its prompts hold 320220 words, and the key solver makes 1518 calls whose prompts hold at most 290619 words. ASSUMED: 1.3 to 1.5 tokens per word, and 10 output tokens per solver reply. The two limits do not change. Version 1.1 (2026-10-07): up to three candidates per (passage, form) instead of one, so the key solver can make up to three times as many calls. REAL from the sealed v1.0 practice run: 268 solver calls used 41185 input tokens and 1609 output tokens. EXPECTED for the v1.1 practice set at 12 settings: about 288 at the version 1.0 candidate count; the ceiling is 3 x 123 open pairs x 2 steps = 738 role-step items plus 3 x 87 x 2 = 522 plain-fact items per solver, 1260 in all; at the REAL version 1.0 rate of about 154 input tokens per call that is about 194000 input tokens, far under the limit. EXPECTED at the ceiling of both sets, with the same ASSUMED 1.3 to 1.5 tokens per word and 10 output tokens per reply: the solver's prompts hold at most 3 x 290619 words, so the whole need is at most about 64% to 74% of the input limit and about 55% to 62% of the output limit. The two limits are far from reached and do not change.",
+    "spend_cap_limit_of_the_count": "Calls that are running when a limit is reached still finish. So a count can pass its limit by a few calls. A call with no reply is not counted.",
+-   "expected_spend_usd": "under 2.00"
++   "expected_spend_usd": "under 2.00",
++   "v1_1_candidates_note": "Version 1.1: up to three candidates per (passage, form) instead of one. The two token limits (2430240 input, 1156520 output) do not change."
+   },
+   "deepseek_reviewer": {
+    "model": "deepseek-v4-pro",
+@@ -224,7 +226,7 @@
+     "final": "gemini-3.5-flash-lite"
+    },
+    "one_model_per_set": true,
+-   "one_model_rule": "Amendment A1. One model writes the practice set, the final set and the spare pass. The two values of model_by_set are the same name. The tool refuses any other model name.",
++   "one_model_rule": "Amendment A1. One model writes the practice set, the final set and every pass (version 1.1: p1, p2, p3). The two values of model_by_set are the same name. The tool refuses any other model name.",
+    "vendor_note": "Gemini is a third vendor: not the vendor of label team A (Claude) and not the vendor of label team B (DeepSeek). The passages were written by another model of the same vendor, gemini-2.5-flash.",
+    "temperature": 1.0,
+    "max_tokens": 30000,
+@@ -232,15 +234,18 @@
+    "batch_rule": "Up to 4 passages per call. Sort the passage ids, shuffle them with the seed of the pass, cut them into groups of 4. Each passage is fenced. The brief tells the writer to treat every passage on its own.",
+    "passes": [
+     "p1",
+-    "p2"
++    "p2",
++    "p3"
+    ],
+    "pass_meaning": {
+     "p1": "first pass",
+-    "p2": "spare pass: same brief, different seeded batch order"
++    "p2": "second pass: same brief, different seeded batch order (called the spare pass in v1.0)",
++    "p3": "third pass: same brief, different seeded batch order"
+    },
+    "unreadable_reply_retries": 1,
+    "calls_seen_note": "REAL, measured by the operator on 2026-10-05: 47 one-word calls to gemini-3.5-flash-lite were answered with no refusal. The daily cap is not known (NOT MEASURED).",
+-   "on_http_429": "A refused call (HTTP 429) is not counted as an attempt. The tool stops cleanly, keeps the checkpoint, and resumes when it is run again later."
++   "on_http_429": "A refused call (HTTP 429) is not counted as an attempt. The tool stops cleanly, keeps the checkpoint, and resumes when it is run again later.",
++   "passes_rule": "Version 1.1. Three passes per set, p1, p2 and p3, each with the same brief and its own seeded batch order (seeds.writer_batch_order_<pass>). The writer tool accepts --pass p3 and reads its seed by the existing name rule. File names follow the existing pattern with p3. No pass is a spare: every question of every pass that passes Steps 2 and 3 is a candidate (question_rules.spare_rule)."
+   },
+   "gemini_support_checker": {
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+@@ -1060,7 +1065,24 @@
+   "word_sequence_regex": "[A-Za-z0-9']+",
+   "plain_fact_uses_same_form_rules": true,
+   "plain_fact_has_anchors": false,
+-  "spare_rule": "The p2 question for a form on a passage is used only when a p1 question for that form on that passage exists and was dropped by Step 2 or Step 3. A p2 question never replaces a p1 question that passed Steps 2 and 3."
++  "spare_rule": "Version 1.1 candidate rule (it replaces the v1.0 spare rule). Every question of every pass (p1, p2, p3) that passes Steps 2 and 3 is a candidate. A (passage, form) pair may have up to three candidates, one per pass. checks/candidates_<set>.json lists them all; each candidate row carries pass; its counts block reports candidates_per_pass. Steps 4 and 5 run on every candidate. In Step 6, per (passage, form), the survivors are reduced to one question before the pair rule: the surviving candidate of the lowest pass (p1 before p2 before p3); the others are dropped with the reason LATER_PASS_NOT_NEEDED. The selection file records pass_used per task. The writer never learns which pass was kept; the choice is a fixed rule, not a choice after seeing the solvers.",
++  "question_must_not_match_right_option": true,
++  "question_must_not_match_right_option_rule": "Version 1.1, Step 2, reason code QUESTION_REPEATS_KEY. A role-step question is dropped when its question sentence and its right option match by the looser word test of tools/verdict.py (lenient_span: the two texts share at least half of the content words of the shorter text). Not applied to plain-fact questions. Checked after the existing form checks and before the anchor check. Counted in dropped_by_reason like every other code.",
++  "no_two_options_match": true,
++  "no_two_options_match_rule": "Version 1.1, Step 2, reason code OPTIONS_MATCH_EACH_OTHER. Two options match when they match by the looser word test of tools/verdict.py AND share at least 2 content words. A one-word overlap is left to the brief line 'No two options name the same thing' and to the solvers' flags. Role-step questions: the six options. Plain-fact questions: the same rule on their four options. Checked after the existing form checks and before the anchor check. A question already failing EMPTY_TEXT or OPTION_COUNT is not tested. Counted in dropped_by_reason like every other code.",
++  "no_two_options_match_min_shared_content_words": 2,
++  "wrong_options_must_match_passage_forms": [
++   "GOES_FOR",
++   "KEEPS_AWAY",
++   "WHAT_STUCK",
++   "WHAT_SLID_OFF",
++   "WHAT_LEFT",
++   "NOT_BELONG",
++   "LONG_BREAK",
++   "NEW_STARTER",
++   "TAKE_AWAY"
++  ],
++  "wrong_options_must_match_passage_rule": "Version 1.1, Step 2, reason code WRONG_OPTION_NOT_FROM_PASSAGE. For the nine forms in wrong_options_must_match_passage_forms only: a role-step question is dropped when any WRONG option does not match the passage by the looser word test of tools/verdict.py (lenient_span: at least half of the option's content words occur in the passage). The right option is not tested by this rule. Not applied to MEET_AGAIN, SWAP_PERSON or WHERE_HELPS (their options are new things or new situations by design) and not to plain-fact questions. Checked after the existing form checks and before the anchor check. Counted in dropped_by_reason like every other code."
+  },
+  "briefs": {
+   "question_brief": [
+@@ -1076,6 +1098,7 @@
+    "Forms 1 and 2. A passage supports them when something a person notices makes them remember or picture something quite different.",
+    "- MEET_AGAIN: later and somewhere else, which of these would most likely bring the same thing back to the person?",
+    "- TAKE_AWAY: suppose the noticed thing had not been there; which of these would most likely not have happened?",
++   "In TAKE_AWAY the right option is the thing that was brought to mind, never the noticed thing itself. In MEET_AGAIN the right option is a new thing of the same kind as the noticed thing (a sound like that sound, a smell like that smell), never the remembered thing.",
+    "",
+    "Forms 3 and 4. A passage supports them when the passage shows a person plainly liking one thing, or plainly keeping clear of one.",
+    "- GOES_FOR (only if the person plainly likes a thing): at a later free moment, which of these does the person choose?",
+@@ -1092,6 +1115,7 @@
+    "Forms 9 and 10. A passage supports them when the passage lists the named parts of a thing.",
+    "- WHAT_LEFT: some of the named parts are dealt with; which named part is still left?",
+    "- NOT_BELONG: a spare kit holds one of each named part; which of these would not be in it?",
++   "In WHAT_LEFT the question names every part that was dealt with, and exactly one named part is left. In NOT_BELONG the five wrong options are five of the named parts, and the right option is a thing that is not one of the named parts.",
+    "",
+    "Forms 11 and 12. A passage supports them when doing the same thing again and again at set times has changed what a person does without trying.",
+    "- LONG_BREAK: the repeated thing stops for a year or two; which action has most likely faded?",
+@@ -1101,6 +1125,10 @@
+    "- Give exactly six different options: one right option and five wrong options. Exactly one option may be right.",
+    "- Give the five wrong options in a fixed order. Where the form allows it, the FIRST wrong option uses the same things as the right option in a different relationship. Example: where the right option is the thing the person likes, the first wrong option is the thing the person keeps clear of.",
+    "- Every wrong option is a thing or an action named in the passage, or one that plainly fits the passage. No throwaway options.",
++   "- Every wrong option is the same kind of thing as the right option: an action with actions, a named part with named parts, a thing brought to mind with things brought to mind, a situation with situations.",
++   "- Name things by their plain nouns. No option carries a word that says whether a thing is pleasant or unpleasant, liked or disliked, easy or hard, calm or alarming, rough or smooth, heavy or light.",
++   "- No two options name the same thing, or nearly the same thing.",
++   "- The question sentence must not repeat the words of the right option, and must not repeat the words of the passage sentence that holds the right option.",
+    "- No option is longer than 12 words. All six options are within 2 words of each other in length. The right option must not stand out by its length. No option may contain another option.",
+    "- The question is at most 45 words long.",
+    "- Give one or two anchors. An anchor is an exact, unbroken copy of words from the passage, at most 8 words long, that the question turns on.",
+@@ -2072,11 +2100,15 @@
+   "seconds_per_call": "0.3 to 0.5; planned with 1.0",
+   "model_calls_likely": 2700,
+   "gemini_question_calls_at_8_settings": {
+-   "practice": 30,
+-   "final": 118
++   "practice": 45,
++   "final": 177
+   },
+-  "gemini_question_calls_note": "Arithmetic on the REAL counts at 8 practice settings, with 4 passages per call and two passes: 58 practice passages make 15 calls per pass; 235 final passages make 59 calls per pass. Calls that are asked for once more come on top.",
+-  "gemini_support_calls_at_ceiling": 95
++  "gemini_question_calls_note": "Arithmetic on the REAL counts, with 4 passages per call and three passes (version 1.1). At 8 practice settings: 58 practice passages make 15 calls per pass, 45 over three passes; 235 final passages make 59 calls per pass, 177 over three passes. At 12 practice settings: 87 practice passages make 22 calls per pass, 66 over three passes; 206 final passages make 52 calls per pass, 156 over three passes. Calls that are asked for once more come on top. Gemini is free tier: no money.",
++  "gemini_support_calls_at_ceiling": 95,
++  "gemini_question_calls_at_12_settings": {
++   "practice": 66,
++   "final": 156
++  }
+  },
+  "review_round": {
+   "reviewer": "deepseek-v4-pro",

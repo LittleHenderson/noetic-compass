@@ -1,0 +1,89 @@
+--- v1.0/tools/ob_write_questions.py
++++ v1.1/tools/ob_write_questions.py
+@@ -22,9 +22,11 @@
+ file, never printed and never stored. Error texts are scrubbed of the key before they are logged.
+ 
+ Usage:
+-  ob_write_questions.py --set practice|final --pass p1|p2 --max-calls N
++  ob_write_questions.py --set practice|final --pass p1|p2|p3 --max-calls N
+                         [--batch-size K] [--practice-settings 8..12] [--pace SECONDS]
+-  --pass p1 is the first pass. --pass p2 is the spare pass (same brief, different seeded batch order).
++  --pass p1 is the first pass. --pass p2 and --pass p3 are the later passes (same brief, different
++  seeded batch order). The pass names come from outside_services.gemini_question_writer.passes in
++  PLAN_CONSTANTS.json (plan v1.1); the seed of a pass is seeds.writer_batch_order_<pass>.
+   --max-calls is the call budget for this run (for the day). 0 writes the plan and calls nobody.
+ 
+ Files (FILE_FORMATS.md section 4):
+@@ -448,6 +450,25 @@
+ 
+ # ---------------------------------------------------------------- the run
+ 
++def pass_choices(argv):
++    """The pass names of PLAN_CONSTANTS.json (outside_services.gemini_question_writer.passes), read before the options are parsed.
++
++    A dry fixture (--work under optionb/dry/) may override the list in its DRY_CONSTANT_OVERRIDES.json, as Ctx does later.
++    The list is used only for the --pass choices; the run checks the pass again against the constants it loads.
++    """
++    try:
++        constants = json.loads((REAL_WORK / 'PLAN_CONSTANTS.json').read_text(encoding='utf-8'))
++        argv = list(sys.argv[1:] if argv is None else argv)
++        if '--work' in argv and argv.index('--work') + 1 < len(argv):
++            over = Path(argv[argv.index('--work') + 1]) / OVERRIDES_NAME
++            if over.exists():
++                merge(constants, json.loads(over.read_text(encoding='utf-8')))
++        passes = constants['outside_services']['gemini_question_writer']['passes']
++    except (OSError, ValueError, KeyError, TypeError):
++        return None
++    return list(passes) if isinstance(passes, list) and all(isinstance(p, str) for p in passes) else None
++
++
+ def main(argv=None):
+     for stream in (sys.stdout, sys.stderr):      # FILE_FORMATS.md section 0: a laptop tool prints in UTF-8
+         try:
+@@ -456,7 +477,9 @@
+             pass
+     parser = argparse.ArgumentParser(description='Option B Step 1: the blind question writer, in batches.')
+     parser.add_argument('--set', dest='set_name', required=True, choices=['practice', 'final'])
+-    parser.add_argument('--pass', dest='pass_name', required=True, choices=['p1', 'p2'], help='p1 = first pass, p2 = spare pass')
++    passes = pass_choices(argv)
++    parser.add_argument('--pass', dest='pass_name', required=True, choices=passes,
++                        help='a pass name of PLAN_CONSTANTS.json: p1 = first pass; p2, p3 = later passes with another seeded batch order')
+     parser.add_argument('--max-calls', type=int, required=True, help='call budget for this run; 0 = write the plan only')
+     parser.add_argument('--batch-size', type=int, default=None, help='passages per call (default and upper limit: the plan value)')
+     parser.add_argument('--practice-settings', type=int, default=None, help='practice set only: 8 to 12 (default 8)')
+@@ -498,8 +521,9 @@
+     state_path = qdir / ('writer_state_%s_%s.json' % (set_name, pass_name))
+     log_path = qdir / ('writer_calls_%s_%s.jsonl' % (set_name, pass_name))
+     raw_path = qdir / ('raw_questions_%s_%s.json' % (set_name, pass_name))
+-    other_pass = [p for p in G['passes'] if p != pass_name][0]
+-    other_state_path = qdir / ('writer_state_%s_%s.json' % (set_name, other_pass))
++    # plan v1.1: there may be more than one other pass. Every other pass that has a checkpoint is read.
++    other_passes = [p for p in G['passes'] if p != pass_name]
++    other_state_paths = [qdir / ('writer_state_%s_%s.json' % (set_name, p)) for p in other_passes]
+     split_path = ctx.work / 'select' / 'split_fixed.json'
+ 
+     split = ctx.read_json(split_path) if split_path.exists() else None
+@@ -515,12 +539,12 @@
+             raise Stop('BAD_ARGUMENT', '--practice-settings must be %d to %d.' % (start, most))
+ 
+     state = load_own(state_path) if state_path.exists() else None
+-    other_state = load_own(other_state_path) if other_state_path.exists() else None
++    other_states = [load_own(path) for path in other_state_paths if path.exists()]
+     if state is None:
+         state = {'set': set_name, 'pass': pass_name, 'model': model, 'seed': seed, 'waves': [], 'cap_stops_utc': [], 'complete': False}
+     if (state['set'], state['pass'], state['seed']) != (set_name, pass_name, seed):
+         raise Stop('CHECKPOINT_DOES_NOT_MATCH', 'The checkpoint was made for another set, pass or seed.')
+-    for name, doc in (('this pass', state), ('the other pass', other_state)):
++    for name, doc in [('this pass', state)] + [('pass %s' % doc['pass'], doc) for doc in other_states]:
+         if doc is not None and doc['model'] != model:
+             raise Stop('ONE_MODEL_PER_SET', 'The checkpoint of %s names model %s. This set is written by one model only (%s).' % (name, doc['model'], model))
+ 
+@@ -532,7 +556,7 @@
+         if set_name == 'practice':
+             if split is not None:
+                 raise Stop('PRACTICE_SET_IS_FIXED', 'select/split_fixed.json exists. No practice wave is added after that.')
+-            if number > 0 and not (other_state and number in {w['wave'] for w in other_state['waves']}):
++            if number > 0 and not any(number in {w['wave'] for w in other['waves']} for other in other_states):
+                 # The reserve rule (amendment A8; FILE_FORMATS.md sections 4 and 7.1). This tool reads the block reserve of
+                 # select/selection_practice.json, exactly as tools/ob_select.py and tools/ob_seal.py do. It does not read
+                 # floor.met for this rule. A file with no reserve block also stops it.

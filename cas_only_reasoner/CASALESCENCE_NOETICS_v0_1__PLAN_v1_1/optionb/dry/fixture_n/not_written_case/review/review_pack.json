@@ -1,0 +1,680 @@
+{
+ "schema": "casalescence/optionb/review_pack/v1",
+ "made_by": {
+  "program": "tools/ob_assemble.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "6402a4c40de62c9a66b3ed5497c819354d9b5b9270ed69a3fad3fc9754b63204",
+  "utc": "2026-10-07T02:23:35Z"
+ },
+ "inputs": [
+  {
+   "path": "../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+   "sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880"
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "00f18c02b8544a1597432154abdb7c900165f186757d67d215cec4a0ffea0192"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/SEAL_OPTIONB.jsonl",
+   "sha256": "6a1aededebdcef29dcbc9c12f1d04cb13062475229785dcf1e524afc9a5db15d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/anchor_check_final.json",
+   "sha256": "92b4dab408758a286a4fdda2615271f86c86cea471f8188f94c575fb4062fc83"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/anchor_check_practice.json",
+   "sha256": "39bccbdf801ac9bdc898ba2bc1c256513e224817c4039547d538ee37ede632bc"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/candidates_final.json",
+   "sha256": "79c945505bd278157fc3c361b8522395e5a3e85659bb9ae1f81d9f329f17456d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/candidates_practice.json",
+   "sha256": "a1e2e20f8b27432830de3b6390eaeb245c009282ba5e582b45b5c819d7cc440d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/form_check_final.json",
+   "sha256": "e81f28fbbc282948376eb8a7573595f07062d2eb083f2724e6bbc40064c2752f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/form_check_practice.json",
+   "sha256": "639c53254bfcb2e9fc1b6a92d93d4740a1524f0641ea3e4b27ef3aae5c7ce4fb"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/option_check_final.json",
+   "sha256": "163103e7a3b5547fb025c51134647685f10c1042e524d540a1a69b5af939bbe9"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/checks/option_check_practice.json",
+   "sha256": "2014af7579cde70857ed38a97977d17c4bb02a93f6e010c8d0668298189789ca"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/elig/eligibility.json",
+   "sha256": "225d5d7a5dffee567ca4bf2346c1514898e5052bccd88442cef2ed8785953848"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/elig/exclusions.json",
+   "sha256": "c5e7bf279aa4d476bf9168dc569e73c28418da5fba508722bbb8de26980715d8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_ord/ordinary_notes_final.json",
+   "sha256": "c6c7336e6c7ae135735970c721708800762b898207bd03d70428b23ba9020db8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_ord/ordinary_notes_practice.json",
+   "sha256": "7d9699f0d154f82303b53f0b5bb6f490f77dd2143de497c6a9274d8a9f83cbdb"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_role/role_notes.json",
+   "sha256": "667c6f2fc3e816b4ecf81c83b9ee7adb6e9ec07ac7a84e6442d750fc5083d2be"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_final_p1.json",
+   "sha256": "f6130abb5d1f24c7d6fbe28b2a245a91f42ad75f6435540db3487aec80d34972"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_final_p2.json",
+   "sha256": "68b052bc7b6232175b44c4c402ef0908d35d2286ee98072978a6ef2de287b884"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_practice_p1.json",
+   "sha256": "9173bca7c3cee238494e692291380819d8f16d29c339360e117f5ca1ca692102"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/questions/raw_questions_practice_p2.json",
+   "sha256": "03e98e732a71647dfcf98e447a7ba5a7c5e2d5a41af7b1efaa75e48e57a23646"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/screen/leak_screen_final.json",
+   "sha256": "1763a3e1f3374e74f43271d5400d7329e95cbf5e50320e0d9b01d4bb7117db28"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/screen/leak_screen_practice.json",
+   "sha256": "afdc4ee157b0eaa2074c6194b645192e45c59bd1ed7dceebbfd9fc1a7791e27f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/select/selection_final.json",
+   "sha256": "e9237d1e8e992a19d9527056118f9d174468cb2b01a121b19a00cd8f0d2a0e06"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/select/selection_practice.json",
+   "sha256": "748f32053f06fe1aef579c2853f7f655605e4214aa9058b7da72e0823d18fc24"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/select/split_fixed.json",
+   "sha256": "c9ea45fbeeee937c19ba23520a22eeda678c1db094cb58c5aa89a280974bbd18"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/solve/key_check_final.json",
+   "sha256": "1046c0fc81ebd6b3bfd61fcb5c28bd480f8a292899357152d60573582b5a4b81"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/solve/key_check_practice.json",
+   "sha256": "8b6f82a62ae9fee9c89ee60d243012086cba6b8f321f4653550d27d0ee989e6d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/support/support_results_final.json",
+   "sha256": "577aeb02be4d30911e7a681aa75524933dacd048888f764fa0ecf366d0cb39ff"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/support/support_results_practice.json",
+   "sha256": "ad024c4888a7701dd38b6162988c007a09b28c9b48de4363ebf47668a359d013"
+  }
+ ],
+ "seed": 20261015,
+ "final_sample_percent": 10,
+ "counts": {
+  "practice_tasks": 7,
+  "final_tasks": 9,
+  "final_tasks_in_the_sample": 1
+ },
+ "practice_tasks": [
+  {
+   "set": "practice",
+   "task_id": "V901.FACT",
+   "passage_id": "V901",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "passage": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump.",
+   "question": "Where did the lantern stand?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "inside the cart"
+     },
+     {
+      "letter": "B",
+      "text": "behind the gate"
+     },
+     {
+      "letter": "C",
+      "text": "on the shelf"
+     },
+     {
+      "letter": "D",
+      "text": "under the bench"
+     }
+    ]
+   },
+   "right_option": "on the shelf",
+   "right_letter": {
+    "1": "C"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^2 Positive: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^3 Negative: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^2 Positive: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "QUOTES-ONLY": "- \"Tamsin\".\n- \"the tar brush\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- \"the bilge pump\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "ORD-INFORMED": {
+     "090": "Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+     "100": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+     "110": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern."
+    },
+    "ORD-FREE": {
+     "090": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door.",
+     "100": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern.",
+     "110": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. A coil of rope lies beside the lantern. The lantern stands on the shelf by the door."
+    }
+   }
+  },
+  {
+   "set": "practice",
+   "task_id": "V901.GOES_FOR",
+   "passage_id": "V901",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "passage": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Tamsin do first?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "reaching for the wire brush again"
+     },
+     {
+      "letter": "B",
+      "text": "moving the lantern to the yard"
+     },
+     {
+      "letter": "C",
+      "text": "reaching for the tar brush again"
+     },
+     {
+      "letter": "D",
+      "text": "hanging the rope on a hook"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "reaching for the tar brush again"
+     },
+     {
+      "letter": "B",
+      "text": "hanging the rope on a hook"
+     },
+     {
+      "letter": "C",
+      "text": "moving the lantern to the yard"
+     },
+     {
+      "letter": "D",
+      "text": "sweeping the shed floor twice"
+     },
+     {
+      "letter": "E",
+      "text": "leaving the door wide open"
+     },
+     {
+      "letter": "F",
+      "text": "reaching for the wire brush again"
+     }
+    ]
+   },
+   "right_option": "reaching for the tar brush again",
+   "right_letter": {
+    "1": "C",
+    "2": "A"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^2 Positive: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^3 Negative: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^2 Positive: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "QUOTES-ONLY": "- \"Tamsin\".\n- \"the tar brush\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- \"the bilge pump\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "ORD-INFORMED": {
+     "090": "Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+     "100": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+     "110": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern."
+    },
+    "ORD-FREE": {
+     "090": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door.",
+     "100": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern.",
+     "110": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. A coil of rope lies beside the lantern. The lantern stands on the shelf by the door."
+    }
+   }
+  },
+  {
+   "set": "practice",
+   "task_id": "V901.KEEPS_AWAY",
+   "passage_id": "V901",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "passage": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Tamsin leave to someone else?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "carrying the lantern outside"
+     },
+     {
+      "letter": "B",
+      "text": "working with the tar brush"
+     },
+     {
+      "letter": "C",
+      "text": "counting every rope there"
+     },
+     {
+      "letter": "D",
+      "text": "working on the bilge pump"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "working with the tar brush"
+     },
+     {
+      "letter": "B",
+      "text": "working on the bilge pump"
+     },
+     {
+      "letter": "C",
+      "text": "counting every rope there"
+     },
+     {
+      "letter": "D",
+      "text": "lighting the big lamp"
+     },
+     {
+      "letter": "E",
+      "text": "carrying the lantern outside"
+     },
+     {
+      "letter": "F",
+      "text": "locking up the boat shed"
+     }
+    ]
+   },
+   "right_option": "working on the bilge pump",
+   "right_letter": {
+    "1": "D",
+    "2": "B"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^2 Positive: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Tamsin\".\n- ^3 Negative: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^2 Positive: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "QUOTES-ONLY": "- \"Tamsin\".\n- \"the tar brush\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- \"the bilge pump\". Supporting quote: \"She kept well away from the bilge pump.\"",
+    "ORD-INFORMED": {
+     "090": "Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+     "100": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+     "110": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern."
+    },
+    "ORD-FREE": {
+     "090": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door.",
+     "100": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern.",
+     "110": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. A coil of rope lies beside the lantern. The lantern stands on the shelf by the door."
+    }
+   }
+  },
+  {
+   "set": "practice",
+   "task_id": "V904.FACT",
+   "passage_id": "V904",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "passage": "Bram opened the forge before dawn. He always reached for the cross hammer before the ball hammer. The quench bucket stood on the stone floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows.",
+   "question": "Where did the quench bucket stand?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "behind the gate"
+     },
+     {
+      "letter": "B",
+      "text": "on the stone floor"
+     },
+     {
+      "letter": "C",
+      "text": "under the bench"
+     },
+     {
+      "letter": "D",
+      "text": "inside the cart"
+     }
+    ]
+   },
+   "right_option": "on the stone floor",
+   "right_letter": {
+    "1": "B"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Bram\".\n- ^2 Positive: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Bram\".\n- ^3 Negative: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^2 Positive: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+    "QUOTES-ONLY": "- \"Bram\".\n- \"the cross hammer\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- \"the leaky bellows\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+    "ORD-INFORMED": {
+     "090": "Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door.",
+     "100": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door.",
+     "110": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door. A pair of tongs lies beside the quench bucket."
+    },
+    "ORD-FREE": {
+     "090": "Bram opens the forge before dawn. The quench bucket stands on the stone floor by the door.",
+     "100": "Bram opens the forge before dawn. The quench bucket stands on the stone floor by the door. A pair of tongs lies beside the quench bucket.",
+     "110": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. A pair of tongs lies beside the quench bucket. The quench bucket stands on the stone floor by the door."
+    }
+   }
+  },
+  {
+   "set": "practice",
+   "task_id": "V904.GOES_FOR",
+   "passage_id": "V904",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "passage": "Bram opened the forge before dawn. He always reached for the cross hammer before the ball hammer. The quench bucket stood on the stone floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Bram do first?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "reaching for the cross hammer again"
+     },
+     {
+      "letter": "B",
+      "text": "moving the quench bucket to the yard"
+     },
+     {
+      "letter": "C",
+      "text": "hanging the tongs on a hook"
+     },
+     {
+      "letter": "D",
+      "text": "reaching for the ball hammer again"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "reaching for the ball hammer again"
+     },
+     {
+      "letter": "B",
+      "text": "leaving the door wide open"
+     },
+     {
+      "letter": "C",
+      "text": "reaching for the cross hammer again"
+     },
+     {
+      "letter": "D",
+      "text": "sweeping the forge floor twice"
+     },
+     {
+      "letter": "E",
+      "text": "moving the quench bucket to the yard"
+     },
+     {
+      "letter": "F",
+      "text": "hanging the tongs on a hook"
+     }
+    ]
+   },
+   "right_option": "reaching for the cross hammer again",
+   "right_letter": {
+    "1": "A",
+    "2": "C"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Bram\".\n- ^2 Positive: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Bram\".\n- ^3 Negative: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^2 Positive: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+    "QUOTES-ONLY": "- \"Bram\".\n- \"the cross hammer\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- \"the leaky bellows\". Supporting quote: \"He kept well away from the leaky bellows.\"",
+    "ORD-INFORMED": {
+     "090": "Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door.",
+     "100": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door.",
+     "110": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door. A pair of tongs lies beside the quench bucket."
+    },
+    "ORD-FREE": {
+     "090": "Bram opens the forge before dawn. The quench bucket stands on the stone floor by the door.",
+     "100": "Bram opens the forge before dawn. The quench bucket stands on the stone floor by the door. A pair of tongs lies beside the quench bucket.",
+     "110": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. A pair of tongs lies beside the quench bucket. The quench bucket stands on the stone floor by the door."
+    }
+   }
+  },
+  {
+   "set": "practice",
+   "task_id": "V905.FACT",
+   "passage_id": "V905",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "passage": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The drying rack stood on the back wall by the door. A tub of madder lay beside it.",
+   "question": "Where did the drying rack stand?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "on the back wall"
+     },
+     {
+      "letter": "B",
+      "text": "under the bench"
+     },
+     {
+      "letter": "C",
+      "text": "behind the gate"
+     },
+     {
+      "letter": "D",
+      "text": "inside the cart"
+     }
+    ]
+   },
+   "right_option": "on the back wall",
+   "right_letter": {
+    "1": "A"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Maren\".\n- ^2 Positive: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Maren\".\n- ^3 Negative: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+    "QUOTES-ONLY": "- \"Maren\".\n- \"the copper ladle\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+    "ORD-INFORMED": {
+     "090": "Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door.",
+     "100": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door.",
+     "110": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door. A tub of madder lies beside the drying rack."
+    },
+    "ORD-FREE": {
+     "090": "Maren opens the dye house before dawn. The drying rack stands on the back wall by the door.",
+     "100": "Maren opens the dye house before dawn. The drying rack stands on the back wall by the door. A tub of madder lies beside the drying rack.",
+     "110": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. A tub of madder lies beside the drying rack. The drying rack stands on the back wall by the door."
+    }
+   }
+  },
+  {
+   "set": "practice",
+   "task_id": "V905.GOES_FOR",
+   "passage_id": "V905",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "passage": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The drying rack stood on the back wall by the door. A tub of madder lay beside it.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Maren do first?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "reaching for the iron ladle again"
+     },
+     {
+      "letter": "B",
+      "text": "reaching for the copper ladle again"
+     },
+     {
+      "letter": "C",
+      "text": "hanging the madder on a hook"
+     },
+     {
+      "letter": "D",
+      "text": "moving the drying rack to the yard"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "moving the drying rack to the yard"
+     },
+     {
+      "letter": "B",
+      "text": "hanging the madder on a hook"
+     },
+     {
+      "letter": "C",
+      "text": "sweeping the house floor twice"
+     },
+     {
+      "letter": "D",
+      "text": "reaching for the copper ladle again"
+     },
+     {
+      "letter": "E",
+      "text": "reaching for the iron ladle again"
+     },
+     {
+      "letter": "F",
+      "text": "leaving the door wide open"
+     }
+    ]
+   },
+   "right_option": "reaching for the copper ladle again",
+   "right_letter": {
+    "1": "B",
+    "2": "D"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Maren\".\n- ^2 Positive: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Maren\".\n- ^3 Negative: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+    "QUOTES-ONLY": "- \"Maren\".\n- \"the copper ladle\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"",
+    "ORD-INFORMED": {
+     "090": "Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door.",
+     "100": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door.",
+     "110": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door. A tub of madder lies beside the drying rack."
+    },
+    "ORD-FREE": {
+     "090": "Maren opens the dye house before dawn. The drying rack stands on the back wall by the door.",
+     "100": "Maren opens the dye house before dawn. The drying rack stands on the back wall by the door. A tub of madder lies beside the drying rack.",
+     "110": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. A tub of madder lies beside the drying rack. The drying rack stands on the back wall by the door."
+    }
+   }
+  }
+ ],
+ "final_tasks_sample": [
+  {
+   "set": "final",
+   "task_id": "V911.GOES_FOR",
+   "passage_id": "V911",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "passage": "Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The brass pan stood on the bench by the door. A box of chalk lay beside it. She kept well away from the cracked weight. She checked that every weight was correct.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Liesel do first?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "reaching for the small scale again"
+     },
+     {
+      "letter": "B",
+      "text": "reaching for the large scale again"
+     },
+     {
+      "letter": "C",
+      "text": "moving the brass pan to the yard"
+     },
+     {
+      "letter": "D",
+      "text": "hanging the chalk on a hook"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "leaving the door wide open"
+     },
+     {
+      "letter": "B",
+      "text": "hanging the chalk on a hook"
+     },
+     {
+      "letter": "C",
+      "text": "reaching for the small scale again"
+     },
+     {
+      "letter": "D",
+      "text": "moving the brass pan to the yard"
+     },
+     {
+      "letter": "E",
+      "text": "reaching for the large scale again"
+     },
+     {
+      "letter": "F",
+      "text": "sweeping the house floor twice"
+     }
+    ]
+   },
+   "right_option": "reaching for the small scale again",
+   "right_letter": {
+    "1": "A",
+    "2": "C"
+   },
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Liesel\".\n- ^2 Positive: \"the small scale\". For the Mind \"Liesel\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- ^3 Negative: \"the cracked weight\". For the Mind \"Liesel\". Supporting quote: \"She kept well away from the cracked weight.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Liesel\".\n- ^3 Negative: \"the small scale\". For the Mind \"Liesel\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- ^2 Positive: \"the cracked weight\". For the Mind \"Liesel\". Supporting quote: \"She kept well away from the cracked weight.\"",
+    "QUOTES-ONLY": "- \"Liesel\".\n- \"the small scale\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- \"the cracked weight\". Supporting quote: \"She kept well away from the cracked weight.\"",
+    "ORD-INFORMED": {
+     "090": "Liesel reaches for the small scale before the large scale. The brass pan stands on the bench by the door.",
+     "100": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The brass pan stands on the bench by the door. She checks that every weight is correct.",
+     "110": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The brass pan stands on the bench by the door. A box of chalk lies beside the brass pan."
+    },
+    "ORD-FREE": {
+     "090": "Liesel opens the weigh house before dawn. The brass pan stands on the bench by the door.",
+     "100": "Liesel opens the weigh house before dawn. The brass pan stands on the bench by the door. A box of chalk lies beside the brass pan.",
+     "110": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. A box of chalk lies beside the brass pan. The brass pan stands on the bench by the door."
+    }
+   }
+  }
+ ]
+}

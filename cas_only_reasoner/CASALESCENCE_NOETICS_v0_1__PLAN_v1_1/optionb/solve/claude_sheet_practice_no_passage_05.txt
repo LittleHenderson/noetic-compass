@@ -1,0 +1,165 @@
+SHEET practice-no_passage-05. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0565 ===
+Question: Where did Robert wait while his engine idled quietly?
+A. near the old fire station
+B. beside the big red engines
+C. outside his childhood home
+D. at the taxi rank
+=== END G0565 ===
+
+=== ITEM G0566 ===
+Question: What did the driver switch off?
+A. interior lamp
+B. headlight switch
+C. for hire light
+D. engine ignition
+=== END G0566 ===
+
+=== ITEM G0567 ===
+Question: What kind of turn was required at the old oak?
+A. A slight right
+B. A U-turn
+C. A gradual curve
+D. A sharp left
+=== END G0567 ===
+
+=== ITEM G0568 ===
+Question: What was placed across the street from where the driver waited?
+A. a bank
+B. a park
+C. a bar
+D. a shop
+=== END G0568 ===
+
+=== ITEM G0569 ===
+Question: What channel was selected on the radio?
+A. talk station
+B. news channel
+C. weather band
+D. music feed
+=== END G0569 ===
+
+=== ITEM G0570 ===
+Question: Where did the man wait?
+A. bus stop
+B. fire station
+C. train platform
+D. taxi rank
+=== END G0570 ===
+
+=== ITEM G0571 ===
+Question: What did the driver flick off before waiting?
+A. headlight switch
+B. radio dial
+C. for hire light
+D. engine ignition
+=== END G0571 ===
+
+=== ITEM G0572 ===
+Question: Where was the vehicle positioned when the driver leaned against it?
+A. busy street
+B. quiet rank
+C. dark alley
+D. fuel pump
+=== END G0572 ===
+
+=== ITEM G0573 ===
+Question: Where did the driver pull the vehicle?
+A. side of the road
+B. middle of the street
+C. front of the queue
+D. back of the line
+=== END G0573 ===
+
+=== ITEM G0574 ===
+Question: What type of vehicle did Kevin lean against while at the rank?
+A. a truck
+B. a van
+C. a bus
+D. his car
+=== END G0574 ===
+
+=== ITEM G0575 ===
+Question: What type of sign shone from across the street?
+A. flashing neon
+B. shaded bulb
+C. metal plate
+D. painted wood
+=== END G0575 ===
+
+=== ITEM G0576 ===
+Question: How far was the customer's requested journey?
+A. Down the long motorway
+B. Just two blocks away
+C. To the nearby river
+D. Across the entire city
+=== END G0576 ===
+
+=== ITEM G0577 ===
+Question: What illuminated the street from across the way?
+A. bright street lamp
+B. flashing neon sign
+C. glowing club sign
+D. blinking traffic light
+=== END G0577 ===
+
+=== ITEM G0578 ===
+Question: Where did George place his foot while sitting?
+A. on the brake pedal
+B. on the accelerator
+C. on the clutch pedal
+D. on the floor mat
+=== END G0578 ===
+
+=== ITEM G0579 ===
+Question: Where did Xander pull his cab to the front?
+A. of the station
+B. of the traffic
+C. of the queue
+D. of the garage
+=== END G0579 ===
+
+=== ITEM G0580 ===
+Question: Near which tree did the directions require a sharp turn?
+A. the green willow
+B. the tall pine
+C. the old oak
+D. the dead birch
+=== END G0580 ===
+
+=== ITEM G0581 ===
+Question: Who was leaning against the car at the quiet rank?
+A. Kevin's grandfather
+B. A pub owner
+C. Kevin
+D. A taxi passenger
+=== END G0581 ===
+
+=== ITEM G0582 ===
+Question: What did George flick off when the young men approached?
+A. his 'for hire' light
+B. his vehicle engine
+C. his radio dial
+D. his front headlights
+=== END G0582 ===
+
+=== ITEM G0583 ===
+Question: At a later free moment, which of these does the driver choose?
+A. a city center
+B. a motorway rest
+C. a small payment
+D. a two block journey
+E. a short trip
+F. a long drive
+=== END G0583 ===
+
+=== ITEM G0584 ===
+Question: Where was George's foot resting while he waited?
+A. On the vehicle floor
+B. On the brake pedal
+C. On the accelerator pedal
+D. On the clutch pedal
+=== END G0584 ===

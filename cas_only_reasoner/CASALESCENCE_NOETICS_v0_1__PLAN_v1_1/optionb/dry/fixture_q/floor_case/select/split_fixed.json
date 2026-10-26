@@ -1,0 +1,96 @@
+{
+ "schema": "casalescence/optionb/split_fixed/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "1fd644ffc8ea6c9f020c881a25c9aa1e5941ddda1a6012968e5ba4948968468e",
+  "utc": "2026-10-07T02:23:28Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "78127fadce11276ec8513f529848b3af4c2b50124309fafad679271056524646"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/anchor_check_practice.json",
+   "sha256": "5e0869c1052a0e655eefa7ce1bc1bbf1f523b50509adadb88b1ccb37e4bda5a5"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/candidates_practice.json",
+   "sha256": "8fd3ad72707c285b94c5b468085d358936f11160272950026dc8e2812e6b8eb9"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/form_check_practice.json",
+   "sha256": "fe8ac55bf857660b32b0594e012f23daa3e32ed40b4612fd8b7a3d63f34ac79c"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/option_check_practice.json",
+   "sha256": "f8260866ddab88f0a7a6643fa67d4845b6b1ef601f298dd486eb6bc8d85fb1e2"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p1.json",
+   "sha256": "916c200730d585054fe03f43d1cae0ffca27785e9b7302011d9e7b1122055319"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p2.json",
+   "sha256": "2db68ec231fe646f078bf509ad7de602423eb7d186a6dc4489e67db1b4b8d653"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p3.json",
+   "sha256": "bf889e200694a5c621ed7b71c86130e4634365144ae4ea478b0f397195c1d069"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/selection_practice.json",
+   "sha256": "3597c0d760d12db3f47ed0b50ced50d305d2948c089591abef856df2a4579b70"
+  },
+  {
+   "path": "optionb/dry/fixture_q/solve/key_check_practice.json",
+   "sha256": "24fa430177873776cda23d422fe8845599ea9b58bdcd00a781cd145d3597ae21"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "practice_setting_count": 9,
+ "practice_settings": [
+  "fixture boathouse",
+  "fixture practice 2",
+  "fixture practice 3",
+  "fixture practice 4",
+  "fixture practice 5",
+  "fixture practice 6",
+  "fixture practice 7",
+  "fixture practice 8",
+  "fixture market"
+ ],
+ "final_settings": [
+  "fixture bakery"
+ ],
+ "history": [
+  {
+   "practice_setting_count": 8,
+   "practice_role_step_tasks": 2,
+   "practice_plain_fact_tasks": 1,
+   "target_met": false
+  },
+  {
+   "practice_setting_count": 9,
+   "practice_role_step_tasks": 4,
+   "practice_plain_fact_tasks": 2,
+   "target_met": true
+  }
+ ],
+ "reserve_target_met": true,
+ "floor_met": true,
+ "final_writer_passage_ids": [
+  "V903"
+ ]
+}

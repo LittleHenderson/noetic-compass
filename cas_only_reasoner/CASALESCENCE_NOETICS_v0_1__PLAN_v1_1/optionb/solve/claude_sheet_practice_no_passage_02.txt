@@ -1,0 +1,175 @@
+SHEET practice-no_passage-02. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0415 ===
+Question: Wendy entered which kind of space?
+A. warm brick vault
+B. bright stone room
+C. dark wooden shed
+D. cool, damp cellar
+=== END G0415 ===
+
+=== ITEM G0416 ===
+Question: What color was the cheese Pierre reviewed?
+A. white
+B. blue
+C. orange
+D. yellow
+=== END G0416 ===
+
+=== ITEM G0417 ===
+Question: At a later moment, which of these is Maria least likely to bring up?
+A. Drop of condensation
+B. Perfect rind
+C. Experimental blue cheese
+D. Firm texture
+E. Mature cheddar wheel
+F. Earthy aroma
+=== END G0417 ===
+
+=== ITEM G0418 ===
+Question: Where did the cheddar enter after being brined?
+A. cheese molds
+B. local cows
+C. cool cellar
+D. specific rennet
+=== END G0418 ===
+
+=== ITEM G0419 ===
+Question: Where did the small drop fall from?
+A. cheese
+B. ceiling
+C. wall
+D. shelf
+=== END G0419 ===
+
+=== ITEM G0420 ===
+Question: Pierre finished the short brining period, humidity adjustments, and gradual temperature drops. Which named part is still left?
+A. temperature drops
+B. blue cheese
+C. separate steps
+D. aging schedule
+E. brining period
+F. rotation frequency
+=== END G0420 ===
+
+=== ITEM G0421 ===
+Question: Someone on their first day takes Yvonne's place. Which of these would most likely be missing?
+A. cheeses
+B. hand
+C. decade
+D. wheels
+E. pattern
+F. shelves
+=== END G0421 ===
+
+=== ITEM G0422 ===
+Question: The repeated thing stops for a year or two; which action has most likely faded?
+A. flipped the cheeses
+B. flipped the wheel
+C. reached for the first wheel
+D. brushed the cheeses
+E. entered the cellar
+F. brushed the ground
+=== END G0422 ===
+
+=== ITEM G0423 ===
+Question: What did Yvonne do daily for a decade?
+A. washed molds
+B. sold milk
+C. rotated wheels
+D. built shelves
+=== END G0423 ===
+
+=== ITEM G0424 ===
+Question: At a later moment, which of these is the person least likely to bring up?
+A. small drop
+B. perfect rind
+C. earthy aroma
+D. dark mould
+E. mature cheddar
+F. firm texture
+=== END G0424 ===
+
+=== ITEM G0425 ===
+Question: Who walked among the shelves turning specific cheeses?
+A. Yvonne
+B. Maria
+C. Wendy
+D. Harriet
+=== END G0425 ===
+
+=== ITEM G0426 ===
+Question: Which item fell onto Maria's sleeve?
+A. mould
+B. cheddar
+C. cheese
+D. condensation
+=== END G0426 ===
+
+=== ITEM G0427 ===
+Question: What fell from the ceiling onto Maria's sleeve?
+A. A small drop of condensation
+B. A mature cheddar wheel
+C. An experimental blue cheese
+D. A piece of dark mould
+=== END G0427 ===
+
+=== ITEM G0428 ===
+Question: Where did the cheese go after being brined?
+A. cows
+B. kitchen
+C. molds
+D. cellar
+=== END G0428 ===
+
+=== ITEM G0429 ===
+Question: Harriet considered the aging what for the new batch?
+A. humidity
+B. temperature
+C. flavor
+D. schedule
+=== END G0429 ===
+
+=== ITEM G0430 ===
+Question: Which variety of cheese did Yvonne rotate daily for a decade?
+A. sharp swiss
+B. fresh paneer
+C. countless wheels of cheddar
+D. aging Gouda
+=== END G0430 ===
+
+=== ITEM G0431 ===
+Question: Pierre dealt with the short brining period. Which named part is still left?
+A. the short brining period
+B. the regular rotation frequency
+C. humidity adjustments
+D. aging schedule
+E. blue cheese
+F. temperature drops
+=== END G0431 ===
+
+=== ITEM G0432 ===
+Question: What was the curd placed into after being cut, stirred, and pressed?
+A. cellar
+B. molds
+C. shelves
+D. bottles
+=== END G0432 ===
+
+=== ITEM G0433 ===
+Question: Which specific cheese did Wendy touch on the top shelf?
+A. aged cheddar
+B. fresh paneer
+C. aging Gouda
+D. sharp swiss
+=== END G0433 ===
+
+=== ITEM G0434 ===
+Question: What color was Pierre's new cheese?
+A. yellow
+B. green
+C. blue
+D. white
+=== END G0434 ===

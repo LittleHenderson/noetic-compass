@@ -1,0 +1,68 @@
+{
+  "anthropic_count_tokens_requests": 0,
+  "anthropic_message_batches": 0,
+  "anthropic_preflight_model_list_gets": 2,
+  "authorization": {
+    "additional_launch_authorized": false,
+    "one_attempt_consumed": true,
+    "stage_c": "NOT AUTHORIZED"
+  },
+  "cleanup": {
+    "anthropic_secure_parameter": "absent",
+    "cloudwatch_log_group": "retained",
+    "instance": "terminated",
+    "instance_profile": "absent",
+    "lambda": "absent",
+    "s3_evidence": "retained",
+    "stop_schedule": "absent",
+    "tagged_volumes": 0,
+    "temporary_iam_roles": "absent",
+    "test_schedule": "absent"
+  },
+  "failure_code": "exit_code=20",
+  "failure_phase": "AWS bootstrap before runner start",
+  "failure_reason": "Both /opt/pytorch/bin/python and /opt/pytorch/bin/python3 lack the transformers module; /usr/bin/python3 lacks torch. No installed Python candidate imports both PyTorch and Transformers.",
+  "launch": {
+    "availability_zone": "us-west-2c",
+    "cloudtrail_evidence_file": "cloudtrail_stage_s_launch_event.json",
+    "cloudtrail_g5_runinstances_count": 1,
+    "conservative_instance_seconds": 491,
+    "instance_id": "i-0ad494b53d5f2ae23",
+    "instance_type": "g5.2xlarge",
+    "launch_time_utc": "2026-10-25T05:14:14Z",
+    "request_id": "8ce09ade-871e-4c45-b08e-81523ee524d6",
+    "root_volume_deleted": true,
+    "root_volume_id": "vol-01f5504d588dbc592",
+    "terminate_request_accepted_utc": "2026-10-25T05:17:00Z",
+    "terminated_observed_utc": "2026-10-25T05:22:25Z"
+  },
+  "limits": {
+    "aws_cap_usd": "5.00",
+    "aws_invoice_settled": false,
+    "aws_max_scenario_estimate_usd": "3.707840740740740740740740740",
+    "claude_total_cap_usd": "10.00",
+    "combined_ec2_limit_seconds": 10800,
+    "combined_ec2_prior_seconds": 1273,
+    "combined_ec2_remaining_seconds": 8988,
+    "combined_ec2_total_seconds_conservative": 1812,
+    "stage_s_claude_upper_bound_usd": "4.249728"
+  },
+  "model_inference": "NOT RUN",
+  "run_id": "typed-probe-v5-stage-s-capacity-retry2-20261025",
+  "runner_manifest": "ABSENT",
+  "stage_s_science_status": "NULL / INCONCLUSIVE / NOT RUN",
+  "status": "FAILED / WITHDRAWN",
+  "verified_at_utc": "2026-10-25T05:23:51.877266+00:00",
+  "watchdog": {
+    "cumulative_seconds": 213,
+    "instance_id": "i-0347a9ca28ccfdd26",
+    "limit_seconds": 300,
+    "prior_seconds": 165,
+    "receipt_s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/provenance/watchdog_proof.json",
+    "receipt_s3_version": "SkHjLkdMO6ESgMBvu6sew4I95R7hcpV8",
+    "receipt_sha256": "f0d2eb8e6c008fa58bd3355abe6735f3e30f3c54872703db8fc92874fa3a3e4f",
+    "remaining_seconds": 87,
+    "status": "PASS",
+    "tracked_seconds": 48
+  }
+}

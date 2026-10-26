@@ -1,0 +1,241 @@
+SHEET practice-no_passage-03. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0455 ===
+Question: Suppose that specific aroma was entirely absent from the room today:
+A. the session
+B. the gym
+C. the tune
+D. the sweat
+E. the workshop
+F. the memory
+=== END G0455 ===
+
+=== ITEM G0456 ===
+Question: What rang to signal a new period of the bout?
+A. guard
+B. stance
+C. bell
+D. gaze
+=== END G0456 ===
+
+=== ITEM G0457 ===
+Question: Where was the heavy bag located?
+A. near the ring
+B. in the corner
+C. by the track
+D. in the locker
+=== END G0457 ===
+
+=== ITEM G0458 ===
+Question: Who outlined the tactical plan to the athlete?
+A. referee
+B. manager
+C. fighter
+D. Coach Terry
+=== END G0458 ===
+
+=== ITEM G0459 ===
+Question: According to Nathan, how many main flaws were in the young man's defence?
+A. Four
+B. Three
+C. Two
+D. Five
+=== END G0459 ===
+
+=== ITEM G0460 ===
+Question: What item did Carla wipe down?
+A. the speed bag
+B. the wool blanket
+C. the armchair
+D. the comic books
+=== END G0460 ===
+
+=== ITEM G0461 ===
+Question: Which specific part of the body did Nathan say was too high?
+A. footwork
+B. left hand
+C. guard
+D. chin
+=== END G0461 ===
+
+=== ITEM G0462 ===
+Question: What furniture item did Carla remember her relative having?
+A. reading table
+B. leather jacket
+C. old armchair
+D. speed bag
+=== END G0462 ===
+
+=== ITEM G0463 ===
+Question: What sound did Tina love?
+A. buzzing of a phone
+B. voice of the coach
+C. steps on the track
+D. crack of leather
+=== END G0463 ===
+
+=== ITEM G0464 ===
+Question: Whose old armchair did Carla picture while wiping down the equipment?
+A. Grandmother
+B. Aunt
+C. Sister
+D. Mother
+=== END G0464 ===
+
+=== ITEM G0465 ===
+Question: What object rang to signal the start of a new segment?
+A. guard
+B. gaze
+C. stance
+D. bell
+=== END G0465 ===
+
+=== ITEM G0466 ===
+Question: What substance was wiped from the athlete's forehead?
+A. liniment
+B. polish
+C. water
+D. sweat
+=== END G0466 ===
+
+=== ITEM G0467 ===
+Question: What object did Tina practice her punches on?
+A. armchair
+B. track
+C. liniment
+D. speed bag
+=== END G0467 ===
+
+=== ITEM G0468 ===
+Question: What is Maria's occupation according to the passage?
+A. Manager
+B. Referee
+C. Trainer
+D. Boxer
+=== END G0468 ===
+
+=== ITEM G0469 ===
+Question: Where was the buzzing device kept?
+A. bag
+B. floor
+C. corner
+D. locker
+=== END G0469 ===
+
+=== ITEM G0470 ===
+Question: While walking past a local leather goods store tomorrow evening:
+A. the tune
+B. the memory
+C. the session
+D. the gym
+E. the sweat
+F. the workshop
+=== END G0470 ===
+
+=== ITEM G0471 ===
+Question: Where was the ringing device located?
+A. locker
+B. corner
+C. ceiling
+D. pocket
+=== END G0471 ===
+
+=== ITEM G0472 ===
+Question: What did Marco use to wipe his brow?
+A. liniment
+B. workshop
+C. leather
+D. sweat
+=== END G0472 ===
+
+=== ITEM G0473 ===
+Question: At a later moment, which of these is Leo least likely to bring up?
+A. phone
+B. heavy bag
+C. corner
+D. booming voice
+E. knuckles
+F. locker
+=== END G0473 ===
+
+=== ITEM G0474 ===
+Question: Who explained the new method to the athlete?
+A. Nathan
+B. Tina
+C. Coach Terry
+D. Carla
+=== END G0474 ===
+
+=== ITEM G0475 ===
+Question: Suppose that particular aroma had been absent from the room; which of these would most likely not have happened?
+A. boxing gym
+B. small workshop
+C. liniment
+D. sparring session
+E. church shoes
+F. old leather
+=== END G0475 ===
+
+=== ITEM G0476 ===
+Question: Who watched the young man spar?
+A. Nathan
+B. Carla
+C. Tina
+D. Coach Terry
+=== END G0476 ===
+
+=== ITEM G0477 ===
+Question: While walking down a busy downtown street, which of these would most likely bring the same thing back?
+A. old leather
+B. church shoes
+C. sparring session
+D. workshop
+E. liniment
+F. grandfather
+=== END G0477 ===
+
+=== ITEM G0478 ===
+Question: Suppose the old smell had been absent; which mental image would most likely not have occurred?
+A. workshop floor
+B. church shoes
+C. sweaty brow
+D. sparring session
+E. boxing gym
+F. liniment bottle
+=== END G0478 ===
+
+=== ITEM G0479 ===
+Question: What object did Tina practice her jabs and hooks on?
+A. Speed bag
+B. Punching mitt
+C. Heavy bag
+D. Focus pad
+=== END G0479 ===
+
+=== ITEM G0480 ===
+Question: What substance filled the boxing gym alongside the smell of old leather?
+A. polish
+B. sweat
+C. liniment
+D. tune
+=== END G0480 ===
+
+=== ITEM G0481 ===
+Question: What kind of shot was introduced after the cross according to the plan?
+A. quick jab
+B. strong cross
+C. sharp body shot
+D. subtle head
+=== END G0481 ===
+
+=== ITEM G0482 ===
+Question: Walking past a different cobbler shop later, which sensory input would most likely bring back that memory?
+A. sight of sweat
+B. sound of humming
+C. touch of liniment
+D. feel of brow
+E. scent of polish
+F. glow of leather
+=== END G0482 ===

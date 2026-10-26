@@ -1,0 +1,16 @@
+  10/60 draws done, running min = 3.8478e-01
+  20/60 draws done, running min = 3.8478e-01
+  30/60 draws done, running min = 3.7874e-01
+  40/60 draws done, running min = 3.6732e-01
+  50/60 draws done, running min = 3.6732e-01
+  60/60 draws done, running min = 3.6732e-01
+
+over 60 independent random (W,U,b,Rd) draws, N(0,1) entries:
+  best absorption (centred) residual found for each draw:
+    min over draws    = 3.6732e-01
+    median over draws = 5.5291e-01
+    max over draws    = 8.1620e-01
+  number of draws with any residual < 1e-2 : 0/60
+  number of draws with any residual < 1e-1 : 0/60
+
+[exited with code 0]

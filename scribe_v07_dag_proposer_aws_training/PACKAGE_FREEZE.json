@@ -1,0 +1,8 @@
+{
+  "package_name": "SCRIBE_V07_DAG_AWS_GPU_PACKAGE.zip",
+  "zip_size_bytes": 9873,
+  "zip_sha256": "35d0b09645b12a17a6dc5c259d323017c3decfb8ddc3171d3d89dae10a923e41",
+  "file_count": 4,
+  "claim_ceiling": "ENGINEERED-NOT-VALIDATED",
+  "claim_status": "SYNTHETIC_ONLY"
+}

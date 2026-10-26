@@ -1,0 +1,182 @@
+{
+ "Q0001": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "C"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0002": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0003": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "B"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0004": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0005": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "B"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0006": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0007": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "C"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0001": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "E"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0002": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0003": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "C"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0004": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0005": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0006": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0007": {
+  "http_status": 200,
+  "content": "MADE-UP reply with no JSON: I think A",
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0015": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0016": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "B"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0017": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0018": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0019": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "C"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0020": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "C"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0015": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "F"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0016": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "C"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0017": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0018": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0019": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0020": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ }
+}

@@ -1,0 +1,6 @@
+[
+ {
+  "http_status": 429,
+  "error": "HTTPError 429: made-up: quota exceeded, limit GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+ }
+]

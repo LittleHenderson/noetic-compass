@@ -1,0 +1,54 @@
+{
+  "objects": [
+    {
+      "bytes": 1600,
+      "file": "watchdog_proof.json",
+      "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/provenance/watchdog_proof.json",
+      "s3_sha256_metadata": "f0d2eb8e6c008fa58bd3355abe6735f3e30f3c54872703db8fc92874fa3a3e4f",
+      "s3_version_id": "SkHjLkdMO6ESgMBvu6sew4I95R7hcpV8",
+      "sha256": "f0d2eb8e6c008fa58bd3355abe6735f3e30f3c54872703db8fc92874fa3a3e4f"
+    },
+    {
+      "bytes": 385,
+      "file": "stage_s_launch_attempt_armed.json",
+      "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/provenance/stage_s_launch_attempt_armed.json",
+      "s3_sha256_metadata": "dad7ea077bc2e258b87c2cf01e5f72f8e2e6267c3e79d51e6e1ec8dade5d15b0",
+      "s3_version_id": "kw5zomaNsZycSmK31tFPfTomjeI4j_pd",
+      "sha256": "dad7ea077bc2e258b87c2cf01e5f72f8e2e6267c3e79d51e6e1ec8dade5d15b0"
+    },
+    {
+      "bytes": 477,
+      "file": "stage_s_launch_attempt_receipt.json",
+      "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/provenance/stage_s_launch_attempt.json",
+      "s3_sha256_metadata": "d3673e0019955260110c89985542cb54f63588a752aa0ba493a740cbc399ef4e",
+      "s3_version_id": "84iGBcbM98pAA4ZuWmKBo.e5mb75QnA7",
+      "sha256": "d3673e0019955260110c89985542cb54f63588a752aa0ba493a740cbc399ef4e"
+    },
+    {
+      "bytes": 6648,
+      "file": "input_manifest.json",
+      "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/input/input_manifest.json",
+      "s3_sha256_metadata": "a3dc1c73178421482b72af8b97471315fc93800880d146b2c823512cad5985e8",
+      "s3_version_id": "Ba9VZbwWzBujb8zuqaQaOMpL2su.o8sU",
+      "sha256": "a3dc1c73178421482b72af8b97471315fc93800880d146b2c823512cad5985e8"
+    },
+    {
+      "bytes": 2809,
+      "file": "instance-bootstrap.log",
+      "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/output/logs/instance-bootstrap.log",
+      "s3_sha256_metadata": null,
+      "s3_version_id": "1NF8SbaK27PRdZVZpeBlKPXKlhlPc5Ce",
+      "sha256": "6f7864676c452936f1c73d2af8bfb9157fa1402723049956133e5e50488aa357"
+    },
+    {
+      "bytes": 50,
+      "file": "instance_exit_status.txt",
+      "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-capacity-retry2-20261025/output/logs/instance_exit_status.txt",
+      "s3_sha256_metadata": null,
+      "s3_version_id": "vAgxPWFfyfb4mq1K53KZNUA3XDfM6vQT",
+      "sha256": "efbe1a03e9986b44bbd8e32dfa7c41fa32c319bd6cd569e336ae2fd03c55ab34"
+    }
+  ],
+  "run_id": "typed-probe-v5-stage-s-capacity-retry2-20261025",
+  "source": "AWS S3 versioned evidence"
+}

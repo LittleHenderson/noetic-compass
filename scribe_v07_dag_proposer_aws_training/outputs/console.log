@@ -1,0 +1,158 @@
++ echo '=== Starting HELM Stage v0.7 DAG Proposer GPU Training Job ==='
+=== Starting HELM Stage v0.7 DAG Proposer GPU Training Job ===
++ mkdir -p /opt/scribe_v07
++ cd /opt/scribe_v07
++ aws s3 cp s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/SCRIBE_V07_DAG_AWS_GPU_PACKAGE.zip ./ --region us-west-2
+Completed 9.6 KiB/9.6 KiB (222.1 KiB/s) with 1 file(s) remainingdownload: s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/SCRIBE_V07_DAG_AWS_GPU_PACKAGE.zip to ./SCRIBE_V07_DAG_AWS_GPU_PACKAGE.zip
++ unzip -q SCRIBE_V07_DAG_AWS_GPU_PACKAGE.zip
++ cd SCRIBE_V07_DAG_AWS_GPU
+++ sha256sum ../SCRIBE_V07_DAG_AWS_GPU_PACKAGE.zip
+++ awk '{print $1}'
++ PACKAGE_SHA=35d0b09645b12a17a6dc5c259d323017c3decfb8ddc3171d3d89dae10a923e41
++ echo 'Verified Package SHA256: 35d0b09645b12a17a6dc5c259d323017c3decfb8ddc3171d3d89dae10a923e41'
+Verified Package SHA256: 35d0b09645b12a17a6dc5c259d323017c3decfb8ddc3171d3d89dae10a923e41
++ nvidia-smi
+Sun Oct 18 09:57:39 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.91.07              Driver Version: 595.91.07      CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:00:1E.0 Off |                    0 |
+| N/A   37C    P0             32W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
++ python3 -m pip install --upgrade pip --break-system-packages
+Requirement already satisfied: pip in /usr/local/lib/python3.10/dist-packages (26.2.1)
++ python3 -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124 --break-system-packages
+Looking in indexes: https://download.pytorch.org/whl/cu124
+Collecting torch
+  Downloading torch-2.6.0%2Bcu124-cp310-cp310-linux_x86_64.whl.metadata (28 kB)
+Collecting torchvision
+  Downloading torchvision-0.21.0%2Bcu124-cp310-cp310-linux_x86_64.whl.metadata (6.1 kB)
+Requirement already satisfied: filelock in /usr/local/lib/python3.10/dist-packages (from torch) (3.32.4)
+Requirement already satisfied: typing-extensions>=4.10.0 in /usr/local/lib/python3.10/dist-packages (from torch) (4.16.0)
+Collecting networkx (from torch)
+  Downloading networkx-3.4.2-py3-none-any.whl.metadata (6.3 kB)
+Requirement already satisfied: jinja2 in /usr/local/lib/python3.10/dist-packages (from torch) (3.1.6)
+Requirement already satisfied: fsspec in /usr/local/lib/python3.10/dist-packages (from torch) (2026.7.0)
+Collecting nvidia-cuda-nvrtc-cu12==12.4.127 (from torch)
+  Downloading nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (24.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 24.6/24.6 MB 244.3 MB/s  0:00:00
+Collecting nvidia-cuda-runtime-cu12==12.4.127 (from torch)
+  Downloading nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (883 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 883.7/883.7 kB 309.8 MB/s  0:00:00
+Collecting nvidia-cuda-cupti-cu12==12.4.127 (from torch)
+  Downloading nvidia_cuda_cupti_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (13.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.8/13.8 MB 414.8 MB/s  0:00:00
+Collecting nvidia-cudnn-cu12==9.1.0.70 (from torch)
+  Downloading nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl (664.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 664.8/664.8 MB 37.6 MB/s  0:00:08
+Collecting nvidia-cublas-cu12==12.4.5.8 (from torch)
+  Downloading nvidia_cublas_cu12-12.4.5.8-py3-none-manylinux2014_x86_64.whl (363.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 363.4/363.4 MB 345.7 MB/s  0:00:01
+Collecting nvidia-cufft-cu12==11.2.1.3 (from torch)
+  Downloading nvidia_cufft_cu12-11.2.1.3-py3-none-manylinux2014_x86_64.whl (211.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 211.5/211.5 MB 321.2 MB/s  0:00:00
+Collecting nvidia-curand-cu12==10.3.5.147 (from torch)
+  Downloading nvidia_curand_cu12-10.3.5.147-py3-none-manylinux2014_x86_64.whl (56.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.3/56.3 MB 362.1 MB/s  0:00:00
+Collecting nvidia-cusolver-cu12==11.6.1.9 (from torch)
+  Downloading nvidia_cusolver_cu12-11.6.1.9-py3-none-manylinux2014_x86_64.whl (127.9 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 127.9/127.9 MB 240.6 MB/s  0:00:00
+Collecting nvidia-cusparse-cu12==12.3.1.170 (from torch)
+  Downloading nvidia_cusparse_cu12-12.3.1.170-py3-none-manylinux2014_x86_64.whl (207.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 207.5/207.5 MB 236.7 MB/s  0:00:00
+Collecting nvidia-cusparselt-cu12==0.6.2 (from torch)
+  Downloading nvidia_cusparselt_cu12-0.6.2-py3-none-manylinux2014_x86_64.whl (150.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 150.1/150.1 MB 348.2 MB/s  0:00:00
+Collecting nvidia-nccl-cu12==2.21.5 (from torch)
+  Downloading nvidia_nccl_cu12-2.21.5-py3-none-manylinux2014_x86_64.whl (188.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 188.7/188.7 MB 321.0 MB/s  0:00:00
+Collecting nvidia-nvtx-cu12==12.4.127 (from torch)
+  Downloading nvidia_nvtx_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (99 kB)
+Collecting nvidia-nvjitlink-cu12==12.4.127 (from torch)
+  Downloading nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (21.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.1/21.1 MB 312.9 MB/s  0:00:00
+Collecting triton==3.2.0 (from torch)
+  Downloading triton-3.2.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.4 kB)
+Collecting sympy==1.13.1 (from torch)
+  Downloading sympy-1.13.1-py3-none-any.whl.metadata (12 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy==1.13.1->torch)
+  Downloading mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+Collecting numpy (from torchvision)
+  Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /usr/local/lib/python3.10/dist-packages (from torchvision) (12.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.10/dist-packages (from jinja2->torch) (3.0.3)
+Downloading torch-2.6.0%2Bcu124-cp310-cp310-linux_x86_64.whl (768.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 768.4/768.4 MB 18.0 MB/s  0:00:15
+Downloading sympy-1.13.1-py3-none-any.whl (6.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.2/6.2 MB 122.7 MB/s  0:00:00
+Downloading triton-3.2.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (166.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 166.6/166.6 MB 154.6 MB/s  0:00:01
+Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 29.1 MB/s  0:00:00
+Downloading torchvision-0.21.0%2Bcu124-cp310-cp310-linux_x86_64.whl (7.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.3/7.3 MB 194.8 MB/s  0:00:00
+Downloading networkx-3.4.2-py3-none-any.whl (1.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 91.3 MB/s  0:00:00
+Downloading numpy-2.2.6-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.8/16.8 MB 215.4 MB/s  0:00:00
+Installing collected packages: triton, nvidia-cusparselt-cu12, mpmath, sympy, nvidia-nvtx-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufft-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, numpy, networkx, nvidia-cusparse-cu12, nvidia-cudnn-cu12, nvidia-cusolver-cu12, torch, torchvision
+
+Successfully installed mpmath-1.3.0 networkx-3.4.2 numpy-2.2.6 nvidia-cublas-cu12-12.4.5.8 nvidia-cuda-cupti-cu12-12.4.127 nvidia-cuda-nvrtc-cu12-12.4.127 nvidia-cuda-runtime-cu12-12.4.127 nvidia-cudnn-cu12-9.1.0.70 nvidia-cufft-cu12-11.2.1.3 nvidia-curand-cu12-10.3.5.147 nvidia-cusolver-cu12-11.6.1.9 nvidia-cusparse-cu12-12.3.1.170 nvidia-cusparselt-cu12-0.6.2 nvidia-nccl-cu12-2.21.5 nvidia-nvjitlink-cu12-12.4.127 nvidia-nvtx-cu12-12.4.127 sympy-1.13.1 torch-2.6.0+cu124 torchvision-0.21.0+cu124 triton-3.2.0
++ python3 -c 'import torch,sys;print('\''TORCH'\'',torch.__version__,'\''CUDA'\'',torch.cuda.is_available());sys.exit(0 if torch.cuda.is_available() else 1)'
+TORCH 2.6.0+cu124 CUDA True
++ '[' 0 -ne 0 ']'
++ mkdir -p /opt/scribe_v07/outputs
++ python3 train_dag_proposer_job.py --epochs 25 --batch-size 32 --lr 0.001 --out-dir /opt/scribe_v07/outputs --require-gpu
+/usr/local/lib/python3.10/dist-packages/torch/nn/modules/transformer.py:508: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. We recommend specifying layout=torch.jagged when constructing a nested tensor, as this layout receives active development, has better operator coverage, and works with torch.compile. (Triggered internally at /pytorch/aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+=== HELM Stage v0.7 Lexicon Expansion GPU Training ===
+PyTorch Version: 2.6.0+cu124
+CUDA Available: True
+GPU Hardware: Tesla T4
+GPU VRAM: 14.56 GB
+Generating training and held-out evaluation splits...
+Train samples: 2000 | Held-out Eval samples: 500
+Vocabulary Size: 168 tokens
+Model Total Parameters: 79906 (100% trained from scratch)
+
+Starting GPU Training Loop...
+Epoch 05/25 | Avg Loss: 0.0527
+Epoch 10/25 | Avg Loss: 0.0134
+Epoch 15/25 | Avg Loss: 0.0062
+Epoch 20/25 | Avg Loss: 0.0035
+Epoch 25/25 | Avg Loss: 0.0022
+
+Running Held-Out Evaluation on 500 Unseen Samples...
+
+=== EVALUATION RESULTS ===
+Exact Full-DAG Match Accuracy: 100.0% (500/500)
+Cyclic Contradiction Refusal Rate: 100.0% (78/78)
+Ambiguous Request Clarify Rate: 100.0% (86/86)
+Total Run Time: 17.45 seconds (0.29 minutes)
+Saved weights: /opt/scribe_v07/outputs/dag_proposer_v07_weights.pt (346258 bytes)
+ALL TRAINING OUTPUTS AND CRYPTOGRAPHIC RECEIPTS SEALED.
++ RC=0
++ echo DAG_PROPOSER_TRAIN_RC=0
+DAG_PROPOSER_TRAIN_RC=0
++ aws s3 cp /opt/scribe_v07/outputs/ s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/outputs/ --recursive --region us-west-2
+Completed 368 Bytes/350.5 KiB (2.7 KiB/s) with 5 file(s) remainingupload: ../outputs/OUTPUTS_SHA256.json to s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/outputs/OUTPUTS_SHA256.json
+Completed 368 Bytes/350.5 KiB (2.7 KiB/s) with 4 file(s) remainingCompleted 9.3 KiB/350.5 KiB (69.1 KiB/s) with 4 file(s) remaining upload: ../outputs/RECEIPTS.json to s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/outputs/RECEIPTS.json
+Completed 9.3 KiB/350.5 KiB (69.1 KiB/s) with 3 file(s) remainingCompleted 347.4 KiB/350.5 KiB (2.5 MiB/s) with 3 file(s) remainingCompleted 347.9 KiB/350.5 KiB (2.5 MiB/s) with 3 file(s) remainingupload: ../outputs/RUN_SUMMARY.json to s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/outputs/RUN_SUMMARY.json
+Completed 347.9 KiB/350.5 KiB (2.5 MiB/s) with 2 file(s) remainingCompleted 350.5 KiB/350.5 KiB (2.4 MiB/s) with 2 file(s) remainingupload: ../outputs/dag_vocab.json to s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/outputs/dag_vocab.json
+Completed 350.5 KiB/350.5 KiB (2.4 MiB/s) with 1 file(s) remainingupload: ../outputs/dag_proposer_v07_weights.pt to s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/outputs/dag_proposer_v07_weights.pt
++ echo 'ALL OUTPUTS STAGED TO S3. SHUTTING DOWN.'
+ALL OUTPUTS STAGED TO S3. SHUTTING DOWN.
++ aws s3 cp /var/log/scribe_v07.log s3://cas-harness-runpod-92754088/bridge-control-20260822/scribe_v07_dag/scribe-v07-1792317383/outputs/console.log --region us-west-2

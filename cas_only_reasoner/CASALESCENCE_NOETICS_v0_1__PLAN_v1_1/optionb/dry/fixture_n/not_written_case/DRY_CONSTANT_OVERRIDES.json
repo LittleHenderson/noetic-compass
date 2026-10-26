@@ -1,0 +1,20 @@
+{
+ "note": "MADE-UP. Dry fixture only. The four floors and the no-launch line are lowered so that a handful of made-up passages can walk through every step. A tool reads this file only when its work folder sits under optionb/dry/. The real floors are 100, 100, 36 and 20.",
+ "launch_floor": {
+  "final_role_step_tasks_min": 2,
+  "final_plain_fact_tasks_min": 2,
+  "practice_role_step_tasks_min": 2,
+  "practice_plain_fact_tasks_min": 2
+ },
+ "tiers": {
+  "no_launch_below_final_role_step_tasks": 2
+ },
+ "outside_services": {
+  "gemini_question_writer": {
+   "passes": [
+    "p1",
+    "p2"
+   ]
+  }
+ }
+}

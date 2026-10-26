@@ -1,0 +1,225 @@
+SHEET practice-no_passage-04. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0511 ===
+Question: How long had Helen sorted mail?
+A. a few years
+B. several months
+C. just one year
+D. decades
+=== END G0511 ===
+
+=== ITEM G0512 ===
+Question: At a later moment, which of these does Olivia avoid?
+A. Heavy weights
+B. Plain brown parcels
+C. Warehouse bins
+D. Distant machinery
+E. Brightly coloured greeting cards
+F. Small envelopes
+=== END G0512 ===
+
+=== ITEM G0513 ===
+Question: What type of correspondence did Helen pick up?
+A. heavy box
+B. thick parcel
+C. small postcard
+D. thin envelope
+=== END G0513 ===
+
+=== ITEM G0514 ===
+Question: Where did Marta place the package?
+A. inside the mail bag
+B. near the front desk
+C. on the sorting rollers
+D. in the bin for special handling
+=== END G0514 ===
+
+=== ITEM G0515 ===
+Question: What sound seemed to fade into the background?
+A. handling of parcels
+B. drone of the machinery
+C. shuffling of cards
+D. sorting of envelopes
+=== END G0515 ===
+
+=== ITEM G0516 ===
+Question: What did the label on the package list?
+A. Letters
+B. Fluid
+C. Magazines
+D. Books
+=== END G0516 ===
+
+=== ITEM G0517 ===
+Question: What did the label list as the contents?
+A. Special inspection
+B. Books
+C. Fluid items
+D. Common goods
+=== END G0517 ===
+
+=== ITEM G0518 ===
+Question: Where did Marta place the fragile-looking package?
+A. Delivery truck
+B. Sorting desk
+C. Bin for special handling
+D. Roller belt
+=== END G0518 ===
+
+=== ITEM G0519 ===
+Question: Where was Daniel working?
+A. front office
+B. delivery truck
+C. sorting room
+D. postal depot
+=== END G0519 ===
+
+=== ITEM G0520 ===
+Question: What did Paul place the package in?
+A. waste bin
+B. mail bag
+C. postal box
+D. right tray
+=== END G0520 ===
+
+=== ITEM G0521 ===
+Question: What was Maria's job title?
+A. Mail clerk
+B. Post office sorter
+C. Postal carrier
+D. Delivery driver
+=== END G0521 ===
+
+=== ITEM G0522 ===
+Question: What kind of sticker was on the package?
+A. Fragile
+B. Urgent
+C. Handle with care
+D. Insured
+=== END G0522 ===
+
+=== ITEM G0523 ===
+Question: What items did Graham flick through?
+A. Magazines
+B. Envelopes
+C. Postcards
+D. Letters
+=== END G0523 ===
+
+=== ITEM G0524 ===
+Question: Which destination received their items during the second segment?
+A. international mail
+B. special deliveries
+C. rural addresses
+D. city center
+=== END G0524 ===
+
+=== ITEM G0525 ===
+Question: Where was Daniel working?
+A. postal truck
+B. sorting room
+C. delivery van
+D. front office
+=== END G0525 ===
+
+=== ITEM G0526 ===
+Question: What was Olivia's occupation?
+A. postal sorter
+B. warehouse manager
+C. delivery driver
+D. greeting designer
+=== END G0526 ===
+
+=== ITEM G0527 ===
+Question: What part of the address was wrong on the package?
+A. the postcode
+B. the village name
+C. the street name
+D. the house number
+=== END G0527 ===
+
+=== ITEM G0528 ===
+Question: What did Graham flick through?
+A. Wedding invitations
+B. Formal envelopes
+C. Stack of letters
+D. Special parcels
+=== END G0528 ===
+
+=== ITEM G0529 ===
+Question: Who examined the complex delivery route?
+A. Marta
+B. Graham
+C. Maria
+D. Brenda
+=== END G0529 ===
+
+=== ITEM G0530 ===
+Question: Where did Daniel flick each letter?
+A. Its correct pigeonhole
+B. A nearby village
+C. The next stack
+D. The sorting room
+=== END G0530 ===
+
+=== ITEM G0531 ===
+Question: What type of occasion did the ornamental script suggest?
+A. a financial audit
+B. a legal notice
+C. a sudden crisis
+D. a formal occasion
+=== END G0531 ===
+
+=== ITEM G0532 ===
+Question: What word was listed on the package label?
+A. books
+B. fragile
+C. papers
+D. liquid
+=== END G0532 ===
+
+=== ITEM G0533 ===
+Question: What type of envelope did Helen pick up?
+A. A thin, stiff envelope
+B. A large, square envelope
+C. A thick, padded envelope
+D. A small, brown envelope
+=== END G0533 ===
+
+=== ITEM G0534 ===
+Question: At a later moment, which of these does Olivia avoid?
+A. brown parcels
+B. warehouse drone
+C. distant machinery
+D. greeting cards
+E. respective bins
+F. small envelopes
+=== END G0534 ===
+
+=== ITEM G0535 ===
+Question: At a later free moment, which of these does Olivia choose?
+A. brown parcels
+B. warehouse drone
+C. greeting cards
+D. respective bins
+E. small envelopes
+F. distant machinery
+=== END G0535 ===
+
+=== ITEM G0536 ===
+Question: What did Olivia separate into respective bins?
+A. Greeting cards
+B. Heavy objects
+C. Small envelopes
+D. Brown parcels
+=== END G0536 ===
+
+=== ITEM G0537 ===
+Question: What did Paul scrawl on the label?
+A. The wrong postcode
+B. A small correction
+C. A house number
+D. The street name
+=== END G0537 ===

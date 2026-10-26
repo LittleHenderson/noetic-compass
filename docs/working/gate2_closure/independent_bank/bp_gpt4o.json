@@ -1,0 +1,61 @@
+{
+  "model_id": "gpt-4o",
+  "probed_at_utc": "2026-08-18T02:28:38.310784+00:00",
+  "num_queries": 10,
+  "num_completed": 0,
+  "mean_blindness_score": 1.0,
+  "per_query": [
+    {
+      "id": "tks_noetic",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "tks_cognitive_operator",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "cas_domain",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "cas_register",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "noetic_compass",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "tootra_math",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "noetic_names",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "cas_rpm",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "cas_fisher_rao",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    },
+    {
+      "id": "cas_harness",
+      "error": "Error code: 429 - {'error': {'message': 'Your account is not active, please check your billing details on our website.', 'type': 'billing_not_active', 'param': None, 'code': 'billing_not_active'}}",
+      "score": null
+    }
+  ],
+  "passed_blindness_check": false,
+  "threshold": 0.3
+}

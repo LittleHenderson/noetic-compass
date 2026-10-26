@@ -1,0 +1,80 @@
+SHEET practice-with_passage-02. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0021 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?
+A. her list for the market
+B. the fish counter beside it
+C. the leeks she bought
+D. the old maps she looked through
+E. the sheets she turned slowly
+F. the brass band on the corner
+=== END Q0021 ===
+
+=== ITEM Q0022 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: That evening a friend asks Odette what she remembers of the market. Going only by the passage, which is she least likely to bring up?
+A. the brass band on the corner
+B. the leeks she bought
+C. her list for the market
+D. the fish counter beside it
+E. the stall of old maps
+F. the time she forgot there
+=== END Q0022 ===
+
+=== ITEM Q0023 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: On her next trip Odette walks the market again. Going only by the passage, which of these does she step wide around?
+A. the stall of old maps
+B. the brass band
+C. her market list
+D. the leeks she bought
+E. the sheets she turned
+F. the fish counter
+=== END Q0023 ===
+
+=== ITEM Q0024 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: Odette has ten free minutes at the same market next week. Going only by the passage, where is she most likely to spend them?
+A. at the fish counter
+B. stepping wide around it
+C. at the leeks she bought
+D. at the stall of old maps
+E. with her list at home
+F. near the brass band
+=== END Q0024 ===
+
+=== ITEM Q0025 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?
+A. the brass band on the corner
+B. the sheets she turned slowly
+C. the fish counter beside it
+D. the stall of old maps
+E. the leeks she bought
+F. her list for the market
+=== END Q0025 ===
+
+=== ITEM Q0026 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: What did Odette buy before she went home?
+A. fresh fish
+B. old maps
+C. leeks
+D. a brass horn
+=== END Q0026 ===

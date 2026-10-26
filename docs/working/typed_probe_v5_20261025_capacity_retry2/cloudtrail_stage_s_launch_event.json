@@ -1,0 +1,16 @@
+{
+  "error_code": null,
+  "event_name": "RunInstances",
+  "event_source": "ec2.amazonaws.com",
+  "event_time_utc": "2026-10-25T05:14:14Z",
+  "image_id": "ami-0d105fd7469b31d32",
+  "instance_ids": [
+    "i-0ad494b53d5f2ae23"
+  ],
+  "instance_type": "g5.2xlarge",
+  "max_count": 1,
+  "min_count": 1,
+  "request_id": "8ce09ade-871e-4c45-b08e-81523ee524d6",
+  "security_group_id": "sg-0562c483e0364cdab",
+  "subnet_id": "subnet-0eb3ca4bf5ca98f24"
+}

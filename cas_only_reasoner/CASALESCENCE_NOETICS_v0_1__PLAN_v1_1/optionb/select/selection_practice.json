@@ -1,0 +1,1497 @@
+{
+ "schema": "casalescence/optionb/selection/v1",
+ "made_by": {
+  "program": "tools/ob_select.py",
+  "sha256": "1fd644ffc8ea6c9f020c881a25c9aa1e5941ddda1a6012968e5ba4948968468e",
+  "utc": "2026-10-07T02:50:38Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "08d7d538dcd1f40c2ea35c8595965bfe8b8939f15e67ac8d7cd8dd12dfece92c"
+  },
+  {
+   "path": "optionb/checks/anchor_check_practice.json",
+   "sha256": "7a7ceb396975b30d8ada56a7639dbb872997f39993d5ed02383ae9b3b0f0fd60"
+  },
+  {
+   "path": "optionb/checks/candidates_practice.json",
+   "sha256": "98855c6b79a8d6a551e24ff7f835a13980f6975c51a89685bf0bdb491247b980"
+  },
+  {
+   "path": "optionb/checks/form_check_practice.json",
+   "sha256": "c0739dba80dfa580d8057dc934a3ee50b0e7f6ece01d9376a6f617bbc29047e2"
+  },
+  {
+   "path": "optionb/checks/option_check_practice.json",
+   "sha256": "48b45a8bcba09980201385e1a378671f91c2770b587932658320e34f7dac72f0"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "5054992f55afb550c962f72ff4be2b7a4cb6f781053e5b41b99914d82380dec4"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "d9b1dfe9e4948a7a7eec2c81a92afb3251be197a76e6b5cbae9e6bb761e7f729"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "e44a6b00b63ba05e5216171aad5b1b6866a8465e710e3e42169a641076fef6ac"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p3.json",
+   "sha256": "eae6b68559eb46a375394c0e14d047bfc4d1011344e400ae917361c7a1de6f7e"
+  },
+  {
+   "path": "optionb/solve/key_check_practice.json",
+   "sha256": "482172b370306ed0d07e7c4d49a38971612cdbb816cee69d214e3d676d153729"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "practice",
+ "practice_setting_count": 12,
+ "tasks": [
+  {
+   "task_id": "V019.FACT",
+   "passage_id": "V019",
+   "question_id": "V019.p3.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p3",
+   "question": "Which specific tactical move on board three captured Michael's attention?",
+   "right": "rook sacrifice",
+   "wrong": [
+    "pawn promotion",
+    "knight fork",
+    "queen trap"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V031.FACT",
+   "passage_id": "V031",
+   "question_id": "V031.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What object did Peter put on his head?",
+   "right": "earmuffs",
+   "wrong": [
+    "hard hat",
+    "safety goggles",
+    "work boots"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": true
+  },
+  {
+   "task_id": "V035.KEEPS_AWAY",
+   "passage_id": "V035",
+   "question_id": "V035.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "pass_used": "p2",
+   "question": "At a later moment, which of these materials does Evelyn avoid?",
+   "right": "tweed",
+   "wrong": [
+    "silk",
+    "door",
+    "sunlight",
+    "rack",
+    "hand"
+   ],
+   "anchors": [
+    "scratchy tweed",
+    "recoiled slightly"
+   ],
+   "anchors_matched": [
+    "scratchy tweed"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V035.FACT",
+   "passage_id": "V035",
+   "question_id": "V035.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Who opened the shop door during the scene?",
+   "right": "a delivery person",
+   "wrong": [
+    "a shop owner",
+    "a passing stranger",
+    "a close friend"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V041.FACT",
+   "passage_id": "V041",
+   "question_id": "V041.p3.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p3",
+   "question": "Where did Agnes guide the next animal?",
+   "right": "stall",
+   "wrong": [
+    "shed",
+    "pen",
+    "barn"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V042.FACT",
+   "passage_id": "V042",
+   "question_id": "V042.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "What part of the hive did Ken and his apprentice inspect first?",
+   "right": "entrance",
+   "wrong": [
+    "top cover",
+    "honey stores",
+    "brood pattern"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": true
+  },
+  {
+   "task_id": "V047.GOES_FOR",
+   "passage_id": "V047",
+   "question_id": "V047.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "pass_used": "p1",
+   "question": "Later during a brief break in the shade, which of these does the man select?",
+   "right": "quartz",
+   "wrong": [
+    "heat",
+    "sun",
+    "glare",
+    "rock",
+    "layer"
+   ],
+   "anchors": [
+    "shimmering sample of quartz"
+   ],
+   "anchors_matched": [
+    "shimmering sample of quartz"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V064.FACT",
+   "passage_id": "V064",
+   "question_id": "V064.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Who walked among the shelves turning specific cheeses?",
+   "right": "Yvonne",
+   "wrong": [
+    "Maria",
+    "Harriet",
+    "Wendy"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V069.FACT",
+   "passage_id": "V069",
+   "question_id": "V069.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Where did the cheddar enter after being brined?",
+   "right": "cool cellar",
+   "wrong": [
+    "local cows",
+    "cheese molds",
+    "specific rennet"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V087.WHAT_SLID_OFF",
+   "passage_id": "V087",
+   "question_id": "V087.p2.WHAT_SLID_OFF",
+   "family": "role_step",
+   "type": "LAND",
+   "form": "WHAT_SLID_OFF",
+   "pass_used": "p2",
+   "question": "At a later moment, which of these is Maria least likely to bring up?",
+   "right": "Drop of condensation",
+   "wrong": [
+    "Mature cheddar wheel",
+    "Experimental blue cheese",
+    "Earthy aroma",
+    "Firm texture",
+    "Perfect rind"
+   ],
+   "anchors": [
+    "drop of condensation"
+   ],
+   "anchors_matched": [
+    "drop of condensation"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V087.FACT",
+   "passage_id": "V087",
+   "question_id": "V087.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Which item fell onto Maria's sleeve?",
+   "right": "condensation",
+   "wrong": [
+    "mould",
+    "cheddar",
+    "cheese"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V090.FACT",
+   "passage_id": "V090",
+   "question_id": "V090.p3.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p3",
+   "question": "What fabric did Olivia run her fingers over?",
+   "right": "silk fabric",
+   "wrong": [
+    "coarse tweed",
+    "new dress",
+    "exorbitant price"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V103.FACT",
+   "passage_id": "V103",
+   "question_id": "V103.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "What sound did Tina love?",
+   "right": "crack of leather",
+   "wrong": [
+    "voice of the coach",
+    "buzzing of a phone",
+    "steps on the track"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": true
+  },
+  {
+   "task_id": "V105.GOES_FOR",
+   "passage_id": "V105",
+   "question_id": "V105.p3.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "pass_used": "p3",
+   "question": "At a later free moment, which of these does the driver choose?",
+   "right": "a long drive",
+   "wrong": [
+    "a short trip",
+    "a motorway rest",
+    "a city center",
+    "a small payment",
+    "a two block journey"
+   ],
+   "anchors": [
+    "preferred the long-distance fares",
+    "steady motorway driving restful"
+   ],
+   "anchors_matched": [
+    "preferred the long-distance fares"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V109.FACT",
+   "passage_id": "V109",
+   "question_id": "V109.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What role did Sarah hold while checking the boxes?",
+   "right": "Beekeeper",
+   "wrong": [
+    "Grocer",
+    "Bake",
+    "Cook"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V134.FACT",
+   "passage_id": "V134",
+   "question_id": "V134.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What kind of machine was heard in the distance?",
+   "right": "sewing machine",
+   "wrong": [
+    "milking unit",
+    "bolt cutter",
+    "lock mechanism"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V153.FACT",
+   "passage_id": "V153",
+   "question_id": "V153.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Where was the buzzing device kept?",
+   "right": "locker",
+   "wrong": [
+    "corner",
+    "bag",
+    "floor"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V160.WHAT_LEFT",
+   "passage_id": "V160",
+   "question_id": "V160.p3.WHAT_LEFT",
+   "family": "role_step",
+   "type": "PARTS",
+   "form": "WHAT_LEFT",
+   "pass_used": "p3",
+   "question": "Pierre finished the short brining period, humidity adjustments, and gradual temperature drops. Which named part is still left?",
+   "right": "rotation frequency",
+   "wrong": [
+    "brining period",
+    "temperature drops",
+    "aging schedule",
+    "blue cheese",
+    "separate steps"
+   ],
+   "anchors": [
+    "regular rotation frequency"
+   ],
+   "anchors_matched": [
+    "regular rotation frequency"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V160.FACT",
+   "passage_id": "V160",
+   "question_id": "V160.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What color was Pierre's new cheese?",
+   "right": "blue",
+   "wrong": [
+    "yellow",
+    "white",
+    "green"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V168.FACT",
+   "passage_id": "V168",
+   "question_id": "V168.p3.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p3",
+   "question": "What was placed across the street from where the driver waited?",
+   "right": "a bar",
+   "wrong": [
+    "a bank",
+    "a shop",
+    "a park"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V194.FACT",
+   "passage_id": "V194",
+   "question_id": "V194.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "Which specific cheese did Wendy touch on the top shelf?",
+   "right": "aging Gouda",
+   "wrong": [
+    "aged cheddar",
+    "fresh paneer",
+    "sharp swiss"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V197.NOT_BELONG",
+   "passage_id": "V197",
+   "question_id": "V197.p3.NOT_BELONG",
+   "family": "role_step",
+   "type": "PARTS",
+   "form": "NOT_BELONG",
+   "pass_used": "p3",
+   "question": "A complete sewing kit holds one of each section. Which item is excluded?",
+   "right": "fabric shears",
+   "wrong": [
+    "the bodice",
+    "the skirt panels",
+    "the lace overlay",
+    "the long train",
+    "the wedding dress"
+   ],
+   "anchors": [
+    "the bodice",
+    "the long train"
+   ],
+   "anchors_matched": [
+    "the bodice",
+    "the long train"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V197.FACT",
+   "passage_id": "V197",
+   "question_id": "V197.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "What garment pattern did Mrs. Jenkins lay out?",
+   "right": "wedding dress",
+   "wrong": [
+    "evening gown",
+    "summer skirt",
+    "lace blouse"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V198.FACT",
+   "passage_id": "V198",
+   "question_id": "V198.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Where did David guide the cows?",
+   "right": "milking parlour",
+   "wrong": [
+    "open pasture",
+    "feeding barn",
+    "holding pen"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V200.WHAT_SLID_OFF",
+   "passage_id": "V200",
+   "question_id": "V200.p2.WHAT_SLID_OFF",
+   "family": "role_step",
+   "type": "LAND",
+   "form": "WHAT_SLID_OFF",
+   "pass_used": "p2",
+   "question": "At a later moment, which of these is Mark least likely to bring up?",
+   "right": "roar",
+   "wrong": [
+    "excavator",
+    "dust",
+    "blast",
+    "crusher",
+    "rock"
+   ],
+   "anchors": [
+    "barely registered in his ears"
+   ],
+   "anchors_matched": [
+    "barely registered in his ears"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V200.FACT",
+   "passage_id": "V200",
+   "question_id": "V200.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What billowed up after a blast?",
+   "right": "fine dust",
+   "wrong": [
+    "heavy smoke",
+    "loud steam",
+    "hot water"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V205.FACT",
+   "passage_id": "V205",
+   "question_id": "V205.p3.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p3",
+   "question": "What is Maria's occupation according to the passage?",
+   "right": "Boxer",
+   "wrong": [
+    "Trainer",
+    "Referee",
+    "Manager"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V210.FACT",
+   "passage_id": "V210",
+   "question_id": "V210.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What piece did Arthur move after his planning?",
+   "right": "queen",
+   "wrong": [
+    "knight",
+    "rook",
+    "king"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V221.FACT",
+   "passage_id": "V221",
+   "question_id": "V221.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What is Mark's occupation according to the passage?",
+   "right": "A locksmith",
+   "wrong": [
+    "A mechanic",
+    "A carpenter",
+    "A watchmaker"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V236.FACT",
+   "passage_id": "V236",
+   "question_id": "V236.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Which equipment part was experiencing a blockage?",
+   "right": "filter",
+   "wrong": [
+    "pulsator hose",
+    "vacuum gauge",
+    "diagnostic display"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": true
+  },
+  {
+   "task_id": "V244.FACT",
+   "passage_id": "V244",
+   "question_id": "V244.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What activity was Maya doing when she noticed the scent?",
+   "right": "Doing laps",
+   "wrong": [
+    "Diving deep",
+    "Treading water",
+    "Floating slowly"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V249.WHAT_LEFT",
+   "passage_id": "V249",
+   "question_id": "V249.p2.WHAT_LEFT",
+   "family": "role_step",
+   "type": "PARTS",
+   "form": "WHAT_LEFT",
+   "pass_used": "p2",
+   "question": "After the release valve, the frayed electrical wire, and the main control panel are dealt with, which named part is still left?",
+   "right": "suction cup",
+   "wrong": [
+    "valve",
+    "wire",
+    "panel",
+    "pump",
+    "flow"
+   ],
+   "anchors": [
+    "suction cup connection"
+   ],
+   "anchors_matched": [
+    "suction cup connection"
+   ],
+   "right_is_single_longest": true,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V249.NOT_BELONG",
+   "passage_id": "V249",
+   "question_id": "V249.p2.NOT_BELONG",
+   "family": "role_step",
+   "type": "PARTS",
+   "form": "NOT_BELONG",
+   "pass_used": "p2",
+   "question": "A spare kit holds one of each named part; which of these would not be in it?",
+   "right": "rubber hose",
+   "wrong": [
+    "release valve",
+    "electrical wire",
+    "suction cup",
+    "control panel",
+    "milk pump"
+   ],
+   "anchors": [
+    "release valve"
+   ],
+   "anchors_matched": [
+    "release valve"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V249.FACT",
+   "passage_id": "V249",
+   "question_id": "V249.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "Which component did Samuel start with?",
+   "right": "valve",
+   "wrong": [
+    "wire",
+    "panel",
+    "pump"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V279.FACT",
+   "passage_id": "V279",
+   "question_id": "V279.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "At what exact hour did the beekeeper begin his afternoon check?",
+   "right": "2 PM",
+   "wrong": [
+    "1 PM",
+    "3 PM",
+    "4 PM"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V303.TAKE_AWAY",
+   "passage_id": "V303",
+   "question_id": "V303.p1.TAKE_AWAY",
+   "family": "role_step",
+   "type": "BRING",
+   "form": "TAKE_AWAY",
+   "pass_used": "p1",
+   "question": "Suppose that particular aroma had been absent from the room; which of these would most likely not have happened?",
+   "right": "small workshop",
+   "wrong": [
+    "old leather",
+    "liniment",
+    "sparring session",
+    "boxing gym",
+    "church shoes"
+   ],
+   "anchors": [
+    "sharp smell of old leather"
+   ],
+   "anchors_matched": [
+    "sharp smell of old leather"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V303.FACT",
+   "passage_id": "V303",
+   "question_id": "V303.p2.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p2",
+   "question": "What substance filled the boxing gym alongside the smell of old leather?",
+   "right": "liniment",
+   "wrong": [
+    "sweat",
+    "polish",
+    "tune"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V328.FACT",
+   "passage_id": "V328",
+   "question_id": "V328.p3.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p3",
+   "question": "At what specific time did the bell ring every morning?",
+   "right": "Half past five",
+   "wrong": [
+    "Four o'clock",
+    "Six o'clock",
+    "Seven o'clock"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": true,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V329.NOT_BELONG",
+   "passage_id": "V329",
+   "question_id": "V329.p1.NOT_BELONG",
+   "family": "role_step",
+   "type": "PARTS",
+   "form": "NOT_BELONG",
+   "pass_used": "p1",
+   "question": "A spare kit holds one of each named part. Which of these would not be in it?",
+   "right": "pressure gauge",
+   "wrong": [
+    "intake screen",
+    "seized impeller",
+    "electrical terminals",
+    "motor casing",
+    "filtration pump"
+   ],
+   "anchors": [
+    "clogged intake screen",
+    "seized impeller"
+   ],
+   "anchors_matched": [
+    "clogged intake screen",
+    "seized impeller"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V329.FACT",
+   "passage_id": "V329",
+   "question_id": "V329.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Which part did Julia decide to address first?",
+   "right": "intake screen",
+   "wrong": [
+    "seized impeller",
+    "electrical terminal",
+    "motor casing"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V344.FACT",
+   "passage_id": "V344",
+   "question_id": "V344.p3.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p3",
+   "question": "What was Tom's job role at the mining site?",
+   "right": "foreman",
+   "wrong": [
+    "supervisor",
+    "worker",
+    "spectator"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V353.WHERE_HELPS",
+   "passage_id": "V353",
+   "question_id": "V353.p1.WHERE_HELPS",
+   "family": "role_step",
+   "type": "FORMED",
+   "form": "WHERE_HELPS",
+   "pass_used": "p1",
+   "question": "In which new situation would this background help most?",
+   "right": "a sudden rush",
+   "wrong": [
+    "a steady march",
+    "a quiet corner",
+    "a slow walk",
+    "a dark room",
+    "an empty street"
+   ],
+   "anchors": [
+    "Decades of playing",
+    "swift defeat"
+   ],
+   "anchors_matched": [
+    "Decades of playing"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V385.FACT",
+   "passage_id": "V385",
+   "question_id": "V385.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Where did Uma walk to after arriving?",
+   "right": "pool deck",
+   "wrong": [
+    "changing room",
+    "starting blocks",
+    "locker room"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V387.FACT",
+   "passage_id": "V387",
+   "question_id": "V387.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Which tool did Owen reach for first?",
+   "right": "the smoker",
+   "wrong": [
+    "the hive tool",
+    "the warm veil",
+    "the hot iron"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": true
+  },
+  {
+   "task_id": "V394.GOES_FOR",
+   "passage_id": "V394",
+   "question_id": "V394.p2.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "pass_used": "p2",
+   "question": "At a later free moment, which of these strategies does Victor choose?",
+   "right": "Queen's Gambit opening",
+   "wrong": [
+    "defensive setup",
+    "cautious play",
+    "slow development",
+    "opponent strategy",
+    "planned attack"
+   ],
+   "anchors": [
+    "Queen's Gambit opening",
+    "strong pull"
+   ],
+   "anchors_matched": [
+    "Queen's Gambit opening"
+   ],
+   "right_is_single_longest": true,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V394.KEEPS_AWAY",
+   "passage_id": "V394",
+   "question_id": "V394.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "pass_used": "p2",
+   "question": "At a later moment, which of these strategies does Victor avoid?",
+   "right": "defensive setup",
+   "wrong": [
+    "Queen's Gambit opening",
+    "cautious play",
+    "slow development",
+    "opponent strategy",
+    "planned attack"
+   ],
+   "anchors": [
+    "defensive setups",
+    "disliked"
+   ],
+   "anchors_matched": [
+    "defensive setups"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V394.FACT",
+   "passage_id": "V394",
+   "question_id": "V394.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What chess opening did Victor feel a strong pull towards?",
+   "right": "Queen's Gambit",
+   "wrong": [
+    "King's Indian",
+    "Sicilian Defense",
+    "English Opening"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V416.FACT",
+   "passage_id": "V416",
+   "question_id": "V416.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "Where did the dust settle thickly according to the passage?",
+   "right": "her boots",
+   "wrong": [
+    "the toolshed",
+    "heavy machinery",
+    "workshop projects"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V418.KEEPS_AWAY",
+   "passage_id": "V418",
+   "question_id": "V418.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "pass_used": "p1",
+   "question": "At a later moment, which of these does Olivia avoid?",
+   "right": "Plain brown parcels",
+   "wrong": [
+    "Brightly coloured greeting cards",
+    "Distant machinery",
+    "Warehouse bins",
+    "Small envelopes",
+    "Heavy weights"
+   ],
+   "anchors": [
+    "disliked the plain brown parcels"
+   ],
+   "anchors_matched": [
+    "disliked the plain brown parcels"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V418.FACT",
+   "passage_id": "V418",
+   "question_id": "V418.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "pass_used": "p1",
+   "question": "What did Olivia separate into respective bins?",
+   "right": "Small envelopes",
+   "wrong": [
+    "Greeting cards",
+    "Brown parcels",
+    "Heavy objects"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  }
+ ],
+ "dropped": [
+  {
+   "question_id": "V002.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V002.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V005.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V005.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V005.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V008.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V010.p2.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V012.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V014.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V014.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V016.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V016.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V017.p2.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V031.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V032.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V032.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V032.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V035.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V036.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V036.p2.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V042.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V056.p3.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V062.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V062.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V064.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V068.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V068.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V087.p3.WHAT_SLID_OFF",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V103.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V109.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V134.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V153.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V153.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V160.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V190.p2.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V198.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V210.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V220.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V221.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V230.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V230.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V230.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V263.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V263.p2.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V267.p3.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V269.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V269.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V279.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V291.p3.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V303.p3.TAKE_AWAY",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V313.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V313.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V313.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V315.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V315.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V315.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V320.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V320.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V329.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V329.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V329.p3.NOT_BELONG",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V342.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V342.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V342.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V376.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V376.p2.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V394.p3.GOES_FOR",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V398.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V411.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  },
+  {
+   "question_id": "V418.p3.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V418.p2.KEEPS_AWAY",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V421.p2.FACT",
+   "reason": "LATER_PASS_NOT_NEEDED"
+  },
+  {
+   "question_id": "V421.p1.FACT",
+   "reason": "PASSAGE_NOT_ELIGIBLE"
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 15,
+  "plain_fact_tasks": 35,
+  "passages_with_a_task": 38,
+  "passages_with_a_role_step_task": 13,
+  "single_longest": [
+   2,
+   15
+  ],
+  "single_shortest": [
+   0,
+   15
+  ]
+ },
+ "survival": {
+  "role_step": {
+   "candidates": 57,
+   "after_key_check": 40,
+   "after_no_passage": 20,
+   "after_lowest_pass": 15,
+   "selected": 15
+  },
+  "plain_fact": {
+   "candidates": 245,
+   "after_key_check": 242,
+   "after_no_passage": 103,
+   "after_lowest_pass": 63,
+   "selected": 35
+  }
+ },
+ "floor": {
+  "practice_role_step_min": 36,
+  "practice_plain_fact_min": 20,
+  "met": false
+ },
+ "reserve": {
+  "role_step_target": 45,
+  "plain_fact_target": 25,
+  "target_met": false,
+  "settings_left": 0,
+  "finished": true
+ }
+}

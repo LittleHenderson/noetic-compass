@@ -1,0 +1,20 @@
+--- v1.0/tools/ob_solve_blind.py
++++ v1.1/tools/ob_solve_blind.py
+@@ -620,6 +620,8 @@
+     used = [int(i['sheet']) for i in run.items if i['solver'] == run.claude and i['mode'] == mode]
+     number = max(used or [0])
+     forms = '|'.join(re.escape(form) for form in C['forms_in_order'])
++    # plan v1.1: the pass names (p1, p2, p3) come from the constants; a question id is <passage>.<pass>.<form>
++    passes = '|'.join(re.escape(name) for name in C['outside_services']['gemini_question_writer']['passes'])
+     written = []
+     for at in range(0, len(fresh), size):
+         number += 1
+@@ -637,7 +639,7 @@
+             blocks.append(fill('\n'.join(C['briefs']['solver_sheet_item_' + mode]), values))
+         header = fill('\n'.join(C['briefs']['solver_sheet_header_' + mode]), {'SHEET_ID': '%s-%s-%s' % (run.set_name, mode, sheet)})
+         text = header + '\n\n' + '\n\n'.join(blocks) + '\n'
+-        if re.search(r'\.p[12]\.|\b(?:%s)\b' % forms, text) or any(item['question_id'] in text for item in made):
++        if re.search(r'\.(?:%s)\.|\b(?:%s)\b' % (passes, forms), text) or any(item['question_id'] in text for item in made):
+             raise Stop('SHEET_NOT_BLIND', 'The sheet text would hold a question id or a form name. Nothing was written.')
+         write_text(path, text)
+         written.append({'sheet': sheet, 'file': rel(path), 'items': len(made), 'sha256': sha_text(text),

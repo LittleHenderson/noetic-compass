@@ -1,0 +1,26 @@
+{
+  "schema": "cas.closed-loop.recovery-ledger/0.1",
+  "source": "SOURCE_BINDINGS.json",
+  "purpose": "Focused deterministic local recovery tests and public engineering witness",
+  "execution": "LOCAL_EXPLICIT_OWNER_EXCEPTION",
+  "cloud_instance": null,
+  "cloud_jobs": 0,
+  "model_jobs": 0,
+  "purchases": 0,
+  "cloud_cost_usd": 0,
+  "local_wall_time_seconds_final_suite": 101.8,
+  "limits": {
+    "host_calls_per_grant": 1,
+    "demo_max_host_calls": 32,
+    "native_instruction_policy_units": 100000,
+    "native_checker_policy_units": 10000,
+    "native_max_ticks": 128,
+    "native_max_depth": 8
+  },
+  "cleanup": "No cloud resource created or process terminated; exact runtime cache and test artifacts retained under ignored task directories. No edits to active Helm/Q4 sources.",
+  "unknowns": [
+    "Complete computation including ordinary reasoning",
+    "One native work record lacks counters",
+    "Model prediction and comparative CAS advantage"
+  ]
+}

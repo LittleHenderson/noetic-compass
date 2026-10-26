@@ -1,0 +1,885 @@
+{
+ "schema": "casalescence/optionb/removal_log/v1",
+ "made_by": {
+  "program": "tools/ob_assemble.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "6402a4c40de62c9a66b3ed5497c819354d9b5b9270ed69a3fad3fc9754b63204",
+  "utc": "2026-10-07T02:23:33Z"
+ },
+ "inputs": [
+  {
+   "path": "../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+   "sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880"
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "6905e9d83fd3c6ca59bf548b36ed575dd939e212c433d040139673f3eb0a4467"
+  },
+  {
+   "path": "optionb/dry/fixture_n/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "00f18c02b8544a1597432154abdb7c900165f186757d67d215cec4a0ffea0192"
+  },
+  {
+   "path": "optionb/dry/fixture_n/SEAL_OPTIONB.jsonl",
+   "sha256": "a709422e2ba92f9eac900bd53f101b5f2f44d440f2cfe24467e0387af2c2037f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/anchor_check_final.json",
+   "sha256": "92b4dab408758a286a4fdda2615271f86c86cea471f8188f94c575fb4062fc83"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/anchor_check_practice.json",
+   "sha256": "39bccbdf801ac9bdc898ba2bc1c256513e224817c4039547d538ee37ede632bc"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/candidates_final.json",
+   "sha256": "79c945505bd278157fc3c361b8522395e5a3e85659bb9ae1f81d9f329f17456d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/candidates_practice.json",
+   "sha256": "a1e2e20f8b27432830de3b6390eaeb245c009282ba5e582b45b5c819d7cc440d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/form_check_final.json",
+   "sha256": "e81f28fbbc282948376eb8a7573595f07062d2eb083f2724e6bbc40064c2752f"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/form_check_practice.json",
+   "sha256": "639c53254bfcb2e9fc1b6a92d93d4740a1524f0641ea3e4b27ef3aae5c7ce4fb"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/option_check_final.json",
+   "sha256": "163103e7a3b5547fb025c51134647685f10c1042e524d540a1a69b5af939bbe9"
+  },
+  {
+   "path": "optionb/dry/fixture_n/checks/option_check_practice.json",
+   "sha256": "2014af7579cde70857ed38a97977d17c4bb02a93f6e010c8d0668298189789ca"
+  },
+  {
+   "path": "optionb/dry/fixture_n/elig/eligibility.json",
+   "sha256": "225d5d7a5dffee567ca4bf2346c1514898e5052bccd88442cef2ed8785953848"
+  },
+  {
+   "path": "optionb/dry/fixture_n/elig/exclusions.json",
+   "sha256": "c5e7bf279aa4d476bf9168dc569e73c28418da5fba508722bbb8de26980715d8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_ord/ordinary_notes_final.json",
+   "sha256": "7d186b482d945b268c61220df9fc99b1b21c5baf295f959168080587413e6ee8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_ord/ordinary_notes_practice.json",
+   "sha256": "540f4fdf96981d40dde4c9e34cce53d2a31c166aec9fa9c893c72d1833f95673"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_role/role_notes.json",
+   "sha256": "667c6f2fc3e816b4ecf81c83b9ee7adb6e9ec07ac7a84e6442d750fc5083d2be"
+  },
+  {
+   "path": "optionb/dry/fixture_n/questions/raw_questions_final_p1.json",
+   "sha256": "f6130abb5d1f24c7d6fbe28b2a245a91f42ad75f6435540db3487aec80d34972"
+  },
+  {
+   "path": "optionb/dry/fixture_n/questions/raw_questions_final_p2.json",
+   "sha256": "68b052bc7b6232175b44c4c402ef0908d35d2286ee98072978a6ef2de287b884"
+  },
+  {
+   "path": "optionb/dry/fixture_n/questions/raw_questions_practice_p1.json",
+   "sha256": "9173bca7c3cee238494e692291380819d8f16d29c339360e117f5ca1ca692102"
+  },
+  {
+   "path": "optionb/dry/fixture_n/questions/raw_questions_practice_p2.json",
+   "sha256": "03e98e732a71647dfcf98e447a7ba5a7c5e2d5a41af7b1efaa75e48e57a23646"
+  },
+  {
+   "path": "optionb/dry/fixture_n/screen/leak_screen_final.json",
+   "sha256": "20078bb4be7edc25f89f7e797243167436318e794faf97b7a9bed6d259b1bda1"
+  },
+  {
+   "path": "optionb/dry/fixture_n/screen/leak_screen_practice.json",
+   "sha256": "ae051267a5d583a024d074f7695fc3ea373bde66c2f2236b1767cfaddf8bf1a5"
+  },
+  {
+   "path": "optionb/dry/fixture_n/select/selection_final.json",
+   "sha256": "e9237d1e8e992a19d9527056118f9d174468cb2b01a121b19a00cd8f0d2a0e06"
+  },
+  {
+   "path": "optionb/dry/fixture_n/select/selection_practice.json",
+   "sha256": "748f32053f06fe1aef579c2853f7f655605e4214aa9058b7da72e0823d18fc24"
+  },
+  {
+   "path": "optionb/dry/fixture_n/select/split_fixed.json",
+   "sha256": "c9ea45fbeeee937c19ba23520a22eeda678c1db094cb58c5aa89a280974bbd18"
+  },
+  {
+   "path": "optionb/dry/fixture_n/solve/key_check_final.json",
+   "sha256": "1046c0fc81ebd6b3bfd61fcb5c28bd480f8a292899357152d60573582b5a4b81"
+  },
+  {
+   "path": "optionb/dry/fixture_n/solve/key_check_practice.json",
+   "sha256": "8b6f82a62ae9fee9c89ee60d243012086cba6b8f321f4653550d27d0ee989e6d"
+  },
+  {
+   "path": "optionb/dry/fixture_n/support/support_results_final.json",
+   "sha256": "69a58a6fac3ae6024cff4f64536f67e40025143ce0ac6ce08e40614c598cd852"
+  },
+  {
+   "path": "optionb/dry/fixture_n/support/support_results_practice.json",
+   "sha256": "3c84efab529905d32ba99f1cd5be9d3f7e44869cb6732308090df5b842923b1f"
+  }
+ ],
+ "entries": [
+  {
+   "set": "practice",
+   "step": "STEP_1_WRITER",
+   "program": "tools/ob_write_questions.py",
+   "object": "question",
+   "id": "V901.p1.GOES_FOR",
+   "rule": "EXTRA_QUESTION_FOR_A_FORM_ALREADY_USED",
+   "detail": "pass p1: a later question for a form the writer already used on this passage"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_1_WRITER",
+   "program": "tools/ob_write_questions.py",
+   "object": "passage",
+   "id": "V903",
+   "rule": "MISSING",
+   "detail": "pass p2: the writer gave no usable object for this passage"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_2_FORM_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V905.p1.GOES_FOR",
+   "rule": "FORBIDDEN_LIST_C",
+   "detail": "FORBIDDEN_LIST_C:drawn"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_2_FORM_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V905.p1.GOES_FOR",
+   "rule": "OPTION_LENGTH_SPREAD",
+   "detail": "OPTION_LENGTH_SPREAD"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V902.p1.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V914.p1.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V914.p2.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3B_OPTION_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V904.p1.KEEPS_AWAY",
+   "rule": "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE",
+   "detail": "option 2 matches the words of a ^3 entry only team B gave"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3B_OPTION_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V904.p2.KEEPS_AWAY",
+   "rule": "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE",
+   "detail": "option 2 matches the words of a ^3 entry only team B gave"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V901.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V901.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V901.p2.KEEPS_AWAY",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V902.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V902.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V904.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V904.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V905.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V914.p1.FACT",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": "no role note exists for this passage, so it carries no task"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V914.p2.FACT",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": "no role note exists for this passage, so it carries no task"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V902|ORD-INFORMED|100|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_7_LEAK_SCREEN",
+   "program": "tools/ob_screen_notes.py",
+   "object": "passage",
+   "id": "V903",
+   "rule": "c",
+   "detail": "1 hit(s) of rule (c); first: ORD-FREE 110: holds the option text: reaching for the oak scoop again"
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V915.p1.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V915.p2.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_4_KEY_CHECK",
+   "program": "tools/ob_solve_blind.py",
+   "object": "question",
+   "id": "V912.p1.KEEPS_AWAY",
+   "rule": "NOT_BOTH_SOLVERS_RIGHT_WITH_THE_PASSAGE",
+   "detail": "claude-sonnet-subagent: RIGHT; deepseek-chat: WRONG"
+  },
+  {
+   "set": "final",
+   "step": "STEP_4_KEY_CHECK",
+   "program": "tools/ob_solve_blind.py",
+   "object": "question",
+   "id": "V912.p2.KEEPS_AWAY",
+   "rule": "NOT_BOTH_SOLVERS_RIGHT_WITH_THE_PASSAGE",
+   "detail": "claude-sonnet-subagent: RIGHT; deepseek-chat: WRONG"
+  },
+  {
+   "set": "final",
+   "step": "STEP_5_NO_PASSAGE_CHECK",
+   "program": "tools/ob_solve_blind.py",
+   "object": "question",
+   "id": "V906.p1.KEEPS_AWAY",
+   "rule": "BOTH_SOLVERS_RIGHT_WITHOUT_THE_PASSAGE",
+   "detail": "claude-sonnet-subagent: RIGHT; deepseek-chat: RIGHT"
+  },
+  {
+   "set": "final",
+   "step": "STEP_5_NO_PASSAGE_CHECK",
+   "program": "tools/ob_solve_blind.py",
+   "object": "question",
+   "id": "V906.p2.KEEPS_AWAY",
+   "rule": "BOTH_SOLVERS_RIGHT_WITHOUT_THE_PASSAGE",
+   "detail": "claude-sonnet-subagent: RIGHT; deepseek-chat: RIGHT"
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V906.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V906.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V907.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V907.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V908.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V908.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V909.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V909.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V910.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V910.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V911.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V911.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V911.p2.KEEPS_AWAY",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V912.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V912.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V913.p2.FACT",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V913.p2.GOES_FOR",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V913.p2.KEEPS_AWAY",
+   "rule": "LATER_PASS_NOT_NEEDED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V915.p1.FACT",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": "no role note exists for this passage, so it carries no task"
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V915.p2.FACT",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": "no role note exists for this passage, so it carries no task"
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_LENGTH_BACKSTOP",
+   "program": "tools/ob_select.py",
+   "object": "task",
+   "id": "V911.KEEPS_AWAY",
+   "rule": "LENGTH_BACKSTOP_LONGEST",
+   "detail": "question V911.p1.KEEPS_AWAY"
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V906|ORD-FREE|090|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V906|ORD-FREE|100|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V906|ORD-FREE|110|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V906|ORD-INFORMED|090|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V906|ORD-INFORMED|100|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V906|ORD-INFORMED|110|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "passage",
+   "id": "V907",
+   "rule": "DROPPED_SECOND_FAILURE",
+   "detail": "a rewritten note failed the support check again; the passage is dropped for every group"
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V907|ORD-FREE|090|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V910|ORD-FREE|090|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V910|ORD-FREE|100|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V910|ORD-FREE|110|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V910|ORD-INFORMED|090|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V910|ORD-INFORMED|100|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V910|ORD-INFORMED|110|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_LEAK_SCREEN",
+   "program": "tools/ob_screen_notes.py",
+   "object": "passage",
+   "id": "V908",
+   "rule": "a",
+   "detail": "1 hit(s) of rule (a); first: ORD-INFORMED 090: letter pattern 1: 1 in the note, 0 in the passage; first: (B)"
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_LEAK_SCREEN",
+   "program": "tools/ob_screen_notes.py",
+   "object": "passage",
+   "id": "V909",
+   "rule": "d",
+   "detail": "1 hit(s) of rule (d); first: ORD-FREE 100: the word correct: 1 in the note, 0 in the passage"
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_LEAK_SCREEN",
+   "program": "tools/ob_screen_notes.py",
+   "object": "passage",
+   "id": "V910",
+   "rule": "b",
+   "detail": "1 hit(s) of rule (b); first: ORD-INFORMED 110: holds a sentence of the question: a free hour comes up next week"
+  }
+ ],
+ "counts_by_step_and_rule": {
+  "STEP_1_WRITER": {
+   "EXTRA_QUESTION_FOR_A_FORM_ALREADY_USED": 1,
+   "MISSING": 1
+  },
+  "STEP_2_FORM_CHECK": {
+   "FORBIDDEN_LIST_C": 1,
+   "OPTION_LENGTH_SPREAD": 1
+  },
+  "STEP_3A_ANCHOR_CHECK": {
+   "FORM_NOT_OPEN": 1,
+   "PASSAGE_NOT_ELIGIBLE": 4
+  },
+  "STEP_3B_OPTION_CHECK": {
+   "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE": 2
+  },
+  "STEP_4_KEY_CHECK": {
+   "NOT_BOTH_SOLVERS_RIGHT_WITH_THE_PASSAGE": 2
+  },
+  "STEP_5_NO_PASSAGE_CHECK": {
+   "BOTH_SOLVERS_RIGHT_WITHOUT_THE_PASSAGE": 2
+  },
+  "STEP_6_SELECTION": {
+   "LATER_PASS_NOT_NEEDED": 26,
+   "PASSAGE_NOT_ELIGIBLE": 4
+  },
+  "STEP_6_LENGTH_BACKSTOP": {
+   "LENGTH_BACKSTOP_LONGEST": 1
+  },
+  "STEP_7_SUPPORT_CHECK": {
+   "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE": 14,
+   "DROPPED_SECOND_FAILURE": 1
+  },
+  "STEP_7_LEAK_SCREEN": {
+   "c": 1,
+   "a": 1,
+   "d": 1,
+   "b": 1
+  }
+ },
+ "survival": {
+  "practice": [
+   {
+    "filter": "written for an open form",
+    "role_step": 7,
+    "plain_fact": 6
+   },
+   {
+    "filter": "form check",
+    "role_step": 7,
+    "plain_fact": 6
+   },
+   {
+    "filter": "anchor check",
+    "role_step": 7,
+    "plain_fact": 6
+   },
+   {
+    "filter": "option check",
+    "role_step": 6,
+    "plain_fact": 6
+   },
+   {
+    "filter": "key check",
+    "role_step": 6,
+    "plain_fact": 6
+   },
+   {
+    "filter": "no-passage check",
+    "role_step": 6,
+    "plain_fact": 6
+   },
+   {
+    "filter": "selection",
+    "role_step": 6,
+    "plain_fact": 5
+   },
+   {
+    "filter": "length backstop",
+    "role_step": 6,
+    "plain_fact": 5
+   },
+   {
+    "filter": "support check",
+    "role_step": 6,
+    "plain_fact": 5
+   },
+   {
+    "filter": "answer-leak screen",
+    "role_step": 5,
+    "plain_fact": 4
+   }
+  ],
+  "final": [
+   {
+    "filter": "written for an open form",
+    "role_step": 12,
+    "plain_fact": 9
+   },
+   {
+    "filter": "form check",
+    "role_step": 12,
+    "plain_fact": 9
+   },
+   {
+    "filter": "anchor check",
+    "role_step": 12,
+    "plain_fact": 9
+   },
+   {
+    "filter": "option check",
+    "role_step": 12,
+    "plain_fact": 9
+   },
+   {
+    "filter": "key check",
+    "role_step": 11,
+    "plain_fact": 9
+   },
+   {
+    "filter": "no-passage check",
+    "role_step": 10,
+    "plain_fact": 9
+   },
+   {
+    "filter": "selection",
+    "role_step": 10,
+    "plain_fact": 8
+   },
+   {
+    "filter": "length backstop",
+    "role_step": 9,
+    "plain_fact": 8
+   },
+   {
+    "filter": "support check",
+    "role_step": 8,
+    "plain_fact": 7
+   },
+   {
+    "filter": "answer-leak screen",
+    "role_step": 5,
+    "plain_fact": 4
+   }
+  ]
+ },
+ "final_counts": {
+  "final_role_step_tasks": 5,
+  "final_plain_fact_tasks": 4,
+  "final_passages_with_a_role_step_task": 4,
+  "practice_role_step_tasks": 5,
+  "practice_plain_fact_tasks": 4
+ },
+ "launch_floor_met": true,
+ "tier": "EXPLORATORY",
+ "estimated_padding": {
+  "note": "an estimate from size counts, not from the tokenizer; no rule uses it; percent of the Notes block, mean over the kept passages of both sets",
+  "FILLER": "95.7",
+  "ROLE": "2.9",
+  "MIXED": "2.7",
+  "ORD-INFORMED": "78.7",
+  "ORD-FREE": "78.7",
+  "QUOTES-ONLY": "76.4"
+ }
+}

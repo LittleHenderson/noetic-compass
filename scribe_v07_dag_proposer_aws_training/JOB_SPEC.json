@@ -1,0 +1,43 @@
+{
+  "job_id": "SCRIBE-v0.7-DAG-PROPOSER-AWS-GPU",
+  "version": "HELM v0.7 Topological Scribe",
+  "task": "Stage v0.7 Lexicon Expansion: Mapping Open English Software Engineering Requests to Symbolic CAS DAG Representations",
+  "objective": "Map open-domain programming, version control, and systems design requests in everyday American English into verified symbolic CAS DAG representations with guaranteed Kahn topological acyclicity and RPM Gate pre-flight compliance",
+  "cloud_provider": "AWS",
+  "region": "us-west-2",
+  "instance_type": "g4dn.xlarge",
+  "gpu_type": "NVIDIA Tesla T4 (16 GB VRAM)",
+  "cost_limit_usd": 1.00,
+  "time_limit_seconds": 900,
+  "exit_on_no_gpu": 20,
+  "runtime_environment": {
+    "python": "3.10+",
+    "torch": "2.5.1+cu121",
+    "cuda": "12.1",
+    "deterministic_algorithms": true,
+    "cublas_workspace_config": ":4096:8"
+  },
+  "training_parameters": {
+    "model_architecture": "CASNativeDAGTransformer (Multi-Head Attention + Multi-Task Topological Classification)",
+    "pretrained_weights": "NONE (Trained completely from scratch, zero foreign weights)",
+    "epochs": 25,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001
+  },
+  "verification_protocol": {
+    "kahn_topological_sort": "Kahn algorithm verifies DAG acyclicity before any step execution",
+    "zero_hallucination_guarantee": "Refusal / CLARIFY triggered whenever ungrounded or circular",
+    "held_out_evaluation_set": "STRICTLY ISOLATED (Zero leakage, 500 held-out samples)"
+  },
+  "expected_outputs": [
+    "RUN_SUMMARY.json",
+    "dag_proposer_v07_weights.pt",
+    "dag_vocab.json",
+    "RECEIPTS.json",
+    "OUTPUTS_SHA256.json"
+  ],
+  "claim_ceiling": "ENGINEERED-NOT-VALIDATED",
+  "claim_status": "SYNTHETIC_ONLY"
+}

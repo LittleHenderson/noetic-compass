@@ -1,0 +1,208 @@
+--- v1.0/tools/ob_select.py
++++ v1.1/tools/ob_select.py
+@@ -1,6 +1,10 @@
+ """Option B, Step 6. Pick the tasks by program, with a seed.
+ 
+ What this tool does, in plain words:
++- Plan v1.1: a passage and form may have up to one surviving candidate per writer pass (p1, p2, p3).
++  Before the pair rule, the survivors of each passage and form are reduced to ONE question: the
++  surviving candidate of the lowest pass (p1 before p2 before p3). The others are logged as dropped with
++  the reason LATER_PASS_NOT_NEEDED. Each kept task records which pass supplied it (pass_used).
+ - Per passage it keeps at most two role-step questions. They must have different forms and
+   different right things (the looser word test of tools/verdict.py). Different types are preferred.
+   A second LAND question needs two agreed ^4 entries. The choice is drawn with a seed.
+@@ -249,6 +253,31 @@
+     return picked, dropped
+ 
+ 
++def pass_rank(constants):
++    """The place of each pass name in outside_services.gemini_question_writer.passes: p1 before p2 before p3."""
++    return {name: index for index, name in enumerate(constants['outside_services']['gemini_question_writer']['passes'])}
++
++
++def lowest_pass_first(constants, survivors):
++    """Plan v1.1, Step 6: per passage and form, keep the surviving candidate of the lowest pass; log the others.
++
++    Returns (kept candidates, dropped rows). The writer never learns which pass was kept; this is a fixed rule,
++    applied before the pair rule, never a choice made after seeing the solvers.
++    """
++    rank = pass_rank(constants)
++    groups = {}
++    for c in survivors:
++        if c.get('pass') not in rank:
++            raise Stop('CANDIDATE_PASS_UNKNOWN', 'Candidate %s carries the pass %r, which is not in the plan constants.' % (c['question_id'], c.get('pass')))
++        groups.setdefault((c['passage_id'], c['form']), []).append(c)
++    kept, dropped = [], []
++    for key in sorted(groups):
++        ordered = sorted(groups[key], key=lambda c: (rank[c['pass']], c['question_id']))
++        kept.append(ordered[0])
++        dropped.extend({'question_id': c['question_id'], 'reason': 'LATER_PASS_NOT_NEEDED'} for c in ordered[1:])
++    return kept, dropped
++
++
+ def run_selection(constants, frozen, in_set, candidates, key_rows, anchors_matched):
+     """Selection and length backstop for one set of passages. Pure: the same inputs give the same result."""
+     forms = constants['forms']
+@@ -260,6 +289,9 @@
+     tasks, dropped = [], []
+     for pid in sorted(by_passage):
+         passage, live = in_set[pid], sorted(by_passage[pid], key=lambda c: c['question_id'])
++        # plan v1.1: one question per passage and form before the pair rule, the lowest pass first
++        live, stood_down = lowest_pass_first(constants, live)
++        dropped.extend(stood_down)
+         if passage['barred'] or not passage['eligible']:
+             reason = 'PASSAGE_BARRED' if passage['barred'] else 'PASSAGE_NOT_ELIGIBLE'
+             dropped.extend({'question_id': c['question_id'], 'reason': reason} for c in live)
+@@ -270,7 +302,8 @@
+             longest, shortest = length_flags(c['right'], c['wrong'])
+             fact = c['family'] == 'plain_fact'
+             tasks.append({'task_id': '%s.%s' % (pid, c['form']), 'passage_id': pid, 'question_id': c['question_id'], 'family': c['family'],
+-                          'type': 'FACT' if fact else forms[c['form']]['type'], 'form': c['form'], 'question': c['question'], 'right': c['right'],
++                          'type': 'FACT' if fact else forms[c['form']]['type'], 'form': c['form'], 'pass_used': c['pass'],
++                          'question': c['question'], 'right': c['right'],
+                           'wrong': list(c['wrong']), 'anchors': list(c['anchors']),
+                           'anchors_matched': [a for a in c['anchors'] if a in anchors_matched.get(c['question_id'], ())],
+                           'right_is_single_longest': longest, 'right_is_single_shortest': shortest})
+@@ -301,11 +334,28 @@
+               'passages_with_a_role_step_task': len({t['passage_id'] for t in role}),
+               'single_longest': [sum(1 for t in role if t['right_is_single_longest']), len(role)],
+               'single_shortest': [sum(1 for t in role if t['right_is_single_shortest']), len(role)]}
+-    return {'tasks': tasks, 'dropped': dropped, 'counts': counts, 'role_step_before_backstop': role_before}
++    # FILE_FORMATS.md section 7.1 (v1.1), block survival: per family, candidates / after_key_check / after_no_passage count
++    # question ids over every pass; after_lowest_pass and selected count passage-and-form pairs.
++    mine = [c for c in candidates if c['passage_id'] in in_set]
++    key_by_id = {row['question_id']: row for row in key_rows}
++    stood_down = {d['question_id'] for d in dropped if d['reason'] == 'LATER_PASS_NOT_NEEDED'}
++    survival = {}
++    for family in ('role_step', 'plain_fact'):
++        ids = [c['question_id'] for c in mine if c['family'] == family]
++        after_no_passage = [qid for qid in ids if qid in survives]
++        survival[family] = {'candidates': len(ids),
++                            'after_key_check': sum(1 for qid in ids if key_by_id.get(qid, {}).get('key_check_passed') is True),
++                            'after_no_passage': len(after_no_passage),
++                            'after_lowest_pass': sum(1 for qid in after_no_passage if qid not in stood_down),
++                            'selected': sum(1 for t in tasks if t['family'] == family)}
++    return {'tasks': tasks, 'dropped': dropped, 'counts': counts, 'survival': survival, 'role_step_before_backstop': role_before}
+ 
+ 
+ def survival_rows(constants, in_set, form_rows, anchor_rows, option_rows, candidates, key_rows, result):
+-    """The survival table: one row per filter. Counted per passage and form; a spare stands in where the first question was dropped."""
++    """The survival table: one row per filter. Counted per passage and form: a pair counts at a stage when any pass
++    passes it (plan v1.1: a later pass stands in where an earlier one was dropped). The key-check and no-passage rows
++    count pairs in the same way, over the candidates of every pass."""
++    passes = list(constants['outside_services']['gemini_question_writer']['passes'])
+     passed_form = {r['question_id'] for r in form_rows if r['passed']}
+     passed_anchor = {r['question_id'] for r in anchor_rows if r['passed']}
+     passed_option = {r['question_id'] for r in option_rows if r['passed']}
+@@ -320,25 +370,35 @@
+         pid, pass_name, tag = row['question_id'].split('.')
+         if pid in in_set and (row['family'] == 'plain_fact' or tag in constants['forms']):
+             slots.setdefault((pid, tag, row['family'] == 'plain_fact'), {})[pass_name] = row['question_id']
+-    role = [s for (pid, tag, fact), s in slots.items() if not fact and 'p1' in s and in_set[pid]['eligible']
++    role = [s for (pid, tag, fact), s in slots.items() if not fact and in_set[pid]['eligible']
+             and not in_set[pid]['barred'] and tag in in_set[pid]['open_forms']]
+-    facts = [s for (pid, tag, fact), s in slots.items() if fact and 'p1' in s]
++    facts = [s for (pid, tag, fact), s in slots.items() if fact]
+ 
+     def alive(slot, fact, stage):
+-        return through(slot.get('p1'), fact, stage) or through(slot.get('p2'), fact, stage)
++        return any(through(slot.get(pass_name), fact, stage) for pass_name in passes)
+ 
+     rows = [{'filter': FILTERS[0], 'role_step': len(role), 'plain_fact': len(facts)}]
+     for name, stage in zip(FILTERS[1:4], (2, 3, 4)):
+         rows.append({'filter': name, 'role_step': sum(alive(s, False, stage) for s in role), 'plain_fact': sum(alive(s, True, 2) for s in facts)})
++    # The check files and checks/candidates must agree, in two ways. (1) Per question: the candidates are exactly the
++    # questions that passed every check (the option check for a role-step question, the form check for a plain-fact one).
++    # (2) Per passage and form: the number of pairs with a candidate equals the option-check survival row.
+     mine = [c for c in candidates if c['passage_id'] in in_set]
+-    for family, key in (('role_step', 'role_step'), ('plain_fact', 'plain_fact')):
+-        if rows[3][key] != sum(1 for c in mine if c['family'] == family):
+-            raise Stop('CHECK_FILES_DISAGREE', 'The check files and checks/candidates do not give the same number of %s candidates. Run ob_check_questions.py again.' % family)
+-    family_of = {c['question_id']: c['family'] for c in mine}
+-    keyed = [r for r in key_rows if r['question_id'] in family_of]
++    pass_through = {False: {qid for qid in passed_option}, True: {r['question_id'] for r in form_rows if r['passed'] and r['family'] == 'plain_fact'}}
++    for family, fact in (('role_step', False), ('plain_fact', True)):
++        ids = sorted(c['question_id'] for c in mine if c['family'] == family)
++        expected = sorted(qid for qid in pass_through[fact] if qid.split('.')[0] in in_set)
++        pairs = len({(c['passage_id'], c['form']) for c in mine if c['family'] == family})
++        if ids != expected or pairs != rows[3][family]:
++            raise Stop('CHECK_FILES_DISAGREE', 'The check files and checks/candidates do not give the same %s candidates (%d candidates in the file, '
++                       '%d questions passed the checks; %d passage-and-form pairs in the file, %d in the survival row). Run ob_check_questions.py again.'
++                       % (family, len(ids), len(expected), pairs, rows[3][family]))
++    pair_of = {c['question_id']: (c['passage_id'], c['form'], c['family']) for c in mine}
++    keyed = [r for r in key_rows if r['question_id'] in pair_of]
+     for name, test in ((FILTERS[4], lambda r: r['key_check_passed']), (FILTERS[5], lambda r: r['survives'])):
+-        rows.append({'filter': name, 'role_step': sum(1 for r in keyed if r['family'] == 'role_step' and test(r)),
+-                     'plain_fact': sum(1 for r in keyed if r['family'] == 'plain_fact' and test(r))})
++        alive_pairs = {pair_of[r['question_id']] for r in keyed if test(r)}
++        rows.append({'filter': name, 'role_step': sum(1 for pair in alive_pairs if pair[2] == 'role_step'),
++                     'plain_fact': sum(1 for pair in alive_pairs if pair[2] == 'plain_fact')})
+     rows.append({'filter': FILTERS[6], 'role_step': result['role_step_before_backstop'], 'plain_fact': result['counts']['plain_fact_tasks']})
+     rows.append({'filter': FILTERS[7], 'role_step': result['counts']['role_step_tasks'], 'plain_fact': result['counts']['plain_fact_tasks']})
+     return rows
+@@ -368,18 +428,27 @@
+         if sorted(c['question_id'] for c in self.candidates) != sorted(r['question_id'] for r in self.key_rows):
+             raise Stop('KEY_CHECK_NOT_CURRENT', 'solve/key_check_%s.json does not cover exactly the candidates. Run the decide step of ob_solve_blind.py again.' % name)
+         self.anchors_matched = {r['question_id']: {m['anchor'] for m in r['matched']} for r in self.anchor_rows if r['passed']}
+-        # which passages the writer was asked about, in both passes (ids only; no question text is read here)
+-        self.written = []
+-        for pass_name in ctx.constants['outside_services']['gemini_question_writer']['passes']:
+-            raw = ctx.read_json(ctx.work / 'questions' / ('raw_questions_%s_%s.json' % (name, pass_name)), 'casalescence/optionb/raw_questions/v1')
+-            self.written.append({row['passage_id'] for row in raw['passages']})
++        # which passages the writer was asked about, in every pass of the plan (ids only; no question text is read here).
++        # Plan v1.1: every pass file must exist in a real run (MISSING_PASS_FILE); only a dry fixture may skip a later pass, as ob_check_questions.py does.
++        passes = list(ctx.constants['outside_services']['gemini_question_writer']['passes'])
++        self.written, self.passes_missing = [], []
++        for pass_name in passes:
++            path = ctx.work / 'questions' / ('raw_questions_%s_%s.json' % (name, pass_name))
++            if not path.exists() and pass_name != passes[0]:
++                if not ctx.dry:
++                    raise Stop('MISSING_PASS_FILE', '%s does not exist. Every pass of the plan (%s) must be written and checked before the selection. '
++                               'Only a dry fixture may skip a later pass.' % (rel(path), ', '.join(passes)))
++                self.passes_missing.append(pass_name)    # dry fixture only
++                continue
++            raw = ctx.read_json(path, 'casalescence/optionb/raw_questions/v1')
++            self.written.append((pass_name, {row['passage_id'] for row in raw['passages']}))
+ 
+     def must_cover(self, in_set, practice_count):
+-        """Stop unless both writer passes cover exactly the passages of this set."""
+-        for asked in self.written:
++        """Stop unless every writer pass that was read covers exactly the passages of this set."""
++        for pass_name, asked in self.written:
+             if asked != set(in_set):
+-                raise Stop('WRITER_DOES_NOT_COVER_THIS_SET', 'The written questions cover %d passages; this set has %d with %d practice settings. '
+-                           'Finish the writer and the checks first, or give the right --practice-settings.' % (len(asked), len(in_set), practice_count))
++                raise Stop('WRITER_DOES_NOT_COVER_THIS_SET', 'The written questions of pass %s cover %d passages; this set has %d with %d practice settings. '
++                           'Finish the writer and the checks first, or give the right --practice-settings.' % (pass_name, len(asked), len(in_set), practice_count))
+ 
+     def passages(self, practice_count, practice):
+         return {pid: row for pid, row in self.asked.items() if in_practice(row['setting_role'], practice_count, self.start) == practice}
+@@ -441,7 +510,8 @@
+     counts = result['counts']
+     rows = survival_rows(C, in_set, run.form_rows, run.anchor_rows, run.option_rows, run.candidates, run.key_rows, result)
+ 
+-    body = {'set': set_name, 'practice_setting_count': practice_count, 'tasks': result['tasks'], 'dropped': result['dropped'], 'counts': counts}
++    body = {'set': set_name, 'practice_setting_count': practice_count, 'tasks': result['tasks'], 'dropped': result['dropped'], 'counts': counts,
++            'survival': result['survival']}
+     reasons, extra = [], {}
+     if set_name == 'practice':
+         # FILE_FORMATS.md section 7.1. The reserve rule looks at both task families and aims at the two
+@@ -454,7 +524,7 @@
+             name = run.eligibility['reserve_settings_in_order'][practice_count - run.start]
+             decision = 'STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING'
+             reasons.append('%s; the reserve targets are %d and %d.' % (said, reserve['role_step_target'], reserve['plain_fact_target']))
+-            nxt = ('The reserve rule moves the next reserve setting to practice: "%s". Write its questions (both passes) with '
++            nxt = ('The reserve rule moves the next reserve setting to practice: "%s". Write its questions (every pass) with '
+                    '--practice-settings %d, then run the check, the solvers and this step again with --practice-settings %d. '
+                    'Seal step 3A is refused until the reserve rule is finished.'
+                    % (name, practice_count + 1, practice_count + 1))
+@@ -487,6 +557,9 @@
+ 
+     ctx.write_json(ctx.work / 'select' / ('selection_%s.json' % set_name), 'casalescence/optionb/selection/v1', body)
+     report = {'set': set_name, 'practice_setting_count': practice_count, 'rows': rows, 'counts': counts,
++              'passes_missing': run.passes_missing,
++              'tasks_by_pass_used': {name: sum(1 for t in result['tasks'] if t['pass_used'] == name)
++                                     for name in C['outside_services']['gemini_question_writer']['passes']},
+               'dropped_by_reason': {reason: sum(1 for d in result['dropped'] if d['reason'] == reason)
+                                     for reason in sorted({d['reason'] for d in result['dropped']})},
+               'decision': decision, 'stop_reasons': reasons, 'next': nxt,
