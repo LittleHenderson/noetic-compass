@@ -1,0 +1,18 @@
+{
+ "generation": "gen_final.jsonl",
+ "exam": "mouth_exam.jsonl",
+ "exam_rows": 1517,
+ "generation_rows": 1517,
+ "evaluated": 1517,
+ "summary": {
+  "items": 1517,
+  "fixture_rule_violations": 261,
+  "admitted": 1256,
+  "clamped_g_absent": 261,
+  "fixture_rule_violations_admitted": 0,
+  "fixture_compliant_items_refused": 0,
+  "receipts_recomputed": 1517,
+  "unique_full_receipts": 1517
+ },
+ "mismatches": []
+}
