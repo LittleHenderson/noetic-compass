@@ -1,0 +1,146 @@
+{
+ "results": [
+  {
+   "family": "narrative",
+   "name": "recall_place",
+   "ok": false,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!\n\n"
+  },
+  {
+   "family": "narrative",
+   "name": "recall_object",
+   "ok": false,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!\n\n"
+  },
+  {
+   "family": "narrative",
+   "name": "recall_person",
+   "ok": false,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!\n\n"
+  },
+  {
+   "family": "preference",
+   "name": "concise_followed",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence.\n\n"
+  },
+  {
+   "family": "preference",
+   "name": "stored",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: Understood. I've noted your preference for short, concise answers and will keep future replies brief.\n\n"
+  },
+  {
+   "family": "inventory",
+   "name": "declare_and_query",
+   "ok": false,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!\n\n"
+  },
+  {
+   "family": "inventory",
+   "name": "declare_updates_state",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: Got it! I've recorded 10 Flour, 8 Water in our session inventory on hand. Let me know when you'd like to calculate a recipe batch, see what we can produce, or modify these amounts.\n\n"
+  },
+  {
+   "family": "recipe_gate",
+   "name": "missing_water",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: I can't run this batch just yet because we're missing essential ingredients: Water.\nThe system automatically halted to prevent guessing, errors, or wasting materials.\n\n"
+  },
+  {
+   "family": "recipe_gate",
+   "name": "valid_batch",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: All set! Based on your ingredients, we can produce exactly 9.904 units.\nYour bottleneck (limiting ingredient) is Water with 8 on hand, which sets the ceiling for this batch.\n(Verified with exact 40-digit Decimal precision; novelty entropy: 0.20, valve aperture: 0.91141) [receipt: b39b35a018c8f2cc]\n\n"
+  },
+  {
+   "family": "refusal",
+   "name": "ood_capital",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified encyclopedic data on capital of Portugal in my active datasets, so I won't guess without evidence. My core capabilities are focused on software engineering, mathematical recipes, systems architecture, and drone flight simulation. Let me know what we can engineer!\n\n"
+  },
+  {
+   "family": "refusal",
+   "name": "ood_future",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!\n\n"
+  },
+  {
+   "family": "memory_count",
+   "name": "count_two",
+   "ok": false,
+   "detail": "",
+   "last_output": "\nHELM: You've shared 1 thing with me so far in this session:\n1. I have a dog named Rufus\n\n"
+  },
+  {
+   "family": "memory_count",
+   "name": "turn_count_exact",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!\n\n"
+  },
+  {
+   "family": "anaphora",
+   "name": "it_resolves",
+   "ok": true,
+   "detail": "",
+   "last_output": "\nHELM: All set! Based on your ingredients, we can produce exactly 9.904 units.\nYour bottleneck (limiting ingredient) is Water with 8 on hand, which sets the ceiling for this batch.\n(Verified with exact 40-digit Decimal precision; novelty entropy: 0.20, valve aperture: 0.91141) [receipt: b39b35a018c8f2cc]\n\n"
+  },
+  {
+   "family": "summary",
+   "name": "summary_lists_topic",
+   "ok": false,
+   "detail": "",
+   "last_output": "\nHELM: I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!\n\n"
+  }
+ ],
+ "families": {
+  "narrative": {
+   "passed": 0,
+   "of": 3
+  },
+  "preference": {
+   "passed": 2,
+   "of": 2
+  },
+  "inventory": {
+   "passed": 1,
+   "of": 2
+  },
+  "recipe_gate": {
+   "passed": 2,
+   "of": 2
+  },
+  "refusal": {
+   "passed": 2,
+   "of": 2
+  },
+  "memory_count": {
+   "passed": 1,
+   "of": 2
+  },
+  "anaphora": {
+   "passed": 1,
+   "of": 1
+  },
+  "summary": {
+   "passed": 0,
+   "of": 1
+  }
+ },
+ "passed": 9,
+ "of": 15,
+ "score": 0.6
+}
