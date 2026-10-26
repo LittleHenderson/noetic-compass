@@ -1,0 +1,15 @@
+{
+ "total_pairs": 114678,
+ "by_source": {
+  "oasst1": 6354,
+  "dailydialog": 68548,
+  "empathetic_dialogues": 39776
+ },
+ "licences": {
+  "oasst1": "Apache-2.0",
+  "dailydialog": "CC BY-NC-SA 4.0",
+  "empathetic_dialogues": "CC BY-NC 4.0"
+ },
+ "mean_words_reply": 13.66,
+ "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-23\\lacunarity_e1\\data\\public_corpus\\public_turns.jsonl"
+}
