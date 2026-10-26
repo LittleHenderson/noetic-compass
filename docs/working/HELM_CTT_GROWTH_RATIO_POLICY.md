@@ -81,3 +81,29 @@ else. A parameter-ratio reading has a problem worth stating: the recipe brain ha
 
 Until the definition is confirmed, the five rules in section 4 stand, and CTT stays at 9,585,823 parameters.
 
+## 7. The scaling rules exist — under another name (2026-10-26)
+
+Searching "HELM scaling rules" and "HELM scaling laws" returned nothing by that name. The rules are recorded as
+**CAS Recipe Capacity Rules v0.1**, `docs/CAS_HARNESS_SPEC_SHEET.md` §7.27 (owner named 2026-10-15: "name it and
+RB-W"), plus the RB-G growth design in `Documents\Codex\2026-10-15\helm_rb_g_growth_design_v1\`.
+
+What they actually say:
+
+1. **Limiting-Reagent Rule of scaling** — a recipe brain's capacity is itself a recipe (slots, routes, blend vertices,
+   efficiency/leakage terms, nesting depth). More parameters help only when each new parameter has a real job. Scale
+   only the kind a frozen test shows to be limiting.
+2. **Simplex blend law** — error falls as 1/vertices², but only up to about 12 vertices on the tested family; it rose
+   after that (0.00737 at 12 vertices, 0.01685 at 16, 0.04137 at 32).
+3. **Guardrails** — a candidate must explain at least 8 new rows; hold-out including shuffled labels; fewest nodes wins;
+   a receipt on every admission; depth cap 5; node cap.
+4. **Scaling triggers** — coverage lacuna → recipe slots; consistent cut input → routes; smooth residual at the vertex
+   cap → vertices; proportional shortfall → efficiency/leakage terms; chains deeper than the cap → depth. Do not scale
+   when the score is at the mark, the law is not recipe-shaped, or the failure is noise.
+5. **Parameter ceiling = 4x the start's allocated parameters** (RB-G, `OPEN_QUESTIONS.md` Q2 and
+   `ARCHITECTURE_RB_G.md` line 227: "matches RB-W's top rung (ALL4X)"). This is a **brain-side** ceiling.
+
+**So the only recorded 4 belongs to the brain's own growth ceiling, not to a CTT-to-brain ratio.** No file states
+CTT : recipe brain = 1 : 4. If the remembered 1:4 came from these rules, the natural reading is: CTT may grow only
+when the brain's own ledger shows the limiting kind, and never past the brain's 4x ceiling logic — i.e. the model
+stays subordinate, which the check-weight rule already enforces.
+
