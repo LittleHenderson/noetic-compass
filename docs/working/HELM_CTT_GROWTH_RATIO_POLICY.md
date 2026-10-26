@@ -57,3 +57,27 @@ The interpretability ratio that matters is **1:1 checkability**, not a parameter
 
 Either the remembered number (or where it came from), or agreement to adopt the five rules above as the ratio. Until
 then I will hold CTT at its current size and spend the effort on data, which is where the v3 evidence points.
+
+## 6. Follow-up search for a 1:4 ratio (2026-10-26, after the owner named it)
+
+The owner asked specifically for a **1:4 CTT-to-recipe-brain ratio**. Searched again, with that pattern:
+
+| Location | Result |
+|---|---|
+| repo `docs/`, including the spec sheet and CTT folder | no `\b1:4\b` near brain/CTT/recipe |
+| repo `book/` (manuscript, PCBA, grimoire, publishing) | no match |
+| `Documents\Codex\2026-10-19\` (the CTT design set: ARCHITECTURE, DATA, TEST_PLAN, OPEN_QUESTIONS) | no 1:4; the only "ratio" is the 70/30 data mix and witnessed-ratio updates |
+| `Documents\Codex\2026-10-23\` (the lacunarity work) | no match |
+| `Documents\Codex\2026-10-15\` (recipe-brain handoffs) | only `(x=1: 4 != 2)` inside a math-check example — unrelated |
+| `sessions/` | no match |
+
+**Result: the 1:4 figure is not in any file I can read.** Several `Documents\Codex` trees return permission errors, so
+it could be there, but I cannot confirm it.
+
+**What I need to implement it:** whether 1:4 means (a) CTT parameters : brain parameters = 1 : 4, (b) CTT data :
+brain data, (c) a growth allowance (CTT may grow 4x before the brain's readable core must also grow), or (d) something
+else. A parameter-ratio reading has a problem worth stating: the recipe brain has **68 learned values**, so a literal
+1:4 parameter ratio would cap CTT at 17 parameters. So (a) cannot be literal; it must be a ratio of something else.
+
+Until the definition is confirmed, the five rules in section 4 stand, and CTT stays at 9,585,823 parameters.
+
