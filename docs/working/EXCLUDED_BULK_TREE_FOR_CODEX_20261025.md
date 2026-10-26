@@ -35,3 +35,7 @@ valid on this machine but not in the remote repository.
 
 None of these was done in this commit; this note exists so the exclusion is a recorded decision rather than a silent
 loss.
+
+## Update 2026-10-25 23:27 PDT — archived to S3
+
+The deduplicated documentary tree was uploaded to `s3://cas-harness-runpod-92754088/bridge-control-20260822/for-codex-tree-20261025/`: **6,112 unique files, 2.55 GiB, 0 failures, 485.7 s**. The manifest with every path, size and SHA-256 is committed at `docs/working/FOR_CODEX_TREE_S3_MANIFEST_20261025.json` and stored beside the objects as `_MANIFEST.json`. Excluded from both repo and archive: `_worktrees`, `_tmp`, `_test_runs`, `github-lfs-cache`, `node_modules`, `__pycache__` and nested `.git` (the bulk of the 56.66 GiB), which remain on disk only.
