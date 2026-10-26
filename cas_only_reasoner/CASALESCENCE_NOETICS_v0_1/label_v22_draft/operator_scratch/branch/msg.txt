@@ -1,0 +1,17 @@
+docs(noetics): label agreement attempt 2 (v2.1): run valid; ^1 LABELABLE, ^2-^9 NOT_LABELABLE
+
+Owner signed plan v2.1 and guide v2.1 "as proposed" on 2026-10-06
+(8:00 PM Pacific). Practice check PASS on 30 passages. 427 passages
+sealed (440 written, 13 dropped by the forbidden-word check). Team A,
+eleven Claude Sonnet labelers, labeled 427/427; team B, deepseek-chat
+(answered as deepseek-flash), labeled 426/427. Run valid; 426 analysed.
+
+Entry agreement E against the signed 0.80 bar: ^1 0.848 (LABELABLE);
+^2 0.694, ^3 0.569, ^4 0.389, ^5 0.484, ^6 0.458, ^7 0.396, ^8 0.388,
+^9 0.321 (NOT_LABELABLE). Kappa on presence 0.724 to 0.920, all above
+0.60. Nothing upgraded; no negative removed.
+
+Adds spec sheet section 7.23 and its change-log row, and a CHANGELOG
+entry. Docs only; no code changed, so no test suite applies.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

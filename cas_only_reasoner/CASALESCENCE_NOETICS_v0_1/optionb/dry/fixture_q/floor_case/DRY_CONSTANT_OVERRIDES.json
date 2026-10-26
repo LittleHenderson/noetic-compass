@@ -1,0 +1,13 @@
+{
+ "note": "MADE-UP. Dry fixture only. These four floors are lowered so that three made-up passages can walk through every step. A tool reads this file only when its work folder sits under optionb/dry/. The real floors are 100, 100, 36 and 20. The two reserve targets of the reserve rule are lowered in the same way; the real reserve targets are 45 and 25. The practice role-step floor (2) is below its reserve target (3) on purpose: with 8 practice settings the made-up practice set meets both floors and misses a reserve target. That is the case of amendment A8.",
+ "launch_floor": {
+  "final_role_step_tasks_min": 99,
+  "final_plain_fact_tasks_min": 1,
+  "practice_role_step_tasks_min": 2,
+  "practice_plain_fact_tasks_min": 1
+ },
+ "split": {
+  "reserve_target_practice_role_step_tasks": 3,
+  "reserve_target_practice_plain_fact_tasks": 1
+ }
+}

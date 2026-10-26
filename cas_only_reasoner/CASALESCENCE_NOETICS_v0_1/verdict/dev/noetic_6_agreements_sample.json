@@ -1,0 +1,1258 @@
+[
+ {
+  "passage": "V199",
+  "writer_kind": "K4",
+  "text": "Arthur, the seasoned barber, examined the faulty electric clippers. He noticed the charging indicator light remained dark. The problem seemed to lie in three main areas: the aged battery pack, the visibly loose power jack, and the fine copper wires beneath the casing, which showed signs of oxidization. Repair would involve replacing these specific parts.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the aged battery pack",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the visibly loose power jack",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the fine copper wires beneath the casing",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "the seasoned barber",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the aged battery pack",
+    "mind": "",
+    "relative_to": "the problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the visibly loose power jack",
+    "mind": "",
+    "relative_to": "the problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the fine copper wires beneath the casing",
+    "mind": "",
+    "relative_to": "the problem",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V401",
+  "writer_kind": "K3",
+  "text": "Agnes stopped at the flower stall, examining a bunch of red roses. Having cultivated her own rose garden for fifty years, she knew what to look for. Her gaze lingered on the slightly drooping petals and the colour that seemed a shade too dull. She picked up a bloom, checking the firmness of its stem with a practiced touch. These were not the finest.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Agnes",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Having cultivated her own rose garden for fifty years",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the slightly drooping petals",
+    "mind": "",
+    "relative_to": "a bunch of red roses",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the colour that seemed a shade too dull",
+    "mind": "",
+    "relative_to": "a bunch of red roses",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the firmness of its stem",
+    "mind": "",
+    "relative_to": "a bunch of red roses",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "These were not the finest",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Agnes",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "cultivated her own rose garden for fifty years",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the slightly drooping petals",
+    "relative_to": "a bunch of red roses",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the colour that seemed a shade too dull",
+    "relative_to": "a bunch of red roses",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the firmness of its stem",
+    "relative_to": "a bloom",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^9",
+    "words": "These were not the finest",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V141",
+  "writer_kind": "K4",
+  "text": "Clara analyzed the feedback distortion. It wasn't one simple fault. She heard a hum from the power supply, a high-pitched whine from the faulty microphone cable, and a slight crackle in the mixing board's third channel. Each element contributed to the unpleasant noise, requiring separate adjustments. She noted them down for repair.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a hum from the power supply",
+    "mind": "",
+    "relative_to": "the feedback distortion",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a high-pitched whine from the faulty microphone cable",
+    "mind": "",
+    "relative_to": "the feedback distortion",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a slight crackle in the mixing board's third channel",
+    "mind": "",
+    "relative_to": "the feedback distortion",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a hum from the power supply",
+    "mind": "",
+    "relative_to": "the feedback distortion",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a high-pitched whine from the faulty microphone cable",
+    "mind": "",
+    "relative_to": "the feedback distortion",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a slight crackle in the mixing board's third channel",
+    "mind": "",
+    "relative_to": "the feedback distortion",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "Each element contributed to the unpleasant noise, requiring separate adjustments",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V216",
+  "writer_kind": "K4",
+  "text": "Dr. Chen examined the malfunctioning spectroscope. The problem was not the power supply, which he checked first. He then looked at the collimator, the diffraction grating, and finally the detector. Each component seemed to function independently, yet the overall readings were erratic. The issue lay in the subtle misalignment between these optical parts.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Chen",
+    "mind": "Dr. Chen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the power supply",
+    "mind": "",
+    "relative_to": "the malfunctioning spectroscope",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the collimator",
+    "mind": "",
+    "relative_to": "the malfunctioning spectroscope",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the diffraction grating",
+    "mind": "",
+    "relative_to": "the malfunctioning spectroscope",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the detector",
+    "mind": "",
+    "relative_to": "the malfunctioning spectroscope",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the subtle misalignment between these optical parts",
+    "mind": "Dr. Chen",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Chen",
+    "mind": "Dr. Chen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the collimator",
+    "relative_to": "the malfunctioning spectroscope",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the diffraction grating",
+    "relative_to": "the malfunctioning spectroscope",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the detector",
+    "relative_to": "the malfunctioning spectroscope",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^9",
+    "words": "The issue lay in the subtle misalignment between these optical parts",
+    "mind": "Dr. Chen",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V287",
+  "writer_kind": "K4",
+  "text": "Arthur, the cobbler, examined the worn boot. The sole had separated from the upper, and the stitching around the toe was frayed. He saw the detached heel block, the scuffed leather, and the bent eyelets. To fix it, he would need to repair the torn welt, reattach the heel, and replace the laces. Each component presented its own small challenge.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The sole",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the upper",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the stitching around the toe",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the detached heel block",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the scuffed leather",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the bent eyelets",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the torn welt",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the laces",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur, the cobbler",
+    "mind": "Arthur, the cobbler",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The sole",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the upper",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the stitching around the toe",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the detached heel block",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the scuffed leather",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the bent eyelets",
+    "mind": "",
+    "relative_to": "the worn boot",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V409",
+  "writer_kind": "K4",
+  "text": "Karen reviewed the draft news story. It had several distinct parts: the initial event, the official statement, eyewitness accounts, and background context. Each needed a clear paragraph, a separate voice. She considered the opening sentence, the main body's structure, and the concluding remarks. The piece required careful reordering for clarity.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Karen",
+    "mind": "Karen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the initial event",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the official statement",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "eyewitness accounts",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "background context",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the opening sentence",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the main body",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the concluding remarks",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Karen",
+    "mind": "Karen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the initial event",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the official statement",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "eyewitness accounts",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "background context",
+    "mind": "",
+    "relative_to": "the draft news story",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V162",
+  "writer_kind": "K4",
+  "text": "Patricia reviewed the last fare's convoluted directions. It involved a sharp left at the old oak, a short bypass along the river, and then a series of confusing one-way streets. The main problem was not the destination itself, but the order of the turns and the unexpected detours. She mentally broke it down.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Patricia",
+    "mind": "Patricia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a sharp left at the old oak",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a short bypass along the river",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a series of confusing one-way streets",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Patricia",
+    "mind": "Patricia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a sharp left at the old oak",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a short bypass along the river",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a series of confusing one-way streets",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the order of the turns",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the unexpected detours",
+    "mind": "",
+    "relative_to": "the last fare's convoluted directions",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V136",
+  "writer_kind": "K4",
+  "text": "David explained the maintenance schedule for the turbine. It involved three main phases: an initial safety shutdown and lockout procedure, followed by the actual inspection of blades and gearbox. The final step was the recalibration of sensors and a system restart sequence. Each part was critical.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an initial safety shutdown and lockout procedure",
+    "mind": "",
+    "relative_to": "the maintenance schedule for the turbine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the actual inspection of blades and gearbox",
+    "mind": "",
+    "relative_to": "the maintenance schedule for the turbine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the recalibration of sensors and a system restart sequence",
+    "mind": "",
+    "relative_to": "the maintenance schedule for the turbine",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an initial safety shutdown and lockout procedure",
+    "mind": "",
+    "relative_to": "the maintenance schedule for the turbine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the actual inspection of blades and gearbox",
+    "mind": "",
+    "relative_to": "the maintenance schedule for the turbine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the recalibration of sensors and a system restart sequence",
+    "mind": "",
+    "relative_to": "the maintenance schedule for the turbine",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V119",
+  "writer_kind": "K4",
+  "text": "Priya reviewed the afternoon loading schedule. She broke down the complex operation into its component parts. First, there were the precise incoming truck arrival slots. Next, she considered the estimated package sorting times for each delivery. Then, she allocated specific forklifts to individual zones. Finally, she factored in the planned route optimization for the outbound vehicles.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Priya",
+    "mind": "Priya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "incoming truck arrival slots",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "package sorting times",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "specific forklifts to individual zones",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "route optimization",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Priya",
+    "mind": "Priya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the precise incoming truck arrival slots",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the estimated package sorting times for each delivery",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "specific forklifts to individual zones",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the planned route optimization for the outbound vehicles",
+    "mind": "",
+    "relative_to": "the complex operation",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V075",
+  "writer_kind": "K4",
+  "text": "Dr. Anya Sharma outlined the complex treatment plan for her patient. It comprised several distinct stages: an initial deep cleaning, followed by two fillings, then an impression for a crown. The final step would involve fitting the new crown. Each part needed careful timing and execution by her team.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Anya Sharma",
+    "mind": "Dr. Anya Sharma",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an initial deep cleaning",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "two fillings",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an impression for a crown",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "fitting the new crown",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Anya Sharma",
+    "mind": "Dr. Anya Sharma",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an initial deep cleaning",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "two fillings",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an impression for a crown",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "fitting the new crown",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V352",
+  "writer_kind": "K7",
+  "text": "Martha the beekeeper found a small pile of dead bees near the hive entrance. She then spotted several dark, sticky spots on the landing board and noticed a faint, unusual smell. Checking inside, she saw the queen cell looked unusually large and capped. All these observations led her to conclude the hive was preparing to swarm very soon.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Martha",
+    "mind": "Martha",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a small pile of dead bees",
+    "mind": "",
+    "relative_to": "All these observations",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "several dark, sticky spots",
+    "mind": "",
+    "relative_to": "All these observations",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a faint, unusual smell",
+    "mind": "",
+    "relative_to": "All these observations",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the queen cell looked unusually large and capped",
+    "mind": "",
+    "relative_to": "All these observations",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the hive was preparing to swarm very soon",
+    "mind": "Martha",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Martha the beekeeper",
+    "mind": "Martha the beekeeper",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a small pile of dead bees near the hive entrance",
+    "relative_to": "All these observations",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "several dark, sticky spots on the landing board",
+    "relative_to": "All these observations",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "a faint, unusual smell",
+    "relative_to": "All these observations",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the queen cell looked unusually large and capped",
+    "relative_to": "All these observations",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^9",
+    "words": "the hive was preparing to swarm very soon",
+    "mind": "Martha the beekeeper",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V052",
+  "writer_kind": "K4",
+  "text": "Harriet considered the aging schedule for the new batch of Gruyere. It involved precise temperature control, managed humidity levels, and regular turning of the wheels. She also factored in the specific strain of surface bacteria and the desired rind development. Each element played a distinct part in the final flavor.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Harriet",
+    "mind": "Harriet",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "temperature control",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "humidity levels",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "turning of the wheels",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "strain of surface bacteria",
+    "mind": "",
+    "relative_to": "the final flavor",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "rind development",
+    "mind": "",
+    "relative_to": "the final flavor",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Harriet",
+    "mind": "Harriet",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "precise temperature control",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "managed humidity levels",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "regular turning of the wheels",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the specific strain of surface bacteria",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the desired rind development",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V284",
+  "writer_kind": "K4",
+  "text": "Ivan outlined his argument for the upcoming hearing. It rested on three main points: the timeline discrepancies in the witness statement, the lack of corroborating evidence from the scene, and the contested expert testimony. He knew each piece had to stand on its own, then fit together.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ivan",
+    "mind": "Ivan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the timeline discrepancies in the witness statement",
+    "mind": "",
+    "relative_to": "his argument",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the lack of corroborating evidence from the scene",
+    "mind": "",
+    "relative_to": "his argument",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the contested expert testimony",
+    "mind": "",
+    "relative_to": "his argument",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ivan",
+    "mind": "Ivan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the timeline discrepancies in the witness statement",
+    "mind": "",
+    "relative_to": "his argument",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the lack of corroborating evidence from the scene",
+    "mind": "",
+    "relative_to": "his argument",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the contested expert testimony",
+    "mind": "",
+    "relative_to": "his argument",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V355",
+  "writer_kind": "K4",
+  "text": "Kate examined the bus's starter motor. She broke down the issue into individual components: the solenoid, the armature, the brushes, and the field windings. First, she checked for a clicking sound from the solenoid. Then, she tested the electrical current reaching the windings, tracing it back through the wiring loom.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Kate",
+    "mind": "Kate",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the solenoid",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the armature",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the brushes",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the field windings",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Kate",
+    "mind": "Kate",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the solenoid",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the armature",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the brushes",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the field windings",
+    "mind": "",
+    "relative_to": "the issue",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V257",
+  "writer_kind": "K4",
+  "text": "Ben, a ski lift mechanic, examined the faulty mechanism. The main issue was a worn bearing in the drive shaft. This then put undue stress on the tensioning spring. Finally, the emergency brake system was partially engaged due to the misalignment. He knew he needed to replace the parts sequentially to ensure safety.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a worn bearing in the drive shaft",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the tensioning spring",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the emergency brake system",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a worn bearing in the drive shaft",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the tensioning spring",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the emergency brake system",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "he needed to replace the parts sequentially to ensure safety",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ }
+]

@@ -1,0 +1,154 @@
+SHEET practice-with_passage-02. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0201 ===
+Passage:
+Sunnic opened the bell tower before dawn. He always reached for the oak spindle before the tin spindle. The ledger stood on the table by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the ledger first.
+
+Question: On the day Sunnic opened up, where did the ledger stand?
+A. on the table
+B. inside the cart
+C. behind the gate
+D. under the bench
+=== END Q0201 ===
+
+=== ITEM Q0202 ===
+Passage:
+Petric opened the nail forge before dawn. He always reached for the tar ruler before the wire ruler. The lantern stood on the counter by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the lantern first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petric leave to someone else?
+A. counting every straw there
+B. locking up the nail forge
+C. working with the tar ruler
+D. working on the loose stair
+E. carrying the lantern outside
+F. lighting the big lamp
+=== END Q0202 ===
+
+=== ITEM Q0203 ===
+Passage:
+Halic opened the dye house before dawn. She always reached for the bone saw before the steel saw. The kettle stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the kettle first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Halic leave to someone else?
+A. working on the broken ladder
+B. lighting the big lamp
+C. counting every pallets there
+D. working with the bone saw
+E. carrying the kettle outside
+F. locking up the dye house
+=== END Q0203 ===
+
+=== ITEM Q0204 ===
+Passage:
+Sunnic opened the bell tower before dawn. He always reached for the oak spindle before the tin spindle. The ledger stood on the table by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the ledger first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunnic do first?
+A. leaving the door wide open
+B. reaching for the tin spindle again
+C. sweeping the tower floor twice
+D. reaching for the oak spindle again
+E. moving the ledger to the yard
+F. hanging the tape on a hook
+=== END Q0204 ===
+
+=== ITEM Q0205 ===
+Passage:
+Sunnic opened the bell tower before dawn. He always reached for the oak spindle before the tin spindle. The ledger stood on the table by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the ledger first.
+
+Question: Sunnic spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the ledger before anything else
+B. seeing the tape beside it
+C. finding the table by the door
+D. opening the bell tower before dawn
+E. walking in through the door
+F. knowing where the ledger stands
+=== END Q0205 ===
+
+=== ITEM Q0206 ===
+Passage:
+Halic opened the dye house before dawn. She always reached for the bone saw before the steel saw. The kettle stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Halic do first?
+A. moving the kettle to the yard
+B. reaching for the bone saw again
+C. leaving the door wide open
+D. reaching for the steel saw again
+E. sweeping the house floor twice
+F. hanging the pallets on a hook
+=== END Q0206 ===
+
+=== ITEM Q0207 ===
+Passage:
+Halic opened the dye house before dawn. She always reached for the bone saw before the steel saw. The kettle stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the kettle first.
+
+Question: On the day Halic opened up, where did the kettle stand?
+A. on the ledge
+B. under the bench
+C. behind the gate
+D. inside the cart
+=== END Q0207 ===
+
+=== ITEM Q0208 ===
+Passage:
+Petric opened the nail forge before dawn. He always reached for the tar ruler before the wire ruler. The lantern stood on the counter by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the lantern first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Petric do first?
+A. moving the lantern to the yard
+B. reaching for the tar ruler again
+C. reaching for the wire ruler again
+D. hanging the straw on a hook
+E. leaving the door wide open
+F. sweeping the forge floor twice
+=== END Q0208 ===
+
+=== ITEM Q0209 ===
+Passage:
+Sunnic opened the bell tower before dawn. He always reached for the oak spindle before the tin spindle. The ledger stood on the table by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the ledger first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunnic leave to someone else?
+A. lighting the big lamp
+B. working with the oak spindle
+C. locking up the bell tower
+D. counting every tape there
+E. working on the bilge pump
+F. carrying the ledger outside
+=== END Q0209 ===
+
+=== ITEM Q0210 ===
+Passage:
+Petric opened the nail forge before dawn. He always reached for the tar ruler before the wire ruler. The lantern stood on the counter by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the lantern first.
+
+Question: On the day Petric opened up, where did the lantern stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the counter
+=== END Q0210 ===
+
+=== ITEM Q0211 ===
+Passage:
+Petric opened the nail forge before dawn. He always reached for the tar ruler before the wire ruler. The lantern stood on the counter by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the lantern first.
+
+Question: Petric spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. walking in through the door
+B. finding the counter by the door
+C. dusting the lantern before anything else
+D. knowing where the lantern stands
+E. opening the nail forge before dawn
+F. seeing the straw beside it
+=== END Q0211 ===
+
+=== ITEM Q0212 ===
+Passage:
+Halic opened the dye house before dawn. She always reached for the bone saw before the steel saw. The kettle stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the kettle first.
+
+Question: Halic spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the dye house before dawn
+B. walking in through the door
+C. knowing where the kettle stands
+D. finding the ledge by the door
+E. seeing the pallets beside it
+F. dusting the kettle before anything else
+=== END Q0212 ===

@@ -1,0 +1,178 @@
+SHEET final-with_passage-01. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0015 ===
+Passage:
+Hale opened the rope walk before dawn. He always reached for the long spindle before the short spindle. The board stood on the post by the door. A bucket of tallow lay beside it. He kept well away from the tar kettle. Every morning for nine years he had dusted the board first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Hale do first?
+A. reaching for the long spindle again
+B. hanging the tallow on a hook
+C. leaving the door wide open
+D. sweeping the walk floor twice
+E. reaching for the short spindle again
+F. moving the board to the yard
+=== END Q0015 ===
+
+=== ITEM Q0016 ===
+Passage:
+Sunniva opened the salt store before dawn. She always reached for the birch rake before the iron rake. The barrow stood on the ramp by the door. A pile of crates lay beside it. She kept well away from the wet sacks. Every morning for nine years she had dusted the barrow first.
+
+Question: Where did the barrow stand?
+A. behind the gate
+B. under the bench
+C. on the ramp
+D. inside the cart
+=== END Q0016 ===
+
+=== ITEM Q0017 ===
+Passage:
+Garrick opened the cooper yard before dawn. He always reached for the curved adze before the straight adze. The mallet stood on the block by the door. A hoop of iron lay beside it. He kept well away from the split stave. Every morning for nine years he had dusted the mallet first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Garrick leave to someone else?
+A. counting every iron there
+B. carrying the mallet outside
+C. working with the curved adze
+D. working on the split stave
+E. locking up the cooper yard
+F. lighting the big lamp
+=== END Q0017 ===
+
+=== ITEM Q0018 ===
+Passage:
+Sunniva opened the salt store before dawn. She always reached for the birch rake before the iron rake. The barrow stood on the ramp by the door. A pile of crates lay beside it. She kept well away from the wet sacks. Every morning for nine years she had dusted the barrow first.
+
+Question: Sunniva spends two years far from the salt store. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the crates beside it
+B. dusting the barrow before anything else
+C. finding the ramp by the door
+D. walking in through the door
+E. opening the salt store before dawn
+F. knowing where the barrow stands
+=== END Q0018 ===
+
+=== ITEM Q0019 ===
+Passage:
+Petra opened the clock shop before dawn. She always reached for the fine tweezers before the flat pliers. The loupe stood on the mat by the door. A tray of springs lay beside it. She kept well away from the sticky oil. Every morning for nine years she had dusted the loupe first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Petra do first?
+A. sweeping the shop floor twice
+B. moving the loupe to the yard
+C. hanging the springs on a hook
+D. reaching for the flat pliers again
+E. leaving the door wide open
+F. reaching for the fine tweezers again
+=== END Q0019 ===
+
+=== ITEM Q0020 ===
+Passage:
+Garrick opened the cooper yard before dawn. He always reached for the curved adze before the straight adze. The mallet stood on the block by the door. A hoop of iron lay beside it. He kept well away from the split stave. Every morning for nine years he had dusted the mallet first.
+
+Question: Where did the mallet stand?
+A. on the block
+B. inside the cart
+C. under the bench
+D. behind the gate
+=== END Q0020 ===
+
+=== ITEM Q0021 ===
+Passage:
+Sunniva opened the salt store before dawn. She always reached for the birch rake before the iron rake. The barrow stood on the ramp by the door. A pile of crates lay beside it. She kept well away from the wet sacks. Every morning for nine years she had dusted the barrow first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunniva do first?
+A. reaching for the birch rake again
+B. sweeping the store floor twice
+C. leaving the door wide open
+D. hanging the crates on a hook
+E. moving the barrow to the yard
+F. reaching for the iron rake again
+=== END Q0021 ===
+
+=== ITEM Q0022 ===
+Passage:
+Hale opened the rope walk before dawn. He always reached for the long spindle before the short spindle. The board stood on the post by the door. A bucket of tallow lay beside it. He kept well away from the tar kettle. Every morning for nine years he had dusted the board first.
+
+Question: Where did the board stand?
+A. on the post
+B. behind the gate
+C. under the bench
+D. inside the cart
+=== END Q0022 ===
+
+=== ITEM Q0023 ===
+Passage:
+Garrick opened the cooper yard before dawn. He always reached for the curved adze before the straight adze. The mallet stood on the block by the door. A hoop of iron lay beside it. He kept well away from the split stave. Every morning for nine years he had dusted the mallet first.
+
+Question: Garrick spends two years far from the cooper yard. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the mallet stands
+B. opening the cooper yard before dawn
+C. finding the block by the door
+D. dusting the mallet before anything else
+E. seeing the iron beside it
+F. walking in through the door
+=== END Q0023 ===
+
+=== ITEM Q0024 ===
+Passage:
+Sunniva opened the salt store before dawn. She always reached for the birch rake before the iron rake. The barrow stood on the ramp by the door. A pile of crates lay beside it. She kept well away from the wet sacks. Every morning for nine years she had dusted the barrow first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunniva leave to someone else?
+A. locking up the salt store
+B. carrying the barrow outside
+C. counting every crates there
+D. working with the birch rake
+E. working on the wet sacks
+F. lighting the big lamp
+=== END Q0024 ===
+
+=== ITEM Q0025 ===
+Passage:
+Petra opened the clock shop before dawn. She always reached for the fine tweezers before the flat pliers. The loupe stood on the mat by the door. A tray of springs lay beside it. She kept well away from the sticky oil. Every morning for nine years she had dusted the loupe first.
+
+Question: Petra spends two years far from the clock shop. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the loupe stands
+B. seeing the springs beside it
+C. opening the clock shop before dawn
+D. walking in through the door
+E. dusting the loupe before anything else
+F. finding the mat by the door
+=== END Q0025 ===
+
+=== ITEM Q0026 ===
+Passage:
+Petra opened the clock shop before dawn. She always reached for the fine tweezers before the flat pliers. The loupe stood on the mat by the door. A tray of springs lay beside it. She kept well away from the sticky oil. Every morning for nine years she had dusted the loupe first.
+
+Question: Where did the loupe stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the mat
+=== END Q0026 ===
+
+=== ITEM Q0027 ===
+Passage:
+Petra opened the clock shop before dawn. She always reached for the fine tweezers before the flat pliers. The loupe stood on the mat by the door. A tray of springs lay beside it. She kept well away from the sticky oil. Every morning for nine years she had dusted the loupe first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petra leave to someone else?
+A. locking up the clock shop
+B. carrying the loupe outside
+C. working on the sticky oil
+D. working with the fine tweezers
+E. counting every springs there
+F. lighting the big lamp
+=== END Q0027 ===
+
+=== ITEM Q0028 ===
+Passage:
+Garrick opened the cooper yard before dawn. He always reached for the curved adze before the straight adze. The mallet stood on the block by the door. A hoop of iron lay beside it. He kept well away from the split stave. Every morning for nine years he had dusted the mallet first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Garrick do first?
+A. leaving the door wide open
+B. moving the mallet to the yard
+C. sweeping the yard floor twice
+D. hanging the iron on a hook
+E. reaching for the curved adze again
+F. reaching for the straight adze again
+=== END Q0028 ===

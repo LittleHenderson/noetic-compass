@@ -1,0 +1,207 @@
+{
+ "schema": "casalescence/optionb/raw_questions/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/writer_calls_practice_p1.jsonl",
+   "sha256": "7da225abec51561971c6542903ed6bf931742f5263e9da81a48c434bd5c4a844"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/selection_practice.json",
+   "sha256": "63e3779a44f32dbf96fe9fca2e1955c5b6c0c765d1c0d8d3d476e82e78688ad0"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "pass": "p1",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "V901",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V901.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "On another day, far from the boathouse, which of these would most likely make Halima picture her uncle's ferry again?",
+     "right": "smelling damp rope on a quay",
+     "wrong": [
+      "hanging a key on a nail",
+      "counting a row of wooden oars",
+      "unlocking a heavy wooden side door",
+      "opening a door early in the morning",
+      "putting a key back in a pocket"
+     ],
+     "anchors": [
+      "the smell of wet rope",
+      "her uncle's ferry"
+     ]
+    },
+    {
+     "question_id": "V901.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the boathouse had not smelled of wet rope that morning. Going only by the passage, which of these would most likely not have happened?",
+     "right": "Halima picturing the tin of biscuits",
+     "wrong": [
+      "Halima unlocking the old boathouse door",
+      "Halima hanging the key on its nail",
+      "Halima counting the oars one by one",
+      "Halima walking in through the door",
+      "Halima starting her usual morning jobs"
+     ],
+     "anchors": [
+      "the smell of wet rope"
+     ]
+    },
+    {
+     "question_id": "V901.p1.UNKNOWN1",
+     "form": "SMELL_TEST",
+     "question": "A question with a form name that is not one of the twelve.",
+     "right": "one",
+     "wrong": [
+      "two",
+      "three",
+      "four",
+      "five",
+      "six"
+     ],
+     "anchors": [
+      "the oars"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V901.p1.FACT",
+    "question": "Where did Halima hang the key?",
+    "right": "on its nail",
+    "wrong": [
+     "under the bench",
+     "by the hatch",
+     "in the tin"
+    ]
+   },
+   "extra_dropped": [
+    {
+     "form": "MEET_AGAIN",
+     "question": "A second question for a form already used. It must land in extra_dropped.",
+     "right": "one",
+     "wrong": [
+      "two",
+      "three",
+      "four",
+      "five",
+      "six"
+     ],
+     "anchors": [
+      "the oars"
+     ]
+    }
+   ]
+  },
+  {
+   "passage_id": "V902",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V902.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "Odette has ten free minutes at the same market next week. Going only by the passage, where is she most likely to spend them?",
+     "right": "at the stall of old maps",
+     "wrong": [
+      "at the fish counter beside it",
+      "near the brass band on the corner",
+      "choosing leeks at a vegetable stall",
+      "reading her list by the gate",
+      "walking straight home with her bag"
+     ],
+     "anchors": [
+      "The stall of old maps"
+     ]
+    },
+    {
+     "question_id": "V902.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?",
+     "right": "the fish counter and its smell",
+     "wrong": [
+      "the stall of old maps",
+      "the brass band on the corner",
+      "the vegetable stall selling fresh leeks",
+      "the gate where she reads her list",
+      "the quiet road back to her home"
+     ],
+     "anchors": [
+      "The fish counter"
+     ]
+    },
+    {
+     "question_id": "V902.p1.WHAT_SLID_OFF",
+     "form": "WHAT_SLID_OFF",
+     "question": "That evening a friend asks Odette what she remembers of the market. Going only by the passage, which is she least likely to bring up?",
+     "right": "the brass band on the corner",
+     "wrong": [
+      "the fish counter and its smell",
+      "the stall of old maps",
+      "losing track of the time",
+      "the leeks she took home",
+      "the list she carried round"
+     ],
+     "anchors": [
+      "barely registered",
+      "The brass band on the corner"
+     ]
+    },
+    {
+     "question_id": "V902.p1.WHAT_STUCK",
+     "form": "WHAT_STUCK",
+     "question": "That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?",
+     "right": "the old maps she looked through",
+     "wrong": [
+      "the brass band playing on the corner",
+      "the price she paid for leeks",
+      "the list she carried all morning",
+      "the walk back to her house",
+      "the gate at the market entrance"
+     ],
+     "anchors": [
+      "barely registered"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V902.p1.FACT",
+    "question": "What did Odette have in mind at the market?",
+    "right": "her list",
+    "wrong": [
+     "old maps",
+     "fresh fish",
+     "a brass horn"
+    ]
+   },
+   "extra_dropped": []
+  }
+ ]
+}

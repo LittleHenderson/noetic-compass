@@ -1,0 +1,32 @@
+{
+ "schema": "cas.optionb.precheck-config/2",
+ "status": "TEMPLATE. Copy to PRECHECK_CONFIG.json and fill every <<FILL>> before the build. This file grants no authority.",
+ "how_to_use": [
+  "derive_precheck_job.py reads seven things from this file: attempt, kind, source_zip, source_zip_sha256, tokenizer_source_zip, previous, existing_allocation_usd.",
+  "A value that still says <<FILL>> stops the build.",
+  "attempt is a whole number. For a pre-check job it is 1 to 4. For a development test it is 1 or 2. It is the suffix of the job id, the folder, the lease and the claim: cas-optionb-b1-precheck-p1 to -p4, or cas-optionb-b1-devtest-d1 and -d2. Use the lowest number that was never launched. The build stops if a lower number has no claim file, and if this number already has a folder, a lease or a claim.",
+  "kind is SEALED_PACKAGE, REHEARSAL or DEVELOPMENT_TEST. The seal file decides which one a package is. The build stops if this file says another kind.",
+  "SEALED_PACKAGE: source.zip was built after seal step 6, or after the last repair line 6R_PROGRAMS_REPAIRED. Only this kind returns values for seal step 7.",
+  "REHEARSAL (plan section 19.1): after seal step 5 and before seal step 6. source.zip was built with 'build_source_zip_b1.py --seal <scratch copy>'. It is one of the 4 jobs. Its result is never written to the real seal file.",
+  "DEVELOPMENT_TEST (plan section 19.1, amendment A10): made-up data, before seal step 1 exists. It is ordered: one job, at most two. Each has a cap of 0.50 USD and 45 minutes. It is outside the seal chain and is not one of the 4 pre-check jobs. Its job id is cas-optionb-b1-devtest-d<attempt>. It is authorised by the operator's decision of 2026-10-05 under the owner's approval record OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json. source.zip comes from optionb/dry/build_dev_package.py and holds made-up data only. Its output is never evidence about roles.",
+  "The block 'previous' names the job that most recently used the shared four-key storage slot. Read the bus and the ledger again on the day of the build. The build stops unless this job is the last job the ledger carries. For a second job of this kit it is normally the job of this kit before it.",
+  "existing_allocation_usd must equal combined_allocation_usd in the ledger pointer at the moment of the build. The build stops if it does not."
+ ],
+ "attempt": "<<FILL NUMBER: 1, 2, 3 or 4 for a pre-check job; 1 or 2 for a development test. Write it as a number, without quotes.>>",
+ "kind": "<<FILL: SEALED_PACKAGE, REHEARSAL or DEVELOPMENT_TEST>>",
+ "source_zip": "<<FILL: absolute path of source.zip. For kind SEALED_PACKAGE it must be the same file, byte for byte, that goes into the GPU job's input.zip. For kind DEVELOPMENT_TEST it is the made-up package of optionb/dry/build_dev_package.py.>>",
+ "source_zip_sha256": "<<FILL: sha256 of that source.zip>>",
+ "tokenizer_source_zip": "D:/tksCAS-runs/controller_cas_small_op11_claude_c1/input.zip",
+ "tokenizer_source_note": "REAL, checked on 2026-10-05 by reading the archive's file list: this archive holds the six small model B files under models/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775/ with the sizes in PLAN_CONSTANTS.json (11,488,523 bytes together). The build reads only those six files and checks each sha256 against PLAN_CONSTANTS.json. It never reads model.safetensors. The new b1 input.zip may be named here instead.",
+ "previous": {
+  "job": "helm-claude-r8-matched-20261005-c05",
+  "folder": "controller_claude_r8_c05",
+  "cleanup_file": "aws-claude-r8-c05-independent-cleanup.json",
+  "cleanup_sha256": "298ed3dff67a9088bece7b727f2bd9ad8223584758fca35b7f18e540b7f8b094",
+  "instance": "i-01bc54291eba4267d",
+  "volumes": ["vol-0d703bc10e7cd373d"]
+ },
+ "previous_note": "REAL on 2026-10-05, read again for amendment A10: bus line claude-0048 (2026-10-05T09:49:42Z) and the ledger pointer (last_jobs) both name helm-claude-r8-matched-20261005-c05 as the last job on the slot. Its independent cleanup record has status VERIFIED and the sha256 above (hashed again on 2026-10-05). So this block is right for the first development test, d1, if no other job uses the slot first. If another job uses the slot before the build, replace this block with that job's record. For every later job of this kit this block normally names the job of this kit before it: its folder (controller_cas_optionb_devtest_d<N> or controller_cas_optionb_precheck_p<N>), its file (aws-cas-optionb-devtest-d<N>-independent-cleanup.json or aws-cas-optionb-precheck-p<N>-independent-cleanup.json), and its host and disk ids from that file.",
+ "existing_allocation_usd": 87.36,
+ "existing_allocation_note": "REAL on 2026-10-05, read again for amendment A10: the pointer file still carries combined_allocation_usd 87.36, ceiling 100.00, unreserved 12.64, written at 2026-10-05T09:49:41Z. Read the pointer again on the day of the build: C:/Users/wakil/Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json"
+}

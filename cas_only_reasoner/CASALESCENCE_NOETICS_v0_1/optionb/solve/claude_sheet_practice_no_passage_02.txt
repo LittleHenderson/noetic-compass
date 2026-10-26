@@ -1,0 +1,93 @@
+SHEET practice-no_passage-02. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0181 ===
+Question: What kind of milk did Liam use for his cheddar?
+A. goat milk
+B. skim milk
+C. raw milk
+D. warm milk
+=== END G0181 ===
+
+=== ITEM G0182 ===
+Question: What color was the cheese Pierre reviewed?
+A. red
+B. green
+C. blue
+D. white
+=== END G0182 ===
+
+=== ITEM G0183 ===
+Question: Which specific item did Maria stop at along the rows?
+A. A dark mould batch.
+B. A small drop.
+C. A ceiling sleeve.
+D. A mature cheddar wheel.
+=== END G0183 ===
+
+=== ITEM G0184 ===
+Question: Someone on their first day takes the person's place; which of these would most likely be missing?
+A. The instant execution of the correct order.
+B. The rapid execution of the correct order.
+C. The fluent execution of the correct order.
+D. The quick execution of the correct order.
+E. The swift execution of the correct order.
+F. The clumsy execution of the correct order.
+=== END G0184 ===
+
+=== ITEM G0185 ===
+Question: A spare kit holds one of each named part. Which of these would not be in it?
+A. regular rotation frequency
+B. blue cheese
+C. local cows
+D. short brining period
+E. humidity adjustments
+F. gradual temperature drops
+=== END G0185 ===
+
+=== ITEM G0186 ===
+Question: How long had Yvonne rotated the wheels daily?
+A. For a decade.
+B. For a month.
+C. For a century.
+D. For a year.
+=== END G0186 ===
+
+=== ITEM G0187 ===
+Question: When did Wendy flip and brush the cheeses?
+A. Every Sunday morning.
+B. Every Friday morning.
+C. Every Monday morning.
+D. Every Tuesday morning.
+=== END G0187 ===
+
+=== ITEM G0188 ===
+Question: At a later moment, which of these is the person least likely to bring up?
+A. She drops the small drop of ceiling water.
+B. She drops the dark mould on the cheese.
+C. She forgets the small drop of ceiling water.
+D. She misses the small drop of ceiling water.
+E. She leaves the small drop of ceiling water.
+F. She forgets the dark mould on the cheese.
+=== END G0188 ===
+
+=== ITEM G0189 ===
+Question: The repeated cellar work stops for two full years; which action has most likely faded?
+A. Reaching for Gouda
+B. Tuesday morning
+C. Flipping the cheeses
+D. Cool, damp cellar
+E. Entering the cellar
+F. Brushing the cheeses
+=== END G0189 ===
+
+=== ITEM G0190 ===
+Question: Pierre completed the short brining period and humidity adjustments. Which named part is still left?
+A. short brining period
+B. regular rotation frequency
+C. gradual temperature drops
+D. separate steps
+E. aging schedule
+F. humidity adjustments
+=== END G0190 ===

@@ -1,0 +1,200 @@
+{
+ "schema": "casalescence/optionb/candidates/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p1.json",
+   "sha256": "76d85817d2c8e0ba82e909b9da1f835234e66a3729e7bbb6b0f184261b31550b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p2.json",
+   "sha256": "12a03bff8dce2e4c96d22aa626a0bc623493c5ac1f023a5bf0beedbdec4e9cf8"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "candidates": [
+  {
+   "question_id": "V901.p1.MEET_AGAIN",
+   "passage_id": "V901",
+   "family": "role_step",
+   "form": "MEET_AGAIN",
+   "pass": "p1",
+   "passage": "Halima unlocked the boathouse and the smell of wet rope met her at the door. At once she was thinking of her uncle's ferry, the bench by the engine hatch, the tin of biscuits he kept under it. She hung the key on its nail and began counting the oars.",
+   "question": "On another day, far from the boathouse, which of these would most likely make Halima picture her uncle's ferry again?",
+   "right": "smelling damp rope on a quay",
+   "wrong": [
+    "hanging a key on a nail",
+    "counting a row of wooden oars",
+    "unlocking a heavy wooden side door",
+    "opening a door early in the morning",
+    "putting a key back in a pocket"
+   ],
+   "anchors": [
+    "the smell of wet rope",
+    "her uncle's ferry"
+   ]
+  },
+  {
+   "question_id": "V901.p2.TAKE_AWAY",
+   "passage_id": "V901",
+   "family": "role_step",
+   "form": "TAKE_AWAY",
+   "pass": "p2",
+   "passage": "Halima unlocked the boathouse and the smell of wet rope met her at the door. At once she was thinking of her uncle's ferry, the bench by the engine hatch, the tin of biscuits he kept under it. She hung the key on its nail and began counting the oars.",
+   "question": "Suppose there had been no rope smell at the door that morning. Going only by the passage, which of these would most likely not have happened?",
+   "right": "Halima remembering the engine hatch bench",
+   "wrong": [
+    "Halima unlocking the old boathouse door",
+    "Halima hanging the key on its nail",
+    "Halima counting the oars one by one",
+    "Halima walking in through the door",
+    "Halima starting her usual morning jobs"
+   ],
+   "anchors": [
+    "her uncle's ferry"
+   ]
+  },
+  {
+   "question_id": "V901.p1.FACT",
+   "passage_id": "V901",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Halima unlocked the boathouse and the smell of wet rope met her at the door. At once she was thinking of her uncle's ferry, the bench by the engine hatch, the tin of biscuits he kept under it. She hung the key on its nail and began counting the oars.",
+   "question": "Where did Halima hang the key?",
+   "right": "on its nail",
+   "wrong": [
+    "under the bench",
+    "by the hatch",
+    "in the tin"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V902.p1.GOES_FOR",
+   "passage_id": "V902",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.",
+   "question": "Odette has ten free minutes at the same market next week. Going only by the passage, where is she most likely to spend them?",
+   "right": "at the stall of old maps",
+   "wrong": [
+    "at the fish counter beside it",
+    "near the brass band on the corner",
+    "choosing leeks at a vegetable stall",
+    "reading her list by the gate",
+    "walking straight home with her bag"
+   ],
+   "anchors": [
+    "The stall of old maps"
+   ]
+  },
+  {
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "passage_id": "V902",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.",
+   "question": "Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?",
+   "right": "the fish counter and its smell",
+   "wrong": [
+    "the stall of old maps",
+    "the brass band on the corner",
+    "the vegetable stall selling fresh leeks",
+    "the gate where she reads her list",
+    "the quiet road back to her home"
+   ],
+   "anchors": [
+    "The fish counter"
+   ]
+  },
+  {
+   "question_id": "V902.p1.WHAT_STUCK",
+   "passage_id": "V902",
+   "family": "role_step",
+   "form": "WHAT_STUCK",
+   "pass": "p1",
+   "passage": "Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.",
+   "question": "That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?",
+   "right": "the old maps she looked through",
+   "wrong": [
+    "the brass band playing on the corner",
+    "the price she paid for leeks",
+    "the list she carried all morning",
+    "the walk back to her house",
+    "the gate at the market entrance"
+   ],
+   "anchors": [
+    "barely registered"
+   ]
+  },
+  {
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "passage_id": "V902",
+   "family": "role_step",
+   "form": "WHAT_SLID_OFF",
+   "pass": "p1",
+   "passage": "Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.",
+   "question": "That evening a friend asks Odette what she remembers of the market. Going only by the passage, which is she least likely to bring up?",
+   "right": "the brass band on the corner",
+   "wrong": [
+    "the fish counter and its smell",
+    "the stall of old maps",
+    "losing track of the time",
+    "the leeks she took home",
+    "the list she carried round"
+   ],
+   "anchors": [
+    "barely registered",
+    "The brass band on the corner"
+   ]
+  },
+  {
+   "question_id": "V902.p2.FACT",
+   "passage_id": "V902",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p2",
+   "passage": "Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.",
+   "question": "What did Odette buy before she went home?",
+   "right": "leeks",
+   "wrong": [
+    "old maps",
+    "fresh fish",
+    "a brass horn"
+   ],
+   "anchors": []
+  }
+ ],
+ "counts": {
+  "role_step": 6,
+  "plain_fact": 2,
+  "spares_used": 2
+ }
+}

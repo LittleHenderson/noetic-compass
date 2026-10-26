@@ -1,0 +1,60 @@
+$ python -B tools/ob_check_questions.py --set final
+{
+ "program": "tools/ob_check_questions.py",
+ "dry_fixture": false,
+ "status": "CHECKED",
+ "set": "final",
+ "practice_setting_count": 9,
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "questions_read": {
+  "role_step": 690,
+  "plain_fact": 230
+ },
+ "form_check": {
+  "checked": 920,
+  "passed": 920,
+  "dropped_by_reason": {}
+ },
+ "anchor_check": {
+  "checked": 690,
+  "passed": 648,
+  "dropped_by_reason": {
+   "PASSAGE_NOT_ELIGIBLE": 18,
+   "PASSAGE_BARRED": 12,
+   "FORM_NOT_OPEN": 12
+  }
+ },
+ "option_check": {
+  "checked": 648,
+  "passed": 644
+ },
+ "candidates": {
+  "role_step": 322,
+  "plain_fact": 115,
+  "spares_used": 0
+ },
+ "survival_after_each_filter": [
+  {
+   "filter": "written for an open form",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "form check",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "option check",
+   "role_step": 322,
+   "plain_fact": 115
+  }
+ ],
+ "note": "Survival counts one per passage and form. The plain-fact column has no label check; its anchor and option rows repeat the form-check count."
+}
+[exit code 0]

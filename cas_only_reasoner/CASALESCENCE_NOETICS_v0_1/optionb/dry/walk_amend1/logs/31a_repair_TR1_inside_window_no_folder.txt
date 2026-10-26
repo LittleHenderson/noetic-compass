@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py repair TR1 --dry-run
+REFUSED: NOTHING_TO_REPAIR: no file that this repair may change differs from its values in force. Nothing was written.
+[exit code 2]

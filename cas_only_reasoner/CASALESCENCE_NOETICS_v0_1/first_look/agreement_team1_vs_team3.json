@@ -1,0 +1,570 @@
+{
+ "purpose": "FIRST LOOK ONLY: guide debugging, not a verdict",
+ "passages": 40,
+ "label_files": [
+  "labels_team1.json",
+  "labels_team3_deepseek.json"
+ ],
+ "per_noetic": {
+  "^1": {
+   "marked_by_first": 34,
+   "marked_by_second": 34,
+   "marked_by_both": 33,
+   "presence_agreement_count": 38,
+   "presence_agreement_share": 0.95,
+   "presence_kappa": 0.8039215686274509,
+   "same_words_when_both_marked": 30,
+   "same_label_and_same_words_count": 35,
+   "same_label_and_same_words_share": 0.875
+  },
+  "^2": {
+   "marked_by_first": 11,
+   "marked_by_second": 11,
+   "marked_by_both": 11,
+   "presence_agreement_count": 40,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 11,
+   "same_label_and_same_words_count": 40,
+   "same_label_and_same_words_share": 1.0
+  },
+  "^3": {
+   "marked_by_first": 11,
+   "marked_by_second": 11,
+   "marked_by_both": 11,
+   "presence_agreement_count": 40,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 9,
+   "same_label_and_same_words_count": 38,
+   "same_label_and_same_words_share": 0.95
+  },
+  "^4": {
+   "marked_by_first": 11,
+   "marked_by_second": 2,
+   "marked_by_both": 1,
+   "presence_agreement_count": 29,
+   "presence_agreement_share": 0.725,
+   "presence_kappa": 0.07563025210084022,
+   "same_words_when_both_marked": 1,
+   "same_label_and_same_words_count": 29,
+   "same_label_and_same_words_share": 0.725
+  },
+  "^5": {
+   "marked_by_first": 9,
+   "marked_by_second": 16,
+   "marked_by_both": 9,
+   "presence_agreement_count": 33,
+   "presence_agreement_share": 0.825,
+   "presence_kappa": 0.6067415730337078,
+   "same_words_when_both_marked": 9,
+   "same_label_and_same_words_count": 33,
+   "same_label_and_same_words_share": 0.825
+  },
+  "^6": {
+   "marked_by_first": 6,
+   "marked_by_second": 5,
+   "marked_by_both": 4,
+   "presence_agreement_count": 37,
+   "presence_agreement_share": 0.925,
+   "presence_kappa": 0.6842105263157896,
+   "same_words_when_both_marked": 3,
+   "same_label_and_same_words_count": 36,
+   "same_label_and_same_words_share": 0.9
+  },
+  "^7": {
+   "marked_by_first": 5,
+   "marked_by_second": 6,
+   "marked_by_both": 5,
+   "presence_agreement_count": 39,
+   "presence_agreement_share": 0.975,
+   "presence_kappa": 0.894736842105263,
+   "same_words_when_both_marked": 5,
+   "same_label_and_same_words_count": 39,
+   "same_label_and_same_words_share": 0.975
+  },
+  "^8": {
+   "marked_by_first": 15,
+   "marked_by_second": 20,
+   "marked_by_both": 15,
+   "presence_agreement_count": 35,
+   "presence_agreement_share": 0.875,
+   "presence_kappa": 0.75,
+   "same_words_when_both_marked": 12,
+   "same_label_and_same_words_count": 32,
+   "same_label_and_same_words_share": 0.8
+  },
+  "^9": {
+   "marked_by_first": 15,
+   "marked_by_second": 22,
+   "marked_by_both": 15,
+   "presence_agreement_count": 33,
+   "presence_agreement_share": 0.825,
+   "presence_kappa": 0.6585365853658536,
+   "same_words_when_both_marked": 14,
+   "same_label_and_same_words_count": 32,
+   "same_label_and_same_words_share": 0.8
+  }
+ },
+ "quote_problems": {
+  "labels_team1.json": 0,
+  "labels_team3_deepseek.json": 3
+ },
+ "confusions": {
+  "^8 vs ^9": 3,
+  "^1 vs ^5": 3,
+  "^5 vs ^7": 2,
+  "^4 vs ^9": 1,
+  "^5 vs ^9": 1,
+  "^1 vs ^4": 1,
+  "^5 vs ^6": 1
+ },
+ "disagreements": [
+  {
+   "passage": "P02",
+   "noetic": "^1",
+   "kind": "different words",
+   "first": [
+    "Bolanle"
+   ],
+   "second": [
+    "Bolanle's hand stopped on the drip bag",
+    "She checked the man's chart"
+   ]
+  },
+  {
+   "passage": "P06",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Lena"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P10",
+   "noetic": "^1",
+   "kind": "different words",
+   "first": [
+    "Hamza"
+   ],
+   "second": [
+    "he argued about football"
+   ]
+  },
+  {
+   "passage": "P17",
+   "noetic": "^1",
+   "kind": "different words",
+   "first": [
+    "Delroy"
+   ],
+   "second": [
+    "he turned a page of the newspaper"
+   ]
+  },
+  {
+   "passage": "P26",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "The boys"
+   ]
+  },
+  {
+   "passage": "P32",
+   "noetic": "^3",
+   "kind": "different words",
+   "first": [
+    "the fish counter"
+   ],
+   "second": [
+    "the sea bass stared up with flat grey eyes"
+   ]
+  },
+  {
+   "passage": "P40",
+   "noetic": "^3",
+   "kind": "different words",
+   "first": [
+    "the music corridor",
+    "the gym"
+   ],
+   "second": [
+    "a trombone was being tortured"
+   ]
+  },
+  {
+   "passage": "P04",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "went past her",
+    "kept her awake until two"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P09",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "hardly glanced down"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P12",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "said fine, fine, and was still humming"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P16",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "flinched"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P17",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "he turned a page of the newspaper"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P22",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "barely lifted his head"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P27",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "nodded without hearing it"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P29",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "with real hope"
+   ]
+  },
+  {
+   "passage": "P32",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "went past her"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P33",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "the words ran through him",
+    "he stopped breathing for a moment"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P40",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "went on drawing a horse on the back of his hand"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P04",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "her second year as a developer"
+   ]
+  },
+  {
+   "passage": "P06",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "her hands were on her fiddle before she had finished taking off her coat"
+   ]
+  },
+  {
+   "passage": "P10",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "his hands bent to his laces before anyone spoke"
+   ]
+  },
+  {
+   "passage": "P12",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "had inherited the farm at twenty-six"
+   ]
+  },
+  {
+   "passage": "P23",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "For six years Cheng had washed his hands at the same sink at the start of every shift, wrists first, then palms, thumbs and between the fingers"
+   ]
+  },
+  {
+   "passage": "P27",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "seventeen and new to the garage"
+   ]
+  },
+  {
+   "passage": "P32",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "nineteen and three weeks into her first kitchen job"
+   ]
+  },
+  {
+   "passage": "P08",
+   "noetic": "^6",
+   "kind": "one team only",
+   "first": [
+    "the interest figure and the monthly figure"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P23",
+   "noetic": "^6",
+   "kind": "one team only",
+   "first": [
+    "wrists first, then palms, thumbs and between the fingers"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P28",
+   "noetic": "^6",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "a cardboard box of single gloves, the left ones never claimed",
+    "a drawer of orphaned pieces"
+   ]
+  },
+  {
+   "passage": "P39",
+   "noetic": "^6",
+   "kind": "different words",
+   "first": [
+    "a pitch fee up by a fifth, a clause about insurance, and a Saturday closing time that would cut off the crowd leaving the church"
+   ],
+   "second": [
+    "three separate pieces"
+   ]
+  },
+  {
+   "passage": "P01",
+   "noetic": "^7",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "thirty years of commuting by rail"
+   ]
+  },
+  {
+   "passage": "P02",
+   "noetic": "^8",
+   "kind": "different words",
+   "first": [
+    "Bed six coughed twice, dry and short"
+   ],
+   "second": [
+    "the cough of her old landlady's dog, Biscuit"
+   ]
+  },
+  {
+   "passage": "P04",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "one curt line about her code in a stranger's email"
+   ]
+  },
+  {
+   "passage": "P06",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the words 'from the top'",
+    "her sister's wedding"
+   ]
+  },
+  {
+   "passage": "P16",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the chime"
+   ]
+  },
+  {
+   "passage": "P21",
+   "noetic": "^8",
+   "kind": "different words",
+   "first": [
+    "the slope of the lower field"
+   ],
+   "second": [
+    "the forecast promised a wet week"
+   ]
+  },
+  {
+   "passage": "P25",
+   "noetic": "^8",
+   "kind": "different words",
+   "first": [
+    "a song that kept changing its count"
+   ],
+   "second": [
+    "the way her shoulders moved at the barline"
+   ]
+  },
+  {
+   "passage": "P26",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the smell of onions frying at half past twelve"
+   ]
+  },
+  {
+   "passage": "P33",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "a hymn from his childhood"
+   ]
+  },
+  {
+   "passage": "P02",
+   "noetic": "^9",
+   "kind": "different words",
+   "first": [
+    "her old landlady's dog, Biscuit"
+   ],
+   "second": [
+    "a hallway in Peckham"
+   ]
+  },
+  {
+   "passage": "P04",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "kept her awake until two"
+   ]
+  },
+  {
+   "passage": "P06",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "her bow arm lifted and her left foot found the floor",
+    "she caught her fingers tuning against the stem of her glass"
+   ]
+  },
+  {
+   "passage": "P10",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "he found himself on the bench outside the maths room with one trainer already off"
+   ]
+  },
+  {
+   "passage": "P16",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "her mouse"
+   ]
+  },
+  {
+   "passage": "P26",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "into the kitchen"
+   ]
+  },
+  {
+   "passage": "P32",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "The head chef's long talk about portion costs"
+   ]
+  },
+  {
+   "passage": "P33",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "his childhood"
+   ]
+  }
+ ],
+ "none_of_these": {
+  "first": 5,
+  "second": 5,
+  "agree": 40
+ }
+}

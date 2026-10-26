@@ -1,0 +1,16 @@
+{
+ "note": "MADE-UP. Development-test fixture only. A tool reads this file only when its work folder sits under optionb/dry/. The real launch floors are 100, 100, 36 and 20 and the real reserve targets are 45 and 25. Here they are set so that 16 made-up passages walk through every step: with 8 practice settings the made-up practice set holds 19 role-step and 10 plain-fact tasks, which meets both practice floors (19, 10) and misses both reserve targets (23, 12). So the reserve rule moves one setting, as in a real build. The job never reads this file: the package holds the real PLAN_CONSTANTS.json.",
+ "launch_floor": {
+  "final_role_step_tasks_min": 2,
+  "final_plain_fact_tasks_min": 2,
+  "practice_role_step_tasks_min": 19,
+  "practice_plain_fact_tasks_min": 10
+ },
+ "split": {
+  "reserve_target_practice_role_step_tasks": 23,
+  "reserve_target_practice_plain_fact_tasks": 12
+ },
+ "tiers": {
+  "no_launch_below_final_role_step_tasks": 2
+ }
+}

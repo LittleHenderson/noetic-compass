@@ -1,0 +1,92 @@
+{
+ "schema": "casalescence/optionb/key_check/v1",
+ "made_by": {
+  "program": "tools/ob_solve_blind.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/candidates_final.json",
+   "sha256": "1ebd174163136af814625d40f426012503eb780125bbe035d2f115244f960774"
+  },
+  {
+   "path": "optionb/dry/fixture_q/solve/deepseek_calls_final.jsonl",
+   "sha256": "84e3710c951e3561f2c96e5dd944a742ae9e9eb6df75194f87dde9c4c719f74f"
+  }
+ ],
+ "set": "final",
+ "rows": [
+  {
+   "question_id": "V903.p1.LONG_BREAK",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V903.p1.NEW_STARTER",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V903.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "WRONG"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  }
+ ],
+ "counts": {
+  "checked": {
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  "key_check_passed": {
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  "no_passage_passed": {
+   "role_step": 2,
+   "plain_fact": 1
+  },
+  "survive": {
+   "role_step": 2,
+   "plain_fact": 1
+  }
+ }
+}

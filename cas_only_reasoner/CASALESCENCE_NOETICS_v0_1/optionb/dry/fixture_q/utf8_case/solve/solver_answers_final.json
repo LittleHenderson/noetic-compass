@@ -1,0 +1,137 @@
+{
+ "schema": "casalescence/optionb/solver_answers/v1",
+ "made_by": {
+  "program": "tools/ob_solve_blind.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15",
+  "utc": "2026-10-05T18:34:02Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/utf8_case/checks/candidates_final.json",
+   "sha256": "1ebd174163136af814625d40f426012503eb780125bbe035d2f115244f960774"
+  },
+  {
+   "path": "optionb/dry/fixture_q/utf8_case/solve/claude_answers_final_with_passage_01.txt",
+   "sha256": "7462566d89ae59119c42ba78322f5b0379d19b6a72721c7b69f998ae8b2619f6"
+  },
+  {
+   "path": "optionb/dry/fixture_q/utf8_case/solve/deepseek_calls_final.jsonl",
+   "sha256": "84e3710c951e3561f2c96e5dd944a742ae9e9eb6df75194f87dde9c4c719f74f"
+  }
+ ],
+ "set": "final",
+ "answers": [
+  {
+   "item_id": "G0001",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V903.p1.LONG_BREAK",
+   "raw": "{\"answer\": \"B\"}",
+   "readable": true,
+   "picked_option_index": 4,
+   "flag": null,
+   "source_sha256": "0dc4a54d26c60713393325f0707bc0137ebc618ee2a9bb5e37a6cfe34261eed7",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0002",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V903.p1.FACT",
+   "raw": "{\"answer\": \"B\"}",
+   "readable": true,
+   "picked_option_index": 3,
+   "flag": null,
+   "source_sha256": "0dc4a54d26c60713393325f0707bc0137ebc618ee2a9bb5e37a6cfe34261eed7",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0003",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V903.p1.NEW_STARTER",
+   "raw": "{\"answer\": \"A\"}",
+   "readable": true,
+   "picked_option_index": 3,
+   "flag": null,
+   "source_sha256": "6ed067e5a026651b1172a0fde32c0e12be7e448ef78786f37c6896994ee4d5b6",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0004",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V903.p1.LONG_BREAK",
+   "raw": "C",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "7462566d89ae59119c42ba78322f5b0379d19b6a72721c7b69f998ae8b2619f6",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0005",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V903.p1.FACT",
+   "raw": "C",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "7462566d89ae59119c42ba78322f5b0379d19b6a72721c7b69f998ae8b2619f6",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0006",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V903.p1.NEW_STARTER",
+   "raw": "B",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "7462566d89ae59119c42ba78322f5b0379d19b6a72721c7b69f998ae8b2619f6",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0001",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V903.p1.NEW_STARTER",
+   "raw": "{\"answer\": \"F\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "4ad0c063e14dcc22fb792d4b08eff8554cb615c4e7bd18c77ed8f491d5782df5",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0002",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V903.p1.FACT",
+   "raw": "{\"answer\": \"B\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "0dc4a54d26c60713393325f0707bc0137ebc618ee2a9bb5e37a6cfe34261eed7",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0003",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V903.p1.LONG_BREAK",
+   "raw": "{\"answer\": \"E\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "3cd2872ae738c5ae3dd861d22c0f67e40c11aafd5eaebc344fd5c6db55e89508",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  }
+ ]
+}

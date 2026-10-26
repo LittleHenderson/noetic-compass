@@ -1,0 +1,4150 @@
+[
+ {
+  "passage_id": "V001",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tama",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar brush",
+    "mind": "Tama",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Tama",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tama",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V002",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odra",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone needle",
+    "mind": "Odra",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Odra",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odra",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V003",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsa",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak scoop",
+    "mind": "Ilsa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Ilsa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilsa",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V004",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Brama",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper hammer",
+    "mind": "Brama",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Brama",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Brama",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V005",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Mara",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp ladle",
+    "mind": "Mara",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Mara",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Mara",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V006",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Cora",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker tray",
+    "mind": "Cora",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Cora",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Cora",
+    "relative_to": "dusted the oilcan"
+   },
+   {
+    "noetic": "^8",
+    "words": "A heap of straw",
+    "mind": "Cora",
+    "relative_to": "the oilcan",
+    "certainty": "ambiguous"
+   }
+  ]
+ },
+ {
+  "passage_id": "V007",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Edda",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden mould",
+    "mind": "Edda",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Edda",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Edda",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V008",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossa",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass ruler",
+    "mind": "Jossa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Jossa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossa",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V009",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrena",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long saw",
+    "mind": "Wrena",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Wrena",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrena",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V010",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fenna",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small spindle",
+    "mind": "Fenna",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Fenna",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fenna",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V011",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liesa",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved rake",
+    "mind": "Liesa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Liesa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Liesa",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V012",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ansa",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine brush",
+    "mind": "Ansa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Ansa",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ansa",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V013",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petra",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch needle",
+    "mind": "Petra",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Petra",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petra",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V014",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Hala",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar scoop",
+    "mind": "Hala",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Hala",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Hala",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V015",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunna",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone hammer",
+    "mind": "Sunna",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Sunna",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunna",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V016",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak ladle",
+    "mind": "Tamen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Tamen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamen",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V017",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odren",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper tray",
+    "mind": "Odren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Odren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odren",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V018",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp mould",
+    "mind": "Ilsen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Ilsen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilsen",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V019",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker ruler",
+    "mind": "Bramen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Bramen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramen",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V020",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Maren",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden saw",
+    "mind": "Maren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Maren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Maren",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V021",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Coren",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass spindle",
+    "mind": "Coren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Coren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Coren",
+    "relative_to": "dusted the ledger"
+   },
+   {
+    "noetic": "^5",
+    "words": "nine years",
+    "mind": "Coren",
+    "relative_to": "",
+    "other_candidate": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage_id": "V022",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Edden",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long rake",
+    "mind": "Edden",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Edden",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Edden",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V023",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small brush",
+    "mind": "Jossen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Jossen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossen",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V024",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrenen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved needle",
+    "mind": "Wrenen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Wrenen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrenen",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V025",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fennen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine scoop",
+    "mind": "Fennen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Fennen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fennen",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V026",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liesen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch hammer",
+    "mind": "Liesen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Liesen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Liesen",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V027",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ansen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar ladle",
+    "mind": "Ansen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Ansen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ansen",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V028",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petren",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone tray",
+    "mind": "Petren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Petren",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petren",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V029",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak mould",
+    "mind": "Halen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Halen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halen",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V030",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunnen",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper ruler",
+    "mind": "Sunnen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Sunnen",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunnen",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V031",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp saw",
+    "mind": "Tamin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Tamin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamin",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V032",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odrin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker spindle",
+    "mind": "Odrin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Odrin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odrin",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V033",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden rake",
+    "mind": "Ilsin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Ilsin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilsin",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V034",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass brush",
+    "mind": "Bramin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Bramin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramin",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V035",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Marin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long needle",
+    "mind": "Marin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Marin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Marin",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V036",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Corin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small scoop",
+    "mind": "Corin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Corin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Corin",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V037",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved hammer",
+    "mind": "Eddin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Eddin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddin",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V038",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine ladle",
+    "mind": "Jossin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Jossin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossin",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V039",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrenin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch tray",
+    "mind": "Wrenin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Wrenin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrenin",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V040",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fennin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar mould",
+    "mind": "Fennin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Fennin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fennin",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V041",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liesin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone ruler",
+    "mind": "Liesin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Liesin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Liesin",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V042",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ansin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak saw",
+    "mind": "Ansin",
+    "relative_to": ""
+   }
+  ]
+ },
+ {
+  "passage_id": "V043",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petrin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper spindle",
+    "mind": "Petrin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Petrin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petrin",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V044",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp rake",
+    "mind": "Halin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Halin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halin",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V045",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunnin",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker brush",
+    "mind": "Sunnin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Sunnin",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunnin",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V046",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamo",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden needle",
+    "mind": "Tamo",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Tamo",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamo",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V047",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odro",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass scoop",
+    "mind": "Odro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Odro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odro",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V048",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilso",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long hammer",
+    "mind": "Ilso",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Ilso",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilso",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V049",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramo",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small ladle",
+    "mind": "Bramo",
+    "relative_to": ""
+   }
+  ]
+ },
+ {
+  "passage_id": "V050",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Maro",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved tray",
+    "mind": "Maro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Maro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Maro",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V051",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Coro",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine mould",
+    "mind": "Coro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Coro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Coro",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V052",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddo",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch ruler",
+    "mind": "Eddo",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Eddo",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddo",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V053",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Josso",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar saw",
+    "mind": "Josso",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Josso",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Josso",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V054",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wreno",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone spindle",
+    "mind": "Wreno",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Wreno",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wreno",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V055",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fenno",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak rake",
+    "mind": "Fenno",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Fenno",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fenno",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V056",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Lieso",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper brush",
+    "mind": "Lieso",
+    "relative_to": ""
+   }
+  ]
+ },
+ {
+  "passage_id": "V057",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Anso",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp needle",
+    "mind": "Anso",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Anso",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Anso",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V058",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petro",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker scoop",
+    "mind": "Petro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Petro",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petro",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V059",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halo",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden hammer",
+    "mind": "Halo",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Halo",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halo",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V060",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunno",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass ladle",
+    "mind": "Sunno",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Sunno",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunno",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V061",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long tray",
+    "mind": "Tamis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Tamis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamis",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V062",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odris",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small mould",
+    "mind": "Odris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Odris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odris",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V063",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved ruler",
+    "mind": "Ilsis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Ilsis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilsis",
+    "relative_to": "dusted the sledge"
+   },
+   {
+    "noetic": "^2",
+    "words": "the straight ruler",
+    "mind": "Ilsis",
+    "relative_to": ""
+   }
+  ]
+ },
+ {
+  "passage_id": "V064",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine saw",
+    "mind": "Bramis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Bramis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramis",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V065",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Maris",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch spindle",
+    "mind": "Maris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Maris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Maris",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V066",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Coris",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar rake",
+    "mind": "Coris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Coris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Coris",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V067",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone brush",
+    "mind": "Eddis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Eddis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddis",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V068",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak needle",
+    "mind": "Jossis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Jossis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossis",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V069",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrenis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper scoop",
+    "mind": "Wrenis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Wrenis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrenis",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V070",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fennis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp hammer",
+    "mind": "Fennis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Fennis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fennis",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V071",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liesis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker ladle",
+    "mind": "Liesis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Liesis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Liesis",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V072",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ansis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden tray",
+    "mind": "Ansis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Ansis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ansis",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V073",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petris",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass mould",
+    "mind": "Petris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Petris",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petris",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V074",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long ruler",
+    "mind": "Halis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Halis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halis",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V075",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunnis",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small saw",
+    "mind": "Sunnis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Sunnis",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunnis",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V076",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamet",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved spindle",
+    "mind": "Tamet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Tamet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamet",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V077",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odret",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine rake",
+    "mind": "Odret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Odret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odret",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V078",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilset",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch brush",
+    "mind": "Ilset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Ilset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilset",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V079",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramet",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar needle",
+    "mind": "Bramet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Bramet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramet",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V080",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Maret",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone scoop",
+    "mind": "Maret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Maret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Maret",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V081",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Coret",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak hammer",
+    "mind": "Coret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Coret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Coret",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V082",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddet",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper ladle",
+    "mind": "Eddet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Eddet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddet",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V083",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Josset",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp tray",
+    "mind": "Josset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Josset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Josset",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V084",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrenet",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker mould",
+    "mind": "Wrenet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Wrenet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrenet",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V085",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fennet",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden ruler",
+    "mind": "Fennet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Fennet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fennet",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V086",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Lieset",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass saw",
+    "mind": "Lieset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Lieset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Lieset",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V087",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Anset",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long spindle",
+    "mind": "Anset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Anset",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Anset",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V088",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petret",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small rake",
+    "mind": "Petret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Petret",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petret",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V089",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halet",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved brush",
+    "mind": "Halet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Halet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halet",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V090",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunnet",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine needle",
+    "mind": "Sunnet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Sunnet",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunnet",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V091",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch scoop",
+    "mind": "Tamol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Tamol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamol",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V092",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odrol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar hammer",
+    "mind": "Odrol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Odrol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odrol",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V093",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone ladle",
+    "mind": "Ilsol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Ilsol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilsol",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V094",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak tray",
+    "mind": "Bramol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Bramol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramol",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V095",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Marol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper mould",
+    "mind": "Marol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Marol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Marol",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V096",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Corol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp ruler",
+    "mind": "Corol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Corol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Corol",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V097",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker saw",
+    "mind": "Eddol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Eddol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddol",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V098",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden spindle",
+    "mind": "Jossol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Jossol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossol",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V099",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrenol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass rake",
+    "mind": "Wrenol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Wrenol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrenol",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V100",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fennol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long brush",
+    "mind": "Fennol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Fennol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fennol",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V101",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liesol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small needle",
+    "mind": "Liesol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Liesol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Liesol",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V102",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ansol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved scoop",
+    "mind": "Ansol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Ansol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ansol",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V103",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petrol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine hammer",
+    "mind": "Petrol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Petrol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petrol",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V104",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch ladle",
+    "mind": "Halol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Halol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halol",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V105",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunnol",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar tray",
+    "mind": "Sunnol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Sunnol",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunnol",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V106",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone mould",
+    "mind": "Tamic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Tamic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamic",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V107",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odric",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak ruler",
+    "mind": "Odric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Odric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odric",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V108",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper saw",
+    "mind": "Ilsic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Ilsic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilsic",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V109",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp spindle",
+    "mind": "Bramic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Bramic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramic",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V110",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Maric",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker rake",
+    "mind": "Maric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Maric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Maric",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V111",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Coric",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden brush",
+    "mind": "Coric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Coric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Coric",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V112",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass needle",
+    "mind": "Eddic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Eddic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddic",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V113",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long scoop",
+    "mind": "Jossic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Jossic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossic",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V114",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrenic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small hammer",
+    "mind": "Wrenic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Wrenic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrenic",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V115",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fennic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved ladle",
+    "mind": "Fennic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Fennic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fennic",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V116",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liesic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine tray",
+    "mind": "Liesic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Liesic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Liesic",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V117",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ansic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch mould",
+    "mind": "Ansic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Ansic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ansic",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V118",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petric",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar ruler",
+    "mind": "Petric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Petric",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petric",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V119",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone saw",
+    "mind": "Halic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Halic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halic",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V120",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunnic",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak spindle",
+    "mind": "Sunnic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Sunnic",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunnic",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V121",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper rake",
+    "mind": "Tamar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Tamar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamar",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V122",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odrar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp brush",
+    "mind": "Odrar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Odrar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odrar",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V123",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker needle",
+    "mind": "Ilsar",
+    "relative_to": ""
+   }
+  ]
+ },
+ {
+  "passage_id": "V124",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden scoop",
+    "mind": "Bramar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Bramar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramar",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V125",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Marar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass hammer",
+    "mind": "Marar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Marar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Marar",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V126",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Corar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long ladle",
+    "mind": "Corar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Corar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Corar",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V127",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small tray",
+    "mind": "Eddar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Eddar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddar",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V128",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved mould",
+    "mind": "Jossar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Jossar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossar",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V129",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wrenar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine ruler",
+    "mind": "Wrenar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Wrenar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wrenar",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V130",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Fennar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch saw",
+    "mind": "Fennar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Fennar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Fennar",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V131",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liesar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar spindle",
+    "mind": "Liesar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Liesar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Liesar",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V132",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ansar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the bone rake",
+    "mind": "Ansar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Ansar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ansar",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V133",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Petrar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the oak brush",
+    "mind": "Petrar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Petrar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Petrar",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V134",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Halar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the copper needle",
+    "mind": "Halar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Halar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Halar",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V135",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sunnar",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the hemp scoop",
+    "mind": "Sunnar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Sunnar",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Sunnar",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ },
+ {
+  "passage_id": "V136",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tamey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wicker hammer",
+    "mind": "Tamey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Tamey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Tamey",
+    "relative_to": "dusted the lantern"
+   }
+  ]
+ },
+ {
+  "passage_id": "V137",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Odrey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the wooden ladle",
+    "mind": "Odrey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Odrey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Odrey",
+    "relative_to": "dusted the kettle"
+   }
+  ]
+ },
+ {
+  "passage_id": "V138",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ilsey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the brass tray",
+    "mind": "Ilsey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the lye vat",
+    "mind": "Ilsey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Ilsey",
+    "relative_to": "dusted the ledger"
+   }
+  ]
+ },
+ {
+  "passage_id": "V139",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bramey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the long mould",
+    "mind": "Bramey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the loose stair",
+    "mind": "Bramey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Bramey",
+    "relative_to": "dusted the bucket"
+   }
+  ]
+ },
+ {
+  "passage_id": "V140",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Marey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the small ruler",
+    "mind": "Marey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the broken ladder",
+    "mind": "Marey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Marey",
+    "relative_to": "dusted the rack"
+   }
+  ]
+ },
+ {
+  "passage_id": "V141",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Corey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the curved saw",
+    "mind": "Corey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the bilge pump",
+    "mind": "Corey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Corey",
+    "relative_to": "dusted the oilcan"
+   }
+  ]
+ },
+ {
+  "passage_id": "V142",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eddey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the fine spindle",
+    "mind": "Eddey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the rusty winch",
+    "mind": "Eddey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Eddey",
+    "relative_to": "dusted the stool"
+   }
+  ]
+ },
+ {
+  "passage_id": "V143",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jossey",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the birch rake",
+    "mind": "Jossey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp cellar",
+    "mind": "Jossey",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Jossey",
+    "relative_to": "dusted the globe"
+   }
+  ]
+ },
+ {
+  "passage_id": "V144",
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wreney",
+    "mind": "",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^2",
+    "words": "the tar brush",
+    "mind": "Wreney",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^3",
+    "words": "the leaky bellows",
+    "mind": "Wreney",
+    "relative_to": ""
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning for nine years",
+    "mind": "Wreney",
+    "relative_to": "dusted the sledge"
+   }
+  ]
+ }
+]

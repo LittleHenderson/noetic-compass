@@ -1,0 +1,8 @@
+$ python -B tools/ob_write_questions.py --set practice --pass p1 --practice-settings 10 --max-calls 0
+{
+ "program": "tools/ob_write_questions.py",
+ "status": "STOP",
+ "code": "RESERVE_RULE_NOT_MET",
+ "reason": "Reserve setting 2 may move to practice only when select/selection_practice.json, made with 9 practice settings, says \"finished\": false in its block reserve. That means: a reserve target is missed (45 practice role-step tasks and 25 practice plain-fact tasks) and a reserve setting is left."
+}
+[exit code 2]

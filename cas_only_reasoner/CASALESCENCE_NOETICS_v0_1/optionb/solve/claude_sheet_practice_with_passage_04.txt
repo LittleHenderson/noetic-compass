@@ -1,0 +1,144 @@
+SHEET practice-with_passage-04. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0225 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: At a later free moment, which of these does the person choose?
+A. Handling more of the brightly coloured greeting cards.
+B. Focusing on separating small envelopes into bins.
+C. Handling more of the plain brown heavy parcels.
+D. Lifting the heavy and awkward plain parcels.
+E. Ignoring the bright greeting cards near holidays.
+F. Listening to the distant drone of warehouse machinery.
+=== END Q0225 ===
+
+=== ITEM Q0226 ===
+Passage:
+Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.
+
+Question: The repeated thing stops for a year or two; which action has most likely faded?
+A. Working in the sorting room with stacks.
+B. Flicking each letter into its correct pigeonhole swiftly.
+C. Reaching for the next stack of letters slowly.
+D. Fanning out letters with expert finger movements.
+E. Reading the postcodes at a glance on envelopes.
+F. Sorting thousands of daily letters in the room.
+=== END Q0226 ===
+
+=== ITEM Q0227 ===
+Passage:
+Brenda picked up a package, testing its weight and balance. The label listed "books," but the package shifted oddly in her grip. Decades of handling parcels had given her a sixth sense for mislabeled contents. This package felt too light for books and too fluid for most other common items. She marked it for special inspection.
+
+Question: What item was listed on the package label?
+A. Books
+B. Fluid
+C. Weight
+D. Inspection
+=== END Q0227 ===
+
+=== ITEM Q0228 ===
+Passage:
+Maria, a post office sorter, examined the complex delivery route. It involved four distinct segments. First, packages went to the city center; then, rural addresses received theirs; after that, international mail was handled; finally, special deliveries completed the round. Each stage had its own set of sorting rules and deadlines.
+
+Question: Who examined the complex delivery route involving four distinct segments?
+A. Marta
+B. Helen
+C. Graham
+D. Maria
+=== END Q0228 ===
+
+=== ITEM Q0229 ===
+Passage:
+Marta carefully handled the fragile-looking package. She had seen too many parcels burst open on the rollers over her thirty years here. A small "Fragile" sticker did little to ease her concern. She gently placed it in the bin for special handling, remembering the time a client's grandmother's antique teacups arrived in splinters.
+
+Question: How long had Marta worked there before handling the package?
+A. twenty years
+B. thirty years
+C. five years
+D. ten years
+=== END Q0229 ===
+
+=== ITEM Q0230 ===
+Passage:
+Helen, who had sorted mail for decades, picked up a thin, stiff envelope. The feel of the paper and the faint, sweet scent of old ink told her it was probably a wedding invitation. She often guessed the contents before even reading the address. Her hands knew the weight and texture of every common type of correspondence.
+
+Question: For how long had Helen sorted mail before picking up the envelope?
+A. years
+B. decades
+C. months
+D. days
+=== END Q0230 ===
+
+=== ITEM Q0231 ===
+Passage:
+Graham flicked through the stack of letters. He had seen every type of handwriting imaginable over his career, from careful cursive to hurried scrawls. The precise, almost ornamental script on this particular envelope suggested a formal occasion, perhaps a wedding invitation. He knew from experience that such envelopes rarely contained bad news, so he handled it without concern.
+
+Question: What kind of item did Graham flick through in the stack?
+A. packages
+B. parcels
+C. letters
+D. postcards
+=== END Q0231 ===
+
+=== ITEM Q0232 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: What kind of parcels did Olivia dislike handling?
+A. Plain brown parcels
+B. Misaddressed packages
+C. Small envelopes in bins
+D. Brightly coloured greeting cards
+=== END Q0232 ===
+
+=== ITEM Q0233 ===
+Passage:
+Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.
+
+Question: Someone on their first day takes the person's place; which of these would most likely be missing?
+A. Sorting thousands of pieces of daily mail items.
+B. Reaching for the next stack of mail envelopes.
+C. Reading the postcodes at a glance on the letters.
+D. The swift, almost unconscious action when flicking letters.
+E. The slow, highly conscious action when flicking letters.
+F. Working in the sorting room with stacks of mail.
+=== END Q0233 ===
+
+=== ITEM Q0234 ===
+Passage:
+Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.
+
+Question: At a later moment, which of these does the person avoid?
+A. Focusing on separating small envelopes into bins.
+B. Handling the brightly coloured greeting cards around holidays.
+C. Lifting the plain brown parcels that are heavy.
+D. Listening to the distant drone of the warehouse.
+E. Lifting the brightly coloured greeting cards for holidays.
+F. Separating the small envelopes into their respective bins.
+=== END Q0234 ===
+
+=== ITEM Q0235 ===
+Passage:
+Paul, a mail carrier nearing retirement, glanced at a misaddressed package. He saw the street name was wrong but the postcode was correct for a nearby village. His years of walking the same routes meant he instantly knew the correct house number. He simply scrawled a small correction on the label and placed it in the right tray.
+
+Question: What did Paul place the package in after writing on the label?
+A. The nearby village
+B. The correct pigeonhole
+C. The right tray
+D. The sorting room
+=== END Q0235 ===
+
+=== ITEM Q0236 ===
+Passage:
+Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.
+
+Question: Where was Daniel working when he reached for the letters?
+A. In the sorting room
+B. At the delivery truck
+C. In a nearby village
+D. By the warehouse bins
+=== END Q0236 ===

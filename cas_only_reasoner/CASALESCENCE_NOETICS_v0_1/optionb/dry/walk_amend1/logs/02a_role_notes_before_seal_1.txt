@@ -1,0 +1,3 @@
+$ python -B tools/ob_role_notes.py 
+STOPPED: SEAL_STEP_MISSING: seal step 1_PLAN_AND_SOURCES has not been written. Nothing was written.
+[exit code 2]

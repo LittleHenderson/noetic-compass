@@ -1,0 +1,96 @@
+[
+ {"passage_id": "G01", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Lena", "label": "Lena", "support": "Lena walked past the bakery on Mill Street.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Lena", "label": "warm smell of rye bread", "support": "She loved the warm smell of rye bread.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^3", "mind": "Lena", "label": "of the fish stall", "support": "She could not stand the sour reek of the fish stall next door.", "measure": "", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "G02", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Bram", "label": "Bram", "support": "Old Bram had mended nets on this quay since boyhood.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^5", "mind": "Bram", "label": "seasons of patching torn mesh", "support": "Forty seasons of patching torn mesh had taught his fingers every knot.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^5", "mind": "Bram", "label": "mesh had taught his fingers every knot", "support": "Forty seasons of patching torn mesh had taught his fingers every knot.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Bram", "label": "the quiet of the early tide", "support": "He liked the quiet of the early tide.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Bram", "label": "the quiet of the early tide", "support": "He liked the quiet of the early tide.", "measure": "", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "G03", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Nell", "label": "Nell", "support": "Nell kept a small jade plant on her desk.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Nell", "label": "Its glossy leaves", "support": "Its glossy leaves gave her a small sense of calm.", "measure": "", "relative_to": "", "certainty": "held", "held_under": "H2-COMFORT"},
+   {"noetic": "^4", "mind": "Nell", "label": "Its glossy leaves", "support": "Its glossy leaves gave her a small sense of calm.", "measure": "a small sense of calm", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^3", "mind": "Nell", "label": "The stack of invoices", "support": "The stack of invoices held little appeal. Sorting them bored her.", "measure": "", "relative_to": "", "certainty": "held", "held_under": "H3-BORED"}
+  ]},
+ {"passage_id": "G04", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Ines", "label": "Ines", "support": "Ines glanced at the cracked gauge on the boiler.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Ines", "label": "the cracked gauge on the boiler", "support": "Ines glanced at the cracked gauge on the boiler. She guessed the pressure had dropped again.", "measure": "", "relative_to": "the pressure had dropped again", "certainty": "ambiguous", "other_candidate": "reasoning"},
+   {"noetic": "^9", "mind": "Ines", "label": "the pressure had dropped again", "support": "Ines glanced at the cracked gauge on the boiler. She guessed the pressure had dropped again.", "measure": "", "relative_to": "the cracked gauge on the boiler", "certainty": "ambiguous", "other_candidate": "reasoning"},
+   {"noetic": "^3", "mind": "Ines", "label": "The faint hiss near the valve", "support": "The faint hiss near the valve might have unsettled her, or she might not have heard it at all.", "measure": "", "relative_to": "", "certainty": "ambiguous", "other_candidate": "^4"},
+   {"noetic": "^4", "mind": "Ines", "label": "The oily rag on the bench", "support": "The oily rag on the bench barely caught her eye.", "measure": "barely caught her eye", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "G05", "none_of_these": false, "not_enough_information": [],
+  "guide_problem": "Rule 7 says a clue has no whole. Rule 16 step 9 says every part of one list carries the same whole. I could not tell which rule covers the smell.",
+  "entries": [
+   {"noetic": "^1", "mind": "Marta", "label": "Marta", "support": "Marta checked the dough.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Marta", "label": "the yeast was dead", "support": "She worked out that the yeast was dead.", "measure": "", "relative_to": "", "certainty": "clear", "reached_by": "reasoning"},
+   {"noetic": "^6", "mind": "", "label": "the crust was pale", "support": "It had not risen, the crust was pale, and the smell was flat.", "measure": "", "relative_to": "", "certainty": "clear", "clue": true},
+   {"noetic": "^6", "mind": "", "label": "mixing the flour", "support": "The recipe had three steps: mixing the flour, resting the dough, and baking the loaf.", "measure": "", "relative_to": "The recipe", "certainty": "clear"},
+   {"noetic": "^6", "mind": "", "label": "resting the dough", "support": "The recipe had three steps: mixing the flour, resting the dough, and baking the loaf.", "measure": "", "relative_to": "the dough", "certainty": "clear"},
+   {"noetic": "^6", "mind": "", "label": "baking the loaf", "support": "The recipe had three steps: mixing the flour, resting the dough, and baking the loaf.", "measure": "", "relative_to": "The recipe", "certainty": "clear"}
+  ]},
+ {"passage_id": "G06", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Pavel", "label": "Pavel", "support": "Every evening after closing, Pavel swept the workshop floor.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^7", "mind": "Pavel", "label": "swept the workshop floor", "support": "Every evening after closing, Pavel swept the workshop floor.", "measure": "Every evening", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^5", "mind": "Pavel", "label": "swept the workshop floor", "support": "Every evening after closing, Pavel swept the workshop floor.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^4", "mind": "Pavel", "label": "the grinder", "support": "Twice a week the grinder shrieked, and he never noticed the grinder at all.", "measure": "shrieked", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "G07", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Tess", "label": "Tess", "support": "Tess and her brother Owen sorted the old records.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^1", "mind": "Owen", "label": "Owen", "support": "Tess and her brother Owen sorted the old records.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Owen", "label": "the scratchy jazz albums", "support": "Tess adored the scratchy jazz albums.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Owen", "label": "the hum of the turntable", "support": "Owen kept the brass needle case, and the hum of the turntable soothed him.", "measure": "", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "G08", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Ravi", "label": "Ravi", "support": "Years of daily deliveries had taught Ravi every back lane.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^1", "mind": "The porter", "label": "The porter", "support": "The porter by the door nodded at nobody.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^5", "mind": "Ravi", "label": "Years of daily deliveries", "support": "Years of daily deliveries had taught Ravi every back lane.", "measure": "", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "G09", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Gus", "label": "Gus", "support": "Gus stacked crates behind the stall.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^3", "mind": "Gus", "label": "the sticky floor", "support": "He hated the sticky floor.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Gus", "label": "this", "support": "He liked this, though he could not have said what it was.", "measure": "", "relative_to": "", "certainty": "clear", "no_fuller_name": true}
+  ]},
+ {"passage_id": "G10", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "reasks": [{"noetic": "^4", "check": "C7"}, {"noetic": "^4", "check": "C7"}, {"noetic": "^4", "check": "C7"}],
+  "entries": [
+   {"noetic": "^1", "mind": "Hana", "label": "Hana", "support": "Hana tuned the old upright in the parlour.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^4", "mind": "Hana", "label": "That note", "support": "That note stayed with her all week.", "measure": "stayed with her all week", "relative_to": "", "certainty": "clear", "dropped": true, "failed_checks": ["C7"]},
+   {"noetic": "^4", "mind": "Hana", "label": "The sour note in the bass", "support": "The sour note in the bass made her wince slightly.", "measure": "made her wince slightly", "relative_to": "", "certainty": "sure", "dropped": true, "failed_checks": ["C1"]},
+   {"noetic": "^2", "mind": "Hana", "label": "the old piano", "support": "Hana tuned the old upright in the parlour.", "measure": "", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "G11", "none_of_these": true, "not_enough_information": [], "guide_problem": "", "entries": []},
+ {"passage_id": "G12", "none_of_these": false, "not_enough_information": [], "guide_problem": "", "labeler_failed": true, "entries": []},
+ {"passage_id": "G13", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Yusuf", "label": "Yusuf", "support": "Yusuf opened the tin of saddle soap.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Yusuf", "label": "The tang", "support": "The tang carried him back to his aunt's stable.", "measure": "", "relative_to": "his aunt's stable", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Yusuf", "label": "his aunt's stable", "support": "The tang carried him back to his aunt's stable.", "measure": "", "relative_to": "The tang", "certainty": "clear"}
+  ]},
+ {"passage_id": "G14", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Colm", "label": "Colm", "support": "Colm watched the boy fumble with the lock.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Colm", "label": "the boy fumble with the lock", "support": "Colm watched the boy fumble with the lock. He remembered his own first day at the forge.", "measure": "", "relative_to": "his own first day at the forge", "certainty": "held", "held_under": "H89-FOLLOWS"},
+   {"noetic": "^9", "mind": "Colm", "label": "his own first day at the forge", "support": "Colm watched the boy fumble with the lock. He remembered his own first day at the forge.", "measure": "", "relative_to": "the boy fumble with the lock", "certainty": "held", "held_under": "H89-FOLLOWS"},
+   {"noetic": "^7", "mind": "Colm", "label": "The steady drip from the gutter", "support": "The steady drip from the gutter went on outside.", "measure": "steady", "relative_to": "", "certainty": "held", "held_under": "H7-NOEFFECT"}
+  ]},
+ {"passage_id": "G15", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Wren", "label": "Wren", "support": "Wren had spent her youth hauling salted cod barrels up frozen harbour steps each winter.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^5", "mind": "Wren", "label": "cod barrels up frozen harbour steps", "support": "Wren had spent her youth hauling salted cod barrels up frozen harbour steps each winter.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^5", "mind": "Wren", "label": "youth hauling salted cod", "support": "Wren had spent her youth hauling salted cod barrels up frozen harbour steps each winter.", "measure": "", "relative_to": "", "certainty": "clear"}
+  ]}
+]

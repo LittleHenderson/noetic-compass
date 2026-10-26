@@ -1,0 +1,29 @@
+$ python -B tools/ob_solve_blind.py import --set final --mode with_passage --sheet 01 --transcript-model made-up-name-from-a-transcript
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\CASALESCENCE_NOETICS_v0_1\optionb\dry\walk_amend1\guard_run.py", line 47, in <module>
+    runpy.run_path(str(tool), run_name='__main__')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\CASALESCENCE_NOETICS_v0_1\optionb\dry\walk_amend1\project_probe\tools\ob_solve_blind.py", line 787, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\CASALESCENCE_NOETICS_v0_1\optionb\dry\walk_amend1\project_probe\tools\ob_solve_blind.py", line 781, in main
+    {'deepseek': step_deepseek, 'export': step_export, 'import': step_import, 'decide': step_decide}[args.step](run, args)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\CASALESCENCE_NOETICS_v0_1\optionb\dry\walk_amend1\project_probe\tools\ob_solve_blind.py", line 701, in step_import
+    print(json.dumps({
+    ~~~~~^^^^^^^^^^^^^
+        'program': PROGRAM, 'dry_fixture': run.ctx.dry, 'step': 'import', 'status': 'SHEET_IMPORTED', 'set': run.set_name, 'mode': mode,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        'lines_that_name_no_item_of_this_sheet': len(stray), 'first_such_lines': stray[:20],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        'note': 'An unreadable reply counts as not picked. It is not asked again.'}, ensure_ascii=False, indent=1))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 793: character maps to <undefined>
+[exit code 1]

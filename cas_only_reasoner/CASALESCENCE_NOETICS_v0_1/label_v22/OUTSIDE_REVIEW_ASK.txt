@@ -1,0 +1,17 @@
+You are an independent reviewer of a study. You did not write it. You are not one of the models that will label. Review the documents below: a labeling guide (version 2.2), the study plan (version 2.2), the one-page sign-off sheet the owner signs, the owner's recorded answers that version 2.2 is built on, and, for reference, the previous plan (version 2.1), which the owner signed and which version 2.2 cites for its unchanged sections.
+
+Background. Two independent teams of language models label short passages written by a third model. For each passage a team writes entries: which stretch of text occupies which of nine roles (^1 to ^9), for which Mind, relative to what. Agreement between the teams is measured entry by entry against bars the owner signs. In attempt 2 (guide v2.1) the role ^1 passed and ^2 to ^9 failed. The owner then compared the guide with his own book and, on 2026-10-07, approved ten worked examples and ruled on an eleventh (the recorded answers are attached, verbatim). Version 2.2 is meant to change only what those answers require, and attempt 3 repeats attempt 2 with that one change, on new passages.
+
+Fixed ground you may not question. Part A of the guide is canon and belongs to the owner. The owner's sentence on Mind, his rulings and his recorded answers are his own decisions.
+
+Check in particular:
+1. Does every change from version 2.1 to version 2.2 follow from the owner's recorded answers? Quote any change that goes beyond them, and any answer that is missing or weakened.
+2. Does any sentence of Part B that the study wrote decide WHEN a role is present, other than by sending the labeler to the Colloquialism Test, the owner's sentence on Mind, and the owner's rulings? Quote it.
+3. Rule 15, as changed: are its cases (a) to (d) coherent and complete? Name the places where two careful labelers would still part widely.
+4. Are the worked examples E1 to E10 and the changed examples X5 and X6 consistent with the rules as written?
+5. The plan: are the measure, the pass marks, the minimum counts, the outcome words and the validity rules fixed before any label exists, and truly unchanged from plan version 2.1? Section 5 discloses that a conclusion flagged as reached by reasoning is still counted apart, so a flagged and an unflagged Effect do not pair. Is that disclosure enough, or a defect to fix before the owner signs?
+6. The sign-off sheet. Does it say truly and completely what the owner's one pasted line puts in force? Is anything worded so that the owner would sign something other than what the guide and the plan do?
+7. What a pass and a failure would and would not show. Is anything claimed that the design cannot support?
+
+For each finding give: severity (BLOCKER or MAJOR only), the exact place, why it matters, and the smallest fix that does not add a presence rule.
+Start your reply with one line: VERDICT: ACCEPT, ACCEPT_WITH_NOTES, or REJECT. Keep the reply under 900 words.

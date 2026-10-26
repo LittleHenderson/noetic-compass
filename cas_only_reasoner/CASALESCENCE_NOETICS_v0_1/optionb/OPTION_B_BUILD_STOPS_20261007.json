@@ -1,0 +1,188 @@
+{
+ "schema": "casalescence/optionb/build_stops/v1",
+ "utc": "2026-10-07T02:53:20Z",
+ "what": "Two free practice builds of the Option B usefulness test ended under the practice launch floor. No final question was written. No GPU job ran. Seal step 7 was never written in either chain, so no spec-sheet status word exists for Option B; the owner's decision on the way forward is pending.",
+ "owner_order": {
+  "words_verbatim": "SIGNED: option B status table as proposed (PASS / FAIL / VACUOUS / VOID groups) and you have my YES concerning r8b ...run parallel our smartest team of agents dividing up the work amongst them",
+  "utc": "2026-10-06T23:12:03Z"
+ },
+ "chains": {
+  "v1_0": {
+   "folder": "CASALESCENCE_NOETICS_v0_1",
+   "plan": "08_OPTION_B_PLAN_v1_0.md",
+   "seal_file": "CASALESCENCE_NOETICS_v0_1/optionb/SEAL_OPTIONB.jsonl",
+   "seal_lines": [
+    {
+     "n": 1,
+     "step": "1_PLAN_AND_SOURCES",
+     "utc": "2026-10-07T00:39:33Z",
+     "files": 22,
+     "line_sha256": "50742dfeb019fee0b1ed1b3cb7c7a13757ac48f30bd74f09557526967430506f"
+    },
+    {
+     "n": 2,
+     "step": "2_ROLE_NOTES",
+     "utc": "2026-10-07T00:39:59Z",
+     "files": 2,
+     "line_sha256": "3f3c458b7bd64aaa93d72760c70445241d5e1728ec5a3695a1159736ed298ea9"
+    },
+    {
+     "n": 3,
+     "step": "3A_PRACTICE_QUESTIONS_AND_KEYS",
+     "utc": "2026-10-07T01:21:37Z",
+     "files": 36,
+     "line_sha256": "44a4c3faf2aff2877f1b485568650f0f7953a8023678c932cb9cbc4a0837a2a5"
+    }
+   ],
+   "practice_settings_final": 12,
+   "funnel_role_step": {
+    "pairs_written_8_settings": 53,
+    "candidates_after_option_check_12_settings": 48,
+    "key_check_passed": 30,
+    "no_passage_passed_and_survive": 16,
+    "selected_tasks": 16,
+    "passages_with_a_role_step_task": 13
+   },
+   "funnel_plain_fact": {
+    "candidates": 86,
+    "key_check_passed": 85,
+    "survive": 44,
+    "selected_tasks": 20
+   },
+   "decision": "STOP_DO_NOT_LAUNCH",
+   "stop_reasons": [
+    "16 practice role-step tasks and 20 practice plain-fact tasks survive with 12 practice settings, and no reserve setting is left; the launch floors are 36 and 20."
+   ],
+   "solver_calls_deepseek": 268,
+   "deepseek_tokens": {
+    "input": 41185,
+    "output": 1609
+   }
+  },
+  "v1_1": {
+   "folder": "CASALESCENCE_NOETICS_v0_1__PLAN_v1_1",
+   "plan": "08_OPTION_B_PLAN_v1_1.md",
+   "spec": "CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/PLAN_V1_1_CHANGE_SPEC.md",
+   "review": "CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/PLAN_V1_1_REVIEW.json",
+   "changes": [
+    "CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/PLAN_V1_1_CHANGES.json",
+    "CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/PLAN_V1_1_TOOL_CHANGES.json"
+   ],
+   "seal_file": "CASALESCENCE_NOETICS_v0_1__PLAN_v1_1/optionb/SEAL_OPTIONB.jsonl",
+   "seal_lines": [
+    {
+     "n": 1,
+     "step": "1_PLAN_AND_SOURCES",
+     "utc": "2026-10-07T02:25:59Z",
+     "files": 22,
+     "line_sha256": "4ab8bcbf0c55325fe8ec72cff9298232b6709174ae16fad91ce238bcaf33f8a3"
+    },
+    {
+     "n": 2,
+     "step": "2_ROLE_NOTES",
+     "utc": "2026-10-07T02:26:00Z",
+     "files": 2,
+     "line_sha256": "275a89cf96a5a934ded56b9b2693629ac64e327b8d926e80fcdc77e3c147a242"
+    },
+    {
+     "n": 3,
+     "step": "3A_PRACTICE_QUESTIONS_AND_KEYS",
+     "utc": "2026-10-07T02:50:56Z",
+     "files": 39,
+     "line_sha256": "2be8ddebb6336396caba26b2c47f7dd159492f10ff8242ca70bbd390248e0fdc"
+    }
+   ],
+   "practice_settings_final": 12,
+   "form_check_12_settings": {
+    "checked": 711,
+    "passed": 492,
+    "dropped_by_reason": {
+     "WRONG_OPTION_NOT_FROM_PASSAGE": 108,
+     "ANCHOR_COUNT": 34,
+     "OPTION_LENGTH_SPREAD": 31,
+     "OPTION_COUNT": 18,
+     "ANCHOR_NOT_IN_PASSAGE": 14,
+     "OPTIONS_MATCH_EACH_OTHER": 12,
+     "QUESTION_REPEATS_KEY": 7,
+     "ANCHOR_TOO_LONG": 7,
+     "FORBIDDEN_LIST_C": 6,
+     "OPTION_INSIDE_ANOTHER": 5
+    }
+   },
+   "pairs_role_step": {
+    "written": 91,
+    "form_check": 69,
+    "anchor_check": 54,
+    "option_check": 36
+   },
+   "funnel_role_step": {
+    "candidates_over_36_pairs": 57,
+    "candidates_per_pass": {
+     "p1": 17,
+     "p2": 19,
+     "p3": 21
+    },
+    "key_check_passed": 40,
+    "no_passage_passed_and_survive": 20,
+    "selected_tasks": 15,
+    "passages_with_a_role_step_task": 13,
+    "tasks_by_pass_before_reduction": {
+     "p1": 26,
+     "p2": 14,
+     "p3": 10
+    }
+   },
+   "funnel_plain_fact": {
+    "candidates": 245,
+    "key_check_passed": 242,
+    "survive": 103,
+    "selected_tasks": 35
+   },
+   "decision": "STOP_DO_NOT_LAUNCH",
+   "stop_reasons": [
+    "15 practice role-step tasks and 35 practice plain-fact tasks survive with 12 practice settings, and no reserve setting is left; the launch floors are 36 and 20."
+   ],
+   "solver_calls_deepseek": 604,
+   "deepseek_tokens": {
+    "input": 86282,
+    "output": 3627
+   }
+  }
+ },
+ "spend": {
+  "aws_usd_provisional_charge": 0.09,
+  "aws_job": "cas-optionb-b1-devtest-d1 (development test on made-up data, PRECHECK_COMPLETE_SELFTEST_PASS, cleanup VERIFIED)",
+  "deepseek_calls_total": 872,
+  "deepseek_tokens_total": {
+   "input": 127467,
+   "output": 5236
+  },
+  "deepseek_token_limits": {
+   "input": 2430240,
+   "output": 1156520
+  },
+  "gemini": "free tier; about 170 writer calls (v1.0: 2 passes) and about 250 (v1.1: 3 passes); 0 refused calls",
+  "gpu_job": "none"
+ },
+ "plain_reading": "The ceiling is structural. After the label gates (eligibility, anchor, option checks) about 36 passage-and-form pairs at 12 settings have any passing question, and the no-passage check removes about half of what passes the key check (v1.0 47 percent, v1.1 50 percent guessable). A third writer pass tripled candidates and the v1.1 brief and program rules raised key soundness (62 to 70 percent) but neither moved the pair count or the guessability enough. 36 tasks cannot be reached by writing more questions on these 428 passages under these filters. Routes that remain are owner decisions outside plan 1.1: label more passages, lower the practice floor in a new plan version, or stop the line.",
+ "status_word": "none: no GPU job ran and seal step 7 was never written in either chain; the owner's signed table (optionb/OUTCOME_STATUS_TABLE.json) applies only to a result file of a GPU run",
+ "nothing_deleted": "Both chains, their seal files and every run log are kept as written. The v1.0 folder was never edited after its seal lines; the v1.1 folder is a separate copy.",
+ "operator": "Claude Code (Option B operator session, 2026-10-07)",
+ "owner_decision": {
+  "decision": "PAUSE_FOR_LABELS",
+  "utc": "2026-10-07T03:00:00Z",
+  "pacific": "2026-10-06 8:00 PM",
+  "owner_words_verbatim": "SIGNED: label-agreement v2.1, guide 2b6617c15102, plan 657413f77f18, as proposed",
+  "how_received": "relayed by the coordinator session from the project chat, 2026-10-07T03:00:56Z",
+  "meaning": "Option B is paused on the recommended option of the decision card. It resumes only when the Noetics label trial v2.1 yields more labeled passages.",
+  "dependency": {
+   "name": "Noetics label trial v2.1",
+   "guide_sha256_prefix": "2b6617c15102",
+   "plan_sha256_prefix": "657413f77f18"
+  },
+  "resume_condition": "new labeled passages raise the count of open passage-and-form pairs above what the practice floor of 36 role-step tasks needs; a new plan version is then written and reviewed before any build",
+  "untouched": "optionb/OUTCOME_STATUS_TABLE.json and both seal chains are not changed by this decision",
+  "record_sha256_before_this_block": "e0b517f0a5cb457e04d6c75dab57b897cdd7b33c94c6bd9154a89a42e187d214",
+  "written_by": "Claude Code (Option B operator session), 2026-10-07"
+ }
+}

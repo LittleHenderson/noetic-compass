@@ -1,0 +1,194 @@
+{
+ "fix": {
+  "done": [
+   {
+    "item": "C1 - tool repairs, the kept reading",
+    "what_changed": "Plan only. One sentence added to row A5 of section 27.2: unsealed practice files that the fault could have changed are derived again by the repaired tool, from the same logged replies. No program changed."
+   },
+   {
+    "item": "C2 - Step 8 reviewer named deepseek-v4-pro",
+    "what_changed": "Plan section 10, Step 8: the reviewer is now 'DeepSeek, asked for as deepseek-v4-pro'. One new sentence there says the outside review of this plan of 2026-10-05 was answered by deepseek-v4-pro, with the record and its receipt. REAL, read in optionb/OUTSIDE_REVIEW_PLAN.md.receipt.json: asked_for_model and answered_by_model are both deepseek-v4-pro. Constants: outside_services.deepseek_reviewer.model and review_round.reviewer changed from deepseek-reasoner to deepseek-v4-pro. No program reads these two values (BY READING)."
+   },
+   {
+    "item": "C3 - import step refuses a wrong transcript model name",
+    "what_changed": "tools/ob_solve_blind.py, import step: one new check right after the older 'name is missing' check and before anything is read or written. If the name given with --transcript-model is not exactly outside_services.claude_solver.model_id (claude-sonnet-5-5), the step stops with the one new code TRANSCRIPT_MODEL_NOT_THE_PINNED_ID, exit code 2, and stores nothing. The code is named once in FILE_FORMATS.md, section 6.4 (the old words 'It does not judge the name' are gone there). The dry driver optionb/dry/fixture_q/run_dry_q.py had to change, because it gave a made-up name: it now gives the pinned id, and it got 2 new checks (refusal, nothing stored)."
+   },
+   {
+    "item": "C4 - program repair line 6R",
+    "what_changed": "tools/ob_seal.py: a kept receipt opens the 6R window only with the status PRECHECK_COMPLETE_WITH_FINDINGS or STOPPED_NO_RETRY (before: any status but the pass status, so RUNNING got through). A 6R line is also refused when the source.zip of its failed pre-check is the one an earlier 6R line already names. Both refusals use the existing code REPAIR_OUTSIDE_ITS_WINDOW; no new code. FILE_FORMATS.md section 15.2 says both. The constants sentence repairs.job_programs.window was brought in line, so the three files do not disagree."
+   },
+   {
+    "item": "C5 - DeepSeek limit",
+    "what_changed": "The sentence 'A call with no reply is not counted.' is added in plan section 19.2 ('Limit of the count') and in the constants (outside_services.deepseek.spend_cap_limit_of_the_count). The two limits (2,430,240 and 1,156,520 tokens) did not change; the plan's round-3 list records that they are confirmed."
+   },
+   {
+    "item": "C6 - HTTP 400, 404, 422 count like an empty reply",
+    "what_changed": "tools/ob_write_ordinary_notes.py: a call log line with HTTP status 400, 404 or 422 now counts toward the give-up rule, both when the log is read back and during a run. Two counted lines give the note up; the passage is then dropped by rule and logged; the guard of 3 passages applies. The reason stored in not_written.errors is HTTP_400, HTTP_404 or HTTP_422. Such a call is not sent again in the same run. HTTP 429 and 500 to 599 stay not counted. Two new report keys show these calls apart from empty replies. One sentence each in plan section 10 Step 7 and FILE_FORMATS.md section 8.1. Also brought in line, because they would otherwise say the opposite: constants ordinary_notes.not_written_rule, and FILE_FORMATS.md sections 8.2 and 18 (one clause each)."
+   },
+   {
+    "item": "C7 - constants estimate brought in line",
+    "what_changed": "Constants outside_services.deepseek.spend_cap_expected now gives the plan's measured estimate of section 19.2 (about 52% to 60% of the output limit and 33% to 38% of the input limit at the very most; the word counts 450344, 2280, 320220, 1518, 290619). The words 'to be measured again by the tool fixer' are gone. Plan section 27.3: the sentence that said the constants still hold the older text now says it was brought in line."
+   },
+   {
+    "item": "C8 - padding sentence",
+    "what_changed": "Plan section 11.3, point 5: one sentence added. Because the ROLE and MIXED notes are longer after amendment A13, the padding line of QUOTES-ONLY, FILLER and ANSWER-GIVEN is longer too, the same for every passage, by the unchanged rule. No rule changed."
+   },
+   {
+    "item": "C9 - the plan fixer's numbers and forms are accepted",
+    "what_changed": "No rule, number or form changed. I searched the plan, the constants and the formats for wording that makes these five wait for the operator: there was none. The word PROPOSED stays, because the plan's own legend defines it as 'a rule of this plan'. Plan section 27.4, last paragraph, now names the five as accepted by the operator. The sentence there that said five confirm findings 'wait for an operator decision' and 'are not decided here' now says the operator decided them in round 3."
+   },
+   {
+    "item": "C10 - fresh owner sample",
+    "what_changed": "Ran /c/Python314/python.exe -B tools/ob_role_notes.py --dry-run optionb/dry (exit 0, ROLE_NOTES_OK), then copied optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md byte for byte to optionb/OWNER_SAMPLE_ROLE_NOTES.md. The new file shows the sayings lines. Line 3 still says: 'Status: DRY RUN. Built before any seal exists. These notes are not sealed yet.' It differs from the amendment-2 dry sample in one line only, the build time."
+   },
+   {
+    "item": "C11 - the round-3 list in the plan",
+    "what_changed": "New last sub-section '### 27.5 Operator decisions of 2026-10-05, round 3' with one table row per C1 to C10. All 79 older headings are kept in the same order; one heading was added. Because the plan already uses C1 to C5 for the conditions of section 15.3, a decision of this round is always written 'operator decision C...'."
+   },
+   {
+    "item": "Dry drivers re-run on the final bytes",
+    "what_changed": "optionb/dry/fixture_q/run_dry_q.py: 86 of 86 checks held (47 tool runs; 84 older checks plus 2 new ones for C3). optionb/dry/fixture_n/run_dry_n.py: 189 of 189 checks held (78 tool runs; this driver was not changed)."
+   },
+   {
+    "item": "Scratch tests for C3, C4 and C6 (made-up data, in the session scratch folder only)",
+    "what_changed": "C3: 17 of 17 held. Six wrong names (claude-opus-5-5, Claude-Sonnet-5-5, claude-sonnet-5-5-20260101, claude-sonnet-5, sonnet, a made-up name) each stop with TRANSCRIPT_MODEL_NOT_THE_PINNED_ID, exit 2, and every file of the work folder keeps its bytes; the exact pinned id imports the sheet. C4: 18 of 18 held, run with the real tools/ob_seal.py on a made-up seal file: receipts with RUNNING, the pass status, another status, no status, or the kind REHEARSAL or DEVELOPMENT_TEST are refused with REPAIR_OUTSIDE_ITS_WINDOW; the two failed statuses pass; a 6R2 whose receipt (or --source-zip) names the source.zip of line 6R1 is refused, another source.zip passes. The old tool bytes let the RUNNING receipt and the copied receipt through. C6: 15 of 15 held: 400, 404 and 422 are counted once per run and not sent again in that run; two such lines give the note up with reasons HTTP_400 / HTTP_404 / HTTP_422; one empty reply plus one 422 also give it up; 503 and no answer are tried 3 times per run and never counted; 429 stops the run and is not counted; a 4th passage trips the guard with exit 2; the unchanged support checker gives the dropped passage the status DROPPED_NOTE_NOT_WRITTEN. The old tool bytes never gave such a note up."
+   },
+   {
+    "item": "Protected folders",
+    "what_changed": "Nothing changed. Hashed before my first edit, after my last write and again at the very end: every file equal in optionb/job/, optionb/controller_b1_draft/ and optionb/dry/dev_package/."
+   }
+  ],
+  "files_changed": [
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/FILE_FORMATS.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_solve_blind.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_seal.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_q/run_dry_q.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/OWNER_SAMPLE_ROLE_NOTES.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md (written again by the dry run that C10 orders)",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/notes_role/role_notes.json (written again by the dry run that C10 orders)",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/notes_role/owner_sample_20.json (written again by the dry run that C10 orders)",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_q/ (176 made-up output files written again by the driver re-run)",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_n/ (160 made-up output files written again by the driver re-run; run_dry_n.py itself has the same bytes as before)"
+  ],
+  "open_issues": [
+   "BLOCKS SEAL STEP 1, and I did not cause it: another lane changed the owner's ruling record while I worked. C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json was written again at 11:15:57 PDT (its own field record_corrected_utc says 2026-10-05T18:15:41Z; the label v2.1 files changed at the same time). REAL: it now has 4,833 bytes and sha256 72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c. The plan (sections 3, 27.3, 27.4) and the constants (sources.owner_ruling_mind_and_colloquialisms) pin 4,245 bytes and a88d9fe8179f7c052e1c91f69bcdbcdff9745757b1e35cf2276dc1b714c1b024. REAL: 'tools/ob_seal.py step 1 --dry-run' refuses with SOURCE_CHANGED, exit 2, nothing written; 14 of the 15 pinned sources still match. The owner's words in the record are unchanged (REAL, equal to the plan's quote). I did not touch the pin: decision C9 accepts 'pinning the record' as it stands, and a pin is a number of the plan. The operator must decide: put the old bytes back, or pin the new bytes in the plan and the constants.",
+   "Hashes that other files quote are stale again, because the plan, the constants and the formats changed. REAL, read only: optionb/job/SELFTEST_EXPECTED.json names constants 7dd40833... and plan 656c0aaf...; optionb/dry/dev_package/BUILD_LOG.json names the three plan files as they stood before round 3 (656c0aaf, 7dd40833, aebef9bf); optionb/dry/elig/eligibility.json and exclusions.json name constants 7dd40833; optionb/dry/ob_role_notes_report.txt quotes the old hashes of the three dry files. None is mine to write. The development test now being prepared covers the plan files as they stood before round 3 (plan section 19.1, 'Limit'). No job program changed.",
+   "Edits beyond the literal file lists of the decisions. I made them so that the three plan files do not say opposite things; the operator may strike any of them. (a) Constants repairs.job_programs.window now names the two receipt statuses and the source.zip rule (C4 named only the tool and the formats). (b) Constants ordinary_notes.not_written_rule got the C6 sentence (C6 named only the plan and the formats; the old text said such a line 'is not counted'). (c) FILE_FORMATS.md sections 8.2 and 18 got one clause each for C6. (d) One head line in FILE_FORMATS.md and one sentence in the constants key 'status' point to plan section 27.5. (e) Plan section 27.3 (one sentence, C7) and section 27.4 (two sentences, C1 to C5 decided and C9 accepted) were corrected so they are not false.",
+   "C9: the three plan files held no sentence that said the five numbers and forms wait for the operator's yes, so there was nothing of that kind to remove. I kept the word PROPOSED, because the plan's legend defines it as 'a rule of this plan'. If the operator wants PROPOSED taken off these five (plan section 10 Step 7, section 24 items 35, 37, 38, section 27.4, constants ordinary_notes.not_written_rule), that is one more small edit.",
+   "C10 side effect: the dry run that C10 orders wrote three files under optionb/dry/ again (notes_role/role_notes.json, notes_role/owner_sample_20.json, OWNER_SAMPLE_ROLE_NOTES.md). They are not in the hard-rule write list by its letter; they are the outputs of the ordered tool run. The dry eligibility files were not built again, so they still name the old constants hash.",
+   "The run sheet C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/RUN_SHEET_B1.md, line 478, still gives the older 6R window wording ('a status other than ...'). It also does not say that the import step now refuses a transcript name that is not claude-sonnet-5-5. Not my file.",
+   "tools/ob_assemble.py (not mine to change) writes the removal-log sentence for a passage dropped by the give-up rule. Its fixed words still say 'an empty or cut-off reply each time it was asked', also when the reasons are HTTP_400, HTTP_404 or HTTP_422. The reasons printed right after those words are exact. tools/ob_check_support.py still says 'two empty or cut-off replies' in its docstring.",
+   "One stall path is still open after C6. A reply with HTTP status 200 whose envelope can not be read every time (REPLY_ENVELOPE_UNREADABLE) is not counted and never given up; the writer then ends with STOPPED_NOTES_NOT_WRITTEN and exit code 1 at every run. C6 names only 400, 404 and 422, so I left it.",
+   "Three findings of the amendment-2 confirm block are not among C1 to C10 and stay open: (1) the whole-chain real-mode walk was not run again, and three tools changed bytes once more in this round; (2) the question writer reads the ten sayings words of list C in its brief, which the reviewer said needs the operator's yes; (3) two worker threads of the note writer can count their replies in another order than they log them. I touched that tool for C6 and did NOT fix point 3, because it was not ordered.",
+   "Three tools changed bytes (ob_solve_blind.py, ob_seal.py, ob_write_ordinary_notes.py). By the run sheet's rule 6 the one review round must read the new bytes before seal step 1. Nothing is sealed, so no repair line is needed.",
+   "The dry drivers do not exercise C4 or C6. Only the scratch tests do. run_dry_n.py was left unchanged because no changed rule broke it. The scratch tests and the before-copies lie in C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0/scratchpad/r3/ (test_c3.py, test_c4.py, test_c6.py, before/).",
+   "Hard-coded values. The three HTTP statuses (400, 404, 422) and the two receipt statuses stand as fixed values in the tools and as prose in the constants and the formats. No program compares the two. This follows the pattern already in those tools (for example the two finished statuses of the support check), and it kept the change smallest.",
+   "C3 is exact-match. If a transcript ever shows the model name in another spelling (for example with a date at the end), the import stops and stores nothing; then: stop and report. The statement that the transcripts show exactly claude-sonnet-5-5 is REAL as the operator reported it; I did not read a transcript.",
+   "C8: that the padding line grows for every passage is BY READING of the unchanged rule plus one REAL count (every ROLE note has at least 1 sayings line: 1 / 3 / 4 per note). How large the padding share is in tokens is NOT MEASURED until the job's self-test.",
+   "Name clash to keep in mind: the operator's decision numbers C1 to C5 are also the names of the plan's conditions C1 to C5 (section 15.3). In all changed files I wrote 'operator decision C...' and plan section 27.5 says so."
+  ],
+  "real_numbers_measured": [
+   "All numbers below are REAL: measured on 2026-10-05 between 11:11 and 11:37 PDT on the laptop with small standard-library Python scripts. No AWS call, no outside model call, no key file opened, no git command that changes state. optionb/SEAL_OPTIONB.jsonl still does not exist: nothing is sealed.",
+   "Plan C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md: 164,768 bytes, sha256 471cb745b45aa2388986bed88745f0c90e1fb08e0a88f6051b9bbaf3c4f3b424 (before: 157,280 bytes, 656c0aaf8a5352055b8df52046e72fb0de30b8eafaca274c5df2d2adbd17fe8f). UTF-8, LF only, no BOM.",
+   "Constants optionb/PLAN_CONSTANTS.json: 91,484 bytes, sha256 ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8 (before: 90,456 bytes, 7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4). It parses. 1,420 leaf values before and after; 7 changed, 0 added, 0 removed.",
+   "Formats optionb/FILE_FORMATS.md: 125,389 bytes, sha256 66a5bd99cd8dfbf35bc3fa7d3e3cd04f4d5be7d44c6c02d3963b238935ff779f (before: 123,821 bytes, aebef9bffcfd88c2ccca5104ca2b549e5dd5bdd9f71c4cbfa136c663210c0f3f).",
+   "tools/ob_solve_blind.py: 45,807 bytes, sha256 9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15 (before: 44,821 bytes, 3435b8ea...). ast.parse ok.",
+   "tools/ob_seal.py: 92,398 bytes, sha256 eb44758756232a8885666aa4c1442a9fc04f86d75a16526b747530d25fff44cb (before: 90,498 bytes, 9edeca8a...). ast.parse ok.",
+   "tools/ob_write_ordinary_notes.py: 48,536 bytes, sha256 adf6cd8fa5b5acf9fe7d1f050641ffcf372628aeeb7dcc759f2a728df7895aee (before: 46,202 bytes, 5dc37955...). ast.parse ok.",
+   "optionb/dry/fixture_q/run_dry_q.py: 33,616 bytes, sha256 880e57e5f73469a7f977f6e1705ebcf1f1cecd76d5fde215179c3b4e9f62e56a (before: 32,167 bytes). ast.parse ok. optionb/dry/fixture_n/run_dry_n.py: same bytes as before (98,461 bytes, cb6581f3...).",
+   "Owner sample optionb/OWNER_SAMPLE_ROLE_NOTES.md: 32,168 bytes, sha256 79dc8bfae884b8ede68cf54a919851f3bd2bfaf54811a04811bc7f3493d90720; byte-equal to optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md. 20 samples, 51 definition lines, 51 sayings lines; each sayings line follows its definition line; every sayings text equals a table cell of docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md character for character. The old file had 26,276 bytes (b923ecc3...) and 0 sayings lines.",
+   "Dry notes written by the C10 run: optionb/dry/notes_role/role_notes.json sha256 a928cffb34951eac9494744f91a85bc953911d99d60db4a06a9fa8aadc8d27d2 (192 passages); owner_sample_20.json sha256 0b104d0db2997a90e08671926f69a0f713037e60d1bd8dfa9c4dd880ba6b58ff. Their inputs name the new constants hash ea34dd97... and the new ob_seal.py hash eb447587....",
+   "Dry drivers on the final bytes: fixture_q 86 of 86 checks held, 47 tool runs, exit 0. fixture_n 189 of 189 checks held, 78 tool runs, exit 0.",
+   "Scratch tests: C3 17 of 17 held; C4 18 of 18 held; C6 15 of 15 held. Each test printed that the tool under test has the sha256 listed above (C3 and C6 run a byte copy in a scratch project; C4 runs the real tools/ob_seal.py with --project pointing at a made-up scratch project).",
+   "Constants against the plan: 639 text values of the constants stood word for word in the plan before, 641 after; none was lost. Code-like tokens of the constants found in the plan: 78 before, 80 after; none lost; the 2 new ones (PRECHECK_COMPLETE_WITH_FINDINGS, STOPPED_NO_RETRY) are in the plan. 35 code-like tokens of the constants were not in the plan before and the same 35 are not in it now (an older state, not from this round). The blocks briefs, prompt, groups, padding, question_rules, solver_rules, forbidden_words, gates, tests, outcome_codes_in_checking_order, stop_codes, report_sentences, selection and levels are equal before and after.",
+   "Plan headings: 79 before, 80 after; the 79 older ones are unchanged and in the same order; the one added is '### 27.5 Operator decisions of 2026-10-05, round 3'.",
+   "Protected folders, hashed before, after the last write and at the very end, every file equal each time. optionb/job/: 6 files, 209,295 bytes, tree sha256 8adb2e9f667e8326a5ebf6f231ffc2d30cff776b58dc88f6eb7e84bba7ea6d48. optionb/controller_b1_draft/: 18 files, 499,878 bytes, ee52d55a8e2c42a22f892a735eaba377b6d26996e3cb57dc0ea902ac637c41be. optionb/dry/dev_package/: 171 files, 6,333,230 bytes, cdd167fa0a708ce651e09b4a7b9638ca9acec40fa1e0e46c2969ee53e2765888. (The tree hash is my own: sha256 over the sorted lines 'path sha256 size'.)",
+   "The eight other tools/ob_*.py files and tools/verdict.py were not written: their modification times are 10:14 to 10:23 PDT (verdict.py older), before this task began at 11:11:44 PDT. No __pycache__ folder and no .partial file was left under the study folder.",
+   "Pinned sources: 15 in the constants; 14 match their pin; 1 does not (the owner's ruling record, changed by another lane at 11:15:57 PDT: 4,833 bytes, sha256 72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c against the pin 4,245 bytes, a88d9fe8...). 'tools/ob_seal.py step 1 --dry-run' ends with REFUSED: SOURCE_CHANGED, exit 2.",
+   "Outside review record, read only: optionb/OUTSIDE_REVIEW_PLAN.md 4,060 bytes sha256 ac7548284b2ba7d49e874f1e036b0bbe3d6ac6a38d5b9190b522cbaa9f2609ff; its receipt 562 bytes sha256 33d17bd33fdcc3bbdb185db031f82580779edb3255e4baac93ba1f5eb4028620, with asked_for_model and answered_by_model both deepseek-v4-pro, utc 2026-10-05T14:55:17+00:00.",
+   "NOT MEASURED in this task: any token count; the padding share in tokens; the real replies of any outside service; the job programs (none was run); the real-mode whole-chain walk of the laptop tools."
+  ]
+ },
+ "confirm": {
+  "verdict": "ACCEPT_WITH_NOTES",
+  "findings": [
+   {
+    "severity": "MAJOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+    "where": "Line 31, key sources.owner_ruling_mind_and_colloquialisms. Partners: plan 08_OPTION_B_PLAN_v1_0.md lines 81 (section 3), 1504 (section 27.3) and 1544 (section 27.4).",
+    "problem": "Not a fault of round 3, but it is wrong now and it stops seal step 1. The owner's ruling record on disk no longer has the pinned bytes. Another lane wrote C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json again at 11:15:57 PDT (its own field record_corrected_utc says 2026-10-05T18:15:41Z; the fields what_stays and what_goes were changed). The plan and the constants still pin 4,245 bytes and sha256 a88d9fe8179f7c052e1c91f69bcdbcdff9745757b1e35cf2276dc1b714c1b024. The fixer did not touch the pin, which was right: decision C9 accepts the pin as it stands and the choice is the operator's. The development test on made-up data is not affected.",
+    "fix": "Operator decision before seal step 1. Either put the old 4,245 bytes back, or pin the new bytes (4,833 bytes, sha256 72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c) in the constants line 31 and in plan lines 81, 1504 and 1544. After a new pin: hash the plan and the constants again, and run tools/ob_eligibility.py and tools/ob_role_notes.py in dry mode again.",
+    "evidence": "REAL, my own hash of all 15 pinned sources: 14 match, 1 does not (this file: 4,833 bytes, sha256 72699b02... against the pin 4,245 bytes, a88d9fe8...). BY READING: tools/ob_seal.py line 632 refuses with SOURCE_CHANGED when a pinned source differs, so the seal fails closed. REAL: the owner's words in the record still stand word for word in the plan."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/RUN_SHEET_B1.md",
+    "where": "Line 478, 'The window (amendment A5)'.",
+    "problem": "The run sheet still gives the older window of a 6R line: 'a status other than PRECHECK_COMPLETE_SELFTEST_PASS'. After decision C4 the tool, the constants and FILE_FORMATS.md section 15.2 accept only PRECHECK_COMPLETE_WITH_FINDINGS or STOPPED_NO_RETRY, and refuse a receipt whose source.zip an earlier 6R line already names. The file is protected in this round, so the fixer rightly left it. The tool enforces the narrower rule, so nothing can go wrong in a run; only the sheet's words are out of date.",
+    "fix": "When the run sheet is next opened (not now, the development test is being prepared from that folder): replace the one sentence with the two statuses and the source.zip rule of FILE_FORMATS.md section 15.2.",
+    "evidence": "REAL: grep of the run sheet. The three status words in optionb/controller_b1_draft/precheck_cpu/precheck_supervisor.py lines 824 to 828 are PRECHECK_COMPLETE_SELFTEST_PASS, PRECHECK_COMPLETE_WITH_FINDINGS and STOPPED_NO_RETRY, plus RUNNING while a job runs. So the two statuses of C4 are exactly the two ends of a failed job."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_assemble.py",
+    "where": "Line 530 (the removal-log sentence for DROPPED_NOTE_NOT_WRITTEN). Also tools/ob_check_support.py line 44 (docstring).",
+    "problem": "After decision C6 a note can be given up for HTTP 400, 404 or 422. The removal log is an evidence file. Its fixed words still say 'an empty or cut-off reply each time it was asked', also when the reasons are HTTP_400, HTTP_404 or HTTP_422. The reasons printed right after those words are exact. Neither tool was in the write list, so the fixer rightly left both; plan section 27.5 row C6 says so.",
+    "fix": "Before seal step 1 (the tools are sealed there): change the fixed words in ob_assemble.py to cover a refused call too, for example 'an empty or cut-off reply, or a call refused with HTTP status 400, 404 or 422, each time it was asked'. The docstring line may follow.",
+    "evidence": "BY READING: tools/ob_assemble.py lines 513 to 531. REAL: no other tool reads not_written.errors; ob_check_support.py, ob_screen_notes.py, ob_assemble.py and ob_seal.py only test whether not_written is set."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_n/run_dry_n.py",
+    "where": "The two standing dry drivers (fixture_n and fixture_q).",
+    "problem": "The new rules of C4 (tools/ob_seal.py) and C6 (tools/ob_write_ordinary_notes.py) have no standing check. Only scratch tests in the session scratch folder cover them, and that folder does not last. C3 has a standing check (2 new checks in run_dry_q.py). The whole-chain real-mode walk of the laptop tools was also not run again, and three tools changed bytes once more (open since amendment 2).",
+    "fix": "Not needed for this round. If the drivers are opened again before seal step 1, move the C4 and C6 cases into them. The operator still chooses: run the whole-chain walk once more on the final tool bytes, or accept the cover named here.",
+    "evidence": "REAL: I ran the fixer's three scratch tests again in my own scratch folder (confirm_r3), on the tool bytes listed in final_hashes: C3 17 of 17 held, C4 18 of 18 held, C6 15 of 15 held. The two driver logs on disk say 86 of 86 and 189 of 189 checks held, written at 11:34 PDT, after the last tool edit (11:31 PDT); I did not run the drivers again, because they write project files."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/elig/eligibility.json",
+    "where": "inputs: the constants hash. Partners: optionb/dry/elig/exclusions.json, optionb/dry/ob_eligibility_count_report.txt, optionb/job/SELFTEST_EXPECTED.json lines 11 and 16, optionb/dry/dev_package/BUILD_LOG.json.",
+    "problem": "Quoted hashes are stale again. The dry eligibility files name the constants as they stood before round 3 (7dd40833...). The dry role notes, written again by the C10 run, name the new constants (ea34dd97...). So the dry folder now mixes two states. SELFTEST_EXPECTED.json and the development package name the plan files as they stood before round 3 (656c0aaf, 7dd40833, aebef9bf). No rule is touched by this: the seven constants values that changed are prose and two reviewer names.",
+    "fix": "Nothing now (protected folders stay as they are). Before the next build of a development package, and before seal step 1: run tools/ob_eligibility.py and tools/ob_role_notes.py in dry mode again, and bring the two quoted hashes in SELFTEST_EXPECTED.json in line. State in the development test's report that it covers the plan files as they stood before round 3.",
+    "evidence": "REAL: grep of the hashes. REAL: constants leaf values 1,420 before and after; 7 changed, 0 added, 0 removed; only the blocks status, outside_services, ordinary_notes, repairs and review_round differ. BY READING (grep over the eleven tools, the job programs, the controller programs and the builders): no program reads any of the 7 changed values. SELFTEST_EXPECTED.json says itself that the runner does not read it."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py",
+    "where": "work(), lines 752 to 765 (the content-retry path) and lines 766 to 772 (the try-later path).",
+    "problem": "C6 is done exactly as ordered. One sister case still has no end, because C6 names only 400, 404 and 422: a reply with HTTP status 200 whose envelope can not be read is never counted, and the same holds for other refusals that would repeat (for example 408 or 413). Such a note is asked for again at every run and the step ends with STOPPED_NOTES_NOT_WRITTEN, exit code 1, each time. The fixer named this and rightly did not widen the rule.",
+    "fix": "No change for C6. If it ever happens in a run: stop and report. The operator may add it to a later decision.",
+    "evidence": "BY READING: counted_reason() (lines 122 to 135) returns a reason only for HTTP 200 with REPLY_EMPTY or REPLY_CUT_OFF and for 400, 404, 422. REAL, my re-run of the C6 scratch test: 503 and no answer are tried 3 times per run and never counted; 429 stops the run and is not counted."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md",
+    "where": "Edits beyond the letter of C1 to C11: constants repairs.job_programs.window and ordinary_notes.not_written_rule; FILE_FORMATS.md sections 8.2 and 18 and one head line; constants key status (one sentence); plan sections 27.3 (one sentence) and 27.4 (last two paragraphs); plan section 27.5 text around the table; two new report keys printed by tools/ob_write_ordinary_notes.py.",
+    "problem": "The round is not 'nothing extra' by the letter. The fixer named every one of these. I read each. All but three are needed so that the files do not say opposite things (the old texts said 'a status other than ...', 'is not counted', 'wait for an operator decision'). Three are bookkeeping only: the head line in FILE_FORMATS.md, the status sentence in the constants, and the two new printed keys that keep empty replies and refused calls apart. None changes a rule, a number, a brief or a file format. C9: I searched the three plan files and found no other sentence that makes the five accepted items wait for the operator; the word PROPOSED stays, and the plan's legend (line 28) defines it as 'a rule of this plan'.",
+    "fix": "None needed. The operator may strike any of the three bookkeeping edits.",
+    "evidence": "REAL: full diff of the plan (8 changed places), the constants (7 leaf values), the formats (6 places) and the three tools against the byte copies of the state the amendment-2 confirm block names (plan 656c0aaf, constants 7dd40833, formats aebef9bf, tools 9edeca8a, 3435b8ea, 5dc37955). Plan headings: 79 before, 80 after, older ones unchanged and in order. Every constants text that stood word for word in the plan before still does; no code was lost; the two new codes stand in the plan."
+   }
+  ],
+  "final_hashes": [
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md | 164768 bytes | sha256 471cb745b45aa2388986bed88745f0c90e1fb08e0a88f6051b9bbaf3c4f3b424",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json | 91484 bytes | sha256 ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/FILE_FORMATS.md | 125389 bytes | sha256 66a5bd99cd8dfbf35bc3fa7d3e3cd04f4d5be7d44c6c02d3963b238935ff779f",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_assemble.py | 61314 bytes | sha256 13eebd988508aaaffd8dae23b7ceaccbe813f9fe1ffb66d3026d1dd1363db8f4",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_check_questions.py | 26516 bytes | sha256 267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_check_support.py | 42986 bytes | sha256 05660139b058ef7d544e84f632ceba76c53cdd36f38da9578bd165c25bc100ac",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_eligibility.py | 41781 bytes | sha256 ae43442bac1a491b962406b67a9298d14317896c4aec17b5604fd077f6b610bb",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_role_notes.py | 43948 bytes | sha256 1f0640abb8b4a53a040c6b93fdbdf9da2805a5fc1d8eea43cbafbf7960b2dafb",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_screen_notes.py | 35804 bytes | sha256 ab4bfd9a607863ae2ad5467cccab31b0aaec13cf5b3f5187bc73b316d8af5fc8",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_seal.py | 92398 bytes | sha256 eb44758756232a8885666aa4c1442a9fc04f86d75a16526b747530d25fff44cb",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_select.py | 35417 bytes | sha256 59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_solve_blind.py | 45807 bytes | sha256 9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py | 48536 bytes | sha256 adf6cd8fa5b5acf9fe7d1f050641ffcf372628aeeb7dcc759f2a728df7895aee",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_questions.py | 36575 bytes | sha256 ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+   "PROTECTED FOLDERS (REAL, my own sha256 listing at 18:50Z; no file and no folder has a modification time after 2026-10-05 18:20Z; every file equals the fixer's listings from before and after the round): optionb/job 6 files 209295 bytes, newest 17:40:03Z, tree 8adb2e9f667e8326a5ebf6f231ffc2d30cff776b58dc88f6eb7e84bba7ea6d48 | optionb/controller_b1_draft 18 files 499878 bytes, newest 18:10:02Z, tree ee52d55a8e2c42a22f892a735eaba377b6d26996e3cb57dc0ea902ac637c41be | optionb/dry/dev_package 171 files 6333230 bytes, newest 18:09:38Z, tree cdd167fa0a708ce651e09b4a7b9638ca9acec40fa1e0e46c2969ee53e2765888 (tree hash = sha256 over the sorted lines 'path sha256 size')",
+   "ALSO CHECKED (REAL): optionb/OWNER_SAMPLE_ROLE_NOTES.md 32168 bytes sha256 79dc8bfae884b8ede68cf54a919851f3bd2bfaf54811a04811bc7f3493d90720, byte-equal to optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md, line 3 says DRY RUN and 'Built before any seal exists', 51 sayings lines (old file: 0), differs from the amendment-2 dry sample in the build-time line only | optionb/dry/fixture_q/run_dry_q.py 33616 bytes sha256 880e57e5f73469a7f977f6e1705ebcf1f1cecd76d5fde215179c3b4e9f62e56a | optionb/dry/fixture_n/run_dry_n.py unchanged, 98461 bytes sha256 cb6581f30449edb17ac32e501a19231551bdfd0c75a87ef1dfba4fa8f8f9f409 | the three changed tools and both drivers pass ast.parse, LF only, no BOM | the constants parse, no duplicate key | optionb/SEAL_OPTIONB.jsonl does not exist | tools/verdict.py, the labeling guide v1.2, docs/ and CHANGELOG.md were not written in this round | I changed no project file"
+  ]
+ }
+}

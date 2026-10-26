@@ -1,0 +1,1058 @@
+SHEET practice-with_passage-01. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0001 ===
+Passage:
+Ken explained the steps for a hive inspection to his new apprentice. First, they would gently smoke the entrance to calm the bees. Next, they would carefully open the top cover. Then, they would remove and examine each frame, looking for the queen. Finally, they would assess the brood pattern and honey stores before closing the hive.
+
+Question: The hive inspection reaches the point where they smoke the entrance, open the top cover, and remove each frame. Which named part is still left?
+A. membership fees and equipment costs
+B. brood pattern and honey stores
+C. membership fees and upkeep costs
+D. equipment purchases and tournament entry
+E. membership fees and tournament costs
+F. equipment purchases and upkeep costs
+=== END Q0001 ===
+
+=== ITEM Q0002 ===
+Passage:
+Arthur analyzed his opponent's aggressive play. He mentally broke down the impending assault into its core components. First, there was the obvious knight's fork aiming at his king and queen. Following that, a rook sacrifice on the seventh rank seemed inevitable. Finally, he saw the queen's forced advance, leading to checkmate.
+
+Question: Whose king and queen were targeted by the knight's fork?
+A. the opponent's king
+B. the queen's king
+C. Arthur's king and queen
+D. the rook's king
+=== END Q0002 ===
+
+=== ITEM Q0003 ===
+Passage:
+Eleanor watched her opponent's hand hover over the knight. She had faced players like him for decades, always confident, always ready to strike. That slight pause, that momentary hesitation before the move, often signaled a hidden trap. She shifted her pawn, ready for whatever complicated play might unfold.
+
+Question: Which chess piece was the opponent's hand hovering over?
+A. The knight.
+B. The rook.
+C. The bishop.
+D. The queen.
+=== END Q0003 ===
+
+=== ITEM Q0004 ===
+Passage:
+Sarah, a beekeeper, checked her hives. The sweet, earthy smell of warm beeswax reminded her of her grandmother’s kitchen, always filled with baking. She remembered helping to press fruit for jam on hot summer days. The scent brought back a wave of comfortable, happy childhood afternoons. She smiled to herself.
+
+Question: What did Sarah check during her rounds?
+A. Her garden
+B. Her hives
+C. Her cellar
+D. Her kitchen
+=== END Q0004 ===
+
+=== ITEM Q0005 ===
+Passage:
+Mrs. Jenkins laid out the wedding dress pattern. It consisted of several key sections. There was the bodice, the full skirt panels, the delicate lace overlay for the sleeves, and the long train. Each piece needed careful cutting and precise stitching. She planned to assemble them one by one.
+
+Question: A spare kit holds one of each named part; which of these would not be in it?
+A. the wedding dress
+B. the long train
+C. the dress pattern
+D. the full skirt panels
+E. the bodice
+F. the delicate lace overlay
+=== END Q0005 ===
+
+=== ITEM Q0006 ===
+Passage:
+Graham explained the day's blasting plan to his team. The process involved several distinct phases. First, the drilling of precise boreholes, then the careful insertion of charges, followed by the clearing of the area, and finally, the controlled detonation. Each step had to be executed flawlessly for safety and efficiency. Skipping any stage would have severe consequences.
+
+Question: What did Graham explain to his team first?
+A. the charge insertion
+B. the day's blasting plan
+C. the safety checks
+D. the clearing process
+=== END Q0006 ===
+
+=== ITEM Q0007 ===
+Passage:
+Arthur, a seasoned chess player, analyzed his opponent’s game. The opponent’s strength lay in their strong pawn structure and aggressive knight maneuvers. Their weaknesses, however, included an exposed king and underdeveloped rook. Arthur planned to exploit these specific components of their strategy. He then moved his queen.
+
+Question: Which piece did Arthur move after planning to exploit his opponent's strategy?
+A. his rook
+B. his queen
+C. his knight
+D. his pawn
+=== END Q0007 ===
+
+=== ITEM Q0008 ===
+Passage:
+Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.
+
+Question: What did Agnes check automatically by scanning her eyes?
+A. the steady pulsation
+B. the milk line pressure
+C. the familiar sound
+D. the early morning quiet
+=== END Q0008 ===
+
+=== ITEM Q0009 ===
+Passage:
+Eleanor glided through the cool water, her strokes steady. A distant splash from the deep end reached her ears. For a moment, she was not in the busy public pool but in her grandmother's quiet garden. She recalled the gentle plash of the small stone fountain, always a peaceful sound on summer afternoons. It was a place she visited often in her thoughts.
+
+Question: Where was Eleanor swimming when she heard the splash?
+A. In the public pool
+B. Near the town fair
+C. In the quiet garden
+D. By the stone fountain
+=== END Q0009 ===
+
+=== ITEM Q0010 ===
+Passage:
+Noah pulled up to the curb, a broken lock needing repair. Before opening the van door, his hand instinctively reached for his heavy-duty bolt cutters. Countless emergency calls had taught him to grab that specific tool first, without conscious thought, even before knowing the full situation. It was simply part of his routine now.
+
+Question: What kind of problem did Noah need to repair after pulling up to the curb?
+A. a leaking hose
+B. a jammed control
+C. a broken lock
+D. a faulty wiring
+=== END Q0010 ===
+
+=== ITEM Q0011 ===
+Passage:
+Uma walked onto the pool deck. The familiar smell of chlorine, once associated with grueling training sessions and fierce competition, now felt completely different. Years of pushing her limits had transformed it into a comforting scent of relaxation. She took a deep breath, anticipating a gentle, peaceful swim.
+
+Question: Where did Uma walk?
+A. into the pool
+B. past the deep end
+C. onto the pool deck
+D. toward the water
+=== END Q0011 ===
+
+=== ITEM Q0012 ===
+Passage:
+Samuel examined the malfunctioning milking machine. He identified the jammed release valve, the frayed electrical wire leading to the pump, and a loose suction cup connection. The main control panel appeared undamaged. Each of these components contributed to the poor milk flow. He started with the valve.
+
+Question: A repair kit holds one of each named part from the text. Which of these would not be in it?
+A. loose suction cup connection
+B. milking machine pump
+C. frayed electrical wire
+D. jammed release valve
+E. polished brass cylinder
+F. main control panel
+=== END Q0012 ===
+
+=== ITEM Q0013 ===
+Passage:
+Lars stirred the stew in the mountain hut. A sudden, sharp gust rattled the windowpane. Forty years of guiding through these peaks had taught him the language of the wind. He knew this particular shift meant a front was moving in faster than expected. He made a mental note to check the barometer more frequently tonight.
+
+Question: What was Lars doing in the mountain hut when the gust hit?
+A. Checking the barometer.
+B. Stirring the stew.
+C. Cleaning the table.
+D. Fixing the windowpane.
+=== END Q0013 ===
+
+=== ITEM Q0014 ===
+Passage:
+Olivia ran her fingers over the smooth silk fabric, clearly delighting in its soft texture. She quickly pulled her hand away from the coarse tweed swatch next to it, making a small grimace of distaste. When the tailor mentioned the exorbitant price of the silk, Olivia simply nodded, unfazed, already imagining her new dress.
+
+Question: Olivia walks past several bolts of cloth at the shop. Which of these does she avoid?
+A. smooth tweed swatch
+B. coarse silk fabric
+C. smooth silk cloth
+D. smooth silk fabric
+E. soft silk fabric
+F. coarse tweed swatch
+=== END Q0014 ===
+
+=== ITEM Q0015 ===
+Passage:
+Daniel carefully picked up a shimmering sample of quartz, admiring its crystalline structure. He wiped a bead of sweat from his brow, disliking the intense heat of the quarry sun. The blinding glare reflecting off the rock faces, however, did not deter him from his detailed examination of the new geological layer.
+
+Question: What did Daniel wipe from his brow?
+A. a blinding glare
+B. a quartz sample
+C. a geological layer
+D. a bead of sweat
+=== END Q0015 ===
+
+=== ITEM Q0016 ===
+Passage:
+The milking machine was malfunctioning during the morning run. Farmer Greg looked at the diagnostic display. The problem involved three components: a blocked filter, a faulty vacuum gauge, and a worn pulsator hose. He knew each part had to be addressed in turn. Ignoring one would lead to continued issues during milking.
+
+Question: A spare kit holds one of each named component from the milking machine. Which of these would not be in it?
+A. the morning run
+B. a blocked filter
+C. a faulty vacuum gauge
+D. a diagnostic display
+E. a worn pulsator hose
+F. the milking machine
+=== END Q0016 ===
+
+=== ITEM Q0017 ===
+Passage:
+Arthur lifted a frame from the hive, his gaze sweeping over the busy bees. He noticed the slight unevenness in the capped honey, a detail many might overlook. Decades spent tending bees allowed him to read their collective state from such tiny clues. That small irregularity signaled a subtle shift in their foraging patterns, perhaps due to a distant change in flora.
+
+Question: According to the passage, what did Arthur lift from the hive?
+A. some capped honey
+B. a tiny clue
+C. a busy bee
+D. a frame
+=== END Q0017 ===
+
+=== ITEM Q0018 ===
+Passage:
+Sarah opened her toolbox. The glint of the new, unused lock mechanisms always drew her eye; she appreciated their pristine engineering. The old, rusty bolts she had just removed, however, she quickly tossed into a separate discard bin without a second glance. A sudden downpour started drumming on the van roof, but she barely registered the sound, focused entirely on the shining brass.
+
+Question: Where did Sarah toss the old, rusty bolts she had just removed?
+A. into a separate discard bin
+B. onto the van roof
+C. under the nearby seat
+D. inside her open toolbox
+=== END Q0018 ===
+
+=== ITEM Q0019 ===
+Passage:
+Peter reviewed the club’s annual budget. He saw distinct categories for membership fees, equipment purchases, and tournament entry costs. There was also a line for refreshments and another for general upkeep of the playing area. Each item required careful consideration for the upcoming year's allocation.
+
+Question: What did Peter review?
+A. The upcoming year
+B. The membership fees
+C. The club’s annual budget
+D. The playing area
+=== END Q0019 ===
+
+=== ITEM Q0020 ===
+Passage:
+Tom, a foreman, supervised the rock blasting. The distant, dull boom echoed through the vast quarry. He immediately pictured the fireworks display from last summer's town fair. He remembered the vibrant explosions of light against the night sky, and the excited gasps from the crowd around him.
+
+Question: What was Tom's job while supervising the site?
+A. Crowd member
+B. Quarry worker
+C. Town fair host
+D. Foreman
+=== END Q0020 ===
+
+=== ITEM Q0021 ===
+Passage:
+Daniel carefully picked up a shimmering sample of quartz, admiring its crystalline structure. He wiped a bead of sweat from his brow, disliking the intense heat of the quarry sun. The blinding glare reflecting off the rock faces, however, did not deter him from his detailed examination of the new geological layer.
+
+Question: At a later moment, which of these does Daniel avoid?
+A. the intense heat
+B. the rock faces
+C. the geological layer
+D. the crystalline structure
+E. the quartz sample
+F. the shimmering sample
+=== END Q0021 ===
+
+=== ITEM Q0022 ===
+Passage:
+Victor felt a strong pull towards the aggressive Queen's Gambit opening. He disliked the more defensive setups, finding them tedious. His opponent's cautious play, however, barely registered with him. He focused intently on his own planned attack, dismissing the slow development across the board. The opponent’s strategy made no impression.
+
+Question: Which opening did Victor feel a strong pull towards?
+A. King's Indian
+B. Queen's Gambit
+C. French Defense
+D. Sicilian Defense
+=== END Q0022 ===
+
+=== ITEM Q0023 ===
+Passage:
+Julia looked at the broken filtration pump. She saw the clogged intake screen, the seized impeller, and the corroded electrical terminals. The main motor casing seemed undamaged. Each of these parts contributed to the system's failure. She decided to address the screen first.
+
+Question: Which part did Julia decide to address first?
+A. The impeller
+B. The electrical terminals
+C. The motor casing
+D. The screen
+=== END Q0023 ===
+
+=== ITEM Q0024 ===
+Passage:
+Eleanor glided through the cool water, her strokes steady. A distant splash from the deep end reached her ears. For a moment, she was not in the busy public pool but in her grandmother's quiet garden. She recalled the gentle plash of the small stone fountain, always a peaceful sound on summer afternoons. It was a place she visited often in her thoughts.
+
+Question: Suppose the noticed thing had not been there; which of these would most likely not have happened?
+A. A distant splash
+B. The busy pool
+C. The cool water
+D. The deep end
+E. The stone fountain
+F. The public pool
+=== END Q0024 ===
+
+=== ITEM Q0025 ===
+Passage:
+Victor examined the geological survey report for the quarry. He broke down the information into key elements: rock type, fault lines, water saturation, and stability ratings. Each section informed a different part of the excavation plan. He focused on the distribution of granite, the presence of schist, and the direction of the deepest veins. The data was clear.
+
+Question: What type of report did Victor examine for the quarry?
+A. safety inspection report
+B. equipment status report
+C. financial audit report
+D. geological survey report
+=== END Q0025 ===
+
+=== ITEM Q0026 ===
+Passage:
+Charles watched his opponent take an aggressive pawn move. Decades of playing had taught him patience and the deceptive nature of early attacks. He didn't rush his counter. Instead, he calmly developed a knight, recalling countless games where overeagerness had led to swift defeat. He knew how to wait.
+
+Question: Which chess piece did Charles calmly develop as his counter move?
+A. a knight
+B. a pawn
+C. a queen
+D. a rook
+=== END Q0026 ===
+
+=== ITEM Q0027 ===
+Passage:
+Tom arrived at the pool exactly at opening time, as he did every day. He walked directly to lane three, his usual spot. His feet automatically navigated the slick tiles without him looking down. He then stepped onto the starting block and dove in, all before anyone else had even reached the water.
+
+Question: Which specific lane did Tom walk directly to?
+A. Lane three
+B. Lane four
+C. Lane one
+D. Lane two
+=== END Q0027 ===
+
+=== ITEM Q0028 ===
+Passage:
+Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.
+
+Question: Years later inside a dusty automotive repair garage, which of these would most likely bring the same childhood memory back?
+A. The scent of fresh flowers
+B. The smell of machine oil
+C. The feel of damp earth
+D. The sight of heavy machinery
+E. The taste of hot coffee
+F. The sound of falling rock
+=== END Q0028 ===
+
+=== ITEM Q0029 ===
+Passage:
+Elena, a tailor, pinned a hem, the soft whir of her sewing machine filling the shop. The sound reminded her of the old wind-up toys her grandmother used to make. She pictured the wooden soldiers dancing across the worn rug. A warmth spread through her as she recalled those quiet afternoons.
+
+Question: What occupation does Elena hold in the shop?
+A. A tailor
+B. A toy maker
+C. A shop keeper
+D. A seamstress
+=== END Q0029 ===
+
+=== ITEM Q0030 ===
+Passage:
+Peter watched the immense excavator scoop up tons of rock. He felt a deep, almost childlike awe for the machine's sheer power. Later, the drilling noise started, shrill and grating, but it hardly registered with him. He simply adjusted his earmuffs, his focus remaining on the grand scale of earth being moved. The deafening sound was a mere backdrop.
+
+Question: What did Peter adjust?
+A. the rock
+B. the drill
+C. the excavator
+D. his earmuffs
+=== END Q0030 ===
+
+=== ITEM Q0031 ===
+Passage:
+Clara sorted through rolls of fabric for a new suit. The rough texture of the tweed made her fingers tingle unpleasantly. But then she touched a bolt of silk, soft and smooth, and a smile touched her lips. She moved away from the tweed swiftly. The distant whir of the sewing machine was just background noise to her.
+
+Question: At a later moment, which of these does Clara avoid when looking through rolls of fabric?
+A. the distant whir
+B. the background noise
+C. the rough texture
+D. the rough tweed
+E. the sewing machine
+F. a bolt of silk
+=== END Q0031 ===
+
+=== ITEM Q0032 ===
+Passage:
+Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.
+
+Question: Someone on their first day takes Agnes's place; which of these would most likely be missing?
+A. stall checking
+B. early morning
+C. steady pulsation
+D. milk line
+E. milking cow
+F. practiced ease
+=== END Q0032 ===
+
+=== ITEM Q0033 ===
+Passage:
+As Maya did laps, the chlorine smell was strong in the air. It instantly brought to her thoughts the municipal pool where she first learned to swim as a small child. She recalled the way the sun shone through the steamed-up windows then. The memory of her father patiently holding her in the shallow end brought a smile.
+
+Question: Where did Maya first learn to swim as a small child?
+A. Lake
+B. Municipal pool
+C. Sea
+D. Shallow end
+=== END Q0033 ===
+
+=== ITEM Q0034 ===
+Passage:
+Olivia drove her locksmith's van through the city. The sight of a deadbolt on a door, even from a distance, instantly told her its brand and likely age. She instinctively knew which tools she would need before she even pulled over. Years of calls had honed this silent recognition. It was a useful shorthand for her work.
+
+Question: What did Olivia drive through the city?
+A. a large truck
+B. her locksmith's van
+C. her family car
+D. a delivery van
+=== END Q0034 ===
+
+=== ITEM Q0035 ===
+Passage:
+Sarah woke before dawn. Her hand automatically reached for the old kettle, filling it with water from the rain barrel. She then retrieved dry kindling and expertly arranged it in the cold hearth. These morning tasks required no conscious thought, a familiar pattern ingrained by many isolated winters.
+
+Question: Where did Sarah get the water to fill the old kettle?
+A. indoor tap
+B. river stream
+C. rain barrel
+D. well pump
+=== END Q0035 ===
+
+=== ITEM Q0036 ===
+Passage:
+Bernard unfolded a roll of raw tweed. Its lanolin scent filled the small shop, a rich, earthy woolliness. Instantly, he pictured his grandfather’s old overcoat, heavy and warm, worn through countless winters. He saw the faint discolouration near the elbow where the fabric had always rubbed against a workbench, mending fishing nets.
+
+Question: What fabric did Bernard unfold in the shop?
+A. Old overcoat
+B. Heavy wool
+C. Raw tweed
+D. Fishing nets
+=== END Q0036 ===
+
+=== ITEM Q0037 ===
+Passage:
+Doris pressed the hot iron onto a wool jacket. The warm, slightly smoky scent reminded her of autumn evenings. She pictured her grandmother's kitchen, filled with the smell of baking bread and woodsmoke from the old stove. It was a clear image of a comfortable, quiet home.
+
+Question: What item was Doris pressing with the hot iron?
+A. a wool jacket
+B. a curtain
+C. a blanket
+D. an apron
+=== END Q0037 ===
+
+=== ITEM Q0038 ===
+Passage:
+Sarah, a beekeeper, checked her hives. The sweet, earthy smell of warm beeswax reminded her of her grandmother’s kitchen, always filled with baking. She remembered helping to press fruit for jam on hot summer days. The scent brought back a wave of comfortable, happy childhood afternoons. She smiled to herself.
+
+Question: Suppose the warm beeswax had no scent; which of these happy memories would most likely not have happened?
+A. Checking the wooden hives in the yard
+B. Remembering the taste of fruit jam today
+C. Closing the top cover of the box
+D. Cleaning the metal tools after work
+E. Remembering helping to press fruit for jam
+F. Carrying the heavy glass jars to town
+=== END Q0038 ===
+
+=== ITEM Q0039 ===
+Passage:
+Old Klaus stoked the fire in the hut's hearth. He had weathered countless blizzards in these mountains over his eighty years. The howling wind outside, which might alarm a novice, merely sounded like a familiar, restless companion to him. He knew exactly how much wood was needed to keep the warmth through the long night.
+
+Question: In which new situation would Old Klaus's mountain background help most?
+A. Lighting a dark hearth fire indoors
+B. Fleeing quickly from a heavy snowstorm
+C. Staying calm during a heavy snowstorm
+D. Listening to quiet winter sounds
+E. Finding lost wood in deep snow
+F. Building a sturdy wooden winter cabin
+=== END Q0039 ===
+
+=== ITEM Q0040 ===
+Passage:
+Mark watched the heavy excavator move rocks with powerful precision, feeling a pull towards its mechanical might. He instinctively turned his face away from the cloud of fine dust that billowed up after a blast. The deafening roar of the rock crusher nearby, however, barely registered in his ears as he focused on the excavator.
+
+Question: What object did Mark watch move rocks with powerful precision?
+A. The heavy excavator
+B. The rock crusher
+C. The fine dust
+D. The heavy blast
+=== END Q0040 ===
+
+=== ITEM Q0041 ===
+Passage:
+Clara, a veteran of countless mountain expeditions, observed the darkening sky from the hut window. While others worried about the impending storm, she calmly began to boil water for tea. Her years of navigating unpredictable mountain weather had taught her to find comfort in small routines during challenging circumstances.
+
+Question: In which new situation would this veteran background help most when facing unexpected trouble?
+A. A quiet afternoon in a warm library
+B. A sudden blizzard on a high peak
+C. A long meeting in a glass office
+D. A bright morning near a calm lake
+E. A fast train moving through open fields
+F. A short walk down a paved street
+=== END Q0041 ===
+
+=== ITEM Q0042 ===
+Passage:
+Julia looked at the broken filtration pump. She saw the clogged intake screen, the seized impeller, and the corroded electrical terminals. The main motor casing seemed undamaged. Each of these parts contributed to the system's failure. She decided to address the screen first.
+
+Question: Julia deals with the clogged intake screen and seized impeller; which named part is still left?
+A. The corroded electrical terminals
+B. The clogged intake screen
+C. The system failure
+D. The main motor casing
+E. The seized impeller
+F. The filtration pump
+=== END Q0042 ===
+
+=== ITEM Q0043 ===
+Passage:
+Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.
+
+Question: The milking stops for two years; which action has most likely faded?
+A. steady pulsation
+B. practiced ease
+C. milking cow
+D. early morning
+E. milk line
+F. stall checking
+=== END Q0043 ===
+
+=== ITEM Q0044 ===
+Passage:
+Liam, a seasoned hiker, felt a sense of peace settle over him as he surveyed the expansive, green valley. The crisp mountain air filled his lungs, a feeling he deeply cherished. The distant, faint sound of a snowmobile engine, however, seemed a jarring intrusion, quickly fading into the background of his thoughts.
+
+Question: According to the passage, what kind of air filled Liam's lungs?
+A. crisp mountain air
+B. expansive green air
+C. faint snowmobile air
+D. warm valley air
+=== END Q0044 ===
+
+=== ITEM Q0045 ===
+Passage:
+Clara sorted through rolls of fabric for a new suit. The rough texture of the tweed made her fingers tingle unpleasantly. But then she touched a bolt of silk, soft and smooth, and a smile touched her lips. She moved away from the tweed swiftly. The distant whir of the sewing machine was just background noise to her.
+
+Question: At a later free moment, which of these does Clara choose when given various materials?
+A. the rough tweed
+B. the background noise
+C. the rough texture
+D. the distant whir
+E. a bolt of silk
+F. the sewing machine
+=== END Q0045 ===
+
+=== ITEM Q0046 ===
+Passage:
+Owen approached the buzzing hive, not pausing to zip his veil completely. He had done this thousands of times. His hands moved automatically, reaching for the smoker, then the hive tool. The familiar drone of the bees no longer registered as a potential threat. He simply worked, his movements practiced and fluid.
+
+Question: What object did Owen reach for first after approaching the buzzing hive?
+A. the tool
+B. the smoker
+C. the hive
+D. the veil
+=== END Q0046 ===
+
+=== ITEM Q0047 ===
+Passage:
+Old Klaus stoked the fire in the hut's hearth. He had weathered countless blizzards in these mountains over his eighty years. The howling wind outside, which might alarm a novice, merely sounded like a familiar, restless companion to him. He knew exactly how much wood was needed to keep the warmth through the long night.
+
+Question: What was Old Klaus stoking in the hut?
+A. the wood near the door
+B. the coals on the floor
+C. the stove in the corner
+D. the fire in the hearth
+=== END Q0047 ===
+
+=== ITEM Q0048 ===
+Passage:
+As Maya did laps, the chlorine smell was strong in the air. It instantly brought to her thoughts the municipal pool where she first learned to swim as a small child. She recalled the way the sun shone through the steamed-up windows then. The memory of her father patiently holding her in the shallow end brought a smile.
+
+Question: Suppose the chlorine smell had not been there. Which of these would most likely not have happened?
+A. Maya seeing the sun shine
+B. Maya finishing her swim laps
+C. Maya smiling in the water
+D. Maya remembering her childhood pool
+E. Maya noticing her father then
+F. Maya swimming laps today
+=== END Q0048 ===
+
+=== ITEM Q0049 ===
+Passage:
+Tom, a foreman, supervised the rock blasting. The distant, dull boom echoed through the vast quarry. He immediately pictured the fireworks display from last summer's town fair. He remembered the vibrant explosions of light against the night sky, and the excited gasps from the crowd around him.
+
+Question: Later and somewhere else, which of these would most likely bring the same thing back to the person?
+A. The fireworks display
+B. The town fair
+C. The vast quarry
+D. The excited gasps
+E. The rock blasting
+F. The dull boom
+=== END Q0049 ===
+
+=== ITEM Q0050 ===
+Passage:
+Zach listened to the low, steady hum emanating from the hive. The sound was constant, a soft, vibrating drone. It suddenly brought to his thoughts a lullaby his mother used to sing when he was very young, a quiet, soothing melody. He remembered the comforting sensation of her hand stroking his hair.
+
+Question: Whose hand did Zach remember stroking his hair?
+A. his friend
+B. his mother
+C. his aunt
+D. his sister
+=== END Q0050 ===
+
+=== ITEM Q0051 ===
+Passage:
+Every time the van stopped at a client's address, Sam, an apprentice locksmith, automatically reached for the heavy toolbox. He swung it onto the ground before the engine even switched off. His hand then went to the clip on his belt, where he kept his small set of picks. He had done this hundreds of times.
+
+Question: Where did Sam keep his small set of picks?
+A. On his belt
+B. In the toolbox
+C. In the van
+D. On the ground
+=== END Q0051 ===
+
+=== ITEM Q0052 ===
+Passage:
+Evelyn ran her hand over a bolt of shimmering silk, appreciating its smooth drape. She recoiled slightly, however, from a rough, scratchy tweed on a nearby rack. Her fingers preferred the delicate touch. Just then, a delivery person opened the door, letting a sudden burst of brilliant yellow sunlight flood the shop. Evelyn barely blinked, absorbed in her fabrics.
+
+Question: At a later free moment, which of these does the person choose?
+A. She reaches for the tweed rack.
+B. She touches the smooth silk bolt.
+C. She checks the bright yellow sunlight.
+D. She picks up the rough scratchy tweed.
+E. She handles the rough nearby tweed.
+F. She picks up the smooth shimmering silk.
+=== END Q0052 ===
+
+=== ITEM Q0053 ===
+Passage:
+Mrs. Jenkins laid out the wedding dress pattern. It consisted of several key sections. There was the bodice, the full skirt panels, the delicate lace overlay for the sleeves, and the long train. Each piece needed careful cutting and precise stitching. She planned to assemble them one by one.
+
+Question: What pattern did Mrs. Jenkins lay out?
+A. the skirt pattern
+B. the wedding dress pattern
+C. the lace pattern
+D. the bodice pattern
+=== END Q0053 ===
+
+=== ITEM Q0054 ===
+Passage:
+Samuel examined the malfunctioning milking machine. He identified the jammed release valve, the frayed electrical wire leading to the pump, and a loose suction cup connection. The main control panel appeared undamaged. Each of these components contributed to the poor milk flow. He started with the valve.
+
+Question: Samuel started fixing the milk system by working on the jammed release valve. Using the text, which named part is still left?
+A. loose suction cup connection
+B. main control panel
+C. poor milk flow
+D. malfunctioning milking machine
+E. jammed release valve
+F. frayed electrical wire
+=== END Q0054 ===
+
+=== ITEM Q0055 ===
+Passage:
+Mark, a young locksmith, found the old lockbox fascinating. He eagerly picked up a complex cylinder mechanism, examining its intricate pins and springs. The simpler, modern electronic keypads, however, left him cold; he found them dull and uninspiring. The faint scent of oil and metal in the van was comforting, while the smell of exhaust fumes from traffic barely registered.
+
+Question: What kind of mechanism did Mark find fascinating in the box?
+A. Spring
+B. Lockbox
+C. Electronic keypad
+D. Cylinder mechanism
+=== END Q0055 ===
+
+=== ITEM Q0056 ===
+Passage:
+Paul rose before dawn, his hand finding the lamp switch in the dark. He stoked the wood stove, adding logs with a practiced, silent motion. He then fetched water from the spring, stepping carefully over familiar rocks. The smell of brewing coffee soon filled the hut, a signal that morning had arrived.
+
+Question: What did Paul fetch from the spring before morning arrived?
+A. Coffee
+B. Lamp
+C. Water
+D. Wood
+=== END Q0056 ===
+
+=== ITEM Q0057 ===
+Passage:
+Yolanda polished a brass lock cylinder in the locksmith's van. The metallic scent of cleaning fluid hung in the air. It briefly reminded her of the brass band her uncle played in years ago, all gleaming instruments and polished buttons. She recalled the loud, joyful music from family gatherings. She tightened the vice, bringing her attention back.
+
+Question: According to the passage, what object was Yolanda polishing in the van?
+A. gleaming instrument
+B. polished button
+C. metal cleaning fluid
+D. brass lock cylinder
+=== END Q0057 ===
+
+=== ITEM Q0058 ===
+Passage:
+Arthur, a beekeeper, always began his afternoon hive check at precisely 2 PM. For years, the chime of the nearby church bell had marked this time. Now, even on days the bell was silent for repair, Arthur found himself moving towards his smoker at two o'clock. His hands would reach for his gloves before he even looked at his watch. He sometimes hummed a tune he associated with the bell.
+
+Question: At what time of day did Arthur always begin his afternoon hive check?
+A. Precisely 2 PM
+B. Precisely 3 PM
+C. Precisely 1 PM
+D. Precisely 4 PM
+=== END Q0058 ===
+
+=== ITEM Q0059 ===
+Passage:
+David guided the cows into the milking parlour. He liked the quiet, steady ones that shuffled cooperatively into their stalls. A particularly restless heifer, however, made him sigh, pushing back against the gate. He quickly moved her along. Just then, a loud, frustrated moo burst from a cow nearby, making David jump, though he quickly regained his composure.
+
+Question: Where did David guide the cows?
+A. Into the dairy barn
+B. Into the cattle pen
+C. Into the milking parlour
+D. Into the open field
+=== END Q0059 ===
+
+=== ITEM Q0060 ===
+Passage:
+Helen arrived at the pool and saw it was crowded with energetic children splashing loudly. Many years of competitive swimming had taught her patience and discipline in chaotic environments. She found an empty lane, mentally divided it into sections, and began her precise, measured strokes, unaffected by the surrounding activity.
+
+Question: What did Helen find at the pool before she began her strokes?
+A. a loud group
+B. a crowded deck
+C. an empty lane
+D. a warm shower
+=== END Q0060 ===
+
+=== ITEM Q0061 ===
+Passage:
+George listened to the struggling milking machine. He quickly identified the components of the problem. First, the vacuum gauge was reading too low, pointing to a loss of suction. Then, he heard a slight hiss, suggesting a worn gasket needed replacing. Finally, he suspected a clogged filter, restricting the airflow. He knew exactly which parts he needed to order.
+
+Question: Which gauge was reading too low according to George?
+A. The airflow gauge
+B. The vacuum gauge
+C. The pressure gauge
+D. The intake gauge
+=== END Q0061 ===
+
+=== ITEM Q0062 ===
+Passage:
+Daniel carefully picked up a shimmering sample of quartz, admiring its crystalline structure. He wiped a bead of sweat from his brow, disliking the intense heat of the quarry sun. The blinding glare reflecting off the rock faces, however, did not deter him from his detailed examination of the new geological layer.
+
+Question: At a later free moment, which of these does Daniel choose?
+A. the geological layer
+B. the rock faces
+C. the intense heat
+D. the blinding glare
+E. the quartz sample
+F. the quarry sun
+=== END Q0062 ===
+
+=== ITEM Q0063 ===
+Passage:
+Helen arrived at the pool and saw it was crowded with energetic children splashing loudly. Many years of competitive swimming had taught her patience and discipline in chaotic environments. She found an empty lane, mentally divided it into sections, and began her precise, measured strokes, unaffected by the surrounding activity.
+
+Question: In which new situation would Helen's background help most?
+A. a crowded pool
+B. a loud child
+C. a chaotic game
+D. a measured stroke
+E. a quiet lane
+F. an empty pool
+=== END Q0063 ===
+
+=== ITEM Q0064 ===
+Passage:
+Julia looked at the broken filtration pump. She saw the clogged intake screen, the seized impeller, and the corroded electrical terminals. The main motor casing seemed undamaged. Each of these parts contributed to the system's failure. She decided to address the screen first.
+
+Question: A spare repair kit holds one of each named part; which of these would not be in it?
+A. the clogged intake screen
+B. the seized impeller
+C. the corroded electrical terminals
+D. the cleaning brush
+E. the filtration pump
+F. the main motor casing
+=== END Q0064 ===
+
+=== ITEM Q0065 ===
+Passage:
+Every morning at half past five, the old bell near the mountain hut rang out. Lena had heard its call for nearly a year now. Without thinking, she would often find herself glancing towards the eastern window as the moment approached. Her hands continued whatever task they were doing, yet her gaze sought the first streaks of dawn light. The sound had become part of her daily routine.
+
+Question: At what time of day did the old bell near the mountain hut ring out?
+A. Seven o'clock
+B. Half past five
+C. Half past six
+D. Quarter to five
+=== END Q0065 ===
+
+=== ITEM Q0066 ===
+Passage:
+Victor felt a strong pull towards the aggressive Queen's Gambit opening. He disliked the more defensive setups, finding them tedious. His opponent's cautious play, however, barely registered with him. He focused intently on his own planned attack, dismissing the slow development across the board. The opponent’s strategy made no impression.
+
+Question: At a later free moment, which of these does Victor choose?
+A. Queen's Gambit setup
+B. cautious play
+C. slow development
+D. Queen's Gambit opening
+E. defensive opening
+F. defensive setups
+=== END Q0066 ===
+
+=== ITEM Q0067 ===
+Passage:
+Samuel examined the malfunctioning milking machine. He identified the jammed release valve, the frayed electrical wire leading to the pump, and a loose suction cup connection. The main control panel appeared undamaged. Each of these components contributed to the poor milk flow. He started with the valve.
+
+Question: According to the passage, which part appeared undamaged?
+A. loose suction cup
+B. jammed release valve
+C. frayed electrical wire
+D. main control panel
+=== END Q0067 ===
+
+=== ITEM Q0068 ===
+Passage:
+Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.
+
+Question: What covered Susan's boots thickly while she watched the heavy machinery excavate rock?
+A. The gravel
+B. The dust
+C. The leaves
+D. The water
+=== END Q0068 ===
+
+=== ITEM Q0069 ===
+Passage:
+Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.
+
+Question: Suppose the noticed thing had not been there; which of these would most likely not have happened?
+A. the dust would not settle thickly
+B. the heavy machinery would not excavate
+C. the boots would not get dusty
+D. the workshop projects would stop
+E. the rock would not be crushed
+F. childhood summers would not be remembered
+=== END Q0069 ===
+
+=== ITEM Q0070 ===
+Passage:
+Evelyn ran her hand over a bolt of shimmering silk, appreciating its smooth drape. She recoiled slightly, however, from a rough, scratchy tweed on a nearby rack. Her fingers preferred the delicate touch. Just then, a delivery person opened the door, letting a sudden burst of brilliant yellow sunlight flood the shop. Evelyn barely blinked, absorbed in her fabrics.
+
+Question: What flooded the shop just after the delivery person opened the door?
+A. A cold evening breeze.
+B. Brilliant yellow sunlight.
+C. A sudden dust cloud.
+D. Heavy falling raindrops.
+=== END Q0070 ===
+
+=== ITEM Q0071 ===
+Passage:
+Mark watched the heavy excavator move rocks with powerful precision, feeling a pull towards its mechanical might. He instinctively turned his face away from the cloud of fine dust that billowed up after a blast. The deafening roar of the rock crusher nearby, however, barely registered in his ears as he focused on the excavator.
+
+Question: At a later moment, which of these is the person least likely to bring up?
+A. The rock crusher
+B. The heavy rocks
+C. The deafening roar
+D. The fine dust
+E. The heavy excavator
+F. The distant blast
+=== END Q0071 ===
+
+=== ITEM Q0072 ===
+Passage:
+Farmer George moved among his herd. He knew each cow by her unique markings and temperament after decades of working this land. The low moo of the first cow entering the parlour wasn't just a sound; it was the start of the daily routine, a familiar pattern ingrained in his very bones. He felt a deep connection to their gentle presence.
+
+Question: Who moved among his herd?
+A. Peter
+B. a locksmith
+C. the first cow
+D. Farmer George
+=== END Q0072 ===
+
+=== ITEM Q0073 ===
+Passage:
+Ken explained the steps for a hive inspection to his new apprentice. First, they would gently smoke the entrance to calm the bees. Next, they would carefully open the top cover. Then, they would remove and examine each frame, looking for the queen. Finally, they would assess the brood pattern and honey stores before closing the hive.
+
+Question: What did Ken and his apprentice look for while examining each frame?
+A. The queen
+B. The smoke
+C. The cover
+D. The honey
+=== END Q0073 ===
+
+=== ITEM Q0074 ===
+Passage:
+Wendy stepped to the edge of the pool. The cool mist rising from the water held no discomfort for her. Decades of early morning swims had acclimated her body to the chill. She slid gracefully into the lane, the familiar sensation of the water enveloping her with a comforting coolness. She began her gentle strokes.
+
+Question: What rose from the water as Wendy stepped to the edge?
+A. Comforting coolness
+B. Familiar sensation
+C. Cool mist
+D. Warm steam
+=== END Q0074 ===
+
+=== ITEM Q0075 ===
+Passage:
+Michael, at the chess club, felt a distinct pull towards the intricate endgame on board three, its complex strategy fascinating him. He admired the subtle rook sacrifice made by one player. His own unfinished game, however, with its simpler mid-game struggle, held little appeal, drawing only a cursory glance as he passed.
+
+Question: Which board held the intricate endgame that felt fascinating to Michael at the chess club?
+A. Board one
+B. Board two
+C. Board three
+D. Board four
+=== END Q0075 ===
+
+=== ITEM Q0076 ===
+Passage:
+Olivia ran her fingers over the smooth silk fabric, clearly delighting in its soft texture. She quickly pulled her hand away from the coarse tweed swatch next to it, making a small grimace of distaste. When the tailor mentioned the exorbitant price of the silk, Olivia simply nodded, unfazed, already imagining her new dress.
+
+Question: Which fabric did Olivia pull her hand away from?
+A. The tailor's new dress
+B. The smooth silk fabric
+C. The expensive silk cloth
+D. The coarse tweed swatch
+=== END Q0076 ===
+
+=== ITEM Q0077 ===
+Passage:
+Olivia ran her fingers over the smooth silk fabric, clearly delighting in its soft texture. She quickly pulled her hand away from the coarse tweed swatch next to it, making a small grimace of distaste. When the tailor mentioned the exorbitant price of the silk, Olivia simply nodded, unfazed, already imagining her new dress.
+
+Question: Olivia is shopping for dress material later that day. Which of these does she choose?
+A. rough tweed fabric
+B. heavy wool tweed
+C. coarse wool fabric
+D. smooth silk fabric
+E. rough denim swatch
+F. coarse tweed swatch
+=== END Q0077 ===
+
+=== ITEM Q0078 ===
+Passage:
+Old Jakob, a mountain guide for decades, heard the distant rumble. Most people would have dismissed it as thunder. He recognized the particular heavy boom of shifting snow high on the peaks. His hand instinctively went to the radio on the shelf. He knew exactly what sort of storm was brewing above them.
+
+Question: Where was the radio located according to the text?
+A. On the shelf.
+B. On the wooden desk.
+C. On the kitchen counter.
+D. On the small table.
+=== END Q0078 ===
+
+=== ITEM Q0079 ===
+Passage:
+Fred knelt beside the malfunctioning milking unit. He knew its parts: the pulsator, the claw, the liner, and the milk hose. He checked the air filter, then the vacuum lines for cracks. Next, he unclipped the control panel, inspecting the wiring harness and the small solenoid valve. The fault lay in one of those components.
+
+Question: What did Fred unclip after checking the air filter and vacuum lines?
+A. the milk hose
+B. the control panel
+C. the small solenoid valve
+D. the wiring harness
+=== END Q0079 ===
+
+=== ITEM Q0080 ===
+Passage:
+The milking machine was malfunctioning during the morning run. Farmer Greg looked at the diagnostic display. The problem involved three components: a blocked filter, a faulty vacuum gauge, and a worn pulsator hose. He knew each part had to be addressed in turn. Ignoring one would lead to continued issues during milking.
+
+Question: Farmer Greg addressed the blocked filter and the worn pulsator hose. Which component is still left to fix?
+A. a blocked filter
+B. the diagnostic display
+C. continued issues
+D. a faulty vacuum gauge
+E. a worn pulsator hose
+F. the morning run
+=== END Q0080 ===
+
+=== ITEM Q0081 ===
+Passage:
+Clara had kept bees since she was a girl. The constant, murmuring hum from the hives was a familiar backdrop to her days. She never actively listened, but her body registered tiny shifts. When the hum deepened in a particular way, her hand instinctively reached for her smoke pot. She just knew a swarm was thinking of leaving.
+
+Question: What object did Clara's hand instinctively reach for when the hum deepened?
+A. her heavy gloves
+B. her smoke pot
+C. her sharp knife
+D. her wooden box
+=== END Q0081 ===
+
+=== ITEM Q0082 ===
+Passage:
+Mr. Davies oversaw the blasting team. He had worked in quarries since he was a young man, understanding the rock formations like few others. The rumble of the distant explosion, a sound that unsettled new workers, simply told him the day's work was progressing. He could almost feel the strata shifting deep below the surface.
+
+Question: Who oversaw the blasting team at the site?
+A. Sarah
+B. Mr. Davies
+C. Victor
+D. A young worker
+=== END Q0082 ===
+
+=== ITEM Q0083 ===
+Passage:
+Ken examined the jammed door lock. He mentally disassembled the faulty mechanism. First, he suspected seized pins, stiff from lack of lubrication. Then, the springs inside might be worn, no longer pushing the pins correctly. A closer look suggested a bent keyway, making the key snag. Finally, he noted signs of corrosion inside the cylinder.
+
+Question: What did Ken examine closely?
+A. The bent keyway
+B. The worn springs
+C. The jammed door lock
+D. The faulty mechanism
+=== END Q0083 ===
+
+=== ITEM Q0084 ===
+Passage:
+Clara sorted through rolls of fabric for a new suit. The rough texture of the tweed made her fingers tingle unpleasantly. But then she touched a bolt of silk, soft and smooth, and a smile touched her lips. She moved away from the tweed swiftly. The distant whir of the sewing machine was just background noise to her.
+
+Question: What made Clara's fingers tingle unpleasantly as she sorted through rolls of fabric?
+A. the bright glint of the metal
+B. the soft and smooth bolt of silk
+C. the distant whir of the sewing machine
+D. the rough texture of the tweed
+=== END Q0084 ===
+
+=== ITEM Q0085 ===
+Passage:
+Mrs. Jenkins laid out the wedding dress pattern. It consisted of several key sections. There was the bodice, the full skirt panels, the delicate lace overlay for the sleeves, and the long train. Each piece needed careful cutting and precise stitching. She planned to assemble them one by one.
+
+Question: Some of the named parts are dealt with; which named part is still left?
+A. the bodice
+B. the full skirt panels
+C. the long train
+D. the delicate lace overlay
+E. the dress pattern
+F. the sleeve section
+=== END Q0085 ===
+
+=== ITEM Q0086 ===
+Passage:
+Peter watched the immense excavator scoop up tons of rock. He felt a deep, almost childlike awe for the machine's sheer power. Later, the drilling noise started, shrill and grating, but it hardly registered with him. He simply adjusted his earmuffs, his focus remaining on the grand scale of earth being moved. The deafening sound was a mere backdrop.
+
+Question: At dinner later, which of these is the person most likely to bring up?
+A. the earmuffs
+B. the drilling noise
+C. the earth
+D. the rock
+E. the backdrop
+F. the immense excavator
+=== END Q0086 ===
+
+=== ITEM Q0087 ===
+Passage:
+Tom, a foreman, supervised the rock blasting. The distant, dull boom echoed through the vast quarry. He immediately pictured the fireworks display from last summer's town fair. He remembered the vibrant explosions of light against the night sky, and the excited gasps from the crowd around him.
+
+Question: Suppose the noticed thing had not been there; which of these would most likely not have happened?
+A. The distant, dull boom
+B. The town fair
+C. The vibrant explosions
+D. The fireworks display
+E. The excited gasps
+F. The vast quarry
+=== END Q0087 ===
+
+=== ITEM Q0088 ===
+Passage:
+Evelyn ran her hand over a bolt of shimmering silk, appreciating its smooth drape. She recoiled slightly, however, from a rough, scratchy tweed on a nearby rack. Her fingers preferred the delicate touch. Just then, a delivery person opened the door, letting a sudden burst of brilliant yellow sunlight flood the shop. Evelyn barely blinked, absorbed in her fabrics.
+
+Question: At a later moment, which of these does the person avoid?
+A. She keeps clear of the smooth shimmering silk.
+B. She keeps clear of the rough scratchy tweed.
+C. She ducks the bright yellow sunlight.
+D. She turns from the shimmering silk bolt.
+E. She avoids the delicate touch of silk.
+F. She leaves the smooth silk on rack.
+=== END Q0088 ===
+
+=== ITEM Q0089 ===
+Passage:
+Clara, a veteran of countless mountain expeditions, observed the darkening sky from the hut window. While others worried about the impending storm, she calmly began to boil water for tea. Her years of navigating unpredictable mountain weather had taught her to find comfort in small routines during challenging circumstances.
+
+Question: What beverage did Clara calmly begin to boil water for from the hut window?
+A. Tea
+B. Soup
+C. Milk
+D. Cocoa
+=== END Q0089 ===
+
+=== ITEM Q0090 ===
+Passage:
+The milking machine was malfunctioning during the morning run. Farmer Greg looked at the diagnostic display. The problem involved three components: a blocked filter, a faulty vacuum gauge, and a worn pulsator hose. He knew each part had to be addressed in turn. Ignoring one would lead to continued issues during milking.
+
+Question: Which specific item did Farmer Greg examine during the morning run?
+A. a blocked filter
+B. the milking machine
+C. the diagnostic display
+D. a worn pulsator hose
+=== END Q0090 ===

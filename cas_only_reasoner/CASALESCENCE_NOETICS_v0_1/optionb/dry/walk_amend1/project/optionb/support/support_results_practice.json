@@ -1,0 +1,1336 @@
+{
+ "schema": "casalescence/optionb/support_results/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py",
+  "sha256": "246032c116a7abdcc1f43b512fa5300d88e5ec924868b7a92cc63eea4254b9e1",
+  "utc": "2026-10-05T16:24:20Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "d648fb72cd362889ae7ee32f37273c2c9946384d7ddd684f69251135ba973ad2"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_practice.json",
+   "sha256": "8c6e5fb9eba58f925c9bee16fe25d2da6163bd1dba8c73657ea61db35b52eb21"
+  },
+  {
+   "path": "optionb/support/support_calls_practice.jsonl",
+   "sha256": "b492cea9b72d5e0d325c618402be66d40774c4d51c84ae439151cea59a710218"
+  }
+ ],
+ "set": "practice",
+ "results": [
+  {
+   "note_id": "V130|ORD-INFORMED|090|v1",
+   "item_id": "N0001",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V130|ORD-INFORMED|100|v1",
+   "item_id": "N0002",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V130|ORD-INFORMED|110|v1",
+   "item_id": "N0003",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V130|ORD-FREE|090|v1",
+   "item_id": "N0004",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V130|ORD-FREE|100|v1",
+   "item_id": "N0005",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V130|ORD-FREE|110|v1",
+   "item_id": "N0006",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V131|ORD-INFORMED|090|v1",
+   "item_id": "N0007",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V131|ORD-INFORMED|100|v1",
+   "item_id": "N0008",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V131|ORD-INFORMED|110|v1",
+   "item_id": "N0009",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V131|ORD-FREE|090|v1",
+   "item_id": "N0010",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V131|ORD-FREE|100|v1",
+   "item_id": "N0011",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V131|ORD-FREE|110|v1",
+   "item_id": "N0012",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V132|ORD-INFORMED|090|v1",
+   "item_id": "N0013",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V132|ORD-INFORMED|100|v1",
+   "item_id": "N0014",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V132|ORD-INFORMED|110|v1",
+   "item_id": "N0015",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V132|ORD-FREE|090|v1",
+   "item_id": "N0016",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V132|ORD-FREE|100|v1",
+   "item_id": "N0017",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V132|ORD-FREE|110|v1",
+   "item_id": "N0018",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V122|ORD-INFORMED|090|v1",
+   "item_id": "N0019",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V122|ORD-INFORMED|100|v1",
+   "item_id": "N0020",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V122|ORD-INFORMED|110|v1",
+   "item_id": "N0021",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V122|ORD-FREE|090|v1",
+   "item_id": "N0022",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V122|ORD-FREE|100|v1",
+   "item_id": "N0023",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V122|ORD-FREE|110|v1",
+   "item_id": "N0024",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V123|ORD-INFORMED|090|v1",
+   "item_id": "N0025",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V123|ORD-INFORMED|100|v1",
+   "item_id": "N0026",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V123|ORD-INFORMED|110|v1",
+   "item_id": "N0027",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V123|ORD-FREE|090|v1",
+   "item_id": "N0028",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V123|ORD-FREE|100|v1",
+   "item_id": "N0029",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V123|ORD-FREE|110|v1",
+   "item_id": "N0030",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V124|ORD-INFORMED|090|v1",
+   "item_id": "N0031",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V124|ORD-INFORMED|100|v1",
+   "item_id": "N0032",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V124|ORD-INFORMED|110|v1",
+   "item_id": "N0033",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V124|ORD-FREE|090|v1",
+   "item_id": "N0034",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V124|ORD-FREE|100|v1",
+   "item_id": "N0035",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V124|ORD-FREE|110|v1",
+   "item_id": "N0036",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V135|ORD-INFORMED|090|v1",
+   "item_id": "N0037",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V135|ORD-INFORMED|100|v1",
+   "item_id": "N0038",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V135|ORD-INFORMED|110|v1",
+   "item_id": "N0039",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V135|ORD-FREE|090|v1",
+   "item_id": "N0040",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V135|ORD-FREE|100|v1",
+   "item_id": "N0041",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V135|ORD-FREE|110|v1",
+   "item_id": "N0042",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V136|ORD-INFORMED|090|v1",
+   "item_id": "N0043",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V136|ORD-INFORMED|100|v1",
+   "item_id": "N0044",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V136|ORD-INFORMED|110|v1",
+   "item_id": "N0045",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V136|ORD-FREE|090|v1",
+   "item_id": "N0046",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V136|ORD-FREE|100|v1",
+   "item_id": "N0047",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V136|ORD-FREE|110|v1",
+   "item_id": "N0048",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V134|ORD-INFORMED|090|v1",
+   "item_id": "N0049",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V134|ORD-INFORMED|100|v1",
+   "item_id": "N0050",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V134|ORD-INFORMED|110|v1",
+   "item_id": "N0051",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V134|ORD-FREE|090|v1",
+   "item_id": "N0052",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V134|ORD-FREE|100|v1",
+   "item_id": "N0053",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V134|ORD-FREE|110|v1",
+   "item_id": "N0054",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V125|ORD-INFORMED|090|v1",
+   "item_id": "N0055",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V125|ORD-INFORMED|100|v1",
+   "item_id": "N0056",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V125|ORD-INFORMED|110|v1",
+   "item_id": "N0057",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V125|ORD-FREE|090|v1",
+   "item_id": "N0058",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V125|ORD-FREE|100|v1",
+   "item_id": "N0059",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V125|ORD-FREE|110|v1",
+   "item_id": "N0060",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V120|ORD-INFORMED|090|v1",
+   "item_id": "N0061",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V120|ORD-INFORMED|100|v1",
+   "item_id": "N0062",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V120|ORD-INFORMED|110|v1",
+   "item_id": "N0063",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V120|ORD-FREE|090|v1",
+   "item_id": "N0064",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V120|ORD-FREE|100|v1",
+   "item_id": "N0065",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V120|ORD-FREE|110|v1",
+   "item_id": "N0066",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V140|ORD-INFORMED|090|v1",
+   "item_id": "N0067",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V140|ORD-INFORMED|100|v1",
+   "item_id": "N0068",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V140|ORD-INFORMED|110|v1",
+   "item_id": "N0069",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V140|ORD-FREE|090|v1",
+   "item_id": "N0070",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V140|ORD-FREE|100|v1",
+   "item_id": "N0071",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V140|ORD-FREE|110|v1",
+   "item_id": "N0072",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V127|ORD-INFORMED|090|v1",
+   "item_id": "N0073",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V127|ORD-INFORMED|100|v1",
+   "item_id": "N0074",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V127|ORD-INFORMED|110|v1",
+   "item_id": "N0075",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V127|ORD-FREE|090|v1",
+   "item_id": "N0076",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V127|ORD-FREE|100|v1",
+   "item_id": "N0077",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V127|ORD-FREE|110|v1",
+   "item_id": "N0078",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V141|ORD-INFORMED|090|v1",
+   "item_id": "N0079",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V141|ORD-INFORMED|100|v1",
+   "item_id": "N0080",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V141|ORD-INFORMED|110|v1",
+   "item_id": "N0081",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V141|ORD-FREE|090|v1",
+   "item_id": "N0082",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V141|ORD-FREE|100|v1",
+   "item_id": "N0083",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V141|ORD-FREE|110|v1",
+   "item_id": "N0084",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V121|ORD-INFORMED|090|v1",
+   "item_id": "N0085",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V121|ORD-INFORMED|100|v1",
+   "item_id": "N0086",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V121|ORD-INFORMED|110|v1",
+   "item_id": "N0087",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V121|ORD-FREE|090|v1",
+   "item_id": "N0088",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V121|ORD-FREE|100|v1",
+   "item_id": "N0089",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V121|ORD-FREE|110|v1",
+   "item_id": "N0090",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V137|ORD-INFORMED|090|v1",
+   "item_id": "N0091",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V137|ORD-INFORMED|100|v1",
+   "item_id": "N0092",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V137|ORD-INFORMED|110|v1",
+   "item_id": "N0093",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V137|ORD-FREE|090|v1",
+   "item_id": "N0094",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "FAIL"
+  },
+  {
+   "note_id": "V137|ORD-FREE|100|v1",
+   "item_id": "N0095",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "FAIL"
+  },
+  {
+   "note_id": "V137|ORD-FREE|110|v1",
+   "item_id": "N0096",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "FAIL"
+  },
+  {
+   "note_id": "V118|ORD-INFORMED|090|v1",
+   "item_id": "N0097",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V118|ORD-INFORMED|100|v1",
+   "item_id": "N0098",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V118|ORD-INFORMED|110|v1",
+   "item_id": "N0099",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V118|ORD-FREE|090|v1",
+   "item_id": "N0100",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V118|ORD-FREE|100|v1",
+   "item_id": "N0101",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V118|ORD-FREE|110|v1",
+   "item_id": "N0102",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V138|ORD-INFORMED|090|v1",
+   "item_id": "N0103",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V138|ORD-INFORMED|100|v1",
+   "item_id": "N0104",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V138|ORD-INFORMED|110|v1",
+   "item_id": "N0105",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V138|ORD-FREE|090|v1",
+   "item_id": "N0106",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V138|ORD-FREE|100|v1",
+   "item_id": "N0107",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V138|ORD-FREE|110|v1",
+   "item_id": "N0108",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V142|ORD-INFORMED|090|v1",
+   "item_id": "N0109",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V142|ORD-INFORMED|100|v1",
+   "item_id": "N0110",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V142|ORD-INFORMED|110|v1",
+   "item_id": "N0111",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V142|ORD-FREE|090|v1",
+   "item_id": "N0112",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V142|ORD-FREE|100|v1",
+   "item_id": "N0113",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V142|ORD-FREE|110|v1",
+   "item_id": "N0114",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V143|ORD-INFORMED|090|v1",
+   "item_id": "N0115",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V143|ORD-INFORMED|100|v1",
+   "item_id": "N0116",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V143|ORD-INFORMED|110|v1",
+   "item_id": "N0117",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V143|ORD-FREE|090|v1",
+   "item_id": "N0118",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V143|ORD-FREE|100|v1",
+   "item_id": "N0119",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V143|ORD-FREE|110|v1",
+   "item_id": "N0120",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V139|ORD-INFORMED|090|v1",
+   "item_id": "N0121",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V139|ORD-INFORMED|100|v1",
+   "item_id": "N0122",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V139|ORD-INFORMED|110|v1",
+   "item_id": "N0123",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V139|ORD-FREE|090|v1",
+   "item_id": "N0124",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V139|ORD-FREE|100|v1",
+   "item_id": "N0125",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V139|ORD-FREE|110|v1",
+   "item_id": "N0126",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V119|ORD-INFORMED|090|v1",
+   "item_id": "N0127",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V119|ORD-INFORMED|100|v1",
+   "item_id": "N0128",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V119|ORD-INFORMED|110|v1",
+   "item_id": "N0129",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V119|ORD-FREE|090|v1",
+   "item_id": "N0130",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V119|ORD-FREE|100|v1",
+   "item_id": "N0131",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V119|ORD-FREE|110|v1",
+   "item_id": "N0132",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V126|ORD-INFORMED|090|v1",
+   "item_id": "N0133",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V126|ORD-INFORMED|100|v1",
+   "item_id": "N0134",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V126|ORD-INFORMED|110|v1",
+   "item_id": "N0135",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V126|ORD-FREE|090|v1",
+   "item_id": "N0136",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V126|ORD-FREE|100|v1",
+   "item_id": "N0137",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V126|ORD-FREE|110|v1",
+   "item_id": "N0138",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V128|ORD-INFORMED|090|v1",
+   "item_id": "N0139",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V128|ORD-INFORMED|100|v1",
+   "item_id": "N0140",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V128|ORD-INFORMED|110|v1",
+   "item_id": "N0141",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V128|ORD-FREE|090|v1",
+   "item_id": "N0142",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V128|ORD-FREE|100|v1",
+   "item_id": "N0143",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V128|ORD-FREE|110|v1",
+   "item_id": "N0144",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V144|ORD-INFORMED|090|v1",
+   "item_id": "N0145",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V144|ORD-INFORMED|100|v1",
+   "item_id": "N0146",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V144|ORD-INFORMED|110|v1",
+   "item_id": "N0147",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V144|ORD-FREE|090|v1",
+   "item_id": "N0148",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V144|ORD-FREE|100|v1",
+   "item_id": "N0149",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V144|ORD-FREE|110|v1",
+   "item_id": "N0150",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V129|ORD-INFORMED|090|v1",
+   "item_id": "N0151",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V129|ORD-INFORMED|100|v1",
+   "item_id": "N0152",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V129|ORD-INFORMED|110|v1",
+   "item_id": "N0153",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V129|ORD-FREE|090|v1",
+   "item_id": "N0154",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V129|ORD-FREE|100|v1",
+   "item_id": "N0155",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V129|ORD-FREE|110|v1",
+   "item_id": "N0156",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V133|ORD-INFORMED|090|v1",
+   "item_id": "N0157",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V133|ORD-INFORMED|100|v1",
+   "item_id": "N0158",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V133|ORD-INFORMED|110|v1",
+   "item_id": "N0159",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V133|ORD-FREE|090|v1",
+   "item_id": "N0160",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V133|ORD-FREE|100|v1",
+   "item_id": "N0161",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V133|ORD-FREE|110|v1",
+   "item_id": "N0162",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V137|ORD-FREE|090|v2",
+   "item_id": "N0163",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 2,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V137|ORD-FREE|100|v2",
+   "item_id": "N0164",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 2,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "V137|ORD-FREE|110|v2",
+   "item_id": "N0165",
+   "checker": "gemini-3.1-flash-lite",
+   "round": 2,
+   "verdict": "PASS"
+  }
+ ],
+ "passages": [
+  {
+   "passage_id": "V118",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V119",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V120",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V121",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V122",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V123",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V124",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V125",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V126",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V127",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V128",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V129",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V130",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V131",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V132",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V133",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V134",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V135",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V136",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V137",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": [
+    "V137|ORD-FREE|090|v1",
+    "V137|ORD-FREE|100|v1",
+    "V137|ORD-FREE|110|v1"
+   ]
+  },
+  {
+   "passage_id": "V138",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V139",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V140",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V141",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V142",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V143",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "V144",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  }
+ ],
+ "counts": {
+  "notes_checked": 165,
+  "passed": 162,
+  "failed_once": 3,
+  "failed_twice": 0,
+  "passages_dropped": 0
+ }
+}

@@ -1,0 +1,17 @@
+[
+ {"id": "G01", "kind": "K2a"},
+ {"id": "G02", "kind": "K3"},
+ {"id": "G03", "kind": "K2a"},
+ {"id": "G04", "kind": "K6"},
+ {"id": "G05", "kind": "K7"},
+ {"id": "G06", "kind": "K5"},
+ {"id": "G07", "kind": "K2a"},
+ {"id": "G08", "kind": "K5"},
+ {"id": "G09", "kind": "K2a"},
+ {"id": "G10", "kind": "K2b"},
+ {"id": "G11", "kind": "K8"},
+ {"id": "G12", "kind": "K2a"},
+ {"id": "G13", "kind": "K1"},
+ {"id": "G14", "kind": "K1"},
+ {"id": "G15", "kind": "K3"}
+]

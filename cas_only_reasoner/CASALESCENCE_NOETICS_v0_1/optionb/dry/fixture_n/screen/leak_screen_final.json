@@ -1,0 +1,126 @@
+{
+ "schema": "casalescence/optionb/leak_screen/v1",
+ "made_by": {
+  "program": "tools/ob_screen_notes.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "ab4bfd9a607863ae2ad5467cccab31b0aaec13cf5b3f5187bc73b316d8af5fc8",
+  "utc": "2026-10-05T18:34:05Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "aeecea41cfdd79e5eecc00ba682c74f6e9d0c3180e1803e9bcc0d8aa467d85c4"
+  },
+  {
+   "path": "optionb/dry/fixture_n/SEAL_OPTIONB.jsonl",
+   "sha256": "64ad01d5131d7ecdebe2405e2d8a9a60c58b0527ca8c17280e2e54b1cdd99787"
+  },
+  {
+   "path": "optionb/dry/fixture_n/elig/eligibility.json",
+   "sha256": "6246dcaaa904856126d7c2b7634ad641c484b030cbf60f0704eaf8017bc6a2c7"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_ord/ordinary_notes_final.json",
+   "sha256": "7b2c0d86c9f2fe4016e504b2504381076f29635df9f8c9da470a5c4edd9879ce"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_ord/ordinary_notes_practice.json",
+   "sha256": "74787be22a07ca0afac85dfa9b684c1391bcc07b219dee69dbb2ee2829a94386"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_role/role_notes.json",
+   "sha256": "775b12b2625f6054a792ef2298dcc2754d1b4fbd7a5aea8591ee7caeb9ded92e"
+  },
+  {
+   "path": "optionb/dry/fixture_n/select/selection_final.json",
+   "sha256": "22e1f19c945f5d0d47b0e2a1f194870b9cd5bdfa3fed8ae7da949befd7a77fde"
+  },
+  {
+   "path": "optionb/dry/fixture_n/select/selection_practice.json",
+   "sha256": "fe40b3874480379b8658d62f8fdcaa525bd59a8a28b6484ea932727d36e50d96"
+  },
+  {
+   "path": "optionb/dry/fixture_n/support/support_results_final.json",
+   "sha256": "ae8d4cb98fc4a64e513eb04021921a1b8049e7ec242001dd1c2beed7f39b01bb"
+  },
+  {
+   "path": "optionb/dry/fixture_n/support/support_results_practice.json",
+   "sha256": "2f1b536cfb9b2baa1767282d39dc082361bad15e7b769a4c187ac2babfacde55"
+  }
+ ],
+ "set": "final",
+ "passages": [
+  {
+   "passage_id": "V906",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V908",
+   "hit": true,
+   "hits": [
+    {
+     "group": "ORD-INFORMED",
+     "length": "090",
+     "rule": "a",
+     "task_id": null,
+     "detail": "letter pattern 1: 1 in the note, 0 in the passage; first: (B)"
+    }
+   ]
+  },
+  {
+   "passage_id": "V909",
+   "hit": true,
+   "hits": [
+    {
+     "group": "ORD-FREE",
+     "length": "100",
+     "rule": "d",
+     "task_id": null,
+     "detail": "the word correct: 1 in the note, 0 in the passage"
+    }
+   ]
+  },
+  {
+   "passage_id": "V910",
+   "hit": true,
+   "hits": [
+    {
+     "group": "ORD-INFORMED",
+     "length": "110",
+     "rule": "b",
+     "task_id": "V910.GOES_FOR",
+     "detail": "holds a sentence of the question: a free hour comes up next week"
+    }
+   ]
+  },
+  {
+   "passage_id": "V911",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V912",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V913",
+   "hit": false,
+   "hits": []
+  }
+ ],
+ "counts": {
+  "passages_screened": 7,
+  "passages_hit": 3,
+  "hits_by_rule": {
+   "a": 1,
+   "b": 1,
+   "c": 0,
+   "d": 1
+  }
+ }
+}

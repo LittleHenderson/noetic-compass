@@ -1,0 +1,63 @@
+{
+ "tool": "label_outside_v22/1",
+ "provider": "deepseek",
+ "model": "deepseek-chat",
+ "guide_sha256": "95473da3ae547f7a7bedea6073db3c02599b1cbcee4591d3e15988935c88eaa0",
+ "instructions_sha256": "25f2aa6330b346bcca92193e348aa89ee8a41116f59e223ee4be76309ecd1b4e",
+ "checker_sha256": "c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9",
+ "passages_sha256": "a1a46b7ee021cb86187e119e6e8c4c992979699819075af2b0fc69d57eefa655",
+ "tool_sha256": "90a216fadfd3bd5ea4786b1dfdb9830277438e4bf89b2e6ae233a59da07162c4",
+ "frame_sha256": "a7388848ef8d536e3dee3a82d1049dc22075330709da9d37517c73f8b49021dd",
+ "seal_sha256": "188fc2873082d566263e7753e9423298073c39025839083ea5af7ce29ffd3271",
+ "written_utc": "2026-10-07T21:57:36.071316+00:00",
+ "labels_file": "labels_team_b.json",
+ "labels_sha256": "299578da82f4af3a6745bfe75d5e6ce1740124326fc461fb6a47f1031cdee60d",
+ "guide": "02_LABELING_GUIDE_v2_2.md",
+ "instructions": "label_v22\\LABELER_INSTRUCTIONS.txt",
+ "passages_file": "label_v22\\practice\\passages_practice.json",
+ "complete": true,
+ "passages": 30,
+ "passages_by_state": {
+  "LABELED": 30
+ },
+ "passages_not_final": [],
+ "passages_by_number_of_tries": {
+  "1": 24,
+  "3": 1,
+  "2": 5
+ },
+ "entries_in_final_records": 126,
+ "entries_by_noetic": {
+  "^1": 37,
+  "^2": 4,
+  "^3": 3,
+  "^4": 7,
+  "^5": 15,
+  "^6": 19,
+  "^7": 5,
+  "^8": 12,
+  "^9": 24
+ },
+ "entries_withdrawn_between_tries": 0,
+ "entries_withdrawn_by_noetic": {},
+ "withdrawn_by_passage": {},
+ "model_asked_for": "deepseek-chat",
+ "models_that_answered": {
+  "deepseek-flash": 37
+ },
+ "tries_with_reasoning_text": 0,
+ "one_passage_per_call": true,
+ "temperature": 0,
+ "tokens_sent": 669299,
+ "tokens_returned": 15194,
+ "stopped_for": null,
+ "cap_in": 1200000,
+ "cap_out": 60000,
+ "caps_given_in_all_runs": [
+  {
+   "utc": "2026-10-07T21:56:18.379490+00:00",
+   "cap_in": 1200000,
+   "cap_out": 60000
+  }
+ ]
+}

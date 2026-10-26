@@ -1,0 +1,18 @@
+[
+ {"passage_id": "H01", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Ada", "label": "Ada", "support": "Ada oiled the old lathe each night.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^4", "mind": "Ada", "label": "Its low growl", "support": "Its low growl never troubled her.", "measure": "hardly troubled her", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^4", "mind": "Ada", "label": "Its low growl", "support": "Its low growl hardly troubled her.", "measure": "barely troubled her", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Ida", "label": "the old lathe", "support": "Ada oiled the old lathe each night.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^6", "mind": "", "label": "the chuck", "support": "The belt, the chuck and the tool rest made up the headstock.", "measure": "", "relative_to": "the tailstock", "certainty": "clear"},
+   {"noetic": "^6", "mind": "", "label": "The belt", "support": "The belt, the chuck and the tool rest made up the headstock.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^6", "mind": "", "label": "the tool rest", "support": "The belt, the chuck and the tool rest made up the headstock.", "measure": "", "relative_to": "", "certainty": "clear", "clue": true},
+   {"noetic": "^8", "mind": "Ada", "label": "The rasp of the file", "support": "The rasp of the file put her in mind of her father's forge.", "measure": "", "relative_to": "her father's forge", "certainty": "clear"},
+   {"noetic": "^3", "mind": "Ada", "label": "the old lathe", "support": "Ada oiled the old lathe each night.", "measure": "", "relative_to": "", "certainty": "held", "held_under": "H2-COMFORT"},
+   {"noetic": "^5", "mind": "Ada", "label": "the old lathe", "support": "Ada oiled the old lathe each night.", "measure": "", "relative_to": "", "certainty": "held"},
+   {"noetic": "^0", "mind": "Ada", "label": "the old lathe", "support": "Ada oiled the old lathe each night.", "measure": "", "relative_to": "", "certainty": "clear"},
+   "this is not an entry",
+   {"noetic": "^7", "mind": "Ada", "label": "oiled the old lathe", "support": "Ada oiled the old lathe each night.", "measure": "each night", "relative_to": "", "certainty": "clear"}
+  ]}
+]

@@ -1,0 +1,107 @@
+SHEET practice-no_passage-04. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0225 ===
+Question: What kind of parcels did Olivia dislike handling?
+A. Brightly coloured greeting cards
+B. Misaddressed packages
+C. Plain brown parcels
+D. Small envelopes in bins
+=== END G0225 ===
+
+=== ITEM G0226 ===
+Question: Who examined the complex delivery route involving four distinct segments?
+A. Marta
+B. Maria
+C. Graham
+D. Helen
+=== END G0226 ===
+
+=== ITEM G0227 ===
+Question: What did Paul place the package in after writing on the label?
+A. The correct pigeonhole
+B. The right tray
+C. The sorting room
+D. The nearby village
+=== END G0227 ===
+
+=== ITEM G0228 ===
+Question: What kind of item did Graham flick through in the stack?
+A. parcels
+B. postcards
+C. packages
+D. letters
+=== END G0228 ===
+
+=== ITEM G0229 ===
+Question: Where was Daniel working when he reached for the letters?
+A. In the sorting room
+B. At the delivery truck
+C. By the warehouse bins
+D. In a nearby village
+=== END G0229 ===
+
+=== ITEM G0230 ===
+Question: How long had Marta worked there before handling the package?
+A. thirty years
+B. ten years
+C. twenty years
+D. five years
+=== END G0230 ===
+
+=== ITEM G0231 ===
+Question: At a later moment, which of these does the person avoid?
+A. Focusing on separating small envelopes into bins.
+B. Lifting the plain brown parcels that are heavy.
+C. Separating the small envelopes into their respective bins.
+D. Handling the brightly coloured greeting cards around holidays.
+E. Lifting the brightly coloured greeting cards for holidays.
+F. Listening to the distant drone of the warehouse.
+=== END G0231 ===
+
+=== ITEM G0232 ===
+Question: The repeated thing stops for a year or two; which action has most likely faded?
+A. Flicking each letter into its correct pigeonhole swiftly.
+B. Reading the postcodes at a glance on envelopes.
+C. Sorting thousands of daily letters in the room.
+D. Fanning out letters with expert finger movements.
+E. Working in the sorting room with stacks.
+F. Reaching for the next stack of letters slowly.
+=== END G0232 ===
+
+=== ITEM G0233 ===
+Question: What item was listed on the package label?
+A. Inspection
+B. Books
+C. Fluid
+D. Weight
+=== END G0233 ===
+
+=== ITEM G0234 ===
+Question: For how long had Helen sorted mail before picking up the envelope?
+A. decades
+B. days
+C. years
+D. months
+=== END G0234 ===
+
+=== ITEM G0235 ===
+Question: At a later free moment, which of these does the person choose?
+A. Handling more of the brightly coloured greeting cards.
+B. Handling more of the plain brown heavy parcels.
+C. Focusing on separating small envelopes into bins.
+D. Ignoring the bright greeting cards near holidays.
+E. Listening to the distant drone of warehouse machinery.
+F. Lifting the heavy and awkward plain parcels.
+=== END G0235 ===
+
+=== ITEM G0236 ===
+Question: Someone on their first day takes the person's place; which of these would most likely be missing?
+A. The swift, almost unconscious action when flicking letters.
+B. Reading the postcodes at a glance on the letters.
+C. Reaching for the next stack of mail envelopes.
+D. Sorting thousands of pieces of daily mail items.
+E. Working in the sorting room with stacks of mail.
+F. The slow, highly conscious action when flicking letters.
+=== END G0236 ===

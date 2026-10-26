@@ -1,0 +1,51 @@
+SHEET practice-no_passage-02. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0012 ===
+Question: That evening a friend asks Odette what she remembers of the market. Going only by the passage, which is she least likely to bring up?
+A. the brass band on the corner
+B. the list she carried round
+C. the stall of old maps
+D. the fish counter and its smell
+E. losing track of the time
+F. the leeks she took home
+=== END G0012 ===
+
+=== ITEM G0013 ===
+Question: Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?
+A. the vegetable stall selling fresh leeks
+B. the gate where she reads her list
+C. the brass band on the corner
+D. the stall of old maps
+E. the fish counter and its smell
+F. the quiet road back to her home
+=== END G0013 ===
+
+=== ITEM G0014 ===
+Question: Odette has ten free minutes at the same market next week. Going only by the passage, where is she most likely to spend them?
+A. reading her list by the gate
+B. at the fish counter beside it
+C. at the stall of old maps
+D. choosing leeks at a vegetable stall
+E. walking straight home with her bag
+F. near the brass band on the corner
+=== END G0014 ===
+
+=== ITEM G0015 ===
+Question: What did Odette buy before she went home?
+A. old maps
+B. fresh fish
+C. a brass horn
+D. leeks
+=== END G0015 ===
+
+=== ITEM G0016 ===
+Question: That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?
+A. the brass band playing on the corner
+B. the old maps she looked through
+C. the price she paid for leeks
+D. the gate at the market entrance
+E. the list she carried all morning
+F. the walk back to her house
+=== END G0016 ===

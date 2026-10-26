@@ -1,0 +1,10 @@
+{
+ "folder": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-01\\task-2\\helm_operator_preparation\\controller_cas_optionb_devtest_d1",
+ "payload_sha256": "18f0f884f6adfbb296d3dc5d2928397ab73452fc4d23801c9653f3e44f5a2935",
+ "payload_bytes": 4044277,
+ "members": 28,
+ "pins_sha256": "f1b2f07a6f94b5d60e7102655434c9b77a580d0a48d63edc596b08d95ca8fc91",
+ "archive_sha256": "6b36f2cbe918b45a3757f76f9e366ba9006d02873ae1a603afbbdc21a39e89a0",
+ "source_freeze_sha256": "dad0a576fa402055e53f98506680679831ffb2cc385110a0ebd6d752bf5fb1ce",
+ "previous_cleanup_sha256": "67d8851e0dc3ee1687e2cda1f5212594f7a719ebd85993d973d4b7c707587fd1"
+}

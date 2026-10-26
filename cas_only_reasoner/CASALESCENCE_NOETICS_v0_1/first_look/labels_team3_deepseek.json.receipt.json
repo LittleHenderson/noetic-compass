@@ -1,0 +1,214 @@
+{
+ "provider": "deepseek",
+ "model": "deepseek-chat",
+ "passages": 40,
+ "failed": 0,
+ "quote_problems": 3,
+ "tokens": {
+  "prompt_tokens": 94108,
+  "completion_tokens": 9651
+ },
+ "guide_sha256": "8ef6dc1aabfee2c3b5d3403283e2b14b48657719a1a24d66c1bf208b0520982a",
+ "log": [
+  {
+   "passage": "P01",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P02",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P03",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P04",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P05",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P06",
+   "attempt": 1,
+   "quote_problems": 1
+  },
+  {
+   "passage": "P07",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P08",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P09",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P10",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P11",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P12",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P13",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P14",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P15",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P16",
+   "attempt": 1,
+   "quote_problems": 2
+  },
+  {
+   "passage": "P17",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P18",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P19",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P20",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P21",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P22",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P23",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P24",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P25",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P26",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P27",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P28",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P29",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P30",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P31",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P32",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P33",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P34",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P35",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P36",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P37",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P38",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P39",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "P40",
+   "attempt": 1,
+   "quote_problems": 0
+  }
+ ]
+}

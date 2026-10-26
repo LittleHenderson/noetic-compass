@@ -1,0 +1,3144 @@
+{
+ "schema": "casalescence/optionb/form_check/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-07T01:19:53Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "ef5850a6959cff906503596049150fdb5fe026922311478e0039ad575b1c5c0e"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "8db5d2a81b3d38ba0c0bc739c238ac01e7dc2c16cb9c4cfe7b3f272bf5598e37"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "2a165f5a6c221b31ca9abf212af768e792f4e8ed7e522594c5427a8f0d4c9c65"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "3875323b6cd206955551c18b46744171b98f4892abf98d5bc834ed9ba8409d12"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "V002.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V002.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V002.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V002.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V002.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V002.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V004.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V004.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V005.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V005.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V005.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_TOO_LONG"
+   ]
+  },
+  {
+   "question_id": "V005.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V005.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V005.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V008.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V008.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V008.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  },
+  {
+   "question_id": "V008.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V008.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V008.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V010.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V010.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V010.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V010.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V010.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V010.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V012.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V014.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V014.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V014.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V014.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V014.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V014.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V016.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V016.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V016.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V016.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V016.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V016.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V017.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V017.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V017.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V017.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V017.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V017.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V019.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V019.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V019.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V019.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V019.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V019.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V031.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V031.p1.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V031.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V031.p2.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V031.p2.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V032.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V032.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  },
+  {
+   "question_id": "V032.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V032.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V032.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V032.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V035.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V035.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V035.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V035.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V035.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V035.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V036.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V036.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V036.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V036.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V036.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V036.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V041.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V041.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V041.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V041.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V041.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V041.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V042.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V042.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V042.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V042.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V042.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V042.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V046.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V046.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V046.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V046.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V047.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V047.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V047.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V047.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V047.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V047.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V051.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V051.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V051.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V051.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V051.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  },
+  {
+   "question_id": "V051.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V052.p1.FACT",
+   "family": "plain_fact",
+   "passed": false,
+   "reasons": [
+    "FORBIDDEN_LIST_C:schedule"
+   ]
+  },
+  {
+   "question_id": "V052.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_INSIDE_ANOTHER"
+   ]
+  },
+  {
+   "question_id": "V052.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V052.p2.FACT",
+   "family": "plain_fact",
+   "passed": false,
+   "reasons": [
+    "FORBIDDEN_LIST_C:schedule"
+   ]
+  },
+  {
+   "question_id": "V052.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V052.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD",
+    "FORBIDDEN_LIST_C:schedule"
+   ]
+  },
+  {
+   "question_id": "V056.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V056.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V056.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V056.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V056.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V056.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V060.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V060.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V060.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V060.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V060.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V060.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V062.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V062.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V062.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V062.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V062.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V062.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V064.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V064.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V064.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V064.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V064.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V068.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V068.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V068.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V068.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V069.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V069.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V069.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p1.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p1.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_INSIDE_ANOTHER"
+   ]
+  },
+  {
+   "question_id": "V087.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p2.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V087.p2.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V090.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V090.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V090.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V090.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V090.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V090.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V103.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V103.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V103.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_INSIDE_ANOTHER"
+   ]
+  },
+  {
+   "question_id": "V103.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V103.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTIONS_NOT_DIFFERENT"
+   ]
+  },
+  {
+   "question_id": "V105.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V105.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V105.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V105.p1.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V105.p1.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V105.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V105.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V109.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V109.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V109.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V109.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V109.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V109.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V120.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V120.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V120.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V120.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V120.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V120.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V132.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V132.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V132.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V132.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V132.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V134.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V134.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V134.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V134.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V134.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V134.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V147.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V147.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTIONS_NOT_DIFFERENT"
+   ]
+  },
+  {
+   "question_id": "V147.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V147.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V147.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD",
+    "FORBIDDEN_LIST_B:below"
+   ]
+  },
+  {
+   "question_id": "V147.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD",
+    "FORBIDDEN_LIST_B:below"
+   ]
+  },
+  {
+   "question_id": "V153.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V153.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V153.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V153.p1.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V153.p1.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V153.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V153.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V153.p2.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V153.p2.WHAT_STUCK",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V157.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V157.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V157.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V160.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V160.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V160.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V160.p2.FACT",
+   "family": "plain_fact",
+   "passed": false,
+   "reasons": [
+    "FORBIDDEN_LIST_C:schedule"
+   ]
+  },
+  {
+   "question_id": "V160.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V162.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V162.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V162.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V162.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V162.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V162.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V163.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V163.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V163.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V163.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V163.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V168.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V168.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V168.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V168.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V168.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V168.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V177.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V177.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V177.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V190.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V190.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V190.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V190.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V190.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V190.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V194.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V194.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V194.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V194.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V194.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V197.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V197.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V197.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V197.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V197.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V197.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V198.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V198.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V198.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V198.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V198.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V198.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V200.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V200.p1.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V200.p1.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V200.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V200.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V200.p2.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V200.p2.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V205.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V205.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V205.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V205.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V205.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V207.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V207.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V207.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V207.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V207.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V207.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTIONS_NOT_DIFFERENT"
+   ]
+  },
+  {
+   "question_id": "V210.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V210.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V210.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V210.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V210.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V210.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V220.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V220.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V220.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V220.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V220.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V220.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p2.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V221.p2.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V229.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V229.p1.WHAT_SLID_OFF",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  },
+  {
+   "question_id": "V229.p1.WHAT_STUCK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V229.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V229.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V229.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V230.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V230.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V230.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V230.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V230.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V230.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V231.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V231.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V231.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V231.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V231.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V231.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V236.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V236.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V236.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V236.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V236.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V236.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V244.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V244.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V244.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V244.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V244.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTIONS_NOT_DIFFERENT"
+   ]
+  },
+  {
+   "question_id": "V244.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V249.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V249.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V249.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V263.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V263.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V263.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V263.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V263.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V263.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V267.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V267.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V267.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V267.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V267.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V267.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V269.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V269.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V269.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V269.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V269.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V269.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V278.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V278.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V278.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V278.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V278.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V279.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V279.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V279.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V279.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V279.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V279.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V291.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V291.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V291.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V291.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V291.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V291.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V301.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V301.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V301.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V301.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V301.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V301.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V303.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V303.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V303.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V303.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V303.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V303.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V305.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V305.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V305.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V305.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V305.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V305.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V313.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V313.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V315.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V315.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V315.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V315.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V315.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V315.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V320.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V320.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_TOO_LONG"
+   ]
+  },
+  {
+   "question_id": "V320.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_TOO_LONG"
+   ]
+  },
+  {
+   "question_id": "V320.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V320.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V320.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTION_LENGTH_SPREAD"
+   ]
+  },
+  {
+   "question_id": "V328.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V328.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V328.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V328.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V328.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V329.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V329.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V329.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V329.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V329.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V329.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V341.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V341.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  },
+  {
+   "question_id": "V341.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  },
+  {
+   "question_id": "V341.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V341.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V341.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V341.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V341.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V342.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V342.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V342.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V342.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V342.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V342.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_COUNT"
+   ]
+  },
+  {
+   "question_id": "V344.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V344.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V344.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V344.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V344.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V344.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V353.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V353.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V353.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V353.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V353.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V359.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V359.p1.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V359.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V359.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V359.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V359.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V376.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V376.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V376.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V376.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V376.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V376.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V385.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V385.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V387.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V387.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V387.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V387.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V394.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V394.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTIONS_NOT_DIFFERENT"
+   ]
+  },
+  {
+   "question_id": "V394.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V394.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V394.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V398.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V398.p1.LONG_BREAK",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "OPTIONS_NOT_DIFFERENT"
+   ]
+  },
+  {
+   "question_id": "V398.p1.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V398.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V398.p2.LONG_BREAK",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V398.p2.NEW_STARTER",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V400.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V400.p1.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V400.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V400.p2.WHERE_HELPS",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V411.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V411.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V411.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V411.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V416.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V416.p1.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V416.p1.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V416.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V416.p2.MEET_AGAIN",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V416.p2.SWAP_PERSON",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  },
+  {
+   "question_id": "V416.p2.TAKE_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V418.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V418.p1.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V418.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V418.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V418.p2.GOES_FOR",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V418.p2.KEEPS_AWAY",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V421.p1.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V421.p1.NOT_BELONG",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_TOO_LONG"
+   ]
+  },
+  {
+   "question_id": "V421.p1.WHAT_LEFT",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V421.p2.FACT",
+   "family": "plain_fact",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V421.p2.NOT_BELONG",
+   "family": "role_step",
+   "passed": true,
+   "reasons": []
+  },
+  {
+   "question_id": "V421.p2.WHAT_LEFT",
+   "family": "role_step",
+   "passed": false,
+   "reasons": [
+    "ANCHOR_NOT_IN_PASSAGE"
+   ]
+  }
+ ],
+ "counts": {
+  "checked": 494,
+  "passed": 433,
+  "dropped_by_reason": {
+   "OPTION_LENGTH_SPREAD": 22,
+   "ANCHOR_TOO_LONG": 4,
+   "ANCHOR_NOT_IN_PASSAGE": 8,
+   "FORBIDDEN_LIST_C": 4,
+   "OPTION_INSIDE_ANOTHER": 3,
+   "OPTIONS_NOT_DIFFERENT": 6,
+   "ANCHOR_COUNT": 15,
+   "FORBIDDEN_LIST_B": 2
+  }
+ }
+}

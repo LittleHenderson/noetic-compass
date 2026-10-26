@@ -1,0 +1,67 @@
+SHEET practice-with_passage-02. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0012 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: What did Odette buy before she went home?
+A. fresh fish
+B. old maps
+C. leeks
+D. a brass horn
+=== END Q0012 ===
+
+=== ITEM Q0013 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: That evening a friend asks Odette what she remembers of the market. Going only by the passage, which is she least likely to bring up?
+A. the brass band on the corner
+B. the leeks she took home
+C. the list she carried round
+D. the fish counter and its smell
+E. the stall of old maps
+F. losing track of the time
+=== END Q0013 ===
+
+=== ITEM Q0014 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: Odette has ten free minutes at the same market next week. Going only by the passage, where is she most likely to spend them?
+A. at the fish counter beside it
+B. walking straight home with her bag
+C. choosing leeks at a vegetable stall
+D. at the stall of old maps
+E. reading her list by the gate
+F. near the brass band on the corner
+=== END Q0014 ===
+
+=== ITEM Q0015 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: Next Saturday Odette plans her way through the market. Going only by the passage, which of these does she keep clear of?
+A. the brass band on the corner
+B. the quiet road back to her home
+C. the fish counter and its smell
+D. the stall of old maps
+E. the vegetable stall selling fresh leeks
+F. the gate where she reads her list
+=== END Q0015 ===
+
+=== ITEM Q0016 ===
+Passage:
+Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.
+
+Question: That evening a friend asks Odette about her morning. Going only by the passage, which is she most likely to bring up first?
+A. the brass band playing on the corner
+B. the walk back to her house
+C. the old maps she looked through
+D. the price she paid for leeks
+E. the gate at the market entrance
+F. the list she carried all morning
+=== END Q0016 ===

@@ -1,0 +1,196 @@
+{
+ "kept_by_writer_kind": {
+  "K1": 4,
+  "K2": 4,
+  "K3": 3,
+  "K4": 4,
+  "K5": 3,
+  "K6": 3,
+  "K7": 3,
+  "K8": 3,
+  "K9": 3
+ },
+ "dropped": [],
+ "passages": [
+  {
+   "id": "R01",
+   "kind": "K1",
+   "setting": "a beach hut",
+   "text": "Olivia, the artist, found a weathered piece of driftwood shaped like a small bird while walking on the beach. Its smooth, sun-bleached surface reminded her of the ancient sculptures she saw in a museum once. She thought of the stories they told of forgotten civilizations and distant lands. The wood felt almost sacred in her hand."
+  },
+  {
+   "id": "R02",
+   "kind": "K4",
+   "setting": "a fish and chip shop",
+   "text": "Sam, the chef, considered the faulty fryer. The first problem was the temperature gauge, which fluctuated wildly, never settling. Next, the heating element wasn't fully engaging, leaving the oil lukewarm. Finally, the drainage valve was partially blocked. These three separate issues combined to stop it from reaching the necessary frying heat."
+  },
+  {
+   "id": "R03",
+   "kind": "K3",
+   "setting": "a fish and chip shop",
+   "text": "Ken, a regular customer, sniffed the air as he walked into the fish and chip shop. The distinct aroma of freshly fried haddock and steaming chips always brought a smile to his face. It was the smell of every Friday night for the last fifty years of his life. He knew exactly what dinner would taste like before he even ordered."
+  },
+  {
+   "id": "R04",
+   "kind": "K4",
+   "setting": "a beach hut",
+   "text": "Frank, the retired carpenter, considered the rickety beach hut he was asked to repair. Its problems were clear: rotten floorboards, a missing pane in the window, and a door that wouldn't close properly. The roof also sagged visibly in the middle, indicating structural weakness. He knew he would need to tackle each of these structural issues before anything else."
+  },
+  {
+   "id": "R05",
+   "kind": "K2",
+   "setting": "a cable car",
+   "text": "Lena pressed her face against the glass on the mountain side of the cable car, gazing at the distant, snow-capped peaks. The sheer drop below made her stomach clench, and she quickly looked away. A sudden, violent gust of wind slammed into the cabin, rattling its frame. She barely flinched, her attention still fixed on the shimmering summits."
+  },
+  {
+   "id": "R06",
+   "kind": "K5",
+   "setting": "a record shop",
+   "text": "Eleanor, a shop assistant, walked directly to the turntable behind the counter when the shop doors opened. She pulled out a specific jazz album without looking, placed it carefully on the player, and lowered the needle. This was her routine every Tuesday morning. The first customers of the day heard the opening notes without fail."
+  },
+  {
+   "id": "R07",
+   "kind": "K7",
+   "setting": "a bell tower",
+   "text": "Emily, the historian, noted the faint inscription on the largest bell, a date from the 16th century. She then observed the more modern iron supports holding it, clearly added much later. The nearby plaque mentioned a significant fire in the 1800s that damaged the tower. She concluded the bell survived the fire and was re-hung with new fittings."
+  },
+  {
+   "id": "R08",
+   "kind": "K6",
+   "setting": "a yoga class",
+   "text": "Sarah, the instructor, observed the slight stiffness in Janet's left hip during downward dog. Janet wasn't openly favoring it, but the subtle alignment was off compared to her usual form. Sarah had taught Janet for years and recognized the early signs. It suggested Janet had probably overdone her long run yesterday, pushing herself too hard."
+  },
+  {
+   "id": "R09",
+   "kind": "K8",
+   "setting": "a record shop",
+   "text": "Fluorescent lights hummed steadily above the rows of vinyl records. A turnstile display creaked softly as it slowly spun a selection of new arrivals. Dust motes danced in the shafts of sunlight slicing through the front window. The cooling unit near the back wall clicked on, sending a gentle current of cool air through the aisles."
+  },
+  {
+   "id": "R10",
+   "kind": "K2",
+   "setting": "a fish and chip shop",
+   "text": "Terry, a worker, eagerly cleaned the deep fryer, enjoying the feel of the hot, soapy water on his hands. He hated scrubbing the greasy floor tiles, finding the task utterly repulsive and dirty. A customer loudly complained about a missing napkin from their order. Terry barely registered the complaint, his attention solely on the spotless fryer basket."
+  },
+  {
+   "id": "R11",
+   "kind": "K1",
+   "setting": "a wool shop",
+   "text": "Liam picked up a skein of chunky yellow wool from the display. The vibrant color reminded him of the bright sunflowers his grandmother used to grow in her garden every summer. He remembered the feeling of their fuzzy stalks against his hands as he helped her tend them. He could almost smell the warm earth of her flowerbeds."
+  },
+  {
+   "id": "R12",
+   "kind": "K8",
+   "setting": "a yoga class",
+   "text": "The studio lights dimmed, casting a soft glow across the room. A faint scent of lavender lingered in the air from a diffuser in the corner. Mats lay neatly unrolled across the polished wooden floor, ready for use. Outside, a gentle rain began to tap against the large windows, a steady, soft sound."
+  },
+  {
+   "id": "R13",
+   "kind": "K8",
+   "setting": "a sculpture park",
+   "text": "The midday sun cast long, sharp shadows across the polished metal surfaces. A light breeze stirred the leaves of the tall oak trees bordering the lawn. Nearby, an automatic sprinkler system whirred softly, spraying a fine mist over a patch of freshly laid turf. Drops of water beaded on the cool stone pedestals."
+  },
+  {
+   "id": "R14",
+   "kind": "K3",
+   "setting": "a wool shop",
+   "text": "Susan, an experienced knitter, ran her hand over a skein of fine merino wool. The softness reminded her of the delicate baby shawls she used to knit for her grandchildren many years ago. She recalled the countless hours spent carefully forming stitches, a quiet comfort now. This particular wool always brought back those cherished, busy days."
+  },
+  {
+   "id": "R15",
+   "kind": "K1",
+   "setting": "a cable car",
+   "text": "Daniel, the tourist, heard the gentle creak of the cable car ascending the mountain. The sound brought back vivid memories of a ski trip with his children many years ago. He remembered the crisp, cold air at the summit and their excited chatter during the journey. They had always loved these mountain journeys together."
+  },
+  {
+   "id": "R16",
+   "kind": "K6",
+   "setting": "a sculpture park",
+   "text": "Peter, the park ranger, saw the faint, almost imperceptible scratch on the base of the new metal sculpture. Only an experienced eye would have noticed its presence. He knew it meant someone had tried to climb it, or at least rested a heavy bag against it during the night. He would need to check the security cameras from last night."
+  },
+  {
+   "id": "R17",
+   "kind": "K2",
+   "setting": "a jumble sale",
+   "text": "Diane felt a definite pull towards the vintage crockery section, admiring the delicate patterns on the teacups. She quickly recoiled from a box overflowing with dusty, mismatched tools, finding them unpleasant. A child's loud shriek suddenly pierced the air nearby. Diane merely adjusted her glasses, her gaze already back on a set of floral teacups."
+  },
+  {
+   "id": "R18",
+   "kind": "K6",
+   "setting": "a rugby clubhouse",
+   "text": "Roger, the former coach, noticed the way young Tom hung his head slightly as he walked in from the pitch. His usual confident stride was missing, and his shoulders slumped. Roger had seen that posture many times before in new players. It meant Tom had missed a crucial tackle and was blaming himself."
+  },
+  {
+   "id": "R19",
+   "kind": "K5",
+   "setting": "a rugby clubhouse",
+   "text": "Arthur, the club secretary, heard the final whistle from the pitch. Automatically, he started stacking the plastic chairs in the main hall. For years, every Saturday, that sound meant it was time to clear the room. He didn't even notice himself doing it anymore. His hands simply moved to the nearest stack without thought."
+  },
+  {
+   "id": "R20",
+   "kind": "K2",
+   "setting": "a beach hut",
+   "text": "Chloe spent ages building an elaborate sandcastle, meticulously shaping each turret and wall. The encroaching tide, a murky brown, bothered her, so she dug a trench to divert it away. A sudden splash of cold spray from a rogue wave hit her full in the face. She simply blinked, then wiped her eyes and kept digging."
+  },
+  {
+   "id": "R21",
+   "kind": "K1",
+   "setting": "a record shop",
+   "text": "Mark picked up a dusty old album with a faded blue cover from the browsing bin. The image of a calm ocean scene instantly took him back to his childhood summers. He pictured the worn-out inflatable boat his dad owned, always patching it. They used to take it out on the lake near their cottage every chance they got."
+  },
+  {
+   "id": "R22",
+   "kind": "K3",
+   "setting": "a bell tower",
+   "text": "Martha, a former ringer, heard the faint chime from the old tower. The slightly off-key note of the third bell always caught her attention. Decades of Sunday ringing practice meant she knew each bell's distinct voice. She knew exactly which ringer was having a slightly difficult morning with their timing. She smiled gently to herself."
+  },
+  {
+   "id": "R23",
+   "kind": "K7",
+   "setting": "a rugby clubhouse",
+   "text": "Chris, the groundskeeper, found a broken padlock near the equipment shed door. He saw faint muddy boot prints leading away from it, distinct from the players' cleats. There was also a fresh scratch on the shed's metal frame, near the lock. He deduced that someone had attempted a break-in just hours before he arrived."
+  },
+  {
+   "id": "R24",
+   "kind": "K9",
+   "setting": "a wool shop",
+   "text": "Clara walked slowly down an aisle, her fingers brushing against skeins of yarn on display. She stopped at a shelf filled with bright blues and greens. She picked up a ball of chunky alpaca wool, feeling its texture between her thumb and forefinger. After a moment, she placed it back and moved towards the knitting needle display."
+  },
+  {
+   "id": "R25",
+   "kind": "K5",
+   "setting": "a jumble sale",
+   "text": "George, a long-time volunteer, sorted through the box of paperback books, automatically arranging them by genre. Every Saturday morning for the past decade, he arrived early to help set up. He didn't even need to think about where each book belonged. His hands simply followed the familiar pattern, stacking biographies separately from thrillers."
+  },
+  {
+   "id": "R26",
+   "kind": "K9",
+   "setting": "a jumble sale",
+   "text": "Ben sifted through a pile of old coats on a clothes rack. He picked up a leather jacket, turned it over, and then hung it back. Moving on, he scanned a table laden with kitchenware. He picked up a chipped ceramic mug, examined its handle for a moment, and placed it down again carefully."
+  },
+  {
+   "id": "R27",
+   "kind": "K4",
+   "setting": "a cable car",
+   "text": "Carla, the engineer, assessed the reported cable car malfunction. The primary issues were worn brake pads that needed replacing, a stretched main cable requiring adjustment, and a faulty communication system between cabins. She knew these three components, if neglected, could lead to serious operational problems. Her team would address each element systematically."
+  },
+  {
+   "id": "R28",
+   "kind": "K7",
+   "setting": "a bell tower",
+   "text": "Patrick, the repairman, examined the loose rope and the scoring on the wooden beam above it. Then he looked at the chipped edge of the largest bell's clapper. The heavy mechanism had clearly shifted slightly from its usual position. He concluded that the last bell strike must have been unusually powerful, putting strain on the old fittings."
+  },
+  {
+   "id": "R29",
+   "kind": "K4",
+   "setting": "a yoga class",
+   "text": "Julia, the instructor, evaluated her upcoming yoga class plan. The warm-up needed to focus on spinal mobility, specifically cat-cow and gentle twists. Then, she would introduce standing poses like warrior two and triangle, emphasizing hip opening. Finally, the cool-down would involve restorative poses and a short seated meditation. This structure ensured a balanced session for everyone."
+  },
+  {
+   "id": "R30",
+   "kind": "K9",
+   "setting": "a sculpture park",
+   "text": "David walked along the winding gravel path, observing the various artworks. He paused by a large abstract piece, observing its complex angles. Further on, he stopped to read a small plaque at the base of a bronze figure. He then continued his stroll, passing several families having picnics on the grass. The sun was bright, and a few clouds drifted overhead."
+  }
+ ]
+}

@@ -1,0 +1,456 @@
+{
+ "schema": "casalescence/optionb/anchor_check/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-05T17:30:54Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/elig/eligibility.json",
+   "sha256": "e286e21015a57282ed37a4a41869d3232e4da30f3f85622b1968f23544315efe"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/questions/raw_questions_final_p1.json",
+   "sha256": "fb55bc6909e547156a5c07ae72de91941ea0aa5a8435ad98a4b6264b6d09f69f"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/questions/raw_questions_final_p2.json",
+   "sha256": "54733be1a24ae5acdd619792f0e191687473991610f7b3bae8b30ddc872b09d2"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/select/split_fixed.json",
+   "sha256": "4c0dcb8a30feda54544d845a57ed5eaa6a365e83c65a169fb65c64a10ba47a86"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "final",
+ "rows": [
+  {
+   "question_id": "D013.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the fine tweezers",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the fine tweezers",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D013.p1.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the sticky oil",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "away from the sticky oil",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D013.p1.LONG_BREAK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D013.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the fine tweezers",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the fine tweezers",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D013.p2.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the sticky oil",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "away from the sticky oil",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D013.p2.LONG_BREAK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D014.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the long spindle",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the long spindle",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D014.p1.KEEPS_AWAY",
+   "passed": false,
+   "reason": "FORM_NOT_OPEN",
+   "matched": []
+  },
+  {
+   "question_id": "D014.p1.LONG_BREAK",
+   "passed": false,
+   "reason": "FORM_NOT_OPEN",
+   "matched": []
+  },
+  {
+   "question_id": "D014.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the long spindle",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the long spindle",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D014.p2.KEEPS_AWAY",
+   "passed": false,
+   "reason": "FORM_NOT_OPEN",
+   "matched": []
+  },
+  {
+   "question_id": "D014.p2.LONG_BREAK",
+   "passed": false,
+   "reason": "FORM_NOT_OPEN",
+   "matched": []
+  },
+  {
+   "question_id": "D015.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the birch rake",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the birch rake",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D015.p1.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the wet sacks",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "away from the wet sacks",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D015.p1.LONG_BREAK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D015.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the birch rake",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the birch rake",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D015.p2.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the wet sacks",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "away from the wet sacks",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D015.p2.LONG_BREAK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D016.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the curved adze",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the curved adze",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D016.p1.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the split stave",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "away from the split stave",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D016.p1.LONG_BREAK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D016.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the curved adze",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "reached for the curved adze",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D016.p2.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the split stave",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "away from the split stave",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "D016.p2.LONG_BREAK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every morning for nine years",
+     "noetic": "^7",
+     "agreed_index": 3,
+     "field": "words_b"
+    }
+   ]
+  }
+ ],
+ "counts": {
+  "checked": 24,
+  "passed": 20,
+  "dropped_by_reason": {
+   "FORM_NOT_OPEN": 4
+  }
+ }
+}

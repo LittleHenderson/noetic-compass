@@ -1,0 +1,87 @@
+SHEET practice-no_passage-05. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0249 ===
+Question: What did George flick off?
+A. His car headlights
+B. His dashboard screen
+C. His 'for hire' light
+D. His radio station
+=== END G0249 ===
+
+=== ITEM G0250 ===
+Question: What kind of streets were part of the route?
+A. quiet residential lanes
+B. wide two-way streets
+C. busy commercial plazas
+D. confusing one-way streets
+=== END G0250 ===
+
+=== ITEM G0251 ===
+Question: What was across the street from Liam?
+A. A bar
+B. A taxi rank
+C. A pub
+D. A club
+=== END G0251 ===
+
+=== ITEM G0252 ===
+Question: At a later moment, which of these is the person least likely to bring up?
+A. restful hours
+B. motorway driving
+C. long trips
+D. minimal payment
+E. long-distance
+F. steady fares
+=== END G0252 ===
+
+=== ITEM G0253 ===
+Question: Where did a customer request a journey?
+A. just two blocks away
+B. a distant suburb
+C. the city center
+D. the motorway exit
+=== END G0253 ===
+
+=== ITEM G0254 ===
+Question: Where was Robert waiting?
+A. his childhood home
+B. the old fire station
+C. the taxi rank
+D. the city center
+=== END G0254 ===
+
+=== ITEM G0255 ===
+Question: Where was Kevin leaning?
+A. Against the pub door
+B. Against his car
+C. Against the taxi rank
+D. Against his grandfather's shop
+=== END G0255 ===
+
+=== ITEM G0256 ===
+Question: Where did George rest his foot?
+A. On the accelerator pedal
+B. On the brake pedal
+C. On the clutch pedal
+D. On the car floor
+=== END G0256 ===
+
+=== ITEM G0257 ===
+Question: At a later free moment, which of these does the person choose?
+A. motorway driving
+B. city center
+C. two blocks
+D. minimal fare
+E. short trip
+F. small hops
+=== END G0257 ===
+
+=== ITEM G0258 ===
+Question: Where did Xander pull his cab?
+A. front of the queue
+B. middle of the rank
+C. back of the line
+D. side of the road
+=== END G0258 ===

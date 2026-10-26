@@ -1,0 +1,88 @@
+{
+ "schema": "casalescence/optionb/anchor_check/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_final_p1.json",
+   "sha256": "416705311e2ead76eff16d427a585dce7d1759b172c4f4076b98069e14d15293"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_final_p2.json",
+   "sha256": "0acea74558b9825cd4b2ebfcad697c20550fccc05290ec9f9e8b3676981ba50e"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/split_fixed.json",
+   "sha256": "636440e590f8377fe6b25413b56738e695012dd318faa6374510019c1fd5b8a6"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "final",
+ "rows": [
+  {
+   "question_id": "V903.p1.LONG_BREAK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every weekday for eleven years",
+     "noetic": "^7",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every weekday for eleven years",
+     "noetic": "^7",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V903.p1.NEW_STARTER",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "Every weekday for eleven years",
+     "noetic": "^7",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "Every weekday for eleven years",
+     "noetic": "^7",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  }
+ ],
+ "counts": {
+  "checked": 2,
+  "passed": 2,
+  "dropped_by_reason": {}
+ }
+}

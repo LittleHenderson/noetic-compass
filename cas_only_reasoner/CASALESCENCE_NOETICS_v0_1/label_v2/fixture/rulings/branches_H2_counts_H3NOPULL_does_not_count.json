@@ -1,0 +1,10 @@
+{
+ "H2-COMFORT": "counts",
+ "H3-NOPULL": "does_not_count",
+ "H3-BORED": "open",
+ "H5-ROLE": "open",
+ "H7-RESULT": "open",
+ "H7-NOEFFECT": "open",
+ "H7-UNBROKEN": "open",
+ "H89-FOLLOWS": "open"
+}

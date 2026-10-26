@@ -1,0 +1,5 @@
+Your complete task message is the text of this file, handed to you unchanged:
+
+<PROMPT FILE>
+
+Read that file in full first (it is about 70 KB: a task message, then a labeling guide, then labeler instructions). Then do exactly what it says, treating it as if it were this message. It names the only two files you may open besides it (your chunk of passages and your working file) and the one command you hand records in with. Do not open, read, grep or import any other file. Do not call any mcp__hearthbot tools or message anyone; your only outputs are the working file and the hand-in command's results. When the hand-in command prints that 0 passages are still open, stop and report in one line how many tries you needed.

@@ -1,0 +1,15 @@
+You are an independent reviewer of a study plan. You did not write it. You are not the model that will label. Review the plan below for one purpose: find defects that would make the label-agreement verdict wrong, unfair or unreadable. Report BLOCKER and MAJOR findings only. No style notes.
+
+Background. Two independent teams of language models label short passages written by a third model. For each passage a team writes entries: which stretch of text occupies which of nine roles (written ^1 to ^9), for which Mind, relative to what. Each entry has a short label plus a full supporting quote. A program pairs the two teams' entries one to one and counts, per role, entries both teams wrote (M), entries only team A wrote and entries only team B wrote. The first attempt, on 428 passages, failed its pass mark for eight of nine roles; this is the plan for a second attempt on new passages. The ten definitions are fixed canon and are not under review.
+
+Check in particular:
+1. Are the measures, pass marks, minimum counts, outcome words and validity rules fully fixed in advance? Name any choice that could still be made after labels are seen.
+2. Entry agreement E = M / (M + only A + only B). Can E be pushed up or down by something other than real agreement: by entries moved into rows with no pass mark (held, uncertain, reached by reasoning, clue), by the matching tolerance, by one team writing very few entries, by the mix of passage kinds? Is the withheld-pass rule (NO_VERDICT_WAITING_ON_OWNER) sound?
+3. The passage plan writes 760 new passages with more of the kinds that feed the roles expected to be near the pass mark. Does this tilt the test? Is it stated honestly?
+4. The practice pass (120 passages) and the five seal conditions S1 to S5: can they be used to tune the guide until the verdict passes? Is the limit of two practice rounds enough of a guard?
+5. Who sees what: can the label teams, the passage writer or the operator share information they should not?
+6. Does the plan say plainly what a pass and a failure would and would not show? Is the forecast (only ^1 likely passes) stated in a way that could bias the run?
+7. Is anything in the plan so complex that an honest operator would likely make a mistake carrying it out? Name the simplest cut.
+
+For each finding give: severity, the exact place, why it matters, and the smallest fix.
+Start your reply with one line: VERDICT: ACCEPT, ACCEPT_WITH_NOTES, or REJECT. Keep the reply under 900 words.

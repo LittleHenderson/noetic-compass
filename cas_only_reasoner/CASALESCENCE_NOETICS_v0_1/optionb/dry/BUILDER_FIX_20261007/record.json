@@ -1,0 +1,22 @@
+{
+ "schema": "casalescence/optionb/dry_builder_fix_record/v1",
+ "utc": "2026-10-07T00:14:02Z",
+ "file": "optionb/dry/build_dev_package.py",
+ "kind": "dry helper, not a step-1 tool, not a job program; writes only under optionb/dry/",
+ "fault": "The builder handed the blind solver's import step the made-up name MADE-UP-NAME-FROM-A-TRANSCRIPT; since operator decision C3 (AMEND_3_RECORD.json) the import step refuses any name but outside_services.claude_solver.model_id with TRANSCRIPT_MODEL_NOT_THE_PINNED_ID.",
+ "evidence": "build_dev_package.py --folder-name dev_package_20261006 stopped: TOOL_DID_NOT_END_AS_EXPECTED / TRANSCRIPT_MODEL_NOT_THE_PINNED_ID (tool_runs_so_far 10, checks_so_far 6).",
+ "change": "NAMES['transcript'] now reads the pinned id from PLAN_CONSTANTS.json; a four-line comment says why. Nothing else changed.",
+ "old_sha256": "2827b184dcd6b953470e85cce2c72dddd4d5c10d44a6f4fb99e6ffb5a2814623",
+ "new_sha256": "19207b75617245eb1fe4607a319b513e5289a39ee704e3366def7d2075dd0aa2",
+ "old_copy": "optionb/dry/BUILDER_FIX_20261007/old/build_dev_package.py",
+ "diff": "optionb/dry/BUILDER_FIX_20261007/diff.txt",
+ "diff_sha256": "8801d6eaceccbbee698e9e507cdb0c05eff51695d24529df2c1bb3084a31400a",
+ "reviewer": "a separate read-only reviewer sub-agent (general-purpose), 2026-10-07, before the change was applied",
+ "author_of_change": "the operator (Claude Code)",
+ "review_verdict": "REPAIR_ALLOWED",
+ "review_reason": "the builder hands the solver a name that the solver now refuses by rule; feeding it the pinned id from the constants is the only change needed, breaks no stated made-up-only or dry-mark rule, and touches nothing a real seal step reads",
+ "owner_words_verbatim": "apply fix",
+ "owner_words_utc": "2026-10-07T00:12:43Z",
+ "channel": "claude.ai project chat, relayed by the coordinator session",
+ "wording_note": "The builder's docstring and BUILD_LOG note still say every model name is made up; after this change the transcript name is the pinned id."
+}

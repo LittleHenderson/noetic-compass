@@ -1,0 +1,160 @@
+{
+ "schema": "casalescence/optionb/support_state/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "246032c116a7abdcc1f43b512fa5300d88e5ec924868b7a92cc63eea4254b9e1",
+  "utc": "2026-10-05T16:27:20Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/SEAL_OPTIONB.jsonl",
+   "sha256": "a778ef8433ceba6ba7054b05ab1f9c990a5cfba354a75c64315bb82d80a647bc"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/elig/eligibility.json",
+   "sha256": "ef7bb7d8555ec91f90ff7f2262c4bb371ff0d6d5a0107bfc45bf767e4c338bf8"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/notes_ord/ordinary_notes_practice.json",
+   "sha256": "34464f8e0b13e19358ff01aa97e033e39dd5832f23311a07a91c0bda269846de"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/support/support_calls_practice.jsonl",
+   "sha256": "d9f324b4a38c4c511d6abe7c850c98c4c4140ff7d9e2fa52aa196b11444859a5"
+  }
+ ],
+ "set": "practice",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "rounds": [
+  {
+   "round": 1,
+   "batches": [
+    {
+     "batch": 0,
+     "item_ids": [
+      "N0001",
+      "N0002",
+      "N0003",
+      "N0004",
+      "N0005",
+      "N0006",
+      "N0007",
+      "N0008",
+      "N0009",
+      "N0010",
+      "N0011",
+      "N0012"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "item_ids": [
+      "N0013",
+      "N0014",
+      "N0015",
+      "N0016",
+      "N0017",
+      "N0018",
+      "N0019",
+      "N0020",
+      "N0021",
+      "N0022",
+      "N0023",
+      "N0024"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 2,
+     "item_ids": [
+      "N0025",
+      "N0026",
+      "N0027",
+      "N0028",
+      "N0029",
+      "N0030",
+      "N0031",
+      "N0032",
+      "N0033",
+      "N0034",
+      "N0035",
+      "N0036"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 3,
+     "item_ids": [
+      "N0037",
+      "N0038",
+      "N0039",
+      "N0040",
+      "N0041",
+      "N0042",
+      "N0043",
+      "N0044",
+      "N0045",
+      "N0046",
+      "N0047",
+      "N0048"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 4,
+     "item_ids": [
+      "N0049",
+      "N0050",
+      "N0051",
+      "N0052",
+      "N0053",
+      "N0054",
+      "N0055",
+      "N0056",
+      "N0057",
+      "N0058",
+      "N0059",
+      "N0060"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 5,
+     "item_ids": [
+      "N0061",
+      "N0062",
+      "N0063",
+      "N0064",
+      "N0065",
+      "N0066",
+      "N0067",
+      "N0068",
+      "N0069",
+      "N0070",
+      "N0071",
+      "N0072"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "first_cap_stop_utc": null,
+ "complete": true
+}

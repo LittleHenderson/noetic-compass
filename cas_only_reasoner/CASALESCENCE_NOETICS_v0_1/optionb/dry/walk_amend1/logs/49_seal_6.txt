@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 6
+SEALED 6_PROGRAMS as line 8 of optionb/SEAL_OPTIONB.jsonl: 5 file(s). Line sha256 bafdd20fcb1f5bfd7c37edc6b259a0fe23b3fc52459418dec0d766d5efdfff5e
+[exit code 0]

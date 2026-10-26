@@ -1,0 +1,142 @@
+{
+ "schema": "casalescence/optionb/survival/v1",
+ "made_by": {
+  "program": "tools/ob_select.py",
+  "sha256": "3ad936fbac1113e5a872f081c7b4a96a3f7c65fdfa555b076a0d85bb116ae355",
+  "utc": "2026-10-05T16:25:00Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "d648fb72cd362889ae7ee32f37273c2c9946384d7ddd684f69251135ba973ad2"
+  },
+  {
+   "path": "optionb/checks/anchor_check_final.json",
+   "sha256": "5fd376f5cf23e96b933bca2fd84fd2bdafc07ecd7d52c1c03e737f2062db5d8c"
+  },
+  {
+   "path": "optionb/checks/candidates_final.json",
+   "sha256": "ed58ea9e4c9c47d3d5a921d6145cb5bb0e7766c57817b99ddc0985d9dac3266e"
+  },
+  {
+   "path": "optionb/checks/form_check_final.json",
+   "sha256": "22013d70f59bb8a67b895d5b905a07bece6c9d359f538bea3ba2afb6f4426ff1"
+  },
+  {
+   "path": "optionb/checks/option_check_final.json",
+   "sha256": "9ab8371701659af8521c4d8b8ff7d081d51779eb9ea577139fab96d3c729f595"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/questions/raw_questions_final_p1.json",
+   "sha256": "0340009589013557112c61d305f73a5bb8f5b0047f66090341e16181ecbec285"
+  },
+  {
+   "path": "optionb/questions/raw_questions_final_p2.json",
+   "sha256": "38815f494713dc0566b803f23924e8b49446f6b40da1102aa02effc5191b16ba"
+  },
+  {
+   "path": "optionb/select/selection_practice.json",
+   "sha256": "da8c050021c3ded4ea6a140f1e2a43f284221cdf76b6e676a4ac45acb354bcf6"
+  },
+  {
+   "path": "optionb/select/split_fixed.json",
+   "sha256": "c7b69355a320ee813007bbcb6dfc69f15307d9c45daf217edd4b8c286b9c8101"
+  },
+  {
+   "path": "optionb/solve/key_check_final.json",
+   "sha256": "27a1ab6aceaf1bceb6cadf437776d174a8e4a9a7ff5583fd49977b186bb3ad90"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "final",
+ "practice_setting_count": 9,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "form check",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "option check",
+   "role_step": 322,
+   "plain_fact": 115
+  },
+  {
+   "filter": "key check",
+   "role_step": 321,
+   "plain_fact": 115
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 320,
+   "plain_fact": 115
+  },
+  {
+   "filter": "selection",
+   "role_step": 216,
+   "plain_fact": 110
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 216,
+   "plain_fact": 110
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 216,
+  "plain_fact_tasks": 110,
+  "passages_with_a_task": 110,
+  "passages_with_a_role_step_task": 110,
+  "single_longest": [
+   0,
+   216
+  ],
+  "single_shortest": [
+   0,
+   216
+  ]
+ },
+ "dropped_by_reason": {
+  "NOT_PICKED_BY_PAIR_RULE": 104,
+  "PASSAGE_BARRED": 2,
+  "PASSAGE_NOT_ELIGIBLE": 3
+ },
+ "decision": "GO",
+ "stop_reasons": [],
+ "next": "Seal step 3C. Then the ordinary notes are written. The launch floor is read again by tools/ob_assemble.py after the later filters.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles.",
+ "launch_floor_numbers": {
+  "final_role_step_tasks": 216,
+  "final_plain_fact_tasks": 110,
+  "practice_role_step_tasks": 53,
+  "practice_plain_fact_tasks": 27
+ },
+ "launch_floor": {
+  "final_role_step_tasks_min": 100,
+  "final_plain_fact_tasks_min": 100,
+  "practice_role_step_tasks_min": 36,
+  "practice_plain_fact_tasks_min": 20
+ },
+ "tier_if_nothing_more_is_removed": "EXPLORATORY"
+}

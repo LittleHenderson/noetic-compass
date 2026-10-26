@@ -1,0 +1,413 @@
+{
+ "schema": "casalescence/optionb/solver_answers/v1",
+ "made_by": {
+  "program": "tools/ob_solve_blind.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/candidates_practice.json",
+   "sha256": "bf7fd4a96763fd99f65de361238a032d6bf4e7cd9be70489d10f4ecd4c6a9f75"
+  },
+  {
+   "path": "optionb/dry/fixture_q/solve/deepseek_calls_practice.jsonl",
+   "sha256": "914e66e0770696539165507aaeaf3d4ceb4f75945e44506c7f29cca44a7e12fc"
+  }
+ ],
+ "set": "practice",
+ "answers": [
+  {
+   "item_id": "G0004",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V901.p1.MEET_AGAIN",
+   "raw": "F",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "d1eccbb8e4c6ef0d1413a196a052a79e282064c2ec53c5d3da6ead657524d21b",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0005",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V901.p2.TAKE_AWAY",
+   "raw": "B",
+   "readable": true,
+   "picked_option_index": 5,
+   "flag": null,
+   "source_sha256": "d1eccbb8e4c6ef0d1413a196a052a79e282064c2ec53c5d3da6ead657524d21b",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0006",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V901.p1.FACT",
+   "raw": "A",
+   "readable": true,
+   "picked_option_index": 2,
+   "flag": null,
+   "source_sha256": "d1eccbb8e4c6ef0d1413a196a052a79e282064c2ec53c5d3da6ead657524d21b",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0012",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "raw": "B",
+   "readable": true,
+   "picked_option_index": 5,
+   "flag": null,
+   "source_sha256": "bb80107e07e47ac50eb4522f5efb05a12e7484fdc07a5ad302518735f2d6dccc",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0013",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "raw": "",
+   "readable": false,
+   "picked_option_index": null,
+   "flag": null,
+   "source_sha256": "bb80107e07e47ac50eb4522f5efb05a12e7484fdc07a5ad302518735f2d6dccc",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0014",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V902.p1.GOES_FOR",
+   "raw": "A",
+   "readable": true,
+   "picked_option_index": 4,
+   "flag": null,
+   "source_sha256": "bb80107e07e47ac50eb4522f5efb05a12e7484fdc07a5ad302518735f2d6dccc",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0015",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V902.p2.FACT",
+   "raw": "G0015 D | G0015 A",
+   "readable": false,
+   "picked_option_index": null,
+   "flag": null,
+   "source_sha256": "bb80107e07e47ac50eb4522f5efb05a12e7484fdc07a5ad302518735f2d6dccc",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0016",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "question_id": "V902.p1.WHAT_STUCK",
+   "raw": "B",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "bb80107e07e47ac50eb4522f5efb05a12e7484fdc07a5ad302518735f2d6dccc",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "G0001",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V901.p1.FACT",
+   "raw": "{\"answer\": \"D\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "857f409709f8d52627d5f671f659e085fb0dca42dd5dcb15e25619f4a7697a1a",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0002",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V901.p2.TAKE_AWAY",
+   "raw": "{\"answer\": \"A\"}",
+   "readable": true,
+   "picked_option_index": 3,
+   "flag": null,
+   "source_sha256": "6ed067e5a026651b1172a0fde32c0e12be7e448ef78786f37c6896994ee4d5b6",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0003",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V901.p1.MEET_AGAIN",
+   "raw": "{\"answer\": \"A\"}",
+   "readable": true,
+   "picked_option_index": 4,
+   "flag": null,
+   "source_sha256": "6ed067e5a026651b1172a0fde32c0e12be7e448ef78786f37c6896994ee4d5b6",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0007",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V902.p2.FACT",
+   "raw": "{\"answer\": \"D\", \"answer\": \"A\"}",
+   "readable": false,
+   "picked_option_index": null,
+   "flag": null,
+   "source_sha256": "2bb26958916a5ca97d41be44846bd347b8161ff6e5c4f8828f963ee298e3dd04",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0008",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "raw": "MADE-UP reply with no JSON: I think A",
+   "readable": false,
+   "picked_option_index": null,
+   "flag": null,
+   "source_sha256": "eec3dd48fca1f78a81560b8ce769d0643bc133dee13be716af780b32d4865cd8",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0009",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V902.p1.GOES_FOR",
+   "raw": "{\"answer\": \"A\"}",
+   "readable": true,
+   "picked_option_index": 5,
+   "flag": null,
+   "source_sha256": "6ed067e5a026651b1172a0fde32c0e12be7e448ef78786f37c6896994ee4d5b6",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0010",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "raw": "{\"answer\": \"A\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "6ed067e5a026651b1172a0fde32c0e12be7e448ef78786f37c6896994ee4d5b6",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "G0011",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "question_id": "V902.p1.WHAT_STUCK",
+   "raw": "{\"answer\": \"E\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "3cd2872ae738c5ae3dd861d22c0f67e40c11aafd5eaebc344fd5c6db55e89508",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0004",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V901.p2.TAKE_AWAY",
+   "raw": "D",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "1da6a35fcdbd43e41af9730525d93b840fafc1b5b40f8f68850d15c0663ed723",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0005",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V901.p1.FACT",
+   "raw": "D",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "1da6a35fcdbd43e41af9730525d93b840fafc1b5b40f8f68850d15c0663ed723",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0006",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V901.p1.MEET_AGAIN",
+   "raw": "E",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "1da6a35fcdbd43e41af9730525d93b840fafc1b5b40f8f68850d15c0663ed723",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0012",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V902.p2.FACT",
+   "raw": "C",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "195d2074cf6c2a46627258688de814e4129536e7ceb4e8183506af9b489dd99e",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0013",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "raw": "A",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "195d2074cf6c2a46627258688de814e4129536e7ceb4e8183506af9b489dd99e",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0014",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V902.p1.GOES_FOR",
+   "raw": "D",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "195d2074cf6c2a46627258688de814e4129536e7ceb4e8183506af9b489dd99e",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0015",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "raw": "MORE_THAN_ONE",
+   "readable": true,
+   "picked_option_index": null,
+   "flag": "MORE_THAN_ONE",
+   "source_sha256": "195d2074cf6c2a46627258688de814e4129536e7ceb4e8183506af9b489dd99e",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0016",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "question_id": "V902.p1.WHAT_STUCK",
+   "raw": "C",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "195d2074cf6c2a46627258688de814e4129536e7ceb4e8183506af9b489dd99e",
+   "model_in_reply": "claude-sonnet-5-5"
+  },
+  {
+   "item_id": "Q0001",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V901.p1.MEET_AGAIN",
+   "raw": "```json\n{\"answer\": \"B\"}\n```",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "1b2aa2285c60f22cfba1d428b25a342a5780a2aa645849868f124f3638a15ba2",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0002",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V901.p1.FACT",
+   "raw": "{\"answer\": \"D\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "857f409709f8d52627d5f671f659e085fb0dca42dd5dcb15e25619f4a7697a1a",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0003",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V901.p2.TAKE_AWAY",
+   "raw": "{\"answer\": \"B\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "0dc4a54d26c60713393325f0707bc0137ebc618ee2a9bb5e37a6cfe34261eed7",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0007",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V902.p1.WHAT_STUCK",
+   "raw": "{\"answer\": \"C\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "b85369f942e856f88783080e2a773018030ac3092299685bf25311e2525c7b8f",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0008",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "raw": "{\"answer\": \"B\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "0dc4a54d26c60713393325f0707bc0137ebc618ee2a9bb5e37a6cfe34261eed7",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0009",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "raw": "{\"answer\": \"B\"}",
+   "readable": true,
+   "picked_option_index": 3,
+   "flag": null,
+   "source_sha256": "0dc4a54d26c60713393325f0707bc0137ebc618ee2a9bb5e37a6cfe34261eed7",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0010",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V902.p1.GOES_FOR",
+   "raw": "{\"answer\": \"A\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "6ed067e5a026651b1172a0fde32c0e12be7e448ef78786f37c6896994ee4d5b6",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  },
+  {
+   "item_id": "Q0011",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "question_id": "V902.p2.FACT",
+   "raw": "{\"answer\": \"D\"}",
+   "readable": true,
+   "picked_option_index": 0,
+   "flag": null,
+   "source_sha256": "857f409709f8d52627d5f671f659e085fb0dca42dd5dcb15e25619f4a7697a1a",
+   "model_in_reply": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  }
+ ]
+}

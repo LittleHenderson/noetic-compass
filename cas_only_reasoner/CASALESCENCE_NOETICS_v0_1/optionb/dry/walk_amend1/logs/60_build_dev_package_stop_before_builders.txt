@@ -1,0 +1,27 @@
+$ python -B optionb/dry/build_dev_package.py --stop-before-the-builders
+{
+ "status": "STUDY_FOLDER_LAID_OUT_BUILDERS_NOT_CALLED",
+ "folder": "optionb/dry/dev_package",
+ "made_up_passages": 16,
+ "counts": {
+  "final_role_step_tasks": 7,
+  "final_plain_fact_tasks": 4,
+  "final_passages_with_a_role_step_task": 4,
+  "practice_role_step_tasks": 23,
+  "practice_plain_fact_tasks": 12
+ },
+ "made_up_seal": {
+  "seal_file": "optionb/dry/dev_package/project/optionb/SEAL_OPTIONB.jsonl",
+  "seal_sha256": "0718baa6d1d6839b4c66604047c2dfccbbb301e7bded6d70d3dbfa2f318a80ee",
+  "seal_lines": 8,
+  "sealed_files": 79
+ },
+ "builder_commands": [
+  "C:\\Python314\\python.exe -B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\walk_amend1\\project_dev\\optionb\\controller_b1_draft\\build_source_zip_b1.py --study-root C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\walk_amend1\\project_dev\\optionb\\dry\\dev_package\\project --out C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\walk_amend1\\project_dev\\optionb\\dry\\dev_package\\package --guest C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\walk_amend1\\project_dev\\optionb\\controller_b1_draft\\worker_v02.py",
+  "C:\\Python314\\python.exe -B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\walk_amend1\\project_dev\\optionb\\controller_b1_draft\\build_contract_b1.py --study-root C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\walk_amend1\\project_dev\\optionb\\dry\\dev_package\\project --out C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\walk_amend1\\project_dev\\optionb\\dry\\dev_package\\package --stamp-only"
+ ],
+ "builders": null,
+ "tool_runs": 54,
+ "checks": 32
+}
+[exit code 0]

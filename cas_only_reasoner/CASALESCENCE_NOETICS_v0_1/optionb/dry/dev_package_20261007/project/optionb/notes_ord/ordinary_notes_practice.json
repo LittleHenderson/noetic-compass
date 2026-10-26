@@ -1,0 +1,1338 @@
+{
+ "schema": "casalescence/optionb/ordinary_notes/v1",
+ "made_by": {
+  "program": "tools/ob_write_ordinary_notes.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "adf6cd8fa5b5acf9fe7d1f050641ffcf372628aeeb7dcc759f2a728df7895aee",
+  "utc": "2026-10-07T00:14:17Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/SEAL_OPTIONB.jsonl",
+   "sha256": "f44ebd181d44bd6d8a858b14aecc856dc4726d0a78cb8244be44555e36df51af"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/elig/eligibility.json",
+   "sha256": "5cbec062ac5b855edd71cf893bda734c158b2e657ea6caba7102ff5a024d159c"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/notes_ord/ordinary_calls_practice.jsonl",
+   "sha256": "4d7bff930df618c663b011a3d0146d9df1d44165198700a6b2484223a0bf3750"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/notes_role/role_notes.json",
+   "sha256": "fbf322cb49d504e229fee333fdc828cf5cb767de885f645121908ba4455393f7"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/select/selection_practice.json",
+   "sha256": "01420a155643c7643c9b3ca3af3244b6e275b4eebdc0332c73d3f474db51b692"
+  }
+ ],
+ "set": "practice",
+ "writer": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "D001",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "2ca31343b37a28f2c2720d42c53f0fc41ad76da002a00fee5b42e7b8ab1b7bd0",
+        "reply_sha256": "c44251abc9e3735b1f8361bdb40f770667abfa12576752ebefea36589b64fcb1",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "5dc60de4a622417d5153a16beaa68d963b9e4ed736460b2a178daa79d2d3a041",
+        "reply_sha256": "8dafd740819195b18ba363e81e58cb01276f04890106577ffc2a98bd5989298e",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "936db19534b5af182991e51eb4ac2eb685de783ff1de1f2c44c4af42cf8448e9",
+        "reply_sha256": "faaa2298cff8bc4fcc651182aa151167e13ccff950985415198365453e824449",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "9f2da63101b46d5549af7d4442f2ee90a00e641c144d19e3853f04c33f72714e",
+        "reply_sha256": "5cc5032805dedbb1185a7b3bb941a4269c715c31359b993b75b1f468d4ec2cc4",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "a4f4657ff88e97b4ec2d4bab4fe1545c6277f57981466a534931485520327b9e",
+        "reply_sha256": "cc42a4f904d147faeac4d56ef60276da70cecb3abc82e3687a3fedc1687bfa2d",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn. Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern. Tamsin keeps well away from the bilge pump. The wire brush comes after the tar brush. The shelf is by the door of the boat shed. Tamsin dusts the lantern first every morning. The boat shed is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "120c958fa54202cabfeee1bc30f90cc3a554e2c44536facba20ffdc86ffccc2d",
+        "reply_sha256": "36ecc00921e61dbd3d3e4264bc817cb7c7b022fbf8ebb7c6c88123f5b1a291b8",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D002",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "f4d0bcfd115a428a4f123d8cdc3444bb71439f32470e900df88ca5fd03a206c3",
+        "reply_sha256": "9227a1d7948d4d77becb52d89286f7e7e5d01383a89d922ce63233c46a789549",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "036e806dd51cf0786ed188d76808b60524ce72ac5a8dc93a9fac01b578e4a514",
+        "reply_sha256": "3bea85310093706d31d59067cd4ff5cb75cf1c80560cbea3d4dd8c532cc15686",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "b7dd1bbdef0a6ffdb38dce41a2434fba3609be719294129066023aeaba5c4234",
+        "reply_sha256": "1ae8c470795bb6f615e60e3f4ae32b0ad439bd421003eec293cb48179a15b0ae",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "03d11208f2ebe31e0a7b15fbccd107cb5a9c91d45924b4814b6ccaa767930722",
+        "reply_sha256": "d646bc91091f288492a9452feb59ca5c4adb80f4601dd9ec7ce7a2b4efebb326",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "b16ee00ea796f1f5ddf6be5c140c4f59afec4bbaa2554337e2743f2f961ef485",
+        "reply_sha256": "f248847399a0771e1c852efdd752c48c869abf23f5b98b238541117e1f38035f",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn. Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle. Odran keeps well away from the rusty winch. The steel needle comes after the bone needle. The stove is by the door of the net loft. Odran dusts the kettle first every morning. The net loft is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "0a922c43a43c14c7ad851774b82358cb0c186c0cc06d7a862f350eda74137dc2",
+        "reply_sha256": "4dd424ea3b5cbe1e4540936959abb6148f3ef3fe14c186d260fd899d36954840",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D003",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "3aed8d71c58c1c4da609b53d59cde662b00aec7965f67b4778850ae962eca15f",
+        "reply_sha256": "f90834ea854f91b6f794d920bad205515853f483198b1ad62f11dc9a90dd92e6",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "60e1ce64f7f8556f529ce772eda3c4180d668a9e696723f21d85f7cebcc2dc44",
+        "reply_sha256": "c49fa1f4df9704347b5f455f4398b9e92feee0b1abf2c9f2bba6c6ff3c1be9c8",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "2fae5884caae1f263561328dd1c42628f596359f6b13c3fb7115813f7ad98e97",
+        "reply_sha256": "77351b6f128674450ef41e61301d811b4df5e9c85951e2815a60ee8aa7788a2a",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "410001656042d6044c8c220e48bd49c957b1daee2599b0a8bcdae0d32b3fae43",
+        "reply_sha256": "83859cdca2665db41fe0e6e204c5c17150f772f6e67f361b355f4b92e4bdf9f0",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "70047760d91310db3a19b8fc789976466af3bcb76d02b0cc466431c66787a39c",
+        "reply_sha256": "07116c41bb625432bc18f70db4d5e56df0b2a4817c8fb06696af50d846086455",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn. Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger. Ilse keeps well away from the damp cellar. The tin scoop comes after the oak scoop. The counter is by the door of the seed store. Ilse dusts the ledger first every morning. The seed store is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "314d842042e8c3ddaa7a19857e3e1f08ce2b4712d8f1d7a21fee2b4860e49bc4",
+        "reply_sha256": "569b97b02141cc2bc47f60a1e2b8cec2a972c221d738defe18501c10587c7977",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D004",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "aabe0fd6211c1b30ec34d3c4c824f26a85a13e266a9756a5b9d26f901926ef1c",
+        "reply_sha256": "06d735e8c38e199eebb944247373a984c584b396ebb60142ed5b472e49092a84",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "24e7bf9270c8f2356aab71599f96c42caeef636ff8e6f140122244016db29895",
+        "reply_sha256": "c8fdec83c2f38c6cb2bb4e9b67ae8c6ef45a5fcb65e7eba2255aa0e5b32a7cc8",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "f7cd42b9f1c769ab23e65fe0492587c0c4eb141fa6a6a87a15a6a1480aad13c6",
+        "reply_sha256": "7e321e98d72743f93218dd71e97284bb25fa380eb18afae97db3dc31e0eb4bb2",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "89df2366382db8f1e90e7f7e0e43614719436d1fe405da6d54ec84df0cbc4094",
+        "reply_sha256": "88754d626e712318c73077b8d30e230b0f376fe27e971cbc49c4f4905ea0a403",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "d7adeb89953af919106a0a0eed839ecdcc6c89dcbd8be2d3c94ab93df0fceed5",
+        "reply_sha256": "5858665302056e561c0497c07a321fb89e7492cc30e7a8a4e33d7587bd2557ac",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn. Bram opens the nail forge before dawn. Bram reaches for the cross hammer before the ball hammer. The bucket stands on the floor by the door. A pair of tongs lies beside the bucket. Bram keeps well away from the leaky bellows. The ball hammer comes after the cross hammer. The floor is by the door of the nail forge. Bram dusts the bucket first every morning. The nail forge is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "2b2bb3808fd38bd394502a9800352214d22b327c4997fbee91b5e0dc7859e77f",
+        "reply_sha256": "bb5819535cf2791512e237c6b166be509e38885ab0be55647738349abb6ac1cc",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D005",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "bb87f320b4bb2af44b862b44f73e7ad48799d790536b7a21ae73435e1d25ba63",
+        "reply_sha256": "e6864a3942e194259dde98ab1821e71b00e3321848d18d63f56ce964ca03a201",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "6f8872fe6eea90e1ddcaa516df364d9179bdd8bd89f6f045e0167d32ece17e18",
+        "reply_sha256": "653a8d9f75be2ed184df69eae9ba3226cac04eda96f187bae701fcb7b8c32c37",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "fcdf20c6b26e112cca50f65c6291d86db04d3d703fefe51c859cedd20327141f",
+        "reply_sha256": "ffa832560c61c6c03fccc0dce1deb413016b99d8dae41a20a779f3e0da3a0645",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "fecd6354b8d6b5106d65697c66379846064f364320e940d3dc6a82f5da081ab7",
+        "reply_sha256": "b30ba9f6f05163815314f4ad78962b20f869b6c064b53eb694cce43a2ba1cb83",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "7138d3882274a7e7511e248903eaaf10c86617ae3ea75fede6f434c4938cd75d",
+        "reply_sha256": "c28010e7676da53966ffda4382fc566daeeb78a71526d2afaf294ed58de8cfec",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn. Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The rack stands on the wall by the door. A tub of madder lies beside the rack. Maren keeps well away from the lye vat. The iron ladle comes after the copper ladle. The wall is by the door of the dye house. Maren dusts the rack first every morning. The dye house is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "32be915a78576b77871cb7608ff22139143e8adb1663ba9e5ff39bfffb568634",
+        "reply_sha256": "d1fa0cb8007bc5d649f14fe2b61567c3d4b1c1eea82d4a9fba843ffaa23c62d3",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D006",
+   "role_size_count": 129,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning. The bell tower is open before dawn. Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower.",
+        "words": 108,
+        "size_count": 121,
+        "prompt_sha256": "dc23312a13b795225d47c1b45601493eb2dd72c357bd0f9de62028bf6658770e",
+        "reply_sha256": "372ed6491759b72f3e9a81fe55ec2ca0f9bd7f633d4ebbdd40a8f9c834cceb25",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning. The bell tower is open before dawn. Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning.",
+        "words": 115,
+        "size_count": 129,
+        "prompt_sha256": "52b6ee79808aaba140625f947cd4fda7b381cd9f9375d3bdd137f20310f4b010",
+        "reply_sha256": "ae002e646f25fecf23710a6dc03703708240f01717419856d30f3de5d6b52f8e",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning. The bell tower is open before dawn. Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning. The bell tower is open before dawn.",
+        "words": 122,
+        "size_count": 137,
+        "prompt_sha256": "5981ae4ab2014d822db4c8858c83954238d093049edcfc4279ad7009e7138ae4",
+        "reply_sha256": "fff31fa19233dc6761ccb0544e1545a8bac6c13c6cb33cbc30670e06c871f6b3",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning. The bell tower is open before dawn. Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door.",
+        "words": 100,
+        "size_count": 112,
+        "prompt_sha256": "23f022b7d65346f4ef04b8ebc404cabcfb49b003efce9f6044ccbba3956a5eaa",
+        "reply_sha256": "afa3bfc6f8b24f440c09a692b7d571336a6a771dc67991032fa738b19044f50a",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning. The bell tower is open before dawn. Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair.",
+        "words": 116,
+        "size_count": 130,
+        "prompt_sha256": "b7202a3edcd0b17273c11f41799e9f0b1ad24cbd664c6796d95543557ff93f03",
+        "reply_sha256": "d055fed16aac311ad855518e14694427a6ced5944cbeb1d36644a4b1ad5dd4b4",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope. The ledge is by the door of the bell tower. Corin dusts the oilcan first every morning. The bell tower is open before dawn. Corin opens the bell tower before dawn. Corin reaches for the hemp rope before the nylon rope. The oilcan stands on the ledge by the door. A pair of gloves lies beside the oilcan. Corin keeps well away from the loose stair. The nylon rope comes after the hemp rope.",
+        "words": 124,
+        "size_count": 139,
+        "prompt_sha256": "1fb7f77396fb4af0f6aea0664193150b14949f8c141d4ab94727465cf937f538",
+        "reply_sha256": "ce8b3fcf9386d2a9628b67466770f33532d203aef6cf9e3860152740b202a77e",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D007",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "5fd7c4994d5bb057036a6299b6725aa69f34c68c63eb7edfacdb96a425c3e06a",
+        "reply_sha256": "020eaed1a4bf0e0d61e050d0d5f41955ea3333c85d370771de4e38c9cbbee4b3",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "ce31c8b7fe986e0a4d6ac2562b16d03eaba37b3b114cb915d2390176337f7cf5",
+        "reply_sha256": "2cd073b1f7cd053ea31d5611ff55ca2b07b30e52d2f2b0a3d267260c2be44037",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "8ca899bb08f75fa55f553e38659a14077b8e27f0f076f45690dce560af4e8946",
+        "reply_sha256": "68786e67fd2a0f0469a81f6c16e48b95e3d3f217a6cce8c26c733a41698b3bf2",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "2a28fec45bb3e1cba7f5737535dccc34b50c889dd0ecab2b571976f2259b2e7d",
+        "reply_sha256": "c87ed0d33727bda389e941934ede9813af6ea95656357ac11e39acec0c3612f8",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "e2a0566206b0744392a44a215f8a39c7c985704c8aa34c66ed0c2bd9a90cc690",
+        "reply_sha256": "155eaab739858702b026e38535e0ea85fed269cdb434772cf70faa0826cd8dbc",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn. Edda opens the apple loft before dawn. Edda reaches for the wicker tray before the wire tray. The stool stands on the landing by the door. A heap of straw lies beside the stool. Edda keeps well away from the broken ladder. The wire tray comes after the wicker tray. The landing is by the door of the apple loft. Edda dusts the stool first every morning. The apple loft is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "88f49b5d756b2ca7df9911d79273760f551865262b2803afd27cacaf5db3d275",
+        "reply_sha256": "af0960f76d847cff02af58ce46b32394b92b81357659cf91cbeafeb224a6b4a4",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D008",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "dc80bd8bc8801b9619c469731cf68e9fb7b94d6d75e99a9c7f841b859ca7c053",
+        "reply_sha256": "12ecf945e3a381f45549ac33ba8150bbde1730920f89ddf4e8453ece1f127e12",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "d470532ff2108c090025bc06544fd235affb90967824e56810bf8aa6062cdb7d",
+        "reply_sha256": "066fb8639d73ea3b52a5fd972f28842edea24252b64a4bb323cca489cbaba8a4",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "ebc59bb5c75f0d20b7a90821f98f3b09e9ea8d21a9b0e383a5b2e6749375afb3",
+        "reply_sha256": "5ef56c6f9f5d4f4f0552097954053daf62ba1f3f92335d377772f0921b66347a",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "5fc465568936f4d7ad561989299c598f9e5918a6e993bccad72b5b29e2d4a964",
+        "reply_sha256": "339efa201849612efbc3360cc95f1748703826e995c0bfe3b7eec2e9d2e770d5",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "7a8cf3cc81709e19e9da87e010c22800239c2bda7881368fdab4d20e2e314b1f",
+        "reply_sha256": "5d9cc3eb6c2b0a2fc1793bde9671b60849095ec4287f1cc4560b03648f00b078",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn. Joss opens the tile yard before dawn. Joss reaches for the wooden mould before the metal mould. The wheelbarrow stands on the path by the door. A stack of pallets lies beside the wheelbarrow. Joss keeps well away from the cracked kiln. The metal mould comes after the wooden mould. The path is by the door of the tile yard. Joss dusts the wheelbarrow first every morning. The tile yard is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "7d976fc607f39fbd330221fcca2dc7a192d9e9dda8436b58fbda17a9241a7845",
+        "reply_sha256": "436b04da437b2824e69a18f73dfad8ff4ce30ad0bdd840a11e6c1c2bb90064ed",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D009",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "ab6ab9b99d9e190f478e03b3f86be1875b8359f1e98478c098807971b55a17b7",
+        "reply_sha256": "831f670825297a6c12d57c57473967e25ddb7e7820a486299ef3a36cac368b99",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "5b2b89855f896ead0c6a52189222315e9744e476a7e166fa2ff61d9a6529c641",
+        "reply_sha256": "530a5a1f55c01c866361d67bad15b51068bda514c5341c2f9a00bc946783ce0e",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "b2ff7e9c5fef203436107fd6fd6ee0b72439acc327bb16eb05671cce0d28d2cc",
+        "reply_sha256": "e0bde6ec58f8aebdce5d8c1b3a145837f549a6e7d4b09ebf5277d150d11bd69a",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "45a9cd9afa64a25592d4b5bf5a27040de6cc8c5171c835cea14b392e65b36b56",
+        "reply_sha256": "b0d37725ef69695b886f71d864d4cea8322f9a0c4a829578d55a9834a6038707",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "fb30c4b558e64c8fc99da01f6d5052d06afa11052ade5d40541d8c679d6b32a4",
+        "reply_sha256": "02c6b78d0e3c7d17df0e6b4bb48b65b9ddc9108525da4014ac1d8010b1d74d6a",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn. Wren opens the map room before dawn. Wren reaches for the brass ruler before the plastic ruler. The globe stands on the table by the door. A roll of tape lies beside the globe. Wren keeps well away from the ink press. The plastic ruler comes after the brass ruler. The table is by the door of the map room. Wren dusts the globe first every morning. The map room is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "21730aa9b366776cd00e9cc726e8b6051a27abc2bfc1c52db67c5a7d15bbc10d",
+        "reply_sha256": "8d6420a3ba8cd7cecb613a4bdb220d197f075e0c05108f6bdb8b9af3e7549c53",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D010",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "c30327172c1dd8e5bd1f2411c2c12e992133b3a242ea26be51eabcb6f58b7944",
+        "reply_sha256": "18c6a4f47522c9796f6728d5a7c25bffcb16bbe48d76c5c636e283043ed1214e",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "d2beaaa34a77dd9e69a0bc1683a6f8c8d6bc2645b8d91da309ccf670c29bfcdc",
+        "reply_sha256": "04c1c5e473b7092f4fb64b758530867c5353ca3afe4ac8ee17e4eef9bcdc0915",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "1750367c0ef877cf612dac36e7c62a6780048737afd3ab51a9f4116da090df9f",
+        "reply_sha256": "b0f5089539d6661e22698b953cbde0acf1ae384c08eaa4a541d690eef59b1610",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "7b9dcc370ab6b592e659f0e3784b9cffd8859b7b2dc40c2a8224252035541173",
+        "reply_sha256": "0ce0dd12244fc10b31bbe02d28e8001072c322732878464ed086ea57e11c17cc",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "ac6405847dacd5e5ee4bf861dacbbeed59dbd57be87f4efb89e62b093208175d",
+        "reply_sha256": "a73c98920fc15c6c6b0cad307f24e26b85db5ba63317c3365ed3f978ccc67cc8",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn. Fenn opens the ice house before dawn. Fenn reaches for the long saw before the short saw. The sledge stands on the step by the door. A bale of sawdust lies beside the sledge. Fenn keeps well away from the steep ramp. The short saw comes after the long saw. The step is by the door of the ice house. Fenn dusts the sledge first every morning. The ice house is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "db3e0917666379abcc0775bbfb2a20778c0a3231b72e45b76167b71d42c65e62",
+        "reply_sha256": "237832d2511c4473716bcc8de0254d17a01f8b3d2e8519c9f24408db42b6d9fc",
+        "utc": "2026-10-07T00:14:16Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D011",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "565e0645d9d0eb476b565a323a8633bb61f474f76ea7f2e0284431003b9c7c00",
+        "reply_sha256": "3bab7e46b157c868b3e6b50356c21ccdd03e322ccce023533a851736a2786548",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "4f1a4ba00ac59195ee86a938505203f0ecf72b7b42174dc485cfdf0b20f5955e",
+        "reply_sha256": "d79c66292d5506a4e91cc3423c6335c1cc9bc25f8d66dfff052f8d995ded687f",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "582560a1e108780e6aea213769b33a73e11c9e0ce5bbada6b72e819afb4e8363",
+        "reply_sha256": "7743a800ebece34fde326e0cb99e2625c8fb503e05b0f71d8587ba2cafe2b145",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "bf9731c21499156c6e8e9bdf4aad90b7cbf31f7185aba6e0c68f873c8a7c07e1",
+        "reply_sha256": "85ed0b33d6e17331aeecc07de668af807dd4201e1854a35fa956cafc3df8f761",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "6aed4c6e3d1b8d656fbfb6a6dfd61a2793bd14a9bca90f46a71aa760ea8c133a",
+        "reply_sha256": "9914ac6351b6362a6b7d5a0e20dae1ad2d974f1269a82f6bc305b7f2ebabe1fd",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn. Liesel opens the weigh house before dawn. Liesel reaches for the small scale before the large scale. The pan stands on the sill by the door. A box of chalk lies beside the pan. Liesel keeps well away from the cracked weight. The large scale comes after the small scale. The sill is by the door of the weigh house. Liesel dusts the pan first every morning. The weigh house is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "0b610d2dc111a97c89f4dc7e4435b006799495c7dc803c8037762683212e7d0c",
+        "reply_sha256": "70421bbea6a279e1f7de2465ce6dad7fa09f8a4e4d39cf86b4cbb31d8a6985ed",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D012",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "71ec9683f0642c75bcc21752044c5b9277997b0ede438d30abf38e97f649d012",
+        "reply_sha256": "63124edfb638c5cc17c26f5f5a3c00eeb2acaf42daabe6f3e43a7aa83218601d",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "9e62a71af5d7c4c697adbac71ec26c375062024360b912370245028705a2b89c",
+        "reply_sha256": "6c16753276a5e5d95c428961240517d20763b18f0daf41d241643d5299b55d24",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "0bf421cf74c35c19d6a9732fee08479205ab54263488b7cd42a2eb4418b5aa95",
+        "reply_sha256": "61ddaea41a0590913361e8b611daef91c7b60aa5c15d88bad69e5c5c7eafc423",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "00341a078a64a85c7bd4ccff08e2efdbf33acd567588d19838c16af1447f7a6a",
+        "reply_sha256": "400ddc513e4ee6f9e19b0e4ee14ee225493a1fe522ed8bb599dbae6d86570fe8",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "ec2cb727dfeff856ee03b7dd9244c5468a4b62ea5d6577ab81505c8afe4c17b3",
+        "reply_sha256": "7f488726b6785da9f4c54e4c8b4d0e5911607e418c72ff0f5db24ce0d3f91b95",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn. Ansel opens the sail loft before dawn. Ansel reaches for the curved needle before the straight needle. The pot stands on the trestle by the door. A bolt of canvas lies beside the pot. Ansel keeps well away from the blunt shears. The straight needle comes after the curved needle. The trestle is by the door of the sail loft. Ansel dusts the pot first every morning. The sail loft is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "0aae20d814bbbfbd4bf328c088c08f739d4367c1df9849b591a2fe37b8a4e8ab",
+        "reply_sha256": "b528dfd1f19b5eba9ee4bad4be074d1d5890021c7f8d573c048f20141b471c68",
+        "utc": "2026-10-07T00:14:17Z"
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

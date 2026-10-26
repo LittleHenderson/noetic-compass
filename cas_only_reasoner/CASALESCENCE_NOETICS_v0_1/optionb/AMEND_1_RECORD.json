@@ -1,0 +1,685 @@
+{
+ "planFix": {
+  "handled": [
+   {
+    "amendment": "A1 question writer",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan: section 10 Step 1 now names Gemini gemini-3.5-flash-lite, up to 4 passages per call, seeded fixed order, each passage fenced and treated on its own, one model for the practice set, the final set and the spare pass, stop on HTTP 429 with checkpoint and resume, model name of every reply stored. It says Gemini is a third vendor (not Claude, not DeepSeek). The 47 one-word calls are given as the operator's measurement; the daily cap is NOT MEASURED. Also changed: 'Practice first' paragraph, section 21 (model families), section 23 row D4. Constants: outside_services.gemini_question_writer (model_by_set, passages_per_call 4, new rule texts). Formats: section 4 (groups of 4, one model, HTTP 429, examples). Left for the tool fixer: tools/ob_write_questions.py."
+   },
+   {
+    "amendment": "A2 support checker, no Claude fallback",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan: section 10 Step 7 names Gemini gemini-3.1-flash-lite, 12 notes per call, one checker, no fallback; if Gemini refuses the build waits. The five-point fallback rule and its 'why' paragraph are deleted. Also fixed: section 22 question 21, section 23 row D6, section 24 items 13 and 33, section 26 rows 7 and 10 and its numbers paragraph. Constants: the six fallback keys and briefs.support_sheet_header are removed; one_checker_rule and if_gemini_refuses added. Formats: section 9 rewritten without export, import, MOVED_TO_FALLBACK and the fallback object; 9.4 is kept as a stub so 9.5 keeps its number. Left for the tool fixer: tools/ob_check_support.py."
+   },
+   {
+    "amendment": "A3 key solvers stay, Claude model id pinned, limit stated",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan: Step 4 says DeepSeek is asked for as deepseek-chat, pins the Claude id claude-sonnet-5-5 (by the operator's statement), and states the limit plainly: a Claude sub-agent carries the CAS definitions, only picks a letter, never writes or edits a question, a key or a note. The same limit is in section 21. Constants: outside_services.claude_solver.model_id is 'claude-sonnet-5-5' (was null); new key limit. Formats: 6.4 (the import step takes --transcript-model and stores the name) and 6.5 (answers[].model_in_reply). I did not verify that the alias names this id."
+   },
+   {
+    "amendment": "A4 standard error for X",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan sections 13, 15.4 and 24 item 19, constants tests.standard_error and missed_gain_x.standard_error_is, formats sections 17.9 and 18: the standard error is the standard deviation of the 10,000 resampled ROLE-minus-better-rival differences (the bootstrap standard error); nothing divides it by a count. The old words 'divided by the count and not by the count minus one' are gone. I checked every other range and standard error in my three files: none has the mistake."
+   },
+   {
+    "amendment": "A4, the part in optionb/job/analysis_b1.py",
+    "action": "NOT_MINE",
+    "what_changed_or_why_not": "Not my file. By reading only (lines 383 to 391): the function range_numbers already takes the standard deviation of the resampled values and divides it by nothing more (the 'count' in its denominator cancels the 'count' in its numerator). Every range and every standard error comes from that one function. So the outside finding was a wording fault in the plan. The fixer should confirm this and make the code comment plain."
+   },
+   {
+    "amendment": "A5 repair lines narrowed",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan section 11.1: TR_TOOLS_REPAIRED only after seal step 1 and while no final question exists; 6R_PROGRAMS_REPAIRED only after a failed pre-check job on the sealed package and before seal step 7 (so before any call to model B). Neither may change the plan, the constants, a brief, a threshold, a key, a task or a note. Each needs its review record. After the window: stop, report, new reviewed plan version. Refusal code REPAIR_OUTSIDE_ITS_WINDOW. Constants: repairs (window keys, never_changed_by_a_repair, outside_the_window). Formats: section 15.2 (windows, exact tests the tool applies). Left for the tool fixer: tools/ob_seal.py."
+   },
+   {
+    "amendment": "A6 what C5 compares",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan section 21 has a new paragraph 'What condition C5 compares': the whole role note (role tags, canon definition lines, Mind and related-thing fields) against the bare labels and quotes; a pass shows formatted role information adds something beyond pointing, not that the role names alone do. The 'can show' bullet, the 'cannot show' list and the reading of the pass code were brought in line. No group was added."
+   },
+   {
+    "amendment": "A7 outcome codes numbered 1 to 11",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan section 15.4 table: 8, 9, 10, 11 (was 8, 8, 9, 10). 'For code 9' is now 'For code 10'. 'codes 5 to 10' is now 'codes 5 to 11' (also section 24 item 18). Section 21 and formats section 19 show 11 + 7 + 8 + 2 = 28 keys; the keys are code names, so the owner's table is unchanged. Constants: the n values, new outcome_codes_count 11, and report_sentences.code_9 renamed to code_10."
+   },
+   {
+    "amendment": "A8 (a) reserve block read by the question writer's tool",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan Step 6, constants split.reserve_block_read_by and split.reserve_block_rule, formats sections 4 and 7.1: tools/ob_write_questions.py reads the block reserve of select/selection_practice.json exactly as ob_select.py and ob_seal.py do. It adds the wave of reserve setting k only when the file exists, practice_setting_count is 8 + k - 1 and reserve.finished is false; a missing reserve block also stops it; it does not read floor.met. The tool itself is not my file."
+   },
+   {
+    "amendment": "A8 (b) seal step 7 reads the receipt",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan sections 11.1 and 19.1, constants seal.step_7_*, formats section 15.1: step 7 takes --receipt, refuses unless precheck_kind is SEALED_PACKAGE, status is PRECHECK_COMPLETE_SELFTEST_PASS, the receipt's seal_step_7_values equal the five values worked out, and the SEAL_OPTIONB.jsonl inside source.zip is byte for byte the real seal file up to its last program line. The tool and the run sheet are not my files."
+   },
+   {
+    "amendment": "A9 model name of every reply; DeepSeek alias fact",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan section 3 states the fact once: deepseek-chat is now an alias answered by deepseek-flash; label team B was asked for under that name and the answering model was not recorded. Step 7 no longer says the writer 'is the same model as label team B'. Sections 10, 11.1 and 25 say every tool stores the reply's model name. Constants: outside_services.model_name_rule. Formats: section 0 rule and the field model_in_reply in all four call logs (4.2, 6.2, 8.2, 9.3)."
+   },
+   {
+    "amendment": "A10 development test before seal step 1 is ordered",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan section 19.1: one CPU-only AWS job of kind DEVELOPMENT_TEST, at most two, cap 0.50 USD and 45 minutes each, by operator decision under the owner's approval record; runs runner_b1.py selftest on a made-up package; never evidence about roles; comes before seal step 1; package built by optionb/dry/build_dev_package.py. Ledger arithmetic in 19.2 now leaves 4.64 USD. Also section 22 question 13, section 25, section 26 row 20. Constants: new block aws.development_test_job; the old 'recommended' key is removed. Formats: new section 20 (the package)."
+   },
+   {
+    "amendment": "A10, the builder optionb/dry/build_dev_package.py",
+    "action": "NOT_MINE",
+    "what_changed_or_why_not": "Not my file. It does not exist yet (I listed optionb/dry/). Formats section 20 says what its package must hold."
+   },
+   {
+    "amendment": "A11 DeepSeek cap as a token count",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan section 19.2, constants outside_services.deepseek.spend_cap_*, formats sections 0, 6.2 and 8.2: at most 4.00 USD, enforced as two limits kept in the four DeepSeek call logs: 2,430,240 input tokens and 1,156,520 output tokens. Each is 40 times the operator's measured count (60,756 and 28,913 for about 0.10 USD on deepseek-v4-pro). A spend inside both limits costs at most 4.00 USD at that model's prices, whatever the split between input and output price. Stop statuses STOPPED_TOKEN_CAP and STOPPED_NO_TOKEN_COUNT. Stated as EXPECTED, NOT MEASURED: deepseek-chat costs no more per token than deepseek-v4-pro. The label run's receipt gives token counts and no price, so it gives no price basis. Gemini: free tier."
+   },
+   {
+    "amendment": "A12 new last section",
+    "action": "DONE",
+    "what_changed_or_why_not": "Plan section 27 'Outside review and amendments A1 to A12': one row per outside finding (7) and one row per amendment (12), each saying what was done and what is left for another file's fixer. The version stays 1.0. Sections 1 to 26 kept their numbers. The formats file got one new last section, 20; no older number changed there either."
+   }
+  ],
+  "files_changed": [
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/FILE_FORMATS.md"
+  ],
+  "open_issues": [
+   "STATE OF MY FILES (REAL, hashed after the last edit; all three UTF-8, LF only, no byte-order mark): 08_OPTION_B_PLAN_v1_0.md 136,356 bytes sha256 91617f388285bbc04411d0cab0daf87898e3efbc63950e8705a8fcdaec740a43; optionb/PLAN_CONSTANTS.json 83,805 bytes sha256 980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c (parses as JSON); optionb/FILE_FORMATS.md 114,158 bytes sha256 ab1f39507ce46b765e13798d1959fa252004947c02342e81ac3209005b695799. Nothing was run on AWS. No outside service was called. No key file was opened. No git command that changes state was run.",
+   "CONSTANTS RENAMED (programs must follow): (1) outside_services.deepseek.proposed_spend_cap_usd (number 4.00) is now spend_cap_usd (string \"4.00\"). (2) outside_services.gemini_question_writer.on_daily_cap is now on_http_429. (3) report_sentences.code_9 is now report_sentences.code_10, same sentence; optionb/job/analysis_b1.py line 850 reads the old name and will raise KeyError until fixed.",
+   "CONSTANTS REMOVED: outside_services.gemini_question_writer.daily_requests_seen and .daily_requests_note; outside_services.gemini_support_checker.fallback_checker, .fallback_checker_model_id, .fallback_blocked_hours_min, .fallback_sheet_items_max, .fallback_rule, .fallback_rule_status; briefs.support_sheet_header; aws.precheck_job.development_test_before_seal_step_1. tools/ob_check_support.py reads three of these (lines 433, 434, 441) and will raise KeyError until its fallback path is taken out. optionb/dry/fixture_n/DRY_CONSTANT_OVERRIDES.json and run_dry_n.py still override fallback_sheet_items_max.",
+   "CONSTANTS ADDED: outside_services.model_name_rule; outside_services.deepseek.model_name_note, spend_cap_status, spend_cap_input_tokens (2430240), spend_cap_output_tokens (1156520), spend_cap_counted_logs, spend_cap_stop_status, spend_cap_no_count_status, spend_cap_rule, spend_cap_basis, spend_cap_expected, spend_cap_limit_of_the_count; gemini_question_writer.one_model_rule, vendor_note, batch_rule, calls_seen_note; gemini_support_checker.one_checker_rule, if_gemini_refuses, daily_cap_note; claude_solver.limit; split.reserve_block_read_by, split.reserve_block_rule; missed_gain_x.standard_error_is; top-level outcome_codes_count and outcome_codes_numbering; aws.precheck_job.kinds, kinds_meaning, kind_is_named_in; the block aws.development_test_job; seal.step_7_reads, step_7_receipt_kind, step_7_receipt_status, step_7_refused_unless, step_7_why; repairs.never_changed_by_a_repair, outside_the_window, outside_the_window_refusal, repairs.job_programs.window, repairs.tools.window; expected.gemini_question_calls_note.",
+   "CONSTANTS WITH A NEW VALUE UNDER THE SAME NAME: status; gemini_question_writer.model_by_set (both gemini-3.5-flash-lite) and passages_per_call (8 to 4); gemini_support_checker.model (gemini-3.1-flash-lite) and rate_refusal; claude_solver.model_id (null to claude-sonnet-5-5) and model_id_rule; tests.standard_error; outcome_codes_in_checking_order n values (8,8,9,10 to 8,9,10,11); aws.precheck_job.after_a_failure.every_job_counts; seal.tools_rule and seal.step_7_needs; repairs.status, rule_above_all and tools.unsealed_outputs; spec_sheet_status.table_keys; expected.gemini_question_calls_at_8_settings (16/60 to 30/118). Names kept stable on purpose because programs read them: model_by_set, passages_per_call, passes, notes_per_call, daily_cap_error_regex, claude_solver.name and model_id, aws.precheck_job.jobs_max, cap_usd_proposed, hard_time_limit_minutes_proposed, repairs.seal_steps, repairs.job_programs.files_that_may_change, spec_sheet_status.table_keys_count (still 28).",
+   "FORMAT CHANGES THE PROGRAM FIXERS MUST FOLLOW (FILE_FORMATS.md): every call log line gets model_in_reply (4.2, 6.2, 8.2, 9.3); the two DeepSeek logs also get model and usage (6.2, 8.2); ob_solve_blind.py import takes --transcript-model and writes answers[].model_in_reply (6.4, 6.5); the writer cuts groups of 4 and reads the reserve block (4, 7.1); the support check has no export, no import, no MOVED_TO_FALLBACK, no fallback object (9); seal step 7 takes --receipt and four checks (15.1); repair lines have windows and the refusal REPAIR_OUTSIDE_ITS_WINDOW, and a 6R needs a kept receipt of kind SEALED_PACKAGE that did not pass (15.2); new section 20 for the development-test package.",
+   "A11, THE NUMBERS ARE MY DERIVATION, the operator should confirm before the seal. I did not measure any price. I used the operator's reading as given (60,756 input and 28,913 output tokens for about 0.10 USD on deepseek-v4-pro). I chose two limits (input 2,430,240; output 1,156,520) and not one, because the input and output prices were not measured apart and two limits hold for any split. A single blended number would be 3,586,760 tokens, but it does not hold if the option B calls are more output-heavy than the measured ones. EXPECTED, NOT MEASURED: deepseek-chat costs no more per token than deepseek-v4-pro. The label run's receipt has no price. My estimate of the need (about 39% to 53% of each limit in the very worst case) comes from word and punctuation counts, not from a tokenizer.",
+   "A5, ONE READING I CHOSE. I kept the older rule that an unsealed derived file which a tool fault could have changed is deleted and derived again by the repaired tool from the same logged replies. I read 'neither may change a key, a task or a note' as: the repair itself changes code only, and no sealed key, task or note ever changes. A stricter reading would refuse a tool repair whenever the fault could have changed any existing derived file, sealed or not. If the operator wants the stricter reading, plan section 11.1 rule 6, constants repairs.tools.unsealed_outputs and formats 15.2 need one more edit before the seal.",
+   "A10, TWO READINGS I ADDED so the order has a meaning: (1) seal step 1 is written only after a development test ended with SELFTEST_PASS; (2) if the second job fails too, nothing is sealed and the operator reports to the owner. No program enforces either. The pre-check kit (derive_precheck_job.py) still allows attempts d1 to d4 for this kind and its texts still say the test 'needs the yes of the operator and of the owner'; the kit, PRECHECK_CONFIG.template.json and RUN_SHEET_B1.md need to follow (at most d1 and d2; ordered by A10).",
+   "A10, THE BUILDER DOES NOT EXIST: optionb/dry/build_dev_package.py is not on disk. The made-up fixture it uses must be much larger than today's dry fixtures: optionb/job/SELFTEST_EXPECTED.json says the set DESIGNED needs at least 20 practice role-step tasks (Gate 5), at least 1 practice plain-fact task, and fewer than 100 and 200 tasks. The package also needs a made-up seal file that names tools/verdict.py with package path tools/verdict.py and ends with a 6_PROGRAMS line; tools/ob_seal.py has no dry-folder mode today.",
+   "A1, SMALL GAP BETWEEN PLAN AND TOOL: the plan now says the question writer's tool stops on HTTP 429. tools/ob_write_questions.py today first waits out a per-minute limit up to --rate-waits times (default 2) and names the stop STOPPED_DAILY_CAP. Its fixer should set the default to no wait, or the operator accepts the short waits; and should refuse any model but the one in the constants for both sets.",
+   "A3, NOT VERIFIED BY ME: that the Agent tool's 'sonnet' alias names claude-sonnet-5-5. It is written as the operator's statement. The import step only stores the transcript's model name; it does not compare it with the pinned id. If the operator wants a refusal on a mismatch, that is one more rule before the seal.",
+   "STALE HASHES: optionb/job/SELFTEST_EXPECTED.json and the dry fixtures quote the old plan hash 7fee7afd... and the old constants hash 3e576140.... tools/ob_eligibility.py must be run again before seal step 1, because its two files record the hash of the constants.",
+   "NOT CHANGED, OUTSIDE A1 TO A12, FOR THE OPERATOR TO DECIDE: (1) Step 8 still names the DeepSeek reasoning model, and constants deepseek_reviewer.model and review_round.reviewer still say deepseek-reasoner. The note in verdict/ says that name is now answered by deepseek-flash, the likely model of label team B. (2) Already missing before my edits: the constants codes STOP_CALL_CAP and STOP_WORK_CUTOFF, the gate names GATE_0_SELFTEST to GATE_7_TIME and some other code-like words do not appear in the plan; and the table 'How each result reads' in section 21 has no row for BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED. Every brief, frame, closing wording, forbidden-word list, outcome code and stop code of the constants does appear word for word in the plan (checked by script). (3) FILE_FORMATS 15.2 still does not describe the --deleted argument of 'ob_seal.py repair TR', which an earlier fixer asked for.",
+   "SMALL FOLLOW-UP IN THE CONTROLLER: controller_common.py seal_gate still allows tool-repair lines after the step 7 line. Under A5 such a line can no longer exist. This is harmless, but its comment is out of date."
+  ],
+  "real_numbers_measured": [
+   "Before my edits (REAL): plan 117,215 bytes sha256 7fee7afd59e1e0da94ed62433847450ad5474cfffe72351d10c4893ec53fd0c7; constants 74,728 bytes sha256 3e576140547e522d63805ade03ecba885250430b32ea58cd937dd711cab7f753; formats 102,376 bytes sha256 de8d373b8faccb3488c61a8bf92e5ca99088c7c245f1908beea8b62809859f91. These equal the hashes in BUILD_REVIEW_ROUND1.json and in the outside review's receipt.",
+   "After my edits (REAL): plan 136,356 bytes sha256 91617f388285bbc04411d0cab0daf87898e3efbc63950e8705a8fcdaec740a43, 1,441 lines; constants 83,805 bytes sha256 980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c, 64 top-level keys, parses; formats 114,158 bytes sha256 ab1f39507ce46b765e13798d1959fa252004947c02342e81ac3209005b695799, 1,579 lines. LF only, no tab, no table row with a wrong column count, no open code fence.",
+   "Word-for-word check by script (REAL): all 9 briefs and frames, 3 prompt frames, 3 closing wordings, 5 forbidden-word lists, 11 outcome codes with their numbers 1 to 11, 8 stop codes, 3 report sentences, 12 forms, 12 settings and the 4 model names of the constants appear in the plan. Missing, and already missing before: STOP_CALL_CAP, STOP_WORK_CUTOFF.",
+   "Status table keys (REAL count from the constants): 11 + 7 + 8 + 2 = 28, all different; table_keys_count is 28.",
+   "DeepSeek limits (arithmetic): 40 x 60,756 = 2,430,240 and 40 x 28,913 = 1,156,520. The token counts and the 0.10 USD are the operator's reading, not measured by me.",
+   "Label run receipt verdict/labels_team_b.json.receipt.json (REAL, read): provider deepseek, model asked for deepseek-chat, 428 passages, 2,327,821 prompt tokens, 88,948 completion tokens, no price field.",
+   "Question writer calls at 8 practice settings with 4 passages per call (arithmetic on REAL counts 58 and 235): 15 and 59 per pass; 30 and 118 with the spare pass.",
+   "Ledger arithmetic on the reading already in the plan (12.64 USD at 2026-10-05T09:49Z, not re-read by me): 12.64 - 5.00 - 2.00 - 1.00 = 4.64 USD.",
+   "EXPECTED, an estimate from word and punctuation counts of the briefs, the 192 dry role notes and the passages (not a tokenizer count): if every ordinary note were written twice and all 466 possible role-step candidates and 293 plain-fact candidates were solved, the need is about 0.94 to 1.18 million input tokens (39% to 48% of the limit) and 0.49 to 0.61 million output tokens (42% to 53%), for 1.2 to 1.5 tokens per counted unit.",
+   "By reading optionb/job/analysis_b1.py lines 383 to 391 (not run): one function works out every range and standard error; it computes the standard deviation of the 10,000 resampled values with no further division.",
+   "optionb/dry/ listing (REAL): no file build_dev_package.py exists."
+  ]
+ },
+ "fixes": [
+  {
+   "set": "pipeline-tools",
+   "fix": {
+    "handled": [
+     {
+      "amendment": "A1 question writer (tools/ob_write_questions.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "The tool takes the writer's name from the constants only (gemini-3.5-flash-lite for both sets). It has no option that names another model. It stops with ONE_MODEL_RULE if the two names in model_by_set differ. Batches hold up to 4 passages (the constant passages_per_call), in the seeded fixed order. On any HTTP 429 it now stops at once with the status STOPPED_HTTP_429, keeps the checkpoint, and does not count the refused call as a try. The old option --rate-waits and the two wait helpers are gone. Every call log line now holds model_in_reply. REAL, dry walk on made-up data: 10 made-up ids are cut into groups of 4, 4 and 2; a made-up HTTP 429 stops the run after 1 call with 0 tries counted."
+     },
+     {
+      "amendment": "A2 support checker, no Claude fallback (tools/ob_check_support.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "Removed: the fallback rule, its 24-hour clock, the sheets, the commands export and import, the status MOVED_TO_FALLBACK and the fallback object of the checkpoint. The tool no longer reads any of the removed constants. One checker (gemini-3.1-flash-lite, 12 notes per call) judges both sets and both rounds. A daily-cap refusal stops with STOPPED_DAILY_CAP; any other HTTP 429 stops with STOPPED_RATE_LIMIT after the allowed waits; both texts say: the build waits, nobody else judges a note. The status NOTHING_PENDING_FOR_THIS_CHECKER is now NOTHING_PENDING. REAL, dry walk: after made-up daily-cap refusals more than 24 hours apart no batch moved; the checkpoint has exactly the fields of FILE_FORMATS 9.1; no claude_support file exists."
+     },
+     {
+      "amendment": "A3 key solvers, pinned Claude model id (tools/ob_solve_blind.py, tools/ob_seal.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "ob_solve_blind.py reads outside_services.claude_solver.model_id. The export step refuses with CLAUDE_MODEL_ID_NOT_PINNED if it is not set, and prints the id the sub-agent must be asked for with (REAL in the dry walk: claude-sonnet-5-5). The import step now needs --transcript-model NAME, refuses without it, and stores the name with every answer of the sheet (answers[].model_in_reply). It does not judge the name, as FILE_FORMATS 6.4 says. The limit (a Claude sub-agent carries the CAS definitions; it only picks a letter) is stated in the tool's head text. ob_seal.py step 1 already refused a null id; that check is unchanged."
+     },
+     {
+      "amendment": "A4 standard error for X",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Plan text and optionb/job/analysis_b1.py. None of my eleven tools works out a standard error or a range."
+     },
+     {
+      "amendment": "A5 repair lines narrowed (tools/ob_seal.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "A TR line is refused with REPAIR_OUTSIDE_ITS_WINDOW when the seal file holds the line 3C_FINAL_QUESTIONS_AND_KEYS or when any final file lies under questions/, checks/, solve/ or select/. A 6R line is refused with the same code unless 6_PROGRAMS exists, 7_PRECHECK does not, and the kept receipt says precheck_kind SEALED_PACKAGE with a status other than PRECHECK_COMPLETE_SELFTEST_PASS. The seal reader now also refuses a seal file that holds a TR line after 3C. The refusal name is checked against repairs.outside_the_window_refusal in the constants. A repair may still change only its own kind of file; any other changed sealed file is a refusal, and each repair still needs its review record. REAL, scratch test on a made-up project copy: 15 window cases held."
+     },
+     {
+      "amendment": "A6 what C5 compares",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Plan text only."
+     },
+     {
+      "amendment": "A7 outcome codes numbered 1 to 11",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Plan, constants, formats and the job programs. ob_seal.py reads the codes by name and the key count 28 from the constants. REAL: in the scratch test it built the 28 table keys from today's constants without a refusal."
+     },
+     {
+      "amendment": "A8 (a) reserve rule in tools/ob_write_questions.py",
+      "action": "DONE",
+      "what_changed_or_why_not": "The writer adds the wave of reserve setting k only when select/selection_practice.json exists, its practice_setting_count is 8 + k - 1, and its block reserve says finished false. A file with no reserve block stops it. It no longer reads floor.met. The stop text names the two reserve targets. REAL, walked twice on made-up data (run_dry_q.py and build_dev_package.py): floors met and a target missed, the writer added wave 1 and select ran with 9 settings. Four refusal cases held: no selection file, no reserve block, floor.met false with reserve.finished true, and a count that does not fit."
+     },
+     {
+      "amendment": "A8 (b) seal step 7 reads the receipt (tools/ob_seal.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "Step 7 now takes --receipt FILE and refuses unless: precheck_kind is SEALED_PACKAGE; status is PRECHECK_COMPLETE_SELFTEST_PASS; seal_step_7_values equals the five values worked out from the given selftest.json and source.zip; and the member SEAL_OPTIONB.jsonl of source.zip is, byte for byte, the real seal file up to its last program line (read with zipfile, this one member only). REAL, scratch test: a rehearsal receipt, a development-test receipt, a receipt with findings, two wrong values, values under the wrong name, another seal copy and a seal copy that ends at 3C were all refused; the right case passed as a dry run, also through the command line."
+     },
+     {
+      "amendment": "A9 model name of every reply (four outside-call tools)",
+      "action": "DONE",
+      "what_changed_or_why_not": "ob_write_questions.py, ob_check_support.py, ob_solve_blind.py and ob_write_ordinary_notes.py store model (the name asked for) and model_in_reply (the reply's own field model, as it is; null when no readable reply came) in every call log line, in the field order of FILE_FORMATS 4.2, 6.2, 8.2 and 9.3. The two DeepSeek logs also hold usage. solver_answers holds model_in_reply per answer. Each tool prints the names seen. REAL in the dry walks: made-up names were stored as given; refused calls and replies with no name stored null."
+     },
+     {
+      "amendment": "A10 builder of the made-up package (optionb/dry/build_dev_package.py, NEW)",
+      "action": "DONE",
+      "what_changed_or_why_not": "The builder writes 16 made-up passages, runs the real laptop tools on them in build order with a made-up seal file that grows line by line, lays the result out as a made-up study folder with its own made-up seal file (steps 1 to 6), has the real seal tool verify that seal file, and then calls build_source_zip_b1.py (--study-root) and build_contract_b1.py (--stamp-only, on a copy of the guest). It refuses if the real seal file exists or the output folder exists. It never opens a real passage, question, label or note. REAL: run with --stop-before-the-builders it ended with 54 tool runs and 32 checks, all held. NOT RUN by me, by rule: the two real controller builders. See open issues."
+     },
+     {
+      "amendment": "A11 DeepSeek token cap in the checkpoints (ob_solve_blind.py, ob_write_ordinary_notes.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "Both tools read the four counted call logs once at their start, add each of their own calls as it is logged, and make no call when the input count has reached 2,430,240 or the output count has reached 1,156,520 (status STOPPED_TOKEN_CAP). A reply with HTTP status 200 and no whole-number token counts is logged, then the tool stops (STOPPED_NO_TOKEN_COUNT). A dry folder counts nothing. Each tool stops if its own call log is not one of the counted logs. REAL: the counting functions held on made-up log lines in both drivers. The stop inside the call loop has not run; a dry folder never reaches it."
+     },
+     {
+      "amendment": "A12 new last plan section",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Plan text only."
+     },
+     {
+      "amendment": "Renamed, added and removed constants",
+      "action": "DONE",
+      "what_changed_or_why_not": "No tool reads a removed or renamed constant any more. REAL, checked by script: every key the four outside-call tools read from their service block exists in today's constants (max_tokens for DeepSeek is read only if present). Both fixture override files no longer name fallback_sheet_items_max. Six tools needed no change and are byte for byte as before: ob_assemble.py, ob_check_questions.py, ob_eligibility.py, ob_role_notes.py, ob_screen_notes.py, ob_select.py."
+     },
+     {
+      "amendment": "Dry drivers re-run on the made-up fixtures",
+      "action": "DONE",
+      "what_changed_or_why_not": "optionb/dry/fixture_n/run_dry_n.py was changed to the new rules (no fallback walk; the new log fields; the token count) and re-run. optionb/dry/fixture_q/ had made-up inputs and no driver on disk, so I wrote run_dry_q.py, which walks the four question tools on those inputs and rebuilds the stop case. Both exit with code 0. Numbers are under real_numbers_measured."
+     }
+    ],
+    "files_changed": [
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_questions.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_check_support.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_solve_blind.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_seal.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/build_dev_package.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_n/run_dry_n.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_n/DRY_CONSTANT_OVERRIDES.json",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_n/ (every made-up output file, written again by run_dry_n.py; the eight old claude_support sheet and answer files are gone)",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_q/run_dry_q.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_q/ (questions/, checks/, solve/, select/ and stop_case/ written again by run_dry_q.py; new replay/used_*.json, replay/made_up_usage_log_*.jsonl and dry_run_log.json; the old file select/split_fixed.before_review_round_1.json is gone; elig/ and the hand-written reply files are untouched)"
+    ],
+    "open_issues": [
+     "NOT RUN BY ME, BY RULE: the two controller builders. build_dev_package.py calls build_source_zip_b1.py and build_contract_b1.py as separate processes. I tested that call path only with stand-in scripts in my scratch folder (REAL: status DEV_PACKAGE_BUILT; a stopped stamp-only builder is recorded and does not stop the build; a stopped zip builder stops the build). The first real run of the two builders is the operator's. By reading and by a small script (REAL): the made-up study folder has the eight seal steps the zip builder wants, names exactly the 15 package paths of FILE_FORMATS 14 once each, and every one of those files has its sealed bytes. If the zip builder stops, my builder stops too. It does not write a zip by itself.",
+     "NO PACKAGE IS ON DISK. I removed my test output optionb/dry/dev_package/ after each test, because the package must hold the plan, the constants, the formats and the job files as they stand on the day of the build. The operator builds it with: python -B optionb/dry/build_dev_package.py. If PLAN_CONSTANTS.json changes after that, the pre-check kit refuses the package and it must be built again under a new folder name.",
+     "TWO SMALL THINGS IN build_dev_package.py GO PAST THE WORDS OF A10: the switch --stop-before-the-builders (so the laptop part can be checked without running controller code) and --folder-name (so a second package for job d2 never overwrites the first). It also writes BUILD_LOG.json in its output folder. If the operator wants neither switch, both can be taken out without touching the rest.",
+     "WHAT THE MADE-UP PACKAGE DOES NOT COVER: it holds two task types (PULL-PUSH and HABIT) and three forms. The other four types and nine forms are not in it, so the job code for them is not exercised by the development test. Every made-up solver answer is right, every made-up note passes, and the leak screen hits nothing; the drop paths of those steps are walked by the two dry drivers, not by the package.",
+     "PADDING, NOT MEASURED: the laptop has no tokenizer. I sized the made-up ordinary notes by the plan's own size count to about 90, 100 and 110 percent of each ROLE note. ESTIMATE from size counts, printed by tools/ob_assemble.py, not a token count: padding share ROLE 4.2, MIXED 5.8, ORD-INFORMED 3.8, ORD-FREE 2.9 percent; the rule's line is 10. EXPECTED: the self-test does not stop with GATE_STOP_PADDING for a fixture reason. If it does, that is a fault of my fixture, not of the job programs.",
+     "THREE TOOLS ARE NOT RUN ON MADE-UP DATA AS COMMANDS. tools/ob_eligibility.py reads the real label files, so the builder writes the made-up eligibility file itself. The command of tools/ob_role_notes.py refuses a set that is not the real size, so the builder calls its two functions read_canon() and build_passage(). The seal steps of tools/ob_seal.py check the real counts, so the builder writes the made-up seal lines itself; the real seal tool then verifies them (REAL: chain whole, all 79 files unchanged).",
+     "TOKEN CAP: the stop inside the call loop of the two DeepSeek tools (STOPPED_TOKEN_CAP and STOPPED_NO_TOKEN_COUNT) has never run. The constants say a dry folder counts nothing, so only the counting functions were exercised, on made-up log lines. Its first real run is the first real DeepSeek call.",
+     "ENDPOINT, A FACT TO CHECK: the task text calls the Gemini request a generateContent call. The tools send what they always sent: the OpenAI-style chat request to the endpoint in the constants (.../v1beta/openai/chat/completions), with no thinking-budget field. I changed nothing there. model_in_reply is the reply's field model, as FILE_FORMATS section 0 says. If a service's reply carries no such field, null is stored. Whether the two new Gemini models answer on that endpoint and fill that field is NOT MEASURED by me.",
+     "NAMES I CHANGED IN PRINTED OUTPUT: the writer's stop status STOPPED_DAILY_CAP is now STOPPED_HTTP_429 and its printed count daily_cap_stops is now stops_after_http_429; the option --rate-waits of the writer is gone; the support check's status NOTHING_PENDING_FOR_THIS_CHECKER is now NOTHING_PENDING. REAL, searched: the plan, the constants, the formats and the controller folder do not use the old names for these two tools. FILE_FORMATS section 4 names no status for the writer's stop; the plan owner may want one sentence there.",
+     "NEW REFUSAL NAMES IN tools/ob_seal.py that FILE_FORMATS does not list by name: RECEIPT_IS_NOT_OF_A_JOB_ON_THE_SEALED_PACKAGE, RECEIPT_DOES_NOT_MATCH, SOURCE_ZIP_IS_NOT_THE_SEALED_PACKAGE (step 7). Step 7 checks the owner's status table before it reads the receipt, so a missing table is reported first. The old name REPAIR_OUT_OF_PLACE is now REPAIR_OUTSIDE_ITS_WINDOW.",
+     "ONE STRICTER READING IN tools/ob_seal.py: the seal reader refuses a whole seal file that holds a TR line after the line 3C (SEAL_CHAIN_BROKEN). The seal tool can not write such a line any more, so this only catches a hand edit. The zip builder, the pre-check kit and the analysis program apply the same rule. The other tools' own small seal checks do not look at the place of a repair line; I left them as they are.",
+     "A3, AS THE FORMAT SAYS: the import step stores the model name from the transcript and does not compare it with the pinned id. If the operator wants a refusal on a mismatch, that is one more rule before the seal.",
+     "STALE FILES I DID NOT TOUCH: optionb/dry/elig/, optionb/dry/notes_role/, optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md and the two report text files are earlier dry outputs made from the real label files. They quote the old constants hash. My rule allowed tool runs on made-up fixtures only. tools/ob_eligibility.py must be run again before seal step 1 in any case, because its two files record the hash of the constants.",
+     "MY SCRATCH TESTS ARE OUTSIDE THE PROJECT, in the session scratch folder: test_seal.py (the seal tool on a made-up project copy), the stand-in scripts for the builder's call path, and five one-off patch scripts. They are not evidence files and nothing in the project points at them.",
+     "SAFETY RECORD OF THIS TASK: no AWS call, no call to any outside model service, no key file opened, no git command that changes state. No job program and no controller program was executed; they were only read, and two of them were parsed for their constants. I wrote only the five tools named above, files under optionb/dry/, and files in my scratch folder."
+    ],
+    "real_numbers_measured": [
+     "optionb/dry/fixture_n/run_dry_n.py (the four note tools, made-up data), run three times, last run: 54 tool runs, 141 checks, 141 held, 0 not held, exit code 0.",
+     "optionb/dry/fixture_q/run_dry_q.py (the four question tools, made-up data), run three times, last run: 41 tool runs, 77 checks, 77 held, 0 not held, exit code 0. Made-up counts in that walk: with 8 practice settings 2 role-step and 1 plain-fact task (floor.met true, reserve.finished false); with 9 settings 4 and 2 (reserve.finished true); final 1 and 1.",
+     "optionb/dry/build_dev_package.py --stop-before-the-builders, last run: status STUDY_FOLDER_LAID_OUT_BUILDERS_NOT_CALLED; 16 made-up passages; 54 tool runs; 32 checks, all held. Made-up counts: with 8 practice settings 19 role-step and 10 plain-fact tasks (both made-up floors met, both made-up reserve targets missed); with 9 settings 23 and 12; final 7 and 4. Writer batches of the practice set: 4, 4, 2 passages, then 2 for the reserve wave. Anchor check of the practice set: 72 checked, 68 passed, 4 dropped as FORM_NOT_OPEN.",
+     "Same run: the made-up practice set holds PULL-PUSH tasks at 6 even and 6 odd places of the sorted task list, and HABIT tasks at 6 even and 5 odd places.",
+     "Same run: the made-up seal file of the made-up study folder has 8 lines and names 79 files. 'tools/ob_seal.py --project <made-up study folder> verify' printed: the chain of 8 lines is whole, all 79 sealed files have their size and sha256 in force. It names exactly 15 package paths. The plan files copied into it had the sha256 values 91617f38..., 980ef44f... and ab1f3950..., the same as in the plan fixer's summary; I hashed the three real files again at the end and they were unchanged.",
+     "First builder run (one task type only, before I added HABIT): the 15 package files were 725,198 bytes together and the seal file 19,003 bytes. Not measured again for the last build. The guest's caps, read by parsing: 8,388,608 bytes and 400 files.",
+     "Padding estimate printed by tools/ob_assemble.py for the last made-up build (from size counts, not from a tokenizer): FILLER 95.4, ROLE 4.2, MIXED 5.8, ORD-INFORMED 3.8, ORD-FREE 2.9, QUOTES-ONLY 62.6 percent. For made-up passage D001 the size counts were ROLE 193 and ordinary notes 174 to 213.",
+     "Scratch test of tools/ob_seal.py on a made-up project copy (real constants, made-up seal lines): 33 of 33 checks held. That is 7 cases for the TR window, 8 for the 6R window, 10 for step 7, and 8 through the command line, one of which wrote a 6R line for real into the made-up seal file and verified it.",
+     "Call path test of build_dev_package.py with stand-in scripts (not the real builders): with both stand-ins passing, status DEV_PACKAGE_BUILT, 56 tool runs, 33 checks; with the stand-in stamp step stopping, still DEV_PACKAGE_BUILT with stamp_only_exit_code 1; with the stand-in zip step stopping, BUILD_STOPPED THE_ZIP_BUILDER_STOPPED, exit code 2. A second build into an existing folder: BUILD_STOPPED OUTPUT_FOLDER_EXISTS.",
+     "ast.parse: all eleven tools/ob_*.py and the three Python files under optionb/dry/ parse. All 14 are LF only with no byte-order mark. A symbol check found no name that is read and never bound.",
+     "Sizes and sha256 after the last edit. tools/ob_write_questions.py 35,558 bytes da5dae95317e807e425b61a18b703646031bfc7deff4db6e5091d13bb6506fda. tools/ob_check_support.py 40,379 bytes 246032c116a7abdcc1f43b512fa5300d88e5ec924868b7a92cc63eea4254b9e1. tools/ob_solve_blind.py 43,761 bytes a80b78c64461d61f6acd1b0c52e732af522c798f40e13297fcf98eb2fe8d93da. tools/ob_write_ordinary_notes.py 40,166 bytes fe4ce3554fccd4e5dd5a90b0b32c5f772af4f4a608730262bbdaeddc81f1e2c3. tools/ob_seal.py 86,208 bytes 1fcd8091a4d4f4177cdde900f9279787db1176be5eff08a642f37bd3a6127fad.",
+     "Sizes and sha256 of the dry programs. optionb/dry/build_dev_package.py 47,620 bytes 519634f7620c5aa75e7f466d66a929767af0d1aba5448aa9e5e68db8ee009db7. optionb/dry/fixture_n/run_dry_n.py 76,970 bytes e8c812059106378b4790aa1de0d20756e6c3a65043dab7b0e355e2985a2c8f36. optionb/dry/fixture_q/run_dry_q.py 27,405 bytes 2a1d706b66340553f188e82bb93e88068b0143ba8293d378498b7c770be2bced.",
+     "Unchanged, compared byte for byte with my copies from the start: ob_assemble.py, ob_check_questions.py, ob_eligibility.py (sha256 73455eef..., so made_by.sha256 in the eligibility files still fits), ob_role_notes.py, ob_screen_notes.py, ob_select.py.",
+     "The real seal file optionb/SEAL_OPTIONB.jsonl does not exist (checked at the end). Nothing is sealed."
+    ]
+   }
+  },
+  {
+   "set": "job-programs",
+   "fix": {
+    "handled": [
+     {
+      "amendment": "A4 the standard error behind X (optionb/job/analysis_b1.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "The arithmetic was already right, so no number changes. One function, range_numbers, works out every range and every standard error. It takes the plain standard deviation of the 10,000 resampled values and divides it by nothing more. The outside finding came from the old comment '(divided by the count, not by the count minus one)'. I replaced that comment in the file header, in range_numbers and in missed_gain_points with the plain statement of amendment A4, and I wrote the whole-number steps out, with a hand check (the values 1 point and 3 points give exactly 1 point). Every other place was checked: the 95% range ends and the one-sided upper end are values picked from the sorted list at index 250, 9749 and 9499; the no-harm ranges (H1, H2) use the same function for the range ends only. No other standard error exists in analysis_b1.py, gate_b1.py or runner_b1.py. X is worked out from the standard error of the ROLE-minus-better-rival test on the final role-step tasks, as the plan says."
+     },
+     {
+      "amendment": "A4 the made-up sets and the number X (optionb/job/SELFTEST_EXPECTED.json)",
+      "action": "DONE",
+      "what_changed_or_why_not": "I worked all five made-up answer sets through by hand again. No expected code changes: ALL_RIGHT and ALL_WRONG give GATE_STOP_DIFFICULTY and UNINFORMATIVE_DIFFICULTY; DESIGNED gives GO (wording 1, level 1) and BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED_EXPLORATORY; ALL_MALFORMED gives GATE_STOP_DIFFICULTY and INVALID_RUN; RANDOM_LETTERS takes any listed code but the pass code. What X the DESIGNED set prints: no single number. X depends on how the role-step tasks sit on the passages, and no program compares it. If every passage carries two role-step tasks, every resample is exactly 50 points, the standard error is 0 and X = 5. If every passage carries one, the standard error is near 50 divided by the square root of n: n = 20 gives 11.280 and X = 29; n = 36 gives 8.364 and X = 21; n = 66 gives 6.141 and X = 16. A mix of 36 tasks on 28 passages gives 6.417 and X = 16. These are EXPECTED for the job; they come from a small separate script on the laptop that runs no job program. A printed X of 5 or 6 on a package where most passages carry one task would show the fault A4 names. In ALL_RIGHT, ALL_WRONG and ALL_MALFORMED every difference is 0, so X = 5. The file now holds this under sets.DESIGNED.x_by_hand, and its two input hashes name the amended plan and constants."
+     },
+     {
+      "amendment": "A7 outcome codes numbered 1 to 11 (optionb/job/analysis_b1.py)",
+      "action": "DONE",
+      "what_changed_or_why_not": "check_constants now stops the program unless the constants list the eleven codes in the checking order, number them 1 to 11 with no number twice, and say outcome_codes_count 11. The two report sentences are read under the number of their code: code_7 and code_10. The old line read report_sentences.code_9, which no longer exists. That line would have raised a KeyError only when the outcome was POINTING_BEATS_ORDINARY_HELP_ROLE_NAMES_NOT_SHOWN. None of the five made-up sets can reach that outcome, so the self-test could not have found it; it would have shown after the final tasks were spent. The check now also needs the three sentences (code_7, code_10, no_harm_range) to be there, and every made-up set runs it, so a renamed sentence is found before any model call. runner_b1.py needed no change for A7: it only lists the code names."
+     },
+     {
+      "amendment": "A5 repair windows, where the job reads the seal (optionb/job/analysis_b1.py, used by runner_b1.py check package_matches_seal)",
+      "action": "DONE",
+      "what_changed_or_why_not": "The seal reader now treats a repair line outside its window as a problem: a 6R_PROGRAMS_REPAIRED line after a line 7_PRECHECK, or a TR_TOOLS_REPAIRED line after the line 3C_FINAL_QUESTIONS_AND_KEYS. The older checks stay: a 6R line only after 6_PROGRAMS, at most 2, no repair line as line 1, the latest line gives the hash in force. This is a check of the form of the seal file only. The job does not read the repair folder, the review record or the receipt of the failed pre-check; tools/ob_seal.py does that. A sound seal file holds neither kind of line, so this adds no stop to a sound package. The comment at the runner's check 2 says the same."
+     },
+     {
+      "amendment": "Constants the plan fixer renamed, added or removed, as far as the job programs read them",
+      "action": "DONE",
+      "what_changed_or_why_not": "A parse-only script resolved every direct key path the four programs read against the amended PLAN_CONSTANTS.json: 78 paths, all found after the fix (before it, one was missing: report_sentences.code_9). The keys the programs reach through a short name (gates, groups, padding, prompt, tests, tiers, repairs, no_harm, readability, decoding) were checked by reading; all exist. The programs read no key under outside_services, split, briefs, seal.step_7_* or aws.development_test_job, and not the removed key aws.precheck_job.development_test_before_seal_step_1. So the other renames and removals do not touch them."
+     },
+     {
+      "amendment": "The careful read of the self-test path, as the CPU-only host with tokenizer files only",
+      "action": "DONE",
+      "what_changed_or_why_not": "Read from the first line of runner_b1.py to the last line of cmd_selftest, with gate_b1.py, analysis_b1.py, scorer_v0_1_1.py and the kit's own command line (selftest --mode precheck --package-dir --model-dir --output-dir). Result by the four kinds asked for. A path: none found; the package, model and output folders are used as given, the snapshot folder is found directly, nothing is written under the package (no bytecode files; tools/verdict.py is loaded with bytecode writing off). A missing optional file: none found; the final file has no answer_given list and the code allows that; selftest.json and GATE.json are not read in a trial. An import of torch at module level: none in any of the four files (checked by parsing). A GPU check reached in the self-test: none in precheck mode; gpu_present and precheck_binding are recorded as not checked, and model.safetensors is looked at in gate0 mode only. So the self-test path needed no code change. The one code fault found sits beside it (the code_9 sentence, fixed under A7). The places where the self-test can stop for a reason that is not a program fault are listed under open issues: they belong to the made-up package and to the host's software."
+     },
+     {
+      "amendment": "A10 development test (job programs)",
+      "action": "DONE",
+      "what_changed_or_why_not": "The job programs need no new mode: the development test runs the same command in the same precheck mode. I changed the status lines of runner_b1.py and analysis_b1.py to say the self-test is first run by the development test on a made-up package, then by the pre-check job. SELFTEST_EXPECTED.json has a new block, what_a_made_up_development_package_needs, read off the self-test, for the builder of the package."
+     },
+     {
+      "amendment": "A10 the builder optionb/dry/build_dev_package.py; the pre-check kit; the run sheet",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Not my files. What the self-test needs from the package is in SELFTEST_EXPECTED.json and under open issues."
+     },
+     {
+      "amendment": "A1, A2, A3, A8, A9, A11 (question writer, support checker, key solvers, reserve block, seal step 7, model names, DeepSeek cap)",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "These are about the laptop tools tools/ob_*.py and the outside services. No job program calls an outside service or reads those constants. Seal step 7 reads selftest.json, whose fields did not change."
+     },
+     {
+      "amendment": "A6 and A12 (plan text)",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Plan text only. The analysis program prints the fixed sentence for code 10 from the constants; it holds no wording of its own about what condition C5 compares."
+     },
+     {
+      "amendment": "gate_b1.py, scorer_v0_1_1.py, scorer_examples_v0_1_1.json",
+      "action": "NOT_DONE",
+      "what_changed_or_why_not": "Left byte for byte as they were, on purpose. No amendment changes what they do, and they read no renamed constant. Their status lines still say 'First exercised by the AWS pre-check job'; under A10 the development test runs the same self-test first. I did not change two files for one comment line."
+     }
+    ],
+    "files_changed": [
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/job/analysis_b1.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/job/runner_b1.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/job/SELFTEST_EXPECTED.json"
+    ],
+    "open_issues": [
+     "NOTHING WAS RUN. No job program was executed, on the laptop or anywhere. They were read and parsed only. Every expected code and every X in SELFTEST_EXPECTED.json is EXPECTED, not REAL. No AWS call, no outside service, no key file opened, no git command that changes state.",
+     "STATE OF MY FILES (REAL, hashed after the last edit; all LF, UTF-8, no byte-order mark). Changed: analysis_b1.py 69,933 bytes sha256 58348eff5528cda1fa0af7b3588f787d559e8d3e9da4de2a1b5ae2b15973b411; runner_b1.py 71,179 bytes sha256 c50631e47b4cbda3ff7d2b7fe916ced0a1bc48cb5e3a4b6b58a1b007bf556ff2; SELFTEST_EXPECTED.json 17,692 bytes sha256 4e84b1ddeb1f4ed36e9d4fe310263118f6dcdaf7cd32144638dff9199f2e2ee7. Not changed: gate_b1.py 35,951 bytes 82605a5a...; scorer_v0_1_1.py 6,173 bytes 62222d04...; scorer_examples_v0_1_1.json 6,559 bytes 11c2eecf.... optionb/controller_b1_draft/GUEST_CHANGE_LIST.md quotes the old runner hash ca7e49d0...; that quote is now stale.",
+     "WHERE THE SELF-TEST CAN STOP WITHOUT A PROGRAM FAULT, 1 of 5: the seal copy in the made-up package. The check package_matches_seal needs a line for each of the eight steps 1_PLAN_AND_SOURCES to 6_PROGRAMS, an unbroken chain (n and previous_line_sha256), and each of the 15 other package files named with its package_path, true size and true sha256; tools/verdict.py with package_path tools/verdict.py, 13,018 bytes and the pinned sha256. The dry seal of today (optionb/dry/fixture_n/SEAL_OPTIONB.jsonl) has 7 lines, no line 6_PROGRAMS and package_path null in every entry (REAL, read). The builder must write a fitting seal copy.",
+     "WHERE IT CAN STOP, 2 of 5: the size of the made-up practice set. The DESIGNED set needs at least 20 practice role-step tasks (Gate 5) and at least 1 practice plain-fact task. The fixture of today has 5 and 4 (REAL, counted). With it the DESIGNED set would print GATE_STOP_NOTES_NOT_READ and the self-test would end with GATE_STOP_SELFTEST.",
+     "WHERE IT CAN STOP, 3 of 5, the one most likely to be missed: note lengths. If the made-up ordinary notes are much shorter than the ROLE note of the same passage, the padding share of ORD-INFORMED and ORD-FREE goes above 10 percent and the self-test ends with GATE_STOP_PADDING. In the fixture of today the ordinary notes are 18 to 41 size units and the ROLE notes 80 to 127 (REAL, counted on six passages; size units are not tokens). A package built from notes like those stops there. That is a property of the made-up notes, not a program fault, but it would use up one of the two development-test jobs.",
+     "WHERE IT CAN STOP, 4 of 5: the host's software. The check tokenizer_loads calls the tokenizer's chat template, which needs the package jinja2. The kit's import check covers transformers, tokenizers, numpy and torch, not jinja2 (REAL, read in precheck_supervisor.py). EXPECTED present, because torch needs it and sits in the same folder. The kit's owner may add jinja2 to the import check. The pinned transformers version was not read by me; the runner accepts both forms a chat template call can return (a list, or an object with input_ids).",
+     "WHERE IT CAN STOP, 5 of 5: time. Five times the slowest analysis run must be at most 240 seconds, so one run must take at most 48 seconds. EXPECTED 10 to 20 seconds on the kit's m6i.xlarge host; NOT MEASURED. The self-test measures this on the practice set; the final set has more passages, and the factor 5 is the margin for that.",
+     "A5, ONE STEP PAST THE TEXT: FILE_FORMATS.md section 15.2 says the runner's self-test compares each path with its values in force. It does not yet say that the self-test also refuses a seal file with a repair line outside its window. My check is in line with the plan (such a line can not exist in a sound seal file). The owner of FILE_FORMATS.md may add one sentence. If tools/ob_seal.py were ever to write a TR line after the line 3C, the job would now fail closed at the pre-check, before any GPU spend.",
+     "A7, NEW STOP TEXT: analysis_b1.py can now raise PLAN_CONSTANTS_REPORT_SENTENCES_NOT_AS_EXPECTED, beside the older PLAN_CONSTANTS_OUTCOME_CODES_NOT_AS_EXPECTED. Both are program errors inside the self-test check made_up_sets; neither is an outcome code or a stop code.",
+     "X IS NOT COMPARED BY ANY PROGRAM. The self-test checks the outcome code of each made-up set, not the number X. So a wrong standard error would not fail the self-test by itself. The reviewer of the development test should read x_points of trial_DESIGNED_RESULT.json against the block x_by_hand: 5 only if every passage carries two role-step tasks; otherwise well above 6.",
+     "THE X VALUES IN SELFTEST_EXPECTED.json come from a small separate script in my session scratchpad (x_by_hand.py; pure standard library; Python 3.14.0; it imports no job program). It is not an evidence file and nothing in the project points at it. The job runs Python 3.12; the draws are EXPECTED to be the same, as the constants already say for a recount.",
+     "HASHES GO STALE AGAIN IF THE PLAN FILES CHANGE: SELFTEST_EXPECTED.json now quotes plan 91617f38... and constants 980ef44f.... No program compares them. If the plan or the constants change once more before seal step 1, the file must be checked by hand again."
+    ],
+    "real_numbers_measured": [
+     "Before my edits (REAL, hashed): analysis_b1.py 65,127 bytes 8aefac018c30e8e0ee6ac089ec555213f7c8246224e2607d70c664fcbfa6b130; runner_b1.py 70,753 bytes ca7e49d0b47f5d8f0bf52d248beb152e8a1f0ecad017e9e7ccb0366dd0474a30; SELFTEST_EXPECTED.json 10,718 bytes 7c0919f03793a2533560b91a4933d116310eb75b87d4703314f4143c6346422d. These equal the hashes in BUILD_REVIEW_ROUND1.json.",
+     "After my edits (REAL, hashed): analysis_b1.py 69,933 bytes, 1,268 lines, 58348eff5528cda1fa0af7b3588f787d559e8d3e9da4de2a1b5ae2b15973b411; runner_b1.py 71,179 bytes, 1,316 lines, c50631e47b4cbda3ff7d2b7fe916ced0a1bc48cb5e3a4b6b58a1b007bf556ff2; SELFTEST_EXPECTED.json 17,692 bytes, 134 lines, 4e84b1ddeb1f4ed36e9d4fe310263118f6dcdaf7cd32144638dff9199f2e2ee7.",
+     "Parse checks (REAL, ast.parse only, Python 3.14.0): runner_b1.py, gate_b1.py, analysis_b1.py and scorer_v0_1_1.py all parse; 0 names read but never bound; 0 uses of a name that the other job module does not define; 0 carriage returns; no byte-order mark. Module-level imports are standard library plus the job's own files; no torch, no transformers, no numpy at module level.",
+     "Constants read by the programs (REAL, parse-only script): 78 distinct direct key paths (runner 33, gate 12, analysis 33, scorer 0); all 78 exist in the amended PLAN_CONSTANTS.json. Before the fix one was missing: report_sentences.code_9.",
+     "Constants as read (REAL): outcome_codes_in_checking_order has n = 1 to 11 in order; outcome_codes_count is 11; code_7 belongs to ROLE_HELP_NOT_ABOVE_ORDINARY_HELP and code_10 to POINTING_BEATS_ORDINARY_HELP_ROLE_NAMES_NOT_SHOWN; report_sentences holds code_7, code_10 and no_harm_range.",
+     "SELFTEST_EXPECTED.json against the constants (REAL, compared by script): for all five sets the gate code, the analysis code and the choice of wording and level are the same in both files; the order of the sets is the same. The file parses as JSON with no repeated key.",
+     "Plan files as hashed by me (REAL): 08_OPTION_B_PLAN_v1_0.md 91617f388285bbc04411d0cab0daf87898e3efbc63950e8705a8fcdaec740a43; PLAN_CONSTANTS.json 980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c; FILE_FORMATS.md ab1f39507ce46b765e13798d1959fa252004947c02342e81ac3209005b695799. They equal the plan fixer's numbers.",
+     "Standard error formula, checked two ways (REAL for the separate script; it runs no job program): by hand, the values 1 point and 3 points give exactly 1 point; by script, the whole-number formula equals Python's statistics.pstdev to within 0.000001 on seven made-up shapes.",
+     "X for the DESIGNED recipe on made-up shapes (REAL output of the separate script, seed 20261005, 10,000 resamples; EXPECTED for the job): 20 passages with one task each: SE 11.280, X 29. 36 with one each: SE 8.364, X 21. 66 with one each: SE 6.141, X 16. 10 or 18 passages with two tasks each: SE 0.000, X 5. 36 tasks on 28 passages: SE 6.417, X 16. 20 tasks on 16 passages: SE 8.855, X 23. With the standard error divided by 10,000, X would be 6 in every case where SE is not 0.",
+     "Sign-flip arithmetic for the DESIGNED set (by hand): with m passages that carry an odd-numbered task, about 100,000 divided by 2 to the power m flips reach the real sum. m = 10 gives about 98; m = 5 about 3,125; m = 4 about 6,250. The line is 5,000, so m must be at least 5. With at least 20 role-step tasks and at most two per passage, m is at least 10.",
+     "Dry fixture of today, optionb/dry/fixture_n (REAL, counted): practice 4 passages, 5 role-step tasks, 4 plain-fact tasks, 10 ANSWER-GIVEN notes; final 4 passages, 5 and 4. Note sizes on six passages: ROLE 80 to 127, ordinary notes 18 to 41 (size-count rule, not tokens). Its seal file: 7 lines, chain unbroken, steps 1 to 5 only, package_path null in all 50 entries.",
+     "Known scorer examples (REAL, counted in the data file): 40, with all five categories present. tools/verdict.py: 13,018 bytes, sha256 ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb, equal to the pinned values; its top level holds standard-library imports and constants only, and its main call is guarded."
+    ]
+   }
+  },
+  {
+   "set": "controller",
+   "fix": {
+    "handled": [
+     {
+      "amendment": "A1 question writer (Gemini gemini-3.5-flash-lite)",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "No file under optionb/controller_b1_draft/ names or calls the question writer. I checked by text search: none of my programs reads a constant the plan fixer renamed or removed (proposed_spend_cap_usd, on_daily_cap, code_9, the fallback keys, development_test_before_seal_step_1)."
+     },
+     {
+      "amendment": "A2 support checker, no Claude fallback",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "tools/ob_check_support.py and the dry fixtures are not my files. Nothing in my folder reads a fallback constant."
+     },
+     {
+      "amendment": "A3 key solvers, Claude model id pinned",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "No file of mine reads outside_services.claude_solver. Nothing to change."
+     },
+     {
+      "amendment": "A4 standard error for X",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "optionb/job/analysis_b1.py is not my file. No program in my folder works out a standard error or a range."
+     },
+     {
+      "amendment": "A5 repair lines narrowed, where the launcher and the builders read repair lines",
+      "action": "DONE",
+      "what_changed_or_why_not": "Five readers now refuse a seal file that holds a tool-repair line (TR_TOOLS_REPAIRED) outside its window, which is: after line 1 and before the line 3C_FINAL_QUESTIONS_AND_KEYS. (1) controller_common.py seal_gate, lines 87 to 90: new stop SEAL_TOOL_REPAIR_LINE_OUTSIDE_ITS_WINDOW, and step 7 must now be the LAST line of the seal file (review round 1 had allowed tool-repair lines after step 7). (2) build_source_zip_b1.py lines 94 to 95 and 200 to 204: stop TOOL_REPAIR_LINE_OUTSIDE_ITS_WINDOW_FILE_FORMATS_15_2. (3) build_contract_b1.py lines 170 to 173: step 7 must be the last line. (4) text_check_b1.py lines 56 to 57 and 510 to 516 (check X6): the same two rules. (5) precheck_cpu/derive_precheck_job.py lines 143 to 144, 509 to 513, 520 to 523: stop SEAL_FILE_HOLDS_A_TOOL_REPAIR_LINE_OUTSIDE_ITS_WINDOW; a rehearsal now needs the real seal file to end with step 5 exactly. The 6R window by place (after step 6, before step 7, at most 2) was already checked in all readers and is unchanged. The other half of the 6R window (only after a failed pre-check job on the sealed package) is enforced by tools/ob_seal.py from the kept receipt; my receipt already carries what it reads. AUTHORITY_B1.template.json: one text now says no line is added after step 7. RUN_SHEET_B1.md steps A9 and B8 and Part C state the windows and the refusal REPAIR_OUTSIDE_ITS_WINDOW. Nothing was run. The four changed expressions were copied as text into a separate tiny script and tried on 7 made-up step lists: all gave the wanted answer."
+     },
+     {
+      "amendment": "A6 what C5 compares",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Plan text only. No file of mine describes the conditions."
+     },
+     {
+      "amendment": "A7 outcome codes numbered 1 to 11",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "No file of mine counts or numbers outcome codes. The run sheet only names the command status-word."
+     },
+     {
+      "amendment": "A8 (a) reserve block in tools/ob_write_questions.py",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "A laptop tool, not my file."
+     },
+     {
+      "amendment": "A8 (b) seal step 7 reads the supervisor's receipt, on my side",
+      "action": "DONE",
+      "what_changed_or_why_not": "No byte of precheck_cpu/precheck_supervisor.py had to change. I confirmed by reading it that the receipt already carries everything seal step 7 now reads: precheck_kind (line 768, in every receipt from the first write), status (lines 824 to 825 and 828), and the block seal_step_7_values with exactly the five values source_zip_sha256, selftest_status, prompt_list_sha256, padding_plan_sha256, selftest_json_sha256 (lines 818 to 823). That block is written only when the kind is SEALED_PACKAGE; a rehearsal or a development test gets the five under values_never_for_a_seal_file. The same receipt also carries job and source_zip_sha256 (line 775) for the 6R window of A5. I rewrote run sheet step A10 to the new command form of FILE_FORMATS.md 15.1: tools/ob_seal.py step 7 --receipt FILE --selftest-json FILE --source-zip FILE, with its four refusals, and recorded this in CONTROLLER_CHANGE_LIST.md section 7.7."
+     },
+     {
+      "amendment": "A9 model name of every reply; DeepSeek alias fact",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "No program in my folder calls an outside model service."
+     },
+     {
+      "amendment": "A10 development test before seal step 1, on my side",
+      "action": "DONE",
+      "what_changed_or_why_not": "Kit (precheck_cpu/derive_precheck_job.py): at most 2 development tests, d1 and d2 (DEV_JOBS_MAX = 2; before, d1 to d4 could be built); cap 0.50 USD and 45 minutes are the kit's own numbers and did not change; the kit's numbers must now also equal the plan's new block aws.development_test_job (kind, 2 jobs, 0.50 USD, 45 minutes, not one of the 4), stop THIS_KIT_AND_THE_PLAN_DISAGREE_ON_THE_DEVELOPMENT_TEST_LIMITS; for this kind the owner's approval record OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json must have its pinned sha256 d1c052f5..., stop OWNER_APPROVAL_RECORD_IS_NOT_THE_PINNED_ONE; the draft of authority_record in PRECHECK_ADMISSION_VALUES.json is the A10 text (operator decision under that record, the limits, made-up data only, never evidence about roles). The words 'needs the yes of the operator and of the owner' are gone from the kit and the template. PRECHECK_CONFIG.template.json: new texts for attempt, kind and previous. build_source_zip_b1.py: the receipt has one new field, made_up_study_root_never_for_a_seal_or_the_gpu_job, and the docstring names the development-test use of --study-root. RUN_SHEET_B1.md has a new first part, 'Part 0. Development test on made-up data, before seal step 1', steps 0.1 to 0.10: what must exist, bus and ledger re-read, the build, the review and the four records with every field the launcher reads, the SLOT NOTICE line, preflight, watchdog and launch commands, what to watch, the independent cleanup check at once and within 30 minutes, reading the result, the budget addendum with its fields and the pointer update, the SLOT RELEASED line, and the archive copy. Parts A0, A1, A2, A3, A4, B5, C and D follow. Nothing was run; the kit's own text check was not run again because I may not execute it."
+     },
+     {
+      "amendment": "A10, the builder optionb/dry/build_dev_package.py",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Not my file. It was still not on disk when I listed optionb/dry/. Run sheet step 0.1 says what it must leave behind for my kit, and gives the two commands of my builders it has to run: build_source_zip_b1.py --study-root <made-up study folder> --out <new folder> --guest worker_v02.py, then build_contract_b1.py --study-root <same> --out <same> --stamp-only on a COPY of the guest."
+     },
+     {
+      "amendment": "A10 question: which records must exist, and which commands in which order, to launch the DEVELOPMENT_TEST job",
+      "action": "DONE",
+      "what_changed_or_why_not": "From the files (base controller_cas_probe_c02/aws_control.py and my derive_precheck_job.py). MUST EXIST BEFORE THE BUILD: no optionb/SEAL_OPTIONB.jsonl; the made-up source.zip; precheck_cpu/PRECHECK_CONFIG.json (attempt 1, kind DEVELOPMENT_TEST, source_zip, source_zip_sha256, tokenizer_source_zip, previous, existing_allocation_usd); the base folder controller_cas_probe_c02 with its pinned bytes; the previous job's VERIFIED cleanup record; the ledger pointer naming that job in last_jobs; the owner's approval record with its pinned sha256; the tokenizer archive D:/tksCAS-runs/controller_cas_small_op11_claude_c1/input.zip. WRITTEN BY THE OPERATOR AFTER ONE REVIEW, in this order: INDEPENDENT_STATIC_REVIEW.json, CONTROLLER_REVIEW.json, ALLOCATION.json (all three in helm_operator_preparation/controller_cas_optionb_devtest_d1/), then the lease helm_operator_preparation/CAS_OPTIONB_DEVTEST_D1_TRANSPORT_LEASE.json. MUST NOT EXIST: CAS_OPTIONB_DEVTEST_D1_SINGLE_LAUNCH_CLAIM.json, aws-cas-optionb-devtest-d1-control.json, aws-cas-optionb-devtest-d1-launch-intent.json. COMMANDS IN ORDER: (1) optionb/dry/build_dev_package.py, by its own usage text; (2) read the bus and the ledger pointer; (3) fill PRECHECK_CONFIG.json; (4) python -B derive_precheck_job.py --check-text-only, then python -B derive_precheck_job.py PRECHECK_CONFIG.json; (5) review, then the four records; (6) claude_jobkit/post_bus.py with the SLOT NOTICE file; (7) python -B aws_control.py preflight in the job folder; (8) aws_control.py watch, wait for WATCHDOG_READY, then aws_control.py launch (the watchdog needs a preflight record under 300 seconds old; the launch needs a watchdog record under 30 seconds old); (9) when both processes have exited: python -B independent_cleanup.py, at once and at the latest 30 minutes after the cleanup file; (10) read supervisor_receipt.json in the result archive; (11) budget addendum and pointer update; (12) post_bus.py with the SLOT RELEASED file; (13) archive copy. The exact command lines are in run sheet steps 0.3, 0.6 and 0.8."
+     },
+     {
+      "amendment": "A10 question: what the launch gate needs as the prior-cleanup record of the most recent job on the shared storage slot",
+      "action": "DONE",
+      "what_changed_or_why_not": "REAL, read today. The most recent job on the slot is helm-claude-r8-matched-20261005-c05. The bus says so (last line claude-0048, SLOT RELEASED, 2026-10-05T09:49:42Z) and the ledger pointer says so (last_jobs). Its record is C:/Users/wakil/Documents/Codex/2026-10-01/task-2/helm_operator_preparation/controller_claude_r8_c05/aws-claude-r8-c05-independent-cleanup.json, sha256 298ed3dff67a9088bece7b727f2bd9ad8223584758fca35b7f18e540b7f8b094, status VERIFIED. The gate of a CPU-kit job needs from that record: the file in the previous job's folder with the pinned sha256; account, region, bucket and prefix of the slot; job equal to the previous job and client_token equal to that job id plus -2b; status VERIFIED; cleanup_verified, compute_cleanup_verified, local_preservation_verified and prefix_cleanup_verified all true; instance and all_job_volumes equal to the pinned ids (i-01bc54291eba4267d and the one disk vol-0d703bc10e7cd373d); and the ledger pointer naming that job, and only that job, in last_jobs. At preflight and at launch the controller also asks AWS, read-only, that the previous host has ended, its disk is gone and the prefix is empty. The record meets every point that can be read from files. This is written into run sheet Part D and is already the 'previous' block of PRECHECK_CONFIG.template.json."
+     },
+     {
+      "amendment": "Measurement asked for: guest sizes and the two byte-identical files",
+      "action": "DONE",
+      "what_changed_or_why_not": "REAL, measured after my last edit with /c/Python314/python.exe 3.14.0. worker_v02.py: 56,033 raw bytes (limit 73,986) and 22,124 packed bytes (gzip with mtime 0, then base64; limit 28,420). Room left for the packed signed links: 21,492. sha256 26eac561681c87fb57b7c43788530a7e12847246d056f4fb9fb3f176751c12d1. I changed no byte of the guest. bounded_s3.py (sha256 2582940278d720da833e3795d7678b4146046d4bb73deec1c76606f252fdee61) and independent_cleanup.py (sha256 4d0b816c14fd65dd8773976a42e0872168da03f73960d810b0a1f286bc5c51e5) are byte-identical to D:/tksCAS-runs/controller_cas_small_op11_claude_c1/: same sha256 and a direct byte comparison."
+     },
+     {
+      "amendment": "A11 DeepSeek cap as a token count",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "The DeepSeek tools are not my files. My run sheet only handles AWS money."
+     },
+     {
+      "amendment": "A12 new last plan section",
+      "action": "NOT_MINE",
+      "what_changed_or_why_not": "Plan file. On my side the two change lists got their own record of the amendments: CONTROLLER_CHANGE_LIST.md sections 7.5, 7.6, 7.7 and 9, and GUEST_CHANGE_LIST.md section 12."
+     }
+    ],
+    "files_changed": [
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/precheck_cpu/derive_precheck_job.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/precheck_cpu/PRECHECK_CONFIG.template.json",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/controller_common.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/build_source_zip_b1.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/build_contract_b1.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/text_check_b1.py",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/AUTHORITY_B1.template.json",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/RUN_SHEET_B1.md",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/CONTROLLER_CHANGE_LIST.md",
+     "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/GUEST_CHANGE_LIST.md"
+    ],
+    "open_issues": [
+     "NOTHING WAS RUN. No AWS call. No outside service. No key file opened. No git command that changes state. Every changed Python file parses (ast.parse) and both JSON templates load. By the task rule I did not execute any program of this folder, also not 'derive_precheck_job.py --check-text-only'. So the statement 'it prints six job names' is from reading the code. All changed controller bytes are new, unrun code and need the one controller review before a launch.",
+     "THE DEVELOPMENT TEST CAN NOT BE BUILT YET: optionb/dry/build_dev_package.py is not on disk (REAL, listed). My zip builder needs from it a made-up study folder with the layout of the study folder and its own optionb/SEAL_OPTIONB.jsonl. That made-up seal must hold steps 1 to 6 in order, each once, with line numbers and an unbroken hash chain, and must give each of the 15 package files its package_path, with 'path' relative to the made-up folder. The dry seal that exists today (optionb/dry/fixture_n/SEAL_OPTIONB.jsonl) ends at step 5, gives every file package_path null and names paths under optionb/dry/fixture_n/. My builder would stop on it (SEAL_STEP_6_PROGRAMS_NOT_WRITTEN_YET).",
+     "THE KIT INSISTS ON THE REAL CONSTANTS: derive_precheck_job.py stops with PACKAGE_PLAN_CONSTANTS_DIFFER_FROM_THE_LAPTOP_COPY unless PLAN_CONSTANTS.json inside the made-up package equals the laptop copy byte for byte. FILE_FORMATS.md section 20 says the same. But the dry fixtures today run with lowered floors (DRY_CONSTANT_OVERRIDES.json). Whether the self-test can reach SELFTEST_PASS on a small made-up set under the real constants is NOT MEASURED and belongs to the owner of the job programs and of the package builder.",
+     "ONE READING I CHOSE FOR A10, for a reviewer to confirm: the base launcher refuses unless CONTROLLER_REVIEW.json says tests_only_owner_approved true (its stop name is OWNER_TESTS_ONLY_APPROVAL_REQUIRED). The owner has not said yes to this test by name. Under A10 the operator sets that field by pointing at the owner's standing record OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json. The run sheet (step 0.4) says so plainly and has the operator add owner_approval_record and owner_approval_sha256 to the record. I did not change the base gate.",
+     "ONE READING I CHOSE FOR A5: I made the readers stricter, not only the comments. The launcher, the zip builder, the contract builder, the text check and the kit now refuse a seal file with a tool-repair line at or after the line 3C, and the launcher and the contract builder refuse any line after step 7. A reader can only see where a line stands. It can not see whether a final question file already existed when the line was written; that half of the window is for tools/ob_seal.py.",
+     "tools/ob_seal.py HAD NOT FOLLOWED YET when I read it (file time 07:28): step 7 had no --receipt argument and the tool had no refusal REPAIR_OUTSIDE_ITS_WINDOW. Run sheet step A10 uses the command form of FILE_FORMATS.md 15.1. Until the tool fixer lands it, that command stops with an argument error. That fails closed.",
+     "NO PROGRAM ENFORCES 'seal step 1 only after a development test ended with SELFTEST_PASS'. The plan says so too. The receipt carries its time; the reviewer checks it against seal line 1.",
+     "NOT CHANGED ON PURPOSE: the kit's purpose text inside the derived controller still reads 'Option B pre-check (decision D7)' for a development test too. Changing it would touch an exact-count edit table that was proved on the real base files. The job id (devtest-d1), the receipt (precheck_kind DEVELOPMENT_TEST) and the bus line name the kind.",
+     "ORDER OF CLOSEOUT: in Part 0 I put the ledger update before the bus release, because the next job's build reads last_jobs in the ledger pointer. Step A11 of Part A still lists the bus first. I left Part A as it was (outside the amendments). The operator may want the same order there.",
+     "THE 30 MINUTE CLEANUP CHECK IS NOT ARMED BY A PROGRAM. A person must run independent_cleanup.py right after the job. The CPU kit has no free-memory gate; the laptop must stay awake for the 45 minutes (owner action, run sheet step B10 checklist).",
+     "MONEY, arithmetic on the reading 12.64 USD unreserved (pointer written 2026-10-05T09:49:41Z, read again by me, unchanged): one development test needs 0.50 USD. If both development tests, all 4 pre-check jobs and the GPU job were charged their full caps: 12.64 - 1.00 - 2.00 - 5.00 = 4.64 USD left. PROPOSED in step 0.10, not in the plan: if the independent cleanup record is not VERIFIED, the whole 0.50 USD cap is charged to the ledger until the owner orders a release or the bill arrives.",
+     "LINE NUMBERS: CONTROLLER_CHANGE_LIST.md section 2 was recomputed with difflib after my edits (controller_common.py is now 170 lines). GUEST_CHANGE_LIST.md section 11 keeps the line numbers of review round 1 and says so; section 12 gives the numbers after the amendments.",
+     "STATE OF MY CHANGED FILES (REAL, hashed after the last edit; all LF, UTF-8): derive_precheck_job.py 46,788 bytes 62bf49d43d087ff0a519e37c3fadabc4e77e17dbe79e43ae64d3b7b2bb840d21; PRECHECK_CONFIG.template.json 5,008 bytes 539869f30289bf56e35d9f5c02d5d90bbadfdc67144d259d7181119422939515; controller_common.py 17,852 bytes 3f4041b4b8325a0be9894e565ed7109ee1ce31568b9ca4f711c1aea54d7af4d9; build_source_zip_b1.py 17,385 bytes 7b1a72b49e2ea898e11e453912180c1891267e9b3f35061c307528e7d09dcd32; build_contract_b1.py 19,078 bytes f17856876c07ae4d85939dbf80d083ac79072bb9a588e6db0d0c00d22b0eaea7; text_check_b1.py 36,812 bytes 05fb8871311ac929d90658274394e9984392ac91127219490de1485e3b05406b; AUTHORITY_B1.template.json 6,427 bytes 1d884da605f2c51dbf50976e1882aea552e439e1fa91739048b65ba1b91e0bfc; RUN_SHEET_B1.md 82,717 bytes a98722597e8b0cddaf3ea87e13c1641d3e3efcb6ca9fd8fa7f9b0f1a1f385be4; CONTROLLER_CHANGE_LIST.md 39,812 bytes eebd084ac0dca25c1cf7bc1a9cc7367f2e196c59181a44a49b116050bf37266b; GUEST_CHANGE_LIST.md 28,548 bytes 3482e77ef9f993aed35bea4f99a76b172c814c4bd274aff73cadb476026c0733. Unchanged: aws_control.py, watchdog.py, build_input_zip_b1.py, precheck_supervisor.py, worker_v02.py, bounded_s3.py, independent_cleanup.py."
+    ],
+    "real_numbers_measured": [
+     "Guest worker_v02.py after my last edit (REAL, /c/Python314/python.exe 3.14.0): 56,033 raw bytes against the limit 73,986; 22,124 packed bytes (gzip with mtime 0, then base64) against the limit 28,420; room left for the packed signed links 60,000 - 16,384 - 22,124 = 21,492; sha256 26eac561681c87fb57b7c43788530a7e12847246d056f4fb9fb3f176751c12d1; 1,089 lines; LF only. Unchanged from before the amendments.",
+     "The same measuring code on the OLD guest D:/tksCAS-runs/controller_cas_small_op11_claude_c1/worker_v02.py gave 73,986 raw and 28,420 packed, which are the two limits. So the tool measures as the launcher did.",
+     "bounded_s3.py: 31,969 bytes, sha256 2582940278d720da833e3795d7678b4146046d4bb73deec1c76606f252fdee61, byte-identical to the old controller's file (same sha256 and a direct byte comparison). independent_cleanup.py: 2,056 bytes, sha256 4d0b816c14fd65dd8773976a42e0872168da03f73960d810b0a1f286bc5c51e5, byte-identical to the old controller's file.",
+     "All 12 Python files of the folder parse with ast.parse after my edits. Both JSON templates load. No __pycache__ folder exists in the folder. Line counts now: controller_common.py 170 (was 168), derive_precheck_job.py 696 (was 647), build_source_zip_b1.py 338 (was 321), build_contract_b1.py 379 (as before), text_check_b1.py 641 (was 635). RUN_SHEET_B1.md 874 lines and 82,717 bytes (was 633 lines and 54,054 bytes); every table row has the right number of cells; every code fence is closed.",
+     "Bus D:/tksCAS-agent-bus/claude_to_codex.jsonl: 48 lines; the last is claude-0048, type DONE, 2026-10-05T09:49:42Z, 'SLOT RELEASED: R8 job helm-claude-r8-matched-20261005-c05 finished ... cleanup VERIFIED'. The line before it, claude-0047 (2026-10-05T09:32:56Z), is that job's SLOT NOTICE.",
+     "Ledger pointer C:/Users/wakil/Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json: 1,854 bytes, sha256 37baa4707799bba88e48d07bd4bbe22ef84bf2bb994dd55640b589e5c224189f, written 2026-10-05T09:49:41.208314+00:00; combined_allocation_usd 87.36; ceiling_usd 100.0; unreserved_usd 12.64; last_jobs [\"helm-claude-r8-matched-20261005-c05\"].",
+     "Prior-cleanup record of that job: C:/Users/wakil/Documents/Codex/2026-10-01/task-2/helm_operator_preparation/controller_claude_r8_c05/aws-claude-r8-c05-independent-cleanup.json, 2,567 bytes, sha256 298ed3dff67a9088bece7b727f2bd9ad8223584758fca35b7f18e540b7f8b094; schema pointer.saturation.independent-cleanup/1; status VERIFIED; cleanup_verified, compute_cleanup_verified, local_preservation_verified and prefix_cleanup_verified all true; instance i-01bc54291eba4267d, state terminated; all_job_volumes [vol-0d703bc10e7cd373d], observed ABSENT; client_token helm-claude-r8-matched-20261005-c05-2b; prefix_versions_remaining empty; written 2026-10-05T09:48:21.833027+00:00.",
+     "Owner approval record CASALESCENCE_NOETICS_v0_1/OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json: sha256 d1c052f56b61a6f30a428d25b4530352d6cd6ddb489163734fe6ea6d23b24325 (hashed again). It equals the pin already in controller_common.py and build_contract_b1.py, and the new pin in derive_precheck_job.py.",
+     "Base of the kit: controller_cas_probe_c02/CONTROLLER_SOURCE_PINS.json sha256 5e7d11c59c4661a7cf69567884eecf1bf2bf8ad01008c01f31328ffad1007d27, equal to BASE_PINS_SHA in derive_precheck_job.py. The historical storage record the base launcher pins is on disk with sha256 540d3176f3c5168c45ab688172ff6b2b044204403f048509319645a69ee08fed, equal to the pin in the base aws_control.py. The tokenizer archive D:/tksCAS-runs/controller_cas_small_op11_claude_c1/input.zip exists (4,098,779,980 bytes; not opened by me).",
+     "Listing of helm_operator_preparation/: no option B job folder, lease or claim exists (nothing named optionb, devtest or precheck). optionb/SEAL_OPTIONB.jsonl does not exist. optionb/dry/build_dev_package.py does not exist.",
+     "Plan constants against the kit's numbers, checked by a separate small script that only reads the JSON: aws.development_test_job says kind DEVELOPMENT_TEST, jobs_max 2, cap_usd 0.50, hard_time_limit_minutes 45, counts_toward_the_4_precheck_jobs false; aws.precheck_job says jobs_max 4, cap_usd_proposed 0.50, hard_time_limit_minutes_proposed 45. Both agree with the kit. tools/verdict.py is 13,018 bytes with sha256 ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb, equal to the plan's pin.",
+     "The three plan files I read first have the hashes the plan fixer reported: 08_OPTION_B_PLAN_v1_0.md 91617f388285bbc04411d0cab0daf87898e3efbc63950e8705a8fcdaec740a43; optionb/PLAN_CONSTANTS.json 980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c; optionb/FILE_FORMATS.md ab1f39507ce46b765e13798d1959fa252004947c02342e81ac3209005b695799.",
+     "Window expressions (amendment A5), copied as text into a separate tiny script and tried on 7 made-up lists of seal steps: the nine plain steps accepted; a tool-repair line after line 1 accepted; one between 3B and 3C accepted; one right after 3C refused; one after step 5 refused; one after step 7 refused; a program-repair line between step 6 and step 7 accepted. The same answer from all four copies (kit, launcher, zip builder, text check). The attempt rule: development test 2 accepted, development test 3 refused, pre-check 4 accepted, pre-check 5 refused, the value true refused.",
+     "Budget rule checked against the last real job (arithmetic on REAL records of helm-claude-r8-matched-20261005-c05): 897 host seconds give list-price use 0.192 x h + 100 x (0.08 / 730) x h + 0.005 x h = 0.051816 USD and a charge of ceil((1.5 x 0.051816 + 0.05) x 100) / 100 = 0.13 USD, equal to that job's addendum."
+    ]
+   }
+  }
+ ],
+ "confirm": {
+  "verdict": "ACCEPT_WITH_NOTES",
+  "findings": [
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md",
+    "where": "Section 11.1, repair rules 2 and 6 (lines 571 and 575). Partners: optionb/PLAN_CONSTANTS.json repairs.tools.unsealed_outputs; optionb/FILE_FORMATS.md section 15.2 (unsealed_files_deleted); tools/ob_seal.py option --deleted (lines 1245 to 1257).",
+    "problem": "A5, one reading that needs the operator's yes before the seal. A5 says a repair may not change a key, a task or a note. Rule 2 of the plan says so. Rule 6 still lets a tool repair delete a derived file that is not sealed yet and derive it again. Inside the tool-repair window such files are the practice question files before seal step 3A, and the practice ordinary notes until seal step 4. Those are keys, tasks and notes. So a repaired tool can still change which practice tasks and notes survive, after practice counts were seen. The four files agree with each other. No sealed file can change: the tool refuses that (REAL, read and tested). The open point is only whether the operator meant this reading.",
+    "fix": "Before seal step 1 the operator picks one. (a) Keep the reading: add one sentence to section 27, row A5: 'unsealed practice files that the fault could have changed are derived again by the repaired tool, from the same logged replies'. (b) Stricter: refuse a tool repair when any existing derived file could have changed; that needs one edit in plan 11.1 rule 6, constants repairs.tools.unsealed_outputs, formats 15.2 and the --deleted branch of tools/ob_seal.py.",
+    "evidence": "Plan line 571: 'Neither kind of repair may change the plan, the constants, a brief, a threshold, a key, a task or a note.' Plan line 575: 'A derived file that the fault could have changed, and that is not sealed yet, is deleted and derived again by the repaired tool, from the same logged replies.' The plan fixer named this as a reading he chose."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+    "where": "outside_services.deepseek_reviewer.model and review_round.reviewer (both 'deepseek-reasoner'); plan section 10 Step 8, line 512 ('the DeepSeek reasoning model, as before').",
+    "problem": "Outside A1 to A12, but it touches the fact A9 states. The note verdict/NOTE_TEAM_B_MODEL_NAME_20261005.md says (REAL, the operator's measurement): a call that asks for deepseek-reasoner is answered by deepseek-flash, the same model that answers deepseek-chat. So the Step 8 reviewer would likely be the same model as label team B, the key solver and the ordinary-note writer. The same note says outside reviews of new plans ask for deepseek-v4-pro. The plan and the constants do not follow that yet.",
+    "fix": "Operator decision before seal step 1: name deepseek-v4-pro in plan Step 8 and in the two constants, or state the limit in section 21. No program reads these two constants, so no tool changes."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_questions.py",
+    "where": "Option --batch-size (lines 447 and 470 to 472). Partners: plan section 10 Step 1 line 426; optionb/FILE_FORMATS.md section 4 line 269.",
+    "problem": "A1 is applied: the tool takes 4 from the constants and never goes above 4. But the plan and the formats say the passages are 'cut into groups of 4', and the tool lets the operator pick a smaller batch size (1 to 4) for each wave. That is one free choice by hand that the plan does not mention.",
+    "fix": "Smallest: add one sentence to FILE_FORMATS.md section 4: 'A real run does not give --batch-size.' Or take the option out before seal step 1."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_solve_blind.py",
+    "where": "step_import, lines 648 to 708. Partner: optionb/PLAN_CONSTANTS.json outside_services.claude_solver.model_id_rule.",
+    "problem": "A3 is applied: the id claude-sonnet-5-5 is pinned, the export step prints it, the import step needs --transcript-model and stores the name with every answer. But the constants say 'No sub-agent of another model id is used', and no program compares the transcript name with the pinned id. A sheet answered by another Claude model is stored and used with no refusal. Both tool fixers named this.",
+    "fix": "Operator choice before seal step 1: leave it as a record only (then the operator compares the two names by eye at each import; the import step already prints both), or add one refusal on a mismatch."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_seal.py",
+    "where": "failed_precheck_facts, lines 1100 to 1136 (the window test of a 6R_PROGRAMS_REPAIRED line).",
+    "problem": "A5 is applied for the program repair: outside the window the tool refuses with REPAIR_OUTSIDE_ITS_WINDOW (REAL, my scratch test). Two small gaps stay. (1) The kept receipt is not tied to the seal file as it stands. The receipt of the first failed pre-check could be copied into repairs/6R2/ and would open the window again with no new failed job. (2) A receipt with the status RUNNING (a job that never finished) counts as 'a status other than PRECHECK_COMPLETE_SELFTEST_PASS'. REAL in my scratch test: such a receipt got past the window test. In both cases only the review record guards.",
+    "fix": "No change is needed for A5 as written. If the operator wants it tighter before the seal: refuse a 6R line whose receipt names the same source_zip_sha256 as an earlier 6R line, and accept only the status PRECHECK_COMPLETE_WITH_FINDINGS. Otherwise say in FILE_FORMATS.md section 15.2 that the review record carries these two points."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/RUN_SHEET_B1.md",
+    "where": "Part 0, step 0.1, line 91. Also: GUEST_CHANGE_LIST.md line 117; optionb/job/gate_b1.py and scorer_v0_1_1.py status lines; derive_precheck_job.py PURPOSE text; tools/ob_check_support.py (--dry-now, first_cap_stop_utc).",
+    "problem": "Small texts that are out of date. None changes what a program does. (1) The run sheet says the builder optionb/dry/build_dev_package.py 'was not on disk yet'. REAL: it is on disk (47,620 bytes, sha256 519634f7...). The sheet also does not say where the builder puts the package: optionb/dry/dev_package/package/source.zip. (2) GUEST_CHANGE_LIST.md quotes the runner hash ca7e49d0...; the runner is now c50631e4.... (3) gate_b1.py and scorer_v0_1_1.py still say 'First exercised by the AWS pre-check job'; under A10 the development test runs them first. (4) The kit's purpose text reads 'Option B pre-check (decision D7)' for a development test too. (5) The support check keeps the option --dry-now and the field first_cap_stop_utc of the removed 24-hour clock; no rule reads them any more.",
+    "fix": "Correct the one run-sheet sentence before the development test is built, and name the output path. The other four can stay as they are; the fixers left them on purpose."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/job/SELFTEST_EXPECTED.json",
+    "where": "sets.DESIGNED.x_by_hand, lines 84 to 93.",
+    "problem": "A4 is applied and the arithmetic is right. No program compares the number X, so the reviewer of the development test must read it by eye. The file's reading rule says: 'X = 5 or X = 6 on a package where most passages carry one role-step task shows the fault'. The package of build_dev_package.py is the other shape: 11 practice passages carry two tasks and one (D006) carries one. The file has no row for that shape. REAL, my own standalone script (pure standard library, seed 20261005, 10,000 resamples, it imports no job program): for that shape the standard error is 2.276 points and X = 7. With the fault A4 names (the standard error divided by 10,000) X would be 6. So on this package only 7 against 6 tells the two apart. This number is EXPECTED for the job, not measured there.",
+    "fix": "Add one line to x_by_hand: for the package of optionb/dry/build_dev_package.py the DESIGNED set should print x_points 7; 6 would show the fault. Check it again by hand if the fixture changes."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/build_dev_package.py",
+    "where": "run_the_builders (lines 598 to 622); the made-up notes (made_up_note, lines 230 to 237); plan section 19.1 'Order'.",
+    "problem": "A10 is applied: the builder exists and does what A10 asks. Four things about the development test are still NOT MEASURED or not enforced. None blocks it. (1) The two real controller builders have never run on the made-up study folder; the fixer used stand-ins, by rule. By reading they fit: the made-up seal has the eight steps and names the 15 package paths, the pinned requirements file is on disk with its pinned hash (REAL), the guest holds the constants the builders read (REAL). (2) The padding rule (at most 10 percent) can not be checked on the laptop. If the made-up notes miss it, the job ends with GATE_STOP_PADDING for a fixture reason and one of the two jobs is used up. (3) No program enforces 'seal step 1 only after a development test ended with SELFTEST_PASS'; the plan says so. (4) The fixture holds 2 of the 6 task types and 3 of the 12 forms, so the job code for the other types is not exercised.",
+    "fix": "Nothing to change before the first development test. Its reviewer reads padding_plan.json first. A GATE_STOP_PADDING there is a fault of the made-up notes, not of the job programs: fix the note lengths and use job d2. Any file that changes after the package is built is not covered by the test; build the package last."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+    "where": "outside_services.deepseek.spend_cap_input_tokens, spend_cap_output_tokens, spend_cap_basis, spend_cap_limit_of_the_count. Partners: tools/ob_solve_blind.py lines 556 to 567; tools/ob_write_ordinary_notes.py lines 651 to 664.",
+    "problem": "A11 is applied in plan, constants, formats and both tools, and the four agree. Two points for the operator. (1) The two limits (2,430,240 input tokens and 1,156,520 output tokens) are the plan fixer's own derivation from the operator's reading 'about 0.10 USD'. The arithmetic is right (40 x 60,756 and 40 x 28,913). They hold 4.00 USD only if that reading is exact and if deepseek-chat costs no more per token than deepseek-v4-pro (EXPECTED, NOT MEASURED). (2) A call that the service ran but whose reply never came back (a timeout) carries no token count and adds nothing to the count. The plan's 'limit of the count' names running calls only.",
+    "fix": "The operator confirms the two limits before seal step 1. If wanted, add one sentence to spend_cap_limit_of_the_count and to plan section 19.2: 'a call with no reply is not counted'."
+   }
+  ],
+  "what_ran_and_passed": [
+   "Claim states used below: REAL = I measured or ran it today on the laptop; BY READING = I read the file and did not run it; EXPECTED = an estimate for the AWS job. I changed no project file. No AWS call, no outside service, no key file opened, no git command that changes state. No job program and no controller program was executed.",
+   "REAL: 22 files hashed at the start and again at the end. All equal the fixers' figures (plan 91617f38..., constants 980ef44f..., formats ab1f3950..., ob_seal.py 1fcd8091..., analysis_b1.py 58348eff..., build_dev_package.py 519634f7...). Nothing changed while I read. All are LF only. The real seal file optionb/SEAL_OPTIONB.jsonl does not exist. No __pycache__ folder was left in tools/ or optionb/job/.",
+   "REAL: all 30 Python files under tools/ob_*.py, optionb/job/, optionb/controller_b1_draft/ and optionb/dry/ parse with ast.parse.",
+   "REAL, searches over plan, constants, formats and every program: 'gemini-2.5-flash' stands only where it names the model that wrote the passages (verdict/writer_state.json says model gemini-2.5-flash); no fallback checker, no MOVED_TO_FALLBACK, no export or import command in tools/ob_check_support.py; no tool reads floor.met for the reserve rule; no standard error is divided by a count; no program reads a removed or renamed constant (code_9, proposed_spend_cap_usd, the fallback keys, development_test_before_seal_step_1).",
+   "REAL, by script on the constants: the outcome codes carry n = 1 to 11 with no number twice; outcome_codes_count is 11; the status table has 28 different keys (11 + 7 + 8 + 2) and table_keys_count is 28; the 28 codes of optionb/OUTCOME_STATUS_TABLE.PROPOSED.json are the same 28; the five made-up sets of SELFTEST_EXPECTED.json name the same codes as the constants; every service key the four outside-call tools read exists in the constants.",
+   "REAL, my own scratch test of tools/ob_seal.py on made-up seal lines in my scratch folder: 28 of 28 checks held. Tool-repair line: accepted after line 1 and between 3B and 3C, refused after 3C and after step 6; 'repair TR1' gives REPAIR_OUTSIDE_ITS_WINDOW with the line 3C in the seal or with one final question file on disk. Program-repair line: REPAIR_OUTSIDE_ITS_WINDOW before step 6, after step 7, and with a kept receipt of kind REHEARSAL, DEVELOPMENT_TEST or a passed SEALED_PACKAGE. Seal step 7: the right case passes as a dry run; refused for a rehearsal receipt, a development-test receipt, a receipt with findings, five values that differ, five values under the wrong name, a source.zip with another seal copy, a seal copy that ends at step 5, and a missing --receipt.",
+   "REAL, tools/ob_seal.py practice_numbers on seven sample counts with today's constants: counts (40, 22), (44, 30) and (50, 22) with 8 settings give 'reserve not finished', so select says move, the writer may add the wave and seal 3A waits. That is the three-tool deadlock of review round 1; it is gone. BY READING: ob_write_questions.py lines 525 to 534 read practice_setting_count and reserve.finished exactly as the confirm block of BUILD_REVIEW_ROUND1.json proposed; a missing reserve block stops it.",
+   "REAL, my own standalone script for the number X (it imports no job program): the formula of analysis_b1.py gives exactly 1 point for the values 1 and 3 points; it gives SE 11.280 and X 29 for 20 passages with one task, and SE 8.364 and X 21 for 36, the same as the job fixer reported. BY READING: analysis_b1.py has one function for every range and standard error (range_numbers, lines 424 to 448); it takes the plain standard deviation of the 10,000 resampled values and divides by nothing more; X uses the ROLE-minus-better-rival standard error.",
+   "REAL, read from the files on disk (I did not run the two dry drivers again, because they rewrite their outputs): every dry output in optionb/dry/fixture_n and fixture_q was made by the tool bytes that are on disk now and names today's constants hash; the two logs record 141 of 141 and 77 of 77 checks held.",
+   "BY READING, amendment by amendment, plan, constants, formats and programs agree: A1 (gemini-3.5-flash-lite, up to 4 passages, seeded order, one model, stop at once on HTTP 429 with checkpoint, model name stored); A2 (gemini-3.1-flash-lite, 12 notes per call, one checker, no fallback, no export or import); A3 (claude-sonnet-5-5 pinned, the limit stated in plan sections 10 and 21, seal step 1 refuses a null id); A4; A5 (windows in plan 11.1, constants repairs, formats 15.2, ob_seal.py, and the five seal readers of the controller and the job); A6 (plan section 21); A7; A8 (a) and (b); A9 (model and model_in_reply in all four call logs, the DeepSeek alias fact once in plan section 3); A10 (plan 19.1, constants aws.development_test_job, formats 20, the kit with 2 jobs, 0.50 USD and 45 minutes, the builder, run sheet Part 0); A11 (two token limits read from the four call logs before each call); A12 (section 27 is the last section, 7 finding rows and 12 amendment rows, version 1.0, sections 1 to 26 keep their numbers).",
+   "REAL: the owner's approval record has the sha256 d1c052f5... that the kit pins; the pinned requirements file is on disk with 403 bytes and its pinned sha256; the guest worker_v02.py holds the constants the two builders read (cap 8,388,608 bytes and 400 files).",
+   "Observation, not a finding: a folder optionb/dry/walk_amend1/ appeared at 09:15 local time while I was reading. I did not make it and did not touch it. My own scratch files are only in the session scratch folder (confirm_a1_a12)."
+  ]
+ },
+ "walk": {
+  "verdict": "ACCEPT_WITH_NOTES",
+  "findings": [
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_solve_blind.py",
+    "where": "step import, the last print (line 701 to 708). The same gap is in ob_check_questions.py, ob_select.py and ob_write_questions.py: these four tools do not set their output to UTF-8. The other seven do.",
+    "problem": "REAL, on made-up data. The import step crashed after it had saved the answers. The made-up answer sheet held one extra line with an arrow sign. On this laptop Python prints in the Windows code page cp1252 when its output goes to a file or a pipe. That code page has no arrow sign. The tool printed a traceback and exit code 1. The answers were on disk. A second run said NOTHING_TO_IMPORT. So the chain gets past it. Why it still matters: under amendment A5 a tool that crashes after the first final file exists can not be repaired. By the letter of the plan that means stop, report, new plan version.",
+    "evidence": "logs/E4_import_with_a_stray_line.txt: UnicodeEncodeError: 'charmap' codec can't encode character '\\u2192', exit code 1. logs/E5_import_again.txt: NOTHING_TO_IMPORT. logs/E7_import_stray_line_with_PYTHONUTF8.txt: the same case with the environment variable PYTHONUTF8=1 ends SHEET_IMPORTED, exit 0, 437 readable, 1 line that names no item. (All under C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/walk_amend1/.)",
+    "fix": "Before seal step 1, either add to these four tools the same two lines the other seven tools have (set stdout to UTF-8), or write into the run sheet that every tool is run with PYTHONUTF8=1. The second way needs no code change and was shown to work here."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_questions.py",
+    "where": "main(): the first save() runs before any call (line 589 to 592). Seen together with the tool-repair window of tools/ob_seal.py (amendment A5).",
+    "problem": "REAL, on made-up data. A plan-only run of the question writer for the final set (--max-calls 0, no call made, no question written) already writes questions/writer_state_final_p1.json and questions/raw_questions_final_p1.json. From then on the seal tool refuses a tool repair with REPAIR_OUTSIDE_ITS_WINDOW. So the repair window closes one step before the first final question exists. The plan text says the window is open 'while no final question exists'. FILE_FORMATS.md 15.2 says 'no final file exists', which is what the tool does. The two texts differ by this one step.",
+    "evidence": "logs/N9_repair_window_before_plan_only.txt: NOTHING_TO_REPAIR (the window was open). logs/N10_final_writer_plan_only.txt: STOPPED_CALL_BUDGET, calls_this_run 0. logs/N11_repair_window_after_plan_only.txt: REPAIR_OUTSIDE_ITS_WINDOW, '2 final file(s) lie under ... raw_questions_final_p1.json, writer_state_final_p1.json'.",
+    "fix": "Smallest change: one sentence in plan section 11.1 and in the run sheet: 'A plan-only run of the final question writer closes the tool-repair window. Do not run it, not even with --max-calls 0, before the practice set is fully done.' No code change is needed."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_check_support.py",
+    "where": "the exit codes of ob_check_support.py, ob_write_ordinary_notes.py, ob_write_questions.py and ob_solve_blind.py",
+    "problem": "REAL. The exit code does not say the same thing in every tool. ob_write_questions.py and ob_solve_blind.py end with exit code 0 when they stop early (STOPPED_CALL_BUDGET, STOPPED_HTTP_429, STOPPED_TOKEN_CAP, STOPPED_NO_TOKEN_COUNT). ob_write_ordinary_notes.py ends with exit code 1 on a plan-only run and on STOPPED_TOKEN_CAP. ob_check_support.py ends with exit code 1 whenever the set is not yet ready for seal step 4, also when the step did all it should (round 1 done, one rewrite needed). So a script that only looks at exit codes would read a token-limit stop of the solver as success and a normal round 1 of the support check as a failure.",
+    "evidence": "logs/P2_deepseek_huge_usage.txt: STOPPED_TOKEN_CAP with exit code 0. logs/P4_notes_after_cap.txt: STOPPED_TOKEN_CAP with exit code 1. logs/24a_notes_practice_plan.txt: PLAN_ONLY with exit code 1. logs/25e_support_practice_round1.txt and logs/26_support_practice_decide1.txt: NOTHING_PENDING and DECIDED with exit code 1. logs/06c_writer_practice_p1_http429.txt: STOPPED_HTTP_429 with exit code 0.",
+    "fix": "No code change is needed if the operator reads the printed status word and never the exit code. Write that one rule into the run sheet."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_assemble.py",
+    "where": "the file assemble/manifest_step5.json and the tool's 'next' sentence; FILE_FORMATS.md sections 11, 12 and 15.1",
+    "problem": "REAL. The assemble tool says: 'Next: seal step 5 over the files named in the manifest.' Its manifest names 11 files. Seal step 5 seals 10. The one that differs is optionb/assemble/planned_calls.json. The files assemble/planned_calls.json and assemble/manifest_step5.json are also not described in FILE_FORMATS.md and no seal line names them. Nothing downstream reads them, so the job is not touched. The six package files have the same sha256 and package path in the manifest and in the seal line.",
+    "evidence": "After logs/48_seal_5.txt: 'in manifest not in seal 5: [optionb/assemble/planned_calls.json]'; 'files under optionb/ that no seal line names: OWNER_SAMPLE_ROLE_NOTES.md, SEAL_OPTIONB.jsonl, assemble/manifest_step5.json, assemble/planned_calls.json'.",
+    "fix": "Add two lines to FILE_FORMATS.md that name the two files as unsealed report files. Or take planned_calls.json out of the manifest. Either is enough."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/FILE_FORMATS.md",
+    "where": "sections 3, 7.1 and 15.1",
+    "problem": "REAL. Three small things the tools write that the formats file does not say. (1) tools/ob_select.py writes select/survival_practice.json and select/survival_final.json. Seal steps 3A and 3C seal them, because their names carry the set name. Sections 4 to 7.1 do not describe them. (2) tools/ob_select.py writes the drop reason PASSAGE_NOT_ELIGIBLE for the plain-fact question of a passage that is left out. Section 7.1 lists six reasons and not this one. (3) tools/ob_role_notes.py writes optionb/OWNER_SAMPLE_ROLE_NOTES.md in a real run. Section 3 does not name it and seal step 2 does not seal it. Every field of every other file the tools wrote matched its table: 86 files looked at.",
+    "evidence": "check_formats.py on the scratch project: 79 files OK, 7 with no format in the formats file (the two survival files, the two assemble files, review_pack.json whose fields section 12.4 gives only in words, the seal file checked by hand against 15.1, and my own made-up status table). select/selection_final.json: dropped reasons NOT_PICKED_BY_PAIR_RULE 104, PASSAGE_NOT_ELIGIBLE 3, PASSAGE_BARRED 2. tools/ob_select.py line 257.",
+    "fix": "Three short additions to FILE_FORMATS.md before seal step 1. No tool change."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/build_dev_package.py",
+    "where": "step 3, run_the_builders(): the calls of controller_b1_draft/build_source_zip_b1.py and build_contract_b1.py --stamp-only",
+    "problem": "NOT RUN, by my rule: no program under optionb/controller_b1_draft/ is executed on the laptop. So the last part of this step was read, not run. Steps 1, 2 and 4 of the builder ran clean (see what_ran_and_passed). The first real run of the two controller builders is still ahead of the operator.",
+    "evidence": "By reading build_source_zip_b1.py against the made-up study folder the builder laid out (REAL numbers): the made-up seal file has steps 1 to 6 in order; it names exactly the 15 package paths; the 15 files hold 756,701 bytes, the seal copy 19,008 bytes; the guest's caps are 8,388,608 bytes and 400 files; the pinned requirements file exists on this laptop with 403 bytes and the pinned sha256 6d9ee033...; the guest names the same requirements hash. EXPECTED: the zip builder writes 18 members and the builder's three receipt checks hold.",
+    "fix": "None in the files. The operator runs 'python -B optionb/dry/build_dev_package.py' once (it needs no service and no key) and reads its last lines. If the zip builder stops, the builder stops too and says why."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_seal.py",
+    "where": "the option --project, against the option --work of the eight question and note tools",
+    "problem": "REAL. The seal tool and the eight tools with --work can not meet in one made-up folder. In a dry folder the four question tools skip the seal check ('not checked: dry fixture'). The four note tools read a seal file in the dry folder with paths counted from the real study folder. The seal tool writes paths counted from --project. And a real run refuses any file that carries the dry mark. So the development test of amendment A10 does not exercise the checks of seal steps 1 to 6: build_dev_package.py writes its own made-up seal lines. Before this walk the real seal steps had not run on files that the real tools wrote. This walk did that, in a scratch copy of the study folder, and all eight steps passed.",
+    "evidence": "tools/ob_select.py line 141 to 142; tools/ob_write_ordinary_notes.py line 232 to 236 and 254 to 257; optionb/dry/build_dev_package.py line 296 to 313. The walk: logs/03, 05, 21, 23, 39, 45, 48, 49 (seal steps) and logs/50_seal_verify.txt.",
+    "fix": "No change asked for. If a tool changes again before seal step 1, run this walk again: the scripts are kept in optionb/dry/walk_amend1/ and one pass takes a few minutes."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/walk_amend1/walk_fixture.py",
+    "where": "limits of this walk",
+    "problem": "What the walk does NOT show. (1) The made-up passages open two task types, PULL-PUSH and HABIT, and three forms plus the plain-fact form. The forms of BRING, LAND, FORMED and PARTS were not walked in a real run. The earlier dry fixture fixture_q walks BRING and LAND in dry mode; nobody has walked FORMED and PARTS. (2) The scratch constants are the real constants with three blocks changed: the size and sha256 of four made-up source files, counts_real, and the names of the practice and reserve settings. Every floor, target, brief, seed, model name and rule is the real one. (3) No real service was called. The stand-in answers in the OpenAI chat form that the tools read. Whether gemini-3.5-flash-lite and gemini-3.1-flash-lite answer on the endpoint in the constants, and what their refusal texts look like, is NOT MEASURED. (4) tools/ob_eligibility.py was not run on the real label files, by rule.",
+    "evidence": "CONSTANTS_CHANGES.json and logs/stub_calls.jsonl in the scratch folder. REAL, hashed only: all 13 files pinned in the real constants have today the pinned size and sha256, and the real tools/ob_*.py are exactly the eleven the plan lists. So the source check of the real seal step 1 is EXPECTED to pass.",
+    "fix": "None. For the operator to know before seal step 1."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py",
+    "where": "the status STOPPED_NOTES_NOT_WRITTEN (line 736 to 737) and tools/ob_check_support.py NOTES_NOT_ALL_WRITTEN (line 462 to 463)",
+    "problem": "BY READING, not run. If the note writer returns an empty or cut-off reply for one note every time, that note is never written. The support check then refuses the whole set (NOTES_NOT_ALL_WRITTEN), so seal step 4 can not be reached. The tool's own text says: 'the plan has no rule for a note the writer can not produce.' The plan and FILE_FORMATS.md hold no such rule (searched). This is outside amendments A1 to A12. It is listed because it is the one place I found where the real chain could stop with no way on.",
+    "evidence": "Text search of 08_OPTION_B_PLAN_v1_0.md and optionb/FILE_FORMATS.md for REPLY_EMPTY, REPLY_CUT_OFF, STOPPED_NOTES_NOT_WRITTEN and 'can not produce': no line found.",
+    "fix": "An operator decision before seal step 1: either accept that such a case means 'stop and report', and say so in the plan, or leave it as it is. No program change is proposed here."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/RUN_SHEET_B1.md",
+    "where": "the operator's shell, before the first real call",
+    "problem": "REAL, for this shell only (the values were not read or printed). GEMINI_API_KEY is set. DEEPSEEK_API_KEY is not set. The tools read keys from the environment and never from a file. So today the DeepSeek steps (key solver, ordinary notes) would stop with KEY_NOT_SET, and a real run of the question writer or the support checker with a call budget above 0 would call Gemini at once. In this walk every tool ran inside a process whose keys were replaced by a made-up text, and every one of the 2,131 stand-in calls carried that made-up text.",
+    "evidence": "Shell test of the two variable names (set or not set only). logs/06b_writer_practice_p1_no_key.txt: KEY_NOT_SET. logs/stub_calls.jsonl: 2,131 lines, made_up_key_was_sent true in all.",
+    "fix": "None in the files. The operator sets DEEPSEEK_API_KEY in the shell of the real run, and starts every real step with --max-calls 0 first."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/walk_amend1/",
+    "where": "a side effect of my own scratch folder on the real seal steps 1 and 2",
+    "problem": "REAL. My scratch folder holds 48 files whose names start like question files (raw_questions_, writer_calls_, writer_state_). The real seal steps 1 and 2 do not count files under optionb/dry/ as question files, so they are not refused. But they print a note and they write the number of such look-alike files into the seal line (values.question_like_files_in_scratch_folder). Today that number would be 70 with my folder and 22 without it.",
+    "evidence": "Count by script: 70 such names under optionb/dry/, 48 of them under optionb/dry/walk_amend1/. tools/ob_seal.py line 405 to 412 and 644.",
+    "fix": "The operator may delete optionb/dry/walk_amend1/ before seal step 1 (530 files, 29 MB, made-up data only), or keep it; either is harmless."
+   }
+  ],
+  "what_ran_and_passed": [
+   "HOW THE WALK WAS DONE (REAL). I made a scratch copy of the study folder at C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/walk_amend1/project/. It holds byte copies of the eleven tools and the rule texts (every copy has the sha256 of its source) and made-up source files: 144 made-up passages in 48 made-up settings, made-up labels of two teams, a made-up design text. The tools ran there as REAL runs, not as dry-fixture runs: no --work, real seal checks, real floors (100, 100, 36, 20) and real reserve targets (45, 25). A small runner, guard_run.py, put made-up replies in the place of the outside services and made every network connection fail. No project file was changed. No AWS call. No outside service. No key file opened. No real passage read. The real seal file still does not exist.",
+   "STEP 1. Command: python -B tools/ob_eligibility.py -> PASS (ELIGIBILITY_OK, exit 0). 144 passages, 3 left out by rule 15, 139 eligible, 2 barred. Files elig/exclusions.json and elig/eligibility.json match FILE_FORMATS.md section 2.",
+   "ORDER NOTE. Command: python -B tools/ob_role_notes.py before seal step 1 -> refused as designed: SEAL_STEP_MISSING. The tools' real order is: eligibility, seal step 1, role notes, seal step 2.",
+   "SEAL STEP 1. Command: python -B tools/ob_seal.py step 1 -> PASS. 21 files sealed: plan, constants, formats, five sources, two eligibility files, eleven tools. All 13 pinned sources were checked. The line matches FILE_FORMATS.md 15.1.",
+   "STEP 2. Command: python -B tools/ob_role_notes.py -> PASS (ROLE_NOTES_OK). 139 role notes, owner sample of 20. notes_role/role_notes.json and owner_sample_20.json match section 3. The canon lines were copied from the guide by the tool.",
+   "SEAL STEP 2. Command: python -B tools/ob_seal.py step 2 -> PASS, 2 files.",
+   "QUESTION WRITER, PRACTICE (amendment A1). Commands: python -B tools/ob_write_questions.py --set practice --pass p1 --max-calls 0 (plan only: STOPPED_CALL_BUDGET, 6 batches of up to 4 passages); the same with a made-up HTTP 429 reply (STOPPED_HTTP_429 after 1 call, 0 tries counted, checkpoint kept); then --pass p1 and --pass p2 with --max-calls 40 --pace 0 -> PASS (ALL_WRITTEN, 6 calls each, 24 passages, model asked for gemini-3.5-flash-lite, model name of every reply stored). The three files per pass match section 4.",
+   "CHECK, PRACTICE. Command: python -B tools/ob_check_questions.py --set practice -> PASS (CHECKED). 192 questions read; 1 dropped by the form check and replaced by its spare; 4 dropped as FORM_NOT_OPEN; 70 role-step and 24 plain-fact candidates. The four files match section 5.",
+   "KEY SOLVER 1, PRACTICE (amendments A9, A11). Command: python -B tools/ob_solve_blind.py deepseek --set practice --max-calls 400 --pace 0 -> PASS (ALL_ANSWERED, 188 calls). In a real run the tool counted the tokens of the four call logs before and after: 23,796 input, 376 output (made-up counts). solver_items and deepseek_calls match sections 6.1 and 6.2, field order included.",
+   "KEY SOLVER 2, PRACTICE (amendment A3). Commands: python -B tools/ob_solve_blind.py export --set practice --mode with_passage, then --mode no_passage -> PASS (SHEETS_WRITTEN; each names the pinned id claude-sonnet-5-5). Made-up answer sheets were saved. Then import --sheet 01 --transcript-model <name> for both modes -> PASS (SHEET_IMPORTED, 94 readable each). Without --transcript-model the import is refused. Then decide --set practice -> PASS (KEY_CHECK_WRITTEN). Sheets, answers and key check match sections 6.3 to 6.6.",
+   "SELECTION AND THE RESERVE RULE, EXERCISED ONCE (amendment A8). Command: python -B tools/ob_select.py select --set practice -> ran clean and said STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING: 47 role-step and 24 plain-fact tasks against the targets 45 and 25. Seal step 3A was then refused (RESERVE_RULE_NOT_FINISHED) and fix-split was refused (SEAL_STEP_MISSING), both as designed. The writer with --practice-settings 10 was refused with RESERVE_RULE_NOT_MET. Then, with --practice-settings 9: writer p1 and p2 (1 call each, wave 1 added), check, solver 1 (24 new calls), export of sheet 02 in both modes, import of both, decide, select -> GO with 53 and 27 tasks. selection_practice.json matches section 7.1.",
+   "SEAL STEP 3A. Command: python -B tools/ob_seal.py step 3A -> PASS, 24 files. Then python -B tools/ob_select.py fix-split -> PASS (SPLIT_FIXED, history of 2 rows, floor_met true); split_fixed.json matches section 7.2. Then SEAL STEP 3B: python -B tools/ob_seal.py step 3B -> PASS, 1 file.",
+   "PRACTICE FIRST: ORDINARY NOTES OF THE PRACTICE SET. Commands: python -B tools/ob_write_ordinary_notes.py --set practice --step first --max-calls 0 (PLAN_ONLY, 162 notes planned), then --max-calls 400 -> PASS (ALL_WRITTEN, 162 notes). One earlier run of this step ended STOPPED_NO_ANSWER_FROM_SERVICE: that was a fault of my own stand-in, not of the tool; the tool kept its log and went on from it. Both note files match section 8.",
+   "PRACTICE FIRST: SUPPORT CHECK (amendment A2). Commands: python -B tools/ob_check_support.py gemini --set practice --max-calls 40 --pace 0 (14 calls, 159 passed, 3 failed once), decide, then ob_write_ordinary_notes.py --set practice --step rewrite --max-calls 50 (3 notes), gemini again (1 call), decide -> PASS: 27 passages ALL_PASS, ready for seal step 4. One checker only, gemini-3.1-flash-lite; no fallback file exists. A made-up daily-cap refusal ended STOPPED_DAILY_CAP after 1 call; a made-up plain rate refusal ended STOPPED_RATE_LIMIT and got no daily-cap mark. The four support files match section 9.",
+   "PRACTICE FIRST: LEAK SCREEN, REPORT ONLY. Command: python -B tools/ob_screen_notes.py --set practice --report-only -> PASS (REPORT_ONLY, 27 passages screened, 0 hit, no file written), as section 10.2 says.",
+   "THE FINAL SET, STEPS 1 TO 6. Commands: ob_write_questions.py --set final --pass p1 and p2 (29 calls each, 115 passages); ob_check_questions.py --set final (920 questions; 322 role-step and 115 plain-fact candidates); ob_solve_blind.py deepseek --set final (874 calls); export --max-items 200 in both modes (3 sheets each); six imports; decide (320 and 115 survive; one made-up flag and one made-up guessable question were dropped as planned); ob_select.py select --set final -> GO with 216 role-step and 110 plain-fact tasks. All PASS. The 28 final files match sections 4 to 7.1.",
+   "SEAL STEP 3C. Command: python -B tools/ob_seal.py step 3C -> PASS, 28 files.",
+   "FINAL ORDINARY NOTES AND SUPPORT CHECK. Commands: ob_write_ordinary_notes.py --set final --step first (660 notes), ob_check_support.py gemini --set final (55 calls), the rewrite step (3 notes), gemini again (1 call), decide -> PASS: 109 passages ALL_PASS and 1 DROPPED_SECOND_FAILURE, as the made-up data was built to give. Files match sections 8 and 9.",
+   "SEAL STEP 4. Command: python -B tools/ob_seal.py step 4 -> PASS, 12 files. Before it, the full leak screen was refused with SEAL_STEP_MISSING, as designed.",
+   "LEAK SCREEN. Command: python -B tools/ob_screen_notes.py --set both -> PASS (SCREENED). 1 made-up final passage hit by rule d and dropped. Both screen files match section 10.1.",
+   "ASSEMBLE. Command: python -B tools/ob_assemble.py -> PASS (ASSEMBLED). 212 final role-step tasks, 108 final plain-fact tasks, 53 and 27 practice tasks, launch floor met, tier EXPLORATORY, 3,196 planned calls under the cap of 5,000, right letters balanced. removal_log.json, both prompt-part files, both key files and both task-meta files match sections 11 and 12. Checked by script for all 400 tasks: the keyed letter points at the right option text at every level, and every task has the groups of its family.",
+   "SEAL STEP 5. Command: python -B tools/ob_seal.py step 5 -> PASS, 10 files. SEAL STEP 6: python -B tools/ob_seal.py step 6 -> PASS, 5 job files (hashed only, never run).",
+   "SEAL FILE AS A WHOLE. Command: python -B tools/ob_seal.py verify -> PASS: the chain of 8 lines is whole, all 103 sealed files have their size and sha256 in force. The seal file names exactly the 15 package paths of FILE_FORMATS.md section 14. By reading the job's own seal check (optionb/job/analysis_b1.py, check_package_against_seal; not run): it asks for nothing this seal file lacks. By parsing the three job programs: every field name they read from the six package data files is a field the tools wrote.",
+   "BUILDER OF THE DEVELOPMENT PACKAGE (amendment A10), steps 1, 2 and 4. Command, on a byte copy in a second scratch copy with the REAL constants: python -B optionb/dry/build_dev_package.py --stop-before-the-builders -> PASS (STUDY_FOLDER_LAID_OUT_BUILDERS_NOT_CALLED). 16 made-up passages, 54 tool runs, 32 checks, all held; 23 and 12 practice tasks, 7 and 4 final tasks. Then python -B tools/ob_seal.py --project <the made-up study folder> verify -> PASS: chain of 8 lines whole, all 79 files in force. The plan, constants and formats it copied have the sha256 values 91617f38..., 980ef44f... and ab1f3950.... Its step 3, the two controller builders, was NOT RUN (see findings).",
+   "PROBE, AMENDMENT A11 (the stop inside the call loop had never run). In a side copy: a reply with no token count -> ob_solve_blind.py ended STOPPED_NO_TOKEN_COUNT after the 4 calls that were under way, all logged. A reply that claims 3,000,000 input tokens -> STOPPED_TOKEN_CAP. The next run of the solver made 0 calls (STOPPED_TOKEN_CAP). The note writer, which shares the count over the four logs, also made 0 calls (STOPPED_TOKEN_CAP).",
+   "PROBE, AMENDMENT A9. A reply with no model name -> the call log line holds model_in_reply null. A refused call holds null too. Every other line holds the made-up name as given.",
+   "PROBE, AMENDMENT A5. python -B tools/ob_seal.py repair TR1 --dry-run before any final file: the window check passed (the refusal was NOTHING_TO_REPAIR). After the first final files: REPAIR_OUTSIDE_ITS_WINDOW. A tool copy with one extra line: ob_select.py and ob_check_questions.py both stopped with SEALED_FILE_CHANGED, and verify ended with exit code 2.",
+   "PROBE, AMENDMENT A8(b), dry runs of seal step 7 with made-up receipts on the seal file the real tool wrote: no status table -> STATUS_TABLE_MISSING; a DEVELOPMENT_TEST receipt -> RECEIPT_IS_NOT_OF_A_JOB_ON_THE_SEALED_PACKAGE; a SEALED_PACKAGE receipt with the seal copy of the made-up development package -> SOURCE_ZIP_IS_NOT_THE_SEALED_PACKAGE; a receipt with findings -> PRECHECK_DID_NOT_PASS; the fitting case -> 'DRY RUN. 7_PRECHECK passed every check', nothing written.",
+   "PROBE, SEALED SETS. After the seals, each of these was refused as designed: the practice writer, the final note writer and the assemble tool (SET_IS_SEALED), and the eligibility tool (ALREADY_SEALED).",
+   "SAFETY RECORD (REAL). 2,131 made-up service calls were answered by the stand-in; every one carried the made-up key; none opened a connection. The nine files the fixers named (five tools, the builder, plan, constants, formats) have the sha256 values the fixers reported. No cache folder was left beside the tools. Everything I wrote is under optionb/dry/walk_amend1/: 530 files, 29 MB, all made-up. Every command and what it printed is under optionb/dry/walk_amend1/logs/."
+  ]
+ }
+}

@@ -1,0 +1,87 @@
+{
+ "schema": "casalescence/optionb/leak_screen/v1",
+ "made_by": {
+  "program": "tools/ob_screen_notes.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "ab4bfd9a607863ae2ad5467cccab31b0aaec13cf5b3f5187bc73b316d8af5fc8",
+  "utc": "2026-10-07T00:14:18Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/SEAL_OPTIONB.jsonl",
+   "sha256": "a605a3170f4a48a69d96163d4d547fc6ceb9e69f871a78bbf6f01b9bbe00bdb8"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/elig/eligibility.json",
+   "sha256": "5cbec062ac5b855edd71cf893bda734c158b2e657ea6caba7102ff5a024d159c"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/notes_ord/ordinary_notes_final.json",
+   "sha256": "0c1297726005dd55581b00eaaf0d8cc9c172834acb5bd9f0f391c12c293a03c6"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/notes_ord/ordinary_notes_practice.json",
+   "sha256": "a48c795fe86ddc2930038ad54413ecc7c5261ccf327950f035041acb7b2de689"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/notes_role/role_notes.json",
+   "sha256": "fbf322cb49d504e229fee333fdc828cf5cb767de885f645121908ba4455393f7"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/select/selection_final.json",
+   "sha256": "adbbd936ee4b3edc9ddfb5426e9d201bab11cfa5e6519667a2265501fb2eabf2"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/select/selection_practice.json",
+   "sha256": "01420a155643c7643c9b3ca3af3244b6e275b4eebdc0332c73d3f474db51b692"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/support/support_results_final.json",
+   "sha256": "66a948b77f3980a60cbbace6afc50fc3e3cbf8486050c4b66515dc8f0f84c4d3"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/support/support_results_practice.json",
+   "sha256": "81879f3ca5a69d5045560e3dc6c7dc9530f4ab8b2a5ea286115629eb58405526"
+  }
+ ],
+ "set": "final",
+ "passages": [
+  {
+   "passage_id": "D013",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "D014",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "D015",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "D016",
+   "hit": false,
+   "hits": []
+  }
+ ],
+ "counts": {
+  "passages_screened": 4,
+  "passages_hit": 0,
+  "hits_by_rule": {
+   "a": 0,
+   "b": 0,
+   "c": 0,
+   "d": 0
+  }
+ }
+}

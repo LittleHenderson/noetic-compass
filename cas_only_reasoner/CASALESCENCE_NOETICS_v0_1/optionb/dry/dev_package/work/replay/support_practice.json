@@ -1,0 +1,326 @@
+[
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0001",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0002",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0003",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0004",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0005",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0006",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0007",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0008",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0009",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0010",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0011",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0012",
+    "verdict": "PASS"
+   }
+  ]
+ },
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0013",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0014",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0015",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0016",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0017",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0018",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0019",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0020",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0021",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0022",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0023",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0024",
+    "verdict": "PASS"
+   }
+  ]
+ },
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0025",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0026",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0027",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0028",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0029",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0030",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0031",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0032",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0033",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0034",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0035",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0036",
+    "verdict": "PASS"
+   }
+  ]
+ },
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0037",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0038",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0039",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0040",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0041",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0042",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0043",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0044",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0045",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0046",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0047",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0048",
+    "verdict": "PASS"
+   }
+  ]
+ },
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0049",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0050",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0051",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0052",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0053",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0054",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0055",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0056",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0057",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0058",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0059",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0060",
+    "verdict": "PASS"
+   }
+  ]
+ },
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0061",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0062",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0063",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0064",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0065",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0066",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0067",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0068",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0069",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0070",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0071",
+    "verdict": "PASS"
+   },
+   {
+    "item": "N0072",
+    "verdict": "PASS"
+   }
+  ]
+ }
+]

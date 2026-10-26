@@ -1,0 +1,64 @@
+{
+ "tool": "label_outside_v21/1",
+ "provider": "deepseek",
+ "model": "deepseek-chat",
+ "guide_sha256": "2b6617c1510270d34f00602a461082a2d4ca90bb89239ec4c60a990402751a29",
+ "instructions_sha256": "15941173a754f85ff191b2230cd43d34b29573e153ff285aa17124d2f55156d6",
+ "checker_sha256": "c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9",
+ "passages_sha256": "87027edc64980896fbaa0ad1b6010ccc1ea901f5daea46a2362f42ab9c533fdb",
+ "tool_sha256": "26bf839438d2891b009e52562effcb76b4f243c4d2a558d509c1ca274094230a",
+ "frame_sha256": "a7388848ef8d536e3dee3a82d1049dc22075330709da9d37517c73f8b49021dd",
+ "seal_sha256": "f7fff437b90024117bea844c45f8feefbbc1ed03c2477afbee8a6d1d5717060b",
+ "written_utc": "2026-10-07T19:50:48.286111+00:00",
+ "labels_file": "labels_team_b.json",
+ "labels_sha256": "ae862395a03f65aaf75ede43ef519a2fd8ec8dc9bfb4181a64203217586c79f2",
+ "guide": "02_LABELING_GUIDE_v2_1.md",
+ "instructions": "label_v21\\LABELER_INSTRUCTIONS.txt",
+ "passages_file": "label_v21\\verdict\\passages_sealed.json",
+ "complete": true,
+ "passages": 427,
+ "passages_by_state": {
+  "LABELED": 426,
+  "NOT_LABELED": 1
+ },
+ "passages_not_final": [],
+ "passages_by_number_of_tries": {
+  "1": 386,
+  "2": 40,
+  "3": 1
+ },
+ "entries_in_final_records": 1712,
+ "entries_by_noetic": {
+  "^1": 485,
+  "^2": 94,
+  "^3": 73,
+  "^4": 124,
+  "^5": 135,
+  "^6": 339,
+  "^7": 109,
+  "^8": 131,
+  "^9": 222
+ },
+ "entries_withdrawn_between_tries": 0,
+ "entries_withdrawn_by_noetic": {},
+ "withdrawn_by_passage": {},
+ "model_asked_for": "deepseek-chat",
+ "models_that_answered": {
+  "deepseek-flash": 469
+ },
+ "tries_with_reasoning_text": 0,
+ "one_passage_per_call": true,
+ "temperature": 0,
+ "tokens_sent": 5884931,
+ "tokens_returned": 176544,
+ "stopped_for": null,
+ "cap_in": 9200000,
+ "cap_out": 740000,
+ "caps_given_in_all_runs": [
+  {
+   "utc": "2026-10-07T19:33:51.980016+00:00",
+   "cap_in": 9200000,
+   "cap_out": 740000
+  }
+ ]
+}

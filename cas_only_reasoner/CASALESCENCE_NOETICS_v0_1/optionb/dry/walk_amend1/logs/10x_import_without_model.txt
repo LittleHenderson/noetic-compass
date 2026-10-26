@@ -1,0 +1,6 @@
+$ python -B tools/ob_solve_blind.py import --set practice --mode no_passage --sheet 01
+usage: ob_solve_blind.py import [-h] --set {practice,final} [--work WORK]
+                                --mode {with_passage,no_passage} --sheet SHEET
+                                --transcript-model TRANSCRIPT_MODEL
+ob_solve_blind.py import: error: the following arguments are required: --transcript-model
+[exit code 2]

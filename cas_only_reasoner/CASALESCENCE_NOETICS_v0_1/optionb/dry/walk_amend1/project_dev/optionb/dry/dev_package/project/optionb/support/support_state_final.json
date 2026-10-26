@@ -1,0 +1,84 @@
+{
+ "schema": "casalescence/optionb/support_state/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "246032c116a7abdcc1f43b512fa5300d88e5ec924868b7a92cc63eea4254b9e1",
+  "utc": "2026-10-05T16:27:21Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/SEAL_OPTIONB.jsonl",
+   "sha256": "fa96391b1425787a11e03706798485547bafb397838d6bd4083574bbd8086914"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/elig/eligibility.json",
+   "sha256": "ef7bb7d8555ec91f90ff7f2262c4bb371ff0d6d5a0107bfc45bf767e4c338bf8"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/notes_ord/ordinary_notes_final.json",
+   "sha256": "efec2a1ece865fe3d45502d51948c414276652f550ec06c143ca18295394063d"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/support/support_calls_final.jsonl",
+   "sha256": "c657eee852ea906cee20d07f3e3ee5e2c130dafd32049cdd094f6695d3b8d858"
+  }
+ ],
+ "set": "final",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "rounds": [
+  {
+   "round": 1,
+   "batches": [
+    {
+     "batch": 0,
+     "item_ids": [
+      "N0001",
+      "N0002",
+      "N0003",
+      "N0004",
+      "N0005",
+      "N0006",
+      "N0007",
+      "N0008",
+      "N0009",
+      "N0010",
+      "N0011",
+      "N0012"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "item_ids": [
+      "N0013",
+      "N0014",
+      "N0015",
+      "N0016",
+      "N0017",
+      "N0018",
+      "N0019",
+      "N0020",
+      "N0021",
+      "N0022",
+      "N0023",
+      "N0024"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "first_cap_stop_utc": null,
+ "complete": true
+}

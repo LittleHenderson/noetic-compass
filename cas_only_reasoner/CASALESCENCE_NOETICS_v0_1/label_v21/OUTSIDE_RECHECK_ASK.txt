@@ -1,0 +1,23 @@
+You are the same independent reviewer who read an earlier state of the three documents below (a labeling guide, the study plan, and the one-page sign-off sheet for the framework's owner) and rejected them with one blocking and four major findings. This is the one recheck. Read the corrected documents and say, for each of your five findings, whether it is resolved. Then name any NEW blocking or major defect that the corrections created. Do not raise new points that are neither. Do not propose new rules on when a role is present, and do not propose word lists for labelers: the owner's ruling is that the Colloquialism Test of the owner's own file decides presence, and nothing else.
+
+Fixed ground you may not question: Part A of the guide is canon, copied by a script from the owner's file. Rule 15 is the owner's own working ruling on reading a sign. The owner's sentence on Mind is quoted as typed.
+
+Your five findings, and what the operator did:
+
+1. BLOCKER. Rule 15's last bullet pointed at rule 10, which is now a stub ("It may be ^4 under rule 10").
+   Done: that one clause now reads "It may be ^4 if rule 5 marks it." The clause was the study's wording, not the owner's. No other byte of rule 15 changed.
+
+2. MAJOR. Rule 2 still held a study-written gate ("Mark a clear pair only when the passage says or plainly shows that ...").
+   Done: rule 2 now says only how to write a pair, the two rule-15 cases, and a lone entry. It says in words that rule 5 and rule 15 decide presence. The sentence about two things that merely sit side by side is gone. Rule 3's sentence on recalling on purpose was removed in an earlier step.
+
+3. MAJOR. Rule 5 leaned on the listed sayings, though Part A calls them "representative, not exhaustive"; two careful labelers can choose different sayings.
+   Done: rule 5 now follows the two questions of the Diagnostic application in their order (what saying would a native speaker use; which Noetic's definition does that saying align with), and says the canonical sayings show the kind of saying that belongs to each Noetic. No rule and no list was added. The plan and the sign-off sheet now tell the owner plainly that the pass mark may be missed for reasons of judgment even when pointing is right, and that this is not measured.
+
+4. MAJOR. The matching test (the two labels overlap in the passage and the words of the shorter one all lie inside the longer one) lets a bare noun or an overrun label count as agreement; you asked for identical content words.
+   Followed in part. The pass mark stays on the containment test, for this reason: the owner's own direction for this attempt treats two selections of different length for the same thing as agreement about the thing (the owner's words: "They largely agreed about the meaning but selected different amounts of text"), and the question this study asks is whether two teams point at the same thing. But the view you asked for is now computed and printed beside every pass-mark number, per role, with no mark of its own ("strict-label view": a pair counts only when the two labels have the same content words in the same order at the same place). The plan names it, the sign-off sheet tells the owner it is printed, and the program's test fixture pins it. On the first attempt's labels the two views differ a great deal (for example ^8: 0.541 against 0.310), and the report will show both.
+
+5. MAJOR. An Effect reached by reasoning is counted apart only when the labeler sets a flag; nobody verifies the flag.
+   Done: the scoring program prints one report-only line per team: how many clear ^9 entries without the flag have a supporting quote that holds one of the example words of rule 15(b), with the passage ids. The words are read from the guide at run time. It changes no count. The sign-off sheet now says the flag is set by the labeler and that the report lists where it may be missing; the plan says the same and says that the line is a hint, not a check.
+
+For each of the five, answer RESOLVED, RESOLVED IN PART (say what is still wrong and whether it is blocking or major), or NOT RESOLVED. Judge finding 4 on this question only: is it acceptable for an agreement study to carry its pass mark on the containment test when the strict view is printed beside every result and the owner is told so before signing? If you think it is not, say which false conclusion a reader could still draw.
+Start your reply with one line: VERDICT: ACCEPT, ACCEPT_WITH_NOTES, or REJECT. Keep the reply under 600 words.

@@ -1,0 +1,2644 @@
+{
+ "made_by": {
+  "program": "optionb/dry/fixture_q/run_dry_q.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "880e57e5f73469a7f977f6e1705ebcf1f1cecd76d5fde215179c3b4e9f62e56a"
+ },
+ "note": "DRY FIXTURE, NOT A RESULT. Made-up passages, label entries, questions, solver replies, answer sheets and model names. No outside call was made.",
+ "tool_runs": 47,
+ "checks": 86,
+ "checks_held": 86,
+ "checks_not_held": 0,
+ "steps": [
+  {
+   "label": "writer with a batch size above the plan value",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "0",
+    "--batch-size",
+    "5"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "BAD_ARGUMENT",
+    "reason": "The batch size must be 1 to 4."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer when the constants name two different writer models",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "ONE_MODEL_RULE",
+    "reason": "outside_services.gemini_question_writer.model_by_set in PLAN_CONSTANTS.json must name one and the same model for the practice set and the final set. It says: {\"final\": \"MADE-UP-OTHER-MODEL\", \"practice\": \"gemini-3.5-flash-lite\"}"
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer practice p1, the first call gets HTTP 429",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "5",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_writer_practice_p1_run1_cap.json"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_HTTP_429",
+   "printed": {
+    "program": "tools/ob_write_questions.py",
+    "dry_fixture": true,
+    "status": "STOPPED_HTTP_429",
+    "set": "practice",
+    "pass": "p1",
+    "model": "DRY-FIXTURE-NO-MODEL",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 8,
+    "waves": 1,
+    "batches": {
+     "DONE": 0,
+     "PENDING": 1,
+     "UNREADABLE": 0
+    },
+    "calls_this_run": 1,
+    "call_budget": 5,
+    "stops_after_http_429": 1,
+    "model_names_in_the_replies": [],
+    "passages_asked": 0,
+    "passages_by_status": {
+     "OK": 0,
+     "MISSING": 0,
+     "BAD_OBJECT": 0
+    },
+    "what_follows_questions": 0,
+    "plain_fact_questions": 0,
+    "next": "The service refused a call (HTTP 429). The refused call is not counted as a try. The checkpoint is kept. Run the same command again later. The daily cap of this model is not known."
+   }
+  },
+  {
+   "label": "writer practice p1, run again later",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "5",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_writer_practice_p1_run2.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_questions.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "pass": "p1",
+    "model": "DRY-FIXTURE-NO-MODEL",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 8,
+    "waves": 1,
+    "batches": {
+     "DONE": 1,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "calls_this_run": 2,
+    "call_budget": 5,
+    "stops_after_http_429": 1,
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-WRITER-REPLY"
+    ],
+    "passages_asked": 1,
+    "passages_by_status": {
+     "OK": 1,
+     "MISSING": 0,
+     "BAD_OBJECT": 0
+    },
+    "what_follows_questions": 3,
+    "plain_fact_questions": 1,
+    "next": "This pass of this set is written."
+   }
+  },
+  {
+   "label": "writer practice p2 (spare pass)",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p2",
+    "--max-calls",
+    "5",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_writer_practice_p2_run1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_questions.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "pass": "p2",
+    "model": "DRY-FIXTURE-NO-MODEL",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 8,
+    "waves": 1,
+    "batches": {
+     "DONE": 1,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "calls_this_run": 1,
+    "call_budget": 5,
+    "stops_after_http_429": 0,
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-WRITER-REPLY"
+    ],
+    "passages_asked": 1,
+    "passages_by_status": {
+     "OK": 1,
+     "MISSING": 0,
+     "BAD_OBJECT": 0
+    },
+    "what_follows_questions": 2,
+    "plain_fact_questions": 1,
+    "next": "This pass of this set is written."
+   }
+  },
+  {
+   "label": "check practice",
+   "tool": "tools/ob_check_questions.py",
+   "argv": [
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "CHECKED",
+   "printed": {
+    "program": "tools/ob_check_questions.py",
+    "dry_fixture": true,
+    "status": "CHECKED",
+    "set": "practice",
+    "practice_setting_count": 8,
+    "seal": "not checked: dry fixture",
+    "questions_read": {
+     "role_step": 5,
+     "plain_fact": 2
+    },
+    "form_check": {
+     "checked": 7,
+     "passed": 6,
+     "dropped_by_reason": {
+      "FORM_NAME_UNKNOWN": 1
+     }
+    },
+    "anchor_check": {
+     "checked": 4,
+     "passed": 4,
+     "dropped_by_reason": {}
+    },
+    "option_check": {
+     "checked": 4,
+     "passed": 2
+    },
+    "candidates": {
+     "role_step": 2,
+     "plain_fact": 1,
+     "spares_used": 1
+    },
+    "survival_after_each_filter": [
+     {
+      "filter": "written for an open form",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "form check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "option check",
+      "role_step": 2,
+      "plain_fact": 1
+     }
+    ],
+    "note": "Survival counts one per passage and form. The plain-fact column has no label check; its anchor and option rows repeat the form-check count."
+   }
+  },
+  {
+   "label": "deepseek practice, the item map only",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "deepseek",
+    "status": "STOPPED_CALL_BUDGET",
+    "set": "practice",
+    "seal": "not checked: dry fixture",
+    "candidates": 3,
+    "items": 6,
+    "items_answered": 0,
+    "items_readable": 0,
+    "items_open": 6,
+    "last_http_status_of_open_items_that_were_tried": {},
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "tokens_this_run_REAL": {
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [],
+    "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+   }
+  },
+  {
+   "label": "deepseek practice",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "50",
+    "--workers",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_deepseek_practice_wave0.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_ANSWERED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "deepseek",
+    "status": "ALL_ANSWERED",
+    "set": "practice",
+    "seal": "not checked: dry fixture",
+    "candidates": 3,
+    "items": 6,
+    "items_answered": 6,
+    "items_readable": 6,
+    "items_open": 0,
+    "last_http_status_of_open_items_that_were_tried": {},
+    "calls_this_run": 7,
+    "call_budget": 50,
+    "tokens_this_run_REAL": {
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+    ],
+    "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+   }
+  },
+  {
+   "label": "export practice with_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "export",
+    "status": "SHEETS_WRITTEN",
+    "set": "practice",
+    "mode": "with_passage",
+    "seal": "not checked: dry fixture",
+    "sheets": [
+     {
+      "sheet": "01",
+      "file": "optionb/dry/fixture_q/solve/claude_sheet_practice_with_passage_01.txt",
+      "items": 3,
+      "sha256": "2c5de1be437ce0715760a3bd8f9d27a94f1b6e0aabd3ee9e19885844a971f440",
+      "answers_go_to": "optionb/dry/fixture_q/solve/claude_answers_practice_with_passage_01.txt"
+     }
+    ],
+    "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+    "next": [
+     "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+     "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+     "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+     "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+    ]
+   }
+  },
+  {
+   "label": "import practice with_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "import",
+    "status": "SHEET_IMPORTED",
+    "set": "practice",
+    "mode": "with_passage",
+    "sheet": "01",
+    "seal": "not checked: dry fixture",
+    "answer_file": "optionb/dry/fixture_q/solve/claude_answers_practice_with_passage_01.txt",
+    "answer_file_sha256": "1da6a35fcdbd43e41af9730525d93b840fafc1b5b40f8f68850d15c0663ed723",
+    "items_on_sheet": 3,
+    "model_name_from_the_transcript": "claude-sonnet-5-5",
+    "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+    "readable": 3,
+    "unreadable": 0,
+    "unreadable_by_cause": {
+     "missing": 0,
+     "repeated": 0,
+     "line_does_not_fit": 0,
+     "reply_not_allowed": 0
+    },
+    "lines_that_name_no_item_of_this_sheet": 1,
+    "first_such_lines": [
+     "Here are my answers (a MADE-UP stray line; the tool must log it and go on)"
+    ],
+    "note": "An unreadable reply counts as not picked. It is not asked again."
+   }
+  },
+  {
+   "label": "export practice no_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "export",
+    "status": "SHEETS_WRITTEN",
+    "set": "practice",
+    "mode": "no_passage",
+    "seal": "not checked: dry fixture",
+    "sheets": [
+     {
+      "sheet": "01",
+      "file": "optionb/dry/fixture_q/solve/claude_sheet_practice_no_passage_01.txt",
+      "items": 3,
+      "sha256": "d8bd3589f2f197d00cdc0f2c0f6e9ac90933f13dcc775e27186f635737711972",
+      "answers_go_to": "optionb/dry/fixture_q/solve/claude_answers_practice_no_passage_01.txt"
+     }
+    ],
+    "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+    "next": [
+     "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+     "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+     "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+     "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+    ]
+   }
+  },
+  {
+   "label": "import practice no_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "import",
+    "status": "SHEET_IMPORTED",
+    "set": "practice",
+    "mode": "no_passage",
+    "sheet": "01",
+    "seal": "not checked: dry fixture",
+    "answer_file": "optionb/dry/fixture_q/solve/claude_answers_practice_no_passage_01.txt",
+    "answer_file_sha256": "d1eccbb8e4c6ef0d1413a196a052a79e282064c2ec53c5d3da6ead657524d21b",
+    "items_on_sheet": 3,
+    "model_name_from_the_transcript": "claude-sonnet-5-5",
+    "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+    "readable": 3,
+    "unreadable": 0,
+    "unreadable_by_cause": {
+     "missing": 0,
+     "repeated": 0,
+     "line_does_not_fit": 0,
+     "reply_not_allowed": 0
+    },
+    "lines_that_name_no_item_of_this_sheet": 0,
+    "first_such_lines": [],
+    "note": "An unreadable reply counts as not picked. It is not asked again."
+   }
+  },
+  {
+   "label": "decide practice",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "KEY_CHECK_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "decide",
+    "status": "KEY_CHECK_WRITTEN",
+    "set": "practice",
+    "seal": "not checked: dry fixture",
+    "counts": {
+     "checked": {
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     "key_check_passed": {
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     "no_passage_passed": {
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     "survive": {
+      "role_step": 2,
+      "plain_fact": 1
+     }
+    },
+    "survival_after_each_filter": [
+     {
+      "filter": "option check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "key check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 2,
+      "plain_fact": 1
+     }
+    ],
+    "note": "The no-passage check row counts questions that passed both checks."
+   }
+  },
+  {
+   "label": "import with an empty transcript model name",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    " "
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "TRANSCRIPT_MODEL_MISSING",
+    "reason": "The import step needs --transcript-model NAME: the model name of the sub-agent, exactly as its transcript shows it, with no space before or after."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "select practice with 8 settings",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "practice"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING",
+   "printed": {
+    "program": "tools/ob_select.py",
+    "dry_fixture": true,
+    "step": "select",
+    "seal": "not checked: dry fixture",
+    "set": "practice",
+    "practice_setting_count": 8,
+    "rows": [
+     {
+      "filter": "written for an open form",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "form check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "option check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "key check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "selection",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "length backstop",
+      "role_step": 2,
+      "plain_fact": 1
+     }
+    ],
+    "counts": {
+     "role_step_tasks": 2,
+     "plain_fact_tasks": 1,
+     "passages_with_a_task": 1,
+     "passages_with_a_role_step_task": 1,
+     "single_longest": [
+      0,
+      2
+     ],
+     "single_shortest": [
+      0,
+      2
+     ]
+    },
+    "dropped_by_reason": {},
+    "decision": "STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING",
+    "stop_reasons": [
+     "2 practice role-step tasks and 1 practice plain-fact tasks survive with 8 practice settings; the reserve targets are 3 and 1."
+    ],
+    "next": "The reserve rule moves the next reserve setting to practice: \"fixture market\". Write its questions (both passes) with --practice-settings 9, then run the check, the solvers and this step again with --practice-settings 9. Seal step 3A is refused until the reserve rule is finished.",
+    "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+   }
+  },
+  {
+   "label": "writer asks for reserve setting 2 while the selection was made with 8 settings",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--practice-settings",
+    "10",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "RESERVE_RULE_NOT_MET",
+    "reason": "Reserve setting 2 may move to practice only when select/selection_practice.json, made with 9 practice settings, says \"finished\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer asks for reserve setting 1 and there is no selection file",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--practice-settings",
+    "9",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "RESERVE_RULE_NOT_MET",
+    "reason": "Reserve setting 1 may move to practice only when select/selection_practice.json, made with 8 practice settings, says \"finished\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer asks for reserve setting 1 and the selection file has no reserve block",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--practice-settings",
+    "9",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "RESERVE_RULE_NOT_MET",
+    "reason": "Reserve setting 1 may move to practice only when select/selection_practice.json, made with 8 practice settings, says \"finished\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer asks for reserve setting 1 when floor.met is false and reserve.finished is true",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--practice-settings",
+    "9",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "RESERVE_RULE_NOT_MET",
+    "reason": "Reserve setting 1 may move to practice only when select/selection_practice.json, made with 8 practice settings, says \"finished\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer practice p1 adds the wave of reserve setting 1 (floors met, a target missed)",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "5",
+    "--practice-settings",
+    "9",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_writer_practice_p1_wave1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_questions.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "pass": "p1",
+    "model": "DRY-FIXTURE-NO-MODEL",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 9,
+    "waves": 2,
+    "batches": {
+     "DONE": 2,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "calls_this_run": 1,
+    "call_budget": 5,
+    "stops_after_http_429": 1,
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-WRITER-REPLY"
+    ],
+    "passages_asked": 2,
+    "passages_by_status": {
+     "OK": 2,
+     "MISSING": 0,
+     "BAD_OBJECT": 0
+    },
+    "what_follows_questions": 7,
+    "plain_fact_questions": 2,
+    "next": "This pass of this set is written."
+   }
+  },
+  {
+   "label": "writer practice p2 adds the same wave (the other pass holds it)",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p2",
+    "--max-calls",
+    "5",
+    "--practice-settings",
+    "9",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_writer_practice_p2_wave1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_questions.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "pass": "p2",
+    "model": "DRY-FIXTURE-NO-MODEL",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 9,
+    "waves": 2,
+    "batches": {
+     "DONE": 2,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "calls_this_run": 1,
+    "call_budget": 5,
+    "stops_after_http_429": 0,
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-WRITER-REPLY"
+    ],
+    "passages_asked": 2,
+    "passages_by_status": {
+     "OK": 2,
+     "MISSING": 0,
+     "BAD_OBJECT": 0
+    },
+    "what_follows_questions": 3,
+    "plain_fact_questions": 2,
+    "next": "This pass of this set is written."
+   }
+  },
+  {
+   "label": "check practice",
+   "tool": "tools/ob_check_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--practice-settings",
+    "9"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "CHECKED",
+   "printed": {
+    "program": "tools/ob_check_questions.py",
+    "dry_fixture": true,
+    "status": "CHECKED",
+    "set": "practice",
+    "practice_setting_count": 9,
+    "seal": "not checked: dry fixture",
+    "questions_read": {
+     "role_step": 10,
+     "plain_fact": 4
+    },
+    "form_check": {
+     "checked": 14,
+     "passed": 11,
+     "dropped_by_reason": {
+      "FORM_NAME_UNKNOWN": 1,
+      "FORBIDDEN_LIST_A": 1,
+      "ANCHOR_NOT_IN_PASSAGE": 1,
+      "FORBIDDEN_LIST_C": 1
+     }
+    },
+    "anchor_check": {
+     "checked": 8,
+     "passed": 8,
+     "dropped_by_reason": {}
+    },
+    "option_check": {
+     "checked": 8,
+     "passed": 6
+    },
+    "candidates": {
+     "role_step": 6,
+     "plain_fact": 2,
+     "spares_used": 2
+    },
+    "survival_after_each_filter": [
+     {
+      "filter": "written for an open form",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "form check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "option check",
+      "role_step": 6,
+      "plain_fact": 2
+     }
+    ],
+    "note": "Survival counts one per passage and form. The plain-fact column has no label check; its anchor and option rows repeat the form-check count."
+   }
+  },
+  {
+   "label": "deepseek practice, the item map only",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "deepseek",
+    "status": "STOPPED_CALL_BUDGET",
+    "set": "practice",
+    "seal": "not checked: dry fixture",
+    "candidates": 8,
+    "items": 16,
+    "items_answered": 6,
+    "items_readable": 6,
+    "items_open": 10,
+    "last_http_status_of_open_items_that_were_tried": {},
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "tokens_this_run_REAL": {
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+    ],
+    "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+   }
+  },
+  {
+   "label": "deepseek practice",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "50",
+    "--workers",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_deepseek_practice_wave1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_ANSWERED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "deepseek",
+    "status": "ALL_ANSWERED",
+    "set": "practice",
+    "seal": "not checked: dry fixture",
+    "candidates": 8,
+    "items": 16,
+    "items_answered": 16,
+    "items_readable": 14,
+    "items_open": 0,
+    "last_http_status_of_open_items_that_were_tried": {},
+    "calls_this_run": 10,
+    "call_budget": 50,
+    "tokens_this_run_REAL": {
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+    ],
+    "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+   }
+  },
+  {
+   "label": "export practice with_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "export",
+    "status": "SHEETS_WRITTEN",
+    "set": "practice",
+    "mode": "with_passage",
+    "seal": "not checked: dry fixture",
+    "sheets": [
+     {
+      "sheet": "02",
+      "file": "optionb/dry/fixture_q/solve/claude_sheet_practice_with_passage_02.txt",
+      "items": 5,
+      "sha256": "7884820261d476f2416cc14d380ab231f5fb19ad1b417fae273af2e0f4d3e232",
+      "answers_go_to": "optionb/dry/fixture_q/solve/claude_answers_practice_with_passage_02.txt"
+     }
+    ],
+    "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+    "next": [
+     "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+     "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+     "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+     "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+    ]
+   }
+  },
+  {
+   "label": "import practice with_passage sheet 02",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "02",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "import",
+    "status": "SHEET_IMPORTED",
+    "set": "practice",
+    "mode": "with_passage",
+    "sheet": "02",
+    "seal": "not checked: dry fixture",
+    "answer_file": "optionb/dry/fixture_q/solve/claude_answers_practice_with_passage_02.txt",
+    "answer_file_sha256": "195d2074cf6c2a46627258688de814e4129536e7ceb4e8183506af9b489dd99e",
+    "items_on_sheet": 5,
+    "model_name_from_the_transcript": "claude-sonnet-5-5",
+    "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+    "readable": 5,
+    "unreadable": 0,
+    "unreadable_by_cause": {
+     "missing": 0,
+     "repeated": 0,
+     "line_does_not_fit": 0,
+     "reply_not_allowed": 0
+    },
+    "lines_that_name_no_item_of_this_sheet": 0,
+    "first_such_lines": [],
+    "note": "An unreadable reply counts as not picked. It is not asked again."
+   }
+  },
+  {
+   "label": "export practice no_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "export",
+    "status": "SHEETS_WRITTEN",
+    "set": "practice",
+    "mode": "no_passage",
+    "seal": "not checked: dry fixture",
+    "sheets": [
+     {
+      "sheet": "02",
+      "file": "optionb/dry/fixture_q/solve/claude_sheet_practice_no_passage_02.txt",
+      "items": 5,
+      "sha256": "2a72200495ab92ee2f052def17df724fa01edc15358d2d83f5edfceaf4262190",
+      "answers_go_to": "optionb/dry/fixture_q/solve/claude_answers_practice_no_passage_02.txt"
+     }
+    ],
+    "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+    "next": [
+     "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+     "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+     "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+     "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+    ]
+   }
+  },
+  {
+   "label": "import practice no_passage sheet 02",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage",
+    "--sheet",
+    "02",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "import",
+    "status": "SHEET_IMPORTED",
+    "set": "practice",
+    "mode": "no_passage",
+    "sheet": "02",
+    "seal": "not checked: dry fixture",
+    "answer_file": "optionb/dry/fixture_q/solve/claude_answers_practice_no_passage_02.txt",
+    "answer_file_sha256": "bb80107e07e47ac50eb4522f5efb05a12e7484fdc07a5ad302518735f2d6dccc",
+    "items_on_sheet": 5,
+    "model_name_from_the_transcript": "claude-sonnet-5-5",
+    "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+    "readable": 3,
+    "unreadable": 2,
+    "unreadable_by_cause": {
+     "missing": 1,
+     "repeated": 1,
+     "line_does_not_fit": 0,
+     "reply_not_allowed": 0
+    },
+    "lines_that_name_no_item_of_this_sheet": 1,
+    "first_such_lines": [
+     "G0013: E"
+    ],
+    "note": "An unreadable reply counts as not picked. It is not asked again."
+   }
+  },
+  {
+   "label": "decide practice",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "KEY_CHECK_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "decide",
+    "status": "KEY_CHECK_WRITTEN",
+    "set": "practice",
+    "seal": "not checked: dry fixture",
+    "counts": {
+     "checked": {
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     "key_check_passed": {
+      "role_step": 5,
+      "plain_fact": 2
+     },
+     "no_passage_passed": {
+      "role_step": 5,
+      "plain_fact": 2
+     },
+     "survive": {
+      "role_step": 4,
+      "plain_fact": 2
+     }
+    },
+    "survival_after_each_filter": [
+     {
+      "filter": "option check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "key check",
+      "role_step": 5,
+      "plain_fact": 2
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 4,
+      "plain_fact": 2
+     }
+    ],
+    "note": "The no-passage check row counts questions that passed both checks."
+   }
+  },
+  {
+   "label": "select practice with 9 settings",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "practice",
+    "--practice-settings",
+    "9"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "GO",
+   "printed": {
+    "program": "tools/ob_select.py",
+    "dry_fixture": true,
+    "step": "select",
+    "seal": "not checked: dry fixture",
+    "set": "practice",
+    "practice_setting_count": 9,
+    "rows": [
+     {
+      "filter": "written for an open form",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "form check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "option check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "key check",
+      "role_step": 5,
+      "plain_fact": 2
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 4,
+      "plain_fact": 2
+     },
+     {
+      "filter": "selection",
+      "role_step": 4,
+      "plain_fact": 2
+     },
+     {
+      "filter": "length backstop",
+      "role_step": 4,
+      "plain_fact": 2
+     }
+    ],
+    "counts": {
+     "role_step_tasks": 4,
+     "plain_fact_tasks": 2,
+     "passages_with_a_task": 2,
+     "passages_with_a_role_step_task": 2,
+     "single_longest": [
+      0,
+      4
+     ],
+     "single_shortest": [
+      0,
+      4
+     ]
+    },
+    "dropped_by_reason": {},
+    "decision": "GO",
+    "stop_reasons": [],
+    "next": "Seal step 3A. Then run: ob_select.py fix-split. Then seal step 3B. Then Step 7 runs on the practice set alone (ordinary notes, support check, the answer-leak screen with --report-only). Only then are final questions written.",
+    "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+   }
+  },
+  {
+   "label": "writer asks for reserve setting 2 after both reserve targets are met",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--practice-settings",
+    "10",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "RESERVE_RULE_NOT_MET",
+    "reason": "Reserve setting 2 may move to practice only when select/selection_practice.json, made with 9 practice settings, says \"finished\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "fix the split",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "fix-split"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SPLIT_FIXED",
+   "printed": {
+    "program": "tools/ob_select.py",
+    "dry_fixture": true,
+    "step": "fix-split",
+    "status": "SPLIT_FIXED",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 9,
+    "history": [
+     {
+      "practice_setting_count": 8,
+      "practice_role_step_tasks": 2,
+      "practice_plain_fact_tasks": 1,
+      "target_met": false
+     },
+     {
+      "practice_setting_count": 9,
+      "practice_role_step_tasks": 4,
+      "practice_plain_fact_tasks": 2,
+      "target_met": true
+     }
+    ],
+    "reserve_target_met": true,
+    "floor_met": true,
+    "launch_floor": {
+     "practice_role_step_min": 2,
+     "practice_plain_fact_min": 1,
+     "met": true
+    },
+    "final_settings": 1,
+    "final_writer_passages": 1,
+    "decision": "GO",
+    "next": "Seal step 3B. Then Step 7 on the practice set alone: the practice ordinary notes, their support check, and the answer-leak screen with --report-only. Only then are the final questions written."
+   }
+  },
+  {
+   "label": "writer final p1",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "final",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "5",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_writer_final_p1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_questions.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "final",
+    "pass": "p1",
+    "model": "DRY-FIXTURE-NO-MODEL",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 9,
+    "waves": 1,
+    "batches": {
+     "DONE": 1,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "calls_this_run": 1,
+    "call_budget": 5,
+    "stops_after_http_429": 0,
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-WRITER-REPLY"
+    ],
+    "passages_asked": 1,
+    "passages_by_status": {
+     "OK": 1,
+     "MISSING": 0,
+     "BAD_OBJECT": 0
+    },
+    "what_follows_questions": 2,
+    "plain_fact_questions": 1,
+    "next": "This pass of this set is written."
+   }
+  },
+  {
+   "label": "writer final p2 (spare pass)",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "final",
+    "--pass",
+    "p2",
+    "--max-calls",
+    "5",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_writer_final_p2.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_questions.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "final",
+    "pass": "p2",
+    "model": "DRY-FIXTURE-NO-MODEL",
+    "seal": "not checked: dry fixture",
+    "practice_setting_count": 9,
+    "waves": 1,
+    "batches": {
+     "DONE": 1,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "calls_this_run": 1,
+    "call_budget": 5,
+    "stops_after_http_429": 0,
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-WRITER-REPLY"
+    ],
+    "passages_asked": 1,
+    "passages_by_status": {
+     "OK": 1,
+     "MISSING": 0,
+     "BAD_OBJECT": 0
+    },
+    "what_follows_questions": 0,
+    "plain_fact_questions": 1,
+    "next": "This pass of this set is written."
+   }
+  },
+  {
+   "label": "check final",
+   "tool": "tools/ob_check_questions.py",
+   "argv": [
+    "--set",
+    "final"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "CHECKED",
+   "printed": {
+    "program": "tools/ob_check_questions.py",
+    "dry_fixture": true,
+    "status": "CHECKED",
+    "set": "final",
+    "practice_setting_count": 9,
+    "seal": "not checked: dry fixture",
+    "questions_read": {
+     "role_step": 2,
+     "plain_fact": 2
+    },
+    "form_check": {
+     "checked": 4,
+     "passed": 4,
+     "dropped_by_reason": {}
+    },
+    "anchor_check": {
+     "checked": 2,
+     "passed": 2,
+     "dropped_by_reason": {}
+    },
+    "option_check": {
+     "checked": 2,
+     "passed": 2
+    },
+    "candidates": {
+     "role_step": 2,
+     "plain_fact": 1,
+     "spares_used": 0
+    },
+    "survival_after_each_filter": [
+     {
+      "filter": "written for an open form",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "form check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "option check",
+      "role_step": 2,
+      "plain_fact": 1
+     }
+    ],
+    "note": "Survival counts one per passage and form. The plain-fact column has no label check; its anchor and option rows repeat the form-check count."
+   }
+  },
+  {
+   "label": "deepseek final, the item map only",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "final",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "deepseek",
+    "status": "STOPPED_CALL_BUDGET",
+    "set": "final",
+    "seal": "not checked: dry fixture",
+    "candidates": 3,
+    "items": 6,
+    "items_answered": 0,
+    "items_readable": 0,
+    "items_open": 6,
+    "last_http_status_of_open_items_that_were_tried": {},
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "tokens_this_run_REAL": {
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [],
+    "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+   }
+  },
+  {
+   "label": "deepseek final",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "final",
+    "--max-calls",
+    "50",
+    "--workers",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_q\\replay\\used_deepseek_final.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_ANSWERED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "deepseek",
+    "status": "ALL_ANSWERED",
+    "set": "final",
+    "seal": "not checked: dry fixture",
+    "candidates": 3,
+    "items": 6,
+    "items_answered": 6,
+    "items_readable": 6,
+    "items_open": 0,
+    "last_http_status_of_open_items_that_were_tried": {},
+    "calls_this_run": 6,
+    "call_budget": 50,
+    "tokens_this_run_REAL": {
+     "prompt_tokens": 0,
+     "completion_tokens": 0
+    },
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+    ],
+    "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+   }
+  },
+  {
+   "label": "export final with_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "final",
+    "--mode",
+    "with_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "export",
+    "status": "SHEETS_WRITTEN",
+    "set": "final",
+    "mode": "with_passage",
+    "seal": "not checked: dry fixture",
+    "sheets": [
+     {
+      "sheet": "01",
+      "file": "optionb/dry/fixture_q/solve/claude_sheet_final_with_passage_01.txt",
+      "items": 3,
+      "sha256": "663e70f84ac54fbb6909763f3f45dafe15bfba3346b55796c870235fc59bb215",
+      "answers_go_to": "optionb/dry/fixture_q/solve/claude_answers_final_with_passage_01.txt"
+     }
+    ],
+    "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+    "next": [
+     "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+     "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+     "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+     "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+    ]
+   }
+  },
+  {
+   "label": "import final with_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "final",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "import",
+    "status": "SHEET_IMPORTED",
+    "set": "final",
+    "mode": "with_passage",
+    "sheet": "01",
+    "seal": "not checked: dry fixture",
+    "answer_file": "optionb/dry/fixture_q/solve/claude_answers_final_with_passage_01.txt",
+    "answer_file_sha256": "b18e564e4f13f76b083924f3ca2c23a8edc3fa9804862e648e34046b2b75b9cb",
+    "items_on_sheet": 3,
+    "model_name_from_the_transcript": "claude-sonnet-5-5",
+    "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+    "readable": 3,
+    "unreadable": 0,
+    "unreadable_by_cause": {
+     "missing": 0,
+     "repeated": 0,
+     "line_does_not_fit": 0,
+     "reply_not_allowed": 0
+    },
+    "lines_that_name_no_item_of_this_sheet": 0,
+    "first_such_lines": [],
+    "note": "An unreadable reply counts as not picked. It is not asked again."
+   }
+  },
+  {
+   "label": "export final no_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "final",
+    "--mode",
+    "no_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "export",
+    "status": "SHEETS_WRITTEN",
+    "set": "final",
+    "mode": "no_passage",
+    "seal": "not checked: dry fixture",
+    "sheets": [
+     {
+      "sheet": "01",
+      "file": "optionb/dry/fixture_q/solve/claude_sheet_final_no_passage_01.txt",
+      "items": 3,
+      "sha256": "efa127a655eec6fc652b7c6e19f40652c2ade8e9b8973215565350cc4ad421ed",
+      "answers_go_to": "optionb/dry/fixture_q/solve/claude_answers_final_no_passage_01.txt"
+     }
+    ],
+    "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+    "next": [
+     "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+     "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+     "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+     "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+    ]
+   }
+  },
+  {
+   "label": "import final no_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "final",
+    "--mode",
+    "no_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "import",
+    "status": "SHEET_IMPORTED",
+    "set": "final",
+    "mode": "no_passage",
+    "sheet": "01",
+    "seal": "not checked: dry fixture",
+    "answer_file": "optionb/dry/fixture_q/solve/claude_answers_final_no_passage_01.txt",
+    "answer_file_sha256": "076008f116db78c619cfe193e92bb08ba531c6781896e925059c7032d506b9ac",
+    "items_on_sheet": 3,
+    "model_name_from_the_transcript": "claude-sonnet-5-5",
+    "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+    "readable": 3,
+    "unreadable": 0,
+    "unreadable_by_cause": {
+     "missing": 0,
+     "repeated": 0,
+     "line_does_not_fit": 0,
+     "reply_not_allowed": 0
+    },
+    "lines_that_name_no_item_of_this_sheet": 0,
+    "first_such_lines": [],
+    "note": "An unreadable reply counts as not picked. It is not asked again."
+   }
+  },
+  {
+   "label": "decide final",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "decide",
+    "--set",
+    "final"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "KEY_CHECK_WRITTEN",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "decide",
+    "status": "KEY_CHECK_WRITTEN",
+    "set": "final",
+    "seal": "not checked: dry fixture",
+    "counts": {
+     "checked": {
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     "key_check_passed": {
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     "no_passage_passed": {
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     "survive": {
+      "role_step": 2,
+      "plain_fact": 1
+     }
+    },
+    "survival_after_each_filter": [
+     {
+      "filter": "option check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "key check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 2,
+      "plain_fact": 1
+     }
+    ],
+    "note": "The no-passage check row counts questions that passed both checks."
+   }
+  },
+  {
+   "label": "select final",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "final"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "GO",
+   "printed": {
+    "program": "tools/ob_select.py",
+    "dry_fixture": true,
+    "step": "select",
+    "seal": "not checked: dry fixture",
+    "set": "final",
+    "practice_setting_count": 9,
+    "rows": [
+     {
+      "filter": "written for an open form",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "form check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "option check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "key check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "selection",
+      "role_step": 1,
+      "plain_fact": 1
+     },
+     {
+      "filter": "length backstop",
+      "role_step": 1,
+      "plain_fact": 1
+     }
+    ],
+    "counts": {
+     "role_step_tasks": 1,
+     "plain_fact_tasks": 1,
+     "passages_with_a_task": 1,
+     "passages_with_a_role_step_task": 1,
+     "single_longest": [
+      0,
+      1
+     ],
+     "single_shortest": [
+      0,
+      1
+     ]
+    },
+    "dropped_by_reason": {
+     "SAME_RIGHT_THING": 1
+    },
+    "decision": "GO",
+    "stop_reasons": [],
+    "next": "Seal step 3C. Then the ordinary notes are written. The launch floor is read again by tools/ob_assemble.py after the later filters.",
+    "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles.",
+    "launch_floor_numbers": {
+     "final_role_step_tasks": 1,
+     "final_plain_fact_tasks": 1,
+     "practice_role_step_tasks": 4,
+     "practice_plain_fact_tasks": 2
+    },
+    "launch_floor": {
+     "final_role_step_tasks_min": 1,
+     "final_plain_fact_tasks_min": 1,
+     "practice_role_step_tasks_min": 2,
+     "practice_plain_fact_tasks_min": 1
+    },
+    "tier_if_nothing_more_is_removed": "NO_LAUNCH"
+   }
+  },
+  {
+   "label": "select practice in the stop case, real targets 45 and 25",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "practice",
+    "--practice-settings",
+    "9"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING",
+   "printed": {
+    "program": "tools/ob_select.py",
+    "dry_fixture": true,
+    "step": "select",
+    "seal": "not checked: dry fixture",
+    "set": "practice",
+    "practice_setting_count": 9,
+    "rows": [
+     {
+      "filter": "written for an open form",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "form check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "option check",
+      "role_step": 6,
+      "plain_fact": 2
+     },
+     {
+      "filter": "key check",
+      "role_step": 5,
+      "plain_fact": 2
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 4,
+      "plain_fact": 2
+     },
+     {
+      "filter": "selection",
+      "role_step": 4,
+      "plain_fact": 2
+     },
+     {
+      "filter": "length backstop",
+      "role_step": 4,
+      "plain_fact": 2
+     }
+    ],
+    "counts": {
+     "role_step_tasks": 4,
+     "plain_fact_tasks": 2,
+     "passages_with_a_task": 2,
+     "passages_with_a_role_step_task": 2,
+     "single_longest": [
+      0,
+      4
+     ],
+     "single_shortest": [
+      0,
+      4
+     ]
+    },
+    "dropped_by_reason": {},
+    "decision": "STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING",
+    "stop_reasons": [
+     "4 practice role-step tasks and 2 practice plain-fact tasks survive with 9 practice settings; the reserve targets are 45 and 25."
+    ],
+    "next": "The reserve rule moves the next reserve setting to practice: \"fixture reserve 2\". Write its questions (both passes) with --practice-settings 10, then run the check, the solvers and this step again with --practice-settings 10. Seal step 3A is refused until the reserve rule is finished.",
+    "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+   }
+  },
+  {
+   "label": "select final in the floor case, a final floor of 99 role-step tasks",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "final"
+   ],
+   "exit": 3,
+   "stop": null,
+   "status": "STOP_DO_NOT_LAUNCH",
+   "printed": {
+    "program": "tools/ob_select.py",
+    "dry_fixture": true,
+    "step": "select",
+    "seal": "not checked: dry fixture",
+    "set": "final",
+    "practice_setting_count": 9,
+    "rows": [
+     {
+      "filter": "written for an open form",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "form check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "anchor check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "option check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "key check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "no-passage check",
+      "role_step": 2,
+      "plain_fact": 1
+     },
+     {
+      "filter": "selection",
+      "role_step": 1,
+      "plain_fact": 1
+     },
+     {
+      "filter": "length backstop",
+      "role_step": 1,
+      "plain_fact": 1
+     }
+    ],
+    "counts": {
+     "role_step_tasks": 1,
+     "plain_fact_tasks": 1,
+     "passages_with_a_task": 1,
+     "passages_with_a_role_step_task": 1,
+     "single_longest": [
+      0,
+      1
+     ],
+     "single_shortest": [
+      0,
+      1
+     ]
+    },
+    "dropped_by_reason": {
+     "SAME_RIGHT_THING": 1
+    },
+    "decision": "STOP_DO_NOT_LAUNCH",
+    "stop_reasons": [
+     "final_role_step_tasks is 1; the launch floor is 99."
+    ],
+    "next": "Do not launch. Report the survival numbers to the owner.",
+    "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles.",
+    "launch_floor_numbers": {
+     "final_role_step_tasks": 1,
+     "final_plain_fact_tasks": 1,
+     "practice_role_step_tasks": 4,
+     "practice_plain_fact_tasks": 2
+    },
+    "launch_floor": {
+     "final_role_step_tasks_min": 99,
+     "final_plain_fact_tasks_min": 1,
+     "practice_role_step_tasks_min": 2,
+     "practice_plain_fact_tasks_min": 1
+    },
+    "tier_if_nothing_more_is_removed": "NO_LAUNCH"
+   }
+  },
+  {
+   "label": "import with a transcript model name that is not the pinned model id",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "final",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "MADE-UP-NAME-FROM-A-TRANSCRIPT"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "TRANSCRIPT_MODEL_NOT_THE_PINNED_ID",
+    "reason": "The name given with --transcript-model is 'MADE-UP-NAME-FROM-A-TRANSCRIPT'. The plan pins the model id 'claude-sonnet-5-5' (outside_services.claude_solver.model_id in PLAN_CONSTANTS.json). A sheet that another model answered is not taken. Nothing was stored."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "import as its own process, output to a pipe, a stray line with an arrow sign",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "final",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "01"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED",
+   "printed": {
+    "program": "tools/ob_solve_blind.py",
+    "dry_fixture": true,
+    "step": "import",
+    "status": "SHEET_IMPORTED",
+    "set": "final",
+    "mode": "with_passage",
+    "sheet": "01",
+    "seal": "not checked: dry fixture",
+    "answer_file": "optionb/dry/fixture_q/utf8_case/solve/claude_answers_final_with_passage_01.txt",
+    "answer_file_sha256": "7462566d89ae59119c42ba78322f5b0379d19b6a72721c7b69f998ae8b2619f6",
+    "items_on_sheet": 3,
+    "model_name_from_the_transcript": "claude-sonnet-5-5",
+    "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+    "readable": 3,
+    "unreadable": 0,
+    "unreadable_by_cause": {
+     "missing": 0,
+     "repeated": 0,
+     "line_does_not_fit": 0,
+     "reply_not_allowed": 0
+    },
+    "lines_that_name_no_item_of_this_sheet": 1,
+    "first_such_lines": [
+     "My answers → one line for each item (a MADE-UP stray line)"
+    ],
+    "note": "An unreadable reply counts as not picked. It is not asked again."
+   }
+  }
+ ],
+ "check_list": [
+  {
+   "check": "the plan names one writer model for both sets, and 4 passages per call",
+   "held": true,
+   "detail": "{\"practice\": \"gemini-3.5-flash-lite\", \"final\": \"gemini-3.5-flash-lite\"}"
+  },
+  {
+   "check": "10 made-up ids are cut into groups of 4, 4 and 2, in a seeded order that comes out the same twice",
+   "held": true,
+   "detail": "[[\"M05\", \"M02\", \"M06\", \"M07\"], [\"M00\", \"M01\", \"M03\", \"M09\"], [\"M08\", \"M04\"]]"
+  },
+  {
+   "check": "writer with a batch size above the plan value -> stops with BAD_ARGUMENT",
+   "held": true,
+   "detail": "{\"code\": \"BAD_ARGUMENT\", \"reason\": \"The batch size must be 1 to 4.\"}"
+  },
+  {
+   "check": "the writer has no option that names another model",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer when the constants name two different writer models -> stops with ONE_MODEL_RULE",
+   "held": true,
+   "detail": "{\"code\": \"ONE_MODEL_RULE\", \"reason\": \"outside_services.gemini_question_writer.model_by_set in PLAN_CONSTANTS.json must name one and the same model for the practice set and the final set. It says: {\\\"final\\\": \\\"MADE-UP-OTHER-MODEL\\\", \\\"practice\\\": \\\"gemini-3.5-flash-lite\\\"}\"}"
+  },
+  {
+   "check": "writer practice p1, the first call gets HTTP 429 -> STOPPED_HTTP_429, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_HTTP_429\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "a refused call stops the writer at once; it is not counted as a try and the checkpoint is kept",
+   "held": true,
+   "detail": "{\"calls\": 1, \"batch\": {\"batch\": 0, \"passage_ids\": [\"V901\"], \"status\": \"PENDING\", \"attempts\": 0}}"
+  },
+  {
+   "check": "writer practice p1, run again later -> ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the resumed run asked twice: one unreadable reply, then a readable one",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer practice p2 (spare pass) -> ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "every call log line of the writer has the seventeen fields of the format (FILE_FORMATS.md section 4.2)",
+   "held": true,
+   "detail": "3"
+  },
+  {
+   "check": "a writer log line holds the model name asked for; an answered call also holds the name in the reply, a refused call null",
+   "held": true,
+   "detail": "[[429, null], [200, \"MADE-UP-NAME-IN-A-WRITER-REPLY\"], [200, \"MADE-UP-NAME-IN-A-WRITER-REPLY\"]]"
+  },
+  {
+   "check": "the writer checkpoint and the raw question file name the model asked for",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "check practice -> CHECKED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"CHECKED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "deepseek practice, the item map only -> STOPPED_CALL_BUDGET, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_CALL_BUDGET\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "deepseek practice -> ALL_ANSWERED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_ANSWERED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "export practice with_passage -> SHEETS_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"SHEETS_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the export step of practice with_passage wrote sheet 01 and names the pinned model id for the sub-agent",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/fixture_q/solve/claude_sheet_practice_with_passage_01.txt\", \"items\": 3, \"sha256\": \"2c5de1be437ce0715760a3bd8f9d27a94f1b6e0aabd3ee9e19885844a971f440\", \"answers_go_to\": \"optionb/dry/fixture_q/solve/claude_answers_practice_with_passage_01.txt\"}]"
+  },
+  {
+   "check": "import practice with_passage sheet 01 -> SHEET_IMPORTED",
+   "held": true,
+   "detail": "{\"status\": \"SHEET_IMPORTED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "export practice no_passage -> SHEETS_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"SHEETS_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the export step of practice no_passage wrote sheet 01 and names the pinned model id for the sub-agent",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/fixture_q/solve/claude_sheet_practice_no_passage_01.txt\", \"items\": 3, \"sha256\": \"d8bd3589f2f197d00cdc0f2c0f6e9ac90933f13dcc775e27186f635737711972\", \"answers_go_to\": \"optionb/dry/fixture_q/solve/claude_answers_practice_no_passage_01.txt\"}]"
+  },
+  {
+   "check": "import practice no_passage sheet 01 -> SHEET_IMPORTED",
+   "held": true,
+   "detail": "{\"status\": \"SHEET_IMPORTED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "decide practice -> KEY_CHECK_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"KEY_CHECK_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "with 8 practice settings 2 role-step and 1 plain-fact question pass both solver checks",
+   "held": true,
+   "detail": "{\"checked\": {\"role_step\": 2, \"plain_fact\": 1}, \"key_check_passed\": {\"role_step\": 2, \"plain_fact\": 1}, \"no_passage_passed\": {\"role_step\": 2, \"plain_fact\": 1}, \"survive\": {\"role_step\": 2, \"plain_fact\": 1}}"
+  },
+  {
+   "check": "the import step refuses to run without --transcript-model",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "import with an empty transcript model name -> stops with TRANSCRIPT_MODEL_MISSING",
+   "held": true,
+   "detail": "{\"code\": \"TRANSCRIPT_MODEL_MISSING\", \"reason\": \"The import step needs --transcript-model NAME: the model name of the sub-agent, exactly as its transcript shows it, with no space before or after.\"}"
+  },
+  {
+   "check": "every answer row holds model_in_reply: the name from the transcript for a Claude answer, the name in the reply for a DeepSeek answer",
+   "held": true,
+   "detail": "[\"MADE-UP-NAME-IN-A-SOLVER-REPLY\", \"claude-sonnet-5-5\"]"
+  },
+  {
+   "check": "every call log line of the key solver has the fourteen fields of the format (FILE_FORMATS.md section 6.2)",
+   "held": true,
+   "detail": "7"
+  },
+  {
+   "check": "a solver log line holds the model name asked for; an answered call also holds the name in the reply, a call with no answer null",
+   "held": true,
+   "detail": "[\"MADE-UP-NAME-IN-A-SOLVER-REPLY\", \"None\"]"
+  },
+  {
+   "check": "select practice with 8 settings -> STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "with 8 settings the practice set meets both launch floors and misses a reserve target: floor.met is true and reserve.finished is false",
+   "held": true,
+   "detail": "{\"floor\": {\"practice_role_step_min\": 2, \"practice_plain_fact_min\": 1, \"met\": true}, \"reserve\": {\"role_step_target\": 3, \"plain_fact_target\": 1, \"target_met\": false, \"settings_left\": 4, \"finished\": false}}"
+  },
+  {
+   "check": "writer asks for reserve setting 2 while the selection was made with 8 settings -> stops with RESERVE_RULE_NOT_MET",
+   "held": true,
+   "detail": "{\"code\": \"RESERVE_RULE_NOT_MET\", \"reason\": \"Reserve setting 2 may move to practice only when select/selection_practice.json, made with 9 practice settings, says \\\"finished\\\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left.\"}"
+  },
+  {
+   "check": "writer asks for reserve setting 1 and there is no selection file -> stops with RESERVE_RULE_NOT_MET",
+   "held": true,
+   "detail": "{\"code\": \"RESERVE_RULE_NOT_MET\", \"reason\": \"Reserve setting 1 may move to practice only when select/selection_practice.json, made with 8 practice settings, says \\\"finished\\\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left.\"}"
+  },
+  {
+   "check": "writer asks for reserve setting 1 and the selection file has no reserve block -> stops with RESERVE_RULE_NOT_MET",
+   "held": true,
+   "detail": "{\"code\": \"RESERVE_RULE_NOT_MET\", \"reason\": \"Reserve setting 1 may move to practice only when select/selection_practice.json, made with 8 practice settings, says \\\"finished\\\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left.\"}"
+  },
+  {
+   "check": "writer asks for reserve setting 1 when floor.met is false and reserve.finished is true -> stops with RESERVE_RULE_NOT_MET",
+   "held": true,
+   "detail": "{\"code\": \"RESERVE_RULE_NOT_MET\", \"reason\": \"Reserve setting 1 may move to practice only when select/selection_practice.json, made with 8 practice settings, says \\\"finished\\\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left.\"}"
+  },
+  {
+   "check": "after the refused tries the checkpoint still holds one wave",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer practice p1 adds the wave of reserve setting 1 (floors met, a target missed) -> ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the writer added wave 1 with the one passage of reserve setting 1, and asked for it once",
+   "held": true,
+   "detail": "{\"wave\": 1, \"settings\": [\"fixture market\"], \"batches\": [{\"batch\": 0, \"passage_ids\": [\"V902\"], \"status\": \"DONE\", \"attempts\": 1}]}"
+  },
+  {
+   "check": "writer practice p2 adds the same wave (the other pass holds it) -> ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "check practice -> CHECKED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"CHECKED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "deepseek practice, the item map only -> STOPPED_CALL_BUDGET, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_CALL_BUDGET\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "deepseek practice -> ALL_ANSWERED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_ANSWERED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "export practice with_passage -> SHEETS_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"SHEETS_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the export step of practice with_passage wrote sheet 02 and names the pinned model id for the sub-agent",
+   "held": true,
+   "detail": "[{\"sheet\": \"02\", \"file\": \"optionb/dry/fixture_q/solve/claude_sheet_practice_with_passage_02.txt\", \"items\": 5, \"sha256\": \"7884820261d476f2416cc14d380ab231f5fb19ad1b417fae273af2e0f4d3e232\", \"answers_go_to\": \"optionb/dry/fixture_q/solve/claude_answers_practice_with_passage_02.txt\"}]"
+  },
+  {
+   "check": "import practice with_passage sheet 02 -> SHEET_IMPORTED",
+   "held": true,
+   "detail": "{\"status\": \"SHEET_IMPORTED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "export practice no_passage -> SHEETS_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"SHEETS_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the export step of practice no_passage wrote sheet 02 and names the pinned model id for the sub-agent",
+   "held": true,
+   "detail": "[{\"sheet\": \"02\", \"file\": \"optionb/dry/fixture_q/solve/claude_sheet_practice_no_passage_02.txt\", \"items\": 5, \"sha256\": \"2a72200495ab92ee2f052def17df724fa01edc15358d2d83f5edfceaf4262190\", \"answers_go_to\": \"optionb/dry/fixture_q/solve/claude_answers_practice_no_passage_02.txt\"}]"
+  },
+  {
+   "check": "import practice no_passage sheet 02 -> SHEET_IMPORTED",
+   "held": true,
+   "detail": "{\"status\": \"SHEET_IMPORTED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "decide practice -> KEY_CHECK_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"KEY_CHECK_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "select practice with 9 settings -> GO, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"GO\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "with 9 settings both reserve targets are met: 4 role-step and 2 plain-fact tasks, reserve.finished is true",
+   "held": true,
+   "detail": "{\"role_step_target\": 3, \"plain_fact_target\": 1, \"target_met\": true, \"settings_left\": 3, \"finished\": true}"
+  },
+  {
+   "check": "writer asks for reserve setting 2 after both reserve targets are met -> stops with RESERVE_RULE_NOT_MET",
+   "held": true,
+   "detail": "{\"code\": \"RESERVE_RULE_NOT_MET\", \"reason\": \"Reserve setting 2 may move to practice only when select/selection_practice.json, made with 9 practice settings, says \\\"finished\\\": false in its block reserve. That means: a reserve target is missed (3 practice role-step tasks and 1 practice plain-fact tasks) and a reserve setting is left.\"}"
+  },
+  {
+   "check": "fix the split -> SPLIT_FIXED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"SPLIT_FIXED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the split holds 9 practice settings and a history of two rows; no setting was moved after the targets were met",
+   "held": true,
+   "detail": "[{\"practice_setting_count\": 8, \"practice_role_step_tasks\": 2, \"practice_plain_fact_tasks\": 1, \"target_met\": false}, {\"practice_setting_count\": 9, \"practice_role_step_tasks\": 4, \"practice_plain_fact_tasks\": 2, \"target_met\": true}]"
+  },
+  {
+   "check": "writer final p1 -> ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "writer final p2 (spare pass) -> ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the practice set, the final set and both passes name one writer model",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "check final -> CHECKED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"CHECKED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "deepseek final, the item map only -> STOPPED_CALL_BUDGET, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_CALL_BUDGET\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "deepseek final -> ALL_ANSWERED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_ANSWERED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "export final with_passage -> SHEETS_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"SHEETS_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the export step of final with_passage wrote sheet 01 and names the pinned model id for the sub-agent",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/fixture_q/solve/claude_sheet_final_with_passage_01.txt\", \"items\": 3, \"sha256\": \"663e70f84ac54fbb6909763f3f45dafe15bfba3346b55796c870235fc59bb215\", \"answers_go_to\": \"optionb/dry/fixture_q/solve/claude_answers_final_with_passage_01.txt\"}]"
+  },
+  {
+   "check": "import final with_passage sheet 01 -> SHEET_IMPORTED",
+   "held": true,
+   "detail": "{\"status\": \"SHEET_IMPORTED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "export final no_passage -> SHEETS_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"SHEETS_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the export step of final no_passage wrote sheet 01 and names the pinned model id for the sub-agent",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/fixture_q/solve/claude_sheet_final_no_passage_01.txt\", \"items\": 3, \"sha256\": \"efa127a655eec6fc652b7c6e19f40652c2ade8e9b8973215565350cc4ad421ed\", \"answers_go_to\": \"optionb/dry/fixture_q/solve/claude_answers_final_no_passage_01.txt\"}]"
+  },
+  {
+   "check": "import final no_passage sheet 01 -> SHEET_IMPORTED",
+   "held": true,
+   "detail": "{\"status\": \"SHEET_IMPORTED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "decide final -> KEY_CHECK_WRITTEN",
+   "held": true,
+   "detail": "{\"status\": \"KEY_CHECK_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "2 final role-step questions and 1 final plain-fact question pass both solver checks",
+   "held": true,
+   "detail": "{\"checked\": {\"role_step\": 2, \"plain_fact\": 1}, \"key_check_passed\": {\"role_step\": 2, \"plain_fact\": 1}, \"no_passage_passed\": {\"role_step\": 2, \"plain_fact\": 1}, \"survive\": {\"role_step\": 2, \"plain_fact\": 1}}"
+  },
+  {
+   "check": "select final -> GO, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"GO\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the final selection holds 1 role-step task and 1 plain-fact task",
+   "held": true,
+   "detail": "{\"role_step_tasks\": 1, \"plain_fact_tasks\": 1, \"passages_with_a_task\": 1, \"passages_with_a_role_step_task\": 1, \"single_longest\": [0, 1], \"single_shortest\": [0, 1]}"
+  },
+  {
+   "check": "every file of the walk is marked as a dry fixture",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "token count: the input and output counts are added up over the log lines; a line with no token count adds nothing",
+   "held": true,
+   "detail": "[13, 6]"
+  },
+  {
+   "check": "token limit: reached when the input count is at its limit, or the output count is at its limit; not one token before",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "token count: a dry folder calls no service and counts nothing",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "token count: the four counted logs are read and added up (made-up logs: 274 input and 92 output tokens); 92 of 92 output tokens is the limit",
+   "held": true,
+   "detail": "[274, 92]"
+  },
+  {
+   "check": "token count: a step whose own call log is not one of the counted logs stops",
+   "held": true,
+   "detail": "PLAN_CONSTANTS_DISAGREE"
+  },
+  {
+   "check": "the four counted logs of the plan include both logs of the key solver",
+   "held": true,
+   "detail": "[\"solve/deepseek_calls_practice.jsonl\", \"solve/deepseek_calls_final.jsonl\", \"notes_ord/ordinary_calls_practice.jsonl\", \"notes_ord/ordinary_calls_final.jsonl\"]"
+  },
+  {
+   "check": "a dry folder counts no tokens: every usage field of the solver log is null",
+   "held": true,
+   "detail": "17"
+  },
+  {
+   "check": "select practice in the stop case, real targets 45 and 25 -> STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "with the real numbers the 4 and 2 made-up tasks miss the floors (36, 20) and the targets (45, 25); 3 reserve settings are left",
+   "held": true,
+   "detail": "{\"floor\": {\"practice_role_step_min\": 36, \"practice_plain_fact_min\": 20, \"met\": false}, \"reserve\": {\"role_step_target\": 45, \"plain_fact_target\": 25, \"target_met\": false, \"settings_left\": 3, \"finished\": false}}"
+  },
+  {
+   "check": "select final in the floor case, a final floor of 99 role-step tasks -> STOP_DO_NOT_LAUNCH, exit 3",
+   "held": true,
+   "detail": "{\"status\": \"STOP_DO_NOT_LAUNCH\", \"exit\": 3, \"stop\": null}"
+  },
+  {
+   "check": "a selection that says do not launch names the missed floor and ends with exit code 3, not 0",
+   "held": true,
+   "detail": "[\"final_role_step_tasks is 1; the launch floor is 99.\"]"
+  },
+  {
+   "check": "the exit codes of the selection tool are the ones of the formats file",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "import with a transcript model name that is not the pinned model id -> stops with TRANSCRIPT_MODEL_NOT_THE_PINNED_ID",
+   "held": true,
+   "detail": "{\"code\": \"TRANSCRIPT_MODEL_NOT_THE_PINNED_ID\", \"reason\": \"The name given with --transcript-model is 'MADE-UP-NAME-FROM-A-TRANSCRIPT'. The plan pins the model id 'claude-sonnet-5-5' (outside_services.claude_solver.model_id in PLAN_CONSTANTS.json). A sheet that another model answered is not taken. Nothing was stored.\"}"
+  },
+  {
+   "check": "the refused import stored nothing: the answers file of the final set, which the import step writes, does not exist in this copy",
+   "held": true,
+   "detail": "[\"solver_answers_practice.json\"]"
+  },
+  {
+   "check": "the import step, run as its own process with its output sent to a pipe, ends with exit code 0 on a stray line that holds an arrow sign",
+   "held": true,
+   "detail": "{\"exit\": 0, \"status\": \"SHEET_IMPORTED\", \"stderr\": \"\"}"
+  }
+ ]
+}

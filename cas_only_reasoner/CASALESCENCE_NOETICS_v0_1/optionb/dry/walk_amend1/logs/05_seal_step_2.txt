@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 2
+SEALED 2_ROLE_NOTES as line 2 of optionb/SEAL_OPTIONB.jsonl: 2 file(s). Line sha256 e467d0a6efff22d1ca8057f60ee57b12f02e1ce3e003c1d6765077d9cb18cc0c
+[exit code 0]

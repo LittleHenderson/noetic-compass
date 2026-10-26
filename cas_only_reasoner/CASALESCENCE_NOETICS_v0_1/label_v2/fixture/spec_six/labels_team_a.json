@@ -1,0 +1,36 @@
+[
+ {"passage_id": "F1", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Mr. Okoro", "label": "Mr. Okoro", "support": "Mr. Okoro wound the hall clock.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Mr. Okoro", "label": "The smell of brass polish", "support": "The smell of brass polish put him back in his uncle's workshop.", "measure": "", "relative_to": "his uncle's workshop", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Mr. Okoro", "label": "his uncle's workshop", "support": "The smell of brass polish put him back in his uncle's workshop.", "measure": "", "relative_to": "The smell of brass polish", "certainty": "clear"}
+  ]},
+ {"passage_id": "F2", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Ilse", "label": "Ilse", "support": "Ilse heard the bell from the yard.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Ilse", "label": "the bell", "support": "Then the bell took her back to her first school, and to the smell of chalk dust.", "measure": "", "relative_to": "her first school", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Ilse", "label": "her first school", "support": "Then the bell took her back to her first school, and to the smell of chalk dust.", "measure": "", "relative_to": "the bell", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Ilse", "label": "the bell", "support": "Then the bell took her back to her first school, and to the smell of chalk dust.", "measure": "", "relative_to": "the smell of chalk dust", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Ilse", "label": "the smell of chalk dust", "support": "Then the bell took her back to her first school, and to the smell of chalk dust.", "measure": "", "relative_to": "the bell", "certainty": "clear"}
+  ]},
+ {"passage_id": "F3", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Dana", "label": "Dana", "support": "Dana set the fern on the sill.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Dana", "label": "Its green fronds", "support": "Its green fronds gave her a quiet sense of calm.", "measure": "", "relative_to": "", "certainty": "held", "held_under": "H2-COMFORT"},
+   {"noetic": "^4", "mind": "Dana", "label": "The radio in the next room", "support": "The radio in the next room barely reached her.", "measure": "barely reached her", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "F4", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Tomas", "label": "Tomas", "support": "Every morning before the ferry left, Tomas checked the mooring lines.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^7", "mind": "Tomas", "label": "checked the mooring lines", "support": "Every morning before the ferry left, Tomas checked the mooring lines.", "measure": "Every morning", "relative_to": "", "certainty": "clear"}
+  ]},
+ {"passage_id": "F5", "none_of_these": false, "not_enough_information": [], "guide_problem": "",
+  "entries": [
+   {"noetic": "^1", "mind": "Rosa", "label": "Rosa", "support": "Rosa saw the grey film on the jar and caught a sharp, sour smell.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Rosa", "label": "the grey film on the jar", "support": "Rosa saw the grey film on the jar and caught a sharp, sour smell. She knew the starter had turned.", "measure": "", "relative_to": "the starter had turned", "certainty": "ambiguous", "other_candidate": "reasoning"},
+   {"noetic": "^9", "mind": "Rosa", "label": "the starter had turned", "support": "Rosa saw the grey film on the jar and caught a sharp, sour smell. She knew the starter had turned.", "measure": "", "relative_to": "the grey film on the jar", "certainty": "ambiguous", "other_candidate": "reasoning"},
+   {"noetic": "^8", "mind": "Rosa", "label": "a sharp, sour smell", "support": "Rosa saw the grey film on the jar and caught a sharp, sour smell. She knew the starter had turned.", "measure": "", "relative_to": "the starter had turned", "certainty": "ambiguous", "other_candidate": "reasoning"},
+   {"noetic": "^9", "mind": "Rosa", "label": "the starter had turned", "support": "Rosa saw the grey film on the jar and caught a sharp, sour smell. She knew the starter had turned.", "measure": "", "relative_to": "a sharp, sour smell", "certainty": "ambiguous", "other_candidate": "reasoning"}
+  ]},
+ {"passage_id": "F6", "none_of_these": true, "not_enough_information": [], "guide_problem": "", "entries": []}
+]

@@ -1,0 +1,839 @@
+{
+ "schema": "casalescence/optionb/raw_questions/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+  "utc": "2026-10-05T18:09:02Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/elig/eligibility.json",
+   "sha256": "307230ae14d018138efb539adbcbc7d99e89e7d4b82c93b8404f918bfde1ad83"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/questions/writer_calls_practice_p1.jsonl",
+   "sha256": "342c4786f3cad6ffb2fc199ad0f345592f2f1dc66d2dcc98d347c8666d54d7c2"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "pass": "p1",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "D006",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D006.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Corin do first?",
+     "right": "reaching for the hemp rope again",
+     "wrong": [
+      "reaching for the nylon rope again",
+      "moving the oilcan to the yard",
+      "hanging the gloves on a hook",
+      "sweeping the tower floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the hemp rope"
+     ]
+    },
+    {
+     "question_id": "D006.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Corin leave to someone else?",
+     "right": "working on the loose stair",
+     "wrong": [
+      "working with the hemp rope",
+      "carrying the oilcan outside",
+      "counting every gloves there",
+      "locking up the bell tower",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the loose stair"
+     ]
+    },
+    {
+     "question_id": "D006.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Corin spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?",
+     "right": "dusting the oilcan before anything else",
+     "wrong": [
+      "opening the bell tower before dawn",
+      "finding the ledge by the door",
+      "seeing the gloves beside it",
+      "knowing where the oilcan stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D006.p1.FACT",
+    "question": "Where did the oilcan stand?",
+    "right": "on the ledge",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D003",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D003.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Ilse do first?",
+     "right": "reaching for the oak scoop again",
+     "wrong": [
+      "reaching for the tin scoop again",
+      "moving the ledger to the yard",
+      "hanging the barley on a hook",
+      "sweeping the store floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the oak scoop"
+     ]
+    },
+    {
+     "question_id": "D003.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Ilse leave to someone else?",
+     "right": "working on the damp cellar",
+     "wrong": [
+      "working with the oak scoop",
+      "carrying the ledger outside",
+      "counting every barley there",
+      "locking up the seed store",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the damp cellar"
+     ]
+    },
+    {
+     "question_id": "D003.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Ilse spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?",
+     "right": "dusting the ledger before anything else",
+     "wrong": [
+      "opening the seed store before dawn",
+      "finding the counter by the door",
+      "seeing the barley beside it",
+      "knowing where the ledger stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D003.p1.FACT",
+    "question": "Where did the ledger stand?",
+    "right": "on the counter",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D007",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D007.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Edda do first?",
+     "right": "reaching for the wicker tray again",
+     "wrong": [
+      "reaching for the wire tray again",
+      "moving the stool to the yard",
+      "hanging the straw on a hook",
+      "sweeping the loft floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the wicker tray"
+     ]
+    },
+    {
+     "question_id": "D007.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Edda leave to someone else?",
+     "right": "working on the broken ladder",
+     "wrong": [
+      "working with the wicker tray",
+      "carrying the stool outside",
+      "counting every straw there",
+      "locking up the apple loft",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the broken ladder"
+     ]
+    },
+    {
+     "question_id": "D007.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Edda spends two years far from the apple loft. Going only by the passage, which of these has most likely faded when she comes back?",
+     "right": "dusting the stool before anything else",
+     "wrong": [
+      "opening the apple loft before dawn",
+      "finding the landing by the door",
+      "seeing the straw beside it",
+      "knowing where the stool stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D007.p1.FACT",
+    "question": "Where did the stool stand?",
+    "right": "on the landing",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D008",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D008.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Joss do first?",
+     "right": "reaching for the wooden mould again",
+     "wrong": [
+      "reaching for the metal mould again",
+      "moving the wheelbarrow to the yard",
+      "hanging the pallets on a hook",
+      "sweeping the yard floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the wooden mould"
+     ]
+    },
+    {
+     "question_id": "D008.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Joss leave to someone else?",
+     "right": "working on the cracked kiln",
+     "wrong": [
+      "working with the wooden mould",
+      "carrying the wheelbarrow outside",
+      "counting every pallets there",
+      "locking up the tile yard",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the cracked kiln"
+     ]
+    },
+    {
+     "question_id": "D008.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Joss spends two years far from the tile yard. Going only by the passage, which of these has most likely faded when he comes back?",
+     "right": "dusting the wheelbarrow before anything else",
+     "wrong": [
+      "opening the tile yard before dawn",
+      "finding the path by the door",
+      "seeing the pallets beside it",
+      "knowing where the wheelbarrow stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D008.p1.FACT",
+    "question": "Where did the wheelbarrow stand?",
+    "right": "on the path",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D001",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D001.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Tamsin do first?",
+     "right": "reaching for the tar brush again",
+     "wrong": [
+      "reaching for the wire brush again",
+      "moving the lantern to the yard",
+      "hanging the rope on a hook",
+      "sweeping the shed floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the tar brush"
+     ]
+    },
+    {
+     "question_id": "D001.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Tamsin leave to someone else?",
+     "right": "working on the bilge pump",
+     "wrong": [
+      "working with the tar brush",
+      "carrying the lantern outside",
+      "counting every rope there",
+      "locking up the boat shed",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the bilge pump"
+     ]
+    },
+    {
+     "question_id": "D001.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Tamsin spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?",
+     "right": "dusting the lantern before anything else",
+     "wrong": [
+      "opening the boat shed before dawn",
+      "finding the shelf by the door",
+      "seeing the rope beside it",
+      "knowing where the lantern stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D001.p1.FACT",
+    "question": "Where did the lantern stand?",
+    "right": "on the shelf",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D002",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D002.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Odran do first?",
+     "right": "reaching for the bone needle again",
+     "wrong": [
+      "reaching for the steel needle again",
+      "moving the kettle to the yard",
+      "hanging the twine on a hook",
+      "sweeping the loft floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the bone needle"
+     ]
+    },
+    {
+     "question_id": "D002.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Odran leave to someone else?",
+     "right": "working on the rusty winch",
+     "wrong": [
+      "working with the bone needle",
+      "carrying the kettle outside",
+      "counting every twine there",
+      "locking up the net loft",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the rusty winch"
+     ]
+    },
+    {
+     "question_id": "D002.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Odran spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?",
+     "right": "dusting the kettle before anything else",
+     "wrong": [
+      "opening the net loft before dawn",
+      "finding the stove by the door",
+      "seeing the twine beside it",
+      "knowing where the kettle stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D002.p1.FACT",
+    "question": "Where did the kettle stand?",
+    "right": "on the stove",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D004",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D004.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Bram do first?",
+     "right": "reaching for the cross hammer again",
+     "wrong": [
+      "reaching for the ball hammer again",
+      "moving the bucket to the yard",
+      "hanging the tongs on a hook",
+      "sweeping the forge floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the cross hammer"
+     ]
+    },
+    {
+     "question_id": "D004.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Bram leave to someone else?",
+     "right": "working on the leaky bellows",
+     "wrong": [
+      "working with the cross hammer",
+      "carrying the bucket outside",
+      "counting every tongs there",
+      "locking up the nail forge",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the leaky bellows"
+     ]
+    },
+    {
+     "question_id": "D004.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Bram spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?",
+     "right": "dusting the bucket before anything else",
+     "wrong": [
+      "opening the nail forge before dawn",
+      "finding the floor by the door",
+      "seeing the tongs beside it",
+      "knowing where the bucket stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D004.p1.FACT",
+    "question": "Where did the bucket stand?",
+    "right": "on the floor",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D010",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D010.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Fenn do first?",
+     "right": "reaching for the long saw again",
+     "wrong": [
+      "reaching for the short saw again",
+      "moving the sledge to the yard",
+      "hanging the sawdust on a hook",
+      "sweeping the house floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the long saw"
+     ]
+    },
+    {
+     "question_id": "D010.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Fenn leave to someone else?",
+     "right": "working on the steep ramp",
+     "wrong": [
+      "working with the long saw",
+      "carrying the sledge outside",
+      "counting every sawdust there",
+      "locking up the ice house",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the steep ramp"
+     ]
+    },
+    {
+     "question_id": "D010.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Fenn spends two years far from the ice house. Going only by the passage, which of these has most likely faded when he comes back?",
+     "right": "dusting the sledge before anything else",
+     "wrong": [
+      "opening the ice house before dawn",
+      "finding the step by the door",
+      "seeing the sawdust beside it",
+      "knowing where the sledge stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D010.p1.FACT",
+    "question": "Where did the sledge stand?",
+    "right": "on the step",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D009",
+   "wave": 0,
+   "batch": 2,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D009.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Wren do first?",
+     "right": "reaching for the brass ruler again",
+     "wrong": [
+      "reaching for the plastic ruler again",
+      "moving the globe to the yard",
+      "hanging the tape on a hook",
+      "sweeping the room floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the brass ruler"
+     ]
+    },
+    {
+     "question_id": "D009.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Wren leave to someone else?",
+     "right": "working on the ink press",
+     "wrong": [
+      "working with the brass ruler",
+      "carrying the globe outside",
+      "counting every tape there",
+      "locking up the map room",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the ink press"
+     ]
+    },
+    {
+     "question_id": "D009.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Wren spends two years far from the map room. Going only by the passage, which of these has most likely faded when she comes back?",
+     "right": "dusting the globe before anything else",
+     "wrong": [
+      "opening the map room before dawn",
+      "finding the table by the door",
+      "seeing the tape beside it",
+      "knowing where the globe stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D009.p1.FACT",
+    "question": "Where did the globe stand?",
+    "right": "on the table",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D005",
+   "wave": 0,
+   "batch": 2,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D005.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Maren do first?",
+     "right": "reaching for the copper ladle again",
+     "wrong": [
+      "reaching for the iron ladle again",
+      "moving the rack to the yard",
+      "hanging the madder on a hook",
+      "sweeping the house floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the copper ladle"
+     ]
+    },
+    {
+     "question_id": "D005.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Maren leave to someone else?",
+     "right": "working on the lye vat",
+     "wrong": [
+      "working with the copper ladle",
+      "carrying the rack outside",
+      "counting every madder there",
+      "locking up the dye house",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the lye vat"
+     ]
+    },
+    {
+     "question_id": "D005.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Maren spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?",
+     "right": "dusting the rack before anything else",
+     "wrong": [
+      "opening the dye house before dawn",
+      "finding the wall by the door",
+      "seeing the madder beside it",
+      "knowing where the rack stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D005.p1.FACT",
+    "question": "Where did the rack stand?",
+    "right": "on the wall",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D011",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D011.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Liesel do first?",
+     "right": "reaching for the small scale again",
+     "wrong": [
+      "reaching for the large scale again",
+      "moving the pan to the yard",
+      "hanging the chalk on a hook",
+      "sweeping the house floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the small scale"
+     ]
+    },
+    {
+     "question_id": "D011.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Liesel leave to someone else?",
+     "right": "working on the cracked weight",
+     "wrong": [
+      "working with the small scale",
+      "carrying the pan outside",
+      "counting every chalk there",
+      "locking up the weigh house",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the cracked weight"
+     ]
+    },
+    {
+     "question_id": "D011.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Liesel spends two years far from the weigh house. Going only by the passage, which of these has most likely faded when she comes back?",
+     "right": "dusting the pan before anything else",
+     "wrong": [
+      "opening the weigh house before dawn",
+      "finding the sill by the door",
+      "seeing the chalk beside it",
+      "knowing where the pan stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D011.p1.FACT",
+    "question": "Where did the pan stand?",
+    "right": "on the sill",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "D012",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "D012.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "A free hour comes up next week. Going only by the passage, which of these does Ansel do first?",
+     "right": "reaching for the curved needle again",
+     "wrong": [
+      "reaching for the straight needle again",
+      "moving the pot to the yard",
+      "hanging the canvas on a hook",
+      "sweeping the loft floor twice",
+      "leaving the door wide open"
+     ],
+     "anchors": [
+      "reached for the curved needle"
+     ]
+    },
+    {
+     "question_id": "D012.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "A visitor asks for help later that day. Going only by the passage, which of these does Ansel leave to someone else?",
+     "right": "working on the blunt shears",
+     "wrong": [
+      "working with the curved needle",
+      "carrying the pot outside",
+      "counting every canvas there",
+      "locking up the sail loft",
+      "lighting the big lamp"
+     ],
+     "anchors": [
+      "away from the blunt shears"
+     ]
+    },
+    {
+     "question_id": "D012.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Ansel spends two years far from the sail loft. Going only by the passage, which of these has most likely faded when he comes back?",
+     "right": "dusting the pot before anything else",
+     "wrong": [
+      "opening the sail loft before dawn",
+      "finding the trestle by the door",
+      "seeing the canvas beside it",
+      "knowing where the pot stands",
+      "walking in through the door"
+     ],
+     "anchors": [
+      "Every morning for nine years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "D012.p1.FACT",
+    "question": "Where did the pot stand?",
+    "right": "on the trestle",
+    "wrong": [
+     "under the bench",
+     "behind the gate",
+     "inside the cart"
+    ]
+   },
+   "extra_dropped": []
+  }
+ ]
+}

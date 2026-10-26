@@ -1,0 +1,1488 @@
+[
+ {
+  "passage_id": "P01",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Mr Pereira",
+    "mind": "Mr Pereira",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young couple beside him",
+    "mind": "the young couple beside him",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "thirty years of commuting by rail",
+    "mind": "Mr Pereira",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "thirty years of commuting by rail",
+    "mind": "Mr Pereira",
+    "relative_to": "the departures board",
+    "certainty": "ambiguous",
+    "other_candidate": "^5"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Mr Pereira is attracted toward or repelled by anything, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": "The guide does not say whether a repeated exposure that has become part of what a Mind is made of should be marked as ^5, ^7, or both."
+ },
+ {
+  "passage_id": "P02",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bolanle's hand stopped on the drip bag",
+    "mind": "Bolanle",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the cough of her old landlady's dog, Biscuit",
+    "mind": "Bolanle",
+    "relative_to": "a hallway in Peckham",
+    "certainty": "ambiguous",
+    "other_candidate": "^9"
+   },
+   {
+    "noetic": "^9",
+    "words": "a hallway in Peckham",
+    "mind": "Bolanle",
+    "relative_to": "the cough of her old landlady's dog, Biscuit",
+    "certainty": "ambiguous",
+    "other_candidate": "^8"
+   },
+   {
+    "noetic": "^1",
+    "words": "She checked the man's chart",
+    "mind": "She",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the cough triggers the hallway memory or the hallway memory is brought to mind by the cough; the ^8/^9 direction is unclear.",
+   "The passage does not show whether Bolanle is attracted toward or repelled by the memory of the dog."
+  ],
+  "guide_problem": "The guide does not say how to label a ^8/^9 pair when the passage gives both Ideas but does not settle which triggers which."
+ },
+ {
+  "passage_id": "P03",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P04",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Bianca",
+    "mind": "Bianca",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the corner where the senior designer sketched layouts in coloured pens",
+    "mind": "Bianca",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the server room, whose cold air and roaring fans made her shoulders hunch",
+    "mind": "Bianca",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "her second year as a developer",
+    "mind": "Bianca",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "one curt line about her code in a stranger's email",
+    "mind": "Bianca",
+    "relative_to": "kept her awake until two",
+    "certainty": "ambiguous",
+    "other_candidate": "^4"
+   },
+   {
+    "noetic": "^9",
+    "words": "kept her awake until two",
+    "mind": "Bianca",
+    "relative_to": "one curt line about her code in a stranger's email",
+    "certainty": "ambiguous",
+    "other_candidate": "^4"
+   }
+  ],
+  "not_enough_information": [
+   "The director's talk is mentioned but the passage does not settle whether Bianca's awareness is at work on it, nor whether she is attracted toward or repelled by it."
+  ],
+  "guide_problem": "The guide does not say how to treat a phrase like 'kept her awake until two', which states an effect on the Mind without naming a distinct Idea brought to Mind."
+ },
+ {
+  "passage_id": "P05",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Teodor",
+    "mind": "Teodor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "She",
+    "mind": "She",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "cooked on cargo ships for thirty years",
+    "mind": "Teodor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the stock was thin",
+    "mind": "",
+    "relative_to": "the new soup",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the cream had gone in too early",
+    "mind": "",
+    "relative_to": "the new soup",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the onion had not been given long enough to turn soft",
+    "mind": "",
+    "relative_to": "the new soup",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Teodor is repelled by the soup or merely analyzing it; no ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P06",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^7",
+    "words": "met on Tuesdays and Thursdays at seven for three years",
+    "mind": "Lena",
+    "relative_to": "her fiddle",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "her hands were on her fiddle before she had finished taking off her coat",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "^7"
+   },
+   {
+    "noetic": "^8",
+    "words": "the words 'from the top'",
+    "mind": "Lena",
+    "relative_to": "her bow arm lifted and her left foot found the floor",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her bow arm lifted and her left foot found the floor",
+    "mind": "Lena",
+    "relative_to": "the words 'from the top'",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "her sister's wedding",
+    "mind": "Lena",
+    "relative_to": "she caught her fingers tuning against the stem of her glass",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "she caught her fingers tuning against the stem of her glass",
+    "mind": "Lena",
+    "relative_to": "her sister's wedding",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Lena is attracted toward or adverse to the music or the tuning habit, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P07",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Wendell",
+    "mind": "Wendell",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the radiator fan clatter",
+    "mind": "Wendell",
+    "relative_to": "eight years old, pegging a torn seven of clubs to the spokes of his brother's red bike",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "eight years old, pegging a torn seven of clubs to the spokes of his brother's red bike",
+    "mind": "Wendell",
+    "relative_to": "the radiator fan clatter",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the gravel lane behind their father's shed",
+    "mind": "Wendell",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "^5"
+   },
+   {
+    "noetic": "^9",
+    "words": "the scrape on his knee",
+    "mind": "Wendell",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "^5"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the gravel lane and the scrape on his knee are brought to mind by the fan clatter or are simply part of what he is composed of."
+  ],
+  "guide_problem": "The guide does not say whether a ^9 whose trigger is not restated in the same words should be marked with relative_to \"\" or with the earlier trigger words."
+ },
+ {
+  "passage_id": "P08",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Imelda",
+    "mind": "Imelda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Everything Imelda knew about money she had learned from her mother, who counted coins into jam jars on Friday nights",
+    "mind": "Imelda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "her husband brought up a new car on a four-year loan",
+    "mind": "Imelda",
+    "relative_to": "the jars",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the jars",
+    "mind": "Imelda",
+    "relative_to": "her husband brought up a new car on a four-year loan",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Imelda is attracted toward or repelled by the car or the jars, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P09",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Joseph",
+    "mind": "Joseph",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "one crate of old jazz sleeves",
+    "mind": "Joseph",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a man fried onions in a drum of black fat",
+    "mind": "Joseph",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the child's dropped box of singles is a ^8 that brings anything to Joseph's Mind, or whether his hardly glancing down is a ^9."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P10",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^7",
+    "words": "Every Thursday for two years",
+    "mind": "Hamza",
+    "relative_to": "the mile on the field behind the school",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his hands bent to his laces before anyone spoke",
+    "mind": "Hamza",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "he argued about football",
+    "mind": "Hamza",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "he found himself on the bench outside the maths room with one trainer already off",
+    "mind": "Hamza",
+    "relative_to": "the mile was cancelled",
+    "certainty": "ambiguous",
+    "other_candidate": "^5"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the cancelled mile is the ^8 that brings the bench-and-trainer moment to mind, or whether that moment is simply what Hamza is composed of (^5)."
+  ],
+  "guide_problem": "The guide does not say whether a ^9 whose trigger is not shown should be marked with relative_to left empty or noted instead."
+ },
+ {
+  "passage_id": "P11",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Galina",
+    "mind": "Galina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the holder",
+    "mind": "Galina",
+    "relative_to": "an exam hall in Omsk",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "an exam hall in Omsk",
+    "mind": "Galina",
+    "relative_to": "the holder",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage hints that Galina failed a physics paper and wept, but does not settle whether she is repelled by the memory (^3).",
+   "The passage hints at what Galina is composed of (^5), but does not settle it."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P12",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ingrid",
+    "mind": "Ingrid",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the henhouse",
+    "mind": "Ingrid",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the slurry pit",
+    "mind": "Ingrid",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had inherited the farm at twenty-six",
+    "mind": "Ingrid",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Whether the pig shed is a ^3 for Ingrid: the passage says she left it to her brother whenever she could, which hints at aversion but does not show it.",
+   "Whether the bull's bad test result is a ^2 or ^3 for Ingrid: her 'fine, fine' and humming do not settle affinity or aversion."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P13",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P14",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sister Fatima",
+    "mind": "Sister Fatima",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had trained when patients lay flat for ten days after surgery",
+    "mind": "Sister Fatima",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had seen two decades of recoveries go badly and three go wonderfully",
+    "mind": "Sister Fatima",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "watching the young physio stand a man up on his second morning",
+    "mind": "Sister Fatima",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "She watched his colour, his lips, the way his knuckles whitened on the frame",
+    "mind": "She",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the unease is felt aversion (^3) or a reasoned judgement that the early mobilisation is wrong."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P15",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Anneliese",
+    "mind": "Anneliese",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The drummer's snare had rattled against the window glass in the second verse",
+    "mind": "Anneliese",
+    "relative_to": "a hailstorm over a Swiss campsite twenty summers ago",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a hailstorm over a Swiss campsite twenty summers ago",
+    "mind": "Anneliese",
+    "relative_to": "The drummer's snare had rattled against the window glass in the second verse",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "The bassist",
+    "mind": "The bassist",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Anneliese is attracted toward or repelled by the hailstorm memory, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P16",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ayesha",
+    "mind": "Ayesha",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "in eighteen months it had chimed hundreds of times",
+    "mind": "Ayesha",
+    "relative_to": "a loud chime",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the chime",
+    "mind": "Ayesha",
+    "relative_to": "her mouse",
+    "certainty": "ambiguous",
+    "other_candidate": "^9"
+   },
+   {
+    "noetic": "^9",
+    "words": "her mouse",
+    "mind": "Ayesha",
+    "relative_to": "the chime",
+    "certainty": "ambiguous",
+    "other_candidate": "^8"
+   },
+   {
+    "noetic": "^1",
+    "words": "a visiting client",
+    "mind": "a visiting client",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Ayesha's hand moving to the mouse is an Idea brought to Mind by the chime (^9) or the chime itself is the trigger (^8); the pair is marked ambiguous.",
+   "The passage does not show whether Ayesha or the client is attracted toward or repelled by the chime, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": "The guide does not say how to label a habitual response where the trigger and the brought-to-mind action are hard to separate."
+ },
+ {
+  "passage_id": "P17",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^2",
+    "words": "the garage",
+    "mind": "Delroy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "his half-built canoe",
+    "mind": "Delroy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The vacuum cleaner in the hall",
+    "mind": "Delroy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "he turned a page of the newspaper",
+    "mind": "Delroy",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle what the slammed door or the photograph brought to Delroy's mind, so no ^8/^9 pair is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P18",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Gordon",
+    "mind": "Gordon",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "fuel was reaching the rail, the spark was strong, the crank sensor read fine when cold, and trouble only came once the engine bay was fully hot",
+    "mind": "",
+    "relative_to": "The Corsa would start, run for ten minutes and die",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Gordon is attracted toward or repelled by the fault, so no ^2 or ^3.",
+   "The passage does not settle what Gordon is composed of, so no ^5.",
+   "The passage does not state a rate or pattern of exposure, so no ^7."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P19",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P20",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Priya",
+    "mind": "Priya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a boy clicked his pen twice, fast",
+    "mind": "Priya",
+    "relative_to": "a cold balcony in Leicester",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a cold balcony in Leicester",
+    "mind": "Priya",
+    "relative_to": "a boy clicked his pen twice, fast",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "Her father had clicked his lighter exactly that way",
+    "mind": "Priya",
+    "relative_to": "the wool of his coat",
+    "certainty": "ambiguous",
+    "other_candidate": "^9"
+   },
+   {
+    "noetic": "^9",
+    "words": "the wool of his coat",
+    "mind": "Priya",
+    "relative_to": "Her father had clicked his lighter exactly that way",
+    "certainty": "ambiguous",
+    "other_candidate": "^8"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Priya is attracted toward or repelled by the balcony memory, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P21",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Alasdair",
+    "mind": "Alasdair",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had farmed through three droughts",
+    "mind": "Alasdair",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the forecast promised a wet week",
+    "mind": "Alasdair",
+    "relative_to": "the autumn the topsoil washed into the ditch",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the autumn the topsoil washed into the ditch",
+    "mind": "Alasdair",
+    "relative_to": "the forecast promised a wet week",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "His son",
+    "mind": "His son",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Whether Alasdair feels aversion toward the promised wet week (^3) is not settled; the passage says only that he did not feel relief.",
+   "Whether the son feels affinity toward the rain (^2) is not settled; he only says it would be good for the grass."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P22",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tobias",
+    "mind": "Tobias",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the freight yards and cranes and every bridge that flashed past",
+    "mind": "Tobias",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the man across the aisle who was peeling boiled eggs",
+    "mind": "Tobias",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P23",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Cheng",
+    "mind": "Cheng",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "at the same sink at the start of every shift",
+    "mind": "Cheng",
+    "relative_to": "washed his hands",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "For six years Cheng had washed his hands at the same sink at the start of every shift, wrists first, then palms, thumbs and between the fingers",
+    "mind": "Cheng",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "^7"
+   },
+   {
+    "noetic": "^1",
+    "words": "The waiter",
+    "mind": "The waiter",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Cheng is attracted toward or adverse to the hand-washing routine, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P24",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Dariusz",
+    "mind": "Dariusz",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "A smell of scorched sugar",
+    "mind": "Dariusz",
+    "relative_to": "his grandmother's flat in Lodz",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandmother's flat in Lodz",
+    "mind": "Dariusz",
+    "relative_to": "A smell of scorched sugar",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P25",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Kwame",
+    "mind": "Kwame",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had played in wedding bands since he was fifteen",
+    "mind": "Kwame",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the way her shoulders moved at the barline",
+    "mind": "Kwame",
+    "relative_to": "forty Saturday nights when the dancers had got lost at exactly this kind of switch",
+    "certainty": "ambiguous",
+    "other_candidate": "^7"
+   },
+   {
+    "noetic": "^9",
+    "words": "forty Saturday nights when the dancers had got lost at exactly this kind of switch",
+    "mind": "Kwame",
+    "relative_to": "the way her shoulders moved at the barline",
+    "certainty": "ambiguous",
+    "other_candidate": "^5"
+   }
+  ],
+  "not_enough_information": [
+   "Whether Kwame is attracted toward or repelled by the song is not settled; no ^2 or ^3.",
+   "Whether the passage states a rate and pattern of exposure to the song is not settled; no ^7."
+  ],
+  "guide_problem": "The guide does not say whether a remembered store of past experience should be marked ^5 or ^9 when it is also brought to mind by a trigger."
+ },
+ {
+  "passage_id": "P26",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^7",
+    "words": "For eleven years the Okafors had eaten Sunday lunch at one",
+    "mind": "the Okafors",
+    "relative_to": "Sunday lunch",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the smell of onions frying at half past twelve",
+    "mind": "everyone",
+    "relative_to": "into the kitchen",
+    "certainty": "ambiguous",
+    "other_candidate": "^7"
+   },
+   {
+    "noetic": "^9",
+    "words": "into the kitchen",
+    "mind": "everyone",
+    "relative_to": "the smell of onions frying at half past twelve",
+    "certainty": "ambiguous",
+    "other_candidate": "^7"
+   },
+   {
+    "noetic": "^1",
+    "words": "The boys",
+    "mind": "The boys",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the boys' standing by the table with forks in hand is attraction toward the lunch (^2) or merely entrained routine (^7)."
+  ],
+  "guide_problem": "The guide does not say how to treat a habitual signal that both entrains a Mind (^7) and brings a different Idea to Mind (^8/^9)."
+ },
+ {
+  "passage_id": "P27",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Imani",
+    "mind": "Imani",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The old Triumph on the ramp",
+    "mind": "Imani",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "diesel fumes",
+    "mind": "Imani",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the paint-stripper tin",
+    "mind": "Imani",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "seventeen and new to the garage",
+    "mind": "Imani",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Whether the estimate of four thousand pounds is an Idea Imani is attracted toward or repelled by is not settled; she nods without hearing it."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P28",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Rafael",
+    "mind": "Rafael",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the old billing job",
+    "mind": "Rafael",
+    "relative_to": "the lost-property cupboard at his school in Valparaiso",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the lost-property cupboard at his school in Valparaiso",
+    "mind": "Rafael",
+    "relative_to": "the old billing job",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a cardboard box of single gloves, the left ones never claimed",
+    "mind": "",
+    "relative_to": "the lost-property cupboard at his school in Valparaiso",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a drawer of orphaned pieces",
+    "mind": "",
+    "relative_to": "the billing job",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Whether Rafael is attracted toward or repelled by the billing job or the cupboard is not settled; no ^2 or ^3.",
+   "The passage does not state the rate or pattern of exposure to any Idea; no ^7."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P29",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "she thought",
+    "mind": "Ms Kowalczyk",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had worked as a supply teacher for twenty-two years",
+    "mind": "Ms Kowalczyk",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the new head announced a silent-corridor rule",
+    "mind": "Ms Kowalczyk",
+    "relative_to": "the five schools where she had seen one begin and the four where it was dropped by Easter",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the five schools where she had seen one begin and the four where it was dropped by Easter",
+    "mind": "Ms Kowalczyk",
+    "relative_to": "the new head announced a silent-corridor rule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "The younger teachers",
+    "mind": "The younger teachers",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the printed plan",
+    "mind": "The younger teachers",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "with real hope",
+    "mind": "The younger teachers",
+    "relative_to": "the printed plan",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Whether Ms Kowalczyk is repelled by the silent-corridor rule (^3) is hinted at by her counting stairwells but not settled."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P30",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Lucia",
+    "mind": "Lucia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a tinny waltz",
+    "mind": "Lucia",
+    "relative_to": "her wedding in a village hall near Bari",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her wedding in a village hall near Bari",
+    "mind": "Lucia",
+    "relative_to": "a tinny waltz",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Lucia is attracted toward or repelled by the wedding memory, so no ^2 or ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P31",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P32",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^2",
+    "words": "The char on the grill steaks",
+    "mind": "Marisol",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Marisol",
+    "mind": "Marisol",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "nineteen and three weeks into her first kitchen job",
+    "mind": "Marisol",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the sea bass stared up with flat grey eyes",
+    "mind": "Marisol",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "^4"
+   },
+   {
+    "noetic": "^1",
+    "words": "she",
+    "mind": "she",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "The head chef's long talk about portion costs",
+    "mind": "she",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "^1"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle what the head chef's long talk brought to mind, so the ^8 partner of the ^9 is not given.",
+   "It is not settled whether Marisol's holding her breath is aversion (^3) or a strong impression (^4)."
+  ],
+  "guide_problem": "The guide does not say whether a ^9 whose trigger is not stated should be marked at all, or how to treat a pronoun as the mind words."
+ },
+ {
+  "passage_id": "P33",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Gareth",
+    "mind": "Gareth",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the window where the sun lay across the bed",
+    "mind": "Gareth",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the tray of grey mince and boiled cabbage",
+    "mind": "Gareth",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a hymn from his childhood",
+    "mind": "Gareth",
+    "relative_to": "his childhood",
+    "certainty": "ambiguous",
+    "other_candidate": "^9"
+   },
+   {
+    "noetic": "^9",
+    "words": "his childhood",
+    "mind": "Gareth",
+    "relative_to": "a hymn from his childhood",
+    "certainty": "ambiguous",
+    "other_candidate": "^8"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle what the hymn brought to mind, only that it stopped his breathing; the ^8/^9 pair is inferred from 'a hymn from his childhood'."
+  ],
+  "guide_problem": "The guide does not say how to label a ^8/^9 pair when the passage gives only the trigger and a bodily reaction, not the Idea brought to Mind."
+ },
+ {
+  "passage_id": "P34",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Kenji",
+    "mind": "Kenji",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the sour smell of silage",
+    "mind": "Kenji",
+    "relative_to": "Mrs Ohara",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "Mrs Ohara",
+    "mind": "Kenji",
+    "relative_to": "the sour smell of silage",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the broom handle, taller than he was, and the chalk dust in his nose",
+    "mind": "Kenji",
+    "relative_to": "Mrs Ohara",
+    "certainty": "ambiguous",
+    "other_candidate": "^8"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the broom handle and chalk dust are brought to mind by Mrs Ohara (^9) or themselves trigger further memories (^8)."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P35",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^2",
+    "words": "The old upright piano",
+    "mind": "Tomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Tomas",
+    "mind": "Tomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the smell of the synthesiser's overheated power brick",
+    "mind": "Tomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "shook the floor through his shoes",
+    "mind": "Tomas",
+    "relative_to": "the low notes",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "made him jump so hard his pick flew across the room",
+    "mind": "Tomas",
+    "relative_to": "a cymbal tipping off its stand",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether the singer's tears or the missed cue occupy any Noetic for Tomas."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P36",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Hiroshi",
+    "mind": "Hiroshi",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the manager called the new release simple",
+    "mind": "Hiroshi",
+    "relative_to": "the three that had been called simple before",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the three that had been called simple before",
+    "mind": "Hiroshi",
+    "relative_to": "the manager called the new release simple",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the database move, the old mobile app, the Friday timing, the single colleague who understood the payment code",
+    "mind": "",
+    "relative_to": "the plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a dozen failed launches in fifteen years",
+    "mind": "Hiroshi",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Hiroshi is repelled by the new release or by the manager's calling it simple; no ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P37",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P38",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ruth",
+    "mind": "Ruth",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The back gate had squeaked, long and low",
+    "mind": "Ruth",
+    "relative_to": "her late husband's bicycle",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her late husband's bicycle",
+    "mind": "Ruth",
+    "relative_to": "The back gate had squeaked, long and low",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Her granddaughter",
+    "mind": "Her granddaughter",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage hints at Ruth's composed memories (the way he leaned the bicycle on the fence and whistled the same four notes) but does not settle them as ^5 or as further ^9s."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P39",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Nasreen",
+    "mind": "Nasreen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "three separate pieces",
+    "mind": "",
+    "relative_to": "it",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had run a spice stall for forty years",
+    "mind": "Nasreen",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not settle whether Nasreen is repelled by the rent letter or its terms; no ^3 is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "P40",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Owen",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the art room, with its propped-open door and its smell of wet clay",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a trombone was being tortured",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "^4"
+   },
+   {
+    "noetic": "^1",
+    "words": "Mr Adeyemi",
+    "mind": "Mr Adeyemi",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Whether Owen's doubled stride is a ^4 Vibration (degree of resonance with the art room) or only a ^2 attraction is not settled."
+  ],
+  "guide_problem": ""
+ }
+]

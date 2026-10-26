@@ -1,0 +1,140 @@
+{
+ "schema": "casalescence/optionb/survival/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+  "utc": "2026-10-07T00:14:18Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/anchor_check_final.json",
+   "sha256": "284a62daf8caa4b848d130ace2a3e16a5e7dbebe38ba21120648d0877989a556"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/candidates_final.json",
+   "sha256": "dacb9e49ea0fd1a0d7e6d247456f127756346461b0425ee682e507f4cf76da13"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/form_check_final.json",
+   "sha256": "800824ed1847c775f051e575b655336055b9773315aed3545f60431d26359a20"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/option_check_final.json",
+   "sha256": "c1735233c4bf691f2fc747472d8bbf46b22db159bc2bee36060419a7046c6294"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/elig/eligibility.json",
+   "sha256": "5cbec062ac5b855edd71cf893bda734c158b2e657ea6caba7102ff5a024d159c"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_final_p1.json",
+   "sha256": "1d3705a65f39a4f837923f2e7c413f08d4a26dcea0b7d3e44f88746a8c05dada"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_final_p2.json",
+   "sha256": "918bbaab80ddff7f1954d80c662c8023dc4ce3da561ee404510f1dca9f309c49"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/select/selection_practice.json",
+   "sha256": "01420a155643c7643c9b3ca3af3244b6e275b4eebdc0332c73d3f474db51b692"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/select/split_fixed.json",
+   "sha256": "13e6fcee03997477f411542cb2d145d065e787f7eb506962e7e99dfcd2f370a8"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/solve/key_check_final.json",
+   "sha256": "b6613f310d33898bcfc80716bb93cf0ff107062555fad18ced963ef0e574a42a"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "final",
+ "practice_setting_count": 9,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "form check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "option check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "key check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "selection",
+   "role_step": 7,
+   "plain_fact": 4
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 7,
+   "plain_fact": 4
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 7,
+  "plain_fact_tasks": 4,
+  "passages_with_a_task": 4,
+  "passages_with_a_role_step_task": 4,
+  "single_longest": [
+   0,
+   7
+  ],
+  "single_shortest": [
+   0,
+   7
+  ]
+ },
+ "dropped_by_reason": {
+  "NOT_PICKED_BY_PAIR_RULE": 3
+ },
+ "decision": "GO",
+ "stop_reasons": [],
+ "next": "Seal step 3C. Then the ordinary notes are written. The launch floor is read again by tools/ob_assemble.py after the later filters.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles.",
+ "launch_floor_numbers": {
+  "final_role_step_tasks": 7,
+  "final_plain_fact_tasks": 4,
+  "practice_role_step_tasks": 23,
+  "practice_plain_fact_tasks": 12
+ },
+ "launch_floor": {
+  "final_role_step_tasks_min": 2,
+  "final_plain_fact_tasks_min": 2,
+  "practice_role_step_tasks_min": 19,
+  "practice_plain_fact_tasks_min": 10
+ },
+ "tier_if_nothing_more_is_removed": "EXPLORATORY"
+}

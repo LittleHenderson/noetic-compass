@@ -1,0 +1,252 @@
+[
+{"passage_id":"V001","none_of_these":true,"entries":[],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V002","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Tom","mind":"Tom","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"every day","mind":"Tom","relative_to":"the pool","certainty":"clear"}
+],"not_enough_information":["His feet navigating the tiles automatically hints at trained skill, but the passage does not state what Tom has become."],"guide_problem":""},
+{"passage_id":"V003","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Catherine","mind":"Catherine","relative_to":"","certainty":"clear"},
+{"noetic":"^3","words":"The stern, closed doors of the courtrooms","mind":"Catherine","relative_to":"","certainty":"clear"},
+{"noetic":"^4","words":"made her feel intensely anxious","mind":"Catherine","relative_to":"The stern, closed doors of the courtrooms","certainty":"clear"},
+{"noetic":"^2","words":"a small, vibrant potted plant","mind":"Catherine","relative_to":"","certainty":"ambiguous","other_candidate":"none"},
+{"noetic":"^4","words":"a small sense of comfort","mind":"Catherine","relative_to":"a small, vibrant potted plant","certainty":"clear"},
+{"noetic":"^4","words":"barely reached her ears","mind":"Catherine","relative_to":"The murmuring voices of other waiting people","certainty":"clear"}
+],"not_enough_information":["The other waiting people are heard murmuring but nothing of their awareness is shown, so they are not listed.","Comfort from the plant is stated, but not a pull toward it."],"guide_problem":""},
+{"passage_id":"V004","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Paul","mind":"Paul","relative_to":"","certainty":"clear"}
+],"not_enough_information":["The smell of brewing coffee is called a signal that morning had arrived, but the passage does not say Paul took it in or what came to his mind.","A practiced motion and familiar rocks hint at skill and exposure; no rate or pattern words and no statement of what Paul has become."],"guide_problem":""},
+{"passage_id":"V005","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Clara","mind":"Clara","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"had kept bees since she was a girl","mind":"Clara","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"a familiar backdrop to her days","mind":"Clara","relative_to":"The constant, murmuring hum from the hives","certainty":"clear"},
+{"noetic":"^8","words":"the hum deepened in a particular way","mind":"Clara","relative_to":"a swarm was thinking of leaving","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^9","words":"a swarm was thinking of leaving","mind":"Clara","relative_to":"the hum deepened in a particular way","certainty":"ambiguous","other_candidate":"reasoning"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V006","none_of_these":true,"entries":[],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V007","none_of_these":true,"entries":[],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V008","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Zach","mind":"Zach","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"the low, steady hum","mind":"Zach","relative_to":"a lullaby","certainty":"clear"},
+{"noetic":"^9","words":"a lullaby","mind":"Zach","relative_to":"the low, steady hum","certainty":"clear"}
+],"not_enough_information":["His mother is shown only inside the recalled song and touch; her own awareness is not shown, so she is not listed.","The remembered sensation of her hand stroking his hair is a detail of the same memory, not a separate trigger."],"guide_problem":"Rule 4 does not say whether someone who sang inside a remembered scene counts as someone shown speaking."},
+{"passage_id":"V009","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Arthur","mind":"Arthur","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"The strong scent of diesel","mind":"Arthur","relative_to":"his grandfather's old shed","certainty":"clear"},
+{"noetic":"^9","words":"his grandfather's old shed","mind":"Arthur","relative_to":"The strong scent of diesel","certainty":"clear"}
+],"not_enough_information":["The tools, coal dust, workbench and spanner accompany the memory; not marked as its parts.","His grandfather is shown only inside the memory, so he is not listed."],"guide_problem":""},
+{"passage_id":"V010","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Doris","mind":"Doris","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"The warm, slightly smoky scent","mind":"Doris","relative_to":"autumn evenings","certainty":"clear"},
+{"noetic":"^9","words":"autumn evenings","mind":"Doris","relative_to":"The warm, slightly smoky scent","certainty":"clear"},
+{"noetic":"^8","words":"The warm, slightly smoky scent","mind":"Doris","relative_to":"her grandmother's kitchen","certainty":"ambiguous","other_candidate":"none"},
+{"noetic":"^9","words":"her grandmother's kitchen","mind":"Doris","relative_to":"The warm, slightly smoky scent","certainty":"ambiguous","other_candidate":"none"}
+],"not_enough_information":["She pictured her grandmother's kitchen: the passage does not say outright that the scent brought it to mind, so it is marked as an uncertain second pair.","The clear image of a quiet home gives no degree of impression."],"guide_problem":""},
+{"passage_id":"V011","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Thomas","mind":"Thomas","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"his own clumsy attempts decades ago","mind":"Thomas","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"a moment of independent struggle often solidified the learning","mind":"Thomas","relative_to":"","certainty":"clear"}
+],"not_enough_information":["The young skier is shown struggling and grinning, but nothing of his awareness; not listed.","The passage does not say that watching the skier brought his own early attempts to mind.","The approving nod is not stated as being drawn toward anything."],"guide_problem":"Rule 2 does not say whether a memory placed right after an observation, with no linking word, counts as shown to be brought to mind."},
+{"passage_id":"V012","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Helen","mind":"Helen","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"had sorted mail for decades","mind":"Helen","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"Her hands knew the weight and texture of every common type of correspondence","mind":"Helen","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"The feel of the paper and the faint, sweet scent of old ink","mind":"Helen","relative_to":"a wedding invitation","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^9","words":"a wedding invitation","mind":"Helen","relative_to":"The feel of the paper and the faint, sweet scent of old ink","certainty":"ambiguous","other_candidate":"reasoning"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V013","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Jack","mind":"Jack","relative_to":"","certainty":"clear"},
+{"noetic":"^1","words":"The patient","mind":"The patient","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"a faint shadow near the gum line","mind":"","relative_to":"All these signs","certainty":"clear"},
+{"noetic":"^6","words":"a slight sensitivity to cold","mind":"","relative_to":"All these signs","certainty":"clear"},
+{"noetic":"^6","words":"a tiny chip on the chewing surface of the molar","mind":"","relative_to":"All these signs","certainty":"clear"},
+{"noetic":"^9","words":"a small, hidden fracture","mind":"Jack","relative_to":"","certainty":"clear","reached_by":"reasoning"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V014","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Bernard","mind":"Bernard","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"Its lanolin scent","mind":"Bernard","relative_to":"his grandfather’s old overcoat","certainty":"clear"},
+{"noetic":"^9","words":"his grandfather’s old overcoat","mind":"Bernard","relative_to":"Its lanolin scent","certainty":"clear"}
+],"not_enough_information":["The faint discolouration and the fishing nets accompany the picture; not marked as its parts."],"guide_problem":""},
+{"passage_id":"V015","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Patrick","mind":"Patrick","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"The slight, almost imperceptible wobble","mind":"Patrick","relative_to":"The rim itself was bent","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^9","words":"The rim itself was bent","mind":"Patrick","relative_to":"The slight, almost imperceptible wobble","certainty":"ambiguous","other_candidate":"reasoning"}
+],"not_enough_information":["A less practiced eye would miss it: hints at Patrick's skill, but the passage does not state it."],"guide_problem":""},
+{"passage_id":"V016","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Old Jakob","mind":"Old Jakob","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"a mountain guide for decades","mind":"Old Jakob","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"the distant rumble","mind":"Old Jakob","relative_to":"shifting snow high on the peaks","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^9","words":"shifting snow high on the peaks","mind":"Old Jakob","relative_to":"the distant rumble","certainty":"ambiguous","other_candidate":"reasoning"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V017","none_of_these":false,"entries":[
+{"noetic":"^1","words":"George","mind":"George","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"a taxi driver with decades on the road","mind":"George","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"Their loud laughter and unsteady steps","mind":"George","relative_to":"trouble","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^9","words":"trouble","mind":"George","relative_to":"Their loud laughter and unsteady steps","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^3","words":"a group of young men","mind":"George","relative_to":"","certainty":"ambiguous","other_candidate":"none"}
+],"not_enough_information":["The young men are shown laughing and walking, but nothing of their awareness; not listed.","Switching off the for-hire light may be steering clear of the group or just a business choice."],"guide_problem":""},
+{"passage_id":"V018","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Chloe","mind":"Chloe","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"The dry, dusty scent of ancient paper","mind":"Chloe","relative_to":"her university library's quiet stacks","certainty":"clear"},
+{"noetic":"^9","words":"her university library's quiet stacks","mind":"Chloe","relative_to":"The dry, dusty scent of ancient paper","certainty":"clear"}
+],"not_enough_information":["The familiar feeling of intense focus settling over her once more: the passage does not say what brought it or how strongly it impressed her."],"guide_problem":""},
+{"passage_id":"V019","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Michael","mind":"Michael","relative_to":"","certainty":"clear"},
+{"noetic":"^2","words":"the intricate endgame on board three","mind":"Michael","relative_to":"","certainty":"clear"},
+{"noetic":"^4","words":"a distinct pull","mind":"Michael","relative_to":"the intricate endgame on board three","certainty":"clear"},
+{"noetic":"^2","words":"the subtle rook sacrifice","mind":"Michael","relative_to":"","certainty":"ambiguous","other_candidate":"none"},
+{"noetic":"^4","words":"held little appeal, drawing only a cursory glance","mind":"Michael","relative_to":"His own unfinished game","certainty":"clear"}
+],"not_enough_information":["The player who made the rook sacrifice is shown only by an action; not listed."],"guide_problem":""},
+{"passage_id":"V020","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Ben","mind":"Ben","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"Every hour, on the hour","mind":"Ben","relative_to":"his mug of tea","certainty":"clear"},
+{"noetic":"^4","words":"now merely prompted him","mind":"Ben","relative_to":"The sound of the shift change alarm","certainty":"ambiguous","other_candidate":"none"}
+],"not_enough_information":["The alarm that once startled him now sets off standing and stretching without conscious thought: acting without thinking, but no rate or pattern words for the alarm and no statement of what he has become."],"guide_problem":""},
+{"passage_id":"V021","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Daniel","mind":"Daniel","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"The familiar scent of bay rum aftershave","mind":"Daniel","relative_to":"his grandfather's shed","certainty":"clear"},
+{"noetic":"^9","words":"his grandfather's shed","mind":"Daniel","relative_to":"The familiar scent of bay rum aftershave","certainty":"clear"}
+],"not_enough_information":["A retired carpenter is an occupation label with no length of time or stated skill, so no ^5 entry.","Sawdust, varnish and hammering accompany the memory; not marked as its parts."],"guide_problem":""},
+{"passage_id":"V022","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Benjamin","mind":"Benjamin","relative_to":"","certainty":"clear"}
+],"not_enough_information":["Routine tasks only: no rate or pattern words, no stated feeling, no stated skill."],"guide_problem":""},
+{"passage_id":"V023","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Dr. James","mind":"Dr. James","relative_to":"","certainty":"clear"},
+{"noetic":"^1","words":"The patient","mind":"The patient","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"the dark shadow beneath the old filling","mind":"","relative_to":"these observations","certainty":"clear"},
+{"noetic":"^6","words":"the slight swelling","mind":"","relative_to":"these observations","certainty":"clear"},
+{"noetic":"^6","words":"a sharp ache when drinking cold water","mind":"","relative_to":"these observations","certainty":"clear"},
+{"noetic":"^9","words":"the existing filling had cracked, allowing decay to develop underneath","mind":"Dr. James","relative_to":"","certainty":"clear","reached_by":"reasoning"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V024","none_of_these":false,"entries":[
+{"noetic":"^1","words":"David","mind":"David","relative_to":"","certainty":"clear"}
+],"not_enough_information":["The customer is shown pointing and handing over coins, nothing of awareness; not listed."],"guide_problem":""},
+{"passage_id":"V025","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Margaret","mind":"Margaret","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"Every morning at six","mind":"Margaret","relative_to":"the soft chime of the breakfast cart","certainty":"clear"}
+],"not_enough_information":["The scent of oatmeal often followed the chime: a fact about the sequence, with Margaret not shown taking it in.","Stirring and reaching without opening her eyes shows acting without thinking; the passage does not state what she has become."],"guide_problem":""},
+{"passage_id":"V026","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Mark","mind":"Mark","relative_to":"","certainty":"clear"}
+],"not_enough_information":["The colleague only hands over a sheet; not listed.","The reply he awaits is not shown."],"guide_problem":""},
+{"passage_id":"V027","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Maria","mind":"Maria","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"Years of cutting hair","mind":"Maria","relative_to":"","certainty":"clear"}
+],"not_enough_information":["The client is mentioned only; not listed."],"guide_problem":""},
+{"passage_id":"V028","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Omar","mind":"Omar","relative_to":"","certainty":"clear"},
+{"noetic":"^1","words":"The driver","mind":"The driver","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"the oil pressure light came on","mind":"","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"a faint knocking sound","mind":"","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"the dipstick; it was dry","mind":"","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"a fresh puddle of dark fluid beneath the engine block","mind":"","relative_to":"","certainty":"clear"},
+{"noetic":"^9","words":"the engine had seized entirely","mind":"Omar","relative_to":"","certainty":"clear","reached_by":"reasoning"}
+],"not_enough_information":["The passage never names the whole that the four observations belong to, so relative_to is empty for them."],"guide_problem":""},
+{"passage_id":"V029","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Paul","mind":"Paul","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"a slightly darker rind","mind":"","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"Its aroma, usually sharp, seemed a little muted today","mind":"","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"the cheese felt subtly firmer than it should for its age","mind":"","relative_to":"","certainty":"clear"},
+{"noetic":"^9","words":"the cellar’s humidity had dropped, slowing the ripening process","mind":"Paul","relative_to":"","certainty":"clear","reached_by":"reasoning"}
+],"not_enough_information":["The passage never names the whole that the three observations belong to, so relative_to is empty for them.","The passage says realized, not how he got there; read here as reasoning from the checked observations."],"guide_problem":"Rule 15 does not say whether realized after several checked observations is 15(b) or 15(d)."},
+{"passage_id":"V030","none_of_these":true,"entries":[],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V031","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Peter","mind":"Peter","relative_to":"","certainty":"clear"},
+{"noetic":"^2","words":"the immense excavator","mind":"Peter","relative_to":"","certainty":"clear"},
+{"noetic":"^4","words":"a deep, almost childlike awe","mind":"Peter","relative_to":"the immense excavator","certainty":"clear"},
+{"noetic":"^4","words":"it hardly registered with him","mind":"Peter","relative_to":"the drilling noise","certainty":"clear"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V032","none_of_these":false,"entries":[
+{"noetic":"^1","words":"George","mind":"George","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"a routine ingrained","mind":"George","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"countless quiet waits","mind":"George","relative_to":"quiet waits","certainty":"clear"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V033","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Owen","mind":"Owen","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"for twenty years","mind":"Owen","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"The routine settled deep into his muscles","mind":"Owen","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"countless repetitions","mind":"Owen","relative_to":"His movements","certainty":"clear"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V034","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Elara","mind":"Elara","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"A subtle flicker","mind":"Elara","relative_to":"a developing lubrication issue","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^9","words":"a developing lubrication issue","mind":"Elara","relative_to":"A subtle flicker","certainty":"ambiguous","other_candidate":"reasoning"}
+],"not_enough_information":["Most new operators might miss it: hints that Elara is experienced, but the passage does not state what she has become."],"guide_problem":""},
+{"passage_id":"V035","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Evelyn","mind":"Evelyn","relative_to":"","certainty":"clear"},
+{"noetic":"^2","words":"a bolt of shimmering silk","mind":"Evelyn","relative_to":"","certainty":"clear"},
+{"noetic":"^3","words":"a rough, scratchy tweed","mind":"Evelyn","relative_to":"","certainty":"clear"},
+{"noetic":"^4","words":"recoiled slightly","mind":"Evelyn","relative_to":"a rough, scratchy tweed","certainty":"clear"},
+{"noetic":"^4","words":"barely blinked","mind":"Evelyn","relative_to":"a sudden burst of brilliant yellow sunlight","certainty":"clear"}
+],"not_enough_information":["The delivery person only opens the door; not listed."],"guide_problem":""},
+{"passage_id":"V036","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Xander","mind":"Xander","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"every night for years","mind":"Xander","relative_to":"the front of the queue","certainty":"clear"}
+],"not_enough_information":["His movements were entirely unthinking: acting without thinking, but the passage does not state what he has become."],"guide_problem":""},
+{"passage_id":"V037","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Rachel","mind":"Rachel","relative_to":"","certainty":"clear"},
+{"noetic":"^4","words":"did not bother her in the slightest","mind":"Rachel","relative_to":"The whirring sound of the drill","certainty":"clear"},
+{"noetic":"^5","words":"completely accustomed to the sounds and smells of the surgery","mind":"Rachel","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"Decades of check-ups and minor procedures","mind":"Rachel","relative_to":"the sounds and smells of the surgery","certainty":"ambiguous","other_candidate":"^5"}
+],"not_enough_information":[],"guide_problem":"Rule 6 does not say whether recurring events such as check-ups count as a named repeating unit."},
+{"passage_id":"V038","none_of_these":true,"entries":[],"not_enough_information":["The driver is mentioned only through weight on a seat; nothing of awareness is shown."],"guide_problem":""},
+{"passage_id":"V039","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Martin","mind":"Martin","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"a worn heating element","mind":"","relative_to":"The fault","certainty":"clear"},
+{"noetic":"^6","words":"a failing thermal cutout","mind":"","relative_to":"The fault","certainty":"clear"},
+{"noetic":"^6","words":"the overloaded motor relay","mind":"","relative_to":"The fault","certainty":"clear"}
+],"not_enough_information":["The new technician is only addressed; nothing of awareness shown, so not listed."],"guide_problem":""},
+{"passage_id":"V040","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Fiona","mind":"Fiona","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"the faulty spark plugs","mind":"","relative_to":"the old car engine","certainty":"clear"},
+{"noetic":"^6","words":"the rusted exhaust manifold","mind":"","relative_to":"the old car engine","certainty":"clear"},
+{"noetic":"^6","words":"the cracked gasket","mind":"","relative_to":"the old car engine","certainty":"clear"},
+{"noetic":"^6","words":"the seized water pump","mind":"","relative_to":"the old car engine","certainty":"clear"}
+],"not_enough_information":["Steel, copper and aluminum are what dismantling would yield, not clearly stated as what the engine consists of; not marked."],"guide_problem":""},
+{"passage_id":"V041","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Agnes","mind":"Agnes","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"shaped every gesture","mind":"Agnes","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"Years of daily milking","mind":"Agnes","relative_to":"milking","certainty":"clear"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V042","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Ken","mind":"Ken","relative_to":"","certainty":"clear"},
+{"noetic":"^6","words":"smoke the entrance","mind":"","relative_to":"a hive inspection","certainty":"clear"},
+{"noetic":"^6","words":"open the top cover","mind":"","relative_to":"a hive inspection","certainty":"clear"},
+{"noetic":"^6","words":"remove and examine each frame","mind":"","relative_to":"a hive inspection","certainty":"clear"},
+{"noetic":"^6","words":"assess the brood pattern and honey stores","mind":"","relative_to":"a hive inspection","certainty":"clear"}
+],"not_enough_information":["The new apprentice is only addressed; nothing of awareness shown, so not listed."],"guide_problem":"Rule 7 does not say whether the named steps of a procedure count as parts of it."},
+{"passage_id":"V043","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Penelope","mind":"Penelope","relative_to":"","certainty":"clear"},
+{"noetic":"^1","words":"the young vendor","mind":"the young vendor","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"her many seasons in the market","mind":"Penelope","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"her own early days of learning to read the buyers and sellers","mind":"Penelope","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"his eagerness and the customer's cautiousness","mind":"Penelope","relative_to":"a good deal forming","certainty":"ambiguous","other_candidate":"reasoning"},
+{"noetic":"^9","words":"a good deal forming","mind":"Penelope","relative_to":"his eagerness and the customer's cautiousness","certainty":"ambiguous","other_candidate":"reasoning"}
+],"not_enough_information":["The customer is shown only through cautiousness; not listed.","Remembering her own early days: no trigger named."],"guide_problem":""},
+{"passage_id":"V044","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Ben","mind":"Ben","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"had operated the harbour crane for twenty years","mind":"Ben","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"became second nature","mind":"Ben","relative_to":"","certainty":"clear"}
+],"not_enough_information":["He adjusts the hoist speed whenever a dull thud echoes, without thinking: acting without thinking, with no rate or pattern words and no thought brought to mind."],"guide_problem":""},
+{"passage_id":"V045","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Simon","mind":"Simon","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"an ingrained habit","mind":"Simon","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"every show for the past five years","mind":"Simon","relative_to":"a small piece of loose fabric","certainty":"clear"}
+],"not_enough_information":[],"guide_problem":""},
+{"passage_id":"V046","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Farmer George","mind":"Farmer George","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"decades of working this land","mind":"Farmer George","relative_to":"","certainty":"clear"},
+{"noetic":"^5","words":"a familiar pattern ingrained in his very bones","mind":"Farmer George","relative_to":"","certainty":"clear"},
+{"noetic":"^7","words":"the daily routine","mind":"Farmer George","relative_to":"The low moo of the first cow","certainty":"clear"},
+{"noetic":"^2","words":"their gentle presence","mind":"Farmer George","relative_to":"","certainty":"clear"},
+{"noetic":"^4","words":"a deep connection","mind":"Farmer George","relative_to":"their gentle presence","certainty":"clear"}
+],"not_enough_information":["The moo is called the start of the daily routine: the passage does not show it bringing a different Idea to his mind.","He knew each cow by her markings and temperament: knowledge, no trigger shown."],"guide_problem":""},
+{"passage_id":"V047","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Daniel","mind":"Daniel","relative_to":"","certainty":"clear"},
+{"noetic":"^2","words":"a shimmering sample of quartz","mind":"Daniel","relative_to":"","certainty":"clear"},
+{"noetic":"^3","words":"the intense heat of the quarry sun","mind":"Daniel","relative_to":"","certainty":"clear"}
+],"not_enough_information":["His detailed examination of the new geological layer is attention alone; no pull is stated."],"guide_problem":""},
+{"passage_id":"V048","none_of_these":false,"entries":[
+{"noetic":"^1","words":"Esther","mind":"Esther","relative_to":"","certainty":"clear"},
+{"noetic":"^8","words":"The faint scent of lavender polish","mind":"Esther","relative_to":"her mother carefully buffing the antique chest","certainty":"clear"},
+{"noetic":"^9","words":"her mother carefully buffing the antique chest","mind":"Esther","relative_to":"The faint scent of lavender polish","certainty":"clear"}
+],"not_enough_information":["Her mother is shown only inside the picture; her own awareness is not shown, so she is not listed.","A feeling of warmth spread through her: no stated degree of impression."],"guide_problem":"Rule 4 does not say whether someone who hummed inside a remembered scene counts as someone shown speaking."}
+]

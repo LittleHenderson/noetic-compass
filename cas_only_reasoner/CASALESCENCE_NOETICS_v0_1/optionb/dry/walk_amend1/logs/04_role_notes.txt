@@ -1,0 +1,43 @@
+$ python -B tools/ob_role_notes.py 
+Option B role notes. Program tools/ob_role_notes.py. Real run. Seal step 1 was checked.
+ROLE NOTES BUILT (all numbers REAL, measured in this run)
+  Notes built: 139 passages, each with ROLE, MIXED and QUOTES-ONLY text.
+  Agreed entries used: 548 (409 of them are not ^1).
+
+LENGTH, shown as shortest / median / longest
+  group        words (white space)    words (word regex)     size count         characters         lines
+  ROLE         56 / 134 / 134         52 / 127 / 127         80 / 192 / 192     312 / 768 / 784    4 / 8 / 8
+  MIXED        54 / 133 / 133         50 / 125 / 125         78 / 189 / 189     298 / 764 / 780    4 / 8 / 8
+  QUOTES-ONLY  19 / 52 / 52           17 / 48 / 48           29 / 76 / 76       101 / 309 / 322    2 / 4 / 4
+  "words (white space)" is len(text.split()). "words (word regex)" counts [A-Za-z0-9']+ ; this is the role_words field.
+  "size count" counts every word and every punctuation mark; this is the role_size_count field.
+  The passages themselves: 53 / 53 / 53 words (white space).
+  ROLE note words as a percent of passage words: 105 / 252 / 252.
+  FILLER base text, the same for every passage (7 words, size count 8): No notes are provided for this passage.
+
+ANSWER-LEAK PATTERNS (rule a: an option letter written as a choice; rule d: the words answer, option, correct)
+  Rules (b) and (c) compare a note with a question. No question exists yet, so they can not be run here.
+  Screened text = the frame text: the note with every quoted passage part emptied.
+  ROLE         notes hit: 0 of 139 
+  MIXED        notes hit: 0 of 139 
+  QUOTES-ONLY  notes hit: 0 of 139 
+  FILLER       hits: 0 
+  For information only, the same patterns on the full text (quoted passage parts kept). These are not hits by the rule:
+  ROLE         notes matched: 0 of 139 
+  MIXED        notes matched: 0 of 139 
+  QUOTES-ONLY  notes matched: 0 of 139 
+
+OTHER FACTS
+  Lines that say: same as for "...": 0, in 0 notes.
+  Printed Minds or related things that are not word-for-word passage text: 0.
+  Notes with no ^1 line: [].
+  Share of a passage's sentences that its ROLE note quotes, mean over all notes: 49.0%. The design says None%;
+    that figure was measured before the plan fixed the sentence rule (a full stop after Mr, Dr and the like does not end a sentence).
+  Of the 113 final role notes, 3 quote exactly one passage sentence (the design says None) and 3 hold exactly one entry besides ^1 (the design says None).
+
+WROTE optionb/notes_role/role_notes.json  sha256 f645753b6457d9e37aad3be2889271fc19aef3db4edd41ee8ba6f184ad585b05
+WROTE optionb/notes_role/owner_sample_20.json  sha256 b6cd2cca5a3c0b0c905a125b1becc723a8b8a415eecf864ad72d5034794a800e
+WROTE optionb/OWNER_SAMPLE_ROLE_NOTES.md  sha256 be3ac2b89199c7dce33616be31db153a97600fe0d5f4b5553e4423413de30682
+Owner sample, seed 20261016: V040, V137, V111, V081, V119, V050, V030, V140, V065, V141, V074, V016, V048, V018, V001, V126, V097, V110, V098, V106
+ROLE_NOTES_OK.
+[exit code 0]

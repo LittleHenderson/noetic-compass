@@ -1,0 +1,63 @@
+{
+ "tool": "label_outside_v22/1",
+ "provider": "deepseek",
+ "model": "deepseek-chat",
+ "guide_sha256": "95473da3ae547f7a7bedea6073db3c02599b1cbcee4591d3e15988935c88eaa0",
+ "instructions_sha256": "25f2aa6330b346bcca92193e348aa89ee8a41116f59e223ee4be76309ecd1b4e",
+ "checker_sha256": "c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9",
+ "passages_sha256": "13df2303a57c4c1a17131d04837a95ee449fb8f4c435d829a43256902afdf9da",
+ "tool_sha256": "90a216fadfd3bd5ea4786b1dfdb9830277438e4bf89b2e6ae233a59da07162c4",
+ "frame_sha256": "a7388848ef8d536e3dee3a82d1049dc22075330709da9d37517c73f8b49021dd",
+ "seal_sha256": "5ad2f969450fd1af90215f9cd704afea6336129287fc2e163cd4e2a46fbe216e",
+ "written_utc": "2026-10-07T23:01:24.482232+00:00",
+ "labels_file": "labels_team_b.json",
+ "labels_sha256": "3f59e187cc75ea58a65af7618de3b5526b45df7fc8803e6ad91fb4ba8e59aaff",
+ "guide": "02_LABELING_GUIDE_v2_2.md",
+ "instructions": "label_v22\\LABELER_INSTRUCTIONS.txt",
+ "passages_file": "label_v22\\verdict\\passages_sealed.json",
+ "complete": true,
+ "passages": 435,
+ "passages_by_state": {
+  "LABELED": 435
+ },
+ "passages_not_final": [],
+ "passages_by_number_of_tries": {
+  "1": 384,
+  "2": 47,
+  "3": 4
+ },
+ "entries_in_final_records": 1787,
+ "entries_by_noetic": {
+  "^1": 521,
+  "^2": 76,
+  "^3": 34,
+  "^4": 131,
+  "^5": 208,
+  "^6": 297,
+  "^7": 88,
+  "^8": 167,
+  "^9": 265
+ },
+ "entries_withdrawn_between_tries": 0,
+ "entries_withdrawn_by_noetic": {},
+ "withdrawn_by_passage": {},
+ "model_asked_for": "deepseek-chat",
+ "models_that_answered": {
+  "deepseek-flash": 490
+ },
+ "tries_with_reasoning_text": 0,
+ "one_passage_per_call": true,
+ "temperature": 0,
+ "tokens_sent": 8831652,
+ "tokens_returned": 177665,
+ "stopped_for": null,
+ "cap_in": 12000000,
+ "cap_out": 400000,
+ "caps_given_in_all_runs": [
+  {
+   "utc": "2026-10-07T22:45:20.466707+00:00",
+   "cap_in": 12000000,
+   "cap_out": 400000
+  }
+ ]
+}

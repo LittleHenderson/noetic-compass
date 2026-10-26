@@ -1,0 +1,68 @@
+{
+ "Q0007": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "C"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0008": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "B"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0009": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "B"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0010": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0011": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0007": {
+  "http_status": 200,
+  "content": "{\"answer\": \"D\", \"answer\": \"A\"}",
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0008": {
+  "http_status": 200,
+  "content": "MADE-UP reply with no JSON: I think A",
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0009": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0010": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0011": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "E"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ }
+}

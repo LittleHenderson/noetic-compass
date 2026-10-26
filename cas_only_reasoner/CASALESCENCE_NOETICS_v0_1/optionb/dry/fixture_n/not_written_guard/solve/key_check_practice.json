@@ -1,0 +1,193 @@
+{
+ "schema": "casalescence/optionb/key_check/v1",
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "cb6581f30449edb17ac32e501a19231551bdfd0c75a87ef1dfba4fa8f8f9f409",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "V901.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V901.p1.GOES_FOR",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V901.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V902.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V902.p1.GOES_FOR",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V903.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V903.p1.GOES_FOR",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V904.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V904.p1.GOES_FOR",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V905.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V905.p2.GOES_FOR",
+   "family": "role_step",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  },
+  {
+   "question_id": "V914.p1.FACT",
+   "family": "plain_fact",
+   "with_passage": {
+    "deepseek-chat": "RIGHT",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "key_check_passed": true,
+   "no_passage": {
+    "deepseek-chat": "WRONG",
+    "claude-sonnet-subagent": "RIGHT"
+   },
+   "no_passage_passed": true,
+   "survives": true
+  }
+ ],
+ "counts": {}
+}

@@ -1,0 +1,41 @@
+SHEET practice-with_passage-01. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0004 ===
+Passage:
+Halima unlocked the boathouse and the smell of wet rope met her at the door. At once she was thinking of her uncle's ferry, the bench by the engine hatch, the tin of biscuits he kept under it. She hung the key on its nail and began counting the oars.
+
+Question: Suppose there had been no rope smell at the door that morning. Going only by the passage, which of these would most likely not have happened?
+A. Halima walking in through the door
+B. Halima starting her usual morning jobs
+C. Halima hanging the key on its nail
+D. Halima remembering the engine hatch bench
+E. Halima counting the oars one by one
+F. Halima unlocking the old boathouse door
+=== END Q0004 ===
+
+=== ITEM Q0005 ===
+Passage:
+Halima unlocked the boathouse and the smell of wet rope met her at the door. At once she was thinking of her uncle's ferry, the bench by the engine hatch, the tin of biscuits he kept under it. She hung the key on its nail and began counting the oars.
+
+Question: Where did Halima hang the key?
+A. under the bench
+B. by the hatch
+C. in the tin
+D. on its nail
+=== END Q0005 ===
+
+=== ITEM Q0006 ===
+Passage:
+Halima unlocked the boathouse and the smell of wet rope met her at the door. At once she was thinking of her uncle's ferry, the bench by the engine hatch, the tin of biscuits he kept under it. She hung the key on its nail and began counting the oars.
+
+Question: On another day, far from the boathouse, which of these would most likely make Halima picture her uncle's ferry again?
+A. unlocking a heavy wooden side door
+B. counting a row of wooden oars
+C. hanging a key on a nail
+D. putting a key back in a pocket
+E. smelling damp rope on a quay
+F. opening a door early in the morning
+=== END Q0006 ===

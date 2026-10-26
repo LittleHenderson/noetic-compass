@@ -1,0 +1,713 @@
+[
+ {
+  "passage_id": "Q01",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "John",
+    "mind": "John",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the faint smell of diesel from the engine",
+    "mind": "John",
+    "relative_to": "a sudden memory of his old bicycle, rusty and strong, that he rode home from school, its chain always needing a drop of oil",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a sudden memory of his old bicycle, rusty and strong, that he rode home from school, its chain always needing a drop of oil",
+    "mind": "John",
+    "relative_to": "the faint smell of diesel from the engine",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q02",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the quiet pull of the line",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "feeling for the fish below",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the clatter of the winch",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "unwanted weeds and debris",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "hardly registered",
+    "mind": "Maria",
+    "relative_to": "his words",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "ignoring his booming voice completely",
+    "mind": "Maria",
+    "relative_to": "his booming voice",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q03",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "the shape of a coming squall from its low, dark belly and the way the gulls were flying",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "its low, dark belly and the way the gulls were flying",
+    "mind": "",
+    "relative_to": "a coming squall",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the shape of a coming squall from its low, dark belly and the way the gulls were flying",
+    "mind": "Robert",
+    "relative_to": "a sudden storm years ago that nearly took his boat",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a sudden storm years ago that nearly took his boat",
+    "mind": "Robert",
+    "relative_to": "the shape of a coming squall from its low, dark belly and the way the gulls were flying",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "No explicit statement of Robert's affinity for or aversion to any idea."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q04",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her fingers simply knew the moment",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every weekday for fifteen years",
+    "mind": "Sarah",
+    "relative_to": "that recording signal the library's closing time",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q05",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a faint, sweet smell of vanilla and aged paper",
+    "mind": "David",
+    "relative_to": "his grandmother's kitchen",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandmother's kitchen",
+    "mind": "David",
+    "relative_to": "a faint, sweet smell of vanilla and aged paper",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the patterned wallpaper",
+    "mind": "",
+    "relative_to": "his grandmother's kitchen",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the ticking clock",
+    "mind": "",
+    "relative_to": "his grandmother's kitchen",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q06",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Emily",
+    "mind": "Emily",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "wandering through the fiction aisles, picking up novels with intriguing covers",
+    "mind": "Emily",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the hum of machines and the bright screens",
+    "mind": "Emily",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered with her",
+    "mind": "Emily",
+    "relative_to": "A loud phone conversation from a patron near the entrance",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "absorbed in the back cover blurb of a new mystery, feeling nothing else",
+    "mind": "Emily",
+    "relative_to": "the back cover blurb of a new mystery",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q07",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of mixing and pouring concrete himself",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "what had gone wrong",
+    "mind": "",
+    "relative_to": "every mistake",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the likely weak spots in the finished slab",
+    "mind": "",
+    "relative_to": "every mistake",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q08",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q09",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Kevin",
+    "mind": "Kevin",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distant clang of steel beams being hoisted into place",
+    "mind": "Kevin",
+    "relative_to": "the sound of church bells from his childhood village, chiming on Sunday mornings",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the sound of church bells from his childhood village, chiming on Sunday mornings",
+    "mind": "Kevin",
+    "relative_to": "The distant clang of steel beams being hoisted into place",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The passage states 'He remembered the quiet paths and the smell of freshly cut grass', but does not explicitly state what triggered this memory, so it cannot be labeled as an ^8/^9 pair (Rule 3)."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q10",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the soft, yeasty smell of the dough rising",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the harsh glare of the fluorescent lights that flickered in the early morning",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered the noise",
+    "mind": "Clara",
+    "relative_to": "the noise",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q11",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the yeast was a little sluggish",
+    "mind": "Sarah",
+    "relative_to": "the humidity in the air was off",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the humidity in the air was off",
+    "mind": "Sarah",
+    "relative_to": "the yeast was a little sluggish",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of early mornings",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Years of early mornings",
+    "mind": "Sarah",
+    "relative_to": "a delicate balance",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "understood deeply",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q12",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "accustomed to its weight",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "months of repetition",
+    "mind": "David",
+    "relative_to": "scooped the precise amount into the mixing bowl",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a movement ingrained",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q13",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Julia",
+    "mind": "Julia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The tinny, distant sound of a baby crying through the customer's phone line",
+    "mind": "Julia",
+    "relative_to": "her own nephew, barely a year old, reaching for her finger last Christmas",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her own nephew, barely a year old, reaching for her finger last Christmas",
+    "mind": "Julia",
+    "relative_to": "The tinny, distant sound of a baby crying through the customer's phone line",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q14",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Mark",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the aggressive tone of the last caller",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a gentle warmth",
+    "mind": "He",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "gentle",
+    "mind": "He",
+    "relative_to": "warmth",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q15",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "customer's frustration",
+    "mind": "",
+    "relative_to": "the rambling complaint about a billing error",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "actual account details",
+    "mind": "",
+    "relative_to": "the rambling complaint about a billing error",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "years of experience",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The core issue, she knew from years of experience, was often a simple miscommunication regarding a promotional discount",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the steps of the billing cycle",
+    "mind": "",
+    "relative_to": "the billing cycle",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q16",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q17",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q18",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q19",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His many years driving this route",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "the road's every curve",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the new patch of loose gravel near the old oak tree",
+    "mind": "Arthur",
+    "relative_to": "how the bus would handle the rough surface",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "how the bus would handle the rough surface",
+    "mind": "Arthur",
+    "relative_to": "the new patch of loose gravel near the old oak tree",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "Q20",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q21",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q22",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q23",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q24",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q25",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q26",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q27",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q28",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q29",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ },
+ {
+  "passage_id": "Q30",
+  "none_of_these": false,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": "",
+  "labeler_failed": true
+ }
+]

@@ -1,0 +1,1043 @@
+[
+ {
+  "passage": "V368",
+  "writer_kind": "K5",
+  "text": "Ben, the ski lift operator, opened the safety bar for the departing skiers. He didn't even watch their skis touch the snow. For years, his hand had moved to the lever at precisely the right moment, a silent, ingrained muscle memory. The constant whirring of the cables was simply part of his day, unheard.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a silent, ingrained muscle memory",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "For years, his hand had moved to the lever at precisely the right moment",
+    "mind": "Ben",
+    "relative_to": "the lever",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "The constant whirring of the cables was simply part of his day",
+    "mind": "Ben",
+    "relative_to": "The constant whirring of the cables",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "unheard",
+    "mind": "Ben",
+    "relative_to": "The constant whirring of the cables",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a silent, ingrained muscle memory",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "For years, his hand had moved to the lever at precisely the right moment",
+    "mind": "Ben",
+    "relative_to": "the lever",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V122",
+  "writer_kind": "K3",
+  "text": "Old Thomas eyed the crates of mackerel. He had been a fishmonger for nearly sixty years, his hands stained with brine and scales. The faint sheen on the fish, nearly imperceptible to others, told him these were the day's freshest catch. He knew precisely which boat had brought them in just by their size and condition.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Old Thomas",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a fishmonger for nearly sixty years",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint sheen on the fish",
+    "mind": "Old Thomas",
+    "relative_to": "these were the day's freshest catch",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "these were the day's freshest catch",
+    "mind": "Old Thomas",
+    "relative_to": "The faint sheen on the fish",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^8",
+    "words": "their size and condition",
+    "mind": "Old Thomas",
+    "relative_to": "which boat had brought them in",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "which boat had brought them in",
+    "mind": "Old Thomas",
+    "relative_to": "their size and condition",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Old Thomas",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a fishmonger for nearly sixty years",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "nearly imperceptible to others",
+    "mind": "Old Thomas",
+    "relative_to": "The faint sheen on the fish",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint sheen on the fish",
+    "mind": "Old Thomas",
+    "relative_to": "these were the day's freshest catch",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "these were the day's freshest catch",
+    "mind": "Old Thomas",
+    "relative_to": "The faint sheen on the fish",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^8",
+    "words": "their size and condition",
+    "mind": "Old Thomas",
+    "relative_to": "which boat had brought them in",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "which boat had brought them in",
+    "mind": "Old Thomas",
+    "relative_to": "their size and condition",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V061",
+  "writer_kind": "K6",
+  "text": "Frank surveyed the newly blasted rock face. His experienced eye caught a faint hairline crack running through a large granite slab. He also noted the slightly hollow sound the drill made on its last pass. He chewed his lip, then waved over the team leader. They would need to reinforce that section before any more digging.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His experienced eye",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the team leader",
+    "mind": "the team leader",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His experienced eye",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a faint hairline crack running through a large granite slab",
+    "mind": "Frank",
+    "relative_to": "They would need to reinforce that section",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "They would need to reinforce that section",
+    "mind": "Frank",
+    "relative_to": "a faint hairline crack running through a large granite slab",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^8",
+    "words": "the slightly hollow sound the drill made on its last pass",
+    "mind": "Frank",
+    "relative_to": "They would need to reinforce that section",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "They would need to reinforce that section",
+    "mind": "Frank",
+    "relative_to": "the slightly hollow sound the drill made on its last pass",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V375",
+  "writer_kind": "K3",
+  "text": "Arthur, the bicycle repairman, examined the buckled front wheel. A young student stood by, visibly distressed about missing their delivery shift. Arthur had seen countless bent rims and snapped spokes over his forty years in the shop. He once felt every breakage keenly, but now the damage only presented a familiar challenge. He quietly began assessing the spokes for tension and alignment.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "A young student",
+    "mind": "A young student",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "missing their delivery shift",
+    "mind": "A young student",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "forty years in the shop",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "felt every breakage keenly",
+    "mind": "Arthur",
+    "relative_to": "countless bent rims and snapped spokes",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "only presented a familiar challenge",
+    "mind": "Arthur",
+    "relative_to": "the buckled front wheel",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "A young student",
+    "mind": "A young student",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "forty years in the shop",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "felt every breakage keenly",
+    "mind": "Arthur",
+    "relative_to": "every breakage",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "the damage only presented a familiar challenge",
+    "mind": "Arthur",
+    "relative_to": "the damage",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V373",
+  "writer_kind": "K6",
+  "text": "Professor Anya peered into the beaker, her brow furrowed slightly. She noticed a faint, almost imperceptible shimmer near the bottom of the clear solution. Years of working with these compounds told her precisely what it indicated. A trace amount of the lead contaminant was present. Her assistant, standing nearby, would have easily missed it.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Professor Anya",
+    "mind": "Professor Anya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of working with these compounds",
+    "mind": "Professor Anya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a faint, almost imperceptible shimmer",
+    "mind": "Professor Anya",
+    "relative_to": "A trace amount of the lead contaminant",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "A trace amount of the lead contaminant",
+    "mind": "Professor Anya",
+    "relative_to": "a faint, almost imperceptible shimmer",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Professor Anya",
+    "mind": "Professor Anya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Her assistant",
+    "mind": "Her assistant",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of working with these compounds",
+    "mind": "Professor Anya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a faint, almost imperceptible shimmer near the bottom of the clear solution",
+    "mind": "Professor Anya",
+    "relative_to": "A trace amount of the lead contaminant was present",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "A trace amount of the lead contaminant was present",
+    "mind": "Professor Anya",
+    "relative_to": "a faint, almost imperceptible shimmer near the bottom of the clear solution",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V130",
+  "writer_kind": "K3",
+  "text": "Lena watched the young beginners falter as they exited the ski lift. Years of skiing steep slopes and navigating unexpected ice patches had taught her caution. She always checked the prevailing wind and the snow conditions carefully before pushing off. Her accumulated experience guided her descent, ensuring a smooth, steady path down the mountain.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of skiing steep slopes and navigating unexpected ice patches",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of skiing steep slopes and navigating unexpected ice patches",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her accumulated experience",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "She always checked the prevailing wind and the snow conditions carefully before pushing off",
+    "mind": "Lena",
+    "relative_to": "the prevailing wind and the snow conditions",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V239",
+  "writer_kind": "K5",
+  "text": "Sarah had worked the morning news desk for years. At exactly twenty-seven minutes past the hour, she would automatically reach for her coffee mug. Her fingers tapped the desk twice before she sipped, ready for the next bulletin. This happened without her ever needing to glance at the clock. It was simply part of the flow now.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had worked the morning news desk for years",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "At exactly twenty-seven minutes past the hour",
+    "mind": "Sarah",
+    "relative_to": "reach for her coffee mug",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "worked the morning news desk for years",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "At exactly twenty-seven minutes past the hour",
+    "mind": "Sarah",
+    "relative_to": "her coffee mug",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Her fingers tapped the desk twice before she sipped",
+    "mind": "Sarah",
+    "relative_to": "the next bulletin",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V060",
+  "writer_kind": "K2",
+  "text": "Liam, a seasoned hiker, felt a sense of peace settle over him as he surveyed the expansive, green valley. The crisp mountain air filled his lungs, a feeling he deeply cherished. The distant, faint sound of a snowmobile engine, however, seemed a jarring intrusion, quickly fading into the background of his thoughts.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Liam",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a seasoned hiker",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The crisp mountain air",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "deeply cherished",
+    "mind": "Liam",
+    "relative_to": "The crisp mountain air",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^3",
+    "words": "The distant, faint sound of a snowmobile engine",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "quickly fading into the background of his thoughts",
+    "mind": "Liam",
+    "relative_to": "The distant, faint sound of a snowmobile engine",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Liam",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a sense of peace",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The crisp mountain air",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The distant, faint sound of a snowmobile engine",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a feeling he deeply cherished",
+    "mind": "Liam",
+    "relative_to": "The crisp mountain air",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "seemed a jarring intrusion",
+    "mind": "Liam",
+    "relative_to": "The distant, faint sound of a snowmobile engine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a seasoned hiker",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V359",
+  "writer_kind": "K3",
+  "text": "Old Klaus stoked the fire in the hut's hearth. He had weathered countless blizzards in these mountains over his eighty years. The howling wind outside, which might alarm a novice, merely sounded like a familiar, restless companion to him. He knew exactly how much wood was needed to keep the warmth through the long night.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Old Klaus",
+    "mind": "Old Klaus",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "weathered countless blizzards in these mountains",
+    "mind": "Old Klaus",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "merely sounded like a familiar, restless companion to him",
+    "mind": "Old Klaus",
+    "relative_to": "The howling wind outside",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Old Klaus",
+    "mind": "Old Klaus",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless blizzards in these mountains over his eighty years",
+    "mind": "Old Klaus",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "merely sounded like a familiar, restless companion to him",
+    "mind": "Old Klaus",
+    "relative_to": "The howling wind outside",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V045",
+  "writer_kind": "K5",
+  "text": "Simon, the stagehand, adjusted the curtain ropes. As the lights dimmed, he automatically straightened a small piece of loose fabric on the backdrop. He had been doing this for every show for the past five years. It was an ingrained habit, a tiny detail he fixed without consciously registering its presence or his own action.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Simon",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained habit",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every show for the past five years",
+    "mind": "Simon",
+    "relative_to": "a small piece of loose fabric",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Simon",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "for every show for the past five years",
+    "mind": "Simon",
+    "relative_to": "a small piece of loose fabric on the backdrop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained habit",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V369",
+  "writer_kind": "K3",
+  "text": "Tanya watched the approaching storm clouds from the ferry deck. Most passengers began to seek shelter below. Tanya, a seasoned deckhand, remained calm. She had seen countless squalls blow in across the river during her career. This one looked like a familiar bluster, nothing she hadn't navigated before. She secured a loose rope near the rail.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tanya",
+    "mind": "Tanya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Most passengers",
+    "mind": "Most passengers",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless squalls blow in across the river during her career",
+    "mind": "Tanya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "remained calm",
+    "mind": "Tanya",
+    "relative_to": "the approaching storm clouds",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tanya",
+    "mind": "Tanya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a seasoned deckhand",
+    "mind": "Tanya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless squalls blow in across the river during her career",
+    "mind": "Tanya",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V043",
+  "writer_kind": "K3",
+  "text": "Penelope watched the young vendor haggling over a price. She saw his eagerness and the customer's cautiousness. With her many seasons in the market, she knew the subtle signs of a good deal forming. She smiled faintly, remembering her own early days of learning to read the buyers and sellers. It was a well-practiced dance.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Penelope",
+    "mind": "Penelope",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young vendor",
+    "mind": "the young vendor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "her many seasons in the market",
+    "mind": "Penelope",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "her own early days of learning to read the buyers and sellers",
+    "mind": "Penelope",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "his eagerness and the customer's cautiousness",
+    "mind": "Penelope",
+    "relative_to": "a good deal forming",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "a good deal forming",
+    "mind": "Penelope",
+    "relative_to": "his eagerness and the customer's cautiousness",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Penelope",
+    "mind": "Penelope",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young vendor",
+    "mind": "the young vendor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the customer",
+    "mind": "the customer",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "her many seasons in the market",
+    "mind": "Penelope",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "her own early days of learning to read the buyers and sellers",
+    "mind": "Penelope",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "a well-practiced dance",
+    "mind": "Penelope",
+    "relative_to": "haggling over a price",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ]
+ },
+ {
+  "passage": "V137",
+  "writer_kind": "K5",
+  "text": "At exactly five minutes past the hour, Clara always cleaned her scissors and comb. She never consulted a watch or looked at the clock. The previous customer's haircut was finished, the next one was settling in, and this small interval had become her routine. It was just how she transitioned between clients, an ingrained habit.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "At exactly five minutes past the hour, Clara always",
+    "mind": "Clara",
+    "relative_to": "cleaned her scissors and comb",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained habit",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "At exactly five minutes past the hour",
+    "mind": "Clara",
+    "relative_to": "cleaned her scissors and comb",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "this small interval had become her routine",
+    "mind": "Clara",
+    "relative_to": "transitioned between clients",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained habit",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V315",
+  "writer_kind": "K3",
+  "text": "Brenda picked up a package, testing its weight and balance. The label listed \"books,\" but the package shifted oddly in her grip. Decades of handling parcels had given her a sixth sense for mislabeled contents. This package felt too light for books and too fluid for most other common items. She marked it for special inspection.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Brenda",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Decades of handling parcels",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Brenda",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Decades of handling parcels",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the package shifted oddly in her grip",
+    "mind": "Brenda",
+    "relative_to": "mislabeled contents",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "mislabeled contents",
+    "mind": "Brenda",
+    "relative_to": "the package shifted oddly in her grip",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V349",
+  "writer_kind": "K3",
+  "text": "Giovanni, a vintner with decades of experience, watched the young pickers hurry through the rows of grapes. He did not rush them. He had learned that the slight stickiness of a perfectly ripe grape, the subtle darkening of its skin, spoke more than any schedule. Time and patience yielded the best wine.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Giovanni",
+    "mind": "Giovanni",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "decades of experience",
+    "mind": "Giovanni",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Giovanni",
+    "mind": "Giovanni",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young pickers",
+    "mind": "the young pickers",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "decades of experience",
+    "mind": "Giovanni",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "He had learned that the slight stickiness of a perfectly ripe grape, the subtle darkening of its skin, spoke more than any schedule",
+    "mind": "Giovanni",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ }
+]

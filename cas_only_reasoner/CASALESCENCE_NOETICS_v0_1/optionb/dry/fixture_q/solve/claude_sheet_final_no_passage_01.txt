@@ -1,0 +1,31 @@
+SHEET final-no_passage-01. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0004 ===
+Question: Where was the new radio?
+A. on the bench
+B. on the shelf
+C. beside the scale
+D. in the tray rack
+=== END G0004 ===
+
+=== ITEM G0005 ===
+Question: Oksana takes a desk job for two years and never weighs flour. Going only by the passage, which of these has most likely faded when she comes back?
+A. calling out for the trays
+B. reading numbers on the scale
+C. tying her apron at the bench
+D. finding her bench before dawn
+E. hearing the radio on the shelf
+F. stopping the scoop without a glance
+=== END G0005 ===
+
+=== ITEM G0006 ===
+Question: A new baker takes Oksana's place on a first day. Going only by the passage, which of these would most likely be missing?
+A. an apron tied before the work
+B. the scoop stopping without a glance
+C. a scale sitting on the bench
+D. a bench standing by the wall
+E. a radio playing on the shelf
+F. a call for the baking trays
+=== END G0006 ===

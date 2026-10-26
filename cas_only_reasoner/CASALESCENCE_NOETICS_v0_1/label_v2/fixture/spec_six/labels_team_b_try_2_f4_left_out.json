@@ -1,0 +1,7 @@
+[
+ {"passage_id": "F4", "none_of_these": false,
+  "entries": [
+   {"noetic": "^1", "mind": "Tomas", "label": "Tomas", "support": "Every morning before the ferry left, Tomas checked the mooring lines.", "measure": "", "relative_to": "", "certainty": "clear"}
+  ],
+  "not_enough_information": [], "guide_problem": ""}
+]

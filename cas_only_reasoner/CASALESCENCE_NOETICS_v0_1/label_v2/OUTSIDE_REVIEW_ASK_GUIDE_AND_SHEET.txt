@@ -1,0 +1,16 @@
+You are an independent reviewer of a study. You did not write it. You are not the model that will label. Review the documents below for one purpose: find defects that would make the label-agreement result wrong, unfair or unreadable. Report BLOCKER and MAJOR findings only. No style notes.
+
+Background. Two independent teams of language models will label short passages. For each passage a team writes entries: which stretch of text occupies which of nine roles (written ^1 to ^9), for which Mind, relative to what. Each entry now has a short label plus a full supporting quote. A program then pairs the two teams' entries one to one and counts, per role, entries both teams wrote, entries only team A wrote and entries only team B wrote. The pass mark is: of every entry either team wrote, at least 0.80 written by both.
+
+Fixed ground you may not question. Part A of the guide (the ten definitions and the table of sayings) is canon. It belongs to the framework's owner and may not be changed, reworded, widened or narrowed. Rule 15 is the owner's own working ruling and may not be changed.
+
+Check in particular:
+1. Does any rule, working line or worked example in Part B of the guide contradict a definition or a saying in Part A? Name the rule and quote both sides. Does any rule decide what a definition covers without saying that it is only a working line that waits for the owner?
+2. Do two rules of the guide order opposite things for the same text? Quote both.
+3. Is the guide too long or too tangled for a labeling model to follow in one read? Name the three places where two careful labelers are most likely to part.
+4. The sign-off sheet asks the owner to sign about 45 items. Does the sheet say truly and completely what a signature puts in force? Is any item worded so that the owner would sign something other than what the guide does?
+5. Can the pass mark be met for the wrong reason (for example by both teams writing very little, by both copying whole sentences as labels, or by entries being moved out of the pass/fail row into held rows)? Can it be missed for the wrong reason?
+6. Could a simpler guide reach the same aim? The owner asked for three things only: keep identifying which thing occupies each role; use a short, consistent identifying label plus the full supporting quote; count extra and missing roles separately. Say plainly whether the changes to presence rules (the held kinds and the working lines) are needed for that aim, or whether they add risk.
+
+For each finding give: severity, the exact place, why it matters, and the smallest fix.
+Start your reply with one line: VERDICT: ACCEPT, ACCEPT_WITH_NOTES, or REJECT. Keep the reply under 900 words.

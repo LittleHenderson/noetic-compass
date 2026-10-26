@@ -1,0 +1,75 @@
+$ python -B tools/ob_select.py select --set practice
+{
+ "program": "tools/ob_select.py",
+ "dry_fixture": false,
+ "step": "select",
+ "seal": "checked: 2 seal lines, all sealed files unchanged",
+ "set": "practice",
+ "practice_setting_count": 8,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 70,
+   "plain_fact": 24
+  },
+  {
+   "filter": "form check",
+   "role_step": 70,
+   "plain_fact": 24
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 70,
+   "plain_fact": 24
+  },
+  {
+   "filter": "option check",
+   "role_step": 70,
+   "plain_fact": 24
+  },
+  {
+   "filter": "key check",
+   "role_step": 70,
+   "plain_fact": 24
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 70,
+   "plain_fact": 24
+  },
+  {
+   "filter": "selection",
+   "role_step": 47,
+   "plain_fact": 24
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 47,
+   "plain_fact": 24
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 47,
+  "plain_fact_tasks": 24,
+  "passages_with_a_task": 24,
+  "passages_with_a_role_step_task": 24,
+  "single_longest": [
+   0,
+   47
+  ],
+  "single_shortest": [
+   0,
+   47
+  ]
+ },
+ "dropped_by_reason": {
+  "NOT_PICKED_BY_PAIR_RULE": 23
+ },
+ "decision": "STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING",
+ "stop_reasons": [
+  "47 practice role-step tasks and 24 practice plain-fact tasks survive with 8 practice settings; the reserve targets are 45 and 25."
+ ],
+ "next": "The reserve rule moves the next reserve setting to practice: \"made-up setting 02\". Write its questions (both passes) with --practice-settings 9, then run the check, the solvers and this step again with --practice-settings 9. Seal step 3A is refused until the reserve rule is finished.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+}
+[exit code 0]

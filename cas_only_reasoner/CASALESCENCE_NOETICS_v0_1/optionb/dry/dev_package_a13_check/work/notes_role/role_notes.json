@@ -1,0 +1,1259 @@
+{
+ "schema": "casalescence/optionb/role_notes/v1",
+ "made_by": {
+  "program": "optionb/dry/build_dev_package.py [MADE-UP DATA FOR THE DEVELOPMENT TEST, NOT A RESULT]",
+  "sha256": "2827b184dcd6b953470e85cce2c72dddd4d5c10d44a6f4fb99e6ffb5a2814623",
+  "utc": "2026-10-05T17:30:52Z"
+ },
+ "inputs": [],
+ "fixture_note": "MADE-UP passages. Built by read_canon(), read_sayings() and build_passage() of tools/ob_role_notes.py, called by optionb/dry/build_dev_package.py.",
+ "canon": {
+  "source": "02_LABELING_GUIDE_v1_2.md",
+  "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e",
+  "lines": {
+   "^1": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.",
+   "^2": "^2 Positive — An Idea the Mind has an affinity for and is attracted toward.",
+   "^3": "^3 Negative — An Idea the Mind is adverse to and repelled by.",
+   "^4": "^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.",
+   "^5": "^5 Female — A Mind impregnated with an Idea, the Ideas a Mind is composed of.",
+   "^6": "^6 Male — An Idea impregnated with another Idea, the Ideas an Idea is composed of.",
+   "^7": "^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.",
+   "^8": "^8 Above/Cause — An Idea that triggers a different Idea than itself to come to Mind.",
+   "^9": "^9 Below/Effect — The Idea brought to Mind by an Above/Cause trigger."
+  },
+  "names": {
+   "^1": "Mind",
+   "^2": "Positive",
+   "^3": "Negative",
+   "^4": "Vibration",
+   "^5": "Female",
+   "^6": "Male",
+   "^7": "Rhythm",
+   "^8": "Above/Cause",
+   "^9": "Below/Effect"
+  },
+  "sayings_source": "../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+  "sayings_sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880",
+  "sayings_lines": {
+   "^1": "Sayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"",
+   "^2": "Sayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"",
+   "^3": "Sayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"",
+   "^4": "Sayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"",
+   "^5": "Sayings: \"We are the sum of our experiences.\" / \"It's who I am.\" / \"Part of what makes me me.\"",
+   "^6": "Sayings: \"Unpacking an idea.\" / \"Breaking it down.\" / \"Looking at what's underneath.\" / \"Pulling apart the argument.\"",
+   "^7": "Sayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"",
+   "^8": "Sayings: \"That reminds me...\" / \"One thing leads to another.\" / \"Triggered a memory.\" / \"Made me think of...\"",
+   "^9": "Sayings: \"It just popped into my head.\" / \"Out of nowhere I thought of...\" / \"The thought came to me.\" / \"It just clicked.\""
+  }
+ },
+ "passages": [
+  {
+   "id": "D001",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Tamsin",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the tar brush",
+     "mind": "Tamsin",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the tar brush before the wire brush.",
+     "same_as_label": null,
+     "offset": 64,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the bilge pump",
+     "mind": "Tamsin",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the bilge pump.",
+     "same_as_label": null,
+     "offset": 199,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Tamsin",
+     "relative_to": "dusted the lantern",
+     "supporting_quote": "Every morning for nine years she had dusted the lantern first.",
+     "same_as_label": null,
+     "offset": 215,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Tamsin\".\n- ^2 Positive: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Tamsin\". Relative to \"dusted the lantern\". Supporting quote: \"Every morning for nine years she had dusted the lantern first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Tamsin\".\n- ^3 Negative: \"the tar brush\". For the Mind \"Tamsin\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^2 Positive: \"the bilge pump\". For the Mind \"Tamsin\". Supporting quote: \"She kept well away from the bilge pump.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Tamsin\". Relative to \"dusted the lantern\". Supporting quote: \"Every morning for nine years she had dusted the lantern first.\"",
+   "quotes_only_text": "- \"Tamsin\".\n- \"the tar brush\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- \"the bilge pump\". Supporting quote: \"She kept well away from the bilge pump.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the lantern first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D002",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Odran",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the bone needle",
+     "mind": "Odran",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the bone needle before the steel needle.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the rusty winch",
+     "mind": "Odran",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the rusty winch.",
+     "same_as_label": null,
+     "offset": 199,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Odran",
+     "relative_to": "dusted the kettle",
+     "supporting_quote": "Every morning for nine years he had dusted the kettle first.",
+     "same_as_label": null,
+     "offset": 216,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Odran\".\n- ^2 Positive: \"the bone needle\". For the Mind \"Odran\". Supporting quote: \"He always reached for the bone needle before the steel needle.\"\n- ^3 Negative: \"the rusty winch\". For the Mind \"Odran\". Supporting quote: \"He kept well away from the rusty winch.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Odran\". Relative to \"dusted the kettle\". Supporting quote: \"Every morning for nine years he had dusted the kettle first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Odran\".\n- ^3 Negative: \"the bone needle\". For the Mind \"Odran\". Supporting quote: \"He always reached for the bone needle before the steel needle.\"\n- ^2 Positive: \"the rusty winch\". For the Mind \"Odran\". Supporting quote: \"He kept well away from the rusty winch.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Odran\". Relative to \"dusted the kettle\". Supporting quote: \"Every morning for nine years he had dusted the kettle first.\"",
+   "quotes_only_text": "- \"Odran\".\n- \"the bone needle\". Supporting quote: \"He always reached for the bone needle before the steel needle.\"\n- \"the rusty winch\". Supporting quote: \"He kept well away from the rusty winch.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years he had dusted the kettle first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D003",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Ilse",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the oak scoop",
+     "mind": "Ilse",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the oak scoop before the tin scoop.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the damp cellar",
+     "mind": "Ilse",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the damp cellar.",
+     "same_as_label": null,
+     "offset": 200,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Ilse",
+     "relative_to": "dusted the ledger",
+     "supporting_quote": "Every morning for nine years she had dusted the ledger first.",
+     "same_as_label": null,
+     "offset": 217,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Ilse\".\n- ^2 Positive: \"the oak scoop\". For the Mind \"Ilse\". Supporting quote: \"She always reached for the oak scoop before the tin scoop.\"\n- ^3 Negative: \"the damp cellar\". For the Mind \"Ilse\". Supporting quote: \"She kept well away from the damp cellar.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Ilse\". Relative to \"dusted the ledger\". Supporting quote: \"Every morning for nine years she had dusted the ledger first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Ilse\".\n- ^3 Negative: \"the oak scoop\". For the Mind \"Ilse\". Supporting quote: \"She always reached for the oak scoop before the tin scoop.\"\n- ^2 Positive: \"the damp cellar\". For the Mind \"Ilse\". Supporting quote: \"She kept well away from the damp cellar.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Ilse\". Relative to \"dusted the ledger\". Supporting quote: \"Every morning for nine years she had dusted the ledger first.\"",
+   "quotes_only_text": "- \"Ilse\".\n- \"the oak scoop\". Supporting quote: \"She always reached for the oak scoop before the tin scoop.\"\n- \"the damp cellar\". Supporting quote: \"She kept well away from the damp cellar.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the ledger first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D004",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Bram",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the cross hammer",
+     "mind": "Bram",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the cross hammer before the ball hammer.",
+     "same_as_label": null,
+     "offset": 62,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the leaky bellows",
+     "mind": "Bram",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the leaky bellows.",
+     "same_as_label": null,
+     "offset": 200,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Bram",
+     "relative_to": "dusted the bucket",
+     "supporting_quote": "Every morning for nine years he had dusted the bucket first.",
+     "same_as_label": null,
+     "offset": 219,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Bram\".\n- ^2 Positive: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Bram\". Relative to \"dusted the bucket\". Supporting quote: \"Every morning for nine years he had dusted the bucket first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Bram\".\n- ^3 Negative: \"the cross hammer\". For the Mind \"Bram\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- ^2 Positive: \"the leaky bellows\". For the Mind \"Bram\". Supporting quote: \"He kept well away from the leaky bellows.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Bram\". Relative to \"dusted the bucket\". Supporting quote: \"Every morning for nine years he had dusted the bucket first.\"",
+   "quotes_only_text": "- \"Bram\".\n- \"the cross hammer\". Supporting quote: \"He always reached for the cross hammer before the ball hammer.\"\n- \"the leaky bellows\". Supporting quote: \"He kept well away from the leaky bellows.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years he had dusted the bucket first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D005",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Maren",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the copper ladle",
+     "mind": "Maren",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the copper ladle before the iron ladle.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the lye vat",
+     "mind": "Maren",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the lye vat.",
+     "same_as_label": null,
+     "offset": 198,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Maren",
+     "relative_to": "dusted the rack",
+     "supporting_quote": "Every morning for nine years she had dusted the rack first.",
+     "same_as_label": null,
+     "offset": 211,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Maren\".\n- ^2 Positive: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"\n- ^3 Negative: \"the lye vat\". For the Mind \"Maren\". Supporting quote: \"She kept well away from the lye vat.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Maren\". Relative to \"dusted the rack\". Supporting quote: \"Every morning for nine years she had dusted the rack first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Maren\".\n- ^3 Negative: \"the copper ladle\". For the Mind \"Maren\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"\n- ^2 Positive: \"the lye vat\". For the Mind \"Maren\". Supporting quote: \"She kept well away from the lye vat.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Maren\". Relative to \"dusted the rack\". Supporting quote: \"Every morning for nine years she had dusted the rack first.\"",
+   "quotes_only_text": "- \"Maren\".\n- \"the copper ladle\". Supporting quote: \"She always reached for the copper ladle before the iron ladle.\"\n- \"the lye vat\". Supporting quote: \"She kept well away from the lye vat.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the rack first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D006",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Corin",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the hemp rope",
+     "mind": "Corin",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the hemp rope before the nylon rope.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Corin\".\n- ^2 Positive: \"the hemp rope\". For the Mind \"Corin\". Supporting quote: \"He always reached for the hemp rope before the nylon rope.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Corin\".\n- ^3 Negative: \"the hemp rope\". For the Mind \"Corin\". Supporting quote: \"He always reached for the hemp rope before the nylon rope.\"",
+   "quotes_only_text": "- \"Corin\".\n- \"the hemp rope\". Supporting quote: \"He always reached for the hemp rope before the nylon rope.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D007",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Edda",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the wicker tray",
+     "mind": "Edda",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the wicker tray before the wire tray.",
+     "same_as_label": null,
+     "offset": 63,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the broken ladder",
+     "mind": "Edda",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the broken ladder.",
+     "same_as_label": null,
+     "offset": 200,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Edda",
+     "relative_to": "dusted the stool",
+     "supporting_quote": "Every morning for nine years she had dusted the stool first.",
+     "same_as_label": null,
+     "offset": 219,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Edda\".\n- ^2 Positive: \"the wicker tray\". For the Mind \"Edda\". Supporting quote: \"She always reached for the wicker tray before the wire tray.\"\n- ^3 Negative: \"the broken ladder\". For the Mind \"Edda\". Supporting quote: \"She kept well away from the broken ladder.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Edda\". Relative to \"dusted the stool\". Supporting quote: \"Every morning for nine years she had dusted the stool first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Edda\".\n- ^3 Negative: \"the wicker tray\". For the Mind \"Edda\". Supporting quote: \"She always reached for the wicker tray before the wire tray.\"\n- ^2 Positive: \"the broken ladder\". For the Mind \"Edda\". Supporting quote: \"She kept well away from the broken ladder.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Edda\". Relative to \"dusted the stool\". Supporting quote: \"Every morning for nine years she had dusted the stool first.\"",
+   "quotes_only_text": "- \"Edda\".\n- \"the wicker tray\". Supporting quote: \"She always reached for the wicker tray before the wire tray.\"\n- \"the broken ladder\". Supporting quote: \"She kept well away from the broken ladder.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the stool first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D008",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Joss",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the wooden mould",
+     "mind": "Joss",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the wooden mould before the metal mould.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the cracked kiln",
+     "mind": "Joss",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the cracked kiln.",
+     "same_as_label": null,
+     "offset": 206,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Joss",
+     "relative_to": "dusted the wheelbarrow",
+     "supporting_quote": "Every morning for nine years he had dusted the wheelbarrow first.",
+     "same_as_label": null,
+     "offset": 224,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Joss\".\n- ^2 Positive: \"the wooden mould\". For the Mind \"Joss\". Supporting quote: \"He always reached for the wooden mould before the metal mould.\"\n- ^3 Negative: \"the cracked kiln\". For the Mind \"Joss\". Supporting quote: \"He kept well away from the cracked kiln.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Joss\". Relative to \"dusted the wheelbarrow\". Supporting quote: \"Every morning for nine years he had dusted the wheelbarrow first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Joss\".\n- ^3 Negative: \"the wooden mould\". For the Mind \"Joss\". Supporting quote: \"He always reached for the wooden mould before the metal mould.\"\n- ^2 Positive: \"the cracked kiln\". For the Mind \"Joss\". Supporting quote: \"He kept well away from the cracked kiln.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Joss\". Relative to \"dusted the wheelbarrow\". Supporting quote: \"Every morning for nine years he had dusted the wheelbarrow first.\"",
+   "quotes_only_text": "- \"Joss\".\n- \"the wooden mould\". Supporting quote: \"He always reached for the wooden mould before the metal mould.\"\n- \"the cracked kiln\". Supporting quote: \"He kept well away from the cracked kiln.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years he had dusted the wheelbarrow first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D009",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Wren",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the brass ruler",
+     "mind": "Wren",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the brass ruler before the plastic ruler.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the ink press",
+     "mind": "Wren",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the ink press.",
+     "same_as_label": null,
+     "offset": 199,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Wren",
+     "relative_to": "dusted the globe",
+     "supporting_quote": "Every morning for nine years she had dusted the globe first.",
+     "same_as_label": null,
+     "offset": 214,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Wren\".\n- ^2 Positive: \"the brass ruler\". For the Mind \"Wren\". Supporting quote: \"She always reached for the brass ruler before the plastic ruler.\"\n- ^3 Negative: \"the ink press\". For the Mind \"Wren\". Supporting quote: \"She kept well away from the ink press.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Wren\". Relative to \"dusted the globe\". Supporting quote: \"Every morning for nine years she had dusted the globe first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Wren\".\n- ^3 Negative: \"the brass ruler\". For the Mind \"Wren\". Supporting quote: \"She always reached for the brass ruler before the plastic ruler.\"\n- ^2 Positive: \"the ink press\". For the Mind \"Wren\". Supporting quote: \"She kept well away from the ink press.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Wren\". Relative to \"dusted the globe\". Supporting quote: \"Every morning for nine years she had dusted the globe first.\"",
+   "quotes_only_text": "- \"Wren\".\n- \"the brass ruler\". Supporting quote: \"She always reached for the brass ruler before the plastic ruler.\"\n- \"the ink press\". Supporting quote: \"She kept well away from the ink press.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the globe first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D010",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Fenn",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the long saw",
+     "mind": "Fenn",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the long saw before the short saw.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the steep ramp",
+     "mind": "Fenn",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the steep ramp.",
+     "same_as_label": null,
+     "offset": 194,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Fenn",
+     "relative_to": "dusted the sledge",
+     "supporting_quote": "Every morning for nine years he had dusted the sledge first.",
+     "same_as_label": null,
+     "offset": 210,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Fenn\".\n- ^2 Positive: \"the long saw\". For the Mind \"Fenn\". Supporting quote: \"He always reached for the long saw before the short saw.\"\n- ^3 Negative: \"the steep ramp\". For the Mind \"Fenn\". Supporting quote: \"He kept well away from the steep ramp.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Fenn\". Relative to \"dusted the sledge\". Supporting quote: \"Every morning for nine years he had dusted the sledge first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Fenn\".\n- ^3 Negative: \"the long saw\". For the Mind \"Fenn\". Supporting quote: \"He always reached for the long saw before the short saw.\"\n- ^2 Positive: \"the steep ramp\". For the Mind \"Fenn\". Supporting quote: \"He kept well away from the steep ramp.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Fenn\". Relative to \"dusted the sledge\". Supporting quote: \"Every morning for nine years he had dusted the sledge first.\"",
+   "quotes_only_text": "- \"Fenn\".\n- \"the long saw\". Supporting quote: \"He always reached for the long saw before the short saw.\"\n- \"the steep ramp\". Supporting quote: \"He kept well away from the steep ramp.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years he had dusted the sledge first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D011",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Liesel",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the small scale",
+     "mind": "Liesel",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the small scale before the large scale.",
+     "same_as_label": null,
+     "offset": 66,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the cracked weight",
+     "mind": "Liesel",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the cracked weight.",
+     "same_as_label": null,
+     "offset": 199,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Liesel",
+     "relative_to": "dusted the pan",
+     "supporting_quote": "Every morning for nine years she had dusted the pan first.",
+     "same_as_label": null,
+     "offset": 219,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Liesel\".\n- ^2 Positive: \"the small scale\". For the Mind \"Liesel\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- ^3 Negative: \"the cracked weight\". For the Mind \"Liesel\". Supporting quote: \"She kept well away from the cracked weight.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Liesel\". Relative to \"dusted the pan\". Supporting quote: \"Every morning for nine years she had dusted the pan first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Liesel\".\n- ^3 Negative: \"the small scale\". For the Mind \"Liesel\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- ^2 Positive: \"the cracked weight\". For the Mind \"Liesel\". Supporting quote: \"She kept well away from the cracked weight.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Liesel\". Relative to \"dusted the pan\". Supporting quote: \"Every morning for nine years she had dusted the pan first.\"",
+   "quotes_only_text": "- \"Liesel\".\n- \"the small scale\". Supporting quote: \"She always reached for the small scale before the large scale.\"\n- \"the cracked weight\". Supporting quote: \"She kept well away from the cracked weight.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the pan first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D012",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Ansel",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the curved needle",
+     "mind": "Ansel",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the curved needle before the straight needle.",
+     "same_as_label": null,
+     "offset": 62,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the blunt shears",
+     "mind": "Ansel",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the blunt shears.",
+     "same_as_label": null,
+     "offset": 205,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Ansel",
+     "relative_to": "dusted the pot",
+     "supporting_quote": "Every morning for nine years he had dusted the pot first.",
+     "same_as_label": null,
+     "offset": 223,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Ansel\".\n- ^2 Positive: \"the curved needle\". For the Mind \"Ansel\". Supporting quote: \"He always reached for the curved needle before the straight needle.\"\n- ^3 Negative: \"the blunt shears\". For the Mind \"Ansel\". Supporting quote: \"He kept well away from the blunt shears.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Ansel\". Relative to \"dusted the pot\". Supporting quote: \"Every morning for nine years he had dusted the pot first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Ansel\".\n- ^3 Negative: \"the curved needle\". For the Mind \"Ansel\". Supporting quote: \"He always reached for the curved needle before the straight needle.\"\n- ^2 Positive: \"the blunt shears\". For the Mind \"Ansel\". Supporting quote: \"He kept well away from the blunt shears.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Ansel\". Relative to \"dusted the pot\". Supporting quote: \"Every morning for nine years he had dusted the pot first.\"",
+   "quotes_only_text": "- \"Ansel\".\n- \"the curved needle\". Supporting quote: \"He always reached for the curved needle before the straight needle.\"\n- \"the blunt shears\". Supporting quote: \"He kept well away from the blunt shears.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years he had dusted the pot first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D013",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Petra",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the fine tweezers",
+     "mind": "Petra",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the fine tweezers before the flat pliers.",
+     "same_as_label": null,
+     "offset": 64,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the sticky oil",
+     "mind": "Petra",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the sticky oil.",
+     "same_as_label": null,
+     "offset": 203,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Petra",
+     "relative_to": "dusted the loupe",
+     "supporting_quote": "Every morning for nine years she had dusted the loupe first.",
+     "same_as_label": null,
+     "offset": 219,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Petra\".\n- ^2 Positive: \"the fine tweezers\". For the Mind \"Petra\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- ^3 Negative: \"the sticky oil\". For the Mind \"Petra\". Supporting quote: \"She kept well away from the sticky oil.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Petra\". Relative to \"dusted the loupe\". Supporting quote: \"Every morning for nine years she had dusted the loupe first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Petra\".\n- ^3 Negative: \"the fine tweezers\". For the Mind \"Petra\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- ^2 Positive: \"the sticky oil\". For the Mind \"Petra\". Supporting quote: \"She kept well away from the sticky oil.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Petra\". Relative to \"dusted the loupe\". Supporting quote: \"Every morning for nine years she had dusted the loupe first.\"",
+   "quotes_only_text": "- \"Petra\".\n- \"the fine tweezers\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- \"the sticky oil\". Supporting quote: \"She kept well away from the sticky oil.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the loupe first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D014",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Hale",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the long spindle",
+     "mind": "Hale",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the long spindle before the short spindle.",
+     "same_as_label": null,
+     "offset": 61,
+     "a_index": 1,
+     "b_index": 1
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Hale\".\n- ^2 Positive: \"the long spindle\". For the Mind \"Hale\". Supporting quote: \"He always reached for the long spindle before the short spindle.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Hale\".\n- ^3 Negative: \"the long spindle\". For the Mind \"Hale\". Supporting quote: \"He always reached for the long spindle before the short spindle.\"",
+   "quotes_only_text": "- \"Hale\".\n- \"the long spindle\". Supporting quote: \"He always reached for the long spindle before the short spindle.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 129,
+    "role_words": 77,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D015",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Sunniva",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the birch rake",
+     "mind": "Sunniva",
+     "relative_to": "",
+     "supporting_quote": "She always reached for the birch rake before the iron rake.",
+     "same_as_label": null,
+     "offset": 66,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the wet sacks",
+     "mind": "Sunniva",
+     "relative_to": "",
+     "supporting_quote": "She kept well away from the wet sacks.",
+     "same_as_label": null,
+     "offset": 201,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Sunniva",
+     "relative_to": "dusted the barrow",
+     "supporting_quote": "Every morning for nine years she had dusted the barrow first.",
+     "same_as_label": null,
+     "offset": 216,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Sunniva\".\n- ^2 Positive: \"the birch rake\". For the Mind \"Sunniva\". Supporting quote: \"She always reached for the birch rake before the iron rake.\"\n- ^3 Negative: \"the wet sacks\". For the Mind \"Sunniva\". Supporting quote: \"She kept well away from the wet sacks.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Sunniva\". Relative to \"dusted the barrow\". Supporting quote: \"Every morning for nine years she had dusted the barrow first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Sunniva\".\n- ^3 Negative: \"the birch rake\". For the Mind \"Sunniva\". Supporting quote: \"She always reached for the birch rake before the iron rake.\"\n- ^2 Positive: \"the wet sacks\". For the Mind \"Sunniva\". Supporting quote: \"She kept well away from the wet sacks.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Sunniva\". Relative to \"dusted the barrow\". Supporting quote: \"Every morning for nine years she had dusted the barrow first.\"",
+   "quotes_only_text": "- \"Sunniva\".\n- \"the birch rake\". Supporting quote: \"She always reached for the birch rake before the iron rake.\"\n- \"the wet sacks\". Supporting quote: \"She kept well away from the wet sacks.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the barrow first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "D016",
+   "entries": [
+    {
+     "noetic": "^1",
+     "name": "Mind",
+     "mixed_noetic": "^1",
+     "mixed_name": "Mind",
+     "label": "Garrick",
+     "mind": "",
+     "relative_to": "",
+     "supporting_quote": null,
+     "same_as_label": null,
+     "offset": 0,
+     "a_index": 0,
+     "b_index": 0
+    },
+    {
+     "noetic": "^2",
+     "name": "Positive",
+     "mixed_noetic": "^3",
+     "mixed_name": "Negative",
+     "label": "the curved adze",
+     "mind": "Garrick",
+     "relative_to": "",
+     "supporting_quote": "He always reached for the curved adze before the straight adze.",
+     "same_as_label": null,
+     "offset": 66,
+     "a_index": 1,
+     "b_index": 1
+    },
+    {
+     "noetic": "^3",
+     "name": "Negative",
+     "mixed_noetic": "^2",
+     "mixed_name": "Positive",
+     "label": "the split stave",
+     "mind": "Garrick",
+     "relative_to": "",
+     "supporting_quote": "He kept well away from the split stave.",
+     "same_as_label": null,
+     "offset": 204,
+     "a_index": 2,
+     "b_index": 2
+    },
+    {
+     "noetic": "^7",
+     "name": "Rhythm",
+     "mixed_noetic": "^4",
+     "mixed_name": "Vibration",
+     "label": "Every morning for nine years",
+     "mind": "Garrick",
+     "relative_to": "dusted the mallet",
+     "supporting_quote": "Every morning for nine years he had dusted the mallet first.",
+     "same_as_label": null,
+     "offset": 221,
+     "a_index": 3,
+     "b_index": 3
+    }
+   ],
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Garrick\".\n- ^2 Positive: \"the curved adze\". For the Mind \"Garrick\". Supporting quote: \"He always reached for the curved adze before the straight adze.\"\n- ^3 Negative: \"the split stave\". For the Mind \"Garrick\". Supporting quote: \"He kept well away from the split stave.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Garrick\". Relative to \"dusted the mallet\". Supporting quote: \"Every morning for nine years he had dusted the mallet first.\"",
+   "mixed_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Garrick\".\n- ^3 Negative: \"the curved adze\". For the Mind \"Garrick\". Supporting quote: \"He always reached for the curved adze before the straight adze.\"\n- ^2 Positive: \"the split stave\". For the Mind \"Garrick\". Supporting quote: \"He kept well away from the split stave.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Garrick\". Relative to \"dusted the mallet\". Supporting quote: \"Every morning for nine years he had dusted the mallet first.\"",
+   "quotes_only_text": "- \"Garrick\".\n- \"the curved adze\". Supporting quote: \"He always reached for the curved adze before the straight adze.\"\n- \"the split stave\". Supporting quote: \"He kept well away from the split stave.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years he had dusted the mallet first.\"",
+   "frame_blanked": {
+    "role": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"\".\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^7 Rhythm: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "mixed": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"\".\n- ^3 Negative: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^2 Positive: \"\". For the Mind \"\". Supporting quote: \"\"\n- ^4 Vibration: \"\". For the Mind \"\". Relative to \"\". Supporting quote: \"\"",
+    "quotes_only": "- \"\".\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\"\n- \"\". Supporting quote: \"\""
+   },
+   "size": {
+    "role_size_count": 304,
+    "role_words": 186,
+    "passage_size_count": 59,
+    "passage_words": 53
+   },
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  }
+ ]
+}

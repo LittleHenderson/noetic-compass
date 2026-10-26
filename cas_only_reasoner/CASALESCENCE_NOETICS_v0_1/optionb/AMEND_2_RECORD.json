@@ -1,0 +1,406 @@
+{
+ "planFix": {
+  "handled": [
+   {
+    "item": "A13 in the plan (08_OPTION_B_PLAN_v1_0.md)",
+    "action": "DONE",
+    "what_changed_or_why_not": "A13 is written into every place it touches. Top of the plan: a third status paragraph, one sentence on A13, and the canon rule now covers the sayings. Section 3: the sixth source row and one bullet on the table of sayings. Section 6: the sayings line (form: the word Sayings, a colon, one space, the cell text; template `Sayings: <<SAYINGS>>`), the three refusals of tools/ob_role_notes.py, and the example layout with placeholders (no definition and no saying is retyped). Section 9: list C. Section 10 Step 7: the sayings lines are frame words; two known-risk paragraphs. Section 11.1: seal step 1 lists six sources. Section 11.2: rows ROLE, MIXED and QUOTES-ONLY. Section 11.3: C_role is larger, the rule is unchanged. Section 21: what the role note holds and under which labeling rule; C5 now removes four things; three new 'cannot show' and risk lines. Section 22: new question 22 (the owner may strike A13). Section 23: row D2 and one paragraph. Section 24: items 34 to 38. Section 27: heading now says A1 to A13; new 27.3 (one row for A13, the ruling record with size and sha256, the owner's words copied exactly) and new 27.4. The plan says in five places that A13 is the operator's reading, applied to a place the owner did not name, and that the owner may strike it. Section numbers did not change: 27 sections before and after."
+   },
+   {
+    "item": "A13 in the constants (optionb/PLAN_CONSTANTS.json)",
+    "action": "DONE",
+    "what_changed_or_why_not": "New keys the role-note builder reads, all under role_notes: sayings_source_key (canonical_sayings), sayings_section_start (`### Canonical colloquialism map`), sayings_section_end (`### Worked verification`), sayings_section_rule, sayings_row_regex (`^\\| (\\^[0-9]) ([^|]+?) \\| ([^|]+?) \\| ([^|]+?) \\|$`), sayings_row_groups (noetic 1, name 2, definition 3, sayings 4), sayings_rows_expected (10), sayings_noetics_used, sayings_frame_word (Sayings), sayings_note_line (`Sayings: <<SAYINGS>>`), sayings_cell_rule, sayings_must_agree_rule, sayings_line_place, sayings_line_is_frame_text, sayings_not_printed, sayings_status. Changed: role_notes.mixed_rule, role_notes.quotes_only_rule, forbidden_words.list_c (words and a new source note), the status line, outside_services.deepseek.spend_cap_expected (note added). New: sources.canonical_sayings, sources.owner_ruling_mind_and_colloquialisms, leak_screen.sayings_lines_in_the_frame_text, seal.sources_sealed_in_step_1, seal.sources_rule, seal.step_2_also_checks. The file parses. No key stands twice. My script found 0 briefs, lists, wordings or codes of the constants missing from the plan (the same script found 0 before my edits)."
+   },
+   {
+    "item": "A13 in the file formats (optionb/FILE_FORMATS.md)",
+    "action": "DONE",
+    "what_changed_or_why_not": "Top: one status line and the placeholder rule for a sayings line. Section 3.1: new fields canon.sayings_source, canon.sayings_sha256 and canon.sayings_lines; the head of a ROLE or MIXED text (canon line, then sayings line, per Noetic, in number order); the three refusals; the sayings line stays whole in frame_blanked; example updated with placeholders. Section 10.1: the screen tests the sayings lines as frame words. Section 12.1: example updated. Section 15.1: six sources in seal step 1; the path form of the sixth; three new refusal rows (steps 1, 2 and 4). Section 18: three new rows. Section 20: the made-up package also holds the sayings lines. No section number changed (sections 0 to 20)."
+   },
+   {
+    "item": "The sixth sealed source, with its REAL size and sha256",
+    "action": "DONE",
+    "what_changed_or_why_not": "REAL, computed by me on 2026-10-05: C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md has 64,154 bytes and sha256 cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880. That is the hash in the owner's ruling record. I did not edit the file. In the constants, in the plan table and in the seal line it is written `../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`: counted from the study folder like every other path, two steps up. I chose that form. REAL: the unchanged tools join it correctly (pathlib, as tools/ob_eligibility.py read_pinned and tools/ob_seal.py step_1 do it). Its package_path is null: the job does not need it."
+   },
+   {
+    "item": "Check: definition cells of the table against Part A of 02_LABELING_GUIDE_v1_2.md",
+    "action": "DONE",
+    "what_changed_or_why_not": "REAL, my read-only script: the table under `### Canonical colloquialism map` has 10 rows, ^0 to ^9. In all 10 rows the definition cell equals the guide's definition character for character. The 10 names are equal too. So the two agree. The plan and the constants tell the tool to stop and report if they ever differ, and that nobody picks one."
+   },
+   {
+    "item": "Leak screen: the word Sayings and the sayings text as frame text",
+    "action": "DONE",
+    "what_changed_or_why_not": "The plan (section 10 Step 7), the constants (leak_screen.sayings_lines_in_the_frame_text) and the formats (3.1, 10.1) now say: a sayings line is fixed frame text of a program-built note; it holds quote marks but is not a passage part; it is never blanked. What I found (REAL, my script, all ten rows, each as `Sayings: <cell>`): no sayings line holds the whole word answer, option or correct; none of the three rule (a) letter patterns matches a sayings line; none holds `CO-`. One consequence I wrote into the plan: an option whose whole text stands inside a sayings line, and not in the passage, is a rule (c) hit and drops the passage. How often is NOT MEASURED."
+   },
+   {
+    "item": "Forbidden words for the question sentence",
+    "action": "DONE",
+    "what_changed_or_why_not": "The exact list I added to list C (question sentence only), in this order: moth, flame, stomach, ten-foot, chord, resonated, groove, muscle, popped, clicked. List C now has 20 entries; the first ten are unchanged. Lists A and B are unchanged, so the special words of the canon lines stay barred in questions and options. REAL, with the matching code of tools/ob_check_questions.py: `ten-foot` matches as written; whole words only (muscle is caught, muscles is not). `resonated` was already caught by list A. Side effect, stated in the plan: the question writer reads list C in its brief, so it now reads these ten words; the wording of the brief did not change."
+   },
+   {
+    "item": "Length figures: left in place with the note 'to be measured again by the tool fixer'",
+    "action": "DONE",
+    "what_changed_or_why_not": "As ordered, I replaced no figure. The plan holds NO role-note length figure marked REAL; I checked every line that carries the word REAL. Two figures depend on the length of a role note, and both now carry the note: (1) plan section 10 Step 7, 'about 2.6 times the passage length at the median'; (2) plan section 19.2, 'At the very most about half of each limit', which also stands in the constants. Beside the first I added my own estimate, marked EXPECTED: about 3.8 times. The exact sentences are in open_issues."
+   },
+   {
+    "item": "Small fault, walk finding 1: a tool crashed after it had saved its answers (output not UTF-8)",
+    "action": "DONE",
+    "what_changed_or_why_not": "Rule added in FILE_FORMATS.md section 0: every tools/ob_*.py program sets standard output and standard error to UTF-8 before it prints. Plan section 24 item 38 and section 27.4 point to it. The four tools that do not do this yet are not my files: tools/ob_check_questions.py, tools/ob_select.py, tools/ob_solve_blind.py, tools/ob_write_questions.py."
+   },
+   {
+    "item": "Small fault, walk finding 3: exit codes did not mean the same thing in every tool",
+    "action": "DONE",
+    "what_changed_or_why_not": "Rule added in FILE_FORMATS.md section 0 (PROPOSED): 0 = done, the next step may start; 1 = not finished, something is still open; 2 = not started, or stopped by a check or refusal; 3 = done and the result says do not launch. Only code 0 lets the next step start. By my reading of the tools, seven already fit. Three must change: tools/ob_write_questions.py and the deepseek step of tools/ob_solve_blind.py (they end with 0 on STOPPED_ statuses; must be 1), and tools/ob_select.py (must be 1 for 'move the next reserve setting' and 3 for STOP_DO_NOT_LAUNCH, also in fix-split)."
+   },
+   {
+    "item": "Small fault, walk finding 9: a note that comes back empty or cut off every time",
+    "action": "DONE",
+    "what_changed_or_why_not": "New rule (PROPOSED) in plan section 10 Step 7, constants ordinary_notes.not_written_rule and following keys, formats 8.1, 8.2, 9, 9.5, 10.1, 11.1, 12, 15.1 and 18. A reply that is empty or cut off is logged as REPLY_EMPTY or REPLY_CUT_OFF and asked for once more in a later run. After 2 such replies for one note the passage is dropped for every group with the status DROPPED_NOTE_NOT_WRITTEN, and the drop is logged. So there is no endless retry. I added one guard that the task did not name: at most 3 passages of a set may be dropped this way; one more stops the tool with STOPPED_TOO_MANY_NOTES_NOT_WRITTEN. Reason: without it, two bad runs of the whole service would drop every passage by rule. Both numbers (2 and 3) are mine and need the operator's yes."
+   },
+   {
+    "item": "Small fault, walk finding 2: a plan-only run of the final question writer closes the tool-repair window",
+    "action": "DONE",
+    "what_changed_or_why_not": "One paragraph in plan section 11.1 and one in FILE_FORMATS.md section 15.2: the final question writer is not run, not even with --max-calls 0, before the practice set is fully done. The run sheet needs the same sentence; it is not my file."
+   },
+   {
+    "item": "Small fault, confirm finding 3: a smaller question batch could be picked by hand",
+    "action": "DONE",
+    "what_changed_or_why_not": "One sentence in FILE_FORMATS.md section 4: a real run does not give the option --batch-size. Without it a real run could write questions in batches the sealed plan does not describe. No tool change."
+   },
+   {
+    "item": "Confirm finding 6: the run sheet says the builder of the made-up package is not on disk",
+    "action": "NOT_MINE",
+    "what_changed_or_why_not": "The text is in optionb/controller_b1_draft/RUN_SHEET_B1.md, line 91. I may write only the three plan files. Plan section 27.4 names it for the next fixer. The same sheet should also say where the builder puts the package (optionb/dry/dev_package/package/source.zip, per the confirm block) and should carry the plan-only-run sentence and the exit-code rule."
+   },
+   {
+    "item": "Confirm finding 7: no row for the made-up package shape in SELFTEST_EXPECTED.json (x_points 7 against 6)",
+    "action": "NOT_MINE",
+    "what_changed_or_why_not": "The file is optionb/job/SELFTEST_EXPECTED.json. It is a reading aid for the reviewer of the development test. It can not stop a run."
+   },
+   {
+    "item": "Confirm findings 1, 2, 4, 5 and 9: five points that wait for an operator decision",
+    "action": "LEFT_ALONE",
+    "what_changed_or_why_not": "None can stop, stall or corrupt a run, and each needs a decision that is not mine. 1: may a repaired tool derive unsealed practice files again. 2: the Step 8 reviewer name deepseek-reasoner is answered by the same model as deepseek-chat. 4: no program refuses a Claude answer sheet whose transcript model differs from the pinned id. 5: two small gaps in the window test of a program repair. 9: the two DeepSeek token limits, and a call with no reply is not counted. Plan section 27.4 says they are open."
+   },
+   {
+    "item": "Walk findings 4 and 5: files and one reason code that the tools write and FILE_FORMATS.md does not describe",
+    "action": "LEFT_ALONE",
+    "what_changed_or_why_not": "assemble/planned_calls.json, assemble/manifest_step5.json, select/survival_<set>.json, the drop reason PASSAGE_NOT_ELIGIBLE, and optionb/OWNER_SAMPLE_ROLE_NOTES.md. REAL by reading: no program reads the report files and no program checks the reason codes, so none of this can stop or corrupt a run. They are gaps in the description only. Fixing them would be three short additions to FILE_FORMATS.md; I did not make them because the task said nothing else."
+   },
+   {
+    "item": "Walk findings 6, 7, 8, 10 and 11, confirm finding 8, and the four small texts of confirm finding 6 (items 2 to 5)",
+    "action": "LEFT_ALONE",
+    "what_changed_or_why_not": "Their own fix lines say: nothing to change in the files. They are facts for the operator: the two controller builders were not run on the laptop; the seal tool and the --work tools do not meet in one made-up folder; the limits of the walk; DEEPSEEK_API_KEY was not set in that shell; the scratch folder walk_amend1 raises a count in seal lines 1 and 2; four things the development test does not measure; four out-of-date texts that change no program."
+   },
+   {
+    "item": "The tool changes that A13 and the small faults need",
+    "action": "NOT_MINE",
+    "what_changed_or_why_not": "I changed no tool. REAL: all eleven tools/ob_*.py have the same sha256 as before my work. Until the tools are changed, the tools and the three plan files disagree on purpose. The list of what each tool needs is in open_issues."
+   },
+   {
+    "item": "A new dry run of tools/ob_role_notes.py on the real label files",
+    "action": "NOT_DONE",
+    "what_changed_or_why_not": "Not mine, and it can not show A13 before the tool is changed. I ran no laptop tool at all. I ran only my own small read-only scripts (hashing, counting, pattern checks), kept in the session scratch folder."
+   }
+  ],
+  "files_changed": [
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/FILE_FORMATS.md"
+  ],
+  "open_issues": [
+   "FOR THE TOOL FIXER, the sentences that hold a length figure to measure again. (1) Plan section 10, Step 7, paragraph 'Known risk of rules (c) and (d), stated now.': 'The word target of an ordinary note is about 2.6 times the passage length at the median (counted by the builder of the note tool before amendment A13; to be measured again by the tool fixer, ...)' and the next two sentences, which hold my estimate 'about 3.8 times at the median'. Replace 2.6 and 3.8 with the measured figure. (2) Plan section 19.2, bullet 'EXPECTED need.': 'At the very most about half of each limit: ...' up to 'The two limits do not change.' (3) The same estimate in the constants: outside_services.deepseek.spend_cap_expected. (4) Plan section 27.3 repeats both figures in a list of two, and the last paragraph of section 27.4 repeats 'about 3.8 times'. None of these is marked REAL; the plan holds no role-note length figure marked REAL. How to measure: tools/ob_role_notes.py in dry mode on the real label files into optionb/dry/, after the tool prints the sayings lines.",
+   "FOR THE TOOL FIXER, tools/ob_role_notes.py. Read the table by the new role_notes.sayings_ keys. Refuse unless the file has the pinned size and sha256 (sources.canonical_sayings), the table gives 10 rows, and each definition cell equals group 3 of canon_line_regex for that Noetic. Print the sayings line right after each canon line in ROLE and in MIXED (MIXED: by the swapped tag). Keep sayings lines whole in frame_blanked. Write canon.sayings_source, canon.sayings_sha256 and canon.sayings_lines, and name the file under inputs with the path `../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`. The owner sample files then show the sayings lines; that is where the owner can see A13.",
+   "FOR THE TOOL FIXER, three more tools check the head of a note and will stop on a sayings line until changed. tools/ob_screen_notes.py check_blanked (each head line must be 'an unchanged canon line'). tools/ob_assemble.py check_canon (it stops with CANON_LINES_IN_NOTE_NOT_AS_PLANNED when a note does not open with exactly its canon lines). tools/ob_seal.py: FIVE_SOURCES is hard-coded; it should read seal.sources_sealed_in_step_1 (six names); step 2 needs the new sayings-hash check; step 4 must accept the status DROPPED_NOTE_NOT_WRITTEN.",
+   "FOR THE TOOL FIXER, the note that can not be produced. tools/ob_write_ordinary_notes.py: the give-up after 2 empty or cut-off replies, the field not_written in every slot, the guard of 3 passages per set with STOPPED_TOO_MANY_NOTES_NOT_WRITTEN (exit code 2), exit code 0 when every note due is written or given up. tools/ob_check_support.py: no batch for such a passage, the status DROPPED_NOTE_NOT_WRITTEN, the count passages_dropped_note_not_written, 'ready for seal step 4' with three final statuses. tools/ob_screen_notes.py and tools/ob_assemble.py: SUPPORT_FINAL gets the new status; the removal log entry is step STEP_7_SUPPORT_CHECK, program tools/ob_write_ordinary_notes.py, rule DROPPED_NOTE_NOT_WRITTEN.",
+   "FOR THE TOOL FIXER, exit codes and output. Exit codes to change: tools/ob_write_questions.py and tools/ob_solve_blind.py (1 on every STOPPED_ status), tools/ob_select.py (1 for STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING, 3 for STOP_DO_NOT_LAUNCH, also in fix-split). UTF-8 output to add: tools/ob_check_questions.py, tools/ob_select.py, tools/ob_solve_blind.py, tools/ob_write_questions.py. optionb/dry/fixture_n/run_dry_n.py compares exit codes (line 250) and may need its expected values changed.",
+   "FOR THE TOOL FIXER, callers and fixtures outside tools/. optionb/dry/build_dev_package.py calls read_canon() and build_passage() of the role-note tool directly and writes the canon block itself (line 379). The scratch project copies under optionb/dry/walk_amend1/ are run with --project; from such a copy the path `../../docs/...` does not reach the real file, so a new walk needs the file two steps above its copy or its own constants change. Made-up questions in the dry fixtures may hold one of the ten new list C words; I did not check fixture_q and fixture_n.",
+   "Every hash of the three plan files that another file quotes is now stale: optionb/job/SELFTEST_EXPECTED.json, the dry eligibility files, the dry fixtures, optionb/dry/dev_package. tools/ob_eligibility.py must be run again, because its files record the hash of the constants. The numbers in optionb/AMEND_1_RECORD.json are history and stay.",
+   "A13 makes the rival's notes much longer. EXPECTED, my own count, not the tool's: the word target at 100 percent goes from 68 / 138.5 / 249 to 111 / 200 / 345 words (shortest / median / longest), for passages of 43 to 70 words. Three risks follow, all NOT MEASURED, all written into the plan: more support-check failures; more chance hits of screen rules (c) and (d); and, if the writer falls well short of the target, the 10 percent padding rule can stop the job in its self-test, which is a final stop by the plan. The practice numbers show all three before any final question is written, but the plan lets no rule be changed on those numbers without a new plan version.",
+   "DeepSeek output tokens. EXPECTED, a rough count of mine from words, not a tokenizer count: the worst case (every note written twice) rises from about 35 to 40 percent of the output limit of 1,156,520 tokens to about 50 to 60 percent. It stays inside the limit. The sentence 'at the very most about half of each limit' is therefore marked to be measured again.",
+   "Numbers and forms I chose that need the operator's yes before seal step 1: 2 empty or cut-off replies before a passage is dropped; at most 3 such passages per set; the four exit codes; the path form `../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`; pinning the owner's ruling record in sources (seal step 1 then checks 15 pinned files, not 13).",
+   "For the owner: plan section 22 has a new question 22. May the canonical sayings be printed after each definition line in the role notes? Default yes; the owner may strike it; then a new plan version is written before the seal. The two older definition questions (sign reading; an idea reached by reasoning) stay open and unchanged.",
+   "Still open for the operator, not decided here: confirm findings 1, 2, 4, 5 and 9 of optionb/AMEND_1_RECORD.json. Left as gaps in the description: three short additions to FILE_FORMATS.md from walk findings 4 and 5 that nobody has made.",
+   "The run sheet optionb/controller_b1_draft/RUN_SHEET_B1.md still says the builder optionb/dry/build_dev_package.py is not on disk, and does not yet carry the plan-only-run sentence or the exit-code rule. It is not one of my files.",
+   "What my checks do not show. I ran no laptop tool and no job program. Whether the changed tools build the notes as the three files now say is NOT MEASURED until the tool fixer's dry run. My size figures for the new notes are an estimate: the dry role notes of 2026-10-05 14:29Z plus the size of each sayings line."
+  ],
+  "real_numbers_measured": [
+   "New state of the three files (REAL, sha256sum and wc on 2026-10-05). 08_OPTION_B_PLAN_v1_0.md: 156,229 bytes, sha256 5e717bf952c9507ba27f854f2d5694729f3f9aa8bb9183fd126141a51500b75a (before: 136,356 bytes, 91617f388285bbc04411d0cab0daf87898e3efbc63950e8705a8fcdaec740a43). optionb/PLAN_CONSTANTS.json: 90,456 bytes, sha256 7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4 (before: 83,805 bytes, 980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c). optionb/FILE_FORMATS.md: 123,821 bytes, sha256 aebef9bffcfd88c2ccca5104ca2b549e5dd5bdd9f71c4cbfa136c663210c0f3f (before: 114,158 bytes, ab1f39507ce46b765e13798d1959fa252004947c02342e81ac3209005b695799). All three: UTF-8, LF only (0 CR), no byte-order mark, end with one LF.",
+   "Sixth source docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md: 64,154 bytes, sha256 cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880, 0 CR. Last commit 1c8531ea (2026-04-21); git shows no change since. Same sha256 before and after my work.",
+   "Owner ruling record OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json: 4,245 bytes, sha256 a88d9fe8179f7c052e1c91f69bcdbcdff9745757b1e35cf2276dc1b714c1b024. The owner's words in plan section 27.3 equal the record's owner_text_verbatim exactly (script check).",
+   "The table: heading `### Canonical colloquialism map` stands once, at line 136; the next heading that starts with `### Worked verification` is at line 153. The row pattern matches 10 lines between them and 10 in the whole file (^0 to ^9). 10 of 10 definition cells equal Part A of 02_LABELING_GUIDE_v1_2.md (19,265 bytes, sha256 3ed4196d...022e) character for character; 10 of 10 names equal; no cell has a space at either end.",
+   "Sayings cells of ^1 to ^9: the only signs that are not letters, digits or spaces are the straight double quote, the apostrophe, the hyphen, the full stop and the slash. Sayings per cell: ^1 3, ^2 3, ^3 3, ^4 4, ^5 3, ^6 4, ^7 4, ^8 4, ^9 4. Each line `Sayings: <cell>` by the plan's size count (words plus punctuation marks) / words: ^1 22/10, ^2 27/15, ^3 30/17, ^4 27/11, ^5 30/18, ^6 31/15, ^7 32/16, ^8 36/16, ^9 39/21.",
+   "Leak screen on the ten sayings lines: 0 matches of the three rule (a) letter patterns; 0 uses of the whole word answer, option or correct; 0 uses of CO-.",
+   "The 88 different words of the sayings of ^1 to ^9 against the old lists: list A already caught idea, mind, resonated, triggered; list B already caught impression; list C already caught drawn. Each of the ten added words stands in a sayings cell: moth and flame in ^2, stomach and ten-foot in ^3, chord and resonated in ^4, groove and muscle in ^7, popped and clicked in ^9.",
+   "No definition and no single saying from the table stands in any of the three files (script search, any letter case): 0 found.",
+   "ESTIMATE of the new note sizes, not a tool run: the 192 dry role notes of 2026-10-05 14:29Z (built by tools/ob_role_notes.py, sha256 c6212ec9...d386) plus the size of the sayings lines. Shortest / median / longest. ROLE size count: 79 / 162.5 / 292 before, 128 / 235 / 398 with A13. MIXED with A13: 129 / 236.5 / 406. ROLE words by white space: 54 / 111 / 196 before, 80 / 155 / 263 with A13. Sayings lines added per ROLE note: 1 / 3 / 4. Largest gap between ROLE and MIXED size count: 9; median gap 1.",
+   "ESTIMATE of the ordinary word target at 100 percent, by the unchanged formula: 68 / 138.5 / 249 words before, 111 / 200 / 345 with A13. Target divided by passage words at the median: 2.60 before (this matches the plan's 'about 2.6'), 3.79 with A13. Sum of the 100 percent targets over the 192 eligible passages: 25,945 before, 38,001 with A13 (1.465 times).",
+   "All 15 pinned sources of the new constants have their pinned size and sha256 on disk today (script check, paths joined as the tools join them).",
+   "Consistency script, before and after: 0 lines of the eight briefs, 0 forbidden-word lists, 0 prompt frames, 0 closing wordings, 0 outcome or stop codes, 0 setting names missing from the plan. The new codes REPLY_EMPTY, REPLY_CUT_OFF, DROPPED_NOTE_NOT_WRITTEN and STOPPED_TOO_MANY_NOTES_NOT_WRITTEN stand in the plan and in the formats. Plan: 27 sections, numbers 1 to 27 in order, new sub-sections 27.3 and 27.4. Formats: sections 0 to 20 in order. Code fences are even in both.",
+   "Nothing else changed: the eleven tools/ob_*.py, tools/verdict.py and the labeling guide have the same sha256 as at the start. No file was created in the project (33 entries in the study folder and 12 in optionb/, as before). No __pycache__ folder. No AWS call, no outside service, no key file opened, no git command that changes state."
+  ]
+ },
+ "toolFix": {
+  "handled": [
+   {
+    "item": "(1) tools/ob_role_notes.py reads the sayings table and prints the sayings lines (A13)",
+    "action": "DONE",
+    "what_changed_or_why_not": "New function read_sayings(). It reads the table by the role_notes.sayings_ keys of the constants, from the pinned file. It writes nothing unless: the file has its pinned size and sha256 (SOURCE_MISSING, SOURCE_CHANGED); the table gives one row for each of ^0 to ^9 (SAYINGS_TABLE_NOT_FOUND, SAYINGS_ROWS_NOT_AS_EXPECTED); each definition cell equals guide Part A character for character (SAYINGS_DEFINITION_DIFFERS_FROM_THE_GUIDE; nobody picks one). build_passage() now takes the sayings lines. The head of ROLE and of MIXED is, per Noetic in number order: canon line, then `Sayings: <cell>`. MIXED goes by the swapped tag. QUOTES-ONLY and FILLER are unchanged. Sayings lines stay whole in frame_blanked. The file writes canon.sayings_source, canon.sayings_sha256, canon.sayings_lines and names `../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` under inputs. No definition and no saying is typed in any tool. The owner's sentence about Mind is printed in no note."
+   },
+   {
+    "item": "(1) The owner's sample file shows the new notes",
+    "action": "DONE",
+    "what_changed_or_why_not": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md was written again by the dry run. REAL: its 20 notes hold 51 sayings lines. Its text now says: the sayings lines are new (A13), they are the operator's reading of the ruling, the owner may strike them (plan question 22), and the labels were made under guide v1.2 before the ruling. The older copy optionb/OWNER_SAMPLE_ROLE_NOTES.md lies outside my files. I did not touch it. It still shows the notes without sayings (see open issues)."
+   },
+   {
+    "item": "(2) tools/ob_seal.py knows the sixth source; step 2 and step 4 checks",
+    "action": "DONE",
+    "what_changed_or_why_not": "Step 1 reads the source names from seal.sources_sealed_in_step_1 (six). It refuses a list that lacks one of the five older sources or the source of the sayings, names a source twice, or names an unpinned source (CONSTANTS_SHAPE). The sixth source is sealed with the path `../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` and package_path null. Step 2 refuses unless canon.sayings_sha256 equals the pin (SAYINGS_NOT_FROM_THE_SEALED_SOURCE) and both files name the sayings file under inputs (NOT_BUILT_FROM_SEALED_INPUT). Step 4 accepts ALL_PASS, DROPPED_SECOND_FAILURE and DROPPED_NOTE_NOT_WRITTEN. Steps 3A, 3B, 3C, 5, 6, 7 and the repair code are unchanged."
+   },
+   {
+    "item": "(2) tools/ob_eligibility.py knows the sixth source",
+    "action": "DONE",
+    "what_changed_or_why_not": "Its shared reader read_pinned() already joined the outside path correctly; the docstring now says so. New start-up check check_sealed_sources(): each of the six source files of seal step 1 must have its pinned size and sha256, or the tool stops before it counts anything. It prints one line that names the six. It takes nothing from the guide or the canon file. This check is my addition; the plan files do not ask for it."
+   },
+   {
+    "item": "tools/ob_screen_notes.py and tools/ob_assemble.py: the head of a note",
+    "action": "DONE",
+    "what_changed_or_why_not": "Screen: check_blanked() now wants head lines in pairs (a canon line of the file, then the sayings line of the same Noetic), unchanged in the blanked text. A role-notes file with no sayings lines is refused (ROLE_NOTES_WITHOUT_SAYINGS_LINES). Assemble: its own second reader sayings_from_table() reads the pinned canon file, checks the definition cells against the guide, and compares every sayings line letter for letter (SAYINGS_SOURCE_DIFFERS, SAYINGS_LINE_NOT_WORD_FOR_WORD). The head must be exactly canon line, sayings line, per Noetic in number order."
+   },
+   {
+    "item": "Leak screen: the word Sayings and the sayings text as frame text",
+    "action": "DONE",
+    "what_changed_or_why_not": "Sayings lines are never blanked, so rules (a) to (d) test them. What I found, REAL: in all ten table rows no sayings line holds the whole word answer, option or correct; none matches a rule (a) letter pattern; none holds CO-. On the 192 dry notes the frame text is hit 0 times in ROLE, 0 in MIXED, 0 in QUOTES-ONLY, 0 in FILLER. The role-note tool now also screens each of the nine sayings lines by itself and stops the build on a hit. Dry check on made-up data: an option whose whole text stands inside a sayings line, and not in the passage, is a rule (c) hit."
+   },
+   {
+    "item": "Forbidden words for the question sentence (list C)",
+    "action": "NOT_MINE",
+    "what_changed_or_why_not": "I added no word to any list. The plan fixer put the ten words into the constants: moth, flame, stomach, ten-foot, chord, resonated, groove, muscle, popped, clicked. The tools read list C from the constants; no tool change was needed. REAL, with form_check() of tools/ob_check_questions.py on made-up questions: each of the ten words in a question sentence gives FORBIDDEN_LIST_C. In an option none is caught by list C; `resonated` is caught there by list A. None of the ten words stands in the made-up questions of the dry fixtures."
+   },
+   {
+    "item": "(3) Made-up fixtures and the canon file",
+    "action": "DONE",
+    "what_changed_or_why_not": "No stand-in was made. optionb/dry/fixture_n/run_dry_n.py and optionb/dry/build_dev_package.py read the real canon file read-only, through read_sayings() of the role-note tool. fixture_q needs no canon file. Refusal tests on altered copies ran only in the session scratch folder, outside the project."
+   },
+   {
+    "item": "(4) Dry run of tools/ob_eligibility.py and tools/ob_role_notes.py on the real label files into optionb/dry/",
+    "action": "DONE",
+    "what_changed_or_why_not": "Both ran with the final tool bytes. Eligibility: ELIGIBILITY_OK, counts unchanged (192 eligible; 34 practice and 156 final passages at 8 settings). Role notes: ROLE_NOTES_OK. The numbers are under real_numbers_measured. Files written: optionb/dry/elig/, optionb/dry/notes_role/, optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md and the two report texts in optionb/dry/."
+   },
+   {
+    "item": "(5) Script check of every sayings line and definition line",
+    "action": "DONE",
+    "what_changed_or_why_not": "My own script, with its own simple parse of the canon file and the guide (it does not use the tool's readers). REAL: 503 of 503 sayings lines in the 192 ROLE notes equal the table cell character for character. 503 of 503 definition lines equal guide Part A. The same holds for MIXED (503 and 503). All 192 heads are in number order in both groups."
+   },
+   {
+    "item": "Plan: the length figures marked 'to be measured again'",
+    "action": "DONE",
+    "what_changed_or_why_not": "Replaced in 08_OPTION_B_PLAN_v1_0.md, and nothing else there. Section 10 Step 7: 'about 2.6 times' and the estimate 'about 3.8 times' became the REAL figure: 3.79 times at the median; word target at 100% is 111 / 200 / 345 words. Section 19.2 'EXPECTED need': 'about half of each limit' became an estimate from REAL word counts: at most about 52% to 60% of the output limit and about 33% to 38% of the input limit. Sections 27.3 and 27.4 repeat the two figures and now say they were measured. Section 27.3 also says the constants still hold the older text. New plan hash: 656c0aaf8a5352055b8df52046e72fb0de30b8eafaca274c5df2d2adbd17fe8f."
+   },
+   {
+    "item": "Small fault, walk finding 1: a tool crashed after it had saved its answers (output not UTF-8)",
+    "action": "DONE",
+    "what_changed_or_why_not": "The four tools that did not set it now do: ob_check_questions.py, ob_select.py, ob_solve_blind.py, ob_write_questions.py. The other three that set only standard output now set standard error too. So all eleven set both. REAL: without the fix a piped Python process on this laptop prints in cp1252 and fails on an arrow sign. New dry check: the import step, run as its own process with its output sent to a pipe, on an answer sheet with a stray arrow line, ends SHEET_IMPORTED with exit code 0."
+   },
+   {
+    "item": "Small fault, walk finding 3: exit codes did not mean the same thing in every tool",
+    "action": "DONE",
+    "what_changed_or_why_not": "Changed: ob_write_questions.py (0 only for ALL_WRITTEN; every STOPPED_ status is 1), ob_solve_blind.py (deepseek step: 0 only for ALL_ANSWERED, else 1), ob_select.py (GO 0; STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING 1; STOP_DO_NOT_LAUNCH 3, also in fix-split), ob_write_ordinary_notes.py (STOPPED_TOO_MANY_NOTES_NOT_WRITTEN is 2). The other tools already fit; their docstrings now state the rule. The dry drivers now check exit codes for these cases, and they held."
+   },
+   {
+    "item": "Small fault, walk finding 9: a note that comes back empty or cut off every time",
+    "action": "DONE",
+    "what_changed_or_why_not": "Five tools. Note writer: a line with HTTP status 200 and the error REPLY_EMPTY or REPLY_CUT_OFF is counted; never asked again in the same run; after 2 such lines the note gets not_written and is never asked again; at most 3 passages of a set; one more passage stops the tool with STOPPED_TOO_MANY_NOTES_NOT_WRITTEN, exit code 2, and no further call. Every slot now holds the field not_written. Support check: such a passage is in no batch, gets DROPPED_NOTE_NOT_WRITTEN, and the count passages_dropped_note_not_written. Screen and assemble: the passage is dropped; the removal log names it under STEP_7_SUPPORT_CHECK with the program tools/ob_write_ordinary_notes.py. Seal step 4 accepts the status. Walked on made-up data in two new dry folders: a first version given up, a rewrite given up, and the guard."
+   },
+   {
+    "item": "Small faults, walk finding 2 and confirm findings 3 and 6: texts in the run sheet",
+    "action": "DONE",
+    "what_changed_or_why_not": "optionb/controller_b1_draft/RUN_SHEET_B1.md, texts only. New rule 8: the four exit codes; only code 0 lets the next step start. New rule 9: the final question writer is not run, not even with --max-calls 0, before the practice set is fully done; a real run gives no --batch-size. Step 0.1: the wrong sentence 'the file was not on disk yet' is gone; the sheet now gives the builder's command and its output folder optionb/dry/dev_package/package/, and says 'build the package last'. The same two sentences stand in the docstring of tools/ob_write_questions.py."
+   },
+   {
+    "item": "optionb/job/SELFTEST_EXPECTED.json",
+    "action": "DONE",
+    "what_changed_or_why_not": "It quoted two hashes and one count that A13 changed. Updated: the two hashes under inputs (constants 7dd40833..., plan 656c0aaf...); a new block changed_by_amendment_A13; the note-length sentence (ROLE notes of the dry fixture are now 129 to 216 size units, counted again). 'No expected code changed' is stated BY READING only: by a text search, no job program reads a constant that A13 changed or added. I ran no job program."
+   },
+   {
+    "item": "(7) Re-run of the made-up dry drivers",
+    "action": "DONE",
+    "what_changed_or_why_not": "All three ran end to end with the final tool bytes. optionb/dry/fixture_q/run_dry_q.py: 84 of 84 checks held (46 tool runs). optionb/dry/fixture_n/run_dry_n.py: 189 of 189 checks held (78 tool runs). optionb/dry/build_dev_package.py --stop-before-the-builders (folder dev_package_a13_check): 54 tool runs, 33 checks held, status STUDY_FOLDER_LAID_OUT_BUILDERS_NOT_CALLED. Both drivers got new checks for A13, the not-written rule, the exit codes and the UTF-8 fault."
+   },
+   {
+    "item": "Real-mode test of seal steps 1 and 2 with the sixth source",
+    "action": "DONE",
+    "what_changed_or_why_not": "Not asked for by name; done because the dry drivers skip the real seal checks. In the session scratch folder, on byte copies of the plan files, the 15 pinned sources and the eleven tools: eligibility, seal step 1 (22 files), role notes (real run), seal step 2, verify. One more byte in the scratch copy of the canon file made verify, the question writer and the question checker stop with SEALED_FILE_CHANGED. 18 of 18 refusal checks held. Nothing was written in the study folder. The real seal file still does not exist."
+   },
+   {
+    "item": "All changed Python files checked with ast.parse",
+    "action": "DONE",
+    "what_changed_or_why_not": "REAL: ast.parse held for the 11 tools and the 3 dry drivers (14 files). All are UTF-8, LF only, no byte-order mark, no damaged character. No __pycache__ folder and no .partial file was left."
+   },
+   {
+    "item": "The step of build_dev_package.py that calls the two controller builders",
+    "action": "NOT_DONE",
+    "what_changed_or_why_not": "By rule: no program under optionb/controller_b1_draft/ and none under optionb/job/ runs on the laptop in this task. So build_source_zip_b1.py and build_contract_b1.py have still never run on a made-up study folder. BY READING: both skip a sealed entry whose package_path is null, so the sixth source does not reach them."
+   },
+   {
+    "item": "A new full real-mode walk like optionb/dry/walk_amend1/",
+    "action": "NOT_DONE",
+    "what_changed_or_why_not": "That walk was about 60 commands run by hand, with its own stand-in service. I did not repeat it, and I did not edit its scripts: the folder is the record of the A1 to A12 walk. Real-mode coverage after my changes: seal steps 1 and 2 on real sources, and the status rule of step 4 by a direct call. Seal steps 3A, 3B, 3C, 5, 6 and 7 were not run again; their code did not change."
+   },
+   {
+    "item": "Confirm findings 1, 2, 4, 5 and 9 (operator decisions)",
+    "action": "LEFT_ALONE",
+    "what_changed_or_why_not": "None can stop, stall or corrupt a run, and each needs a decision that is not mine: derive unsealed practice files again after a tool repair; the Step 8 reviewer name; no refusal on a transcript model that differs from the pinned id; two gaps in the window test of a program repair; the two DeepSeek limits and the uncounted call with no reply."
+   },
+   {
+    "item": "Cosmetic points",
+    "action": "LEFT_ALONE",
+    "what_changed_or_why_not": "Confirm finding 6, items 2 to 5: the runner hash quoted in GUEST_CHANGE_LIST.md; the status lines of gate_b1.py and scorer_v0_1_1.py; the purpose text of the kit; the unused option --dry-now and field first_cap_stop_utc of the support check. Confirm finding 7: no line for the made-up package shape (x_points 7 against 6) in SELFTEST_EXPECTED.json; I did not work that number out myself. Walk findings 4 and 5: assemble/planned_calls.json, assemble/manifest_step5.json, the two survival files, the reason PASSAGE_NOT_ELIGIBLE and the owner sample file are still not described in FILE_FORMATS.md. One awkward line break in the docstring of tools/ob_role_notes.py."
+   },
+   {
+    "item": "Walk findings 6, 7, 8, 10 and 11, confirm finding 8",
+    "action": "LEFT_ALONE",
+    "what_changed_or_why_not": "Facts for the operator, nothing to change in a file: the limits of the earlier walk; the seal tool and the --work tools do not meet in one made-up folder; DEEPSEEK_API_KEY was not set in that shell; what the development test does not measure; scratch folders raise a count in seal lines 1 and 2."
+   }
+  ],
+  "files_changed": [
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_assemble.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_check_questions.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_check_support.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_eligibility.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_role_notes.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_screen_notes.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_seal.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_select.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_solve_blind.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_questions.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/build_dev_package.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_n/run_dry_n.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_q/run_dry_q.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_n/ (every output written again by its driver; new sub-folders not_written_case/ and not_written_guard/)",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/fixture_q/ (every output written again by its driver; new sub-folders floor_case/ and utf8_case/)",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/dev_package_a13_check/ (new; made-up data; a check build that stopped before the two controller builders)",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/elig/eligibility.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/elig/exclusions.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/notes_role/role_notes.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/notes_role/owner_sample_20.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/ob_eligibility_count_report.txt",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/ob_role_notes_report.txt",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/controller_b1_draft/RUN_SHEET_B1.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/job/SELFTEST_EXPECTED.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md"
+  ],
+  "open_issues": [
+   "FOR THE OWNER'S EYES: an old sample file is still on disk. C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/OWNER_SAMPLE_ROLE_NOTES.md (written 05:44, sha256 b923ecc3...) shows the role notes WITHOUT the sayings lines. It is not one of my files, so I left it. The new sample is optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md. To write the old place again: /c/Python314/python.exe -B tools/ob_role_notes.py --dry-run optionb/dry --owner-sample-md optionb/OWNER_SAMPLE_ROLE_NOTES.md",
+   "All eleven tools changed bytes. The run sheet's rule 6 says a changed byte needs a new review. The review and the walk of amendment round 1 covered the old bytes. Nothing is sealed, so no repair line is needed; the one review round must read the new bytes before seal step 1.",
+   "The constants still hold the older estimate. optionb/PLAN_CONSTANTS.json, outside_services.deepseek.spend_cap_expected, still says 'at the very most about half of each limit' and 'To be measured again by the tool fixer'. I may not edit that file. The plan now gives the measured estimate, so the two texts differ until the plan fixer brings the constants in line. No program reads that text. expected_spend_usd 'under 2.00' holds for the likely case; in the very worst case the estimate is about 2.4 USD, inside the 4.00 USD limit.",
+   "The DeepSeek estimate rests on an assumption. REAL: the word counts. ASSUMED: 1.3 to 1.5 tokens per word and 10 output tokens per solver reply. No tokenizer ran. The real token need is NOT MEASURED until the first real calls.",
+   "Things I added that the three plan files do not name. They need the operator's yes or a line in FILE_FORMATS.md. (a) Refusal codes: SAYINGS_TABLE_NOT_FOUND, SAYINGS_ROWS_NOT_AS_EXPECTED, SAYINGS_DEFINITION_DIFFERS_FROM_THE_GUIDE, SAYINGS_NOT_FROM_THE_SEALED_SOURCE, SAYINGS_SOURCE_NOT_SEALED, ROLE_NOTES_WITHOUT_SAYINGS_LINES, SAYINGS_NOT_FOUND, SAYINGS_SOURCE_DIFFERS, SAYINGS_LINE_NOT_WORD_FOR_WORD, SUPPORT_RESULTS_DO_NOT_MATCH_NOTES. (b) The eligibility tool checks the pins of the six sealed sources at its start. (c) Screen and assemble refuse when the passages with the status DROPPED_NOTE_NOT_WRITTEN are not exactly the passages with a not_written note. (d) Two new keys in seal line values: sources_sealed (step 1) and passages_dropped_note_not_written (step 4). (e) New report keys of the note writer and of the assemble tool (sayings_lines_read_from_the_table). (f) The note writer stops the run as soon as the guard is passed, not only at its end. (g) The role-note tool stops if a sayings line by itself hits the leak screen.",
+   "A stall path that the new rule does not cover. The plan counts only an empty or cut-off reply with HTTP status 200. A note whose call gets HTTP 400, 404 or 422 every time, or a reply whose envelope can not be read every time, is not counted. The note writer then ends with STOPPED_NOTES_NOT_WRITTEN and exit code 1 at every run, and no passage is dropped by rule. That needs an operator decision; I changed nothing there.",
+   "NOT RUN: the two controller builders, and so step 3 of optionb/dry/build_dev_package.py. NOT RUN: any job program. NOT RUN again: the full real-mode walk of optionb/dry/walk_amend1/ with the changed tools. A new walk from a copy under optionb/dry/<name>/project/ needs one more change in its scratch constants: the path of sources.canonical_sayings must reach the canon file (from such a copy: ../../../../../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md), or a byte copy must lie two steps above the copy. The walk's own scripts do not do this yet.",
+   "NOT MEASURED, and now more likely with the longer notes: failures of the support check; chance hits of screen rules (c) and (d); the padding share in model B's tokens. The size-count estimate of the assemble tool for the made-up check build is ROLE 2.2, MIXED 4.4, ORD-INFORMED 2.5, ORD-FREE 1.9 percent; that is an estimate from size counts, not tokens. No real service was called, so the real replies of DeepSeek and Gemini to the longer word targets are unknown.",
+   "optionb/dry/dev_package_a13_check/ is a check, not the package of record. It was built before I replaced the two length figures, so its copy of the plan has the older hash 5e717bf9.... The operator builds the real package last, with the default folder name dev_package, which is still free. I deleted nothing.",
+   "Scratch files raise a count in seal lines 1 and 2. REAL today: 126 files with question-file names lie under optionb/dry/ (48 in walk_amend1, 24 in dev_package_a13_check, 54 in the two fixture folders). 0 files count as question files, so seal step 1 is not blocked. The number is only written into the seal line. The operator may clear the scratch folders before seal step 1.",
+   "Hashes quoted elsewhere are stale again, because the plan changed once more (now 656c0aaf8a5352055b8df52046e72fb0de30b8eafaca274c5df2d2adbd17fe8f, 157,280 bytes). I updated optionb/job/SELFTEST_EXPECTED.json. The numbers in optionb/AMEND_1_RECORD.json and in optionb/dry/walk_amend1/ are history and stay.",
+   "SELFTEST_EXPECTED.json: 'no expected code changed' is BY READING, not worked by hand again and not run. The line for the made-up package shape (x_points 7 against 6, confirm finding 7) is still missing.",
+   "Still open for the operator, not decided here: confirm findings 1, 2, 4, 5 and 9; the numbers the plan fixer chose (2 replies, 3 passages, the four exit codes, the path form of the sixth source, pinning the ruling record); plan question 22 for the owner (may the sayings be printed; default yes; the owner may strike it).",
+   "Seen, not touched: while I worked, files of another lane changed in the same study folder (09_LABEL_AGREEMENT_PLAN_v2_1.md, label_v21/, tools/check_labels_v21.py, tools/seal_v21.py, tools/team_a_receipt_v21.py). None is mine.",
+   "What stayed as it was, checked by hash at the end: optionb/PLAN_CONSTANTS.json (7dd40833...), optionb/FILE_FORMATS.md (aebef9bf...), docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md (cda85c03...), 02_LABELING_GUIDE_v1_2.md, tools/verdict.py. No AWS call, no outside service, no key file opened, no git command that changes state. Nothing is sealed: optionb/SEAL_OPTIONB.jsonl does not exist."
+  ],
+  "real_numbers_measured": [
+   "ELIGIBILITY, dry run of tools/ob_eligibility.py on the real label files (REAL, 2026-10-05): ELIGIBILITY_OK, exit code 0, 0 gating counts differ. 428 passages in 40 settings; 104 left out by rule 15; 324 remain; 192 eligible (K1 36, K2 55, K3 25, K4 37, K5 39). At 8 practice settings: 34 practice and 156 final passages; role-step ceilings 66 and 300. Unchanged: the passage list, the counts object, the exclusion list and the settings are equal to the dry run of 07:19 (script compare); only made_by and inputs differ.",
+   "ROLE NOTE LENGTHS, shortest / median / longest (REAL, dry runs of tools/ob_role_notes.py on the same 192 passages). ROLE, words by white space: 54 / 111 / 196 before A13, 80 / 155 / 263 after. ROLE, words by the word regex: 50 / 107.5 / 190 before, 71 / 144 / 246 after. ROLE, size count: 79 / 162.5 / 292 before, 128 / 235 / 398 after. ROLE lines: 4 / 6 / 10 before, 6 / 9 / 14 after.",
+   "MIXED, words by white space: 53 / 110.5 / 197 before, 83 / 156 / 263 after. MIXED, size count: 77 / 162 / 295 before, 129 / 236.5 / 406 after. QUOTES-ONLY, unchanged: 10 / 46.5 / 95 words by white space, size count 20 / 68 / 144. The passages: 43 / 54 / 70 words. FILLER: 7 words, unchanged. Gap between ROLE and MIXED size count per passage: largest 9, median 1.",
+   "SAYINGS LINES (REAL): 503 in the 192 ROLE notes and 503 in the MIXED notes; per ROLE note 1 / 3 / 4. Size count of each sayings line: ^1 22, ^2 27, ^3 30, ^4 27, ^5 30, ^6 31, ^7 32, ^8 36, ^9 39.",
+   "CHECK (5), my own script with its own parse (REAL): the canon file has 64,154 bytes and sha256 cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880. Table rows 10; definition cells equal to guide Part A 10 of 10. ROLE: 503 of 503 sayings lines equal the table cell character for character; 503 of 503 definition lines equal guide Part A; 192 of 192 heads as expected. MIXED: 503 of 503, 503 of 503, 192 of 192. Frame texts that keep the head whole: 384 of 384. QUOTES-ONLY notes with a sayings line: 0. Owner sample: 20 notes, 51 sayings lines.",
+   "LEAK SCREEN (REAL): frame text hit in 0 of 192 ROLE notes, 0 of 192 MIXED, 0 of 192 QUOTES-ONLY, 0 FILLER. The 9 sayings lines screened by themselves: 0 hit. In all ten table rows: 0 hold the whole word answer, option or correct; 0 match a rule (a) pattern; 0 hold CO-.",
+   "WORD TARGET OF AN ORDINARY NOTE (REAL, by word_targets() of the note tool on the dry role notes). At 100%: 68 / 138.5 / 249 words before A13, 111 / 200 / 345 after. At 90%: 100 / 180 / 311 after. At 110%: 122 / 219.5 / 380 after. Sum of the 100% targets over 192 passages: 25,945 before, 38,001 after. Target divided by passage words, at the median: 2.60 before, 3.79 after (shortest 1.78, longest 6.78 after).",
+   "DEEPSEEK NEED, worst case after A13 (word counts REAL; token shares EXPECTED at 1.3 to 1.5 tokens per word, ASSUMED): 2,280 note calls for 190 passages that can carry a task, 450,344 words asked for, 320,220 prompt words; 1,518 solver calls with at most 290,619 prompt words. Output: 51.9% to 59.7% of 1,156,520 tokens. Input: 32.7% to 37.7% of 2,430,240 tokens. Before A13, same count: output 35.9% to 41.2%. Every note written once, after A13: output 26.6% to 30.5%, input 23.3% to 26.8%.",
+   "DRY DRIVERS on made-up data (REAL, final tool bytes). run_dry_q.py: 46 tool runs, 84 of 84 checks held (77 before). run_dry_n.py: 78 tool runs, 189 of 189 checks held (141 before). build_dev_package.py --stop-before-the-builders: 16 made-up passages, 54 tool runs, 33 of 33 checks held; 23 and 12 practice tasks, 7 and 4 final tasks; made-up seal of 8 lines and 79 files; all 47 tool-made files in it were made by the tool bytes now on disk.",
+   "NOT-WRITTEN RULE on made-up data (REAL, inside run_dry_n.py). One empty reply: note still due, exit code 1. A call with no answer: not counted, 3 calls made. Second counted reply (cut off): note given up, not_written = version 1, replies 2, errors REPLY_EMPTY then REPLY_CUT_OFF, exit code 0, never asked a third time. Support check: 24 items in 2 batches for the 4 other passages, status counts ALL_PASS 4 and DROPPED_NOTE_NOT_WRITTEN 1, ready for seal step 4. A rewrite that came back empty twice: given up, first version kept, no round 2 planned. Guard: 4 passages with two empty replies each gave 3 given up, 1 beyond the guard, STOPPED_TOO_MANY_NOTES_NOT_WRITTEN, exit code 2, then 0 calls on the next run.",
+   "REAL-MODE SEAL TEST in the session scratch folder (real tools on byte copies of the real sources; 29 files copied, all byte-equal). Seal step 1: 22 files (21 before A13), values pinned_sources_checked 15, sources_sealed 6, tools_sealed 11; the sixth entry has the path ../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md, package_path null, 64,154 bytes. Role notes real run: ROLE_NOTES_OK, the same lengths as the dry run. Seal step 2: refused twice on altered copies (SAYINGS_NOT_FROM_THE_SEALED_SOURCE, NOT_BUILT_FROM_SEALED_INPUT), then sealed 2 files. Verify: chain of 2 lines whole, 24 files in force. One more byte in the scratch canon copy: verify exit code 2, '1 of 24'; the question writer and the question checker stopped with SEALED_FILE_CHANGED. Refusal checks of read_sayings(), seal step 4 and the source list: 18 of 18 held. The question writer with --max-calls 0 in that copy: STOPPED_CALL_BUDGET, 0 calls, exit code 1.",
+   "UTF-8 (REAL): a piped Python process on this laptop reports the output encoding cp1252 and fails on the sign U+2192 with UnicodeEncodeError. With the fix, the import step as its own piped process ends SHEET_IMPORTED, exit code 0, 3 readable answers, the stray line listed.",
+   "LIST C (REAL, form_check() on made-up questions): 20 entries in the constants; each of the ten new words in a question sentence gives FORBIDDEN_LIST_C (10 of 10); in an option, list C catches 0 of 10.",
+   "MADE-UP FIXTURE SIZES after A13 (REAL, size counts, not tokens): fixture_n, 8 kept passages: ROLE 129 to 216, MIXED 130 to 216, ordinary notes 18 to 41. Check build of the development package, 16 passages: ROLE 129 to 304, MIXED 130 to 296, ordinary notes 112 to 332.",
+   "NEW sha256 of the changed files (REAL, 2026-10-05). tools: ob_assemble.py 13eebd98...b8f4 (61,314 bytes); ob_check_questions.py 267a773a...f45e (26,516); ob_check_support.py 05660139...00ac (42,986); ob_eligibility.py ae43442b...10bb (41,781); ob_role_notes.py 1f0640ab...dafb (43,948); ob_screen_notes.py ab4bfd9a...5fc8 (35,804); ob_seal.py 9edeca8a...96d9 (90,498); ob_select.py 59a63824...6712 (35,417); ob_solve_blind.py 3435b8ea...0dec (44,821); ob_write_ordinary_notes.py 5dc37955...00f7 (46,202); ob_write_questions.py ae250776...a159 (36,575). build_dev_package.py 2827b184...4623; run_dry_n.py cb6581f3...f409; run_dry_q.py c2eb60dc...9786; RUN_SHEET_B1.md af80a4af...1e86 (85,708 bytes); SELFTEST_EXPECTED.json 348cec70...7da0 (19,500 bytes); 08_OPTION_B_PLAN_v1_0.md 656c0aaf8a5352055b8df52046e72fb0de30b8eafaca274c5df2d2adbd17fe8f (157,280 bytes). Dry outputs: role_notes.json 7e986bab...d570; owner_sample_20.json 956a9861...cfb0; OWNER_SAMPLE_ROLE_NOTES.md 4cedcb62...c137; eligibility.json a626991a...069d; exclusions.json 25cadeab...99a0.",
+   "SCRATCH LOOK-ALIKES (REAL, question_files() of the seal tool): 0 files count as question files; 126 files with question-file names lie under optionb/dry/."
+  ]
+ },
+ "confirm": {
+  "verdict": "ACCEPT_WITH_NOTES",
+  "findings": [
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+    "where": "Line 120, key outside_services.deepseek.spend_cap_expected. Partners: plan section 19.2, bullet 'EXPECTED need' (line 1125), and plan section 27.3 (line 1525).",
+    "problem": "This is the one text where the plan and the constants do not say the same. The plan gives the estimate that was measured again: at most about 52% to 60% of the output limit and about 33% to 38% of the input limit. The constants still say 'at the very most about half of each limit' and 'To be measured again by the tool fixer'. Both files say openly that the constants hold the older text, and the plan says it 'is brought in line before seal step 1'. No program reads this text. No limit and no rule differs. That is why I rate it MINOR and not MAJOR. By the letter of 'two files disagree' it is the only such place I found. It must be done before seal step 1, because both files are sealed there.",
+    "fix": "Replace that one sentence of the constants with the plan's figures. The constants hash then changes. So after the edit: run tools/ob_eligibility.py and tools/ob_role_notes.py in dry mode again, run the two dry drivers again, and write the new constants hash into optionb/job/SELFTEST_EXPECTED.json. Build the development package only after that.",
+    "evidence": "REAL, my own count from the dry role notes: 190 passages can carry a task; 2,280 calls if every note is written twice; 450,344 words asked for. At 1.3 to 1.5 tokens per word, plus 1,518 short solver replies, that is 51.9% to 59.7% of 1,156,520 output tokens. So the plan's figures hold. The constants text is the stale one."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md",
+    "where": "Section 11.2, the sentence under the group table (line 647): 'Amendment A13 changed two groups only: ROLE and MIXED.' Partners: section 11.3 point 5 (the padding target) and section 21.",
+    "problem": "The texts of QUOTES-ONLY and FILLER are unchanged (REAL, 192 of 192). But model B will not read the same Notes block in those groups as before. By the unchanged padding rule, every Notes block of a passage is padded up to the largest block of that passage. The ROLE and MIXED notes are longer now. So the padding line of QUOTES-ONLY, FILLER and ANSWER-GIVEN grows too. The plan does not say this. It matters for reading condition C5 (ROLE against QUOTES-ONLY).",
+    "fix": "Add one sentence to section 11.2 and one to section 21: by the unchanged padding rule the padding line of every other group with a Notes block grows with the ROLE note. No rule changes. No tool changes.",
+    "evidence": "ESTIMATE in size units, not tokens (my script, from the dry notes and the size-count rule): the padding share of a QUOTES-ONLY block is 58% at the median before A13 and 72% after. For FILLER it is 95% before and 97% after. The real token shares are NOT MEASURED until the job's self-test."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py",
+    "where": "work(), lines 730 to 743 (SAME_CALL_WOULD_FAIL = 400, 404, 422, line 112). Partners: plan section 10 Step 7 and constants ordinary_notes.not_written_rule ('A call log line with another HTTP status, or with no answer, is not counted').",
+    "problem": "BY READING. The new rule ends the case 'empty or cut off every time': I read the code and it does (2 counted replies, then not_written, then the passage is dropped and logged; guard at 3 passages; exit code 2). One sister case has no end. A note whose call gets HTTP 400, 404 or 422 every time is never counted and never given up. The writer then ends with STOPPED_NOTES_NOT_WRITTEN and exit code 1 at every run, and tools/ob_check_support.py refuses the set with NOTES_NOT_ALL_WRITTEN. The tool's own name for these codes says the same call would fail again. The fixer named this as open. The risk is low: DeepSeek already read all 428 passages for label team B.",
+    "fix": "An operator decision before seal step 1. Either say in plan section 10 Step 7 that this case means 'stop and report', or count such a line like an empty reply. No change is needed for A13 itself.",
+    "evidence": "tools/ob_write_ordinary_notes.py line 731: only 'status == 200 and error in (REPLY_EMPTY, REPLY_CUT_OFF)' reaches count_failed_reply(). Line 573: the same test when the call log is read."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/walk_amend1/00_make_project_copy.py",
+    "where": "The whole-chain walk of amendment round 1 (optionb/AMEND_1_RECORD.json, block walk, finding 7: 'If a tool changes again before seal step 1, run this walk again').",
+    "problem": "All eleven tools/ob_*.py changed bytes after that walk. The full real-mode walk (seal steps 3A to 7 with the real seal checks on) was not run again on the new bytes. The walk's scripts also can not run as they are: from a scratch project copy the path ../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md does not reach the canon file. What was run on the new bytes: the fixer's two dry drivers (their logs say 84 of 84 and 189 of 189 checks held) and seal steps 1 and 2 in real mode. I ran steps 1 and 2 again myself on byte copies and they passed. The code of seal steps 3A, 3B, 3C, 5, 6 and 7 did not change; step 4 changed by one status.",
+    "fix": "Operator choice before seal step 1: run the walk once more with a byte copy of the canon file two folders above the scratch project, or accept the cover named here. No file needs a change for A13.",
+    "evidence": "REAL, my scratch run on 29 byte copies: ELIGIBILITY_OK; seal step 1 sealed 22 files (pinned_sources_checked 15, sources_sealed 6, tools_sealed 11; sixth entry path ../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md, package_path null, 64154 bytes); ROLE_NOTES_OK; seal step 2 sealed 2 files; verify: 24 files in force. One more byte in the scratch canon copy made verify end with exit code 2."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/OWNER_SAMPLE_ROLE_NOTES.md",
+    "where": "The whole file (written 2026-10-05 05:44 local, 26,276 bytes).",
+    "problem": "This older owner sample still shows the 20 role notes without the sayings lines. REAL, my scan: it holds 51 definition lines and 0 sayings lines. The new sample, optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md, holds 51 definition lines and 51 sayings lines and asks the owner plan question 22. An owner who opens the old file would judge A13 on notes that do not show it. No program reads either file. The fixer named this; the file was not his to write.",
+    "fix": "Point the owner to optionb/dry/OWNER_SAMPLE_ROLE_NOTES.md. Or write the old place again: /c/Python314/python.exe -B tools/ob_role_notes.py --dry-run optionb/dry --owner-sample-md optionb/OWNER_SAMPLE_ROLE_NOTES.md",
+    "evidence": "Both files hold only canon lines that equal the source files character for character. The old one simply lacks the sayings lines."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+    "where": "forbidden_words.list_c.words (line 365) together with briefs.question_brief, the line that holds <<LIST_C>>. Partner: plan section 9 (line 427), which says so.",
+    "problem": "The amendment says every brief is unchanged. The 18 brief texts are unchanged (REAL: the block briefs is equal before and after). But the question brief prints list C. So the text that is sent to the question writer differs in one line of 60: it now also names moth, flame, stomach, ten-foot, chord, resonated, groove, muscle, popped, clicked. The blind question writer so reads ten words of the sayings. The plan states this. It follows from adding the words to list C. It needs the operator's yes, not a repair.",
+    "fix": "None if the operator agrees. Keeping the ten words out of the brief would need a new rule and a changed brief, which the amendment does not ask for.",
+    "evidence": "REAL, my script filled the question brief with the constants before and after: 60 lines each; only line 53 differs, by exactly these ten words."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_write_ordinary_notes.py",
+    "where": "work(): the call log line is written in one locked block (line 699) and the reply is counted in a second locked block (line 732). Partner: constants ordinary_notes.not_written_guard and FILE_FORMATS.md section 8.1 ('the first ones that meet the rule, in the order of the call log').",
+    "problem": "BY READING, not run. With 4 workers two threads can write their log lines in one order and count their replies in the other order. In the one run that passes the guard, the third passage given up can then differ from the third passage in call-log order. This has no effect on a run that goes on: at that moment the tool is at its final stop (exit code 2), and the next start builds the notes file again from the call log. Dry runs use one worker, so the dry drivers can not show it.",
+    "fix": "May be left as it is. If the tool is touched again for another reason: count the reply inside the same locked block that writes the log line.",
+    "evidence": "tools/ob_write_ordinary_notes.py lines 698 to 716 (first block) and 731 to 737 (second block)."
+   }
+  ],
+  "what_was_checked": [
+   "Claim states: REAL = I ran or measured it today on the laptop with my own small standard-library scripts. BY READING = I read the file and did not run it. I changed no project file: 23 key files have the same sha256 at my start and at my end (plan 656c0aaf..., constants 7dd40833..., formats aebef9bf..., the eleven tools as the fixers reported). No AWS call, no outside service, no key file opened, no git command that changes state. No job program and no controller program was run. My scripts and scratch copies lie only in the session scratch folder (confirm_a13).",
+   "(1) REAL. My script parses the canon table and guide Part A by itself (plain string splitting, not the tool's regex). docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md: 64,154 bytes, sha256 cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880, no CR; unchanged against git (last commit 1c8531ea). The table has 10 rows; 10 of 10 definition cells and names equal guide Part A. In optionb/dry/notes_role/role_notes.json (192 passages, made by tool 1f0640ab...): ROLE 503 of 503 definition lines and 503 of 503 sayings lines equal the files character for character; 192 of 192 heads are 'definition line, then sayings line' per Noetic in number order. MIXED: 503 of 503, 503 of 503, 192 of 192; every entry follows the swap table; each head is built from the tags the note now shows; the entry lines differ from ROLE only in tag and name. The blanked frame texts keep every head whole (384 of 384). The owner's sentence about Mind stands in no note (0 hits).",
+   "(1) wider, REAL. I scanned 1,086 text files under optionb/ for any line that starts with 'Sayings: \"' or looks like a definition line. Every such line equals the source file: 0 bad lines. That covers the dry notes, both owner sample files, fixture_n, fixture_q and dev_package_a13_check.",
+   "(2) How I compared. The state before A13 is on disk as byte copies in optionb/dry/walk_amend1/: plan 91617f38..., constants 980ef44f..., formats ab1f3950..., ob_seal.py 1fcd8091... (all four hashes are named in optionb/AMEND_1_RECORD.json), and the old role-note tool c6212ec9... . REAL: I built all 192 notes in memory with the old tool and old constants, and with the new tool and new constants, from the same eligibility data. QUOTES-ONLY: 192 of 192 equal, old against new and old against the dry file. Blanked QUOTES-ONLY: 192 of 192 equal. FILLER: equal (7 words). ROLE and MIXED of today minus their sayings lines equal the old notes: 192 of 192 each. Briefs: the block briefs (18 texts) is equal before and after; so are the blocks prompt, groups, padding, question_rules, solver_rules and 14 more. The constants differ in 5 changed and 39 added leaf keys, none removed; the 5 changed are forbidden_words.list_c.words, outside_services.deepseek.spend_cap_expected, role_notes.mixed_rule, role_notes.quotes_only_rule and status. The plan diff has no changed line in section 8 (the briefs).",
+   "(3) REAL and BY READING. Sixth source: the plan table row, constants sources.canonical_sayings and the formats text give the same path ../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md, 64,154 bytes and the same sha256; seal.sources_sealed_in_step_1 names six sources; tools/ob_seal.py reads that list and no longer holds a fixed list of five. All 15 pinned sources have their pinned size and sha256 on disk. Frame word: constants say Sayings and 'Sayings: <<SAYINGS>>'; the plan holds the same template; the formats point to the constants key; no tool types the word into a note (the tools read the template). Word list: list C has 20 entries; the plan's table row C equals it in order; the last ten are moth, flame, stomach, ten-foot, chord, resonated, groove, muscle, popped, clicked; it applies to the question sentence only; lists A and B are unchanged; the tools read list C from the constants. No leftover text says 'five source files'. The owner's words in plan section 27.3 equal the ruling record.",
+   "(4) REAL. I searched the plan, constants, formats, run sheet, SELFTEST_EXPECTED.json, the eleven tools, the job programs, the controller programs and the three dry drivers for all 10 definitions and all 33 single sayings, with and without the last full stop: 0 found, except the one-word saying 'Resonated', which is also a list C word. The ten list C words stand only in constants line 365 (the list), plan line 421 (table row C) and two plan sentences that name the same list (lines 426 and 1518). They stand in no program and not in the formats.",
+   "(5) REAL. I ran build() of the old eligibility tool with the old constants and of the new tool with the new constants, in memory. Passage list, exclusion list, counts, practice settings and reserve settings are equal, and equal to optionb/dry/elig/. Counts: 428 passages, 40 settings, 104 excluded, 192 eligible (K1 36, K2 55, K3 25, K4 37, K5 39), 34 practice and 156 final passages at 8 settings. counts_real is the same in the constants before and after.",
+   "(6) BY READING: I read the full diff of all eleven tools against their byte copies from before the amendment. UTF-8: all eleven set standard output and standard error to UTF-8 at the start of main(), so the import step of tools/ob_solve_blind.py can no longer crash on a sign after it saved its answers. Exit codes: ob_write_questions.py 0 only for ALL_WRITTEN, else 1; ob_solve_blind.py deepseek 0 only for ALL_ANSWERED, else 1; ob_select.py GO 0, move-the-reserve 1, STOP_DO_NOT_LAUNCH 3 (select and fix-split); ob_write_ordinary_notes.py 0 / 1 / 2 with the guard on 2; a refusal is 2 in every tool; this matches FILE_FORMATS.md section 0 and run sheet rule 8. A note that can not be written: the writer counts only HTTP 200 lines with REPLY_EMPTY or REPLY_CUT_OFF, never asks twice in one run, gives the note up at 2 such lines, and stops at more than 3 passages; the support check, the screen, the assemble tool and seal step 4 know DROPPED_NOTE_NOT_WRITTEN; the removal log names the drop under STEP_7_SUPPORT_CHECK. Texts: the plan-only-run sentence stands in plan 11.1, formats 15.2, run sheet rule 9 and the writer's docstring; 'a real run does not give --batch-size' stands in formats section 4 and the run sheet; run sheet step 0.1 no longer says the builder is missing and now gives its command and output folder.",
+   "Leak screen, REAL, with my own use of the three rule (a) patterns and the three rule (d) words from the constants: none of the nine sayings lines is hit; no saying holds the whole word answer, option or correct, and none holds CO-; the frame text is hit in 0 of 192 ROLE, 0 of 192 MIXED and 0 of 192 QUOTES-ONLY notes; FILLER is not hit.",
+   "Refusals of the sayings reader, REAL, on altered copies in my scratch folder: one more byte -> SOURCE_CHANGED; one saying changed -> SOURCE_CHANGED; a definition cell changed by one letter with the pin moved -> SAYINGS_DEFINITION_DIFFERS_FROM_THE_GUIDE; a row removed, a second row for one Noetic, or CR LF line ends -> SAYINGS_ROWS_NOT_AS_EXPECTED; the heading renamed or standing twice -> SAYINGS_TABLE_NOT_FOUND. 9 of 9 as expected.",
+   "Length figures the plan marks REAL, counted again by my script: word target at 100% is 111 / 200 / 345 words (shortest / median / longest) and 3.79 times the passage words at the median; before A13 68 / 138.5 / 249 and 2.60. ROLE size count 128 / 235 / 398; MIXED 129 / 236.5 / 406; 503 sayings lines, 1 / 3 / 4 per ROLE note. The stored size fields equal my count in 192 of 192 notes. All match the plan and the fixers.",
+   "Dry outputs on disk, REAL: every tool-made JSON file in fixture_q (93), fixture_n (41), dev_package_a13_check (92), elig (2) and notes_role (2) names the tool bytes and the constants hash that are on disk now. The two driver logs say 84 of 84 and 189 of 189 checks held. I did not run the two drivers again, because they write their outputs again. The job programs skip a sealed entry whose package_path is null and never read canon lines (BY READING: analysis_b1.py line 223; build_source_zip_b1.py; text_check_b1.py).",
+   "Not checked: the two prompt-word counts in plan section 19.2 (320,220 and 290,619) were not counted again. No token count exists; every token share is an estimate. Whether the support check, the leak screen and the padding rule lose more passages with the longer notes is NOT MEASURED. Nothing is sealed: optionb/SEAL_OPTIONB.jsonl does not exist."
+  ]
+ }
+}

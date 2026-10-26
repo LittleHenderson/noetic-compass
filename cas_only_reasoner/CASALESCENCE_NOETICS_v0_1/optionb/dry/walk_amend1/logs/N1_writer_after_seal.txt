@@ -1,0 +1,8 @@
+$ python -B tools/ob_write_questions.py --set practice --pass p1 --max-calls 0
+{
+ "program": "tools/ob_write_questions.py",
+ "status": "STOP",
+ "code": "SET_IS_SEALED",
+ "reason": "Seal step 3A_PRACTICE_QUESTIONS_AND_KEYS exists. These files are sealed and are not written again."
+}
+[exit code 2]

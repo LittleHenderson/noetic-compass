@@ -1,0 +1,12 @@
+$ python -B tools/ob_seal.py --project optionb/dry/dev_package/project verify
+line 1  1_PLAN_AND_SOURCES               2026-10-05T16:27:22Z  6 file(s)
+line 2  2_ROLE_NOTES                     2026-10-05T16:27:22Z  1 file(s)
+line 3  3A_PRACTICE_QUESTIONS_AND_KEYS   2026-10-05T16:27:22Z  24 file(s)
+line 4  3B_PRACTICE_SET_FIXED            2026-10-05T16:27:22Z  1 file(s)
+line 5  3C_FINAL_QUESTIONS_AND_KEYS      2026-10-05T16:27:22Z  20 file(s)
+line 6  4_ORDINARY_NOTES                 2026-10-05T16:27:22Z  12 file(s)
+line 7  5_PROMPT_PARTS_AND_REMOVAL_LOG   2026-10-05T16:27:22Z  10 file(s)
+line 8  6_PROGRAMS                       2026-10-05T16:27:22Z  5 file(s)
+The chain of 8 line(s) is whole (0 repair line(s)). All 79 sealed file(s) have their size and sha256 in force.
+The next step is 7_PRECHECK.
+[exit code 0]

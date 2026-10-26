@@ -1,0 +1,88 @@
+$ python -B tools/ob_select.py select --set final
+{
+ "program": "tools/ob_select.py",
+ "dry_fixture": false,
+ "step": "select",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "set": "final",
+ "practice_setting_count": 9,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "form check",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 324,
+   "plain_fact": 115
+  },
+  {
+   "filter": "option check",
+   "role_step": 322,
+   "plain_fact": 115
+  },
+  {
+   "filter": "key check",
+   "role_step": 321,
+   "plain_fact": 115
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 320,
+   "plain_fact": 115
+  },
+  {
+   "filter": "selection",
+   "role_step": 216,
+   "plain_fact": 110
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 216,
+   "plain_fact": 110
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 216,
+  "plain_fact_tasks": 110,
+  "passages_with_a_task": 110,
+  "passages_with_a_role_step_task": 110,
+  "single_longest": [
+   0,
+   216
+  ],
+  "single_shortest": [
+   0,
+   216
+  ]
+ },
+ "dropped_by_reason": {
+  "NOT_PICKED_BY_PAIR_RULE": 104,
+  "PASSAGE_BARRED": 2,
+  "PASSAGE_NOT_ELIGIBLE": 3
+ },
+ "decision": "GO",
+ "stop_reasons": [],
+ "next": "Seal step 3C. Then the ordinary notes are written. The launch floor is read again by tools/ob_assemble.py after the later filters.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles.",
+ "launch_floor_numbers": {
+  "final_role_step_tasks": 216,
+  "final_plain_fact_tasks": 110,
+  "practice_role_step_tasks": 53,
+  "practice_plain_fact_tasks": 27
+ },
+ "launch_floor": {
+  "final_role_step_tasks_min": 100,
+  "final_plain_fact_tasks_min": 100,
+  "practice_role_step_tasks_min": 36,
+  "practice_plain_fact_tasks_min": 20
+ },
+ "tier_if_nothing_more_is_removed": "EXPLORATORY"
+}
+[exit code 0]

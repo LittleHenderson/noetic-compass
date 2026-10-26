@@ -1,0 +1,355 @@
+SHEET final-no_passage-03. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0838 ===
+Question: Bramic spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the boat shed before dawn
+B. finding the ledge by the door
+C. seeing the madder beside it
+D. walking in through the door
+E. knowing where the lantern stands
+F. dusting the lantern before anything else
+=== END G0838 ===
+
+=== ITEM G0839 ===
+Question: Wrenic spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the ledge by the door
+B. opening the bell tower before dawn
+C. seeing the twine beside it
+D. dusting the oilcan before anything else
+E. walking in through the door
+F. knowing where the oilcan stands
+=== END G0839 ===
+
+=== ITEM G0840 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Bramic leave to someone else?
+A. working on the leaky bellows
+B. locking up the boat shed
+C. carrying the lantern outside
+D. working with the hemp spindle
+E. counting every madder there
+F. lighting the big lamp
+=== END G0840 ===
+
+=== ITEM G0841 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesic do first?
+A. reaching for the fine tray again
+B. moving the globe to the yard
+C. leaving the door wide open
+D. reaching for the flat tray again
+E. sweeping the loft floor twice
+F. hanging the tongs on a hook
+=== END G0841 ===
+
+=== ITEM G0842 ===
+Question: On the day Wrenic opened up, where did the oilcan stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the ledge
+=== END G0842 ===
+
+=== ITEM G0843 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Coric do first?
+A. hanging the pallets on a hook
+B. sweeping the store floor twice
+C. leaving the door wide open
+D. reaching for the metal brush again
+E. moving the ledger to the yard
+F. reaching for the wooden brush again
+=== END G0843 ===
+
+=== ITEM G0844 ===
+Question: On the day Jossic opened up, where did the rack stand?
+A. on the counter
+B. behind the gate
+C. inside the cart
+D. under the bench
+=== END G0844 ===
+
+=== ITEM G0845 ===
+Question: On the day Coric opened up, where did the ledger stand?
+A. inside the cart
+B. behind the gate
+C. under the bench
+D. on the shelf
+=== END G0845 ===
+
+=== ITEM G0846 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Jossic leave to someone else?
+A. working with the long scoop
+B. counting every rope there
+C. lighting the big lamp
+D. working on the bilge pump
+E. locking up the dye house
+F. carrying the rack outside
+=== END G0846 ===
+
+=== ITEM G0847 ===
+Question: On the day Ansic opened up, where did the sledge stand?
+A. inside the cart
+B. on the stove
+C. behind the gate
+D. under the bench
+=== END G0847 ===
+
+=== ITEM G0848 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Maric leave to someone else?
+A. locking up the net loft
+B. carrying the kettle outside
+C. lighting the big lamp
+D. working on the lye vat
+E. working with the wicker rake
+F. counting every straw there
+=== END G0848 ===
+
+=== ITEM G0849 ===
+Question: Coric spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the ledger stands
+B. finding the shelf by the door
+C. seeing the pallets beside it
+D. walking in through the door
+E. dusting the ledger before anything else
+F. opening the seed store before dawn
+=== END G0849 ===
+
+=== ITEM G0850 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Maric do first?
+A. sweeping the loft floor twice
+B. moving the kettle to the yard
+C. hanging the straw on a hook
+D. reaching for the wicker rake again
+E. reaching for the mesh rake again
+F. leaving the door wide open
+=== END G0850 ===
+
+=== ITEM G0851 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Coric leave to someone else?
+A. working on the loose stair
+B. lighting the big lamp
+C. counting every pallets there
+D. carrying the ledger outside
+E. working with the wooden brush
+F. locking up the seed store
+=== END G0851 ===
+
+=== ITEM G0852 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Eddic leave to someone else?
+A. working on the broken ladder
+B. working with the brass needle
+C. counting every tape there
+D. carrying the bucket outside
+E. lighting the big lamp
+F. locking up the nail forge
+=== END G0852 ===
+
+=== ITEM G0853 ===
+Question: Eddic spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the tape beside it
+B. finding the stove by the door
+C. knowing where the bucket stands
+D. dusting the bucket before anything else
+E. walking in through the door
+F. opening the nail forge before dawn
+=== END G0853 ===
+
+=== ITEM G0854 ===
+Question: On the day Fennic opened up, where did the stool stand?
+A. behind the gate
+B. on the table
+C. inside the cart
+D. under the bench
+=== END G0854 ===
+
+=== ITEM G0855 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansic do first?
+A. hanging the madder on a hook
+B. leaving the door wide open
+C. reaching for the zinc mould again
+D. moving the sledge to the yard
+E. reaching for the birch mould again
+F. sweeping the store floor twice
+=== END G0855 ===
+
+=== ITEM G0856 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesic leave to someone else?
+A. counting every tongs there
+B. working with the fine tray
+C. carrying the globe outside
+D. locking up the net loft
+E. lighting the big lamp
+F. working on the leaky bellows
+=== END G0856 ===
+
+=== ITEM G0857 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Fennic do first?
+A. reaching for the curved ladle again
+B. sweeping the shed floor twice
+C. moving the stool to the yard
+D. leaving the door wide open
+E. hanging the barley on a hook
+F. reaching for the straight ladle again
+=== END G0857 ===
+
+=== ITEM G0858 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Wrenic do first?
+A. moving the oilcan to the yard
+B. leaving the door wide open
+C. reaching for the small hammer again
+D. reaching for the large hammer again
+E. hanging the twine on a hook
+F. sweeping the tower floor twice
+=== END G0858 ===
+
+=== ITEM G0859 ===
+Question: Ilsic spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the sledge before anything else
+B. opening the bell tower before dawn
+C. knowing where the sledge stands
+D. walking in through the door
+E. seeing the tongs beside it
+F. finding the counter by the door
+=== END G0859 ===
+
+=== ITEM G0860 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ansic leave to someone else?
+A. locking up the seed store
+B. carrying the sledge outside
+C. working with the birch mould
+D. working on the lye vat
+E. counting every madder there
+F. lighting the big lamp
+=== END G0860 ===
+
+=== ITEM G0861 ===
+Question: Fennic spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the barley beside it
+B. opening the boat shed before dawn
+C. knowing where the stool stands
+D. finding the table by the door
+E. walking in through the door
+F. dusting the stool before anything else
+=== END G0861 ===
+
+=== ITEM G0862 ===
+Question: On the day Liesic opened up, where did the globe stand?
+A. under the bench
+B. behind the gate
+C. inside the cart
+D. on the shelf
+=== END G0862 ===
+
+=== ITEM G0863 ===
+Question: On the day Bramic opened up, where did the lantern stand?
+A. on the ledge
+B. under the bench
+C. inside the cart
+D. behind the gate
+=== END G0863 ===
+
+=== ITEM G0864 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Eddic do first?
+A. reaching for the plastic needle again
+B. leaving the door wide open
+C. sweeping the forge floor twice
+D. reaching for the brass needle again
+E. moving the bucket to the yard
+F. hanging the tape on a hook
+=== END G0864 ===
+
+=== ITEM G0865 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fennic leave to someone else?
+A. carrying the stool outside
+B. working on the damp cellar
+C. counting every barley there
+D. working with the curved ladle
+E. locking up the boat shed
+F. lighting the big lamp
+=== END G0865 ===
+
+=== ITEM G0866 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Bramic do first?
+A. sweeping the shed floor twice
+B. reaching for the nylon spindle again
+C. moving the lantern to the yard
+D. reaching for the hemp spindle again
+E. hanging the madder on a hook
+F. leaving the door wide open
+=== END G0866 ===
+
+=== ITEM G0867 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Jossic do first?
+A. sweeping the house floor twice
+B. hanging the rope on a hook
+C. leaving the door wide open
+D. reaching for the short scoop again
+E. reaching for the long scoop again
+F. moving the rack to the yard
+=== END G0867 ===
+
+=== ITEM G0868 ===
+Question: Ansic spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the madder beside it
+B. dusting the sledge before anything else
+C. knowing where the sledge stands
+D. opening the seed store before dawn
+E. finding the stove by the door
+F. walking in through the door
+=== END G0868 ===
+
+=== ITEM G0869 ===
+Question: Liesic spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the globe stands
+B. dusting the globe before anything else
+C. seeing the tongs beside it
+D. finding the shelf by the door
+E. walking in through the door
+F. opening the net loft before dawn
+=== END G0869 ===
+
+=== ITEM G0870 ===
+Question: Jossic spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the counter by the door
+B. walking in through the door
+C. seeing the rope beside it
+D. knowing where the rack stands
+E. dusting the rack before anything else
+F. opening the dye house before dawn
+=== END G0870 ===
+
+=== ITEM G0871 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wrenic leave to someone else?
+A. working on the rusty winch
+B. lighting the big lamp
+C. carrying the oilcan outside
+D. counting every twine there
+E. working with the small hammer
+F. locking up the bell tower
+=== END G0871 ===
+
+=== ITEM G0872 ===
+Question: On the day Eddic opened up, where did the bucket stand?
+A. inside the cart
+B. under the bench
+C. behind the gate
+D. on the stove
+=== END G0872 ===
+
+=== ITEM G0873 ===
+Question: Maric spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the kettle before anything else
+B. finding the table by the door
+C. seeing the straw beside it
+D. walking in through the door
+E. knowing where the kettle stands
+F. opening the net loft before dawn
+=== END G0873 ===
+
+=== ITEM G0874 ===
+Question: On the day Maric opened up, where did the kettle stand?
+A. under the bench
+B. behind the gate
+C. on the table
+D. inside the cart
+=== END G0874 ===

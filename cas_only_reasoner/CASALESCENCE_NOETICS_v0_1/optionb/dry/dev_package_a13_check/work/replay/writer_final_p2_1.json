@@ -1,0 +1,244 @@
+[
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY",
+  "content_json": [
+   {
+    "passage": "D015",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "A free hour comes up next week. Going only by the passage, which of these does Sunniva do first?",
+      "right": "reaching for the birch rake again",
+      "wrong": [
+       "reaching for the iron rake again",
+       "moving the barrow to the yard",
+       "hanging the crates on a hook",
+       "sweeping the store floor twice",
+       "leaving the door wide open"
+      ],
+      "anchors": [
+       "reached for the birch rake"
+      ]
+     },
+     {
+      "form": "KEEPS_AWAY",
+      "question": "A visitor asks for help later that day. Going only by the passage, which of these does Sunniva leave to someone else?",
+      "right": "working on the wet sacks",
+      "wrong": [
+       "working with the birch rake",
+       "carrying the barrow outside",
+       "counting every crates there",
+       "locking up the salt store",
+       "lighting the big lamp"
+      ],
+      "anchors": [
+       "away from the wet sacks"
+      ]
+     },
+     {
+      "form": "LONG_BREAK",
+      "question": "Sunniva spends two years far from the salt store. Going only by the passage, which of these has most likely faded when she comes back?",
+      "right": "dusting the barrow before anything else",
+      "wrong": [
+       "opening the salt store before dawn",
+       "finding the ramp by the door",
+       "seeing the crates beside it",
+       "knowing where the barrow stands",
+       "walking in through the door"
+      ],
+      "anchors": [
+       "Every morning for nine years"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where did the barrow stand?",
+     "right": "on the ramp",
+     "wrong": [
+      "under the bench",
+      "behind the gate",
+      "inside the cart"
+     ]
+    }
+   },
+   {
+    "passage": "D014",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "A free hour comes up next week. Going only by the passage, which of these does Hale do first?",
+      "right": "reaching for the long spindle again",
+      "wrong": [
+       "reaching for the short spindle again",
+       "moving the board to the yard",
+       "hanging the tallow on a hook",
+       "sweeping the walk floor twice",
+       "leaving the door wide open"
+      ],
+      "anchors": [
+       "reached for the long spindle"
+      ]
+     },
+     {
+      "form": "KEEPS_AWAY",
+      "question": "A visitor asks for help later that day. Going only by the passage, which of these does Hale leave to someone else?",
+      "right": "working on the tar kettle",
+      "wrong": [
+       "working with the long spindle",
+       "carrying the board outside",
+       "counting every tallow there",
+       "locking up the rope walk",
+       "lighting the big lamp"
+      ],
+      "anchors": [
+       "away from the tar kettle"
+      ]
+     },
+     {
+      "form": "LONG_BREAK",
+      "question": "Hale spends two years far from the rope walk. Going only by the passage, which of these has most likely faded when he comes back?",
+      "right": "dusting the board before anything else",
+      "wrong": [
+       "opening the rope walk before dawn",
+       "finding the post by the door",
+       "seeing the tallow beside it",
+       "knowing where the board stands",
+       "walking in through the door"
+      ],
+      "anchors": [
+       "Every morning for nine years"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where did the board stand?",
+     "right": "on the post",
+     "wrong": [
+      "under the bench",
+      "behind the gate",
+      "inside the cart"
+     ]
+    }
+   },
+   {
+    "passage": "D013",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "A free hour comes up next week. Going only by the passage, which of these does Petra do first?",
+      "right": "reaching for the fine tweezers again",
+      "wrong": [
+       "reaching for the flat pliers again",
+       "moving the loupe to the yard",
+       "hanging the springs on a hook",
+       "sweeping the shop floor twice",
+       "leaving the door wide open"
+      ],
+      "anchors": [
+       "reached for the fine tweezers"
+      ]
+     },
+     {
+      "form": "KEEPS_AWAY",
+      "question": "A visitor asks for help later that day. Going only by the passage, which of these does Petra leave to someone else?",
+      "right": "working on the sticky oil",
+      "wrong": [
+       "working with the fine tweezers",
+       "carrying the loupe outside",
+       "counting every springs there",
+       "locking up the clock shop",
+       "lighting the big lamp"
+      ],
+      "anchors": [
+       "away from the sticky oil"
+      ]
+     },
+     {
+      "form": "LONG_BREAK",
+      "question": "Petra spends two years far from the clock shop. Going only by the passage, which of these has most likely faded when she comes back?",
+      "right": "dusting the loupe before anything else",
+      "wrong": [
+       "opening the clock shop before dawn",
+       "finding the mat by the door",
+       "seeing the springs beside it",
+       "knowing where the loupe stands",
+       "walking in through the door"
+      ],
+      "anchors": [
+       "Every morning for nine years"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where did the loupe stand?",
+     "right": "on the mat",
+     "wrong": [
+      "under the bench",
+      "behind the gate",
+      "inside the cart"
+     ]
+    }
+   },
+   {
+    "passage": "D016",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "A free hour comes up next week. Going only by the passage, which of these does Garrick do first?",
+      "right": "reaching for the curved adze again",
+      "wrong": [
+       "reaching for the straight adze again",
+       "moving the mallet to the yard",
+       "hanging the iron on a hook",
+       "sweeping the yard floor twice",
+       "leaving the door wide open"
+      ],
+      "anchors": [
+       "reached for the curved adze"
+      ]
+     },
+     {
+      "form": "KEEPS_AWAY",
+      "question": "A visitor asks for help later that day. Going only by the passage, which of these does Garrick leave to someone else?",
+      "right": "working on the split stave",
+      "wrong": [
+       "working with the curved adze",
+       "carrying the mallet outside",
+       "counting every iron there",
+       "locking up the cooper yard",
+       "lighting the big lamp"
+      ],
+      "anchors": [
+       "away from the split stave"
+      ]
+     },
+     {
+      "form": "LONG_BREAK",
+      "question": "Garrick spends two years far from the cooper yard. Going only by the passage, which of these has most likely faded when he comes back?",
+      "right": "dusting the mallet before anything else",
+      "wrong": [
+       "opening the cooper yard before dawn",
+       "finding the block by the door",
+       "seeing the iron beside it",
+       "knowing where the mallet stands",
+       "walking in through the door"
+      ],
+      "anchors": [
+       "Every morning for nine years"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where did the mallet stand?",
+     "right": "on the block",
+     "wrong": [
+      "under the bench",
+      "behind the gate",
+      "inside the cart"
+     ]
+    }
+   }
+  ]
+ }
+]

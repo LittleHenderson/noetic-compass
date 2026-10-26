@@ -1,0 +1,31 @@
+$ python -B tools/ob_write_questions.py --set final --pass p1 --max-calls 0
+{
+ "program": "tools/ob_write_questions.py",
+ "dry_fixture": false,
+ "status": "STOPPED_CALL_BUDGET",
+ "set": "final",
+ "pass": "p1",
+ "model": "gemini-3.5-flash-lite",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "practice_setting_count": 9,
+ "waves": 1,
+ "batches": {
+  "DONE": 0,
+  "PENDING": 29,
+  "UNREADABLE": 0
+ },
+ "calls_this_run": 0,
+ "call_budget": 0,
+ "stops_after_http_429": 0,
+ "model_names_in_the_replies": [],
+ "passages_asked": 0,
+ "passages_by_status": {
+  "OK": 0,
+  "MISSING": 0,
+  "BAD_OBJECT": 0
+ },
+ "what_follows_questions": 0,
+ "plain_fact_questions": 0,
+ "next": "The call budget of this run is used up. The checkpoint is kept. Run the same command again."
+}
+[exit code 0]

@@ -1,0 +1,1185 @@
+[
+ {
+  "passage": "V173",
+  "writer_kind": "K2",
+  "text": "Chloe enjoyed folding the crisp, clean sheets, appreciating their fresh scent and smooth texture. She wrinkled her nose slightly at the damp, musty smell from the incoming linen skips. The intense heat and constant rush of steam from the industrial presses, however, were just part of her everyday environment, barely noticed.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the crisp, clean sheets",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp, musty smell",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "her everyday environment",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "folding the crisp, clean sheets",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp, musty smell from the incoming linen skips",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V097",
+  "writer_kind": "K2",
+  "text": "Julia spent her shift intently monitoring the wind speed graphs, particularly fond of the smooth, upward curves. They spoke of steady power generation. A sudden, jagged drop in an individual turbine’s output, however, always brought a frown to her face. The faint chimes from her incoming personal messages were completely ignored.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Julia",
+    "mind": "Julia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the smooth, upward curves",
+    "mind": "Julia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "A sudden, jagged drop in an individual turbine’s output",
+    "mind": "Julia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "completely ignored",
+    "mind": "Julia",
+    "relative_to": "The faint chimes from her incoming personal messages",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Julia",
+    "mind": "Julia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the smooth, upward curves",
+    "mind": "Julia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "A sudden, jagged drop in an individual turbine’s output",
+    "mind": "Julia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always brought a frown to her face",
+    "mind": "Julia",
+    "relative_to": "A sudden, jagged drop in an individual turbine’s output",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "completely ignored",
+    "mind": "Julia",
+    "relative_to": "The faint chimes from her incoming personal messages",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V221",
+  "writer_kind": "K2",
+  "text": "Mark, a young locksmith, found the old lockbox fascinating. He eagerly picked up a complex cylinder mechanism, examining its intricate pins and springs. The simpler, modern electronic keypads, however, left him cold; he found them dull and uninspiring. The faint scent of oil and metal in the van was comforting, while the smell of exhaust fumes from traffic barely registered.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mark",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the old lockbox",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a complex cylinder mechanism",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "left him cold",
+    "mind": "Mark",
+    "relative_to": "The simpler, modern electronic keypads",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The faint scent of oil and metal in the van",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Mark",
+    "relative_to": "the smell of exhaust fumes",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mark",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the old lockbox",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a complex cylinder mechanism",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The simpler, modern electronic keypads",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "left him cold",
+    "mind": "Mark",
+    "relative_to": "The simpler, modern electronic keypads",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Mark",
+    "relative_to": "the smell of exhaust fumes from traffic",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "its intricate pins and springs",
+    "mind": "",
+    "relative_to": "a complex cylinder mechanism",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V364",
+  "writer_kind": "K2",
+  "text": "Susan, a passenger, found the enclosed cabin of the river ferry stuffy. She felt a strong pull toward the open deck, where the wind whipped past. The chatter inside felt loud and unwelcome. As the boat scraped against the dock, she barely registered the jolt. Her gaze was already fixed on the distant trees across the water, eager to disembark.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the enclosed cabin",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the open deck",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a strong pull",
+    "mind": "Susan",
+    "relative_to": "the open deck",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The chatter inside",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Susan",
+    "relative_to": "the jolt",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "disembark",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the enclosed cabin of the river ferry stuffy",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the open deck",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The chatter inside",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "she barely registered the jolt",
+    "mind": "Susan",
+    "relative_to": "the jolt",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the distant trees across the water",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V047",
+  "writer_kind": "K2",
+  "text": "Daniel carefully picked up a shimmering sample of quartz, admiring its crystalline structure. He wiped a bead of sweat from his brow, disliking the intense heat of the quarry sun. The blinding glare reflecting off the rock faces, however, did not deter him from his detailed examination of the new geological layer.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a shimmering sample of quartz",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the intense heat of the quarry sun",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a shimmering sample of quartz",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the intense heat of the quarry sun",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V060",
+  "writer_kind": "K2",
+  "text": "Liam, a seasoned hiker, felt a sense of peace settle over him as he surveyed the expansive, green valley. The crisp mountain air filled his lungs, a feeling he deeply cherished. The distant, faint sound of a snowmobile engine, however, seemed a jarring intrusion, quickly fading into the background of his thoughts.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Liam",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a seasoned hiker",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The crisp mountain air",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "deeply cherished",
+    "mind": "Liam",
+    "relative_to": "The crisp mountain air",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^3",
+    "words": "The distant, faint sound of a snowmobile engine",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "quickly fading into the background of his thoughts",
+    "mind": "Liam",
+    "relative_to": "The distant, faint sound of a snowmobile engine",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Liam",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a sense of peace",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The crisp mountain air",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The distant, faint sound of a snowmobile engine",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a feeling he deeply cherished",
+    "mind": "Liam",
+    "relative_to": "The crisp mountain air",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "seemed a jarring intrusion",
+    "mind": "Liam",
+    "relative_to": "The distant, faint sound of a snowmobile engine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a seasoned hiker",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V327",
+  "writer_kind": "K2",
+  "text": "Oscar instantly gravitated towards the bright red fire engine in the corner of the room, his eyes wide with fascination. He ignored the gentle buzzing of the educational tablet lying nearby. The stern voice of the teacher, asking him to sit down, barely registered amidst his excitement for the toy.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Oscar",
+    "mind": "Oscar",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the teacher",
+    "mind": "the teacher",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the bright red fire engine",
+    "mind": "Oscar",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "his eyes wide with fascination",
+    "mind": "Oscar",
+    "relative_to": "the bright red fire engine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Oscar",
+    "relative_to": "The stern voice of the teacher",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Oscar",
+    "mind": "Oscar",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the bright red fire engine in the corner of the room",
+    "mind": "Oscar",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the gentle buzzing of the educational tablet lying nearby",
+    "mind": "Oscar",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Oscar",
+    "relative_to": "The stern voice of the teacher, asking him to sit down",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V078",
+  "writer_kind": "K1",
+  "text": "Frank hosed down his stall, the chilly spray misting the air. The sharp, briny smell of the fresh oysters on ice brought him back to his childhood holidays by the sea. He remembered the thrill of digging for clams on the sandy beach with his father. A quiet longing for those simple summer days settled over him.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp, briny smell of the fresh oysters on ice",
+    "mind": "Frank",
+    "relative_to": "his childhood holidays by the sea",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his childhood holidays by the sea",
+    "mind": "Frank",
+    "relative_to": "The sharp, briny smell of the fresh oysters on ice",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "those simple summer days",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp, briny smell of the fresh oysters on ice",
+    "mind": "Frank",
+    "relative_to": "his childhood holidays by the sea",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his childhood holidays by the sea",
+    "mind": "Frank",
+    "relative_to": "The sharp, briny smell of the fresh oysters on ice",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "A quiet longing for those simple summer days",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V209",
+  "writer_kind": "K2",
+  "text": "Chloe, a wind farm engineer, felt uneasy whenever a turbine's output dipped below its typical range. She preferred the steady, high power readings, which brought a sense of accomplishment. The low hum of the servers in the room barely registered with her. Her attention was always fixed on the green-lit operational turbines on the main display.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a turbine's output dipped below its typical range",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the steady, high power readings",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered with her",
+    "mind": "Chloe",
+    "relative_to": "The low hum of the servers",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a turbine's output dipped below its typical range",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the steady, high power readings",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered with her",
+    "mind": "Chloe",
+    "relative_to": "The low hum of the servers in the room",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V347",
+  "writer_kind": "K2",
+  "text": "Doris watched the afternoon tea cart approach, her eyes fixed on the small lemon drizzle cake. She completely ignored the chatter of the other residents in the lounge. The distant television news, usually a comfort, now merely faded into the background. All she wanted was that single slice of cake.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Doris",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the other residents",
+    "mind": "the other residents",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the small lemon drizzle cake",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "merely faded into the background",
+    "mind": "Doris",
+    "relative_to": "The distant television news",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "completely ignored",
+    "mind": "Doris",
+    "relative_to": "the chatter of the other residents",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Doris",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the small lemon drizzle cake",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "that single slice of cake",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "merely faded into the background",
+    "mind": "Doris",
+    "relative_to": "The distant television news",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V392",
+  "writer_kind": "K2",
+  "text": "Ben, a student volunteer, moved among the plants. He meticulously cared for the rare orchids, admiring their delicate forms. The common, robust tomato plants, however, held little appeal for him. The intense humidity of the greenhouse felt like a welcome embrace, while the distant rumble of traffic outside barely registered in his attention.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the rare orchids",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The intense humidity of the greenhouse",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "held little appeal for him",
+    "mind": "Ben",
+    "relative_to": "The common, robust tomato plants",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered in his attention",
+    "mind": "Ben",
+    "relative_to": "the distant rumble of traffic",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the rare orchids",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The common, robust tomato plants",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "felt like a welcome embrace",
+    "mind": "Ben",
+    "relative_to": "The intense humidity of the greenhouse",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered in his attention",
+    "mind": "Ben",
+    "relative_to": "the distant rumble of traffic outside",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V321",
+  "writer_kind": "K2",
+  "text": "Peter, a radio journalist, found himself drawn to the urgent, breaking news wire flashing across his screen. He felt an intense pull towards the unfolding story. However, a lengthy, pre-recorded interview waiting for transcription sat untouched on his desk. Its persistent blinking notification light received barely a moment of his attention.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the urgent, breaking news wire",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "an intense pull",
+    "mind": "Peter",
+    "relative_to": "the urgent, breaking news wire",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely a moment of his attention",
+    "mind": "Peter",
+    "relative_to": "persistent blinking notification light",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the urgent, breaking news wire flashing across his screen",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "an intense pull",
+    "mind": "Peter",
+    "relative_to": "the unfolding story",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely a moment of his attention",
+    "mind": "Peter",
+    "relative_to": "Its persistent blinking notification light",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V111",
+  "writer_kind": "K2",
+  "text": "Leo, a young snowboarder, stepped onto the ski lift. He gripped the cold bar, already dreaming of fresh powder. The distant clatter of a snowplow barely registered in his excitement. He detested the crowded, icy beginner slopes but loved the untouched wilderness at the summit. The biting wind felt like a welcome thrill, not an inconvenience.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "fresh powder",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the untouched wilderness at the summit",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The biting wind",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the crowded, icy beginner slopes",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered in his excitement",
+    "mind": "Leo",
+    "relative_to": "The distant clatter of a snowplow",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "fresh powder",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the untouched wilderness at the summit",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the crowded, icy beginner slopes",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Leo",
+    "relative_to": "The distant clatter of a snowplow",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "felt like a welcome thrill",
+    "mind": "Leo",
+    "relative_to": "The biting wind",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V046",
+  "writer_kind": "K3",
+  "text": "Farmer George moved among his herd. He knew each cow by her unique markings and temperament after decades of working this land. The low moo of the first cow entering the parlour wasn't just a sound; it was the start of the daily routine, a familiar pattern ingrained in his very bones. He felt a deep connection to their gentle presence.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Farmer George",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "decades of working this land",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a familiar pattern ingrained in his very bones",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "the daily routine",
+    "mind": "Farmer George",
+    "relative_to": "The low moo of the first cow",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "their gentle presence",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a deep connection",
+    "mind": "Farmer George",
+    "relative_to": "their gentle presence",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Farmer George",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "decades of working this land",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a familiar pattern ingrained in his very bones",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "the daily routine",
+    "mind": "Farmer George",
+    "relative_to": "The low moo of the first cow entering the parlour",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a deep connection to their gentle presence",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V073",
+  "writer_kind": "K2",
+  "text": "David walked through the market aisle. He winced at the strong, briny scent near the clam vendor's stall. But then he saw the display of gleaming, fresh mackerel, their scales shimmering under the lights. A wave of hunger hit him immediately. The distant shouts of the auctioneers barely registered as he approached the mackerel.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the auctioneers",
+    "mind": "the auctioneers",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the strong, briny scent",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the display of gleaming, fresh mackerel",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "A wave of hunger hit him immediately",
+    "mind": "David",
+    "relative_to": "the display of gleaming, fresh mackerel",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "David",
+    "relative_to": "The distant shouts of the auctioneers",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the strong, briny scent near the clam vendor's stall",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the display of gleaming, fresh mackerel",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "A wave of hunger hit him immediately",
+    "mind": "David",
+    "relative_to": "the display of gleaming, fresh mackerel",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "David",
+    "relative_to": "The distant shouts of the auctioneers",
+    "certainty": "clear"
+   }
+  ]
+ }
+]

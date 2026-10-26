@@ -1,0 +1,18 @@
+{"json": {
+ "notes_ord/ordinary_notes_": ["casalescence/optionb/ordinary_notes/v1", ["set", "writer", "passages"], {"passages": ["passage_id", "role_size_count", "passage_words", "passage_size_count", "notes"]}],
+ "support/support_state_": ["casalescence/optionb/support_state/v1", ["set", "model", "rounds", "cap_stops_utc", "first_cap_stop_utc", "complete"], {"rounds": ["round", "batches"], "rounds.batches": ["batch", "item_ids", "status", "attempts"]}],
+ "support/support_items_": ["casalescence/optionb/support_items/v1", ["set", "items"], {"items": ["item_id", "note_id", "round", "checker", "sheet"]}],
+ "support/support_results_": ["casalescence/optionb/support_results/v1", ["set", "results", "passages", "counts"], {"results": ["note_id", "item_id", "checker", "round", "verdict"], "passages": ["passage_id", "status", "rewrite_note_ids"]}],
+ "screen/leak_screen_": ["casalescence/optionb/leak_screen/v1", ["set", "passages", "counts"], {"passages": ["passage_id", "hit", "hits"], "passages.hits": ["group", "length", "rule", "task_id", "detail"]}],
+ "removal_log.json": ["casalescence/optionb/removal_log/v1", ["entries", "counts_by_step_and_rule", "survival", "final_counts", "launch_floor_met", "tier", "estimated_padding"], {"entries": ["set", "step", "program", "object", "id", "rule", "detail"]}],
+ "prompts/prompt_parts_practice.json": ["casalescence/optionb/prompt_parts/v1", ["set", "passages", "tasks", "answer_given"], {"passages": ["passage_id", "text", "notes"], "tasks": ["task_id", "passage_id", "family", "question", "options", "groups"], "answer_given": ["task_id", "level", "note"]}],
+ "prompts/prompt_parts_final.json": ["casalescence/optionb/prompt_parts/v1", ["set", "passages", "tasks"], {"passages": ["passage_id", "text", "notes"], "tasks": ["task_id", "passage_id", "family", "question", "options", "groups"]}],
+ "keys_practice/keys_practice.json": ["casalescence/optionb/keys/v1", ["set", "keys"], {}],
+ "keys_final/keys_final.json": ["casalescence/optionb/keys/v1", ["set", "keys"], {}],
+ "keys_practice/task_meta_practice.json": ["casalescence/optionb/task_meta/v1", ["set", "tasks"], {}],
+ "keys_final/task_meta_final.json": ["casalescence/optionb/task_meta/v1", ["set", "tasks"], {}]
+},
+"jsonl": {
+ "notes_ord/ordinary_calls_": ["utc", "note_id", "frame", "model", "model_in_reply", "usage", "http_status", "ok", "error", "prompt_sha256", "reply_sha256", "prompt", "reply"],
+ "support/support_calls_": ["utc", "model", "model_in_reply", "round", "batch", "item_ids", "attempt", "http_status", "ok", "error", "prompt_sha256", "reply_sha256", "prompt", "reply"]
+}}

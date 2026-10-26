@@ -1,0 +1,21 @@
+{
+  "schema": "helm.owner-direct-approval/2",
+  "utc_recorded": "2026-10-05T05:46:00Z",
+  "received_pacific": "2026-10-04 about 22:40 PDT",
+  "time_correction": "This record first carried 23:05 PDT and 06:10Z, which were my wrong estimates; corrected against the system clock at 22:45 PDT. The file name keeps the first estimate.",
+  "channel": "Owner typed directly to Claude Code (desktop app, Code tab), session d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0, while the first-look label teams were running",
+  "owner_words_verbatim": "OK YOU HAVE MY APPROVAL FOR IT ALL",
+  "what_it_followed": "Claude had just reported: no-cost parts written; 'No AWS and no paid calls'; label teams next, then the priced plan. The earlier approval record in this folder listed what was waiting on a priced plan and an owner yes: any AWS job, any paid call to an outside model service, the label-agreement verdict, building the new reader, the early Cause/Effect help-to-B check.",
+  "scope_as_read_by_claude_labelled_as_interpretation": {
+    "approved": "All stages of DIRECTIVE_R2.md (sha256 eb667f2549a89a1eda7fc5955b14395915c69023e093f43580c26243f558198b), including the paid preliminary stages and the use of an outside model service as the non-Claude label team.",
+    "money": "No dollar figure was named by the owner. Claude therefore spends only inside the funds the ledger shows as unreserved at launch time, with a stated cap and automatic shutdown on every job, and reports each cost. Anything that would exceed unreserved funds is brought back to the owner as a new approval request.",
+    "not_read_into_these_words": [
+      "releasing the USD 8 hold of the finished op11 job (needs an owner order or the bill)",
+      "raising any ledger ceiling",
+      "changing a pass rule, a threshold or a finished result",
+      "anything outside DIRECTIVE_R2.md"
+    ]
+  },
+  "ledger_at_record_time": {"pointer": "C:/Users/wakil/Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json", "combined_allocation_usd": 87.15, "ceiling_usd": 100.0, "unreserved_usd": 12.85},
+  "operator": "Claude Code (claude-fable-5-1)"
+}

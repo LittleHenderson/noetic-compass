@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 7 --dry-run --receipt ../step7_probe/receipt_sealed_but_devpkg_zip.json --selftest-json ../step7_probe/selftest.json --source-zip ../step7_probe/source_devpkg.zip
+REFUSED: SOURCE_ZIP_IS_NOT_THE_SEALED_PACKAGE: the member SEAL_OPTIONB.jsonl of the given source.zip is not, byte for byte, the real seal file from its first line to its last program line (6_PROGRAMS or the last 6R_PROGRAMS_REPAIRED). This source.zip is not the package of the seal file as it stands. Nothing was written.
+[exit code 2]

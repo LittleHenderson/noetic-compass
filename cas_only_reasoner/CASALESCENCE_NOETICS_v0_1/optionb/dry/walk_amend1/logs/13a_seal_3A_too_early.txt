@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 3A
+REFUSED: RESERVE_RULE_NOT_FINISHED: the practice selection holds 47 role-step and 24 plain-fact tasks with 8 practice settings; the reserve targets are 45 and 25, and 4 reserve setting(s) are left. Move the next reserve setting first. After seal step 3A no practice question file is written again. Nothing was written.
+[exit code 2]

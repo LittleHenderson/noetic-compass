@@ -1,0 +1,880 @@
+[
+ {
+  "passage": "V423",
+  "writer_kind": "K5",
+  "text": "Every Tuesday, Dr. Lena performed the same intricate titration experiment. She always set up the glassware in a particular order, without consciously thinking about it. Her hand automatically reached for the pipette before the burette. The precise movements had become second nature to her over hundreds of repetitions. She completed the steps fluidly.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Lena",
+    "mind": "Dr. Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every Tuesday",
+    "mind": "Dr. Lena",
+    "relative_to": "the same intricate titration experiment",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The precise movements had become second nature to her",
+    "mind": "Dr. Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Lena",
+    "mind": "Dr. Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every Tuesday",
+    "mind": "Dr. Lena",
+    "relative_to": "the same intricate titration experiment",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "over hundreds of repetitions",
+    "mind": "Dr. Lena",
+    "relative_to": "The precise movements",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "second nature",
+    "mind": "Dr. Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V247",
+  "writer_kind": "K5",
+  "text": "Every Monday morning, Julian walked past the same row of ancient Roman amphorae. He always found his keys in his pocket precisely at the moment he reached the dusty cabinet with the Egyptian sarcophagus. The routine became so ingrained that he would sometimes pat his pocket even on his days off. It was a purely automatic gesture now.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Julian",
+    "mind": "Julian",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every Monday morning",
+    "mind": "Julian",
+    "relative_to": "the same row of ancient Roman amphorae",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "so ingrained that he would sometimes pat his pocket even on his days off",
+    "mind": "Julian",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Julian",
+    "mind": "Julian",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every Monday morning",
+    "mind": "Julian",
+    "relative_to": "the same row of ancient Roman amphorae",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "The routine became so ingrained",
+    "mind": "Julian",
+    "relative_to": "the dusty cabinet with the Egyptian sarcophagus",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The routine became so ingrained",
+    "mind": "Julian",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V368",
+  "writer_kind": "K5",
+  "text": "Ben, the ski lift operator, opened the safety bar for the departing skiers. He didn't even watch their skis touch the snow. For years, his hand had moved to the lever at precisely the right moment, a silent, ingrained muscle memory. The constant whirring of the cables was simply part of his day, unheard.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a silent, ingrained muscle memory",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "For years, his hand had moved to the lever at precisely the right moment",
+    "mind": "Ben",
+    "relative_to": "the lever",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "The constant whirring of the cables was simply part of his day",
+    "mind": "Ben",
+    "relative_to": "The constant whirring of the cables",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "unheard",
+    "mind": "Ben",
+    "relative_to": "The constant whirring of the cables",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a silent, ingrained muscle memory",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "For years, his hand had moved to the lever at precisely the right moment",
+    "mind": "Ben",
+    "relative_to": "the lever",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V156",
+  "writer_kind": "K5",
+  "text": "Gina entered the sterile lab and donned her gloves and mask in one smooth motion. She uncapped the reagent bottle with a twist of her wrist, measuring out precisely 5 ml without conscious calculation. Her hand reached for the pipette, then the sample, all movements fluid and automatic. The steps were ingrained from countless repetitions.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Gina",
+    "mind": "Gina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The steps were ingrained",
+    "mind": "Gina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless repetitions",
+    "mind": "Gina",
+    "relative_to": "The steps",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Gina",
+    "mind": "Gina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The steps were ingrained from countless repetitions",
+    "mind": "Gina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless repetitions",
+    "mind": "Gina",
+    "relative_to": "The steps",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V239",
+  "writer_kind": "K5",
+  "text": "Sarah had worked the morning news desk for years. At exactly twenty-seven minutes past the hour, she would automatically reach for her coffee mug. Her fingers tapped the desk twice before she sipped, ready for the next bulletin. This happened without her ever needing to glance at the clock. It was simply part of the flow now.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had worked the morning news desk for years",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "At exactly twenty-seven minutes past the hour",
+    "mind": "Sarah",
+    "relative_to": "reach for her coffee mug",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "worked the morning news desk for years",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "At exactly twenty-seven minutes past the hour",
+    "mind": "Sarah",
+    "relative_to": "her coffee mug",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Her fingers tapped the desk twice before she sipped",
+    "mind": "Sarah",
+    "relative_to": "the next bulletin",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V041",
+  "writer_kind": "K5",
+  "text": "Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Agnes",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "shaped every gesture",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Years of daily milking",
+    "mind": "Agnes",
+    "relative_to": "milking",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Agnes",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of daily milking",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Years of daily milking",
+    "mind": "Agnes",
+    "relative_to": "milking",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V045",
+  "writer_kind": "K5",
+  "text": "Simon, the stagehand, adjusted the curtain ropes. As the lights dimmed, he automatically straightened a small piece of loose fabric on the backdrop. He had been doing this for every show for the past five years. It was an ingrained habit, a tiny detail he fixed without consciously registering its presence or his own action.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Simon",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained habit",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every show for the past five years",
+    "mind": "Simon",
+    "relative_to": "a small piece of loose fabric",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Simon",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "for every show for the past five years",
+    "mind": "Simon",
+    "relative_to": "a small piece of loose fabric on the backdrop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained habit",
+    "mind": "Simon",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V224",
+  "writer_kind": "K5",
+  "text": "Eleanor, a baker in her fifties, walked past the flower stall. Without looking up from her shopping list, her hand reached out. She gently touched the petals of a peony, a gesture she repeated every Tuesday morning. This familiar contact was an unconscious habit, established over years of weekly visits to the market. She barely noticed she had done it.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every Tuesday morning",
+    "mind": "Eleanor",
+    "relative_to": "touched the petals of a peony",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "years of weekly visits to the market",
+    "mind": "Eleanor",
+    "relative_to": "the market",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an unconscious habit",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed she had done it",
+    "mind": "Eleanor",
+    "relative_to": "touched the petals of a peony",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a baker in her fifties",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "years of weekly visits to the market",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every Tuesday morning",
+    "mind": "Eleanor",
+    "relative_to": "the petals of a peony",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "years of weekly visits to the market",
+    "mind": "Eleanor",
+    "relative_to": "the market",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Eleanor",
+    "relative_to": "This familiar contact",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V201",
+  "writer_kind": "K5",
+  "text": "At precisely four o'clock, Nancy reached for her cup of tea. She didn't check the clock, nor did she wait for the trolley. For years, afternoon tea arrived at that exact moment. Her hand simply extended, expecting the familiar warmth of the mug. It was an ingrained gesture.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Nancy",
+    "mind": "Nancy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "For years, afternoon tea arrived at that exact moment",
+    "mind": "Nancy",
+    "relative_to": "her cup of tea",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained gesture",
+    "mind": "Nancy",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Nancy",
+    "mind": "Nancy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "For years, afternoon tea arrived at that exact moment",
+    "mind": "Nancy",
+    "relative_to": "afternoon tea",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained gesture",
+    "mind": "Nancy",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V064",
+  "writer_kind": "K5",
+  "text": "Yvonne walked among the shelves, her hand instinctively turning specific cheeses. The exact rotational pattern, the pressure, the angle; these movements required no thought. Daily for a decade, she had rotated countless wheels of cheddar. Her muscle memory guided her without any deliberate instruction.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Yvonne",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Daily for a decade",
+    "mind": "Yvonne",
+    "relative_to": "rotated countless wheels of cheddar",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her muscle memory",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Yvonne",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Daily for a decade",
+    "mind": "Yvonne",
+    "relative_to": "rotated countless wheels of cheddar",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her muscle memory",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V170",
+  "writer_kind": "K5",
+  "text": "Wendy walked through the aisles, automatically checking the soil moisture of each plant. Her fingers dipped into the earth without conscious instruction, a quick, habitual touch. Every morning, for years, she had performed this exact task. Her hand just knew when a plant needed water.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Wendy",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning, for years",
+    "mind": "Wendy",
+    "relative_to": "checking the soil moisture of each plant",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her hand just knew when a plant needed water",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Wendy",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning, for years",
+    "mind": "Wendy",
+    "relative_to": "checking the soil moisture of each plant",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "for years, she had performed this exact task",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V046",
+  "writer_kind": "K3",
+  "text": "Farmer George moved among his herd. He knew each cow by her unique markings and temperament after decades of working this land. The low moo of the first cow entering the parlour wasn't just a sound; it was the start of the daily routine, a familiar pattern ingrained in his very bones. He felt a deep connection to their gentle presence.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Farmer George",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "decades of working this land",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a familiar pattern ingrained in his very bones",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "the daily routine",
+    "mind": "Farmer George",
+    "relative_to": "The low moo of the first cow",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "their gentle presence",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a deep connection",
+    "mind": "Farmer George",
+    "relative_to": "their gentle presence",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Farmer George",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "decades of working this land",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a familiar pattern ingrained in his very bones",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "the daily routine",
+    "mind": "Farmer George",
+    "relative_to": "The low moo of the first cow entering the parlour",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a deep connection to their gentle presence",
+    "mind": "Farmer George",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V214",
+  "writer_kind": "K5",
+  "text": "Chris sat at his desk, editing scripts. The steady stream of news alerts chimed on his screen, a familiar, incessant sound. He no longer consciously read each one for urgency. His fingers simply moved, automatically flagging certain headlines for immediate attention. Other alerts, though equally new, were smoothly scrolled past, almost without his awareness.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chris",
+    "mind": "Chris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "The steady stream of news alerts chimed on his screen, a familiar, incessant sound",
+    "mind": "Chris",
+    "relative_to": "news alerts",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "He no longer consciously read each one for urgency",
+    "mind": "Chris",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^4",
+    "words": "almost without his awareness",
+    "mind": "Chris",
+    "relative_to": "Other alerts",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chris",
+    "mind": "Chris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "The steady stream of news alerts chimed on his screen",
+    "mind": "Chris",
+    "relative_to": "news alerts",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "He no longer consciously read each one for urgency",
+    "mind": "Chris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "almost without his awareness",
+    "mind": "Chris",
+    "relative_to": "Other alerts",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V334",
+  "writer_kind": "K5",
+  "text": "Susan moved from the washing machine to the dryer, her hands grabbing wet towels without looking. Her routine was a seamless flow of loading, transferring, and folding, repeated countless times each day. The heat and steam from the machines were simply part of her environment, no longer noticed, like the constant hum of the extractors.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "repeated countless times each day",
+    "mind": "Susan",
+    "relative_to": "loading, transferring, and folding",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "no longer noticed",
+    "mind": "Susan",
+    "relative_to": "The heat and steam from the machines",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "repeated countless times each day",
+    "mind": "Susan",
+    "relative_to": "loading, transferring, and folding",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her routine was a seamless flow of loading, transferring, and folding",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V025",
+  "writer_kind": "K5",
+  "text": "Every morning at six, the soft chime of the breakfast cart sounded down the hall. Margaret, an elderly resident, stirred in her bed and swung her legs to the floor without opening her eyes. Her hands reached for her slippers under the bed. The scent of oatmeal often followed the chime a few minutes later. She always waited by the door then.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Margaret",
+    "mind": "Margaret",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning at six",
+    "mind": "Margaret",
+    "relative_to": "the soft chime of the breakfast cart",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Margaret",
+    "mind": "Margaret",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every morning at six",
+    "mind": "Margaret",
+    "relative_to": "the soft chime of the breakfast cart",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "always",
+    "mind": "Margaret",
+    "relative_to": "the chime",
+    "certainty": "clear"
+   }
+  ]
+ }
+]

@@ -1,0 +1,91 @@
+{
+ "schema": "casalescence/optionb/raw_questions/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/writer_calls_final_p1.jsonl",
+   "sha256": "82389e9dced586c1b122921f56372c5f0df40497c4aec1429280f11b5f3f46f2"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/split_fixed.json",
+   "sha256": "636440e590f8377fe6b25413b56738e695012dd318faa6374510019c1fd5b8a6"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "final",
+ "pass": "p1",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "V903",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V903.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Oksana takes a desk job for two years and never weighs flour. Going only by the passage, which of these has most likely faded when she comes back?",
+     "right": "stopping the scoop without a glance",
+     "wrong": [
+      "tying her apron at the bench",
+      "calling out for the trays",
+      "hearing the radio on the shelf",
+      "finding her bench before dawn",
+      "reading numbers on the scale"
+     ],
+     "anchors": [
+      "Every weekday for eleven years",
+      "her hands stopped the scoop"
+     ]
+    },
+    {
+     "question_id": "V903.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "A new baker takes Oksana's place on a first day. Going only by the passage, which of these would most likely be missing?",
+     "right": "the scoop stopping without a glance",
+     "wrong": [
+      "a radio playing on the shelf",
+      "an apron tied before the work",
+      "a call for the baking trays",
+      "a bench standing by the wall",
+      "a scale sitting on the bench"
+     ],
+     "anchors": [
+      "Every weekday for eleven years"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V903.p1.FACT",
+    "question": "Where was the new radio?",
+    "right": "on the shelf",
+    "wrong": [
+     "on the bench",
+     "beside the scale",
+     "in the tray rack"
+    ]
+   },
+   "extra_dropped": []
+  }
+ ]
+}

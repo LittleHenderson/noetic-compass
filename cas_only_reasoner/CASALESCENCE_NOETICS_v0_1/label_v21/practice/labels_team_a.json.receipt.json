@@ -1,0 +1,48 @@
+{
+ "tool": "team_a_receipt_v21/1",
+ "team": "A",
+ "written_utc": "2026-10-07T05:45:46.240542+00:00",
+ "guide_sha256": "2b6617c1510270d34f00602a461082a2d4ca90bb89239ec4c60a990402751a29",
+ "instructions_sha256": "15941173a754f85ff191b2230cd43d34b29573e153ff285aa17124d2f55156d6",
+ "checker_sha256": "c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9",
+ "passages_sha256": "2b8add1ce0734538edc9eae758aee7a83d449786b0938970c4edcf264b2af33d",
+ "task_message_sha256": "4f9aea1164bf0543b3d83c747d7832200fd06cbb0bf1eb217128bb69c8dbd4d1",
+ "tool_sha256": "a7c05ba54aaedbe5f0992308408a5a829e3cf57085c88bbe144f46350f15448d",
+ "labels_file": "labels_team_a.json",
+ "labels_sha256": "501419dfa6932ea22fce617dc6df46a3fd3b4de0066f9ab4c6ce01d226d07a01",
+ "tries_file": "labels_team_a.json.tries.jsonl",
+ "tries_sha256": "517941d91debafbe670c51540fac74678fa2f919e76d30706329572c0b93983d",
+ "complete": true,
+ "take_command": "-B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\tools\\check_labels_v21.py take <passage file> <an empty list of records> <L>",
+ "take_exit_code": 0,
+ "take_last_line": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\label_v21\\practice\\labels_team_a.json written: 30 labeled, 0 could not be labeled, 0 still open (correct them and run this again)",
+ "passages": 30,
+ "passages_by_state": {
+  "LABELED": 30,
+  "NOT_LABELED": 0,
+  "NOT_FINAL": 0
+ },
+ "passages_not_final": [],
+ "chunks_whose_own_labels_file_differs": [],
+ "chunks": [
+  {
+   "chunk": "01",
+   "chunk_file": "chunk_01.json",
+   "chunk_sha256": "2b8add1ce0734538edc9eae758aee7a83d449786b0938970c4edcf264b2af33d",
+   "passages": 30,
+   "passages_final": 30,
+   "prompt_file": "labels_team_a.json.chunk_01.prompt.txt",
+   "prompt_sha256": "3961692257b6d3306e4e3fa9b22ae37f9920ee7209507c864a6f6ce3d8b67e58",
+   "labels_file": "labels_team_a.json.chunk_01.json",
+   "labels_sha256": "501419dfa6932ea22fce617dc6df46a3fd3b4de0066f9ab4c6ce01d226d07a01",
+   "tries_file": "labels_team_a.json.chunk_01.json.tries.jsonl",
+   "tries_sha256": "517941d91debafbe670c51540fac74678fa2f919e76d30706329572c0b93983d",
+   "session_id": "sonnet-subagent-practice-chunk01-20261007"
+  }
+ ],
+ "guide": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\02_LABELING_GUIDE_v2_1.md",
+ "instructions": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\label_v21\\LABELER_INSTRUCTIONS.txt",
+ "passages_file": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\label_v21\\practice\\passages_practice.json",
+ "sessions_are_as_the_workflow_script_named_them": true,
+ "not_checked_by_this_tool": "This tool cannot see whether a sub-agent was given its prompt file unchanged and nothing else, or whether it ran the checker in another way than its take command. The transcripts show that."
+}

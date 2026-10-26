@@ -1,0 +1,12 @@
+[
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+  "content_json": [
+   {
+    "item": "N0031",
+    "verdict": "PASS"
+   }
+  ]
+ }
+]

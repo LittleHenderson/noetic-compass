@@ -1,0 +1,8 @@
+$ python -B tools/ob_solve_blind.py import --set final --mode with_passage --sheet 01 --transcript-model made-up-name-from-a-transcript
+{
+ "program": "tools/ob_solve_blind.py",
+ "status": "STOP",
+ "code": "NOTHING_TO_IMPORT",
+ "reason": "Sheet 01 was imported before from this same answer file."
+}
+[exit code 2]

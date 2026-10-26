@@ -1,0 +1,7 @@
+{
+ "schema": "casalescence/label-agreement-v22-owner-signoff/1",
+ "utc_recorded": "2026-10-07T21:54:30+00:00",
+ "owner_pasted_text_verbatim": "SIGNED: label-agreement v2.2, guide 95473da3ae54, plan d18aaf7421dd, as proposed",
+ "guide_sha256_first12": "95473da3ae54",
+ "plan_sha256_first12": "d18aaf7421dd"
+}

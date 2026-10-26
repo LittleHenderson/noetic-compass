@@ -1,0 +1,12 @@
+{
+ "note": "MADE-UP FOR THE WALK. NOT A RESULT. NOT THE OWNER.",
+ "precheck_kind": "SEALED_PACKAGE",
+ "status": "PRECHECK_COMPLETE_SELFTEST_PASS",
+ "seal_step_7_values": {
+  "source_zip_sha256": "09493ee647682a03fcfe19f2aed2bdb629f1023e12f886a3a2728f6e97a588b6",
+  "selftest_status": "SELFTEST_PASS",
+  "prompt_list_sha256": "1c48423ac931c2d380f489843e63bc807fd92602700158b3e5f3ef68029d9646",
+  "padding_plan_sha256": "43b4ec9d5383a53ffa36542c19d2ced3eeddc346f8a2a520726684e31741827c",
+  "selftest_json_sha256": "35b670c608d7d904d0d521ede7e26400bc443f230d33410789c723ccd60bac9f"
+ }
+}

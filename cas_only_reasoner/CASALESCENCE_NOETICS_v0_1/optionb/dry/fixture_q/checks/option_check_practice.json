@@ -1,0 +1,103 @@
+{
+ "schema": "casalescence/optionb/option_check/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p1.json",
+   "sha256": "76d85817d2c8e0ba82e909b9da1f835234e66a3729e7bbb6b0f184261b31550b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p2.json",
+   "sha256": "12a03bff8dce2e4c96d22aa626a0bc623493c5ac1f023a5bf0beedbdec4e9cf8"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "V901.p1.MEET_AGAIN",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V901.p1.TAKE_AWAY",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 0,
+     "option": "Halima picturing the tin of biscuits",
+     "noetic": "^9",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p2.MEET_AGAIN",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 5,
+     "option": "a tin left on a shelf",
+     "noetic": "^9",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p2.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V902.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V902.p1.WHAT_STUCK",
+   "passed": true,
+   "hits": []
+  }
+ ],
+ "counts": {
+  "checked": 8,
+  "passed": 6
+ }
+}

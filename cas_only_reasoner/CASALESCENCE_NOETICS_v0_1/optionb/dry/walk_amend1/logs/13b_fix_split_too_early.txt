@@ -1,0 +1,8 @@
+$ python -B tools/ob_select.py fix-split
+{
+ "program": "tools/ob_select.py",
+ "status": "STOP",
+ "code": "SEAL_STEP_MISSING",
+ "reason": "Seal step 3A_PRACTICE_QUESTIONS_AND_KEYS must exist before this program runs."
+}
+[exit code 2]

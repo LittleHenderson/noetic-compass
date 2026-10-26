@@ -1,0 +1,118 @@
+SHEET practice-with_passage-05. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0249 ===
+Passage:
+Robert waited at the taxi rank, his engine idling quietly. A faint, distant siren wailed in the city. The sound made him think of the old fire station near his childhood home. He remembered the loud clang of the bell when the trucks were called out, and the exciting rush of the big red engines.
+
+Question: Where was Robert waiting?
+A. the old fire station
+B. the city center
+C. his childhood home
+D. the taxi rank
+=== END Q0249 ===
+
+=== ITEM Q0250 ===
+Passage:
+George, a taxi driver with decades on the road, watched a group of young men approach. Their loud laughter and unsteady steps instantly signaled trouble. He knew from experience they would argue over the fare or try to negotiate a longer route. George simply flicked off his 'for hire' light and waited for them to pass.
+
+Question: What did George flick off?
+A. His dashboard screen
+B. His 'for hire' light
+C. His radio station
+D. His car headlights
+=== END Q0250 ===
+
+=== ITEM Q0251 ===
+Passage:
+Liam, a taxi driver, disliked the loud, boisterous groups that often emerged from the clubs. He much preferred the quiet, single passengers heading home after a long shift. The flashing neon sign from the bar across the street did not distract him. He just wanted a straightforward fare for his last trip of the night.
+
+Question: What was across the street from Liam?
+A. A taxi rank
+B. A club
+C. A pub
+D. A bar
+=== END Q0251 ===
+
+=== ITEM Q0252 ===
+Passage:
+Kevin, a taxi driver, leaned against his car at the quiet rank. The faint scent of stale beer drifted from the nearby pub door as it opened. Suddenly, he remembered the smell of his grandfather's old workshop. His grandfather used to brew his own ale there, even though he was never supposed to. It brought a small smile to Kevin's face.
+
+Question: Where was Kevin leaning?
+A. Against his car
+B. Against his grandfather's shop
+C. Against the pub door
+D. Against the taxi rank
+=== END Q0252 ===
+
+=== ITEM Q0253 ===
+Passage:
+Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.
+
+Question: At a later moment, which of these is the person least likely to bring up?
+A. steady fares
+B. minimal payment
+C. long-distance
+D. long trips
+E. restful hours
+F. motorway driving
+=== END Q0253 ===
+
+=== ITEM Q0254 ===
+Passage:
+Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.
+
+Question: At a later free moment, which of these does the person choose?
+A. short trip
+B. two blocks
+C. city center
+D. motorway driving
+E. small hops
+F. minimal fare
+=== END Q0254 ===
+
+=== ITEM Q0255 ===
+Passage:
+Patricia reviewed the last fare's convoluted directions. It involved a sharp left at the old oak, a short bypass along the river, and then a series of confusing one-way streets. The main problem was not the destination itself, but the order of the turns and the unexpected detours. She mentally broke it down.
+
+Question: What kind of streets were part of the route?
+A. confusing one-way streets
+B. quiet residential lanes
+C. busy commercial plazas
+D. wide two-way streets
+=== END Q0255 ===
+
+=== ITEM Q0256 ===
+Passage:
+George pulled his car to the next spot in line. Without glancing at his watch, he knew the precise interval since the last fare had departed. He shifted the radio station to a news channel, a routine ingrained from countless quiet waits. His foot rested lightly on the brake pedal. He waited for the next customer automatically.
+
+Question: Where did George rest his foot?
+A. On the accelerator pedal
+B. On the clutch pedal
+C. On the brake pedal
+D. On the car floor
+=== END Q0256 ===
+
+=== ITEM Q0257 ===
+Passage:
+Xander pulled his cab to the front of the queue. His eyes automatically scanned the street for approaching passengers, checking their expressions for urgency. His foot rested lightly on the brake, ready to shift into gear. He had waited here every night for years, and his movements were entirely unthinking.
+
+Question: Where did Xander pull his cab?
+A. middle of the rank
+B. front of the queue
+C. side of the road
+D. back of the line
+=== END Q0257 ===
+
+=== ITEM Q0258 ===
+Passage:
+Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.
+
+Question: Where did a customer request a journey?
+A. just two blocks away
+B. a distant suburb
+C. the motorway exit
+D. the city center
+=== END Q0258 ===

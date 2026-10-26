@@ -1,0 +1,1199 @@
+{
+ "schema": "casalescence/optionb/task_meta/v1",
+ "made_by": {
+  "program": "tools/ob_assemble.py",
+  "sha256": "6353a3f75b5d2154826707210fc6b5ee457d7f9d0d32516a78284abcacd53ab0",
+  "utc": "2026-10-05T16:25:54Z"
+ },
+ "inputs": [
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "acf84a5083d18d27b2aea42963416cb647095475f206cc47b353d6ce74a518df"
+  },
+  {
+   "path": "optionb/checks/anchor_check_final.json",
+   "sha256": "5fd376f5cf23e96b933bca2fd84fd2bdafc07ecd7d52c1c03e737f2062db5d8c"
+  },
+  {
+   "path": "optionb/checks/anchor_check_practice.json",
+   "sha256": "bdcebb82f87f7743eeb743395bfd718888a9a9983604c3ef3423207f915e83db"
+  },
+  {
+   "path": "optionb/checks/candidates_final.json",
+   "sha256": "ed58ea9e4c9c47d3d5a921d6145cb5bb0e7766c57817b99ddc0985d9dac3266e"
+  },
+  {
+   "path": "optionb/checks/candidates_practice.json",
+   "sha256": "1e7d08b6716d6046a4e3d95b6d943636d3c089cde54c314ca8179788d87a3747"
+  },
+  {
+   "path": "optionb/checks/form_check_final.json",
+   "sha256": "22013d70f59bb8a67b895d5b905a07bece6c9d359f538bea3ba2afb6f4426ff1"
+  },
+  {
+   "path": "optionb/checks/form_check_practice.json",
+   "sha256": "d2b14865ccb601b147c5afe600541d089c29e9ba7d01a4eff5c7b58cce532d7f"
+  },
+  {
+   "path": "optionb/checks/option_check_final.json",
+   "sha256": "9ab8371701659af8521c4d8b8ff7d081d51779eb9ea577139fab96d3c729f595"
+  },
+  {
+   "path": "optionb/checks/option_check_practice.json",
+   "sha256": "91b2187b96127818577affbe11bcdbeb0bb24a28f57ebcce8bfbba56ee72c991"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/elig/exclusions.json",
+   "sha256": "88b8a2256e42c2fa848f7020f757272fab7ee011d2e8de1aa10d587bc1dcaec4"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_final.json",
+   "sha256": "3c1d11144bd639bdf5f29a5913049b9d8d7a21b7529f419042e2ff923c35f55f"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_practice.json",
+   "sha256": "8c6e5fb9eba58f925c9bee16fe25d2da6163bd1dba8c73657ea61db35b52eb21"
+  },
+  {
+   "path": "optionb/notes_role/role_notes.json",
+   "sha256": "f645753b6457d9e37aad3be2889271fc19aef3db4edd41ee8ba6f184ad585b05"
+  },
+  {
+   "path": "optionb/questions/raw_questions_final_p1.json",
+   "sha256": "0340009589013557112c61d305f73a5bb8f5b0047f66090341e16181ecbec285"
+  },
+  {
+   "path": "optionb/questions/raw_questions_final_p2.json",
+   "sha256": "38815f494713dc0566b803f23924e8b49446f6b40da1102aa02effc5191b16ba"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "1e134d553e3d7ae13eef3fdf684d5ebdb13021a136db08e8424d8765fe14b0f9"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "5de993c03d36bafa2d081565b43f3b820918fa9263100b7ef55a8f480b247008"
+  },
+  {
+   "path": "optionb/screen/leak_screen_final.json",
+   "sha256": "8b967068c51df7d9ffc820e344d2b72ac614c70198bff42d79f6b0d5c5770b6f"
+  },
+  {
+   "path": "optionb/screen/leak_screen_practice.json",
+   "sha256": "6f35bad60088029e55b5085a6e44137a2ad13b1b6fbc188fc9f6cac0d1a9049d"
+  },
+  {
+   "path": "optionb/select/selection_final.json",
+   "sha256": "f48384efc9bd9e8df5152b63c0c84c8dbb9c0c07938adc3f4599b7f702c1f6cb"
+  },
+  {
+   "path": "optionb/select/selection_practice.json",
+   "sha256": "da8c050021c3ded4ea6a140f1e2a43f284221cdf76b6e676a4ac45acb354bcf6"
+  },
+  {
+   "path": "optionb/select/split_fixed.json",
+   "sha256": "c7b69355a320ee813007bbcb6dfc69f15307d9c45daf217edd4b8c286b9c8101"
+  },
+  {
+   "path": "optionb/solve/key_check_final.json",
+   "sha256": "27a1ab6aceaf1bceb6cadf437776d174a8e4a9a7ff5583fd49977b186bb3ad90"
+  },
+  {
+   "path": "optionb/solve/key_check_practice.json",
+   "sha256": "84799b71f999a212c3febd9c6ff7c5ba72fad8bb936dc66110a76f8fda489e46"
+  },
+  {
+   "path": "optionb/support/support_results_final.json",
+   "sha256": "add014ddb9192b2c46078567e28afd81f4c816fa8b8dd8f4a7b4fdd268dfef04"
+  },
+  {
+   "path": "optionb/support/support_results_practice.json",
+   "sha256": "bc1a86e570682b18c0d3c900a68658e4728407b72cf65a78747a053e86a57122"
+  },
+  {
+   "path": "verdict/passages_kinds_HIDDEN_FROM_LABELERS.json",
+   "sha256": "aa3cfc8cf363b2e9273abbbfe0c1b9d1ed94f982ae42ee0bc7290f87d12ef434"
+  }
+ ],
+ "set": "practice",
+ "tasks": {
+  "V118.FACT": {
+   "passage_id": "V118",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K3",
+   "setting": "made-up setting 02",
+   "right_text": "on the counter",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V118.GOES_FOR": {
+   "passage_id": "V118",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K3",
+   "setting": "made-up setting 02",
+   "right_text": "reaching for the tar ruler again",
+   "anchors_matched": [
+    "reached for the tar ruler"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V118.LONG_BREAK": {
+   "passage_id": "V118",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K3",
+   "setting": "made-up setting 02",
+   "right_text": "dusting the lantern before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V119.FACT": {
+   "passage_id": "V119",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K4",
+   "setting": "made-up setting 02",
+   "right_text": "on the ledge",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V119.GOES_FOR": {
+   "passage_id": "V119",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K4",
+   "setting": "made-up setting 02",
+   "right_text": "reaching for the bone saw again",
+   "anchors_matched": [
+    "reached for the bone saw"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V119.LONG_BREAK": {
+   "passage_id": "V119",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K4",
+   "setting": "made-up setting 02",
+   "right_text": "dusting the kettle before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V120.FACT": {
+   "passage_id": "V120",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K5",
+   "setting": "made-up setting 02",
+   "right_text": "on the table",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V120.GOES_FOR": {
+   "passage_id": "V120",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K5",
+   "setting": "made-up setting 02",
+   "right_text": "reaching for the oak spindle again",
+   "anchors_matched": [
+    "reached for the oak spindle"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V120.LONG_BREAK": {
+   "passage_id": "V120",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K5",
+   "setting": "made-up setting 02",
+   "right_text": "dusting the ledger before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V121.FACT": {
+   "passage_id": "V121",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K1",
+   "setting": "made-up setting 07",
+   "right_text": "on the shelf",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V121.GOES_FOR": {
+   "passage_id": "V121",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K1",
+   "setting": "made-up setting 07",
+   "right_text": "reaching for the copper rake again",
+   "anchors_matched": [
+    "reached for the copper rake"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V121.LONG_BREAK": {
+   "passage_id": "V121",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K1",
+   "setting": "made-up setting 07",
+   "right_text": "dusting the bucket before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V122.FACT": {
+   "passage_id": "V122",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K2",
+   "setting": "made-up setting 07",
+   "right_text": "on the stove",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V122.GOES_FOR": {
+   "passage_id": "V122",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K2",
+   "setting": "made-up setting 07",
+   "right_text": "reaching for the hemp brush again",
+   "anchors_matched": [
+    "reached for the hemp brush"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V122.LONG_BREAK": {
+   "passage_id": "V122",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K2",
+   "setting": "made-up setting 07",
+   "right_text": "dusting the rack before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V123.FACT": {
+   "passage_id": "V123",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K3",
+   "setting": "made-up setting 07",
+   "right_text": "on the counter",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V123.GOES_FOR": {
+   "passage_id": "V123",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K3",
+   "setting": "made-up setting 07",
+   "right_text": "reaching for the wicker needle again",
+   "anchors_matched": [
+    "reached for the wicker needle"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V124.FACT": {
+   "passage_id": "V124",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K4",
+   "setting": "made-up setting 10",
+   "right_text": "on the ledge",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V124.GOES_FOR": {
+   "passage_id": "V124",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K4",
+   "setting": "made-up setting 10",
+   "right_text": "reaching for the wooden scoop again",
+   "anchors_matched": [
+    "reached for the wooden scoop"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V124.LONG_BREAK": {
+   "passage_id": "V124",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K4",
+   "setting": "made-up setting 10",
+   "right_text": "dusting the stool before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V125.FACT": {
+   "passage_id": "V125",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K5",
+   "setting": "made-up setting 10",
+   "right_text": "on the table",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V125.GOES_FOR": {
+   "passage_id": "V125",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K5",
+   "setting": "made-up setting 10",
+   "right_text": "reaching for the brass hammer again",
+   "anchors_matched": [
+    "reached for the brass hammer"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V125.LONG_BREAK": {
+   "passage_id": "V125",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K5",
+   "setting": "made-up setting 10",
+   "right_text": "dusting the globe before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V126.FACT": {
+   "passage_id": "V126",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K1",
+   "setting": "made-up setting 10",
+   "right_text": "on the shelf",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V126.KEEPS_AWAY": {
+   "passage_id": "V126",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K1",
+   "setting": "made-up setting 10",
+   "right_text": "working on the broken ladder",
+   "anchors_matched": [
+    "away from the broken ladder"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V126.LONG_BREAK": {
+   "passage_id": "V126",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K1",
+   "setting": "made-up setting 10",
+   "right_text": "dusting the sledge before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V127.FACT": {
+   "passage_id": "V127",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K2",
+   "setting": "made-up setting 18",
+   "right_text": "on the stove",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V127.KEEPS_AWAY": {
+   "passage_id": "V127",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K2",
+   "setting": "made-up setting 18",
+   "right_text": "working on the bilge pump",
+   "anchors_matched": [
+    "away from the bilge pump"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V127.LONG_BREAK": {
+   "passage_id": "V127",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K2",
+   "setting": "made-up setting 18",
+   "right_text": "dusting the lantern before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V128.FACT": {
+   "passage_id": "V128",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K3",
+   "setting": "made-up setting 18",
+   "right_text": "on the counter",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V128.KEEPS_AWAY": {
+   "passage_id": "V128",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K3",
+   "setting": "made-up setting 18",
+   "right_text": "working on the rusty winch",
+   "anchors_matched": [
+    "away from the rusty winch"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V128.LONG_BREAK": {
+   "passage_id": "V128",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K3",
+   "setting": "made-up setting 18",
+   "right_text": "dusting the kettle before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V129.FACT": {
+   "passage_id": "V129",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K4",
+   "setting": "made-up setting 18",
+   "right_text": "on the ledge",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V129.GOES_FOR": {
+   "passage_id": "V129",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K4",
+   "setting": "made-up setting 18",
+   "right_text": "reaching for the fine ruler again",
+   "anchors_matched": [
+    "reached for the fine ruler"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V129.LONG_BREAK": {
+   "passage_id": "V129",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K4",
+   "setting": "made-up setting 18",
+   "right_text": "dusting the ledger before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V130.FACT": {
+   "passage_id": "V130",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K5",
+   "setting": "made-up setting 19",
+   "right_text": "on the table",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V130.KEEPS_AWAY": {
+   "passage_id": "V130",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K5",
+   "setting": "made-up setting 19",
+   "right_text": "working on the leaky bellows",
+   "anchors_matched": [
+    "away from the leaky bellows"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V130.LONG_BREAK": {
+   "passage_id": "V130",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K5",
+   "setting": "made-up setting 19",
+   "right_text": "dusting the bucket before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V131.FACT": {
+   "passage_id": "V131",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K1",
+   "setting": "made-up setting 19",
+   "right_text": "on the shelf",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V131.KEEPS_AWAY": {
+   "passage_id": "V131",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K1",
+   "setting": "made-up setting 19",
+   "right_text": "working on the lye vat",
+   "anchors_matched": [
+    "away from the lye vat"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V131.LONG_BREAK": {
+   "passage_id": "V131",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K1",
+   "setting": "made-up setting 19",
+   "right_text": "dusting the rack before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V132.FACT": {
+   "passage_id": "V132",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K2",
+   "setting": "made-up setting 19",
+   "right_text": "on the stove",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V132.KEEPS_AWAY": {
+   "passage_id": "V132",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K2",
+   "setting": "made-up setting 19",
+   "right_text": "working on the loose stair",
+   "anchors_matched": [
+    "away from the loose stair"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V132.LONG_BREAK": {
+   "passage_id": "V132",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K2",
+   "setting": "made-up setting 19",
+   "right_text": "dusting the oilcan before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V133.FACT": {
+   "passage_id": "V133",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K3",
+   "setting": "made-up setting 26",
+   "right_text": "on the counter",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V133.KEEPS_AWAY": {
+   "passage_id": "V133",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K3",
+   "setting": "made-up setting 26",
+   "right_text": "working on the broken ladder",
+   "anchors_matched": [
+    "away from the broken ladder"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V133.LONG_BREAK": {
+   "passage_id": "V133",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K3",
+   "setting": "made-up setting 26",
+   "right_text": "dusting the stool before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V134.FACT": {
+   "passage_id": "V134",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K4",
+   "setting": "made-up setting 26",
+   "right_text": "on the ledge",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V134.GOES_FOR": {
+   "passage_id": "V134",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K4",
+   "setting": "made-up setting 26",
+   "right_text": "reaching for the copper needle again",
+   "anchors_matched": [
+    "reached for the copper needle"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V134.LONG_BREAK": {
+   "passage_id": "V134",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K4",
+   "setting": "made-up setting 26",
+   "right_text": "dusting the globe before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V135.FACT": {
+   "passage_id": "V135",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K5",
+   "setting": "made-up setting 26",
+   "right_text": "on the table",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V135.KEEPS_AWAY": {
+   "passage_id": "V135",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K5",
+   "setting": "made-up setting 26",
+   "right_text": "working on the rusty winch",
+   "anchors_matched": [
+    "away from the rusty winch"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V135.LONG_BREAK": {
+   "passage_id": "V135",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K5",
+   "setting": "made-up setting 26",
+   "right_text": "dusting the sledge before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V136.FACT": {
+   "passage_id": "V136",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K1",
+   "setting": "made-up setting 34",
+   "right_text": "on the shelf",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V136.GOES_FOR": {
+   "passage_id": "V136",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K1",
+   "setting": "made-up setting 34",
+   "right_text": "reaching for the wicker hammer again",
+   "anchors_matched": [
+    "reached for the wicker hammer"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V136.LONG_BREAK": {
+   "passage_id": "V136",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K1",
+   "setting": "made-up setting 34",
+   "right_text": "dusting the lantern before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V137.FACT": {
+   "passage_id": "V137",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K2",
+   "setting": "made-up setting 34",
+   "right_text": "on the stove",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V137.KEEPS_AWAY": {
+   "passage_id": "V137",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K2",
+   "setting": "made-up setting 34",
+   "right_text": "working on the leaky bellows",
+   "anchors_matched": [
+    "away from the leaky bellows"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V137.LONG_BREAK": {
+   "passage_id": "V137",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K2",
+   "setting": "made-up setting 34",
+   "right_text": "dusting the kettle before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V138.FACT": {
+   "passage_id": "V138",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K3",
+   "setting": "made-up setting 34",
+   "right_text": "on the counter",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V138.KEEPS_AWAY": {
+   "passage_id": "V138",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K3",
+   "setting": "made-up setting 34",
+   "right_text": "working on the lye vat",
+   "anchors_matched": [
+    "away from the lye vat"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V138.LONG_BREAK": {
+   "passage_id": "V138",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K3",
+   "setting": "made-up setting 34",
+   "right_text": "dusting the ledger before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V139.FACT": {
+   "passage_id": "V139",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K4",
+   "setting": "made-up setting 35",
+   "right_text": "on the ledge",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V139.KEEPS_AWAY": {
+   "passage_id": "V139",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K4",
+   "setting": "made-up setting 35",
+   "right_text": "working on the loose stair",
+   "anchors_matched": [
+    "away from the loose stair"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V139.LONG_BREAK": {
+   "passage_id": "V139",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K4",
+   "setting": "made-up setting 35",
+   "right_text": "dusting the bucket before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V140.FACT": {
+   "passage_id": "V140",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K5",
+   "setting": "made-up setting 35",
+   "right_text": "on the table",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V140.KEEPS_AWAY": {
+   "passage_id": "V140",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K5",
+   "setting": "made-up setting 35",
+   "right_text": "working on the broken ladder",
+   "anchors_matched": [
+    "away from the broken ladder"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V140.LONG_BREAK": {
+   "passage_id": "V140",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K5",
+   "setting": "made-up setting 35",
+   "right_text": "dusting the rack before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V141.FACT": {
+   "passage_id": "V141",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K1",
+   "setting": "made-up setting 35",
+   "right_text": "on the shelf",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V141.GOES_FOR": {
+   "passage_id": "V141",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K1",
+   "setting": "made-up setting 35",
+   "right_text": "reaching for the curved saw again",
+   "anchors_matched": [
+    "reached for the curved saw"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V141.LONG_BREAK": {
+   "passage_id": "V141",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K1",
+   "setting": "made-up setting 35",
+   "right_text": "dusting the oilcan before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V142.FACT": {
+   "passage_id": "V142",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K2",
+   "setting": "made-up setting 36",
+   "right_text": "on the stove",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V142.KEEPS_AWAY": {
+   "passage_id": "V142",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K2",
+   "setting": "made-up setting 36",
+   "right_text": "working on the rusty winch",
+   "anchors_matched": [
+    "away from the rusty winch"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V142.LONG_BREAK": {
+   "passage_id": "V142",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K2",
+   "setting": "made-up setting 36",
+   "right_text": "dusting the stool before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V143.FACT": {
+   "passage_id": "V143",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K3",
+   "setting": "made-up setting 36",
+   "right_text": "on the counter",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V143.KEEPS_AWAY": {
+   "passage_id": "V143",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "kind": "K3",
+   "setting": "made-up setting 36",
+   "right_text": "working on the damp cellar",
+   "anchors_matched": [
+    "away from the damp cellar"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V143.LONG_BREAK": {
+   "passage_id": "V143",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K3",
+   "setting": "made-up setting 36",
+   "right_text": "dusting the globe before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V144.FACT": {
+   "passage_id": "V144",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "kind": "K4",
+   "setting": "made-up setting 36",
+   "right_text": "on the ledge",
+   "anchors_matched": [],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V144.GOES_FOR": {
+   "passage_id": "V144",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "kind": "K4",
+   "setting": "made-up setting 36",
+   "right_text": "reaching for the tar brush again",
+   "anchors_matched": [
+    "reached for the tar brush"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  },
+  "V144.LONG_BREAK": {
+   "passage_id": "V144",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "kind": "K4",
+   "setting": "made-up setting 36",
+   "right_text": "dusting the sledge before anything else",
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "type_has_leftover": false,
+   "passage_any_leftover_2_to_9": false
+  }
+ }
+}

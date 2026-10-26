@@ -1,0 +1,3235 @@
+[
+ {
+  "passage": "V002",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Tom arrived at the pool exactly at opening time, as he did every day. He walked directly to lane three, his usual spot. His feet automatically navigated the slick tiles without him looking down. He then stepped onto the starting block and dove in, all before anyone else had even reached the water.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tom",
+    "mind": "Tom",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every day",
+    "mind": "Tom",
+    "relative_to": "the pool",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tom",
+    "mind": "Tom",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "as he did every day",
+    "mind": "Tom",
+    "relative_to": "arrived at the pool exactly at opening time",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "His feet automatically navigated the slick tiles without him looking down",
+    "mind": "Tom",
+    "relative_to": "the slick tiles",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "His feet navigating the tiles automatically hints at trained skill, but the passage does not state what Tom has become."
+  ],
+  "team_b_notes": [
+   "The passage does not state what Tom has become or is composed of through this daily routine, so ^5 is not settled.",
+   "The passage does not show lane three or the starting block bringing a different Idea to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V005",
+  "miss_kind": "different words",
+  "writer_kind": "K5",
+  "text": "Clara had kept bees since she was a girl. The constant, murmuring hum from the hives was a familiar backdrop to her days. She never actively listened, but her body registered tiny shifts. When the hum deepened in a particular way, her hand instinctively reached for her smoke pot. She just knew a swarm was thinking of leaving.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had kept bees since she was a girl",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "a familiar backdrop to her days",
+    "mind": "Clara",
+    "relative_to": "The constant, murmuring hum from the hives",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the hum deepened in a particular way",
+    "mind": "Clara",
+    "relative_to": "a swarm was thinking of leaving",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "a swarm was thinking of leaving",
+    "mind": "Clara",
+    "relative_to": "the hum deepened in a particular way",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "kept bees since she was a girl",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "The constant, murmuring hum from the hives",
+    "mind": "Clara",
+    "relative_to": "the hives",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "her body registered tiny shifts",
+    "mind": "Clara",
+    "relative_to": "The constant, murmuring hum from the hives",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the hum deepened in a particular way",
+    "mind": "Clara",
+    "relative_to": "a swarm was thinking of leaving",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "a swarm was thinking of leaving",
+    "mind": "Clara",
+    "relative_to": "the hum deepened in a particular way",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V012",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Helen, who had sorted mail for decades, picked up a thin, stiff envelope. The feel of the paper and the faint, sweet scent of old ink told her it was probably a wedding invitation. She often guessed the contents before even reading the address. Her hands knew the weight and texture of every common type of correspondence.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Helen",
+    "mind": "Helen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had sorted mail for decades",
+    "mind": "Helen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her hands knew the weight and texture of every common type of correspondence",
+    "mind": "Helen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The feel of the paper and the faint, sweet scent of old ink",
+    "mind": "Helen",
+    "relative_to": "a wedding invitation",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "a wedding invitation",
+    "mind": "Helen",
+    "relative_to": "The feel of the paper and the faint, sweet scent of old ink",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Helen",
+    "mind": "Helen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "sorted mail for decades",
+    "mind": "Helen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "often",
+    "mind": "Helen",
+    "relative_to": "guessed the contents",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The feel of the paper and the faint, sweet scent of old ink",
+    "mind": "Helen",
+    "relative_to": "a wedding invitation",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "a wedding invitation",
+    "mind": "Helen",
+    "relative_to": "The feel of the paper and the faint, sweet scent of old ink",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V027",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Maria held the scissors steady, her gaze assessing the shape of the client's head. Years of cutting hair had given her an instinct for the correct angles and the way hair would fall. She knew exactly how much to trim to achieve the desired style, her hands moving with quiet, assured skill. The haircut would be precise.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of cutting hair",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of cutting hair",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Years of cutting hair",
+    "mind": "Maria",
+    "relative_to": "cutting hair",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The client is mentioned only; not listed."
+  ],
+  "team_b_notes": [
+   "The passage says she knew how much to trim but does not show what brought that knowledge to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V032",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "George pulled his car to the next spot in line. Without glancing at his watch, he knew the precise interval since the last fare had departed. He shifted the radio station to a news channel, a routine ingrained from countless quiet waits. His foot rested lightly on the brake pedal. He waited for the next customer automatically.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "George",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a routine ingrained",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless quiet waits",
+    "mind": "George",
+    "relative_to": "quiet waits",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "George",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless quiet waits",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless quiet waits",
+    "mind": "George",
+    "relative_to": "the next customer",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "automatically",
+    "mind": "George",
+    "relative_to": "the next customer",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage says he knew the precise interval since the last fare had departed, but does not reveal what brought that knowledge to mind (rule 15(d) would need a sign; no sign is named).",
+   "Whether shifting the radio station to a news channel is a routine he is drawn toward (^2) is not settled."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V033",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Owen arrived before dawn, just as he had for twenty years. Without conscious thought, he grabbed the thick apron, sorted the ice, and arranged the cod on the display. His movements were fluid and automatic, a dance learned through countless repetitions. The routine settled deep into his muscles.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Owen",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "for twenty years",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The routine settled deep into his muscles",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless repetitions",
+    "mind": "Owen",
+    "relative_to": "His movements",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Owen",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "just as he had for twenty years",
+    "mind": "Owen",
+    "relative_to": "arrived before dawn",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless repetitions",
+    "mind": "Owen",
+    "relative_to": "a dance",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The routine settled deep into his muscles",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage shows the routine running without conscious thought but does not show a cue bringing a different Idea to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V036",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Xander pulled his cab to the front of the queue. His eyes automatically scanned the street for approaching passengers, checking their expressions for urgency. His foot rested lightly on the brake, ready to shift into gear. He had waited here every night for years, and his movements were entirely unthinking.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Xander",
+    "mind": "Xander",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every night for years",
+    "mind": "Xander",
+    "relative_to": "the front of the queue",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Xander",
+    "mind": "Xander",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every night for years",
+    "mind": "Xander",
+    "relative_to": "waited here",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his movements were entirely unthinking",
+    "mind": "Xander",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "His movements were entirely unthinking: acting without thinking, but the passage does not state what he has become."
+  ],
+  "team_b_notes": [
+   "The passage shows Xander scanning the street and checking expressions, but does not settle whether any particular thing brought a different Idea to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V044",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Ben had operated the harbour crane for twenty years. The clank and grind of metal, the boom of containers settling, became second nature. He found himself adjusting the hoist speed slightly whenever a particular dull thud echoed. His hands moved without thinking, a small tilt here, a gentle brake there. It simply became part of the job, like breathing.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "had operated the harbour crane for twenty years",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "became second nature",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ben",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "twenty years",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "whenever a particular dull thud echoed",
+    "mind": "Ben",
+    "relative_to": "a particular dull thud",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His hands moved without thinking",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "He adjusts the hoist speed whenever a dull thud echoes, without thinking: acting without thinking, with no rate or pattern words and no thought brought to mind."
+  ],
+  "team_b_notes": [
+   "The passage does not show the dull thud bringing a thought or the action to Mind, only that he now adjusts without thinking (rule 13).",
+   "Whether the clank and grind of metal and the boom of containers settling are Ideas Ben is composed of (^5) or merely the schedule of exposure (^7) is not settled."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V053",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Cathy, the cobbler, effortlessly identified the leather type and sole material of each shoe placed on her counter. The specific creak of the old polishing machine had become background ambience. Her fingers sorted through various thread spools without conscious selection, finding the exact shade needed for each repair.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Cathy",
+    "mind": "Cathy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "effortlessly identified the leather type and sole material",
+    "mind": "Cathy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "had become background ambience",
+    "mind": "Cathy",
+    "relative_to": "The specific creak of the old polishing machine",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Cathy",
+    "mind": "Cathy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "the cobbler",
+    "mind": "Cathy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "had become background ambience",
+    "mind": "Cathy",
+    "relative_to": "The specific creak of the old polishing machine",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "without conscious selection",
+    "mind": "Cathy",
+    "relative_to": "various thread spools",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The creak 'had become background ambience' but no rate or pattern words are given, so no ^7.",
+   "Sorting thread spools 'without conscious selection' shows acting without thought; no pair."
+  ],
+  "team_b_notes": [
+   "The passage does not show what brought the leather type or sole material to mind, so no ^8/^9 pair is marked.",
+   "The passage does not state how strongly the creak or the shoes impressed Cathy, so no ^4 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V074",
+  "miss_kind": "different words",
+  "writer_kind": "K5",
+  "text": "Leo walked through the scrapyard, categorising piles of metal. The roar of the crusher, the clang of falling steel, and the screech of machinery were constant. After years, his ears simply filtered out the cacophony. He rarely flinched at sudden loud noises. His attention remained fixed on identifying the various alloys.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "were constant",
+    "mind": "Leo",
+    "relative_to": "The roar of the crusher, the clang of falling steel, and the screech of machinery",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "After years, his ears simply filtered out the cacophony",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "rarely flinched",
+    "mind": "Leo",
+    "relative_to": "sudden loud noises",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "After years",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "After years",
+    "mind": "Leo",
+    "relative_to": "the cacophony",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'His attention remained fixed on identifying the various alloys' is attention alone, not attraction."
+  ],
+  "team_b_notes": [
+   "The passage does not show whether Leo is drawn toward or repelled by the alloys or the noise; no ^2 or ^3 is settled.",
+   "The passage does not state how strongly the noise impressed him, only that he filtered it out; no ^4 is settled."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V088",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Mike had worked on the loading bay for years. Each Tuesday and Friday, the same delivery truck signaled its arrival with three short honks. Now, as soon as he heard that particular sequence, his hands moved the forklift towards Lane Four without conscious thought. He often had the designated pallets ready before the truck even backed into its spot. It was a practiced movement.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mike",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "worked on the loading bay for years",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Each Tuesday and Friday",
+    "mind": "Mike",
+    "relative_to": "three short honks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a practiced movement",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mike",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "worked on the loading bay for years",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Each Tuesday and Friday",
+    "mind": "Mike",
+    "relative_to": "the same delivery truck signaled its arrival with three short honks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "a practiced movement",
+    "mind": "Mike",
+    "relative_to": "moved the forklift towards Lane Four",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "His hands move 'without conscious thought' at the sound, so under rule 13 no pair is marked."
+  ],
+  "team_b_notes": [
+   "The passage shows the honks setting off the action without conscious thought, but does not show a different Idea coming to Mind, so no ^8/^9 pair is marked (rule 13)."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V095",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Eleanor settled into the dental chair. The whirring sound of the drill began, a familiar mechanical whine. Having sat through countless similar appointments over her sixty years, she barely reacted. She simply closed her eyes and focused on her breathing, knowing the procedure would soon be over. The noise was simply part of the routine.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless similar appointments",
+    "mind": "Eleanor",
+    "relative_to": "appointments",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely reacted",
+    "mind": "Eleanor",
+    "relative_to": "The whirring sound of the drill",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless similar appointments over her sixty years",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely reacted",
+    "mind": "Eleanor",
+    "relative_to": "The whirring sound of the drill",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not show the drill noise bringing any different Idea to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V100",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Adam guided the massive crane arm over the container ship. His hands moved the controls with a fluid precision born of long practice. He knew the wind’s subtle pushes and the sway of the suspended cargo almost before they happened. His focus was absolute, his actions entirely natural after so many years.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Adam",
+    "mind": "Adam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "long practice",
+    "mind": "Adam",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Adam",
+    "mind": "Adam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "long practice",
+    "mind": "Adam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "so many years",
+    "mind": "Adam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "long practice",
+    "mind": "Adam",
+    "relative_to": "the controls",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "so many years",
+    "mind": "Adam",
+    "relative_to": "the controls",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "He knew the wind's pushes and the sway of the cargo almost before they happened: no trigger is named for what came to his Mind."
+  ],
+  "team_b_notes": [
+   "The passage says he knew the wind's pushes and the cargo's sway almost before they happened, but does not show one thing bringing a different thing to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V103",
+  "miss_kind": "one team only",
+  "writer_kind": "K2",
+  "text": "Tina loved the quick, sharp crack of leather on a speed bag, practicing her jabs and hooks with intense focus. The sparring sessions exhilarated her; the strategy and speed felt like a dance. However, the monotonous jumping jacks and endless laps around the track offered little appeal, barely holding her attention.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tina",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the quick, sharp crack of leather on a speed bag",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The sparring sessions",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely holding her attention",
+    "mind": "Tina",
+    "relative_to": "the monotonous jumping jacks and endless laps around the track",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tina",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the quick, sharp crack of leather on a speed bag",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The sparring sessions",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the monotonous jumping jacks and endless laps around the track",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "exhilarated her",
+    "mind": "Tina",
+    "relative_to": "The sparring sessions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely holding her attention",
+    "mind": "Tina",
+    "relative_to": "the monotonous jumping jacks and endless laps around the track",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "practicing her jabs and hooks",
+    "mind": "Tina",
+    "relative_to": "her jabs and hooks",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The jumping jacks and laps offered little appeal: a lack of pull, not shown as repulsion, so no ^3."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V106",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Yvonne picked up a piece of bent sheet metal. Her calloused fingers ran over its surface, instantly assessing its grade and weight. Years spent sorting through discarded machinery had given her an unerring eye for material value. She tossed it onto the correct pile with a practiced, almost casual flick of her wrist.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Yvonne",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years spent sorting through discarded machinery",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Yvonne",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years spent sorting through discarded machinery",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Years spent sorting through discarded machinery",
+    "mind": "Yvonne",
+    "relative_to": "discarded machinery",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "Her calloused fingers ran over its surface",
+    "mind": "Yvonne",
+    "relative_to": "its grade and weight",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "its grade and weight",
+    "mind": "Yvonne",
+    "relative_to": "Her calloused fingers ran over its surface",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_a_notes": [
+   "She instantly assessed grade and weight, but the passage names no conclusion that came to her Mind and no rate or pattern of exposure."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V112",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K3",
+  "text": "Old Thomas, a fishmonger for forty years, eyed the fresh catches. The glint on the scales, the clarity of the eyes, and the firmness of the flesh spoke volumes to him. He knew exactly which boat brought each fish in and its journey. Years of early mornings and cold hands had taught him to judge quality in an instant.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Old Thomas",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a fishmonger for forty years",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Years of early mornings",
+    "mind": "Old Thomas",
+    "relative_to": "early mornings",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The glint on the scales, the clarity of the eyes, and the firmness of the flesh",
+    "mind": "Old Thomas",
+    "relative_to": "which boat brought each fish in and its journey",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "which boat brought each fish in and its journey",
+    "mind": "Old Thomas",
+    "relative_to": "The glint on the scales, the clarity of the eyes, and the firmness of the flesh",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Old Thomas",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a fishmonger for forty years",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of early mornings and cold hands",
+    "mind": "Old Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Years of early mornings",
+    "mind": "Old Thomas",
+    "relative_to": "the fresh catches",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "spoke volumes to him",
+    "mind": "Old Thomas",
+    "relative_to": "The glint on the scales",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The glint on the scales",
+    "mind": "Old Thomas",
+    "relative_to": "which boat brought each fish in and its journey",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "which boat brought each fish in and its journey",
+    "mind": "Old Thomas",
+    "relative_to": "The glint on the scales",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not settle whether the glint on the scales directly brought the knowledge of the boat and journey to mind or whether Thomas worked it out from the signs."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V121",
+  "miss_kind": "different words",
+  "writer_kind": "K5",
+  "text": "George had cut Mr. Henderson's hair every month for over twenty years. When Mr. Henderson said \"just a trim,\" George's hands simply began the precise movements. He knew exactly where to fade the sides and how much length to take off the top. His clippers and scissors moved with an automatic certainty, requiring no further thought or instruction. The cut was ingrained.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "George",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Mr. Henderson",
+    "mind": "Mr. Henderson",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every month for over twenty years",
+    "mind": "George",
+    "relative_to": "cut Mr. Henderson's hair",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The cut was ingrained",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "George",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Mr. Henderson",
+    "mind": "Mr. Henderson",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "over twenty years",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every month",
+    "mind": "George",
+    "relative_to": "Mr. Henderson's hair",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The cut was ingrained",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "When Mr. Henderson said just a trim, George's hands began the movements, but the passage shows acting without thought, not a different Idea brought to Mind (rule 13), so no pair."
+  ],
+  "team_b_notes": [
+   "The passage shows George's hands acting without thought, but does not show the cue bringing the action or a thought of it to Mind, so no ^8/^9 pair is marked (rule 13)."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V127",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Peter misted the orchids in the greenhouse. The high humidity and constant warm air had become second nature to him. He checked the soil moisture by touch, his fingers automatically assessing the texture. He rarely thought about the optimum growing conditions; he simply moved among the plants, performing the necessary tasks. It was simply how things were done.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "constant warm air",
+    "mind": "Peter",
+    "relative_to": "warm air",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "second nature to him",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "The high humidity and constant warm air had become second nature to him",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "He rarely thought about the optimum growing conditions; he simply moved among the plants, performing the necessary tasks",
+    "mind": "Peter",
+    "relative_to": "the necessary tasks",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_a_notes": [
+   "He rarely thought about the growing conditions and simply moved among the plants: acting without thought, not a different Idea brought to Mind, so no pair."
+  ],
+  "team_b_notes": [
+   "The passage shows Peter's routine as second nature but gives no rate or pattern words for the exposure that built it, so ^7 is uncertain."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V130",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Lena watched the young beginners falter as they exited the ski lift. Years of skiing steep slopes and navigating unexpected ice patches had taught her caution. She always checked the prevailing wind and the snow conditions carefully before pushing off. Her accumulated experience guided her descent, ensuring a smooth, steady path down the mountain.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of skiing steep slopes and navigating unexpected ice patches",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Years of skiing steep slopes and navigating unexpected ice patches",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her accumulated experience",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "She always checked the prevailing wind and the snow conditions carefully before pushing off",
+    "mind": "Lena",
+    "relative_to": "the prevailing wind and the snow conditions",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage says her experience 'had taught her caution' and 'guided her descent' but does not show a specific thing bringing a different thing to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V150",
+  "miss_kind": "one team only",
+  "writer_kind": "K1",
+  "text": "Finn caught the smell of diesel and damp river mud. It brought to his thoughts the old fishing boat his grandfather owned, long since sold. He remembered the rough wooden deck and the feel of the rope in his hands. That scent always seemed to follow him.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Finn",
+    "mind": "Finn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the smell of diesel and damp river mud",
+    "mind": "Finn",
+    "relative_to": "the old fishing boat",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fishing boat",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "always seemed to follow him",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Finn",
+    "mind": "Finn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the smell of diesel and damp river mud",
+    "mind": "Finn",
+    "relative_to": "the old fishing boat his grandfather owned",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fishing boat his grandfather owned",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always seemed to follow him",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'the rough wooden deck and the feel of the rope' are details of the recalled boat, not named parts (rule 7)."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V151",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Robert, a control room operator, reached for his coffee. His gaze automatically flicked to the main display, checking the wind speed readings. He did this every fifteen minutes, a practice he had followed for years. The quick scan was an ingrained, unthinking part of his shift, an effortless assessment of the farm's performance.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every fifteen minutes",
+    "mind": "Robert",
+    "relative_to": "the main display",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained, unthinking part of his shift",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every fifteen minutes",
+    "mind": "Robert",
+    "relative_to": "the wind speed readings",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "for years",
+    "mind": "Robert",
+    "relative_to": "checking the wind speed readings",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an ingrained, unthinking part of his shift",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage shows the scan as an unthinking routine but does not show the display bringing a different Idea to Mind, so no ^8/^9 pair is marked (rule 13)."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V157",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K3",
+  "text": "Wendy stepped to the edge of the pool. The cool mist rising from the water held no discomfort for her. Decades of early morning swims had acclimated her body to the chill. She slid gracefully into the lane, the familiar sensation of the water enveloping her with a comforting coolness. She began her gentle strokes.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Wendy",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Decades of early morning swims",
+    "mind": "Wendy",
+    "relative_to": "early morning swims",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "acclimated her body to the chill",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Wendy",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Decades of early morning swims",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Decades of early morning swims",
+    "mind": "Wendy",
+    "relative_to": "swims",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'the familiar sensation of the water ... comforting coolness' is pleasant but no pull toward it is shown."
+  ],
+  "team_b_notes": [
+   "The passage does not state how strongly the water impressed her; 'comforting coolness' names a quality, not a degree of impression, so no ^4 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V158",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Daniel had served as a court clerk for fifteen years in the same courtroom. Every day, just before the lunch break, Judge Davies would strike her gavel twice for adjournment. As soon as Daniel heard that distinct pair of sharp taps, his hand automatically reached for the case files on the table. He gathered them without a moment's conscious thought, ready for the recess.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Judge Davies",
+    "mind": "Judge Davies",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "served as a court clerk for fifteen years in the same courtroom",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every day, just before the lunch break",
+    "mind": "Daniel",
+    "relative_to": "strike her gavel twice",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Judge Davies",
+    "mind": "Judge Davies",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "served as a court clerk for fifteen years in the same courtroom",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every day, just before the lunch break",
+    "mind": "Daniel",
+    "relative_to": "Judge Davies would strike her gavel twice for adjournment",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "that distinct pair of sharp taps",
+    "mind": "Daniel",
+    "relative_to": "his hand automatically reached for the case files on the table",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his hand automatically reached for the case files on the table",
+    "mind": "Daniel",
+    "relative_to": "that distinct pair of sharp taps",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The taps set off the action without thought (rule 13), so no ^8/^9 pair."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V159",
+  "miss_kind": "one team only",
+  "writer_kind": "K4",
+  "text": "Olivia outlined the steps for propagating her prize orchid. First, she prepared the sterile growing medium in small pots. Next, she carefully cut a section of the parent plant's stem. That segment then needed a rooting hormone applied before being gently placed into the prepared pot. Finally, she misted it daily.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "prepared the sterile growing medium in small pots",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "cut a section of the parent plant's stem",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a rooting hormone applied",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "gently placed into the prepared pot",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "misted it daily",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the steps for propagating her prize orchid",
+    "mind": "",
+    "relative_to": "propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the sterile growing medium in small pots",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a section of the parent plant's stem",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a rooting hormone",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the prepared pot",
+    "mind": "",
+    "relative_to": "the steps for propagating her prize orchid",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "misted it daily",
+    "mind": "Olivia",
+    "relative_to": "it",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not show whether Olivia is drawn toward or averse to the orchid or the task, so no ^2 or ^3 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V173",
+  "miss_kind": "one team only",
+  "writer_kind": "K2",
+  "text": "Chloe enjoyed folding the crisp, clean sheets, appreciating their fresh scent and smooth texture. She wrinkled her nose slightly at the damp, musty smell from the incoming linen skips. The intense heat and constant rush of steam from the industrial presses, however, were just part of her everyday environment, barely noticed.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the crisp, clean sheets",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp, musty smell",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "her everyday environment",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "folding the crisp, clean sheets",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp, musty smell from the incoming linen skips",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not state how strongly the fresh scent and smooth texture impressed Chloe, so no ^4 entry is marked for them."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V195",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Sarah, a session musician, adjusted her headphones. She instinctively tapped the microphone stand twice before starting to play. It was a small, silent ritual she performed every time she entered the booth, a habit formed over years of recording sessions. The quick taps were simply part of her routine, a movement she performed without conscious thought.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every time she entered the booth",
+    "mind": "Sarah",
+    "relative_to": "tapped the microphone stand twice",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "years of recording sessions",
+    "mind": "Sarah",
+    "relative_to": "recording sessions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a habit formed",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "years of recording sessions",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every time she entered the booth",
+    "mind": "Sarah",
+    "relative_to": "the booth",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V218",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Clara walked the tray through the line, her arm extending for the main course before she even looked. She then reached for the cutlery, sorting the fork and spoon into her left hand without glancing down. Her feet knew the path to her usual table, turning left at the beverage dispenser. She sat, ready to eat.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her feet knew the path to her usual table",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "her arm extending for the main course before she even looked",
+    "mind": "Clara",
+    "relative_to": "the main course",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "sorting the fork and spoon into her left hand without glancing down",
+    "mind": "Clara",
+    "relative_to": "the cutlery",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Her feet knew the path to her usual table, turning left at the beverage dispenser",
+    "mind": "Clara",
+    "relative_to": "the path to her usual table",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "Acting without looking and a usual table hint at habit, but the passage gives no rate or pattern words, so no ^7 is marked."
+  ],
+  "team_b_notes": [
+   "The passage shows trained, unthinking actions but does not state what Clara has become, so no ^5 entry is marked."
+  ],
+  "team_a_guide_problem": "Guide does not say whether a word like usual counts as a pattern word for ^7.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V220",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Noah pulled up to the curb, a broken lock needing repair. Before opening the van door, his hand instinctively reached for his heavy-duty bolt cutters. Countless emergency calls had taught him to grab that specific tool first, without conscious thought, even before knowing the full situation. It was simply part of his routine now.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Noah",
+    "mind": "Noah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "taught him to grab that specific tool first",
+    "mind": "Noah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Countless emergency calls",
+    "mind": "Noah",
+    "relative_to": "emergency calls",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Noah",
+    "mind": "Noah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Countless emergency calls had taught him",
+    "mind": "Noah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Countless emergency calls",
+    "mind": "Noah",
+    "relative_to": "grab that specific tool first",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The broken lock and his hand reaching for the bolt cutters: the passage says he acts without conscious thought, not that a thought was brought to mind, so no pair."
+  ],
+  "team_b_notes": [
+   "The passage does not show the broken lock bringing anything to Mind; it shows only that Noah now acts without thinking, so no ^8/^9 pair is marked (rule 13)."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V230",
+  "miss_kind": "one team only",
+  "writer_kind": "K4",
+  "text": "Nathan watched his boxer spar. The young man's defence had three main flaws: his chin was too high, his left hand dropped too soon, and his footwork was too flat. Nathan broke it down for him: first, tuck the chin. Second, keep the guard up. Third, stay light on the balls of the feet. He repeated each point individually.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Nathan",
+    "mind": "Nathan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "his chin was too high",
+    "mind": "",
+    "relative_to": "three main flaws",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "his left hand dropped too soon",
+    "mind": "",
+    "relative_to": "three main flaws",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "his footwork was too flat",
+    "mind": "",
+    "relative_to": "three main flaws",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "tuck the chin",
+    "mind": "",
+    "relative_to": "three main flaws",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "keep the guard up",
+    "mind": "",
+    "relative_to": "three main flaws",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "stay light on the balls of the feet",
+    "mind": "",
+    "relative_to": "three main flaws",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Nathan",
+    "mind": "Nathan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "his boxer",
+    "mind": "his boxer",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "his chin was too high",
+    "mind": "",
+    "relative_to": "The young man's defence",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "his left hand dropped too soon",
+    "mind": "",
+    "relative_to": "The young man's defence",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "his footwork was too flat",
+    "mind": "",
+    "relative_to": "The young man's defence",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "repeated each point individually",
+    "mind": "Nathan",
+    "relative_to": "each point",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The young boxer's awareness is not shown, so he is not listed as a Mind."
+  ],
+  "team_b_notes": [
+   "Whether the boxer takes in or responds to Nathan's points is not shown, so no ^1 entry is given for him beyond the mention."
+  ],
+  "team_a_guide_problem": "Guide does not say which Idea is the whole when the same parts appear twice, as flaws and as fixes.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V237",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Omar guided his forklift through the busy loading bay. He had seen countless pallets move down the conveyor belt, day in and day out. His hands and feet automatically adjusted the machine's position. He rarely needed to look directly at the incoming cargo anymore. His muscles simply knew where to place the forks to lift the next load.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Omar",
+    "mind": "Omar",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "day in and day out",
+    "mind": "Omar",
+    "relative_to": "countless pallets",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His muscles simply knew where to place the forks",
+    "mind": "Omar",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Omar",
+    "mind": "Omar",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless pallets move down the conveyor belt",
+    "mind": "Omar",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "day in and day out",
+    "mind": "Omar",
+    "relative_to": "pallets move down the conveyor belt",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His muscles simply knew where to place the forks to lift the next load",
+    "mind": "Omar",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V243",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "As the last load of towels finished its cycle, Karen automatically grabbed the empty linen cart. She wheeled it towards the sorting station without a conscious thought. For five years, this had been her end-of-day sequence, every Tuesday and Thursday. Her movements were smooth and swift, requiring no mental effort at all.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Karen",
+    "mind": "Karen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "For five years, this had been her end-of-day sequence",
+    "mind": "Karen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every Tuesday and Thursday",
+    "mind": "Karen",
+    "relative_to": "her end-of-day sequence",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Karen",
+    "mind": "Karen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every Tuesday and Thursday",
+    "mind": "Karen",
+    "relative_to": "this",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "For five years, this had been her end-of-day sequence",
+    "mind": "Karen",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The finished load sets off the action with no thought of it, so no pair (rule 13)."
+  ],
+  "team_b_notes": [
+   "The passage shows Karen acting without a conscious thought, but does not show the finished cycle bringing the action or a thought of it to Mind, so no ^8/^9 pair is marked (rule 13)."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V246",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Peter checked the fuel levels in bus number twelve. For twenty years, he had started his shift in this dimly lit depot. The quiet hum of engines warming up, a sound many found eerie, was simply the sound of another working night to him. He knew the distinct feel of each bus's steering wheel in his hands.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "For twenty years, he had started his shift in this dimly lit depot",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "was simply the sound of another working night to him",
+    "mind": "Peter",
+    "relative_to": "The quiet hum of engines warming up",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "twenty years",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "twenty years, he had started his shift",
+    "mind": "Peter",
+    "relative_to": "his shift",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "the distinct feel of each bus's steering wheel in his hands",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not show whether Peter is drawn toward or repelled by the fuel levels, the depot, or the hum of engines; no ^2 or ^3 is settled.",
+   "The passage does not show the hum of engines bringing a different Idea to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V255",
+  "miss_kind": "different words",
+  "writer_kind": "K5",
+  "text": "Clara folded towels in the hotel laundry. The constant hum of the industrial dryers had become a quiet backdrop to her thoughts, unnoticed for years. When the afternoon shift bell chimed, she automatically glanced at the large clock without consciously deciding to. Her hands paused their methodical folding, and she moved towards the sorting bins. It was time for the next load.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "had become a quiet backdrop to her thoughts, unnoticed for years",
+    "mind": "Clara",
+    "relative_to": "The constant hum of the industrial dryers",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "constant",
+    "mind": "Clara",
+    "relative_to": "The constant hum of the industrial dryers",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "unnoticed for years",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "for years",
+    "mind": "Clara",
+    "relative_to": "The constant hum of the industrial dryers",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "When the afternoon shift bell chimed",
+    "mind": "Clara",
+    "relative_to": "the afternoon shift bell",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The bell and the clock glance are described as automatic but no rate or pattern words are given for the bell, so no pair and no ^7 for it."
+  ],
+  "team_b_notes": [
+   "The passage shows Clara acting automatically at the bell but does not show the bell bringing a thought of the next load to Mind, so no ^8/^9 pair is marked (rule 13).",
+   "Whether Clara is drawn toward or averse to the hum, the folding or the next load is not settled."
+  ],
+  "team_a_guide_problem": "Rule 6 does not say whether a word like 'constant' counts as a rate word.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V285",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Brenda watched the children lining up, some skipping, some dragging their feet. She had worked in this canteen for thirty-five years, seeing generations pass through. The daily bustle, once overwhelming, now felt like a comforting hum. She could tell by their faces which ones would ask for extra gravy and who would only pick at their peas.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Brenda",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "worked in this canteen for thirty-five years",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "daily",
+    "mind": "Brenda",
+    "relative_to": "The daily bustle",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "their faces",
+    "mind": "Brenda",
+    "relative_to": "which ones would ask for extra gravy and who would only pick at their peas",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "which ones would ask for extra gravy and who would only pick at their peas",
+    "mind": "Brenda",
+    "relative_to": "their faces",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Brenda",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "thirty-five years",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "once overwhelming, now felt like a comforting hum",
+    "mind": "Brenda",
+    "relative_to": "The daily bustle",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "their faces",
+    "mind": "Brenda",
+    "relative_to": "which ones would ask for extra gravy and who would only pick at their peas",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "which ones would ask for extra gravy and who would only pick at their peas",
+    "mind": "Brenda",
+    "relative_to": "their faces",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "team_a_notes": [
+   "'now felt like a comforting hum' states a changed feeling but not clearly a pull toward the bustle."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "Rule 6 does not say whether a single word like 'daily' is enough for ^7.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V288",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Nathan felt the familiar tremor through the floor as the presses started up. Without thinking, he adjusted the ear defenders over his ears. He then moved his hands to prepare the paper feed, his movements precise and unhurried. The loud thumping became background noise, utterly ignored.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Nathan",
+    "mind": "Nathan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "became background noise, utterly ignored",
+    "mind": "Nathan",
+    "relative_to": "The loud thumping",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Nathan",
+    "mind": "Nathan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Without thinking",
+    "mind": "Nathan",
+    "relative_to": "the presses started up",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his movements precise and unhurried",
+    "mind": "Nathan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "utterly ignored",
+    "mind": "Nathan",
+    "relative_to": "The loud thumping",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The tremor and the ear defenders are described as done without thinking, with no schedule words, so no ^7 and no pair (rule 13)."
+  ],
+  "team_b_notes": [
+   "The passage does not show the tremor bringing a thought of the presses to Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V291",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Every time the van stopped at a client's address, Sam, an apprentice locksmith, automatically reached for the heavy toolbox. He swung it onto the ground before the engine even switched off. His hand then went to the clip on his belt, where he kept his small set of picks. He had done this hundreds of times.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "an apprentice locksmith",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every time the van stopped at a client's address",
+    "mind": "Sam",
+    "relative_to": "a client's address",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every time the van stopped at a client's address",
+    "mind": "Sam",
+    "relative_to": "the heavy toolbox",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "hundreds of times",
+    "mind": "Sam",
+    "relative_to": "reached for the heavy toolbox",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "Reaching for the toolbox is shown as automatic, so no cue-brings-to-Mind pair."
+  ],
+  "team_b_notes": [
+   "The passage shows Sam acting without thinking but does not show the cue bringing the action or a thought of it to Mind, so no ^8/^9 pair is marked (rule 13)."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V298",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Beatrice stood in the wings, listening. The house lights dimmed, and a profound silence fell upon the puppet theatre. After fifty years of theatre work, she knew this quiet intimately. It was not just an absence of sound, but a shared anticipation, a moment brimming with unspoken stories about to unfold. She always found herself holding her breath too.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Beatrice",
+    "mind": "Beatrice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "After fifty years of theatre work",
+    "mind": "Beatrice",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Beatrice",
+    "mind": "Beatrice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "fifty years of theatre work",
+    "mind": "Beatrice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "always",
+    "mind": "Beatrice",
+    "relative_to": "holding her breath",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "Whether she is drawn to the quiet or repelled by it is not stated.",
+   "Holding her breath is a bodily reaction with no stated degree."
+  ],
+  "team_b_notes": [
+   "The passage does not settle whether the quiet brings anything different to Beatrice's mind (^8/^9) or whether she works it out by reasoning."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V305",
+  "miss_kind": "one team only",
+  "writer_kind": "K1",
+  "text": "Eleanor glided through the cool water, her strokes steady. A distant splash from the deep end reached her ears. For a moment, she was not in the busy public pool but in her grandmother's quiet garden. She recalled the gentle plash of the small stone fountain, always a peaceful sound on summer afternoons. It was a place she visited often in her thoughts.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "A distant splash from the deep end",
+    "mind": "Eleanor",
+    "relative_to": "her grandmother's quiet garden",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's quiet garden",
+    "mind": "Eleanor",
+    "relative_to": "A distant splash from the deep end",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "visited often in her thoughts",
+    "mind": "Eleanor",
+    "relative_to": "her grandmother's quiet garden",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "A distant splash from the deep end",
+    "mind": "Eleanor",
+    "relative_to": "her grandmother's quiet garden",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's quiet garden",
+    "mind": "Eleanor",
+    "relative_to": "A distant splash from the deep end",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "often",
+    "mind": "Eleanor",
+    "relative_to": "her thoughts",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not state how strongly the splash or the garden impressed her, so no ^4 is marked.",
+   "The passage does not state what Eleanor is composed of, so no ^5 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V314",
+  "miss_kind": "one team only",
+  "writer_kind": "K7",
+  "text": "Peter noticed the slight shudder in the boom every time he lifted a particularly heavy container. He checked the hydraulic pressure readings, which were slightly lower than usual. Then he observed a small leak near one of the piston seals. He concluded the seal was failing and reported it for immediate repair.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "every time he lifted a particularly heavy container",
+    "mind": "Peter",
+    "relative_to": "the slight shudder in the boom",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the slight shudder in the boom",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^6",
+    "words": "the hydraulic pressure readings",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^6",
+    "words": "a small leak near one of the piston seals",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "words": "the seal was failing",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the hydraulic pressure readings",
+    "mind": "",
+    "relative_to": "the seal was failing",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a small leak near one of the piston seals",
+    "mind": "",
+    "relative_to": "the seal was failing",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the seal was failing",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not say whether the shudder or the readings brought anything to Mind directly, so no ^8/^9 triggered pair is marked."
+  ],
+  "team_a_guide_problem": "Rule 15(b) asks for ^6 on evidence pieces but rule 7 needs a named whole, so relative_to is unclear.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V316",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Arthur, a seasoned puppeteer with sixty years of shows under his belt, watched the young apprentice struggle with a marionette. He saw the novice's frustration, but instead of pity, he felt a familiar pang of recognition. Every puppeteer learned the precise tension required through countless tangled strings, a lesson hard-won over many hours.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young apprentice",
+    "mind": "the young apprentice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "sixty years of shows",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "sixty years of shows",
+    "mind": "Arthur",
+    "relative_to": "shows",
+    "certainty": "ambiguous",
+    "other_candidate": "^5"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young apprentice",
+    "mind": "the young apprentice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "sixty years of shows under his belt",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a seasoned puppeteer",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Every puppeteer learned the precise tension required through countless tangled strings, a lesson hard-won over many hours",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless tangled strings",
+    "mind": "Arthur",
+    "relative_to": "the precise tension required",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "What the familiar pang of recognition refers to is not settled."
+  ],
+  "team_b_notes": [
+   "The passage does not settle whether Arthur is drawn toward or repelled by the novice's frustration or the recognition; no ^2 or ^3.",
+   "The passage does not show one thing bringing a different thing to Arthur's Mind; no ^8/^9 pair."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V387",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K5",
+  "text": "Owen approached the buzzing hive, not pausing to zip his veil completely. He had done this thousands of times. His hands moved automatically, reaching for the smoker, then the hive tool. The familiar drone of the bees no longer registered as a potential threat. He simply worked, his movements practiced and fluid.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Owen",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "thousands of times",
+    "mind": "Owen",
+    "relative_to": "the buzzing hive",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his movements practiced and fluid",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "no longer registered as a potential threat",
+    "mind": "Owen",
+    "relative_to": "The familiar drone of the bees",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Owen",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "thousands of times",
+    "mind": "Owen",
+    "relative_to": "this",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his movements practiced and fluid",
+    "mind": "Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "no longer registered as a potential threat",
+    "mind": "Owen",
+    "relative_to": "The familiar drone of the bees",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not show the buzzing hive or the drone of the bees bringing any different Idea to Owen's Mind, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V390",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Mark’s hands moved automatically, feeding paper into the industrial press. The scent of ink, once noticeable, now simply registered as part of the air he breathed. When the machine made a specific whirring sound, his fingers would adjust the alignment rollers without him even looking up. His body knew the routine intimately.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mark",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "simply registered as part of the air he breathed",
+    "mind": "Mark",
+    "relative_to": "The scent of ink",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "the routine",
+    "mind": "Mark",
+    "relative_to": "feeding paper into the industrial press",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^5",
+    "words": "His body knew the routine intimately",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mark",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "moved automatically",
+    "mind": "Mark",
+    "relative_to": "feeding paper into the industrial press",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "now simply registered as part of the air he breathed",
+    "mind": "Mark",
+    "relative_to": "The scent of ink",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "his fingers would adjust the alignment rollers without him even looking up",
+    "mind": "Mark",
+    "relative_to": "a specific whirring sound",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His body knew the routine intimately",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not show whether the whirring sound brings a thought of the adjustment to Mind or only sets off the action without thinking (rule 13)."
+  ],
+  "team_a_guide_problem": "Rule 13 says acting without thinking is marked ^7, but rule 6 needs rate or pattern words, which this passage lacks.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V398",
+  "miss_kind": "different words",
+  "writer_kind": "K5",
+  "text": "Sarah woke before dawn. Her hand automatically reached for the old kettle, filling it with water from the rain barrel. She then retrieved dry kindling and expertly arranged it in the cold hearth. These morning tasks required no conscious thought, a familiar pattern ingrained by many isolated winters.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "a familiar pattern ingrained by many isolated winters",
+    "mind": "Sarah",
+    "relative_to": "These morning tasks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "These morning tasks required no conscious thought",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sarah",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "These morning tasks required no conscious thought, a familiar pattern",
+    "mind": "Sarah",
+    "relative_to": "the old kettle",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "ingrained by many isolated winters",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V404",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Mrs. Jenkins, a retired headmistress, visited her old school canteen. The noise of chattering children and clanking cutlery was immense. Yet, she heard each individual giggle and scrape, not a cacophony. Decades spent managing busy lunchtimes had honed her ability to process the soundscape, finding a familiar order within the apparent chaos.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mrs. Jenkins",
+    "mind": "Mrs. Jenkins",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Decades spent managing busy lunchtimes",
+    "mind": "Mrs. Jenkins",
+    "relative_to": "busy lunchtimes",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "honed her ability to process the soundscape",
+    "mind": "Mrs. Jenkins",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mrs. Jenkins",
+    "mind": "Mrs. Jenkins",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Decades spent managing busy lunchtimes",
+    "mind": "Mrs. Jenkins",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "immense",
+    "mind": "Mrs. Jenkins",
+    "relative_to": "The noise of chattering children and clanking cutlery",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not show the noise bringing a different Idea to Mind, nor any reasoning to a conclusion, so no ^8/^9 pair is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V408",
+  "miss_kind": "one team only",
+  "writer_kind": "K1",
+  "text": "Lena gently watered a tray of seedlings. The warm, damp air of the greenhouse carried the rich smell of earth and growing things. This familiar scent somehow shifted her thoughts to her grandmother’s kitchen. She imagined the yeasty warmth of rising bread dough. It was a comforting, solid memory she often visited.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the rich smell of earth and growing things",
+    "mind": "Lena",
+    "relative_to": "her grandmother’s kitchen",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother’s kitchen",
+    "mind": "Lena",
+    "relative_to": "the rich smell of earth and growing things",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a comforting, solid memory",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "she often visited",
+    "mind": "Lena",
+    "relative_to": "a comforting, solid memory",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "This familiar scent",
+    "mind": "Lena",
+    "relative_to": "her grandmother’s kitchen",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother’s kitchen",
+    "mind": "Lena",
+    "relative_to": "This familiar scent",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a comforting, solid memory she often visited",
+    "mind": "Lena",
+    "relative_to": "her grandmother’s kitchen",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ }
+]

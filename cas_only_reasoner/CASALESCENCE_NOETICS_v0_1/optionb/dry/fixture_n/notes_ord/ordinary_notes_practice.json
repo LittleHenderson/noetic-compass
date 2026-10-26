@@ -1,0 +1,595 @@
+{
+ "schema": "casalescence/optionb/ordinary_notes/v1",
+ "made_by": {
+  "program": "tools/ob_write_ordinary_notes.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "adf6cd8fa5b5acf9fe7d1f050641ffcf372628aeeb7dcc759f2a728df7895aee",
+  "utc": "2026-10-05T18:34:03Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "5eaef0b21670ddd41eb4e1f254dbf793d48dfb90d9cbd5b9cca6e2d90e9f713c"
+  },
+  {
+   "path": "optionb/dry/fixture_n/SEAL_OPTIONB.jsonl",
+   "sha256": "487dcf9638b091bfead1850cdf05cf18a3c9b995c7625f1c5d71f2e6cf5f8e38"
+  },
+  {
+   "path": "optionb/dry/fixture_n/elig/eligibility.json",
+   "sha256": "6246dcaaa904856126d7c2b7634ad641c484b030cbf60f0704eaf8017bc6a2c7"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_ord/ordinary_calls_practice.jsonl",
+   "sha256": "57c8bd87ce0ad0e888f5095cbe3659e88380f51d94e748a482d785dfadfad270"
+  },
+  {
+   "path": "optionb/dry/fixture_n/notes_role/role_notes.json",
+   "sha256": "775b12b2625f6054a792ef2298dcc2754d1b4fbd7a5aea8591ee7caeb9ded92e"
+  },
+  {
+   "path": "optionb/dry/fixture_n/select/selection_practice.json",
+   "sha256": "fe40b3874480379b8658d62f8fdcaa525bd59a8a28b6484ea932727d36e50d96"
+  },
+  {
+   "path": "optionb/dry/fixture_n/support/support_results_practice.json",
+   "sha256": "32fff7895c3fb735e1865ee80b86ba1e08eec2ab0c08c61effa7ec528983fe87"
+  }
+ ],
+ "set": "practice",
+ "writer": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "V901",
+   "role_size_count": 206,
+   "passage_words": 42,
+   "passage_size_count": 47,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+        "words": 19,
+        "size_count": 21,
+        "prompt_sha256": "1309a4699b582a2dcbe2c9d649c57112975b22c7c75afe074cebb9d0f081fb2b",
+        "reply_sha256": "9adabfc0b7ff9e3027ec7b785de857efd738ab9f511eced7ee581d89c3e37c9d",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 184,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "c6608a2cba14c4fd3bcd2d8608797ca8aa14c62a97224cb108b7063a8faa1e78",
+        "reply_sha256": "654f77bd60c306a00a642da8b831e982820b9aa3153e5176888cf7815979b281",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 202,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern.",
+        "words": 34,
+        "size_count": 38,
+        "prompt_sha256": "41ab58be5f83ea0502a30162b870e0d46cf08f9e1d16ac5606d41e037ce90e2d",
+        "reply_sha256": "2a305a08400b90333b1beaefbde57369681896342892e6e92b05ec681cf8b15c",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door.",
+        "words": 16,
+        "size_count": 18,
+        "prompt_sha256": "d43fe7babb7be5b3af2df964e1853098ddab5562344a60dadfc8764d7691370f",
+        "reply_sha256": "1bb42085775a1e3814e92a79a15ae22b7d141111fa8fb126a8078be4cc0e0250",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 184,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. The lantern stands on the shelf by the door. A coil of rope lies beside the lantern.",
+        "words": 24,
+        "size_count": 27,
+        "prompt_sha256": "ed25f27648902e7cd9e83e3de0ec49090e4252b4b40199b64c92c8c2fdfd8769",
+        "reply_sha256": "68fb98d643f079a0f305b9ef81eb14e7ee18fb6071c2515e2a2de1fb5f92e248",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 202,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Tamsin opens the boat shed before dawn. Tamsin reaches for the tar brush before the wire brush. A coil of rope lies beside the lantern. The lantern stands on the shelf by the door.",
+        "words": 34,
+        "size_count": 38,
+        "prompt_sha256": "bb0b3f8924b8856dd9eb44dc46fde61d6ba0391d800a4dc77f2c1f79ed5b546c",
+        "reply_sha256": "22817bcaa95903ec5ed1650d79fa04719cccb90edae3956411adf520915d09e7",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V902",
+   "role_size_count": 129,
+   "passage_words": 34,
+   "passage_size_count": 38,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door.",
+        "words": 19,
+        "size_count": 21,
+        "prompt_sha256": "d3630c194a325c8c4ecd5c08a561e6cc9be7c5a8ad73b221606ffb381b730e2f",
+        "reply_sha256": "dda2c52a0f02b0aaf00726abeaaa184a745df900f2729afdd0c44059d6b3942c",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 115,
+      "current": 2,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. He also owns three boats.",
+        "words": 31,
+        "size_count": 35,
+        "prompt_sha256": "6cc261320e3e76cdd6e370ba92f866cfba1191e23a7427944b618403a37ab863",
+        "reply_sha256": "42ecd9b6c8609df4e8f2df6cf923130615ad5aa6ecb80337c0c506812a47eab3",
+        "utc": "2026-10-05T18:34:02Z"
+       },
+       {
+        "version": 2,
+        "text": "Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "b143f42ba3738293fb5c7adfd3d0bfdfa075cf1495ed95eea8fcfa6616106708",
+        "reply_sha256": "0334cb974a33291b633a565662cb0287a09b86b03874e60916a3645e932bc440",
+        "utc": "2026-10-05T18:34:03Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. The kettle stands on the stove by the door. A ball of twine lies beside the kettle.",
+        "words": 34,
+        "size_count": 38,
+        "prompt_sha256": "6579a5d7ca930d24ed7a84f8f2886c33de08c16ab43b3fb6723d71d38b53afcc",
+        "reply_sha256": "4eb5cab2b7be2c1fe2110ad12659c5591f79fbc481af92f791190b06139d1d55",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. The kettle stands on the stove by the door.",
+        "words": 16,
+        "size_count": 18,
+        "prompt_sha256": "046b22c7cf7538ecdc3d1736ece6e9ae54274bb81e11d3acbc1c6fe3b181b821",
+        "reply_sha256": "2a0ccde4bd9d31658abcb012e863082290137913f03dd913e512e6e913dcc084",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 115,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. The kettle stands on the stove by the door. A ball of twine lies beside the kettle.",
+        "words": 24,
+        "size_count": 27,
+        "prompt_sha256": "429d816fb92f59b28547b683b2c3ead9af409d7c3a9d582acf7e3eb680c090a4",
+        "reply_sha256": "538ffe86b56cd0ade2b8d317c9690e347afde790876ca700e30bc63d42324d9b",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Odran opens the net loft before dawn. Odran reaches for the bone needle before the steel needle. A ball of twine lies beside the kettle. The kettle stands on the stove by the door.",
+        "words": 34,
+        "size_count": 38,
+        "prompt_sha256": "5cbaa68934972339fb9c55bace383e40a302d645465d9c9914fb60050640645b",
+        "reply_sha256": "fbcd5ca071257a7c04a3d707f24a086fea9730e359ba0f88c2c2520cc590d2e8",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V903",
+   "role_size_count": 129,
+   "passage_words": 34,
+   "passage_size_count": 38,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door.",
+        "words": 19,
+        "size_count": 21,
+        "prompt_sha256": "638aa3355ff0853b7367c70e9254026471693f57b0dbdc3439a08b198dbe8698",
+        "reply_sha256": "8620bf6b09d7507f1ed412e7d8c0bc0bee2fe67a46f5e57d1af0ed2e25c833ef",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 115,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "8e4dc0334aed23c56de4799198cb023ae25186145f6c3ba10ad9530c6f6b6831",
+        "reply_sha256": "fdc77aa437deef28f01e1e530f2da65a3f44b178b323b1f40aa3a6f4e5447be1",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. The ledger stands on the counter by the door. A sack of barley lies beside the ledger.",
+        "words": 34,
+        "size_count": 38,
+        "prompt_sha256": "740cf09b38d2ed2861459c3a558531ac660f1929c2583f2402466ab79f2c744c",
+        "reply_sha256": "7eed5819296fdb7f4466946086a23f43339c62eb95f0542533f029a79b642425",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. The ledger stands on the counter by the door.",
+        "words": 16,
+        "size_count": 18,
+        "prompt_sha256": "eae1d45bcf68495adde39a4f116927b59c16877dce1a494f7b5f990f26be2e53",
+        "reply_sha256": "a1530c0d6ed55bae3780f622834e890ca555c0926118782225c27f9de742a3ac",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 115,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. The ledger stands on the counter by the door. A sack of barley lies beside the ledger.",
+        "words": 24,
+        "size_count": 27,
+        "prompt_sha256": "adfeb23f1dd59281c09e8174b25385f4c853dfeedd0ae19a092b4a24aacf9da2",
+        "reply_sha256": "6efe55cbee517d16e73964a34727309783522e186d561a0944c274355f223ed3",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Ilse opens the seed store before dawn. Ilse reaches for the oak scoop before the tin scoop. A sack of barley lies beside the ledger. The ledger stands on the counter by the door. Next week it will be reaching for the oak scoop again.",
+        "words": 45,
+        "size_count": 50,
+        "prompt_sha256": "21b350836a41fe25a55902343ea0709569e51434c71b5e93126c19d5ed036ef4",
+        "reply_sha256": "5e002a16398e7e6a302bb77b3d6b304e6b545a777528b223a89e93142cea505d",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V904",
+   "role_size_count": 206,
+   "passage_words": 43,
+   "passage_size_count": 48,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door.",
+        "words": 21,
+        "size_count": 23,
+        "prompt_sha256": "38bfefbce0de182e110fd11c0b4bffb3d48e8c95bfbc5f0757f8817c05784613",
+        "reply_sha256": "6b7cb9d597b21872331bfe98806dbb525a142d850b59fd1c08ca16b5c675050b",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 185,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "7749390ed77dfe9a370157d545e2b9e628cb50d000c65b8c0a41586c551797a4",
+        "reply_sha256": "88a773151e6a30184db60373937f7048a2a3bccd3034ab99b8951fd521e2a149",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 203,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. The quench bucket stands on the stone floor by the door. A pair of tongs lies beside the quench bucket.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "082711227bb2fbf5ec6ce0edb826a8df20124ee6c53aa54d88dc6b70599def43",
+        "reply_sha256": "d95eb350f8a56873db95b7a8ebda043fe06a12cc7f4bddade6c73f31da385a7a",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 166,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the forge before dawn. The quench bucket stands on the stone floor by the door.",
+        "words": 17,
+        "size_count": 19,
+        "prompt_sha256": "1074defd15c35b3e9ae602d5be6627cc441cc1f2d495bf295ec3152fc442cd59",
+        "reply_sha256": "ae786758f37fa36395cf54d99de92109c534a67082a4b0060edf649e4df78926",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 185,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the forge before dawn. The quench bucket stands on the stone floor by the door. A pair of tongs lies beside the quench bucket.",
+        "words": 26,
+        "size_count": 29,
+        "prompt_sha256": "71e4a5e3701914ee05fed010bbe9e33d06db2aa8ec829ebfb03fa8e36fc7f72d",
+        "reply_sha256": "b3595027cede79268c2f3e223fd57f8cc768a7f1002751fe96e0568e7992af79",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 203,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Bram opens the forge before dawn. Bram reaches for the cross hammer before the ball hammer. A pair of tongs lies beside the quench bucket. The quench bucket stands on the stone floor by the door.",
+        "words": 36,
+        "size_count": 40,
+        "prompt_sha256": "9714ce38646bc34853bc4f56e35ab9656927dacb115457b2c4a3bef6d3d070be",
+        "reply_sha256": "976be9eb0fc64acef0d6ebb9429dd3ca8d96dc21e793fc35a555f711608b398d",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "V905",
+   "role_size_count": 129,
+   "passage_words": 36,
+   "passage_size_count": 40,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door.",
+        "words": 21,
+        "size_count": 23,
+        "prompt_sha256": "448cb175efde8cc2540d7562a820cb9be6f1783928026eecdcf9beaea0e62a75",
+        "reply_sha256": "9fc66cdcb379a3c630bae310f9b39d7e0db271cc82292ea2561c998db0d2b088",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door.",
+        "words": 28,
+        "size_count": 31,
+        "prompt_sha256": "29706275d9b4113e3f2a37af2a2951296adfad4097cd43932c7560e91715a6ea",
+        "reply_sha256": "a497582e2b36ae3e40b20732220805b06cd2a774b508b1b6965bbc75ee8de749",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 128,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. The drying rack stands on the back wall by the door. A tub of madder lies beside the drying rack.",
+        "words": 37,
+        "size_count": 41,
+        "prompt_sha256": "f2eb2d19f62710cf3a0238dbef517ca6bc4118be653a34dc1affa631fe41208f",
+        "reply_sha256": "b63b6269d68fcb821eb88531841addf88fc334609833096ac874c973469c691d",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. The drying rack stands on the back wall by the door.",
+        "words": 18,
+        "size_count": 20,
+        "prompt_sha256": "852f9c14652861a1c3eea109c70aa1332b9e4d15fe661ea10a3d9061def4f8e2",
+        "reply_sha256": "ba7b65d206425251ba1dc779818772d6a7b4afd700bb2cc4085f5de92b76bd69",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. The drying rack stands on the back wall by the door. A tub of madder lies beside the drying rack.",
+        "words": 27,
+        "size_count": 30,
+        "prompt_sha256": "0c8f9afc15ec98658038909c3e33ca17a44f2d50ba67afa0dc95568de05a6f7d",
+        "reply_sha256": "3e0473bd91e9f7abb3c2d7d85538243c0b69a6b6bf4e07288a1647ae9fc169cc",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 128,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Maren opens the dye house before dawn. Maren reaches for the copper ladle before the iron ladle. A tub of madder lies beside the drying rack. The drying rack stands on the back wall by the door.",
+        "words": 37,
+        "size_count": 41,
+        "prompt_sha256": "bc5d1730fa20b9380f89cd796a161f19e703debd21f66897be80c9639dea90c6",
+        "reply_sha256": "3f9b494c86523913edbaa7069bd6daea0eba28742d0fa6ef2f65ba57f3df81ae",
+        "utc": "2026-10-05T18:34:02Z"
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

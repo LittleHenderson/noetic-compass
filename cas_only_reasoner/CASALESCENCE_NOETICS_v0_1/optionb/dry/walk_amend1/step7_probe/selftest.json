@@ -1,0 +1,14 @@
+{
+ "schema": "casalescence/optionb/selftest/v1",
+ "note": "MADE-UP FOR THE WALK. NOT A RESULT. NOT THE OWNER.",
+ "mode": "precheck",
+ "status": "SELFTEST_PASS",
+ "checks": [
+  {
+   "name": "package_matches_seal",
+   "passed": true
+  }
+ ],
+ "prompt_list_sha256": "1c48423ac931c2d380f489843e63bc807fd92602700158b3e5f3ef68029d9646",
+ "padding_plan_sha256": "43b4ec9d5383a53ffa36542c19d2ced3eeddc346f8a2a520726684e31741827c"
+}

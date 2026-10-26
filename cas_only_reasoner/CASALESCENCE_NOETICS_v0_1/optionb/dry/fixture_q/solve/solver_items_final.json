@@ -1,0 +1,209 @@
+{
+ "schema": "casalescence/optionb/solver_items/v1",
+ "made_by": {
+  "program": "tools/ob_solve_blind.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "9468c1bc80c1614e46d32a3a1c52b300786cb8ab063c13412cd6ce946480bd15",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/checks/candidates_final.json",
+   "sha256": "1ebd174163136af814625d40f426012503eb780125bbe035d2f115244f960774"
+  }
+ ],
+ "set": "final",
+ "items": [
+  {
+   "item_id": "Q0001",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V903.p1.NEW_STARTER",
+   "shown": [
+    3,
+    1,
+    5,
+    2,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0002",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V903.p1.FACT",
+   "shown": [
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0003",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V903.p1.LONG_BREAK",
+   "shown": [
+    2,
+    4,
+    1,
+    5,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0001",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V903.p1.LONG_BREAK",
+   "shown": [
+    0,
+    4,
+    3,
+    1,
+    5,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0002",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V903.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0003",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V903.p1.NEW_STARTER",
+   "shown": [
+    3,
+    5,
+    0,
+    1,
+    2,
+    4
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0004",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V903.p1.LONG_BREAK",
+   "shown": [
+    5,
+    4,
+    0,
+    3,
+    1,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0005",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V903.p1.FACT",
+   "shown": [
+    1,
+    2,
+    0,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0006",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V903.p1.NEW_STARTER",
+   "shown": [
+    3,
+    0,
+    1,
+    4,
+    5,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0004",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V903.p1.FACT",
+   "shown": [
+    1,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0005",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V903.p1.LONG_BREAK",
+   "shown": [
+    2,
+    5,
+    1,
+    4,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0006",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V903.p1.NEW_STARTER",
+   "shown": [
+    2,
+    0,
+    5,
+    4,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  }
+ ]
+}

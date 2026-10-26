@@ -1,0 +1,217 @@
+{
+ "schema": "casalescence/optionb/owner_role_note_sample/v1",
+ "made_by": {
+  "program": "tools/ob_role_notes.py",
+  "sha256": "c6212ec967f8aebf0430959f2f0c160edc12a6f42671fd3649740fc5a785d386",
+  "utc": "2026-10-05T16:20:00Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "tools/ob_eligibility.py",
+   "sha256": "73455eef7ce2a7157aad87e42b33a8610b551b0eb4aae7e56feb19aa9db0d104"
+  },
+  {
+   "path": "tools/ob_seal.py",
+   "sha256": "1fcd8091a4d4f4177cdde900f9279787db1176be5eff08a642f37bd3a6127fad"
+  },
+  {
+   "path": "design_v2/optionB_final.json",
+   "sha256": "c1fc64b89f7fbd3aadab77597fa2b8c6970342c7fa899568afabe32c47e3b7a2"
+  }
+ ],
+ "seed": 20261016,
+ "passages": [
+  {
+   "id": "V040",
+   "text": "Fennin opened the nail forge before dawn. He always reached for the tar mould before the wire mould. The bucket stood on the table by the door. A roll of tape lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the bucket first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Fennin\".\n- ^2 Positive: \"the tar mould\". For the Mind \"Fennin\". Supporting quote: \"He always reached for the tar mould before the wire mould.\"\n- ^3 Negative: \"the lye vat\". For the Mind \"Fennin\". Supporting quote: \"He kept well away from the lye vat.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Fennin\". Relative to \"the bucket\". Supporting quote: \"Every morning for nine years he had dusted the bucket first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V137",
+   "text": "Odrey opened the dye house before dawn. She always reached for the wooden ladle before the metal ladle. The kettle stood on the stove by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the kettle first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Odrey\".\n- ^2 Positive: \"the wooden ladle\". For the Mind \"Odrey\". Supporting quote: \"She always reached for the wooden ladle before the metal ladle.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Odrey\". Supporting quote: \"She kept well away from the leaky bellows.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Odrey\". Relative to \"the kettle\". Supporting quote: \"Every morning for nine years she had dusted the kettle first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V111",
+   "text": "Coric opened the seed store before dawn. She always reached for the wooden brush before the metal brush. The ledger stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the ledger first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Coric\".\n- ^2 Positive: \"the wooden brush\". For the Mind \"Coric\". Supporting quote: \"She always reached for the wooden brush before the metal brush.\"\n- ^3 Negative: \"the loose stair\". For the Mind \"Coric\". Supporting quote: \"She kept well away from the loose stair.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Coric\". Relative to \"the ledger\". Supporting quote: \"Every morning for nine years she had dusted the ledger first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V081",
+   "text": "Coret opened the seed store before dawn. She always reached for the oak hammer before the tin hammer. The sledge stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the sledge first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Coret\".\n- ^2 Positive: \"the oak hammer\". For the Mind \"Coret\". Supporting quote: \"She always reached for the oak hammer before the tin hammer.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Coret\". Supporting quote: \"She kept well away from the leaky bellows.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Coret\". Relative to \"the sledge\". Supporting quote: \"Every morning for nine years she had dusted the sledge first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V119",
+   "text": "Halic opened the dye house before dawn. She always reached for the bone saw before the steel saw. The kettle stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the kettle first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Halic\".\n- ^2 Positive: \"the bone saw\". For the Mind \"Halic\". Supporting quote: \"She always reached for the bone saw before the steel saw.\"\n- ^3 Negative: \"the broken ladder\". For the Mind \"Halic\". Supporting quote: \"She kept well away from the broken ladder.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Halic\". Relative to \"the kettle\". Supporting quote: \"Every morning for nine years she had dusted the kettle first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V050",
+   "text": "Maro opened the net loft before dawn. He always reached for the curved tray before the straight tray. The rack stood on the table by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the rack first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Maro\".\n- ^2 Positive: \"the curved tray\". For the Mind \"Maro\". Supporting quote: \"He always reached for the curved tray before the straight tray.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Maro\". Supporting quote: \"He kept well away from the bilge pump.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Maro\". Relative to \"the rack\". Supporting quote: \"Every morning for nine years he had dusted the rack first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V030",
+   "text": "Sunnen opened the bell tower before dawn. He always reached for the copper ruler before the iron ruler. The ledger stood on the table by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the ledger first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Sunnen\".\n- ^2 Positive: \"the copper ruler\". For the Mind \"Sunnen\". Supporting quote: \"He always reached for the copper ruler before the iron ruler.\"\n- ^3 Negative: \"the rusty winch\". For the Mind \"Sunnen\". Supporting quote: \"He kept well away from the rusty winch.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Sunnen\". Relative to \"the ledger\". Supporting quote: \"Every morning for nine years he had dusted the ledger first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V140",
+   "text": "Marey opened the net loft before dawn. He always reached for the small ruler before the large ruler. The rack stood on the table by the door. A pair of tongs lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the rack first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Marey\".\n- ^2 Positive: \"the small ruler\". For the Mind \"Marey\". Supporting quote: \"He always reached for the small ruler before the large ruler.\"\n- ^3 Negative: \"the broken ladder\". For the Mind \"Marey\". Supporting quote: \"He kept well away from the broken ladder.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Marey\". Relative to \"the rack\". Supporting quote: \"Every morning for nine years he had dusted the rack first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V065",
+   "text": "Maris opened the dye house before dawn. She always reached for the birch spindle before the zinc spindle. The kettle stood on the table by the door. A coil of rope lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the kettle first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Maris\".\n- ^2 Positive: \"the birch spindle\". For the Mind \"Maris\". Supporting quote: \"She always reached for the birch spindle before the zinc spindle.\"\n- ^3 Negative: \"the rusty winch\". For the Mind \"Maris\". Supporting quote: \"She kept well away from the rusty winch.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Maris\". Relative to \"the kettle\". Supporting quote: \"Every morning for nine years she had dusted the kettle first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V141",
+   "text": "Corey opened the seed store before dawn. She always reached for the curved saw before the straight saw. The oilcan stood on the shelf by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the oilcan first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Corey\".\n- ^2 Positive: \"the curved saw\". For the Mind \"Corey\". Supporting quote: \"She always reached for the curved saw before the straight saw.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Corey\". Supporting quote: \"She kept well away from the bilge pump.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Corey\". Relative to \"the oilcan\". Supporting quote: \"Every morning for nine years she had dusted the oilcan first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V074",
+   "text": "Halis opened the net loft before dawn. He always reached for the long ruler before the short ruler. The kettle stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the kettle first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Halis\".\n- ^2 Positive: \"the long ruler\". For the Mind \"Halis\". Supporting quote: \"He always reached for the long ruler before the short ruler.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Halis\". Supporting quote: \"He kept well away from the leaky bellows.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Halis\". Relative to \"the kettle\". Supporting quote: \"Every morning for nine years he had dusted the kettle first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V016",
+   "text": "Tamen opened the nail forge before dawn. He always reached for the oak ladle before the tin ladle. The stool stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the stool first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Tamen\".\n- ^2 Positive: \"the oak ladle\". For the Mind \"Tamen\". Supporting quote: \"He always reached for the oak ladle before the tin ladle.\"\n- ^3 Negative: \"the rusty winch\". For the Mind \"Tamen\". Supporting quote: \"He kept well away from the rusty winch.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Tamen\". Relative to \"the stool\". Supporting quote: \"Every morning for nine years he had dusted the stool first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V048",
+   "text": "Ilso opened the bell tower before dawn. He always reached for the long hammer before the short hammer. The ledger stood on the counter by the door. A roll of tape lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the ledger first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Ilso\".\n- ^2 Positive: \"the long hammer\". For the Mind \"Ilso\". Supporting quote: \"He always reached for the long hammer before the short hammer.\"\n- ^3 Negative: \"the loose stair\". For the Mind \"Ilso\". Supporting quote: \"He kept well away from the loose stair.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Ilso\". Relative to \"the ledger\". Supporting quote: \"Every morning for nine years he had dusted the ledger first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V018",
+   "text": "Ilsen opened the bell tower before dawn. He always reached for the hemp mould before the nylon mould. The sledge stood on the counter by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the sledge first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Ilsen\".\n- ^2 Positive: \"the hemp mould\". For the Mind \"Ilsen\". Supporting quote: \"He always reached for the hemp mould before the nylon mould.\"\n- ^3 Negative: \"the leaky bellows\". For the Mind \"Ilsen\". Supporting quote: \"He kept well away from the leaky bellows.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Ilsen\". Relative to \"the sledge\". Supporting quote: \"Every morning for nine years he had dusted the sledge first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V001",
+   "text": "Tama opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Tama\".\n- ^2 Positive: \"the tar brush\". For the Mind \"Tama\". Supporting quote: \"She always reached for the tar brush before the wire brush.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Tama\". Supporting quote: \"She kept well away from the bilge pump.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Tama\". Relative to \"the lantern\". Supporting quote: \"Every morning for nine years she had dusted the lantern first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V126",
+   "text": "Corar opened the bell tower before dawn. He always reached for the long ladle before the short ladle. The sledge stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the sledge first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Corar\".\n- ^2 Positive: \"the long ladle\". For the Mind \"Corar\". Supporting quote: \"He always reached for the long ladle before the short ladle.\"\n- ^3 Negative: \"the broken ladder\". For the Mind \"Corar\". Supporting quote: \"He kept well away from the broken ladder.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Corar\". Relative to \"the sledge\". Supporting quote: \"Every morning for nine years he had dusted the sledge first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V097",
+   "text": "Eddol opened the boat shed before dawn. She always reached for the wicker saw before the mesh saw. The stool stood on the stove by the door. A coil of rope lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the stool first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Eddol\".\n- ^2 Positive: \"the wicker saw\". For the Mind \"Eddol\". Supporting quote: \"She always reached for the wicker saw before the mesh saw.\"\n- ^3 Negative: \"the loose stair\". For the Mind \"Eddol\". Supporting quote: \"She kept well away from the loose stair.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Eddol\". Relative to \"the stool\". Supporting quote: \"Every morning for nine years she had dusted the stool first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V110",
+   "text": "Maric opened the net loft before dawn. He always reached for the wicker rake before the mesh rake. The kettle stood on the table by the door. A heap of straw lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the kettle first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Maric\".\n- ^2 Positive: \"the wicker rake\". For the Mind \"Maric\". Supporting quote: \"He always reached for the wicker rake before the mesh rake.\"\n- ^3 Negative: \"the lye vat\". For the Mind \"Maric\". Supporting quote: \"He kept well away from the lye vat.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Maric\". Relative to \"the kettle\". Supporting quote: \"Every morning for nine years he had dusted the kettle first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V098",
+   "text": "Jossol opened the net loft before dawn. He always reached for the wooden spindle before the metal spindle. The globe stood on the counter by the door. A ball of twine lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the globe first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Jossol\".\n- ^2 Positive: \"the wooden spindle\". For the Mind \"Jossol\". Supporting quote: \"He always reached for the wooden spindle before the metal spindle.\"\n- ^3 Negative: \"the broken ladder\". For the Mind \"Jossol\". Supporting quote: \"He kept well away from the broken ladder.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Jossol\". Relative to \"the globe\". Supporting quote: \"Every morning for nine years he had dusted the globe first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V106",
+   "text": "Tamic opened the nail forge before dawn. He always reached for the bone mould before the steel mould. The stool stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the stool first.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\n^3 Negative — An Idea the Mind is adverse to and repelled by.\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\n- ^1 Mind: \"Tamic\".\n- ^2 Positive: \"the bone mould\". For the Mind \"Tamic\". Supporting quote: \"He always reached for the bone mould before the steel mould.\"\n- ^3 Negative: \"the bilge pump\". For the Mind \"Tamic\". Supporting quote: \"He kept well away from the bilge pump.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Tamic\". Relative to \"the stool\". Supporting quote: \"Every morning for nine years he had dusted the stool first.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  }
+ ]
+}

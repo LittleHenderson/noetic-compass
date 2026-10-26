@@ -1,0 +1,30 @@
+{
+  "schema": "helm.owner-direct-ruling/1",
+  "utc_recorded": "2026-10-05T15:58:00Z",
+  "received_pacific": "2026-10-05 about 08:55 PDT",
+  "channel": "Owner typed this into Claude Code (desktop app, Code tab), session d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0, in capital letters, with no other words.",
+  "what_it_answers": "The operator's reports of 2026-10-05 said that labeling method v2.0 had been rejected because its builders added their own 'working lines' on when a role is present (some against the canon table of sayings), that questions about what a definition covers were still open (for example: is a person shown only doing a physical thing a Mind; is comfort with no pull Positive), and that the owner's definition questions stay open.",
+  "owner_text_verbatim": "MIND IS AN ENTITY, A BEING, ANYTHING THAT THINKS, MACHINE,HUMAN, ANIMAL, AI ETC.  POSITIVE AND NEGATIVE USE THE COLLOQUILISMS (SHOULD BE  IN LOCAL FILES) THE SAME ABOUT THE OTHER NOETICS",
+  "local_file_the_owner_points_to": {
+    "path": "docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+    "sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880",
+    "last_commit": "1c8531ea (2026-04-21)",
+    "sections": "Clarification 1 (the ten definitions) and Clarification 6 (the Colloquialism Test: the principle, the canonical colloquialism map, the worked verification with its anti-drift annotations, the diagnostic application)"
+  },
+  "decisions_taken_from_it_labelled_as_interpretation": {
+    "mind": "A Mind (^1) is an entity, a being, anything that thinks: a machine, a human, an animal, an AI, and so on. In labeling, every such being that a passage names is listed as a Mind. A label team no longer leaves a person out because the passage shows nothing of that person's awareness. The canonical definition line of ^1 is unchanged and is still quoted word for word; the owner's sentence is quoted beside it as the owner's ruling.",
+    "presence_of_positive_and_negative": "Whether a thing is Positive (^2) or Negative (^3) for a Mind is decided with the canonical colloquialisms of Clarification 6, not with working lines written by the study's builders.",
+    "presence_of_the_other_noetics": "The same holds for ^4 to ^9 (and ^1): the Colloquialism Test of Clarification 6 decides. Ask what saying a native speaker would use for the moment; mark the Noetic whose canonical sayings and definition it matches; if several match, mark each; if none matches, mark nothing.",
+    "what_stays": "The ten definitions word for word. The anti-drift annotations of Clarification 6 (^3 is visceral, not analytical; ^8 is triggering, not reasoning). The Clarification 6 guardrail: where a colloquialism and a definition appear to disagree, the definition governs. The owner's working ruling on reading a sign (guide rule 15) until the owner answers the two questions below. The format rules on how a pair or a lone entry is written (guide rules 2 and 3 as they now stand): they do not decide presence.",
+    "what_goes": "The study's own narrowing rules on presence from guide v1.2 (for example: ^4 needs words for how much; a length of time alone is ^5 and not ^7; who is and is not listed as a Mind), including 'mark neither when only one of the pair is given' (rule 2) and 'recall on purpose is not a pair' (rule 3), and every 'held kind' and 'working line' of the rejected v2.0. The full canonical map of sayings replaces the shortened table in the guide's Part A."
+  },
+  "operator_extension_not_in_the_owner_words": "For the option B usefulness test, the operator will also print the canonical sayings beside each canonical definition line in the role notes model B reads, so that B meets each role through its sayings as well. This is the operator's reading of 'use the colloquialisms ... the same about the other Noetics', applied to a place the owner did not name. The owner may strike it.",
+  "not_decided_by_these_words": [
+    "Does recognizing a familiar sign count as Cause -> Effect when it brings another idea to mind?",
+    "Does an idea reached through reasoning also count as Effect?",
+    "Whether a being that is only spoken of, and is not present in the scene (a grandfather in a memory), is listed as a Mind. The operator's working reading is yes, because the owner's sentence defines a Mind by what kind of thing it is, not by what the passage shows of it. The owner may correct this."
+  ],
+  "money_granted_by_these_words": "None.",
+  "operator": "Claude Code (claude-opus-5-5)",
+  "record_corrected_utc": "2026-10-05T18:15:41Z. Reason: 'what_stays' and 'what_goes' were corrected to agree with guide v2.1 as it now stands (operator's decision after review: the ruling is applied in full, so guide rules 2 and 3 no longer narrow when ^8 and ^9 are marked); the owner's verbatim text and every other field are unchanged."
+}

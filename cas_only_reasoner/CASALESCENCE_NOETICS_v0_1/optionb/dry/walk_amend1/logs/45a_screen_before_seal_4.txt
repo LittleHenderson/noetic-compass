@@ -1,0 +1,8 @@
+$ python -B tools/ob_screen_notes.py --set both
+{
+ "program": "tools/ob_screen_notes.py",
+ "status": "STOP",
+ "code": "SEAL_STEP_MISSING",
+ "reason": "Seal step 4_ORDINARY_NOTES must exist before this program runs."
+}
+[exit code 2]

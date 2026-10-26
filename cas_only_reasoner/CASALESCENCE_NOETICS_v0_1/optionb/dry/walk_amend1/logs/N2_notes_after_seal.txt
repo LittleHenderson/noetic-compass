@@ -1,0 +1,8 @@
+$ python -B tools/ob_write_ordinary_notes.py --set final --step first --max-calls 0
+{
+ "program": "tools/ob_write_ordinary_notes.py",
+ "status": "STOP",
+ "code": "SET_IS_SEALED",
+ "reason": "Seal step 4_ORDINARY_NOTES exists. These files are sealed and are not written again."
+}
+[exit code 2]

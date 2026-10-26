@@ -1,0 +1,87 @@
+{
+ "schema": "cas.optionb.b1.authority/1",
+ "status": "TEMPLATE_NOT_ADMITTED",
+ "how_to_fill": [
+  "Copy this file to AUTHORITY_B1.json in the controller folder. Fill every <<FILL>>. Then set status to ADMITTED.",
+  "The launcher refuses any record whose status is not ADMITTED, and any blank that is still a <<FILL>> text.",
+  "Run 'aws_control.py hashes' to print the hashes and the ledger numbers this record needs. It calls no AWS service and writes nothing.",
+  "The price receipt is valid for 60 minutes. Fill this record and launch inside that time.",
+  "This record grants nothing by itself. controller_common.authority() checks every field against the files on disk."
+ ],
+ "job": "cas-optionb-b1",
+ "execution_owner": "claude-code/claude-opus-5-5/session-d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0",
+ "job_record": {
+  "source": "The sealed Option B package: source.zip (plan 08_OPTION_B_PLAN_v1_0.md, seal chain optionb/SEAL_OPTIONB.jsonl) and the seven pinned files of model B, Qwen/Qwen2.5-0.5B-Instruct revision 7ae557604adf67be50417f59c2c2f167def9a775.",
+  "purpose": "Option B usefulness test, GPU job b1: Gate 0 self-test, practice calls, practice gates, final calls only if every gate passes, then scoring. One outcome code from a program.",
+  "instance": "one g5.2xlarge (one A10G 24 GB GPU), image ami-0dddfa1ffa6b87af7, region us-west-2",
+  "limits": "cap 5.00 USD all services; hard time limit 180 minutes; one attempt; no retry; at most 5,000 model calls; result archive at most 100,000,000 bytes; the host shuts itself down",
+  "clock_minutes_after_launch": "setup must end 30; all model work stops 135; forced shutdown 175; hard limit 180",
+  "cleanup": "aws_control.py ends the host, deletes its disk, downloads and re-opens the result archive, then empties the four storage keys and writes CLEANUP.json. independent_cleanup.py is then run by the operator within 30 minutes, and before minute 180 after launch."
+ },
+ "owner_approval": {
+  "path": "OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json",
+  "sha256": "d1c052f56b61a6f30a428d25b4530352d6cd6ddb489163734fe6ea6d23b24325"
+ },
+ "owner_direction": {
+  "path": "OWNER_DIRECTION_POINTING_AND_OPTION_B_20261005.json",
+  "sha256": "689f4b5622b0f28d60e0146e3b2e41d68c40f9eec7ddf42c06719c42d4f692fc"
+ },
+ "owner_go_record": {
+  "path": "<<FILL: file name of the owner's yes for this job, inside CASALESCENCE_NOETICS_v0_1/>>",
+  "sha256": "<<FILL: its sha256>>"
+ },
+ "owner_go_record_required_fields": {
+  "why": "Plan section 22, questions 12 and 13: the GPU job waits for one yes from the owner after the real counts are shown. The launcher reads these fields from the record named above.",
+  "applies_to_job": "cas-optionb-b1",
+  "decision": "GO",
+  "owner_words_verbatim": "<<the owner's own words, unchanged>>",
+  "cap_usd": 5.0,
+  "hard_minutes": 180
+ },
+ "cap_usd": 5.0,
+ "hard_minutes": 180,
+ "clock_seconds": [1800, 8100, 10500, 10800],
+ "model_calls_cap": 5000,
+ "archive_cap_bytes": 100000000,
+ "os": "Linux",
+ "paid_attempts_allowed": 1,
+ "automatic_retry": false,
+ "new_installs_allowed": "GUEST_ISOLATED_OVERLAY_OF_ACCEPTED_REQUIREMENTS_ONLY",
+ "ledger_reading": {
+  "pointer_path": "C:/Users/wakil/Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json",
+  "read_utc": "<<FILL: when you read the pointer>>",
+  "pointer_sha256": "<<FILL: sha256 of the pointer file at that moment>>",
+  "combined_allocation_usd": "<<FILL NUMBER: combined_allocation_usd in the pointer>>",
+  "ceiling_usd": "<<FILL NUMBER: ceiling_usd in the pointer>>",
+  "unreserved_usd": "<<FILL NUMBER: ceiling minus combined; it must be 5.00 or more>>"
+ },
+ "ledger_reading_seen_earlier_not_a_launch_value": "REAL at 2026-10-05T09:49Z: combined 87.36, ceiling 100.00, unreserved 12.64 (decision D8). The pre-check job changes it. Read it again.",
+ "new_hold_usd": 5.0,
+ "unreserved_after_hold_usd": "<<FILL NUMBER: unreserved_usd minus 5.00>>",
+ "exclusive_lease_sha256": "<<FILL: sha256 of C:/Users/wakil/Documents/Codex/2026-10-01/task-2/helm_operator_preparation/CAS_OPTIONB_B1_TRANSPORT_LEASE.json>>",
+ "controller_review": {"path": "INDEPENDENT_REVIEW.json", "sha256": "<<FILL>>"},
+ "source_pins": {"path": "SOURCE_PINS.json", "sha256": "<<FILL>>"},
+ "private_route_receipt": {"path": "PRIVATE_ROUTE_RECEIPT.json", "sha256": "<<FILL: written by 'aws_control.py readiness'>>"},
+ "fresh_price_receipt": {"path": "FRESH_PRICE_RECEIPT.json", "sha256": "<<FILL: written by 'aws_control.py readiness'; valid for 60 minutes>>"},
+ "prior_slot_job": "<<FILL: the job that most recently used the shared four-key storage slot. It must be the last job the ledger carries. Expected: the pre-check job that passed, one of cas-optionb-b1-precheck-p1 to -p4.>>",
+ "prior_cleanup_receipt": {"path": "PRIOR_INDEPENDENT_CLEANUP.json", "sha256": "<<FILL: sha256 of that job's independent cleanup record, copied into this folder under this name>>"},
+ "payload_manifest_sha256": "<<FILL: sha256 of CONTRACT.json>>",
+ "input_zip_bytes": "<<FILL NUMBER: size of input.zip in bytes; at most 1,100,000,000>>",
+ "input_zip_sha256": "<<FILL: sha256 of input.zip>>",
+ "seal": {
+  "seal_file_sha256": "<<FILL: sha256 of optionb/SEAL_OPTIONB.jsonl after step 7_PRECHECK was added. Step 7 also seals the owner's table optionb/OUTCOME_STATUS_TABLE.json; the launcher checks that file against it. Step 7 is the last line of the seal file: after it no line can be added (amendment A5), and the launcher refuses a seal file that holds one.>>",
+  "source_zip_sha256": "<<FILL: sha256 of source.zip; the same value as in seal step 7 and in CONTRACT.json>>",
+  "bundle_manifest_sha256": "<<FILL: sha256 of BUNDLE_MANIFEST.json inside source.zip; the same value as source.manifest_sha256 in CONTRACT.json>>",
+  "precheck": {
+   "prompt_list_sha256": "<<FILL: from seal step 7>>",
+   "padding_plan_sha256": "<<FILL: from seal step 7>>",
+   "selftest_json_sha256": "<<FILL: from seal step 7>>"
+  },
+  "precheck_receipt": {
+   "path": "PRECHECK_RECEIPT.json",
+   "sha256": "<<FILL: sha256 of supervisor_receipt.json of the pre-check job that passed. Copy that file, unchanged, out of the job's result archive into this folder under the name PRECHECK_RECEIPT.json. The launcher refuses a receipt of a rehearsal or of a test on made-up data, and a receipt whose five values differ from seal step 7.>>"
+  }
+ },
+ "utc": "<<FILL: when this record was completed>>",
+ "actual_billing": "PENDING_HOLD_RETAINED_UNTIL_CLOSEOUT"
+}

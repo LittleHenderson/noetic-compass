@@ -1,0 +1,12 @@
+{
+ "Q0007": {"http_status": 200, "content_json": {"answer": "C"}},
+ "Q0008": {"http_status": 200, "content_json": {"answer": "B"}},
+ "Q0009": {"http_status": 200, "content_json": {"answer": "B"}},
+ "Q0010": {"http_status": 200, "content_json": {"answer": "A"}},
+ "Q0011": {"http_status": 200, "content_json": {"answer": "D"}},
+ "G0007": {"http_status": 200, "content": "{\"answer\": \"D\", \"answer\": \"A\"}"},
+ "G0008": {"http_status": 200, "content": "MADE-UP reply with no JSON: I think A"},
+ "G0009": {"http_status": 200, "content_json": {"answer": "A"}},
+ "G0010": {"http_status": 200, "content_json": {"answer": "A"}},
+ "G0011": {"http_status": 200, "content_json": {"answer": "E"}}
+}

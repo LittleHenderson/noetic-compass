@@ -1,0 +1,95 @@
+{
+ "schema": "casalescence/optionb/split_fixed/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+  "utc": "2026-10-05T17:30:53Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/checks/anchor_check_practice.json",
+   "sha256": "4035c92ae0261ff33e6866e7e054048e91ebb59673665c84e942beafcdcba37d"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/checks/candidates_practice.json",
+   "sha256": "cb9f2cdd637ea308c074f98f778989260cd255a4d1e1e781658a31dfed8e0489"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/checks/form_check_practice.json",
+   "sha256": "50b3c427804b819712096856579d697a41d2bd9086499f8d4167d33acf9af934"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/checks/option_check_practice.json",
+   "sha256": "02c50ec9db290e3863d42948e653a248e913a06ccc8cdc8cd1d70eca1e93c17d"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/elig/eligibility.json",
+   "sha256": "e286e21015a57282ed37a4a41869d3232e4da30f3f85622b1968f23544315efe"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/questions/raw_questions_practice_p1.json",
+   "sha256": "9271434fdb7c209251de8e98874b3369c9d731ae0792970852accd41bdb0f108"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/questions/raw_questions_practice_p2.json",
+   "sha256": "4d9315a6f896cc374d9d2a3f026e3ec182d7ce26d3084c86876aafc7c87d62da"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/select/selection_practice.json",
+   "sha256": "591bd03ca055bd0326c3f78e02b85f7203b4798899e673080fd10bfde332173b"
+  },
+  {
+   "path": "optionb/dry/dev_package_a13_check/work/solve/key_check_practice.json",
+   "sha256": "1c66613823a09b7d50f836a64fdfd647db120d5ec20a2f25507d9ade88c6a9ff"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "practice_setting_count": 9,
+ "practice_settings": [
+  "dev practice yard 1",
+  "dev practice yard 2",
+  "dev practice yard 3",
+  "dev practice yard 4",
+  "dev practice yard 5",
+  "dev practice yard 6",
+  "dev practice yard 7",
+  "dev practice yard 8",
+  "dev reserve yard 1"
+ ],
+ "final_settings": [
+  "dev final yard"
+ ],
+ "history": [
+  {
+   "practice_setting_count": 8,
+   "practice_role_step_tasks": 19,
+   "practice_plain_fact_tasks": 10,
+   "target_met": false
+  },
+  {
+   "practice_setting_count": 9,
+   "practice_role_step_tasks": 23,
+   "practice_plain_fact_tasks": 12,
+   "target_met": true
+  }
+ ],
+ "reserve_target_met": true,
+ "floor_met": true,
+ "final_writer_passage_ids": [
+  "D013",
+  "D014",
+  "D015",
+  "D016"
+ ]
+}

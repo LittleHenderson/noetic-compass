@@ -1,0 +1,65 @@
+$ python -B tools/ob_write_ordinary_notes.py --set practice --step first --max-calls 400
+{
+ "program": "tools/ob_write_ordinary_notes.py",
+ "dry_fixture": false,
+ "status": "ALL_WRITTEN",
+ "set": "practice",
+ "step": "first",
+ "writer": "deepseek-chat",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "passages_that_carry_a_task": 27,
+ "notes_planned": 162,
+ "notes_with_version_1": 162,
+ "notes_with_version_2": 0,
+ "due_in_this_step_at_start": 162,
+ "still_open_in_this_step": 0,
+ "calls_this_run": 162,
+ "call_budget": 400,
+ "notes_written_this_run": 162,
+ "tokens_this_run_as_the_service_reported": {
+  "prompt_tokens": 20331,
+  "completion_tokens": 27694,
+  "total_tokens": 48025
+ },
+ "deepseek_tokens_in_the_four_call_logs": {
+  "input": 47169,
+  "output": 28118
+ },
+ "deepseek_token_limits": {
+  "input": 2430240,
+  "output": 1156520
+ },
+ "model_names_in_the_replies": [
+  "made-up-note-writer-reply-name"
+ ],
+ "empty_or_cut_off_replies_this_run": [],
+ "empty_or_cut_off_replies_in_the_log": {},
+ "words_written_and_words_asked_for_per_brief_and_length": {
+  "ORD-FREE 090": [
+   4198,
+   4095
+  ],
+  "ORD-FREE 100": [
+   4572,
+   4544
+  ],
+  "ORD-FREE 110": [
+   5055,
+   5019
+  ],
+  "ORD-INFORMED 090": [
+   4096,
+   4095
+  ],
+  "ORD-INFORMED 100": [
+   4545,
+   4544
+  ],
+  "ORD-INFORMED 110": [
+   5228,
+   5019
+  ]
+ },
+ "next": "Everything due in this step is written. Next: tools/ob_check_support.py."
+}
+[exit code 0]

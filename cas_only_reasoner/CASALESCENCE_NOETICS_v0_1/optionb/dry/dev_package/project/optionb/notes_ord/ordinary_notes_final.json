@@ -1,0 +1,474 @@
+{
+ "schema": "casalescence/optionb/ordinary_notes/v1",
+ "made_by": {
+  "program": "tools/ob_write_ordinary_notes.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "5dc37955c9bffb7435be4eaabaded9e9621865820a6ff8955efcb6cbc2e300f7",
+  "utc": "2026-10-05T18:09:36Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/SEAL_OPTIONB.jsonl",
+   "sha256": "6ac4701d59ff741cafabb95ba44ab4e52b366869f984a75280e4c465bda8126e"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/elig/eligibility.json",
+   "sha256": "0c336040253b2cb20a12966785be7b1223aa934c3e07c7d9f6aa43da53dda043"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/notes_ord/ordinary_calls_final.jsonl",
+   "sha256": "9d2e986f8f19a5eb0e72a603b3033e4e32c3a8bcdccaa5278c2880d112554414"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/notes_role/role_notes.json",
+   "sha256": "d5e503191bbcc3f4665b51d37893c56ccc5ba753f01ede7867313425fc5ed809"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/select/selection_final.json",
+   "sha256": "8c478f07fe1cfb92a4eeb8bed882166b69f6617141b1899297bd6ad159408d0b"
+  }
+ ],
+ "set": "final",
+ "writer": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "D013",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "8bb3105bc0a0abc64e65d9b0b9137bc3ac7167dcd53cd35842c941b86a42eec7",
+        "reply_sha256": "6f2e66f23fb914e239ca604cf7a42d2f6fae195ec13c6ef7ae2d2441b94edaf0",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "a7ab446990be9b9f464776139f2372aee0c406088160ac2f4920886907b86b78",
+        "reply_sha256": "7d87e8981dc4a93fc1c4412290ea86e42c8f5e6d967b0a1fbe2c375e81aa950e",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "4b2a63135f6f866dee8368033e993b7a0f128cb3eb284b3b3e606fa6a196d808",
+        "reply_sha256": "a7ff7bd0533734daded58cf8b8b869560835ed5c3da80930608fa9d976855029",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "94cafdd8a795c9ded941e6a5ec86f9f985f868f760889f72b69c60f0d956524d",
+        "reply_sha256": "1da007d0ec579e1dea8ff3dca282a2933c35246531400452c07e0f55ade323d5",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "1a2f39033c8b8d69e779ce74e288f24b8932a9d0862fcb43654cb1869f33b5a2",
+        "reply_sha256": "5d244416c602a7c56ee3fd8a2e82f344b69f35760fa3c09e4e3797e45de33edc",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "74f18ed979328190e19a9652c466927abf3d0db5547d3e3faf57daabc8ca645e",
+        "reply_sha256": "5aad3d7eb26e7a88b0ec097c0aac736f4addd2c5cf54b8bd3c2c007b6518f3d5",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D014",
+   "role_size_count": 129,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk.",
+        "words": 108,
+        "size_count": 121,
+        "prompt_sha256": "f5030f35d200628e79112feca836cbb0c50fffffaa77478ff7e84cf98c241bed",
+        "reply_sha256": "869732acb9db561dea5b6813d050c33d1bcb1c26bc4af7a8f86cf068a09d7df7",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning.",
+        "words": 115,
+        "size_count": 129,
+        "prompt_sha256": "acb8fc2ffa9bd63635cfdba750ee8ff5e7009c4530510220011db143d58df590",
+        "reply_sha256": "0bfeae41c9f6432a2b94baca839e32e472048083723c646bfaa9994734eed67a",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn.",
+        "words": 122,
+        "size_count": 137,
+        "prompt_sha256": "13c6b1198dc5cd701902e4e8ec35f01ca8d9ab4c5a88de3cf16243f345566603",
+        "reply_sha256": "d930946a0fbabe20dd09b768a173914954a908aca07ae2389de7b6aca9e18bcb",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 104,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door.",
+        "words": 100,
+        "size_count": 112,
+        "prompt_sha256": "46e311a879321fee6fd7fed50593e396796037e457566103e7d372daebc910e1",
+        "reply_sha256": "d618e5411bed9222040ef13b5b68983fc0d770e148ea3f56640319207be553de",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 116,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle.",
+        "words": 116,
+        "size_count": 130,
+        "prompt_sha256": "21cdf7fe8604735eb1ba1105586bf8b57bbc18f6672ce79e26e251fbebbaca1e",
+        "reply_sha256": "6122abe93e1a85abfebfe0697ad7cc9e35f4dc045d904663008a7e037e417d80",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 127,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle.",
+        "words": 124,
+        "size_count": 139,
+        "prompt_sha256": "2caa5ccd03b56cd40b03378cc9c71a31f9a07258ae5b1ab3e8f7c0ebe3c474b0",
+        "reply_sha256": "0e8dee8fb55dcbf075381497b518500cb1a86e8048439aba98cac31ee39c07c1",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D015",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "fa1a9c2e5552ae9cebe025dd496e2208fc4ae517071e49c5babe1c4a8e8f6fd9",
+        "reply_sha256": "75937a3d272a00bffb9f597b8826c62dbfcc6eca61ef75468e59e3ca3ce5d504",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "a397337ae7d833d69eb2eb1ef8ea096d159b442875d47bd4cdcfcdcd97a3c096",
+        "reply_sha256": "38328acab14ba1685b77716d765a70bdf5c80dbdc4f8ca9ae9be1a94c5fc9ff1",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "ccc83fdf09e09557424dce6313c70fb1b2bf74ade1859981f0c1308bffe2c918",
+        "reply_sha256": "7821951403b23ffaedaf8bc17092c76073bad587e6d8e46391062641b53b17a6",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "e191b694af7ca7b15503f41256a8fd3424a2162d573b79dd150b36e009119ded",
+        "reply_sha256": "58d8115b4bdb7c9292fe5c3f93aa6b0b716c0aa99e1f85cf6e3125781059513b",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "3c4915f07c08cae624992a2d7196018bde97f337956926fd2b3f1578397c650a",
+        "reply_sha256": "45511fa55dc1def9b8f4deb47d49cc53a61c0e07c605e9545f5cc3c4cad4d21e",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "c5dfee71f30ded400d10efa480d2829b8da838ab89ad3f89dc706f8928e3fee6",
+        "reply_sha256": "aa65cc01f57c74c304e31716208017b89df6e86d15af40e21656a5227218e313",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "passage_id": "D016",
+   "role_size_count": 304,
+   "passage_words": 53,
+   "passage_size_count": 59,
+   "notes": {
+    "ORD-INFORMED": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze.",
+        "words": 246,
+        "size_count": 276,
+        "prompt_sha256": "a6ca16936e3ecf69fc785ecaca7938e9266dc0380d95e425de9a381de282d9cf",
+        "reply_sha256": "b3f28e7b82e111d2e196f09f79789ed6b68e85ece0ddb7b4fd9ca37041a23b80",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn.",
+        "words": 270,
+        "size_count": 303,
+        "prompt_sha256": "f62b84fe55c2a939a0c7d1e5f6ed9228b21aa3e8a35d48d479ef17d0b7a5b3eb",
+        "reply_sha256": "f73dbd7628cbe1a4099e83a21ed5087b99d0cfe7b2d577fa137518ca25b1021a",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "320b46a8584382a6626d9738fd187fe9d0b637df41a172face281ce86fe4f591",
+        "reply_sha256": "d4aafb3e3444b7544c86ad8a21909c0d398b907e90c02ee75dbf927ef9b9329b",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    },
+    "ORD-FREE": {
+     "090": {
+      "target_words": 246,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze.",
+        "words": 239,
+        "size_count": 268,
+        "prompt_sha256": "497784db95d3aa5a30f5003b8280f77c2e68b4dafe82c8c265df9ae34bfcd301",
+        "reply_sha256": "6d8ac6ff5a09a87330a1c6cd0143065b7887c5ba22f3defb169c16e957280564",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "100": {
+      "target_words": 273,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze.",
+        "words": 272,
+        "size_count": 305,
+        "prompt_sha256": "fceff588ea90ab4f1cc44d4c18fa1cb346f2f687c69b061643c17d88cf5079d5",
+        "reply_sha256": "904c2076490ac14ce75bab53b2615422d409171ad0d5ae54d5cfc25b01f155c5",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     },
+     "110": {
+      "target_words": 300,
+      "current": 1,
+      "not_written": null,
+      "versions": [
+       {
+        "version": 1,
+        "text": "Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn.",
+        "words": 296,
+        "size_count": 332,
+        "prompt_sha256": "fc5781cb33ebc2d0e8c6b66bb2cca968a109993426a920da650fe7e830c1a718",
+        "reply_sha256": "b9847d68920fd973ef46b3dea20d1438ea111cdfbe250a7a62a5e5b7154f1958",
+        "utc": "2026-10-05T18:09:36Z"
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

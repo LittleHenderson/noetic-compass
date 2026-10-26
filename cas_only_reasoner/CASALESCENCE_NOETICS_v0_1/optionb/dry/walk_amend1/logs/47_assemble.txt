@@ -1,0 +1,270 @@
+$ python -B tools/ob_assemble.py 
+{
+ "program": "tools/ob_assemble.py",
+ "dry_fixture": false,
+ "seal": "checked: 6 seal lines, all sealed files unchanged",
+ "canon_lines_read_from_the_guide": 9,
+ "passage_text_check": "checked: every kept passage text equals the sealed passage text",
+ "final_counts": {
+  "final_role_step_tasks": 212,
+  "final_plain_fact_tasks": 108,
+  "final_passages_with_a_role_step_task": 108,
+  "practice_role_step_tasks": 53,
+  "practice_plain_fact_tasks": 27
+ },
+ "launch_floor": {
+  "final_role_step_tasks_min": 100,
+  "final_plain_fact_tasks_min": 100,
+  "practice_role_step_tasks_min": 36,
+  "practice_plain_fact_tasks_min": 20
+ },
+ "launch_floor_met": true,
+ "tier": "EXPLORATORY",
+ "planned_calls": {
+  "practice": 852,
+  "final_must_run": 2132,
+  "final_no_passage": 212,
+  "whole_job": 3196,
+  "cap": 5000
+ },
+ "planned_calls_under_the_cap": true,
+ "survival": {
+  "practice": [
+   {
+    "filter": "written for an open form",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "form check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "anchor check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "option check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "key check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "no-passage check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "selection",
+    "role_step": 53,
+    "plain_fact": 27
+   },
+   {
+    "filter": "length backstop",
+    "role_step": 53,
+    "plain_fact": 27
+   },
+   {
+    "filter": "support check",
+    "role_step": 53,
+    "plain_fact": 27
+   },
+   {
+    "filter": "answer-leak screen",
+    "role_step": 53,
+    "plain_fact": 27
+   }
+  ],
+  "final": [
+   {
+    "filter": "written for an open form",
+    "role_step": 330,
+    "plain_fact": 115
+   },
+   {
+    "filter": "form check",
+    "role_step": 330,
+    "plain_fact": 115
+   },
+   {
+    "filter": "anchor check",
+    "role_step": 324,
+    "plain_fact": 115
+   },
+   {
+    "filter": "option check",
+    "role_step": 322,
+    "plain_fact": 115
+   },
+   {
+    "filter": "key check",
+    "role_step": 321,
+    "plain_fact": 115
+   },
+   {
+    "filter": "no-passage check",
+    "role_step": 320,
+    "plain_fact": 115
+   },
+   {
+    "filter": "selection",
+    "role_step": 216,
+    "plain_fact": 110
+   },
+   {
+    "filter": "length backstop",
+    "role_step": 216,
+    "plain_fact": 110
+   },
+   {
+    "filter": "support check",
+    "role_step": 214,
+    "plain_fact": 109
+   },
+   {
+    "filter": "answer-leak screen",
+    "role_step": 212,
+    "plain_fact": 108
+   }
+  ]
+ },
+ "removal_log_entries": 196,
+ "status": "ASSEMBLED",
+ "right_letter_counts": {
+  "practice": {
+   "PULL-PUSH level 1": {
+    "A": 7,
+    "B": 7,
+    "C": 7,
+    "D": 6
+   },
+   "HABIT level 1": {
+    "A": 7,
+    "B": 6,
+    "C": 6,
+    "D": 7
+   },
+   "role_step family level 1": {
+    "A": 14,
+    "B": 13,
+    "C": 13,
+    "D": 13
+   },
+   "PULL-PUSH level 2": {
+    "A": 5,
+    "B": 5,
+    "C": 5,
+    "D": 4,
+    "E": 4,
+    "F": 4
+   },
+   "HABIT level 2": {
+    "A": 4,
+    "B": 4,
+    "C": 4,
+    "D": 5,
+    "E": 5,
+    "F": 4
+   },
+   "role_step family level 2": {
+    "A": 9,
+    "B": 9,
+    "C": 9,
+    "D": 9,
+    "E": 9,
+    "F": 8
+   },
+   "FACT level 1": {
+    "A": 7,
+    "B": 7,
+    "C": 7,
+    "D": 6
+   },
+   "plain_fact family level 1": {
+    "A": 7,
+    "B": 7,
+    "C": 7,
+    "D": 6
+   }
+  },
+  "final": {
+   "PULL-PUSH level 1": {
+    "A": 27,
+    "B": 27,
+    "C": 27,
+    "D": 26
+   },
+   "HABIT level 1": {
+    "A": 26,
+    "B": 26,
+    "C": 26,
+    "D": 27
+   },
+   "role_step family level 1": {
+    "A": 53,
+    "B": 53,
+    "C": 53,
+    "D": 53
+   },
+   "PULL-PUSH level 2": {
+    "A": 18,
+    "B": 18,
+    "C": 18,
+    "D": 18,
+    "E": 18,
+    "F": 17
+   },
+   "HABIT level 2": {
+    "A": 18,
+    "B": 18,
+    "C": 17,
+    "D": 17,
+    "E": 17,
+    "F": 18
+   },
+   "role_step family level 2": {
+    "A": 36,
+    "B": 36,
+    "C": 35,
+    "D": 35,
+    "E": 35,
+    "F": 35
+   },
+   "FACT level 1": {
+    "A": 27,
+    "B": 27,
+    "C": 27,
+    "D": 27
+   },
+   "plain_fact family level 1": {
+    "A": 27,
+    "B": 27,
+    "C": 27,
+    "D": 27
+   }
+  }
+ },
+ "answer_given_notes_in_the_practice_file": 106,
+ "files_written": [
+  "optionb/removal_log.json",
+  "optionb/prompts/prompt_parts_practice.json",
+  "optionb/keys_practice/keys_practice.json",
+  "optionb/keys_practice/task_meta_practice.json",
+  "optionb/prompts/prompt_parts_final.json",
+  "optionb/keys_final/keys_final.json",
+  "optionb/keys_final/task_meta_final.json",
+  "optionb/review/review_pack.json",
+  "optionb/assemble/planned_calls.json",
+  "optionb/assemble/manifest_step5.json"
+ ],
+ "manifest": "optionb/assemble/manifest_step5.json",
+ "manifest_sha256": "fa0ba0af5ef95c04661c0baa5771495bd85c124ad0a3fc6d01d81a7e8b0587eb",
+ "next": "Next: seal step 5 (tools/ob_seal.py) over the files named in the manifest. Then the owner checkpoint: the real counts and the detection table."
+}
+[exit code 0]

@@ -1,0 +1,918 @@
+{
+ "schema": "casalescence/optionb/candidates/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-07T00:14:15Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/elig/eligibility.json",
+   "sha256": "5cbec062ac5b855edd71cf893bda734c158b2e657ea6caba7102ff5a024d159c"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_practice_p1.json",
+   "sha256": "f5c0075b3023b05a99ee5296dbf7598a35436862071e349339f1064e9a44f464"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_practice_p2.json",
+   "sha256": "6b27b78f5d1d1e813ef8ce7db99e4ed0a68302aa2f107cc7f536e5b81038f951"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "candidates": [
+  {
+   "question_id": "D001.p1.GOES_FOR",
+   "passage_id": "D001",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Tamsin do first?",
+   "right": "reaching for the tar brush again",
+   "wrong": [
+    "reaching for the wire brush again",
+    "moving the lantern to the yard",
+    "hanging the rope on a hook",
+    "sweeping the shed floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the tar brush"
+   ]
+  },
+  {
+   "question_id": "D001.p1.KEEPS_AWAY",
+   "passage_id": "D001",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Tamsin leave to someone else?",
+   "right": "working on the bilge pump",
+   "wrong": [
+    "working with the tar brush",
+    "carrying the lantern outside",
+    "counting every rope there",
+    "locking up the boat shed",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the bilge pump"
+   ]
+  },
+  {
+   "question_id": "D001.p1.LONG_BREAK",
+   "passage_id": "D001",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.",
+   "question": "Tamsin spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the lantern before anything else",
+   "wrong": [
+    "opening the boat shed before dawn",
+    "finding the shelf by the door",
+    "seeing the rope beside it",
+    "knowing where the lantern stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D001.p1.FACT",
+   "passage_id": "D001",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.",
+   "question": "Where did the lantern stand?",
+   "right": "on the shelf",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D002.p1.GOES_FOR",
+   "passage_id": "D002",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Odran opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Odran do first?",
+   "right": "reaching for the bone needle again",
+   "wrong": [
+    "reaching for the steel needle again",
+    "moving the kettle to the yard",
+    "hanging the twine on a hook",
+    "sweeping the loft floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the bone needle"
+   ]
+  },
+  {
+   "question_id": "D002.p1.KEEPS_AWAY",
+   "passage_id": "D002",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Odran opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Odran leave to someone else?",
+   "right": "working on the rusty winch",
+   "wrong": [
+    "working with the bone needle",
+    "carrying the kettle outside",
+    "counting every twine there",
+    "locking up the net loft",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the rusty winch"
+   ]
+  },
+  {
+   "question_id": "D002.p1.LONG_BREAK",
+   "passage_id": "D002",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Odran opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.",
+   "question": "Odran spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the kettle before anything else",
+   "wrong": [
+    "opening the net loft before dawn",
+    "finding the stove by the door",
+    "seeing the twine beside it",
+    "knowing where the kettle stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D002.p1.FACT",
+   "passage_id": "D002",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Odran opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.",
+   "question": "Where did the kettle stand?",
+   "right": "on the stove",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D003.p1.GOES_FOR",
+   "passage_id": "D003",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Ilse opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Ilse do first?",
+   "right": "reaching for the oak scoop again",
+   "wrong": [
+    "reaching for the tin scoop again",
+    "moving the ledger to the yard",
+    "hanging the barley on a hook",
+    "sweeping the store floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the oak scoop"
+   ]
+  },
+  {
+   "question_id": "D003.p1.KEEPS_AWAY",
+   "passage_id": "D003",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Ilse opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Ilse leave to someone else?",
+   "right": "working on the damp cellar",
+   "wrong": [
+    "working with the oak scoop",
+    "carrying the ledger outside",
+    "counting every barley there",
+    "locking up the seed store",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the damp cellar"
+   ]
+  },
+  {
+   "question_id": "D003.p1.LONG_BREAK",
+   "passage_id": "D003",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Ilse opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.",
+   "question": "Ilse spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the ledger before anything else",
+   "wrong": [
+    "opening the seed store before dawn",
+    "finding the counter by the door",
+    "seeing the barley beside it",
+    "knowing where the ledger stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D003.p1.FACT",
+   "passage_id": "D003",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Ilse opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.",
+   "question": "Where did the ledger stand?",
+   "right": "on the counter",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D004.p1.GOES_FOR",
+   "passage_id": "D004",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Bram opened the nail forge before dawn. He always reached for the cross hammer before the ball hammer. The bucket stood on the floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Bram do first?",
+   "right": "reaching for the cross hammer again",
+   "wrong": [
+    "reaching for the ball hammer again",
+    "moving the bucket to the yard",
+    "hanging the tongs on a hook",
+    "sweeping the forge floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the cross hammer"
+   ]
+  },
+  {
+   "question_id": "D004.p1.KEEPS_AWAY",
+   "passage_id": "D004",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Bram opened the nail forge before dawn. He always reached for the cross hammer before the ball hammer. The bucket stood on the floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Bram leave to someone else?",
+   "right": "working on the leaky bellows",
+   "wrong": [
+    "working with the cross hammer",
+    "carrying the bucket outside",
+    "counting every tongs there",
+    "locking up the nail forge",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the leaky bellows"
+   ]
+  },
+  {
+   "question_id": "D004.p1.LONG_BREAK",
+   "passage_id": "D004",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Bram opened the nail forge before dawn. He always reached for the cross hammer before the ball hammer. The bucket stood on the floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.",
+   "question": "Bram spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the bucket before anything else",
+   "wrong": [
+    "opening the nail forge before dawn",
+    "finding the floor by the door",
+    "seeing the tongs beside it",
+    "knowing where the bucket stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D004.p1.FACT",
+   "passage_id": "D004",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Bram opened the nail forge before dawn. He always reached for the cross hammer before the ball hammer. The bucket stood on the floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.",
+   "question": "Where did the bucket stand?",
+   "right": "on the floor",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D005.p1.GOES_FOR",
+   "passage_id": "D005",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The rack stood on the wall by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Maren do first?",
+   "right": "reaching for the copper ladle again",
+   "wrong": [
+    "reaching for the iron ladle again",
+    "moving the rack to the yard",
+    "hanging the madder on a hook",
+    "sweeping the house floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the copper ladle"
+   ]
+  },
+  {
+   "question_id": "D005.p1.KEEPS_AWAY",
+   "passage_id": "D005",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The rack stood on the wall by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Maren leave to someone else?",
+   "right": "working on the lye vat",
+   "wrong": [
+    "working with the copper ladle",
+    "carrying the rack outside",
+    "counting every madder there",
+    "locking up the dye house",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the lye vat"
+   ]
+  },
+  {
+   "question_id": "D005.p1.LONG_BREAK",
+   "passage_id": "D005",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The rack stood on the wall by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.",
+   "question": "Maren spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the rack before anything else",
+   "wrong": [
+    "opening the dye house before dawn",
+    "finding the wall by the door",
+    "seeing the madder beside it",
+    "knowing where the rack stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D005.p1.FACT",
+   "passage_id": "D005",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The rack stood on the wall by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.",
+   "question": "Where did the rack stand?",
+   "right": "on the wall",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D006.p1.GOES_FOR",
+   "passage_id": "D006",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Corin opened the bell tower before dawn. He always reached for the hemp rope before the nylon rope. The oilcan stood on the ledge by the door. A pair of gloves lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the oilcan first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Corin do first?",
+   "right": "reaching for the hemp rope again",
+   "wrong": [
+    "reaching for the nylon rope again",
+    "moving the oilcan to the yard",
+    "hanging the gloves on a hook",
+    "sweeping the tower floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the hemp rope"
+   ]
+  },
+  {
+   "question_id": "D006.p1.FACT",
+   "passage_id": "D006",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Corin opened the bell tower before dawn. He always reached for the hemp rope before the nylon rope. The oilcan stood on the ledge by the door. A pair of gloves lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the oilcan first.",
+   "question": "Where did the oilcan stand?",
+   "right": "on the ledge",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D007.p1.GOES_FOR",
+   "passage_id": "D007",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Edda opened the apple loft before dawn. She always reached for the wicker tray before the wire tray. The stool stood on the landing by the door. A heap of straw lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Edda do first?",
+   "right": "reaching for the wicker tray again",
+   "wrong": [
+    "reaching for the wire tray again",
+    "moving the stool to the yard",
+    "hanging the straw on a hook",
+    "sweeping the loft floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the wicker tray"
+   ]
+  },
+  {
+   "question_id": "D007.p1.KEEPS_AWAY",
+   "passage_id": "D007",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Edda opened the apple loft before dawn. She always reached for the wicker tray before the wire tray. The stool stood on the landing by the door. A heap of straw lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Edda leave to someone else?",
+   "right": "working on the broken ladder",
+   "wrong": [
+    "working with the wicker tray",
+    "carrying the stool outside",
+    "counting every straw there",
+    "locking up the apple loft",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the broken ladder"
+   ]
+  },
+  {
+   "question_id": "D007.p1.LONG_BREAK",
+   "passage_id": "D007",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Edda opened the apple loft before dawn. She always reached for the wicker tray before the wire tray. The stool stood on the landing by the door. A heap of straw lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.",
+   "question": "Edda spends two years far from the apple loft. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the stool before anything else",
+   "wrong": [
+    "opening the apple loft before dawn",
+    "finding the landing by the door",
+    "seeing the straw beside it",
+    "knowing where the stool stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D007.p1.FACT",
+   "passage_id": "D007",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Edda opened the apple loft before dawn. She always reached for the wicker tray before the wire tray. The stool stood on the landing by the door. A heap of straw lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.",
+   "question": "Where did the stool stand?",
+   "right": "on the landing",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D008.p1.GOES_FOR",
+   "passage_id": "D008",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Joss opened the tile yard before dawn. He always reached for the wooden mould before the metal mould. The wheelbarrow stood on the path by the door. A stack of pallets lay beside it. He kept well away from the cracked kiln. Every morning for nine years he had dusted the wheelbarrow first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Joss do first?",
+   "right": "reaching for the wooden mould again",
+   "wrong": [
+    "reaching for the metal mould again",
+    "moving the wheelbarrow to the yard",
+    "hanging the pallets on a hook",
+    "sweeping the yard floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the wooden mould"
+   ]
+  },
+  {
+   "question_id": "D008.p1.KEEPS_AWAY",
+   "passage_id": "D008",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Joss opened the tile yard before dawn. He always reached for the wooden mould before the metal mould. The wheelbarrow stood on the path by the door. A stack of pallets lay beside it. He kept well away from the cracked kiln. Every morning for nine years he had dusted the wheelbarrow first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Joss leave to someone else?",
+   "right": "working on the cracked kiln",
+   "wrong": [
+    "working with the wooden mould",
+    "carrying the wheelbarrow outside",
+    "counting every pallets there",
+    "locking up the tile yard",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the cracked kiln"
+   ]
+  },
+  {
+   "question_id": "D008.p1.LONG_BREAK",
+   "passage_id": "D008",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Joss opened the tile yard before dawn. He always reached for the wooden mould before the metal mould. The wheelbarrow stood on the path by the door. A stack of pallets lay beside it. He kept well away from the cracked kiln. Every morning for nine years he had dusted the wheelbarrow first.",
+   "question": "Joss spends two years far from the tile yard. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the wheelbarrow before anything else",
+   "wrong": [
+    "opening the tile yard before dawn",
+    "finding the path by the door",
+    "seeing the pallets beside it",
+    "knowing where the wheelbarrow stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D008.p1.FACT",
+   "passage_id": "D008",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Joss opened the tile yard before dawn. He always reached for the wooden mould before the metal mould. The wheelbarrow stood on the path by the door. A stack of pallets lay beside it. He kept well away from the cracked kiln. Every morning for nine years he had dusted the wheelbarrow first.",
+   "question": "Where did the wheelbarrow stand?",
+   "right": "on the path",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D009.p1.GOES_FOR",
+   "passage_id": "D009",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Wren opened the map room before dawn. She always reached for the brass ruler before the plastic ruler. The globe stood on the table by the door. A roll of tape lay beside it. She kept well away from the ink press. Every morning for nine years she had dusted the globe first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Wren do first?",
+   "right": "reaching for the brass ruler again",
+   "wrong": [
+    "reaching for the plastic ruler again",
+    "moving the globe to the yard",
+    "hanging the tape on a hook",
+    "sweeping the room floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the brass ruler"
+   ]
+  },
+  {
+   "question_id": "D009.p1.KEEPS_AWAY",
+   "passage_id": "D009",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Wren opened the map room before dawn. She always reached for the brass ruler before the plastic ruler. The globe stood on the table by the door. A roll of tape lay beside it. She kept well away from the ink press. Every morning for nine years she had dusted the globe first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Wren leave to someone else?",
+   "right": "working on the ink press",
+   "wrong": [
+    "working with the brass ruler",
+    "carrying the globe outside",
+    "counting every tape there",
+    "locking up the map room",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the ink press"
+   ]
+  },
+  {
+   "question_id": "D009.p1.LONG_BREAK",
+   "passage_id": "D009",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Wren opened the map room before dawn. She always reached for the brass ruler before the plastic ruler. The globe stood on the table by the door. A roll of tape lay beside it. She kept well away from the ink press. Every morning for nine years she had dusted the globe first.",
+   "question": "Wren spends two years far from the map room. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the globe before anything else",
+   "wrong": [
+    "opening the map room before dawn",
+    "finding the table by the door",
+    "seeing the tape beside it",
+    "knowing where the globe stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D009.p1.FACT",
+   "passage_id": "D009",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Wren opened the map room before dawn. She always reached for the brass ruler before the plastic ruler. The globe stood on the table by the door. A roll of tape lay beside it. She kept well away from the ink press. Every morning for nine years she had dusted the globe first.",
+   "question": "Where did the globe stand?",
+   "right": "on the table",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D010.p1.GOES_FOR",
+   "passage_id": "D010",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Fenn opened the ice house before dawn. He always reached for the long saw before the short saw. The sledge stood on the step by the door. A bale of sawdust lay beside it. He kept well away from the steep ramp. Every morning for nine years he had dusted the sledge first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Fenn do first?",
+   "right": "reaching for the long saw again",
+   "wrong": [
+    "reaching for the short saw again",
+    "moving the sledge to the yard",
+    "hanging the sawdust on a hook",
+    "sweeping the house floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the long saw"
+   ]
+  },
+  {
+   "question_id": "D010.p1.KEEPS_AWAY",
+   "passage_id": "D010",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Fenn opened the ice house before dawn. He always reached for the long saw before the short saw. The sledge stood on the step by the door. A bale of sawdust lay beside it. He kept well away from the steep ramp. Every morning for nine years he had dusted the sledge first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Fenn leave to someone else?",
+   "right": "working on the steep ramp",
+   "wrong": [
+    "working with the long saw",
+    "carrying the sledge outside",
+    "counting every sawdust there",
+    "locking up the ice house",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the steep ramp"
+   ]
+  },
+  {
+   "question_id": "D010.p1.LONG_BREAK",
+   "passage_id": "D010",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Fenn opened the ice house before dawn. He always reached for the long saw before the short saw. The sledge stood on the step by the door. A bale of sawdust lay beside it. He kept well away from the steep ramp. Every morning for nine years he had dusted the sledge first.",
+   "question": "Fenn spends two years far from the ice house. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the sledge before anything else",
+   "wrong": [
+    "opening the ice house before dawn",
+    "finding the step by the door",
+    "seeing the sawdust beside it",
+    "knowing where the sledge stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D010.p1.FACT",
+   "passage_id": "D010",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Fenn opened the ice house before dawn. He always reached for the long saw before the short saw. The sledge stood on the step by the door. A bale of sawdust lay beside it. He kept well away from the steep ramp. Every morning for nine years he had dusted the sledge first.",
+   "question": "Where did the sledge stand?",
+   "right": "on the step",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D011.p1.GOES_FOR",
+   "passage_id": "D011",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Liesel do first?",
+   "right": "reaching for the small scale again",
+   "wrong": [
+    "reaching for the large scale again",
+    "moving the pan to the yard",
+    "hanging the chalk on a hook",
+    "sweeping the house floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the small scale"
+   ]
+  },
+  {
+   "question_id": "D011.p1.KEEPS_AWAY",
+   "passage_id": "D011",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Liesel leave to someone else?",
+   "right": "working on the cracked weight",
+   "wrong": [
+    "working with the small scale",
+    "carrying the pan outside",
+    "counting every chalk there",
+    "locking up the weigh house",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the cracked weight"
+   ]
+  },
+  {
+   "question_id": "D011.p1.LONG_BREAK",
+   "passage_id": "D011",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.",
+   "question": "Liesel spends two years far from the weigh house. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the pan before anything else",
+   "wrong": [
+    "opening the weigh house before dawn",
+    "finding the sill by the door",
+    "seeing the chalk beside it",
+    "knowing where the pan stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D011.p1.FACT",
+   "passage_id": "D011",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.",
+   "question": "Where did the pan stand?",
+   "right": "on the sill",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "D012.p1.GOES_FOR",
+   "passage_id": "D012",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Ansel do first?",
+   "right": "reaching for the curved needle again",
+   "wrong": [
+    "reaching for the straight needle again",
+    "moving the pot to the yard",
+    "hanging the canvas on a hook",
+    "sweeping the loft floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the curved needle"
+   ]
+  },
+  {
+   "question_id": "D012.p1.KEEPS_AWAY",
+   "passage_id": "D012",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Ansel leave to someone else?",
+   "right": "working on the blunt shears",
+   "wrong": [
+    "working with the curved needle",
+    "carrying the pot outside",
+    "counting every canvas there",
+    "locking up the sail loft",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the blunt shears"
+   ]
+  },
+  {
+   "question_id": "D012.p1.LONG_BREAK",
+   "passage_id": "D012",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.",
+   "question": "Ansel spends two years far from the sail loft. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the pot before anything else",
+   "wrong": [
+    "opening the sail loft before dawn",
+    "finding the trestle by the door",
+    "seeing the canvas beside it",
+    "knowing where the pot stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ]
+  },
+  {
+   "question_id": "D012.p1.FACT",
+   "passage_id": "D012",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.",
+   "question": "Where did the pot stand?",
+   "right": "on the trestle",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": []
+  }
+ ],
+ "counts": {
+  "role_step": 34,
+  "plain_fact": 12,
+  "spares_used": 0
+ }
+}

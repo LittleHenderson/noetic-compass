@@ -1,0 +1,1574 @@
+{
+ "schema": "casalescence/optionb/eligibility/v1",
+ "made_by": {
+  "program": "optionb/dry/build_dev_package.py [MADE-UP DATA FOR THE DEVELOPMENT TEST, NOT A RESULT]",
+  "sha256": "2827b184dcd6b953470e85cce2c72dddd4d5c10d44a6f4fb99e6ffb5a2814623",
+  "utc": "2026-10-05T18:09:33Z"
+ },
+ "inputs": [],
+ "fixture_note": "MADE-UP. 16 made-up passages and made-up label entries, written by optionb/dry/build_dev_package.py. Never a case.",
+ "practice_settings": [
+  "dev practice yard 1",
+  "dev practice yard 2",
+  "dev practice yard 3",
+  "dev practice yard 4",
+  "dev practice yard 5",
+  "dev practice yard 6",
+  "dev practice yard 7",
+  "dev practice yard 8"
+ ],
+ "reserve_settings_in_order": [
+  "dev reserve yard 1",
+  "dev reserve yard 2",
+  "dev reserve yard 3",
+  "dev reserve yard 4"
+ ],
+ "counts": {
+  "passages": 16
+ },
+ "counts_match_plan": false,
+ "passages": [
+  {
+   "id": "D001",
+   "kind": "K2",
+   "setting": "dev practice yard 1",
+   "text": "Tamsin opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Tamsin",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Tamsin",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the tar brush",
+       "mind": "Tamsin",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the tar brush",
+       "mind": "Tamsin",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the bilge pump",
+       "mind": "Tamsin",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the bilge pump",
+       "mind": "Tamsin",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Tamsin",
+       "relative_to": "dusted the lantern"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Tamsin",
+       "relative_to": "dusted the lantern"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D002",
+   "kind": "K2",
+   "setting": "dev practice yard 2",
+   "text": "Odran opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Odran",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Odran",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the bone needle",
+       "mind": "Odran",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the bone needle",
+       "mind": "Odran",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the rusty winch",
+       "mind": "Odran",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the rusty winch",
+       "mind": "Odran",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Odran",
+       "relative_to": "dusted the kettle"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Odran",
+       "relative_to": "dusted the kettle"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D003",
+   "kind": "K2",
+   "setting": "dev practice yard 3",
+   "text": "Ilse opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Ilse",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Ilse",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the oak scoop",
+       "mind": "Ilse",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the oak scoop",
+       "mind": "Ilse",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the damp cellar",
+       "mind": "Ilse",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the damp cellar",
+       "mind": "Ilse",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Ilse",
+       "relative_to": "dusted the ledger"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Ilse",
+       "relative_to": "dusted the ledger"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D004",
+   "kind": "K2",
+   "setting": "dev practice yard 4",
+   "text": "Bram opened the nail forge before dawn. He always reached for the cross hammer before the ball hammer. The bucket stood on the floor by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Bram",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Bram",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the cross hammer",
+       "mind": "Bram",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the cross hammer",
+       "mind": "Bram",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the leaky bellows",
+       "mind": "Bram",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the leaky bellows",
+       "mind": "Bram",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Bram",
+       "relative_to": "dusted the bucket"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Bram",
+       "relative_to": "dusted the bucket"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D005",
+   "kind": "K2",
+   "setting": "dev practice yard 5",
+   "text": "Maren opened the dye house before dawn. She always reached for the copper ladle before the iron ladle. The rack stood on the wall by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Maren",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Maren",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the copper ladle",
+       "mind": "Maren",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the copper ladle",
+       "mind": "Maren",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the lye vat",
+       "mind": "Maren",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the lye vat",
+       "mind": "Maren",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Maren",
+       "relative_to": "dusted the rack"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Maren",
+       "relative_to": "dusted the rack"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D006",
+   "kind": "K2",
+   "setting": "dev practice yard 6",
+   "text": "Corin opened the bell tower before dawn. He always reached for the hemp rope before the nylon rope. The oilcan stood on the ledge by the door. A pair of gloves lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the oilcan first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Corin",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Corin",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the hemp rope",
+       "mind": "Corin",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the hemp rope",
+       "mind": "Corin",
+       "relative_to": ""
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D007",
+   "kind": "K2",
+   "setting": "dev practice yard 7",
+   "text": "Edda opened the apple loft before dawn. She always reached for the wicker tray before the wire tray. The stool stood on the landing by the door. A heap of straw lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Edda",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Edda",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the wicker tray",
+       "mind": "Edda",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the wicker tray",
+       "mind": "Edda",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the broken ladder",
+       "mind": "Edda",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the broken ladder",
+       "mind": "Edda",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Edda",
+       "relative_to": "dusted the stool"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Edda",
+       "relative_to": "dusted the stool"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D008",
+   "kind": "K2",
+   "setting": "dev practice yard 8",
+   "text": "Joss opened the tile yard before dawn. He always reached for the wooden mould before the metal mould. The wheelbarrow stood on the path by the door. A stack of pallets lay beside it. He kept well away from the cracked kiln. Every morning for nine years he had dusted the wheelbarrow first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Joss",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Joss",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the wooden mould",
+       "mind": "Joss",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the wooden mould",
+       "mind": "Joss",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the cracked kiln",
+       "mind": "Joss",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the cracked kiln",
+       "mind": "Joss",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Joss",
+       "relative_to": "dusted the wheelbarrow"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Joss",
+       "relative_to": "dusted the wheelbarrow"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D009",
+   "kind": "K2",
+   "setting": "dev practice yard 1",
+   "text": "Wren opened the map room before dawn. She always reached for the brass ruler before the plastic ruler. The globe stood on the table by the door. A roll of tape lay beside it. She kept well away from the ink press. Every morning for nine years she had dusted the globe first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Wren",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Wren",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the brass ruler",
+       "mind": "Wren",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the brass ruler",
+       "mind": "Wren",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the ink press",
+       "mind": "Wren",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the ink press",
+       "mind": "Wren",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Wren",
+       "relative_to": "dusted the globe"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Wren",
+       "relative_to": "dusted the globe"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D010",
+   "kind": "K2",
+   "setting": "dev practice yard 2",
+   "text": "Fenn opened the ice house before dawn. He always reached for the long saw before the short saw. The sledge stood on the step by the door. A bale of sawdust lay beside it. He kept well away from the steep ramp. Every morning for nine years he had dusted the sledge first.",
+   "setting_role": "practice",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Fenn",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Fenn",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the long saw",
+       "mind": "Fenn",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the long saw",
+       "mind": "Fenn",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the steep ramp",
+       "mind": "Fenn",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the steep ramp",
+       "mind": "Fenn",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Fenn",
+       "relative_to": "dusted the sledge"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Fenn",
+       "relative_to": "dusted the sledge"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D011",
+   "kind": "K2",
+   "setting": "dev reserve yard 1",
+   "text": "Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.",
+   "setting_role": "reserve_1",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Liesel",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Liesel",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the small scale",
+       "mind": "Liesel",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the small scale",
+       "mind": "Liesel",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the cracked weight",
+       "mind": "Liesel",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the cracked weight",
+       "mind": "Liesel",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Liesel",
+       "relative_to": "dusted the pan"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Liesel",
+       "relative_to": "dusted the pan"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D012",
+   "kind": "K2",
+   "setting": "dev reserve yard 1",
+   "text": "Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.",
+   "setting_role": "reserve_1",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Ansel",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Ansel",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the curved needle",
+       "mind": "Ansel",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the curved needle",
+       "mind": "Ansel",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the blunt shears",
+       "mind": "Ansel",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the blunt shears",
+       "mind": "Ansel",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Ansel",
+       "relative_to": "dusted the pot"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Ansel",
+       "relative_to": "dusted the pot"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D013",
+   "kind": "K2",
+   "setting": "dev final yard",
+   "text": "Petra opened the clock shop before dawn. She always reached for the fine tweezers before the flat pliers. The loupe stood on the mat by the door. A tray of springs lay beside it. She kept well away from the sticky oil. Every morning for nine years she had dusted the loupe first.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Petra",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Petra",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the fine tweezers",
+       "mind": "Petra",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the fine tweezers",
+       "mind": "Petra",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the sticky oil",
+       "mind": "Petra",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the sticky oil",
+       "mind": "Petra",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Petra",
+       "relative_to": "dusted the loupe"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Petra",
+       "relative_to": "dusted the loupe"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D014",
+   "kind": "K2",
+   "setting": "dev final yard",
+   "text": "Hale opened the rope walk before dawn. He always reached for the long spindle before the short spindle. The board stood on the post by the door. A bucket of tallow lay beside it. He kept well away from the tar kettle. Every morning for nine years he had dusted the board first.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR"
+   ],
+   "open_types": [
+    "PULL-PUSH"
+   ],
+   "max_role_step_tasks": 1,
+   "leftover_on_type": {
+    "PULL-PUSH": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Hale",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Hale",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the long spindle",
+       "mind": "Hale",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the long spindle",
+       "mind": "Hale",
+       "relative_to": ""
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D015",
+   "kind": "K2",
+   "setting": "dev final yard",
+   "text": "Sunniva opened the salt store before dawn. She always reached for the birch rake before the iron rake. The barrow stood on the ramp by the door. A pile of crates lay beside it. She kept well away from the wet sacks. Every morning for nine years she had dusted the barrow first.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Sunniva",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Sunniva",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the birch rake",
+       "mind": "Sunniva",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the birch rake",
+       "mind": "Sunniva",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the wet sacks",
+       "mind": "Sunniva",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the wet sacks",
+       "mind": "Sunniva",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Sunniva",
+       "relative_to": "dusted the barrow"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Sunniva",
+       "relative_to": "dusted the barrow"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  },
+  {
+   "id": "D016",
+   "kind": "K2",
+   "setting": "dev final yard",
+   "text": "Garrick opened the cooper yard before dawn. He always reached for the curved adze before the straight adze. The mallet stood on the block by the door. A hoop of iron lay beside it. He kept well away from the split stave. Every morning for nine years he had dusted the mallet first.",
+   "setting_role": "final",
+   "writer_asks": true,
+   "excluded": false,
+   "barred": false,
+   "eligible": true,
+   "agreed": {
+    "^1": 1,
+    "^2": 1,
+    "^3": 1,
+    "^7": 1
+   },
+   "only_a": {},
+   "only_b": {},
+   "open_forms": [
+    "GOES_FOR",
+    "KEEPS_AWAY",
+    "LONG_BREAK",
+    "NEW_STARTER"
+   ],
+   "open_types": [
+    "PULL-PUSH",
+    "HABIT"
+   ],
+   "max_role_step_tasks": 2,
+   "leftover_on_type": {
+    "PULL-PUSH": false,
+    "HABIT": false
+   },
+   "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {
+      "noetic": "^1",
+      "a": {
+       "index": 0,
+       "words": "Garrick",
+       "mind": "",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 0,
+       "words": "Garrick",
+       "mind": "",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^2",
+      "a": {
+       "index": 1,
+       "words": "the curved adze",
+       "mind": "Garrick",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 1,
+       "words": "the curved adze",
+       "mind": "Garrick",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^3",
+      "a": {
+       "index": 2,
+       "words": "the split stave",
+       "mind": "Garrick",
+       "relative_to": ""
+      },
+      "b": {
+       "index": 2,
+       "words": "the split stave",
+       "mind": "Garrick",
+       "relative_to": ""
+      }
+     },
+     {
+      "noetic": "^7",
+      "a": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Garrick",
+       "relative_to": "dusted the mallet"
+      },
+      "b": {
+       "index": 3,
+       "words": "Every morning for nine years",
+       "mind": "Garrick",
+       "relative_to": "dusted the mallet"
+      }
+     }
+    ],
+    "only_a": [],
+    "only_b": []
+   }
+  }
+ ]
+}

@@ -1,0 +1,970 @@
+{
+ "schema": "casalescence/label-agreement-v2-fixture-expected/1",
+ "what_this_is": "The expected output of tools/verdict_v2.py in its four program checks. Part 1 holds the numbers the design spec gives for the old v1.2 labels. Part 2 holds counts worked out by hand for made-up passages, scored from raw label files: the scorer alone, no checker. Part 3 sends the same made-up label files through the checker first (tools/check_labels_v2.py), then scores the rows the checker wrote: the chain the real run uses. Part 4 shows hand-made seals, receipts and label rows to the gate of verdict mode and lists the refusals it must give. Nothing here is a verdict.",
+ "how_it_is_used": "verdict_v2.py walks every expected block. It prints one line for each value: what is expected here and what the program printed. A key that starts with `_` is a note for a reader and is skipped. E, shares and kappa are text with 3 decimals. A dropped share has 4 decimals. Part 1: `verdict_v2.py old --old-dir verdict --expected <this file>`. Parts 2, 3 and 4: `verdict_v2.py fixture --dir label_v2/fixture`. Seal condition S1 needs all four parts with 0 values that differ.",
+ "status_words": "Bars, hold table, outcome words and seal conditions are proposals until the owner signs them. In every program check the outcome column reads NOT_A_VERDICT. The key `rule_would_give` shows which word the arithmetic leads to, so that the arithmetic can be checked.",
+
+ "part_1_old_labels": {
+  "_source": "design_v2/labeling_final.json, spec fields measures_and_bars, extra_and_missing_reporting, matching_algorithm_precise and worked_examples. These are the numbers the design agent measured with its sketch on the 428 spent passages. They were copied here before the program ran.",
+  "_mode": "Old labels mode. One fixed mapping: label from old `words`; for ^4 and ^7 label from old `relative_to` and measure from old `words`; a ^6 with an empty whole goes to the clue row; an entry whose label cannot be found is left out. No support, one place per field, no checker, step 3b (the ^5 twin) not applied.",
+  "_not_in_the_spec": "The program also reports that 2 team B entries are left out because their label cannot be found. The spec gives no number for that. It is reported, not checked.",
+  "expected": {
+   "sentences_total": 1885,
+   "passages_total": 428,
+   "passages_analysed": 428,
+   "run_is_valid": true,
+   "teams": {"A": {"entries_sent": 1470, "dropped_total": 0}, "B": {"entries_sent": 1590, "dropped_total": 0}},
+   "rows": {
+    "^1": {"A": 403, "B": 430, "M": 387, "only_A": 16, "only_B": 43, "E": "0.868"},
+    "^2": {"A": 75, "B": 70, "M": 52, "only_A": 23, "only_B": 18, "E": "0.559"},
+    "^3": {"A": 48, "B": 52, "M": 39, "only_A": 9, "only_B": 13, "E": "0.639"},
+    "^4": {"A": 94, "B": 110, "M": 56, "only_A": 38, "only_B": 54, "E": "0.378"},
+    "^5": {"A": 119, "B": 153, "M": 84, "only_A": 35, "only_B": 69, "E": "0.447"},
+    "^6": {"A": 295, "B": 329, "M": 172, "only_A": 123, "only_B": 157, "E": "0.381"},
+    "^7": {"A": 66, "B": 96, "M": 37, "only_A": 29, "only_B": 59, "E": "0.296"},
+    "^8": {"A": 61, "B": 70, "M": 42, "only_A": 19, "only_B": 28, "E": "0.472"},
+    "^9": {"A": 61, "B": 72, "M": 43, "only_A": 18, "only_B": 29, "E": "0.478"},
+    "^9 reached by reasoning": {"A": 32, "B": 47, "M": 27, "E": "0.519"},
+    "uncertain ^8": {"A": 73, "B": 70, "M": 46, "E": "0.474"},
+    "uncertain ^9": {"A": 60, "B": 71, "M": 42, "E": "0.472"},
+    "^6 clue": {"A": 18, "B": 0}
+   },
+   "bar": {
+    "^1": {"cases": 373, "absences": 55, "fully_matched_cases": 314, "cases_with_at_least_one_matched_pair": 368, "share_A": "0.960", "share_B": "0.900", "kappa": "0.950", "outcome": "NOT_A_VERDICT", "rule_would_give": "LABELABLE_UNDER_THIS_METHOD"},
+    "^2": {"cases": 65, "absences": 363, "fully_matched_cases": 40, "cases_with_at_least_one_matched_pair": 48, "share_A": "0.693", "share_B": "0.743", "kappa": "0.943", "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    "^3": {"cases": 56, "absences": 372, "fully_matched_cases": 38, "cases_with_at_least_one_matched_pair": 38, "share_A": "0.812", "share_B": "0.750", "kappa": "0.839", "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    "^4": {"cases": 95, "absences": 333, "fully_matched_cases": 29, "cases_with_at_least_one_matched_pair": 46, "share_A": "0.596", "share_B": "0.509", "kappa": "0.677", "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    "^5": {"cases": 129, "absences": 299, "fully_matched_cases": 63, "cases_with_at_least_one_matched_pair": 81, "share_A": "0.706", "share_B": "0.549", "kappa": "0.890", "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    "^6": {"cases": 98, "absences": 330, "fully_matched_cases": 31, "cases_with_at_least_one_matched_pair": 52, "share_A": "0.583", "share_B": "0.523", "kappa": "0.842", "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    "^7": {"cases": 79, "absences": 349, "fully_matched_cases": 22, "cases_with_at_least_one_matched_pair": 36, "share_A": "0.561", "share_B": "0.385", "kappa": "0.767", "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    "^8": {"cases": 64, "absences": 364, "fully_matched_cases": 37, "cases_with_at_least_one_matched_pair": 41, "share_A": "0.689", "share_B": "0.600", "kappa": "0.953", "inside": 89, "outside": 99, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    "^9": {"cases": 64, "absences": 364, "fully_matched_cases": 37, "cases_with_at_least_one_matched_pair": 42, "share_A": "0.705", "share_B": "0.597", "kappa": "0.953", "inside": 90, "outside": 143, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_LABELABLE_UNDER_THIS_METHOD"}
+   },
+   "reasons": {
+    "^1": {"A": "OTHER_THING 16", "B": "STATUS 1; OTHER_THING 38; ABSENT 4"},
+    "^2": {"A": "START 4; OTHER_LABEL 6; OTHER_NOETIC 6; OTHER_THING 5; ABSENT 2", "B": "STATUS 1; START 4; OTHER_LABEL 6; OTHER_NOETIC 1; OTHER_THING 6"},
+    "^3": {"A": "OTHER_LABEL 3; OTHER_NOETIC 1; OTHER_THING 1; ABSENT 4", "B": "OTHER_LABEL 3; OTHER_NOETIC 7; OTHER_THING 1; ABSENT 2"},
+    "^4": {"A": "FIELD 3; START 3; OTHER_LABEL 5; OTHER_NOETIC 4; OTHER_THING 12; ABSENT 11", "B": "STATUS 8; FIELD 3; START 3; OTHER_LABEL 7; OTHER_NOETIC 3; OTHER_THING 12; ABSENT 18"},
+    "^5": {"A": "START 14; OTHER_LABEL 10; OTHER_NOETIC 4; OTHER_THING 6; ABSENT 1", "B": "STATUS 5; START 14; OTHER_LABEL 10; OTHER_NOETIC 10; OTHER_THING 21; ABSENT 9"},
+    "^6": {"A": "FIELD 70; START 3; OTHER_LABEL 12; OTHER_THING 25; ABSENT 13", "B": "STATUS 25; FIELD 70; START 3; OTHER_LABEL 6; OTHER_THING 22; ABSENT 31"},
+    "^7": {"A": "FIELD 1; START 3; OTHER_LABEL 12; OTHER_NOETIC 7; OTHER_THING 3; ABSENT 3", "B": "STATUS 1; FIELD 1; START 3; OTHER_LABEL 12; OTHER_NOETIC 12; OTHER_THING 15; ABSENT 15"},
+    "^8": {"A": "FIELD 3; START 2; OTHER_LABEL 13; OTHER_THING 1", "B": "STATUS 1; FIELD 3; START 2; OTHER_LABEL 13; OTHER_NOETIC 2; OTHER_THING 3; ABSENT 4"},
+    "^9": {"A": "FIELD 14; START 1; OTHER_LABEL 1; OTHER_THING 2", "B": "STATUS 1; FIELD 14; START 1; OTHER_LABEL 1; OTHER_NOETIC 1; OTHER_THING 8; ABSENT 3"}
+   },
+   "other_noetic": {
+    "^2": {"A": "^4 6"},
+    "^3": {"B": "^4 7"}
+   },
+   "ceiling": {
+    "^1": {"ceiling": "0.868"},
+    "^2": {"ceiling": "0.629", "ceiling_other_label_everywhere": "0.747"},
+    "^3": {"ceiling": "0.639", "ceiling_other_label_everywhere": "0.724"},
+    "^4": {"ceiling": "0.437", "ceiling_other_label_everywhere": "0.489"},
+    "^5": {"ceiling": "0.563", "ceiling_other_label_everywhere": "0.659"},
+    "^6": {"ceiling": "0.673", "ceiling_other_label_everywhere": "0.673"},
+    "^7": {"ceiling": "0.339", "ceiling_other_label_everywhere": "0.486"},
+    "^8": {"ceiling": "0.845", "ceiling_other_label_everywhere": "0.845"},
+    "^9": {"ceiling": "0.797", "ceiling_other_label_everywhere": "0.797"}
+   },
+   "table_4": {
+    "^2": {"tolerance_0": {"E": "0.526"}, "no_start_rule": {"E": "0.629"}},
+    "^5": {"tolerance_0": {"E": "0.388"}, "no_start_rule": {"E": "0.563"}},
+    "^6": {"tolerance_0": {"E": "0.308"}, "no_start_rule": {"E": "0.402"}},
+    "^7": {"tolerance_0": {"E": "0.227"}, "no_start_rule": {"E": "0.328"}},
+    "^8": {"tolerance_0": {"E": "0.456"}, "no_start_rule": {"E": "0.541"}},
+    "^9": {"tolerance_0": {"E": "0.430"}, "no_start_rule": {"E": "0.529"}}
+   },
+   "per_passage_counts": {
+    "V014": {"_why": "'Its lanolin scent' against 'Its lanolin scent filled the small shop': same start, overlap. Matched.", "rows": {"^8": {"M": 1}, "^9": {"M": 1}}},
+    "V388": {"_why": "The owner's 'girl' case. The two old quotes start 2 words apart. Matched.", "rows": {"^8": {"M": 1}, "^9": {"M": 1}}},
+    "V237": {"_why": "The owner's 'pallets' case. ^7 starts 1 word apart, same measure: matched. ^5: team A none clear, team B two.", "rows": {"^7": {"M": 1}, "^5": {"A": 0, "B": 2, "M": 0}}, "reasons": {"^5": ["B:OTHER_NOETIC", "B:STATUS"]}},
+    "V099": {"_why": "'shriveled, diseased berries' against 'some shriveled, diseased berries hung limp and unappealing'. Matched.", "rows": {"^3": {"M": 1}}},
+    "V018": {"_why": "'The dry, dusty scent of ancient paper' against 'This smell'. No overlap. Nothing is rescued.", "rows": {"^8": {"A": 1, "B": 1, "M": 0}, "^9": {"A": 1, "B": 1, "M": 0}}, "reasons": {"^8": ["A:OTHER_LABEL", "B:OTHER_LABEL"], "^9": ["A:FIELD", "B:FIELD"]}},
+    "V200": {"_why": "'the heavy excavator' against 'its mechanical might'. A real difference the test must not hide.", "rows": {"^2": {"A": 1, "B": 1, "M": 0}}, "reasons": {"^2": ["A:OTHER_LABEL", "B:OTHER_LABEL"]}},
+    "V338": {"_why": "Extras in one passage. ^2: one pair and one extra for team B. ^4: one entry against two, none matched.", "rows": {"^2": {"A": 1, "B": 2, "M": 1}, "^4": {"A": 1, "B": 2, "M": 0}}, "reasons": {"^2": ["B:OTHER_THING"], "^4": ["A:FIELD", "B:FIELD", "B:OTHER_LABEL"]}},
+    "V238": {"_why": "Four parts at the same places; the wholes 'the playback' and 'The recording' differ. All FIELD.", "rows": {"^6": {"A": 4, "B": 4, "M": 0}}, "reasons": {"^6": ["A:FIELD", "A:FIELD", "A:FIELD", "A:FIELD", "B:FIELD", "B:FIELD", "B:FIELD", "B:FIELD"]}},
+    "V041": {"_why": "'shaped every gesture' against 'Years of daily milking' for ^5: same evidence, another label. ^7 matched.", "rows": {"^5": {"A": 1, "B": 1, "M": 0}, "^7": {"M": 1}}, "reasons": {"^5": ["A:OTHER_LABEL", "B:OTHER_LABEL"]}}
+   }
+  }
+ },
+
+ "part_2_fixture": {
+  "_note": "Five runs on three sets of made-up passages. `spec_six` is the six-passage fixture the design spec writes out (F1 to F6), with the spec's own expected counts. `branches` is 15 more made-up passages (G01 to G15) so that every branch of the scoring is hit at least once. `backstop` is one passage (H01) with 11 broken entries, one for each way the program itself must drop an entry. The two `ruling` runs score the first two sets again under an owner-ruling file. Every count below was worked out by hand before the program ran.",
+  "_note_this_part_is_the_backstop_test": "Every set in part 2 is scored from RAW label files. No checker is run. So every drop in this part is made by the scorer's own backstop, and a repeated entry is taken out by the scorer as a duplicate. In the real run the checker comes first: it marks the drops, and it fails a repeated entry (C8), which then stays in its row as a dropped entry. Part 3 tests that chain. Verdict mode and practice mode never score a raw file.",
+  "_note_added_after_the_review_round": "Three runs were added after the one review round of the build. `forms` is six passages (J01 to J06). In each one team B writes a form that guide section B2 forbids. `spec_six_bar_row_5_with_twins` scores the six passages with the constant FIVE_BAR_ROW switched to 'with_twins' (sheet item 6). `spec_six_ruling_all_codes_open` scores them under the hold table with every code open. The counts of these three runs were worked out by hand first, and then compared with the program.",
+  "outcome_rule_edges": {
+   "_note": "No hand-made fixture can reach 50 cases and 50 absences, so every fixture row gives NOT_ENOUGH_CASES. These lines ask the outcome-word rule directly, at each edge of the order the plan gives: 1 too few cases or absences; 2 a bar missed; 3 bars met but more entries outside the bar row than inside; 4 otherwise labelable. The bars used are the proposed ones: E at least 0.80, kappa at least 0.60, 50 cases, 50 absences. If the owner signs other numbers, these lines change with the constants block.",
+   "edges": [
+    {"_why": "One case short of 50. The size rule comes first.", "cases": 49, "absences": 400, "E": "0.95", "kappa": "0.95", "inside": 100, "outside": 0, "word": "NOT_ENOUGH_CASES"},
+    {"_why": "One absence short of 50.", "cases": 50, "absences": 49, "E": "0.95", "kappa": "0.95", "inside": 100, "outside": 0, "word": "NOT_ENOUGH_CASES"},
+    {"_why": "Too few cases and both bars missed: still the size word, because it is first in the order.", "cases": 10, "absences": 400, "E": "0.10", "kappa": "0.10", "inside": 20, "outside": 0, "word": "NOT_ENOUGH_CASES"},
+    {"_why": "Exactly 50 and 50 is enough. E just under 0.80: a failed bar is a failure.", "cases": 50, "absences": 50, "E": "0.799", "kappa": "0.95", "inside": 100, "outside": 0, "word": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    {"_why": "E meets its bar, kappa is just under 0.60: a failure.", "cases": 50, "absences": 50, "E": "0.80", "kappa": "0.599", "inside": 100, "outside": 0, "word": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    {"_why": "Both bars met exactly. As many entries outside the bar row as inside is not 'more outside'.", "cases": 50, "absences": 50, "E": "0.80", "kappa": "0.60", "inside": 100, "outside": 100, "word": "LABELABLE_UNDER_THIS_METHOD"},
+    {"_why": "Both bars met, one more entry outside the bar row than inside: the pass is withheld.", "cases": 50, "absences": 50, "E": "0.80", "kappa": "0.60", "inside": 100, "outside": 101, "word": "NO_VERDICT_WAITING_ON_OWNER"},
+    {"_why": "A bar is missed and most entries sit outside the bar row. The withheld-pass rule can only take a pass away. A failure stays a failure.", "cases": 50, "absences": 50, "E": "0.79", "kappa": "0.95", "inside": 100, "outside": 500, "word": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    {"_why": "E cannot be computed. A bar that is not shown to be met is not met.", "cases": 50, "absences": 50, "E": "n/a", "kappa": "0.95", "inside": 0, "outside": 0, "word": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    {"_why": "Kappa cannot be computed. The same.", "cases": 50, "absences": 50, "E": "0.90", "kappa": "n/a", "inside": 100, "outside": 0, "word": "NOT_LABELABLE_UNDER_THIS_METHOD"},
+    {"_why": "A clean pass: both bars well met, nothing outside the bar row.", "cases": 300, "absences": 400, "E": "0.93", "kappa": "0.88", "inside": 410, "outside": 0, "word": "LABELABLE_UNDER_THIS_METHOD"}
+   ]
+  },
+
+  "sets": {
+
+   "spec_six": {
+    "files": {"passages": "spec_six/passages.json", "labels_team_a": "spec_six/labels_team_a.json", "labels_team_b": "spec_six/labels_team_b.json"},
+    "_cases": [
+     "F1: 'Mr.' must not end a sentence. The passage has curly quotes and a curly apostrophe; the labels use straight ones. The two teams copied two different sentences as support for the Mind. Team B's ^8 label runs 3 words longer.",
+     "F2: team B's support holds the string 'the bell' twice. One trigger brings two things, so two pairs with one ^8 label.",
+     "F3: team A holds the ^2 under H2-COMFORT; team B writes it clear. A miss in both rows.",
+     "F4: team B's ^7 label is not in the passage. It is dropped and stays in row ^7.",
+     "F5: two noticed things, one thing known. Team A writes two uncertain pairs, team B one.",
+     "F6: no person. Both teams write none_of_these."
+    ],
+    "_what_a_wrong_program_prints": "From the spec. If the Mind is located through the ^1 support: ^1 matched 4, and ^8 and ^9 matched 2. If a label is located only at its first place in the support: ^8 and ^9 matched 1. If 'Mr.' ends a sentence: 16 sentences. If a dropped entry vanishes: row ^7 reads 1 / 0.",
+    "expected": {
+     "sentences_total": 14,
+     "sentences_per_passage": {"F1": 3, "F2": 2, "F3": 3, "F4": 2, "F5": 2, "F6": 2},
+     "passages_total": 6,
+     "passages_analysed": 6,
+     "passages_not_labeled_by_both_teams": [],
+     "run_is_valid": false,
+     "validity_rules_broken": {"_why": "Team B: 1 of 16 entries dropped is 0.0625, over 0.05. Every passage was labeled by both teams.", "too_many_passages_not_labeled": false, "team_A_too_many_entries_dropped": false, "team_B_too_many_entries_dropped": true},
+     "rescored_under_an_owner_ruling": false,
+     "teams": {
+      "A": {"entries_sent": 18, "dropped_kept_in_a_row": 0, "dropped_no_row": 0, "dropped_total": 0, "dropped_share": "0.0000", "dropped_by_this_program_not_marked_by_the_checker": 0, "duplicates_removed": 0, "twins_written_by_the_labeler_removed": 0, "program_made_twins": 1, "held_entries_ruled_out": 0, "drops_by_check": "none", "passages_not_labeled": []},
+      "B": {"_why": "The fixture file does not mark the F4 entry as dropped. The program cannot place its label, so it drops the entry itself and names check C3.", "entries_sent": 16, "dropped_kept_in_a_row": 1, "dropped_no_row": 0, "dropped_total": 1, "dropped_share": "0.0625", "dropped_by_this_program_not_marked_by_the_checker": 1, "duplicates_removed": 0, "twins_written_by_the_labeler_removed": 0, "program_made_twins": 0, "held_entries_ruled_out": 0, "drops_by_check": "C3 1", "drops_by_noetic": "^7 1", "passages_not_labeled": []}
+     },
+     "rows": {
+      "^1": {"A": 5, "B": 5, "M": 5, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^2": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "^3": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^4": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^6": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^7": {"A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"},
+      "^8": {"A": 3, "B": 3, "M": 3, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^9": {"A": 3, "B": 3, "M": 3, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^9 reached by reasoning": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^1": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^2": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^3": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^4": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^6": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^7": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^8": {"A": 2, "B": 1, "M": 1, "only_A": 1, "only_B": 0, "E": "0.500"},
+      "uncertain ^9": {"A": 2, "B": 1, "M": 1, "only_A": 1, "only_B": 0, "E": "0.500"},
+      "^6 clue": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^1": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^2": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^3": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^4": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^6": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^7": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^8": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^9": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^5 with twins": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "held ^2": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "held ^3": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "held ^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "held ^7": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "held ^8": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "held ^9": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"}
+     },
+     "bar": {
+      "^1": {"cases": 5, "absences": 1, "fully_matched_cases": 5, "cases_with_a_match_and_leftovers": 0, "cases_with_no_match": 0, "share_A": "1.000", "share_B": "1.000", "kappa": "1.000", "inside": 5, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^2": {"_why": "Team A's entry is held, so only team B is in the bar row. Kappa: agreement 5 of 6, chance 5 of 6, so 0.", "cases": 1, "absences": 5, "fully_matched_cases": 0, "cases_with_a_match_and_leftovers": 0, "cases_with_no_match": 1, "share_A": "n/a", "share_B": "0.000", "kappa": "0.000", "inside": 1, "outside": 1, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^3": {"cases": 0, "absences": 6, "kappa": "n/a", "inside": 0, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^4": {"cases": 1, "absences": 5, "fully_matched_cases": 1, "kappa": "1.000", "inside": 1, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^5": {"cases": 0, "absences": 6, "kappa": "n/a", "inside": 0, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^6": {"cases": 0, "absences": 6, "kappa": "n/a", "inside": 0, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^7": {"_why": "The dropped entry counts in team B's entries, in the cases and in presence. So both teams are present and kappa is 1.", "cases": 1, "absences": 5, "fully_matched_cases": 0, "cases_with_no_match": 1, "share_A": "0.000", "share_B": "0.000", "kappa": "1.000", "dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 1, "inside": 2, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^8": {"_why": "Outside the bar row: the uncertain ^8 row has 2 + 1 - 1 = 2 entries.", "cases": 2, "absences": 4, "fully_matched_cases": 2, "kappa": "1.000", "inside": 3, "outside": 2, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^9": {"cases": 2, "absences": 4, "fully_matched_cases": 2, "kappa": "1.000", "inside": 3, "outside": 2, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"}
+     },
+     "reasons": {
+      "^1": {"A": "none", "B": "none"},
+      "^2": {"A": "none", "B": "STATUS 1"},
+      "^3": {"A": "none", "B": "none"},
+      "^4": {"A": "none", "B": "none"},
+      "^5": {"A": "none", "B": "none"},
+      "^6": {"A": "none", "B": "none"},
+      "^7": {"A": "FACES_A_DROP 1", "B": "DROPPED 1"},
+      "^8": {"A": "none", "B": "none"},
+      "^9": {"A": "none", "B": "none"}
+     },
+     "ceiling": {
+      "^1": {"pointing_pairs": 0, "ceiling": "1.000"},
+      "^2": {"pointing_pairs": 0, "ceiling": "0.000"},
+      "^3": {"pointing_pairs": 0, "ceiling": "n/a"},
+      "^7": {"pointing_pairs": 0, "ceiling": "0.000", "pairs_other_label_everywhere": 0},
+      "^8": {"pointing_pairs": 0, "ceiling": "1.000"},
+      "^9": {"pointing_pairs": 0, "ceiling": "1.000"}
+     },
+     "no_bar": {
+      "held ^2": {"unmatched_A_that_B_wrote_as_clear": 1, "unmatched_B_that_A_wrote_as_clear": 0, "matched_pairs_with_the_same_code": 0, "matched_pairs_with_different_codes": 0},
+      "uncertain ^8": {"unmatched_A_that_B_wrote_as_clear": 0, "unmatched_B_that_A_wrote_as_clear": 0},
+      "uncertain ^9": {"unmatched_A_that_B_wrote_as_clear": 0, "unmatched_B_that_A_wrote_as_clear": 0}
+     },
+     "held_by_code": {
+      "held ^2 H2-COMFORT": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "A_paired_with_another_code": 0, "B_paired_with_another_code": 0}
+     },
+     "table_4": {
+      "^1": {"pooled_clear_and_held": {"A": 5, "B": 5, "M": 5, "E": "1.000"}, "tolerance_0": {"M": 5}, "no_start_rule": {"M": 5}, "v12_word_test": {"M": 5}, "exact_same_span": {"M": 5}},
+      "^2": {"_why": "Pooled: team A's held entry and team B's clear entry are the same reading once certainty is ignored. Holding hides no disagreement here.", "pooled_clear_and_held": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"}},
+      "^4": {"pooled_clear_and_held": {"A": 1, "B": 1, "M": 1, "E": "1.000"}, "tolerance_0": {"M": 1}, "exact_same_span": {"M": 1}, "without_no_impression_measures": {"A": 1, "B": 1, "M": 1}},
+      "^7": {"pooled_clear_and_held": {"A": 1, "B": 1, "M": 0, "E": "0.000"}},
+      "^8": {"_why": "Exact same span: in F1 team B's label is 3 words longer, so that pair is lost. 3 / 3 / 2 gives 2 of 4.", "tolerance_0": {"A": 3, "B": 3, "M": 3, "E": "1.000"}, "no_start_rule": {"M": 3}, "v12_word_test": {"M": 3}, "exact_same_span": {"A": 3, "B": 3, "M": 2, "E": "0.500"}},
+      "^9": {"tolerance_0": {"M": 3}, "no_start_rule": {"M": 3}, "v12_word_test": {"M": 3}, "exact_same_span": {"M": 3}}
+     },
+     "table_5": {
+      "bystander_minds": {"A": 0, "B": 0},
+      "labels_with_more_than_one_candidate_place": {"A": {}, "B": {"^8": 2}},
+      "no_fuller_name_uses": {"A": 0, "B": 0},
+      "matched_pairs_by_label_start_gap": {
+       "^1": {"0 words": 5, "1 word": 0, "2 words": 0},
+       "^4": {"0 words": 1, "1 word": 0, "2 words": 0},
+       "^8": {"0 words": 3, "1 word": 0, "2 words": 0},
+       "^9": {"0 words": 3, "1 word": 0, "2 words": 0}
+      }
+     },
+     "none_of_these": {"team_A": 1, "team_B": 1, "both": 1, "agree": 6, "passages": 6},
+     "seal_conditions": {"S2": "FAIL", "S3": "PASS", "S3_reports": 0, "S4": "NOT_EVALUATED", "S5": "NOT_EVALUATED", "S5_parts": 0, "S5_whole": 0, "S5_share": "n/a"},
+     "per_passage": {
+      "F1": {"_why": "Both Minds sit at the first 'Mr. Okoro' in the passage, whatever sentence was copied. The two ^8 labels start at the same word and overlap. The ^9 entries point back at those two labels, which are the same thing.", "rows": "^1 1/1/1; ^8 1/1/1; ^9 1/1/1", "reasons": "none"},
+      "F2": {"_why": "Team B's support holds 'the bell' twice; its second place is the one team A has. Two ^8 entries with one label are not duplicates, because each points at another ^9.", "rows": "^1 1/1/1; ^8 2/2/2; ^9 2/2/2", "reasons": "none"},
+      "F3": {"_why": "Held against clear: team A's entry is in row 'held ^2', team B's in row ^2. Team B's reason is STATUS. The ^4 entries match.", "rows": "^1 1/1/1; ^2 0/1/0; ^4 1/1/1; held ^2 1/0/0", "reasons": "^2 B:STATUS"},
+      "F4": {"_why": "Team B's label 'checked the mooring ropes' is not in the passage: dropped (C3), kept in row ^7. Team A's entry faces only a drop. Only team A's clear ^7 gets a program-made ^5 twin.", "rows": "^1 1/1/1; ^7 1/1/0; ^5 with twins 1/0/0", "reasons": "^7 A:FACES_A_DROP B:DROPPED"},
+      "F5": {"_why": "Team A wrote the ^9 twice, once per noticed thing. Team B wrote one pair. One uncertain pair matches; team A's second pair is left over.", "rows": "^1 1/1/1; uncertain ^8 2/1/1; uncertain ^9 2/1/1", "reasons": "none"},
+      "F6": {"_why": "Empty on both sides. No row, no case.", "rows": "none", "reasons": "none"}
+     }
+    }
+   },
+
+   "branches": {
+    "files": {"passages": "branches/passages.json", "labels_team_a": "branches/labels_team_a.json", "labels_team_b": "branches/labels_team_b.json", "kinds": "branches/kinds.json"},
+    "_cases": [
+     "a matched pair: G01 ^2, G09 ^3, and every ^1",
+     "a label that starts a few words apart, inside the tolerance: G01 ^2 (1 word), G02 ^5 and G15 ^5 (2 words)",
+     "a label that starts outside the tolerance: G01 ^3 (3 words): reason START",
+     "two entries for one thing: G02 ^5 (team B writes two entries that both fit team A's one; only one may pair) and G02 ^2 (team B sends the same entry twice; the second is a duplicate)",
+     "the largest pairing needs a re-seat: G15 ^5 (a greedy pairing finds 1 pair, the right answer is 2)",
+     "extra entries on one side: G02 ^5 (OTHER_THING), G03 ^4 (OTHER_THING), G08 ^1 (a bystander Mind), G09 ^2 (ABSENT)",
+     "a held pair with equal codes: G03 ^2 (H2-COMFORT), G14 ^8 and ^9 (H89-FOLLOWS)",
+     "a held pair with different codes: G03 ^3 (H3-NOPULL against H3-BORED), G14 ^7 (H7-UNBROKEN against H7-NOEFFECT)",
+     "an uncertain pair: G04 ^8 and ^9",
+     "ambiguous entries: G04 ^3 (both ambiguous: matched) and G04 ^4 (ambiguous against clear: STATUS)",
+     "a clue: G05 (two clues against one)",
+     "a reached-by-reasoning ^9: G05",
+     "a ^7 with its ^5 twin: G06 (both teams; team B also wrote the twin itself and it is taken out), G08 (team A's twin meets team B's own ^5)",
+     "a wrong Mind: G07 ^2 (MIND)",
+     "a wrong related thing: G05 ^6 (another whole: FIELD), G13 ^9 (another trigger: FIELD); a wrong measure: G06 ^4 (FIELD)",
+     "another label on the same evidence: G07 ^2 (OTHER_LABEL, not called pointing), G13 ^8 (OTHER_LABEL, pointing because the same ^9 ties them)",
+     "the same words under another Noetic: G08 (^7 against ^5: OTHER_NOETIC both ways)",
+     "a dropped entry: G10 (one marked by the checker and kept in row ^4; one with a bad certainty, no row; one the program cannot place, kept in row ^2)",
+     "an empty passage on both sides: G11",
+     "a passage only one team could label: G12 (left out of the analysis)",
+     "clean-up: G01 has two spaces in a row; G13 has a curly apostrophe",
+     "a pointer label with no_fuller_name: G09"
+    ],
+    "expected": {
+     "sentences_total": 45,
+     "sentences_per_passage": {"G01": 3, "G02": 3, "G03": 4, "G04": 4, "G05": 4, "G06": 3, "G07": 3, "G08": 3, "G09": 3, "G10": 3, "G11": 2, "G12": 2, "G13": 3, "G14": 3, "G15": 2},
+     "passages_total": 15,
+     "passages_analysed": 14,
+     "passages_not_labeled_by_both_teams": ["G12"],
+     "run_is_valid": false,
+     "validity_rules_broken": {"_why": "1 of 15 passages not labeled by both teams is 0.0667, over 0.05. Team B: 3 of 51 entries dropped is 0.0588, over 0.05.", "too_many_passages_not_labeled": true, "team_A_too_many_entries_dropped": false, "team_B_too_many_entries_dropped": true},
+     "rescored_under_an_owner_ruling": false,
+     "teams": {
+      "A": {"_why": "48 entries sent: 3+3+5+5+7+3+4+2+2+2+0+2+3+4+3. The 2 in G12 are sent but not analysed.", "entries_sent": 48, "dropped_kept_in_a_row": 0, "dropped_no_row": 0, "dropped_total": 0, "dropped_share": "0.0000", "dropped_by_this_program_not_marked_by_the_checker": 0, "duplicates_removed": 0, "twins_written_by_the_labeler_removed": 0, "program_made_twins": 2, "held_entries_ruled_out": 0, "drops_by_check": "none", "reasks_by_check": "none", "passages_not_labeled": []},
+      "B": {"_why": "51 entries sent: 3+5+4+5+6+4+4+3+3+4+0+0+3+4+3. 3 dropped, all in G10: 3 of 51 is 0.0588, over 0.05.", "entries_sent": 51, "dropped_kept_in_a_row": 2, "dropped_no_row": 1, "dropped_total": 3, "dropped_share": "0.0588", "dropped_by_this_program_not_marked_by_the_checker": 1, "duplicates_removed": 1, "twins_written_by_the_labeler_removed": 1, "program_made_twins": 1, "held_entries_ruled_out": 0, "drops_by_check": "C1 1; C3 1; C7 1", "drops_by_noetic": "^2 1; ^4 2", "reasks_by_check": "C7 3", "reasks_by_noetic": "^4 3", "passages_not_labeled": ["G12"]}
+     },
+     "rows": {
+      "^1": {"A": 14, "B": 15, "M": 14, "only_A": 0, "only_B": 1, "E": "0.933"},
+      "^2": {"A": 4, "B": 6, "M": 2, "only_A": 2, "only_B": 4, "E": "0.250"},
+      "^3": {"A": 2, "B": 2, "M": 1, "only_A": 1, "only_B": 1, "E": "0.333"},
+      "^4": {"A": 4, "B": 4, "M": 1, "only_A": 3, "only_B": 3, "E": "0.143"},
+      "^5": {"A": 3, "B": 5, "M": 3, "only_A": 0, "only_B": 2, "E": "0.600"},
+      "^6": {"A": 3, "B": 3, "M": 2, "only_A": 1, "only_B": 1, "E": "0.500"},
+      "^7": {"A": 2, "B": 1, "M": 1, "only_A": 1, "only_B": 0, "E": "0.500"},
+      "^8": {"A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"},
+      "^9": {"A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"},
+      "^9 reached by reasoning": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "uncertain ^1": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^2": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^3": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^4": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^6": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^7": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "uncertain ^8": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "uncertain ^9": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^6 clue": {"A": 2, "B": 1, "M": 1, "only_A": 1, "only_B": 0, "E": "0.500"},
+      "ambiguous ^1": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^2": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^3": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "ambiguous ^4": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "ambiguous ^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^6": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^7": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^8": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^9": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^5 with twins": {"A": 5, "B": 6, "M": 5, "only_A": 0, "only_B": 1, "E": "0.833"},
+      "held ^2": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "held ^3": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "held ^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "held ^7": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "held ^8": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "held ^9": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"}
+     },
+     "bar": {
+      "^1": {"_why": "13 passages with a Mind, 1 without (G11). G08 has a match and a leftover.", "cases": 13, "absences": 1, "fully_matched_cases": 12, "cases_with_a_match_and_leftovers": 1, "cases_with_no_match": 0, "cases_with_at_least_one_matched_pair": 13, "share_A": "1.000", "share_B": "0.933", "kappa": "1.000", "dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 0, "inside": 15, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^2": {"_why": "Cases G01 G02 G07 G09 G10. Kappa: team A present in 3, team B in 5, both in 3, of 14: (168 - 114) / (196 - 114) = 54/82.", "cases": 5, "absences": 9, "fully_matched_cases": 2, "cases_with_a_match_and_leftovers": 0, "cases_with_no_match": 3, "cases_with_at_least_one_matched_pair": 2, "share_A": "0.500", "share_B": "0.333", "kappa": "0.659", "dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 1, "inside": 8, "outside": 1, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^3": {"_why": "Cases G01 G09. Outside: held ^3 has 1 entry, ambiguous ^3 has 1.", "cases": 2, "absences": 12, "fully_matched_cases": 1, "cases_with_a_match_and_leftovers": 0, "cases_with_no_match": 1, "cases_with_at_least_one_matched_pair": 1, "share_A": "0.500", "share_B": "0.500", "kappa": "1.000", "inside": 3, "outside": 2, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^4": {"_why": "Cases G03 G04 G06 G10. Kappa: team A present in 3, team B in 4, both in 3, of 14: (182 - 122) / (196 - 122) = 60/74.", "cases": 4, "absences": 10, "fully_matched_cases": 0, "cases_with_a_match_and_leftovers": 1, "cases_with_no_match": 3, "cases_with_at_least_one_matched_pair": 1, "share_A": "0.250", "share_B": "0.250", "kappa": "0.811", "dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 1, "inside": 7, "outside": 1, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^5": {"_why": "Cases G02 G08 G15. Kappa: team A present in 2, team B in 3, both in 2, of 14: (182 - 138) / (196 - 138) = 44/58.", "cases": 3, "absences": 11, "fully_matched_cases": 1, "cases_with_a_match_and_leftovers": 1, "cases_with_no_match": 1, "cases_with_at_least_one_matched_pair": 2, "share_A": "1.000", "share_B": "0.600", "kappa": "0.759", "inside": 5, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^6": {"_why": "One case, G05. Outside: the clue row has 2 + 1 - 1 = 2 entries.", "cases": 1, "absences": 13, "fully_matched_cases": 0, "cases_with_a_match_and_leftovers": 1, "cases_with_no_match": 0, "share_A": "0.667", "share_B": "0.667", "kappa": "1.000", "inside": 4, "outside": 2, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^7": {"_why": "Cases G06 G08. Kappa: team A present in 2, team B in 1, both in 1, of 14: (182 - 158) / (196 - 158) = 24/38.", "cases": 2, "absences": 12, "fully_matched_cases": 1, "cases_with_a_match_and_leftovers": 0, "cases_with_no_match": 1, "share_A": "0.500", "share_B": "1.000", "kappa": "0.632", "inside": 2, "outside": 1, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^8": {"_why": "One case, G13. Outside: uncertain ^8 has 1 entry, held ^8 has 1.", "cases": 1, "absences": 13, "fully_matched_cases": 0, "cases_with_no_match": 1, "share_A": "0.000", "share_B": "0.000", "kappa": "1.000", "inside": 2, "outside": 2, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^9": {"_why": "One case, G13. Outside: uncertain 1, held 1, reached by reasoning 1.", "cases": 1, "absences": 13, "fully_matched_cases": 0, "cases_with_no_match": 1, "share_A": "0.000", "share_B": "0.000", "kappa": "1.000", "inside": 2, "outside": 3, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"}
+     },
+     "reasons": {
+      "^1": {"A": "none", "B": "OTHER_THING 1"},
+      "^2": {"A": "MIND 1; OTHER_LABEL 1", "B": "DROPPED 1; MIND 1; OTHER_LABEL 1; ABSENT 1"},
+      "^3": {"A": "START 1", "B": "START 1"},
+      "^4": {"A": "FIELD 1; FACES_A_DROP 1; OTHER_THING 1", "B": "DROPPED 1; STATUS 1; FIELD 1"},
+      "^5": {"A": "none", "B": "OTHER_NOETIC 1; OTHER_THING 1"},
+      "^6": {"A": "FIELD 1", "B": "FIELD 1"},
+      "^7": {"A": "OTHER_NOETIC 1", "B": "none"},
+      "^8": {"A": "OTHER_LABEL 1", "B": "OTHER_LABEL 1"},
+      "^9": {"A": "FIELD 1", "B": "FIELD 1"}
+     },
+     "field_split": {
+      "^4": {"A": "R4 measure 1", "B": "R4 measure 1"},
+      "^6": {"A": "R3 related thing 1", "B": "R3 related thing 1"},
+      "^9": {"A": "R3 related thing 1", "B": "R3 related thing 1"},
+      "^2": {"A": "none", "B": "none"}
+     },
+     "other_noetic": {
+      "^5": {"A": "none", "B": "^7 1"},
+      "^7": {"A": "^5 1", "B": "none"}
+     },
+     "ceiling": {
+      "^1": {"pointing_pairs": 0, "ceiling": "0.933", "pairs_other_label_everywhere": 0, "ceiling_other_label_everywhere": "0.933"},
+      "^2": {"_why": "G07's needle case and hum share evidence but not a label. For ^2 that is not called pointing: 0 pairs on the first line, 1 on the second: (2 + 1) / (8 - 1).", "pointing_pairs": 0, "ceiling": "0.250", "pairs_other_label_everywhere": 1, "ceiling_other_label_everywhere": "0.429"},
+      "^3": {"_why": "G01's START pair: (1 + 1) / (3 - 1).", "pointing_pairs": 1, "ceiling": "1.000", "pairs_other_label_everywhere": 1, "ceiling_other_label_everywhere": "1.000"},
+      "^4": {"_why": "G06's FIELD pair: (1 + 1) / (7 - 1).", "pointing_pairs": 1, "ceiling": "0.333", "pairs_other_label_everywhere": 1, "ceiling_other_label_everywhere": "0.333"},
+      "^5": {"pointing_pairs": 0, "ceiling": "0.600", "pairs_other_label_everywhere": 0, "ceiling_other_label_everywhere": "0.600"},
+      "^6": {"_why": "G05's FIELD pair: (2 + 1) / (4 - 1).", "pointing_pairs": 1, "ceiling": "1.000", "pairs_other_label_everywhere": 1, "ceiling_other_label_everywhere": "1.000"},
+      "^7": {"pointing_pairs": 0, "ceiling": "0.500", "pairs_other_label_everywhere": 0, "ceiling_other_label_everywhere": "0.500"},
+      "^8": {"_why": "G13: OTHER_LABEL counts as pointing for ^8 because the same ^9 ties the two entries: (0 + 1) / (2 - 1).", "pointing_pairs": 1, "ceiling": "1.000", "pairs_other_label_everywhere": 1, "ceiling_other_label_everywhere": "1.000"},
+      "^9": {"_why": "G13's FIELD pair: (0 + 1) / (2 - 1).", "pointing_pairs": 1, "ceiling": "1.000", "pairs_other_label_everywhere": 1, "ceiling_other_label_everywhere": "1.000"}
+     },
+     "no_bar": {
+      "held ^2": {"unmatched_A_that_B_wrote_as_clear": 0, "unmatched_B_that_A_wrote_as_clear": 0, "matched_pairs_with_the_same_code": 1, "matched_pairs_with_different_codes": 0},
+      "held ^3": {"matched_pairs_with_the_same_code": 0, "matched_pairs_with_different_codes": 1},
+      "held ^7": {"matched_pairs_with_the_same_code": 0, "matched_pairs_with_different_codes": 1},
+      "held ^8": {"matched_pairs_with_the_same_code": 1, "matched_pairs_with_different_codes": 0},
+      "held ^9": {"matched_pairs_with_the_same_code": 1, "matched_pairs_with_different_codes": 0},
+      "ambiguous ^4": {"unmatched_A_that_B_wrote_as_clear": 1, "unmatched_B_that_A_wrote_as_clear": 0},
+      "^6 clue": {"unmatched_A_that_B_wrote_as_clear": 0, "unmatched_B_that_A_wrote_as_clear": 0}
+     },
+     "held_by_code": {
+      "held ^2 H2-COMFORT": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "A_paired_with_another_code": 0, "B_paired_with_another_code": 0},
+      "held ^3 H3-NOPULL": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "A_paired_with_another_code": 1, "B_paired_with_another_code": 0},
+      "held ^3 H3-BORED": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "A_paired_with_another_code": 0, "B_paired_with_another_code": 1},
+      "held ^7 H7-RESULT": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "A_paired_with_another_code": 0, "B_paired_with_another_code": 0},
+      "held ^7 H7-NOEFFECT": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "A_paired_with_another_code": 0, "B_paired_with_another_code": 1},
+      "held ^7 H7-UNBROKEN": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "A_paired_with_another_code": 1, "B_paired_with_another_code": 0},
+      "held ^8 H89-FOLLOWS": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "A_paired_with_another_code": 0, "B_paired_with_another_code": 0},
+      "held ^9 H89-FOLLOWS": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "A_paired_with_another_code": 0, "B_paired_with_another_code": 0}
+     },
+     "table_4": {
+      "^1": {"pooled_clear_and_held": {"A": 14, "B": 15, "M": 14, "E": "0.933"}, "tolerance_0": {"A": 14, "B": 15, "M": 14, "E": "0.933"}, "no_start_rule": {"M": 14}, "v12_word_test": {"M": 14}, "exact_same_span": {"M": 14}},
+      "^2": {"_why": "Pooled adds G03's held pair: 5 / 7 / 3. Tolerance 0 loses G01 (1 word apart). The v1.2 word test keeps G01 and G02. Exact span keeps only G02.", "pooled_clear_and_held": {"A": 5, "B": 7, "M": 3, "only_A": 2, "only_B": 4, "E": "0.333"}, "tolerance_0": {"A": 4, "B": 6, "M": 1, "E": "0.111"}, "no_start_rule": {"A": 4, "B": 6, "M": 2, "E": "0.250"}, "v12_word_test": {"A": 4, "B": 6, "M": 2, "E": "0.250"}, "exact_same_span": {"A": 4, "B": 6, "M": 1, "E": "0.111"}},
+      "^3": {"_why": "Pooled adds G03's held pair: 3 / 3 / 2. With no start rule G01 matches (the two labels overlap). The v1.2 word test also takes G01: 2 shared content words of 4. Exact span keeps only G09.", "pooled_clear_and_held": {"A": 3, "B": 3, "M": 2, "E": "0.500"}, "tolerance_0": {"A": 2, "B": 2, "M": 1, "E": "0.333"}, "no_start_rule": {"A": 2, "B": 2, "M": 2, "E": "1.000"}, "v12_word_test": {"A": 2, "B": 2, "M": 2, "E": "1.000"}, "exact_same_span": {"A": 2, "B": 2, "M": 1, "E": "0.333"}},
+      "^4": {"_why": "Without no-impression measures: team A's G06 measure 'never noticed' holds 'never', so that entry leaves: 3 / 4 / 1 gives 1 of 6.", "pooled_clear_and_held": {"A": 4, "B": 4, "M": 1, "E": "0.143"}, "tolerance_0": {"A": 4, "B": 4, "M": 1, "E": "0.143"}, "no_start_rule": {"M": 1}, "v12_word_test": {"M": 1}, "exact_same_span": {"M": 1}, "without_no_impression_measures": {"A": 3, "B": 4, "M": 1, "only_A": 2, "only_B": 3, "E": "0.167"}},
+      "^5": {"_why": "Every ^5 pair here starts 2 words apart. Tolerance 0 and exact span lose all three. With no start rule and with the v1.2 word test all three stay.", "pooled_clear_and_held": {"A": 3, "B": 5, "M": 3, "E": "0.600"}, "tolerance_0": {"A": 3, "B": 5, "M": 0, "E": "0.000"}, "no_start_rule": {"A": 3, "B": 5, "M": 3, "E": "0.600"}, "v12_word_test": {"A": 3, "B": 5, "M": 3, "E": "0.600"}, "exact_same_span": {"A": 3, "B": 5, "M": 0, "E": "0.000"}},
+      "^6": {"_why": "On the part alone all three parts match. With the whole, 2 do.", "pooled_clear_and_held": {"A": 3, "B": 3, "M": 2, "E": "0.500"}, "tolerance_0": {"M": 2}, "no_start_rule": {"M": 2}, "v12_word_test": {"M": 2}, "exact_same_span": {"M": 2}, "matched_on_the_part_alone_whole_ignored": {"A": 3, "B": 3, "M": 3, "only_A": 0, "only_B": 0, "E": "1.000"}},
+      "^7": {"_why": "Pooled adds G14's held pair: 3 / 2 / 2.", "pooled_clear_and_held": {"A": 3, "B": 2, "M": 2, "only_A": 1, "only_B": 0, "E": "0.667"}, "tolerance_0": {"A": 2, "B": 1, "M": 1, "E": "0.500"}, "no_start_rule": {"M": 1}, "v12_word_test": {"M": 1}, "exact_same_span": {"M": 1}},
+      "^8": {"_why": "Pooled adds G14's held pair. The v1.2 word test has no positions: 'Its sharp tang' and 'The tang' share 1 content word of 2, so it calls G13 a match. The new test does not.", "pooled_clear_and_held": {"A": 2, "B": 2, "M": 1, "E": "0.333"}, "tolerance_0": {"M": 0}, "no_start_rule": {"A": 1, "B": 1, "M": 0, "E": "0.000"}, "v12_word_test": {"A": 1, "B": 1, "M": 1, "E": "1.000"}, "exact_same_span": {"M": 0}},
+      "^9": {"_why": "The labels are the same span, but the triggers they point back at are not. No variant of the label test changes that.", "pooled_clear_and_held": {"A": 2, "B": 2, "M": 1, "E": "0.333"}, "tolerance_0": {"M": 0}, "no_start_rule": {"M": 0}, "v12_word_test": {"M": 0}, "exact_same_span": {"A": 1, "B": 1, "M": 0, "E": "0.000"}}
+     },
+     "table_5": {
+      "bystander_minds": {"A": 0, "B": 1},
+      "labels_with_more_than_one_candidate_place": {"A": {"^4": 1}, "B": {"^4": 1}},
+      "no_fuller_name_uses": {"A": 0, "B": 1},
+      "label_words_largest": {"A": {"^3": 7, "^8": 6}, "B": {"^5": 7, "^8": 6}},
+      "support_sentences_largest": {"A": {"^8": 2}, "B": {"^3": 2}},
+      "matched_pairs_by_label_start_gap": {
+       "^1": {"0 words": 14, "1 word": 0, "2 words": 0},
+       "^2": {"0 words": 1, "1 word": 1, "2 words": 0},
+       "^3": {"0 words": 1, "1 word": 0, "2 words": 0},
+       "^4": {"0 words": 1, "1 word": 0, "2 words": 0},
+       "^5": {"0 words": 0, "1 word": 0, "2 words": 3},
+       "^6": {"0 words": 2, "1 word": 0, "2 words": 0},
+       "^7": {"0 words": 1, "1 word": 0, "2 words": 0},
+       "^8": {"0 words": 0, "1 word": 0, "2 words": 0},
+       "^9": {"0 words": 0, "1 word": 0, "2 words": 0}
+      }
+     },
+     "none_of_these": {"team_A": 1, "team_B": 1, "both": 1, "agree": 14, "passages": 14},
+     "table_6_kinds": {"K1": 2, "K2a": 4, "K2b": 1, "K3": 2, "K5": 2, "K6": 1, "K7": 1, "K8": 1},
+     "seal_conditions": {
+      "_why": "S2: team B dropped 3 of 51. S3: one guide problem is written (G05, team B); the program cannot judge it. S4: the kind K1 passages are G13 and G14; ^8 and ^9 have 0 of 2 matched there. S5: 3 part matches, 2 of them also match on the whole.",
+      "S2": "FAIL", "S3": "NEEDS_A_READER", "S3_reports": 1, "S4": "FAIL", "S4_E": {"^8": "0.000", "^9": "0.000"}, "S5": "FAIL", "S5_parts": 3, "S5_whole": 2, "S5_share": "0.667"
+     },
+     "per_passage": {
+      "G01": {"_why": "^2: 'the warm smell of rye bread' and 'warm smell of rye bread' start 1 word apart and overlap: matched. ^3: 'the sour reek of the fish stall' and 'of the fish stall' start 3 words apart: no match, same sentence, shared words: START.", "rows": "^1 1/1/1; ^2 1/1/1; ^3 1/1/0", "reasons": "^3 A:START B:START"},
+      "G02": {"_why": "^5: team A's 'patching torn mesh' fits both of team B's entries (2 words before, 2 words after). They are 4 words apart from each other, so they are not duplicates. Only one may pair; the nearer start wins. The other is extra: OTHER_THING. ^2: team B sent the same entry twice; one copy is a duplicate.", "rows": "^1 1/1/1; ^2 1/1/1; ^5 1/2/1; ^5 with twins 1/2/1", "reasons": "^5 B:OTHER_THING"},
+      "G03": {"_why": "Held ^2: same code. Held ^3: matched, H3-NOPULL against H3-BORED. ^4: the leaves entry matches; team A's invoices entry has no partner and team B has another ^4 here: OTHER_THING.", "rows": "^1 1/1/1; ^4 2/1/1; held ^2 1/1/1; held ^3 1/1/1", "reasons": "^4 A:OTHER_THING"},
+      "G04": {"_why": "The uncertain pair matches. Both wrote the ^3 ambiguous: matched in row 'ambiguous ^3'. Team A wrote the ^4 ambiguous and team B clear: a miss in both rows; team B's reason is STATUS.", "rows": "^1 1/1/1; ^4 0/1/0; uncertain ^8 1/1/1; uncertain ^9 1/1/1; ambiguous ^3 1/1/1; ambiguous ^4 1/0/0", "reasons": "^4 B:STATUS"},
+      "G05": {"_why": "The reasoned ^9 matches. Clues: 2 against 1. Parts: 'mixing the flour' and 'baking the loaf' match. For 'resting the dough' team B wrote the whole 'the dough'; its nearest place before the part is in sentence 1, not 'The recipe': FIELD.", "rows": "^1 1/1/1; ^6 3/3/2; ^9 reached by reasoning 1/1/1; ^6 clue 2/1/1", "reasons": "^6 A:FIELD B:FIELD"},
+      "G06": {"_why": "^7 matches. Team B's own ^5 on the same label is taken out of every row. Each team's clear ^7 gets one program-made ^5 twin; the two twins match. ^4: same label 'the grinder' (it occurs twice in the support), but 'never noticed' and 'shrieked' do not overlap: FIELD.", "rows": "^1 1/1/1; ^4 1/1/0; ^7 1/1/1; ^5 with twins 1/1/1", "reasons": "^4 A:FIELD B:FIELD"},
+      "G07": {"_why": "Two Minds, both matched. The jazz albums: team A says Tess, team B says Owen: MIND. Owen's entries: 'the brass needle case' against 'the hum of the turntable', same sentence, no shared word: OTHER_LABEL.", "rows": "^1 2/2/2; ^2 2/2/0", "reasons": "^2 A:MIND A:OTHER_LABEL B:MIND B:OTHER_LABEL"},
+      "G08": {"_why": "Team B lists the porter as a Mind and gives him no other entry: one extra ^1, a bystander. Team A wrote ^7 on 'daily deliveries'; team B wrote ^5 on 'Years of daily deliveries': the same words under another Noetic, both ways. Team A's program-made twin meets team B's ^5 (2 words apart): matched in '^5 with twins'.", "rows": "^1 1/2/1; ^5 0/1/0; ^7 1/0/0; ^5 with twins 1/1/1", "reasons": "^1 B:OTHER_THING; ^5 B:OTHER_NOETIC; ^7 A:OTHER_NOETIC"},
+      "G09": {"_why": "^3 matches. Team B's ^2 on 'this' (no_fuller_name) has nothing on team A's side: ABSENT.", "rows": "^1 1/1/1; ^2 0/1/0; ^3 1/1/1", "reasons": "^2 B:ABSENT"},
+      "G10": {"_why": "Team B: 'That note' was dropped by the checker (C7) and stays in row ^4; an entry with certainty 'sure' has no row; 'the old piano' is not in the passage, so the program drops it (C3) and keeps it in row ^2. Team A's ^4 faces only a drop.", "rows": "^1 1/1/1; ^2 0/1/0; ^4 1/1/0", "reasons": "^2 B:DROPPED; ^4 A:FACES_A_DROP B:DROPPED"},
+      "G11": {"_why": "Empty on both sides.", "rows": "none", "reasons": "none"},
+      "G13": {"_why": "^8: 'Its sharp tang' against 'The tang' in the next sentence: no word at the same place, same ^9: OTHER_LABEL. ^9: same label, but the triggers pointed back at differ: FIELD.", "rows": "^1 1/1/1; ^8 1/1/0; ^9 1/1/0", "reasons": "^8 A:OTHER_LABEL B:OTHER_LABEL; ^9 A:FIELD B:FIELD"},
+      "G14": {"_why": "A held pair under H89-FOLLOWS on both sides, and a held ^7 with two different codes. Three held rows, all matched. A held ^7 gets no twin.", "rows": "^1 1/1/1; held ^7 1/1/1; held ^8 1/1/1; held ^9 1/1/1", "reasons": "none"},
+      "G15": {"_why": "Team A: 'salted cod barrels' (fits both of team B's) and 'up frozen harbour steps' (fits only 'cod barrels up frozen harbour steps'). Taking the nearest first gives 1 pair; the largest pairing re-seats the first entry and gives 2.", "rows": "^1 1/1/1; ^5 2/2/2; ^5 with twins 2/2/2", "reasons": "none"}
+     }
+    }
+   },
+
+   "backstop": {
+    "files": {"passages": "backstop/passages.json", "labels_team_a": "backstop/labels_team_a.json", "labels_team_b": "backstop/labels_team_b.json"},
+    "_cases": [
+     "One passage, H01. Team A's six entries are all in order. Team B sends 13 entries. Two are in order (the Mind and the ^7). The other 11 each break one rule, and none is marked by a checker. The program must drop each one, name the check, and keep it in its row when its Noetic and certainty are valid.",
+     "entry 2: the support is not in the passage (C2). entry 3: the measure is not in the passage (C4). entry 4: the mind 'Ida' is no ^1 entry of this team (C5).",
+     "entry 5: the whole 'the tailstock' is not in the passage (C6). entry 6: a ^6 with no whole and no clue mark (C6). entry 8: an ^8 whose ^9 partner was never written (C6).",
+     "entry 7: clue is true, but this team wrote no ^9 reached by reasoning (C1). entry 9: held under H2-COMFORT on a ^3, a code of another Noetic (C1). entry 10: held with no code (C1).",
+     "entry 11: Noetic '^0' (C1, no row). entry 12: not an entry at all, only a string (C1, no row)."
+    ],
+    "expected": {
+     "sentences_total": 4,
+     "passages_total": 1,
+     "passages_analysed": 1,
+     "run_is_valid": false,
+     "validity_rules_broken": {"too_many_passages_not_labeled": false, "team_A_too_many_entries_dropped": false, "team_B_too_many_entries_dropped": true},
+     "teams": {
+      "A": {"entries_sent": 6, "dropped_total": 0, "dropped_share": "0.0000", "dropped_by_this_program_not_marked_by_the_checker": 0, "program_made_twins": 1, "drops_by_check": "none"},
+      "B": {"_why": "11 of 13 dropped: 9 stay in a row, 2 have no row. Checks: C1 five times (entries 7, 9, 10, 11, 12), C2 once, C4 once, C5 once, C6 three times (entries 5, 6, 8).", "entries_sent": 13, "dropped_kept_in_a_row": 9, "dropped_no_row": 2, "dropped_total": 11, "dropped_share": "0.8462", "dropped_by_this_program_not_marked_by_the_checker": 11, "duplicates_removed": 0, "twins_written_by_the_labeler_removed": 0, "program_made_twins": 1, "drops_by_check": "C1 5; C2 1; C4 1; C5 1; C6 3", "drops_by_noetic": "^2 1; ^3 1; ^4 2; ^5 1; ^6 3; ^8 1; no valid Noetic 2"}
+     },
+     "rows": {
+      "^1": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^2": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "^3": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^4": {"A": 1, "B": 2, "M": 0, "only_A": 1, "only_B": 2, "E": "0.000"},
+      "^5": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^6": {"A": 1, "B": 2, "M": 0, "only_A": 1, "only_B": 2, "E": "0.000"},
+      "^7": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^8": {"A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"},
+      "^9": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "^9 reached by reasoning": {"A": 0, "B": 0, "M": 0},
+      "^6 clue": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "^5 with twins": {"A": 1, "B": 1, "M": 1, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "held ^2": {"A": 0, "B": 0, "M": 0},
+      "held ^3": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "held ^5": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "held ^7": {"A": 0, "B": 0, "M": 0},
+      "uncertain ^8": {"A": 0, "B": 0, "M": 0},
+      "ambiguous ^4": {"A": 0, "B": 0, "M": 0}
+     },
+     "bar": {
+      "^2": {"dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 1, "cases": 1},
+      "^4": {"dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 2, "cases": 1, "kappa": "n/a"},
+      "^6": {"dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 2},
+      "^8": {"dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 1},
+      "^9": {"dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 0, "rule_would_give": "NOT_ENOUGH_CASES", "outcome": "NOT_A_VERDICT"}
+     },
+     "reasons": {
+      "^1": {"A": "none", "B": "none"},
+      "^2": {"A": "none", "B": "DROPPED 1"},
+      "^4": {"A": "FACES_A_DROP 1", "B": "DROPPED 2"},
+      "^6": {"A": "FACES_A_DROP 1", "B": "DROPPED 2"},
+      "^7": {"A": "none", "B": "none"},
+      "^8": {"A": "FACES_A_DROP 1", "B": "DROPPED 1"},
+      "^9": {"A": "ABSENT 1", "B": "none"}
+     },
+     "per_passage": {
+      "H01": {"_why": "Every broken entry stays in the row its own Noetic and certainty name, as an unmatched entry of team B. Team A's entries that face only drops get FACES_A_DROP. Team A's ^9 faces nothing at all, because team B never wrote a ^9: ABSENT. The two ^7 entries match and give one twin each.", "rows": "^1 1/1/1; ^2 0/1/0; ^4 1/2/0; ^6 1/2/0; ^7 1/1/1; ^8 1/1/0; ^9 1/0/0; ^6 clue 0/1/0; ^5 with twins 1/1/1; held ^3 0/1/0; held ^5 0/1/0", "reasons": "^2 B:DROPPED; ^4 A:FACES_A_DROP B:DROPPED B:DROPPED; ^6 A:FACES_A_DROP B:DROPPED B:DROPPED; ^8 A:FACES_A_DROP B:DROPPED; ^9 A:ABSENT"}
+     }
+    }
+   },
+
+   "spec_six_ruling_H2_does_not_count": {
+    "files": {"passages": "spec_six/passages.json", "labels_team_a": "spec_six/labels_team_a.json", "labels_team_b": "spec_six/labels_team_b.json", "ruling": "rulings/spec_six_H2_does_not_count.json"},
+    "_cases": ["An owner ruling sets H2-COMFORT to does_not_count. Team A's held ^2 in F3 leaves every row. Team B's clear ^2 stays in the bar row, unmatched, and is tagged 'clear against a kind ruled out'. Every row prints REPORTED_ONLY_NO_BAR, and no other outcome word is printed."],
+    "expected": {
+     "rescored_under_an_owner_ruling": true,
+     "teams": {"A": {"held_entries_ruled_out": 1}, "B": {"held_entries_ruled_out": 0}},
+     "rows": {
+      "^2": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "held ^2": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^1": {"A": 5, "B": 5, "M": 5}, "^4": {"A": 1, "B": 1, "M": 1}, "^7": {"A": 1, "B": 1, "M": 0}, "^8": {"A": 3, "B": 3, "M": 3}, "^9": {"A": 3, "B": 3, "M": 3}
+     },
+     "reasons": {"^2": {"A": "none", "B": "ABSENT 1"}},
+     "tagged_clear_against_a_kind_ruled_out": {"^2": {"A": 0, "B": 1}, "^7": {"A": 0, "B": 0}},
+     "bar": {
+      "^1": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^2": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^3": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^4": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^5": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^6": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^7": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^8": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^9": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"}
+     },
+     "per_passage": {
+      "F3": {"_why": "With the held kind ruled out, team A has no ^2 of any kind here. Team B's clear entry stays as an unmatched entry: ABSENT, with the tag.", "rows": "^1 1/1/1; ^2 0/1/0; ^4 1/1/1", "reasons": "^2 B:ABSENT"}
+     }
+    }
+   },
+
+   "branches_ruling_H2_counts_H3NOPULL_does_not_count": {
+    "files": {"passages": "branches/passages.json", "labels_team_a": "branches/labels_team_a.json", "labels_team_b": "branches/labels_team_b.json", "kinds": "branches/kinds.json", "ruling": "rulings/branches_H2_counts_H3NOPULL_does_not_count.json"},
+    "_cases": ["An owner ruling sets H2-COMFORT to counts and H3-NOPULL to does_not_count. G03's two held ^2 entries become clear and pair in the bar row: ^2 goes from 4 / 6 / 2 to 5 / 7 / 3. Team A's held ^3 (H3-NOPULL) leaves every row; team B's held ^3 (H3-BORED, still open) stays alone in its row. No clear ^3 faced the ruled-out entry, so nothing is tagged."],
+    "expected": {
+     "rescored_under_an_owner_ruling": true,
+     "teams": {"A": {"held_entries_ruled_out": 1}, "B": {"held_entries_ruled_out": 0}},
+     "rows": {
+      "^2": {"A": 5, "B": 7, "M": 3, "only_A": 2, "only_B": 4, "E": "0.333"},
+      "^3": {"A": 2, "B": 2, "M": 1, "only_A": 1, "only_B": 1, "E": "0.333"},
+      "^4": {"A": 4, "B": 4, "M": 1},
+      "held ^2": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "held ^3": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "held ^7": {"A": 1, "B": 1, "M": 1}
+     },
+     "tagged_clear_against_a_kind_ruled_out": {"^3": {"A": 0, "B": 0}, "^2": {"A": 0, "B": 0}},
+     "held_by_code": {
+      "held ^3 H3-NOPULL": {"A": 0, "B": 0, "M": 0},
+      "held ^3 H3-BORED": {"A": 0, "B": 1, "M": 0, "only_B": 1, "B_paired_with_another_code": 0}
+     },
+     "bar": {
+      "^2": {"cases": 6, "absences": 8, "fully_matched_cases": 3, "outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^3": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"},
+      "^8": {"outcome": "REPORTED_ONLY_NO_BAR", "rule_would_give": "not printed"}
+     },
+     "per_passage": {
+      "G03": {"_why": "The two H2-COMFORT entries now sit in the bar row ^2 and match. Team A's H3-NOPULL entry is gone; team B's H3-BORED entry stays in 'held ^3' alone.", "rows": "^1 1/1/1; ^2 1/1/1; ^4 2/1/1; held ^3 0/1/0", "reasons": "^4 A:OTHER_THING"}
+     }
+    }
+   },
+
+   "forms": {
+    "files": {"passages": "forms/passages.json", "labels_team_a": "forms/labels_team_a.json", "labels_team_b": "forms/labels_team_b.json"},
+    "_cases": [
+     "Six passages, J01 to J06. Team A writes each record as the guide says. In each passage team B writes one form that guide section B2 forbids. No entry is marked by a checker. The scorer itself must drop each entry that breaks a tie between fields, and name the check. It must take out each repeated entry as a duplicate.",
+     "J01: a clear ^8 whose partner is a ^9 with reached_by reasoning. That ^9 has a relative_to (C6). The ^8 then has no partner it may have (C6). Rule 15(b): 'Do not mark ^8'.",
+     "J02: one thing written three times for ^2 and one Mind: clear, then held, then ambiguous. The second and the third repeat the first.",
+     "J03: a clue with a whole (C6). One piece written as a clue and again as a plain part: the plain part repeats the clue.",
+     "J04: a lone ^9 with reached_by reasoning and other_candidate reasoning (C1).",
+     "J05: a lone held ^9 with reached_by reasoning (C1).",
+     "J06: a clue with certainty ambiguous (C1). A ^6 with a mind (C5)."
+    ],
+    "expected": {
+     "sentences_total": 14,
+     "sentences_per_passage": {"J01": 2, "J02": 2, "J03": 3, "J04": 2, "J05": 2, "J06": 3},
+     "passages_total": 6,
+     "passages_analysed": 6,
+     "passages_not_labeled_by_both_teams": [],
+     "run_is_valid": false,
+     "validity_rules_broken": {"_why": "Team B: 7 of 20 entries dropped is 0.3500, over 0.05.", "too_many_passages_not_labeled": false, "team_A_too_many_entries_dropped": false, "team_B_too_many_entries_dropped": true},
+     "rescored_under_an_owner_ruling": false,
+     "five_bar_row": {"the_bar_row_for_^5": "^5 as the labelers wrote it", "the_other_^5_row_printed_with_no_bar": "^5 with twins"},
+     "teams": {
+      "A": {"_why": "18 entries sent: 2+2+4+3+3+4.", "entries_sent": 18, "dropped_kept_in_a_row": 0, "dropped_no_row": 0, "dropped_total": 0, "dropped_share": "0.0000", "dropped_by_this_program_not_marked_by_the_checker": 0, "duplicates_removed": 0, "drops_by_check": "none", "passages_not_labeled": []},
+      "B": {"_why": "20 entries sent: 3+4+5+2+2+4. Dropped by the scorer: J01 entries 2 and 3 (C6, C6), J03 entry 3 (C6), J04 entry 2 (C1), J05 entry 2 (C1), J06 entries 3 and 4 (C1, C5). That is 7. Taken out as duplicates: J02 entries 3 and 4, and J03 entry 5. That is 3. A duplicate is not a drop.", "entries_sent": 20, "dropped_kept_in_a_row": 7, "dropped_no_row": 0, "dropped_total": 7, "dropped_share": "0.3500", "dropped_by_this_program_not_marked_by_the_checker": 7, "duplicates_removed": 3, "twins_written_by_the_labeler_removed": 0, "program_made_twins": 0, "drops_by_check": "C1 3; C5 1; C6 3", "drops_by_noetic": "^6 3; ^8 1; ^9 3", "reasks_by_check": "none", "put_back_after_being_left_out": 0, "passages_not_labeled": []}
+     },
+     "rows": {
+      "^1": {"A": 6, "B": 6, "M": 6, "only_A": 0, "only_B": 0, "E": "1.000"},
+      "^2": {"_why": "J02. Team B's first entry is clear. Team A's is held.", "A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "^3": {"A": 0, "B": 0, "M": 0, "E": "n/a"},
+      "^6": {"_why": "J03 entry 5 repeats the clue in entry 4. It is taken out as a duplicate, so the row is empty.", "A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^8": {"_why": "J01. The ^8 has no partner it may have. It is dropped and stays in the bar row.", "A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "^9": {"A": 0, "B": 0, "M": 0, "E": "n/a"},
+      "^9 reached by reasoning": {"_why": "J01, J03 and J06 for each team. Team B's J01 entry has a relative_to. It is dropped and stays in this row. 3 / 3 / 2 gives 2 of 4.", "A": 3, "B": 3, "M": 2, "only_A": 1, "only_B": 1, "E": "0.500"},
+      "uncertain ^8": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "uncertain ^9": {"_why": "J04. Team B's lone entry is dropped (C1). Its own fields put it in this row.", "A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"},
+      "^6 clue": {"_why": "Team A: 2 in J03 and 2 in J06. Team B: J03 entry 3 (dropped, C6), J03 entry 4 (located), J06 entry 4 (dropped, C5). One pair: 'the axle was bent' in J03. 1 of 4 + 3 - 1 = 6.", "A": 4, "B": 3, "M": 1, "only_A": 3, "only_B": 2, "E": "0.167"},
+      "ambiguous ^2": {"_why": "J02 entry 4 repeats entry 2. It is taken out as a duplicate.", "A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "ambiguous ^6": {"_why": "J06 entry 3: a clue written ambiguous. Dropped (C1). Its own fields put it in this row.", "A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "^5 with twins": {"A": 0, "B": 0, "M": 0, "E": "n/a"},
+      "held ^2": {"_why": "J02 entry 3 repeats entry 2. It is taken out as a duplicate. Team A's held entry is alone.", "A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "held ^8": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "held ^9": {"_why": "J05. Team B's lone held ^9 with reached_by is dropped (C1) and stays in this row.", "A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"}
+     },
+     "bar": {
+      "^1": {"_why": "Both teams list a Mind in all 6 passages, so kappa cannot be computed.", "cases": 6, "absences": 0, "fully_matched_cases": 6, "kappa": "n/a", "inside": 6, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^2": {"_why": "Kappa: team A present in 0, team B in 1, of 6: agreement 5 of 6, chance 5 of 6, so 0. Outside the bar row: the held ^2 row has 1 entry.", "cases": 1, "absences": 5, "cases_with_no_match": 1, "kappa": "0.000", "inside": 1, "outside": 1, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^6": {"_why": "Outside the bar row: the clue row has 4 + 3 - 1 = 6 entries, the ambiguous ^6 row has 1.", "cases": 0, "absences": 6, "kappa": "n/a", "inside": 0, "outside": 7, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^8": {"_why": "Outside the bar row: held ^8 has 1 entry, uncertain ^8 has 1.", "cases": 1, "absences": 5, "kappa": "0.000", "dropped_kept_in_row_A": 0, "dropped_kept_in_row_B": 1, "inside": 1, "outside": 2, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"},
+      "^9": {"_why": "Outside the bar row: held ^9 has 2 entries, uncertain ^9 has 2, reached by reasoning has 3 + 3 - 2 = 4.", "cases": 0, "absences": 6, "kappa": "n/a", "inside": 0, "outside": 8, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"}
+     },
+     "reasons": {
+      "^1": {"A": "none", "B": "none"},
+      "^2": {"A": "none", "B": "STATUS 1"},
+      "^6": {"A": "none", "B": "none"},
+      "^8": {"A": "none", "B": "DROPPED 1"},
+      "^9": {"A": "none", "B": "none"}
+     },
+     "no_bar": {
+      "held ^2": {"unmatched_A_that_B_wrote_as_clear": 1, "unmatched_B_that_A_wrote_as_clear": 0, "matched_pairs_with_the_same_code": 0, "matched_pairs_with_different_codes": 0}
+     },
+     "held_by_code": {
+      "held ^2 H2-COMFORT": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0},
+      "held ^8 H89-FOLLOWS": {"A": 1, "B": 0, "M": 0},
+      "held ^9 H89-FOLLOWS": {"A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1}
+     },
+     "per_passage": {
+      "J01": {"_why": "Team B's ^9 is reached by reasoning and still names a trigger: dropped (C6), kept in the row 'reached by reasoning'. Its ^8 may not have that ^9 as a partner: dropped (C6), kept in bar row ^8. So no worked-out conclusion feeds the ^8 bar as a located entry.", "rows": "^1 1/1/1; ^8 0/1/0; ^9 reached by reasoning 1/1/0", "reasons": "^8 B:DROPPED"},
+      "J02": {"_why": "Team B's clear ^2 stays. Its held copy and its ambiguous copy are duplicates and are taken out. Team A's held entry faces a clear one: STATUS.", "rows": "^1 1/1/1; ^2 0/1/0; held ^2 1/0/0", "reasons": "^2 B:STATUS"},
+      "J03": {"_why": "The clue with a whole is dropped (C6) and stays in the clue row. The plain part that repeats a clue is a duplicate and is taken out.", "rows": "^1 1/1/1; ^9 reached by reasoning 1/1/1; ^6 clue 2/2/1", "reasons": "none"},
+      "J04": {"rows": "^1 1/1/1; uncertain ^8 1/0/0; uncertain ^9 1/1/0", "reasons": "none"},
+      "J05": {"rows": "^1 1/1/1; held ^8 1/0/0; held ^9 1/1/0", "reasons": "none"},
+      "J06": {"_why": "Both of team B's clues are dropped: one is written ambiguous (C1, row 'ambiguous ^6'), one carries a mind (C5, clue row).", "rows": "^1 1/1/1; ^9 reached by reasoning 1/1/1; ^6 clue 2/1/0; ambiguous ^6 0/1/0", "reasons": "none"}
+     }
+    }
+   },
+
+   "spec_six_bar_row_5_with_twins": {
+    "files": {"passages": "spec_six/passages.json", "labels_team_a": "spec_six/labels_team_a.json", "labels_team_b": "spec_six/labels_team_b.json"},
+    "scorer_constants": {"FIVE_BAR_ROW": "with_twins"},
+    "_cases": ["Sheet item 6. The six passages are scored once more with the constant FIVE_BAR_ROW switched to 'with_twins', as it would be if the owner signed 'with twins'. The two ^5 rows change places: the row with the program-made twins carries the bar, and the row as the labelers wrote it is printed with no bar. In F4 team A's clear ^7 gives one twin. Team B's ^7 is dropped, so it gives none. With the constant as proposed (false) the same numbers stand in the row '^5 with twins' of the set spec_six: 1 / 0 / 0."],
+    "expected": {
+     "five_bar_row": {"the_bar_row_for_^5": "^5 with the program-made twins", "the_other_^5_row_printed_with_no_bar": "^5 without twins"},
+     "rows": {
+      "^5": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"},
+      "^5 without twins": {"A": 0, "B": 0, "M": 0, "only_A": 0, "only_B": 0, "E": "n/a"},
+      "^7": {"A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"}
+     },
+     "bar": {
+      "^5": {"_why": "Kappa: team A present in 1, team B in 0, of 6: agreement 5 of 6, chance 5 of 6, so 0.", "cases": 1, "absences": 5, "cases_with_no_match": 1, "kappa": "0.000", "inside": 1, "outside": 0, "outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"}
+     },
+     "reasons": {
+      "^5": {"_why": "Team B has no located entry in F4 but its Mind, and no dropped ^5. So the twin's reason is ABSENT.", "A": "ABSENT 1", "B": "none"},
+      "^7": {"A": "FACES_A_DROP 1", "B": "DROPPED 1"}
+     },
+     "per_passage": {
+      "F4": {"rows": "^1 1/1/1; ^5 1/0/0; ^7 1/1/0", "reasons": "^5 A:ABSENT; ^7 A:FACES_A_DROP B:DROPPED"}
+     }
+    }
+   },
+
+   "spec_six_ruling_all_codes_open": {
+    "files": {"passages": "spec_six/passages.json", "labels_team_a": "spec_six/labels_team_a.json", "labels_team_b": "spec_six/labels_team_b.json", "ruling": "rulings/all_codes_open.json"},
+    "_cases": ["The hold table with every one of the eight codes set to open: rulings/all_codes_open.json. This is the form of the file a verdict run uses. Under it nothing is re-scored: the rows are those of the set spec_six, and the outcome column is not REPORTED_ONLY_NO_BAR."],
+    "expected": {
+     "rescored_under_an_owner_ruling": false,
+     "teams": {"A": {"held_entries_ruled_out": 0}, "B": {"held_entries_ruled_out": 0}},
+     "rows": {
+      "^2": {"A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "held ^2": {"A": 1, "B": 0, "M": 0, "only_A": 1, "only_B": 0, "E": "0.000"}
+     },
+     "bar": {
+      "^2": {"outcome": "NOT_A_VERDICT", "rule_would_give": "NOT_ENOUGH_CASES"}
+     },
+     "per_passage": {
+      "F3": {"rows": "^1 1/1/1; ^2 0/1/0; ^4 1/1/1; held ^2 1/0/0", "reasons": "^2 B:STATUS"}
+     }
+    }
+   }
+  }
+ },
+
+ "part_3_chain": {
+  "_note": "The chain the real run uses: checker first, then scorer. For every set below, verdict_v2.py loads tools/check_labels_v2.py, sends each made-up record through the checker's own three-try loop (take_try), lets the checker write the final rows (final_row), and scores those rows. Three things are compared. `checker_marks`: what the checker wrote, counted from its rows alone. `gate`: the refusal codes the label gate of verdict mode gives for those rows (none are expected). `scorer`: the scorer's output. Where a set names `scorer_as_raw_set`, the scorer must print what part 2 expects for that set, except the values under `scorer_except`. So each difference between the raw run and the chain is written down, with its reason. A broken checker, or a broken hand-over from checker to scorer, shows here as a value that differs. A fixture row with \"labeler_failed\": true stands for a reply that could not be read: no record is sent on any try. Marks that a made-up label file carries itself (dropped, failed_checks, reasks) are thrown away by the checker, which writes its own.",
+  "_how_these_counts_were_made": "By hand, from the counts of part 2 and the checker's written rules (guide section B2 and the text at the top of check_labels_v2.py), before the chain was run. Then the chain was run and compared.",
+  "sets": {
+   "spec_six": {
+    "files": {"passages": "spec_six/passages.json", "labels_team_a": ["spec_six/labels_team_a.json"], "labels_team_b": ["spec_six/labels_team_b.json"]},
+    "_cases": ["The six passages of the design spec. Every record is sent unchanged on each try. Team A: every record is accepted on the first try. Team B: F4's ^7 label 'checked the mooring ropes' is not in the passage. It fails C3 on all three tries, is dropped by the checker, and stays in row ^7. This is the plan's line: 'Checker: team A 18 entries, 0 fail. Team B 16 entries; 1 fails C3'."],
+    "checker_marks": {
+     "A": {"rows": 6, "entries": 18, "entries_marked_dropped": 0, "entries_put_back_after_being_left_out": 0, "passages_not_labeled": [], "marked_dropped_by_check": "none", "rows_by_final_state": "LABELED 6", "rows_by_tries_used": "1 6"},
+     "B": {"_why": "Five records pass on try 1. F4 uses all 3 tries.", "rows": 6, "entries": 16, "entries_marked_dropped": 1, "entries_put_back_after_being_left_out": 0, "passages_not_labeled": [], "marked_dropped_by_check": "C3 1", "rows_by_final_state": "LABELED 5; LABELED_WITH_DROPPED_ENTRIES 1", "rows_by_tries_used": "1 5; 3 1"}
+    },
+    "gate": {"A": [], "B": []},
+    "scorer_as_raw_set": "spec_six",
+    "scorer_except": {
+     "teams": {
+      "B": {"_why": "The checker marked the F4 entry, so the scorer drops nothing by itself. Tries 1 and 2 were sent back, each with one failed check: C3 on a ^7.", "dropped_by_this_program_not_marked_by_the_checker": 0, "reasks_by_check": "C3 2", "reasks_by_noetic": "^7 2", "put_back_after_being_left_out": 0}
+     }
+    }
+   },
+
+   "spec_six_f4_left_out": {
+    "files": {"passages": "spec_six/passages.json", "labels_team_a": ["spec_six/labels_team_a.json"], "labels_team_b": ["spec_six/labels_team_b.json", "spec_six/labels_team_b_try_2_f4_left_out.json"]},
+    "_cases": ["The same six passages. On try 1 team B's F4 record fails C3 on its ^7 entry, as before. On try 2 team B sends F4 again WITHOUT that entry. The record then passes and is accepted. The entry must not vanish: the checker puts it back, marked dropped, C3, removed_after_reask. The scorer keeps it in row ^7 and in the dropped share. So row ^7 reads 1 / 1 / 0 and the run is still not valid.", "What a wrong chain prints (the design spec's own line): 'If a dropped entry vanishes, row ^7 is 1 / 0.' Then team B has 15 entries, 0 dropped, and the run reads valid."],
+    "checker_marks": {
+     "A": {"rows": 6, "entries": 18, "entries_marked_dropped": 0, "entries_put_back_after_being_left_out": 0, "passages_not_labeled": []},
+     "B": {"_why": "16 entries in the rows: the 15 last sent and the 1 put back. F4 is final on try 2.", "rows": 6, "entries": 16, "entries_marked_dropped": 1, "entries_put_back_after_being_left_out": 1, "passages_not_labeled": [], "marked_dropped_by_check": "C3 1", "rows_by_tries_used": "1 5; 2 1"}
+    },
+    "gate": {"A": [], "B": []},
+    "scorer_as_raw_set": "spec_six",
+    "scorer_except": {
+     "teams": {
+      "B": {"_why": "Still 16 entries and 1 dropped: 0.0625, over 0.05. Only try 1 was sent back, so there is one re-ask. The put-back entry is counted per check and per Noetic.", "dropped_by_this_program_not_marked_by_the_checker": 0, "reasks_by_check": "C3 1", "reasks_by_noetic": "^7 1", "put_back_after_being_left_out": 1, "put_back_by_check": "C3 1", "put_back_by_noetic": "^7 1"}
+     }
+    }
+   },
+
+   "branches": {
+    "files": {"passages": "branches/passages.json", "labels_team_a": ["branches/labels_team_a.json"], "labels_team_b": ["branches/labels_team_b.json"], "kinds": "branches/kinds.json"},
+    "_cases": ["The 15 passages G01 to G15. Every record is sent unchanged on each try. Team A: every record is accepted on the first try. Team B: four entries fail on all three tries. G02 entry 5 repeats entry 4 (C8). G10 entry 2 has the pointer label 'That note' (C7). G10 entry 3 has certainty 'sure' (C1, no row). G10 entry 4 has a label that is not in the passage (C3). G12 stands for a reply that could not be read: after three tries the passage is not labeled.", "The one path that differs from part 2: the repeated ^2 entry of G02. In part 2 no checker ran and the scorer took it out as a duplicate. In the chain the checker fails it (C8), it is dropped, and it stays in row ^2 as an unmatched entry of team B. Every value under scorer_except follows from that one entry, from the checker's marks on G10, or from the re-asks."],
+    "checker_marks": {
+     "A": {"_why": "48 entries, none fails.", "rows": 15, "entries": 48, "entries_marked_dropped": 0, "entries_put_back_after_being_left_out": 0, "passages_not_labeled": [], "marked_dropped_by_check": "none", "rows_by_final_state": "LABELED 15", "rows_by_tries_used": "1 15"},
+     "B": {"_why": "51 entries. 4 fail: C1 1, C3 1, C7 1, C8 1. G02, G10 and G12 use all 3 tries.", "rows": 15, "entries": 51, "entries_marked_dropped": 4, "entries_put_back_after_being_left_out": 0, "passages_not_labeled": ["G12"], "marked_dropped_by_check": "C1 1; C3 1; C7 1; C8 1", "rows_by_final_state": "LABELED 12; LABELED_WITH_DROPPED_ENTRIES 2; NOT_LABELED 1", "rows_by_tries_used": "1 12; 3 3"}
+    },
+    "gate": {"A": [], "B": []},
+    "scorer_as_raw_set": "branches",
+    "scorer_except": {
+     "validity_rules_broken": {"_why": "1 of 15 passages not labeled by both teams is 0.0667, over 0.05. Team B: 4 of 51 entries dropped is 0.0784, over 0.05."},
+     "teams": {
+      "B": {"_why": "51 entries sent. 4 dropped: G02 entry 5 (C8, row ^2), G10 entry 2 (C7, row ^4), G10 entry 3 (C1, no row), G10 entry 4 (C3, row ^2). 4 of 51 is 0.0784. All four are marked by the checker. No duplicate is left for the scorer to take out. Re-asks: tries 1 and 2 of G02 (C8 on a ^2), of G10 (C7 and C1 on a ^4, C3 on a ^2) and of G12 (R0, the record as a whole).", "dropped_kept_in_a_row": 3, "dropped_no_row": 1, "dropped_total": 4, "dropped_share": "0.0784", "dropped_by_this_program_not_marked_by_the_checker": 0, "duplicates_removed": 0, "drops_by_check": "C1 1; C3 1; C7 1; C8 1", "drops_by_noetic": "^2 2; ^4 2", "reasks_by_check": "C1 2; C3 2; C7 2; C8 2; R0 2", "reasks_by_noetic": "^2 4; ^4 4; record 2"}
+     },
+     "rows": {
+      "^2": {"_why": "Team B has one more entry: the repeated one in G02, dropped and kept. 2 of 4 + 7 - 2 = 9.", "B": 7, "only_B": 5, "E": "0.222"}
+     },
+     "bar": {
+      "^2": {"_why": "The same cases G01 G02 G07 G09 G10 and the same kappa 54/82. G02 now has a match and a leftover, so it is no longer fully matched. Team B's share is 2 of 7.", "fully_matched_cases": 1, "cases_with_a_match_and_leftovers": 1, "share_B": "0.286", "dropped_kept_in_row_B": 2, "inside": 9}
+     },
+     "reasons": {
+      "^2": {"B": "DROPPED 2; MIND 1; OTHER_LABEL 1; ABSENT 1"}
+     },
+     "ceiling": {
+      "^2": {"_why": "No pointing pair on the first line: 2 / 9. One OTHER_LABEL pair on the second: (2 + 1) / (9 - 1).", "ceiling": "0.222", "ceiling_other_label_everywhere": "0.375"}
+     },
+     "table_4": {
+      "^2": {"_why": "Team B has one more entry in every line. Pooled: 5 / 8 / 3. Tolerance 0 and exact span keep 1 pair of 4 + 7 - 1 = 10. No start rule and the v1.2 word test keep 2 pairs of 9.", "pooled_clear_and_held": {"B": 8, "only_B": 5, "E": "0.300"}, "tolerance_0": {"B": 7, "E": "0.100"}, "no_start_rule": {"B": 7, "E": "0.222"}, "v12_word_test": {"B": 7, "E": "0.222"}, "exact_same_span": {"B": 7, "E": "0.100"}}
+     },
+     "seal_conditions": {"_why": "S2: team B dropped 4 of 51. S3, S4 and S5 as in part 2."},
+     "per_passage": {
+      "G02": {"_why": "^5 as in part 2. ^2: team B sent the same entry twice. The checker fails the second (C8). It is dropped and stays in row ^2: 1 / 2 / 1.", "rows": "^1 1/1/1; ^2 1/2/1; ^5 1/2/1; ^5 with twins 1/2/1", "reasons": "^2 B:DROPPED; ^5 B:OTHER_THING"},
+      "G10": {"_why": "The same rows as in part 2. Here all three of team B's failing entries are dropped by the checker: 'That note' (C7, row ^4), the entry with certainty 'sure' (C1, no row), 'the old piano' (C3, row ^2)."}
+     }
+    }
+   },
+
+   "forms": {
+    "files": {"passages": "forms/passages.json", "labels_team_a": ["forms/labels_team_a.json"], "labels_team_b": ["forms/labels_team_b.json"]},
+    "_cases": ["The six passages J01 to J06, sent unchanged on each try. The checker must fail every form that guide section B2 forbids, under the check the guide names. The scorer's own backstop names the same check for the same entry in part 2, so the two programs are shown to agree on each form.", "The one path that differs from part 2 is the repeated entry. In part 2 the scorer took out J02 entries 3 and 4 and J03 entry 5 as duplicates. In the chain the checker fails them (C8). They are dropped and stay in their own rows: held ^2, ambiguous ^2 and ^6."],
+    "checker_marks": {
+     "A": {"rows": 6, "entries": 18, "entries_marked_dropped": 0, "entries_put_back_after_being_left_out": 0, "passages_not_labeled": [], "marked_dropped_by_check": "none", "rows_by_final_state": "LABELED 6", "rows_by_tries_used": "1 6"},
+     "B": {"_why": "20 entries. 10 fail: J01 C6 and C6; J02 C8 and C8; J03 C6 and C8; J04 C1; J05 C1; J06 C1 and C5. Every record uses all 3 tries.", "rows": 6, "entries": 20, "entries_marked_dropped": 10, "entries_put_back_after_being_left_out": 0, "passages_not_labeled": [], "marked_dropped_by_check": "C1 3; C5 1; C6 3; C8 3", "rows_by_final_state": "LABELED_WITH_DROPPED_ENTRIES 6", "rows_by_tries_used": "3 6"}
+    },
+    "gate": {"A": [], "B": []},
+    "scorer_as_raw_set": "forms",
+    "scorer_except": {
+     "validity_rules_broken": {"_why": "Team B: 10 of 20 entries dropped is 0.5000, over 0.05."},
+     "teams": {
+      "B": {"_why": "20 entries sent. 10 dropped, all marked by the checker, all with a valid Noetic and certainty: 10 of 20 is 0.5000. No duplicate is left for the scorer. Re-asks: every failed check twice (tries 1 and 2).", "dropped_kept_in_a_row": 10, "dropped_total": 10, "dropped_share": "0.5000", "dropped_by_this_program_not_marked_by_the_checker": 0, "duplicates_removed": 0, "drops_by_check": "C1 3; C5 1; C6 3; C8 3", "drops_by_noetic": "^2 2; ^6 4; ^8 1; ^9 3", "reasks_by_check": "C1 6; C5 2; C6 6; C8 6", "reasks_by_noetic": "^2 4; ^6 8; ^8 2; ^9 6"}
+     },
+     "rows": {
+      "^6": {"_why": "J03 entry 5 repeats a clue. The checker fails it (C8). It is dropped and stays in bar row ^6.", "A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "ambiguous ^2": {"_why": "J02 entry 4: dropped (C8), kept in its own row.", "A": 0, "B": 1, "M": 0, "only_A": 0, "only_B": 1, "E": "0.000"},
+      "held ^2": {"_why": "J02 entry 3: dropped (C8), kept in its own row. It cannot pair with team A's held entry: a dropped entry is never matched.", "A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1, "E": "0.000"}
+     },
+     "bar": {
+      "^2": {"_why": "Outside the bar row: held ^2 has 1 + 1 = 2 entries, ambiguous ^2 has 1.", "outside": 3},
+      "^6": {"_why": "One case, J03. Kappa: team A present in 0, team B in 1, of 6: 0.", "cases": 1, "absences": 5, "kappa": "0.000", "dropped_kept_in_row_B": 1, "inside": 1, "outside": 7}
+     },
+     "reasons": {
+      "^6": {"A": "none", "B": "DROPPED 1"}
+     },
+     "held_by_code": {
+      "held ^2 H2-COMFORT": {"A": 1, "B": 1, "M": 0, "only_A": 1, "only_B": 1}
+     },
+     "per_passage": {
+      "J02": {"_why": "Neither copy vanishes. Each stays in the row of its own certainty as a dropped entry. So a team that hedges one thing three ways gets one located entry and two unmatched ones.", "rows": "^1 1/1/1; ^2 0/1/0; ambiguous ^2 0/1/0; held ^2 1/1/0", "reasons": "^2 B:STATUS"},
+      "J03": {"_why": "The plain part that repeats a clue is dropped (C8) and stays in bar row ^6.", "rows": "^1 1/1/1; ^6 0/1/0; ^9 reached by reasoning 1/1/1; ^6 clue 2/2/1", "reasons": "^6 B:DROPPED"}
+     }
+    }
+   }
+  }
+ },
+
+ "part_4_gates": {
+  "_note": "The gate of verdict mode (see the text at the top of tools/verdict_v2.py). Each case shows the gate a hand-made seal record, receipt or set of label rows and lists the refusal codes it must give. An empty list means: not refused. Every sha256 here is made up. No project file is written. Cases under `label_gate` use the rows the chain of part 3 wrote, with one hand-made fault each.",
+  "_note_on_numbers": "Two seal cases use the proposed bar 0.80 and the proposed ^5 bar row. If the owner signs other values and the constants block changes with them, these two cases are rewritten with the new values, as are the outcome-rule edges of part 2.",
+  "seal_gate": {
+   "base_seal": {
+    "schema": "casalescence/label-agreement-v2-seal/1",
+    "is_a_seal": true,
+    "no_label_existed_when_sealed": true,
+    "guide": {"file": "02_LABELING_GUIDE_v2_0.md", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "plan": {"file": "09_LABEL_AGREEMENT_PLAN_v2_0.md", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    "checker": {"file": "check_labels_v2.py", "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"},
+    "scorer": {"file": "verdict_v2.py", "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"},
+    "passages": {"file": "passages_sealed.json", "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+    "hold_table": {"file": "all_codes_open.json", "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"},
+    "instructions": {"file": "LABELER_INSTRUCTIONS.txt", "sha256": "1111111111111111111111111111111111111111111111111111111111111111"},
+    "team_a_launch": {"file": "TEAM_A_LAUNCH.txt", "sha256": "2222222222222222222222222222222222222222222222222222222222222222"},
+    "team_b_tool": {"file": "label_outside_v2.py", "sha256": "3333333333333333333333333333333333333333333333333333333333333333"},
+    "owner_signoff": {
+     "file": "OWNER_SIGNOFF.json",
+     "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+     "items": {
+      "1": {"decision": "as_proposed"}, "2": {"decision": "as_proposed"}, "3": {"decision": "as_proposed"},
+      "4a": {"decision": "as_proposed"}, "4b": {"decision": "as_proposed"}, "4c": {"decision": "as_proposed"}, "4d": {"decision": "as_proposed"},
+      "4e": {"decision": "as_proposed"}, "4f": {"decision": "as_proposed"}, "4g": {"decision": "as_proposed"}, "4h": {"decision": "as_proposed"},
+      "5": {"decision": "as_proposed"}, "6": {"decision": "as_proposed"},
+      "7a": {"decision": "as_proposed"}, "7b": {"decision": "as_proposed"}, "7c": {"decision": "as_proposed"}, "7d": {"decision": "as_proposed"}, "7e": {"decision": "as_proposed"},
+      "7f": {"decision": "as_proposed"}, "7g": {"decision": "as_proposed"}, "7h": {"decision": "as_proposed"}, "7i": {"decision": "as_proposed"},
+      "8a": {"decision": "as_proposed"}, "8b": {"decision": "as_proposed"}, "8c": {"decision": "as_proposed"}, "8d": {"decision": "as_proposed"}, "8e": {"decision": "as_proposed"},
+      "9a": {"decision": "as_proposed"}, "9b": {"decision": "as_proposed"}, "9c": {"decision": "as_proposed"}, "9d": {"decision": "as_proposed"}, "9e": {"decision": "as_proposed"},
+      "9f": {"decision": "as_proposed"}, "9g": {"decision": "as_proposed"}, "9h": {"decision": "as_proposed"}, "9i": {"decision": "as_proposed"}, "9j": {"decision": "as_proposed"},
+      "9k": {"decision": "as_proposed"}, "9l": {"decision": "as_proposed"}, "9m": {"decision": "as_proposed"}, "9n": {"decision": "as_proposed"}, "9o": {"decision": "as_proposed"},
+      "9p": {"decision": "as_proposed"}, "9q": {"decision": "as_proposed"}, "10": {"decision": "as_proposed"}
+     },
+     "changed_items": [],
+     "owner_values": {},
+     "conditions_struck": [],
+     "hold_codes_removed": [],
+     "lines_struck": [],
+     "changed_items_not_checked_by_this_tool": []
+    },
+    "seal_conditions": {"conditions": {"S1": {"status": "PASS"}, "S2": {"status": "PASS"}, "S3": {"status": "PASS"}, "S4": {"status": "PASS"}, "S5": {"status": "PASS"}}}
+   },
+   "base_now": {
+    "guide": {"file": "02_LABELING_GUIDE_v2_0.md", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "plan": {"file": "09_LABEL_AGREEMENT_PLAN_v2_0.md", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    "checker": {"file": "check_labels_v2.py", "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"},
+    "scorer": {"file": "verdict_v2.py", "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"},
+    "passages": {"file": "passages_sealed.json", "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}
+   },
+   "cases": [
+    {"name": "a complete seal record", "_why": "The layout tools/seal_v2.py writes in verdict mode, with every item signed as proposed.", "expect": []},
+    {"name": "a practice record with its five hashes at the top", "_why": "What the review showed: such a record opened verdict mode. It is not a seal and holds no owner sign-off.",
+     "set": {"schema": "casalescence/label-agreement-v2-practice-set/1", "is_a_seal": false, "owner_signoff": null, "seal_conditions": null},
+     "expect": ["NOT_THE_SEAL_SCHEMA", "NOT_A_SEAL", "NO_OWNER_SIGNOFF", "NO_SEAL_CONDITIONS"]},
+    {"name": "a practice record as the seal tool writes it now", "_why": "Its file hashes do not sit at the top, so the five sealed files are not named either.",
+     "set": {"schema": "casalescence/label-agreement-v2-practice-set/1", "is_a_seal": false, "owner_signoff": null, "seal_conditions": null, "guide": null, "plan": null, "checker": null, "scorer": null, "passages": null, "hold_table": null, "practice_passages": {"file": "passages_practice.json", "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}},
+     "expect": ["NOT_THE_SEAL_SCHEMA", "NOT_A_SEAL", "NO_OWNER_SIGNOFF", "NO_SEAL_CONDITIONS", "NO_HOLD_TABLE", "HASH_MISSING guide", "HASH_MISSING plan", "HASH_MISSING checker", "HASH_MISSING scorer", "HASH_MISSING passages"]},
+    {"name": "a hand-made record with five matching hashes and nothing else",
+     "set": {"schema": null, "is_a_seal": null, "no_label_existed_when_sealed": null, "owner_signoff": null, "seal_conditions": null, "hold_table": null, "instructions": null, "team_a_launch": null, "team_b_tool": null},
+     "expect": ["NOT_THE_SEAL_SCHEMA", "NOT_A_SEAL", "NOT_SEALED_BEFORE_LABELS", "NO_OWNER_SIGNOFF", "NO_SEAL_CONDITIONS", "NO_HOLD_TABLE"]},
+    {"name": "the layout of the first attempt's SEAL.json", "_why": "That layout is no longer read: verdict mode is never run on the old set.",
+     "set": {"schema": "casalescence/label-agreement-verdict-seal/1", "is_a_seal": null, "owner_signoff": null, "seal_conditions": null, "hold_table": null, "checker": null, "scorer": null, "passages": null, "passages_sealed_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "tools_sha256": {"check_labels_v2.py": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "verdict_v2.py": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}},
+     "expect": ["NOT_THE_SEAL_SCHEMA", "NOT_A_SEAL", "NO_OWNER_SIGNOFF", "NO_SEAL_CONDITIONS", "NO_HOLD_TABLE", "HASH_MISSING checker", "HASH_MISSING scorer", "HASH_MISSING passages"]},
+    {"name": "the scorer file changed after the seal",
+     "now": {"scorer": {"sha256": "9999999999999999999999999999999999999999999999999999999999999999"}},
+     "expect": ["HASH_DIFFERS scorer"]},
+    {"name": "the guide given has another file name",
+     "now": {"guide": {"file": "02_LABELING_GUIDE_v2_1.md"}},
+     "expect": ["FILE_NAME_DIFFERS guide"]},
+    {"name": "the sign-off holds no decision for item 6",
+     "set": {"owner_signoff": {"items": {"6": null}}},
+     "expect": ["SIGNOFF_ITEM_MISSING 6"]},
+    {"name": "the sign-off has no sha256",
+     "set": {"owner_signoff": {"sha256": null}},
+     "expect": ["NO_OWNER_SIGNOFF"]},
+    {"name": "the owner changed the bar to 0.75 and the scorer still holds 0.80", "_why": "The review's case: the seal was written and the verdict used the old number. Now the scorer itself refuses.",
+     "set": {"owner_signoff": {"items": {"1": {"decision": "changed", "value": "0.75"}}, "changed_items": ["1"], "owner_values": {"1": {"BAR_ENTRY_AGREEMENT": 0.75}}}},
+     "expect": ["SIGNED_VALUE_NOT_HELD 1 BAR_ENTRY_AGREEMENT"]},
+    {"name": "the owner wrote the bar the scorer holds",
+     "set": {"owner_signoff": {"items": {"1": {"decision": "changed", "value": "0.80"}}, "changed_items": ["1"], "owner_values": {"1": {"BAR_ENTRY_AGREEMENT": 0.8}}}},
+     "expect": []},
+    {"name": "the owner picked the ^5 row with twins and the scorer holds the other row", "_why": "The scorer holds this one setting under two names: FIVE_BAR_ROW ('without_twins' or 'with_twins') and BAR_ROW_5_WITH_TWINS (false or true). The seal tool may sign either.",
+     "set": {"owner_signoff": {"items": {"6": {"decision": "changed", "value": "with twins"}}, "changed_items": ["6"], "owner_values": {"6": {"BAR_ROW_5_WITH_TWINS": true}}}},
+     "expect": ["SIGNED_VALUE_NOT_HELD 6 BAR_ROW_5_WITH_TWINS"]},
+    {"name": "the same choice, written beside the item under the other name",
+     "set": {"owner_signoff": {"items": {"6": {"decision": "changed", "value": "with twins", "constants": {"FIVE_BAR_ROW": "with_twins"}}}, "changed_items": ["6"]}},
+     "expect": ["SIGNED_VALUE_NOT_HELD 6 FIVE_BAR_ROW"]},
+    {"name": "the values signed as proposed, written beside their items, are the ones the scorer holds", "_why": "If the owner signs other numbers and the constants block changes with them, this case is rewritten.",
+     "set": {"owner_signoff": {"items": {
+       "1": {"decision": "as_proposed", "constants": {"BAR_ENTRY_AGREEMENT": 0.8}},
+       "2": {"decision": "as_proposed", "constants": {"BAR_KAPPA": 0.6}},
+       "3": {"decision": "as_proposed", "constants": {"MIN_CASES": 50, "MIN_ABSENCES": 50}},
+       "5": {"decision": "as_proposed", "constants": {"OUTCOME_NOT_ENOUGH": "NOT_ENOUGH_CASES", "OUTCOME_NOT_LABELABLE": "NOT_LABELABLE_UNDER_THIS_METHOD", "OUTCOME_WAITING": "NO_VERDICT_WAITING_ON_OWNER", "OUTCOME_LABELABLE": "LABELABLE_UNDER_THIS_METHOD", "OUTCOME_NO_BAR": "REPORTED_ONLY_NO_BAR"}},
+       "6": {"decision": "as_proposed", "constants": {"FIVE_BAR_ROW": "without_twins", "BAR_ROW_5_WITH_TWINS": false}},
+       "8b": {"decision": "as_proposed", "constants": {"SEAL_S2_MAX_DROPPED_SHARE": 0.05}},
+       "8d": {"decision": "as_proposed", "constants": {"SEAL_S4_KIND": "K1", "SEAL_S4_MIN_E": 0.8}},
+       "8e": {"decision": "as_proposed", "constants": {"SEAL_S5_MIN_WHOLE_SHARE": 0.8}}}}},
+     "expect": []},
+    {"name": "a value signed as proposed, written beside its item, that the scorer does not hold",
+     "set": {"owner_signoff": {"items": {"2": {"decision": "as_proposed", "constants": {"BAR_KAPPA": 0.65}}}}},
+     "expect": ["SIGNED_VALUE_NOT_HELD 2 BAR_KAPPA"]},
+    {"name": "the owner ruled on H2-COMFORT and the scorer still carries the code",
+     "set": {"owner_signoff": {"items": {"4a": {"decision": "changed", "value": "ruled: counts"}}, "changed_items": ["4a"], "hold_codes_removed": ["H2-COMFORT"]}},
+     "expect": ["HOLD_CODE_RULED_ON_BUT_HELD H2-COMFORT"]},
+    {"name": "the same ruling, marked beside the item",
+     "set": {"owner_signoff": {"items": {"4a": {"decision": "changed", "value": "ruled: counts", "hold_code_removed": true}}, "changed_items": ["4a"]}},
+     "expect": ["HOLD_CODE_RULED_ON_BUT_HELD H2-COMFORT"]},
+    {"name": "the file given with --ruling is the sealed hold table",
+     "ruling": {"file": "all_codes_open.json", "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "states": {"H2-COMFORT": "open", "H3-NOPULL": "open", "H3-BORED": "open", "H5-ROLE": "open", "H7-RESULT": "open", "H7-NOEFFECT": "open", "H7-UNBROKEN": "open", "H89-FOLLOWS": "open"}},
+     "expect": []},
+    {"name": "an all-open file given with --ruling is not the sealed hold table",
+     "ruling": {"file": "other.json", "sha256": "7777777777777777777777777777777777777777777777777777777777777777", "states": {"H2-COMFORT": "open", "H3-NOPULL": "open", "H3-BORED": "open", "H5-ROLE": "open", "H7-RESULT": "open", "H7-NOEFFECT": "open", "H7-UNBROKEN": "open", "H89-FOLLOWS": "open"}},
+     "expect": ["RULING_NOT_THE_SEALED_HOLD_TABLE"]},
+    {"name": "a ruling file that sets a code to counts is a re-score and is not refused", "_why": "Every row then prints REPORTED_ONLY_NO_BAR (part 2, the two ruling sets).",
+     "ruling": {"file": "ruling.json", "sha256": "7777777777777777777777777777777777777777777777777777777777777777", "states": {"H2-COMFORT": "counts", "H3-NOPULL": "open", "H3-BORED": "open", "H5-ROLE": "open", "H7-RESULT": "open", "H7-NOEFFECT": "open", "H7-UNBROKEN": "open", "H89-FOLLOWS": "open"}},
+     "expect": []},
+    {"name": "a ruling file that names a code this program does not carry",
+     "ruling": {"file": "ruling.json", "sha256": "7777777777777777777777777777777777777777777777777777777777777777", "states": {"H9-OTHER": "open"}},
+     "expect": ["RULING_NOT_VALID"]}
+   ]
+  },
+  "receipt_gate": {
+   "_note": "The seal is the base seal above. The base receipt is a team A receipt in the layout tools/check_labels_v2.py writes at export.",
+   "labels_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+   "seal_sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+   "base_receipt": {
+    "format": "check_labels_v2.receipt/1",
+    "labels_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+    "passages_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "checker_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "guide_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "instructions_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "launch_text_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "seal_record": {"file": "SEAL.json", "sha256": "6666666666666666666666666666666666666666666666666666666666666666"},
+    "every_passage_final": true,
+    "closed_before_third_try": 0,
+    "close_unfinished_was_used": false
+   },
+   "cases": [
+    {"name": "a complete team A receipt", "expect": []},
+    {"name": "the labels were made under another guide", "set": {"guide_sha256": "9999999999999999999999999999999999999999999999999999999999999999"}, "expect": ["RECEIPT_DIFFERS A guide_sha256"]},
+    {"name": "the receipt names no guide", "set": {"guide_sha256": null}, "expect": ["RECEIPT_KEY_MISSING A guide_sha256"]},
+    {"name": "the labels went through another checker", "set": {"checker_sha256": "9999999999999999999999999999999999999999999999999999999999999999"}, "expect": ["RECEIPT_DIFFERS A checker_sha256"]},
+    {"name": "the labels are for another passage file", "set": {"passages_sha256": "9999999999999999999999999999999999999999999999999999999999999999"}, "expect": ["RECEIPT_DIFFERS A passages_sha256"]},
+    {"name": "the labelers were given other instructions", "set": {"instructions_sha256": "9999999999999999999999999999999999999999999999999999999999999999"}, "expect": ["RECEIPT_DIFFERS A instructions_sha256"]},
+    {"name": "team A's receipt names no launch text", "set": {"launch_text_sha256": null}, "expect": ["RECEIPT_KEY_MISSING A launch_text_sha256"]},
+    {"name": "the receipt belongs to another label file", "set": {"labels_sha256": "9999999999999999999999999999999999999999999999999999999999999999"}, "expect": ["RECEIPT_FOR_ANOTHER_LABEL_FILE A"]},
+    {"name": "the export was checked against another seal record", "set": {"seal_record": {"sha256": "9999999999999999999999999999999999999999999999999999999999999999"}}, "expect": ["RECEIPT_MADE_WITH_ANOTHER_SEAL A"]},
+    {"name": "one of team A's try logs was written by another checker", "set": {"try_logs": [{"file": "tries_A1.json", "checker_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}, {"file": "tries_A2.json", "checker_sha256": "9999999999999999999999999999999999999999999999999999999999999999"}]}, "expect": ["RECEIPT_TRY_LOG_OF_ANOTHER_CHECKER A"]},
+    {"name": "the receipt says a passage is still open", "set": {"every_passage_final": false}, "expect": ["RECEIPT_SAYS_NOT_FINISHED A"]},
+    {"name": "the receipt says rows were closed before their third try", "set": {"close_unfinished_was_used": true, "closed_before_third_try": 2}, "expect": ["RECEIPT_SAYS_CLOSED_EARLY A"]},
+    {"name": "a complete team B receipt", "team": "B", "set": {"launch_text_sha256": null, "tool_sha256": "3333333333333333333333333333333333333333333333333333333333333333"}, "expect": []},
+    {"name": "team B's labels were made by another labeling tool", "team": "B", "set": {"launch_text_sha256": null, "tool_sha256": "9999999999999999999999999999999999999999999999999999999999999999"}, "expect": ["RECEIPT_DIFFERS B tool_sha256"]}
+   ]
+  },
+  "label_gate": {
+   "_note": "`chain_set` and `team` name rows that part 3 wrote. `edit` makes one fault by hand. `strict` true is verdict mode; false is practice mode.",
+   "cases": [
+    {"name": "the rows the checker wrote for team B of spec_six", "chain_set": "spec_six", "team": "B", "expect": []},
+    {"name": "a row is missing", "chain_set": "spec_six", "team": "B", "edit": {"drop_row": "F5"}, "expect": ["ROW_MISSING F5"]},
+    {"name": "a passage was never sent to the labeler", "_why": "The review's case: 5 of 120 rows NOT_ATTEMPTED still gave a valid verdict.", "chain_set": "spec_six", "team": "B", "edit": {"set_checker": ["F5", {"final": "NOT_ATTEMPTED", "tries": 0, "dropped": []}], "set_row": ["F5", {"labeler_failed": true, "entries": []}]}, "expect": ["ROW_NOT_FINAL F5"]},
+    {"name": "a passage with tries left", "chain_set": "spec_six", "team": "B", "edit": {"set_checker": ["F5", {"final": "UNFINISHED", "tries": 1, "dropped": []}], "set_row": ["F5", {"labeler_failed": true, "entries": []}]}, "expect": ["ROW_NOT_FINAL F5"]},
+    {"name": "the same open row in practice mode is listed and not refused", "chain_set": "spec_six", "team": "B", "strict": false, "edit": {"set_checker": ["F5", {"final": "UNFINISHED", "tries": 1, "dropped": []}], "set_row": ["F5", {"labeler_failed": true, "entries": []}]}, "expect": []},
+    {"name": "a row closed before its third try", "chain_set": "spec_six", "team": "B", "edit": {"set_checker": ["F4", {"closed_before_third_try": true}]}, "expect": ["CLOSED_BEFORE_THIRD_TRY F4"]},
+    {"name": "a passage marked not labeled after one try", "chain_set": "branches", "team": "B", "edit": {"set_checker": ["G12", {"tries": 1}]}, "expect": ["NOT_LABELED_BEFORE_THE_LAST_TRY G12"]},
+    {"name": "a raw label file that never went through the checker", "_why": "The review's case: a raw file was scored, long labels and all.", "chain_set": "spec_six", "team": "B", "edit": {"raw_file": "spec_six/labels_team_b.json"}, "expect": ["NO_CHECKER_BLOCK F1", "NO_CHECKER_BLOCK F2", "NO_CHECKER_BLOCK F3", "NO_CHECKER_BLOCK F4", "NO_CHECKER_BLOCK F5", "NO_CHECKER_BLOCK F6"]},
+    {"name": "the same raw file in practice mode", "chain_set": "spec_six", "team": "B", "strict": false, "edit": {"raw_file": "spec_six/labels_team_b.json"}, "expect": ["NO_CHECKER_BLOCK F1", "NO_CHECKER_BLOCK F2", "NO_CHECKER_BLOCK F3", "NO_CHECKER_BLOCK F4", "NO_CHECKER_BLOCK F5", "NO_CHECKER_BLOCK F6"]},
+    {"name": "a failing entry whose dropped mark was taken off", "chain_set": "spec_six", "team": "B", "edit": {"unmark_dropped": "F4"}, "expect": ["ENTRY_FAILS_NOT_MARKED F4 entry 2 C3"]},
+    {"name": "a row written by another checker", "chain_set": "spec_six", "team": "B", "edit": {"set_checker": ["F1", {"checker": "check_labels_v2/0"}]}, "expect": ["ANOTHER_CHECKER F1"]},
+    {"name": "two rows for one passage", "chain_set": "spec_six", "team": "B", "edit": {"repeat_row": "F1"}, "expect": ["ROW_TWICE F1"]},
+    {"name": "a row for a passage that is not in the passage file", "chain_set": "spec_six", "team": "B", "edit": {"add_row": {"passage_id": "Z9", "none_of_these": true, "entries": [], "not_enough_information": [], "guide_problem": ""}}, "expect": ["ROW_FOR_NO_PASSAGE \"Z9\""]},
+    {"name": "one file given for both teams", "_why": "The review's case: team A's file for both teams gave E 1.000 on every row.", "same_sha256": true, "expect": ["LABEL_FILES_ARE_ONE_FILE"]},
+    {"name": "two different label files", "same_sha256": false, "expect": []},
+    {"name": "the rows with a put-back entry pass the gate", "chain_set": "spec_six_f4_left_out", "team": "B", "expect": []},
+    {"name": "a put-back entry whose dropped mark was taken off", "chain_set": "spec_six_f4_left_out", "team": "B", "edit": {"unmark_dropped": "F4"}, "expect": ["PUT_BACK_NOT_MARKED_DROPPED F4 entry 2"]}
+   ]
+  }
+ }
+}

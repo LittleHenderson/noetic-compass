@@ -1,0 +1,866 @@
+[
+ {
+  "id": "V001",
+  "kind": "K1",
+  "setting": "made-up setting 01",
+  "text": "Tama opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V002",
+  "kind": "K2",
+  "setting": "made-up setting 01",
+  "text": "Odra opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V003",
+  "kind": "K3",
+  "setting": "made-up setting 01",
+  "text": "Ilsa opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V004",
+  "kind": "K4",
+  "setting": "made-up setting 03",
+  "text": "Brama opened the nail forge before dawn. He always reached for the copper hammer before the iron hammer. The bucket stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V005",
+  "kind": "K5",
+  "setting": "made-up setting 03",
+  "text": "Mara opened the dye house before dawn. She always reached for the hemp ladle before the nylon ladle. The rack stood on the table by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V006",
+  "kind": "K1",
+  "setting": "made-up setting 03",
+  "text": "Cora opened the bell tower before dawn. He always reached for the wicker tray before the mesh tray. The oilcan stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V007",
+  "kind": "K2",
+  "setting": "made-up setting 04",
+  "text": "Edda opened the boat shed before dawn. She always reached for the wooden mould before the metal mould. The stool stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V008",
+  "kind": "K3",
+  "setting": "made-up setting 04",
+  "text": "Jossa opened the net loft before dawn. He always reached for the brass ruler before the plastic ruler. The globe stood on the counter by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V009",
+  "kind": "K4",
+  "setting": "made-up setting 04",
+  "text": "Wrena opened the seed store before dawn. She always reached for the long saw before the short saw. The sledge stood on the ledge by the door. A coil of rope lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V010",
+  "kind": "K5",
+  "setting": "made-up setting 05",
+  "text": "Fenna opened the nail forge before dawn. He always reached for the small spindle before the large spindle. The lantern stood on the table by the door. A ball of twine lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V011",
+  "kind": "K1",
+  "setting": "made-up setting 05",
+  "text": "Liesa opened the dye house before dawn. She always reached for the curved rake before the straight rake. The kettle stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V012",
+  "kind": "K2",
+  "setting": "made-up setting 05",
+  "text": "Ansa opened the bell tower before dawn. He always reached for the fine brush before the flat brush. The ledger stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V013",
+  "kind": "K3",
+  "setting": "made-up setting 09",
+  "text": "Petra opened the boat shed before dawn. She always reached for the birch needle before the zinc needle. The bucket stood on the counter by the door. A tub of madder lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V014",
+  "kind": "K4",
+  "setting": "made-up setting 09",
+  "text": "Hala opened the net loft before dawn. He always reached for the tar scoop before the wire scoop. The rack stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V015",
+  "kind": "K5",
+  "setting": "made-up setting 09",
+  "text": "Sunna opened the seed store before dawn. She always reached for the bone hammer before the steel hammer. The oilcan stood on the table by the door. A stack of pallets lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V016",
+  "kind": "K1",
+  "setting": "made-up setting 11",
+  "text": "Tamen opened the nail forge before dawn. He always reached for the oak ladle before the tin ladle. The stool stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V017",
+  "kind": "K2",
+  "setting": "made-up setting 11",
+  "text": "Odren opened the dye house before dawn. She always reached for the copper tray before the iron tray. The globe stood on the stove by the door. A coil of rope lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V018",
+  "kind": "K3",
+  "setting": "made-up setting 11",
+  "text": "Ilsen opened the bell tower before dawn. He always reached for the hemp mould before the nylon mould. The sledge stood on the counter by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the sledge first."
+ },
+ {
+  "id": "V019",
+  "kind": "K4",
+  "setting": "made-up setting 12",
+  "text": "Bramen opened the boat shed before dawn. She always reached for the wicker ruler before the mesh ruler. The lantern stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V020",
+  "kind": "K5",
+  "setting": "made-up setting 12",
+  "text": "Maren opened the net loft before dawn. He always reached for the wooden saw before the metal saw. The kettle stood on the table by the door. A pair of tongs lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V021",
+  "kind": "K1",
+  "setting": "made-up setting 12",
+  "text": "Coren opened the seed store before dawn. She always reached for the brass spindle before the plastic spindle. The ledger stood on the shelf by the door. A tub of madder lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V022",
+  "kind": "K2",
+  "setting": "made-up setting 13",
+  "text": "Edden opened the nail forge before dawn. He always reached for the long rake before the short rake. The bucket stood on the stove by the door. A heap of straw lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V023",
+  "kind": "K3",
+  "setting": "made-up setting 13",
+  "text": "Jossen opened the dye house before dawn. She always reached for the small brush before the large brush. The rack stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V024",
+  "kind": "K4",
+  "setting": "made-up setting 13",
+  "text": "Wrenen opened the bell tower before dawn. He always reached for the curved needle before the straight needle. The oilcan stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V025",
+  "kind": "K5",
+  "setting": "made-up setting 14",
+  "text": "Fennen opened the boat shed before dawn. She always reached for the fine scoop before the flat scoop. The stool stood on the table by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V026",
+  "kind": "K1",
+  "setting": "made-up setting 14",
+  "text": "Liesen opened the net loft before dawn. He always reached for the birch hammer before the zinc hammer. The globe stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V027",
+  "kind": "K2",
+  "setting": "made-up setting 14",
+  "text": "Ansen opened the seed store before dawn. She always reached for the tar ladle before the wire ladle. The sledge stood on the stove by the door. A sack of barley lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V028",
+  "kind": "K6",
+  "setting": "made-up setting 15",
+  "text": "Petren opened the nail forge before dawn. He always reached for the bone tray before the steel tray. The lantern stood on the counter by the door. A pair of tongs lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V029",
+  "kind": "K4",
+  "setting": "made-up setting 15",
+  "text": "Halen opened the dye house before dawn. She always reached for the oak mould before the tin mould. The kettle stood on the ledge by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V030",
+  "kind": "K5",
+  "setting": "made-up setting 15",
+  "text": "Sunnen opened the bell tower before dawn. He always reached for the copper ruler before the iron ruler. The ledger stood on the table by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V031",
+  "kind": "K1",
+  "setting": "made-up setting 16",
+  "text": "Tamin opened the boat shed before dawn. She always reached for the hemp saw before the nylon saw. The bucket stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V032",
+  "kind": "K2",
+  "setting": "made-up setting 16",
+  "text": "Odrin opened the net loft before dawn. He always reached for the wicker spindle before the mesh spindle. The rack stood on the stove by the door. A roll of tape lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V033",
+  "kind": "K3",
+  "setting": "made-up setting 16",
+  "text": "Ilsin opened the seed store before dawn. She always reached for the wooden rake before the metal rake. The oilcan stood on the counter by the door. A coil of rope lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V034",
+  "kind": "K4",
+  "setting": "made-up setting 17",
+  "text": "Bramin opened the nail forge before dawn. He always reached for the brass brush before the plastic brush. The stool stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V035",
+  "kind": "K7",
+  "setting": "made-up setting 17",
+  "text": "Marin opened the dye house before dawn. She always reached for the long needle before the short needle. The globe stood on the table by the door. A sack of barley lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V036",
+  "kind": "K1",
+  "setting": "made-up setting 17",
+  "text": "Corin opened the bell tower before dawn. He always reached for the small scoop before the large scoop. The sledge stood on the shelf by the door. A pair of tongs lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the sledge first."
+ },
+ {
+  "id": "V037",
+  "kind": "K2",
+  "setting": "made-up setting 20",
+  "text": "Eddin opened the boat shed before dawn. She always reached for the curved hammer before the straight hammer. The lantern stood on the stove by the door. A tub of madder lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V038",
+  "kind": "K3",
+  "setting": "made-up setting 20",
+  "text": "Jossin opened the net loft before dawn. He always reached for the fine ladle before the flat ladle. The kettle stood on the counter by the door. A heap of straw lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V039",
+  "kind": "K4",
+  "setting": "made-up setting 20",
+  "text": "Wrenin opened the seed store before dawn. She always reached for the birch tray before the zinc tray. The ledger stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V040",
+  "kind": "K5",
+  "setting": "made-up setting 21",
+  "text": "Fennin opened the nail forge before dawn. He always reached for the tar mould before the wire mould. The bucket stood on the table by the door. A roll of tape lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V041",
+  "kind": "K1",
+  "setting": "made-up setting 21",
+  "text": "Liesin opened the dye house before dawn. She always reached for the bone ruler before the steel ruler. The rack stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V042",
+  "kind": "K2",
+  "setting": "made-up setting 21",
+  "text": "Ansin opened the bell tower before dawn. He always reached for the oak saw before the tin saw. The oilcan stood on the stove by the door. A ball of twine lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V043",
+  "kind": "K3",
+  "setting": "made-up setting 22",
+  "text": "Petrin opened the boat shed before dawn. She always reached for the copper spindle before the iron spindle. The stool stood on the counter by the door. A sack of barley lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V044",
+  "kind": "K4",
+  "setting": "made-up setting 22",
+  "text": "Halin opened the net loft before dawn. He always reached for the hemp rake before the nylon rake. The globe stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V045",
+  "kind": "K5",
+  "setting": "made-up setting 22",
+  "text": "Sunnin opened the seed store before dawn. She always reached for the wicker brush before the mesh brush. The sledge stood on the table by the door. A tub of madder lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V046",
+  "kind": "K1",
+  "setting": "made-up setting 23",
+  "text": "Tamo opened the nail forge before dawn. He always reached for the wooden needle before the metal needle. The lantern stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V047",
+  "kind": "K2",
+  "setting": "made-up setting 23",
+  "text": "Odro opened the dye house before dawn. She always reached for the brass scoop before the plastic scoop. The kettle stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V048",
+  "kind": "K3",
+  "setting": "made-up setting 23",
+  "text": "Ilso opened the bell tower before dawn. He always reached for the long hammer before the short hammer. The ledger stood on the counter by the door. A roll of tape lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V049",
+  "kind": "K4",
+  "setting": "made-up setting 24",
+  "text": "Bramo opened the boat shed before dawn. She always reached for the small ladle before the large ladle. The bucket stood on the ledge by the door. A coil of rope lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V050",
+  "kind": "K5",
+  "setting": "made-up setting 24",
+  "text": "Maro opened the net loft before dawn. He always reached for the curved tray before the straight tray. The rack stood on the table by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V051",
+  "kind": "K1",
+  "setting": "made-up setting 24",
+  "text": "Coro opened the seed store before dawn. She always reached for the fine mould before the flat mould. The oilcan stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V052",
+  "kind": "K2",
+  "setting": "made-up setting 25",
+  "text": "Eddo opened the nail forge before dawn. He always reached for the birch ruler before the zinc ruler. The stool stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V053",
+  "kind": "K3",
+  "setting": "made-up setting 25",
+  "text": "Josso opened the dye house before dawn. She always reached for the tar saw before the wire saw. The globe stood on the counter by the door. A tub of madder lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V054",
+  "kind": "K4",
+  "setting": "made-up setting 25",
+  "text": "Wreno opened the bell tower before dawn. He always reached for the bone spindle before the steel spindle. The sledge stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the sledge first."
+ },
+ {
+  "id": "V055",
+  "kind": "K5",
+  "setting": "made-up setting 27",
+  "text": "Fenno opened the boat shed before dawn. She always reached for the oak rake before the tin rake. The lantern stood on the table by the door. A stack of pallets lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V056",
+  "kind": "K1",
+  "setting": "made-up setting 27",
+  "text": "Lieso opened the net loft before dawn. He always reached for the copper brush before the iron brush. The kettle stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V057",
+  "kind": "K2",
+  "setting": "made-up setting 27",
+  "text": "Anso opened the seed store before dawn. She always reached for the hemp needle before the nylon needle. The ledger stood on the stove by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V058",
+  "kind": "K3",
+  "setting": "made-up setting 28",
+  "text": "Petro opened the nail forge before dawn. He always reached for the wicker scoop before the mesh scoop. The bucket stood on the counter by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V059",
+  "kind": "K4",
+  "setting": "made-up setting 28",
+  "text": "Halo opened the dye house before dawn. She always reached for the wooden hammer before the metal hammer. The rack stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V060",
+  "kind": "K5",
+  "setting": "made-up setting 28",
+  "text": "Sunno opened the bell tower before dawn. He always reached for the brass ladle before the plastic ladle. The oilcan stood on the table by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V061",
+  "kind": "K1",
+  "setting": "made-up setting 29",
+  "text": "Tamis opened the boat shed before dawn. She always reached for the long tray before the short tray. The stool stood on the shelf by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V062",
+  "kind": "K2",
+  "setting": "made-up setting 29",
+  "text": "Odris opened the net loft before dawn. He always reached for the small mould before the large mould. The globe stood on the stove by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V063",
+  "kind": "K3",
+  "setting": "made-up setting 29",
+  "text": "Ilsis opened the seed store before dawn. She always reached for the curved ruler before the straight ruler. The sledge stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V064",
+  "kind": "K4",
+  "setting": "made-up setting 30",
+  "text": "Bramis opened the nail forge before dawn. He always reached for the fine saw before the flat saw. The lantern stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V065",
+  "kind": "K5",
+  "setting": "made-up setting 30",
+  "text": "Maris opened the dye house before dawn. She always reached for the birch spindle before the zinc spindle. The kettle stood on the table by the door. A coil of rope lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V066",
+  "kind": "K1",
+  "setting": "made-up setting 30",
+  "text": "Coris opened the bell tower before dawn. He always reached for the tar rake before the wire rake. The ledger stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V067",
+  "kind": "K2",
+  "setting": "made-up setting 31",
+  "text": "Eddis opened the boat shed before dawn. She always reached for the bone brush before the steel brush. The bucket stood on the stove by the door. A sack of barley lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V068",
+  "kind": "K3",
+  "setting": "made-up setting 31",
+  "text": "Jossis opened the net loft before dawn. He always reached for the oak needle before the tin needle. The rack stood on the counter by the door. A pair of tongs lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V069",
+  "kind": "K4",
+  "setting": "made-up setting 31",
+  "text": "Wrenis opened the seed store before dawn. She always reached for the copper scoop before the iron scoop. The oilcan stood on the ledge by the door. A tub of madder lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V070",
+  "kind": "K5",
+  "setting": "made-up setting 32",
+  "text": "Fennis opened the nail forge before dawn. He always reached for the hemp hammer before the nylon hammer. The stool stood on the table by the door. A heap of straw lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V071",
+  "kind": "K1",
+  "setting": "made-up setting 32",
+  "text": "Liesis opened the dye house before dawn. She always reached for the wicker ladle before the mesh ladle. The globe stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V072",
+  "kind": "K2",
+  "setting": "made-up setting 32",
+  "text": "Ansis opened the bell tower before dawn. He always reached for the wooden tray before the metal tray. The sledge stood on the stove by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the sledge first."
+ },
+ {
+  "id": "V073",
+  "kind": "K3",
+  "setting": "made-up setting 33",
+  "text": "Petris opened the boat shed before dawn. She always reached for the brass mould before the plastic mould. The lantern stood on the counter by the door. A coil of rope lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V074",
+  "kind": "K4",
+  "setting": "made-up setting 33",
+  "text": "Halis opened the net loft before dawn. He always reached for the long ruler before the short ruler. The kettle stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V075",
+  "kind": "K5",
+  "setting": "made-up setting 33",
+  "text": "Sunnis opened the seed store before dawn. She always reached for the small saw before the large saw. The ledger stood on the table by the door. A sack of barley lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V076",
+  "kind": "K1",
+  "setting": "made-up setting 37",
+  "text": "Tamet opened the nail forge before dawn. He always reached for the curved spindle before the straight spindle. The bucket stood on the shelf by the door. A pair of tongs lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V077",
+  "kind": "K2",
+  "setting": "made-up setting 37",
+  "text": "Odret opened the dye house before dawn. She always reached for the fine rake before the flat rake. The rack stood on the stove by the door. A tub of madder lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V078",
+  "kind": "K3",
+  "setting": "made-up setting 37",
+  "text": "Ilset opened the bell tower before dawn. He always reached for the birch brush before the zinc brush. The oilcan stood on the counter by the door. A heap of straw lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V079",
+  "kind": "K4",
+  "setting": "made-up setting 38",
+  "text": "Bramet opened the boat shed before dawn. She always reached for the tar needle before the wire needle. The stool stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V080",
+  "kind": "K5",
+  "setting": "made-up setting 38",
+  "text": "Maret opened the net loft before dawn. He always reached for the bone scoop before the steel scoop. The globe stood on the table by the door. A roll of tape lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V081",
+  "kind": "K1",
+  "setting": "made-up setting 38",
+  "text": "Coret opened the seed store before dawn. She always reached for the oak hammer before the tin hammer. The sledge stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V082",
+  "kind": "K2",
+  "setting": "made-up setting 39",
+  "text": "Eddet opened the nail forge before dawn. He always reached for the copper ladle before the iron ladle. The lantern stood on the stove by the door. A ball of twine lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V083",
+  "kind": "K3",
+  "setting": "made-up setting 39",
+  "text": "Josset opened the dye house before dawn. She always reached for the hemp tray before the nylon tray. The kettle stood on the counter by the door. A sack of barley lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V084",
+  "kind": "K4",
+  "setting": "made-up setting 39",
+  "text": "Wrenet opened the bell tower before dawn. He always reached for the wicker mould before the mesh mould. The ledger stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V085",
+  "kind": "K5",
+  "setting": "made-up setting 40",
+  "text": "Fennet opened the boat shed before dawn. She always reached for the wooden ruler before the metal ruler. The bucket stood on the table by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V086",
+  "kind": "K1",
+  "setting": "made-up setting 40",
+  "text": "Lieset opened the net loft before dawn. He always reached for the brass saw before the plastic saw. The rack stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V087",
+  "kind": "K2",
+  "setting": "made-up setting 40",
+  "text": "Anset opened the seed store before dawn. She always reached for the long spindle before the short spindle. The oilcan stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V088",
+  "kind": "K3",
+  "setting": "made-up setting 41",
+  "text": "Petret opened the nail forge before dawn. He always reached for the small rake before the large rake. The stool stood on the counter by the door. A roll of tape lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V089",
+  "kind": "K4",
+  "setting": "made-up setting 41",
+  "text": "Halet opened the dye house before dawn. She always reached for the curved brush before the straight brush. The globe stood on the ledge by the door. A coil of rope lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V090",
+  "kind": "K5",
+  "setting": "made-up setting 41",
+  "text": "Sunnet opened the bell tower before dawn. He always reached for the fine needle before the flat needle. The sledge stood on the table by the door. A ball of twine lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the sledge first."
+ },
+ {
+  "id": "V091",
+  "kind": "K1",
+  "setting": "made-up setting 42",
+  "text": "Tamol opened the boat shed before dawn. She always reached for the birch scoop before the zinc scoop. The lantern stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V092",
+  "kind": "K2",
+  "setting": "made-up setting 42",
+  "text": "Odrol opened the net loft before dawn. He always reached for the tar hammer before the wire hammer. The kettle stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V093",
+  "kind": "K3",
+  "setting": "made-up setting 42",
+  "text": "Ilsol opened the seed store before dawn. She always reached for the bone ladle before the steel ladle. The ledger stood on the counter by the door. A tub of madder lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V094",
+  "kind": "K4",
+  "setting": "made-up setting 43",
+  "text": "Bramol opened the nail forge before dawn. He always reached for the oak tray before the tin tray. The bucket stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V095",
+  "kind": "K5",
+  "setting": "made-up setting 43",
+  "text": "Marol opened the dye house before dawn. She always reached for the copper mould before the iron mould. The rack stood on the table by the door. A stack of pallets lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V096",
+  "kind": "K1",
+  "setting": "made-up setting 43",
+  "text": "Corol opened the bell tower before dawn. He always reached for the hemp ruler before the nylon ruler. The oilcan stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V097",
+  "kind": "K2",
+  "setting": "made-up setting 44",
+  "text": "Eddol opened the boat shed before dawn. She always reached for the wicker saw before the mesh saw. The stool stood on the stove by the door. A coil of rope lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V098",
+  "kind": "K3",
+  "setting": "made-up setting 44",
+  "text": "Jossol opened the net loft before dawn. He always reached for the wooden spindle before the metal spindle. The globe stood on the counter by the door. A ball of twine lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V099",
+  "kind": "K4",
+  "setting": "made-up setting 44",
+  "text": "Wrenol opened the seed store before dawn. She always reached for the brass rake before the plastic rake. The sledge stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V100",
+  "kind": "K5",
+  "setting": "made-up setting 45",
+  "text": "Fennol opened the nail forge before dawn. He always reached for the long brush before the short brush. The lantern stood on the table by the door. A pair of tongs lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V101",
+  "kind": "K1",
+  "setting": "made-up setting 45",
+  "text": "Liesol opened the dye house before dawn. She always reached for the small needle before the large needle. The kettle stood on the shelf by the door. A tub of madder lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V102",
+  "kind": "K2",
+  "setting": "made-up setting 45",
+  "text": "Ansol opened the bell tower before dawn. He always reached for the curved scoop before the straight scoop. The ledger stood on the stove by the door. A heap of straw lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V103",
+  "kind": "K3",
+  "setting": "made-up setting 47",
+  "text": "Petrol opened the boat shed before dawn. She always reached for the fine hammer before the flat hammer. The bucket stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V104",
+  "kind": "K4",
+  "setting": "made-up setting 47",
+  "text": "Halol opened the net loft before dawn. He always reached for the birch ladle before the zinc ladle. The rack stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V105",
+  "kind": "K5",
+  "setting": "made-up setting 47",
+  "text": "Sunnol opened the seed store before dawn. She always reached for the tar tray before the wire tray. The oilcan stood on the table by the door. A coil of rope lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V106",
+  "kind": "K1",
+  "setting": "made-up setting 48",
+  "text": "Tamic opened the nail forge before dawn. He always reached for the bone mould before the steel mould. The stool stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V107",
+  "kind": "K2",
+  "setting": "made-up setting 48",
+  "text": "Odric opened the dye house before dawn. She always reached for the oak ruler before the tin ruler. The globe stood on the stove by the door. A sack of barley lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V108",
+  "kind": "K3",
+  "setting": "made-up setting 48",
+  "text": "Ilsic opened the bell tower before dawn. He always reached for the copper saw before the iron saw. The sledge stood on the counter by the door. A pair of tongs lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the sledge first."
+ },
+ {
+  "id": "V109",
+  "kind": "K4",
+  "setting": "made-up setting 46",
+  "text": "Bramic opened the boat shed before dawn. She always reached for the hemp spindle before the nylon spindle. The lantern stood on the ledge by the door. A tub of madder lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V110",
+  "kind": "K5",
+  "setting": "made-up setting 46",
+  "text": "Maric opened the net loft before dawn. He always reached for the wicker rake before the mesh rake. The kettle stood on the table by the door. A heap of straw lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V111",
+  "kind": "K1",
+  "setting": "made-up setting 46",
+  "text": "Coric opened the seed store before dawn. She always reached for the wooden brush before the metal brush. The ledger stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V112",
+  "kind": "K2",
+  "setting": "made-up setting 08",
+  "text": "Eddic opened the nail forge before dawn. He always reached for the brass needle before the plastic needle. The bucket stood on the stove by the door. A roll of tape lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V113",
+  "kind": "K3",
+  "setting": "made-up setting 08",
+  "text": "Jossic opened the dye house before dawn. She always reached for the long scoop before the short scoop. The rack stood on the counter by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V114",
+  "kind": "K4",
+  "setting": "made-up setting 08",
+  "text": "Wrenic opened the bell tower before dawn. He always reached for the small hammer before the large hammer. The oilcan stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V115",
+  "kind": "K5",
+  "setting": "made-up setting 06",
+  "text": "Fennic opened the boat shed before dawn. She always reached for the curved ladle before the straight ladle. The stool stood on the table by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V116",
+  "kind": "K1",
+  "setting": "made-up setting 06",
+  "text": "Liesic opened the net loft before dawn. He always reached for the fine tray before the flat tray. The globe stood on the shelf by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V117",
+  "kind": "K2",
+  "setting": "made-up setting 06",
+  "text": "Ansic opened the seed store before dawn. She always reached for the birch mould before the zinc mould. The sledge stood on the stove by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V118",
+  "kind": "K3",
+  "setting": "made-up setting 02",
+  "text": "Petric opened the nail forge before dawn. He always reached for the tar ruler before the wire ruler. The lantern stood on the counter by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V119",
+  "kind": "K4",
+  "setting": "made-up setting 02",
+  "text": "Halic opened the dye house before dawn. She always reached for the bone saw before the steel saw. The kettle stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V120",
+  "kind": "K5",
+  "setting": "made-up setting 02",
+  "text": "Sunnic opened the bell tower before dawn. He always reached for the oak spindle before the tin spindle. The ledger stood on the table by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V121",
+  "kind": "K1",
+  "setting": "made-up setting 07",
+  "text": "Tamar opened the boat shed before dawn. She always reached for the copper rake before the iron rake. The bucket stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V122",
+  "kind": "K2",
+  "setting": "made-up setting 07",
+  "text": "Odrar opened the net loft before dawn. He always reached for the hemp brush before the nylon brush. The rack stood on the stove by the door. A ball of twine lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V123",
+  "kind": "K3",
+  "setting": "made-up setting 07",
+  "text": "Ilsar opened the seed store before dawn. She always reached for the wicker needle before the mesh needle. The oilcan stood on the counter by the door. A sack of barley lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V124",
+  "kind": "K4",
+  "setting": "made-up setting 10",
+  "text": "Bramar opened the nail forge before dawn. He always reached for the wooden scoop before the metal scoop. The stool stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V125",
+  "kind": "K5",
+  "setting": "made-up setting 10",
+  "text": "Marar opened the dye house before dawn. She always reached for the brass hammer before the plastic hammer. The globe stood on the table by the door. A tub of madder lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V126",
+  "kind": "K1",
+  "setting": "made-up setting 10",
+  "text": "Corar opened the bell tower before dawn. He always reached for the long ladle before the short ladle. The sledge stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the sledge first."
+ },
+ {
+  "id": "V127",
+  "kind": "K2",
+  "setting": "made-up setting 18",
+  "text": "Eddar opened the boat shed before dawn. She always reached for the small tray before the large tray. The lantern stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first."
+ },
+ {
+  "id": "V128",
+  "kind": "K3",
+  "setting": "made-up setting 18",
+  "text": "Jossar opened the net loft before dawn. He always reached for the curved mould before the straight mould. The kettle stood on the counter by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first."
+ },
+ {
+  "id": "V129",
+  "kind": "K4",
+  "setting": "made-up setting 18",
+  "text": "Wrenar opened the seed store before dawn. She always reached for the fine ruler before the flat ruler. The ledger stood on the ledge by the door. A coil of rope lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first."
+ },
+ {
+  "id": "V130",
+  "kind": "K5",
+  "setting": "made-up setting 19",
+  "text": "Fennar opened the nail forge before dawn. He always reached for the birch saw before the zinc saw. The bucket stood on the table by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first."
+ },
+ {
+  "id": "V131",
+  "kind": "K1",
+  "setting": "made-up setting 19",
+  "text": "Liesar opened the dye house before dawn. She always reached for the tar spindle before the wire spindle. The rack stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first."
+ },
+ {
+  "id": "V132",
+  "kind": "K2",
+  "setting": "made-up setting 19",
+  "text": "Ansar opened the bell tower before dawn. He always reached for the bone rake before the steel rake. The oilcan stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the oilcan first."
+ },
+ {
+  "id": "V133",
+  "kind": "K3",
+  "setting": "made-up setting 26",
+  "text": "Petrar opened the boat shed before dawn. She always reached for the oak brush before the tin brush. The stool stood on the counter by the door. A tub of madder lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first."
+ },
+ {
+  "id": "V134",
+  "kind": "K4",
+  "setting": "made-up setting 26",
+  "text": "Halar opened the net loft before dawn. He always reached for the copper needle before the iron needle. The globe stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the globe first."
+ },
+ {
+  "id": "V135",
+  "kind": "K5",
+  "setting": "made-up setting 26",
+  "text": "Sunnar opened the seed store before dawn. She always reached for the hemp scoop before the nylon scoop. The sledge stood on the table by the door. A stack of pallets lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the sledge first."
+ },
+ {
+  "id": "V136",
+  "kind": "K1",
+  "setting": "made-up setting 34",
+  "text": "Tamey opened the nail forge before dawn. He always reached for the wicker hammer before the mesh hammer. The lantern stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the lantern first."
+ },
+ {
+  "id": "V137",
+  "kind": "K2",
+  "setting": "made-up setting 34",
+  "text": "Odrey opened the dye house before dawn. She always reached for the wooden ladle before the metal ladle. The kettle stood on the stove by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the kettle first."
+ },
+ {
+  "id": "V138",
+  "kind": "K3",
+  "setting": "made-up setting 34",
+  "text": "Ilsey opened the bell tower before dawn. He always reached for the brass tray before the plastic tray. The ledger stood on the counter by the door. A ball of twine lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the ledger first."
+ },
+ {
+  "id": "V139",
+  "kind": "K4",
+  "setting": "made-up setting 35",
+  "text": "Bramey opened the boat shed before dawn. She always reached for the long mould before the short mould. The bucket stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the bucket first."
+ },
+ {
+  "id": "V140",
+  "kind": "K5",
+  "setting": "made-up setting 35",
+  "text": "Marey opened the net loft before dawn. He always reached for the small ruler before the large ruler. The rack stood on the table by the door. A pair of tongs lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the rack first."
+ },
+ {
+  "id": "V141",
+  "kind": "K1",
+  "setting": "made-up setting 35",
+  "text": "Corey opened the seed store before dawn. She always reached for the curved saw before the straight saw. The oilcan stood on the shelf by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the oilcan first."
+ },
+ {
+  "id": "V142",
+  "kind": "K2",
+  "setting": "made-up setting 36",
+  "text": "Eddey opened the nail forge before dawn. He always reached for the fine spindle before the flat spindle. The stool stood on the stove by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the stool first."
+ },
+ {
+  "id": "V143",
+  "kind": "K3",
+  "setting": "made-up setting 36",
+  "text": "Jossey opened the dye house before dawn. She always reached for the birch rake before the zinc rake. The globe stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the globe first."
+ },
+ {
+  "id": "V144",
+  "kind": "K4",
+  "setting": "made-up setting 36",
+  "text": "Wreney opened the bell tower before dawn. He always reached for the tar brush before the wire brush. The sledge stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the sledge first."
+ }
+]

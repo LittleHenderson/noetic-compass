@@ -1,0 +1,8 @@
+{
+ "Q0001": {"http_status": 200, "content": "```json\n{\"answer\": \"B\"}\n```"},
+ "Q0002": [{"http_status": 0, "error": "MADE-UP: no answer from the service"}, {"http_status": 200, "content_json": {"answer": "D"}}],
+ "Q0003": {"http_status": 200, "content_json": {"answer": "B"}},
+ "G0001": {"http_status": 200, "content_json": {"answer": "D"}},
+ "G0002": {"http_status": 200, "content_json": {"answer": "A"}},
+ "G0003": {"http_status": 200, "content_json": {"answer": "A"}}
+}

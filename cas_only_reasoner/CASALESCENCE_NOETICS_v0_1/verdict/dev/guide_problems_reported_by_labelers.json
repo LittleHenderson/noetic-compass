@@ -1,0 +1,232 @@
+[
+ {
+  "passage": "V008",
+  "team": "A",
+  "problem": "Rule 4 does not say whether someone who sang inside a remembered scene counts as someone shown speaking."
+ },
+ {
+  "passage": "V011",
+  "team": "A",
+  "problem": "Rule 2 does not say whether a memory placed right after an observation, with no linking word, counts as shown to be brought to mind."
+ },
+ {
+  "passage": "V029",
+  "team": "A",
+  "problem": "Rule 15 does not say whether realized after several checked observations is 15(b) or 15(d)."
+ },
+ {
+  "passage": "V037",
+  "team": "A",
+  "problem": "Rule 6 does not say whether recurring events such as check-ups count as a named repeating unit."
+ },
+ {
+  "passage": "V042",
+  "team": "A",
+  "problem": "Rule 7 does not say whether the named steps of a procedure count as parts of it."
+ },
+ {
+  "passage": "V048",
+  "team": "A",
+  "problem": "Rule 4 does not say whether someone who hummed inside a remembered scene counts as someone shown speaking."
+ },
+ {
+  "passage": "V050",
+  "team": "A",
+  "problem": "The guide does not say which sign to quote when several signs lead to one conclusion."
+ },
+ {
+  "passage": "V054",
+  "team": "A",
+  "problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage": "V067",
+  "team": "A",
+  "problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage": "V079",
+  "team": "A",
+  "problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage": "V084",
+  "team": "A",
+  "problem": "The guide does not say whether a decision to act, after several noticed signs, counts as a reasoned conclusion."
+ },
+ {
+  "passage": "V094",
+  "team": "A",
+  "problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage": "V105",
+  "team": "A",
+  "problem": "Unclear whether a degree word on a felt aversion (mild annoyance) also earns its own ^4 entry."
+ },
+ {
+  "passage": "V126",
+  "team": "A",
+  "problem": "Several signs point to one conclusion; the guide does not say how to write the pair when there are three triggers."
+ },
+ {
+  "passage": "V152",
+  "team": "A",
+  "problem": "Rule 4 does not say whether a person doing a physical task with no awareness shown counts as a Mind."
+ },
+ {
+  "passage": "V155",
+  "team": "A",
+  "problem": "Rule 4 does not say whether a person doing a physical task with no awareness shown counts as a Mind."
+ },
+ {
+  "passage": "V161",
+  "team": "A",
+  "problem": "Rule 4 does not say whether a person doing a physical task with no awareness shown counts as a Mind."
+ },
+ {
+  "passage": "V164",
+  "team": "A",
+  "problem": "Unclear whether a pair counts when the brought-to-mind Idea is only a placeholder such as 'what it needed'."
+ },
+ {
+  "passage": "V174",
+  "team": "A",
+  "problem": "Unclear whether a pair counts when the brought-to-mind Idea is only a placeholder such as 'what it needed'."
+ },
+ {
+  "passage": "V194",
+  "team": "A",
+  "problem": "Guide does not say whether an action's place in a schedule counts as what the Mind has become (^5)."
+ },
+ {
+  "passage": "V218",
+  "team": "A",
+  "problem": "Guide does not say whether a word like usual counts as a pattern word for ^7."
+ },
+ {
+  "passage": "V222",
+  "team": "A",
+  "problem": "Guide does not say whether a person who only handles objects in a task counts as a Mind."
+ },
+ {
+  "passage": "V230",
+  "team": "A",
+  "problem": "Guide does not say which Idea is the whole when the same parts appear twice, as flaws and as fixes."
+ },
+ {
+  "passage": "V254",
+  "team": "A",
+  "problem": "Rule 15(b) names ^6 for pieces taken apart, but here the evidence pieces are put together."
+ },
+ {
+  "passage": "V255",
+  "team": "A",
+  "problem": "Rule 6 does not say whether a word like 'constant' counts as a rate word."
+ },
+ {
+  "passage": "V256",
+  "team": "A",
+  "problem": "Rule 7 does not say whether the steps of a procedure count as named parts."
+ },
+ {
+  "passage": "V266",
+  "team": "A",
+  "problem": "Rule 7 does not say whether the steps of a routine count as named parts."
+ },
+ {
+  "passage": "V274",
+  "team": "A",
+  "problem": "Rule 15(b) asks for ^6 on the pieces, but here no whole is named for them."
+ },
+ {
+  "passage": "V285",
+  "team": "A",
+  "problem": "Rule 6 does not say whether a single word like 'daily' is enough for ^7."
+ },
+ {
+  "passage": "V302",
+  "team": "A",
+  "problem": "Rule 15(b) asks for ^6 on evidence pieces but rule 7 needs a named whole, so relative_to is unclear."
+ },
+ {
+  "passage": "V309",
+  "team": "A",
+  "problem": "Rule 15(b) asks for ^6 on evidence pieces but rule 7 needs a named whole, so relative_to is unclear."
+ },
+ {
+  "passage": "V314",
+  "team": "A",
+  "problem": "Rule 15(b) asks for ^6 on evidence pieces but rule 7 needs a named whole, so relative_to is unclear."
+ },
+ {
+  "passage": "V331",
+  "team": "A",
+  "problem": "The passage says 'He knew' (rule 15d) and 'The evidence pointed to' (rule 15b), so it is unclear which rule governs."
+ },
+ {
+  "passage": "V336",
+  "team": "A",
+  "problem": "Rule 15(b) asks for ^6 on evidence pieces but rule 7 needs a named whole, so relative_to is unclear."
+ },
+ {
+  "passage": "V337",
+  "team": "A",
+  "problem": "The guide does not say whether a worker shown only doing a task and feeling sunlight counts as a Mind."
+ },
+ {
+  "passage": "V355",
+  "team": "A",
+  "problem": "The guide does not say whether the whole broken down is the issue or the starter motor the parts belong to."
+ },
+ {
+  "passage": "V360",
+  "team": "A",
+  "problem": "The guide does not say what relative_to should be for evidence pieces when the whole they make up is not named."
+ },
+ {
+  "passage": "V372",
+  "team": "A",
+  "problem": "The guide does not say whether the whole these elements make up is the sales report or the profit margin they explain."
+ },
+ {
+  "passage": "V390",
+  "team": "A",
+  "problem": "Rule 13 says acting without thinking is marked ^7, but rule 6 needs rate or pattern words, which this passage lacks."
+ },
+ {
+  "passage": "V395",
+  "team": "A",
+  "problem": "The guide does not say whether boredom is weak ^4 or mild ^3."
+ },
+ {
+  "passage": "V407",
+  "team": "A",
+  "problem": "Rule 15(b) does not say what to quote as relative_to for the evidence pieces when no whole is named."
+ },
+ {
+  "passage": "V415",
+  "team": "A",
+  "problem": "Rule 4 does not say whether a person shown only doing routine tasks counts as a Mind."
+ },
+ {
+  "passage": "V084",
+  "team": "B",
+  "problem": "Rule 15(b) requires ^6 for named pieces of reasoning, but the passage names no parts of the rain, leaving the ^6 entries uncertain."
+ },
+ {
+  "passage": "V166",
+  "team": "B",
+  "problem": "Rule 15(b) says to mark ^6 for the named pieces the Mind takes apart, but the passage's checked items are not presented as parts of the thing being explained, so it is unclear whether they qualify as ^6."
+ },
+ {
+  "passage": "V191",
+  "team": "B",
+  "problem": "Rule 15(d) does not say whether each sign in a multi-sign passage gets its own uncertain pair or whether the signs together form one pair."
+ },
+ {
+  "passage": "V302",
+  "team": "B",
+  "problem": "Rule 15(b) says to mark ^6 for the named pieces the Mind takes apart, but the passage names no such pieces, leaving the reasoning's ^6 side unmarkable."
+ }
+]

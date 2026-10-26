@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 1
+SEALED 1_PLAN_AND_SOURCES as line 1 of optionb/SEAL_OPTIONB.jsonl: 21 file(s). Line sha256 786ef31ecf55f7d060b0353526643c6e2c4f43b7bc54a8bc6388fa120ba7c44c
+[exit code 0]

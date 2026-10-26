@@ -1,0 +1,55 @@
+LABELER INSTRUCTIONS
+This text goes with the labeling guide, version 2.2 (02_LABELING_GUIDE_v2_2.md).
+
+YOUR TASK
+You get the labeling guide and a passage with an id.
+Label the passage exactly as Part B of the guide says.
+Work only from the guide and from the passage in front of you. Use no outside knowledge.
+Label each passage on its own. One passage must not change how you label another.
+Never force a label. Do not turn a hint into an entry.
+
+WHAT YOU RETURN
+One JSON record for each passage. Each record is ONE JSON object.
+Nothing else goes with it: no words before it, no words after it, no code fence.
+The message that gives you the passage says how to hand the record in.
+
+{"passage_id": "<the id you were given>",
+ "none_of_these": false,
+ "entries": [
+  {"noetic": "^8", "label": "...", "support": "...", "mind": "...", "relative_to": "...", "certainty": "clear", "saying": "..."}
+ ],
+ "not_enough_information": []}
+
+- "passage_id": the id of the passage, copied exactly.
+- "none_of_these": true only when nothing in the passage holds any of "^1" to "^9". Then "entries" is [].
+- "entries": one entry for each thing, in one role, for one Mind.
+- "not_enough_information": a list of short notes. Use [] when there are none.
+
+EVERY ENTRY
+Write these seven fields in every entry: "noetic", "label", "support", "mind", "relative_to", "certainty", "saying".
+A field that does not apply is "". Never leave one of the seven out.
+- "noetic" is one of "^1" to "^9". Do not label Worlds, Domains, Drives or Registers.
+- "certainty" is "clear" or "ambiguous".
+- "saying" is the everyday saying that fits the moment (rule 5 of the guide), in your own words or a canonical one.
+  It has 2 to 20 words in every "^2" to "^9" entry. It is "" in a "^1" entry, and only there.
+- Add "other_candidate" only with "certainty": "ambiguous". Its value is another Noetic ("^n"), "none" or "reasoning".
+
+EXACT COPIES
+"label", "support", "mind" and "relative_to" are exact copies of passage text: the same letters, the same capitals, the same punctuation, one unbroken stretch. "saying" is your own line, not a copy.
+- Do not correct the passage. Do not reword it. Do not join two stretches. Do not cut words out of the middle.
+- "support" is whole sentences, each from its first word to its end mark. At most 4, next to each other.
+- "label" lies inside "support". It has 1 to 12 words.
+- In a "^1" entry, "support" is the sentence that holds the first place the name stands in the passage.
+- "mind" is the "label" of your own "^1" entry for that Mind, character for character. It is "" in a "^6" entry, and only there.
+- "relative_to" is the "label" of the related thing, or "" where the table of the guide says so.
+- If the passage never names the related thing, leave "relative_to" as "" and add a note under "not_enough_information". For "^8" and "^9" see rule 2 of the guide.
+
+THE CHECKER
+A fixed program checks the form of your record before it is accepted.
+It reads form only. A record that passes is not thereby correct.
+If a check fails, you get the checker's messages. Then do this:
+1. Read every message. Fix what the messages name. Use the guide to decide the fix.
+2. Hand in the whole record again, in the same format, with every entry in it.
+You have up to three tries for one passage.
+Never remove an entry to make a message go away. Fix its form and keep it.
+The one exception: a message that itself says to keep only one of two, or to take the entries out.

@@ -1,0 +1,135 @@
+SHEET final-no_passage-01. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0015 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Petra do first?
+A. reaching for the flat pliers again
+B. moving the loupe to the yard
+C. reaching for the fine tweezers again
+D. sweeping the shop floor twice
+E. hanging the springs on a hook
+F. leaving the door wide open
+=== END G0015 ===
+
+=== ITEM G0016 ===
+Question: Petra spends two years far from the clock shop. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the loupe stands
+B. finding the mat by the door
+C. opening the clock shop before dawn
+D. dusting the loupe before anything else
+E. walking in through the door
+F. seeing the springs beside it
+=== END G0016 ===
+
+=== ITEM G0017 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Hale do first?
+A. sweeping the walk floor twice
+B. moving the board to the yard
+C. reaching for the short spindle again
+D. leaving the door wide open
+E. reaching for the long spindle again
+F. hanging the tallow on a hook
+=== END G0017 ===
+
+=== ITEM G0018 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunniva do first?
+A. leaving the door wide open
+B. hanging the crates on a hook
+C. reaching for the birch rake again
+D. moving the barrow to the yard
+E. reaching for the iron rake again
+F. sweeping the store floor twice
+=== END G0018 ===
+
+=== ITEM G0019 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunniva leave to someone else?
+A. lighting the big lamp
+B. working with the birch rake
+C. counting every crates there
+D. locking up the salt store
+E. carrying the barrow outside
+F. working on the wet sacks
+=== END G0019 ===
+
+=== ITEM G0020 ===
+Question: Garrick spends two years far from the cooper yard. Going only by the passage, which of these has most likely faded when he comes back?
+A. walking in through the door
+B. seeing the iron beside it
+C. opening the cooper yard before dawn
+D. finding the block by the door
+E. dusting the mallet before anything else
+F. knowing where the mallet stands
+=== END G0020 ===
+
+=== ITEM G0021 ===
+Question: Sunniva spends two years far from the salt store. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the barrow before anything else
+B. opening the salt store before dawn
+C. knowing where the barrow stands
+D. seeing the crates beside it
+E. walking in through the door
+F. finding the ramp by the door
+=== END G0021 ===
+
+=== ITEM G0022 ===
+Question: Where did the loupe stand?
+A. inside the cart
+B. under the bench
+C. on the mat
+D. behind the gate
+=== END G0022 ===
+
+=== ITEM G0023 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petra leave to someone else?
+A. working with the fine tweezers
+B. counting every springs there
+C. lighting the big lamp
+D. carrying the loupe outside
+E. working on the sticky oil
+F. locking up the clock shop
+=== END G0023 ===
+
+=== ITEM G0024 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Garrick leave to someone else?
+A. working with the curved adze
+B. locking up the cooper yard
+C. counting every iron there
+D. working on the split stave
+E. carrying the mallet outside
+F. lighting the big lamp
+=== END G0024 ===
+
+=== ITEM G0025 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Garrick do first?
+A. hanging the iron on a hook
+B. sweeping the yard floor twice
+C. leaving the door wide open
+D. moving the mallet to the yard
+E. reaching for the curved adze again
+F. reaching for the straight adze again
+=== END G0025 ===
+
+=== ITEM G0026 ===
+Question: Where did the board stand?
+A. under the bench
+B. on the post
+C. inside the cart
+D. behind the gate
+=== END G0026 ===
+
+=== ITEM G0027 ===
+Question: Where did the barrow stand?
+A. behind the gate
+B. on the ramp
+C. inside the cart
+D. under the bench
+=== END G0027 ===
+
+=== ITEM G0028 ===
+Question: Where did the mallet stand?
+A. inside the cart
+B. under the bench
+C. on the block
+D. behind the gate
+=== END G0028 ===

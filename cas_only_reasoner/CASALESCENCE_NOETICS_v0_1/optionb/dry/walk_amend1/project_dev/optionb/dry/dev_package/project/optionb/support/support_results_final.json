@@ -1,0 +1,234 @@
+{
+ "schema": "casalescence/optionb/support_results/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "246032c116a7abdcc1f43b512fa5300d88e5ec924868b7a92cc63eea4254b9e1",
+  "utc": "2026-10-05T16:27:21Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/SEAL_OPTIONB.jsonl",
+   "sha256": "fa96391b1425787a11e03706798485547bafb397838d6bd4083574bbd8086914"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/elig/eligibility.json",
+   "sha256": "ef7bb7d8555ec91f90ff7f2262c4bb371ff0d6d5a0107bfc45bf767e4c338bf8"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/notes_ord/ordinary_notes_final.json",
+   "sha256": "efec2a1ece865fe3d45502d51948c414276652f550ec06c143ca18295394063d"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/support/support_calls_final.jsonl",
+   "sha256": "c657eee852ea906cee20d07f3e3ee5e2c130dafd32049cdd094f6695d3b8d858"
+  }
+ ],
+ "set": "final",
+ "results": [
+  {
+   "note_id": "D013|ORD-INFORMED|090|v1",
+   "item_id": "N0001",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D013|ORD-INFORMED|100|v1",
+   "item_id": "N0002",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D013|ORD-INFORMED|110|v1",
+   "item_id": "N0003",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D013|ORD-FREE|090|v1",
+   "item_id": "N0004",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D013|ORD-FREE|100|v1",
+   "item_id": "N0005",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D013|ORD-FREE|110|v1",
+   "item_id": "N0006",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D015|ORD-INFORMED|090|v1",
+   "item_id": "N0007",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D015|ORD-INFORMED|100|v1",
+   "item_id": "N0008",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D015|ORD-INFORMED|110|v1",
+   "item_id": "N0009",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D015|ORD-FREE|090|v1",
+   "item_id": "N0010",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D015|ORD-FREE|100|v1",
+   "item_id": "N0011",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D015|ORD-FREE|110|v1",
+   "item_id": "N0012",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D014|ORD-INFORMED|090|v1",
+   "item_id": "N0013",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D014|ORD-INFORMED|100|v1",
+   "item_id": "N0014",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D014|ORD-INFORMED|110|v1",
+   "item_id": "N0015",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D014|ORD-FREE|090|v1",
+   "item_id": "N0016",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D014|ORD-FREE|100|v1",
+   "item_id": "N0017",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D014|ORD-FREE|110|v1",
+   "item_id": "N0018",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D016|ORD-INFORMED|090|v1",
+   "item_id": "N0019",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D016|ORD-INFORMED|100|v1",
+   "item_id": "N0020",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D016|ORD-INFORMED|110|v1",
+   "item_id": "N0021",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D016|ORD-FREE|090|v1",
+   "item_id": "N0022",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D016|ORD-FREE|100|v1",
+   "item_id": "N0023",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  },
+  {
+   "note_id": "D016|ORD-FREE|110|v1",
+   "item_id": "N0024",
+   "checker": "DRY-FIXTURE-NO-MODEL",
+   "round": 1,
+   "verdict": "PASS"
+  }
+ ],
+ "passages": [
+  {
+   "passage_id": "D013",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "D014",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "D015",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  },
+  {
+   "passage_id": "D016",
+   "status": "ALL_PASS",
+   "rewrite_note_ids": []
+  }
+ ],
+ "counts": {
+  "notes_checked": 24,
+  "passed": 24,
+  "failed_once": 0,
+  "failed_twice": 0,
+  "passages_dropped": 0
+ }
+}

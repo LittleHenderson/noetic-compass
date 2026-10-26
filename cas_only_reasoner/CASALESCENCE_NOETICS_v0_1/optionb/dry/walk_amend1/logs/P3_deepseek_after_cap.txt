@@ -1,0 +1,34 @@
+$ python -B tools/ob_solve_blind.py deepseek --set final --max-calls 50 --pace 0
+{
+ "program": "tools/ob_solve_blind.py",
+ "dry_fixture": false,
+ "step": "deepseek",
+ "status": "STOPPED_TOKEN_CAP",
+ "set": "final",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "candidates": 437,
+ "items": 874,
+ "items_answered": 8,
+ "items_readable": 8,
+ "items_open": 866,
+ "last_http_status_of_open_items_that_were_tried": {},
+ "calls_this_run": 0,
+ "call_budget": 50,
+ "tokens_this_run_REAL": {
+  "prompt_tokens": 0,
+  "completion_tokens": 0
+ },
+ "deepseek_tokens_in_the_four_call_logs": {
+  "input": 12026838,
+  "output": 444
+ },
+ "deepseek_token_limits": {
+  "input": 2430240,
+  "output": 1156520
+ },
+ "model_names_in_the_replies": [
+  "made-up-solver-reply-name"
+ ],
+ "next": "A DeepSeek token limit is reached. No further call is made. The call log is kept. A limit is never raised without a new reviewed plan version. Report this."
+}
+[exit code 0]

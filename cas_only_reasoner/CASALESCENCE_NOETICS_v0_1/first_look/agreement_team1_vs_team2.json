@@ -1,0 +1,318 @@
+{
+ "purpose": "FIRST LOOK ONLY: guide debugging, not a verdict",
+ "passages": 40,
+ "label_files": [
+  "labels_team1.json",
+  "labels_team2.json"
+ ],
+ "per_noetic": {
+  "^1": {
+   "marked_by_first": 34,
+   "marked_by_second": 19,
+   "marked_by_both": 19,
+   "presence_agreement_count": 25,
+   "presence_agreement_share": 0.625,
+   "presence_kappa": 0.27536231884057966,
+   "same_words_when_both_marked": 19,
+   "same_label_and_same_words_count": 25,
+   "same_label_and_same_words_share": 0.625
+  },
+  "^2": {
+   "marked_by_first": 11,
+   "marked_by_second": 10,
+   "marked_by_both": 10,
+   "presence_agreement_count": 39,
+   "presence_agreement_share": 0.975,
+   "presence_kappa": 0.9354838709677419,
+   "same_words_when_both_marked": 10,
+   "same_label_and_same_words_count": 39,
+   "same_label_and_same_words_share": 0.975
+  },
+  "^3": {
+   "marked_by_first": 11,
+   "marked_by_second": 10,
+   "marked_by_both": 10,
+   "presence_agreement_count": 39,
+   "presence_agreement_share": 0.975,
+   "presence_kappa": 0.9354838709677419,
+   "same_words_when_both_marked": 10,
+   "same_label_and_same_words_count": 39,
+   "same_label_and_same_words_share": 0.975
+  },
+  "^4": {
+   "marked_by_first": 11,
+   "marked_by_second": 10,
+   "marked_by_both": 10,
+   "presence_agreement_count": 39,
+   "presence_agreement_share": 0.975,
+   "presence_kappa": 0.9354838709677419,
+   "same_words_when_both_marked": 10,
+   "same_label_and_same_words_count": 39,
+   "same_label_and_same_words_share": 0.975
+  },
+  "^5": {
+   "marked_by_first": 9,
+   "marked_by_second": 9,
+   "marked_by_both": 9,
+   "presence_agreement_count": 40,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 9,
+   "same_label_and_same_words_count": 40,
+   "same_label_and_same_words_share": 1.0
+  },
+  "^6": {
+   "marked_by_first": 6,
+   "marked_by_second": 5,
+   "marked_by_both": 4,
+   "presence_agreement_count": 37,
+   "presence_agreement_share": 0.925,
+   "presence_kappa": 0.6842105263157896,
+   "same_words_when_both_marked": 4,
+   "same_label_and_same_words_count": 37,
+   "same_label_and_same_words_share": 0.925
+  },
+  "^7": {
+   "marked_by_first": 5,
+   "marked_by_second": 5,
+   "marked_by_both": 5,
+   "presence_agreement_count": 40,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 5,
+   "same_label_and_same_words_count": 40,
+   "same_label_and_same_words_share": 1.0
+  },
+  "^8": {
+   "marked_by_first": 15,
+   "marked_by_second": 15,
+   "marked_by_both": 15,
+   "presence_agreement_count": 40,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 15,
+   "same_label_and_same_words_count": 40,
+   "same_label_and_same_words_share": 1.0
+  },
+  "^9": {
+   "marked_by_first": 15,
+   "marked_by_second": 15,
+   "marked_by_both": 15,
+   "presence_agreement_count": 40,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 15,
+   "same_label_and_same_words_count": 40,
+   "same_label_and_same_words_share": 1.0
+  }
+ },
+ "quote_problems": {
+  "labels_team1.json": 0,
+  "labels_team2.json": 0
+ },
+ "confusions": {
+  "^1 vs ^6": 2,
+  "^1 vs ^5": 2,
+  "^8 vs ^9": 2,
+  "^1 vs ^7": 1
+ },
+ "disagreements": [
+  {
+   "passage": "P04",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Bianca"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P06",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Lena"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P09",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Joseph"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P10",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Hamza"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P12",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Ingrid"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P15",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Anneliese",
+    "The bassist"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P16",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Ayesha",
+    "A visiting client"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P17",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Delroy"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P22",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Tobias"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P23",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Cheng",
+    "The waiter"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P27",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Imani"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P32",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Marisol"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P33",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Gareth"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P35",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Tomas"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P40",
+   "noetic": "^1",
+   "kind": "one team only",
+   "first": [
+    "Owen"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P29",
+   "noetic": "^2",
+   "kind": "one team only",
+   "first": [
+    "the printed plan"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P14",
+   "noetic": "^3",
+   "kind": "one team only",
+   "first": [
+    "the young physio stand a man up on his second morning"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P16",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [
+    "flinched"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P01",
+   "noetic": "^6",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the lateness of the previous service, the cancelled stop two lines down and the platform that had changed twice since morning"
+   ]
+  },
+  {
+   "passage": "P08",
+   "noetic": "^6",
+   "kind": "one team only",
+   "first": [
+    "the interest figure and the monthly figure"
+   ],
+   "second": []
+  },
+  {
+   "passage": "P23",
+   "noetic": "^6",
+   "kind": "one team only",
+   "first": [
+    "wrists first, then palms, thumbs and between the fingers"
+   ],
+   "second": []
+  }
+ ],
+ "none_of_these": {
+  "first": 5,
+  "second": 5,
+  "agree": 40
+ }
+}

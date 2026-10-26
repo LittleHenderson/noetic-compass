@@ -1,0 +1,189 @@
+{
+ "schema": "casalescence/optionb/anchor_check/v1",
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "cb6581f30449edb17ac32e501a19231551bdfd0c75a87ef1dfba4fa8f8f9f409",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "V901.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the tar brush",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p1.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the bilge pump",
+     "noetic": "^3",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the tar brush",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p2.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the bilge pump",
+     "noetic": "^3",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V902.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the bone needle",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "passed": false,
+   "reason": "FORM_NOT_OPEN",
+   "matched": []
+  },
+  {
+   "question_id": "V902.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the bone needle",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V903.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the oak scoop",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V904.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the cross hammer",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V904.p1.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the leaky bellows",
+     "noetic": "^3",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V904.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the cross hammer",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V904.p2.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "away from the leaky bellows",
+     "noetic": "^3",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V905.p2.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "reached for the copper ladle",
+     "noetic": "^2",
+     "agreed_index": 0,
+     "field": "words_a"
+    }
+   ]
+  },
+  {
+   "question_id": "V914.p1.GOES_FOR",
+   "passed": false,
+   "reason": "PASSAGE_NOT_ELIGIBLE",
+   "matched": []
+  },
+  {
+   "question_id": "V914.p2.GOES_FOR",
+   "passed": false,
+   "reason": "PASSAGE_NOT_ELIGIBLE",
+   "matched": []
+  }
+ ],
+ "counts": {
+  "checked": 15
+ }
+}

@@ -1,0 +1,126 @@
+[
+ {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY",
+  "content_json": [
+   {
+    "passage": "D011",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "A free hour comes up next week. Going only by the passage, which of these does Liesel do first?",
+      "right": "reaching for the small scale again",
+      "wrong": [
+       "reaching for the large scale again",
+       "moving the pan to the yard",
+       "hanging the chalk on a hook",
+       "sweeping the house floor twice",
+       "leaving the door wide open"
+      ],
+      "anchors": [
+       "reached for the small scale"
+      ]
+     },
+     {
+      "form": "KEEPS_AWAY",
+      "question": "A visitor asks for help later that day. Going only by the passage, which of these does Liesel leave to someone else?",
+      "right": "working on the cracked weight",
+      "wrong": [
+       "working with the small scale",
+       "carrying the pan outside",
+       "counting every chalk there",
+       "locking up the weigh house",
+       "lighting the big lamp"
+      ],
+      "anchors": [
+       "away from the cracked weight"
+      ]
+     },
+     {
+      "form": "LONG_BREAK",
+      "question": "Liesel spends two years far from the weigh house. Going only by the passage, which of these has most likely faded when she comes back?",
+      "right": "dusting the pan before anything else",
+      "wrong": [
+       "opening the weigh house before dawn",
+       "finding the sill by the door",
+       "seeing the chalk beside it",
+       "knowing where the pan stands",
+       "walking in through the door"
+      ],
+      "anchors": [
+       "Every morning for nine years"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where did the pan stand?",
+     "right": "on the sill",
+     "wrong": [
+      "under the bench",
+      "behind the gate",
+      "inside the cart"
+     ]
+    }
+   },
+   {
+    "passage": "D012",
+    "what_follows": [
+     {
+      "form": "GOES_FOR",
+      "question": "A free hour comes up next week. Going only by the passage, which of these does Ansel do first?",
+      "right": "reaching for the curved needle again",
+      "wrong": [
+       "reaching for the straight needle again",
+       "moving the pot to the yard",
+       "hanging the canvas on a hook",
+       "sweeping the loft floor twice",
+       "leaving the door wide open"
+      ],
+      "anchors": [
+       "reached for the curved needle"
+      ]
+     },
+     {
+      "form": "KEEPS_AWAY",
+      "question": "A visitor asks for help later that day. Going only by the passage, which of these does Ansel leave to someone else?",
+      "right": "working on the blunt shears",
+      "wrong": [
+       "working with the curved needle",
+       "carrying the pot outside",
+       "counting every canvas there",
+       "locking up the sail loft",
+       "lighting the big lamp"
+      ],
+      "anchors": [
+       "away from the blunt shears"
+      ]
+     },
+     {
+      "form": "LONG_BREAK",
+      "question": "Ansel spends two years far from the sail loft. Going only by the passage, which of these has most likely faded when he comes back?",
+      "right": "dusting the pot before anything else",
+      "wrong": [
+       "opening the sail loft before dawn",
+       "finding the trestle by the door",
+       "seeing the canvas beside it",
+       "knowing where the pot stands",
+       "walking in through the door"
+      ],
+      "anchors": [
+       "Every morning for nine years"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where did the pot stand?",
+     "right": "on the trestle",
+     "wrong": [
+      "under the bench",
+      "behind the gate",
+      "inside the cart"
+     ]
+    }
+   }
+  ]
+ }
+]

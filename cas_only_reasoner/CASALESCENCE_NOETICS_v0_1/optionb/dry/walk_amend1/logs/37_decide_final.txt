@@ -1,0 +1,46 @@
+$ python -B tools/ob_solve_blind.py decide --set final
+{
+ "program": "tools/ob_solve_blind.py",
+ "dry_fixture": false,
+ "step": "decide",
+ "status": "KEY_CHECK_WRITTEN",
+ "set": "final",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "counts": {
+  "checked": {
+   "role_step": 322,
+   "plain_fact": 115
+  },
+  "key_check_passed": {
+   "role_step": 321,
+   "plain_fact": 115
+  },
+  "no_passage_passed": {
+   "role_step": 321,
+   "plain_fact": 115
+  },
+  "survive": {
+   "role_step": 320,
+   "plain_fact": 115
+  }
+ },
+ "survival_after_each_filter": [
+  {
+   "filter": "option check",
+   "role_step": 322,
+   "plain_fact": 115
+  },
+  {
+   "filter": "key check",
+   "role_step": 321,
+   "plain_fact": 115
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 320,
+   "plain_fact": 115
+  }
+ ],
+ "note": "The no-passage check row counts questions that passed both checks."
+}
+[exit code 0]

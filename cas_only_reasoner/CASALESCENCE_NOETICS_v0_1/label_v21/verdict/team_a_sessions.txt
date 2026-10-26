@@ -1,0 +1,15 @@
+Team A verdict labelers: one Claude Sonnet sub-agent per chunk, started 2026-10-07 about 19:36 UTC (12:36 PM Pacific)
+by the thread operator with the Agent tool (not a workflow script; same wrapper text as the practice labeler).
+Transcripts: C:/Users/wakil/.claude/projects/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner-CASALESCENCE-NOETICS-v0-1/6fbc6595-1bf9-4970-9753-be964ad6ed9c/subagents/agent-<id>.jsonl
+01=a4d2b698c1eb0ec2c
+02=a5f2eafe097255c75
+03=ac8c773707ef5af0c
+04=a5d02217a8ee1a0dd
+05=ac18e7e89e50e1497
+06=a28c1f17a9513323d
+07=af27d73214bbf60fd
+08=a10dce14a1649d9f0
+09=a45d8685635ed26fa
+10=a1faf0d338a5ddd3b
+11=abf298419b5e82ef1
+Practice labeler: 01=add2c898ae4772236

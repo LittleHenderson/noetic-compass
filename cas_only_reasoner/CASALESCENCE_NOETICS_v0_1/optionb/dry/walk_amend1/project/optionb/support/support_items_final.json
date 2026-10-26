@@ -1,0 +1,4674 @@
+{
+ "schema": "casalescence/optionb/support_items/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py",
+  "sha256": "246032c116a7abdcc1f43b512fa5300d88e5ec924868b7a92cc63eea4254b9e1",
+  "utc": "2026-10-05T16:25:26Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "4b2a858d0713fab902da920684f9850242f37b31fdf6d84eeda5745c5ce681c9"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_final.json",
+   "sha256": "3c1d11144bd639bdf5f29a5913049b9d8d7a21b7529f419042e2ff923c35f55f"
+  },
+  {
+   "path": "optionb/support/support_calls_final.jsonl",
+   "sha256": "39daf9865ffb3392a94fa71b81c7aaf454b188aa670e9acc2553a8821a7c68b0"
+  }
+ ],
+ "set": "final",
+ "items": [
+  {
+   "item_id": "N0001",
+   "note_id": "V049|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0002",
+   "note_id": "V049|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0003",
+   "note_id": "V049|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0004",
+   "note_id": "V049|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0005",
+   "note_id": "V049|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0006",
+   "note_id": "V049|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0007",
+   "note_id": "V055|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0008",
+   "note_id": "V055|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0009",
+   "note_id": "V055|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0010",
+   "note_id": "V055|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0011",
+   "note_id": "V055|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0012",
+   "note_id": "V055|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0013",
+   "note_id": "V108|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0014",
+   "note_id": "V108|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0015",
+   "note_id": "V108|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0016",
+   "note_id": "V108|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0017",
+   "note_id": "V108|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0018",
+   "note_id": "V108|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0019",
+   "note_id": "V040|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0020",
+   "note_id": "V040|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0021",
+   "note_id": "V040|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0022",
+   "note_id": "V040|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0023",
+   "note_id": "V040|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0024",
+   "note_id": "V040|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0025",
+   "note_id": "V073|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0026",
+   "note_id": "V073|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0027",
+   "note_id": "V073|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0028",
+   "note_id": "V073|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0029",
+   "note_id": "V073|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0030",
+   "note_id": "V073|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0031",
+   "note_id": "V043|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0032",
+   "note_id": "V043|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0033",
+   "note_id": "V043|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0034",
+   "note_id": "V043|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0035",
+   "note_id": "V043|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0036",
+   "note_id": "V043|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0037",
+   "note_id": "V047|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0038",
+   "note_id": "V047|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0039",
+   "note_id": "V047|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0040",
+   "note_id": "V047|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0041",
+   "note_id": "V047|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0042",
+   "note_id": "V047|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0043",
+   "note_id": "V095|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0044",
+   "note_id": "V095|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0045",
+   "note_id": "V095|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0046",
+   "note_id": "V095|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0047",
+   "note_id": "V095|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0048",
+   "note_id": "V095|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0049",
+   "note_id": "V102|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0050",
+   "note_id": "V102|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0051",
+   "note_id": "V102|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0052",
+   "note_id": "V102|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0053",
+   "note_id": "V102|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0054",
+   "note_id": "V102|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0055",
+   "note_id": "V057|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0056",
+   "note_id": "V057|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0057",
+   "note_id": "V057|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0058",
+   "note_id": "V057|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0059",
+   "note_id": "V057|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0060",
+   "note_id": "V057|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0061",
+   "note_id": "V016|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0062",
+   "note_id": "V016|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0063",
+   "note_id": "V016|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0064",
+   "note_id": "V016|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0065",
+   "note_id": "V016|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0066",
+   "note_id": "V016|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0067",
+   "note_id": "V080|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0068",
+   "note_id": "V080|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0069",
+   "note_id": "V080|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0070",
+   "note_id": "V080|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0071",
+   "note_id": "V080|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0072",
+   "note_id": "V080|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0073",
+   "note_id": "V012|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0074",
+   "note_id": "V012|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0075",
+   "note_id": "V012|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0076",
+   "note_id": "V012|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0077",
+   "note_id": "V012|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0078",
+   "note_id": "V012|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0079",
+   "note_id": "V079|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0080",
+   "note_id": "V079|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0081",
+   "note_id": "V079|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0082",
+   "note_id": "V079|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0083",
+   "note_id": "V079|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0084",
+   "note_id": "V079|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0085",
+   "note_id": "V087|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0086",
+   "note_id": "V087|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0087",
+   "note_id": "V087|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0088",
+   "note_id": "V087|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0089",
+   "note_id": "V087|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0090",
+   "note_id": "V087|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0091",
+   "note_id": "V059|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0092",
+   "note_id": "V059|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0093",
+   "note_id": "V059|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0094",
+   "note_id": "V059|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0095",
+   "note_id": "V059|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0096",
+   "note_id": "V059|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0097",
+   "note_id": "V056|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0098",
+   "note_id": "V056|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0099",
+   "note_id": "V056|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0100",
+   "note_id": "V056|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0101",
+   "note_id": "V056|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0102",
+   "note_id": "V056|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0103",
+   "note_id": "V111|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0104",
+   "note_id": "V111|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0105",
+   "note_id": "V111|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0106",
+   "note_id": "V111|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0107",
+   "note_id": "V111|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0108",
+   "note_id": "V111|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0109",
+   "note_id": "V077|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0110",
+   "note_id": "V077|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0111",
+   "note_id": "V077|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0112",
+   "note_id": "V077|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0113",
+   "note_id": "V077|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0114",
+   "note_id": "V077|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0115",
+   "note_id": "V100|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0116",
+   "note_id": "V100|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0117",
+   "note_id": "V100|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0118",
+   "note_id": "V100|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0119",
+   "note_id": "V100|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0120",
+   "note_id": "V100|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0121",
+   "note_id": "V117|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0122",
+   "note_id": "V117|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0123",
+   "note_id": "V117|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0124",
+   "note_id": "V117|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0125",
+   "note_id": "V117|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0126",
+   "note_id": "V117|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0127",
+   "note_id": "V061|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0128",
+   "note_id": "V061|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0129",
+   "note_id": "V061|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0130",
+   "note_id": "V061|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0131",
+   "note_id": "V061|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0132",
+   "note_id": "V061|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0133",
+   "note_id": "V013|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0134",
+   "note_id": "V013|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0135",
+   "note_id": "V013|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0136",
+   "note_id": "V013|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0137",
+   "note_id": "V013|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0138",
+   "note_id": "V013|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0139",
+   "note_id": "V089|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0140",
+   "note_id": "V089|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0141",
+   "note_id": "V089|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0142",
+   "note_id": "V089|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0143",
+   "note_id": "V089|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0144",
+   "note_id": "V089|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0145",
+   "note_id": "V091|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0146",
+   "note_id": "V091|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0147",
+   "note_id": "V091|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0148",
+   "note_id": "V091|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0149",
+   "note_id": "V091|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0150",
+   "note_id": "V091|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0151",
+   "note_id": "V038|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0152",
+   "note_id": "V038|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0153",
+   "note_id": "V038|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0154",
+   "note_id": "V038|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0155",
+   "note_id": "V038|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0156",
+   "note_id": "V038|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0157",
+   "note_id": "V104|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0158",
+   "note_id": "V104|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0159",
+   "note_id": "V104|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0160",
+   "note_id": "V104|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0161",
+   "note_id": "V104|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0162",
+   "note_id": "V104|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0163",
+   "note_id": "V078|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0164",
+   "note_id": "V078|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0165",
+   "note_id": "V078|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0166",
+   "note_id": "V078|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0167",
+   "note_id": "V078|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0168",
+   "note_id": "V078|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0169",
+   "note_id": "V115|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0170",
+   "note_id": "V115|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0171",
+   "note_id": "V115|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0172",
+   "note_id": "V115|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0173",
+   "note_id": "V115|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0174",
+   "note_id": "V115|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0175",
+   "note_id": "V048|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0176",
+   "note_id": "V048|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0177",
+   "note_id": "V048|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0178",
+   "note_id": "V048|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0179",
+   "note_id": "V048|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0180",
+   "note_id": "V048|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0181",
+   "note_id": "V088|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0182",
+   "note_id": "V088|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0183",
+   "note_id": "V088|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0184",
+   "note_id": "V088|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0185",
+   "note_id": "V088|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0186",
+   "note_id": "V088|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0187",
+   "note_id": "V008|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0188",
+   "note_id": "V008|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0189",
+   "note_id": "V008|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0190",
+   "note_id": "V008|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0191",
+   "note_id": "V008|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0192",
+   "note_id": "V008|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0193",
+   "note_id": "V090|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0194",
+   "note_id": "V090|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0195",
+   "note_id": "V090|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0196",
+   "note_id": "V090|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0197",
+   "note_id": "V090|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0198",
+   "note_id": "V090|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0199",
+   "note_id": "V032|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0200",
+   "note_id": "V032|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0201",
+   "note_id": "V032|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0202",
+   "note_id": "V032|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0203",
+   "note_id": "V032|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0204",
+   "note_id": "V032|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0205",
+   "note_id": "V109|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0206",
+   "note_id": "V109|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0207",
+   "note_id": "V109|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0208",
+   "note_id": "V109|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0209",
+   "note_id": "V109|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0210",
+   "note_id": "V109|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0211",
+   "note_id": "V082|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0212",
+   "note_id": "V082|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0213",
+   "note_id": "V082|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0214",
+   "note_id": "V082|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0215",
+   "note_id": "V082|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0216",
+   "note_id": "V082|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0217",
+   "note_id": "V075|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0218",
+   "note_id": "V075|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0219",
+   "note_id": "V075|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0220",
+   "note_id": "V075|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0221",
+   "note_id": "V075|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0222",
+   "note_id": "V075|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0223",
+   "note_id": "V066|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0224",
+   "note_id": "V066|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0225",
+   "note_id": "V066|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0226",
+   "note_id": "V066|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0227",
+   "note_id": "V066|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0228",
+   "note_id": "V066|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0229",
+   "note_id": "V113|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0230",
+   "note_id": "V113|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0231",
+   "note_id": "V113|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0232",
+   "note_id": "V113|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0233",
+   "note_id": "V113|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0234",
+   "note_id": "V113|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0235",
+   "note_id": "V105|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0236",
+   "note_id": "V105|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0237",
+   "note_id": "V105|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0238",
+   "note_id": "V105|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0239",
+   "note_id": "V105|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0240",
+   "note_id": "V105|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0241",
+   "note_id": "V071|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0242",
+   "note_id": "V071|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0243",
+   "note_id": "V071|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0244",
+   "note_id": "V071|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0245",
+   "note_id": "V071|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0246",
+   "note_id": "V071|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0247",
+   "note_id": "V101|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0248",
+   "note_id": "V101|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0249",
+   "note_id": "V101|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0250",
+   "note_id": "V101|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0251",
+   "note_id": "V101|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0252",
+   "note_id": "V101|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0253",
+   "note_id": "V027|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0254",
+   "note_id": "V027|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0255",
+   "note_id": "V027|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0256",
+   "note_id": "V027|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0257",
+   "note_id": "V027|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0258",
+   "note_id": "V027|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0259",
+   "note_id": "V015|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0260",
+   "note_id": "V015|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0261",
+   "note_id": "V015|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0262",
+   "note_id": "V015|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0263",
+   "note_id": "V015|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0264",
+   "note_id": "V015|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0265",
+   "note_id": "V081|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0266",
+   "note_id": "V081|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0267",
+   "note_id": "V081|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0268",
+   "note_id": "V081|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0269",
+   "note_id": "V081|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0270",
+   "note_id": "V081|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0271",
+   "note_id": "V019|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0272",
+   "note_id": "V019|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0273",
+   "note_id": "V019|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0274",
+   "note_id": "V019|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0275",
+   "note_id": "V019|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0276",
+   "note_id": "V019|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0277",
+   "note_id": "V084|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0278",
+   "note_id": "V084|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0279",
+   "note_id": "V084|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0280",
+   "note_id": "V084|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0281",
+   "note_id": "V084|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0282",
+   "note_id": "V084|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0283",
+   "note_id": "V046|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0284",
+   "note_id": "V046|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0285",
+   "note_id": "V046|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0286",
+   "note_id": "V046|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0287",
+   "note_id": "V046|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0288",
+   "note_id": "V046|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0289",
+   "note_id": "V106|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0290",
+   "note_id": "V106|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0291",
+   "note_id": "V106|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0292",
+   "note_id": "V106|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0293",
+   "note_id": "V106|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0294",
+   "note_id": "V106|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0295",
+   "note_id": "V083|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0296",
+   "note_id": "V083|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0297",
+   "note_id": "V083|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0298",
+   "note_id": "V083|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0299",
+   "note_id": "V083|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0300",
+   "note_id": "V083|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0301",
+   "note_id": "V041|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0302",
+   "note_id": "V041|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0303",
+   "note_id": "V041|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0304",
+   "note_id": "V041|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0305",
+   "note_id": "V041|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0306",
+   "note_id": "V041|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0307",
+   "note_id": "V112|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0308",
+   "note_id": "V112|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0309",
+   "note_id": "V112|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0310",
+   "note_id": "V112|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0311",
+   "note_id": "V112|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0312",
+   "note_id": "V112|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0313",
+   "note_id": "V107|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0314",
+   "note_id": "V107|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0315",
+   "note_id": "V107|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0316",
+   "note_id": "V107|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0317",
+   "note_id": "V107|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0318",
+   "note_id": "V107|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0319",
+   "note_id": "V063|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0320",
+   "note_id": "V063|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0321",
+   "note_id": "V063|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0322",
+   "note_id": "V063|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0323",
+   "note_id": "V063|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0324",
+   "note_id": "V063|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0325",
+   "note_id": "V053|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0326",
+   "note_id": "V053|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0327",
+   "note_id": "V053|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0328",
+   "note_id": "V053|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0329",
+   "note_id": "V053|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0330",
+   "note_id": "V053|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0331",
+   "note_id": "V058|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0332",
+   "note_id": "V058|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0333",
+   "note_id": "V058|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0334",
+   "note_id": "V058|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0335",
+   "note_id": "V058|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0336",
+   "note_id": "V058|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0337",
+   "note_id": "V018|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0338",
+   "note_id": "V018|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0339",
+   "note_id": "V018|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0340",
+   "note_id": "V018|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0341",
+   "note_id": "V018|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0342",
+   "note_id": "V018|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0343",
+   "note_id": "V062|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0344",
+   "note_id": "V062|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0345",
+   "note_id": "V062|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0346",
+   "note_id": "V062|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0347",
+   "note_id": "V062|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0348",
+   "note_id": "V062|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0349",
+   "note_id": "V094|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0350",
+   "note_id": "V094|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0351",
+   "note_id": "V094|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0352",
+   "note_id": "V094|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0353",
+   "note_id": "V094|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0354",
+   "note_id": "V094|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0355",
+   "note_id": "V099|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0356",
+   "note_id": "V099|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0357",
+   "note_id": "V099|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0358",
+   "note_id": "V099|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0359",
+   "note_id": "V099|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0360",
+   "note_id": "V099|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0361",
+   "note_id": "V023|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0362",
+   "note_id": "V023|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0363",
+   "note_id": "V023|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0364",
+   "note_id": "V023|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0365",
+   "note_id": "V023|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0366",
+   "note_id": "V023|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0367",
+   "note_id": "V029|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0368",
+   "note_id": "V029|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0369",
+   "note_id": "V029|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0370",
+   "note_id": "V029|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0371",
+   "note_id": "V029|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0372",
+   "note_id": "V029|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0373",
+   "note_id": "V026|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0374",
+   "note_id": "V026|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0375",
+   "note_id": "V026|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0376",
+   "note_id": "V026|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0377",
+   "note_id": "V026|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0378",
+   "note_id": "V026|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0379",
+   "note_id": "V114|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0380",
+   "note_id": "V114|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0381",
+   "note_id": "V114|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0382",
+   "note_id": "V114|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0383",
+   "note_id": "V114|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0384",
+   "note_id": "V114|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0385",
+   "note_id": "V097|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0386",
+   "note_id": "V097|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0387",
+   "note_id": "V097|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0388",
+   "note_id": "V097|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0389",
+   "note_id": "V097|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0390",
+   "note_id": "V097|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0391",
+   "note_id": "V011|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0392",
+   "note_id": "V011|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0393",
+   "note_id": "V011|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0394",
+   "note_id": "V011|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0395",
+   "note_id": "V011|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0396",
+   "note_id": "V011|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0397",
+   "note_id": "V064|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0398",
+   "note_id": "V064|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0399",
+   "note_id": "V064|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0400",
+   "note_id": "V064|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0401",
+   "note_id": "V064|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0402",
+   "note_id": "V064|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0403",
+   "note_id": "V025|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0404",
+   "note_id": "V025|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0405",
+   "note_id": "V025|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0406",
+   "note_id": "V025|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0407",
+   "note_id": "V025|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0408",
+   "note_id": "V025|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0409",
+   "note_id": "V017|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0410",
+   "note_id": "V017|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0411",
+   "note_id": "V017|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0412",
+   "note_id": "V017|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0413",
+   "note_id": "V017|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0414",
+   "note_id": "V017|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0415",
+   "note_id": "V072|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0416",
+   "note_id": "V072|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0417",
+   "note_id": "V072|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0418",
+   "note_id": "V072|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0419",
+   "note_id": "V072|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0420",
+   "note_id": "V072|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0421",
+   "note_id": "V110|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0422",
+   "note_id": "V110|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0423",
+   "note_id": "V110|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0424",
+   "note_id": "V110|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0425",
+   "note_id": "V110|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0426",
+   "note_id": "V110|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0427",
+   "note_id": "V034|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0428",
+   "note_id": "V034|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0429",
+   "note_id": "V034|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0430",
+   "note_id": "V034|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0431",
+   "note_id": "V034|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0432",
+   "note_id": "V034|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0433",
+   "note_id": "V045|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0434",
+   "note_id": "V045|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0435",
+   "note_id": "V045|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0436",
+   "note_id": "V045|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0437",
+   "note_id": "V045|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0438",
+   "note_id": "V045|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0439",
+   "note_id": "V031|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0440",
+   "note_id": "V031|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0441",
+   "note_id": "V031|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0442",
+   "note_id": "V031|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0443",
+   "note_id": "V031|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0444",
+   "note_id": "V031|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0445",
+   "note_id": "V103|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0446",
+   "note_id": "V103|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0447",
+   "note_id": "V103|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0448",
+   "note_id": "V103|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0449",
+   "note_id": "V103|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0450",
+   "note_id": "V103|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0451",
+   "note_id": "V060|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0452",
+   "note_id": "V060|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0453",
+   "note_id": "V060|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0454",
+   "note_id": "V060|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0455",
+   "note_id": "V060|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0456",
+   "note_id": "V060|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0457",
+   "note_id": "V039|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0458",
+   "note_id": "V039|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0459",
+   "note_id": "V039|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0460",
+   "note_id": "V039|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0461",
+   "note_id": "V039|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0462",
+   "note_id": "V039|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0463",
+   "note_id": "V022|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0464",
+   "note_id": "V022|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0465",
+   "note_id": "V022|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0466",
+   "note_id": "V022|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0467",
+   "note_id": "V022|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0468",
+   "note_id": "V022|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0469",
+   "note_id": "V003|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0470",
+   "note_id": "V003|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0471",
+   "note_id": "V003|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0472",
+   "note_id": "V003|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0473",
+   "note_id": "V003|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0474",
+   "note_id": "V003|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0475",
+   "note_id": "V044|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0476",
+   "note_id": "V044|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0477",
+   "note_id": "V044|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0478",
+   "note_id": "V044|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0479",
+   "note_id": "V044|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0480",
+   "note_id": "V044|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0481",
+   "note_id": "V086|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0482",
+   "note_id": "V086|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0483",
+   "note_id": "V086|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0484",
+   "note_id": "V086|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0485",
+   "note_id": "V086|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0486",
+   "note_id": "V086|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0487",
+   "note_id": "V065|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0488",
+   "note_id": "V065|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0489",
+   "note_id": "V065|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0490",
+   "note_id": "V065|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0491",
+   "note_id": "V065|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0492",
+   "note_id": "V065|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0493",
+   "note_id": "V054|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0494",
+   "note_id": "V054|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0495",
+   "note_id": "V054|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0496",
+   "note_id": "V054|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0497",
+   "note_id": "V054|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0498",
+   "note_id": "V054|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0499",
+   "note_id": "V030|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0500",
+   "note_id": "V030|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0501",
+   "note_id": "V030|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0502",
+   "note_id": "V030|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0503",
+   "note_id": "V030|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0504",
+   "note_id": "V030|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0505",
+   "note_id": "V024|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0506",
+   "note_id": "V024|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0507",
+   "note_id": "V024|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0508",
+   "note_id": "V024|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0509",
+   "note_id": "V024|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0510",
+   "note_id": "V024|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0511",
+   "note_id": "V037|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0512",
+   "note_id": "V037|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0513",
+   "note_id": "V037|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0514",
+   "note_id": "V037|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0515",
+   "note_id": "V037|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0516",
+   "note_id": "V037|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0517",
+   "note_id": "V036|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0518",
+   "note_id": "V036|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0519",
+   "note_id": "V036|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0520",
+   "note_id": "V036|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0521",
+   "note_id": "V036|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0522",
+   "note_id": "V036|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0523",
+   "note_id": "V001|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0524",
+   "note_id": "V001|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0525",
+   "note_id": "V001|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0526",
+   "note_id": "V001|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0527",
+   "note_id": "V001|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0528",
+   "note_id": "V001|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0529",
+   "note_id": "V004|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0530",
+   "note_id": "V004|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0531",
+   "note_id": "V004|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0532",
+   "note_id": "V004|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0533",
+   "note_id": "V004|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0534",
+   "note_id": "V004|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0535",
+   "note_id": "V067|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0536",
+   "note_id": "V067|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0537",
+   "note_id": "V067|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0538",
+   "note_id": "V067|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0539",
+   "note_id": "V067|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0540",
+   "note_id": "V067|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0541",
+   "note_id": "V020|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0542",
+   "note_id": "V020|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0543",
+   "note_id": "V020|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0544",
+   "note_id": "V020|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0545",
+   "note_id": "V020|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0546",
+   "note_id": "V020|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0547",
+   "note_id": "V074|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0548",
+   "note_id": "V074|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0549",
+   "note_id": "V074|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0550",
+   "note_id": "V074|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0551",
+   "note_id": "V074|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0552",
+   "note_id": "V074|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0553",
+   "note_id": "V085|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0554",
+   "note_id": "V085|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0555",
+   "note_id": "V085|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0556",
+   "note_id": "V085|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0557",
+   "note_id": "V085|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0558",
+   "note_id": "V085|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0559",
+   "note_id": "V092|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0560",
+   "note_id": "V092|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0561",
+   "note_id": "V092|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0562",
+   "note_id": "V092|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0563",
+   "note_id": "V092|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0564",
+   "note_id": "V092|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0565",
+   "note_id": "V033|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0566",
+   "note_id": "V033|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0567",
+   "note_id": "V033|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0568",
+   "note_id": "V033|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0569",
+   "note_id": "V033|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0570",
+   "note_id": "V033|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0571",
+   "note_id": "V116|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0572",
+   "note_id": "V116|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0573",
+   "note_id": "V116|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0574",
+   "note_id": "V116|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0575",
+   "note_id": "V116|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0576",
+   "note_id": "V116|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0577",
+   "note_id": "V093|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0578",
+   "note_id": "V093|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0579",
+   "note_id": "V093|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0580",
+   "note_id": "V093|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0581",
+   "note_id": "V093|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0582",
+   "note_id": "V093|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0583",
+   "note_id": "V098|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0584",
+   "note_id": "V098|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0585",
+   "note_id": "V098|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0586",
+   "note_id": "V098|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0587",
+   "note_id": "V098|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0588",
+   "note_id": "V098|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0589",
+   "note_id": "V002|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0590",
+   "note_id": "V002|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0591",
+   "note_id": "V002|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0592",
+   "note_id": "V002|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0593",
+   "note_id": "V002|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0594",
+   "note_id": "V002|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0595",
+   "note_id": "V096|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0596",
+   "note_id": "V096|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0597",
+   "note_id": "V096|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0598",
+   "note_id": "V096|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0599",
+   "note_id": "V096|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0600",
+   "note_id": "V096|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0601",
+   "note_id": "V005|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0602",
+   "note_id": "V005|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0603",
+   "note_id": "V005|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0604",
+   "note_id": "V005|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0605",
+   "note_id": "V005|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0606",
+   "note_id": "V005|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0607",
+   "note_id": "V068|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0608",
+   "note_id": "V068|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0609",
+   "note_id": "V068|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0610",
+   "note_id": "V068|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0611",
+   "note_id": "V068|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0612",
+   "note_id": "V068|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0613",
+   "note_id": "V052|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0614",
+   "note_id": "V052|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0615",
+   "note_id": "V052|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0616",
+   "note_id": "V052|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0617",
+   "note_id": "V052|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0618",
+   "note_id": "V052|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0619",
+   "note_id": "V007|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0620",
+   "note_id": "V007|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0621",
+   "note_id": "V007|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0622",
+   "note_id": "V007|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0623",
+   "note_id": "V007|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0624",
+   "note_id": "V007|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0625",
+   "note_id": "V010|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0626",
+   "note_id": "V010|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0627",
+   "note_id": "V010|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0628",
+   "note_id": "V010|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0629",
+   "note_id": "V010|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0630",
+   "note_id": "V010|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0631",
+   "note_id": "V042|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0632",
+   "note_id": "V042|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0633",
+   "note_id": "V042|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0634",
+   "note_id": "V042|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0635",
+   "note_id": "V042|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0636",
+   "note_id": "V042|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0637",
+   "note_id": "V050|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0638",
+   "note_id": "V050|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0639",
+   "note_id": "V050|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0640",
+   "note_id": "V050|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0641",
+   "note_id": "V050|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0642",
+   "note_id": "V050|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0643",
+   "note_id": "V070|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0644",
+   "note_id": "V070|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0645",
+   "note_id": "V070|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0646",
+   "note_id": "V070|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0647",
+   "note_id": "V070|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0648",
+   "note_id": "V070|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0649",
+   "note_id": "V051|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0650",
+   "note_id": "V051|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0651",
+   "note_id": "V051|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0652",
+   "note_id": "V051|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0653",
+   "note_id": "V051|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0654",
+   "note_id": "V051|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0655",
+   "note_id": "V069|ORD-INFORMED|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0656",
+   "note_id": "V069|ORD-INFORMED|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0657",
+   "note_id": "V069|ORD-INFORMED|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0658",
+   "note_id": "V069|ORD-FREE|090|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0659",
+   "note_id": "V069|ORD-FREE|100|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0660",
+   "note_id": "V069|ORD-FREE|110|v1",
+   "round": 1,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0661",
+   "note_id": "V085|ORD-INFORMED|090|v2",
+   "round": 2,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0662",
+   "note_id": "V085|ORD-INFORMED|100|v2",
+   "round": 2,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  },
+  {
+   "item_id": "N0663",
+   "note_id": "V085|ORD-INFORMED|110|v2",
+   "round": 2,
+   "checker": "gemini-3.1-flash-lite",
+   "sheet": "00"
+  }
+ ]
+}

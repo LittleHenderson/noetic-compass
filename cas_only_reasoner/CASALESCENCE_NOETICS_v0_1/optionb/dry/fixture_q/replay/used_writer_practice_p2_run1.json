@@ -1,0 +1,52 @@
+[
+ {
+  "http_status": 200,
+  "content_json": [
+   {
+    "passage": "V901",
+    "what_follows": [
+     {
+      "form": "MEET_AGAIN",
+      "question": "Weeks later Halima is in a town with no river. Going only by the passage, which of these would most likely bring the ferry back to her?",
+      "right": "a coil of wet rope nearby",
+      "wrong": [
+       "a key hanging on a nail",
+       "a rack of oars to count",
+       "a door that needs unlocking early",
+       "a bench beside a quiet road",
+       "a tin left on a shelf"
+      ],
+      "anchors": [
+       "the smell of wet rope"
+      ]
+     },
+     {
+      "form": "TAKE_AWAY",
+      "question": "Suppose there had been no rope smell at the door that morning. Going only by the passage, which of these would most likely not have happened?",
+      "right": "Halima remembering the engine hatch bench",
+      "wrong": [
+       "Halima unlocking the old boathouse door",
+       "Halima hanging the key on its nail",
+       "Halima counting the oars one by one",
+       "Halima walking in through the door",
+       "Halima starting her usual morning jobs"
+      ],
+      "anchors": [
+       "her uncle's ferry"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "What did Halima begin counting?",
+     "right": "the oars",
+     "wrong": [
+      "the keys",
+      "the benches",
+      "the biscuit tins"
+     ]
+    }
+   }
+  ],
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY"
+ }
+]

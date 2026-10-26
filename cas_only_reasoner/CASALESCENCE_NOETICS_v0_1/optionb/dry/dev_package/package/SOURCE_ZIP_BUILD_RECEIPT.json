@@ -1,0 +1,48 @@
+{
+ "schema": "casalescence/optionb/source-zip-build-receipt/v1",
+ "state": "WRITTEN",
+ "source_zip": {
+  "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package\\package\\source.zip",
+  "bytes": 876886,
+  "sha256": "71f3580d643d0f7259bc8891e8aec3ddfc4d93d9d013fa8dc8a1bf8e499e1126"
+ },
+ "members": 18,
+ "unpacked_bytes": 874616,
+ "guest_caps": {
+  "files": 400,
+  "unpacked_bytes": 8388608
+ },
+ "bundle_manifest_sha256": "844ff4986ca0764eeac61ec6a4d8aa2db975fcd6106a33679637e7adef27dbac",
+ "requirements_sha256": "6d9ee033baf3acbcecfbf8feb735a807025c141cac8e6060e480154c2c1c15b7",
+ "seal_lines_in_package": 8,
+ "seal_lines_on_disk": 8,
+ "seal_file_read": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package\\project\\optionb\\SEAL_OPTIONB.jsonl",
+ "rehearsal_package_never_for_the_gpu_job": false,
+ "made_up_study_root_never_for_a_seal_or_the_gpu_job": true,
+ "program_repair_lines_in_package": 0,
+ "last_seal_step_in_package": "6_PROGRAMS",
+ "member_sizes": {
+  "08_OPTION_B_PLAN_v1_0.md": 157280,
+  "BUNDLE_MANIFEST.json": 2908,
+  "FILE_FORMATS.md": 123821,
+  "PLAN_CONSTANTS.json": 90456,
+  "SEAL_OPTIONB.jsonl": 19010,
+  "contracts/requirements.small-linux.txt": 403,
+  "job/analysis_b1.py": 69933,
+  "job/gate_b1.py": 35951,
+  "job/runner_b1.py": 71179,
+  "job/scorer_examples_v0_1_1.json": 6559,
+  "job/scorer_v0_1_1.py": 6173,
+  "keys_final/keys_final.json": 5774,
+  "keys_final/task_meta_final.json": 8985,
+  "keys_practice/keys_practice.json": 6891,
+  "keys_practice/task_meta_practice.json": 17302,
+  "prompts/prompt_parts_final.json": 57697,
+  "prompts/prompt_parts_practice.json": 181276,
+  "tools/verdict.py": 13018
+ },
+ "made_by": {
+  "program": "build_source_zip_b1.py",
+  "sha256": "7b1a72b49e2ea898e11e453912180c1891267e9b3f35061c307528e7d09dcd32"
+ }
+}

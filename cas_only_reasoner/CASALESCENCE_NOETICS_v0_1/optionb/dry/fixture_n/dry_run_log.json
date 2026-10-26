@@ -1,0 +1,6040 @@
+{
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "cb6581f30449edb17ac32e501a19231551bdfd0c75a87ef1dfba4fa8f8f9f409",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "note": "DRY FIXTURE, NOT A RESULT. Made-up passages, questions, notes, verdicts, seal lines and clock. No outside call was made.",
+ "tool_runs": 78,
+ "checks": 189,
+ "checks_held": 189,
+ "checks_not_held": 0,
+ "steps": [
+  {
+   "label": "writer practice before seal step 3A",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SEAL_STEP_MISSING",
+    "reason": "Seal step 3A_PRACTICE_QUESTIONS_AND_KEYS must exist before this program runs."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer practice, plan only",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "PLAN_ONLY",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "PLAN_ONLY",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 0,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 30,
+    "still_open_in_this_step": 30,
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {},
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {},
+    "next": "No call was made. The plan is written. Run again with a call budget."
+   }
+  },
+  {
+   "label": "writer in a dry folder with a call budget and no made-up replies",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "5"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "DRY_FIXTURE_NEEDS_REPLAY",
+    "reason": "No outside call is ever made from a dry folder. Give --replay-replies."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer final before seal step 3C",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SEAL_STEP_MISSING",
+    "reason": "Seal step 3C_FINAL_QUESTIONS_AND_KEYS must exist before this program runs."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer rewrite before any support check",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "rewrite",
+    "--max-calls",
+    "5",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_practice_unused.json"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "NO_SUPPORT_RESULTS",
+    "reason": "support/support_results_practice.json does not exist. A note is written again only after a failed support check."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer practice, the 7th call gets HTTP 429",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_practice_run1_http429.json"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_HTTP_429",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_HTTP_429",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 6,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 30,
+    "still_open_in_this_step": 24,
+    "calls_this_run": 7,
+    "call_budget": 100,
+    "notes_written_this_run": 6,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {},
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      16,
+      166
+     ],
+     "ORD-FREE 100": [
+      24,
+      184
+     ],
+     "ORD-FREE 110": [
+      34,
+      202
+     ],
+     "ORD-INFORMED 090": [
+      19,
+      166
+     ],
+     "ORD-INFORMED 100": [
+      26,
+      184
+     ],
+     "ORD-INFORMED 110": [
+      34,
+      202
+     ]
+    },
+    "next": "The service answered HTTP 429 (too many requests). The log is kept. Run the same command later."
+   }
+  },
+  {
+   "label": "writer practice, call budget 4",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "4",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_practice_full.json"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_CALL_BUDGET",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 10,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 24,
+    "still_open_in_this_step": 20,
+    "calls_this_run": 4,
+    "call_budget": 4,
+    "notes_written_this_run": 4,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {},
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      32,
+      270
+     ],
+     "ORD-FREE 100": [
+      48,
+      299
+     ],
+     "ORD-FREE 110": [
+      68,
+      329
+     ],
+     "ORD-INFORMED 090": [
+      38,
+      270
+     ],
+     "ORD-INFORMED 100": [
+      26,
+      184
+     ],
+     "ORD-INFORMED 110": [
+      34,
+      202
+     ]
+    },
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "writer practice, notes file lost, rebuilt from the call log",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "PLAN_ONLY",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "PLAN_ONLY",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 10,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 20,
+    "still_open_in_this_step": 20,
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {},
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      32,
+      270
+     ],
+     "ORD-FREE 100": [
+      48,
+      299
+     ],
+     "ORD-FREE 110": [
+      68,
+      329
+     ],
+     "ORD-INFORMED 090": [
+      38,
+      270
+     ],
+     "ORD-INFORMED 100": [
+      26,
+      184
+     ],
+     "ORD-INFORMED 110": [
+      34,
+      202
+     ]
+    },
+    "next": "No call was made. The plan is written. Run again with a call budget."
+   }
+  },
+  {
+   "label": "writer practice, one reply is empty",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_practice_run4_empty_reply.json"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_NOTES_NOT_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_NOTES_NOT_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 29,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 20,
+    "still_open_in_this_step": 1,
+    "calls_this_run": 20,
+    "call_budget": 100,
+    "notes_written_this_run": 19,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [
+     "V903|ORD-FREE|090|v1"
+    ],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V903|ORD-FREE|090|v1": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      67,
+      540
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Some notes are still not written (no answer, an empty or cut-off reply, or a call refused with HTTP status 400, 404 or 422). Run the same command again. A note whose reply is empty or cut off, or whose call is refused in that way, a second time is given up by the rule of the plan: its passage is dropped for every group and the drop is logged."
+   }
+  },
+  {
+   "label": "writer practice, last run",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_practice_full.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 30,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 1,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 1,
+    "call_budget": 100,
+    "notes_written_this_run": 1,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V903|ORD-FREE|090|v1": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      83,
+      644
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "writer practice after a sealed file was changed by one byte",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SEALED_FILE_CHANGED",
+    "reason": "optionb/dry/fixture_n/select/selection_practice.json was sealed in step 3A_PRACTICE_QUESTIONS_AND_KEYS and has changed."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer final, one run",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_final_full.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "final",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 8,
+    "notes_planned": 48,
+    "notes_with_version_1": 48,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 48,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 48,
+    "call_budget": 100,
+    "notes_written_this_run": 48,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {},
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      142,
+      1078
+     ],
+     "ORD-FREE 100": [
+      211,
+      1199
+     ],
+     "ORD-FREE 110": [
+      284,
+      1317
+     ],
+     "ORD-INFORMED 090": [
+      167,
+      1078
+     ],
+     "ORD-INFORMED 100": [
+      223,
+      1199
+     ],
+     "ORD-INFORMED 110": [
+      291,
+      1317
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "support in a dry folder with a call budget and no made-up replies",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "DRY_FIXTURE_NEEDS_REPLAY",
+    "reason": "No outside call is ever made from a dry folder. Give --replay-replies."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "support practice, plan only",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [],
+    "passages": 5,
+    "passages_by_status": {
+     "UNCHECKED": 5
+    },
+    "notes": {
+     "notes_checked": 0,
+     "passed": 0,
+     "failed_once": 0,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 0,
+     "PENDING": 3,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers garbage",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_practice_001_garbage.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "UNCHECKED": 5
+    },
+    "notes": {
+     "notes_checked": 0,
+     "passed": 0,
+     "failed_once": 0,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 0,
+     "PENDING": 3,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_practice_002_full.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 2,
+     "UNCHECKED": 3
+    },
+    "notes": {
+     "notes_checked": 12,
+     "passed": 12,
+     "failed_once": 0,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 2,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers partial",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_practice_003_partial.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 2,
+     "REWRITE_NEEDED": 1,
+     "UNCHECKED": 2
+    },
+    "notes": {
+     "notes_checked": 22,
+     "passed": 21,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 2,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_practice_004_full.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 3,
+     "REWRITE_NEEDED": 1,
+     "UNCHECKED": 1
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 23,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 2,
+     "PENDING": 1,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_practice_005_full.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "NOTHING_PENDING",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "NOTHING_PENDING",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 4,
+     "REWRITE_NEEDED": 1
+    },
+    "notes": {
+     "notes_checked": 30,
+     "passed": 29,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 3,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "REWRITE",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "No batch is waiting for the checker. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "screen report-only before the practice support check is finished",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--report-only"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SUPPORT_CHECK_NOT_FINISHED",
+    "reason": "The support check of the practice set is not finished: 1 passages that carry a task are neither ALL_PASS nor dropped (DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN) (first: V902)."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer practice rewrite",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "rewrite",
+    "--max-calls",
+    "10",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_practice_rewrite.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "step": "rewrite",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 30,
+    "notes_with_version_2": 1,
+    "due_in_this_step_at_start": 1,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 1,
+    "call_budget": 10,
+    "notes_written_this_run": 1,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V903|ORD-FREE|090|v1": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      83,
+      644
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      133,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_practice_006_full.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "NOTHING_PENDING",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "NOTHING_PENDING",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 5
+    },
+    "notes": {
+     "notes_checked": 31,
+     "passed": 30,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 4,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1,
+     2
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": true,
+    "next": "No batch is waiting for the checker. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "writer practice rewrite, nothing more is due",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "rewrite",
+    "--max-calls",
+    "10",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_practice_rewrite.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "step": "rewrite",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 30,
+    "notes_with_version_2": 1,
+    "due_in_this_step_at_start": 0,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 0,
+    "call_budget": 10,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V903|ORD-FREE|090|v1": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      83,
+      644
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      133,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "screen report-only for the final set",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--report-only"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "REPORT_ONLY_IS_FOR_THE_PRACTICE_SET",
+    "reason": "--report-only is refused with --set final. It is for the practice set only."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "screen report-only for both sets",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "both",
+    "--report-only"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "REPORT_ONLY_IS_FOR_THE_PRACTICE_SET",
+    "reason": "--report-only is refused with --set both. It is for the practice set only."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "screen report-only on the practice set, before seal step 4",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--report-only"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "REPORT_ONLY",
+   "printed": {
+    "program": "tools/ob_screen_notes.py",
+    "dry_fixture": true,
+    "status": "REPORT_ONLY",
+    "set": "practice",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "files_written": [],
+    "screen_counts": {
+     "passages_screened": 5,
+     "passages_hit": 1,
+     "hits_by_rule": {
+      "a": 0,
+      "b": 0,
+      "c": 1,
+      "d": 0
+     }
+    },
+    "passages_hit": [
+     {
+      "passage_id": "V903",
+      "rules": [
+       "c"
+      ]
+     }
+    ],
+    "what_would_be_left": {
+     "passages_that_carry_a_task": 5,
+     "passages_dropped_by_the_support_check": 0,
+     "passages_dropped_by_the_screen": 1,
+     "passages_left": 4,
+     "passages_left_with_a_role_step_task": 4,
+     "role_step_tasks_left": 5,
+     "plain_fact_tasks_left": 4
+    },
+    "practice_launch_floor": [
+     {
+      "what": "practice role_step tasks",
+      "left": 5,
+      "floor": 2,
+      "met": true
+     },
+     {
+      "what": "practice plain_fact tasks",
+      "left": 4,
+      "floor": 2,
+      "met": true
+     }
+    ],
+    "what_this_run_is": "An early look. It wrote no file. The screen of record is the later full run after seal step 4. A hit never causes a note to be written again. No brief, no filter and no screen rule is changed because of these numbers without a new reviewed plan version.",
+    "next": "The practice set is at or above both practice launch floors. The final questions may now be written."
+   }
+  },
+  {
+   "label": "screen report-only with a practice floor of 99 role-step tasks",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--report-only"
+   ],
+   "exit": 3,
+   "stop": null,
+   "status": "REPORT_ONLY_PRACTICE_FLOOR_NOT_MET",
+   "printed": {
+    "program": "tools/ob_screen_notes.py",
+    "dry_fixture": true,
+    "status": "REPORT_ONLY_PRACTICE_FLOOR_NOT_MET",
+    "set": "practice",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "files_written": [],
+    "screen_counts": {
+     "passages_screened": 5,
+     "passages_hit": 1,
+     "hits_by_rule": {
+      "a": 0,
+      "b": 0,
+      "c": 1,
+      "d": 0
+     }
+    },
+    "passages_hit": [
+     {
+      "passage_id": "V903",
+      "rules": [
+       "c"
+      ]
+     }
+    ],
+    "what_would_be_left": {
+     "passages_that_carry_a_task": 5,
+     "passages_dropped_by_the_support_check": 0,
+     "passages_dropped_by_the_screen": 1,
+     "passages_left": 4,
+     "passages_left_with_a_role_step_task": 4,
+     "role_step_tasks_left": 5,
+     "plain_fact_tasks_left": 4
+    },
+    "practice_launch_floor": [
+     {
+      "what": "practice role_step tasks",
+      "left": 5,
+      "floor": 99,
+      "met": false
+     },
+     {
+      "what": "practice plain_fact tasks",
+      "left": 4,
+      "floor": 2,
+      "met": true
+     }
+    ],
+    "what_this_run_is": "An early look. It wrote no file. The screen of record is the later full run after seal step 4. A hit never causes a note to be written again. No brief, no filter and no screen rule is changed because of these numbers without a new reviewed plan version.",
+    "next": "DO NOT LAUNCH. The practice set is under the launch floor. No final question is written. Report these numbers to the owner."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_007_full.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 1,
+     "UNCHECKED": 6
+    },
+    "notes": {
+     "notes_checked": 12,
+     "passed": 11,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 3,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers daily_cap",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_008_daily_cap.json",
+    "--dry-now",
+    "2026-10-06T10:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_DAILY_CAP",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_DAILY_CAP",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 1,
+     "UNCHECKED": 6
+    },
+    "notes": {
+     "notes_checked": 12,
+     "passed": 11,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 3,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 1,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The daily cap was hit. The log is kept. The build waits: run the same command on a later day. Nobody else judges a note. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers garbage_twice",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "2",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_009_garbage_twice.json",
+    "--dry-now",
+    "2026-10-07T08:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 2,
+    "call_budget": 2,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 3,
+     "UNCHECKED": 4
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 11,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 2,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 1,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers minute_limit_three_times",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "5",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_010_minute_limit_three_times.json",
+    "--dry-now",
+    "2026-10-07T08:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_RATE_LIMIT",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_RATE_LIMIT",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 3,
+    "call_budget": 5,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 3,
+     "UNCHECKED": 4
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 11,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 2,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 1,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The service refused the call for a rate limit that is not the daily cap. This is not a daily-cap stop. The log is kept. The build waits: run the same command again later. Nobody else judges a note. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers daily_cap",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_011_daily_cap.json",
+    "--dry-now",
+    "2026-10-07T10:00:01Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_DAILY_CAP",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_DAILY_CAP",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 3,
+     "UNCHECKED": 4
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 11,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 2,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 2,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The daily cap was hit. The log is kept. The build waits: run the same command on a later day. Nobody else judges a note. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers daily_cap",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_012_daily_cap.json",
+    "--dry-now",
+    "2026-10-07T22:00:01Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_DAILY_CAP",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_DAILY_CAP",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 3,
+     "UNCHECKED": 4
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 11,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 2,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 3,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The daily cap was hit. The log is kept. The build waits: run the same command on a later day. Nobody else judges a note. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers daily_cap",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_013_daily_cap.json",
+    "--dry-now",
+    "2026-10-08T10:00:01Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_DAILY_CAP",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_DAILY_CAP",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 3,
+     "UNCHECKED": 4
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 11,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 2,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 4,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The daily cap was hit. The log is kept. The build waits: run the same command on a later day. Nobody else judges a note. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_014_full.json",
+    "--dry-now",
+    "2026-10-08T12:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 3,
+     "REWRITE_NEEDED": 3,
+     "UNCHECKED": 2
+    },
+    "notes": {
+     "notes_checked": 36,
+     "passed": 23,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 2,
+     "PENDING": 1,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 4,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_015_full.json",
+    "--dry-now",
+    "2026-10-08T12:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "NOTHING_PENDING",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "NOTHING_PENDING",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 5,
+     "REWRITE_NEEDED": 3
+    },
+    "notes": {
+     "notes_checked": 48,
+     "passed": 35,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 3,
+     "PENDING": 0,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "REWRITE",
+    "daily_cap_stops": 4,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "No batch is waiting for the checker. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "writer final rewrite",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--step",
+    "rewrite",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\writer_final_rewrite.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "final",
+    "step": "rewrite",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 8,
+    "notes_planned": 48,
+    "notes_with_version_1": 48,
+    "notes_with_version_2": 13,
+    "due_in_this_step_at_start": 13,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 13,
+    "call_budget": 100,
+    "notes_written_this_run": 13,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {},
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      142,
+      1078
+     ],
+     "ORD-FREE 100": [
+      211,
+      1199
+     ],
+     "ORD-FREE 110": [
+      284,
+      1317
+     ],
+     "ORD-INFORMED 090": [
+      167,
+      1078
+     ],
+     "ORD-INFORMED 100": [
+      223,
+      1199
+     ],
+     "ORD-INFORMED 110": [
+      291,
+      1317
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "support final: plan round 2",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "0",
+    "--dry-now",
+    "2026-10-08T12:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 5,
+     "UNCHECKED": 3
+    },
+    "notes": {
+     "notes_checked": 48,
+     "passed": 35,
+     "failed_once": 13,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 3,
+     "PENDING": 2,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1,
+     2
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 4,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_016_full.json",
+    "--dry-now",
+    "2026-10-08T12:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 6,
+     "DROPPED_SECOND_FAILURE": 1,
+     "UNCHECKED": 1
+    },
+    "notes": {
+     "notes_checked": 60,
+     "passed": 46,
+     "failed_once": 13,
+     "failed_twice": 1,
+     "passages_dropped": 1,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 4,
+     "PENDING": 1,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1,
+     2
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 4,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\replay\\support_final_017_full.json",
+    "--dry-now",
+    "2026-10-08T12:00:00Z"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "NOTHING_PENDING",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "NOTHING_PENDING",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 7,
+     "DROPPED_SECOND_FAILURE": 1
+    },
+    "notes": {
+     "notes_checked": 61,
+     "passed": 47,
+     "failed_once": 13,
+     "failed_twice": 1,
+     "passages_dropped": 1,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 5,
+     "PENDING": 0,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1,
+     2
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 4,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": true,
+    "next": "No batch is waiting for the checker. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "support final, decide",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "decide",
+    "--set",
+    "final",
+    "--dry-now",
+    "2026-10-08T12:00:00Z"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "DECIDED",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "decide",
+    "status": "DECIDED",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 7,
+     "DROPPED_SECOND_FAILURE": 1
+    },
+    "notes": {
+     "notes_checked": 61,
+     "passed": 47,
+     "failed_once": 13,
+     "failed_twice": 1,
+     "passages_dropped": 1,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 5,
+     "PENDING": 0,
+     "UNREADABLE": 1
+    },
+    "rounds_planned": [
+     1,
+     2
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 4,
+    "first_cap_stop_utc": "2026-10-06T10:00:00Z",
+    "ready_for_seal_step_4": true,
+    "next": "The results file is written. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "support practice, decide",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice",
+    "--dry-now",
+    "2026-10-08T12:00:00Z"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "DECIDED",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "decide",
+    "status": "DECIDED",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 5
+    },
+    "notes": {
+     "notes_checked": 31,
+     "passed": 30,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 4,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1,
+     2
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": true,
+    "next": "The results file is written. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "screen before seal step 4",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "both"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SEAL_STEP_MISSING",
+    "reason": "Seal step 4_ORDINARY_NOTES must exist before this program runs."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "writer after seal step 4",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SET_IS_SEALED",
+    "reason": "Seal step 4_ORDINARY_NOTES exists. These files are sealed and are not written again."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "support decide after seal step 4",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SET_IS_SEALED",
+    "reason": "Seal step 4_ORDINARY_NOTES exists. These files are sealed and are not written again."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "support status after seal step 4 (writes nothing)",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "status",
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "STATUS_ONLY",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "status",
+    "status": "STATUS_ONLY",
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY",
+     "None"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 5
+    },
+    "notes": {
+     "notes_checked": 31,
+     "passed": 30,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 4,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1,
+     2
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": true,
+    "next": "Nothing was written. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "screen practice only",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SCREENED",
+   "printed": {
+    "program": "tools/ob_screen_notes.py",
+    "dry_fixture": true,
+    "status": "SCREENED",
+    "sets_screened_in_this_run": [
+     "practice"
+    ],
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "screen_counts": {
+     "practice": {
+      "passages_screened": 5,
+      "passages_hit": 1,
+      "hits_by_rule": {
+       "a": 0,
+       "b": 0,
+       "c": 1,
+       "d": 0
+      }
+     }
+    },
+    "what_is_left": {
+     "practice": {
+      "passages_that_carry_a_task": 5,
+      "passages_dropped_by_the_support_check": 0,
+      "passages_dropped_by_the_screen": 1,
+      "passages_left": 4,
+      "passages_left_with_a_role_step_task": 4,
+      "role_step_tasks_left": 5,
+      "plain_fact_tasks_left": 4
+     },
+     "final": null
+    },
+    "launch_floor": {
+     "lines": [
+      {
+       "what": "practice role_step tasks",
+       "left": 5,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "practice plain_fact tasks",
+       "left": 4,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "final role_step tasks",
+       "left": null,
+       "floor": 2,
+       "met": null
+      },
+      {
+       "what": "final plain_fact tasks",
+       "left": null,
+       "floor": 2,
+       "met": null
+      }
+     ],
+     "checked_on_both_sets": false,
+     "met": null,
+     "tier": null
+    },
+    "a_hit_never_causes_a_rewrite": "This program calls nobody. The note writer reads only the support check results.",
+    "next": "Screen the other set as well. The launch floor can be checked only on both sets."
+   }
+  },
+  {
+   "label": "screen both sets",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "both"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SCREENED",
+   "printed": {
+    "program": "tools/ob_screen_notes.py",
+    "dry_fixture": true,
+    "status": "SCREENED",
+    "sets_screened_in_this_run": [
+     "practice",
+     "final"
+    ],
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "screen_counts": {
+     "practice": {
+      "passages_screened": 5,
+      "passages_hit": 1,
+      "hits_by_rule": {
+       "a": 0,
+       "b": 0,
+       "c": 1,
+       "d": 0
+      }
+     },
+     "final": {
+      "passages_screened": 7,
+      "passages_hit": 3,
+      "hits_by_rule": {
+       "a": 1,
+       "b": 1,
+       "c": 0,
+       "d": 1
+      }
+     }
+    },
+    "what_is_left": {
+     "practice": {
+      "passages_that_carry_a_task": 5,
+      "passages_dropped_by_the_support_check": 0,
+      "passages_dropped_by_the_screen": 1,
+      "passages_left": 4,
+      "passages_left_with_a_role_step_task": 4,
+      "role_step_tasks_left": 5,
+      "plain_fact_tasks_left": 4
+     },
+     "final": {
+      "passages_that_carry_a_task": 8,
+      "passages_dropped_by_the_support_check": 1,
+      "passages_dropped_by_the_screen": 3,
+      "passages_left": 4,
+      "passages_left_with_a_role_step_task": 4,
+      "role_step_tasks_left": 5,
+      "plain_fact_tasks_left": 4
+     }
+    },
+    "launch_floor": {
+     "lines": [
+      {
+       "what": "practice role_step tasks",
+       "left": 5,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "practice plain_fact tasks",
+       "left": 4,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "final role_step tasks",
+       "left": 5,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "final plain_fact tasks",
+       "left": 4,
+       "floor": 2,
+       "met": true
+      }
+     ],
+     "checked_on_both_sets": true,
+     "met": true,
+     "tier": "EXPLORATORY"
+    },
+    "a_hit_never_causes_a_rewrite": "This program calls nobody. The note writer reads only the support check results.",
+    "next": "Next: tools/ob_assemble.py."
+   }
+  },
+  {
+   "label": "screen with a floor of 99 final role-step tasks",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "both"
+   ],
+   "exit": 3,
+   "stop": null,
+   "status": "SCREENED_LAUNCH_FLOOR_NOT_MET",
+   "printed": {
+    "program": "tools/ob_screen_notes.py",
+    "dry_fixture": true,
+    "status": "SCREENED_LAUNCH_FLOOR_NOT_MET",
+    "sets_screened_in_this_run": [
+     "practice",
+     "final"
+    ],
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "screen_counts": {
+     "practice": {
+      "passages_screened": 5,
+      "passages_hit": 1,
+      "hits_by_rule": {
+       "a": 0,
+       "b": 0,
+       "c": 1,
+       "d": 0
+      }
+     },
+     "final": {
+      "passages_screened": 7,
+      "passages_hit": 3,
+      "hits_by_rule": {
+       "a": 1,
+       "b": 1,
+       "c": 0,
+       "d": 1
+      }
+     }
+    },
+    "what_is_left": {
+     "practice": {
+      "passages_that_carry_a_task": 5,
+      "passages_dropped_by_the_support_check": 0,
+      "passages_dropped_by_the_screen": 1,
+      "passages_left": 4,
+      "passages_left_with_a_role_step_task": 4,
+      "role_step_tasks_left": 5,
+      "plain_fact_tasks_left": 4
+     },
+     "final": {
+      "passages_that_carry_a_task": 8,
+      "passages_dropped_by_the_support_check": 1,
+      "passages_dropped_by_the_screen": 3,
+      "passages_left": 4,
+      "passages_left_with_a_role_step_task": 4,
+      "role_step_tasks_left": 5,
+      "plain_fact_tasks_left": 4
+     }
+    },
+    "launch_floor": {
+     "lines": [
+      {
+       "what": "practice role_step tasks",
+       "left": 5,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "practice plain_fact tasks",
+       "left": 4,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "final role_step tasks",
+       "left": 5,
+       "floor": 99,
+       "met": false
+      },
+      {
+       "what": "final plain_fact tasks",
+       "left": 4,
+       "floor": 2,
+       "met": true
+      }
+     ],
+     "checked_on_both_sets": true,
+     "met": false,
+     "tier": "NO_LAUNCH"
+    },
+    "a_hit_never_causes_a_rewrite": "This program calls nobody. The note writer reads only the support check results.",
+    "next": "DO NOT LAUNCH. The launch floor is not met. Report these numbers to the owner."
+   }
+  },
+  {
+   "label": "assemble with a floor of 99 final role-step tasks",
+   "tool": "tools/ob_assemble.py",
+   "argv": [],
+   "exit": 3,
+   "stop": null,
+   "status": "DO_NOT_LAUNCH_FLOOR_NOT_MET",
+   "printed": {
+    "program": "tools/ob_assemble.py",
+    "dry_fixture": true,
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "canon_lines_read_from_the_guide": 9,
+    "sayings_lines_read_from_the_table": 9,
+    "passage_text_check": "not checked: dry fixture",
+    "final_counts": {
+     "final_role_step_tasks": 5,
+     "final_plain_fact_tasks": 4,
+     "final_passages_with_a_role_step_task": 4,
+     "practice_role_step_tasks": 5,
+     "practice_plain_fact_tasks": 4
+    },
+    "launch_floor": {
+     "final_role_step_tasks_min": 99,
+     "final_plain_fact_tasks_min": 2,
+     "practice_role_step_tasks_min": 2,
+     "practice_plain_fact_tasks_min": 2
+    },
+    "launch_floor_met": false,
+    "tier": "NO_LAUNCH",
+    "planned_calls": {
+     "practice": 92,
+     "final_must_run": 59,
+     "final_no_passage": 5,
+     "whole_job": 156,
+     "cap": 5000
+    },
+    "planned_calls_under_the_cap": true,
+    "survival": {
+     "practice": [
+      {
+       "filter": "written for an open form",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "form check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "option check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "key check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "selection",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "support check",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 5,
+       "plain_fact": 4
+      }
+     ],
+     "final": [
+      {
+       "filter": "written for an open form",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "form check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "option check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "key check",
+       "role_step": 11,
+       "plain_fact": 9
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 10,
+       "plain_fact": 9
+      },
+      {
+       "filter": "selection",
+       "role_step": 10,
+       "plain_fact": 8
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 9,
+       "plain_fact": 8
+      },
+      {
+       "filter": "support check",
+       "role_step": 8,
+       "plain_fact": 7
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 5,
+       "plain_fact": 4
+      }
+     ]
+    },
+    "removal_log_entries": 35,
+    "status": "DO_NOT_LAUNCH_FLOOR_NOT_MET",
+    "files_written": [
+     "optionb/dry/fixture_n/removal_log.json"
+    ],
+    "older_files_still_on_disk_that_are_now_stale": [],
+    "next": "DO NOT LAUNCH. Only the removal log was written. No prompt part, no key and no manifest exists for seal step 5. Report the numbers to the owner."
+   }
+  },
+  {
+   "label": "assemble with a call cap of 100",
+   "tool": "tools/ob_assemble.py",
+   "argv": [],
+   "exit": 3,
+   "stop": null,
+   "status": "DO_NOT_LAUNCH_PLANNED_CALLS_ABOVE_THE_CAP",
+   "printed": {
+    "program": "tools/ob_assemble.py",
+    "dry_fixture": true,
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "canon_lines_read_from_the_guide": 9,
+    "sayings_lines_read_from_the_table": 9,
+    "passage_text_check": "not checked: dry fixture",
+    "final_counts": {
+     "final_role_step_tasks": 5,
+     "final_plain_fact_tasks": 4,
+     "final_passages_with_a_role_step_task": 4,
+     "practice_role_step_tasks": 5,
+     "practice_plain_fact_tasks": 4
+    },
+    "launch_floor": {
+     "final_role_step_tasks_min": 2,
+     "final_plain_fact_tasks_min": 2,
+     "practice_role_step_tasks_min": 2,
+     "practice_plain_fact_tasks_min": 2
+    },
+    "launch_floor_met": true,
+    "tier": "EXPLORATORY",
+    "planned_calls": {
+     "practice": 92,
+     "final_must_run": 59,
+     "final_no_passage": 5,
+     "whole_job": 156,
+     "cap": 100
+    },
+    "planned_calls_under_the_cap": false,
+    "survival": {
+     "practice": [
+      {
+       "filter": "written for an open form",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "form check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "option check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "key check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "selection",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "support check",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 5,
+       "plain_fact": 4
+      }
+     ],
+     "final": [
+      {
+       "filter": "written for an open form",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "form check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "option check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "key check",
+       "role_step": 11,
+       "plain_fact": 9
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 10,
+       "plain_fact": 9
+      },
+      {
+       "filter": "selection",
+       "role_step": 10,
+       "plain_fact": 8
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 9,
+       "plain_fact": 8
+      },
+      {
+       "filter": "support check",
+       "role_step": 8,
+       "plain_fact": 7
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 5,
+       "plain_fact": 4
+      }
+     ]
+    },
+    "removal_log_entries": 35,
+    "status": "DO_NOT_LAUNCH_PLANNED_CALLS_ABOVE_THE_CAP",
+    "files_written": [
+     "optionb/dry/fixture_n/removal_log.json"
+    ],
+    "older_files_still_on_disk_that_are_now_stale": [],
+    "next": "DO NOT LAUNCH. Only the removal log was written. No prompt part, no key and no manifest exists for seal step 5. Report the numbers to the owner."
+   }
+  },
+  {
+   "label": "assemble",
+   "tool": "tools/ob_assemble.py",
+   "argv": [],
+   "exit": 0,
+   "stop": null,
+   "status": "ASSEMBLED",
+   "printed": {
+    "program": "tools/ob_assemble.py",
+    "dry_fixture": true,
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "canon_lines_read_from_the_guide": 9,
+    "sayings_lines_read_from_the_table": 9,
+    "passage_text_check": "not checked: dry fixture",
+    "final_counts": {
+     "final_role_step_tasks": 5,
+     "final_plain_fact_tasks": 4,
+     "final_passages_with_a_role_step_task": 4,
+     "practice_role_step_tasks": 5,
+     "practice_plain_fact_tasks": 4
+    },
+    "launch_floor": {
+     "final_role_step_tasks_min": 2,
+     "final_plain_fact_tasks_min": 2,
+     "practice_role_step_tasks_min": 2,
+     "practice_plain_fact_tasks_min": 2
+    },
+    "launch_floor_met": true,
+    "tier": "EXPLORATORY",
+    "planned_calls": {
+     "practice": 92,
+     "final_must_run": 59,
+     "final_no_passage": 5,
+     "whole_job": 156,
+     "cap": 5000
+    },
+    "planned_calls_under_the_cap": true,
+    "survival": {
+     "practice": [
+      {
+       "filter": "written for an open form",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "form check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "option check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "key check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "selection",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "support check",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 5,
+       "plain_fact": 4
+      }
+     ],
+     "final": [
+      {
+       "filter": "written for an open form",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "form check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "option check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "key check",
+       "role_step": 11,
+       "plain_fact": 9
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 10,
+       "plain_fact": 9
+      },
+      {
+       "filter": "selection",
+       "role_step": 10,
+       "plain_fact": 8
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 9,
+       "plain_fact": 8
+      },
+      {
+       "filter": "support check",
+       "role_step": 8,
+       "plain_fact": 7
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 5,
+       "plain_fact": 4
+      }
+     ]
+    },
+    "removal_log_entries": 35,
+    "status": "ASSEMBLED",
+    "right_letter_counts": {
+     "practice": {
+      "PULL-PUSH level 1": {
+       "A": 2,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "role_step family level 1": {
+       "A": 2,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "PULL-PUSH level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 1,
+       "F": 0
+      },
+      "role_step family level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 1,
+       "F": 0
+      },
+      "FACT level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "plain_fact family level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      }
+     },
+     "final": {
+      "PULL-PUSH level 1": {
+       "A": 2,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "role_step family level 1": {
+       "A": 2,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "PULL-PUSH level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 1,
+       "F": 0
+      },
+      "role_step family level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 1,
+       "F": 0
+      },
+      "FACT level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "plain_fact family level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      }
+     }
+    },
+    "answer_given_notes_in_the_practice_file": 10,
+    "files_written": [
+     "optionb/dry/fixture_n/removal_log.json",
+     "optionb/dry/fixture_n/prompts/prompt_parts_practice.json",
+     "optionb/dry/fixture_n/keys_practice/keys_practice.json",
+     "optionb/dry/fixture_n/keys_practice/task_meta_practice.json",
+     "optionb/dry/fixture_n/prompts/prompt_parts_final.json",
+     "optionb/dry/fixture_n/keys_final/keys_final.json",
+     "optionb/dry/fixture_n/keys_final/task_meta_final.json",
+     "optionb/dry/fixture_n/review/review_pack.json",
+     "optionb/dry/fixture_n/assemble/planned_calls.json",
+     "optionb/dry/fixture_n/assemble/manifest_step5.json"
+    ],
+    "manifest": "optionb/dry/fixture_n/assemble/manifest_step5.json",
+    "manifest_sha256": "22f76df188a3411487be1b6e0890bfb08255decf429740cdf40da22bfbe6c952",
+    "next": "Next: seal step 5 (tools/ob_seal.py) over the files named in the manifest. Then the owner checkpoint: the real counts and the detection table."
+   }
+  },
+  {
+   "label": "assemble after seal step 5",
+   "tool": "tools/ob_assemble.py",
+   "argv": [],
+   "exit": 2,
+   "stop": {
+    "code": "SET_IS_SEALED",
+    "reason": "Seal step 5_PROMPT_PARTS_AND_REMOVAL_LOG exists. These files are sealed and are not written again."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "screen after seal step 5",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "both"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "SET_IS_SEALED",
+    "reason": "Seal step 5_PROMPT_PARTS_AND_REMOVAL_LOG exists. These files are sealed and are not written again."
+   },
+   "status": null,
+   "printed": {}
+  },
+  {
+   "label": "not written: practice, the reply for one note is empty",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_practice_empty.json"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_NOTES_NOT_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_NOTES_NOT_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 29,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 30,
+    "still_open_in_this_step": 1,
+    "calls_this_run": 30,
+    "call_budget": 100,
+    "notes_written_this_run": 29,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [
+     "V902|ORD-FREE|090|v1"
+    ],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V902|ORD-FREE|090|v1": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      67,
+      540
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Some notes are still not written (no answer, an empty or cut-off reply, or a call refused with HTTP status 400, 404 or 422). Run the same command again. A note whose reply is empty or cut off, or whose call is refused in that way, a second time is given up by the rule of the plan: its passage is dropped for every group and the drop is logged."
+   }
+  },
+  {
+   "label": "not written: practice, the same note gets no answer at all",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_practice_no_answer.json"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_NOTES_NOT_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_NOTES_NOT_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 29,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 1,
+    "still_open_in_this_step": 1,
+    "calls_this_run": 3,
+    "call_budget": 100,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V902|ORD-FREE|090|v1": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      67,
+      540
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Some notes are still not written (no answer, an empty or cut-off reply, or a call refused with HTTP status 400, 404 or 422). Run the same command again. A note whose reply is empty or cut off, or whose call is refused in that way, a second time is given up by the rule of the plan: its passage is dropped for every group and the drop is logged."
+   }
+  },
+  {
+   "label": "not written: practice, the second reply for the note is cut off",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_practice_cut_off.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 29,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 1,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 1,
+    "call_budget": 100,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [
+     "V902|ORD-FREE|090|v1"
+    ],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V902|ORD-FREE|090|v1": 2
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [
+     "V902|ORD-FREE|090|v1"
+    ],
+    "passages_dropped_because_a_note_was_given_up": [
+     "V902"
+    ],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      67,
+      540
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "not written: practice, one more run",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_practice_full.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 29,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 0,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 0,
+    "call_budget": 100,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V902|ORD-FREE|090|v1": 2
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [
+     "V902|ORD-FREE|090|v1"
+    ],
+    "passages_dropped_because_a_note_was_given_up": [
+     "V902"
+    ],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      67,
+      540
+     ],
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "not written: support practice, plan only",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "calls_this_run": 0,
+    "call_budget": 0,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [],
+    "passages": 5,
+    "passages_by_status": {
+     "DROPPED_NOTE_NOT_WRITTEN": 1,
+     "UNCHECKED": 4
+    },
+    "notes": {
+     "notes_checked": 0,
+     "passed": 0,
+     "failed_once": 0,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 1
+    },
+    "batches": {
+     "DONE": 0,
+     "PENDING": 2,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\support_practice_018_full.json",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 2,
+     "DROPPED_NOTE_NOT_WRITTEN": 1,
+     "UNCHECKED": 2
+    },
+    "notes": {
+     "notes_checked": 12,
+     "passed": 12,
+     "failed_once": 0,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 1
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 1,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again."
+   }
+  },
+  {
+   "label": "support practice: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\support_practice_019_full.json",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "NOTHING_PENDING",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "NOTHING_PENDING",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 4,
+     "DROPPED_NOTE_NOT_WRITTEN": 1
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 24,
+     "failed_once": 0,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 1
+    },
+    "batches": {
+     "DONE": 2,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": true,
+    "next": "No batch is waiting for the checker. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "not written: screen report-only on the practice set",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--report-only"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "REPORT_ONLY",
+   "printed": {
+    "program": "tools/ob_screen_notes.py",
+    "dry_fixture": true,
+    "status": "REPORT_ONLY",
+    "set": "practice",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "files_written": [],
+    "screen_counts": {
+     "passages_screened": 4,
+     "passages_hit": 1,
+     "hits_by_rule": {
+      "a": 0,
+      "b": 0,
+      "c": 1,
+      "d": 0
+     }
+    },
+    "passages_hit": [
+     {
+      "passage_id": "V903",
+      "rules": [
+       "c"
+      ]
+     }
+    ],
+    "what_would_be_left": {
+     "passages_that_carry_a_task": 5,
+     "passages_dropped_by_the_support_check": 1,
+     "passages_dropped_by_the_screen": 1,
+     "passages_left": 3,
+     "passages_left_with_a_role_step_task": 3,
+     "role_step_tasks_left": 4,
+     "plain_fact_tasks_left": 3
+    },
+    "practice_launch_floor": [
+     {
+      "what": "practice role_step tasks",
+      "left": 4,
+      "floor": 2,
+      "met": true
+     },
+     {
+      "what": "practice plain_fact tasks",
+      "left": 3,
+      "floor": 2,
+      "met": true
+     }
+    ],
+    "what_this_run_is": "An early look. It wrote no file. The screen of record is the later full run after seal step 4. A hit never causes a note to be written again. No brief, no filter and no screen rule is changed because of these numbers without a new reviewed plan version.",
+    "next": "The practice set is at or above both practice launch floors. The final questions may now be written."
+   }
+  },
+  {
+   "label": "not written: writer final, first versions",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_final_full.json",
+    "--step",
+    "first"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "final",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 8,
+    "notes_planned": 48,
+    "notes_with_version_1": 48,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 48,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 48,
+    "call_budget": 100,
+    "notes_written_this_run": 48,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {},
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      142,
+      1078
+     ],
+     "ORD-FREE 100": [
+      211,
+      1199
+     ],
+     "ORD-FREE 110": [
+      284,
+      1317
+     ],
+     "ORD-INFORMED 090": [
+      167,
+      1078
+     ],
+     "ORD-INFORMED 100": [
+      223,
+      1199
+     ],
+     "ORD-INFORMED 110": [
+      291,
+      1317
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\support_final_020_full.json",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 1,
+     "REWRITE_NEEDED": 1,
+     "UNCHECKED": 6
+    },
+    "notes": {
+     "notes_checked": 12,
+     "passed": 11,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 1,
+     "PENDING": 3,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\support_final_021_full.json",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 3,
+     "REWRITE_NEEDED": 1,
+     "UNCHECKED": 4
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 23,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 2,
+     "PENDING": 2,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\support_final_022_full.json",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "STOPPED_CALL_BUDGET",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 5,
+     "REWRITE_NEEDED": 1,
+     "UNCHECKED": 2
+    },
+    "notes": {
+     "notes_checked": 36,
+     "passed": 35,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 3,
+     "PENDING": 1,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "ROUND_1",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "The call budget of this run is used up. The log is kept. Run the same command again. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "support final: gemini, made-up service answers full",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\support_final_023_full.json",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "NOTHING_PENDING",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "NOTHING_PENDING",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 1,
+    "call_budget": 1,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 7,
+     "REWRITE_NEEDED": 1
+    },
+    "notes": {
+     "notes_checked": 48,
+     "passed": 47,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 0
+    },
+    "batches": {
+     "DONE": 4,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": "REWRITE",
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": false,
+    "next": "No batch is waiting for the checker. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+   }
+  },
+  {
+   "label": "not written: writer final rewrite, the reply is empty",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_final_rewrite_empty.json",
+    "--step",
+    "rewrite"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_NOTES_NOT_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_NOTES_NOT_WRITTEN",
+    "set": "final",
+    "step": "rewrite",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 8,
+    "notes_planned": 48,
+    "notes_with_version_1": 48,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 1,
+    "still_open_in_this_step": 1,
+    "calls_this_run": 1,
+    "call_budget": 100,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [
+     "V907|ORD-FREE|090|v2"
+    ],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V907|ORD-FREE|090|v2": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      142,
+      1078
+     ],
+     "ORD-FREE 100": [
+      211,
+      1199
+     ],
+     "ORD-FREE 110": [
+      284,
+      1317
+     ],
+     "ORD-INFORMED 090": [
+      167,
+      1078
+     ],
+     "ORD-INFORMED 100": [
+      223,
+      1199
+     ],
+     "ORD-INFORMED 110": [
+      291,
+      1317
+     ]
+    },
+    "next": "Some notes are still not written (no answer, an empty or cut-off reply, or a call refused with HTTP status 400, 404 or 422). Run the same command again. A note whose reply is empty or cut off, or whose call is refused in that way, a second time is given up by the rule of the plan: its passage is dropped for every group and the drop is logged."
+   }
+  },
+  {
+   "label": "not written: writer final rewrite, the reply is empty again",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_final_rewrite_empty.json",
+    "--step",
+    "rewrite"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "ALL_WRITTEN",
+    "set": "final",
+    "step": "rewrite",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 8,
+    "notes_planned": 48,
+    "notes_with_version_1": 48,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 1,
+    "still_open_in_this_step": 0,
+    "calls_this_run": 1,
+    "call_budget": 100,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [
+     "V907|ORD-FREE|090|v2"
+    ],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V907|ORD-FREE|090|v2": 2
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [
+     "V907|ORD-FREE|090|v2"
+    ],
+    "passages_dropped_because_a_note_was_given_up": [
+     "V907"
+    ],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 090": [
+      142,
+      1078
+     ],
+     "ORD-FREE 100": [
+      211,
+      1199
+     ],
+     "ORD-FREE 110": [
+      284,
+      1317
+     ],
+     "ORD-INFORMED 090": [
+      167,
+      1078
+     ],
+     "ORD-INFORMED 100": [
+      223,
+      1199
+     ],
+     "ORD-INFORMED 110": [
+      291,
+      1317
+     ]
+    },
+    "next": "Every note due in this step is written, or given up by the rule of the plan (see notes_given_up). Next: tools/ob_check_support.py."
+   }
+  },
+  {
+   "label": "not written: support final after the rewrite was given up",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "5",
+    "--dry-now",
+    "2026-10-05T00:00:00Z",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_case\\replay\\nw_no_replies.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "NOTHING_PENDING",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "gemini",
+    "status": "NOTHING_PENDING",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "calls_this_run": 0,
+    "call_budget": 5,
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 7,
+     "DROPPED_NOTE_NOT_WRITTEN": 1
+    },
+    "notes": {
+     "notes_checked": 48,
+     "passed": 47,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 1
+    },
+    "batches": {
+     "DONE": 4,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": true,
+    "next": "No batch is waiting for the checker. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "not written: support final, decide",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "decide",
+    "--set",
+    "final",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "DECIDED",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "decide",
+    "status": "DECIDED",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "set": "final",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 8,
+    "passages_by_status": {
+     "ALL_PASS": 7,
+     "DROPPED_NOTE_NOT_WRITTEN": 1
+    },
+    "notes": {
+     "notes_checked": 48,
+     "passed": 47,
+     "failed_once": 1,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 1
+    },
+    "batches": {
+     "DONE": 4,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": true,
+    "next": "The results file is written. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "not written: support practice, decide",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice",
+    "--dry-now",
+    "2026-10-05T00:00:00Z"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "DECIDED",
+   "printed": {
+    "program": "tools/ob_check_support.py",
+    "dry_fixture": true,
+    "command": "decide",
+    "status": "DECIDED",
+    "seal": "checked: 5 seal lines, all sealed files unchanged",
+    "set": "practice",
+    "checker": "DRY-FIXTURE-NO-MODEL",
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-CHECKER-REPLY"
+    ],
+    "passages": 5,
+    "passages_by_status": {
+     "ALL_PASS": 4,
+     "DROPPED_NOTE_NOT_WRITTEN": 1
+    },
+    "notes": {
+     "notes_checked": 24,
+     "passed": 24,
+     "failed_once": 0,
+     "failed_twice": 0,
+     "passages_dropped": 0,
+     "passages_dropped_note_not_written": 1
+    },
+    "batches": {
+     "DONE": 2,
+     "PENDING": 0,
+     "UNREADABLE": 0
+    },
+    "rounds_planned": [
+     1
+    ],
+    "round_2_waits_for": null,
+    "daily_cap_stops": 0,
+    "first_cap_stop_utc": null,
+    "ready_for_seal_step_4": true,
+    "next": "The results file is written. Every passage of this set is ALL_PASS, DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN. This set is ready for seal step 4."
+   }
+  },
+  {
+   "label": "not written: screen both sets",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "both"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SCREENED",
+   "printed": {
+    "program": "tools/ob_screen_notes.py",
+    "dry_fixture": true,
+    "status": "SCREENED",
+    "sets_screened_in_this_run": [
+     "practice",
+     "final"
+    ],
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "screen_counts": {
+     "practice": {
+      "passages_screened": 4,
+      "passages_hit": 1,
+      "hits_by_rule": {
+       "a": 0,
+       "b": 0,
+       "c": 1,
+       "d": 0
+      }
+     },
+     "final": {
+      "passages_screened": 7,
+      "passages_hit": 3,
+      "hits_by_rule": {
+       "a": 1,
+       "b": 1,
+       "c": 0,
+       "d": 1
+      }
+     }
+    },
+    "what_is_left": {
+     "practice": {
+      "passages_that_carry_a_task": 5,
+      "passages_dropped_by_the_support_check": 1,
+      "passages_dropped_by_the_screen": 1,
+      "passages_left": 3,
+      "passages_left_with_a_role_step_task": 3,
+      "role_step_tasks_left": 4,
+      "plain_fact_tasks_left": 3
+     },
+     "final": {
+      "passages_that_carry_a_task": 8,
+      "passages_dropped_by_the_support_check": 1,
+      "passages_dropped_by_the_screen": 3,
+      "passages_left": 4,
+      "passages_left_with_a_role_step_task": 4,
+      "role_step_tasks_left": 5,
+      "plain_fact_tasks_left": 4
+     }
+    },
+    "launch_floor": {
+     "lines": [
+      {
+       "what": "practice role_step tasks",
+       "left": 4,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "practice plain_fact tasks",
+       "left": 3,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "final role_step tasks",
+       "left": 5,
+       "floor": 2,
+       "met": true
+      },
+      {
+       "what": "final plain_fact tasks",
+       "left": 4,
+       "floor": 2,
+       "met": true
+      }
+     ],
+     "checked_on_both_sets": true,
+     "met": true,
+     "tier": "EXPLORATORY"
+    },
+    "a_hit_never_causes_a_rewrite": "This program calls nobody. The note writer reads only the support check results.",
+    "next": "Next: tools/ob_assemble.py."
+   }
+  },
+  {
+   "label": "not written: assemble",
+   "tool": "tools/ob_assemble.py",
+   "argv": [],
+   "exit": 0,
+   "stop": null,
+   "status": "ASSEMBLED",
+   "printed": {
+    "program": "tools/ob_assemble.py",
+    "dry_fixture": true,
+    "seal": "checked: 6 seal lines, all sealed files unchanged",
+    "canon_lines_read_from_the_guide": 9,
+    "sayings_lines_read_from_the_table": 9,
+    "passage_text_check": "not checked: dry fixture",
+    "final_counts": {
+     "final_role_step_tasks": 5,
+     "final_plain_fact_tasks": 4,
+     "final_passages_with_a_role_step_task": 4,
+     "practice_role_step_tasks": 4,
+     "practice_plain_fact_tasks": 3
+    },
+    "launch_floor": {
+     "final_role_step_tasks_min": 2,
+     "final_plain_fact_tasks_min": 2,
+     "practice_role_step_tasks_min": 2,
+     "practice_plain_fact_tasks_min": 2
+    },
+    "launch_floor_met": true,
+    "tier": "EXPLORATORY",
+    "planned_calls": {
+     "practice": 72,
+     "final_must_run": 59,
+     "final_no_passage": 5,
+     "whole_job": 136,
+     "cap": 5000
+    },
+    "planned_calls_under_the_cap": true,
+    "survival": {
+     "practice": [
+      {
+       "filter": "written for an open form",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "form check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 7,
+       "plain_fact": 6
+      },
+      {
+       "filter": "option check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "key check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 6,
+       "plain_fact": 6
+      },
+      {
+       "filter": "selection",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 6,
+       "plain_fact": 5
+      },
+      {
+       "filter": "support check",
+       "role_step": 5,
+       "plain_fact": 4
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 4,
+       "plain_fact": 3
+      }
+     ],
+     "final": [
+      {
+       "filter": "written for an open form",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "form check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "anchor check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "option check",
+       "role_step": 12,
+       "plain_fact": 9
+      },
+      {
+       "filter": "key check",
+       "role_step": 11,
+       "plain_fact": 9
+      },
+      {
+       "filter": "no-passage check",
+       "role_step": 10,
+       "plain_fact": 9
+      },
+      {
+       "filter": "selection",
+       "role_step": 10,
+       "plain_fact": 8
+      },
+      {
+       "filter": "length backstop",
+       "role_step": 9,
+       "plain_fact": 8
+      },
+      {
+       "filter": "support check",
+       "role_step": 8,
+       "plain_fact": 7
+      },
+      {
+       "filter": "answer-leak screen",
+       "role_step": 5,
+       "plain_fact": 4
+      }
+     ]
+    },
+    "removal_log_entries": 23,
+    "status": "ASSEMBLED",
+    "right_letter_counts": {
+     "practice": {
+      "PULL-PUSH level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "role_step family level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "PULL-PUSH level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 0,
+       "F": 0
+      },
+      "role_step family level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 0,
+       "F": 0
+      },
+      "FACT level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 0
+      },
+      "plain_fact family level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 0
+      }
+     },
+     "final": {
+      "PULL-PUSH level 1": {
+       "A": 2,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "role_step family level 1": {
+       "A": 2,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "PULL-PUSH level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 1,
+       "F": 0
+      },
+      "role_step family level 2": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1,
+       "E": 1,
+       "F": 0
+      },
+      "FACT level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      },
+      "plain_fact family level 1": {
+       "A": 1,
+       "B": 1,
+       "C": 1,
+       "D": 1
+      }
+     }
+    },
+    "answer_given_notes_in_the_practice_file": 8,
+    "files_written": [
+     "optionb/dry/fixture_n/not_written_case/removal_log.json",
+     "optionb/dry/fixture_n/not_written_case/prompts/prompt_parts_practice.json",
+     "optionb/dry/fixture_n/not_written_case/keys_practice/keys_practice.json",
+     "optionb/dry/fixture_n/not_written_case/keys_practice/task_meta_practice.json",
+     "optionb/dry/fixture_n/not_written_case/prompts/prompt_parts_final.json",
+     "optionb/dry/fixture_n/not_written_case/keys_final/keys_final.json",
+     "optionb/dry/fixture_n/not_written_case/keys_final/task_meta_final.json",
+     "optionb/dry/fixture_n/not_written_case/review/review_pack.json",
+     "optionb/dry/fixture_n/not_written_case/assemble/planned_calls.json",
+     "optionb/dry/fixture_n/not_written_case/assemble/manifest_step5.json"
+    ],
+    "manifest": "optionb/dry/fixture_n/not_written_case/assemble/manifest_step5.json",
+    "manifest_sha256": "12e44900a74998c73c5cdeabfb980528481afc629034351e1b322b9f2739bc68",
+    "next": "Next: seal step 5 (tools/ob_seal.py) over the files named in the manifest. Then the owner checkpoint: the real counts and the detection table."
+   }
+  },
+  {
+   "label": "guard: practice, one note of each of 4 passages comes back empty",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_guard\\replay\\guard_practice_four_empty.json"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_NOTES_NOT_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_NOTES_NOT_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 26,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 30,
+    "still_open_in_this_step": 4,
+    "calls_this_run": 30,
+    "call_budget": 100,
+    "notes_written_this_run": 26,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [
+     "V901|ORD-FREE|090|v1",
+     "V902|ORD-FREE|090|v1",
+     "V903|ORD-FREE|090|v1",
+     "V904|ORD-FREE|090|v1"
+    ],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V901|ORD-FREE|090|v1": 1,
+     "V902|ORD-FREE|090|v1": 1,
+     "V903|ORD-FREE|090|v1": 1,
+     "V904|ORD-FREE|090|v1": 1
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [],
+    "passages_dropped_because_a_note_was_given_up": [],
+    "passages_beyond_the_guard_of_3": [],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ],
+     "ORD-FREE 090": [
+      18,
+      104
+     ]
+    },
+    "next": "Some notes are still not written (no answer, an empty or cut-off reply, or a call refused with HTTP status 400, 404 or 422). Run the same command again. A note whose reply is empty or cut off, or whose call is refused in that way, a second time is given up by the rule of the plan: its passage is dropped for every group and the drop is logged."
+   }
+  },
+  {
+   "label": "guard: practice, the same 4 notes come back empty again",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_guard\\replay\\guard_practice_four_empty.json"
+   ],
+   "exit": 2,
+   "stop": null,
+   "status": "STOPPED_TOO_MANY_NOTES_NOT_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_TOO_MANY_NOTES_NOT_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 26,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 4,
+    "still_open_in_this_step": 1,
+    "calls_this_run": 4,
+    "call_budget": 100,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [
+     "V901|ORD-FREE|090|v1",
+     "V902|ORD-FREE|090|v1",
+     "V903|ORD-FREE|090|v1",
+     "V904|ORD-FREE|090|v1"
+    ],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V901|ORD-FREE|090|v1": 2,
+     "V902|ORD-FREE|090|v1": 2,
+     "V903|ORD-FREE|090|v1": 2,
+     "V904|ORD-FREE|090|v1": 2
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [
+     "V901|ORD-FREE|090|v1",
+     "V902|ORD-FREE|090|v1",
+     "V903|ORD-FREE|090|v1"
+    ],
+    "passages_dropped_because_a_note_was_given_up": [
+     "V901",
+     "V902",
+     "V903"
+    ],
+    "passages_beyond_the_guard_of_3": [
+     "V904"
+    ],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ],
+     "ORD-FREE 090": [
+      18,
+      104
+     ]
+    },
+    "next": "More passages have a note the writer could not produce than the guard of the plan allows. Nothing more is given up and no further call is made. That many missing notes point to a fault of the service or of this tool. Stop and report."
+   }
+  },
+  {
+   "label": "guard: practice, one more run makes no call",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "100",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\fixture_n\\not_written_guard\\replay\\guard_practice_full.json"
+   ],
+   "exit": 2,
+   "stop": null,
+   "status": "STOPPED_TOO_MANY_NOTES_NOT_WRITTEN",
+   "printed": {
+    "program": "tools/ob_write_ordinary_notes.py",
+    "dry_fixture": true,
+    "status": "STOPPED_TOO_MANY_NOTES_NOT_WRITTEN",
+    "set": "practice",
+    "step": "first",
+    "writer": "DRY-FIXTURE-NO-MODEL",
+    "seal": "checked: 4 seal lines, all sealed files unchanged",
+    "passages_that_carry_a_task": 5,
+    "notes_planned": 30,
+    "notes_with_version_1": 26,
+    "notes_with_version_2": 0,
+    "due_in_this_step_at_start": 1,
+    "still_open_in_this_step": 1,
+    "calls_this_run": 0,
+    "call_budget": 100,
+    "notes_written_this_run": 0,
+    "tokens_this_run_as_the_service_reported": {},
+    "deepseek_tokens_in_the_four_call_logs": null,
+    "deepseek_token_limits": {
+     "input": 2430240,
+     "output": 1156520
+    },
+    "model_names_in_the_replies": [
+     "MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY"
+    ],
+    "empty_or_cut_off_replies_this_run": [],
+    "empty_or_cut_off_replies_in_the_log": {
+     "V901|ORD-FREE|090|v1": 2,
+     "V902|ORD-FREE|090|v1": 2,
+     "V903|ORD-FREE|090|v1": 2,
+     "V904|ORD-FREE|090|v1": 2
+    },
+    "calls_refused_with_http_400_404_422_this_run": [],
+    "calls_refused_with_http_400_404_422_in_the_log": {},
+    "notes_given_up_after_2_such_replies": [
+     "V901|ORD-FREE|090|v1",
+     "V902|ORD-FREE|090|v1",
+     "V903|ORD-FREE|090|v1"
+    ],
+    "passages_dropped_because_a_note_was_given_up": [
+     "V901",
+     "V902",
+     "V903"
+    ],
+    "passages_beyond_the_guard_of_3": [
+     "V904"
+    ],
+    "words_written_and_words_asked_for_per_brief_and_length": {
+     "ORD-FREE 100": [
+      125,
+      715
+     ],
+     "ORD-FREE 110": [
+      186,
+      787
+     ],
+     "ORD-INFORMED 090": [
+      99,
+      644
+     ],
+     "ORD-INFORMED 100": [
+      138,
+      715
+     ],
+     "ORD-INFORMED 110": [
+      175,
+      787
+     ],
+     "ORD-FREE 090": [
+      18,
+      104
+     ]
+    },
+    "next": "More passages have a note the writer could not produce than the guard of the plan allows. Nothing more is given up and no further call is made. That many missing notes point to a fault of the service or of this tool. Stop and report."
+   }
+  },
+  {
+   "label": "guard: support practice while a note is neither written nor given up",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 2,
+   "stop": {
+    "code": "NOTES_NOT_ALL_WRITTEN",
+    "reason": "1 notes of this set have no first version yet and are not given up. Run tools/ob_write_ordinary_notes.py --step first."
+   },
+   "status": null,
+   "printed": {}
+  }
+ ],
+ "check_list": [
+  {
+   "check": "the fixture holds 15 made-up passages",
+   "held": true,
+   "detail": "words per passage: 34 to 50"
+  },
+  {
+   "check": "writer practice before seal step 3A -> stops with SEAL_STEP_MISSING",
+   "held": true,
+   "detail": "{\"code\": \"SEAL_STEP_MISSING\", \"reason\": \"Seal step 3A_PRACTICE_QUESTIONS_AND_KEYS must exist before this program runs.\"}"
+  },
+  {
+   "check": "nothing was written before seal step 3A",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer practice, plan only -> status PLAN_ONLY, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"PLAN_ONLY\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "the plan holds 6 notes for each of the 5 practice passages that carry a task",
+   "held": true,
+   "detail": "30"
+  },
+  {
+   "check": "writer in a dry folder with a call budget and no made-up replies -> stops with DRY_FIXTURE_NEEDS_REPLAY",
+   "held": true,
+   "detail": "{\"code\": \"DRY_FIXTURE_NEEDS_REPLAY\", \"reason\": \"No outside call is ever made from a dry folder. Give --replay-replies.\"}"
+  },
+  {
+   "check": "writer final before seal step 3C -> stops with SEAL_STEP_MISSING",
+   "held": true,
+   "detail": "{\"code\": \"SEAL_STEP_MISSING\", \"reason\": \"Seal step 3C_FINAL_QUESTIONS_AND_KEYS must exist before this program runs.\"}"
+  },
+  {
+   "check": "writer rewrite before any support check -> stops with NO_SUPPORT_RESULTS",
+   "held": true,
+   "detail": "{\"code\": \"NO_SUPPORT_RESULTS\", \"reason\": \"support/support_results_practice.json does not exist. A note is written again only after a failed support check.\"}"
+  },
+  {
+   "check": "writer practice, the 7th call gets HTTP 429 -> status STOPPED_HTTP_429, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_HTTP_429\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "6 notes were written before the stop",
+   "held": true,
+   "detail": "6"
+  },
+  {
+   "check": "writer practice, call budget 4 -> status STOPPED_CALL_BUDGET, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_CALL_BUDGET\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "the resumed run wrote 4 more notes and asked for no note twice",
+   "held": true,
+   "detail": "10"
+  },
+  {
+   "check": "writer practice, notes file lost, rebuilt from the call log -> status PLAN_ONLY, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"PLAN_ONLY\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "the rebuilt notes file equals the lost one",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer practice, one reply is empty -> status STOPPED_NOTES_NOT_WRITTEN, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_NOTES_NOT_WRITTEN\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "the empty reply is reported and its note stays open",
+   "held": true,
+   "detail": "[\"V903|ORD-FREE|090|v1\"]"
+  },
+  {
+   "check": "writer practice, last run -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "all 30 practice notes have a first version",
+   "held": true,
+   "detail": "{\"notes\": 30, \"calls\": 1}"
+  },
+  {
+   "check": "a note text is the reply with outer white space removed",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the notes file is marked as a dry fixture",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the three word targets of V901 follow the plan formula",
+   "held": true,
+   "detail": "{\"by_hand\": {\"090\": 166, \"100\": 184, \"110\": 202}, \"tool\": {\"090\": 166, \"100\": 184, \"110\": 202}}"
+  },
+  {
+   "check": "a prompt holds the brief word for word, the fixed reply line and the passage, and nothing else",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "no prompt of the note writer holds a question, an option or a role-note word",
+   "held": true,
+   "detail": "32 logged calls looked at"
+  },
+  {
+   "check": "every logged call has the thirteen fields of the format (FILE_FORMATS.md section 8.2)",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "every call log line of the note writer holds the model name asked for; an answered call also holds the name in the reply, a refused call null",
+   "held": true,
+   "detail": "[\"MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY\", \"None\"]"
+  },
+  {
+   "check": "a dry folder counts no tokens: every usage field is null and no run stopped for a missing token count",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "token count: the input and output counts are added up over the log lines; a line with no token count adds nothing",
+   "held": true,
+   "detail": "[13, 6]"
+  },
+  {
+   "check": "token limit: reached when the input count is at its limit, or the output count is at its limit; not one token before",
+   "held": true,
+   "detail": "{\"input\": 2430240, \"output\": 1156520}"
+  },
+  {
+   "check": "token count: a dry folder calls no service and counts nothing",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "token count: the four counted logs are read and added up (made-up logs: 274 input and 92 output tokens)",
+   "held": true,
+   "detail": "[274, 92]"
+  },
+  {
+   "check": "token limit: 274 of 275 input tokens is not yet the limit; one more token is",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "token count: a tool whose own call log is not one of the counted logs stops",
+   "held": true,
+   "detail": "PLAN_DOES_NOT_MATCH_PROGRAM"
+  },
+  {
+   "check": "the plan names the two stop statuses of the token count",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the four counted logs of the plan include both logs of the note writer",
+   "held": true,
+   "detail": "[\"solve/deepseek_calls_practice.jsonl\", \"solve/deepseek_calls_final.jsonl\", \"notes_ord/ordinary_calls_practice.jsonl\", \"notes_ord/ordinary_calls_final.jsonl\"]"
+  },
+  {
+   "check": "writer practice after a sealed file was changed by one byte -> stops with SEALED_FILE_CHANGED",
+   "held": true,
+   "detail": "{\"code\": \"SEALED_FILE_CHANGED\", \"reason\": \"optionb/dry/fixture_n/select/selection_practice.json was sealed in step 3A_PRACTICE_QUESTIONS_AND_KEYS and has changed.\"}"
+  },
+  {
+   "check": "writer final, one run -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "all 48 final notes have a first version",
+   "held": true,
+   "detail": "48"
+  },
+  {
+   "check": "support in a dry folder with a call budget and no made-up replies -> stops with DRY_FIXTURE_NEEDS_REPLAY",
+   "held": true,
+   "detail": "{\"code\": \"DRY_FIXTURE_NEEDS_REPLAY\", \"reason\": \"No outside call is ever made from a dry folder. Give --replay-replies.\"}"
+  },
+  {
+   "check": "support practice, plan only -> status STOPPED_CALL_BUDGET, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_CALL_BUDGET\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "the plan holds 3 batches for 5 passages",
+   "held": true,
+   "detail": "{\"DONE\": 0, \"PENDING\": 3, \"UNREADABLE\": 0}"
+  },
+  {
+   "check": "a batch holds the six notes of two passages",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "after an unreadable reply the batch is still open with one try used",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "after a partial reply only the two items with no verdict are asked once more",
+   "held": true,
+   "detail": "[\"N0023\", \"N0024\"]"
+  },
+  {
+   "check": "round 1 of the practice set is finished and round 2 waits for the rewrite",
+   "held": true,
+   "detail": "{\"ALL_PASS\": 4, \"REWRITE_NEEDED\": 1}"
+  },
+  {
+   "check": "the one note with an unsupported sentence is listed for a rewrite",
+   "held": true,
+   "detail": "{\"passage_id\": \"V902\", \"status\": \"REWRITE_NEEDED\", \"rewrite_note_ids\": [\"V902|ORD-INFORMED|100|v1\"]}"
+  },
+  {
+   "check": "screen report-only before the practice support check is finished -> stops with SUPPORT_CHECK_NOT_FINISHED",
+   "held": true,
+   "detail": "{\"code\": \"SUPPORT_CHECK_NOT_FINISHED\", \"reason\": \"The support check of the practice set is not finished: 1 passages that carry a task are neither ALL_PASS nor dropped (DROPPED_SECOND_FAILURE or DROPPED_NOTE_NOT_WRITTEN) (first: V902).\"}"
+  },
+  {
+   "check": "no prompt of the checker holds a group name, a length tag, a passage id, a question or a role-note word",
+   "held": true,
+   "detail": "5 logged calls looked at"
+  },
+  {
+   "check": "a checker prompt opens with the support brief word for word",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer practice rewrite -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "exactly one note was written again",
+   "held": true,
+   "detail": "1"
+  },
+  {
+   "check": "the rewrite prompt holds the fixed rewrite sentence of the plan",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "round 2 checked the one rewritten note; the practice set is ready for seal step 4",
+   "held": true,
+   "detail": "{\"notes_checked\": 31, \"passed\": 30, \"failed_once\": 1, \"failed_twice\": 0, \"passages_dropped\": 0, \"passages_dropped_note_not_written\": 0}"
+  },
+  {
+   "check": "writer practice rewrite, nothing more is due -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "no note is ever written a third time",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "screen report-only for the final set -> stops with REPORT_ONLY_IS_FOR_THE_PRACTICE_SET",
+   "held": true,
+   "detail": "{\"code\": \"REPORT_ONLY_IS_FOR_THE_PRACTICE_SET\", \"reason\": \"--report-only is refused with --set final. It is for the practice set only.\"}"
+  },
+  {
+   "check": "screen report-only for both sets -> stops with REPORT_ONLY_IS_FOR_THE_PRACTICE_SET",
+   "held": true,
+   "detail": "{\"code\": \"REPORT_ONLY_IS_FOR_THE_PRACTICE_SET\", \"reason\": \"--report-only is refused with --set both. It is for the practice set only.\"}"
+  },
+  {
+   "check": "screen report-only on the practice set, before seal step 4 -> status REPORT_ONLY, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"REPORT_ONLY\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the report-only run prints the hits per rule and what would be left beside the two practice launch floors",
+   "held": true,
+   "detail": "{\"passages_hit\": [{\"passage_id\": \"V903\", \"rules\": [\"c\"]}], \"screen_counts\": {\"passages_screened\": 5, \"passages_hit\": 1, \"hits_by_rule\": {\"a\": 0, \"b\": 0, \"c\": 1, \"d\": 0}}, \"practice_launch_floor\": [{\"what\": \"practice role_step tasks\", \"left\": 5, \"floor\": 2, \"met\": true}, {\"what\": \"practice plain_fact tasks\", \"left\": 4, \"floor\": 2, \"met\": true}]}"
+  },
+  {
+   "check": "the report-only run writes no file",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "screen report-only with a practice floor of 99 role-step tasks -> status REPORT_ONLY_PRACTICE_FLOOR_NOT_MET, exit 3",
+   "held": true,
+   "detail": "{\"status\": \"REPORT_ONLY_PRACTICE_FLOOR_NOT_MET\", \"exit\": 3, \"stop\": null}"
+  },
+  {
+   "check": "the report-only run says do not launch when the practice set is under the floor",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the support check has no export step any more",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the support check has no import step any more",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "a daily-cap answer stops the run cleanly and is not counted as a try",
+   "held": true,
+   "detail": "STOPPED_DAILY_CAP"
+  },
+  {
+   "check": "two unreadable replies close the batch as UNREADABLE",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "a rate refusal is waited out twice, then the run stops with STOPPED_RATE_LIMIT; it is never counted as a daily-cap stop",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_RATE_LIMIT\", \"stops\": 1}"
+  },
+  {
+   "check": "in the call log only the daily-cap refusal carries the mark; the three rate refusals do not",
+   "held": true,
+   "detail": "[true, false, false, false]"
+  },
+  {
+   "check": "after daily-cap refusals more than 24 hours apart with no answered call between them, no batch has moved: the build waits for Gemini",
+   "held": true,
+   "detail": "[\"DONE\", \"UNREADABLE\", \"PENDING\", \"PENDING\"]"
+  },
+  {
+   "check": "the checkpoint has exactly the fields of the format, with the times of the daily-cap refusals only, and no fallback object",
+   "held": true,
+   "detail": "[\"schema\", \"made_by\", \"inputs\", \"set\", \"model\", \"rounds\", \"cap_stops_utc\", \"first_cap_stop_utc\", \"complete\"]"
+  },
+  {
+   "check": "the summary names one checker and no fallback",
+   "held": true,
+   "detail": "[\"batches\", \"call_budget\", \"calls_this_run\", \"checker\", \"command\", \"daily_cap_stops\", \"dry_fixture\", \"first_cap_stop_utc\", \"model_names_in_the_replies\", \"next\", \"notes\", \"passages\", \"passages_by_status\", \"program\", \"ready_for_seal_step_4\", \"round_2_waits_for\", \"rounds_planned\", \"seal\", \"set\", \"status\"]"
+  },
+  {
+   "check": "the next-step text of a daily-cap stop says: the build waits, nobody else judges a note",
+   "held": true,
+   "detail": "The daily cap was hit. The log is kept. The build waits: run the same command on a later day. Nobody else judges a note. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+  },
+  {
+   "check": "when Gemini answers again, the same checker finishes round 1; round 2 waits for the rewrite",
+   "held": true,
+   "detail": "{\"DONE\": 3, \"PENDING\": 0, \"UNREADABLE\": 1}"
+  },
+  {
+   "check": "the 12 items of the batch that was unreadable twice get the verdict UNREADABLE, which counts as FAIL",
+   "held": true,
+   "detail": "12"
+  },
+  {
+   "check": "writer final rewrite -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "every failed final note was written again once",
+   "held": true,
+   "detail": "{\"rewritten\": 13, \"failed\": 13}"
+  },
+  {
+   "check": "round 2 holds one item for every rewritten note, in batches of up to 12 items",
+   "held": true,
+   "detail": "{\"round 2 items\": 13}"
+  },
+  {
+   "check": "support final, decide -> status DECIDED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"DECIDED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the final set is ready for seal step 4: seven passages pass, one is dropped after a second failure",
+   "held": true,
+   "detail": "{\"ALL_PASS\": 7, \"DROPPED_SECOND_FAILURE\": 1}"
+  },
+  {
+   "check": "the dropped passage is the one whose note failed twice",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "one checker judged every note of both rounds: the item map and the results name it for every item, on sheet 00",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "no sheet and no answer file for another checker exists",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "every call log line of the checker has the fourteen fields of the format (FILE_FORMATS.md section 9.3)",
+   "held": true,
+   "detail": "14"
+  },
+  {
+   "check": "a call log line of the checker holds the model name asked for; an answered call holds the name the made-up reply carried, a refused call null",
+   "held": true,
+   "detail": "[\"MADE-UP-NAME-IN-A-CHECKER-REPLY\", \"None\"]"
+  },
+  {
+   "check": "support practice, decide -> status DECIDED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"DECIDED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "screen before seal step 4 -> stops with SEAL_STEP_MISSING",
+   "held": true,
+   "detail": "{\"code\": \"SEAL_STEP_MISSING\", \"reason\": \"Seal step 4_ORDINARY_NOTES must exist before this program runs.\"}"
+  },
+  {
+   "check": "writer after seal step 4 -> stops with SET_IS_SEALED",
+   "held": true,
+   "detail": "{\"code\": \"SET_IS_SEALED\", \"reason\": \"Seal step 4_ORDINARY_NOTES exists. These files are sealed and are not written again.\"}"
+  },
+  {
+   "check": "support decide after seal step 4 -> stops with SET_IS_SEALED",
+   "held": true,
+   "detail": "{\"code\": \"SET_IS_SEALED\", \"reason\": \"Seal step 4_ORDINARY_NOTES exists. These files are sealed and are not written again.\"}"
+  },
+  {
+   "check": "support status after seal step 4 (writes nothing) -> status STATUS_ONLY, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"STATUS_ONLY\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "screen practice only -> status SCREENED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"SCREENED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "with one set screened the launch floor is not yet checked on both sets",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "screen both sets -> status SCREENED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"SCREENED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the screen hits exactly the four planted notes, one for each rule",
+   "held": true,
+   "detail": "{\"practice\": {\"V903\": [\"c\"]}, \"final\": {\"V908\": [\"a\"], \"V909\": [\"d\"], \"V910\": [\"b\"]}}"
+  },
+  {
+   "check": "a word that the passage holds as often as the note is no hit (V911, the word correct)",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the passage dropped by the support check is not screened",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "a hit names the group, the length, the rule and the task",
+   "held": true,
+   "detail": "{\"group\": \"ORD-FREE\", \"length\": \"110\", \"rule\": \"c\", \"task_id\": \"V903.GOES_FOR\", \"detail\": \"holds the option text: reaching for the oak scoop again\"}"
+  },
+  {
+   "check": "the screen of record gives the practice counts that the report-only run printed",
+   "held": true,
+   "detail": "{\"passages_screened\": 5, \"passages_hit\": 1, \"hits_by_rule\": {\"a\": 0, \"b\": 0, \"c\": 1, \"d\": 0}}"
+  },
+  {
+   "check": "the screen file has exactly the fields of the format",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "what is left: practice 4 passages, 5 role-step and 4 plain-fact tasks; final 4 passages, 5 and 4",
+   "held": true,
+   "detail": "{\"practice\": {\"passages_that_carry_a_task\": 5, \"passages_dropped_by_the_support_check\": 0, \"passages_dropped_by_the_screen\": 1, \"passages_left\": 4, \"passages_left_with_a_role_step_task\": 4, \"role_step_tasks_left\": 5, \"plain_fact_tasks_left\": 4}, \"final\": {\"passages_that_carry_a_task\": 8, \"passages_dropped_by_the_support_check\": 1, \"passages_dropped_by_the_screen\": 3, \"passages_left\": 4, \"passages_left_with_a_role_step_task\": 4, \"role_step_tasks_left\": 5, \"plain_fact_tasks_left\": 4}}"
+  },
+  {
+   "check": "the launch floor of the fixture is met and the tier is EXPLORATORY",
+   "held": true,
+   "detail": "{\"lines\": [{\"what\": \"practice role_step tasks\", \"left\": 5, \"floor\": 2, \"met\": true}, {\"what\": \"practice plain_fact tasks\", \"left\": 4, \"floor\": 2, \"met\": true}, {\"what\": \"final role_step tasks\", \"left\": 5, \"floor\": 2, \"met\": true}, {\"what\": \"final plain_fact tasks\", \"left\": 4, \"floor\": 2, \"met\": true}], \"checked_on_both_sets\": true, \"met\": true, \"tier\": \"EXPLORATORY\"}"
+  },
+  {
+   "check": "the screen changed no note file and no support file",
+   "held": true,
+   "detail": "12 files compared"
+  },
+  {
+   "check": "the sentence rule does not cut after Dr.",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "rule (a): a letter that the passage holds as often is no hit; one more is a hit",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "rule (a): answer: C and (D) are hits",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "rule (b): the whole question or a sentence of 5 or more words is a hit; a short sentence is not",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "rule (c): an option the passage does not hold is a hit; an option that is passage text is not",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "rule (d): the words answer, option, correct count as whole words only",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "a blanked text that still holds a quoted part is refused",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the head check holds for a note whose head is: canon line, sayings line, for each Noetic",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "a ROLE note whose head lacks a sayings line is refused",
+   "held": true,
+   "detail": "The ROLE note of V901 and its blanked text do not have the lines they must have."
+  },
+  {
+   "check": "a ROLE note whose canon line is followed by the sayings line of another Noetic is refused",
+   "held": true,
+   "detail": "Lines 1 and 2 of the ROLE note of V901 are not an unchanged canon line of the role-notes file followed by the sayings line of the same Noetic."
+  },
+  {
+   "check": "a blanked text whose sayings line was emptied is refused: a sayings line stays whole in the frame text",
+   "held": true,
+   "detail": "Lines 1 and 2 of the ROLE note of V901 are not an unchanged canon line of the role-notes file followed by the sayings line of the same Noetic."
+  },
+  {
+   "check": "a role-notes file with no sayings lines (built before amendment A13) is refused by the screen",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the frame text of a ROLE note holds its sayings lines whole, and the screen finds no letter pattern and none of the three words in it",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "rule (c): an option whose whole text stands inside a sayings line, and not in the passage, is a hit of the ROLE frame text",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the blanked-text check holds for a passage whose quote holds quote marks",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "screen with a floor of 99 final role-step tasks -> status SCREENED_LAUNCH_FLOOR_NOT_MET, exit 3",
+   "held": true,
+   "detail": "{\"status\": \"SCREENED_LAUNCH_FLOOR_NOT_MET\", \"exit\": 3, \"stop\": null}"
+  },
+  {
+   "check": "the screen says do not launch when the floor is missed",
+   "held": true,
+   "detail": "{\"lines\": [{\"what\": \"practice role_step tasks\", \"left\": 5, \"floor\": 2, \"met\": true}, {\"what\": \"practice plain_fact tasks\", \"left\": 4, \"floor\": 2, \"met\": true}, {\"what\": \"final role_step tasks\", \"left\": 5, \"floor\": 99, \"met\": false}, {\"what\": \"final plain_fact tasks\", \"left\": 4, \"floor\": 2, \"met\": true}], \"checked_on_both_sets\": true, \"met\": false, \"tier\": \"NO_LAUNCH\"}"
+  },
+  {
+   "check": "assemble with a floor of 99 final role-step tasks -> status DO_NOT_LAUNCH_FLOOR_NOT_MET, exit 3",
+   "held": true,
+   "detail": "{\"status\": \"DO_NOT_LAUNCH_FLOOR_NOT_MET\", \"exit\": 3, \"stop\": null}"
+  },
+  {
+   "check": "below the floor only the removal log is written",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "assemble with a call cap of 100 -> status DO_NOT_LAUNCH_PLANNED_CALLS_ABOVE_THE_CAP, exit 3",
+   "held": true,
+   "detail": "{\"status\": \"DO_NOT_LAUNCH_PLANNED_CALLS_ABOVE_THE_CAP\", \"exit\": 3, \"stop\": null}"
+  },
+  {
+   "check": "above the call cap no prompt part is written",
+   "held": true,
+   "detail": "{\"practice\": 92, \"final_must_run\": 59, \"final_no_passage\": 5, \"whole_job\": 156, \"cap\": 100}"
+  },
+  {
+   "check": "assemble -> status ASSEMBLED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ASSEMBLED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "the final counts are 5 and 4 final tasks on 4 passages, 5 and 4 practice tasks",
+   "held": true,
+   "detail": "{\"final_role_step_tasks\": 5, \"final_plain_fact_tasks\": 4, \"final_passages_with_a_role_step_task\": 4, \"practice_role_step_tasks\": 5, \"practice_plain_fact_tasks\": 4}"
+  },
+  {
+   "check": "the planned calls follow 12 and 8 per practice task, 7 and 6 per final task, 1 more per final role-step task",
+   "held": true,
+   "detail": "{\"practice\": 92, \"final_must_run\": 59, \"final_no_passage\": 5, \"whole_job\": 156, \"cap\": 5000}"
+  },
+  {
+   "check": "the survival rows are the ones worked out by hand for this fixture",
+   "held": true,
+   "detail": "{\"practice\": [[7, 6], [7, 6], [7, 6], [6, 6], [6, 6], [6, 6], [6, 5], [6, 5], [6, 5], [5, 4]], \"final\": [[12, 9], [12, 9], [12, 9], [12, 9], [11, 9], [10, 9], [10, 8], [9, 8], [8, 7], [5, 4]]}"
+  },
+  {
+   "check": "the survival rows carry the ten filter names of the format, in order",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the removal log has an entry for every step",
+   "held": true,
+   "detail": "[\"STEP_1_WRITER\", \"STEP_2_FORM_CHECK\", \"STEP_3A_ANCHOR_CHECK\", \"STEP_3B_OPTION_CHECK\", \"STEP_4_KEY_CHECK\", \"STEP_5_NO_PASSAGE_CHECK\", \"STEP_6_LENGTH_BACKSTOP\", \"STEP_6_SELECTION\", \"STEP_7_LEAK_SCREEN\", \"STEP_7_SUPPORT_CHECK\"]"
+  },
+  {
+   "check": "the removal log has exactly the fields of the format",
+   "held": true,
+   "detail": "35"
+  },
+  {
+   "check": "the removal log names the rule of every leak drop",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the kept passages are the expected ones",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the final prompt parts hold no answer_given list, no ANSWER-GIVEN sentence and no key field",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the practice prompt parts hold two ANSWER-GIVEN notes per practice role-step task and they name the key letter",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "level 1 shows the right option and the first three wrong ones, level 2 all six; the key letter points at the right option",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "each letter is right equally often, to within one task, inside every type and over the whole family, at each level",
+   "held": true,
+   "detail": "{\"practice\": {\"PULL-PUSH level 1\": {\"A\": 2, \"B\": 1, \"C\": 1, \"D\": 1}, \"role_step family level 1\": {\"A\": 2, \"B\": 1, \"C\": 1, \"D\": 1}, \"PULL-PUSH level 2\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 0}, \"role_step family level 2\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 0}, \"FACT level 1\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1}, \"plain_fact family level 1\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1}}, \"final\": {\"PULL-PUSH level 1\": {\"A\": 2, \"B\": 1, \"C\": 1, \"D\": 1}, \"role_step family level 1\": {\"A\": 2, \"B\": 1, \"C\": 1, \"D\": 1}, \"PULL-PUSH level 2\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 0}, \"role_step family level 2\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 0}, \"FACT level 1\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1}, \"plain_fact family level 1\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1}}}"
+  },
+  {
+   "check": "36 made-up tasks in types of 5, 9, 6, 7, 5 and 4: each of A to D is right 9 times at level 1, each of A to F 6 times at level 2",
+   "held": true,
+   "detail": "{\"BRING level 1\": {\"A\": 2, \"B\": 1, \"C\": 1, \"D\": 1}, \"PULL-PUSH level 1\": {\"A\": 2, \"B\": 3, \"C\": 2, \"D\": 2}, \"LAND level 1\": {\"A\": 1, \"B\": 1, \"C\": 2, \"D\": 2}, \"FORMED level 1\": {\"A\": 2, \"B\": 2, \"C\": 2, \"D\": 1}, \"PARTS level 1\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 2}, \"HABIT level 1\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1}, \"role_step family level 1\": {\"A\": 9, \"B\": 9, \"C\": 9, \"D\": 9}, \"BRING level 2\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 0}, \"PULL-PUSH level 2\": {\"A\": 2, \"B\": 2, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 2}, \"LAND level 2\": {\"A\": 1, \"B\": 1, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 1}, \"FORMED level 2\": {\"A\": 1, \"B\": 1, \"C\": 2, \"D\": 1, \"E\": 1, \"F\": 1}, \"PARTS level 2\": {\"A\": 1, \"B\": 1, \"C\": 0, \"D\": 1, \"E\": 1, \"F\": 1}, \"HABIT level 2\": {\"A\": 0, \"B\": 0, \"C\": 1, \"D\": 1, \"E\": 1, \"F\": 1}, \"role_step family level 2\": {\"A\": 6, \"B\": 6, \"C\": 6, \"D\": 6, \"E\": 6, \"F\": 6}}"
+  },
+  {
+   "check": "the letters come out the same when worked out a second time (seeded)",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "a passage carries the notes text of every group, three lengths for each ordinary group, and no padding line",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "a ROLE note opens with its head: for each Noetic the guide line letter for letter, then its sayings line; MIXED with the swapped ones",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "every sayings line in the fixture starts with the frame word of the plan and equals the line the role-note tool reads from the canon file",
+   "held": true,
+   "detail": "[\"^1\", \"^2\", \"^3\", \"^4\", \"^5\", \"^6\", \"^7\", \"^8\", \"^9\"]"
+  },
+  {
+   "check": "the QUOTES-ONLY note and the FILLER note hold no sayings line",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "no struck group appears anywhere in the prompt parts",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the groups of a role-step task are the seven must-run groups, of a plain-fact task the first six",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the task facts sit beside the keys, not in the prompt parts",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the manifest lists the 11 files of seal step 5 with their true sha256 and size",
+   "held": true,
+   "detail": "[\"screen/leak_screen_practice.json\", \"screen/leak_screen_final.json\", \"removal_log.json\", \"prompts/prompt_parts_practice.json\", \"keys_practice/keys_practice.json\", \"keys_practice/task_meta_practice.json\", \"prompts/prompt_parts_final.json\", \"keys_final/keys_final.json\", \"keys_final/task_meta_final.json\", \"review/review_pack.json\", \"assemble/planned_calls.json\"]"
+  },
+  {
+   "check": "the manifest marks exactly the six package files",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the list of planned calls adds up to the totals",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the review pack holds all practice tasks and a seeded tenth of the final tasks, rounded up",
+   "held": true,
+   "detail": "{\"practice_tasks\": 9, \"final_tasks\": 9, \"final_tasks_in_the_sample\": 1}"
+  },
+  {
+   "check": "every assembled file is marked as a dry fixture",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "assemble after seal step 5 -> stops with SET_IS_SEALED",
+   "held": true,
+   "detail": "{\"code\": \"SET_IS_SEALED\", \"reason\": \"Seal step 5_PROMPT_PARTS_AND_REMOVAL_LOG exists. These files are sealed and are not written again.\"}"
+  },
+  {
+   "check": "screen after seal step 5 -> stops with SET_IS_SEALED",
+   "held": true,
+   "detail": "{\"code\": \"SET_IS_SEALED\", \"reason\": \"Seal step 5_PROMPT_PARTS_AND_REMOVAL_LOG exists. These files are sealed and are not written again.\"}"
+  },
+  {
+   "check": "not written: practice, the reply for one note is empty -> status STOPPED_NOTES_NOT_WRITTEN, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_NOTES_NOT_WRITTEN\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "not written: after one empty reply the note is still due and nothing is given up",
+   "held": true,
+   "detail": "{\"V902|ORD-FREE|090|v1\": 1}"
+  },
+  {
+   "check": "not written: every slot of the notes file holds the field not_written, in the place the format gives it",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "not written: practice, the same note gets no answer at all -> status STOPPED_NOTES_NOT_WRITTEN, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_NOTES_NOT_WRITTEN\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "not written: a call with no answer is not counted; the count for the note is still 1",
+   "held": true,
+   "detail": "3"
+  },
+  {
+   "check": "not written: practice, the second reply for the note is cut off -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: after two such replies the note is given up: not_written is set, the note has no version, the step ends with exit code 0",
+   "held": true,
+   "detail": "{\"version\": 1, \"replies\": 2, \"errors\": [\"REPLY_EMPTY\", \"REPLY_CUT_OFF\"]}"
+  },
+  {
+   "check": "not written: practice, one more run -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: the note is never asked for a third time; its two counted log lines carry the two errors of the plan",
+   "held": true,
+   "detail": "[[200, \"REPLY_EMPTY\"], [0, \"URLError: made-up: no route\"], [0, \"URLError: made-up: no route\"], [0, \"URLError: made-up: no route\"], [200, \"REPLY_CUT_OFF\"]]"
+  },
+  {
+   "check": "not written: support practice, plan only -> status STOPPED_CALL_BUDGET, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_CALL_BUDGET\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "not written: the dropped passage is in no batch: 24 items for the 4 other passages, in 2 batches",
+   "held": true,
+   "detail": "{\"DONE\": 0, \"PENDING\": 2, \"UNREADABLE\": 0}"
+  },
+  {
+   "check": "not written: the practice set is ready for seal step 4 with one passage dropped for a note that could not be written",
+   "held": true,
+   "detail": "{\"ALL_PASS\": 4, \"DROPPED_NOTE_NOT_WRITTEN\": 1}"
+  },
+  {
+   "check": "not written: no note of the dropped passage was sent to the checker",
+   "held": true,
+   "detail": "2 calls looked at"
+  },
+  {
+   "check": "not written: screen report-only on the practice set -> status REPORT_ONLY, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"REPORT_ONLY\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: the dropped passage is not screened",
+   "held": true,
+   "detail": "{\"passages_that_carry_a_task\": 5, \"passages_dropped_by_the_support_check\": 1, \"passages_dropped_by_the_screen\": 1, \"passages_left\": 3, \"passages_left_with_a_role_step_task\": 3, \"role_step_tasks_left\": 4, \"plain_fact_tasks_left\": 3}"
+  },
+  {
+   "check": "not written: writer final, first versions -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: round 1 of the final set finds the one unsupported note; round 2 waits for the rewrite",
+   "held": true,
+   "detail": "{\"ALL_PASS\": 7, \"REWRITE_NEEDED\": 1}"
+  },
+  {
+   "check": "not written: writer final rewrite, the reply is empty -> status STOPPED_NOTES_NOT_WRITTEN, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_NOTES_NOT_WRITTEN\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "not written: writer final rewrite, the reply is empty again -> status ALL_WRITTEN, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ALL_WRITTEN\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: a rewrite that comes back empty twice is given up; the first version stays on record",
+   "held": true,
+   "detail": "{\"version\": 2, \"replies\": 2, \"errors\": [\"REPLY_EMPTY\", \"REPLY_EMPTY\"]}"
+  },
+  {
+   "check": "not written: support final after the rewrite was given up -> status NOTHING_PENDING, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"NOTHING_PENDING\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: no round 2 is planned for the dropped passage; the final set is ready for seal step 4",
+   "held": true,
+   "detail": "{\"ALL_PASS\": 7, \"DROPPED_NOTE_NOT_WRITTEN\": 1}"
+  },
+  {
+   "check": "not written: support final, decide -> status DECIDED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"DECIDED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: support practice, decide -> status DECIDED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"DECIDED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: the results file gives the passage the status of the plan and keeps the failed first check on record",
+   "held": true,
+   "detail": "{\"passage_id\": \"V907\", \"status\": \"DROPPED_NOTE_NOT_WRITTEN\", \"rewrite_note_ids\": [\"V907|ORD-FREE|090|v1\"]}"
+  },
+  {
+   "check": "not written: screen both sets -> status SCREENED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"SCREENED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: the two dropped passages are not screened",
+   "held": true,
+   "detail": "{\"practice\": [\"V901\", \"V903\", \"V904\", \"V905\"], \"final\": [\"V906\", \"V908\", \"V909\", \"V910\", \"V911\", \"V912\", \"V913\"]}"
+  },
+  {
+   "check": "not written: assemble -> status ASSEMBLED, exit 0",
+   "held": true,
+   "detail": "{\"status\": \"ASSEMBLED\", \"exit\": 0, \"stop\": null}"
+  },
+  {
+   "check": "not written: the removal log names both drops under the step of the support check, with the note writer as the program",
+   "held": true,
+   "detail": "[[\"practice\", \"STEP_7_SUPPORT_CHECK\", \"tools/ob_write_ordinary_notes.py\", \"passage\", \"V902\"], [\"final\", \"STEP_7_SUPPORT_CHECK\", \"tools/ob_write_ordinary_notes.py\", \"passage\", \"V907\"]]"
+  },
+  {
+   "check": "not written: each log entry names the note and the logged reasons",
+   "held": true,
+   "detail": "[\"the note writer could not produce a note (an empty or cut-off reply each time it was asked): V902|ORD-FREE|090|v1 (REPLY_EMPTY, REPLY_CUT_OFF); the passage is dropped for every group\", \"the note writer could not produce a note (an empty or cut-off reply each time it was asked): V907|ORD-FREE|090|v2 (REPLY_EMPTY, REPLY_EMPTY); the passage is dropped for every group\"]"
+  },
+  {
+   "check": "not written: no prompt part is written for a dropped passage",
+   "held": true,
+   "detail": "{\"practice\": [\"V901\", \"V904\", \"V905\"], \"final\": [\"V906\", \"V911\", \"V912\", \"V913\"]}"
+  },
+  {
+   "check": "not written: the survival row \"support check\" counts the dropped passages as removed",
+   "held": true,
+   "detail": "{\"practice\": {\"written for an open form\": [7, 6], \"form check\": [7, 6], \"anchor check\": [7, 6], \"option check\": [6, 6], \"key check\": [6, 6], \"no-passage check\": [6, 6], \"selection\": [6, 5], \"length backstop\": [6, 5], \"support check\": [5, 4], \"answer-leak screen\": [4, 3]}, \"final\": {\"written for an open form\": [12, 9], \"form check\": [12, 9], \"anchor check\": [12, 9], \"option check\": [12, 9], \"key check\": [11, 9], \"no-passage check\": [10, 9], \"selection\": [10, 8], \"length backstop\": [9, 8], \"support check\": [8, 7], \"answer-leak screen\": [5, 4]}}"
+  },
+  {
+   "check": "guard: practice, one note of each of 4 passages comes back empty -> status STOPPED_NOTES_NOT_WRITTEN, exit 1",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_NOTES_NOT_WRITTEN\", \"exit\": 1, \"stop\": null}"
+  },
+  {
+   "check": "guard: after the first run 4 notes are still due and nothing is given up",
+   "held": true,
+   "detail": "4"
+  },
+  {
+   "check": "guard: practice, the same 4 notes come back empty again -> status STOPPED_TOO_MANY_NOTES_NOT_WRITTEN, exit 2",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_TOO_MANY_NOTES_NOT_WRITTEN\", \"exit\": 2, \"stop\": null}"
+  },
+  {
+   "check": "guard: the first 3 passages in the order of the call log are given up; the 4th is not, and the tool stops with exit code 2",
+   "held": true,
+   "detail": "{\"given_up\": [\"V901|ORD-FREE|090|v1\", \"V902|ORD-FREE|090|v1\", \"V903|ORD-FREE|090|v1\"], \"beyond\": [\"V904\"]}"
+  },
+  {
+   "check": "guard: practice, one more run makes no call -> status STOPPED_TOO_MANY_NOTES_NOT_WRITTEN, exit 2",
+   "held": true,
+   "detail": "{\"status\": \"STOPPED_TOO_MANY_NOTES_NOT_WRITTEN\", \"exit\": 2, \"stop\": null}"
+  },
+  {
+   "check": "guard: once the guard is passed the tool makes no further call and gives nothing more up",
+   "held": true,
+   "detail": "0"
+  },
+  {
+   "check": "guard: support practice while a note is neither written nor given up -> stops with NOTES_NOT_ALL_WRITTEN",
+   "held": true,
+   "detail": "{\"code\": \"NOTES_NOT_ALL_WRITTEN\", \"reason\": \"1 notes of this set have no first version yet and are not given up. Run tools/ob_write_ordinary_notes.py --step first.\"}"
+  }
+ ]
+}

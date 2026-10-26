@@ -1,0 +1,165 @@
+{
+ "provider": "gemini",
+ "model": "gemini-2.5-flash",
+ "passages": 30,
+ "failed": 13,
+ "quote_problems": 0,
+ "tokens": {
+  "prompt_tokens": 60984,
+  "completion_tokens": 4417
+ },
+ "guide": "02_LABELING_GUIDE_v0_2.md",
+ "guide_sha256": "f8af5ac7a904f952791f235c17600e640ffad9a89fe256a91fc0fac038429651",
+ "log": [
+  {
+   "passage": "Q01",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q02",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q03",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q04",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q05",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q06",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q07",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q08",
+   "attempt": 2,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q09",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q10",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q11",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q12",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q13",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q14",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q15",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q16",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q17",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q18",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q19",
+   "attempt": 1,
+   "quote_problems": 0
+  },
+  {
+   "passage": "Q20",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q21",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q22",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q23",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q24",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q25",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q26",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q27",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q28",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q29",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  },
+  {
+   "passage": "Q30",
+   "attempt": 3,
+   "error": "HTTPError: HTTP Error 429: Too Many Requests"
+  }
+ ]
+}

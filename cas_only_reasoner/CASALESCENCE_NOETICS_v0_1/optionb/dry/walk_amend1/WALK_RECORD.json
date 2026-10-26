@@ -1,0 +1,23 @@
+{
+ "note": "MADE-UP DATA WALK, NOT A RESULT. Everything in this folder is scratch. It holds made-up passages, labels, questions, solver answers, notes, verdicts, receipts and a made-up status table. It holds no real passage and no evidence about roles. No outside service and no AWS service was called. The whole folder may be deleted.",
+ "what_was_walked": "The eleven laptop tools tools/ob_*.py, as byte copies, in a scratch copy of the study folder (project/). They ran as real runs, not as dry-fixture runs: no --work, the real seal checks, the real floors and targets. guard_run.py put made-up replies in the place of the outside services and made every socket connection fail.",
+ "folders": {
+  "project/": "the walk: eligibility to seal step 6 on 144 made-up passages. Its PLAN_CONSTANTS.json is the real file with the keys of CONSTANTS_CHANGES.json changed (pins and counts of the made-up source files, the made-up settings).",
+  "project_probe/": "a side copy for probes: the DeepSeek token limits, a reply with no model name, a changed tool, the tool-repair window, an answer sheet with a sign that cp1252 can not print.",
+  "project_dev/": "a byte copy of the programs with the REAL constants, in which a byte copy of optionb/dry/build_dev_package.py ran with --stop-before-the-builders. The two controller builders were not run.",
+  "step7_probe/": "made-up receipts, a made-up selftest.json and two small zips for dry runs of seal step 7.",
+  "logs/": "what every command printed, with its exit code. stub_calls.jsonl lists every made-up service call."
+ },
+ "scripts": {
+  "00_make_project_copy.py": "copies programs and rule texts, byte for byte",
+  "01_make_fixture.py": "writes the made-up source files and the scratch constants",
+  "walk_fixture.py": "the made-up people, passages, questions and notes",
+  "walk_stub.py": "the stand-in for the outside services",
+  "guard_run.py": "runs one tool unchanged with the stand-in and with the network closed",
+  "run.sh": "runs one tool through guard_run.py and keeps its output under logs/",
+  "claude_stand_in.py": "writes a made-up answer sheet in the place of a Claude sub-agent",
+  "02_make_step7_probe.py": "made-up files for dry runs of seal step 7",
+  "check_formats.py": "compares the written files with field lists typed from FILE_FORMATS.md",
+  "shape.py": "prints the shape of a JSON file"
+ }
+}

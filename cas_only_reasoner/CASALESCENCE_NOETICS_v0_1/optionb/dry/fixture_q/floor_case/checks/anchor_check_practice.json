@@ -1,0 +1,282 @@
+{
+ "schema": "casalescence/optionb/anchor_check/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p1.json",
+   "sha256": "76d85817d2c8e0ba82e909b9da1f835234e66a3729e7bbb6b0f184261b31550b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/raw_questions_practice_p2.json",
+   "sha256": "12a03bff8dce2e4c96d22aa626a0bc623493c5ac1f023a5bf0beedbdec4e9cf8"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "V901.p1.MEET_AGAIN",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "words_b"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "relative_a"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "relative_b"
+    },
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "relative_a"
+    },
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "relative_b"
+    },
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p1.TAKE_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "words_b"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "relative_a"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "relative_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p2.MEET_AGAIN",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "words_b"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "relative_a"
+    },
+    {
+     "anchor": "the smell of wet rope",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "relative_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V901.p2.TAKE_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "relative_a"
+    },
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^8",
+     "agreed_index": 1,
+     "field": "relative_b"
+    },
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "her uncle's ferry",
+     "noetic": "^9",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V902.p1.GOES_FOR",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "The stall of old maps",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_a"
+    },
+    {
+     "anchor": "The stall of old maps",
+     "noetic": "^2",
+     "agreed_index": 1,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V902.p1.KEEPS_AWAY",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "The fish counter",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_a"
+    },
+    {
+     "anchor": "The fish counter",
+     "noetic": "^3",
+     "agreed_index": 2,
+     "field": "words_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V902.p1.WHAT_SLID_OFF",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "barely registered",
+     "noetic": "^4",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "barely registered",
+     "noetic": "^4",
+     "agreed_index": 3,
+     "field": "words_b"
+    },
+    {
+     "anchor": "The brass band on the corner",
+     "noetic": "^4",
+     "agreed_index": 3,
+     "field": "relative_a"
+    },
+    {
+     "anchor": "The brass band on the corner",
+     "noetic": "^4",
+     "agreed_index": 3,
+     "field": "relative_b"
+    }
+   ]
+  },
+  {
+   "question_id": "V902.p1.WHAT_STUCK",
+   "passed": true,
+   "reason": null,
+   "matched": [
+    {
+     "anchor": "barely registered",
+     "noetic": "^4",
+     "agreed_index": 3,
+     "field": "words_a"
+    },
+    {
+     "anchor": "barely registered",
+     "noetic": "^4",
+     "agreed_index": 3,
+     "field": "words_b"
+    }
+   ]
+  }
+ ],
+ "counts": {
+  "checked": 8,
+  "passed": 8,
+  "dropped_by_reason": {}
+ }
+}

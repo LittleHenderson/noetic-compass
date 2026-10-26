@@ -1,0 +1,63 @@
+# LABEL-AGREEMENT VERDICT, VERSION 2.1
+
+A pass means two model teams point at the same things for that Noetic under this guide. It does not show the labels are correct, and it tests no reader. A missed bar is a failure of this method for that Noetic. The ^8 row and the ^9 row count the same pairs from two ends.
+
+bars: E at least 0.8 and kappa at least 0.6, with at least 50 cases and at least 50 passages where neither team has a bar-row entry
+
+- passages given 427 | analysed 426 | left out 1 W266
+- team A: passages labeled 427, not labeled 0 | entries in last tries 1595: kept 1595, dropped 0 {}, lost with unlabeled passages 0 | withdrawn between tries 0 {}
+- team B: passages labeled 426, not labeled 1 | entries in last tries 1717: kept 1712, dropped 1 {"^3": 1}, lost with unlabeled passages 4 | withdrawn between tries 0 {}
+- run is valid: yes
+- floor: 300 shuffles; team B entries that kept their own symbol: 0.389. A moved symbol keeps its entry's own fields, so the floor is low for rows that need a related thing.
+- report only, no count changes: clear ^9 entries with no reasoning flag whose support holds a word of guide rule 15(b) (worked out, checked, ruled out, compared, so it had to be): team A 1 of 70 (W021); team B 1 of 115 (W021)
+- NOTE team B: the name asked for was deepseek-chat; the replies carry {"deepseek-flash": 469}.
+
+### Table 1. The bar row: clear entries, not a ^9 reached by reasoning. Entry by entry.
+
+| row | A | B | M | only A | only B | E = M/(M+only A+only B) | strict-label view (no bar) | E 95% | kappa | kappa 95% | cases | neither | outcome |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ^1 | 546 | 485 | 473 | 73 | 12 | 473/558 = 0.848 | 470/561 = 0.838 | [0.815, 0.879] | 0.918 | [0.854, 0.969] | 374 | 52 | LABELABLE_UNDER_THIS_METHOD |
+| ^2 | 91 | 92 | 75 | 16 | 17 | 75/108 = 0.694 | 70/113 = 0.619 | [0.598, 0.791] | 0.920 | [0.866, 0.965] | 71 | 355 | NOT_LABELABLE_UNDER_THIS_METHOD |
+| ^3 | 44 | 69 | 41 | 3 | 28 | 41/72 = 0.569 | 39/74 = 0.527 | [0.448, 0.687] | 0.747 | [0.646, 0.837] | 63 | 363 | NOT_LABELABLE_UNDER_THIS_METHOD |
+| ^4 | 80 | 120 | 56 | 24 | 64 | 56/144 = 0.389 | 45/155 = 0.290 | [0.301, 0.482] | 0.724 | [0.624, 0.813] | 85 | 341 | NOT_LABELABLE_UNDER_THIS_METHOD |
+| ^5 | 96 | 131 | 74 | 22 | 57 | 74/153 = 0.484 | 67/160 = 0.419 | [0.402, 0.571] | 0.766 | [0.690, 0.831] | 122 | 304 | NOT_LABELABLE_UNDER_THIS_METHOD |
+| ^6 | 294 | 333 | 197 | 97 | 136 | 197/430 = 0.458 | 177/450 = 0.393 | [0.363, 0.564] | 0.833 | [0.764, 0.895] | 92 | 334 | NOT_LABELABLE_UNDER_THIS_METHOD |
+| ^7 | 66 | 89 | 44 | 22 | 45 | 44/111 = 0.396 | 34/121 = 0.281 | [0.299, 0.500] | 0.837 | [0.761, 0.906] | 79 | 347 | NOT_LABELABLE_UNDER_THIS_METHOD |
+| ^8 | 63 | 80 | 40 | 23 | 40 | 40/103 = 0.388 | 34/109 = 0.312 | [0.293, 0.505] | 0.859 | [0.790, 0.920] | 75 | 351 | NOT_LABELABLE_UNDER_THIS_METHOD |
+| ^9 | 70 | 115 | 45 | 25 | 70 | 45/140 = 0.321 | 39/146 = 0.267 | [0.248, 0.405] | 0.845 | [0.773, 0.908] | 78 | 348 | NOT_LABELABLE_UNDER_THIS_METHOD |
+
+### Table 2. Beside table 1. No bar on any of these. A pair is listed by the loosest of its label, its Mind and its related thing.
+
+| row | M/A | M/B | fully matched cases | cases with a pair | pairs: all same span | pairs: one inside the other | pairs: overlap in part | dropped + withdrawn | E if those were misses | floor mean | floor max | attempt-1 way (passages) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ^1 | 0.866 | 0.975 | 307 | 366 | 470 | 3 | 0 | 0 | 0.848 | 0.223 | 0.257 | 365/374 = 0.976 |
+| ^2 | 0.824 | 0.815 | 45 | 58 | 68 | 7 | 0 | 0 | 0.694 | 0.137 | 0.236 | 57/71 = 0.803 |
+| ^3 | 0.932 | 0.594 | 36 | 39 | 38 | 3 | 0 | 1 | 0.562 | 0.092 | 0.173 | 38/63 = 0.603 |
+| ^4 | 0.700 | 0.467 | 25 | 44 | 38 | 18 | 0 | 0 | 0.389 | 0.110 | 0.164 | 44/85 = 0.518 |
+| ^5 | 0.771 | 0.565 | 62 | 71 | 65 | 9 | 0 | 0 | 0.484 | 0.136 | 0.205 | 71/122 = 0.582 |
+| ^6 | 0.670 | 0.592 | 39 | 51 | 156 | 41 | 0 | 0 | 0.458 | 0.305 | 0.340 | 51/92 = 0.554 |
+| ^7 | 0.667 | 0.494 | 36 | 43 | 28 | 16 | 0 | 0 | 0.396 | 0.103 | 0.169 | 39/79 = 0.494 |
+| ^8 | 0.635 | 0.500 | 34 | 39 | 29 | 11 | 0 | 0 | 0.388 | 0.059 | 0.121 | 38/75 = 0.507 |
+| ^9 | 0.643 | 0.391 | 23 | 43 | 34 | 11 | 0 | 0 | 0.321 | 0.066 | 0.109 | 42/78 = 0.538 |
+
+### Table 3. All entries, clear and ambiguous pooled. No bar.
+
+| row | A | B | M | only A | only B | E = M/(M+only A+only B) | strict-label view (no bar) | M/A | M/B | cases | pairs: all same span | pairs: one inside the other | pairs: overlap in part |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ^1 | 570 | 485 | 477 | 93 | 8 | 477/578 = 0.825 | 474/581 = 0.816 | 0.837 | 0.984 | 376 | 474 | 3 | 0 |
+| ^2 | 94 | 94 | 76 | 18 | 18 | 76/112 = 0.679 | 71/117 = 0.607 | 0.809 | 0.809 | 75 | 69 | 7 | 0 |
+| ^3 | 52 | 73 | 47 | 5 | 26 | 47/78 = 0.603 | 44/81 = 0.543 | 0.904 | 0.644 | 68 | 43 | 4 | 0 |
+| ^4 | 92 | 124 | 62 | 30 | 62 | 62/154 = 0.403 | 50/166 = 0.301 | 0.674 | 0.500 | 93 | 43 | 19 | 0 |
+| ^5 | 98 | 135 | 76 | 22 | 59 | 76/157 = 0.484 | 69/164 = 0.421 | 0.776 | 0.563 | 126 | 67 | 9 | 0 |
+| ^6 | 309 | 339 | 208 | 101 | 131 | 208/440 = 0.473 | 188/460 = 0.409 | 0.673 | 0.614 | 94 | 165 | 43 | 0 |
+| ^7 | 89 | 109 | 56 | 33 | 53 | 56/142 = 0.394 | 45/153 = 0.294 | 0.629 | 0.514 | 102 | 36 | 20 | 0 |
+| ^8 | 120 | 131 | 79 | 41 | 52 | 79/172 = 0.459 | 68/183 = 0.372 | 0.658 | 0.603 | 134 | 58 | 21 | 0 |
+| ^9 | 166 | 222 | 116 | 50 | 106 | 116/272 = 0.426 | 101/287 = 0.352 | 0.699 | 0.523 | 182 | 91 | 24 | 1 |
+
+### Table 4. The rule-15 rows of plan v1.2. No bar.
+
+| row | A | B | M | only A | only B | E = M/(M+only A+only B) | strict-label view (no bar) | M/A | M/B | cases | pairs: all same span | pairs: one inside the other | pairs: overlap in part |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| uncertain ^8 | 57 | 51 | 35 | 22 | 16 | 35/73 = 0.479 | 31/77 = 0.403 | 0.614 | 0.686 | 66 | 27 | 8 | 0 |
+| uncertain ^9 | 62 | 57 | 34 | 28 | 23 | 34/85 = 0.400 | 31/88 = 0.352 | 0.548 | 0.596 | 74 | 27 | 7 | 0 |
+| ^9 reached by reasoning | 34 | 50 | 32 | 2 | 18 | 32/52 = 0.615 | 28/56 = 0.500 | 0.941 | 0.640 | 49 | 27 | 4 | 1 |

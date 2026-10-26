@@ -1,0 +1,124 @@
+SHEET practice-with_passage-02. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0181 ===
+Passage:
+Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.
+
+Question: Someone on their first day takes the person's place; which of these would most likely be missing?
+A. The clumsy execution of the correct order.
+B. The quick execution of the correct order.
+C. The rapid execution of the correct order.
+D. The fluent execution of the correct order.
+E. The swift execution of the correct order.
+F. The instant execution of the correct order.
+=== END Q0181 ===
+
+=== ITEM Q0182 ===
+Passage:
+Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.
+
+Question: A spare kit holds one of each named part. Which of these would not be in it?
+A. humidity adjustments
+B. regular rotation frequency
+C. blue cheese
+D. short brining period
+E. gradual temperature drops
+F. local cows
+=== END Q0182 ===
+
+=== ITEM Q0183 ===
+Passage:
+Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.
+
+Question: Which specific item did Maria stop at along the rows?
+A. A mature cheddar wheel.
+B. A dark mould batch.
+C. A ceiling sleeve.
+D. A small drop.
+=== END Q0183 ===
+
+=== ITEM Q0184 ===
+Passage:
+Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.
+
+Question: Pierre completed the short brining period and humidity adjustments. Which named part is still left?
+A. gradual temperature drops
+B. short brining period
+C. regular rotation frequency
+D. aging schedule
+E. separate steps
+F. humidity adjustments
+=== END Q0184 ===
+
+=== ITEM Q0185 ===
+Passage:
+Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.
+
+Question: What color was the cheese Pierre reviewed?
+A. red
+B. blue
+C. white
+D. green
+=== END Q0185 ===
+
+=== ITEM Q0186 ===
+Passage:
+Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.
+
+Question: The repeated cellar work stops for two full years; which action has most likely faded?
+A. Entering the cellar
+B. Cool, damp cellar
+C. Reaching for Gouda
+D. Brushing the cheeses
+E. Flipping the cheeses
+F. Tuesday morning
+=== END Q0186 ===
+
+=== ITEM Q0187 ===
+Passage:
+Liam explained the recipe for his aged cheddar. It began with specific rennet and raw milk from local cows. The curd was then cut, stirred, and pressed into molds. After that, it was brined before entering the cool, damp cellar for years. Each stage developed its distinct flavor profile.
+
+Question: What kind of milk did Liam use for his cheddar?
+A. raw milk
+B. goat milk
+C. skim milk
+D. warm milk
+=== END Q0187 ===
+
+=== ITEM Q0188 ===
+Passage:
+Yvonne walked among the shelves, her hand instinctively turning specific cheeses. The exact rotational pattern, the pressure, the angle; these movements required no thought. Daily for a decade, she had rotated countless wheels of cheddar. Her muscle memory guided her without any deliberate instruction.
+
+Question: How long had Yvonne rotated the wheels daily?
+A. For a century.
+B. For a decade.
+C. For a year.
+D. For a month.
+=== END Q0188 ===
+
+=== ITEM Q0189 ===
+Passage:
+Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.
+
+Question: At a later moment, which of these is the person least likely to bring up?
+A. She drops the dark mould on the cheese.
+B. She drops the small drop of ceiling water.
+C. She misses the small drop of ceiling water.
+D. She leaves the small drop of ceiling water.
+E. She forgets the small drop of ceiling water.
+F. She forgets the dark mould on the cheese.
+=== END Q0189 ===
+
+=== ITEM Q0190 ===
+Passage:
+Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.
+
+Question: When did Wendy flip and brush the cheeses?
+A. Every Friday morning.
+B. Every Tuesday morning.
+C. Every Sunday morning.
+D. Every Monday morning.
+=== END Q0190 ===

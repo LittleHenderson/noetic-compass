@@ -1,0 +1,140 @@
+{
+ "schema": "casalescence/optionb/survival/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+  "utc": "2026-10-05T18:09:36Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/checks/anchor_check_final.json",
+   "sha256": "3535a0e4eee15b1afa3367174d221ab8ca1720491a6995e4f45d60cd400b97f9"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/checks/candidates_final.json",
+   "sha256": "1a75aa84c11b656d2e0577712b5222332c12d197499959fb960dd9b5d47abda7"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/checks/form_check_final.json",
+   "sha256": "794bff4189905837c71fc7a3f669fb600fb90eaf3fa2ebf3b6c1dcfe1e9b188e"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/checks/option_check_final.json",
+   "sha256": "64319c96b475f331caefe2fc340b1a79eb05ab86fc33e3f246f903ad4ddface3"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/elig/eligibility.json",
+   "sha256": "0c336040253b2cb20a12966785be7b1223aa934c3e07c7d9f6aa43da53dda043"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/questions/raw_questions_final_p1.json",
+   "sha256": "dd630151b39d39393358beb88c1a7429d6d8a21ec600dc058be1e897cfb77339"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/questions/raw_questions_final_p2.json",
+   "sha256": "22c215ece5722bcc69146c9b2deb1488b2a88d292fb7ee7a298ff4761d934dbf"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/select/selection_practice.json",
+   "sha256": "43b0c6ff75a5abcaaf02c1ae60fa1c78b90635be358398da22bedd731b1e5f74"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/select/split_fixed.json",
+   "sha256": "1c9218c426e7b832627a5a131a38b6dc8e9dc15b1240d04fce7658ecf33f6890"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/solve/key_check_final.json",
+   "sha256": "b7fd98c5a9d8cb5679efe529de245e4f39ff48c0d29a71e34076beb7c06ffe04"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "final",
+ "practice_setting_count": 9,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "form check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "option check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "key check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 10,
+   "plain_fact": 4
+  },
+  {
+   "filter": "selection",
+   "role_step": 7,
+   "plain_fact": 4
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 7,
+   "plain_fact": 4
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 7,
+  "plain_fact_tasks": 4,
+  "passages_with_a_task": 4,
+  "passages_with_a_role_step_task": 4,
+  "single_longest": [
+   0,
+   7
+  ],
+  "single_shortest": [
+   0,
+   7
+  ]
+ },
+ "dropped_by_reason": {
+  "NOT_PICKED_BY_PAIR_RULE": 3
+ },
+ "decision": "GO",
+ "stop_reasons": [],
+ "next": "Seal step 3C. Then the ordinary notes are written. The launch floor is read again by tools/ob_assemble.py after the later filters.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles.",
+ "launch_floor_numbers": {
+  "final_role_step_tasks": 7,
+  "final_plain_fact_tasks": 4,
+  "practice_role_step_tasks": 23,
+  "practice_plain_fact_tasks": 12
+ },
+ "launch_floor": {
+  "final_role_step_tasks_min": 2,
+  "final_plain_fact_tasks_min": 2,
+  "practice_role_step_tasks_min": 19,
+  "practice_plain_fact_tasks_min": 10
+ },
+ "tier_if_nothing_more_is_removed": "EXPLORATORY"
+}

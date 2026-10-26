@@ -1,0 +1,957 @@
+[
+ {
+  "passage": "V078",
+  "writer_kind": "K1",
+  "text": "Frank hosed down his stall, the chilly spray misting the air. The sharp, briny smell of the fresh oysters on ice brought him back to his childhood holidays by the sea. He remembered the thrill of digging for clams on the sandy beach with his father. A quiet longing for those simple summer days settled over him.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp, briny smell of the fresh oysters on ice",
+    "mind": "Frank",
+    "relative_to": "his childhood holidays by the sea",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his childhood holidays by the sea",
+    "mind": "Frank",
+    "relative_to": "The sharp, briny smell of the fresh oysters on ice",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "those simple summer days",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp, briny smell of the fresh oysters on ice",
+    "mind": "Frank",
+    "relative_to": "his childhood holidays by the sea",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his childhood holidays by the sea",
+    "mind": "Frank",
+    "relative_to": "The sharp, briny smell of the fresh oysters on ice",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "A quiet longing for those simple summer days",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V416",
+  "writer_kind": "K1",
+  "text": "Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distinct metallic tang in the air",
+    "mind": "Susan",
+    "relative_to": "childhood summers",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood summers",
+    "mind": "Susan",
+    "relative_to": "The distinct metallic tang in the air",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "diesel",
+    "mind": "",
+    "relative_to": "The distinct metallic tang in the air",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "crushed stone",
+    "mind": "",
+    "relative_to": "The distinct metallic tang in the air",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distinct metallic tang in the air, a mix of diesel and crushed stone",
+    "mind": "Susan",
+    "relative_to": "childhood summers",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood summers",
+    "mind": "Susan",
+    "relative_to": "The distinct metallic tang in the air, a mix of diesel and crushed stone",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the smell of her father's toolshed",
+    "mind": "Susan",
+    "relative_to": "The distinct metallic tang in the air, a mix of diesel and crushed stone",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "metal filings",
+    "mind": "",
+    "relative_to": "the smell of her father's toolshed",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "machine oil",
+    "mind": "",
+    "relative_to": "the smell of her father's toolshed",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V241",
+  "writer_kind": "K1",
+  "text": "Chloe adjusted the microphone, waiting for the engineer. She noticed the faint, steady hum from an old tube amplifier in the corner of the room. It brought to her thoughts the cluttered garage at her childhood home. Her dad would spend hours there, patiently fixing vintage radios, the same low hum always present. That sound always meant quiet focus.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the faint, steady hum from an old tube amplifier",
+    "mind": "Chloe",
+    "relative_to": "the cluttered garage at her childhood home",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the cluttered garage at her childhood home",
+    "mind": "Chloe",
+    "relative_to": "the faint, steady hum from an old tube amplifier",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the faint, steady hum from an old tube amplifier in the corner of the room",
+    "mind": "Chloe",
+    "relative_to": "the cluttered garage at her childhood home",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the cluttered garage at her childhood home",
+    "mind": "Chloe",
+    "relative_to": "the faint, steady hum from an old tube amplifier in the corner of the room",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V244",
+  "writer_kind": "K1",
+  "text": "As Maya did laps, the chlorine smell was strong in the air. It instantly brought to her thoughts the municipal pool where she first learned to swim as a small child. She recalled the way the sun shone through the steamed-up windows then. The memory of her father patiently holding her in the shallow end brought a smile.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maya",
+    "mind": "Maya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the chlorine smell",
+    "mind": "Maya",
+    "relative_to": "the municipal pool",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the municipal pool",
+    "mind": "Maya",
+    "relative_to": "the chlorine smell",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maya",
+    "mind": "Maya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the chlorine smell",
+    "mind": "Maya",
+    "relative_to": "the municipal pool",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the municipal pool",
+    "mind": "Maya",
+    "relative_to": "the chlorine smell",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The memory of her father patiently holding her in the shallow end",
+    "mind": "Maya",
+    "relative_to": "a smile",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a smile",
+    "mind": "Maya",
+    "relative_to": "The memory of her father patiently holding her in the shallow end",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V253",
+  "writer_kind": "K1",
+  "text": "David, a business traveler, handed over his passport. The customs officer’s crisp, almost robotic voice echoed slightly in the sterile space. David instantly thought of the automated voice announcements at the train station he used to frequent as a student. He remembered hurrying to catch the early morning train, often with a half-eaten sandwich.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "The customs officer",
+    "mind": "The customs officer",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The customs officer’s crisp, almost robotic voice",
+    "mind": "David",
+    "relative_to": "the automated voice announcements",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the automated voice announcements",
+    "mind": "David",
+    "relative_to": "The customs officer’s crisp, almost robotic voice",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "The customs officer",
+    "mind": "The customs officer",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The customs officer’s crisp, almost robotic voice",
+    "mind": "David",
+    "relative_to": "the automated voice announcements at the train station",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the automated voice announcements at the train station",
+    "mind": "David",
+    "relative_to": "The customs officer’s crisp, almost robotic voice",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "as a student",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V380",
+  "writer_kind": "K1",
+  "text": "Elena examined a passport from a small island nation. The faded, intricate design of the visa stamp caught her eye. It reminded her of the vibrant patterns on the saris her grandmother used to wear, especially the one with the tiny gold threads woven through the deep blue fabric. She remembered the scratchy feel of it.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faded, intricate design of the visa stamp",
+    "mind": "Elena",
+    "relative_to": "the vibrant patterns on the saris",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the vibrant patterns on the saris",
+    "mind": "Elena",
+    "relative_to": "The faded, intricate design of the visa stamp",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faded, intricate design of the visa stamp",
+    "mind": "Elena",
+    "relative_to": "the vibrant patterns on the saris her grandmother used to wear",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the vibrant patterns on the saris her grandmother used to wear",
+    "mind": "Elena",
+    "relative_to": "The faded, intricate design of the visa stamp",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V225",
+  "writer_kind": "K3",
+  "text": "George, the puppeteer, watched the young apprentice struggle with the marionette's tangled strings. He had seen countless beginners make the same mistake over his fifty years. The jerky, uncoordinated movements brought back memories of his own early fumbling attempts. He knew patience and repetition were the only true teachers for such delicate work.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "George",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless beginners make the same mistake over his fifty years",
+    "mind": "George",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The jerky, uncoordinated movements",
+    "mind": "George",
+    "relative_to": "his own early fumbling attempts",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his own early fumbling attempts",
+    "mind": "George",
+    "relative_to": "The jerky, uncoordinated movements",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "George, the puppeteer",
+    "mind": "George, the puppeteer",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young apprentice",
+    "mind": "the young apprentice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his fifty years",
+    "mind": "George, the puppeteer",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The jerky, uncoordinated movements",
+    "mind": "George, the puppeteer",
+    "relative_to": "his own early fumbling attempts",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "memories of his own early fumbling attempts",
+    "mind": "George, the puppeteer",
+    "relative_to": "The jerky, uncoordinated movements",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V277",
+  "writer_kind": "K1",
+  "text": "Sophie sat in the small theatre, waiting for the show to begin. The air held a faint, sweet smell of polished wood and sawdust. It brought to her thoughts the workbench in her grandfather's garage. She pictured the small birdhouses he used to carve, their unpainted surfaces smooth beneath her fingers. The aroma of the puppets felt warm and familiar.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sophie",
+    "mind": "Sophie",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a faint, sweet smell of polished wood and sawdust",
+    "mind": "Sophie",
+    "relative_to": "the workbench in her grandfather's garage",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the workbench in her grandfather's garage",
+    "mind": "Sophie",
+    "relative_to": "a faint, sweet smell of polished wood and sawdust",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sophie",
+    "mind": "Sophie",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The air held a faint, sweet smell of polished wood and sawdust",
+    "mind": "Sophie",
+    "relative_to": "the workbench in her grandfather's garage",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the workbench in her grandfather's garage",
+    "mind": "Sophie",
+    "relative_to": "The air held a faint, sweet smell of polished wood and sawdust",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "felt warm and familiar",
+    "mind": "Sophie",
+    "relative_to": "The aroma of the puppets",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V150",
+  "writer_kind": "K1",
+  "text": "Finn caught the smell of diesel and damp river mud. It brought to his thoughts the old fishing boat his grandfather owned, long since sold. He remembered the rough wooden deck and the feel of the rope in his hands. That scent always seemed to follow him.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Finn",
+    "mind": "Finn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the smell of diesel and damp river mud",
+    "mind": "Finn",
+    "relative_to": "the old fishing boat",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fishing boat",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "always seemed to follow him",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Finn",
+    "mind": "Finn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the smell of diesel and damp river mud",
+    "mind": "Finn",
+    "relative_to": "the old fishing boat his grandfather owned",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fishing boat his grandfather owned",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always seemed to follow him",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V021",
+  "writer_kind": "K1",
+  "text": "Daniel, a retired carpenter, sat waiting for his turn. The familiar scent of bay rum aftershave filled the small shop. It instantly took him back to his grandfather's shed. He remembered the smell of sawdust and varnish there, and the sound of his grandfather's careful hammering on small wooden joints.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The familiar scent of bay rum aftershave",
+    "mind": "Daniel",
+    "relative_to": "his grandfather's shed",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's shed",
+    "mind": "Daniel",
+    "relative_to": "The familiar scent of bay rum aftershave",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The familiar scent of bay rum aftershave",
+    "mind": "Daniel",
+    "relative_to": "his grandfather's shed",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's shed",
+    "mind": "Daniel",
+    "relative_to": "The familiar scent of bay rum aftershave",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V303",
+  "writer_kind": "K1",
+  "text": "Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Marco",
+    "mind": "Marco",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp smell of old leather and liniment",
+    "mind": "Marco",
+    "relative_to": "his grandfather's small workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's small workshop",
+    "mind": "Marco",
+    "relative_to": "The sharp smell of old leather and liniment",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Marco",
+    "mind": "Marco",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp smell of old leather and liniment",
+    "mind": "Marco",
+    "relative_to": "his grandfather's small workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's small workshop",
+    "mind": "Marco",
+    "relative_to": "The sharp smell of old leather and liniment",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always made Marco feel steady before a sparring session",
+    "mind": "Marco",
+    "relative_to": "That memory",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V305",
+  "writer_kind": "K1",
+  "text": "Eleanor glided through the cool water, her strokes steady. A distant splash from the deep end reached her ears. For a moment, she was not in the busy public pool but in her grandmother's quiet garden. She recalled the gentle plash of the small stone fountain, always a peaceful sound on summer afternoons. It was a place she visited often in her thoughts.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "A distant splash from the deep end",
+    "mind": "Eleanor",
+    "relative_to": "her grandmother's quiet garden",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's quiet garden",
+    "mind": "Eleanor",
+    "relative_to": "A distant splash from the deep end",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "visited often in her thoughts",
+    "mind": "Eleanor",
+    "relative_to": "her grandmother's quiet garden",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "A distant splash from the deep end",
+    "mind": "Eleanor",
+    "relative_to": "her grandmother's quiet garden",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's quiet garden",
+    "mind": "Eleanor",
+    "relative_to": "A distant splash from the deep end",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "often",
+    "mind": "Eleanor",
+    "relative_to": "her thoughts",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ]
+ },
+ {
+  "passage": "V107",
+  "writer_kind": "K1",
+  "text": "Ursula stamped a passport. The crisp, clean smell of new paper reminded her of her old school textbooks. She suddenly thought of the quiet library where she spent hours studying for exams, surrounded by rows of silent, dusty volumes. It felt like a lifetime ago.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ursula",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The crisp, clean smell of new paper",
+    "mind": "Ursula",
+    "relative_to": "her old school textbooks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her old school textbooks",
+    "mind": "Ursula",
+    "relative_to": "The crisp, clean smell of new paper",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ursula",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The crisp, clean smell of new paper",
+    "mind": "Ursula",
+    "relative_to": "her old school textbooks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her old school textbooks",
+    "mind": "Ursula",
+    "relative_to": "The crisp, clean smell of new paper",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "her old school textbooks",
+    "mind": "Ursula",
+    "relative_to": "the quiet library where she spent hours studying for exams",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the quiet library where she spent hours studying for exams",
+    "mind": "Ursula",
+    "relative_to": "her old school textbooks",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V192",
+  "writer_kind": "K1",
+  "text": "Samuel, a graphic designer, waited for his proofs. The sharp, metallic scent of fresh ink filled the air. He inhaled deeply, and a memory of his grandfather's old workshop flooded his thoughts. He pictured the rusted tools on the workbench, the faint smell of oil, and the quiet concentration as his grandfather repaired intricate clock mechanisms.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Samuel",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "his grandfather",
+    "mind": "his grandfather",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp, metallic scent of fresh ink",
+    "mind": "Samuel",
+    "relative_to": "a memory of his grandfather's old workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a memory of his grandfather's old workshop",
+    "mind": "Samuel",
+    "relative_to": "The sharp, metallic scent of fresh ink",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Samuel",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp, metallic scent of fresh ink",
+    "mind": "Samuel",
+    "relative_to": "his grandfather's old workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a memory of his grandfather's old workshop",
+    "mind": "Samuel",
+    "relative_to": "The sharp, metallic scent of fresh ink",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the rusted tools on the workbench",
+    "relative_to": "his grandfather's old workshop",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the faint smell of oil",
+    "relative_to": "his grandfather's old workshop",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the quiet concentration as his grandfather repaired intricate clock mechanisms",
+    "relative_to": "his grandfather's old workshop",
+    "certainty": "clear",
+    "mind": ""
+   }
+  ]
+ },
+ {
+  "passage": "V389",
+  "writer_kind": "K1",
+  "text": "Wendy was oiling the joint of a wooden puppet. The faint smell of linseed oil filled the workshop. It brought her back to her grandmother's attic, where old furniture sat, waiting for restoration. She remembered the dust motes in the sunbeams and the quiet calm of that space. The puppet's arm now moved more freely.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Wendy",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint smell of linseed oil",
+    "mind": "Wendy",
+    "relative_to": "her grandmother's attic",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's attic",
+    "mind": "Wendy",
+    "relative_to": "The faint smell of linseed oil",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Wendy",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint smell of linseed oil",
+    "mind": "Wendy",
+    "relative_to": "her grandmother's attic",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's attic",
+    "mind": "Wendy",
+    "relative_to": "The faint smell of linseed oil",
+    "certainty": "clear"
+   }
+  ]
+ }
+]

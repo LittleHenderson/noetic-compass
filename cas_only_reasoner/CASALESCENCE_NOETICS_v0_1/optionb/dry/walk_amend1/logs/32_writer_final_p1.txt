@@ -1,0 +1,33 @@
+$ python -B tools/ob_write_questions.py --set final --pass p1 --max-calls 60 --pace 0
+{
+ "program": "tools/ob_write_questions.py",
+ "dry_fixture": false,
+ "status": "ALL_WRITTEN",
+ "set": "final",
+ "pass": "p1",
+ "model": "gemini-3.5-flash-lite",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "practice_setting_count": 9,
+ "waves": 1,
+ "batches": {
+  "DONE": 29,
+  "PENDING": 0,
+  "UNREADABLE": 0
+ },
+ "calls_this_run": 29,
+ "call_budget": 60,
+ "stops_after_http_429": 0,
+ "model_names_in_the_replies": [
+  "made-up-writer-reply-name"
+ ],
+ "passages_asked": 115,
+ "passages_by_status": {
+  "OK": 115,
+  "MISSING": 0,
+  "BAD_OBJECT": 0
+ },
+ "what_follows_questions": 345,
+ "plain_fact_questions": 115,
+ "next": "This pass of this set is written."
+}
+[exit code 0]

@@ -1,0 +1,269 @@
+{
+ "schema": "casalescence/label-agreement-v21-seal/1",
+ "is_a_seal": true,
+ "mode": "verdict",
+ "sealed_utc": "2026-10-07T19:33:51.568590+00:00",
+ "writer": {
+  "provider": "gemini",
+  "model_asked_for": "gemini-2.5-flash",
+  "models_that_answered": [
+   "gemini-2.5-flash"
+  ],
+  "jobs_sha256": "b72264e963574e6b58930344ec0baf476b2a5a480e7a5b7532e033188b5c7efb",
+  "briefs_sha256": "877a764f828fc84139e9de402f238674b727d8afd69819ad081b9cac47ccdab0",
+  "state_sha256": "d950db97cf2f18d548086b64c6a55d81caffdcbd25ec8975b13c58e45a705214"
+ },
+ "passages_written": 440,
+ "passages_dropped": [
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word",
+  "forbidden word"
+ ],
+ "passages_kept": 427,
+ "passages_sealed_sha256": "87027edc64980896fbaa0ad1b6010ccc1ea901f5daea46a2362f42ab9c533fdb",
+ "sha256": {
+  "attempt1_program": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb",
+  "canon": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880",
+  "checker": "c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9",
+  "guide": "2b6617c1510270d34f00602a461082a2d4ca90bb89239ec4c60a990402751a29",
+  "instructions": "15941173a754f85ff191b2230cd43d34b29573e153ff285aa17124d2f55156d6",
+  "owner_ruling": "72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c",
+  "part_a_tool": "99c9eaf451b36f7097e2dab4c8e2c041a06a2708c59eee61f0907aed0deac28b",
+  "passages": "87027edc64980896fbaa0ad1b6010ccc1ea901f5daea46a2362f42ab9c533fdb",
+  "plan": "657413f77f182c7310071505e89d01452eb9e62cd97ac0c69d954051218430cd",
+  "scorer": "ba9dd3115d8b14aa8e5afeb4e4b0722957a280623f9a9d03e0dde181b6859412",
+  "seal_tool": "d03e3e483fb342c49ea83452d055f8f31fb3e9bb1ca22d54891c847188a34e63",
+  "team_a_task_message": "4f9aea1164bf0543b3d83c747d7832200fd06cbb0bf1eb217128bb69c8dbd4d1",
+  "team_a_tool": "a7c05ba54aaedbe5f0992308408a5a829e3cf57085c88bbe144f46350f15448d",
+  "team_b_tool": "26bf839438d2891b009e52562effcb76b4f243c4d2a558d509c1ca274094230a",
+  "writer_tool": "1377dc06c9da79bbf0143b41a94535391746030f6441c1d7e4b2b7f8185a4723"
+ },
+ "attempt1_program": {
+  "file": "verdict.py",
+  "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+ },
+ "canon": {
+  "file": "CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+  "sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880"
+ },
+ "checker": {
+  "file": "check_labels_v21.py",
+  "sha256": "c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9"
+ },
+ "guide": {
+  "file": "02_LABELING_GUIDE_v2_1.md",
+  "sha256": "2b6617c1510270d34f00602a461082a2d4ca90bb89239ec4c60a990402751a29"
+ },
+ "instructions": {
+  "file": "LABELER_INSTRUCTIONS.txt",
+  "sha256": "15941173a754f85ff191b2230cd43d34b29573e153ff285aa17124d2f55156d6"
+ },
+ "owner_ruling": {
+  "file": "OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json",
+  "sha256": "72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c"
+ },
+ "part_a_tool": {
+  "file": "build_guide_part_a_v21.py",
+  "sha256": "99c9eaf451b36f7097e2dab4c8e2c041a06a2708c59eee61f0907aed0deac28b"
+ },
+ "passages": {
+  "file": "passages_sealed.json",
+  "sha256": "87027edc64980896fbaa0ad1b6010ccc1ea901f5daea46a2362f42ab9c533fdb"
+ },
+ "plan": {
+  "file": "09_LABEL_AGREEMENT_PLAN_v2_1.md",
+  "sha256": "657413f77f182c7310071505e89d01452eb9e62cd97ac0c69d954051218430cd"
+ },
+ "scorer": {
+  "file": "verdict_v21.py",
+  "sha256": "ba9dd3115d8b14aa8e5afeb4e4b0722957a280623f9a9d03e0dde181b6859412"
+ },
+ "seal_tool": {
+  "file": "seal_v21.py",
+  "sha256": "d03e3e483fb342c49ea83452d055f8f31fb3e9bb1ca22d54891c847188a34e63"
+ },
+ "team_a_task_message": {
+  "file": "TASK_MESSAGE.txt",
+  "sha256": "4f9aea1164bf0543b3d83c747d7832200fd06cbb0bf1eb217128bb69c8dbd4d1"
+ },
+ "team_a_tool": {
+  "file": "team_a_receipt_v21.py",
+  "sha256": "a7c05ba54aaedbe5f0992308408a5a829e3cf57085c88bbe144f46350f15448d"
+ },
+ "team_b_tool": {
+  "file": "label_outside_v21.py",
+  "sha256": "26bf839438d2891b009e52562effcb76b4f243c4d2a558d509c1ca274094230a"
+ },
+ "writer_tool": {
+  "file": "write_passages_v21.py",
+  "sha256": "1377dc06c9da79bbf0143b41a94535391746030f6441c1d7e4b2b7f8185a4723"
+ },
+ "owner_signoff": {
+  "file": "OWNER_SIGNOFF_RECORD.json",
+  "sha256": "cee713eaec901b3c38b2ec584824d7eb9d7c2d69537bb7a66d4ca3c4c3e49542",
+  "owner_pasted_text_verbatim": "SIGNED: label-agreement v2.1, guide 2b6617c15102, plan 657413f77f18, as proposed.",
+  "utc_recorded": "2026-10-07T05:16:21+00:00",
+  "signed_against": {
+   "guide_sha256_first12": "2b6617c15102",
+   "plan_sha256_first12": "657413f77f18"
+  },
+  "numbers_signed": {
+   "pass mark": 0.8,
+   "presence mark": 0.6,
+   "minimum cases": 50,
+   "minimum empty passages": 50
+  },
+  "numbers_changed_by_the_owner": {},
+  "numbers_proposed": {
+   "pass mark": 0.8,
+   "presence mark": 0.6,
+   "minimum cases": 50,
+   "minimum empty passages": 50
+  }
+ },
+ "scorer_constants_compared": {
+  "pass mark": [
+   "BAR_E",
+   0.8
+  ],
+  "presence mark": [
+   "BAR_KAPPA",
+   0.6
+  ],
+  "minimum cases": [
+   "MIN_CASES",
+   50
+  ],
+  "minimum empty passages": [
+   "MIN_ABSENT",
+   50
+  ]
+ },
+ "scorer_fixture": {
+  "command": "-B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\tools\\verdict_v21.py --fixture --fixture-dir C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\label_v21\\fixture",
+  "exit_code": 0,
+  "pass_line": "PASS: every number equals FIXTURE_EXPECTED.json",
+  "stdout_sha256": "1fca4c77aff7bb215aa6282f394c14e3f6acef43045c010401605a2c18a1dfab",
+  "files_sha256": {
+   "FIXTURE_EXPECTED.json": "cf4f3453253f775a329d9bd3fc79ce126ae68d6c939e96a8b491b72ebd70a258",
+   "labels_team_a.json": "9212b1378f3443c93d4af53441465f680f44b1317c66f2149388648cb44cd56c",
+   "labels_team_a.json.tries.jsonl": "f4b18f484da2e7b66516e7fe992a619ab8e4133288ebfc1cfcb4511705a6dcb6",
+   "labels_team_b.json": "4e9ba66d536945b601e25420d1189b0b85adaae6ae52ba1db4618642939c56d0",
+   "labels_team_b.json.tries.jsonl": "456d0e17a8edd0bc56ccfdb55e57f6416aacd8f52aea8bfa4359b90a50a73c45",
+   "passages.json": "e87253398f5d876e10745a7c4fb3ab73e446be45562ae3116b24a9b1a8be3418"
+  }
+ },
+ "part_a_check": {
+  "command": "-B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\tools\\build_guide_part_a_v21.py check C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\02_LABELING_GUIDE_v2_1.md",
+  "exit_code": 0,
+  "printed": "IDENTICAL",
+  "canon_sha256_pinned_in_the_builder": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880"
+ },
+ "team_a_chunks": [
+  {
+   "file": "chunk_01.json",
+   "first": "W001",
+   "last": "W040",
+   "passages": 40
+  },
+  {
+   "file": "chunk_02.json",
+   "first": "W041",
+   "last": "W080",
+   "passages": 40
+  },
+  {
+   "file": "chunk_03.json",
+   "first": "W081",
+   "last": "W120",
+   "passages": 40
+  },
+  {
+   "file": "chunk_04.json",
+   "first": "W121",
+   "last": "W160",
+   "passages": 40
+  },
+  {
+   "file": "chunk_05.json",
+   "first": "W161",
+   "last": "W200",
+   "passages": 40
+  },
+  {
+   "file": "chunk_06.json",
+   "first": "W201",
+   "last": "W240",
+   "passages": 40
+  },
+  {
+   "file": "chunk_07.json",
+   "first": "W241",
+   "last": "W280",
+   "passages": 40
+  },
+  {
+   "file": "chunk_08.json",
+   "first": "W281",
+   "last": "W320",
+   "passages": 40
+  },
+  {
+   "file": "chunk_09.json",
+   "first": "W321",
+   "last": "W360",
+   "passages": 40
+  },
+  {
+   "file": "chunk_10.json",
+   "first": "W361",
+   "last": "W400",
+   "passages": 40
+  },
+  {
+   "file": "chunk_11.json",
+   "first": "W401",
+   "last": "W427",
+   "passages": 27
+  }
+ ],
+ "shuffle_seed": 20261023,
+ "compared_for_exact_repeats": [
+  "passages_sealed.json",
+  "passages_practice.json"
+ ],
+ "hidden_kinds": {
+  "folder": "verdict_HIDDEN_FROM_LABELERS",
+  "file": "passages_kinds.json",
+  "sha256": "84cc3bd13bf06d0b8c4a7a98e005e3b39ee5a2266d6bf69e7edc6f4d550262fd"
+ },
+ "no_label_existed_when_sealed": true,
+ "practice_set": {
+  "file": "PRACTICE_SET.json",
+  "sha256": "fdd25f11d99903127a03bf4d01259f2a60d32cc9a6ee8354252d3ec3f67ee5f1",
+  "guide_measure_and_signoff_unchanged": true,
+  "practice_check_run_by_this_tool": {
+   "command": "-B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\tools\\verdict_v21.py practice --passages label_v21\\practice\\passages_practice.json --labels-a label_v21\\practice\\labels_team_a.json --labels-b label_v21\\practice\\labels_team_b.json --guide C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\02_LABELING_GUIDE_v2_1.md --instructions C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\label_v21\\LABELER_INSTRUCTIONS.txt --receipt-a label_v21\\practice\\labels_team_a.json.receipt.json --receipt-b label_v21\\practice\\labels_team_b.json.receipt.json",
+   "exit_code": 0,
+   "pass_line": "PRACTICE CHECK: PASS",
+   "stdout_sha256": "54f41d2b6845eca90289509a8437673e05a690975fb5c0e5c6aee97d97023b26",
+   "files_sha256": {
+    "labels_a: labels_team_a.json": "501419dfa6932ea22fce617dc6df46a3fd3b4de0066f9ab4c6ce01d226d07a01",
+    "labels_b: labels_team_b.json": "9c4f0db7ae613d5ad3958d0344a45ba97acc7d8d737eab3093cfa0a018c6e403",
+    "receipt_a: labels_team_a.json.receipt.json": "f69b594c4baf5219fe8d2f367b327a950f9456d393492bb0bb8e7e6d7b8c87c9",
+    "receipt_b: labels_team_b.json.receipt.json": "c559fd7a68a5aef5b386d1c9bfebcfc3287cdba6a254fec8a11e0cd78a7f78e7"
+   }
+  },
+  "tool_files_changed_since_practice": {}
+ }
+}

@@ -1,0 +1,4 @@
+Here are my answers (a MADE-UP stray line; the tool must log it and go on)
+Q0004 D
+Q0005 D
+Q0006 E

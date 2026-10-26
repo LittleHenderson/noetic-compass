@@ -1,0 +1,773 @@
+{
+ "plan": "06_VERDICT_PLAN_v1_1.md",
+ "passages_sealed": 30,
+ "passages_analysed": 30,
+ "passages_excluded": [],
+ "entries_dropped_for_bad_quote_or_label": {
+  "team_a": 0,
+  "team_b": 1
+ },
+ "entries_kept": {
+  "team_a": 107,
+  "team_b": 111
+ },
+ "bars": {
+  "strict_agreement_min": 0.8,
+  "kappa_min": 0.6,
+  "min_cases": 50,
+  "min_absent": 50
+ },
+ "valid": true,
+ "per_class": {
+  "^1": {
+   "marked_by_a": 26,
+   "marked_by_b": 26,
+   "marked_by_both": 26,
+   "cases_marked_by_at_least_one": 26,
+   "passages_marked_by_neither": 4,
+   "strict_agreement_count": 26,
+   "strict_agreement_share": 1.0,
+   "strict_agreement_interval95": [
+    0.871271076371412,
+    1.0
+   ],
+   "kappa": 1.0,
+   "kappa_interval95": [
+    1.0,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 1.0,
+    "same_words_only_share": 1.0,
+    "exact_same_words_share": 1.0,
+    "lenient_same_words_share": 1.0
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^2": {
+   "marked_by_a": 5,
+   "marked_by_b": 7,
+   "marked_by_both": 5,
+   "cases_marked_by_at_least_one": 7,
+   "passages_marked_by_neither": 23,
+   "strict_agreement_count": 5,
+   "strict_agreement_share": 0.7142857142857143,
+   "strict_agreement_interval95": [
+    0.3589344495310541,
+    0.9177810767507166
+   ],
+   "kappa": 0.7931034482758622,
+   "kappa_interval95": [
+    0.44444444444444453,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9333333333333333,
+    "same_words_only_share": 0.7142857142857143,
+    "exact_same_words_share": 0.7142857142857143,
+    "lenient_same_words_share": 0.7142857142857143
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^3": {
+   "marked_by_a": 7,
+   "marked_by_b": 6,
+   "marked_by_both": 6,
+   "cases_marked_by_at_least_one": 7,
+   "passages_marked_by_neither": 23,
+   "strict_agreement_count": 6,
+   "strict_agreement_share": 0.8571428571428571,
+   "strict_agreement_interval95": [
+    0.486872167860775,
+    0.9743203759421759
+   ],
+   "kappa": 0.9019607843137255,
+   "kappa_interval95": [
+    0.6341463414634149,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9666666666666667,
+    "same_words_only_share": 0.8571428571428571,
+    "exact_same_words_share": 0.7142857142857143,
+    "lenient_same_words_share": 0.8571428571428571
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^4": {
+   "marked_by_a": 7,
+   "marked_by_b": 8,
+   "marked_by_both": 7,
+   "cases_marked_by_at_least_one": 8,
+   "passages_marked_by_neither": 22,
+   "strict_agreement_count": 6,
+   "strict_agreement_share": 0.75,
+   "strict_agreement_interval95": [
+    0.40927542792725174,
+    0.9285207879020445
+   ],
+   "kappa": 0.9112426035502958,
+   "kappa_interval95": [
+    0.6715328467153286,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9333333333333333,
+    "same_words_only_share": 0.875,
+    "exact_same_words_share": 0.5,
+    "lenient_same_words_share": 0.875
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^5": {
+   "marked_by_a": 11,
+   "marked_by_b": 11,
+   "marked_by_both": 10,
+   "cases_marked_by_at_least_one": 12,
+   "passages_marked_by_neither": 18,
+   "strict_agreement_count": 7,
+   "strict_agreement_share": 0.5833333333333334,
+   "strict_agreement_interval95": [
+    0.31951131084242423,
+    0.8067396875653928
+   ],
+   "kappa": 0.8564593301435407,
+   "kappa_interval95": [
+    0.6268656716417911,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.8333333333333334,
+    "same_words_only_share": 0.5833333333333334,
+    "exact_same_words_share": 0.5,
+    "lenient_same_words_share": 0.5833333333333334
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^6": {
+   "marked_by_a": 1,
+   "marked_by_b": 4,
+   "marked_by_both": 1,
+   "cases_marked_by_at_least_one": 4,
+   "passages_marked_by_neither": 26,
+   "strict_agreement_count": 1,
+   "strict_agreement_share": 0.25,
+   "strict_agreement_interval95": [
+    0.04558726029536886,
+    0.6993581599030918
+   ],
+   "kappa": 0.36619718309859134,
+   "kappa_interval95": [
+    0.0,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9,
+    "same_words_only_share": 0.25,
+    "exact_same_words_share": 0.25,
+    "lenient_same_words_share": 0.25
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^7": {
+   "marked_by_a": 6,
+   "marked_by_b": 5,
+   "marked_by_both": 5,
+   "cases_marked_by_at_least_one": 6,
+   "passages_marked_by_neither": 24,
+   "strict_agreement_count": 2,
+   "strict_agreement_share": 0.3333333333333333,
+   "strict_agreement_interval95": [
+    0.09677141021353453,
+    0.7000066870052566
+   ],
+   "kappa": 0.8888888888888888,
+   "kappa_interval95": [
+    0.5945945945945945,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.8666666666666667,
+    "same_words_only_share": 0.8333333333333334,
+    "exact_same_words_share": 0.8333333333333334,
+    "lenient_same_words_share": 0.8333333333333334
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^8": {
+   "marked_by_a": 5,
+   "marked_by_b": 6,
+   "marked_by_both": 5,
+   "cases_marked_by_at_least_one": 6,
+   "passages_marked_by_neither": 24,
+   "strict_agreement_count": 5,
+   "strict_agreement_share": 0.8333333333333334,
+   "strict_agreement_interval95": [
+    0.4364971749742326,
+    0.969946630588185
+   ],
+   "kappa": 0.8888888888888888,
+   "kappa_interval95": [
+    0.5945945945945945,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9666666666666667,
+    "same_words_only_share": 0.8333333333333334,
+    "exact_same_words_share": 0.6666666666666666,
+    "lenient_same_words_share": 0.8333333333333334
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^9": {
+   "marked_by_a": 5,
+   "marked_by_b": 6,
+   "marked_by_both": 5,
+   "cases_marked_by_at_least_one": 6,
+   "passages_marked_by_neither": 24,
+   "strict_agreement_count": 5,
+   "strict_agreement_share": 0.8333333333333334,
+   "strict_agreement_interval95": [
+    0.4364971749742326,
+    0.969946630588185
+   ],
+   "kappa": 0.8888888888888888,
+   "kappa_interval95": [
+    0.5945945945945945,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9666666666666667,
+    "same_words_only_share": 0.8333333333333334,
+    "exact_same_words_share": 0.8333333333333334,
+    "lenient_same_words_share": 0.8333333333333334
+   },
+   "outcome": "NOT_ENOUGH_CASES"
+  },
+  "^9 reached by reasoning": {
+   "marked_by_a": 1,
+   "marked_by_b": 2,
+   "marked_by_both": 1,
+   "cases_marked_by_at_least_one": 2,
+   "passages_marked_by_neither": 28,
+   "strict_agreement_count": 1,
+   "strict_agreement_share": 0.5,
+   "strict_agreement_interval95": [
+    0.09453120463920084,
+    0.9054687953607992
+   ],
+   "kappa": 0.6511627906976744,
+   "kappa_interval95": [
+    null,
+    null
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9666666666666667,
+    "same_words_only_share": 0.5,
+    "exact_same_words_share": 0.0,
+    "lenient_same_words_share": 0.5
+   },
+   "outcome": "REPORTED_ONLY_NO_BAR"
+  },
+  "uncertain ^8": {
+   "marked_by_a": 7,
+   "marked_by_b": 5,
+   "marked_by_both": 5,
+   "cases_marked_by_at_least_one": 7,
+   "passages_marked_by_neither": 23,
+   "strict_agreement_count": 3,
+   "strict_agreement_share": 0.42857142857142855,
+   "strict_agreement_interval95": [
+    0.15821985399244537,
+    0.7495416372469643
+   ],
+   "kappa": 0.7931034482758622,
+   "kappa_interval95": [
+    0.44444444444444453,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.8666666666666667,
+    "same_words_only_share": 0.7142857142857143,
+    "exact_same_words_share": 0.42857142857142855,
+    "lenient_same_words_share": 0.7142857142857143
+   },
+   "outcome": "REPORTED_ONLY_NO_BAR"
+  },
+  "uncertain ^9": {
+   "marked_by_a": 7,
+   "marked_by_b": 5,
+   "marked_by_both": 5,
+   "cases_marked_by_at_least_one": 7,
+   "passages_marked_by_neither": 23,
+   "strict_agreement_count": 3,
+   "strict_agreement_share": 0.42857142857142855,
+   "strict_agreement_interval95": [
+    0.15821985399244537,
+    0.7495416372469643
+   ],
+   "kappa": 0.7931034482758622,
+   "kappa_interval95": [
+    0.44444444444444453,
+    1.0
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.8666666666666667,
+    "same_words_only_share": 0.42857142857142855,
+    "exact_same_words_share": 0.2857142857142857,
+    "lenient_same_words_share": 0.5714285714285714
+   },
+   "outcome": "REPORTED_ONLY_NO_BAR"
+  }
+ },
+ "confusions_same_words_different_noetic": {
+  "^5 vs ^7": 3,
+  "^1 vs ^3": 1
+ },
+ "none_of_these": {
+  "team_a": 4,
+  "team_b": 4,
+  "agree": 30
+ },
+ "descriptive_by_writer_kind": {
+  "K1": {
+   "^1 both": 7,
+   "^2 neither": 7,
+   "^3 neither": 7,
+   "^4 neither": 6,
+   "^4 one": 1,
+   "^5 neither": 6,
+   "^5 one": 1,
+   "^6 neither": 6,
+   "^6 one": 1,
+   "^7 neither": 7,
+   "^8 both": 5,
+   "^8 neither": 1,
+   "^8 one": 1,
+   "^9 both": 5,
+   "^9 neither": 1,
+   "^9 one": 1
+  },
+  "K2": {
+   "^1 both": 7,
+   "^2 both": 5,
+   "^2 neither": 1,
+   "^2 one": 1,
+   "^3 both": 6,
+   "^3 one": 1,
+   "^4 both": 7,
+   "^5 neither": 7,
+   "^6 neither": 7,
+   "^7 neither": 7,
+   "^8 neither": 7,
+   "^9 neither": 7
+  },
+  "K3": {
+   "^1 both": 7,
+   "^2 neither": 7,
+   "^3 neither": 7,
+   "^4 neither": 7,
+   "^5 both": 5,
+   "^5 neither": 1,
+   "^5 one": 1,
+   "^6 both": 1,
+   "^6 neither": 4,
+   "^6 one": 2,
+   "^7 neither": 6,
+   "^7 one": 1,
+   "^8 neither": 7,
+   "^9 neither": 7
+  },
+  "K4": {
+   "^1 both": 5,
+   "^2 neither": 4,
+   "^2 one": 1,
+   "^3 neither": 5,
+   "^4 neither": 5,
+   "^5 both": 5,
+   "^6 neither": 5,
+   "^7 both": 5,
+   "^8 neither": 5,
+   "^9 neither": 5
+  },
+  "K5": {
+   "^1 neither": 4,
+   "^2 neither": 4,
+   "^3 neither": 4,
+   "^4 neither": 4,
+   "^5 neither": 4,
+   "^6 neither": 4,
+   "^7 neither": 4,
+   "^8 neither": 4,
+   "^9 neither": 4
+  }
+ },
+ "disagreements": [
+  {
+   "passage": "Q14",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "to end the conversation"
+   ]
+  },
+  {
+   "passage": "Q29",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "anticipating his usual cup of coffee"
+   ]
+  },
+  {
+   "passage": "Q18",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [
+    "the small yappy terrier"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "Q10",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "barely registered the noise",
+     "Clara",
+     "The loud bang of a metal tray dropping in the next room"
+    ]
+   ],
+   "team_b": [
+    [
+     "barely registered",
+     "Clara",
+     "the noise"
+    ]
+   ]
+  },
+  {
+   "passage": "Q13",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "gripped so tightly, a surprising strength"
+   ]
+  },
+  {
+   "passage": "Q03",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [
+    "knew the shape of a coming squall"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "Q04",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Her fingers simply knew the moment",
+     "Sarah",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Every weekday for fifteen years, she had heard that recording signal the library's closing time",
+     "Sarah",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "Q09",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his childhood village"
+   ]
+  },
+  {
+   "passage": "Q11",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a delicate balance, one she understood deeply",
+     "Sarah",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Years of early mornings",
+     "Sarah",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "Q28",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "This routine had been ingrained",
+     "Maria",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "years of weekly business trips",
+     "Maria",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "Q01",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "rusty",
+    "strong",
+    "its chain always needing a drop of oil"
+   ]
+  },
+  {
+   "passage": "Q15",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the customer's frustration",
+    "the actual account details"
+   ]
+  },
+  {
+   "passage": "Q23",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the edges"
+   ]
+  },
+  {
+   "passage": "Q04",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Every weekday for fifteen years",
+     "Sarah",
+     "that recording"
+    ]
+   ],
+   "team_b": [
+    [
+     "Every weekday for fifteen years",
+     "Sarah",
+     "that recording signal the library's closing time"
+    ]
+   ]
+  },
+  {
+   "passage": "Q11",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "Years of early mornings"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "Q28",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "years of weekly business trips",
+     "Maria",
+     "business trips"
+    ]
+   ],
+   "team_b": [
+    [
+     "years of weekly business trips",
+     "Maria",
+     "This routine"
+    ]
+   ]
+  },
+  {
+   "passage": "Q29",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "so many identical turnarounds",
+     "Tom",
+     "turnarounds"
+    ]
+   ],
+   "team_b": [
+    [
+     "so many identical turnarounds",
+     "Tom",
+     "the precise moment for a short break"
+    ]
+   ]
+  },
+  {
+   "passage": "Q13",
+   "class": "^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The tinny, distant sound of a baby crying through the customer's phone line"
+   ]
+  },
+  {
+   "passage": "Q13",
+   "class": "^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "her own nephew, barely a year old, reaching for her finger last Christmas"
+   ]
+  },
+  {
+   "passage": "Q23",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the slow wear of countless firings, a gradual stress across years",
+    "material fatigue, not a recent operational error"
+   ]
+  },
+  {
+   "passage": "Q03",
+   "class": "uncertain ^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "its low, dark belly and the way the gulls were flying",
+     "Robert",
+     "a coming squall"
+    ]
+   ],
+   "team_b": [
+    [
+     "the shape of a coming squall from its low, dark belly and the way the gulls were flying",
+     "Robert",
+     "a sudden storm years ago that nearly took his boat"
+    ]
+   ]
+  },
+  {
+   "passage": "Q13",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "The tinny, distant sound of a baby crying through the customer's phone line"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "Q21",
+   "class": "uncertain ^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "A faint scent of old leather and damp wool",
+     "Martha",
+     "the worn brown satchel"
+    ]
+   ],
+   "team_b": [
+    [
+     "A faint scent of old leather and damp wool drifted from the seat in front",
+     "Martha",
+     "the worn brown satchel her father carried each morning"
+    ]
+   ]
+  },
+  {
+   "passage": "Q23",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "the edges were too smooth"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "Q03",
+   "class": "uncertain ^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a coming squall",
+     "Robert",
+     "its low, dark belly and the way the gulls were flying"
+    ]
+   ],
+   "team_b": [
+    [
+     "a sudden storm years ago that nearly took his boat",
+     "Robert",
+     "the shape of a coming squall from its low, dark belly and the way the gulls were flying"
+    ]
+   ]
+  },
+  {
+   "passage": "Q13",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "her own nephew"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "Q21",
+   "class": "uncertain ^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the worn brown satchel",
+     "Martha",
+     "A faint scent of old leather and damp wool"
+    ]
+   ],
+   "team_b": [
+    [
+     "the worn brown satchel her father carried each morning",
+     "Martha",
+     "A faint scent of old leather and damp wool drifted from the seat in front"
+    ]
+   ]
+  },
+  {
+   "passage": "Q23",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "the slow wear of countless firings"
+   ],
+   "team_b": []
+  }
+ ]
+}

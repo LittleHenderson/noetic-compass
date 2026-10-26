@@ -1,0 +1,62 @@
+{
+ "schema": "casalescence/optionb/exclusions/v1",
+ "made_by": {
+  "program": "tools/ob_eligibility.py",
+  "sha256": "73455eef7ce2a7157aad87e42b33a8610b551b0eb4aae7e56feb19aa9db0d104",
+  "utc": "2026-10-05T16:19:36Z"
+ },
+ "inputs": [
+  {
+   "path": "verdict/labels_team_a.json",
+   "sha256": "25c80ddacf3f5fa8c934cbc920ed02a3b3b1f67e9ddaf446cdfd149be97948bc"
+  },
+  {
+   "path": "verdict/labels_team_b.json",
+   "sha256": "1df3d8aea68b3037176184cc077a8ba07856ec94bd4b5631806a87c012e234cc"
+  },
+  {
+   "path": "verdict/passages_kinds_HIDDEN_FROM_LABELERS.json",
+   "sha256": "aa3cfc8cf363b2e9273abbbfe0c1b9d1ed94f982ae42ee0bc7290f87d12ef434"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "design_v2/optionB_final.json",
+   "sha256": "c1fc64b89f7fbd3aadab77597fa2b8c6970342c7fa899568afabe32c47e3b7a2"
+  }
+ ],
+ "count": 3,
+ "by_kind": {
+  "K1": 2,
+  "K4": 1
+ },
+ "passages": [
+  {
+   "id": "V006",
+   "kind": "K1",
+   "reasons": [
+    "A:UNCERTAIN_8_OR_9"
+   ]
+  },
+  {
+   "id": "V014",
+   "kind": "K4",
+   "reasons": [
+    "B:REACHED_BY_REASONING"
+   ]
+  },
+  {
+   "id": "V021",
+   "kind": "K1",
+   "reasons": [
+    "A:OTHER_CANDIDATE_REASONING"
+   ]
+  }
+ ]
+}

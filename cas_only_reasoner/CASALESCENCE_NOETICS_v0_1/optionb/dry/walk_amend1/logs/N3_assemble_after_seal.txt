@@ -1,0 +1,8 @@
+$ python -B tools/ob_assemble.py 
+{
+ "program": "tools/ob_assemble.py",
+ "status": "STOP",
+ "code": "SET_IS_SEALED",
+ "reason": "Seal step 5_PROMPT_PARTS_AND_REMOVAL_LOG exists. These files are sealed and are not written again."
+}
+[exit code 2]

@@ -1,0 +1,143 @@
+{
+ "schema": "casalescence/optionb/writer_state/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py",
+  "sha256": "da5dae95317e807e425b61a18b703646031bfc7deff4db6e5091d13bb6506fda",
+  "utc": "2026-10-05T16:21:55Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "55754fd5d66082cba937c8360f5b1643f6fc65a947e7742aa371a65fb9ea41ca"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/questions/writer_calls_practice_p1.jsonl",
+   "sha256": "a1359fb278cf704178f8fb4c57e5614c54b4df38af03602f558c9f7523a4d6ad"
+  },
+  {
+   "path": "optionb/select/selection_practice.json",
+   "sha256": "8180dd0347dfe38ffe1a66cbb30998f4ed8b5affe92b3c367809aa68d15c039c"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "pass": "p1",
+ "model": "gemini-3.5-flash-lite",
+ "seed": 20261005,
+ "waves": [
+  {
+   "wave": 0,
+   "settings": [
+    "made-up setting 18",
+    "made-up setting 35",
+    "made-up setting 19",
+    "made-up setting 26",
+    "made-up setting 10",
+    "made-up setting 07",
+    "made-up setting 36",
+    "made-up setting 34"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V131",
+      "V123",
+      "V136",
+      "V134"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "V139",
+      "V126",
+      "V142",
+      "V127"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 2,
+     "passage_ids": [
+      "V128",
+      "V141",
+      "V144",
+      "V140"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 3,
+     "passage_ids": [
+      "V132",
+      "V135",
+      "V122",
+      "V121"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 4,
+     "passage_ids": [
+      "V137",
+      "V143",
+      "V124",
+      "V125"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 5,
+     "passage_ids": [
+      "V133",
+      "V130",
+      "V138",
+      "V129"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "wave": 1,
+   "settings": [
+    "made-up setting 02"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V118",
+      "V120",
+      "V119"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [
+  "2026-10-05T16:20:19Z"
+ ],
+ "complete": true
+}

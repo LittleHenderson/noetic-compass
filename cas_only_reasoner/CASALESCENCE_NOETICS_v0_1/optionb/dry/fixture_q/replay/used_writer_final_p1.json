@@ -1,0 +1,53 @@
+[
+ {
+  "http_status": 200,
+  "content_json": [
+   {
+    "passage": "V903",
+    "what_follows": [
+     {
+      "form": "LONG_BREAK",
+      "question": "Oksana takes a desk job for two years and never weighs flour. Going only by the passage, which of these has most likely faded when she comes back?",
+      "right": "stopping the scoop without a glance",
+      "wrong": [
+       "tying her apron at the bench",
+       "calling out for the trays",
+       "hearing the radio on the shelf",
+       "finding her bench before dawn",
+       "reading numbers on the scale"
+      ],
+      "anchors": [
+       "Every weekday for eleven years",
+       "her hands stopped the scoop"
+      ]
+     },
+     {
+      "form": "NEW_STARTER",
+      "question": "A new baker takes Oksana's place on a first day. Going only by the passage, which of these would most likely be missing?",
+      "right": "the scoop stopping without a glance",
+      "wrong": [
+       "a radio playing on the shelf",
+       "an apron tied before the work",
+       "a call for the baking trays",
+       "a bench standing by the wall",
+       "a scale sitting on the bench"
+      ],
+      "anchors": [
+       "Every weekday for eleven years"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where was the new radio?",
+     "right": "on the shelf",
+     "wrong": [
+      "on the bench",
+      "beside the scale",
+      "in the tray rack"
+     ]
+    }
+   }
+  ],
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY"
+ }
+]

@@ -1,0 +1,254 @@
+{
+ "passages": 30,
+ "label_files": [
+  "practice_round2/labels_claude.json",
+  "practice_round2/labels_deepseek.json"
+ ],
+ "per_noetic": {
+  "^1": {
+   "marked_by_first": 26,
+   "marked_by_second": 26,
+   "marked_by_both": 26,
+   "presence_agreement_count": 30,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 26,
+   "same_label_and_same_words_count": 30,
+   "same_label_and_same_words_share": 1.0
+  },
+  "^2": {
+   "marked_by_first": 8,
+   "marked_by_second": 8,
+   "marked_by_both": 8,
+   "presence_agreement_count": 30,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 7,
+   "same_label_and_same_words_count": 29,
+   "same_label_and_same_words_share": 0.9666666666666667
+  },
+  "^3": {
+   "marked_by_first": 7,
+   "marked_by_second": 7,
+   "marked_by_both": 7,
+   "presence_agreement_count": 30,
+   "presence_agreement_share": 1.0,
+   "presence_kappa": 1.0,
+   "same_words_when_both_marked": 7,
+   "same_label_and_same_words_count": 30,
+   "same_label_and_same_words_share": 1.0
+  },
+  "^4": {
+   "marked_by_first": 7,
+   "marked_by_second": 8,
+   "marked_by_both": 7,
+   "presence_agreement_count": 29,
+   "presence_agreement_share": 0.9666666666666667,
+   "presence_kappa": 0.9112426035502958,
+   "same_words_when_both_marked": 7,
+   "same_label_and_same_words_count": 29,
+   "same_label_and_same_words_share": 0.9666666666666667
+  },
+  "^5": {
+   "marked_by_first": 11,
+   "marked_by_second": 12,
+   "marked_by_both": 11,
+   "presence_agreement_count": 29,
+   "presence_agreement_share": 0.9666666666666667,
+   "presence_kappa": 0.9295774647887324,
+   "same_words_when_both_marked": 11,
+   "same_label_and_same_words_count": 29,
+   "same_label_and_same_words_share": 0.9666666666666667
+  },
+  "^6": {
+   "marked_by_first": 2,
+   "marked_by_second": 3,
+   "marked_by_both": 2,
+   "presence_agreement_count": 29,
+   "presence_agreement_share": 0.9666666666666667,
+   "presence_kappa": 0.7826086956521738,
+   "same_words_when_both_marked": 2,
+   "same_label_and_same_words_count": 29,
+   "same_label_and_same_words_share": 0.9666666666666667
+  },
+  "^7": {
+   "marked_by_first": 5,
+   "marked_by_second": 6,
+   "marked_by_both": 5,
+   "presence_agreement_count": 29,
+   "presence_agreement_share": 0.9666666666666667,
+   "presence_kappa": 0.8888888888888888,
+   "same_words_when_both_marked": 5,
+   "same_label_and_same_words_count": 29,
+   "same_label_and_same_words_share": 0.9666666666666667
+  },
+  "^8": {
+   "marked_by_first": 7,
+   "marked_by_second": 12,
+   "marked_by_both": 7,
+   "presence_agreement_count": 25,
+   "presence_agreement_share": 0.8333333333333334,
+   "presence_kappa": 0.6268656716417911,
+   "same_words_when_both_marked": 7,
+   "same_label_and_same_words_count": 25,
+   "same_label_and_same_words_share": 0.8333333333333334
+  },
+  "^9": {
+   "marked_by_first": 7,
+   "marked_by_second": 11,
+   "marked_by_both": 7,
+   "presence_agreement_count": 26,
+   "presence_agreement_share": 0.8666666666666667,
+   "presence_kappa": 0.689119170984456,
+   "same_words_when_both_marked": 7,
+   "same_label_and_same_words_count": 26,
+   "same_label_and_same_words_share": 0.8666666666666667
+  }
+ },
+ "quote_problems": {
+  "practice_round2/labels_claude.json": 0,
+  "practice_round2/labels_deepseek.json": 0
+ },
+ "confusions": {
+  "^5 vs ^7": 2,
+  "^5 vs ^8": 1,
+  "^2 vs ^4": 1,
+  "^1 vs ^3": 1
+ },
+ "disagreements": [
+  {
+   "passage": "Q14",
+   "noetic": "^2",
+   "kind": "different words",
+   "first": [
+    "a quiet elderly woman asking simple questions"
+   ],
+   "second": [
+    "to end the conversation"
+   ]
+  },
+  {
+   "passage": "Q13",
+   "noetic": "^4",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "a surprising strength"
+   ]
+  },
+  {
+   "passage": "Q25",
+   "noetic": "^5",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "The scent used to cling to her aprons and the soft blankets on her sofa"
+   ]
+  },
+  {
+   "passage": "Q23",
+   "noetic": "^6",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the slow wear of countless firings",
+    "a gradual stress across years"
+   ]
+  },
+  {
+   "passage": "Q23",
+   "noetic": "^7",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "countless firings"
+   ]
+  },
+  {
+   "passage": "Q03",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the shape of a coming squall"
+   ]
+  },
+  {
+   "passage": "Q10",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "The loud bang of a metal tray dropping in the next room"
+   ]
+  },
+  {
+   "passage": "Q11",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the yeast was a little sluggish"
+   ]
+  },
+  {
+   "passage": "Q19",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the new patch of loose gravel near the old oak tree"
+   ]
+  },
+  {
+   "passage": "Q27",
+   "noetic": "^8",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "a sharp, intermittent knock"
+   ]
+  },
+  {
+   "passage": "Q03",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "a sudden storm years ago that nearly took his boat"
+   ]
+  },
+  {
+   "passage": "Q11",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "the humidity in the air was off"
+   ]
+  },
+  {
+   "passage": "Q19",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "how the bus would handle the rough surface"
+   ]
+  },
+  {
+   "passage": "Q27",
+   "noetic": "^9",
+   "kind": "one team only",
+   "first": [],
+   "second": [
+    "a shoe, or perhaps a stray toy, had worked its way free"
+   ]
+  }
+ ],
+ "none_of_these": {
+  "first": 4,
+  "second": 4,
+  "agree": 30
+ }
+}

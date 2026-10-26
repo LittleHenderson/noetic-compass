@@ -1,0 +1,101 @@
+{
+ "schema": "casalescence/optionb/writer_state/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "da5dae95317e807e425b61a18b703646031bfc7deff4db6e5091d13bb6506fda",
+  "utc": "2026-10-05T16:27:19Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/elig/eligibility.json",
+   "sha256": "ef7bb7d8555ec91f90ff7f2262c4bb371ff0d6d5a0107bfc45bf767e4c338bf8"
+  },
+  {
+   "path": "optionb/dry/dev_package/work/questions/writer_calls_practice_p1.jsonl",
+   "sha256": "6531153db55432570972dd89cdb19e84bb4be8777d6abd9446296e337d399d83"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "pass": "p1",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "seed": 20261005,
+ "waves": [
+  {
+   "wave": 0,
+   "settings": [
+    "dev practice yard 1",
+    "dev practice yard 2",
+    "dev practice yard 3",
+    "dev practice yard 4",
+    "dev practice yard 5",
+    "dev practice yard 6",
+    "dev practice yard 7",
+    "dev practice yard 8"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "D006",
+      "D003",
+      "D007",
+      "D008"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "D001",
+      "D002",
+      "D004",
+      "D010"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 2,
+     "passage_ids": [
+      "D009",
+      "D005"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "wave": 1,
+   "settings": [
+    "dev reserve yard 1"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "D011",
+      "D012"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "complete": true
+}

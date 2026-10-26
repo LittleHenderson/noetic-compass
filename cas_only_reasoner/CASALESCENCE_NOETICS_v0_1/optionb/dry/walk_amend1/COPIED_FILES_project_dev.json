@@ -1,0 +1,198 @@
+{
+ "note": "MADE-UP DATA WALK, NOT A RESULT. Byte copies of program files and rule texts only.",
+ "copy": "project_dev",
+ "files": [
+  {
+   "path": "tools/ob_assemble.py",
+   "bytes": 53541,
+   "sha256": "6353a3f75b5d2154826707210fc6b5ee457d7f9d0d32516a78284abcacd53ab0",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_check_questions.py",
+   "bytes": 26166,
+   "sha256": "86b9f430a0b62b7dbd4e3dd88b3bbeed119acf38ca84a45d3f9dd1b569bd3366",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_check_support.py",
+   "bytes": 40379,
+   "sha256": "246032c116a7abdcc1f43b512fa5300d88e5ec924868b7a92cc63eea4254b9e1",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_eligibility.py",
+   "bytes": 39877,
+   "sha256": "73455eef7ce2a7157aad87e42b33a8610b551b0eb4aae7e56feb19aa9db0d104",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_role_notes.py",
+   "bytes": 35437,
+   "sha256": "c6212ec967f8aebf0430959f2f0c160edc12a6f42671fd3649740fc5a785d386",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_screen_notes.py",
+   "bytes": 32691,
+   "sha256": "69aa01ab4ac4ad59fe990c2471b597ad595fe5f047f57f3cb086854da52a8bd8",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_seal.py",
+   "bytes": 86208,
+   "sha256": "1fcd8091a4d4f4177cdde900f9279787db1176be5eff08a642f37bd3a6127fad",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_select.py",
+   "bytes": 34405,
+   "sha256": "3ad936fbac1113e5a872f081c7b4a96a3f7c65fdfa555b076a0d85bb116ae355",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_solve_blind.py",
+   "bytes": 43761,
+   "sha256": "a80b78c64461d61f6acd1b0c52e732af522c798f40e13297fcf98eb2fe8d93da",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_write_ordinary_notes.py",
+   "bytes": 40166,
+   "sha256": "fe4ce3554fccd4e5dd5a90b0b32c5f772af4f4a608730262bbdaeddc81f1e2c3",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/ob_write_questions.py",
+   "bytes": 35558,
+   "sha256": "da5dae95317e807e425b61a18b703646031bfc7deff4db6e5091d13bb6506fda",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/verdict.py",
+   "bytes": 13018,
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "bytes": 7968,
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "tools/scorer_v0_1.py",
+   "bytes": 3030,
+   "sha256": "8fe3a88512b08cadd3190602345ea81d113f2062b230c20b3dd66d29c392181e",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "08_OPTION_B_PLAN_v1_0.md",
+   "bytes": 136356,
+   "sha256": "91617f388285bbc04411d0cab0daf87898e3efbc63950e8705a8fcdaec740a43",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "bytes": 19265,
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "03_SCORER_RULES_v0_1.md",
+   "bytes": 4375,
+   "sha256": "d611de5fa2b8e9d133f9ba28f3dadf783de6ffc159a1c9c451d2c5a1f40ef3d1",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "scorer_examples_v0_1.json",
+   "bytes": 4527,
+   "sha256": "f1b40f166dd85303f751d3785c7d2a85de293be0fad24ff353fef70611a58aba",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "design_v2/optionB_reviews.json",
+   "bytes": 43218,
+   "sha256": "06c9d2884b1510ad7f65946ae8a69d88a1d16d9fe3f8f51fa7898d677ba6ffe5",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "OWNER_DIRECTION_POINTING_AND_OPTION_B_20261005.json",
+   "bytes": 4405,
+   "sha256": "689f4b5622b0f28d60e0146e3b2e41d68c40f9eec7ddf42c06719c42d4f692fc",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "DIRECTIVE_R2.md",
+   "bytes": 14760,
+   "sha256": "eb667f2549a89a1eda7fc5955b14395915c69023e093f43580c26243f558198b",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/FILE_FORMATS.md",
+   "bytes": 114158,
+   "sha256": "ab1f39507ce46b765e13798d1959fa252004947c02342e81ac3209005b695799",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "bytes": 83805,
+   "sha256": "980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/job/runner_b1.py",
+   "bytes": 71179,
+   "sha256": "c50631e47b4cbda3ff7d2b7fe916ced0a1bc48cb5e3a4b6b58a1b007bf556ff2",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/job/scorer_v0_1_1.py",
+   "bytes": 6173,
+   "sha256": "62222d04d714a21b20e88997684cb90521d684c1ee085cc7781883f71591a867",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/job/gate_b1.py",
+   "bytes": 35951,
+   "sha256": "82605a5a38455b11e7765f06159530faa6165d5f8ec109bfcd0b31ae2a97133f",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/job/analysis_b1.py",
+   "bytes": 69933,
+   "sha256": "58348eff5528cda1fa0af7b3588f787d559e8d3e9da4de2a1b5ae2b15973b411",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/job/scorer_examples_v0_1_1.json",
+   "bytes": 6559,
+   "sha256": "11c2eecf7edc5c17d2432ffecb835666c526a907eab709c67e761985d8de3583",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/dry/build_dev_package.py",
+   "bytes": 47620,
+   "sha256": "519634f7620c5aa75e7f466d66a929767af0d1aba5448aa9e5e68db8ee009db7",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/controller_b1_draft/worker_v02.py",
+   "bytes": 56033,
+   "sha256": "26eac561681c87fb57b7c43788530a7e12847246d056f4fb9fb3f176751c12d1",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/controller_b1_draft/build_source_zip_b1.py",
+   "bytes": 17385,
+   "sha256": "7b1a72b49e2ea898e11e453912180c1891267e9b3f35061c307528e7d09dcd32",
+   "copy_is_byte_identical": true
+  },
+  {
+   "path": "optionb/controller_b1_draft/build_contract_b1.py",
+   "bytes": 19078,
+   "sha256": "f17856876c07ae4d85939dbf80d083ac79072bb9a588e6db0d0c00d22b0eaea7",
+   "copy_is_byte_identical": true
+  }
+ ]
+}

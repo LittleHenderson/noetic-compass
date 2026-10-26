@@ -1,0 +1,32 @@
+$ python -B tools/ob_solve_blind.py deepseek --set practice --max-calls 0
+{
+ "program": "tools/ob_solve_blind.py",
+ "dry_fixture": false,
+ "step": "deepseek",
+ "status": "STOPPED_CALL_BUDGET",
+ "set": "practice",
+ "seal": "checked: 2 seal lines, all sealed files unchanged",
+ "candidates": 94,
+ "items": 188,
+ "items_answered": 0,
+ "items_readable": 0,
+ "items_open": 188,
+ "last_http_status_of_open_items_that_were_tried": {},
+ "calls_this_run": 0,
+ "call_budget": 0,
+ "tokens_this_run_REAL": {
+  "prompt_tokens": 0,
+  "completion_tokens": 0
+ },
+ "deepseek_tokens_in_the_four_call_logs": {
+  "input": 0,
+  "output": 0
+ },
+ "deepseek_token_limits": {
+  "input": 2430240,
+  "output": 1156520
+ },
+ "model_names_in_the_replies": [],
+ "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+}
+[exit code 0]

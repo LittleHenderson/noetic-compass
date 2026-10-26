@@ -1,0 +1,1901 @@
+SHEET final-no_passage-02. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0638 ===
+Question: Jossis spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. walking in through the door
+B. opening the net loft before dawn
+C. knowing where the rack stands
+D. seeing the tongs beside it
+E. finding the counter by the door
+F. dusting the rack before anything else
+=== END G0638 ===
+
+=== ITEM G0639 ===
+Question: Ansol spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the ledger before anything else
+B. finding the stove by the door
+C. knowing where the ledger stands
+D. walking in through the door
+E. seeing the straw beside it
+F. opening the bell tower before dawn
+=== END G0639 ===
+
+=== ITEM G0640 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilset leave to someone else?
+A. working with the birch brush
+B. locking up the bell tower
+C. working on the bilge pump
+D. carrying the oilcan outside
+E. counting every straw there
+F. lighting the big lamp
+=== END G0640 ===
+
+=== ITEM G0641 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesis leave to someone else?
+A. working on the bilge pump
+B. carrying the globe outside
+C. counting every pallets there
+D. lighting the big lamp
+E. locking up the dye house
+F. working with the wicker ladle
+=== END G0641 ===
+
+=== ITEM G0642 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Bramis leave to someone else?
+A. lighting the big lamp
+B. counting every tape there
+C. carrying the lantern outside
+D. locking up the nail forge
+E. working on the bilge pump
+F. working with the fine saw
+=== END G0642 ===
+
+=== ITEM G0643 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Eddis do first?
+A. hanging the barley on a hook
+B. reaching for the steel brush again
+C. leaving the door wide open
+D. moving the bucket to the yard
+E. reaching for the bone brush again
+F. sweeping the shed floor twice
+=== END G0643 ===
+
+=== ITEM G0644 ===
+Question: Fennol spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the lantern stands
+B. walking in through the door
+C. opening the nail forge before dawn
+D. seeing the tongs beside it
+E. finding the table by the door
+F. dusting the lantern before anything else
+=== END G0644 ===
+
+=== ITEM G0645 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wrenet leave to someone else?
+A. working with the wicker mould
+B. carrying the ledger outside
+C. counting every tongs there
+D. working on the broken ladder
+E. lighting the big lamp
+F. locking up the bell tower
+=== END G0645 ===
+
+=== ITEM G0646 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilsic do first?
+A. reaching for the iron saw again
+B. hanging the tongs on a hook
+C. moving the sledge to the yard
+D. leaving the door wide open
+E. reaching for the copper saw again
+F. sweeping the tower floor twice
+=== END G0646 ===
+
+=== ITEM G0647 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odris leave to someone else?
+A. carrying the globe outside
+B. counting every straw there
+C. lighting the big lamp
+D. locking up the net loft
+E. working on the loose stair
+F. working with the small mould
+=== END G0647 ===
+
+=== ITEM G0648 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Marol do first?
+A. hanging the pallets on a hook
+B. moving the rack to the yard
+C. leaving the door wide open
+D. reaching for the copper mould again
+E. reaching for the iron mould again
+F. sweeping the house floor twice
+=== END G0648 ===
+
+=== ITEM G0649 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Halis do first?
+A. reaching for the long ruler again
+B. sweeping the loft floor twice
+C. leaving the door wide open
+D. reaching for the short ruler again
+E. hanging the twine on a hook
+F. moving the kettle to the yard
+=== END G0649 ===
+
+=== ITEM G0650 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petrol leave to someone else?
+A. working with the fine hammer
+B. working on the lye vat
+C. counting every pallets there
+D. lighting the big lamp
+E. carrying the bucket outside
+F. locking up the boat shed
+=== END G0650 ===
+
+=== ITEM G0651 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilsol do first?
+A. moving the ledger to the yard
+B. reaching for the steel ladle again
+C. hanging the madder on a hook
+D. leaving the door wide open
+E. sweeping the store floor twice
+F. reaching for the bone ladle again
+=== END G0651 ===
+
+=== ITEM G0652 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ansol leave to someone else?
+A. counting every straw there
+B. working on the leaky bellows
+C. carrying the ledger outside
+D. working with the curved scoop
+E. lighting the big lamp
+F. locking up the bell tower
+=== END G0652 ===
+
+=== ITEM G0653 ===
+Question: Wrenet spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the tongs beside it
+B. knowing where the ledger stands
+C. dusting the ledger before anything else
+D. opening the bell tower before dawn
+E. walking in through the door
+F. finding the ledge by the door
+=== END G0653 ===
+
+=== ITEM G0654 ===
+Question: On the day Tamic opened up, where did the stool stand?
+A. under the bench
+B. inside the cart
+C. on the shelf
+D. behind the gate
+=== END G0654 ===
+
+=== ITEM G0655 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Anso leave to someone else?
+A. working with the hemp needle
+B. lighting the big lamp
+C. locking up the seed store
+D. carrying the ledger outside
+E. counting every rope there
+F. working on the bilge pump
+=== END G0655 ===
+
+=== ITEM G0656 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Halol leave to someone else?
+A. working on the loose stair
+B. lighting the big lamp
+C. working with the birch ladle
+D. counting every tape there
+E. carrying the rack outside
+F. locking up the net loft
+=== END G0656 ===
+
+=== ITEM G0657 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Tamol do first?
+A. leaving the door wide open
+B. reaching for the birch scoop again
+C. moving the lantern to the yard
+D. hanging the barley on a hook
+E. sweeping the shed floor twice
+F. reaching for the zinc scoop again
+=== END G0657 ===
+
+=== ITEM G0658 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Maris leave to someone else?
+A. working with the birch spindle
+B. working on the rusty winch
+C. counting every rope there
+D. locking up the dye house
+E. lighting the big lamp
+F. carrying the kettle outside
+=== END G0658 ===
+
+=== ITEM G0659 ===
+Question: Sunnol spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the oilcan before anything else
+B. finding the table by the door
+C. seeing the rope beside it
+D. walking in through the door
+E. opening the seed store before dawn
+F. knowing where the oilcan stands
+=== END G0659 ===
+
+=== ITEM G0660 ===
+Question: Fennis spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the nail forge before dawn
+B. finding the table by the door
+C. knowing where the stool stands
+D. walking in through the door
+E. seeing the straw beside it
+F. dusting the stool before anything else
+=== END G0660 ===
+
+=== ITEM G0661 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petris leave to someone else?
+A. working with the brass mould
+B. working on the damp cellar
+C. lighting the big lamp
+D. locking up the boat shed
+E. counting every rope there
+F. carrying the lantern outside
+=== END G0661 ===
+
+=== ITEM G0662 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Jossol do first?
+A. leaving the door wide open
+B. moving the globe to the yard
+C. reaching for the wooden spindle again
+D. hanging the twine on a hook
+E. reaching for the metal spindle again
+F. sweeping the loft floor twice
+=== END G0662 ===
+
+=== ITEM G0663 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Fennis do first?
+A. leaving the door wide open
+B. moving the stool to the yard
+C. reaching for the hemp hammer again
+D. sweeping the forge floor twice
+E. hanging the straw on a hook
+F. reaching for the nylon hammer again
+=== END G0663 ===
+
+=== ITEM G0664 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilsic leave to someone else?
+A. counting every tongs there
+B. working on the damp cellar
+C. locking up the bell tower
+D. working with the copper saw
+E. carrying the sledge outside
+F. lighting the big lamp
+=== END G0664 ===
+
+=== ITEM G0665 ===
+Question: On the day Ilsis opened up, where did the sledge stand?
+A. under the bench
+B. inside the cart
+C. on the counter
+D. behind the gate
+=== END G0665 ===
+
+=== ITEM G0666 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Halol do first?
+A. moving the rack to the yard
+B. hanging the tape on a hook
+C. reaching for the zinc ladle again
+D. sweeping the loft floor twice
+E. reaching for the birch ladle again
+F. leaving the door wide open
+=== END G0666 ===
+
+=== ITEM G0667 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Jossol leave to someone else?
+A. carrying the globe outside
+B. working on the broken ladder
+C. locking up the net loft
+D. lighting the big lamp
+E. working with the wooden spindle
+F. counting every twine there
+=== END G0667 ===
+
+=== ITEM G0668 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Petro do first?
+A. sweeping the forge floor twice
+B. reaching for the mesh scoop again
+C. hanging the twine on a hook
+D. reaching for the wicker scoop again
+E. leaving the door wide open
+F. moving the bucket to the yard
+=== END G0668 ===
+
+=== ITEM G0669 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Halet leave to someone else?
+A. carrying the globe outside
+B. lighting the big lamp
+C. locking up the dye house
+D. working on the lye vat
+E. working with the curved brush
+F. counting every rope there
+=== END G0669 ===
+
+=== ITEM G0670 ===
+Question: Halet spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the ledge by the door
+B. knowing where the globe stands
+C. seeing the rope beside it
+D. dusting the globe before anything else
+E. opening the dye house before dawn
+F. walking in through the door
+=== END G0670 ===
+
+=== ITEM G0671 ===
+Question: On the day Corol opened up, where did the oilcan stand?
+A. behind the gate
+B. under the bench
+C. inside the cart
+D. on the shelf
+=== END G0671 ===
+
+=== ITEM G0672 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilsol leave to someone else?
+A. working with the bone ladle
+B. carrying the ledger outside
+C. counting every madder there
+D. locking up the seed store
+E. lighting the big lamp
+F. working on the rusty winch
+=== END G0672 ===
+
+=== ITEM G0673 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Eddol leave to someone else?
+A. working with the wicker saw
+B. carrying the stool outside
+C. locking up the boat shed
+D. lighting the big lamp
+E. counting every rope there
+F. working on the loose stair
+=== END G0673 ===
+
+=== ITEM G0674 ===
+Question: On the day Ilset opened up, where did the oilcan stand?
+A. under the bench
+B. on the counter
+C. behind the gate
+D. inside the cart
+=== END G0674 ===
+
+=== ITEM G0675 ===
+Question: Wrenol spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the sledge stands
+B. opening the seed store before dawn
+C. walking in through the door
+D. dusting the sledge before anything else
+E. seeing the barley beside it
+F. finding the ledge by the door
+=== END G0675 ===
+
+=== ITEM G0676 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunnol do first?
+A. reaching for the tar tray again
+B. reaching for the wire tray again
+C. moving the oilcan to the yard
+D. sweeping the store floor twice
+E. hanging the rope on a hook
+F. leaving the door wide open
+=== END G0676 ===
+
+=== ITEM G0677 ===
+Question: On the day Coret opened up, where did the sledge stand?
+A. inside the cart
+B. on the shelf
+C. behind the gate
+D. under the bench
+=== END G0677 ===
+
+=== ITEM G0678 ===
+Question: Halo spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the barley beside it
+B. walking in through the door
+C. opening the dye house before dawn
+D. finding the ledge by the door
+E. knowing where the rack stands
+F. dusting the rack before anything else
+=== END G0678 ===
+
+=== ITEM G0679 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Maret leave to someone else?
+A. working with the bone scoop
+B. carrying the globe outside
+C. working on the damp cellar
+D. locking up the net loft
+E. counting every tape there
+F. lighting the big lamp
+=== END G0679 ===
+
+=== ITEM G0680 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilset do first?
+A. leaving the door wide open
+B. reaching for the zinc brush again
+C. sweeping the tower floor twice
+D. moving the oilcan to the yard
+E. hanging the straw on a hook
+F. reaching for the birch brush again
+=== END G0680 ===
+
+=== ITEM G0681 ===
+Question: Fennet spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. dusting the bucket before anything else
+C. knowing where the bucket stands
+D. finding the table by the door
+E. seeing the madder beside it
+F. opening the boat shed before dawn
+=== END G0681 ===
+
+=== ITEM G0682 ===
+Question: On the day Tamis opened up, where did the stool stand?
+A. under the bench
+B. behind the gate
+C. on the shelf
+D. inside the cart
+=== END G0682 ===
+
+=== ITEM G0683 ===
+Question: On the day Ansis opened up, where did the sledge stand?
+A. under the bench
+B. behind the gate
+C. inside the cart
+D. on the stove
+=== END G0683 ===
+
+=== ITEM G0684 ===
+Question: On the day Odret opened up, where did the rack stand?
+A. on the stove
+B. behind the gate
+C. inside the cart
+D. under the bench
+=== END G0684 ===
+
+=== ITEM G0685 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Eddis leave to someone else?
+A. lighting the big lamp
+B. counting every barley there
+C. working with the bone brush
+D. working on the leaky bellows
+E. locking up the boat shed
+F. carrying the bucket outside
+=== END G0685 ===
+
+=== ITEM G0686 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Petret do first?
+A. reaching for the large rake again
+B. leaving the door wide open
+C. reaching for the small rake again
+D. moving the stool to the yard
+E. hanging the tape on a hook
+F. sweeping the forge floor twice
+=== END G0686 ===
+
+=== ITEM G0687 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Eddet do first?
+A. moving the lantern to the yard
+B. leaving the door wide open
+C. sweeping the forge floor twice
+D. reaching for the iron ladle again
+E. hanging the twine on a hook
+F. reaching for the copper ladle again
+=== END G0687 ===
+
+=== ITEM G0688 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petro leave to someone else?
+A. locking up the nail forge
+B. working with the wicker scoop
+C. lighting the big lamp
+D. carrying the bucket outside
+E. counting every twine there
+F. working on the rusty winch
+=== END G0688 ===
+
+=== ITEM G0689 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Halo leave to someone else?
+A. counting every barley there
+B. carrying the rack outside
+C. lighting the big lamp
+D. working on the damp cellar
+E. working with the wooden hammer
+F. locking up the dye house
+=== END G0689 ===
+
+=== ITEM G0690 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Corol do first?
+A. reaching for the nylon ruler again
+B. reaching for the hemp ruler again
+C. moving the oilcan to the yard
+D. hanging the tape on a hook
+E. sweeping the tower floor twice
+F. leaving the door wide open
+=== END G0690 ===
+
+=== ITEM G0691 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Tamis do first?
+A. moving the stool to the yard
+B. sweeping the shed floor twice
+C. reaching for the short tray again
+D. reaching for the long tray again
+E. leaving the door wide open
+F. hanging the madder on a hook
+=== END G0691 ===
+
+=== ITEM G0692 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Lieset do first?
+A. moving the rack to the yard
+B. sweeping the loft floor twice
+C. reaching for the plastic saw again
+D. leaving the door wide open
+E. hanging the straw on a hook
+F. reaching for the brass saw again
+=== END G0692 ===
+
+=== ITEM G0693 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Corol leave to someone else?
+A. counting every tape there
+B. carrying the oilcan outside
+C. working with the hemp ruler
+D. lighting the big lamp
+E. working on the lye vat
+F. locking up the bell tower
+=== END G0693 ===
+
+=== ITEM G0694 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Marol leave to someone else?
+A. carrying the rack outside
+B. working with the copper mould
+C. counting every pallets there
+D. lighting the big lamp
+E. working on the leaky bellows
+F. locking up the dye house
+=== END G0694 ===
+
+=== ITEM G0695 ===
+Question: On the day Jossis opened up, where did the rack stand?
+A. inside the cart
+B. behind the gate
+C. on the counter
+D. under the bench
+=== END G0695 ===
+
+=== ITEM G0696 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Anset do first?
+A. sweeping the store floor twice
+B. hanging the pallets on a hook
+C. moving the oilcan to the yard
+D. leaving the door wide open
+E. reaching for the long spindle again
+F. reaching for the short spindle again
+=== END G0696 ===
+
+=== ITEM G0697 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Anset leave to someone else?
+A. working on the damp cellar
+B. carrying the oilcan outside
+C. locking up the seed store
+D. working with the long spindle
+E. lighting the big lamp
+F. counting every pallets there
+=== END G0697 ===
+
+=== ITEM G0698 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunnis leave to someone else?
+A. working on the lye vat
+B. working with the small saw
+C. carrying the ledger outside
+D. locking up the seed store
+E. counting every barley there
+F. lighting the big lamp
+=== END G0698 ===
+
+=== ITEM G0699 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Petrol do first?
+A. reaching for the fine hammer again
+B. sweeping the shed floor twice
+C. leaving the door wide open
+D. reaching for the flat hammer again
+E. hanging the pallets on a hook
+F. moving the bucket to the yard
+=== END G0699 ===
+
+=== ITEM G0700 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Odric do first?
+A. moving the globe to the yard
+B. hanging the barley on a hook
+C. leaving the door wide open
+D. sweeping the house floor twice
+E. reaching for the tin ruler again
+F. reaching for the oak ruler again
+=== END G0700 ===
+
+=== ITEM G0701 ===
+Question: On the day Bramet opened up, where did the stool stand?
+A. behind the gate
+B. inside the cart
+C. on the ledge
+D. under the bench
+=== END G0701 ===
+
+=== ITEM G0702 ===
+Question: On the day Petris opened up, where did the lantern stand?
+A. behind the gate
+B. on the counter
+C. under the bench
+D. inside the cart
+=== END G0702 ===
+
+=== ITEM G0703 ===
+Question: On the day Marol opened up, where did the rack stand?
+A. behind the gate
+B. under the bench
+C. on the table
+D. inside the cart
+=== END G0703 ===
+
+=== ITEM G0704 ===
+Question: On the day Sunno opened up, where did the oilcan stand?
+A. on the table
+B. inside the cart
+C. behind the gate
+D. under the bench
+=== END G0704 ===
+
+=== ITEM G0705 ===
+Question: Josset spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the kettle before anything else
+B. opening the dye house before dawn
+C. finding the counter by the door
+D. knowing where the kettle stands
+E. seeing the barley beside it
+F. walking in through the door
+=== END G0705 ===
+
+=== ITEM G0706 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansis do first?
+A. reaching for the metal tray again
+B. leaving the door wide open
+C. sweeping the tower floor twice
+D. moving the sledge to the yard
+E. hanging the tape on a hook
+F. reaching for the wooden tray again
+=== END G0706 ===
+
+=== ITEM G0707 ===
+Question: Bramet spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the stool before anything else
+B. walking in through the door
+C. seeing the pallets beside it
+D. knowing where the stool stands
+E. finding the ledge by the door
+F. opening the boat shed before dawn
+=== END G0707 ===
+
+=== ITEM G0708 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Josset leave to someone else?
+A. working with the hemp tray
+B. working on the loose stair
+C. counting every barley there
+D. lighting the big lamp
+E. locking up the dye house
+F. carrying the kettle outside
+=== END G0708 ===
+
+=== ITEM G0709 ===
+Question: On the day Ilsol opened up, where did the ledger stand?
+A. on the counter
+B. inside the cart
+C. behind the gate
+D. under the bench
+=== END G0709 ===
+
+=== ITEM G0710 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Bramis do first?
+A. leaving the door wide open
+B. reaching for the flat saw again
+C. hanging the tape on a hook
+D. sweeping the forge floor twice
+E. reaching for the fine saw again
+F. moving the lantern to the yard
+=== END G0710 ===
+
+=== ITEM G0711 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Halis leave to someone else?
+A. counting every twine there
+B. lighting the big lamp
+C. carrying the kettle outside
+D. locking up the net loft
+E. working with the long ruler
+F. working on the leaky bellows
+=== END G0711 ===
+
+=== ITEM G0712 ===
+Question: Jossol spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the counter by the door
+B. seeing the twine beside it
+C. knowing where the globe stands
+D. opening the net loft before dawn
+E. dusting the globe before anything else
+F. walking in through the door
+=== END G0712 ===
+
+=== ITEM G0713 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansol do first?
+A. sweeping the tower floor twice
+B. reaching for the curved scoop again
+C. leaving the door wide open
+D. hanging the straw on a hook
+E. reaching for the straight scoop again
+F. moving the ledger to the yard
+=== END G0713 ===
+
+=== ITEM G0714 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Odret do first?
+A. leaving the door wide open
+B. hanging the madder on a hook
+C. sweeping the house floor twice
+D. reaching for the fine rake again
+E. moving the rack to the yard
+F. reaching for the flat rake again
+=== END G0714 ===
+
+=== ITEM G0715 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Halet do first?
+A. leaving the door wide open
+B. hanging the rope on a hook
+C. reaching for the curved brush again
+D. moving the globe to the yard
+E. reaching for the straight brush again
+F. sweeping the house floor twice
+=== END G0715 ===
+
+=== ITEM G0716 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesis do first?
+A. hanging the pallets on a hook
+B. leaving the door wide open
+C. moving the globe to the yard
+D. reaching for the wicker ladle again
+E. reaching for the mesh ladle again
+F. sweeping the house floor twice
+=== END G0716 ===
+
+=== ITEM G0717 ===
+Question: Petro spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. walking in through the door
+B. dusting the bucket before anything else
+C. knowing where the bucket stands
+D. opening the nail forge before dawn
+E. seeing the twine beside it
+F. finding the counter by the door
+=== END G0717 ===
+
+=== ITEM G0718 ===
+Question: On the day Wrenol opened up, where did the sledge stand?
+A. under the bench
+B. on the ledge
+C. behind the gate
+D. inside the cart
+=== END G0718 ===
+
+=== ITEM G0719 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunno leave to someone else?
+A. counting every tongs there
+B. working with the brass ladle
+C. locking up the bell tower
+D. working on the leaky bellows
+E. carrying the oilcan outside
+F. lighting the big lamp
+=== END G0719 ===
+
+=== ITEM G0720 ===
+Question: Corol spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the tape beside it
+B. finding the shelf by the door
+C. knowing where the oilcan stands
+D. opening the bell tower before dawn
+E. walking in through the door
+F. dusting the oilcan before anything else
+=== END G0720 ===
+
+=== ITEM G0721 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Wrenol do first?
+A. reaching for the plastic rake again
+B. reaching for the brass rake again
+C. leaving the door wide open
+D. sweeping the store floor twice
+E. hanging the barley on a hook
+F. moving the sledge to the yard
+=== END G0721 ===
+
+=== ITEM G0722 ===
+Question: Marol spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the pallets beside it
+B. dusting the rack before anything else
+C. opening the dye house before dawn
+D. knowing where the rack stands
+E. finding the table by the door
+F. walking in through the door
+=== END G0722 ===
+
+=== ITEM G0723 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunnet do first?
+A. sweeping the tower floor twice
+B. reaching for the flat needle again
+C. reaching for the fine needle again
+D. hanging the twine on a hook
+E. leaving the door wide open
+F. moving the sledge to the yard
+=== END G0723 ===
+
+=== ITEM G0724 ===
+Question: Ansis spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the sledge stands
+B. dusting the sledge before anything else
+C. opening the bell tower before dawn
+D. seeing the tape beside it
+E. walking in through the door
+F. finding the stove by the door
+=== END G0724 ===
+
+=== ITEM G0725 ===
+Question: On the day Fennet opened up, where did the bucket stand?
+A. under the bench
+B. inside the cart
+C. on the table
+D. behind the gate
+=== END G0725 ===
+
+=== ITEM G0726 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odrol leave to someone else?
+A. lighting the big lamp
+B. carrying the kettle outside
+C. locking up the net loft
+D. counting every tongs there
+E. working with the tar hammer
+F. working on the bilge pump
+=== END G0726 ===
+
+=== ITEM G0727 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Lieset leave to someone else?
+A. carrying the rack outside
+B. counting every straw there
+C. lighting the big lamp
+D. working with the brass saw
+E. working on the rusty winch
+F. locking up the net loft
+=== END G0727 ===
+
+=== ITEM G0728 ===
+Question: Petret spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the stool before anything else
+B. seeing the tape beside it
+C. walking in through the door
+D. opening the nail forge before dawn
+E. knowing where the stool stands
+F. finding the counter by the door
+=== END G0728 ===
+
+=== ITEM G0729 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Odris do first?
+A. moving the globe to the yard
+B. reaching for the small mould again
+C. sweeping the loft floor twice
+D. reaching for the large mould again
+E. hanging the straw on a hook
+F. leaving the door wide open
+=== END G0729 ===
+
+=== ITEM G0730 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Fennol do first?
+A. moving the lantern to the yard
+B. reaching for the long brush again
+C. leaving the door wide open
+D. hanging the tongs on a hook
+E. reaching for the short brush again
+F. sweeping the forge floor twice
+=== END G0730 ===
+
+=== ITEM G0731 ===
+Question: On the day Liesol opened up, where did the kettle stand?
+A. on the shelf
+B. inside the cart
+C. under the bench
+D. behind the gate
+=== END G0731 ===
+
+=== ITEM G0732 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tamol leave to someone else?
+A. working on the broken ladder
+B. working with the birch scoop
+C. carrying the lantern outside
+D. lighting the big lamp
+E. locking up the boat shed
+F. counting every barley there
+=== END G0732 ===
+
+=== ITEM G0733 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wrenis leave to someone else?
+A. working with the copper scoop
+B. carrying the oilcan outside
+C. counting every madder there
+D. locking up the seed store
+E. lighting the big lamp
+F. working on the loose stair
+=== END G0733 ===
+
+=== ITEM G0734 ===
+Question: Sunno spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the oilcan before anything else
+B. seeing the tongs beside it
+C. finding the table by the door
+D. walking in through the door
+E. opening the bell tower before dawn
+F. knowing where the oilcan stands
+=== END G0734 ===
+
+=== ITEM G0735 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunnis do first?
+A. moving the ledger to the yard
+B. reaching for the small saw again
+C. sweeping the store floor twice
+D. leaving the door wide open
+E. hanging the barley on a hook
+F. reaching for the large saw again
+=== END G0735 ===
+
+=== ITEM G0736 ===
+Question: Ilsol spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the counter by the door
+B. seeing the madder beside it
+C. opening the seed store before dawn
+D. knowing where the ledger stands
+E. dusting the ledger before anything else
+F. walking in through the door
+=== END G0736 ===
+
+=== ITEM G0737 ===
+Question: On the day Tamet opened up, where did the bucket stand?
+A. inside the cart
+B. under the bench
+C. behind the gate
+D. on the shelf
+=== END G0737 ===
+
+=== ITEM G0738 ===
+Question: Eddet spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the lantern before anything else
+B. finding the stove by the door
+C. opening the nail forge before dawn
+D. walking in through the door
+E. knowing where the lantern stands
+F. seeing the twine beside it
+=== END G0738 ===
+
+=== ITEM G0739 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Eddol do first?
+A. reaching for the wicker saw again
+B. hanging the rope on a hook
+C. leaving the door wide open
+D. reaching for the mesh saw again
+E. moving the stool to the yard
+F. sweeping the shed floor twice
+=== END G0739 ===
+
+=== ITEM G0740 ===
+Question: Liesol spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the kettle before anything else
+B. finding the shelf by the door
+C. seeing the madder beside it
+D. knowing where the kettle stands
+E. walking in through the door
+F. opening the dye house before dawn
+=== END G0740 ===
+
+=== ITEM G0741 ===
+Question: On the day Fennis opened up, where did the stool stand?
+A. on the table
+B. behind the gate
+C. under the bench
+D. inside the cart
+=== END G0741 ===
+
+=== ITEM G0742 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odret leave to someone else?
+A. counting every madder there
+B. lighting the big lamp
+C. locking up the dye house
+D. working on the broken ladder
+E. working with the fine rake
+F. carrying the rack outside
+=== END G0742 ===
+
+=== ITEM G0743 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunnol leave to someone else?
+A. working with the tar tray
+B. counting every rope there
+C. carrying the oilcan outside
+D. working on the broken ladder
+E. locking up the seed store
+F. lighting the big lamp
+=== END G0743 ===
+
+=== ITEM G0744 ===
+Question: On the day Liesis opened up, where did the globe stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the shelf
+=== END G0744 ===
+
+=== ITEM G0745 ===
+Question: On the day Ilsic opened up, where did the sledge stand?
+A. under the bench
+B. inside the cart
+C. on the counter
+D. behind the gate
+=== END G0745 ===
+
+=== ITEM G0746 ===
+Question: Coris spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the bell tower before dawn
+B. walking in through the door
+C. knowing where the ledger stands
+D. finding the shelf by the door
+E. dusting the ledger before anything else
+F. seeing the twine beside it
+=== END G0746 ===
+
+=== ITEM G0747 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Wrenis do first?
+A. reaching for the copper scoop again
+B. moving the oilcan to the yard
+C. reaching for the iron scoop again
+D. leaving the door wide open
+E. hanging the madder on a hook
+F. sweeping the store floor twice
+=== END G0747 ===
+
+=== ITEM G0748 ===
+Question: Coret spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. seeing the rope beside it
+C. opening the seed store before dawn
+D. knowing where the sledge stands
+E. finding the shelf by the door
+F. dusting the sledge before anything else
+=== END G0748 ===
+
+=== ITEM G0749 ===
+Question: On the day Wrenet opened up, where did the ledger stand?
+A. behind the gate
+B. under the bench
+C. inside the cart
+D. on the ledge
+=== END G0749 ===
+
+=== ITEM G0750 ===
+Question: On the day Halo opened up, where did the rack stand?
+A. behind the gate
+B. on the ledge
+C. under the bench
+D. inside the cart
+=== END G0750 ===
+
+=== ITEM G0751 ===
+Question: Bramis spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the tape beside it
+B. knowing where the lantern stands
+C. finding the ledge by the door
+D. walking in through the door
+E. opening the nail forge before dawn
+F. dusting the lantern before anything else
+=== END G0751 ===
+
+=== ITEM G0752 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Wrenet do first?
+A. hanging the tongs on a hook
+B. reaching for the wicker mould again
+C. moving the ledger to the yard
+D. leaving the door wide open
+E. sweeping the tower floor twice
+F. reaching for the mesh mould again
+=== END G0752 ===
+
+=== ITEM G0753 ===
+Question: Maret spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the table by the door
+B. knowing where the globe stands
+C. opening the net loft before dawn
+D. seeing the tape beside it
+E. dusting the globe before anything else
+F. walking in through the door
+=== END G0753 ===
+
+=== ITEM G0754 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odric leave to someone else?
+A. lighting the big lamp
+B. working with the oak ruler
+C. working on the rusty winch
+D. counting every barley there
+E. carrying the globe outside
+F. locking up the dye house
+=== END G0754 ===
+
+=== ITEM G0755 ===
+Question: On the day Lieset opened up, where did the rack stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the shelf
+=== END G0755 ===
+
+=== ITEM G0756 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Bramet leave to someone else?
+A. working on the rusty winch
+B. working with the tar needle
+C. lighting the big lamp
+D. carrying the stool outside
+E. counting every pallets there
+F. locking up the boat shed
+=== END G0756 ===
+
+=== ITEM G0757 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Maris do first?
+A. moving the kettle to the yard
+B. hanging the rope on a hook
+C. sweeping the house floor twice
+D. reaching for the zinc spindle again
+E. reaching for the birch spindle again
+F. leaving the door wide open
+=== END G0757 ===
+
+=== ITEM G0758 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ansis leave to someone else?
+A. lighting the big lamp
+B. working on the rusty winch
+C. carrying the sledge outside
+D. locking up the bell tower
+E. working with the wooden tray
+F. counting every tape there
+=== END G0758 ===
+
+=== ITEM G0759 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Bramol do first?
+A. reaching for the tin tray again
+B. reaching for the oak tray again
+C. moving the bucket to the yard
+D. hanging the straw on a hook
+E. leaving the door wide open
+F. sweeping the forge floor twice
+=== END G0759 ===
+
+=== ITEM G0760 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Jossis do first?
+A. leaving the door wide open
+B. reaching for the oak needle again
+C. reaching for the tin needle again
+D. hanging the tongs on a hook
+E. moving the rack to the yard
+F. sweeping the loft floor twice
+=== END G0760 ===
+
+=== ITEM G0761 ===
+Question: Lieset spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the shelf by the door
+B. knowing where the rack stands
+C. dusting the rack before anything else
+D. walking in through the door
+E. seeing the straw beside it
+F. opening the net loft before dawn
+=== END G0761 ===
+
+=== ITEM G0762 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Coris leave to someone else?
+A. working with the tar rake
+B. carrying the ledger outside
+C. working on the damp cellar
+D. counting every twine there
+E. lighting the big lamp
+F. locking up the bell tower
+=== END G0762 ===
+
+=== ITEM G0763 ===
+Question: On the day Halet opened up, where did the globe stand?
+A. under the bench
+B. behind the gate
+C. inside the cart
+D. on the ledge
+=== END G0763 ===
+
+=== ITEM G0764 ===
+Question: On the day Sunnet opened up, where did the sledge stand?
+A. behind the gate
+B. under the bench
+C. on the table
+D. inside the cart
+=== END G0764 ===
+
+=== ITEM G0765 ===
+Question: Wrenis spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the oilcan stands
+B. finding the ledge by the door
+C. opening the seed store before dawn
+D. seeing the madder beside it
+E. walking in through the door
+F. dusting the oilcan before anything else
+=== END G0765 ===
+
+=== ITEM G0766 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Fennet do first?
+A. reaching for the wooden ruler again
+B. hanging the madder on a hook
+C. sweeping the shed floor twice
+D. reaching for the metal ruler again
+E. moving the bucket to the yard
+F. leaving the door wide open
+=== END G0766 ===
+
+=== ITEM G0767 ===
+Question: On the day Petrol opened up, where did the bucket stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the counter
+=== END G0767 ===
+
+=== ITEM G0768 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Halo do first?
+A. reaching for the metal hammer again
+B. reaching for the wooden hammer again
+C. sweeping the house floor twice
+D. hanging the barley on a hook
+E. leaving the door wide open
+F. moving the rack to the yard
+=== END G0768 ===
+
+=== ITEM G0769 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tamis leave to someone else?
+A. lighting the big lamp
+B. counting every madder there
+C. working with the long tray
+D. working on the lye vat
+E. carrying the stool outside
+F. locking up the boat shed
+=== END G0769 ===
+
+=== ITEM G0770 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Coret leave to someone else?
+A. counting every rope there
+B. locking up the seed store
+C. working with the oak hammer
+D. working on the leaky bellows
+E. carrying the sledge outside
+F. lighting the big lamp
+=== END G0770 ===
+
+=== ITEM G0771 ===
+Question: Liesis spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the globe before anything else
+B. seeing the pallets beside it
+C. opening the dye house before dawn
+D. walking in through the door
+E. knowing where the globe stands
+F. finding the shelf by the door
+=== END G0771 ===
+
+=== ITEM G0772 ===
+Question: On the day Maret opened up, where did the globe stand?
+A. under the bench
+B. behind the gate
+C. inside the cart
+D. on the table
+=== END G0772 ===
+
+=== ITEM G0773 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Coret do first?
+A. moving the sledge to the yard
+B. reaching for the tin hammer again
+C. reaching for the oak hammer again
+D. hanging the rope on a hook
+E. sweeping the store floor twice
+F. leaving the door wide open
+=== END G0773 ===
+
+=== ITEM G0774 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Petris do first?
+A. hanging the rope on a hook
+B. reaching for the plastic mould again
+C. reaching for the brass mould again
+D. moving the lantern to the yard
+E. leaving the door wide open
+F. sweeping the shed floor twice
+=== END G0774 ===
+
+=== ITEM G0775 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tamic leave to someone else?
+A. counting every twine there
+B. carrying the stool outside
+C. locking up the nail forge
+D. lighting the big lamp
+E. working with the bone mould
+F. working on the bilge pump
+=== END G0775 ===
+
+=== ITEM G0776 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Tamic do first?
+A. reaching for the steel mould again
+B. moving the stool to the yard
+C. hanging the twine on a hook
+D. leaving the door wide open
+E. sweeping the forge floor twice
+F. reaching for the bone mould again
+=== END G0776 ===
+
+=== ITEM G0777 ===
+Question: Anset spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the seed store before dawn
+B. finding the stove by the door
+C. dusting the oilcan before anything else
+D. walking in through the door
+E. seeing the pallets beside it
+F. knowing where the oilcan stands
+=== END G0777 ===
+
+=== ITEM G0778 ===
+Question: On the day Halol opened up, where did the rack stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the ledge
+=== END G0778 ===
+
+=== ITEM G0779 ===
+Question: On the day Odric opened up, where did the globe stand?
+A. on the stove
+B. under the bench
+C. inside the cart
+D. behind the gate
+=== END G0779 ===
+
+=== ITEM G0780 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesol leave to someone else?
+A. lighting the big lamp
+B. working with the small needle
+C. counting every madder there
+D. carrying the kettle outside
+E. locking up the dye house
+F. working on the damp cellar
+=== END G0780 ===
+
+=== ITEM G0781 ===
+Question: On the day Maris opened up, where did the kettle stand?
+A. on the table
+B. under the bench
+C. inside the cart
+D. behind the gate
+=== END G0781 ===
+
+=== ITEM G0782 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesol do first?
+A. hanging the madder on a hook
+B. leaving the door wide open
+C. reaching for the small needle again
+D. reaching for the large needle again
+E. moving the kettle to the yard
+F. sweeping the house floor twice
+=== END G0782 ===
+
+=== ITEM G0783 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fennis leave to someone else?
+A. lighting the big lamp
+B. locking up the nail forge
+C. working with the hemp hammer
+D. carrying the stool outside
+E. working on the broken ladder
+F. counting every straw there
+=== END G0783 ===
+
+=== ITEM G0784 ===
+Question: Tamis spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the shelf by the door
+B. seeing the madder beside it
+C. opening the boat shed before dawn
+D. walking in through the door
+E. dusting the stool before anything else
+F. knowing where the stool stands
+=== END G0784 ===
+
+=== ITEM G0785 ===
+Question: On the day Eddet opened up, where did the lantern stand?
+A. behind the gate
+B. on the stove
+C. under the bench
+D. inside the cart
+=== END G0785 ===
+
+=== ITEM G0786 ===
+Question: Odrol spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the kettle before anything else
+B. finding the stove by the door
+C. seeing the tongs beside it
+D. walking in through the door
+E. knowing where the kettle stands
+F. opening the net loft before dawn
+=== END G0786 ===
+
+=== ITEM G0787 ===
+Question: On the day Petro opened up, where did the bucket stand?
+A. inside the cart
+B. under the bench
+C. behind the gate
+D. on the counter
+=== END G0787 ===
+
+=== ITEM G0788 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Bramet do first?
+A. leaving the door wide open
+B. moving the stool to the yard
+C. sweeping the shed floor twice
+D. reaching for the wire needle again
+E. reaching for the tar needle again
+F. hanging the pallets on a hook
+=== END G0788 ===
+
+=== ITEM G0789 ===
+Question: On the day Odris opened up, where did the globe stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the stove
+=== END G0789 ===
+
+=== ITEM G0790 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petret leave to someone else?
+A. working with the small rake
+B. locking up the nail forge
+C. working on the leaky bellows
+D. counting every tape there
+E. lighting the big lamp
+F. carrying the stool outside
+=== END G0790 ===
+
+=== ITEM G0791 ===
+Question: Odric spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. finding the stove by the door
+C. dusting the globe before anything else
+D. seeing the barley beside it
+E. opening the dye house before dawn
+F. knowing where the globe stands
+=== END G0791 ===
+
+=== ITEM G0792 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Josset do first?
+A. reaching for the hemp tray again
+B. hanging the barley on a hook
+C. reaching for the nylon tray again
+D. moving the kettle to the yard
+E. sweeping the house floor twice
+F. leaving the door wide open
+=== END G0792 ===
+
+=== ITEM G0793 ===
+Question: Tamic spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the twine beside it
+B. finding the shelf by the door
+C. walking in through the door
+D. dusting the stool before anything else
+E. knowing where the stool stands
+F. opening the nail forge before dawn
+=== END G0793 ===
+
+=== ITEM G0794 ===
+Question: On the day Eddis opened up, where did the bucket stand?
+A. behind the gate
+B. on the stove
+C. inside the cart
+D. under the bench
+=== END G0794 ===
+
+=== ITEM G0795 ===
+Question: On the day Eddol opened up, where did the stool stand?
+A. inside the cart
+B. on the stove
+C. under the bench
+D. behind the gate
+=== END G0795 ===
+
+=== ITEM G0796 ===
+Question: Sunnet spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the sledge stands
+B. seeing the twine beside it
+C. finding the table by the door
+D. opening the bell tower before dawn
+E. walking in through the door
+F. dusting the sledge before anything else
+=== END G0796 ===
+
+=== ITEM G0797 ===
+Question: On the day Petret opened up, where did the stool stand?
+A. behind the gate
+B. on the counter
+C. under the bench
+D. inside the cart
+=== END G0797 ===
+
+=== ITEM G0798 ===
+Question: Odris spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the straw beside it
+B. opening the net loft before dawn
+C. dusting the globe before anything else
+D. knowing where the globe stands
+E. finding the stove by the door
+F. walking in through the door
+=== END G0798 ===
+
+=== ITEM G0799 ===
+Question: Ilset spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the oilcan before anything else
+B. seeing the straw beside it
+C. walking in through the door
+D. finding the counter by the door
+E. knowing where the oilcan stands
+F. opening the bell tower before dawn
+=== END G0799 ===
+
+=== ITEM G0800 ===
+Question: Tamol spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the lantern before anything else
+B. finding the shelf by the door
+C. seeing the barley beside it
+D. walking in through the door
+E. opening the boat shed before dawn
+F. knowing where the lantern stands
+=== END G0800 ===
+
+=== ITEM G0801 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fennol leave to someone else?
+A. locking up the nail forge
+B. carrying the lantern outside
+C. working with the long brush
+D. lighting the big lamp
+E. counting every tongs there
+F. working on the rusty winch
+=== END G0801 ===
+
+=== ITEM G0802 ===
+Question: Bramol spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the bucket before anything else
+B. seeing the straw beside it
+C. opening the nail forge before dawn
+D. walking in through the door
+E. finding the ledge by the door
+F. knowing where the bucket stands
+=== END G0802 ===
+
+=== ITEM G0803 ===
+Question: Halol spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the rack stands
+B. finding the ledge by the door
+C. seeing the tape beside it
+D. opening the net loft before dawn
+E. walking in through the door
+F. dusting the rack before anything else
+=== END G0803 ===
+
+=== ITEM G0804 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunnet leave to someone else?
+A. working with the fine needle
+B. counting every twine there
+C. locking up the bell tower
+D. lighting the big lamp
+E. working on the loose stair
+F. carrying the sledge outside
+=== END G0804 ===
+
+=== ITEM G0805 ===
+Question: On the day Sunnis opened up, where did the ledger stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the table
+=== END G0805 ===
+
+=== ITEM G0806 ===
+Question: On the day Josset opened up, where did the kettle stand?
+A. under the bench
+B. on the counter
+C. behind the gate
+D. inside the cart
+=== END G0806 ===
+
+=== ITEM G0807 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Coris do first?
+A. sweeping the tower floor twice
+B. reaching for the tar rake again
+C. leaving the door wide open
+D. reaching for the wire rake again
+E. hanging the twine on a hook
+F. moving the ledger to the yard
+=== END G0807 ===
+
+=== ITEM G0808 ===
+Question: On the day Ansol opened up, where did the ledger stand?
+A. behind the gate
+B. on the stove
+C. under the bench
+D. inside the cart
+=== END G0808 ===
+
+=== ITEM G0809 ===
+Question: Odret spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the dye house before dawn
+B. knowing where the rack stands
+C. walking in through the door
+D. finding the stove by the door
+E. dusting the rack before anything else
+F. seeing the madder beside it
+=== END G0809 ===
+
+=== ITEM G0810 ===
+Question: Eddol spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the boat shed before dawn
+B. finding the stove by the door
+C. knowing where the stool stands
+D. walking in through the door
+E. seeing the rope beside it
+F. dusting the stool before anything else
+=== END G0810 ===
+
+=== ITEM G0811 ===
+Question: Halis spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the kettle before anything else
+B. opening the net loft before dawn
+C. knowing where the kettle stands
+D. seeing the twine beside it
+E. walking in through the door
+F. finding the ledge by the door
+=== END G0811 ===
+
+=== ITEM G0812 ===
+Question: Eddis spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. finding the stove by the door
+C. dusting the bucket before anything else
+D. seeing the barley beside it
+E. knowing where the bucket stands
+F. opening the boat shed before dawn
+=== END G0812 ===
+
+=== ITEM G0813 ===
+Question: On the day Bramol opened up, where did the bucket stand?
+A. on the ledge
+B. under the bench
+C. behind the gate
+D. inside the cart
+=== END G0813 ===
+
+=== ITEM G0814 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fennet leave to someone else?
+A. working with the wooden ruler
+B. counting every madder there
+C. lighting the big lamp
+D. locking up the boat shed
+E. carrying the bucket outside
+F. working on the bilge pump
+=== END G0814 ===
+
+=== ITEM G0815 ===
+Question: On the day Halis opened up, where did the kettle stand?
+A. behind the gate
+B. inside the cart
+C. on the ledge
+D. under the bench
+=== END G0815 ===
+
+=== ITEM G0816 ===
+Question: On the day Bramis opened up, where did the lantern stand?
+A. on the ledge
+B. under the bench
+C. inside the cart
+D. behind the gate
+=== END G0816 ===
+
+=== ITEM G0817 ===
+Question: On the day Wrenis opened up, where did the oilcan stand?
+A. behind the gate
+B. under the bench
+C. on the ledge
+D. inside the cart
+=== END G0817 ===
+
+=== ITEM G0818 ===
+Question: On the day Tamol opened up, where did the lantern stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the shelf
+=== END G0818 ===
+
+=== ITEM G0819 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Eddet leave to someone else?
+A. carrying the lantern outside
+B. working on the lye vat
+C. lighting the big lamp
+D. counting every twine there
+E. working with the copper ladle
+F. locking up the nail forge
+=== END G0819 ===
+
+=== ITEM G0820 ===
+Question: Anso spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. seeing the rope beside it
+C. dusting the ledger before anything else
+D. opening the seed store before dawn
+E. knowing where the ledger stands
+F. finding the stove by the door
+=== END G0820 ===
+
+=== ITEM G0821 ===
+Question: Sunnis spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the barley beside it
+B. opening the seed store before dawn
+C. dusting the ledger before anything else
+D. knowing where the ledger stands
+E. walking in through the door
+F. finding the table by the door
+=== END G0821 ===
+
+=== ITEM G0822 ===
+Question: On the day Anset opened up, where did the oilcan stand?
+A. under the bench
+B. behind the gate
+C. inside the cart
+D. on the stove
+=== END G0822 ===
+
+=== ITEM G0823 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wrenol leave to someone else?
+A. carrying the sledge outside
+B. locking up the seed store
+C. working on the bilge pump
+D. lighting the big lamp
+E. working with the brass rake
+F. counting every barley there
+=== END G0823 ===
+
+=== ITEM G0824 ===
+Question: On the day Fennol opened up, where did the lantern stand?
+A. behind the gate
+B. under the bench
+C. on the table
+D. inside the cart
+=== END G0824 ===
+
+=== ITEM G0825 ===
+Question: Petris spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the lantern stands
+B. walking in through the door
+C. seeing the rope beside it
+D. opening the boat shed before dawn
+E. dusting the lantern before anything else
+F. finding the counter by the door
+=== END G0825 ===
+
+=== ITEM G0826 ===
+Question: On the day Coris opened up, where did the ledger stand?
+A. behind the gate
+B. on the shelf
+C. under the bench
+D. inside the cart
+=== END G0826 ===
+
+=== ITEM G0827 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Bramol leave to someone else?
+A. lighting the big lamp
+B. working on the damp cellar
+C. carrying the bucket outside
+D. working with the oak tray
+E. locking up the nail forge
+F. counting every straw there
+=== END G0827 ===
+
+=== ITEM G0828 ===
+Question: On the day Odrol opened up, where did the kettle stand?
+A. under the bench
+B. behind the gate
+C. inside the cart
+D. on the stove
+=== END G0828 ===
+
+=== ITEM G0829 ===
+Question: Petrol spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the pallets beside it
+B. walking in through the door
+C. knowing where the bucket stands
+D. finding the counter by the door
+E. opening the boat shed before dawn
+F. dusting the bucket before anything else
+=== END G0829 ===
+
+=== ITEM G0830 ===
+Question: On the day Jossol opened up, where did the globe stand?
+A. on the counter
+B. under the bench
+C. inside the cart
+D. behind the gate
+=== END G0830 ===
+
+=== ITEM G0831 ===
+Question: Ilsis spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. opening the seed store before dawn
+C. finding the counter by the door
+D. seeing the pallets beside it
+E. dusting the sledge before anything else
+F. knowing where the sledge stands
+=== END G0831 ===
+
+=== ITEM G0832 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Jossis leave to someone else?
+A. locking up the net loft
+B. working on the lye vat
+C. carrying the rack outside
+D. counting every tongs there
+E. working with the oak needle
+F. lighting the big lamp
+=== END G0832 ===
+
+=== ITEM G0833 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Maret do first?
+A. reaching for the steel scoop again
+B. leaving the door wide open
+C. reaching for the bone scoop again
+D. moving the globe to the yard
+E. sweeping the loft floor twice
+F. hanging the tape on a hook
+=== END G0833 ===
+
+=== ITEM G0834 ===
+Question: On the day Sunnol opened up, where did the oilcan stand?
+A. on the table
+B. behind the gate
+C. under the bench
+D. inside the cart
+=== END G0834 ===
+
+=== ITEM G0835 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Odrol do first?
+A. hanging the tongs on a hook
+B. sweeping the loft floor twice
+C. reaching for the wire hammer again
+D. leaving the door wide open
+E. reaching for the tar hammer again
+F. moving the kettle to the yard
+=== END G0835 ===
+
+=== ITEM G0836 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunno do first?
+A. reaching for the brass ladle again
+B. reaching for the plastic ladle again
+C. sweeping the tower floor twice
+D. moving the oilcan to the yard
+E. leaving the door wide open
+F. hanging the tongs on a hook
+=== END G0836 ===
+
+=== ITEM G0837 ===
+Question: Maris spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. knowing where the kettle stands
+C. finding the table by the door
+D. opening the dye house before dawn
+E. dusting the kettle before anything else
+F. seeing the rope beside it
+=== END G0837 ===

@@ -1,0 +1,171 @@
+{
+ "fix": {
+  "done": [
+   {
+    "item": "P1 - guide rule 2 (a Cause or an Effect may now be written alone)",
+    "what_changed": "File 02_LABELING_GUIDE_v2_1.md. The heading now reads: \"`^8` and `^9` come as a pair when the passage gives both.\" The first sentence is kept. \"There are exactly two other cases, both in rule 15\" now reads \"There are exactly three other cases\": rule 15b, rule 15d, and a lone entry. The `relative_to` sentence is kept. The last sentence is replaced by: \"When the passage gives only one of the two, and rule 5 marks it (for example a thought that comes out of nowhere, with no trigger named), write that one entry alone, with `relative_to` `\"\"` and a note under `not_enough_information`. When two things merely sit side by side and no saying fits, mark neither.\""
+   },
+   {
+    "item": "P2 - guide rule 3",
+    "what_changed": "The first three sentences are kept. The last sentence (\"Recalling something on purpose, with no named thing that brought it up, is not a pair either.\") is removed. Rule 5 now decides that case."
+   },
+   {
+    "item": "P3 - guide rule 5, last sentence",
+    "what_changed": "Old: \"Nothing else decides presence; for `^8` and `^9`, rules 2, 3 and 15 stay as written.\" New: \"Nothing else decides presence. Rules 2, 3 and 15 say how a pair or a lone entry is written; they do not decide presence beyond rule 15, which is the owner's own working ruling.\""
+   },
+   {
+    "item": "P4 - what was not touched in the guide, and the new example X11",
+    "what_changed": "Rule 15 and rule 16: same bytes (cmp shows no difference). Part A: same bytes. Rules 1, 4, 6 to 14: same bytes. The field rules, the table and examples P00 and X1 to X10: same bytes. New example X11, a lone `^9`: passage \"Henrike was folding sheets. Out of nowhere she thought of the red tin whistle.\" Its record has a `^1` entry and a `^9` entry with relative_to \"\" and the saying \"Out of nowhere I thought of...\". A script confirmed this saying is an exact copy of a `^9` saying in Part A. One note line follows the record. No presence rule, word list, held kind or working line was added."
+   },
+   {
+    "item": "Guide: lines that had to follow, and cuts made to stay under 40,000 bytes",
+    "what_changed": "These go beyond the literal list P1 to P4. (1) Two sentences said rules 2 and 3 are \"byte for byte\" the text of v1.2. That became false, so both lists now read \"Rules 1, 8, 9, 11, 12, 14 and 15\". The status block also says \"rules 2 and 3 no longer decide presence\". (2) The heading \"Ten made-up examples\" is now \"Eleven made-up examples\". (3) One new row in the last change table records this change. (4) The edits put the guide at 40,838 bytes. To get under 40,000 I cut history text only: the row \"Rule 16, kept from 1.2\" of the pointing change table (354 bytes; by its own words \"Not new\"); the sentence \"Version 2.1 was built and reviewed on 2026-10-05, then amended in place the same day ...\"; the opening of \"Changes before version 2.1\" (shortened to one sentence); and the two record file names in the two change-table headings (both names still stand in the status block)."
+   },
+   {
+    "item": "P5 - checker tools/check_labels_v21.py",
+    "what_changed": "A `^8` or `^9` entry with relative_to \"\" and no reached_by now passes: it is a lone entry. The message that said \"rule 2 says mark neither: take this entry out\" is removed. A `^9` with reached_by \"reasoning\" keeps its own rule (relative_to must be \"\"). A filled relative_to is checked exactly as before. One code comment was corrected. The file went from 358 to 354 lines. ast.parse passes."
+   },
+   {
+    "item": "P6 - fixture label_v21/fixture/ and the scorer",
+    "what_changed": "Checker cases c35 (lone `^8`) and c35b (lone `^9`) now expect acceptance. Three made-up passages were added, with rows and try-log lines for both teams. F20: both teams write the same lone `^9` (1 matched pair, same span). F21: only team A writes a lone `^9` (1 unmatched). F22: team A writes a lone `^9`, team B writes a pair at the same place (no pair: an empty and a filled related thing do not agree). I worked every changed number by hand first, then ran the program: it printed PASS on the first run. FIXTURE_EXPECTED.json was updated: counts, kappa values, the unmatched list, the worked-by-hand notes, the validity case v8. tools/verdict_v21.py was NOT changed: it already handles a lone entry correctly (its sha256 is still b87693626936...)."
+   },
+   {
+    "item": "P7 - labeler instructions",
+    "what_changed": "File label_v21/LABELER_INSTRUCTIONS.txt, last line. Old: \"The one exception: a message that itself says to take an entry out, or to keep only one of two.\" New: \"The one exception: a message that itself says to keep only one of two, or to take the entries out.\" The removed checker message was the only one that said \"take this entry out\". The two messages that remain are \"keep only one of them\" and \"make it false or take the entries out\"."
+   },
+   {
+    "item": "P8 - owner sign-off sheet, item 4",
+    "what_changed": "File label_v21/OWNER_SIGNOFF_SHEET.md. Item 4 now says: \"The study's presence rules are removed, including its rule that Cause and Effect are marked only as a pair: a Cause or an Effect that the test marks is written alone when its partner is not named. Rule 15 (your sign-reading ruling, with the study's example words) stays; your two questions on it stay open. One reading is the operator's; you may strike it: a being only spoken of is still listed as a Mind.\" The words \"You may strike them.\" about rules 2 and 3 are gone. Items 1, 2, 3 and 5 are untouched."
+   },
+   {
+    "item": "P9 - plan 09_LABEL_AGREEMENT_PLAN_v2_1.md",
+    "what_changed": "Section 2, row \"When `^2` to `^9` are present\": it now says rules 5, 6, 7, 10 and 13 are removed and rules 2 and 3 no longer decide presence. Section 2, row \"The other working rules\": the same-bytes list is now \"rules 1, 8, 9, 11, 12, 14 and 15\". Section 15 bullet: it now says rules 2 and 3 no longer decide presence, a `^8` or `^9` that the test marks is written alone when its partner is not named, and which two sentences are gone. Section 5: \"Each needs the other as its related thing\" became \"In a pair, each needs the other as its related thing\" (a lone entry has no partner). To stay under 25,000 bytes I cut two things in section 16 (history of review round 1): the bullet on team B's name (it only pointed to section 10, where the fact still stands), and the tool name in the team A bullet (now just \"Section 10.\"). No number, bar or measure of the plan changed."
+   },
+   {
+    "item": "P10 - operator's ruling record",
+    "what_changed": "File OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json. Only two fields changed: what_stays (it now adds the format rules on how a pair or a lone entry is written, guide rules 2 and 3 as they now stand) and what_goes (it now names 'mark neither when only one of the pair is given' and 'recall on purpose is not a pair'). One field was added: record_corrected_utc, \"2026-10-05T18:15:41Z\" with a one-line reason. A script compared every field with the copy from before: the owner's verbatim text and all other fields are the same. The Part A check still prints IDENTICAL."
+   }
+  ],
+  "files_changed": [
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/02_LABELING_GUIDE_v2_1.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/check_labels_v21.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/FIXTURE_EXPECTED.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/passages.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_a.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_a.json.tries.jsonl",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_b.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_b.json.tries.jsonl",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/LABELER_INSTRUCTIONS.txt",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/OWNER_SIGNOFF_SHEET.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/09_LABEL_AGREEMENT_PLAN_v2_1.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json"
+  ],
+  "open_issues": [
+   "Nothing is signed, sealed or labeled. The method is still a CANDIDATE. No agreement number exists for guide v2.1. How the lone-entry change moves agreement is NOT MEASURED.",
+   "The earlier signing line (guide 24a861107f41, plan b2be8aeacf9d) no longer fits. The new one is: SIGNED: label-agreement v2.1, guide d65ad695bfa1, plan 84d874364747, as proposed.",
+   "This change has had no independent review yet. I checked my own work with scripts and two control runs only.",
+   "Guide: to stay under 40,000 bytes I cut history text that P1 to P4 did not name (the change-table row 'Rule 16, kept from 1.2', one sentence of the changes intro, the opening of 'Changes before version 2.1', two file names in table headings). No rule, example or Part A text was cut. The guide has 46 bytes of room left. If the operator wants that row back, the same number of bytes must go elsewhere.",
+   "Plan: to stay under 25,000 bytes I cut one bullet and one tool name in section 16 (review-round-1 history). The plan has 8 bytes of room left.",
+   "The task said a filled relative_to 'must still be the label of a partner entry in the same record, as now'. The checker does not check that, and it did not before: it only checks that a filled relative_to is an exact copy of passage text. I left this as it is. Adding such a check would be a new check and would change several pinned fixture cases (for example c17, c19, c22, c23, c36, c42, c46).",
+   "A side effect of the checker change: a `^9` with an empty relative_to and no reached_by used to get a message that also reminded the labeler of the reasoning flag. Now it passes as a lone entry. So a labeler who forgets \"reached_by\": \"reasoning\" on a worked-out conclusion gets no message, and that entry is counted in the `^9` pass-mark row. How often this will happen is NOT MEASURED.",
+   "The scorer was not changed, as told. One sentence it prints in verdict mode is now less exact: 'The ^8 row and the ^9 row count the same pairs from two ends.' A lone entry is counted in one row only. The plan's matching sentence was corrected ('In a pair, ...'); the scorer's printed sentence was not.",
+   "A lone `^8` or `^9` that a labeler marks \"ambiguous\" goes to the rows 'uncertain ^8' and 'uncertain ^9', which the sheet calls 'uncertain sign-reading pairs'. That is how the scorer already treated every ambiguous `^8` or `^9`. I did not change it.",
+   "The sheet now says the study's presence rules are removed. Some study-written text that touches presence stays by the operator's design and is not named on the sheet, apart from rule 15: the first sentence of rule 2 ('Mark a clear pair only when ...'), rule 3's three kept sentences, and the table rows that say what the `^4` and `^7` label is. An earlier reviewer listed these as MINOR.",
+   "Instructions, last line: I kept the exception for the message 'none_of_these is true but there are entries; make it false or take the entries out', because that message still exists. If the operator wants only 'keep only one of two' as the exception, that line needs one more edit.",
+   "Not updated, because they are not among the files I may write: label_v21/OWNER_RULING_AMENDMENT_RECORD.json (it still holds the old hashes and the old statement that rules 2 and 3 stay), CHANGELOG.md, and docs/CAS_HARNESS_SPEC_SHEET.md. No experimental result was produced in this task.",
+   "The ruling record's sha256 changed (a88d9fe8179f... to 72699b024b52...). That is allowed now. After the practice step the seal tool pins this file and it may not change again.",
+   "Guide rule 15 is untouched, so its last bullet still says 'It may be `^4` under rule 10', and rule 10 is a one-line stub. This was open before and stays open.",
+   "X11 and the fixture passages F20, F21 and F22 are made up by me. They are examples of form. They are not evidence about how real labelers will behave.",
+   "No git command that changes state was run (one read-only 'git status'). No AWS call, no outside model call, the key file was never opened. Scratch files only, outside the project: C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0/scratchpad/p1p10/ (before-copies, verify_guide.py, old_before.txt, old_after.txt)."
+  ],
+  "real_numbers_measured": [
+   "All numbers below are REAL: measured on the laptop on 2026-10-05 with tiny standard-library Python (/c/Python314/python.exe -B). No model was run.",
+   "Part A check (tools/build_guide_part_a_v21.py check): printed IDENTICAL, exit 0, before and after the edits.",
+   "Scorer 'fixture' mode after the edits: 'fixture: 22 passages, 62 checker cases, 8 outcome cases, 8 validity cases, 27 gate cases, and the order check' then 'PASS: every number equals FIXTURE_EXPECTED.json', exit 0. Before the edits it was 19 passages and PASS.",
+   "Fixture, hand-worked and then confirmed by the program. `^9` row: A 6, B 4, matched 3, only A 3, only B 1, E = 3/7 = 0.429, kappa = 6/7 = 0.857, cases 5, neither 15. `^8` row: A 3, B 3, matched 2, only A 1, only B 1, E = 2/4 = 0.500, kappa = 17/22 = 0.773. `^1` row: E = 17/19 = 0.895, kappa = 24/29 = 0.828. F20 gives 1 pair (same span). F21 gives 1 only A. F22 gives 1 only A and 1 only B in the `^9` row and 1 only B in the `^8` row.",
+   "Control 1: the OLD checker with the NEW fixture prints FAIL with 85 differences (it refuses the lone entries of F20 to F22). Control 2: the NEW checker with the OLD fixture prints FAIL with exactly 2 differences, cases c35 and c35b. So the fixture really pins the new behaviour.",
+   "Scorer 'old' mode: exit 0. The nine E values are the same as before: ^1 387/446 = 0.868, ^2 56/89 = 0.629, ^3 39/61 = 0.639, ^4 59/147 = 0.401, ^5 95/177 = 0.537, ^6 179/463 = 0.387, ^7 39/123 = 0.317, ^8 46/85 = 0.541, ^9 46/87 = 0.529. The whole output (52 lines) is byte-identical before and after: sha256 6eb6ebe867b7af3a5b0f30342ffbb9944c0b0e58469321f649c50b4c951b0b75. It printed 'run is valid: yes' and 'all 12 rows: yes'. These are attempt-1 labels, not a verdict.",
+   "Checker on every worked example record of the guide: 12 records (P00, X1 to X11), 12 pass, 0 messages, exit 0. They hold 37 entries: 15 are `^1`, 22 are `^2` to `^9`. Control: the old checker gives X11 one message (the removed 'take this entry out' message).",
+   "Byte comparison of the guide against its text before my edit. Rule 15: 1,785 bytes before and after, sha256 7a0a22d8d5b6aebbf9e2165337406eca34bff4cda196af95b0f0e68a3e5e8835 both, cmp shows no difference. Rule 16: 2,393 bytes before and after, sha256 fc6dc196c772557d2f999a38405f5bc1b440e05a6259ae2654ecca604b6f74be both, cmp shows no difference.",
+   "Rule by rule: rules 1, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 are the same bytes as before; rules 2, 3 and 5 changed (rule 2: 630 to 857 bytes; rule 3: 204 to 110; rule 5: 832 to 924). Part A: same bytes (7,425 bytes). Field rules and table: same bytes. Examples X1 to X10: same bytes. Against guide v1.2: rules 1, 8, 9, 11, 12, 14 and 15 are the same bytes.",
+   "Sizes against limits: guide 39,954 bytes (limit 40,000; was 39,314). Plan 24,992 bytes (limit 25,000; was 24,985). Sheet 3,174 bytes (limit 3,200; was 3,199). Instructions 3,560 bytes (limit 3,600; was 3,557). Checker 354 lines (was 358). Ruling record 4,833 bytes (was 4,245).",
+   "Signing line printed by 'tools/seal_v21.py signing-line' (exit 0; it seals nothing): SIGNED: label-agreement v2.1, guide d65ad695bfa1, plan 84d874364747, as proposed.",
+   "sha256 after the edits: guide d65ad695bfa13755f812938cf3bd97b03f4048e9bdcb769bb2e0d9e87cacc958; plan 84d8743647471c345fbdbcc90862e7e8e152a4143086705f751d0907de6d20ea; checker c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9; sheet 32cad8c21aec891a42307079a95142d404e3c23cb7d300fe6ff1adeccf157d7a; instructions 15941173a754f85ff191b2230cd43d34b29573e153ff285aa17124d2f55156d6; ruling record 72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c; FIXTURE_EXPECTED.json 24f027a90a4a1857579de3d228eed86f492527ab94c33690fabf97507eaf5c29.",
+   "Unchanged files, same sha256 as before: tools/verdict_v21.py b87693626936ae8142e45f0f963ffa0fb017cbbe3ff3838f95b1c87d5e8116b5; tools/verdict.py ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb; tools/seal_v21.py d03e3e483fb3...; tools/build_guide_part_a_v21.py 99c9eaf451b3...; canon file docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880.",
+   "Form of the 12 changed files: UTF-8, 0 carriage returns, final newline present, no byte-order mark. All seven tools/*_v21.py files pass ast.parse. All four fixture JSON files and both try logs parse (24 and 29 lines).",
+   "Ruling record, field by field against the copy from before: 2 fields changed (what_stays, what_goes), 1 field added (record_corrected_utc), 0 removed; owner_text_verbatim is the same."
+  ]
+ },
+ "confirm": {
+  "verdict": "ACCEPT_WITH_NOTES",
+  "findings": [
+   {
+    "severity": "MAJOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/PLAN_CONSTANTS.json",
+    "where": "sources.owner_ruling_mind_and_colloquialisms. Also C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/08_OPTION_B_PLAN_v1_0.md lines 81 and 1504, and C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/ob_seal.py lines 626 to 632 (step_1). All three are outside the files this task may write.",
+    "problem": "P10 broke a pin in another chain. P10 changed the bytes of the owner's ruling record, as ordered. The Option B plan pins that same file by size and fingerprint (sha256), and the pin still holds the old values. The Option B seal tool checks every pinned source in its first step and refuses when one differs. So Option B's step 1 will now refuse with SOURCE_CHANGED on the real project. The Option B plan also prints the old size and fingerprint in two places. This is not a fault in how P1 to P10 were done: the task ordered the change and forbids writing these files. But neither the task nor the fixer's report names it. Nothing wrong can come out of it, because the tool refuses. It does not hold the v2.1 signing line. The risk is the wrong repair: if someone puts the old record back to make Option B run, P10 is undone, and after the v2.1 practice step the v2.1 seal tool would refuse as well. This is why the verdict is not a plain ACCEPT. Inside the files of this task, P1 to P10 are done exactly and the files agree with each other.",
+    "evidence": "REAL, measured read-only on 2026-10-05: of the 15 sources pinned in optionb/PLAN_CONSTANTS.json, 14 equal the file on disk and 1 does not. Pinned: OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json, 4245 bytes, sha256 a88d9fe8179f7c052e1c91f69bcdbcdff9745757b1e35cf2276dc1b714c1b024. On disk: 4,833 bytes, sha256 72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c. tools/ob_seal.py step_1: \"for name, pin in c['sources'].items(): ... if size != pin['bytes'] or digest != pin['sha256']: raise Refused('SOURCE_CHANGED', ...)\". Option B plan line 81: \"(`OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json`, 4,245 bytes, sha256 `a88d9fe8179f7c052e1c91f69bcdbcdff9745757b1e35cf2276dc1b714c1b024`)\". I did not run ob_seal.py. PLAN_CONSTANTS.json was last written at 11:26:05 PDT, after the record changed at 11:15:57 PDT, and it still holds the old pin. Other work was changing Option B files while I reviewed (tools/ob_seal.py 11:24, 08_OPTION_B_PLAN_v1_0.md 11:28). That is not part of this change: the files of P1 to P10 were last written between 11:06 and 11:15 and did not change during my review.",
+    "fix": "Not for this task's fixer. The operator re-pins the record in the Option B lane, by that plan's own amendment step: 4833 bytes, sha256 72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c, in optionb/PLAN_CONSTANTS.json (sources.owner_ruling_mind_and_colloquialisms) and in 08_OPTION_B_PLAN_v1_0.md lines 81 and 1504. Do not restore the old record. Do it before the v2.1 practice step: after that step tools/seal_v21.py holds the record's fingerprint and the record may not change again. Tell the Option B work now, because it is running."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/verdict_v21.py",
+    "where": "run_verdict, lines 672 to 674 (the text named scope)",
+    "problem": "One sentence the scorer prints with a verdict is no longer exact. It says the ^8 row and the ^9 row count the same pairs from two ends. A lone entry is counted in one row only. The plan's matching sentence was corrected (section 5: \"In a pair, each needs the other as its related thing.\"). The scorer's sentence was left, as the task ordered: the scorer handles a lone entry correctly, so it was not to be changed. The sentence goes into the verdict report.",
+    "evidence": "Scorer: \"The ^8 row and the ^9 row count the same pairs from two ends.\" REAL, fixture after the change: ^8 row A 3, B 3, matched 2; ^9 row A 6, B 4, matched 3. The two rows now differ. REAL probe in memory: a lone ^8 written by both teams gives 1 pair in the ^8 row and nothing in the ^9 row.",
+    "fix": "Operator's choice. Leave it and say so in the result report. Or, before the practice step, change the sentence to: \"A pair is counted once in the ^8 row and once in the ^9 row; a lone entry is counted in one row only.\" It prints only in verdict mode, so the fixture and the old-mode output stay the same. Then run ast.parse, the fixture mode and the old mode again. The scorer's sha256 changes; the signing line does not."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/check_labels_v21.py",
+    "where": "entry_faults, lines 179 to 184. Read with guide rule 15(b) and sheet item 1.",
+    "problem": "A side effect of the change that the sheet does not name. A lone ^9 and a worked-out conclusion whose labeler forgot \"reached_by\": \"reasoning\" now have the same form. Before, the checker stopped the second one and named the flag. Now both pass with no message. The unflagged one is counted in the ^9 pass-mark row, not in the row \"^9 reached by reasoning\". Guide rule 15(b) says the two \"are counted separately and never mixed\". That now rests on the labeler alone. The fixer disclosed it. How often it will happen under the new rule is NOT MEASURED.",
+    "evidence": "REAL probe in memory: team A writes a lone clear ^9, team B writes the same thing with the flag. Result: ^9 pass-mark row A 1, B 0, matched 0, only A 1; row \"^9 reached by reasoning\" only B 1. REAL, attempt-1 labels (guide v1.2, no checker): 80 ^9 entries had an empty relative_to (team A 32, team B 48) and all 80 carried the flag; 0 ^8 or ^9 entries had an empty relative_to without it. So it did not happen in attempt 1, under the old rule.",
+    "fix": "No fix by form exists, and a check on meaning would be a new presence rule. Leave the checker. Nothing is needed to sign. Say in the result report that the ^9 pass-mark row can hold conclusions whose flag was forgotten."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/check_labels_v21.py",
+    "where": "entry_faults, lines 185 and 186. Task item P5, second sentence.",
+    "problem": "P5 says a filled relative_to \"must still be the label of a partner entry in the same record, as now\". No such check exists, and none existed before this change. The checker only tests that a filled relative_to is an exact copy of passage text, at whole words, 1 to 12 words. The fixer left it so and said so. That is right: a new check is not part of this change and would move pinned fixture cases. Nothing was lost. The operator's sentence describes a check the tool never had.",
+    "evidence": "REAL probe: a ^9 whose relative_to is \"The kettle clicked\", in a record with no ^8 entry, passes today's checker (sha256 c32e2f7b5b98...) and the checker from before the change (sha256 63d9bb0ce074...). The diff of the checker shows two places changed and no check removed except the lone-entry message.",
+    "fix": "None for this change. If the operator wants that check, it is a separate change with its own fixture cases, made before the practice step."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/02_LABELING_GUIDE_v2_1.md",
+    "where": "Status block (line 7), heading (line 167), \"Changes before version 2.1\" (line 303), \"Changes from version 1.2 to version 2.1\" (lines 307, 309, 317, and the removed row \"Rule 16, kept from 1.2\")",
+    "problem": "The fixer changed more guide text than P1 to P4 name. The task said \"nothing else\", so the operator should know. Needed and correct: the two \"byte for byte\" lists no longer name rules 2 and 3; \"Ten\" became \"Eleven\"; one new row records the change. Cut to stay under 40,000 bytes: history text only, among it the change-table row \"Rule 16, kept from 1.2\". No rule, no example passage and no byte of Part A was cut. The fixer disclosed all of it.",
+    "evidence": "REAL, by my own script against the copy from before (sha256 24a861107f41...): rules 1, 4 and 6 to 16 are the same bytes; rules 2, 3 and 5 changed. Part A (7,425 bytes), the field rules with the table, and the examples P00 to X10 are the same bytes. Rules 1, 8, 9, 11, 12, 14 and 15 equal 02_LABELING_GUIDE_v1_2.md. The guide is 39,954 bytes; 46 bytes of room.",
+    "fix": "None needed. If the operator wants the cut row back, the same number of bytes must go elsewhere, and the signing line must be made again."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/09_LABEL_AGREEMENT_PLAN_v2_1.md",
+    "where": "Section 17, line 265",
+    "problem": "The plan's own list of what the amendment changed is a little behind. It names \"section 15 (review round 2)\". The bullet there is now the operator's decision made after that review. The list does not name section 5, where one sentence changed, or the two cuts in section 16.",
+    "evidence": "Line 265: \"Changed here: the presence rows of section 2, the forecast (removed), the seal list (section 4), team A's tool (section 10), the cost estimate, section 15 (review round 2).\" Section 5 now reads: \"In a pair, each needs the other as its related thing.\" The plan is 24,992 bytes; 8 bytes of room.",
+    "fix": "Optional. Replace \"section 15 (review round 2)\" with \"sections 5 and 15\". That is 10 bytes shorter. Any change to the plan needs a new signing line, so do it only if the plan is opened again for another reason."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/OWNER_RULING_AMENDMENT_RECORD.json",
+    "where": "Whole file (blocks guide, follow, reviews, fix, confirm). Also C:/Users/wakil/OneDrive/Desktop/tksCAS/CHANGELOG.md.",
+    "problem": "The amendment record still ends on the state before this change. Its fix and confirm blocks say rules 2 and 3 stay, give the old fingerprints, and give a signing line that no longer fits. The fixer may not write this file or CHANGELOG.md. Until the operator adds this step, the trail points to the wrong line.",
+    "evidence": "Record, confirm block: \"SIGNED: label-agreement v2.1, guide 24a861107f41, plan b2be8aeacf9d, as proposed.\" Today's line: guide d65ad695bfa1, plan 84d874364747. What a new block can hold, all REAL, run by me on 2026-10-05 with /c/Python314/python.exe -B, with no project file changed: Part A check IDENTICAL (exit 0). Scorer fixture mode: 22 passages, 62 checker cases, \"PASS: every number equals FIXTURE_EXPECTED.json\" (exit 0). Scorer old mode: exit 0, output sha256 6eb6ebe867b7af3a5b0f30342ffbb9944c0b0e58469321f649c50b4c951b0b75, E values ^1 0.868, ^2 0.629, ^3 0.639, ^4 0.401, ^5 0.537, ^6 0.387, ^7 0.317, ^8 0.541, ^9 0.529. Checker on all 12 guide examples (P00, X1 to X11): 12 pass, 0 messages (exit 0). Controls: the checker from before gives X11 one message; old checker with new fixture FAIL, 85 differences; new checker with old fixture FAIL, 2 differences (c35, c35b). Fixture numbers worked again by hand: ^9 E 3/7 = 0.429, kappa 6/7; ^8 E 2/4, kappa 17/22; ^1 E 17/19, kappa 24/29. Ruling record: 2 fields changed (what_stays, what_goes), 1 added (record_corrected_utc), the owner's text the same. Limits: guide 39,954 of 40,000; plan 24,992 of 25,000; sheet 3,174 of 3,200; instructions 3,560 of 3,600. All 12 changed files: UTF-8, 0 carriage returns. All seven tools/*_v21.py pass ast.parse. Nothing is signed, sealed or labeled. My scratch files are only in C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0/scratchpad/confirm_p1p10/.",
+    "fix": "The operator adds a block for this step to the record and an entry to CHANGELOG.md, with the hashes in final_hashes and the new signing line. No spec-sheet status changes: no experimental result was produced."
+   }
+  ],
+  "final_hashes": [
+   "guide C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/02_LABELING_GUIDE_v2_1.md: sha256 d65ad695bfa13755f812938cf3bd97b03f4048e9bdcb769bb2e0d9e87cacc958, 39,954 bytes",
+   "instructions C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/LABELER_INSTRUCTIONS.txt: sha256 15941173a754f85ff191b2230cd43d34b29573e153ff285aa17124d2f55156d6, 3,560 bytes",
+   "plan C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/09_LABEL_AGREEMENT_PLAN_v2_1.md: sha256 84d8743647471c345fbdbcc90862e7e8e152a4143086705f751d0907de6d20ea, 24,992 bytes",
+   "sheet C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/OWNER_SIGNOFF_SHEET.md: sha256 32cad8c21aec891a42307079a95142d404e3c23cb7d300fe6ff1adeccf157d7a, 3,174 bytes",
+   "checker C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/check_labels_v21.py: sha256 c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9, 20,711 bytes",
+   "scorer C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/verdict_v21.py: sha256 b87693626936ae8142e45f0f963ffa0fb017cbbe3ff3838f95b1c87d5e8116b5, 51,552 bytes (not changed)",
+   "seal tool C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/seal_v21.py: sha256 d03e3e483fb342c49ea83452d055f8f31fb3e9bb1ca22d54891c847188a34e63, 29,423 bytes (not changed)",
+   "FIXTURE_EXPECTED.json C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/FIXTURE_EXPECTED.json: sha256 24f027a90a4a1857579de3d228eed86f492527ab94c33690fabf97507eaf5c29, 70,363 bytes"
+  ],
+  "signing_line": "SIGNED: label-agreement v2.1, guide d65ad695bfa1, plan 84d874364747, as proposed."
+ }
+}

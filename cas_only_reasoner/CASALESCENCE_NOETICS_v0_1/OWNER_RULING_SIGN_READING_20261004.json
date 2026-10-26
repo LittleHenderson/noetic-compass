@@ -1,0 +1,22 @@
+{
+  "schema": "helm.owner-direct-ruling/1",
+  "utc_recorded": "2026-10-05T06:42:00Z",
+  "received_pacific": "2026-10-04 about 23:38 PDT",
+  "channel": "Owner pasted this text into Claude Code (desktop app, Code tab), session d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0, with no other words. Pasted text from the owner is the owner speaking.",
+  "question_it_answers": "Claude asked for a ruling: is an experienced Mind reading a sign (a knock in the dryer, and he knows a shoe is loose) an ^8/^9 pair or not?",
+  "owner_pasted_text_verbatim": "The important unresolved question is whether recognizing a familiar sign counts as Cause → Effect, reasoning, or both\nMy recommendation for your ruling:\n\n* A sign directly brings a different idea to mind: mark ^8 and ^9\n* The person works through evidence to reach a conclusion: mark the reasoning roles specified by your definitions\n* Both happen: allow both, attached to their respective parts\n* The passage doesn’t reveal which happened: mark it uncertain\n\nBeing fast doesn’t prove that no reasoning occurred. And an experienced Mind (^5) could be involved while a trigger-and-result pair also occurs; those descriptions needn’t automatically exclude each other\nThe loud bang followed by a flinch needs separate care: a physical reaction alone doesn’t establish that a different Idea came to Mind\nDoes that distinction match your intended CAS/TKS meaning, or do you intend learned recognition of a sign to be excluded from ^8/^9?",
+  "how_claude_applies_it_labelled_as_interpretation": {
+    "status": "WORKING RULING. The pasted text is a recommendation written to the owner by another agent and ends with a question to the owner. The owner pasted it without answering that last question in their own words. Claude applies the four bullets and the two cautions as the ruling for labeling guide v1.0, and treats the last question as still open.",
+    "rules_taken": [
+      "A sign directly brings a different Idea to Mind: mark ^8 and ^9.",
+      "The Mind works through evidence to a conclusion: mark the reasoning roles the canon names. Clarification 6 says deductive causal inference is a compound of ^6 Male and ^9 Below/Effect, not ^8 Above/Cause alone.",
+      "Both happen: mark both, each attached to its own words.",
+      "The passage does not reveal which happened: mark the pair as uncertain.",
+      "Speed is not proof that no reasoning occurred.",
+      "^5 Female may be marked as well; it does not exclude a pair.",
+      "A bodily reaction alone does not establish that a different Idea came to Mind."
+    ],
+    "open_question_left_with_the_owner": "Do you intend learned recognition of a sign to be excluded from ^8/^9 altogether? If yes, guide v1.0 rule 15 changes and any labels made under it for that kind of passage are redone. Under the working ruling, learned recognition is marked as a pair when the passage shows the sign bringing the thing to Mind, and as uncertain when the passage only says the Mind knew."
+  },
+  "operator": "Claude Code (claude-opus-5-5)"
+}

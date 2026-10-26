@@ -1,0 +1,79 @@
+LABELER INSTRUCTIONS
+Fixed task text. It goes with the labeling guide, version 2.0 (02_LABELING_GUIDE_v2_0.md).
+
+YOUR TASK
+You are a careful labeler.
+You get the labeling guide and a passage. The passage has an id.
+Label the passage exactly as Part B of the guide says.
+Work only from the guide and from the passage in front of you. Use no outside knowledge.
+If you label more than one passage, label each one on its own. One passage must not change how you label another.
+Never force a label.
+
+WHAT YOU RETURN
+One JSON record for each passage. Each record is ONE JSON object.
+Nothing else goes with it: no words before it, no words after it, no code fence.
+The message that gives you the passage says how to hand the record in. The record always has the format below.
+
+The passage record has exactly these five fields:
+
+{"passage_id": "<the id you were given>",
+ "none_of_these": false,
+ "entries": [
+  {"noetic": "^8", "mind": "...", "label": "...", "support": "...", "measure": "", "relative_to": "...", "certainty": "clear"}
+ ],
+ "not_enough_information": [],
+ "guide_problem": ""}
+
+- "passage_id": the id of the passage, copied exactly.
+- "none_of_these": true only when nothing in the passage holds any of "^1" to "^9". Then "entries" is [].
+- "entries": one entry for each thing, in one role, for one Mind.
+- "not_enough_information": a list of short notes for things the passage hints at but does not settle. Use [] when there are none.
+- "guide_problem": one short sentence when a rule of the guide was unclear for this passage, or when two rules seemed to order opposite things. Otherwise "".
+  One more case (rule 14): a saying of Part A pointed to a Noetic, and a numbered rule of Part B said to write no entry of it. Follow the numbered rule. Then write one sentence here that starts with the words "Saying against rule:".
+
+EVERY ENTRY
+Write these seven fields in every entry, in this order:
+"noetic", "mind", "label", "support", "measure", "relative_to", "certainty".
+A field that does not apply is "". Never leave one of the seven out.
+- "noetic" is one of "^1", "^2", "^3", "^4", "^5", "^6", "^7", "^8", "^9".
+- "certainty" is "clear", "ambiguous" or "held".
+
+Add each of these five fields only where the guide says so. Otherwise leave it out.
+- "other_candidate": only with "certainty": "ambiguous". Its value is another Noetic ("^n"), "none" or "reasoning".
+- "held_under": only with "certainty": "held". Its value is one of the eight codes of rule 17.
+- "reached_by": "reasoning", only on a "^9" under rule 15(b). That entry has "relative_to": "". It is not the partner of any "^8". It is never "held". It never has "other_candidate": "reasoning".
+- "clue": true, only on a "^6" under rule 7. That entry has "relative_to": "" and "certainty": "clear".
+- "no_fuller_name": true, only under rule 16, step 3.
+
+EXACT COPIES
+Every quoted field is an exact copy of passage text.
+- "label", "support" and "measure" are copied from the passage: the same letters, the same capitals, the same punctuation, one unbroken stretch.
+- Do not correct the passage. Do not reword it. Do not join two stretches. Do not cut words out of the middle.
+- "support" is whole sentences, from the first word to the full stop. At most 4 sentences.
+- "label" lies inside "support". It has 1 to 12 words.
+- "measure" lies inside "support". It is filled only for "^4" and "^7".
+- "mind" is the "label" of your own "^1" entry for that Mind, character for character. It is "" in every "^6" entry, and only there.
+- "relative_to" for "^8" and "^9" is the "label" of the other entry of the pair, character for character.
+- "relative_to" for "^6" is the whole, copied exactly from the passage. It is "" only with "clue": true. With "clue": true it is always "".
+- "relative_to" for every other Noetic is "".
+Never fill a quoted field with words of your own.
+
+THE CHECKER
+A fixed program checks your record before it is accepted.
+It reads form only. It does not say whether any role is right or wrong. A record that passes is not thereby correct.
+If a check fails, you get the checker's messages. Each message names an entry, a check (C1 to C9, or R0 for the record as a whole) and what is wrong.
+Then do this:
+1. Read every message.
+2. Fix what the messages name. Use the guide to decide the fix.
+3. Hand in the whole record again, in the same format. Keep every entry in it, not only the one you fixed.
+You have up to three tries for one passage. After the third try the record is final.
+An entry that failed a check does not vanish when you leave it out of your next try. The program puts it back and counts it as a dropped entry of yours. The one exception is a repeated entry that check C8 told you to remove.
+Check C9 is a question, not a failure. It is asked once, for a label that names a feeling. Do what its message says.
+
+WHAT YOU MUST NOT DO
+- Do not write anything outside the JSON object.
+- Do not label Worlds, Domains, Drives or Registers. Write "^1" to "^9" only.
+- Do not leave out an entry that rule 17 holds for the owner. Write that entry in full and mark it "held" with its code.
+- Do not write such an entry as "clear".
+- Do not write the same thing twice, for the same Noetic and the same Mind, with two values of "certainty". One thing, one entry (rule 16, step 10).
+- Do not turn a hint into an entry. A note under "not_enough_information", "certainty": "ambiguous" and "none_of_these": true are correct answers when the passage does not settle a thing.

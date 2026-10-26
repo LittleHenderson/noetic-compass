@@ -1,0 +1,121 @@
+{
+ "schema": "casalescence/optionb/survival/v1",
+ "made_by": {
+  "program": "tools/ob_select.py",
+  "sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+  "utc": "2026-10-07T01:21:00Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "ef5850a6959cff906503596049150fdb5fe026922311478e0039ad575b1c5c0e"
+  },
+  {
+   "path": "optionb/checks/anchor_check_practice.json",
+   "sha256": "5311fb21986da5de558b04d245f04038e9754f9282e1c79f24118690e678a6a1"
+  },
+  {
+   "path": "optionb/checks/candidates_practice.json",
+   "sha256": "5f12f3a6bfb6745a6535ba215d27045ff37e83a7c26c5a610354b744f6da7aca"
+  },
+  {
+   "path": "optionb/checks/form_check_practice.json",
+   "sha256": "2caf3e9607907ad9fbe108e089e208e6104854f7bcdfd3f3b4f02cd0e65afa34"
+  },
+  {
+   "path": "optionb/checks/option_check_practice.json",
+   "sha256": "f86eca83d6ab30abb9991b82c39cabb6e80b86ceaf94a039918d11ebc81bb39f"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "8db5d2a81b3d38ba0c0bc739c238ac01e7dc2c16cb9c4cfe7b3f272bf5598e37"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "2a165f5a6c221b31ca9abf212af768e792f4e8ed7e522594c5427a8f0d4c9c65"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "3875323b6cd206955551c18b46744171b98f4892abf98d5bc834ed9ba8409d12"
+  },
+  {
+   "path": "optionb/solve/key_check_practice.json",
+   "sha256": "f252b33839dcc3f9f3853cf13364a6389e0e5bdef80881de0a76904f81a7fa97"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "practice",
+ "practice_setting_count": 12,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 82,
+   "plain_fact": 87
+  },
+  {
+   "filter": "form check",
+   "role_step": 80,
+   "plain_fact": 86
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 64,
+   "plain_fact": 86
+  },
+  {
+   "filter": "option check",
+   "role_step": 48,
+   "plain_fact": 86
+  },
+  {
+   "filter": "key check",
+   "role_step": 30,
+   "plain_fact": 85
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 16,
+   "plain_fact": 44
+  },
+  {
+   "filter": "selection",
+   "role_step": 16,
+   "plain_fact": 20
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 16,
+   "plain_fact": 20
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 16,
+  "plain_fact_tasks": 20,
+  "passages_with_a_task": 29,
+  "passages_with_a_role_step_task": 13,
+  "single_longest": [
+   1,
+   16
+  ],
+  "single_shortest": [
+   0,
+   16
+  ]
+ },
+ "dropped_by_reason": {
+  "PASSAGE_NOT_ELIGIBLE": 24
+ },
+ "decision": "STOP_DO_NOT_LAUNCH",
+ "stop_reasons": [
+  "16 practice role-step tasks and 20 practice plain-fact tasks survive with 12 practice settings, and no reserve setting is left; the launch floors are 36 and 20."
+ ],
+ "next": "Do not launch. Report the survival numbers to the owner. Seal step 3A may still be written, so that the practice questions are kept as evidence; seal step 3B will be refused. No brief and no filter is changed without a new reviewed plan version.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+}

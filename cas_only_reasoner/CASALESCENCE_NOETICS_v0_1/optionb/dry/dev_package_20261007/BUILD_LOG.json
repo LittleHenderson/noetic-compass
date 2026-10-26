@@ -1,0 +1,1130 @@
+{
+ "schema": "casalescence/optionb/dev_package_build_log/v1",
+ "made_by": {
+  "program": "optionb/dry/build_dev_package.py [MADE-UP DATA FOR THE DEVELOPMENT TEST, NOT A RESULT]",
+  "sha256": "19207b75617245eb1fe4607a319b513e5289a39ee704e3366def7d2075dd0aa2",
+  "utc": "2026-10-07T00:14:14Z"
+ },
+ "note": "MADE-UP DATA, NOT A RESULT. Made-up passages, label entries, questions, solver answers, notes, verdicts, model names and seal lines. No outside call was made. The only real study text is the canon definition lines and the canonical sayings lines (amendment A13), copied by the role-note tool from the guide and from the table of the canon file. This package is for the development test only. It is never evidence about roles and never the package of a seal step.",
+ "status": "DEV_PACKAGE_BUILT",
+ "folder": "optionb/dry/dev_package_20261007",
+ "made_up_passages": 16,
+ "counts": {
+  "final_role_step_tasks": 7,
+  "final_plain_fact_tasks": 4,
+  "final_passages_with_a_role_step_task": 4,
+  "practice_role_step_tasks": 23,
+  "practice_plain_fact_tasks": 12
+ },
+ "plan_files_as_they_stood": {
+  "08_OPTION_B_PLAN_v1_0.md": "37ef5ffe3ce3518fa292e7111bdeb875bfc58bdd48bcba222c6fbe97e21f2897",
+  "PLAN_CONSTANTS.json": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34",
+  "FILE_FORMATS.md": "66a5bd99cd8dfbf35bc3fa7d3e3cd04f4d5be7d44c6c02d3963b238935ff779f"
+ },
+ "made_up_study_folder": "optionb/dry/dev_package_20261007/project",
+ "made_up_seal": {
+  "seal_file": "optionb/dry/dev_package_20261007/project/optionb/SEAL_OPTIONB.jsonl",
+  "seal_sha256": "d3f92f8f9c7c543359304a9c4d2b9d20aba5d8cb8a383a9303c58537874ce9ca",
+  "seal_lines": 8,
+  "sealed_files": 79
+ },
+ "package_files": {
+  "08_OPTION_B_PLAN_v1_0.md": {
+   "path": "08_OPTION_B_PLAN_v1_0.md",
+   "bytes": 165280,
+   "sha256": "37ef5ffe3ce3518fa292e7111bdeb875bfc58bdd48bcba222c6fbe97e21f2897"
+  },
+  "FILE_FORMATS.md": {
+   "path": "optionb/FILE_FORMATS.md",
+   "bytes": 125389,
+   "sha256": "66a5bd99cd8dfbf35bc3fa7d3e3cd04f4d5be7d44c6c02d3963b238935ff779f"
+  },
+  "PLAN_CONSTANTS.json": {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "bytes": 91484,
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  "job/analysis_b1.py": {
+   "path": "optionb/job/analysis_b1.py",
+   "bytes": 69933,
+   "sha256": "58348eff5528cda1fa0af7b3588f787d559e8d3e9da4de2a1b5ae2b15973b411"
+  },
+  "job/gate_b1.py": {
+   "path": "optionb/job/gate_b1.py",
+   "bytes": 35951,
+   "sha256": "82605a5a38455b11e7765f06159530faa6165d5f8ec109bfcd0b31ae2a97133f"
+  },
+  "job/runner_b1.py": {
+   "path": "optionb/job/runner_b1.py",
+   "bytes": 71179,
+   "sha256": "c50631e47b4cbda3ff7d2b7fe916ced0a1bc48cb5e3a4b6b58a1b007bf556ff2"
+  },
+  "job/scorer_examples_v0_1_1.json": {
+   "path": "optionb/job/scorer_examples_v0_1_1.json",
+   "bytes": 6559,
+   "sha256": "11c2eecf7edc5c17d2432ffecb835666c526a907eab709c67e761985d8de3583"
+  },
+  "job/scorer_v0_1_1.py": {
+   "path": "optionb/job/scorer_v0_1_1.py",
+   "bytes": 6173,
+   "sha256": "62222d04d714a21b20e88997684cb90521d684c1ee085cc7781883f71591a867"
+  },
+  "keys_final/keys_final.json": {
+   "path": "optionb/keys_final/keys_final.json",
+   "bytes": 6026,
+   "sha256": "6a197c3606af128c44e9fec93a9e9a3d6db6104b22af70f7b3f7d1f4b2ee1821"
+  },
+  "keys_final/task_meta_final.json": {
+   "path": "optionb/keys_final/task_meta_final.json",
+   "bytes": 9237,
+   "sha256": "a83b34d0fb32099c8585123fbf6292f3de1b6b1a96da977b39d10246d5919eb1"
+  },
+  "keys_practice/keys_practice.json": {
+   "path": "optionb/keys_practice/keys_practice.json",
+   "bytes": 7143,
+   "sha256": "4b7b6a3c110af8edbb74bdeb438a13199465f135b9e419607d66911599c161de"
+  },
+  "keys_practice/task_meta_practice.json": {
+   "path": "optionb/keys_practice/task_meta_practice.json",
+   "bytes": 17554,
+   "sha256": "5de4b25daeea68386033d8491fa6f4f109444d3501ab3ceafb1b724b31f384b2"
+  },
+  "prompts/prompt_parts_final.json": {
+   "path": "optionb/prompts/prompt_parts_final.json",
+   "bytes": 57949,
+   "sha256": "cf63dd85469add7c3b3a601825bba5721e95b0867864ee38123a97f66c362e4d"
+  },
+  "prompts/prompt_parts_practice.json": {
+   "path": "optionb/prompts/prompt_parts_practice.json",
+   "bytes": 181528,
+   "sha256": "346a6b5059252463beac33b27f1207a6cb9a7012d813a45b976805e827519bdd"
+  },
+  "tools/verdict.py": {
+   "path": "tools/verdict.py",
+   "bytes": 13018,
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ },
+ "builder_commands": [
+  "C:\\Python314\\python.exe -B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\controller_b1_draft\\build_source_zip_b1.py --study-root C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\project --out C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\package --guest C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\controller_b1_draft\\worker_v02.py",
+  "C:\\Python314\\python.exe -B C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\controller_b1_draft\\build_contract_b1.py --study-root C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\project --out C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\package --stamp-only"
+ ],
+ "builders": {
+  "source_zip": {
+   "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\package\\source.zip",
+   "bytes": 888995,
+   "sha256": "6b36f2cbe918b45a3757f76f9e366ba9006d02873ae1a603afbbdc21a39e89a0"
+  },
+  "source_zip_build_receipt": "optionb/dry/dev_package_20261007/package/SOURCE_ZIP_BUILD_RECEIPT.json",
+  "stamp_only_exit_code": 0,
+  "stamp_only_note": "The contract builder stamped a copy of the guest and checked its size limits. No contract was written: a contract needs seal step 7."
+ },
+ "not_run_by_this_script": [
+  "tools/ob_eligibility.py: it reads the real label files; the made-up eligibility file is written by this script",
+  "the command of tools/ob_role_notes.py: it refuses a set that is not the real size; its three building functions were called",
+  "the seal steps of tools/ob_seal.py: they check the real counts and sources; the made-up seal lines are written by this script"
+ ],
+ "tool_runs": 56,
+ "checks": 34,
+ "steps": [
+  {
+   "label": "role notes of 16 made-up passages",
+   "tool": "tools/ob_role_notes.py",
+   "argv": [
+    "read_canon()",
+    "read_sayings()",
+    "build_passage()"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "CALLED_DIRECTLY"
+  },
+  {
+   "label": "writer practice p1: the plan",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "writer practice p1: 3 made-up replies",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "3",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\writer_practice_p1_1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "writer practice p2: the plan",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p2",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "writer practice p2: 3 made-up replies",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p2",
+    "--max-calls",
+    "3",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\writer_practice_p2_1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "check practice",
+   "tool": "tools/ob_check_questions.py",
+   "argv": [
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "CHECKED"
+  },
+  {
+   "label": "deepseek practice: the item map",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "deepseek practice: 76 made-up replies",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "76",
+    "--workers",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\deepseek_practice_0.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_ANSWERED"
+  },
+  {
+   "label": "export practice with_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN"
+  },
+  {
+   "label": "import practice with_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED"
+  },
+  {
+   "label": "export practice no_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN"
+  },
+  {
+   "label": "import practice no_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED"
+  },
+  {
+   "label": "decide practice",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "KEY_CHECK_WRITTEN"
+  },
+  {
+   "label": "select practice, 8 settings",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "practice"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOP_RESERVE_TARGET_NOT_MET_MOVE_NEXT_RESERVE_SETTING"
+  },
+  {
+   "label": "writer practice p1: the plan",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--practice-settings",
+    "9",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "writer practice p1: 1 made-up replies",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p1",
+    "--practice-settings",
+    "9",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\writer_practice_p1_2.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "writer practice p2: the plan",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p2",
+    "--practice-settings",
+    "9",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "writer practice p2: 1 made-up replies",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--pass",
+    "p2",
+    "--practice-settings",
+    "9",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\writer_practice_p2_2.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "check practice",
+   "tool": "tools/ob_check_questions.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--practice-settings",
+    "9"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "CHECKED"
+  },
+  {
+   "label": "deepseek practice: the item map",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "deepseek practice: 16 made-up replies",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "practice",
+    "--max-calls",
+    "16",
+    "--workers",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\deepseek_practice_76.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_ANSWERED"
+  },
+  {
+   "label": "export practice with_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN"
+  },
+  {
+   "label": "import practice with_passage sheet 02",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "02",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED"
+  },
+  {
+   "label": "export practice no_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN"
+  },
+  {
+   "label": "import practice no_passage sheet 02",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "practice",
+    "--mode",
+    "no_passage",
+    "--sheet",
+    "02",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED"
+  },
+  {
+   "label": "decide practice",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "KEY_CHECK_WRITTEN"
+  },
+  {
+   "label": "select practice, 9 settings",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "practice",
+    "--practice-settings",
+    "9"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "GO"
+  },
+  {
+   "label": "fix the split",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "fix-split"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SPLIT_FIXED"
+  },
+  {
+   "label": "notes practice: the plan",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "PLAN_ONLY"
+  },
+  {
+   "label": "notes practice: 72 made-up notes",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--step",
+    "first",
+    "--max-calls",
+    "72",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\notes_practice.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "support practice: the plan",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "support practice: 6 made-up replies",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "practice",
+    "--max-calls",
+    "6",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\support_practice.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "NOTHING_PENDING"
+  },
+  {
+   "label": "support practice: decide",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "decide",
+    "--set",
+    "practice"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "DECIDED"
+  },
+  {
+   "label": "screen practice, report only",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "practice",
+    "--report-only"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "REPORT_ONLY"
+  },
+  {
+   "label": "writer final p1: the plan",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "final",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "writer final p1: 1 made-up replies",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "final",
+    "--pass",
+    "p1",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\writer_final_p1_1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "writer final p2: the plan",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "final",
+    "--pass",
+    "p2",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "writer final p2: 1 made-up replies",
+   "tool": "tools/ob_write_questions.py",
+   "argv": [
+    "--set",
+    "final",
+    "--pass",
+    "p2",
+    "--max-calls",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\writer_final_p2_1.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "check final",
+   "tool": "tools/ob_check_questions.py",
+   "argv": [
+    "--set",
+    "final"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "CHECKED"
+  },
+  {
+   "label": "deepseek final: the item map",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "final",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "deepseek final: 28 made-up replies",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "deepseek",
+    "--set",
+    "final",
+    "--max-calls",
+    "28",
+    "--workers",
+    "1",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\deepseek_final_0.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_ANSWERED"
+  },
+  {
+   "label": "export final with_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "final",
+    "--mode",
+    "with_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN"
+  },
+  {
+   "label": "import final with_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "final",
+    "--mode",
+    "with_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED"
+  },
+  {
+   "label": "export final no_passage",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "export",
+    "--set",
+    "final",
+    "--mode",
+    "no_passage"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEETS_WRITTEN"
+  },
+  {
+   "label": "import final no_passage sheet 01",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "import",
+    "--set",
+    "final",
+    "--mode",
+    "no_passage",
+    "--sheet",
+    "01",
+    "--transcript-model",
+    "claude-sonnet-5-5"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SHEET_IMPORTED"
+  },
+  {
+   "label": "decide final",
+   "tool": "tools/ob_solve_blind.py",
+   "argv": [
+    "decide",
+    "--set",
+    "final"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "KEY_CHECK_WRITTEN"
+  },
+  {
+   "label": "select final",
+   "tool": "tools/ob_select.py",
+   "argv": [
+    "select",
+    "--set",
+    "final"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "GO"
+  },
+  {
+   "label": "notes final: the plan",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--step",
+    "first",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "PLAN_ONLY"
+  },
+  {
+   "label": "notes final: 24 made-up notes",
+   "tool": "tools/ob_write_ordinary_notes.py",
+   "argv": [
+    "--set",
+    "final",
+    "--step",
+    "first",
+    "--max-calls",
+    "24",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\notes_final.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "ALL_WRITTEN"
+  },
+  {
+   "label": "support final: the plan",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "0"
+   ],
+   "exit": 1,
+   "stop": null,
+   "status": "STOPPED_CALL_BUDGET"
+  },
+  {
+   "label": "support final: 2 made-up replies",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "gemini",
+    "--set",
+    "final",
+    "--max-calls",
+    "2",
+    "--replay-replies",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\work\\replay\\support_final.json"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "NOTHING_PENDING"
+  },
+  {
+   "label": "support final: decide",
+   "tool": "tools/ob_check_support.py",
+   "argv": [
+    "decide",
+    "--set",
+    "final"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "DECIDED"
+  },
+  {
+   "label": "screen both sets",
+   "tool": "tools/ob_screen_notes.py",
+   "argv": [
+    "--set",
+    "both"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": "SCREENED"
+  },
+  {
+   "label": "assemble",
+   "tool": "tools/ob_assemble.py",
+   "argv": [],
+   "exit": 0,
+   "stop": null,
+   "status": "ASSEMBLED"
+  },
+  {
+   "label": "the real zip builder",
+   "tool": "optionb/controller_b1_draft/build_source_zip_b1.py",
+   "argv": [
+    "--study-root",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\project",
+    "--out",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\package",
+    "--guest",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\controller_b1_draft\\worker_v02.py"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": null
+  },
+  {
+   "label": "the real contract builder, stamp only, on a copy of the guest",
+   "tool": "optionb/controller_b1_draft/build_contract_b1.py",
+   "argv": [
+    "--study-root",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\project",
+    "--out",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CASALESCENCE_NOETICS_v0_1\\optionb\\dry\\dev_package_20261007\\package",
+    "--stamp-only"
+   ],
+   "exit": 0,
+   "stop": null,
+   "status": null
+  }
+ ],
+ "check_list": [
+  {
+   "check": "the made-up passages open the planned forms: GOES_FOR alone for two of them, two PULL-PUSH forms and two HABIT forms for the others",
+   "held": true,
+   "detail": "[\"GOES_FOR\", \"GOES_FOR KEEPS_AWAY LONG_BREAK NEW_STARTER\"]"
+  },
+  {
+   "check": "every made-up passage has a role note that opens, for each of its Noetics in number order, with the canon line copied from the guide and then the sayings line copied from the table of the canon file",
+   "held": true,
+   "detail": "16"
+  },
+  {
+   "check": "no sayings line stands in a QUOTES-ONLY note",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer practice p1: no batch holds more than 4 passages",
+   "held": true,
+   "detail": "[4, 4, 2]"
+  },
+  {
+   "check": "writer practice p2: no batch holds more than 4 passages",
+   "held": true,
+   "detail": "[4, 4, 2]"
+  },
+  {
+   "check": "export practice with_passage: one sheet, and it names the pinned model id",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/dev_package_20261007/work/solve/claude_sheet_practice_with_passage_01.txt\", \"items\": 38, \"sha256\": \"57c42e6fd16682d39035283bb593b3c6a9e20c00e6d42b0383df2b60b4c163cf\", \"answers_go_to\": \"optionb/dry/dev_package_20261007/work/solve/claude_answers_practice_with_passage_01.txt\"}]"
+  },
+  {
+   "check": "export practice no_passage: one sheet, and it names the pinned model id",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/dev_package_20261007/work/solve/claude_sheet_practice_no_passage_01.txt\", \"items\": 38, \"sha256\": \"5723e9983924cf7f3b2b25677033e24b7f8de2051c283a9c792ce10c0fe6589b\", \"answers_go_to\": \"optionb/dry/dev_package_20261007/work/solve/claude_answers_practice_no_passage_01.txt\"}]"
+  },
+  {
+   "check": "with 8 practice settings the made-up set meets both practice floors and misses a reserve target (the case of amendment A8)",
+   "held": true,
+   "detail": "{\"counts\": [19, 10], \"floor\": {\"practice_role_step_min\": 19, \"practice_plain_fact_min\": 10, \"met\": true}, \"reserve\": {\"role_step_target\": 23, \"plain_fact_target\": 12, \"target_met\": false, \"settings_left\": 4, \"finished\": false}}"
+  },
+  {
+   "check": "writer practice p1: no batch holds more than 4 passages",
+   "held": true,
+   "detail": "[2]"
+  },
+  {
+   "check": "writer practice p2: no batch holds more than 4 passages",
+   "held": true,
+   "detail": "[2]"
+  },
+  {
+   "check": "export practice with_passage: one sheet, and it names the pinned model id",
+   "held": true,
+   "detail": "[{\"sheet\": \"02\", \"file\": \"optionb/dry/dev_package_20261007/work/solve/claude_sheet_practice_with_passage_02.txt\", \"items\": 8, \"sha256\": \"b4944aecfe98aabbbd469f97d637811ec942483604083e6fd17d8f5836c824e2\", \"answers_go_to\": \"optionb/dry/dev_package_20261007/work/solve/claude_answers_practice_with_passage_02.txt\"}]"
+  },
+  {
+   "check": "export practice no_passage: one sheet, and it names the pinned model id",
+   "held": true,
+   "detail": "[{\"sheet\": \"02\", \"file\": \"optionb/dry/dev_package_20261007/work/solve/claude_sheet_practice_no_passage_02.txt\", \"items\": 8, \"sha256\": \"8127c313f8ff4ffa2fac67b17ac74bc8040af3046d92411855e2bdce55b384f6\", \"answers_go_to\": \"optionb/dry/dev_package_20261007/work/solve/claude_answers_practice_no_passage_02.txt\"}]"
+  },
+  {
+   "check": "with 9 practice settings both reserve targets are met",
+   "held": true,
+   "detail": "{\"counts\": [23, 12], \"reserve\": {\"role_step_target\": 23, \"plain_fact_target\": 12, \"target_met\": true, \"settings_left\": 3, \"finished\": true}}"
+  },
+  {
+   "check": "notes practice: every planned note has a first version",
+   "held": true,
+   "detail": "72"
+  },
+  {
+   "check": "support practice: every passage is ALL_PASS, judged by one checker",
+   "held": true,
+   "detail": "{\"ALL_PASS\": 12}"
+  },
+  {
+   "check": "no final question file exists before the practice notes are checked",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "writer final p1: no batch holds more than 4 passages",
+   "held": true,
+   "detail": "[4]"
+  },
+  {
+   "check": "writer final p2: no batch holds more than 4 passages",
+   "held": true,
+   "detail": "[4]"
+  },
+  {
+   "check": "export final with_passage: one sheet, and it names the pinned model id",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/dev_package_20261007/work/solve/claude_sheet_final_with_passage_01.txt\", \"items\": 14, \"sha256\": \"955d1724a3019078c10fc9d5d9a09be29e0d76e6649188673d0643966374a2ad\", \"answers_go_to\": \"optionb/dry/dev_package_20261007/work/solve/claude_answers_final_with_passage_01.txt\"}]"
+  },
+  {
+   "check": "export final no_passage: one sheet, and it names the pinned model id",
+   "held": true,
+   "detail": "[{\"sheet\": \"01\", \"file\": \"optionb/dry/dev_package_20261007/work/solve/claude_sheet_final_no_passage_01.txt\", \"items\": 14, \"sha256\": \"286c38ee39cdfaab39e081a0ca918dbdbc1abe20fda415a4ec280779039443a7\", \"answers_go_to\": \"optionb/dry/dev_package_20261007/work/solve/claude_answers_final_no_passage_01.txt\"}]"
+  },
+  {
+   "check": "the made-up final set holds the planned tasks",
+   "held": true,
+   "detail": "[7, 4]"
+  },
+  {
+   "check": "notes final: every planned note has a first version",
+   "held": true,
+   "detail": "24"
+  },
+  {
+   "check": "support final: every passage is ALL_PASS, judged by one checker",
+   "held": true,
+   "detail": "{\"ALL_PASS\": 4}"
+  },
+  {
+   "check": "the answer-leak screen hits no made-up note",
+   "held": true,
+   "detail": "{\"practice\": {\"passages_that_carry_a_task\": 12, \"passages_dropped_by_the_support_check\": 0, \"passages_dropped_by_the_screen\": 0, \"passages_left\": 12, \"passages_left_with_a_role_step_task\": 12, \"role_step_tasks_left\": 23, \"plain_fact_tasks_left\": 12}, \"final\": {\"passages_that_carry_a_task\": 4, \"passages_dropped_by_the_support_check\": 0, \"passages_dropped_by_the_screen\": 0, \"passages_left\": 4, \"passages_left_with_a_role_step_task\": 4, \"role_step_tasks_left\": 7, \"plain_fact_tasks_left\": 4}}"
+  },
+  {
+   "check": "the assembled counts are the planned ones",
+   "held": true,
+   "detail": "{\"final_role_step_tasks\": 7, \"final_plain_fact_tasks\": 4, \"final_passages_with_a_role_step_task\": 4, \"practice_role_step_tasks\": 23, \"practice_plain_fact_tasks\": 12}"
+  },
+  {
+   "check": "the made-up practice set is large enough for the self-test (FILE_FORMATS.md section 20)",
+   "held": true,
+   "detail": "{\"final_role_step_tasks\": 7, \"final_plain_fact_tasks\": 4, \"final_passages_with_a_role_step_task\": 4, \"practice_role_step_tasks\": 23, \"practice_plain_fact_tasks\": 12}"
+  },
+  {
+   "check": "the made-up practice set holds PULL-PUSH and HABIT tasks, each type at even and at odd places of the sorted task list",
+   "held": true,
+   "detail": "{\"PULL-PUSH\": [6, 6], \"HABIT\": [6, 5]}"
+  },
+  {
+   "check": "the manifest of the assemble tool marks exactly the six package files",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the constants name the five job files under optionb/job/",
+   "held": true,
+   "detail": "[\"optionb/job/runner_b1.py\", \"optionb/job/scorer_v0_1_1.py\", \"optionb/job/gate_b1.py\", \"optionb/job/analysis_b1.py\", \"optionb/job/scorer_examples_v0_1_1.json\"]"
+  },
+  {
+   "check": "tools/verdict.py is the pinned frozen file",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the made-up seal file of the work folder holds steps 1 to 5",
+   "held": true,
+   "detail": "[\"1_PLAN_AND_SOURCES\", \"2_ROLE_NOTES\", \"3A_PRACTICE_QUESTIONS_AND_KEYS\", \"3B_PRACTICE_SET_FIXED\", \"3C_FINAL_QUESTIONS_AND_KEYS\", \"4_ORDINARY_NOTES\", \"5_PROMPT_PARTS_AND_REMOVAL_LOG\"]"
+  },
+  {
+   "check": "the made-up seal file names the 15 package files of FILE_FORMATS.md section 14 (the seal file itself is the 16th), each once",
+   "held": true,
+   "detail": "[\"08_OPTION_B_PLAN_v1_0.md\", \"FILE_FORMATS.md\", \"PLAN_CONSTANTS.json\", \"job/analysis_b1.py\", \"job/gate_b1.py\", \"job/runner_b1.py\", \"job/scorer_examples_v0_1_1.json\", \"job/scorer_v0_1_1.py\", \"keys_final/keys_final.json\", \"keys_final/task_meta_final.json\", \"keys_practice/keys_practice.json\", \"keys_practice/task_meta_practice.json\", \"prompts/prompt_parts_final.json\", \"prompts/prompt_parts_practice.json\", \"tools/verdict.py\"]"
+  },
+  {
+   "check": "the made-up seal file ends with the line 6_PROGRAMS and holds no step 7",
+   "held": true,
+   "detail": ""
+  },
+  {
+   "check": "the zip builder says: made-up study root, last seal step 6_PROGRAMS, 18 members",
+   "held": true,
+   "detail": "{\"made_up_study_root_never_for_a_seal_or_the_gpu_job\": true, \"last_seal_step_in_package\": \"6_PROGRAMS\", \"members\": 18}"
+  }
+ ]
+}

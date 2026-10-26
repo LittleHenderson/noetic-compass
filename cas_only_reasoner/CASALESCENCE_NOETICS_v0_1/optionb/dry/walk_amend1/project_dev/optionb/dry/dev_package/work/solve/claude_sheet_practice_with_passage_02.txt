@@ -1,0 +1,104 @@
+SHEET practice-with_passage-02. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0085 ===
+Passage:
+Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.
+
+Question: Where did the pot stand?
+A. on the trestle
+B. under the bench
+C. behind the gate
+D. inside the cart
+=== END Q0085 ===
+
+=== ITEM Q0086 ===
+Passage:
+Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.
+
+Question: Liesel spends two years far from the weigh house. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the pan before anything else
+B. seeing the chalk beside it
+C. knowing where the pan stands
+D. finding the sill by the door
+E. opening the weigh house before dawn
+F. walking in through the door
+=== END Q0086 ===
+
+=== ITEM Q0087 ===
+Passage:
+Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesel leave to someone else?
+A. working with the small scale
+B. lighting the big lamp
+C. locking up the weigh house
+D. working on the cracked weight
+E. carrying the pan outside
+F. counting every chalk there
+=== END Q0087 ===
+
+=== ITEM Q0088 ===
+Passage:
+Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansel do first?
+A. reaching for the straight needle again
+B. reaching for the curved needle again
+C. leaving the door wide open
+D. sweeping the loft floor twice
+E. moving the pot to the yard
+F. hanging the canvas on a hook
+=== END Q0088 ===
+
+=== ITEM Q0089 ===
+Passage:
+Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ansel leave to someone else?
+A. counting every canvas there
+B. working with the curved needle
+C. working on the blunt shears
+D. carrying the pot outside
+E. locking up the sail loft
+F. lighting the big lamp
+=== END Q0089 ===
+
+=== ITEM Q0090 ===
+Passage:
+Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.
+
+Question: Where did the pan stand?
+A. on the sill
+B. behind the gate
+C. under the bench
+D. inside the cart
+=== END Q0090 ===
+
+=== ITEM Q0091 ===
+Passage:
+Liesel opened the weigh house before dawn. She always reached for the small scale before the large scale. The pan stood on the sill by the door. A box of chalk lay beside it. She kept well away from the cracked weight. Every morning for nine years she had dusted the pan first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesel do first?
+A. sweeping the house floor twice
+B. reaching for the small scale again
+C. hanging the chalk on a hook
+D. leaving the door wide open
+E. reaching for the large scale again
+F. moving the pan to the yard
+=== END Q0091 ===
+
+=== ITEM Q0092 ===
+Passage:
+Ansel opened the sail loft before dawn. He always reached for the curved needle before the straight needle. The pot stood on the trestle by the door. A bolt of canvas lay beside it. He kept well away from the blunt shears. Every morning for nine years he had dusted the pot first.
+
+Question: Ansel spends two years far from the sail loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the canvas beside it
+B. opening the sail loft before dawn
+C. finding the trestle by the door
+D. knowing where the pot stands
+E. walking in through the door
+F. dusting the pot before anything else
+=== END Q0092 ===

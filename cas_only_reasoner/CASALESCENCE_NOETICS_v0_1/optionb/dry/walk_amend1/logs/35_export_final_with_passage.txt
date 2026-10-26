@@ -1,0 +1,41 @@
+$ python -B tools/ob_solve_blind.py export --set final --mode with_passage --max-items 200
+{
+ "program": "tools/ob_solve_blind.py",
+ "dry_fixture": false,
+ "step": "export",
+ "status": "SHEETS_WRITTEN",
+ "set": "final",
+ "mode": "with_passage",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "sheets": [
+  {
+   "sheet": "01",
+   "file": "optionb/solve/claude_sheet_final_with_passage_01.txt",
+   "items": 200,
+   "sha256": "eb58940045c932cd5ba9bbf2b8d37ae9511f79c43e1fa0c8bdfb6741af71bd21",
+   "answers_go_to": "optionb/solve/claude_answers_final_with_passage_01.txt"
+  },
+  {
+   "sheet": "02",
+   "file": "optionb/solve/claude_sheet_final_with_passage_02.txt",
+   "items": 200,
+   "sha256": "33090700c7ee383e2bc2ba082fb23a912a509e63f365e3640a403c4056350afa",
+   "answers_go_to": "optionb/solve/claude_answers_final_with_passage_02.txt"
+  },
+  {
+   "sheet": "03",
+   "file": "optionb/solve/claude_sheet_final_with_passage_03.txt",
+   "items": 37,
+   "sha256": "926a80bb3483eb12cec4ca60d7eb1ef182dcf2b448f997730f693126e259da36",
+   "answers_go_to": "optionb/solve/claude_answers_final_with_passage_03.txt"
+  }
+ ],
+ "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+ "next": [
+  "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+  "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+  "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+  "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+ ]
+}
+[exit code 0]

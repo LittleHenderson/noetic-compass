@@ -1,0 +1,317 @@
+{
+ "schema": "casalescence/scorer-known-examples/v0.1.1",
+ "made_by": {
+  "program": "none: written by hand by the builder of job/scorer_v0_1_1.py",
+  "sha256": null,
+  "utc": "2026-10-05T12:45:00Z"
+ },
+ "inputs": [
+  {
+   "path": "scorer_examples_v0_1.json",
+   "sha256": "f1b40f166dd85303f751d3785c7d2a85de293be0fad24ff353fef70611a58aba"
+  },
+  {
+   "path": "03_SCORER_RULES_v0_1.md",
+   "sha256": "d611de5fa2b8e9d133f9ba28f3dadf783de6ffc159a1c9c451d2c5a1f40ef3d1"
+  }
+ ],
+ "rules": "03_SCORER_RULES_v0_1.md plus: a repeated key is FORMAT_FAIL",
+ "expected_decided_by": "hand, from the written rules",
+ "note": "S01 to S30 are the 30 examples of scorer_examples_v0_1.json, unchanged. S31 to S40 are the ten single-letter cases of plan section 17.2, in the plan's order; the task answer is the string B in each.",
+ "examples": [
+  {
+   "id": "S01",
+   "raw_text": "{\"answer\": 4}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S02",
+   "raw_text": "{\"answer\": 5}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "WRONG"
+  },
+  {
+   "id": "S03",
+   "raw_text": "  {\"answer\": \"Bex\"}\n",
+   "cut_off": false,
+   "task_answer": "Bex",
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S04",
+   "raw_text": "{\"answer\": \"Ada\"}",
+   "cut_off": false,
+   "task_answer": "Bex",
+   "expected": "WRONG"
+  },
+  {
+   "id": "S05",
+   "raw_text": "{\"answer\": [\"piano\", \"drum\"]}",
+   "cut_off": false,
+   "task_answer": [
+    "piano",
+    "drum"
+   ],
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S06",
+   "raw_text": "{\"answer\": [\"drum\", \"piano\"]}",
+   "cut_off": false,
+   "task_answer": [
+    "piano",
+    "drum"
+   ],
+   "expected": "WRONG"
+  },
+  {
+   "id": "S07",
+   "raw_text": "{\"answer\": \"bex\"}",
+   "cut_off": false,
+   "task_answer": "Bex",
+   "expected": "WRONG"
+  },
+  {
+   "id": "S08",
+   "raw_text": "```json\n{\n  \"answer\": \"Bex\"\n}\n```",
+   "cut_off": false,
+   "task_answer": "Bex",
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S09",
+   "raw_text": "```json\n{\n  \"answer\": \"Ada\"\n}\n```",
+   "cut_off": false,
+   "task_answer": "Bex",
+   "expected": "WRONG"
+  },
+  {
+   "id": "S10",
+   "raw_text": "```\n{\"answer\": 4}\n```",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S11",
+   "raw_text": "```JSON\n{\"answer\": 4}\n```\n",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S12",
+   "raw_text": "{\"answer\": \"4\"}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "TYPE_MISMATCH"
+  },
+  {
+   "id": "S13",
+   "raw_text": "```json\n{\"answer\": \"4\"}\n```",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "TYPE_MISMATCH"
+  },
+  {
+   "id": "S14",
+   "raw_text": "{\"answer\": 4}",
+   "cut_off": false,
+   "task_answer": "4",
+   "expected": "TYPE_MISMATCH"
+  },
+  {
+   "id": "S15",
+   "raw_text": "{\"answer\": \"piano\"}",
+   "cut_off": false,
+   "task_answer": [
+    "piano"
+   ],
+   "expected": "TYPE_MISMATCH"
+  },
+  {
+   "id": "S16",
+   "raw_text": "The answer is 4.",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S17",
+   "raw_text": "Sure! ```json\n{\"answer\": 4}\n```",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S18",
+   "raw_text": "```json\n{\"answer\": 4}\n```\nHope this helps.",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S19",
+   "raw_text": "```json\n{\"answer\": 4}\n```\n```json\n{\"answer\": 5}\n```",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S20",
+   "raw_text": "{'answer': 4}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S21",
+   "raw_text": "{\"answer\": 4, \"note\": \"checked\"}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S22",
+   "raw_text": "{\"result\": 4}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S23",
+   "raw_text": "{}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S24",
+   "raw_text": "4",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S25",
+   "raw_text": "[{\"answer\": 4}]",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S26",
+   "raw_text": "{\"answer\": 4.0}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S27",
+   "raw_text": "{\"answer\": \"\"}",
+   "cut_off": false,
+   "task_answer": "Bex",
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S28",
+   "raw_text": "{\"answer\": null}",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S29",
+   "raw_text": "",
+   "cut_off": false,
+   "task_answer": 4,
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S30",
+   "raw_text": "```json\n{\n  \"answer\": [\"harbor\", \"valley\", \"canyon\", \"island\",",
+   "cut_off": true,
+   "task_answer": [
+    "harbor",
+    "valley",
+    "canyon",
+    "island",
+    "meadow"
+   ],
+   "expected": "CUT_OFF"
+  },
+  {
+   "id": "S31",
+   "raw_text": "{\"answer\": \"B\"}",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S32",
+   "raw_text": "{\"answer\": \"b\"}",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "WRONG"
+  },
+  {
+   "id": "S33",
+   "raw_text": "{\"answer\": \"B.\"}",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "WRONG"
+  },
+  {
+   "id": "S34",
+   "raw_text": "{\"answer\": \"B. the side door\"}",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "WRONG"
+  },
+  {
+   "id": "S35",
+   "raw_text": "{\"answer\": 2}",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "TYPE_MISMATCH"
+  },
+  {
+   "id": "S36",
+   "raw_text": "{\"answer\": [\"B\"]}",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "TYPE_MISMATCH"
+  },
+  {
+   "id": "S37",
+   "raw_text": "```json\n{\"answer\": \"B\"}\n```",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "CORRECT"
+  },
+  {
+   "id": "S38",
+   "raw_text": "```{\"answer\": \"B\"}```",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S39",
+   "raw_text": "{\"answer\": \"A\", \"answer\": \"B\"}",
+   "cut_off": false,
+   "task_answer": "B",
+   "expected": "FORMAT_FAIL"
+  },
+  {
+   "id": "S40",
+   "raw_text": "{\"answer\": \"B\"",
+   "cut_off": true,
+   "task_answer": "B",
+   "expected": "CUT_OFF"
+  }
+ ]
+}

@@ -1,0 +1,363 @@
+SHEET practice-no_passage-01. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0039 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Maren do first?
+A. reaching for the iron ladle again
+B. reaching for the copper ladle again
+C. sweeping the house floor twice
+D. leaving the door wide open
+E. hanging the madder on a hook
+F. moving the rack to the yard
+=== END G0039 ===
+
+=== ITEM G0040 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Odran do first?
+A. hanging the twine on a hook
+B. moving the kettle to the yard
+C. reaching for the bone needle again
+D. sweeping the loft floor twice
+E. leaving the door wide open
+F. reaching for the steel needle again
+=== END G0040 ===
+
+=== ITEM G0041 ===
+Question: Where did the sledge stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the step
+=== END G0041 ===
+
+=== ITEM G0042 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Wren do first?
+A. hanging the tape on a hook
+B. reaching for the brass ruler again
+C. moving the globe to the yard
+D. leaving the door wide open
+E. reaching for the plastic ruler again
+F. sweeping the room floor twice
+=== END G0042 ===
+
+=== ITEM G0043 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Edda leave to someone else?
+A. working with the wicker tray
+B. locking up the apple loft
+C. working on the broken ladder
+D. lighting the big lamp
+E. counting every straw there
+F. carrying the stool outside
+=== END G0043 ===
+
+=== ITEM G0044 ===
+Question: Maren spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the dye house before dawn
+B. knowing where the rack stands
+C. finding the wall by the door
+D. walking in through the door
+E. dusting the rack before anything else
+F. seeing the madder beside it
+=== END G0044 ===
+
+=== ITEM G0045 ===
+Question: Where did the oilcan stand?
+A. under the bench
+B. inside the cart
+C. on the ledge
+D. behind the gate
+=== END G0045 ===
+
+=== ITEM G0046 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tamsin leave to someone else?
+A. locking up the boat shed
+B. counting every rope there
+C. lighting the big lamp
+D. working with the tar brush
+E. carrying the lantern outside
+F. working on the bilge pump
+=== END G0046 ===
+
+=== ITEM G0047 ===
+Question: Wren spends two years far from the map room. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. finding the table by the door
+C. seeing the tape beside it
+D. opening the map room before dawn
+E. knowing where the globe stands
+F. dusting the globe before anything else
+=== END G0047 ===
+
+=== ITEM G0048 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Joss do first?
+A. reaching for the wooden mould again
+B. moving the wheelbarrow to the yard
+C. hanging the pallets on a hook
+D. leaving the door wide open
+E. sweeping the yard floor twice
+F. reaching for the metal mould again
+=== END G0048 ===
+
+=== ITEM G0049 ===
+Question: Where did the rack stand?
+A. inside the cart
+B. under the bench
+C. behind the gate
+D. on the wall
+=== END G0049 ===
+
+=== ITEM G0050 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Tamsin do first?
+A. moving the lantern to the yard
+B. reaching for the wire brush again
+C. reaching for the tar brush again
+D. leaving the door wide open
+E. sweeping the shed floor twice
+F. hanging the rope on a hook
+=== END G0050 ===
+
+=== ITEM G0051 ===
+Question: Where did the wheelbarrow stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the path
+=== END G0051 ===
+
+=== ITEM G0052 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilse leave to someone else?
+A. locking up the seed store
+B. working with the oak scoop
+C. counting every barley there
+D. carrying the ledger outside
+E. lighting the big lamp
+F. working on the damp cellar
+=== END G0052 ===
+
+=== ITEM G0053 ===
+Question: Fenn spends two years far from the ice house. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the ice house before dawn
+B. knowing where the sledge stands
+C. finding the step by the door
+D. dusting the sledge before anything else
+E. walking in through the door
+F. seeing the sawdust beside it
+=== END G0053 ===
+
+=== ITEM G0054 ===
+Question: Joss spends two years far from the tile yard. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the wheelbarrow stands
+B. opening the tile yard before dawn
+C. finding the path by the door
+D. walking in through the door
+E. dusting the wheelbarrow before anything else
+F. seeing the pallets beside it
+=== END G0054 ===
+
+=== ITEM G0055 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Fenn do first?
+A. reaching for the long saw again
+B. moving the sledge to the yard
+C. leaving the door wide open
+D. sweeping the house floor twice
+E. hanging the sawdust on a hook
+F. reaching for the short saw again
+=== END G0055 ===
+
+=== ITEM G0056 ===
+Question: Where did the globe stand?
+A. on the table
+B. inside the cart
+C. behind the gate
+D. under the bench
+=== END G0056 ===
+
+=== ITEM G0057 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Bram do first?
+A. reaching for the cross hammer again
+B. reaching for the ball hammer again
+C. sweeping the forge floor twice
+D. hanging the tongs on a hook
+E. moving the bucket to the yard
+F. leaving the door wide open
+=== END G0057 ===
+
+=== ITEM G0058 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wren leave to someone else?
+A. counting every tape there
+B. carrying the globe outside
+C. lighting the big lamp
+D. working on the ink press
+E. locking up the map room
+F. working with the brass ruler
+=== END G0058 ===
+
+=== ITEM G0059 ===
+Question: Where did the ledger stand?
+A. behind the gate
+B. under the bench
+C. on the counter
+D. inside the cart
+=== END G0059 ===
+
+=== ITEM G0060 ===
+Question: Tamsin spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the shelf by the door
+B. dusting the lantern before anything else
+C. opening the boat shed before dawn
+D. knowing where the lantern stands
+E. walking in through the door
+F. seeing the rope beside it
+=== END G0060 ===
+
+=== ITEM G0061 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Bram leave to someone else?
+A. lighting the big lamp
+B. working with the cross hammer
+C. carrying the bucket outside
+D. counting every tongs there
+E. working on the leaky bellows
+F. locking up the nail forge
+=== END G0061 ===
+
+=== ITEM G0062 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Joss leave to someone else?
+A. working on the cracked kiln
+B. working with the wooden mould
+C. lighting the big lamp
+D. locking up the tile yard
+E. counting every pallets there
+F. carrying the wheelbarrow outside
+=== END G0062 ===
+
+=== ITEM G0063 ===
+Question: Where did the stool stand?
+A. behind the gate
+B. under the bench
+C. on the landing
+D. inside the cart
+=== END G0063 ===
+
+=== ITEM G0064 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fenn leave to someone else?
+A. working with the long saw
+B. counting every sawdust there
+C. lighting the big lamp
+D. locking up the ice house
+E. working on the steep ramp
+F. carrying the sledge outside
+=== END G0064 ===
+
+=== ITEM G0065 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Edda do first?
+A. moving the stool to the yard
+B. reaching for the wicker tray again
+C. leaving the door wide open
+D. hanging the straw on a hook
+E. reaching for the wire tray again
+F. sweeping the loft floor twice
+=== END G0065 ===
+
+=== ITEM G0066 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odran leave to someone else?
+A. lighting the big lamp
+B. locking up the net loft
+C. counting every twine there
+D. carrying the kettle outside
+E. working with the bone needle
+F. working on the rusty winch
+=== END G0066 ===
+
+=== ITEM G0067 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Maren leave to someone else?
+A. lighting the big lamp
+B. working on the lye vat
+C. counting every madder there
+D. carrying the rack outside
+E. locking up the dye house
+F. working with the copper ladle
+=== END G0067 ===
+
+=== ITEM G0068 ===
+Question: Ilse spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. finding the counter by the door
+C. knowing where the ledger stands
+D. opening the seed store before dawn
+E. dusting the ledger before anything else
+F. seeing the barley beside it
+=== END G0068 ===
+
+=== ITEM G0069 ===
+Question: Where did the bucket stand?
+A. behind the gate
+B. on the floor
+C. under the bench
+D. inside the cart
+=== END G0069 ===
+
+=== ITEM G0070 ===
+Question: Edda spends two years far from the apple loft. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. seeing the straw beside it
+C. dusting the stool before anything else
+D. knowing where the stool stands
+E. finding the landing by the door
+F. opening the apple loft before dawn
+=== END G0070 ===
+
+=== ITEM G0071 ===
+Question: Where did the kettle stand?
+A. behind the gate
+B. on the stove
+C. inside the cart
+D. under the bench
+=== END G0071 ===
+
+=== ITEM G0072 ===
+Question: Odran spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the net loft before dawn
+B. knowing where the kettle stands
+C. dusting the kettle before anything else
+D. finding the stove by the door
+E. seeing the twine beside it
+F. walking in through the door
+=== END G0072 ===
+
+=== ITEM G0073 ===
+Question: Where did the lantern stand?
+A. on the shelf
+B. behind the gate
+C. under the bench
+D. inside the cart
+=== END G0073 ===
+
+=== ITEM G0074 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Corin do first?
+A. reaching for the nylon rope again
+B. leaving the door wide open
+C. hanging the gloves on a hook
+D. sweeping the tower floor twice
+E. reaching for the hemp rope again
+F. moving the oilcan to the yard
+=== END G0074 ===
+
+=== ITEM G0075 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilse do first?
+A. reaching for the tin scoop again
+B. sweeping the store floor twice
+C. leaving the door wide open
+D. moving the ledger to the yard
+E. hanging the barley on a hook
+F. reaching for the oak scoop again
+=== END G0075 ===
+
+=== ITEM G0076 ===
+Question: Bram spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the floor by the door
+B. seeing the tongs beside it
+C. opening the nail forge before dawn
+D. knowing where the bucket stands
+E. walking in through the door
+F. dusting the bucket before anything else
+=== END G0076 ===

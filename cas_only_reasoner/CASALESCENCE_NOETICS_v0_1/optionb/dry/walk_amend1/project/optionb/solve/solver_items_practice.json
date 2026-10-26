@@ -1,0 +1,6593 @@
+{
+ "schema": "casalescence/optionb/solver_items/v1",
+ "made_by": {
+  "program": "tools/ob_solve_blind.py",
+  "sha256": "a80b78c64461d61f6acd1b0c52e732af522c798f40e13297fcf98eb2fe8d93da",
+  "utc": "2026-10-05T16:22:04Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "55754fd5d66082cba937c8360f5b1643f6fc65a947e7742aa371a65fb9ea41ca"
+  },
+  {
+   "path": "optionb/checks/candidates_practice.json",
+   "sha256": "1e7d08b6716d6046a4e3d95b6d943636d3c089cde54c314ca8179788d87a3747"
+  }
+ ],
+ "set": "practice",
+ "items": [
+  {
+   "item_id": "Q0001",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    1,
+    2,
+    3,
+    0,
+    4
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0002",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.LONG_BREAK",
+   "shown": [
+    4,
+    1,
+    3,
+    5,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0003",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.FACT",
+   "shown": [
+    1,
+    2,
+    0,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0004",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    5,
+    2,
+    3,
+    4,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0005",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.GOES_FOR",
+   "shown": [
+    2,
+    4,
+    1,
+    0,
+    5,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0006",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    2,
+    1,
+    5,
+    3,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0007",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.GOES_FOR",
+   "shown": [
+    2,
+    5,
+    3,
+    0,
+    1,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0008",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.LONG_BREAK",
+   "shown": [
+    1,
+    0,
+    5,
+    2,
+    3,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0009",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    2,
+    1,
+    4,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0010",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    1,
+    5,
+    0,
+    2,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0011",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.LONG_BREAK",
+   "shown": [
+    2,
+    5,
+    1,
+    4,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0012",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V123.p1.GOES_FOR",
+   "shown": [
+    1,
+    2,
+    0,
+    4,
+    3,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0013",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.GOES_FOR",
+   "shown": [
+    0,
+    4,
+    1,
+    2,
+    5,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0014",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.FACT",
+   "shown": [
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0015",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.FACT",
+   "shown": [
+    2,
+    0,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0016",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.FACT",
+   "shown": [
+    0,
+    3,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0017",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    5,
+    2,
+    3,
+    4,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0018",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.GOES_FOR",
+   "shown": [
+    5,
+    0,
+    2,
+    1,
+    4,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0019",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.LONG_BREAK",
+   "shown": [
+    1,
+    0,
+    5,
+    3,
+    2,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0020",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.LONG_BREAK",
+   "shown": [
+    2,
+    0,
+    3,
+    5,
+    1,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0021",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.GOES_FOR",
+   "shown": [
+    5,
+    4,
+    0,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0022",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.GOES_FOR",
+   "shown": [
+    5,
+    4,
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0023",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    2,
+    5,
+    1,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0024",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.FACT",
+   "shown": [
+    2,
+    0,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0025",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.GOES_FOR",
+   "shown": [
+    3,
+    1,
+    0,
+    2,
+    4,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0026",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.GOES_FOR",
+   "shown": [
+    4,
+    3,
+    1,
+    0,
+    2,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0027",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.LONG_BREAK",
+   "shown": [
+    3,
+    4,
+    1,
+    5,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0028",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V130.p1.LONG_BREAK",
+   "shown": [
+    2,
+    0,
+    5,
+    1,
+    4,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0029",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    0,
+    4,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0030",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.FACT",
+   "shown": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0031",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.GOES_FOR",
+   "shown": [
+    0,
+    3,
+    5,
+    2,
+    1,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0032",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    3,
+    1,
+    2,
+    5,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0033",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.GOES_FOR",
+   "shown": [
+    3,
+    2,
+    5,
+    1,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0034",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.GOES_FOR",
+   "shown": [
+    0,
+    3,
+    5,
+    4,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0035",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.LONG_BREAK",
+   "shown": [
+    4,
+    3,
+    5,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0036",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.FACT",
+   "shown": [
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0037",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.GOES_FOR",
+   "shown": [
+    3,
+    0,
+    1,
+    4,
+    2,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0038",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    0,
+    2,
+    1,
+    4,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0039",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.FACT",
+   "shown": [
+    0,
+    2,
+    1,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0040",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.LONG_BREAK",
+   "shown": [
+    2,
+    4,
+    5,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0041",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.FACT",
+   "shown": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0042",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.FACT",
+   "shown": [
+    2,
+    1,
+    0,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0043",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.FACT",
+   "shown": [
+    1,
+    2,
+    3,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0044",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.LONG_BREAK",
+   "shown": [
+    4,
+    1,
+    3,
+    0,
+    2,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0045",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.FACT",
+   "shown": [
+    0,
+    3,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0046",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.LONG_BREAK",
+   "shown": [
+    5,
+    0,
+    1,
+    3,
+    4,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0047",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V130.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    3,
+    5,
+    4,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0048",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.FACT",
+   "shown": [
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0049",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.LONG_BREAK",
+   "shown": [
+    2,
+    4,
+    1,
+    0,
+    5,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0050",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.FACT",
+   "shown": [
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0051",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    5,
+    0,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0052",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    0,
+    5,
+    3,
+    1,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0053",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.FACT",
+   "shown": [
+    2,
+    0,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0054",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.LONG_BREAK",
+   "shown": [
+    4,
+    2,
+    5,
+    0,
+    3,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0055",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.GOES_FOR",
+   "shown": [
+    3,
+    5,
+    0,
+    1,
+    2,
+    4
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0056",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    0,
+    5,
+    4,
+    3,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0057",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.FACT",
+   "shown": [
+    0,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0058",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0059",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.LONG_BREAK",
+   "shown": [
+    0,
+    5,
+    1,
+    2,
+    4,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0060",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.GOES_FOR",
+   "shown": [
+    0,
+    3,
+    5,
+    2,
+    4,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0061",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    1,
+    2,
+    0,
+    3,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0062",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.LONG_BREAK",
+   "shown": [
+    1,
+    5,
+    3,
+    2,
+    0,
+    4
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0063",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    0,
+    5,
+    2,
+    3,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0064",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.LONG_BREAK",
+   "shown": [
+    3,
+    1,
+    4,
+    5,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0065",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    5,
+    2,
+    4,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0066",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.LONG_BREAK",
+   "shown": [
+    5,
+    0,
+    4,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0067",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.LONG_BREAK",
+   "shown": [
+    5,
+    0,
+    2,
+    1,
+    4,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0068",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.GOES_FOR",
+   "shown": [
+    5,
+    4,
+    0,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0069",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.GOES_FOR",
+   "shown": [
+    4,
+    2,
+    5,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0070",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    4,
+    0,
+    3,
+    5,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0071",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.LONG_BREAK",
+   "shown": [
+    4,
+    0,
+    2,
+    3,
+    1,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0072",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.LONG_BREAK",
+   "shown": [
+    5,
+    2,
+    4,
+    0,
+    1,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0073",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.FACT",
+   "shown": [
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0074",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    3,
+    5,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0075",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.GOES_FOR",
+   "shown": [
+    0,
+    3,
+    5,
+    4,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0076",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0077",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.GOES_FOR",
+   "shown": [
+    3,
+    0,
+    5,
+    4,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0078",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    0,
+    2,
+    1,
+    5,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0079",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.GOES_FOR",
+   "shown": [
+    1,
+    5,
+    2,
+    3,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0080",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.LONG_BREAK",
+   "shown": [
+    1,
+    3,
+    0,
+    5,
+    4,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0081",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V123.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0082",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.FACT",
+   "shown": [
+    2,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0083",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.FACT",
+   "shown": [
+    3,
+    1,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0084",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V130.p1.FACT",
+   "shown": [
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0085",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    3,
+    1,
+    4,
+    2,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0086",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.GOES_FOR",
+   "shown": [
+    5,
+    0,
+    3,
+    4,
+    1,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0087",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.GOES_FOR",
+   "shown": [
+    4,
+    0,
+    2,
+    3,
+    1,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0088",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.LONG_BREAK",
+   "shown": [
+    2,
+    0,
+    5,
+    3,
+    1,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0089",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.GOES_FOR",
+   "shown": [
+    4,
+    1,
+    2,
+    3,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0090",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V130.p2.GOES_FOR",
+   "shown": [
+    2,
+    3,
+    5,
+    1,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0091",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    4,
+    1,
+    3,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0092",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.FACT",
+   "shown": [
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0093",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    2,
+    1,
+    3,
+    4,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0094",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.LONG_BREAK",
+   "shown": [
+    1,
+    4,
+    3,
+    2,
+    5,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0001",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.GOES_FOR",
+   "shown": [
+    3,
+    4,
+    2,
+    1,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0002",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.LONG_BREAK",
+   "shown": [
+    0,
+    4,
+    3,
+    5,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0003",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.LONG_BREAK",
+   "shown": [
+    0,
+    3,
+    1,
+    4,
+    5,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0004",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    3,
+    5,
+    2,
+    0,
+    4
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0005",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    5,
+    2,
+    1,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0006",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.FACT",
+   "shown": [
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0007",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.LONG_BREAK",
+   "shown": [
+    4,
+    5,
+    3,
+    2,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0008",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.LONG_BREAK",
+   "shown": [
+    0,
+    4,
+    3,
+    5,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0009",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.LONG_BREAK",
+   "shown": [
+    2,
+    3,
+    1,
+    0,
+    5,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0010",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.GOES_FOR",
+   "shown": [
+    5,
+    3,
+    0,
+    1,
+    4,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0011",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.GOES_FOR",
+   "shown": [
+    0,
+    2,
+    1,
+    5,
+    3,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0012",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    2,
+    5,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0013",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0014",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.FACT",
+   "shown": [
+    3,
+    1,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0015",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.LONG_BREAK",
+   "shown": [
+    3,
+    5,
+    2,
+    1,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0016",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.LONG_BREAK",
+   "shown": [
+    4,
+    3,
+    5,
+    2,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0017",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.GOES_FOR",
+   "shown": [
+    0,
+    1,
+    2,
+    5,
+    4,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0018",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.LONG_BREAK",
+   "shown": [
+    4,
+    2,
+    0,
+    1,
+    3,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0019",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.LONG_BREAK",
+   "shown": [
+    0,
+    5,
+    3,
+    4,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0020",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.FACT",
+   "shown": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0021",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.FACT",
+   "shown": [
+    1,
+    3,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0022",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    1,
+    4,
+    2,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0023",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.FACT",
+   "shown": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0024",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    5,
+    3,
+    0,
+    4,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0025",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.GOES_FOR",
+   "shown": [
+    2,
+    3,
+    0,
+    1,
+    4,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0026",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.FACT",
+   "shown": [
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0027",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.FACT",
+   "shown": [
+    1,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0028",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    1,
+    0,
+    5,
+    3,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0029",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V123.p1.GOES_FOR",
+   "shown": [
+    3,
+    1,
+    4,
+    2,
+    5,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0030",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.FACT",
+   "shown": [
+    1,
+    2,
+    3,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0031",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.GOES_FOR",
+   "shown": [
+    5,
+    1,
+    3,
+    2,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0032",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V130.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    4,
+    3,
+    5,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0033",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    4,
+    3,
+    1,
+    5,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0034",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    5,
+    0,
+    2,
+    4,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0035",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    3,
+    1,
+    0,
+    2,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0036",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.GOES_FOR",
+   "shown": [
+    0,
+    3,
+    2,
+    4,
+    1,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0037",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    0,
+    1,
+    4,
+    2,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0038",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0039",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.LONG_BREAK",
+   "shown": [
+    0,
+    4,
+    2,
+    3,
+    1,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0040",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.GOES_FOR",
+   "shown": [
+    4,
+    5,
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0041",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.LONG_BREAK",
+   "shown": [
+    1,
+    5,
+    3,
+    0,
+    4,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0042",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.FACT",
+   "shown": [
+    2,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0043",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.FACT",
+   "shown": [
+    1,
+    3,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0044",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V123.p1.FACT",
+   "shown": [
+    3,
+    1,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0045",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.GOES_FOR",
+   "shown": [
+    0,
+    5,
+    1,
+    4,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0046",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    5,
+    4,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0047",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.FACT",
+   "shown": [
+    0,
+    3,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0048",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0049",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.GOES_FOR",
+   "shown": [
+    2,
+    5,
+    0,
+    4,
+    1,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0050",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V130.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0051",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.GOES_FOR",
+   "shown": [
+    1,
+    5,
+    2,
+    3,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0052",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.FACT",
+   "shown": [
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0053",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.GOES_FOR",
+   "shown": [
+    2,
+    1,
+    5,
+    0,
+    4,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0054",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    1,
+    4,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0055",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.FACT",
+   "shown": [
+    3,
+    2,
+    0,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0056",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V139.p1.GOES_FOR",
+   "shown": [
+    0,
+    1,
+    2,
+    4,
+    3,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0057",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.FACT",
+   "shown": [
+    2,
+    1,
+    0,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0058",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.LONG_BREAK",
+   "shown": [
+    5,
+    2,
+    1,
+    0,
+    4,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0059",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V142.p1.GOES_FOR",
+   "shown": [
+    4,
+    3,
+    1,
+    5,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0060",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    4,
+    0,
+    2,
+    1,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0061",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    4,
+    2,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0062",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    5,
+    3,
+    0,
+    4,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0063",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V132.p1.GOES_FOR",
+   "shown": [
+    5,
+    2,
+    4,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0064",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.GOES_FOR",
+   "shown": [
+    5,
+    3,
+    1,
+    0,
+    4,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0065",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.FACT",
+   "shown": [
+    2,
+    1,
+    0,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0066",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V131.p1.LONG_BREAK",
+   "shown": [
+    0,
+    4,
+    3,
+    2,
+    5,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0067",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V136.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    0,
+    5,
+    1,
+    3,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0068",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V140.p1.LONG_BREAK",
+   "shown": [
+    1,
+    2,
+    0,
+    4,
+    5,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0069",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V126.p1.LONG_BREAK",
+   "shown": [
+    3,
+    0,
+    2,
+    1,
+    4,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0070",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.LONG_BREAK",
+   "shown": [
+    5,
+    0,
+    3,
+    2,
+    4,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0071",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.FACT",
+   "shown": [
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0072",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.LONG_BREAK",
+   "shown": [
+    5,
+    4,
+    1,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0073",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.FACT",
+   "shown": [
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0074",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    1,
+    3,
+    5,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0075",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V141.p1.GOES_FOR",
+   "shown": [
+    5,
+    1,
+    2,
+    0,
+    3,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0076",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V128.p1.LONG_BREAK",
+   "shown": [
+    3,
+    0,
+    1,
+    2,
+    4,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0077",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V143.p1.LONG_BREAK",
+   "shown": [
+    0,
+    3,
+    1,
+    2,
+    5,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0078",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.LONG_BREAK",
+   "shown": [
+    3,
+    2,
+    1,
+    4,
+    5,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0079",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.LONG_BREAK",
+   "shown": [
+    5,
+    3,
+    4,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0080",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V134.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    2,
+    1,
+    3,
+    5,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0081",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V144.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    5,
+    1,
+    2,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0082",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V124.p1.LONG_BREAK",
+   "shown": [
+    1,
+    0,
+    3,
+    4,
+    2,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0083",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V135.p1.FACT",
+   "shown": [
+    3,
+    1,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0084",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V127.p1.GOES_FOR",
+   "shown": [
+    4,
+    3,
+    2,
+    5,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0085",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V129.p1.GOES_FOR",
+   "shown": [
+    0,
+    1,
+    3,
+    5,
+    2,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0086",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V138.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    5,
+    3,
+    1,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0087",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V130.p2.GOES_FOR",
+   "shown": [
+    5,
+    3,
+    0,
+    1,
+    4,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0088",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V121.p1.GOES_FOR",
+   "shown": [
+    4,
+    0,
+    3,
+    1,
+    2,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0089",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.FACT",
+   "shown": [
+    2,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0090",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V122.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    0,
+    1,
+    2,
+    5,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0091",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V133.p1.GOES_FOR",
+   "shown": [
+    3,
+    4,
+    0,
+    5,
+    2,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0092",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V125.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    1,
+    5,
+    2,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0093",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V130.p1.LONG_BREAK",
+   "shown": [
+    3,
+    0,
+    2,
+    1,
+    4,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0094",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V137.p1.GOES_FOR",
+   "shown": [
+    3,
+    5,
+    1,
+    2,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0095",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.FACT",
+   "shown": [
+    2,
+    0,
+    3,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0096",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.GOES_FOR",
+   "shown": [
+    0,
+    1,
+    2,
+    4,
+    3,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0097",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.LONG_BREAK",
+   "shown": [
+    2,
+    4,
+    0,
+    1,
+    3,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0098",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.GOES_FOR",
+   "shown": [
+    5,
+    4,
+    0,
+    3,
+    1,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0099",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    4,
+    2,
+    5,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0100",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.GOES_FOR",
+   "shown": [
+    0,
+    5,
+    3,
+    2,
+    4,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0101",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    4,
+    3,
+    5,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0102",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.FACT",
+   "shown": [
+    1,
+    3,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0103",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.LONG_BREAK",
+   "shown": [
+    0,
+    4,
+    3,
+    2,
+    1,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0104",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V123.p1.FACT",
+   "shown": [
+    2,
+    0,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0105",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.FACT",
+   "shown": [
+    1,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0106",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.GOES_FOR",
+   "shown": [
+    0,
+    3,
+    2,
+    1,
+    5,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0107",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    3,
+    0,
+    1,
+    2,
+    4
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0108",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    1,
+    5,
+    3,
+    4,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0109",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.FACT",
+   "shown": [
+    3,
+    2,
+    0,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0110",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.LONG_BREAK",
+   "shown": [
+    4,
+    2,
+    1,
+    5,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0111",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0112",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0113",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.GOES_FOR",
+   "shown": [
+    1,
+    4,
+    3,
+    5,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0114",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.LONG_BREAK",
+   "shown": [
+    4,
+    5,
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0115",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    4,
+    0,
+    3,
+    2,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0116",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.FACT",
+   "shown": [
+    1,
+    2,
+    0,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0117",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.LONG_BREAK",
+   "shown": [
+    3,
+    1,
+    0,
+    4,
+    2,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0118",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.LONG_BREAK",
+   "shown": [
+    2,
+    5,
+    1,
+    0,
+    4,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0119",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V130.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    0,
+    2,
+    4,
+    3,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0120",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0121",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.FACT",
+   "shown": [
+    1,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0122",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.LONG_BREAK",
+   "shown": [
+    5,
+    0,
+    3,
+    1,
+    2,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0123",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.LONG_BREAK",
+   "shown": [
+    2,
+    1,
+    3,
+    5,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0124",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.GOES_FOR",
+   "shown": [
+    2,
+    4,
+    1,
+    5,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0125",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.GOES_FOR",
+   "shown": [
+    5,
+    0,
+    4,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0126",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.FACT",
+   "shown": [
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0127",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.LONG_BREAK",
+   "shown": [
+    2,
+    0,
+    4,
+    1,
+    3,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0128",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    5,
+    2,
+    4,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0129",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.GOES_FOR",
+   "shown": [
+    0,
+    2,
+    3,
+    1,
+    4,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0130",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.GOES_FOR",
+   "shown": [
+    4,
+    1,
+    3,
+    5,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0131",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    1,
+    5,
+    3,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0132",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.LONG_BREAK",
+   "shown": [
+    0,
+    2,
+    5,
+    4,
+    1,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0133",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.GOES_FOR",
+   "shown": [
+    0,
+    1,
+    4,
+    5,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0134",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.GOES_FOR",
+   "shown": [
+    2,
+    0,
+    1,
+    4,
+    3,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0135",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.GOES_FOR",
+   "shown": [
+    5,
+    4,
+    0,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0136",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0137",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.GOES_FOR",
+   "shown": [
+    0,
+    4,
+    1,
+    2,
+    3,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0138",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    1,
+    2,
+    5,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0139",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0140",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.GOES_FOR",
+   "shown": [
+    1,
+    5,
+    3,
+    0,
+    2,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0141",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.LONG_BREAK",
+   "shown": [
+    1,
+    3,
+    2,
+    4,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0142",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.LONG_BREAK",
+   "shown": [
+    5,
+    0,
+    2,
+    4,
+    3,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0143",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.LONG_BREAK",
+   "shown": [
+    4,
+    3,
+    0,
+    5,
+    2,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0144",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0145",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    2,
+    3,
+    0,
+    4,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0146",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    1,
+    3,
+    2,
+    4,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0147",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V130.p1.FACT",
+   "shown": [
+    3,
+    2,
+    0,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0148",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    0,
+    5,
+    2,
+    1,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0149",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.LONG_BREAK",
+   "shown": [
+    1,
+    4,
+    5,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0150",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.LONG_BREAK",
+   "shown": [
+    5,
+    2,
+    1,
+    0,
+    4,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0151",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.FACT",
+   "shown": [
+    0,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0152",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.GOES_FOR",
+   "shown": [
+    1,
+    2,
+    5,
+    3,
+    0,
+    4
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0153",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.GOES_FOR",
+   "shown": [
+    3,
+    1,
+    4,
+    5,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0154",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.GOES_FOR",
+   "shown": [
+    4,
+    3,
+    2,
+    5,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0155",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.LONG_BREAK",
+   "shown": [
+    5,
+    4,
+    0,
+    3,
+    1,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0156",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    2,
+    5,
+    4,
+    3,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0157",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.LONG_BREAK",
+   "shown": [
+    5,
+    4,
+    3,
+    2,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0158",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.LONG_BREAK",
+   "shown": [
+    3,
+    1,
+    2,
+    4,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0159",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.GOES_FOR",
+   "shown": [
+    5,
+    2,
+    1,
+    3,
+    0,
+    4
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0160",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.FACT",
+   "shown": [
+    1,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0161",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    1,
+    0,
+    3,
+    2,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0162",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.FACT",
+   "shown": [
+    1,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0163",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    1,
+    3,
+    0,
+    5,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0164",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.FACT",
+   "shown": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0165",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.GOES_FOR",
+   "shown": [
+    4,
+    2,
+    5,
+    1,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0166",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.GOES_FOR",
+   "shown": [
+    2,
+    1,
+    4,
+    3,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0167",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    5,
+    3,
+    4,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0168",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.FACT",
+   "shown": [
+    1,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0169",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.LONG_BREAK",
+   "shown": [
+    1,
+    2,
+    5,
+    0,
+    3,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0170",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.FACT",
+   "shown": [
+    3,
+    1,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0171",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    3,
+    5,
+    0,
+    1,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0172",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V130.p2.GOES_FOR",
+   "shown": [
+    4,
+    2,
+    5,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0173",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.LONG_BREAK",
+   "shown": [
+    2,
+    3,
+    0,
+    5,
+    1,
+    4
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0174",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.GOES_FOR",
+   "shown": [
+    1,
+    4,
+    0,
+    5,
+    3,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0175",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    1,
+    2,
+    4,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0176",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    3,
+    0,
+    4,
+    5,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0177",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.LONG_BREAK",
+   "shown": [
+    0,
+    5,
+    1,
+    2,
+    3,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0178",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    4,
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0179",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    3,
+    1,
+    0,
+    2,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0180",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V130.p1.LONG_BREAK",
+   "shown": [
+    5,
+    3,
+    2,
+    4,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0181",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.FACT",
+   "shown": [
+    2,
+    1,
+    0,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0182",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.LONG_BREAK",
+   "shown": [
+    1,
+    4,
+    2,
+    3,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0183",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.FACT",
+   "shown": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0184",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V123.p1.GOES_FOR",
+   "shown": [
+    3,
+    1,
+    4,
+    5,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0185",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.GOES_FOR",
+   "shown": [
+    2,
+    4,
+    1,
+    3,
+    5,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0186",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    5,
+    3,
+    1,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0187",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    5,
+    1,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0188",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0095",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.GOES_FOR",
+   "shown": [
+    1,
+    5,
+    4,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0096",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V130.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    3,
+    4,
+    2,
+    5,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0097",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.GOES_FOR",
+   "shown": [
+    1,
+    2,
+    3,
+    0,
+    4,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0098",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.FACT",
+   "shown": [
+    2,
+    1,
+    3,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0099",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.GOES_FOR",
+   "shown": [
+    0,
+    4,
+    3,
+    1,
+    2,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0100",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.GOES_FOR",
+   "shown": [
+    4,
+    2,
+    5,
+    1,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0101",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    5,
+    0,
+    2,
+    1,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0102",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.LONG_BREAK",
+   "shown": [
+    0,
+    1,
+    4,
+    2,
+    5,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0103",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0104",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.GOES_FOR",
+   "shown": [
+    5,
+    4,
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0105",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.LONG_BREAK",
+   "shown": [
+    2,
+    5,
+    4,
+    0,
+    3,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0106",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    1,
+    3,
+    0,
+    4,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0107",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V130.p2.GOES_FOR",
+   "shown": [
+    3,
+    1,
+    4,
+    0,
+    2,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0108",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.GOES_FOR",
+   "shown": [
+    4,
+    5,
+    2,
+    0,
+    3,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0109",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.GOES_FOR",
+   "shown": [
+    5,
+    0,
+    2,
+    4,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0110",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    5,
+    1,
+    0,
+    3,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0111",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    2,
+    1,
+    5,
+    3,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0112",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.LONG_BREAK",
+   "shown": [
+    4,
+    5,
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0113",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.LONG_BREAK",
+   "shown": [
+    4,
+    3,
+    5,
+    2,
+    0,
+    1
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0114",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.FACT",
+   "shown": [
+    1,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0115",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.GOES_FOR",
+   "shown": [
+    3,
+    0,
+    1,
+    2,
+    4,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0116",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.LONG_BREAK",
+   "shown": [
+    5,
+    1,
+    4,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0117",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.GOES_FOR",
+   "shown": [
+    1,
+    5,
+    2,
+    3,
+    0,
+    4
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0118",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V130.p1.FACT",
+   "shown": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0119",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0120",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.LONG_BREAK",
+   "shown": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0121",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.FACT",
+   "shown": [
+    1,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0122",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    3,
+    5,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0123",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    4,
+    0,
+    1,
+    5,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0124",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.LONG_BREAK",
+   "shown": [
+    1,
+    2,
+    5,
+    3,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0125",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0126",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.LONG_BREAK",
+   "shown": [
+    1,
+    5,
+    3,
+    2,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0127",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.FACT",
+   "shown": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0128",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.FACT",
+   "shown": [
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0129",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.FACT",
+   "shown": [
+    3,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0130",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.GOES_FOR",
+   "shown": [
+    1,
+    3,
+    2,
+    4,
+    5,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0131",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    5,
+    4,
+    1,
+    3,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0132",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    0,
+    2,
+    5,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0133",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V140.p1.FACT",
+   "shown": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0134",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.GOES_FOR",
+   "shown": [
+    0,
+    2,
+    4,
+    3,
+    5,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0135",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    5,
+    4,
+    3,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0136",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V137.p1.LONG_BREAK",
+   "shown": [
+    3,
+    5,
+    1,
+    4,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0137",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V130.p1.LONG_BREAK",
+   "shown": [
+    3,
+    0,
+    5,
+    2,
+    1,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0138",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    3,
+    5,
+    4,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0139",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.LONG_BREAK",
+   "shown": [
+    5,
+    2,
+    1,
+    0,
+    3,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0140",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    4,
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0141",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    1,
+    3,
+    0,
+    5,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0142",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    0,
+    5,
+    2,
+    1,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0143",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.GOES_FOR",
+   "shown": [
+    4,
+    3,
+    0,
+    2,
+    1,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0144",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V122.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    2,
+    5,
+    3,
+    4,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0145",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.FACT",
+   "shown": [
+    0,
+    2,
+    1,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0146",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    1,
+    3,
+    0,
+    5,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0147",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.LONG_BREAK",
+   "shown": [
+    5,
+    1,
+    3,
+    4,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0148",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.LONG_BREAK",
+   "shown": [
+    3,
+    0,
+    5,
+    2,
+    1,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0149",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.FACT",
+   "shown": [
+    3,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0150",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.LONG_BREAK",
+   "shown": [
+    0,
+    2,
+    4,
+    5,
+    3,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0151",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.LONG_BREAK",
+   "shown": [
+    0,
+    5,
+    4,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0152",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V138.p1.LONG_BREAK",
+   "shown": [
+    1,
+    4,
+    0,
+    5,
+    2,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0153",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.FACT",
+   "shown": [
+    2,
+    1,
+    3,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0154",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    4,
+    0,
+    1,
+    5,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0155",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.FACT",
+   "shown": [
+    1,
+    2,
+    3,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0156",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    0,
+    1,
+    2,
+    4,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0157",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.GOES_FOR",
+   "shown": [
+    5,
+    0,
+    4,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0158",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.LONG_BREAK",
+   "shown": [
+    0,
+    4,
+    5,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0159",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V127.p1.GOES_FOR",
+   "shown": [
+    2,
+    1,
+    5,
+    3,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0160",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.LONG_BREAK",
+   "shown": [
+    2,
+    1,
+    4,
+    5,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0161",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.LONG_BREAK",
+   "shown": [
+    1,
+    5,
+    2,
+    4,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0162",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.LONG_BREAK",
+   "shown": [
+    2,
+    0,
+    4,
+    3,
+    5,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0163",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V123.p1.FACT",
+   "shown": [
+    0,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0164",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.GOES_FOR",
+   "shown": [
+    4,
+    5,
+    2,
+    3,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0165",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V142.p1.LONG_BREAK",
+   "shown": [
+    5,
+    4,
+    2,
+    0,
+    1,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0166",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    0,
+    5,
+    4,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0167",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V135.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0168",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.GOES_FOR",
+   "shown": [
+    2,
+    0,
+    5,
+    4,
+    3,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0169",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    0,
+    1,
+    4,
+    2,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0170",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V124.p1.LONG_BREAK",
+   "shown": [
+    4,
+    0,
+    1,
+    2,
+    5,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0171",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V136.p1.FACT",
+   "shown": [
+    0,
+    3,
+    1,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0172",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    2,
+    5,
+    3,
+    1,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0173",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V131.p1.FACT",
+   "shown": [
+    0,
+    2,
+    3,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0174",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V128.p1.GOES_FOR",
+   "shown": [
+    1,
+    4,
+    0,
+    2,
+    3,
+    5
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0175",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V143.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0176",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V133.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0177",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.GOES_FOR",
+   "shown": [
+    3,
+    1,
+    2,
+    0,
+    4,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0178",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V134.p1.FACT",
+   "shown": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0179",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V123.p1.GOES_FOR",
+   "shown": [
+    0,
+    5,
+    2,
+    1,
+    3,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0180",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V125.p1.GOES_FOR",
+   "shown": [
+    4,
+    2,
+    5,
+    1,
+    0,
+    3
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0181",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.LONG_BREAK",
+   "shown": [
+    5,
+    3,
+    1,
+    2,
+    0,
+    4
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0182",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V121.p1.FACT",
+   "shown": [
+    2,
+    3,
+    0,
+    1
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0183",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V139.p1.GOES_FOR",
+   "shown": [
+    1,
+    5,
+    0,
+    3,
+    2,
+    4
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0184",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V132.p1.GOES_FOR",
+   "shown": [
+    1,
+    0,
+    4,
+    2,
+    3,
+    5
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0185",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V141.p1.FACT",
+   "shown": [
+    2,
+    1,
+    3,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0186",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V126.p1.GOES_FOR",
+   "shown": [
+    2,
+    4,
+    0,
+    1,
+    5,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0187",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V144.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    5,
+    4,
+    2,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0188",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "01",
+   "question_id": "V129.p1.FACT",
+   "shown": [
+    1,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0189",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.GOES_FOR",
+   "shown": [
+    1,
+    3,
+    5,
+    4,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "Q0190",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.LONG_BREAK",
+   "shown": [
+    5,
+    3,
+    1,
+    4,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0191",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.FACT",
+   "shown": [
+    3,
+    0,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0192",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    3,
+    5,
+    0,
+    1,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0193",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.KEEPS_AWAY",
+   "shown": [
+    4,
+    0,
+    3,
+    5,
+    2,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0194",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.LONG_BREAK",
+   "shown": [
+    2,
+    4,
+    3,
+    0,
+    1,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0195",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.KEEPS_AWAY",
+   "shown": [
+    2,
+    0,
+    5,
+    1,
+    3,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0196",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.GOES_FOR",
+   "shown": [
+    3,
+    0,
+    5,
+    2,
+    4,
+    1
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0197",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0198",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.FACT",
+   "shown": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0199",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.GOES_FOR",
+   "shown": [
+    0,
+    3,
+    2,
+    1,
+    5,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0200",
+   "solver": "deepseek-chat",
+   "mode": "with_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.LONG_BREAK",
+   "shown": [
+    1,
+    4,
+    3,
+    2,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0189",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.GOES_FOR",
+   "shown": [
+    3,
+    5,
+    2,
+    1,
+    4,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0190",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    1,
+    3,
+    4,
+    2,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0191",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.LONG_BREAK",
+   "shown": [
+    5,
+    1,
+    2,
+    0,
+    3,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0192",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.GOES_FOR",
+   "shown": [
+    0,
+    5,
+    3,
+    1,
+    2,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0193",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.FACT",
+   "shown": [
+    1,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0194",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V120.p1.LONG_BREAK",
+   "shown": [
+    1,
+    2,
+    0,
+    5,
+    4,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0195",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    2,
+    3,
+    0,
+    1,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0196",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.FACT",
+   "shown": [
+    3,
+    1,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0197",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.GOES_FOR",
+   "shown": [
+    2,
+    4,
+    3,
+    5,
+    1,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0198",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V118.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    0,
+    1,
+    4,
+    5,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0199",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.FACT",
+   "shown": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0200",
+   "solver": "deepseek-chat",
+   "mode": "no_passage",
+   "sheet": "00",
+   "question_id": "V119.p1.LONG_BREAK",
+   "shown": [
+    4,
+    2,
+    5,
+    0,
+    3,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0201",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.FACT",
+   "shown": [
+    0,
+    3,
+    2,
+    1
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0202",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    4,
+    1,
+    0,
+    2,
+    5
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0203",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.KEEPS_AWAY",
+   "shown": [
+    0,
+    5,
+    3,
+    1,
+    2,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0204",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.GOES_FOR",
+   "shown": [
+    5,
+    1,
+    4,
+    0,
+    2,
+    3
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0205",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.LONG_BREAK",
+   "shown": [
+    0,
+    3,
+    2,
+    1,
+    5,
+    4
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0206",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.GOES_FOR",
+   "shown": [
+    2,
+    0,
+    5,
+    1,
+    4,
+    3
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0207",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.FACT",
+   "shown": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "Q0208",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.GOES_FOR",
+   "shown": [
+    2,
+    0,
+    1,
+    3,
+    5,
+    4
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "Q0209",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.KEEPS_AWAY",
+   "shown": [
+    5,
+    1,
+    4,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "Q0210",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.FACT",
+   "shown": [
+    1,
+    3,
+    2,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "Q0211",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.LONG_BREAK",
+   "shown": [
+    5,
+    2,
+    0,
+    4,
+    1,
+    3
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "Q0212",
+   "solver": "claude-sonnet-subagent",
+   "mode": "with_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.LONG_BREAK",
+   "shown": [
+    1,
+    5,
+    4,
+    2,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0201",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.FACT",
+   "shown": [
+    1,
+    3,
+    0,
+    2
+   ],
+   "right_letter": "C"
+  },
+  {
+   "item_id": "G0202",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.GOES_FOR",
+   "shown": [
+    5,
+    2,
+    4,
+    0,
+    3,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0203",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    2,
+    4,
+    5,
+    3,
+    0
+   ],
+   "right_letter": "F"
+  },
+  {
+   "item_id": "G0204",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.KEEPS_AWAY",
+   "shown": [
+    3,
+    4,
+    2,
+    0,
+    5,
+    1
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0205",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.FACT",
+   "shown": [
+    1,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0206",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.GOES_FOR",
+   "shown": [
+    2,
+    3,
+    1,
+    4,
+    0,
+    5
+   ],
+   "right_letter": "E"
+  },
+  {
+   "item_id": "G0207",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.FACT",
+   "shown": [
+    2,
+    1,
+    3,
+    0
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0208",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.GOES_FOR",
+   "shown": [
+    2,
+    1,
+    3,
+    0,
+    5,
+    4
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0209",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.LONG_BREAK",
+   "shown": [
+    1,
+    5,
+    4,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "D"
+  },
+  {
+   "item_id": "G0210",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V118.p1.LONG_BREAK",
+   "shown": [
+    0,
+    1,
+    4,
+    3,
+    5,
+    2
+   ],
+   "right_letter": "A"
+  },
+  {
+   "item_id": "G0211",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V120.p1.LONG_BREAK",
+   "shown": [
+    3,
+    0,
+    5,
+    4,
+    1,
+    2
+   ],
+   "right_letter": "B"
+  },
+  {
+   "item_id": "G0212",
+   "solver": "claude-sonnet-subagent",
+   "mode": "no_passage",
+   "sheet": "02",
+   "question_id": "V119.p1.KEEPS_AWAY",
+   "shown": [
+    1,
+    4,
+    5,
+    0,
+    3,
+    2
+   ],
+   "right_letter": "D"
+  }
+ ]
+}

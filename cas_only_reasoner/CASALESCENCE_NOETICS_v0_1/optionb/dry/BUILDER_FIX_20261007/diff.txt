@@ -1,0 +1,17 @@
+--- a/optionb/dry/build_dev_package.py
++++ b/optionb/dry/build_dev_package.py
+@@ -108,8 +108,12 @@
+ SEAL_NAME = 'SEAL_OPTIONB.jsonl'
+ STEPS = ('1_PLAN_AND_SOURCES', '2_ROLE_NOTES', '3A_PRACTICE_QUESTIONS_AND_KEYS', '3B_PRACTICE_SET_FIXED',
+          '3C_FINAL_QUESTIONS_AND_KEYS', '4_ORDINARY_NOTES', '5_PROMPT_PARTS_AND_REMOVAL_LOG', '6_PROGRAMS')
+-# made-up model names that the made-up services "put in their replies" (amendment A9: the tools store them as given)
+-NAMES = {'writer': 'MADE-UP-NAME-IN-A-WRITER-REPLY', 'solver': 'MADE-UP-NAME-IN-A-SOLVER-REPLY', 'transcript': 'MADE-UP-NAME-FROM-A-TRANSCRIPT',
++# made-up model names that the made-up services "put in their replies" (amendment A9: the tools store them as given).
++# The transcript name is the one exception: since operator decision C3 (amendment 3) the import step of
++# tools/ob_solve_blind.py takes a sheet only under the pinned id outside_services.claude_solver.model_id, so that id is read
++# from PLAN_CONSTANTS.json here. It is a model id, not a passage, question, label, note or key (FILE_FORMATS.md section 20).
++NAMES = {'writer': 'MADE-UP-NAME-IN-A-WRITER-REPLY', 'solver': 'MADE-UP-NAME-IN-A-SOLVER-REPLY',
++         'transcript': json.loads((OPTIONB / 'PLAN_CONSTANTS.json').read_bytes().decode('utf-8'))['outside_services']['claude_solver']['model_id'],
+          'note_writer': 'MADE-UP-NAME-IN-A-NOTE-WRITER-REPLY', 'checker': 'MADE-UP-NAME-IN-A-CHECKER-REPLY'}
+ # what FILE_FORMATS.md section 20 asks of the made-up practice set (from optionb/job/SELFTEST_EXPECTED.json)
+ PRACTICE_ROLE_STEP_MIN, PRACTICE_ROLE_STEP_BELOW = 20, 200

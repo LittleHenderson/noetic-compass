@@ -1,0 +1,396 @@
+You are a careful labeler. Work only from the labeling guide and the labeler instructions that follow this message. Never force a label.
+
+Your passages are in C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/verdict/team_a/chunk_10.json, a JSON list of {"id", "text"}. Label every passage in it, each on its own.
+Write your records as ONE JSON list in your working file C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/verdict/labels_team_a.json.chunk_10.work.json.
+Hand the records in with this command and no other: python -B C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/check_labels_v21.py take C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/verdict/team_a/chunk_10.json C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/verdict/labels_team_a.json.chunk_10.work.json C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/verdict/labels_team_a.json.chunk_10.json
+The command runs a format checker. It reads form only. Every new or changed record it reads is logged as a try. You have three tries in all for one passage. If it prints messages, fix what they name in the working file and run the same command again. Stop when it prints that 0 passages are still open.
+Never run the checker in any other way, and never import it. Open no file but the two named above: not the checker, not a labels file, not a try log, not another chunk.
+
+=== LABELING GUIDE ===
+# 02 — Labeling guide, version 2.1 (candidate, not yet in force)
+
+For label teams only. Never show this guide to case writers or to anyone tuning a reader.
+
+Status: CANDIDATE. Not in force until the owner has signed and the passages are sealed. Nothing has been labeled under it. It was never signed, sealed or used, so it was amended in place on 2026-10-05, after the owner's ruling of that day (`OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json`): "MIND IS AN ENTITY, A BEING, ANYTHING THAT THINKS, MACHINE,HUMAN, ANIMAL, AI ETC.  POSITIVE AND NEGATIVE USE THE COLLOQUILISMS (SHOULD BE  IN LOCAL FILES) THE SAME ABOUT THE OTHER NOETICS". The local file is `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`.
+
+Version 2.1 differs from version 1.2 in two things. (1) Pointing: the field `words` becomes a short `label` plus the full `support` quote, and rule 16 is one pointing rule (owner's direction of 2026-10-05, `OWNER_DIRECTION_POINTING_AND_OPTION_B_20261005.json`). (2) Presence, by the ruling above: Part A now holds the Colloquialism Test of the owner's file, copied by a script; rule 4 is replaced (a Mind is any being that thinks); the study's own presence rules 5, 6, 7, 10 and 13 are removed and new rule 5 applies the test; rules 2 and 3 no longer decide presence; every entry gains the field `saying`. Rules 1, 8, 9, 11, 12, 14 and 15 are the text of version 1.2, byte for byte, but for one clause of rule 15 that pointed at removed rule 10. The owner's two open questions stay open; rule 15 stays in force as written (`OWNER_RULING_SIGN_READING_20261004.json`). Version 2.0 was built, reviewed, rejected and never used. An outside review of this version led to the last row of the last table. No change is made to this guide once practice labels exist; a defect found after that is a new version with a new review.
+
+## Part A — Canon and the owner's ruling on Mind (copied by a script, never retyped)
+
+Built by `tools/build_guide_part_a_v21.py` from `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` (sha256 `cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880`). A line that starts with `[A` is a source mark written by the study. All other text of Part A is copied character for character: it is canon, except A2, which is the owner's. Two things of form are the study's: the line form of A1, and the quote sign `>` before A2.
+
+[A1] Clarification 1, "The Ten Noetics" (canon lines 16 to 25): the ten names and definitions. The line form is the guide's.
+
+- `^0` **Idea** — All things in and outside the Mind.
+- `^1` **Mind** — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.
+- `^2` **Positive** — An Idea the Mind has an affinity for and is attracted toward.
+- `^3` **Negative** — An Idea the Mind is adverse to and repelled by.
+- `^4` **Vibration** — The degree to which an Idea resonates with the Mind, its impression.
+- `^5` **Female** — A Mind impregnated with an Idea, the Ideas a Mind is composed of.
+- `^6` **Male** — An Idea impregnated with another Idea, the Ideas an Idea is composed of.
+- `^7` **Rhythm** — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.
+- `^8` **Above/Cause** — An Idea that triggers a different Idea than itself to come to Mind.
+- `^9` **Below/Effect** — The Idea brought to Mind by an Above/Cause trigger.
+
+[A2] Owner's ruling of 2026-10-05 on Mind, exactly as typed (record `OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json`).
+
+> MIND IS AN ENTITY, A BEING, ANYTHING THAT THINKS, MACHINE,HUMAN, ANIMAL, AI ETC.
+
+[A3] Clarification 6, "The principle" (canon line 126).
+
+> **If ever unsure of a Noetic's true definition, try to match its definition with a colloquialism and it will make it clear.**
+
+[A4] Clarification 6, "Canonical colloquialism map" (canon lines 138 to 151): the whole table and the paragraph after it.
+
+| Noetic | Authoritative definition | Folk-form colloquialisms |
+| :--- | :--- | :--- |
+| ^0 Idea | All things in and outside the Mind. | "It's all in your head." |
+| ^1 Mind | Various degrees of awareness that processes, stores, outputs, and intakes Ideas. | "Paying attention." / "Making up your mind." / "Using your head." |
+| ^2 Positive | An Idea the Mind has an affinity for and is attracted toward. | "Drawn to it like a moth to a flame." / "Speaks to me." / "Can't resist." |
+| ^3 Negative | An Idea the Mind is adverse to and repelled by. | "Can't stomach it." / "Rubs me the wrong way." / "Wouldn't touch it with a ten-foot pole." |
+| ^4 Vibration | The degree to which an Idea resonates with the Mind, its impression. | "Hit me hard." / "Struck a chord." / "Resonated." / "Made an impression." |
+| ^5 Female | A Mind impregnated with an Idea, the Ideas a Mind is composed of. | "We are the sum of our experiences." / "It's who I am." / "Part of what makes me me." |
+| ^6 Male | An Idea impregnated with another Idea, the Ideas an Idea is composed of. | "Unpacking an idea." / "Breaking it down." / "Looking at what's underneath." / "Pulling apart the argument." |
+| ^7 Rhythm | The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. | "Practice makes perfect." / "You are what you repeatedly do." / "Getting into a groove." / "Muscle memory." |
+| ^8 Above/Cause | An Idea that triggers a different Idea than itself to come to Mind. | "That reminds me..." / "One thing leads to another." / "Triggered a memory." / "Made me think of..." |
+| ^9 Below/Effect | The Idea brought to Mind by an Above/Cause trigger. | "It just popped into my head." / "Out of nowhere I thought of..." / "The thought came to me." / "It just clicked." |
+
+These colloquialisms are representative, not exhaustive. Native speakers of any language carry many more folk-form descriptions that align with each Noetic; the patterns above are English-language exemplars. When working in other linguistic or cultural contexts, find the equivalent folk-form markers that encode the same Mind-Idea dynamic.
+
+[A5] Clarification 5, "Colloquial framing" of `^5` Female (canon line 81).
+
+> **Female is: we are each the sum of our experiences. The Mind is not a container that holds experiences — the Mind IS the experiences accumulated. Who you are is what you have lived.**
+
+[A6] Clarification 6, worked verification of `^3` Negative (canon line 179): the annotation, from its bold label to its end. "These colloquialisms" are the sayings of `^3`.
+
+**Anti-drift annotation:** these colloquialisms are **VISCERAL, not analytical** — consistent with the authoritative aversive semantic. This rules out the Scheme-A "CO-3 Concretization" reading (concretization is not aversion) and the Scheme-B "Aversion / Critical Evaluation" reading (analytical critique is `^6` Male, not `^3` Negative). When an example's description reaches for analytical-critique vocabulary (audit, scrutinize, find flaws), `^3` is the wrong classification — reach for `^6` instead.
+
+[A7] Clarification 6, worked verification of `^4` Vibration (canon line 185): the annotation, from its bold label to its end.
+
+**Linguistic-cognate observation:** "struck a chord" is literally a Vibration metaphor — a vibrating string producing a resonant impression. The colloquialism and the authoritative definition are not analogues pointing at the same phenomenon from different angles; they are etymological convergences on the same structural dynamic. This is the strongest form of colloquialism-test verification.
+
+[A8] Clarification 6, worked verification of `^8` Above/Cause (canon line 209): the annotation, from its bold label to its end. "These colloquialisms" are the sayings of `^8`.
+
+**Anti-drift annotation:** these colloquialisms are **NOT analytical reasoning** — they describe associative surfacing of Ideas, not deductive inference. This rules out the Scheme-B "Causal Reasoning" reading (deductive causal inference is a compound of `^6` Male and `^9` Below/Effect, not `^8` Above/Cause alone). When an example describes "working out the cause" through logical analysis, that is compositional decomposition (`^6`), not associative triggering (`^8`). When an example describes "that reminded me" or "one thing led to another," that is the authoritative `^8`.
+
+[A9] Clarification 6, "Diagnostic application" (canon lines 219 to 224): the whole section.
+
+When analyzing an example and classifying it in Noetic notation, pose two questions:
+
+1. **What colloquialism would a native speaker use to describe this cognitive phenomenon?**
+2. **Which Noetic's authoritative definition does that colloquialism align with?**
+
+If the answer produces a clean match to a single Noetic, single-operator classification is supported. If the colloquialism invokes several Noetics simultaneously, the example probably needs a compound expression (often with ^5 Female as substrate per Clarification 5). If no colloquialism fits at all, the Noetic reading is drifting from authoritative semantics and must be reconciled.
+
+[A10] Clarification 6, "What this clarification does NOT change" (canon line 253): the second bullet.
+
+- Where a colloquialism and a canonical definition appear to disagree, the canonical definition governs; the colloquialism is either imprecise in that specific usage or the proposed example is misclassified.
+
+## Part B — How to label in this study (working convention, v2.1)
+
+Study note (not canon): Female and Male say nothing about gender. Positive and Negative do not mean good and bad.
+
+### What you produce
+
+For each passage, a list of entries. Each entry says: this Noetic is occupied by this thing, for this Mind, relative to this other thing. It points at the thing twice: a short `label` that names it, and the full `support` quote that shows it. It also gives the everyday `saying` that led you to the Noetic.
+
+Passage P00: "Ines came home at dusk. The squeak of the gate reminded her of her first bicycle."
+
+```json
+{"passage_id": "P00",
+ "none_of_these": false,
+ "entries": [
+   {"noetic": "^1", "label": "Ines", "support": "Ines came home at dusk.", "mind": "Ines", "relative_to": "", "certainty": "clear", "saying": ""},
+   {"noetic": "^8", "label": "The squeak of the gate", "support": "The squeak of the gate reminded her of her first bicycle.", "mind": "Ines", "relative_to": "her first bicycle", "certainty": "clear", "saying": "That reminds me..."},
+   {"noetic": "^9", "label": "her first bicycle", "support": "The squeak of the gate reminded her of her first bicycle.", "mind": "Ines", "relative_to": "The squeak of the gate", "certainty": "clear", "saying": "It just popped into my head."}
+ ],
+ "not_enough_information": []}
+```
+
+Rules for the fields:
+
+- Every entry has seven fields: `noetic`, `label`, `support`, `mind`, `relative_to`, `certainty`, `saying`. A field that does not apply is `""`.
+- `label`: the short identifying name of the thing that occupies the role. An exact, unbroken copy of passage text, 1 to 12 words. It is the passage's own naming of the thing, never cut down to a bare noun when the passage names it more fully. Rule 16 says how to choose it.
+- `support`: the full supporting quote. The whole sentence or sentences that show the role: at most 4, next to each other, copied exactly, each from its first word to its end mark. The `label` lies inside the `support`.
+- `mind`: the `label` of your own `^1` entry for that Mind, character for character. Use `""` only where the Noetic has no Mind in its definition (`^6`).
+- `relative_to`: the `label` of the related thing, chosen by rule 16 in the same way, or `""` where the table below says so. If the passage never names the related thing, leave `relative_to` empty and add a note under `not_enough_information` (for `^8` and `^9` see rule 2).
+- `certainty`: `"clear"` or `"ambiguous"`. If ambiguous, add `"other_candidate"`: another Noetic (`"^n"`), `"none"`, or `"reasoning"` (see rule 15).
+- `saying`: the everyday saying that fits this moment (rule 5), in your own words or a canonical one from Part A. 2 to 20 words: a canonical saying of one word needs words around it ("It resonated with me."). Required for `^2` to `^9`; `""` for `^1`. It is not a copy of passage text. It records that you applied the test. It is never compared between teams and never scored.
+- `reached_by`: used only under rule 15(b). Write `"reached_by": "reasoning"` on a conclusion the Mind worked out. Leave the field out everywhere else.
+- `none_of_these`: `true` when no Noetic `^1` to `^9` is occupied by anything in the passage. Then `entries` is empty.
+- `not_enough_information`: short notes for things the passage hints at but does not settle. Do not turn a hint into an entry.
+
+Never force a label. An honest "ambiguous", "not enough information" or "none of these" is a correct answer.
+
+### What to mark for each Noetic
+
+| Noetic | `label` = | `mind` = | `relative_to` = |
+|---|---|---|---|
+| `^1` Mind | the name or mention of each Mind in the passage, listed once per Mind (see rule 4) | the same mention | `""` |
+| `^2` Positive | the Idea the Mind has an affinity for and is attracted toward | that Mind | `""` |
+| `^3` Negative | the Idea the Mind is adverse to and repelled by | that Mind | `""` |
+| `^4` Vibration | the words that state how strongly or how weakly the Idea impresses the Mind | that Mind | the Idea that resonates |
+| `^5` Female | the Idea or Ideas the Mind is composed of (what it has lived, learned, come to believe, become skilled in) | that Mind | `""` |
+| `^6` Male | the Idea or Ideas that another Idea is composed of | `""` | the Idea they compose |
+| `^7` Rhythm | the words that state the rate and pattern of exposure | the Mind exposed | the Idea it is exposed to |
+| `^8` Above/Cause | the Idea that triggers a different Idea to come to Mind | that Mind | the Idea it brings to Mind (the `^9`) |
+| `^9` Below/Effect | the Idea brought to Mind | that Mind | its trigger (the `^8`) |
+
+`support` is the whole sentence or sentences that show the role (rule 16 says which).
+
+`^0` Idea is not an entry. Every thing you point to is an Idea. You are not asked whether an Idea is present.
+
+### Working rules
+
+1. **One passage, many entries.** Mark every Noetic the passage settles. The same words may occupy two Noetics; write two entries.
+2. **`^8` and `^9` come as a pair when the passage gives both.** This rule says only how to write them. Whether a Cause and an Effect are present is decided by rule 5 and by rule 15, the owner's working ruling on reading a sign. When the passage gives both, write them as a pair: each quotes the other in `relative_to`, from wherever it appears in the passage. The two rule-15 cases keep their flags: a conclusion reached by reasoning (rule 15b) is marked on its own, with `"reached_by": "reasoning"`; a sign whose way of working the passage does not reveal (rule 15d) is marked as an uncertain pair. When the passage gives only one of the two, and rule 5 marks it (for example a thought that comes out of nowhere, with no trigger named), write that one entry alone, with `relative_to` `""` and a note under `not_enough_information`.
+3. **No Mind, no `^8`/`^9`.** Rain making a road wet is not `^8`. The definition needs an Idea coming to Mind.
+4. **List every Mind once (owner's ruling, 2026-10-05; Part A, A2).** A Mind is an entity, a being, anything that thinks: machine, human, animal, AI, and so on. List every such being the passage names, once, by its first full naming: one `^1` entry each. A thing that does not think (a conveyor, a storm) is not a Mind. A being that is only spoken of is listed too. That last point is the operator's reading of the ruling, not the owner's words; the owner may correct it.
+5. **The Colloquialism Test decides `^2` to `^9` (owner's ruling, 2026-10-05).** For every possible entry of `^2` to `^9`, apply the Diagnostic application of Part A (A9), in its order. First ask what saying a native speaker would use for this moment. Then ask which Noetic's definition (A1) that saying aligns with. Mark that Noetic, and write the saying in `saying`. The canonical sayings of Part A (A4, A5) show the kind of saying that belongs to each Noetic; A4 calls them "representative, not exhaustive". If the saying aligns with several Noetics, write an entry for each. If no saying of any Noetic fits, write no entry. If you cannot tell, write the entry with `"certainty": "ambiguous"` and the other candidate. Where a saying and a definition appear to disagree, the definition governs (A10). The annotations of Part A apply: `^3` is visceral, not analytical (A6); `^8` is triggering, not reasoning (A8). Nothing else decides presence. Rules 2, 3 and 15 say how a pair or a lone entry is written; they do not decide presence beyond rule 15, which is the owner's own working ruling.
+6. *Removed by the owner's ruling of 2026-10-05; rule 5 now decides.*
+7. *Removed by the owner's ruling of 2026-10-05; rule 5 now decides.*
+8. **Do not label Worlds, Domains, Drives or Registers.**
+9. **Do not use outside knowledge.** Label only what this passage says.
+10. *Removed by the owner's ruling of 2026-10-05; rule 5 now decides.*
+11. **Several Noetics on one moment are normal.** A trained response can be `^5` (what the Mind is made of), `^7` (the schedule that built it) and an `^8`/`^9` pair (a signal bringing something to Mind) at once. Mark each one the passage settles.
+12. **For `^7`, `relative_to` may be an activity.** Quote the words for what the Mind was repeatedly exposed to, whether a thing or an activity.
+13. *Removed by the owner's ruling of 2026-10-05; rule 5 now decides.*
+14. **Ambiguous between a Noetic and nothing.** Write `"certainty": "ambiguous"` with `"other_candidate": "none"`.
+15. **A sign, reasoning, or both (owner's working ruling, 2026-10-04).** When a Mind meets a sign and something else comes to it, read what the passage shows:
+    - **(a) The sign directly brings a different Idea to Mind.** Mark `^8` and `^9`. Words that show this: "reminded", "brought back", "made her think of", "came to him", "was suddenly in".
+    - **(b) The Mind works through evidence to a conclusion.** Mark the reasoning roles the canon names: `^6` for the named pieces it takes apart, and `^9` for the conclusion it lands on, with `relative_to` `""` and `"reached_by": "reasoning"`. Do not mark `^8`. The flag keeps these conclusions apart from a `^9` brought to Mind by a trigger: the two are counted separately and never mixed. (Clarification 6: deductive causal inference is a compound of `^6` Male and `^9` Below/Effect, not `^8` Above/Cause alone.) Words that show this: "worked out", "checked", "ruled out", "compared", "so it had to be".
+    - **(c) Both happen.** Mark both, each attached to its own words.
+    - **(d) The passage does not reveal which happened.** Do not mark a clear pair. Mark an uncertain pair: both entries get `"certainty": "ambiguous"` with `"other_candidate": "reasoning"`. Uncertain entries are counted separately and never count as a clear pair. A passage that says only that the Mind "knew", "recognised", "could tell" or that the sign "meant" something is this case.
+    - **Speed proves nothing either way.** "At once" or "instantly" does not show that no reasoning occurred.
+    - **`^5` may be marked as well.** Experience that shapes the reading is `^5`; it does not exclude a pair.
+    - **A bodily reaction alone is not a `^9`.** A flinch or a startle does not show that a different Idea came to Mind. It may be `^4` if rule 5 marks it.
+16. **How to point: support first, then label.** Do these steps in order.
+    - **Step 1. Support.** Copy the whole sentence or sentences that show the role, each from its first word to its end mark (. ? or !). At most 4 sentences, next to each other. They must hold the naming of the thing, and the naming of the related thing when the entry has one. If 4 are not enough, keep the ones nearest the label.
+    - **Step 2. Label.** The label is the naming phrase of the thing, inside the support. Start at the first word of the naming: an article, a possessive, a number or a describing word. Run through the head noun and any words that belong to the name. An activity or a scene is named by more than its noun: keep its doing words and its place words ("pallets moving down the conveyor", "a small girl on a kitchen stool"). A happening or a fact that no noun names alone is named by the stretch that says it. Never cut a name down to a bare noun: not "pallets", not "girl".
+    - **Step 3. Stop.** Stop before the words that say what the thing did or what happened next: "Its lanolin scent", not "Its lanolin scent filled the small shop".
+    - **Step 4. Pointers.** A pointer is: a pronoun alone (it, this, that, they, there, here, one); a phrase starting with this, that, these or those ("this smell"); "the" plus one bare word ("the noise"); or a general word for what came to Mind ("a memory", "a vivid picture") when the words after it say what it was. Everything else is a naming. If the naming inside the support is a pointer, widen the support to the first sentence that names the thing in full, and take the label from there. If no sentence does, the pointer is the label. A pointer inside a longer naming ("waited here") stays as it stands.
+    - **Step 5. One thing, one label.** Use the same label for the same thing in every entry of the record. `mind` and `relative_to` copy it character for character.
+    - **Step 6. Length.** At most 12 words, in one unbroken stretch. If the name is longer, stop after the 12th word.
+    - **Three rows of the table differ.** For `^1` the label is the name at its first full mention (rule 4), and the support is the sentence that holds that first mention. For `^4` and `^7` the label is the how-much words or the rate-and-pattern words, as short as possible while still stating it. Steps 2 to 4 then choose their `relative_to`, the thing.
+
+### Eleven made-up examples (never used as cases)
+
+Passage X1: "Renate lifted the lid and the steam smelled of cloves. At once she was back in her aunt's hallway, coat still on, nine years old."
+
+```json
+{"passage_id": "X1", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Renate", "support": "Renate lifted the lid and the steam smelled of cloves.", "mind": "Renate", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^1", "label": "her aunt", "support": "At once she was back in her aunt's hallway, coat still on, nine years old.", "mind": "her aunt", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^8", "label": "the steam smelled of cloves", "support": "Renate lifted the lid and the steam smelled of cloves. At once she was back in her aunt's hallway, coat still on, nine years old.", "mind": "Renate", "relative_to": "her aunt's hallway", "certainty": "clear", "saying": "Triggered a memory."},
+ {"noetic": "^9", "label": "her aunt's hallway", "support": "Renate lifted the lid and the steam smelled of cloves. At once she was back in her aunt's hallway, coat still on, nine years old.", "mind": "Renate", "relative_to": "the steam smelled of cloves", "certainty": "clear", "saying": "All at once it came back to her."}
+], "not_enough_information": []}
+```
+
+What Renate noticed is a happening that no noun names alone, so the `^8` label is the stretch that says it (step 2). The `^9` label is the place; the words after the comma stay in the support. Each entry needs the naming of the other, so both carry both sentences (step 1). Her aunt is only spoken of, yet she is a being that thinks, so rule 4 lists her. The `^8` saying is a canonical one; the `^9` saying is in the labeler's own words.
+
+Passage X2: "The conveyor ran all night. Crates dropped from the chute, slid to the scale and were pushed left or right by a metal arm."
+
+```json
+{"passage_id": "X2", "none_of_these": true, "entries": [], "not_enough_information": []}
+```
+
+Nothing in this passage thinks, so there is no Mind (rule 4) and no entry.
+
+Passage X3: "Odile read the proposal twice and set it down."
+
+```json
+{"passage_id": "X3", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Odile", "support": "Odile read the proposal twice and set it down.", "mind": "Odile", "relative_to": "", "certainty": "clear", "saying": ""}
+], "not_enough_information": ["Nothing settles whether Odile is attracted toward the proposal or repelled by it."]}
+```
+
+Odile is a being that thinks, so she is listed (rule 4). No saying of `^2` to `^9` fits what the passage shows, so there is no other entry (rule 5).
+
+Passage X4: "The first review of his book hit Anselm harder than he expected; he read it four times before lunch. The second one he skimmed and forgot by evening."
+
+```json
+{"passage_id": "X4", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Anselm", "support": "The first review of his book hit Anselm harder than he expected; he read it four times before lunch.", "mind": "Anselm", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^4", "label": "hit Anselm harder than he expected", "support": "The first review of his book hit Anselm harder than he expected; he read it four times before lunch.", "mind": "Anselm", "relative_to": "The first review of his book", "certainty": "clear", "saying": "Hit me hard."},
+ {"noetic": "^4", "label": "skimmed and forgot by evening", "support": "The second one he skimmed and forgot by evening.", "mind": "Anselm", "relative_to": "The second one", "certainty": "clear", "saying": "It made no impression on him."}
+], "not_enough_information": []}
+```
+
+For `^4` the label is the how-much words and `relative_to` is the thing. "The second one" is the passage's only naming of that review, so it is the label (step 4). The second saying is about a small impression: the `^4` definition speaks of "the degree", and the table says "how strongly or how weakly".
+
+Passage X5: "Forty winters of roofing had taught Ludmila what a soft step meant. Her boot sank a finger's width near the chimney and she knew the board beneath was rotten."
+
+```json
+{"passage_id": "X5", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Ludmila", "support": "Forty winters of roofing had taught Ludmila what a soft step meant.", "mind": "Ludmila", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^5", "label": "Forty winters of roofing", "support": "Forty winters of roofing had taught Ludmila what a soft step meant.", "mind": "Ludmila", "relative_to": "", "certainty": "clear", "saying": "We are the sum of our experiences."},
+ {"noetic": "^7", "label": "Forty winters", "support": "Forty winters of roofing had taught Ludmila what a soft step meant.", "mind": "Ludmila", "relative_to": "roofing", "certainty": "ambiguous", "saying": "Practice makes perfect.", "other_candidate": "none"},
+ {"noetic": "^8", "label": "Her boot sank a finger's width near the chimney", "support": "Her boot sank a finger's width near the chimney and she knew the board beneath was rotten.", "mind": "Ludmila", "relative_to": "the board beneath was rotten", "certainty": "ambiguous", "saying": "Made me think of...", "other_candidate": "reasoning"},
+ {"noetic": "^9", "label": "the board beneath was rotten", "support": "Her boot sank a finger's width near the chimney and she knew the board beneath was rotten.", "mind": "Ludmila", "relative_to": "Her boot sank a finger's width near the chimney", "certainty": "ambiguous", "saying": "It just clicked.", "other_candidate": "reasoning"}
+], "not_enough_information": []}
+```
+
+Rule 15(d): the passage says she knew, not how. The sign is a happening and the thing known is a fact, so both labels are the stretch that says it (step 2). The `^5` saying fits what forty winters of roofing have made of her. The labeler could not tell whether "Practice makes perfect." fits as well, so the `^7` entry is ambiguous with `"other_candidate": "none"` (rules 5 and 14).
+
+Passage X6: "Tobias laid the bill out line by line: the call-out fee, two hours of labour, a pump he had never asked for. He added the first two, compared the sum with the quote, and worked out that the pump was the whole difference."
+
+```json
+{"passage_id": "X6", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Tobias", "support": "Tobias laid the bill out line by line: the call-out fee, two hours of labour, a pump he had never asked for.", "mind": "Tobias", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^6", "label": "the call-out fee", "support": "Tobias laid the bill out line by line: the call-out fee, two hours of labour, a pump he had never asked for.", "mind": "", "relative_to": "the bill", "certainty": "clear", "saying": "Breaking it down."},
+ {"noetic": "^6", "label": "two hours of labour", "support": "Tobias laid the bill out line by line: the call-out fee, two hours of labour, a pump he had never asked for.", "mind": "", "relative_to": "the bill", "certainty": "clear", "saying": "Breaking it down."},
+ {"noetic": "^6", "label": "a pump he had never asked for", "support": "Tobias laid the bill out line by line: the call-out fee, two hours of labour, a pump he had never asked for.", "mind": "", "relative_to": "the bill", "certainty": "clear", "saying": "Breaking it down."},
+ {"noetic": "^9", "label": "the pump was the whole difference", "support": "He added the first two, compared the sum with the quote, and worked out that the pump was the whole difference.", "mind": "Tobias", "relative_to": "", "certainty": "clear", "saying": "It just clicked.", "reached_by": "reasoning"}
+], "not_enough_information": []}
+```
+
+Rule 15(b). No `^8`. `^6` has no Mind, so its `mind` is `""`. Every part gets the saying, one entry each.
+
+Passage X7 (a remembered scene): "Wilhelmina let the sugar catch at the bottom of the pan. Its bitter smoke brought back a small girl on a kitchen stool, and Wilhelmina turned off the gas."
+
+```json
+{"passage_id": "X7", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Wilhelmina", "support": "Wilhelmina let the sugar catch at the bottom of the pan.", "mind": "Wilhelmina", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^1", "label": "a small girl", "support": "Its bitter smoke brought back a small girl on a kitchen stool, and Wilhelmina turned off the gas.", "mind": "a small girl", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^8", "label": "Its bitter smoke", "support": "Its bitter smoke brought back a small girl on a kitchen stool, and Wilhelmina turned off the gas.", "mind": "Wilhelmina", "relative_to": "a small girl on a kitchen stool", "certainty": "clear", "saying": "Triggered a memory."},
+ {"noetic": "^9", "label": "a small girl on a kitchen stool", "support": "Its bitter smoke brought back a small girl on a kitchen stool, and Wilhelmina turned off the gas.", "mind": "Wilhelmina", "relative_to": "Its bitter smoke", "certainty": "clear", "saying": "The thought came to me."}
+], "not_enough_information": []}
+```
+
+The `^9` label is the scene as the passage names it (step 2). Wrong: "girl" (a bare noun; the remembered scene is lost). Wrong: "a kitchen stool". The label stops before "and Wilhelmina turned off the gas": that is what happened next (step 3). "Its bitter smoke" is a naming, not a pointer (step 4). Wilhelmina is named twice; the `^1` support is the sentence of the first mention. The small girl is only spoken of, so rule 4 lists her too, by her own naming. The passage does not say who she is (rule 9).
+
+Passage X8 (a repeated activity): "Shift after shift, Dag watched pallets moving down the conveyor. Now his hand went to the stop button before he looked up."
+
+```json
+{"passage_id": "X8", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Dag", "support": "Shift after shift, Dag watched pallets moving down the conveyor.", "mind": "Dag", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^7", "label": "Shift after shift", "support": "Shift after shift, Dag watched pallets moving down the conveyor. Now his hand went to the stop button before he looked up.", "mind": "Dag", "relative_to": "pallets moving down the conveyor", "certainty": "clear", "saying": "Muscle memory."}
+], "not_enough_information": []}
+```
+
+For `^7` the label is the rate-and-pattern words and `relative_to` is the activity, with its doing words (rule 12, step 2). Wrong: "pallets" (the repeated activity is lost). Wrong: "the conveyor". "Muscle memory." is a clean match to `^7` alone (A9). No saying of `^8` or `^9` fits, so there is no pair (rule 5).
+
+Passage X9 (a pointer resolved to its full naming): "A sour reek of wet wool hung in the drying shed. It reminded Marguerite of the ferry to her grandmother's island."
+
+```json
+{"passage_id": "X9", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Marguerite", "support": "It reminded Marguerite of the ferry to her grandmother's island.", "mind": "Marguerite", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^1", "label": "her grandmother", "support": "It reminded Marguerite of the ferry to her grandmother's island.", "mind": "her grandmother", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^8", "label": "A sour reek of wet wool", "support": "A sour reek of wet wool hung in the drying shed. It reminded Marguerite of the ferry to her grandmother's island.", "mind": "Marguerite", "relative_to": "the ferry to her grandmother's island", "certainty": "clear", "saying": "That reminds me..."},
+ {"noetic": "^9", "label": "the ferry to her grandmother's island", "support": "A sour reek of wet wool hung in the drying shed. It reminded Marguerite of the ferry to her grandmother's island.", "mind": "Marguerite", "relative_to": "A sour reek of wet wool", "certainty": "clear", "saying": "It just popped into my head."}
+], "not_enough_information": []}
+```
+
+The sentence with "reminded" names the trigger only as "It", a pointer. The support is widened to the sentence that names it in full, and the label comes from there (step 4). Wrong: "It". Wrong: "the drying shed". Her grandmother is only spoken of; rule 4 lists her.
+
+Passage X10 (a naming followed by words that are cut): "The smell of hot tar drifted over the wall and made Leopold think of his father's boat shed."
+
+```json
+{"passage_id": "X10", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Leopold", "support": "The smell of hot tar drifted over the wall and made Leopold think of his father's boat shed.", "mind": "Leopold", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^1", "label": "his father", "support": "The smell of hot tar drifted over the wall and made Leopold think of his father's boat shed.", "mind": "his father", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^8", "label": "The smell of hot tar", "support": "The smell of hot tar drifted over the wall and made Leopold think of his father's boat shed.", "mind": "Leopold", "relative_to": "his father's boat shed", "certainty": "clear", "saying": "Made me think of..."},
+ {"noetic": "^9", "label": "his father's boat shed", "support": "The smell of hot tar drifted over the wall and made Leopold think of his father's boat shed.", "mind": "Leopold", "relative_to": "The smell of hot tar", "certainty": "clear", "saying": "The thought came to me."}
+], "not_enough_information": []}
+```
+
+The `^8` label stops before "drifted over the wall": those words say what the smell did (step 3). Wrong: "The smell of hot tar drifted over the wall". Wrong: "tar" (a bare noun). His father is only spoken of; rule 4 lists him.
+
+Passage X11 (a lone `^9`): "Henrike was folding sheets. Out of nowhere she thought of the red tin whistle."
+
+```json
+{"passage_id": "X11", "none_of_these": false, "entries": [
+ {"noetic": "^1", "label": "Henrike", "support": "Henrike was folding sheets.", "mind": "Henrike", "relative_to": "", "certainty": "clear", "saying": ""},
+ {"noetic": "^9", "label": "the red tin whistle", "support": "Out of nowhere she thought of the red tin whistle.", "mind": "Henrike", "relative_to": "", "certainty": "clear", "saying": "Out of nowhere I thought of..."}
+], "not_enough_information": ["No trigger is named."]}
+```
+
+The saying fits and no trigger is named, so the `^9` is written alone, with a note (rules 2 and 5).
+
+## Changes before version 2.1
+
+The change tables of versions 0.2 to 1.2 stand, unchanged, at the end of `02_LABELING_GUIDE_v1_2.md`. Two of their notes still hold. The working rules are conventions for applying the definitions in this study; they do not change a definition, and the owner may correct any of them. The word lists in rule 15 are this study's way of applying the owner's working ruling of 2026-10-04; they are not canon, and the owner may correct them.
+
+## Changes from version 1.2 to version 2.1
+
+Version 1.2 was used for the first verdict labels. Rules 1, 8, 9, 11, 12, 14 and 15 are unchanged, byte for byte, but for one clause of rule 15 (last row below). So are `certainty`, `other_candidate`, `reached_by` and the passage record.
+
+Pointing (owner's direction of 2026-10-05):
+
+| Where | Change | Why |
+|---|---|---|
+| Entry format | `words` becomes `label` (the short identifying name) plus `support` (whole sentences). `mind` is the `label` of the `^1` entry. `relative_to` is the `label` of the related thing. The table column `words` is renamed `label` | Owner's direction: "Use a short, consistent identifying label PLUS the full supporting quote. Don't reduce everything to one word" |
+| Rule 16 | Replaced by one pointing rule of six steps | In the first verdict the teams often saw the same role and copied different stretches of text |
+| Examples | P00 gets a passage. X1 to X6 keep their passages; their entries are full records. X7 to X10 are new | A record needs whole sentences to copy |
+
+Presence (owner's ruling of 2026-10-05, quoted in the status block):
+
+| Where | Change | Why |
+|---|---|---|
+| Part A | Rebuilt by `tools/build_guide_part_a_v21.py`, never retyped. It holds the ten definitions (same text as before), the owner's sentence on Mind, and from Clarifications 5 and 6: the principle, the whole map of sayings, the framing of `^5`, three annotations, the Diagnostic application and the line that the definition governs. Gone: the study's own sentences, its shortened table of sayings and its two reworded warnings | The ruling points to the local file. The study's table had left sayings out |
+| Start of Part B | One study note on what the names do not mean, marked as not canon | It stood in Part A, among the canon |
+| Rule 4 | Replaced. A Mind is any being that thinks. Every such being the passage names is listed, also one that is only spoken of | The owner's sentence on Mind. The last point is the operator's reading; the owner may strike it |
+| Rules 5, 6, 7, 10, 13 | The study's own rules on when `^2` to `^7` are present, and on a cue that sets off an action, are removed. New rule 5: the Colloquialism Test of Part A decides `^2` to `^9`. Rules 6, 7, 10 and 13 are stubs | The owner: use the colloquialisms for Positive and Negative, "THE SAME ABOUT THE OTHER NOETICS" |
+| Rules 2, 3 and 5; X11 | The operator's decision after review: the ruling is applied in full. Rule 2: a `^8` or `^9` that rule 5 marks is written alone when the passage does not give the other one (before: mark neither). Rule 3: the sentence on recalling on purpose is removed. Rule 5: its last sentence. X11 is new | Canonical sayings of `^9` (A4) fit a thought with no trigger named |
+| Table | "(see rule 10)" is deleted from the `^4` row | Rule 10 is removed |
+| Entry format | New seventh field `saying` | Clarification 6 says to write the colloquialism down. The field shows that the test was applied. It is never compared and never scored |
+| Examples | Every `^2` to `^9` entry has a `saying`. X1, X7, X9 and X10 each gain a `^1` entry for a being that is only spoken of (rule 4). X5 gains an ambiguous `^7` entry: removed rule 6 had shut it out, and the labeler could not tell (rule 5). P00, X2, X3, X4, X6 and X8 keep their entries; their notes now give rules 4 and 5 as the reason where removed rules stood behind them (X3: old rules 4 and 5; X4: old rule 10; X8: old rule 13) | Every record must follow from rules 4 and 5 as now written |
+| Rules 2, 5 and 15; X8 | After the outside review of this version (`label_v21/OUTSIDE_REVIEW_GUIDE_PLAN_SHEET.md`), before any signature or label. Rule 2 keeps no test of its own: it says only how to write. Rule 5 asks the two questions of A9 in their order: the saying first, then the definition it aligns with. Rule 15, last bullet: "under rule 10" becomes "if rule 5 marks it". The note of X8 gives rule 5 as its reason | Rule 2 still decided presence. Rule 5 asked the saying to match the canonical sayings too; A9 names only the definition. Rule 10 is removed |
+
+=== LABELER INSTRUCTIONS ===
+LABELER INSTRUCTIONS
+This text goes with the labeling guide, version 2.1 (02_LABELING_GUIDE_v2_1.md).
+
+YOUR TASK
+You get the labeling guide and a passage with an id.
+Label the passage exactly as Part B of the guide says.
+Work only from the guide and from the passage in front of you. Use no outside knowledge.
+Label each passage on its own. One passage must not change how you label another.
+Never force a label. Do not turn a hint into an entry.
+
+WHAT YOU RETURN
+One JSON record for each passage. Each record is ONE JSON object.
+Nothing else goes with it: no words before it, no words after it, no code fence.
+The message that gives you the passage says how to hand the record in.
+
+{"passage_id": "<the id you were given>",
+ "none_of_these": false,
+ "entries": [
+  {"noetic": "^8", "label": "...", "support": "...", "mind": "...", "relative_to": "...", "certainty": "clear", "saying": "..."}
+ ],
+ "not_enough_information": []}
+
+- "passage_id": the id of the passage, copied exactly.
+- "none_of_these": true only when nothing in the passage holds any of "^1" to "^9". Then "entries" is [].
+- "entries": one entry for each thing, in one role, for one Mind.
+- "not_enough_information": a list of short notes. Use [] when there are none.
+
+EVERY ENTRY
+Write these seven fields in every entry: "noetic", "label", "support", "mind", "relative_to", "certainty", "saying".
+A field that does not apply is "". Never leave one of the seven out.
+- "noetic" is one of "^1" to "^9". Do not label Worlds, Domains, Drives or Registers.
+- "certainty" is "clear" or "ambiguous".
+- "saying" is the everyday saying that fits the moment (rule 5 of the guide), in your own words or a canonical one.
+  It has 2 to 20 words in every "^2" to "^9" entry. It is "" in a "^1" entry, and only there.
+- Add "other_candidate" only with "certainty": "ambiguous". Its value is another Noetic ("^n"), "none" or "reasoning".
+- Add "reached_by": "reasoning" only on a "^9" under rule 15(b). That entry has "relative_to": "".
+
+EXACT COPIES
+"label", "support", "mind" and "relative_to" are exact copies of passage text: the same letters, the same capitals, the same punctuation, one unbroken stretch. "saying" is your own line, not a copy.
+- Do not correct the passage. Do not reword it. Do not join two stretches. Do not cut words out of the middle.
+- "support" is whole sentences, each from its first word to its end mark. At most 4, next to each other.
+- "label" lies inside "support". It has 1 to 12 words.
+- In a "^1" entry, "support" is the sentence that holds the first place the name stands in the passage.
+- "mind" is the "label" of your own "^1" entry for that Mind, character for character. It is "" in a "^6" entry, and only there.
+- "relative_to" is the "label" of the related thing, or "" where the table of the guide says so.
+- If the passage never names the related thing, leave "relative_to" as "" and add a note under "not_enough_information". For "^8" and "^9" see rule 2 of the guide.
+
+THE CHECKER
+A fixed program checks the form of your record before it is accepted.
+It reads form only. A record that passes is not thereby correct.
+If a check fails, you get the checker's messages. Then do this:
+1. Read every message. Fix what the messages name. Use the guide to decide the fix.
+2. Hand in the whole record again, in the same format, with every entry in it.
+You have up to three tries for one passage.
+Never remove an entry to make a message go away. Fix its form and keep it.
+The one exception: a message that itself says to keep only one of two, or to take the entries out.

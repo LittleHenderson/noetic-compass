@@ -1,0 +1,144 @@
+{
+ "schema": "casalescence/label-agreement-verdict-seal/1",
+ "sealed_utc": "2026-10-05T07:20:17.851992+00:00",
+ "writer": {
+  "provider": "gemini",
+  "model": "gemini-2.5-flash"
+ },
+ "passages_written": 440,
+ "passages_dropped": [
+  {
+   "kind": "K8",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K8",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K2",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K8",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K5",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K5",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K8",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K8",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K2",
+   "reason": "forbidden word"
+  }
+ ],
+ "passages_kept": 428,
+ "kept_by_writer_kind": {
+  "K1": 57,
+  "K2": 58,
+  "K3": 60,
+  "K4": 60,
+  "K5": 58,
+  "K6": 30,
+  "K7": 30,
+  "K8": 55,
+  "K9": 20
+ },
+ "passages_sealed_sha256": "9aa3fc6d3e71bbf7a74a2fff59bdda2a40c6c32db506d4c4a3ce912ced3d760a",
+ "guide": {
+  "file": "02_LABELING_GUIDE_v1_2.md",
+  "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+ },
+ "plan": {
+  "file": "06_VERDICT_PLAN_v1_2.md",
+  "sha256": "708def671937b04822d3adce805def6c1e49afd053c7a6e4763e885a358791ce"
+ },
+ "tools_sha256": {
+  "verdict.py": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb",
+  "label_outside.py": "bec6eec486fe18c19d0d94380746bca670451869e0a9158273c33ce789ecbd55",
+  "write_verdict_passages.py": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da",
+  "seal_verdict.py": "dee6dabc9cea8445e196c8b5284680c645743441eee19b4a4929ec8dce4edebe"
+ },
+ "team_a_chunks": [
+  {
+   "file": "chunk_01.json",
+   "first": "V001",
+   "last": "V048",
+   "passages": 48
+  },
+  {
+   "file": "chunk_02.json",
+   "first": "V049",
+   "last": "V096",
+   "passages": 48
+  },
+  {
+   "file": "chunk_03.json",
+   "first": "V097",
+   "last": "V144",
+   "passages": 48
+  },
+  {
+   "file": "chunk_04.json",
+   "first": "V145",
+   "last": "V192",
+   "passages": 48
+  },
+  {
+   "file": "chunk_05.json",
+   "first": "V193",
+   "last": "V240",
+   "passages": 48
+  },
+  {
+   "file": "chunk_06.json",
+   "first": "V241",
+   "last": "V288",
+   "passages": 48
+  },
+  {
+   "file": "chunk_07.json",
+   "first": "V289",
+   "last": "V336",
+   "passages": 48
+  },
+  {
+   "file": "chunk_08.json",
+   "first": "V337",
+   "last": "V384",
+   "passages": 48
+  },
+  {
+   "file": "chunk_09.json",
+   "first": "V385",
+   "last": "V428",
+   "passages": 44
+  }
+ ],
+ "shuffle_seed": 20261005,
+ "no_label_existed_when_sealed": true
+}

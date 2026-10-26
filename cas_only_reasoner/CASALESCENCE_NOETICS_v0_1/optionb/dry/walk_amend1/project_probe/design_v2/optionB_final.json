@@ -1,0 +1,11 @@
+{
+ "note": "MADE-UP design text for the walk. It only states the made-up counts in the sentences the tools look for.",
+ "spec": {
+  "source_passages_and_role_descriptions": "MADE-UP. They hold 548 agreed entries (409 of them ^2 to ^9). There are 1 entries only team A gave and 0 only team B gave (^2 to ^9).",
+  "sizes_and_what_can_be_concluded": "MADE-UP. No size is stated here.",
+  "guidance_groups": {
+   "note": "MADE-UP"
+  },
+  "task_design": "MADE-UP. No count is stated here."
+ }
+}

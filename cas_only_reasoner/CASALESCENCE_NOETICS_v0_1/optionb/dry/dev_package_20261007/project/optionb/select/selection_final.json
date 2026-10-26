@@ -1,0 +1,345 @@
+{
+ "schema": "casalescence/optionb/selection/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+  "utc": "2026-10-07T00:14:18Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/anchor_check_final.json",
+   "sha256": "284a62daf8caa4b848d130ace2a3e16a5e7dbebe38ba21120648d0877989a556"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/candidates_final.json",
+   "sha256": "dacb9e49ea0fd1a0d7e6d247456f127756346461b0425ee682e507f4cf76da13"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/form_check_final.json",
+   "sha256": "800824ed1847c775f051e575b655336055b9773315aed3545f60431d26359a20"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/checks/option_check_final.json",
+   "sha256": "c1735233c4bf691f2fc747472d8bbf46b22db159bc2bee36060419a7046c6294"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/elig/eligibility.json",
+   "sha256": "5cbec062ac5b855edd71cf893bda734c158b2e657ea6caba7102ff5a024d159c"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_final_p1.json",
+   "sha256": "1d3705a65f39a4f837923f2e7c413f08d4a26dcea0b7d3e44f88746a8c05dada"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_final_p2.json",
+   "sha256": "918bbaab80ddff7f1954d80c662c8023dc4ce3da561ee404510f1dca9f309c49"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/select/selection_practice.json",
+   "sha256": "01420a155643c7643c9b3ca3af3244b6e275b4eebdc0332c73d3f474db51b692"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/select/split_fixed.json",
+   "sha256": "13e6fcee03997477f411542cb2d145d065e787f7eb506962e7e99dfcd2f370a8"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/solve/key_check_final.json",
+   "sha256": "b6613f310d33898bcfc80716bb93cf0ff107062555fad18ced963ef0e574a42a"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "final",
+ "practice_setting_count": 9,
+ "tasks": [
+  {
+   "task_id": "D013.GOES_FOR",
+   "passage_id": "D013",
+   "question_id": "D013.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Petra do first?",
+   "right": "reaching for the fine tweezers again",
+   "wrong": [
+    "reaching for the flat pliers again",
+    "moving the loupe to the yard",
+    "hanging the springs on a hook",
+    "sweeping the shop floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the fine tweezers"
+   ],
+   "anchors_matched": [
+    "reached for the fine tweezers"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D013.LONG_BREAK",
+   "passage_id": "D013",
+   "question_id": "D013.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Petra spends two years far from the clock shop. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the loupe before anything else",
+   "wrong": [
+    "opening the clock shop before dawn",
+    "finding the mat by the door",
+    "seeing the springs beside it",
+    "knowing where the loupe stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D013.FACT",
+   "passage_id": "D013",
+   "question_id": "D013.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the loupe stand?",
+   "right": "on the mat",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D014.GOES_FOR",
+   "passage_id": "D014",
+   "question_id": "D014.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Hale do first?",
+   "right": "reaching for the long spindle again",
+   "wrong": [
+    "reaching for the short spindle again",
+    "moving the board to the yard",
+    "hanging the tallow on a hook",
+    "sweeping the walk floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the long spindle"
+   ],
+   "anchors_matched": [
+    "reached for the long spindle"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D014.FACT",
+   "passage_id": "D014",
+   "question_id": "D014.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the board stand?",
+   "right": "on the post",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D015.KEEPS_AWAY",
+   "passage_id": "D015",
+   "question_id": "D015.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Sunniva leave to someone else?",
+   "right": "working on the wet sacks",
+   "wrong": [
+    "working with the birch rake",
+    "carrying the barrow outside",
+    "counting every crates there",
+    "locking up the salt store",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the wet sacks"
+   ],
+   "anchors_matched": [
+    "away from the wet sacks"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D015.LONG_BREAK",
+   "passage_id": "D015",
+   "question_id": "D015.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Sunniva spends two years far from the salt store. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the barrow before anything else",
+   "wrong": [
+    "opening the salt store before dawn",
+    "finding the ramp by the door",
+    "seeing the crates beside it",
+    "knowing where the barrow stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D015.FACT",
+   "passage_id": "D015",
+   "question_id": "D015.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the barrow stand?",
+   "right": "on the ramp",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D016.KEEPS_AWAY",
+   "passage_id": "D016",
+   "question_id": "D016.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Garrick leave to someone else?",
+   "right": "working on the split stave",
+   "wrong": [
+    "working with the curved adze",
+    "carrying the mallet outside",
+    "counting every iron there",
+    "locking up the cooper yard",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the split stave"
+   ],
+   "anchors_matched": [
+    "away from the split stave"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D016.LONG_BREAK",
+   "passage_id": "D016",
+   "question_id": "D016.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Garrick spends two years far from the cooper yard. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the mallet before anything else",
+   "wrong": [
+    "opening the cooper yard before dawn",
+    "finding the block by the door",
+    "seeing the iron beside it",
+    "knowing where the mallet stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D016.FACT",
+   "passage_id": "D016",
+   "question_id": "D016.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the mallet stand?",
+   "right": "on the block",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  }
+ ],
+ "dropped": [
+  {
+   "question_id": "D013.p1.KEEPS_AWAY",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D015.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D016.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 7,
+  "plain_fact_tasks": 4,
+  "passages_with_a_task": 4,
+  "passages_with_a_role_step_task": 4,
+  "single_longest": [
+   0,
+   7
+  ],
+  "single_shortest": [
+   0,
+   7
+  ]
+ }
+}

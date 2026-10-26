@@ -1,0 +1,8 @@
+{
+ "Q0001": {"http_status": 200, "content_json": {"answer": "F"}},
+ "Q0002": {"http_status": 200, "content_json": {"answer": "B"}},
+ "Q0003": {"http_status": 200, "content_json": {"answer": "E"}},
+ "G0001": {"http_status": 200, "content_json": {"answer": "B"}},
+ "G0002": {"http_status": 200, "content_json": {"answer": "B"}},
+ "G0003": {"http_status": 200, "content_json": {"answer": "A"}}
+}

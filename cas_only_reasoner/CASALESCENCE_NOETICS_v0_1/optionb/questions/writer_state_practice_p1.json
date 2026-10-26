@@ -1,0 +1,337 @@
+{
+ "schema": "casalescence/optionb/writer_state/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py",
+  "sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+  "utc": "2026-10-07T01:19:30Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "ef5850a6959cff906503596049150fdb5fe026922311478e0039ad575b1c5c0e"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "8db5d2a81b3d38ba0c0bc739c238ac01e7dc2c16cb9c4cfe7b3f272bf5598e37"
+  },
+  {
+   "path": "optionb/questions/writer_calls_practice_p1.jsonl",
+   "sha256": "83a869b3b0ec68c259a6581dae77776a4f2febb58ea4c1b93220a607b5f8c00d"
+  },
+  {
+   "path": "optionb/select/selection_practice.json",
+   "sha256": "f4e383d25fb33ac9318f6460dcb8974c53ed1f556e4bea63bbced136c2364a32"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "pass": "p1",
+ "model": "gemini-3.5-flash-lite",
+ "seed": 20261005,
+ "waves": [
+  {
+   "wave": 0,
+   "settings": [
+    "a locksmith's van",
+    "a tailor's shop",
+    "a mountain hut",
+    "a quarry",
+    "a dairy at milking time",
+    "a chess club",
+    "a swimming pool",
+    "a beekeeper's yard"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V041",
+      "V008",
+      "V047",
+      "V197"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "V109",
+      "V042",
+      "V291",
+      "V279"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 2,
+     "passage_ids": [
+      "V210",
+      "V207",
+      "V359",
+      "V005"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 3,
+     "passage_ids": [
+      "V132",
+      "V421",
+      "V134",
+      "V220"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 4,
+     "passage_ids": [
+      "V249",
+      "V341",
+      "V056",
+      "V060"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 5,
+     "passage_ids": [
+      "V090",
+      "V305",
+      "V200",
+      "V344"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 6,
+     "passage_ids": [
+      "V387",
+      "V278",
+      "V353",
+      "V010"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 7,
+     "passage_ids": [
+      "V385",
+      "V031",
+      "V046",
+      "V313"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 8,
+     "passage_ids": [
+      "V320",
+      "V398",
+      "V147",
+      "V394"
+     ],
+     "status": "DONE",
+     "attempts": 2
+    },
+    {
+     "batch": 9,
+     "passage_ids": [
+      "V002",
+      "V051",
+      "V157",
+      "V267"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 10,
+     "passage_ids": [
+      "V177",
+      "V301",
+      "V198",
+      "V329"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 11,
+     "passage_ids": [
+      "V416",
+      "V400",
+      "V328",
+      "V019"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 12,
+     "passage_ids": [
+      "V014",
+      "V004",
+      "V221",
+      "V244"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 13,
+     "passage_ids": [
+      "V016",
+      "V035",
+      "V163",
+      "V068"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 14,
+     "passage_ids": [
+      "V236",
+      "V062"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "wave": 1,
+   "settings": [
+    "a cheese cellar"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V087",
+      "V052",
+      "V064",
+      "V194"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "V160",
+      "V069"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "wave": 2,
+   "settings": [
+    "a boxing gym"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V120",
+      "V230",
+      "V103",
+      "V190"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "V303",
+      "V205",
+      "V153"
+     ],
+     "status": "DONE",
+     "attempts": 2
+    }
+   ]
+  },
+  {
+   "wave": 3,
+   "settings": [
+    "a post office sorting room"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V411",
+      "V342",
+      "V012",
+      "V229"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "V263",
+      "V231",
+      "V418",
+      "V315"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "wave": 4,
+   "settings": [
+    "a taxi rank at night"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V269",
+      "V168",
+      "V017",
+      "V032"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "V105",
+      "V036",
+      "V376",
+      "V162"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "complete": true
+}

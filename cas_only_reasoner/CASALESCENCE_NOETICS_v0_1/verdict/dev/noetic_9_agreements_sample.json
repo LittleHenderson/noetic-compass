@@ -1,0 +1,1064 @@
+[
+ {
+  "passage": "V059",
+  "writer_kind": "K7",
+  "text": "Daniel held up the jacket. The right shoulder seemed to sag slightly, and the fabric pulled just a little at the back of the collar. He ran his hand down the sleeve and noticed the cuff hung unevenly. Someone had probably pressed it incorrectly after cleaning, stretching the material in one direction. That explained the poor drape.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The right shoulder",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the collar",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the cuff",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "Someone had probably pressed it incorrectly after cleaning",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The right shoulder",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the fabric",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the cuff",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "Someone had probably pressed it incorrectly after cleaning, stretching the material in one direction",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "That explained the poor drape",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V054",
+  "writer_kind": "K7",
+  "text": "Leo test-rode the customer's bicycle. He heard a persistent squeaking sound with every rotation of the pedals. Upon inspection, he noted the chain was rusty and stiff, and one pedal felt loose. These signs, taken together, led him to his conclusion. The entire drivetrain needed a thorough overhaul, not just a simple lubrication.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a persistent squeaking sound",
+    "mind": "",
+    "relative_to": "These signs",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the chain was rusty and stiff",
+    "mind": "",
+    "relative_to": "These signs",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "one pedal felt loose",
+    "mind": "",
+    "relative_to": "These signs",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "The entire drivetrain needed a thorough overhaul",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the chain was rusty and stiff",
+    "mind": "",
+    "relative_to": "The entire drivetrain",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "one pedal felt loose",
+    "mind": "",
+    "relative_to": "The entire drivetrain",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "The entire drivetrain needed a thorough overhaul, not just a simple lubrication",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V274",
+  "writer_kind": "K7",
+  "text": "Henry observed the sparse snow patches and the direction of the wind. He found some faint boot prints heading uphill, but they ended abruptly near a rocky outcrop. The temperature had dropped significantly overnight. He concluded a small party likely turned back earlier, perhaps seeking shelter from the sudden cold.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Henry",
+    "mind": "Henry",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the sparse snow patches",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^6",
+    "words": "the direction of the wind",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^6",
+    "words": "faint boot prints heading uphill, but they ended abruptly near a rocky outcrop",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^6",
+    "words": "The temperature had dropped significantly overnight",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "words": "a small party likely turned back earlier",
+    "mind": "Henry",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Henry",
+    "mind": "Henry",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the sparse snow patches",
+    "relative_to": "the direction of the wind",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the direction of the wind",
+    "relative_to": "the sparse snow patches",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "some faint boot prints heading uphill",
+    "relative_to": "a rocky outcrop",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "a rocky outcrop",
+    "relative_to": "some faint boot prints heading uphill",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "The temperature had dropped significantly overnight",
+    "relative_to": "a small party likely turned back earlier",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^9",
+    "words": "a small party likely turned back earlier, perhaps seeking shelter from the sudden cold",
+    "mind": "Henry",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V381",
+  "writer_kind": "K7",
+  "text": "Arthur found a mislabeled box. He cross-referenced the accession number with an old inventory ledger. The ledger entry detailed a unique inscription on a ceramic shard, which matched a fragment he'd seen earlier that day. This indicated the shard belonged to a collection presumed lost decades ago.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the shard belonged to a collection presumed lost decades ago",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a unique inscription on a ceramic shard",
+    "mind": "",
+    "relative_to": "The ledger entry",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the shard belonged to a collection presumed lost decades ago",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V107",
+  "writer_kind": "K1",
+  "text": "Ursula stamped a passport. The crisp, clean smell of new paper reminded her of her old school textbooks. She suddenly thought of the quiet library where she spent hours studying for exams, surrounded by rows of silent, dusty volumes. It felt like a lifetime ago.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ursula",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The crisp, clean smell of new paper",
+    "mind": "Ursula",
+    "relative_to": "her old school textbooks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her old school textbooks",
+    "mind": "Ursula",
+    "relative_to": "The crisp, clean smell of new paper",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ursula",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The crisp, clean smell of new paper",
+    "mind": "Ursula",
+    "relative_to": "her old school textbooks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her old school textbooks",
+    "mind": "Ursula",
+    "relative_to": "The crisp, clean smell of new paper",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "her old school textbooks",
+    "mind": "Ursula",
+    "relative_to": "the quiet library where she spent hours studying for exams",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the quiet library where she spent hours studying for exams",
+    "mind": "Ursula",
+    "relative_to": "her old school textbooks",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V309",
+  "writer_kind": "K7",
+  "text": "Frank checked the wire service for new reports. A small item mentioned unusual traffic delays near the city's main bridge. Another report, from local police, detailed a minor incident involving a stray dog. He then saw a weather alert predicting high winds for the afternoon. Frank concluded the bridge might close to high-sided vehicles soon.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "unusual traffic delays",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^6",
+    "words": "a minor incident involving a stray dog",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^6",
+    "words": "a weather alert predicting high winds for the afternoon",
+    "mind": "",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "words": "the bridge might close to high-sided vehicles soon",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "unusual traffic delays near the city's main bridge",
+    "mind": "",
+    "relative_to": "A small item",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a minor incident involving a stray dog",
+    "mind": "",
+    "relative_to": "Another report, from local police",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "high winds for the afternoon",
+    "mind": "",
+    "relative_to": "a weather alert",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the bridge might close to high-sided vehicles soon",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V150",
+  "writer_kind": "K1",
+  "text": "Finn caught the smell of diesel and damp river mud. It brought to his thoughts the old fishing boat his grandfather owned, long since sold. He remembered the rough wooden deck and the feel of the rope in his hands. That scent always seemed to follow him.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Finn",
+    "mind": "Finn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the smell of diesel and damp river mud",
+    "mind": "Finn",
+    "relative_to": "the old fishing boat",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fishing boat",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "always seemed to follow him",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Finn",
+    "mind": "Finn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the smell of diesel and damp river mud",
+    "mind": "Finn",
+    "relative_to": "the old fishing boat his grandfather owned",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fishing boat his grandfather owned",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always seemed to follow him",
+    "mind": "Finn",
+    "relative_to": "the smell of diesel and damp river mud",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V380",
+  "writer_kind": "K1",
+  "text": "Elena examined a passport from a small island nation. The faded, intricate design of the visa stamp caught her eye. It reminded her of the vibrant patterns on the saris her grandmother used to wear, especially the one with the tiny gold threads woven through the deep blue fabric. She remembered the scratchy feel of it.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faded, intricate design of the visa stamp",
+    "mind": "Elena",
+    "relative_to": "the vibrant patterns on the saris",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the vibrant patterns on the saris",
+    "mind": "Elena",
+    "relative_to": "The faded, intricate design of the visa stamp",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faded, intricate design of the visa stamp",
+    "mind": "Elena",
+    "relative_to": "the vibrant patterns on the saris her grandmother used to wear",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the vibrant patterns on the saris her grandmother used to wear",
+    "mind": "Elena",
+    "relative_to": "The faded, intricate design of the visa stamp",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V303",
+  "writer_kind": "K1",
+  "text": "Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Marco",
+    "mind": "Marco",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp smell of old leather and liniment",
+    "mind": "Marco",
+    "relative_to": "his grandfather's small workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's small workshop",
+    "mind": "Marco",
+    "relative_to": "The sharp smell of old leather and liniment",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Marco",
+    "mind": "Marco",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp smell of old leather and liniment",
+    "mind": "Marco",
+    "relative_to": "his grandfather's small workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's small workshop",
+    "mind": "Marco",
+    "relative_to": "The sharp smell of old leather and liniment",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always made Marco feel steady before a sparring session",
+    "mind": "Marco",
+    "relative_to": "That memory",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V124",
+  "writer_kind": "K1",
+  "text": "Chloe, a night bus mechanic, wiped grease from her brow. The pungent smell of diesel and engine oil hung heavy in the depot air. It reminded her of childhood summers spent at her grandfather's garage, a place filled with similar powerful scents. She pictured him, wiping his own hands with a grimy rag, a familiar smile on his face.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The pungent smell of diesel and engine oil",
+    "mind": "Chloe",
+    "relative_to": "childhood summers spent at her grandfather's garage",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood summers spent at her grandfather's garage",
+    "mind": "Chloe",
+    "relative_to": "The pungent smell of diesel and engine oil",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The pungent smell of diesel and engine oil",
+    "mind": "Chloe",
+    "relative_to": "childhood summers spent at her grandfather's garage",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood summers spent at her grandfather's garage",
+    "mind": "Chloe",
+    "relative_to": "The pungent smell of diesel and engine oil",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V010",
+  "writer_kind": "K1",
+  "text": "Doris pressed the hot iron onto a wool jacket. The warm, slightly smoky scent reminded her of autumn evenings. She pictured her grandmother's kitchen, filled with the smell of baking bread and woodsmoke from the old stove. It was a clear image of a comfortable, quiet home.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Doris",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The warm, slightly smoky scent",
+    "mind": "Doris",
+    "relative_to": "autumn evenings",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "autumn evenings",
+    "mind": "Doris",
+    "relative_to": "The warm, slightly smoky scent",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The warm, slightly smoky scent",
+    "mind": "Doris",
+    "relative_to": "her grandmother's kitchen",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's kitchen",
+    "mind": "Doris",
+    "relative_to": "The warm, slightly smoky scent",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Doris",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The warm, slightly smoky scent",
+    "mind": "Doris",
+    "relative_to": "autumn evenings",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "autumn evenings",
+    "mind": "Doris",
+    "relative_to": "The warm, slightly smoky scent",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V215",
+  "writer_kind": "K1",
+  "text": "Old Mr. Henderson dropped off a pair of worn boots. The distinct scent of tanned leather filled the small kiosk. For a moment, Sam was transported back to his grandfather's workshop, a place he hadn't visited since childhood. He pictured the tools hanging on the wall and the dusty wooden floor.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distinct scent of tanned leather",
+    "mind": "Sam",
+    "relative_to": "his grandfather's workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's workshop",
+    "mind": "Sam",
+    "relative_to": "The distinct scent of tanned leather",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Old Mr. Henderson",
+    "mind": "Old Mr. Henderson",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distinct scent of tanned leather",
+    "mind": "Sam",
+    "relative_to": "his grandfather's workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's workshop",
+    "mind": "Sam",
+    "relative_to": "The distinct scent of tanned leather",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V416",
+  "writer_kind": "K1",
+  "text": "Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distinct metallic tang in the air",
+    "mind": "Susan",
+    "relative_to": "childhood summers",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood summers",
+    "mind": "Susan",
+    "relative_to": "The distinct metallic tang in the air",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "diesel",
+    "mind": "",
+    "relative_to": "The distinct metallic tang in the air",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "crushed stone",
+    "mind": "",
+    "relative_to": "The distinct metallic tang in the air",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distinct metallic tang in the air, a mix of diesel and crushed stone",
+    "mind": "Susan",
+    "relative_to": "childhood summers",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood summers",
+    "mind": "Susan",
+    "relative_to": "The distinct metallic tang in the air, a mix of diesel and crushed stone",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the smell of her father's toolshed",
+    "mind": "Susan",
+    "relative_to": "The distinct metallic tang in the air, a mix of diesel and crushed stone",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "metal filings",
+    "mind": "",
+    "relative_to": "the smell of her father's toolshed",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "machine oil",
+    "mind": "",
+    "relative_to": "the smell of her father's toolshed",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V071",
+  "writer_kind": "K4",
+  "text": "Olivia inspected the misprinted flyer. The problem had several aspects: paper alignment, ink saturation, and plate registration. She first checked the paper feeder for any jams or skewing. Then, she examined the colour calibration settings on the press, ensuring each ink cylinder was correctly positioned. The fault became clear.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "paper alignment",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "ink saturation",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "plate registration",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "The fault became clear",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "paper alignment",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "ink saturation",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "plate registration",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "The fault became clear",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ },
+ {
+  "passage": "V419",
+  "writer_kind": "K7",
+  "text": "Dr. Alice, a museum curator, examined the small clay pot in the storeroom. The distinct markings suggested a coastal origin, not inland as previously catalogued. She then noted the type of residue inside, indicating a specific grain. Finally, the firing method matched known examples from a forgotten fishing community. Her findings meant the pot needed re-labelling.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Alice",
+    "mind": "Dr. Alice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The distinct markings",
+    "mind": "",
+    "relative_to": "the small clay pot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the type of residue inside",
+    "mind": "",
+    "relative_to": "the small clay pot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the firing method",
+    "mind": "",
+    "relative_to": "the small clay pot",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the pot needed re-labelling",
+    "mind": "Dr. Alice",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Alice",
+    "mind": "Dr. Alice",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The distinct markings",
+    "relative_to": "the small clay pot",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the type of residue inside",
+    "relative_to": "the small clay pot",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the firing method",
+    "relative_to": "the small clay pot",
+    "certainty": "clear",
+    "mind": ""
+   },
+   {
+    "noetic": "^9",
+    "words": "the pot needed re-labelling",
+    "mind": "Dr. Alice",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ]
+ }
+]

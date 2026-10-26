@@ -1,0 +1,84 @@
+{
+ "schema": "casalescence/optionb/support_state/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "05660139b058ef7d544e84f632ceba76c53cdd36f38da9578bd165c25bc100ac",
+  "utc": "2026-10-07T00:14:18Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/SEAL_OPTIONB.jsonl",
+   "sha256": "f9cba282342a37adb54c7c0de947a9d17c3a43297201640cd382b06367cb42c1"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/elig/eligibility.json",
+   "sha256": "5cbec062ac5b855edd71cf893bda734c158b2e657ea6caba7102ff5a024d159c"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/notes_ord/ordinary_notes_final.json",
+   "sha256": "0c1297726005dd55581b00eaaf0d8cc9c172834acb5bd9f0f391c12c293a03c6"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/support/support_calls_final.jsonl",
+   "sha256": "5f9a516282335df68b33252c6ea0d0d09ae58ee081ea1f927edb303aff5b6764"
+  }
+ ],
+ "set": "final",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "rounds": [
+  {
+   "round": 1,
+   "batches": [
+    {
+     "batch": 0,
+     "item_ids": [
+      "N0001",
+      "N0002",
+      "N0003",
+      "N0004",
+      "N0005",
+      "N0006",
+      "N0007",
+      "N0008",
+      "N0009",
+      "N0010",
+      "N0011",
+      "N0012"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "item_ids": [
+      "N0013",
+      "N0014",
+      "N0015",
+      "N0016",
+      "N0017",
+      "N0018",
+      "N0019",
+      "N0020",
+      "N0021",
+      "N0022",
+      "N0023",
+      "N0024"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "first_cap_stop_utc": null,
+ "complete": true
+}

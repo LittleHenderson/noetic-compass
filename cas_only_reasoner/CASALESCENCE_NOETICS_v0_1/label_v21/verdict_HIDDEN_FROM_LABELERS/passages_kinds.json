@@ -1,0 +1,2631 @@
+{
+ "kept_by_writer_kind": {
+  "K1": 55,
+  "K2": 60,
+  "K3": 59,
+  "K4": 60,
+  "K5": 56,
+  "K6": 29,
+  "K7": 30,
+  "K8": 58,
+  "K9": 20
+ },
+ "dropped": [
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K5",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K5",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K5",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K8",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K1",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K3",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K8",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K6",
+   "reason": "forbidden word"
+  },
+  {
+   "kind": "K5",
+   "reason": "forbidden word"
+  }
+ ],
+ "passages": [
+  {
+   "id": "W001",
+   "kind": "K7",
+   "setting": "a trout hatchery",
+   "text": "Evelyn checked the water temperature in tank seven. It was slightly lower than optimal. She observed the fry; they clustered more tightly than usual, sluggish in their movements. The aeration pump in the corner seemed quieter than its usual hum. She noted a small, slow drip from a pipe connection nearby. The pump was losing pressure."
+  },
+  {
+   "id": "W002",
+   "kind": "K5",
+   "setting": "a lifeboat station",
+   "text": "Gary, a lifeboat volunteer, had served for years. When the station alarm blared, his body moved before his brain registered the sound. He was already reaching for his waterproof jacket. His feet carried him automatically towards the main doors. He listened intently for the emergency details, a familiar routine imprinted on him."
+  },
+  {
+   "id": "W003",
+   "kind": "K2",
+   "setting": "an aquarium",
+   "text": "Julian walked straight past the display of small, darting fish, hardly glancing at them. Their frenetic energy offered him nothing. He paused for a long time before the large tank of sleeping sharks, captivated by their silent power. He found their motionless grace deeply satisfying. The distant chatter of a school group barely registered in his hearing."
+  },
+  {
+   "id": "W004",
+   "kind": "K9",
+   "setting": "a carpet showroom",
+   "text": "Sarah smoothed a large swatch of Saxony under a customer's shoe. She then rolled it back onto the display rack. She wrote down the stock number and a brief note about the colour. Later, she vacuumed the aisle with a wide-brush cleaner. Her shift involved arranging samples and answering questions."
+  },
+  {
+   "id": "W005",
+   "kind": "K3",
+   "setting": "a rope factory",
+   "text": "Noah had spent thirty years watching ropes being spun. The sound of a snapping fibre, faint and sharp, made him instantly flinch. He remembered a machine malfunction from years ago. Younger workers barely noticed the sound, but for Noah, it was a familiar warning. He walked over to check the tension."
+  },
+  {
+   "id": "W006",
+   "kind": "K6",
+   "setting": "a bell foundry",
+   "text": "Eleanor watched the molten metal flow into the mould. A tiny ripple appeared on the surface, almost imperceptible. She knew instantly the temperature was a degree too low. It meant the sound quality would be slightly off, a flat note where a rich one should be. Her years in the foundry had taught her these subtle cues."
+  },
+  {
+   "id": "W007",
+   "kind": "K8",
+   "setting": "a bell foundry",
+   "text": "The overhead crane moved slowly along its gantry, carrying a ladle of molten metal. Sparks flew gently from the slag crust as the ladle swayed. Beneath it, a row of sand moulds waited, their dark surfaces ready. A faint clang from a distant hammer echoed through the large space. The air hung thick with the smell of hot sand and metal."
+  },
+  {
+   "id": "W008",
+   "kind": "K5",
+   "setting": "a tyre fitting bay",
+   "text": "Brenda fitted hundreds of tyres each week. She learned to instinctively tighten wheel nuts in a star pattern. The proper sequence became an unconscious action, ensuring even pressure. If she saw someone tightening them haphazardly, she felt a slight unease. Her hands just knew the correct method by now."
+  },
+  {
+   "id": "W009",
+   "kind": "K4",
+   "setting": "a fairground",
+   "text": "The manager reviewed the day’s takings. The total amount was broken down into several categories. There was revenue from ride tickets, a separate sum from the food stalls, and a smaller contribution from the prize games. He also noted the costs for electricity, staff wages, and security services."
+  },
+  {
+   "id": "W010",
+   "kind": "K2",
+   "setting": "a seaside pier",
+   "text": "Emily saw the brightly coloured ice cream stall. Its promise of sweet, cold delight instantly captured her attention. She desperately wanted a scoop. But then she spotted the noisy arcade with its flashing lights and loud, clanging machines. That jarring racket made her turn away with disinterest."
+  },
+  {
+   "id": "W011",
+   "kind": "K8",
+   "setting": "a potato packing shed",
+   "text": "Potatoes tumbled onto a wide conveyor belt. They moved steadily past rotating brushes, which agitated their surfaces. Jets of water sprayed down, rinsing away soil and debris. Excess water drained through perforated sections of the belt before the clean potatoes continued their journey."
+  },
+  {
+   "id": "W012",
+   "kind": "K3",
+   "setting": "an aquarium",
+   "text": "Zach watched the new clownfish swim into the anemone. Its tentative approach seemed perfectly natural to him. Young trainees might worry about the fish's safety. After decades of observing marine life, Zach knew the symbiosis would soon establish itself. He simply observed the natural unfolding of their interaction."
+  },
+  {
+   "id": "W013",
+   "kind": "K7",
+   "setting": "an aquarium",
+   "text": "Liam watched the surgeonfish. Its fins flicked rapidly, yet it stayed in one place. He saw tiny, barely visible bubbles rising from a small tube near the rockwork. The fish seemed to congregate near that spot more than elsewhere. He realised the hidden tube must be releasing extra oxygen into the water there."
+  },
+  {
+   "id": "W014",
+   "kind": "K3",
+   "setting": "a shipyard",
+   "text": "Old Captain Jones stood on the shipyard dock, observing the new vessel. Its sleek lines looked unfamiliar to his eye. He remembered when ships were built piece by heavy piece, riveted with loud hammers. This new construction, welded and modular, felt less like craftsmanship and more like assembly. He just preferred the old ways."
+  },
+  {
+   "id": "W015",
+   "kind": "K8",
+   "setting": "a pet shop",
+   "text": "The aquarium pumps gurgled steadily in the background. Fluorescent lights cast a bright sheen on the polished floor tiles. A small birdcage swayed slightly as a finch hopped from perch to perch inside. Bags of pet food, stacked high on wooden pallets, waited near the back storeroom door."
+  },
+  {
+   "id": "W016",
+   "kind": "K4",
+   "setting": "a carpet showroom",
+   "text": "Tina examined the complex floor plan for the new office installation. She broke it down into manageable sections. First, the main reception area needed underlay. Then, the individual offices required specific cut-outs for power sockets. Finally, the long corridor demanded a seamless seam where the rolls joined. She outlined each stage for her team."
+  },
+  {
+   "id": "W017",
+   "kind": "K4",
+   "setting": "a town hall archive",
+   "text": "Peter sorted through the old building permits. He separated them by street name, then by year of construction. After that, he organized them by property owner, and finally by the type of alteration. The request for a specific address needed all those distinct layers to be unpicked."
+  },
+  {
+   "id": "W018",
+   "kind": "K1",
+   "setting": "an olive press",
+   "text": "Helen watched the olives being fed into the heavy machinery. The sharp, earthy aroma of crushed fruit permeated the air. It instantly transported her back to a small village in Tuscany she visited as a teenager. She remembered the warmth of the sun on her skin and the specific taste of freshly baked bread dipped in green oil at a family dinner there."
+  },
+  {
+   "id": "W019",
+   "kind": "K5",
+   "setting": "a salt works",
+   "text": "Zach was tightening bolts on a large pump. Every Tuesday at ten, the main conveyor belt briefly shut down for inspection. He heard the sudden silence, then, without pausing, reached for his lunchbox. It was a completely automatic response. He always ate his sandwich during that short, predictable lull in the machinery."
+  },
+  {
+   "id": "W020",
+   "kind": "K4",
+   "setting": "a tannery",
+   "text": "The faulty tanning machine puzzled Robert. He broke down the problem into its parts: the power supply, the main motor, the conveyor belt mechanism, and the spray nozzles. Then he considered the sensors, the temperature regulators, and the chemical lines. Each component needed individual checking to find the blockage."
+  },
+  {
+   "id": "W021",
+   "kind": "K1",
+   "setting": "a hot-air balloon field",
+   "text": "Olivia checked the fuel lines, the faint scent of propane lingering in the morning air. The smell instantly brought her back to childhood camping trips with her family. She remembered setting up the old gas stove, the hiss of the regulator, and the aroma of her father's burnt pancakes under the clear starry sky."
+  },
+  {
+   "id": "W022",
+   "kind": "K6",
+   "setting": "a garden centre",
+   "text": "Yolanda walked past the rows of potted saplings. She noticed a subtle yellowing on the underside of a single leaf on an oak sapling. It was barely visible to the casual eye. Yolanda, who had nurtured plants for over forty years, immediately knew it signaled a nutrient deficiency that could quickly spread if left unaddressed. She reached for a specific fertilizer."
+  },
+  {
+   "id": "W023",
+   "kind": "K4",
+   "setting": "a seaside pier",
+   "text": "Beatrice looked at the faulty arcade game. She saw a loose wire connecting the joystick, a jammed coin mechanism, and a dusty screen. The main circuit board appeared scorched near a certain chip. Each problem contributed to the machine's unresponsiveness. Fixing it required addressing these individual components."
+  },
+  {
+   "id": "W024",
+   "kind": "K3",
+   "setting": "an ice cream parlour",
+   "text": "Peter watched the child agonizing over flavour choices. Vanilla, chocolate, strawberry; the decision seemed momentous. He had observed this scene countless times over the decades. He knew the child would eventually pick something, often the same choice as last time. He just waited, his expression calm and unhurried."
+  },
+  {
+   "id": "W025",
+   "kind": "K6",
+   "setting": "a fairground",
+   "text": "Rita checked the bearings on the Ferris wheel. She detected a faint, almost imperceptible hum coming from the main axle. Most people would have dismissed it as background noise. Years of maintaining rides taught Rita that this particular sound meant the lubricant was low. She made a note to attend to it immediately after closing."
+  },
+  {
+   "id": "W026",
+   "kind": "K9",
+   "setting": "a trout hatchery",
+   "text": "Paul filled a bucket with fish food pellets. He walked along the walkways between the rearing tanks, distributing the food evenly. He then checked the flow meters on several pipes, making small adjustments. After that, he scrubbed algae from the inside of a large holding tank with a long-handled brush."
+  },
+  {
+   "id": "W027",
+   "kind": "K3",
+   "setting": "an athletics track",
+   "text": "Lucy watched the young runner warm up, noting his slightly uneven stride. After decades of coaching, she saw more than just raw speed. She could discern subtle muscular imbalances and potential injury points just by observing someone's gait. The smallest shift in foot placement or arm swing told her volumes. She knew exactly what corrections he needed."
+  },
+  {
+   "id": "W028",
+   "kind": "K3",
+   "setting": "a recycling centre",
+   "text": "Helen directed a van driver to the cardboard skip. He grumbled about the separate bins for different materials. She had heard similar complaints hundreds of times over her ten years working there. She knew the process was inconvenient for some, but essential for others. Her instruction remained polite but firm."
+  },
+  {
+   "id": "W029",
+   "kind": "K4",
+   "setting": "a fairground",
+   "text": "Jenny planned her route through the fairground. First, she would visit the dodgems for a bit of bumpy fun. After that, the Ferris wheel offered good views, and finally, she would try her luck at the ring toss game. Each activity promised a different kind of enjoyment. She mentally mapped out her exciting afternoon."
+  },
+  {
+   "id": "W030",
+   "kind": "K5",
+   "setting": "a trout hatchery",
+   "text": "Mark checked the fish food dispensers at the hatchery. Each day, the hoppers needed refilling at precise intervals. After weeks of this routine, he found himself automatically measuring out the correct portions. His hands moved without conscious thought, grabbing the right scoop and pouring with practiced accuracy. The repeated action had become second nature."
+  },
+  {
+   "id": "W031",
+   "kind": "K4",
+   "setting": "a hat maker's workshop",
+   "text": "Grace described the process of making a felt hat. She started with raw wool, which underwent carding and felting to create a hood. Next, blocking shaped the hood onto a wooden form. After that, she added a brim and stitched on a sweatband. The final touches involved trimming and adding decorative elements."
+  },
+  {
+   "id": "W032",
+   "kind": "K2",
+   "setting": "a village hall",
+   "text": "Ursula, attending the weekly tea dance, settled into her chair. She felt a comforting warmth from her cup of tea and the sweet taste of a biscuit, both drawing her in. A cold draught from the main entrance, however, made her shiver slightly, pushing her away. The faint chatter from a meeting in another room hardly bothered her."
+  },
+  {
+   "id": "W033",
+   "kind": "K5",
+   "setting": "a tannery",
+   "text": "Arthur stood by the vats, his hands moving automatically. The sharp smell of the chemicals had long since ceased to register as unpleasant. When the large bell sounded for lunch, he barely heard it, his hands already wiping clean before his partner even straightened up. Years of precise timings had ingrained the routine deep within his bones. He walked towards the mess hall without a single conscious thought."
+  },
+  {
+   "id": "W034",
+   "kind": "K4",
+   "setting": "an ice cream parlour",
+   "text": "Clara studied the broken ice cream machine. She noted the power switch, which was clearly off. Then she checked the power cord for damage, finding none. Next, she examined the motor, the compressor, and the mixing paddle assembly. Finally, she looked inside the flavour reservoir, which was completely empty."
+  },
+  {
+   "id": "W035",
+   "kind": "K8",
+   "setting": "a newsagent's shop",
+   "text": "The shop door swung open with a soft sigh. A gust of wind pushed a few loose papers across the linoleum floor, sending them skittering under a display rack. Outside, rain hammered against the large plate glass window, blurring the streetlights into hazy halos. A newspaper delivery truck rumbled past, its engine humming a low note."
+  },
+  {
+   "id": "W036",
+   "kind": "K2",
+   "setting": "an athletics track",
+   "text": "Emily watched the sprinters intensely, her gaze fixed on their powerful strides. When a group of distance runners ambled past, she barely registered their presence. The roar of the crowd as the sprinters approached the finish line sent a jolt of excitement through her. A distant siren barely broke her focus."
+  },
+  {
+   "id": "W037",
+   "kind": "K9",
+   "setting": "a tannery",
+   "text": "David moved the wet hides from one vat to the next with a long pole. He guided each piece into position, ensuring it was fully submerged in the solution. Later, he checked the temperature gauges on the vats, adjusting them slightly. He then retrieved a stacked trolley and pushed it across the concrete floor."
+  },
+  {
+   "id": "W038",
+   "kind": "K5",
+   "setting": "a funicular railway",
+   "text": "Liam had been operating the funicular for thirty years. At precisely 8:00 AM, without glancing at a clock, his hand always moved to the control lever. The subtle lurch of the carriage as it began its ascent became an extension of his own breathing. He closed the doors and signaled departure without consciously thinking about it."
+  },
+  {
+   "id": "W039",
+   "kind": "K1",
+   "setting": "a shipyard",
+   "text": "Mark stood on the dry dock, listening to the clang of steel on steel as welders worked. The sharp, metallic scent of new paint hung in the air. This combination of sounds and smells always transported him to his childhood. He recalled his father fixing their rusty old bicycle in the garage, the similar scent of fresh paint on metal."
+  },
+  {
+   "id": "W040",
+   "kind": "K3",
+   "setting": "a potato packing shed",
+   "text": "Owen, a farmer all his life, watched the potatoes tumble down the conveyor belt. Some were small, some large, a few slightly blemished. He remembered the back-breaking work of hand-picking fields as a boy. The rumble and clatter of the automated sorting machine now seemed like a miracle of modern efficiency. It saved countless hours compared to his youth."
+  },
+  {
+   "id": "W041",
+   "kind": "K1",
+   "setting": "a telephone exchange",
+   "text": "Inside the bustling telephone exchange, Martin noticed the faint scent of ozone from the old equipment. That unique smell always brought him back to his grandfather’s workshop. His grandfather used to fix antique radios there, and the distinct aroma of hot tubes often filled the air. Martin smiled, remembering the old bakelite cases."
+  },
+  {
+   "id": "W042",
+   "kind": "K1",
+   "setting": "a seaside pier",
+   "text": "Clara, a retired teacher, strolled along the seaside pier. A particular sharp, salty smell drifted from the fish and chip shop. It made her recall a stormy afternoon years ago when her youngest son, Leo, had defiantly refused to wear his wellies. He ended up with soaked socks, but a very happy smile."
+  },
+  {
+   "id": "W043",
+   "kind": "K7",
+   "setting": "a town hall archive",
+   "text": "Rebecca scanned the registry for the year 1892, finding no relevant entries. She then checked the adjacent decade, looking for possible misfilings. A faded marginal note in the 1901 book mentioned a 'boundary dispute of '92'. Following this clue, she located the detailed record in a separate land ownership ledger, correctly dated."
+  },
+  {
+   "id": "W044",
+   "kind": "K9",
+   "setting": "a potato packing shed",
+   "text": "Gary stood by the conveyer belt, picking out potatoes with blemishes. He tossed them into a separate bin positioned beside him. Full bags of washed potatoes moved past on another belt, ready for stacking. He placed a new empty sack on the chute and watched it fill. After tying it securely, he sent it down to the loading area."
+  },
+  {
+   "id": "W045",
+   "kind": "K4",
+   "setting": "a wallpaper shop",
+   "text": "Ursula explained the process for hanging patterned wallpaper. She broke it down into distinct stages. First, preparation of the walls, ensuring they were clean and smooth. Then, carefully measuring and cutting the strips, matching the pattern. Next came the paste application, ensuring even coverage. Finally, hanging each strip from the ceiling down, smoothing out air bubbles as she went."
+  },
+  {
+   "id": "W046",
+   "kind": "K6",
+   "setting": "a roadside diner",
+   "text": "Frank, a truck driver in his fifties, pulled his rig into the diner’s lot. He saw a small, handwritten sign taped inside the front window, barely visible. It read, 'Cash Only Today.' He nodded to himself, knowing the card machine was likely down again. He already had enough bills in his wallet for breakfast. He walked inside, ready to order."
+  },
+  {
+   "id": "W047",
+   "kind": "K7",
+   "setting": "a rope factory",
+   "text": "David noticed a slight fray in one of the incoming strands. He followed it back to the spool and found it was winding unevenly. Next, he checked the tension setting on the coiler, which seemed correct. Then he examined the spindle and discovered a tiny burr on its surface. He realized the burr was catching the filament, causing the damage."
+  },
+  {
+   "id": "W048",
+   "kind": "K7",
+   "setting": "a concert hall cloakroom",
+   "text": "Karen found a single red ticket stub on the floor, numbered 37. The owner had mentioned a dark blue coat. She remembered handing out several dark blue coats earlier that evening. Checking the hangers, she saw that tag number 37 was still attached to a thick, woollen overcoat. The owner must have mistakenly left the stub."
+  },
+  {
+   "id": "W049",
+   "kind": "K5",
+   "setting": "a town hall archive",
+   "text": "Chloe began her archiving job two years ago. Now, whenever she finished with a document, she automatically placed it into a clear plastic sleeve. She no longer had to remind herself of the preservation rule. The protective action had simply become a part of her daily work."
+  },
+  {
+   "id": "W050",
+   "kind": "K5",
+   "setting": "a costume hire shop",
+   "text": "Chloe stacked the superhero capes after closing time. Every Tuesday, she sorted the returns, folding each item just so. Her hands moved without conscious thought, pressing out creases, aligning edges. She completed the task quickly, her movements precise and automatic. Years of repeating the same routine had built that quiet efficiency."
+  },
+  {
+   "id": "W051",
+   "kind": "K3",
+   "setting": "a hot-air balloon field",
+   "text": "Robert observed the distant high-altitude winds. He remembered a turbulent flight years ago, caught unexpectedly by a strong jet stream. That difficult experience had taught him extreme caution. Now, he always factored in even the slightest atmospheric hint before approving any ascent plan. He prioritised safety above all else."
+  },
+  {
+   "id": "W052",
+   "kind": "K2",
+   "setting": "a tyre fitting bay",
+   "text": "Quinn enjoyed the precise work of balancing a wheel. The frantic rush of a walk-in puncture repair, however, often made him irritated. A sudden loud bang from a dropped tool barely registered with him. But a perfectly tightened lug nut brought him quiet satisfaction."
+  },
+  {
+   "id": "W053",
+   "kind": "K6",
+   "setting": "a garden centre",
+   "text": "Gina, a horticulturist for decades, checked the rose bushes. She saw a faint discolouration on the underside of a single leaf, barely visible. To anyone else, it looked harmless. But Gina knew it indicated the early stages of a fungal infection, needing immediate attention. She quickly fetched the organic spray."
+  },
+  {
+   "id": "W054",
+   "kind": "K2",
+   "setting": "a rowing club",
+   "text": "Fiona felt a surge of energy watching the sleek racing shells glide across the water. Her gaze followed their precise movements, captivated by their speed. When the rusty old motorboat chugged by, creating a messy wake, she turned her head away in annoyance. The distant chatter from the clubhouse faded into the background."
+  },
+  {
+   "id": "W055",
+   "kind": "K2",
+   "setting": "a hot-air balloon field",
+   "text": "Sarah watched the hot-air balloons inflate, their colorful fabrics slowly taking shape. She felt a strong pull to the bright yellow and blue one, imagining herself soaring high above the fields. When another balloon, a dull grey one, began to fill, she barely registered its presence, her focus entirely on the more vibrant craft."
+  },
+  {
+   "id": "W056",
+   "kind": "K2",
+   "setting": "an olive press",
+   "text": "Maria sampled the first press of the season. The rich, peppery oil immediately made her smile. She then tasted a sample from a different batch, which was thin and bitter. She pushed it aside instantly, hardly registering its flavour. Only the finest oil held her attention, its intensity a genuine pleasure."
+  },
+  {
+   "id": "W057",
+   "kind": "K1",
+   "setting": "a seaside pier",
+   "text": "Simon leaned against the railing, inhaling the crisp, salty air. The aroma, mixed with the faint scent of fried chips, transported him back to summer holidays by the sea. He pictured sandcastles, ice cream dripping down his fingers, and the joyful shouts of his younger self chasing waves."
+  },
+  {
+   "id": "W058",
+   "kind": "K1",
+   "setting": "a bookbinder's workshop",
+   "text": "Quinn carefully applied glue to a spine. The faint, sweet smell of the paste drifted up to him. He was suddenly back in his grandmother's pantry, surrounded by jars of homemade jam and the scent of warm fruit preserves. He smiled, a flash of childhood comfort passing through him."
+  },
+  {
+   "id": "W059",
+   "kind": "K1",
+   "setting": "an orchard at picking time",
+   "text": "Tina reached for a ripe apple on a high branch. The cool morning air and the sweet scent of apples reminded her of a day long ago. She pictured her childhood bedroom window, open to a similar breeze. A sense of youthful freedom came to her then. It was a memory she had not considered in years."
+  },
+  {
+   "id": "W060",
+   "kind": "K9",
+   "setting": "a second-hand bookshop",
+   "text": "Wendy straightened the fiction shelves, pushing each book back into line. She found a misplaced cookbook and carried it to the cookery section. She then dusted the top of an old display cabinet with a soft cloth. Later, she retrieved a stack of newly donated paperbacks from the back room. Her work was quiet and orderly."
+  },
+  {
+   "id": "W061",
+   "kind": "K5",
+   "setting": "a trout hatchery",
+   "text": "Wendy walked the length of the fish tanks every afternoon. As she passed tank five, her hand automatically tapped the glass twice. It was a silent, unthinking habit. The movement dispersed the fry slightly, a small check she performed without conscious consideration after years of daily observation."
+  },
+  {
+   "id": "W062",
+   "kind": "K1",
+   "setting": "a lifeboat station",
+   "text": "Wendy checked the communication equipment, the air thick with the scent of salt and diesel. She spotted an old, tarnished brass bell hanging near the door, its surface dull. It made her think of her grandfather's boat, docked in a quiet harbour, where he taught her how to tie knots as a small girl. She recalled the gentle rocking of the waves."
+  },
+  {
+   "id": "W063",
+   "kind": "K2",
+   "setting": "a salt works",
+   "text": "Clara watched the bright white salt crystals shimmer under the sun. She always preferred the dazzling purity of the drying beds. The dull, greyish rock salt piles, however, always gave her a shiver. A tiny speck of grit flew from a passing truck, landing squarely on her cheek, but she barely noticed it. A small, perfect crystal landing nearby, though, made her smile."
+  },
+  {
+   "id": "W064",
+   "kind": "K5",
+   "setting": "a second-hand bookshop",
+   "text": "Philip shelved the new arrivals. His fingers automatically found the correct section, even while he hummed a tune. He didn't need to read the spines; his hands knew the weight and texture of different genres. Each book slid into its proper place without hesitation. Years of handling volumes had trained his muscles."
+  },
+  {
+   "id": "W065",
+   "kind": "K2",
+   "setting": "a potato packing shed",
+   "text": "Laura found herself drawn to the smooth, clean, perfectly formed potatoes, quickly adding them to the premium bags. The small, knobby ones, covered in bits of soil, she pushed aside with a sigh. The loud clatter of a conveyor belt stopping abruptly made her flinch. But the persistent, high-pitched squeak from a loose wheel nearby she barely noticed."
+  },
+  {
+   "id": "W066",
+   "kind": "K4",
+   "setting": "a seaside pier",
+   "text": "Eleanor reviewed the proposed budget for the pier’s annual maintenance. She saw the figures for timber replacement, structural steel inspections, and paintwork. Then there were the smaller lines for light bulb changes, refuse collection, and winter storm barrier repairs. Each part contributed to the whole, but the initial costs for the largest sections always caught her eye. She knew where the major expenses lay."
+  },
+  {
+   "id": "W067",
+   "kind": "K3",
+   "setting": "a boarding kennel",
+   "text": "Victor, who had run the kennels for decades, heard the faint whimpering from the new arrival. To new staff, it was just another anxious dog. But Victor recognized the specific tone of a greyhound, missing its familiar blanket. He knew to fetch a soft bed for the kennel."
+  },
+  {
+   "id": "W068",
+   "kind": "K8",
+   "setting": "a golf course",
+   "text": "The wind whispered through the long grass bordering the fairway. A lone golf ball rolled gently to a stop near a bunker, partially hidden. Dewdrops clung to the blades of manicured lawn, glistening in the early morning light. A distant lawnmower's steady drone traveled across the wide-open space."
+  },
+  {
+   "id": "W069",
+   "kind": "K3",
+   "setting": "a bookbinder's workshop",
+   "text": "Felicity, visiting her old workshop, watched an apprentice apply gold leaf to a leather spine. The young woman worked with a quick, light touch. Felicity remembered how she had struggled for years to achieve that same delicate precision. She knew that every slight hesitation, every extra breath, could ruin the intricate pattern, having ruined countless herself learning the skill."
+  },
+  {
+   "id": "W070",
+   "kind": "K6",
+   "setting": "a clock repair shop",
+   "text": "Susan carefully held the tiny balance wheel. She saw a slight glint on one of its pivots, almost imperceptible to an untrained eye. That minute shine meant a microscopic burr, which would quickly wear out the jewel bearing. She picked up a fine file, knowing the exact angle for correction. Decades of delicate work made such details obvious."
+  },
+  {
+   "id": "W071",
+   "kind": "K7",
+   "setting": "a clock repair shop",
+   "text": "Michael observed the old pocket watch. Its minute hand was loose. He then checked the winding stem, which turned freely without resistance. Next, he noticed the faint scratch marks around the casing where it had probably been dropped. He deduced the small gear connecting the stem to the mainspring had slipped."
+  },
+  {
+   "id": "W072",
+   "kind": "K4",
+   "setting": "a wallpaper shop",
+   "text": "The new wallpaper design was complex, so Mrs. Davies broke it down. First, she considered the main repeating motif, then its background colors. After that, she looked at the subtle texture, and finally, how the edges matched up for seamless hanging. Each element contributed to the overall visual pattern."
+  },
+  {
+   "id": "W073",
+   "kind": "K3",
+   "setting": "an aquarium",
+   "text": "Quinn observed the school of silver fish, moving as one fluid entity. He had spent years studying shoaling patterns in the open ocean. He understood the complex, unseen cues that coordinated their instant turns and dives, a deep-seated instinct for survival perfected over millennia. Others saw only beauty, but he saw an ancient, silent language."
+  },
+  {
+   "id": "W074",
+   "kind": "K7",
+   "setting": "a shipyard",
+   "text": "David inspected the welding seam, noting a slight discoloration. He then checked the temperature readings from the day it was applied, which showed a brief spike. Comparing those details with the material batch number, he consulted the specification sheet. The pattern of information suggested an issue with the alloy's cooling rate."
+  },
+  {
+   "id": "W075",
+   "kind": "K4",
+   "setting": "an ice cream parlour",
+   "text": "Chloe examined the daily sales report, dissecting it into its core segments. She separated the cone sales from the tub sales, then analyzed the individual flavour popularity. Next, she considered the timing of purchases: morning, lunchtime, and evening rushes. Each section provided a distinct piece of the overall picture."
+  },
+  {
+   "id": "W076",
+   "kind": "K7",
+   "setting": "a seaside pier",
+   "text": "Janet saw the discarded ice cream cone, still half-full, near the railing. A flock of gulls circled above, unusually loud. Then she noticed the sticky smear on the bench and a single dropped penny gleaming on the wooden planks. Someone was enjoying a treat, then dropped their money, then got distracted by the birds and forgot their cone."
+  },
+  {
+   "id": "W077",
+   "kind": "K4",
+   "setting": "a shipyard",
+   "text": "Michael broke down the ship repair project into its main components. First came the hull plating inspection and replacement. Then they needed to overhaul the propulsion system. After that, the electrical systems required a complete diagnostic check, followed by interior refitting. Finally, the painting and finishing work would complete the job."
+  },
+  {
+   "id": "W078",
+   "kind": "K8",
+   "setting": "a lifeboat station",
+   "text": "The engine spluttered to life, a deep rumble filling the boathouse. Sea spray lashed against the large bay doors, rattling their metal frames. A strong gust of wind swept across the ramp, pushing loose grit before it. The winch cable slowly began to retract, pulling the boat back inside. Water dripped from the hull onto the concrete floor."
+  },
+  {
+   "id": "W079",
+   "kind": "K8",
+   "setting": "an olive press",
+   "text": "The large press slowly rotated, crushing the dark olives with steady force. A thick stream of green-gold liquid flowed into a collection vat below. The air in the building was heavy with the rich, earthy scent of fresh fruit and oil. Pulp accumulated in a separate bin beside the machine."
+  },
+  {
+   "id": "W080",
+   "kind": "K1",
+   "setting": "a pet shop",
+   "text": "In the pet shop, the soft chirping of the budgies caught Lily's attention. The sound transported her back to her aunt's house, filled with the cheerful songs of various cage birds. She recalled Sunday visits and the gentle flutter of wings. The small, happy sounds brought a distant, comforting scene to her."
+  },
+  {
+   "id": "W081",
+   "kind": "K8",
+   "setting": "a garden centre",
+   "text": "Water sprinklers arced across rows of potted plants. Bees buzzed lazily among the flowering shrubs. A delivery truck rumbled slowly past the main entrance. The scent of damp soil hung in the air. Sunlight streamed through the polycarbonate roof panels, warming the display."
+  },
+  {
+   "id": "W082",
+   "kind": "K1",
+   "setting": "a shipyard",
+   "text": "David, a welder, finished his section of the hull. The sharp, metallic tang of his torch lingered in the air. It whisked him back to Mrs. Henderson's kitchen, many years ago, and the faint smell of burnt toast from her old gas stove. He almost heard her kindly voice offering him tea."
+  },
+  {
+   "id": "W083",
+   "kind": "K1",
+   "setting": "a roadside diner",
+   "text": "Susan wiped down the counter, the smell of burnt coffee lingering in the air. She noticed the faint, scratched tune playing on the old jukebox. It was a song her grandmother always played on Sundays. She pictured her grandmother humming softly in her armchair, a crochet hook moving quickly through a ball of yarn, sunlight warming the living room."
+  },
+  {
+   "id": "W084",
+   "kind": "K4",
+   "setting": "an orchard at picking time",
+   "text": "The orchard manager, Susan, meticulously planned the apple harvest. She divided it into picking crews, then allocated specific rows to each crew. Next, she accounted for the number of crates, the tractor schedule for transport, and the packing shed's capacity. Finally, she coordinated the delivery trucks for market, piece by piece."
+  },
+  {
+   "id": "W085",
+   "kind": "K1",
+   "setting": "a town hall archive",
+   "text": "The faint smell of aged paper and dry dust drifted from the old ledgers. It reminded Harriet of her grandmother's attic. She pictured the dusty boxes of old photographs and letters there. A sense of long-forgotten stories and lives came to her. The archive's scent brought a distinct feeling of distant past."
+  },
+  {
+   "id": "W086",
+   "kind": "K4",
+   "setting": "a salt works",
+   "text": "George reviewed the new delivery schedule for the refined salt. He saw it broke down into several parts. There was the initial bulk order, then the separate packaging request for different bag sizes. Next came the specific transport instructions for delivery routes, followed by the payment terms. Each step needed individual confirmation."
+  },
+  {
+   "id": "W087",
+   "kind": "K8",
+   "setting": "a garden centre",
+   "text": "The sprinkler system whirred into life, sending fine mist across the bedding plants. Drops collected on the broad leaves of the hostas, then ran down their veins. Sunlight warmed the terracotta pots stacked outside. A pallet truck rolled slowly across the concrete, carrying a load of compost bags towards the main display area. The air grew damp and smelled of rich soil."
+  },
+  {
+   "id": "W088",
+   "kind": "K3",
+   "setting": "a rowing club",
+   "text": "Owen watched the new crew struggle with their synchronized strokes. Their blades kept catching the water at different times. Years of coaching taught him that shouting rarely helped in these moments. He knew they needed to feel the timing themselves, not just hear instructions. He simply tapped the boat with his launch, a subtle cue for them to reset."
+  },
+  {
+   "id": "W089",
+   "kind": "K2",
+   "setting": "a second-hand bookshop",
+   "text": "Kevin felt an immediate pull towards the dusty collection of classic sci-fi novels, his fingers tracing their faded spines. The section filled with self-help guides, however, gave him an instant feeling of unease. A sudden loud clap of thunder outside made the windows rattle slightly, but he barely registered it, lost in thought about a new discovery."
+  },
+  {
+   "id": "W090",
+   "kind": "K5",
+   "setting": "a violin maker's workshop",
+   "text": "Clara had spent decades surrounded by the gentle scent of wood shavings and varnish. Now, whenever she entered a new space, her hands automatically brushed against the nearest wooden surface. She would unconsciously tap it, testing its density with a light, practiced touch. The ingrained habit was simply part of her day."
+  },
+  {
+   "id": "W091",
+   "kind": "K4",
+   "setting": "a hot-air balloon field",
+   "text": "Sarah outlined the flight plan to her crew. It included the launch site coordinates, the expected altitude range, and the projected landing zone. She also detailed emergency procedures for high winds or rapid pressure changes. Fuel consumption estimates and communication protocols formed other key elements. Every piece was essential for a safe journey."
+  },
+  {
+   "id": "W092",
+   "kind": "K3",
+   "setting": "a hat maker's workshop",
+   "text": "Samuel watched the young customer trying on a cloche hat. It sat awkwardly, not quite framing her face. Decades of fitting hats taught Samuel that the wearer's confidence was as important as the style. He knew the hat felt wrong to her, even if she couldn't explain why. He gently guided her towards a wider-brimmed option."
+  },
+  {
+   "id": "W093",
+   "kind": "K8",
+   "setting": "a violin maker's workshop",
+   "text": "Dust motes danced in the afternoon sunlight streaming through the high window. A block of maple wood rested on the workbench. Tiny, curling wood shavings piled up around it. A light breeze stirred through an open vent, shifting some of the delicate particles across the floor. Tools gleamed dully on a nearby rack, catching the light."
+  },
+  {
+   "id": "W094",
+   "kind": "K4",
+   "setting": "a lifeboat station",
+   "text": "George examined the engine, mentally dissecting the recent fault report. He considered the fuel system, the ignition wiring, the oil pressure, and the battery charge as separate but connected areas. The starter motor whirred, but the engine failed to catch. He knew each of those components could independently prevent it from firing."
+  },
+  {
+   "id": "W095",
+   "kind": "K3",
+   "setting": "a town hall archive",
+   "text": "David handled the old council minutes with extreme care. He had spent decades working with fragile documents, understanding their vulnerability. He knew their paper crumbled easily, their ink faded. His long career had taught him deep respect for preserving such delicate records, so he treated them with utmost gentleness."
+  },
+  {
+   "id": "W096",
+   "kind": "K5",
+   "setting": "a violin maker's workshop",
+   "text": "Helen, a luthier, spent hours sanding wood. The fine dust settled on her clothes, her workbench, and even her hair. Over time, she developed a habit of brushing her hands together before touching a new piece of wood. It was an automatic gesture, keeping the surfaces clean. She hardly noticed herself doing it anymore."
+  },
+  {
+   "id": "W097",
+   "kind": "K4",
+   "setting": "a bell foundry",
+   "text": "Arthur, the engineer, studied the diagram for the new bell. He saw the crown at the top, followed by the shoulder and then the waist. Below that, the sound bow provided the bell's striking surface. Finally, the lip formed the bottom edge. Each part had specific measurements for the intended tone."
+  },
+  {
+   "id": "W098",
+   "kind": "K8",
+   "setting": "a bookbinder's workshop",
+   "text": "The heavy presses stood silently in a row, their iron jaws open. A thin layer of leather dust settled on the workbench surfaces. Sunlight cast sharp lines across the rows of finished volumes on the shelves. A stapling machine lay unused, its lever waiting to be depressed."
+  },
+  {
+   "id": "W099",
+   "kind": "K3",
+   "setting": "a carpet showroom",
+   "text": "Ken watched the young couple argue about patterns. One liked stripes, the other preferred plain. Decades of observing customers taught Ken that compromise was rarely about the pattern itself. He knew it was often about who felt heard. He smoothly suggested they look at texture samples instead, diverting the immediate conflict."
+  },
+  {
+   "id": "W100",
+   "kind": "K5",
+   "setting": "a wallpaper shop",
+   "text": "Clara unrolled a sample of floral paper. Her thumb ran along the edge, measuring its repeat pattern without looking at a ruler. She knew exactly how many rolls would be needed for a standard room. Her movements were swift, efficient, born from countless similar interactions. Years of practice had refined her instinct for quantities."
+  },
+  {
+   "id": "W101",
+   "kind": "K3",
+   "setting": "a wallpaper shop",
+   "text": "Ursula overheard the young couple complaining about a pattern's repeat. They thought it was too complicated. Years of helping customers taught Ursula that sometimes people just saw flaws where there were none. She knew the issue wasn't the pattern, but their uncertainty with decorating. She subtly redirected them to a simpler, textured option."
+  },
+  {
+   "id": "W102",
+   "kind": "K5",
+   "setting": "a carpet showroom",
+   "text": "Victor walked across the display area. He passed a swatch of deep blue carpet. Without a conscious thought, his foot nudged it back into perfect alignment with its neighbours. He continued toward the office, his eyes already scanning for any other misplaced samples. It was a movement he performed dozens of times daily."
+  },
+  {
+   "id": "W103",
+   "kind": "K8",
+   "setting": "a pet shop",
+   "text": "A hamster wheel spun rapidly in its cage, making a soft whirring sound. Water dripped steadily from a bird feeder bottle onto the sawdust below. The faint smell of wood shavings and dry food hung in the air. A cage door rattled lightly as a small claw explored its mesh."
+  },
+  {
+   "id": "W104",
+   "kind": "K8",
+   "setting": "a telephone exchange",
+   "text": "Tiny indicator lamps blinked on and off across the vast board. Thin copper wires snaked between connections, some taut, some drooping slightly. A soft, steady hum emanated from the main power unit in the corner, a constant mechanical purr. Dust motes danced in the shafts of light cutting through the high windows. Outside, a light drizzle streaked the glass."
+  },
+  {
+   "id": "W105",
+   "kind": "K4",
+   "setting": "a recycling centre",
+   "text": "Henry reviewed the proposed bill for the new baler. He looked at the installation costs first, then the equipment price. Next, he found the maintenance agreement terms. He also noted the separate line for spare parts and finally, the transportation fees. The breakdown seemed clear."
+  },
+  {
+   "id": "W106",
+   "kind": "K8",
+   "setting": "a seaside pier",
+   "text": "The sea spray coated the metal railings, leaving a film of salt. Gulls circled overhead, their cries carried away by the brisk wind. Waves crashed against the wooden piles beneath, sending white foam upwards. Distant fairground music drifted on the air, then faded."
+  },
+  {
+   "id": "W107",
+   "kind": "K8",
+   "setting": "a pet shop",
+   "text": "The shop's automatic doors hissed open, then closed again. A tall stack of hamster cages, wrapped in plastic, sat on a dolly near the entrance. Overhead, an air conditioning unit hummed softly, circulating cooler air. A delivery truck pulled up outside, its engine still running as a worker emerged."
+  },
+  {
+   "id": "W108",
+   "kind": "K3",
+   "setting": "a fairground",
+   "text": "Bernard watched the roller coaster cars rattle up the incline. He remembered a time when he helped repair similar ride machinery. He knew the sounds of straining metal and worn bearings. His past experience meant he heard every groan of the chain with a knowing, critical ear."
+  },
+  {
+   "id": "W109",
+   "kind": "K5",
+   "setting": "a concert hall cloakroom",
+   "text": "Rachel watched the steady stream of theatre-goers arrive. She automatically extended her hand for their coats before they even reached the counter. Her fingers found the claim ticket roll without looking, tearing a new one with a swift motion. Every evening, the flow of people and garments followed a predictable pattern. She moved with quiet efficiency, her movements ingrained by repetition."
+  },
+  {
+   "id": "W110",
+   "kind": "K3",
+   "setting": "a tannery",
+   "text": "Hannah ran her gloved hand over the surface of a fresh hide. The other apprentices still struggled to tell the difference between good leather and a poorly processed one. But after thirty years in the tannery, she could discern the quality by touch alone. The subtle pliability and evenness of the grain spoke volumes. She nodded, satisfied with this batch."
+  },
+  {
+   "id": "W111",
+   "kind": "K4",
+   "setting": "a roadside diner",
+   "text": "James explained the diner's famous club sandwich. It began with three slices of toasted white bread. Between the first two went crisp lettuce, sliced tomato, and cooked bacon. The next layer held roasted chicken breast, a fried egg, and a spread of mayonnaise. He finished by slicing it into quarters."
+  },
+  {
+   "id": "W112",
+   "kind": "K1",
+   "setting": "an athletics track",
+   "text": "Walter watched a runner complete a lap on the athletics track. The smell of damp earth and freshly cut grass reminded him of his own school days. He pictured himself in spikes, standing at the starting line. A forgotten yearning for competition returned to him. It was a distinct memory from his youth."
+  },
+  {
+   "id": "W113",
+   "kind": "K8",
+   "setting": "an ice cream parlour",
+   "text": "The compressor unit hummed softly behind the counter, keeping the chilled tubs cold. A metal scoop scraped against the frozen surface of the vanilla. Cold air flowed from the display case, condensing faintly on the glass. The light catch on the freezer door clicked shut with a small, definite sound."
+  },
+  {
+   "id": "W114",
+   "kind": "K3",
+   "setting": "a roadside diner",
+   "text": "Neil watched the young cook struggle to flip pancakes on a busy griddle. He remembered the fierce heat, the constant motion, and the sheer volume of orders from his own youth in similar kitchens. He quietly asked for more coffee, understanding the situation without a word. The cook's frustration was palpable."
+  },
+  {
+   "id": "W115",
+   "kind": "K5",
+   "setting": "a recycling centre",
+   "text": "Mark’s hand moved quickly, separating plastic bottles from cardboard. He didn't deliberate over each item; his fingers sorted them with an almost unconscious precision. Years of working on the line had ingrained the categories into his muscle memory. His gaze barely flickered as he processed the continuous stream."
+  },
+  {
+   "id": "W116",
+   "kind": "K8",
+   "setting": "a clock repair shop",
+   "text": "The quiet shop was filled with the soft ticking of many mechanisms. A tiny brass gear spun on a jeweller's lathe at the workbench. Dust motes danced in the shaft of light coming through the window. A small hammer tapped against a delicate spring, testing its movement."
+  },
+  {
+   "id": "W117",
+   "kind": "K8",
+   "setting": "a bell foundry",
+   "text": "A large overhead crane slowly traversed the length of the foundry. Molten metal poured from a crucible into a waiting mould, steam rising in a cloud. Heavy tongs clanged against the concrete floor as they were set down. The ventilation system drew hot air upward and out through the roof vents."
+  },
+  {
+   "id": "W118",
+   "kind": "K1",
+   "setting": "a hot-air balloon field",
+   "text": "Daniel heard the whoosh of the hot air burner. The sudden roar made him recall a bonfire from his youth. He pictured the towering flames, the crackling wood, and the excited shouts of his friends. That distinctive sound always brought back those forgotten summer nights."
+  },
+  {
+   "id": "W119",
+   "kind": "K8",
+   "setting": "a stonemason's yard",
+   "text": "A crane arm swung overhead, lifting a heavy block of limestone. Dust settled on the surrounding slabs, turning them a pale grey. The grinding wheel spun, sending sparks into the air. Rain began to fall, darkening the rough-cut stone. Water pooled in the shallow indentations on the ground."
+  },
+  {
+   "id": "W120",
+   "kind": "K3",
+   "setting": "a costume hire shop",
+   "text": "Evelyn saw the young woman hesitantly trying on the medieval dress. The fabric hung awkwardly on her. Years of dressing countless actors and performers taught Evelyn to spot a bad fit instantly. She knew the woman wouldn't be comfortable, regardless of the style. Evelyn smoothly suggested a different cut, one with a more adjustable bodice."
+  },
+  {
+   "id": "W121",
+   "kind": "K3",
+   "setting": "a boarding kennel",
+   "text": "Helen heard the new Labrador puppy yelping in its pen. Most staff would rush over to comfort it immediately. Helen, however, paused, listening to the particular pitch of its cries. Decades of observing dogs taught her that this was just testing its voice, not genuine distress. She continued preparing the next meal, knowing it would settle soon."
+  },
+  {
+   "id": "W122",
+   "kind": "K3",
+   "setting": "a bookbinder's workshop",
+   "text": "Katherine inspected the antique leather binding. She recognised the specific type of tooling, the gold leaf pattern, and the marbled endpapers. Her years as a book restorer had taught her to identify these details instantly. This particular style belonged to an eighteenth-century Parisian workshop. She knew its history just by looking at the cover."
+  },
+  {
+   "id": "W123",
+   "kind": "K8",
+   "setting": "a second-hand bookshop",
+   "text": "Dust motes danced in the shaft of sunlight slicing through the tall window. Pages of old books lay open on a display table, their corners curled slightly. The wooden floorboards creaked faintly with every shift in temperature. Outside, the gentle tapping of raindrops began against the glass."
+  },
+  {
+   "id": "W124",
+   "kind": "K6",
+   "setting": "a funicular railway",
+   "text": "James, a funicular operator for forty years, listened to the ascent. He heard a faint, irregular click from the cable. It was barely perceptible above the usual mechanical hum. James knew immediately it indicated a loose fastener on one of the track rollers. He prepared for a maintenance stop at the next station."
+  },
+  {
+   "id": "W125",
+   "kind": "K4",
+   "setting": "a carpet showroom",
+   "text": "The designer broke down the client’s request for a living room carpet. First, they specified a preference for natural fibers like wool or cotton. Next, a muted colour palette was essential, avoiding bold patterns. Finally, the budget had a firm upper limit, which excluded some premium ranges."
+  },
+  {
+   "id": "W126",
+   "kind": "K5",
+   "setting": "a pet shop",
+   "text": "Liam, the pet shop assistant, moved through his morning tasks. He scooped food into bowls, his hands moving with practiced ease. He checked water levels in each enclosure without consciously thinking about it. A familiar tune escaped his lips, a whistle he always made during the routine. His actions were a daily, ingrained ballet."
+  },
+  {
+   "id": "W127",
+   "kind": "K5",
+   "setting": "a botanical garden",
+   "text": "Janet watered the delicate orchids in the glasshouse. Every Wednesday morning, she began her rounds here. She reached for the watering can without looking, her grip firm and practiced. Her hand knew exactly how much to tilt the spout for each thirsty plant. Years of repetition had ingrained the routine."
+  },
+  {
+   "id": "W128",
+   "kind": "K6",
+   "setting": "a violin maker's workshop",
+   "text": "Oliver ran his thumb along the violin's fingerboard. A faint, almost imperceptible dip marked the wood near the nut. To a casual observer, it meant nothing. He knew it indicated a slight structural weakness in the neck joint. It was a sign the instrument would eventually require a specific repair."
+  },
+  {
+   "id": "W129",
+   "kind": "K6",
+   "setting": "a potato packing shed",
+   "text": "Robert, a veteran of twenty years, watched the conveyor belt. He saw a faint grey smudge on the surface of three potatoes in a row. He paused the machine immediately. That small flaw meant the sorting mechanism for the next size up had started to slip. Rejected batches would follow if he didn't adjust it."
+  },
+  {
+   "id": "W130",
+   "kind": "K5",
+   "setting": "a lifeboat station",
+   "text": "Fiona checked the boat's fuel gauge. Every Thursday, she carried out the same routine maintenance tasks. She tightened a loose bolt on the engine casing without a second thought. Her hands moved swiftly, familiar with every curve and connection. Repetition had made these vital checks completely automatic."
+  },
+  {
+   "id": "W131",
+   "kind": "K1",
+   "setting": "an aquarium",
+   "text": "Arthur paused by the large coral tank, watching a school of iridescent fish dart and swirl. A small child nearby exclaimed, \"Look, Daddy, a clownfish!\" The sound of the child's delighted voice brought Arthur back to a day in his youth. He remembered sitting by a stream, skipping flat stones across the surface, the air thick with summer insects."
+  },
+  {
+   "id": "W132",
+   "kind": "K1",
+   "setting": "a roadside diner",
+   "text": "Grace stirred her coffee at the counter. The clatter of cutlery from the kitchen took her back to her first job, waiting tables at the town's old railway station cafe. She remembered the rush of the breakfast shift, the steam from the urn, and the bell from arriving trains. It felt like another lifetime."
+  },
+  {
+   "id": "W133",
+   "kind": "K8",
+   "setting": "a bell foundry",
+   "text": "A stream of molten bronze poured from the crucible into the waiting mold. The liquid metal glowed orange, casting flickering shadows across the foundry floor. Sparks flew as the stream met the sand-lined channels. A plume of white smoke rose, diffusing into the high ceilings of the workshop."
+  },
+  {
+   "id": "W134",
+   "kind": "K2",
+   "setting": "a stonemason's yard",
+   "text": "Robert traced the smooth, cool surface of a marble slab. He felt a deep satisfaction in its precise cut and fine grain. A nearby stack of rough, unhewn granite left him cold and uninterested. The dust from the carving machine barely registered on his clothes. He only noticed the perfect polish of the finished work."
+  },
+  {
+   "id": "W135",
+   "kind": "K5",
+   "setting": "a second-hand bookshop",
+   "text": "Robert reached for the heavy tome, his fingers automatically finding the spine to support its weight. Decades of shelving countless books had refined his movements. He never considered how to lift them without strain; his muscles simply knew the way. Each book found its place with an unthinking efficiency."
+  },
+  {
+   "id": "W136",
+   "kind": "K6",
+   "setting": "a stonemason's yard",
+   "text": "Xander, a master stonemason, observed his apprentice carving granite. He saw a tiny, almost imperceptible hesitation in the apprentice's hammer strike. It was a fleeting thing, but Xander understood it meant the young man was unsure of the grain direction. He stepped in to offer guidance before any stone was wasted."
+  },
+  {
+   "id": "W137",
+   "kind": "K6",
+   "setting": "a fairground",
+   "text": "Brenda saw the small queue forming at the 'Ring Toss' game. Its shortness, combined with the way families drifted quickly past, told her exactly what was happening. She knew the prizes were too cheap to entice serious players, and the game attendant looked bored. It meant a slow day for that stall."
+  },
+  {
+   "id": "W138",
+   "kind": "K4",
+   "setting": "a hot-air balloon field",
+   "text": "Thomas assessed the slow inflation problem, mentally separating the system into parts. He considered the burner, the fuel lines, the fan motor, and the envelope fabric as distinct elements. Each section contributed to the balloon’s ascent. He needed to verify the functionality of every individual component."
+  },
+  {
+   "id": "W139",
+   "kind": "K4",
+   "setting": "an orchard at picking time",
+   "text": "Martin examined the poor harvest. He considered the elements that had ruined the apple crop. There was the late spring frost that damaged the blossoms. Then, a dry spell during summer stunted the fruit's growth. Lastly, the sudden windstorm last week knocked many of the small apples from the branches before they ripened."
+  },
+  {
+   "id": "W140",
+   "kind": "K2",
+   "setting": "a violin maker's workshop",
+   "text": "Karen found immense satisfaction in the smell of aged maple wood. She disliked the harsh scent of chemical varnish, often opting for natural oils. A loud street noise from outside barely registered in her concentration. However, a small imperfection in the violin's scroll seized her full attention."
+  },
+  {
+   "id": "W141",
+   "kind": "K3",
+   "setting": "a village hall",
+   "text": "Peter surveyed the newly installed stage lights. As a former amateur theatre director, he immediately spotted the uneven coverage and harsh shadows. He knew instinctively that the gels were incorrectly placed and that the focus needed adjusting. His trained eye quickly picked out the flaws that others might have missed."
+  },
+  {
+   "id": "W142",
+   "kind": "K8",
+   "setting": "a roadside diner",
+   "text": "The old coffee machine hissed steadily on the counter, releasing a plume of steam. Outside, rain tapped against the large windowpanes, blurring the distant highway. A plate of scrambled eggs and bacon was placed onto the stainless steel surface with a clatter. Nearby, a fan spun slowly on the ceiling, stirring the air."
+  },
+  {
+   "id": "W143",
+   "kind": "K3",
+   "setting": "a golf course",
+   "text": "Arthur stood at the eighteenth tee, surveying the slight crosswind. Younger players often dismissed such subtle shifts in air. However, years of competitive play taught him to account for every tiny variable. He remembered a tournament twenty years ago, where a similar breeze cost him a crucial putt. His stance adjusted almost imperceptibly."
+  },
+  {
+   "id": "W144",
+   "kind": "K6",
+   "setting": "a shipyard",
+   "text": "Alan, a shipyard foreman of thirty years, watched the welders. He saw a tiny wisp of smoke curl from the edge of a newly installed plate. It was almost invisible against the grey steel. Alan knew immediately that the temperature gauge on the annealing oven was faulty. They would need to check the entire batch."
+  },
+  {
+   "id": "W145",
+   "kind": "K3",
+   "setting": "an ice cream parlour",
+   "text": "Edna gazed at the colourful tubs, a soft smile touching her lips. For many, it was just a choice of flavour. But for Edna, each scoop held memories of countless family holidays and simple joys. Decades had passed since her first childhood cone, yet the simple treat still held a comforting familiarity."
+  },
+  {
+   "id": "W146",
+   "kind": "K5",
+   "setting": "a tyre fitting bay",
+   "text": "Every Monday morning, Liam serviced the same delivery van. Its worn tires always arrived at his bay caked in a specific type of clay mud. Without thinking, he now grabbed the stiff wire brush first before reaching for the air wrench. This small preparation saved him a few seconds each week, a habit formed over years of repetition."
+  },
+  {
+   "id": "W147",
+   "kind": "K1",
+   "setting": "a village hall",
+   "text": "Xenia swept the wooden floor of the village hall. The smell of old polish and dust brought back images of her grandfather's workshop. She remembered the specific light that fell through his window. A feeling of quiet diligence settled over her. The familiar scent stirred up a forgotten connection."
+  },
+  {
+   "id": "W148",
+   "kind": "K2",
+   "setting": "a lifeboat station",
+   "text": "Owen hurried past the display of old maritime knots, feeling no pull to study their intricate twists. He found them confusing and uninteresting. He gravitated instead towards the large, gleaming engine of the current lifeboat. Its sheer mechanical power fascinated him completely. The steady thrum of the building's ventilation system was barely audible to him."
+  },
+  {
+   "id": "W149",
+   "kind": "K1",
+   "setting": "a boarding kennel",
+   "text": "Yvonne, a kennel hand, cleaned out a dog run. A particularly high-pitched, drawn-out whine came from a new arrival in a distant pen. This specific sound brought a completely different image to her thoughts. She suddenly remembered the day she brought her tiny puppy home. It had been full of joyful, excited noises."
+  },
+  {
+   "id": "W150",
+   "kind": "K4",
+   "setting": "a garden centre",
+   "text": "Liam reviewed the new garden centre layout plan. He began with the entrance flow, then the seasonal display section. After that, he examined the perennial plant area and the bedding plant tables. Finally, he looked at the checkout counter placement and the outdoor storage area. He needed to ensure smooth customer movement."
+  },
+  {
+   "id": "W151",
+   "kind": "K9",
+   "setting": "an aquarium",
+   "text": "Carla moved slowly along the main corridor. She stopped before a large tank, watching the jellyfish drift. Her gaze followed their pulsing forms for several minutes. Later, she paused at the gift shop, picking up a small, smooth pebble. She then placed it back on the shelf."
+  },
+  {
+   "id": "W152",
+   "kind": "K2",
+   "setting": "a bookbinder's workshop",
+   "text": "Quinn carefully smoothed an aged leather cover, enjoying its worn texture and subtle scent. He much preferred working with these old, natural materials. He recoiled slightly from a stack of garish, synthetic book jackets, finding them unappealing. The distant chatter of colleagues in the next room faded into the background, unnoticed."
+  },
+  {
+   "id": "W153",
+   "kind": "K9",
+   "setting": "a wallpaper shop",
+   "text": "Maria tidied the display rolls, aligning their edges perfectly. She pulled a new sample book from under the counter. After flipping through a few pages, she placed it on the stand near the window. She then returned to restock the paint brushes by the till. Her movements were precise and methodical."
+  },
+  {
+   "id": "W154",
+   "kind": "K5",
+   "setting": "a costume hire shop",
+   "text": "Working in the costume hire shop, Ben developed an unconscious habit. Whenever a child’s pirate costume was returned, he immediately checked for the missing eye patch. Over the years, countless children had forgotten to put it back. His hand simply went to the small accessory pouch without a conscious thought."
+  },
+  {
+   "id": "W155",
+   "kind": "K7",
+   "setting": "a violin maker's workshop",
+   "text": "Sarah bowed the violin, hearing a slight buzzing sound. She checked the bridge height, finding it perfectly set, then inspected the f-holes for debris. Her gaze moved to the soundpost, noting its position seemed slightly off-centre. Adjusting it minutely, she played again, confirming the soundpost's misalignment was the issue."
+  },
+  {
+   "id": "W156",
+   "kind": "K3",
+   "setting": "a tyre fitting bay",
+   "text": "Oscar watched the young technician tighten the lug nuts with an air gun. The speed and force seemed careless to him. In his decades of experience, he had learned the subtle feel of a properly torqued bolt, the way it settled just right. He silently worried about stripped threads, knowing too well the costs of shortcuts."
+  },
+  {
+   "id": "W157",
+   "kind": "K1",
+   "setting": "a lifeboat station",
+   "text": "Ursula heard the sharp, wailing blast of the lifeboat siren. Its distinctive rising and falling pitch pulled her thoughts towards an old action movie she watched as a child. She remembered a dramatic scene where heroes raced against time, the siren a constant backdrop to their desperate mission."
+  },
+  {
+   "id": "W158",
+   "kind": "K1",
+   "setting": "a garden centre",
+   "text": "Arthur picked up a bag of fresh compost. The earthy scent filled his nostrils, rich and dark. Instantly, he pictured his grandmother's allotment patch from his childhood. He remembered her kneeling among the potato plants, her sturdy hands in the soil. That smell always took him back there."
+  },
+  {
+   "id": "W159",
+   "kind": "K1",
+   "setting": "a stonemason's yard",
+   "text": "Rachel carefully chiselled a piece of limestone. The fine dust filled the air, giving the yard a pale, hazy look. The gritty smell instantly reminded her of the ancient cathedrals she had visited in France. She pictured their towering spires and intricate carvings, feeling a connection to past craftsmen."
+  },
+  {
+   "id": "W160",
+   "kind": "K4",
+   "setting": "a newsagent's shop",
+   "text": "Zach meticulously arranged the new magazine display. First, the wooden stand provided the base. Then, he added several clear acrylic risers for varying heights. Next, he placed the weekly news magazines at eye level. Finally, smaller, special interest publications filled the lower shelves, ordered by subject."
+  },
+  {
+   "id": "W161",
+   "kind": "K2",
+   "setting": "a costume hire shop",
+   "text": "Yvonne carefully admired a velvet gown from the Victorian era, enjoying its rich fabric. She always gravitated towards the historical costumes. A bright, neon-coloured jumpsuit from the 1980s hung nearby, and she instinctively avoided touching it. The distant ring of a phone in the office scarcely registered."
+  },
+  {
+   "id": "W162",
+   "kind": "K9",
+   "setting": "a funicular railway",
+   "text": "Arthur stepped onto the platform, waiting for the carriage. When it arrived, he chose a seat near the window. He settled in as the doors closed, then watched the scenery outside as the car began its slow ascent. At the top station, he stood and walked off with the other passengers."
+  },
+  {
+   "id": "W163",
+   "kind": "K2",
+   "setting": "a violin maker's workshop",
+   "text": "Peter felt drawn to the rich, dark grain of aged maple wood. He loved the way it felt under his fingers, solid and smooth. Conversely, the newer, paler spruce felt too soft, lacking character for him. The intricate curves of a finished scroll held his attention for a long time. The straight lines of a simple bridge, however, held little appeal."
+  },
+  {
+   "id": "W164",
+   "kind": "K5",
+   "setting": "a hot-air balloon field",
+   "text": "Tina, a hot-air balloon crew member, had years of experience. When the burners roared to life, she automatically checked the mooring ropes for tension. Her eyes scanned the horizon without conscious effort, assessing the wind direction by subtle clues. She adjusted the tether lines expertly, her body anticipating the balloon's lift."
+  },
+  {
+   "id": "W165",
+   "kind": "K9",
+   "setting": "an olive press",
+   "text": "Rachel checked the pressure gauge on the hydraulic press. She then adjusted a valve on the washing machine. Later, she swept the stone floor of the main production area. She refilled a container with fresh olives. Finally, she wiped down the large stainless steel filtering tanks."
+  },
+  {
+   "id": "W166",
+   "kind": "K1",
+   "setting": "a newsagent's shop",
+   "text": "Alice picked up a freshly printed newspaper, the distinct smell of ink wafting from its pages. The scent instantly transported her back to her school days. She recalled the dusty library and the crisp pages of textbooks, a memory of quiet mornings and focused learning."
+  },
+  {
+   "id": "W167",
+   "kind": "K1",
+   "setting": "a rowing club",
+   "text": "Colin pulled his shell from the racks. The scent of damp wood and river water filled the boathouse. He caught a glimpse of an old, faded photograph tacked to a corkboard. It showed an eight-man crew from the 1970s, their faces grim and determined. He suddenly pictured his own father at that age, before his knees gave out, winning a local regatta years ago."
+  },
+  {
+   "id": "W168",
+   "kind": "K1",
+   "setting": "a shipyard",
+   "text": "Daniel paused his welding, taking a deep breath of the salty air. The tang of the sea mixed with the scent of hot metal. It suddenly reminded him of the fishing trips he took with his grandfather as a boy. He could almost feel the rocking of the small boat beneath him."
+  },
+  {
+   "id": "W169",
+   "kind": "K8",
+   "setting": "a town hall archive",
+   "text": "A trolley laden with old ledgers rolled quietly along the aisle. Its small wheels made a faint, soft rumble on the linoleum floor. The binding of one large book had split, spilling brittle pages onto the stack. An overhead fan circulated air, stirring a loose sheaf of documents. A faint smell of mildew lingered near the far wall."
+  },
+  {
+   "id": "W170",
+   "kind": "K7",
+   "setting": "a newsagent's shop",
+   "text": "Fiona noticed the till was short at closing time. She checked the lottery scratch cards first, finding no discrepancies. Next, she reviewed the CCTV footage from the afternoon. A customer had bought a magazine and paid with a large note. The footage showed her giving too much change by mistake."
+  },
+  {
+   "id": "W171",
+   "kind": "K1",
+   "setting": "a trout hatchery",
+   "text": "Ian dipped his hand into the cool, clear water of a rearing tank. The small trout darted away from his shadow. A distinct metallic tang, like old pennies, rose from the water. He was instantly reminded of his childhood fishing trips with his grandfather, sitting patiently by the riverbank, hoping for a bite while the sun warmed his face."
+  },
+  {
+   "id": "W172",
+   "kind": "K1",
+   "setting": "a hot-air balloon field",
+   "text": "The sudden, loud roar of the burner filling the balloon's envelope made Chloe jump. It reminded her of a dragon's breath, hot and powerful. She imagined ancient tales of flying beasts with fiery mouths. The sound transported her to a world of myth and magic. It painted vivid pictures in her head."
+  },
+  {
+   "id": "W173",
+   "kind": "K5",
+   "setting": "a fairground",
+   "text": "George called out for customers to try their luck. His voice, hoarse from years, carried over the music and shouts. He automatically caught the tossed rings, placing them back on their pegs. His hands moved without a glance, ready for the next attempt. The routine of the game was deeply etched into his movements."
+  },
+  {
+   "id": "W174",
+   "kind": "K3",
+   "setting": "a pet shop",
+   "text": "Susan saw the young couple cooing over the new puppies. Their excitement was palpable, their questions endless. She had witnessed this joy many times over her twenty years running the shop. She knew they probably hadn't considered the late-night feedings or the vet bills. Her replies were always tempered with a dose of realistic advice."
+  },
+  {
+   "id": "W175",
+   "kind": "K4",
+   "setting": "a botanical garden",
+   "text": "David reviewed the proposal for the new pollinator garden. He separated it into sections: plant selection, irrigation system diagrams, soil preparation, and visitor pathway designs. There was also a detailed timeline for planting and a list of projected material costs. Each component needed individual approval. He then checked the budget allocation."
+  },
+  {
+   "id": "W176",
+   "kind": "K4",
+   "setting": "a lifeboat station",
+   "text": "Tina reviewed the emergency launch procedure with the new volunteers. It began with checking the engine and fuel levels. Next, they secured all loose equipment inside the boat. Then, the crew donned their dry suits and life jackets. Finally, they activated the launch mechanism, sending the vessel down the slipway."
+  },
+  {
+   "id": "W177",
+   "kind": "K5",
+   "setting": "an ice cream parlour",
+   "text": "Sam worked the afternoon shift, scooping cones. Whenever a child ordered strawberry, his hand automatically reached for the pink sugar sprinkles. He didn't even think about it anymore. It was just part of the routine, a silent, unconscious action repeated dozens of times daily."
+  },
+  {
+   "id": "W178",
+   "kind": "K4",
+   "setting": "a rowing club",
+   "text": "Ben analyzed the faulty rowing machine. The resistance mechanism felt too loose, indicating an issue there. He suspected the flywheel bearings, or perhaps the chain tensioner. He also considered a worn belt or a broken spring within the handle assembly. It was a mechanical puzzle with distinct parts."
+  },
+  {
+   "id": "W179",
+   "kind": "K8",
+   "setting": "a carpet showroom",
+   "text": "Sunlight streamed through the tall showroom windows, illuminating dust motes dancing in the air. Bright display lights highlighted the varied textures of the carpet rolls. A low hum came from the air conditioning unit mounted high on the wall. The scent of new fibres, faint and clean, hung in the warm space. A light breeze stirred a loose fibre on a sample."
+  },
+  {
+   "id": "W180",
+   "kind": "K1",
+   "setting": "a pet shop",
+   "text": "David, a college student working part-time, rearranged a cage of exotic insects. The persistent, high-pitched chirping of the crickets filled the air. This sound brought to his thoughts a very different image. He suddenly recalled a warm summer night from years ago. He was sitting around a crackling campfire, listening to distant frogs."
+  },
+  {
+   "id": "W181",
+   "kind": "K4",
+   "setting": "a concert hall cloakroom",
+   "text": "The evening’s schedule had completely unravelled. First, the opening act went over their allotted time by twenty minutes. Next, the interval was cut short by half, leaving patrons rushed. Finally, the main performance started late because of a technical hitch backstage. This sequence of delays created a ripple of confusion among the staff."
+  },
+  {
+   "id": "W182",
+   "kind": "K6",
+   "setting": "a costume hire shop",
+   "text": "Owen examined the returned pirate costume, his eyes scanning for faults. He noticed a faint sheen on the velvet where the armpit fabric met the sleeve. This subtle discoloration immediately told him it hadn't been dry-cleaned properly. A new customer might overlook it, but Owen knew it meant the garment would need a full re-processing before its next hire."
+  },
+  {
+   "id": "W183",
+   "kind": "K4",
+   "setting": "a botanical garden",
+   "text": "Neil described the layout of the garden's new fern section. It had a central winding gravel path. On the left side, he planted hardy outdoor ferns, tolerating cooler temperatures. The right side featured a sheltered rockery for more delicate, exotic varieties. At the far end, a small pool provided humidity for moisture-loving species."
+  },
+  {
+   "id": "W184",
+   "kind": "K3",
+   "setting": "a tyre fitting bay",
+   "text": "John checked the pressure on a new set of tyres. The customer watched him closely, hovering nearby. He remembered anxious customers from his first days as an apprentice. Now, their hovering was just part of the job's background. He simply continued his work, unhurried and methodical."
+  },
+  {
+   "id": "W185",
+   "kind": "K5",
+   "setting": "a seaside pier",
+   "text": "Julian walked the pier’s length every morning. He always paused at the same spot to watch the waves, a ritual over many years. When he heard a particular seagull call, he instinctively looked out to sea. This automatic glance was now ingrained, a response formed from countless similar mornings. It became part of his daily routine."
+  },
+  {
+   "id": "W186",
+   "kind": "K9",
+   "setting": "an athletics track",
+   "text": "Liam pushed the large roller across lane one. Dust rose in faint clouds behind the machine's path. He steered it carefully around the bend, keeping a steady pace. Later, he collected stray discarded water bottles near the spectator stands. He piled them into a recycling bin."
+  },
+  {
+   "id": "W187",
+   "kind": "K3",
+   "setting": "a recycling centre",
+   "text": "Wendy, the supervisor, saw the new recycling machine sorting different types of plastic. She remembered the early days when everything was sorted by hand, a slow, messy job. This automated process seemed miraculous compared to the mountains of unsorted waste she once faced, a testament to years of innovation."
+  },
+  {
+   "id": "W188",
+   "kind": "K4",
+   "setting": "an orchard at picking time",
+   "text": "Uma studied the apple harvesting plan. She first checked the section allocations for each team. Then she confirmed the truck schedules for transport. Next, she reviewed the packing house capacity. She also considered the predicted weather conditions and the availability of crates."
+  },
+  {
+   "id": "W189",
+   "kind": "K5",
+   "setting": "a bell foundry",
+   "text": "Edward walked past the cooling molds, his heavy boots accustomed to the uneven floor. He instinctively avoided a spot where the concrete was always damp. Reaching the hoist controls, his hand went directly to the lever for the five-ton crucible. He performed the calibration checks by feel, barely registering the sequence of clicks. Another shift, another pour, moving without conscious thought."
+  },
+  {
+   "id": "W190",
+   "kind": "K2",
+   "setting": "an athletics track",
+   "text": "Ben watched the sprinters powerfully burst from the blocks. Their speed thrilled him; he longed for such explosive pace. Then he saw the exhausted long-distance runners completing their final laps, faces strained. He felt no pull towards their enduring grind. The sheer effort of sustained running left him cold."
+  },
+  {
+   "id": "W191",
+   "kind": "K4",
+   "setting": "a concert hall cloakroom",
+   "text": "Paul meticulously counted the coat check tickets. There were the red ones for the main hall, the blue ones for the balcony, and the yellow for the VIP boxes. Each colour represented a different seating section and therefore a slightly different flow of customers. He grouped them accordingly, preparing for the evening’s rush. The system helped keep everything organised."
+  },
+  {
+   "id": "W192",
+   "kind": "K2",
+   "setting": "a funicular railway",
+   "text": "Jane, visiting for the day, eagerly stepped into the funicular carriage. She felt a strong pull towards the panoramic views through the windows. The cramped space inside, however, made her feel distinctly uncomfortable. The loud grinding of the cables as the carriage ascended barely registered with her. She only saw the expanding landscape."
+  },
+  {
+   "id": "W193",
+   "kind": "K2",
+   "setting": "a tannery",
+   "text": "Patrick preferred the smooth, finished calfskin, running his hand over its supple surface. He enjoyed the scent of the oils and dyes. The raw, rough hides, still bearing hair and grit, repulsed him. Their strong, unrefined odour hardly bothered him, but their appearance did. He avoided touching them whenever possible."
+  },
+  {
+   "id": "W194",
+   "kind": "K7",
+   "setting": "a botanical garden",
+   "text": "Catherine observed the drooping leaves on the rare orchid. She noted the soil felt unusually dry to the touch. She then checked the humidity gauge in the enclosure, seeing it was lower than optimal. Finally, she consulted the plant's care records, confirming a consistent watering schedule had been missed. She concluded the plant was severely dehydrated."
+  },
+  {
+   "id": "W195",
+   "kind": "K2",
+   "setting": "a bell foundry",
+   "text": "George watched the molten bronze pour from the crucible, mesmerized by its fiery glow. He loved the raw power and artistry of the casting process. The constant din of the grinding room, however, always made him wince. A tiny spark from the furnace flicked past his eye, unheeded. The first clear, deep ring of a newly cooled bell made him shiver with delight."
+  },
+  {
+   "id": "W196",
+   "kind": "K1",
+   "setting": "a rowing club",
+   "text": "Jessica wiped down her oar after a morning practice. The distinctive smell of damp wood and river water filled the boathouse. This particular scent always reminded her of her grandmother’s old wooden chest in the attic. Inside, among mothballed blankets, lay brittle letters and photographs from a forgotten era, smelling faintly of age and dust."
+  },
+  {
+   "id": "W197",
+   "kind": "K5",
+   "setting": "a concert hall cloakroom",
+   "text": "Nancy accepted a coat, handing the patron a small brass token. She hooked the garment onto the rail with a practiced flick of her wrist. Her hand then moved automatically to the next available hook, clearing space for the next arrival. The entire sequence, from greeting to placement, flowed without conscious direction. Years of handling countless coats had ingrained the movements deeply."
+  },
+  {
+   "id": "W198",
+   "kind": "K7",
+   "setting": "a trout hatchery",
+   "text": "Peter observed the trout’s sluggish movements, then noticed a subtle cloudiness in the water. He measured the pH levels, which were slightly high, and checked the oxygen saturation. Consulting the feed log, he saw a recent change in protein content. Combining these observations, he suspected a minor dietary imbalance."
+  },
+  {
+   "id": "W199",
+   "kind": "K6",
+   "setting": "a clock repair shop",
+   "text": "George peered at the old mantel clock. A barely perceptible catch in the escapement’s swing caught his eye. That minute stutter, almost imperceptible to an untrained observer, told him the mainspring was weakening. He understood the mechanism required careful adjustment before it stopped entirely. It was a familiar sign of age in such pieces."
+  },
+  {
+   "id": "W200",
+   "kind": "K8",
+   "setting": "a telephone exchange",
+   "text": "Rows of indicator lights flickered on the main panel. A low hum filled the room, constant and steady. Cooling fans whirred, pushing warm air upwards towards the ventilation shafts. Small relays clicked intermittently as connections were made and broken. Dust settled on the grey metal casing of the older equipment."
+  },
+  {
+   "id": "W201",
+   "kind": "K5",
+   "setting": "a fairground",
+   "text": "Arthur finished cleaning his hot dog stand. The carousel music began its daily tune. Without pausing, he reached for the small metal latch on his icebox. He opened it and took out a fresh packet of buns, even though he had just restocked it an hour before. It was just a thing he did when that particular melody started up."
+  },
+  {
+   "id": "W202",
+   "kind": "K4",
+   "setting": "a hat maker's workshop",
+   "text": "Eleanor, the master hat maker, considered a new design. She broke it down into its core parts. First, she thought about the angle and curve of the brim. Then came the desired height and shape of the crown. Next, she focused on the material for the hat band. Finally, she considered the type of lining stitch needed for the interior finish."
+  },
+  {
+   "id": "W203",
+   "kind": "K5",
+   "setting": "a recycling centre",
+   "text": "Agnes worked Tuesdays at the recycling centre. Every week, she saw discarded cardboard boxes arrive, flattened or stacked. Without thinking, she now automatically sorted her own household cardboard. The sight of a crumpled box made her instinctively smooth it out. It became a routine, a quick, almost unconscious action that saved space."
+  },
+  {
+   "id": "W204",
+   "kind": "K2",
+   "setting": "a village hall",
+   "text": "Nora found herself drawn to the stage, admiring the newly painted backdrop. She enjoyed the quiet preparation before events, seeing everything come together. The clatter of chairs being stacked in the corner, however, always made her jump. A shouted instruction from the kitchen barely registered. The soft rustle of a new banner unfurling nearby, though, made her smile broadly."
+  },
+  {
+   "id": "W205",
+   "kind": "K5",
+   "setting": "a hat maker's workshop",
+   "text": "Beatrice smoothed the felt over the wooden hat block. She reached for the steam iron without looking, her fingers finding the handle precisely. The regular hiss of the steam and the warmth on her hand were familiar sensations. Every brim and crown she shaped followed a sequence of movements her body simply knew. She pressed the felt firmly, her gaze already moving to the next task."
+  },
+  {
+   "id": "W206",
+   "kind": "K8",
+   "setting": "a lifeboat station",
+   "text": "Salt spray coated the windows of the station, blurring the view of the churning grey sea. The wind howled against the reinforced concrete walls. Inside, the massive lifeboat rested on its trailer, its orange hull gleaming under the fluorescent lights. Waves crashed against the shore, sending foam high into the air."
+  },
+  {
+   "id": "W207",
+   "kind": "K3",
+   "setting": "a telephone exchange",
+   "text": "Martha, an operator for thirty years, listened to the distant hum. It was a familiar sound, unlike any new digital tone. She heard the faint clicking of relays, a language she understood. The slight buzz on line three meant a specific type of cable wear. Her long service gave a deep understanding to the day’s work."
+  },
+  {
+   "id": "W208",
+   "kind": "K2",
+   "setting": "a salt works",
+   "text": "Frank loved watching the salt crystallize in the vast, shallow ponds. He found the blinding glare from the sun on the water completely captivating. However, the constant, low hum of the processing plant nearby always made him feel uneasy. A sudden sharp crack from a distant conveyor belt hardly registered with him. He just kept observing the crystals form."
+  },
+  {
+   "id": "W209",
+   "kind": "K2",
+   "setting": "an olive press",
+   "text": "Finn watched the olives arrive on the conveyor belt. He quickly scooped up a handful of plump, dark ones, admiring their sheen. A few squashed, yellowish olives passed, and he wrinkled his nose, pushing them away from the good batch with a small shovel. A loud metallic clang from the grinding stone scarcely registered in his ears as he continued his work."
+  },
+  {
+   "id": "W210",
+   "kind": "K2",
+   "setting": "a bookbinder's workshop",
+   "text": "Nina loved the intricate detail of the old leather-bound tomes, carefully running her hand over their embossed covers. The plain, mass-produced paperbacks, however, held no appeal for her. A heavy box of newly printed pages falling onto the floor nearby made her jump. Yet, the constant gentle whirring of the fan in the corner was completely ignored."
+  },
+  {
+   "id": "W211",
+   "kind": "K5",
+   "setting": "a hot-air balloon field",
+   "text": "Yvonne had launched balloons for twenty years. Every morning, she would check the wind sock, then glance at the distant tree line. She did it without deliberating. The unconscious action helped her gauge the upper air currents, a silent prelude to her daily flight preparations."
+  },
+  {
+   "id": "W212",
+   "kind": "K3",
+   "setting": "a pet shop",
+   "text": "Susan watched a playful kitten batting at a toy mouse. Its antics were charming, but she felt a distant ache. She had recently said goodbye to her own beloved cat of fifteen years. Her long experience of pet ownership meant she observed the kitten with a certain gentle sadness now."
+  },
+  {
+   "id": "W213",
+   "kind": "K2",
+   "setting": "a stonemason's yard",
+   "text": "Ursula wandered past stacks of rough-cut granite, their dull grey surfaces holding little appeal. She quickly moved towards a display of polished marble, its veined patterns captivating her. She ran her hand over a cool, smooth slab, feeling a profound connection. The coarse dust from the sawing nearby irritated her throat, but her fascination with the marble easily overcame the discomfort."
+  },
+  {
+   "id": "W214",
+   "kind": "K3",
+   "setting": "a funicular railway",
+   "text": "Fiona looked out at the city spread below as the carriage ascended. The panoramic view usually thrilled visitors. However, as an architect who had studied urban planning, she saw more than just pretty lights. She noticed the aging infrastructure, the haphazard sprawl, and the areas where redevelopment had stalled. Her gaze lingered on a cluster of neglected historical buildings, seeing their unfulfilled potential."
+  },
+  {
+   "id": "W215",
+   "kind": "K8",
+   "setting": "a violin maker's workshop",
+   "text": "Fine wood shavings curled from the plane's blade, falling silently onto the workbench. Dust motes danced in the single shaft of sunlight that pierced the grimy window. A faint scent of pine and varnish hung in the still air. The small stove in the corner radiated a steady, gentle warmth."
+  },
+  {
+   "id": "W216",
+   "kind": "K9",
+   "setting": "a clock repair shop",
+   "text": "Richard polished the brass casing of a mantel clock. He then placed it on a protective cloth on the workbench. He opened a small drawer and selected a pair of tweezers. Next, he picked up a minuscule screw from a tray. His day involved various precise adjustments and cleaning tasks."
+  },
+  {
+   "id": "W217",
+   "kind": "K8",
+   "setting": "a carpet showroom",
+   "text": "Large rolls of carpet stood upright against the far wall. Fluorescent lights hummed softly overhead, casting a bright, even glow. A motorized display arm slowly rotated a sample swatch, revealing different textures. Dust motes drifted lazily through the still air. The plush pile of a display rug flattened slightly under an unseen weight."
+  },
+  {
+   "id": "W218",
+   "kind": "K1",
+   "setting": "a seaside pier",
+   "text": "Olivia leaned against the railing of the pier, watching the waves. The salty air filled her lungs. Suddenly, she smelled frying dough from a nearby food stall. It reminded her strongly of the donuts her grandmother used to make every Sunday morning, filling their kitchen with a sweet aroma."
+  },
+  {
+   "id": "W219",
+   "kind": "K7",
+   "setting": "a hot-air balloon field",
+   "text": "Peter checked the weather instruments. The wind speed was steady, but he saw a slight shift in direction near the ground. He also noticed the distant clouds were gathering lower than earlier. The barometer showed a fractional drop in pressure. He concluded they would need to delay the morning flight."
+  },
+  {
+   "id": "W220",
+   "kind": "K2",
+   "setting": "a recycling centre",
+   "text": "Daniel found old wooden furniture much more interesting than plastic items. He lingered over a discarded armchair, admiring its carved legs. A stack of brightly coloured plastic garden chairs, however, held no attraction for him. He quickly sorted them into the appropriate bin without a second glance. The smooth plastic felt entirely uninteresting under his touch."
+  },
+  {
+   "id": "W221",
+   "kind": "K3",
+   "setting": "a costume hire shop",
+   "text": "Vicky saw the young man trying on a clown costume. He looked slightly uncomfortable in the oversized shoes. Many years of helping people find the right fit had taught her patience. She knew everyone felt awkward at first. She simply offered a gentle suggestion for a different wig, her tone calm and steady."
+  },
+  {
+   "id": "W222",
+   "kind": "K8",
+   "setting": "an olive press",
+   "text": "Olives fed into the hopper, dropping onto the rotating millstones. A deep grinding sound filled the pressing room as the stones crushed the fruit. The resulting paste flowed onto a series of fibre mats stacked in a hydraulic press. Slowly, a golden-green liquid began to seep from the edges of the mats. A rich, earthy aroma of fresh oil filled the air."
+  },
+  {
+   "id": "W223",
+   "kind": "K2",
+   "setting": "a newsagent's shop",
+   "text": "Tom enjoyed browsing the historical magazines at the newsagent. He ignored the brightly coloured gossip tabloids, finding them tiresome. The loud ringing of the shop bell barely made him look up. However, finding a rare edition on ancient warfare always brought him a quiet thrill."
+  },
+  {
+   "id": "W224",
+   "kind": "K8",
+   "setting": "a garden centre",
+   "text": "Water sprayed in fine arcs over rows of bedding plants. Small terracotta pots stacked neatly on wooden pallets. A wheelbarrow, its metal surface glinting, sat overturned near a pile of bagged compost. Bees buzzed lazily among the flowering shrubs, their wings catching the sunlight."
+  },
+  {
+   "id": "W225",
+   "kind": "K9",
+   "setting": "a hot-air balloon field",
+   "text": "Xander unrolled the large canvas groundsheet onto the grass. He then pulled the balloon envelope from its bag, spreading it out carefully. Next, he attached the inflation fan's duct to the envelope's mouth. He checked the fastenings before switching on the fan. The fabric slowly began to billow."
+  },
+  {
+   "id": "W226",
+   "kind": "K5",
+   "setting": "a town hall archive",
+   "text": "Eleanor handled the fragile parchment, her touch almost imperceptibly light. Years of working with ancient records had ingrained a delicate precision into her movements. She instinctively knew how to unfold a brittle map without tearing it. Her fingers moved with a practiced gentleness that required no conscious thought."
+  },
+  {
+   "id": "W227",
+   "kind": "K6",
+   "setting": "a funicular railway",
+   "text": "Charles, the railway engineer, heard a faint, irregular squeak from the cable. It was barely audible above the general motor hum. He knew it meant a specific roller needed immediate lubrication. Ignoring it would lead to greater wear and eventual failure. Years of listening had trained his ear for such nuances."
+  },
+  {
+   "id": "W228",
+   "kind": "K3",
+   "setting": "a village hall",
+   "text": "Eleanor, having volunteered for decades, observed the new sound system setup in the village hall. The crew struggled with a tangled mess of wires. She had seen countless events, from amateur plays to political debates, fall flat due to technical glitches. Her expression remained neutral, but she braced herself for potential difficulties."
+  },
+  {
+   "id": "W229",
+   "kind": "K5",
+   "setting": "a tannery",
+   "text": "Arthur spent decades trimming leather. His hands moved without conscious thought, anticipating the next cut. The blade glided along the hide, guided by an ingrained knowledge of its texture. He never looked directly at his hands, yet they always found the correct line. The repetitive motion became part of him."
+  },
+  {
+   "id": "W230",
+   "kind": "K8",
+   "setting": "a trout hatchery",
+   "text": "Cold, clear water flowed steadily through the long, shallow raceways. Small trout fry darted beneath the surface, moving against the gentle current. An automatic feeder motor whirred softly, dispensing pellets at regular intervals. The fine mist of the aerators drifted across the concrete tanks. Overhead, a single fluorescent lamp hummed quietly."
+  },
+  {
+   "id": "W231",
+   "kind": "K4",
+   "setting": "a tannery",
+   "text": "Ben examined the breakdown report for the dehairing machine. The failure wasn't simple; it had several parts. First, the water pressure dropped significantly. Then, the spray nozzles clogged, followed by a motor overheating warning. Finally, the main conveyor belt jammed completely, stopping the entire line. He knew exactly where to tell the team to start."
+  },
+  {
+   "id": "W232",
+   "kind": "K4",
+   "setting": "a rope factory",
+   "text": "To fix the ancient rope-making machine, Thomas first inspected the main drive shaft. He then checked the gear train for worn teeth, followed by the individual spindle mechanisms. Next, he examined the tensioning rollers, and finally the winding drum. Each part contributed to the complex symphony of its operation, or its failure."
+  },
+  {
+   "id": "W233",
+   "kind": "K6",
+   "setting": "a bell foundry",
+   "text": "Thomas listened to the hum of the furnace. A barely perceptible shift in the pitch reached his ears. Only his years of working with molten metal allowed him to hear it. He knew the temperature inside the crucible was fluctuating slightly. He motioned for his apprentice to adjust the air intake."
+  },
+  {
+   "id": "W234",
+   "kind": "K9",
+   "setting": "an ice cream parlour",
+   "text": "Henry approached the counter and pointed at a flavour. He handed over some coins to the server. She scooped the ice cream into a waffle cone. He took the cone and walked to an empty table. He then sat down and began to eat it."
+  },
+  {
+   "id": "W235",
+   "kind": "K4",
+   "setting": "a tannery",
+   "text": "Alice heard a strange clunking from the hide-stretching machine. She first checked the main drive belt for wear or slackness. Then she looked at the tension rollers, noticing no obvious obstruction. The actual problem was a loose bolt on the primary gear housing. The fault involved the belt, the rollers, and the specific loose bolt."
+  },
+  {
+   "id": "W236",
+   "kind": "K2",
+   "setting": "a tannery",
+   "text": "Evelyn loved the smooth, finished feel of polished leather. She traced the soft surface with her fingertips, appreciating its suppleness. The raw, rough texture of an untanned hide, however, always made her slightly uncomfortable. She always sought out the fine, perfected pieces. The strong smell of the chemicals used in the early stages of tanning barely bothered her."
+  },
+  {
+   "id": "W237",
+   "kind": "K2",
+   "setting": "an olive press",
+   "text": "Thomas watched the golden stream of fresh oil flowing into the collection vat, a look of deep satisfaction on his face. He savored its rich, earthy aroma. The loud clang of the pressing machine, however, made him wince slightly, but he quickly returned his attention to the oil. The distant buzz of a fly was completely unnoticed."
+  },
+  {
+   "id": "W238",
+   "kind": "K3",
+   "setting": "a botanical garden",
+   "text": "Agnes knelt beside the rare orchid, her gaze sharp. Its delicate purple bloom might have seemed fragile to others, but she recognized its hardy mountain lineage instantly. Decades spent nurturing difficult specimens taught her to see past initial appearances. This plant carried the resilience of many cold winters within its graceful petals."
+  },
+  {
+   "id": "W239",
+   "kind": "K2",
+   "setting": "an orchard at picking time",
+   "text": "Martha reached for a plump, unblemished apple, its skin glowing red. Its crisp perfection beckoned her hand. Nearby, a heap of bruised, fallen fruit lay rotting, attracting flies. She recoiled from the sickly sweet smell and the dark, soft patches. The sight held no appeal for her."
+  },
+  {
+   "id": "W240",
+   "kind": "K8",
+   "setting": "a costume hire shop",
+   "text": "Rows of sequined gowns hung from high rails, shimmering under the strip lights. A velvet cloak lay draped over a mannequin, its heavy folds gathering dust. A faint, musky scent of old fabrics filled the air. Outside, a car horn honked sharply, then faded into the general city drone. A loose button rolled off a counter and disappeared under a shelf."
+  },
+  {
+   "id": "W241",
+   "kind": "K2",
+   "setting": "a stonemason's yard",
+   "text": "Liam carefully examined the block of polished marble, running his hand over its smooth surface. He admired its cool texture and intricate veining. A stack of rough, unfinished granite blocks nearby held no appeal for him. The harsh, grating sound of a distant saw did not distract him from his inspection."
+  },
+  {
+   "id": "W242",
+   "kind": "K2",
+   "setting": "a tannery",
+   "text": "David disliked the metallic tang of certain chemicals, so he worked quickly around the vats. The rich, earthy smell of the curing hides, however, he found oddly comforting. When a splatter of processing liquid landed on his arm, he wiped it off immediately, wrinkling his nose. The strong odour of the tanned leather, however, he barely noticed at all."
+  },
+  {
+   "id": "W243",
+   "kind": "K4",
+   "setting": "a pet shop",
+   "text": "Tina outlined the steps for caring for the new puppies. She listed the feeding times, the crate training schedule, the outdoor potty breaks, and the necessary socialization periods. Each part built upon the others to ensure healthy development. Neglecting any one element would set back their progress."
+  },
+  {
+   "id": "W244",
+   "kind": "K8",
+   "setting": "a wallpaper shop",
+   "text": "The rolls of wallpaper stood vertically in tall racks. Sunlight streamed through the high window, illuminating dust motes dancing in the air. A large display board, weighted with samples, slowly tilted forward under its own weight. It creaked softly before a staff member steadied it again. A distant hum came from the fluorescent lights."
+  },
+  {
+   "id": "W245",
+   "kind": "K4",
+   "setting": "a rope factory",
+   "text": "Mark examined the faulty rope production report. The data showed inconsistencies in diameter, tensile strength, and knot-holding ability. He deduced the problem lay with the fiber feed, the twisting mechanism, or the final compacting stage. Each part of the machine's sequence contributed to the overall product. He needed to isolate the failing component."
+  },
+  {
+   "id": "W246",
+   "kind": "K2",
+   "setting": "an aquarium",
+   "text": "Mark pressed his face against the glass of the tropical fish tank, captivated by the bright, swirling colours. He found the murky, still water of the swamp exhibit rather unsettling and quickly moved on. A small child crying loudly from a nearby stroller made him glance over. But the distant, muffled announcement over the loudspeaker went entirely unheard."
+  },
+  {
+   "id": "W247",
+   "kind": "K1",
+   "setting": "a violin maker's workshop",
+   "text": "Henry planed a piece of spruce, the sweet, resinous scent filling the small workshop. The aroma carried him back to his grandfather’s hunting cabin, deep in the pine forest. He could almost hear the crackle of the wood stove and feel the rough wool blanket on the narrow bed."
+  },
+  {
+   "id": "W248",
+   "kind": "K3",
+   "setting": "a botanical garden",
+   "text": "Arthur, a lifelong botanist, looked at the newly cultivated orchid species. He noticed its delicate purple bloom and its slightly unusual leaf structure. He had seen countless hybrids and rare specimens over the years. This particular plant simply seemed to fit seamlessly into the rich tapestry of his botanical knowledge."
+  },
+  {
+   "id": "W249",
+   "kind": "K5",
+   "setting": "a clock repair shop",
+   "text": "Ben picked up the tiny gear, his fingers automatically adjusting their grip to its delicate form. Months of handling miniature components had conditioned his dexterity. He placed it precisely into its slot without conscious effort. His movements had become fluid and unthinking, guided by repetitive practice."
+  },
+  {
+   "id": "W250",
+   "kind": "K8",
+   "setting": "a concert hall cloakroom",
+   "text": "Rain pattered steadily against the glass doors of the concert hall cloakroom. A strong gust of wind pushed the double doors open momentarily, rattling their frames. Cold air swept through the space, rustling the hanging plastic garment covers. A small puddle formed just inside the entrance, reflecting the dim ceiling lights."
+  },
+  {
+   "id": "W251",
+   "kind": "K2",
+   "setting": "a hat maker's workshop",
+   "text": "Clara examined the display of finished hats. The elegant fedora, with its clean lines and rich felt, instantly captivated her. She imagined wearing it for a special event. Her eye then caught a brightly feathered, eccentric fascinator. Its flamboyant style held no charm for her at all."
+  },
+  {
+   "id": "W252",
+   "kind": "K8",
+   "setting": "a carpet showroom",
+   "text": "Bolts of deep pile wool and synthetic blends stood upright, forming colourful towers. Sunlight streamed through the large front windows, illuminating motes of fibre floating in the air. A large display stand slowly rotated, showcasing a patterned rug. The air in the vast room felt thick and still. Outside, a pigeon cooed from the roof of a nearby building."
+  },
+  {
+   "id": "W253",
+   "kind": "K2",
+   "setting": "a bookbinder's workshop",
+   "text": "Rachel loved the rich smell of new leather. The sharp scent of cleaning chemicals, however, always made her turn away. She felt deeply engaged by the careful folding of paper sheets. A loud clang from the street outside made her jump. The delicate texture of the pages drew her full attention."
+  },
+  {
+   "id": "W254",
+   "kind": "K1",
+   "setting": "a shipyard",
+   "text": "Victor watched a crane hoist a massive steel beam, its cables groaning under the strain. The deep thrumming sound echoed across the shipyard. This familiar noise brought to Victor's thoughts an old documentary he once saw about deep-sea exploration. He imagined the immense pressures of the ocean floor, the silent, crushing weight of the water."
+  },
+  {
+   "id": "W255",
+   "kind": "K7",
+   "setting": "a telephone exchange",
+   "text": "Eric saw the indicator light flash intermittently on the telephone panel. He checked the main power supply, which showed a steady flow. Then he examined the circuit board, finding a loose connection. Tightening the screw did not resolve the issue. He finally traced the problem to a tiny, burnt-out resistor, which he then replaced."
+  },
+  {
+   "id": "W256",
+   "kind": "K1",
+   "setting": "an olive press",
+   "text": "Isabella breathed in the rich, peppery smell of freshly pressed olives. The aroma instantly transported her back to her grandmother's kitchen. She pictured the huge family meals, the bowls of glistening green olive oil on the table. That specific scent always reminded her of home and tradition."
+  },
+  {
+   "id": "W257",
+   "kind": "K3",
+   "setting": "a village hall",
+   "text": "Reginald sat at the back of the village hall meeting. He heard the young speaker dismiss a proposed budget increase as \"simple.\" Reginald remembered years of negotiating every penny for community projects. He knew nothing about local funding was ever truly simple. His past battles made him deeply sceptical."
+  },
+  {
+   "id": "W258",
+   "kind": "K3",
+   "setting": "an aquarium",
+   "text": "Sam observed the vibrant clownfish weaving through an anemone. Most visitors only saw pretty colors, but his years as a marine biologist offered a different view. He understood the intricate symbiotic relationship, the specialized stinging cells, and the subtle communication between species. He saw a complex ecosystem, not just individual creatures. He appreciated the hidden science behind the beauty."
+  },
+  {
+   "id": "W259",
+   "kind": "K8",
+   "setting": "a rope factory",
+   "text": "Inside the factory, massive machines hummed with a low, constant drone. Raw fibres moved along conveyor belts, twisting together under precise mechanisms. Finished ropes, thick and uniform, spooled onto enormous wooden drums. The air hung heavy with the smell of processed material. Light bulbs cast a yellow glow over the moving parts."
+  },
+  {
+   "id": "W260",
+   "kind": "K4",
+   "setting": "a potato packing shed",
+   "text": "Victor investigated the recent surge in damaged potatoes. He disassembled the packing line issue. First, the conveyor belt speed was too high, causing bruising. Then, the dropping distance into the crates was excessive. Finally, the automated sorting mechanism had a faulty sensor. He listed each specific component that needed adjustment."
+  },
+  {
+   "id": "W261",
+   "kind": "K3",
+   "setting": "a carpet showroom",
+   "text": "Eleanor walked slowly through the aisles of rugs. Her parents had owned a small textile mill, and she remembered the complex weave patterns from her youth. She ran her hand over a dense wool pile, recognizing the quality of the yarn and the tightness of the knotting. These details spoke to her immediately."
+  },
+  {
+   "id": "W262",
+   "kind": "K8",
+   "setting": "a trout hatchery",
+   "text": "Water streamed continuously into the long, narrow tanks. Small fish, no larger than a finger, glided in lazy circles, their scales catching the overhead lights. Aeration pumps hummed steadily from the far wall, sending fine bubbles up through the columns of water. Feed pellets dropped at intervals from an automated dispenser, scattering across the surface."
+  },
+  {
+   "id": "W263",
+   "kind": "K7",
+   "setting": "a trout hatchery",
+   "text": "Robert noticed the unusual stillness in one tank. He checked the water temperature, finding it slightly low. Next, he observed a slight discoloration in the water near the bottom. He then tested the oxygen levels, which were also depleted. He concluded the aeration pump was malfunctioning and needed immediate repair."
+  },
+  {
+   "id": "W264",
+   "kind": "K2",
+   "setting": "a rowing club",
+   "text": "Yasmin found herself always gravitating towards the polished wooden sculls. She loved their sleek lines and the way they sliced through the water. The old, chipped fibreglass boats, however, made her feel quite uninterested. A splash from a nearby oar barely registered on her. The feel of cold, smooth wood against her hand, though, always filled her with anticipation."
+  },
+  {
+   "id": "W265",
+   "kind": "K4",
+   "setting": "a hat maker's workshop",
+   "text": "Clara reviewed the failed hat design, mentally breaking it into its component parts. The brim angle was too sharp, the crown height disproportionate to the client's face, and the chosen ribbon clashed. She saw the overall shape, the material choice, and the decorative elements as distinct problems. Each aspect needed a separate adjustment."
+  },
+  {
+   "id": "W266",
+   "kind": "K2",
+   "setting": "a seaside pier",
+   "text": "Zach, a teenager, headed straight for the arcade games on the pier, clearly drawn to the flashing lights. He felt quite put off by the loud crying of a toddler near the entrance to a funfair ride. The distant blare of a foghorn, however, barely registered in his awareness. His focus remained entirely on the prize machines."
+  },
+  {
+   "id": "W267",
+   "kind": "K9",
+   "setting": "a tyre fitting bay",
+   "text": "Frank wheeled the trolley of new tyres towards the waiting car. He selected the correct size and placed it on the mounting machine. He pressed the buttons to secure the tyre, then operated the lever to inflate it. Next, he checked the pressure with a handheld gauge. He then returned the wheel to the vehicle."
+  },
+  {
+   "id": "W268",
+   "kind": "K1",
+   "setting": "a recycling centre",
+   "text": "Maria sorted plastic bottles into a large wire cage. The faint scent of forgotten soft drinks and detergents hung in the air. This specific aroma reminded her of the cluttered cupboard under her grandmother's sink, full of cleaning supplies and half-empty bottles. She suddenly pictured the floral wallpaper in that old kitchen. The memory brought a small, unexpected smile to her face."
+  },
+  {
+   "id": "W269",
+   "kind": "K5",
+   "setting": "a roadside diner",
+   "text": "Doris automatically reached for the coffee pot at precisely 6:15 AM. The clatter of the delivery truck always signaled its need. She poured a fresh brew without looking, her hand finding the cup by feel alone. The regular sequence of the morning rush had shaped her movements. She rarely questioned the timing anymore."
+  },
+  {
+   "id": "W270",
+   "kind": "K8",
+   "setting": "a wallpaper shop",
+   "text": "Rolls of patterned paper stood upright in display racks. A cutting machine hummed quietly at the back of the store. Sunlight streamed through the large front window, illuminating dust motes in the air. A delivery lorry parked outside, its rear door already open, waiting for goods to be unloaded."
+  },
+  {
+   "id": "W271",
+   "kind": "K4",
+   "setting": "a telephone exchange",
+   "text": "David examined the faulty circuit board. He saw the burnt resistor, the corroded capacitor, and the hairline crack in the solder joint. Each part had failed in its own way. He knew repairing it meant replacing those individual components. The breakdown was a sum of its broken elements."
+  },
+  {
+   "id": "W272",
+   "kind": "K6",
+   "setting": "a second-hand bookshop",
+   "text": "Liam ran his finger along a shelf of old hardcovers. He spotted a barely perceptible crease at the top corner of a specific volume. This subtle detail told him the book had a rare, early dust jacket missing its flap. Its true value was far higher than its listed price."
+  },
+  {
+   "id": "W273",
+   "kind": "K1",
+   "setting": "an athletics track",
+   "text": "Eleanor stretched on the synthetic track. The faint, dusty smell of rubber warmed by the sun filled her nostrils. Immediately, she thought of her grandmother’s old garden hose, left coiled in the summer heat. A familiar longing for long, slow afternoons settled over her. She wished for a quiet, shaded spot instead."
+  },
+  {
+   "id": "W274",
+   "kind": "K4",
+   "setting": "a bookbinder's workshop",
+   "text": "The old book required a complete restoration. Its components needed careful separation before repair could begin. First, the worn leather cover had to be removed. Then, the brittle spine was detached, piece by piece. Finally, the individual pages were gently unstitched from their binding threads."
+  },
+  {
+   "id": "W275",
+   "kind": "K2",
+   "setting": "a botanical garden",
+   "text": "Olivia, a head gardener, entered the orchid house. She felt drawn to a rare, newly blooming specimen, admiring its delicate petals. However, a loud group of schoolchildren running past the exhibit made her frown in irritation. The faint, distant hum of traffic from beyond the garden walls barely registered with her at all."
+  },
+  {
+   "id": "W276",
+   "kind": "K2",
+   "setting": "a roadside diner",
+   "text": "Zoe always liked serving the regular customers, who knew exactly what they wanted. Dealing with indecisive tourists, however, sometimes tested her patience. The loud clang of a dropping pan in the kitchen barely made her jump. Yet, a polite \"thank you\" from an appreciative diner always brightened her shift."
+  },
+  {
+   "id": "W277",
+   "kind": "K3",
+   "setting": "a telephone exchange",
+   "text": "Doris heard the faint, distorted static on line 304. Newcomers might have dismissed it as typical interference. But after forty years in the telephone exchange, she recognised the distinct whisper of old corroded wiring. It signaled a problem in the junction box two miles out. She knew exactly which crew to dispatch."
+  },
+  {
+   "id": "W278",
+   "kind": "K5",
+   "setting": "a clock repair shop",
+   "text": "Quentin constantly worked surrounded by ticking clocks. He often found himself tapping his foot in time to an internal beat. When placing a tiny gear, his hand moved with a subtle, precise timing. The regular pulses of the mechanisms had shaped his movements. He performed delicate tasks with an almost unconscious steadiness."
+  },
+  {
+   "id": "W279",
+   "kind": "K3",
+   "setting": "a village hall",
+   "text": "Arthur watched the young volunteers struggle with the collapsible tables. They fumbled with the catches, collapsing one leg while trying to extend another. He remembered similar struggles from decades of setting up for fêtes and dances. He knew a gentle twist and a firm push would lock them into place. Their frustration hardly registered with him."
+  },
+  {
+   "id": "W280",
+   "kind": "K1",
+   "setting": "a stonemason's yard",
+   "text": "Ulric chipped away at a block of granite. The regular tink-tink of his chisel against the stone took him back to an old village church. He recalled the gentle ringing of its bells on Sunday mornings. A feeling of peaceful continuity settled over him. The sound brought a quiet reflection about his craft."
+  },
+  {
+   "id": "W281",
+   "kind": "K2",
+   "setting": "a rope factory",
+   "text": "Edward felt drawn to the vibrant spools of red and blue synthetic cord, admiring their smooth sheen. The coarse, rough hemp ropes, however, made his skin itch just looking at them. A loud bang from the machinery further down the line made him jump. A moment later, a smaller thud as a coil of rope dropped from a hook barely registered in his awareness."
+  },
+  {
+   "id": "W282",
+   "kind": "K5",
+   "setting": "a golf course",
+   "text": "Iris played the same course every Tuesday morning. When she reached the fifth hole, she automatically adjusted her grip. She never consciously decided to do it anymore. The slight slope of the fairway always required that minor change, and her hands just knew. It was purely automatic."
+  },
+  {
+   "id": "W283",
+   "kind": "K1",
+   "setting": "a concert hall cloakroom",
+   "text": "George sorted a pile of umbrellas, their wet tips still dripping onto the rubber mat. He caught a waft of expensive perfume from a discarded scarf. It was the same scent his late wife used to wear for their anniversaries. He suddenly pictured her smiling across a candlelit table, her eyes sparkling, just before they shared a quiet toast."
+  },
+  {
+   "id": "W284",
+   "kind": "K5",
+   "setting": "a stonemason's yard",
+   "text": "After years as a stonemason, Thomas found his fingers automatically tracing the natural grain of each rock. Before even considering tools, his hands would assess the stone’s hardness and potential fracture lines. This ingrained action became a silent dialogue between him and the raw material, a preparation for cutting."
+  },
+  {
+   "id": "W285",
+   "kind": "K8",
+   "setting": "a funicular railway",
+   "text": "The steel cable tightened slowly, lifting the funicular carriage up the incline. Wheels whirred smoothly against the rails. Rain began to fall, streaking across the windows. A gentle swaying motion accompanied the ascent. The track ahead disappeared into a patch of low-hanging mist."
+  },
+  {
+   "id": "W286",
+   "kind": "K8",
+   "setting": "a tannery",
+   "text": "Heavy hides arrived on a forklift. The tines lifted the stacked pallets and deposited them near the loading dock. Steam rose from a vat in the corner, obscuring the far wall. A conveyor belt carried smaller pieces through a series of rollers. Water dripped steadily from an overhead pipe onto the concrete floor."
+  },
+  {
+   "id": "W287",
+   "kind": "K5",
+   "setting": "an orchard at picking time",
+   "text": "Throughout the apple harvest, Ben regularly found himself reaching for his worn leather gloves. He never consciously decided to put them on; his hands simply sought them out. The routine of pruning, picking, and packing ingrained this small action. It was simply what he did when he stepped into the orchard."
+  },
+  {
+   "id": "W288",
+   "kind": "K2",
+   "setting": "a clock repair shop",
+   "text": "Peter carefully cleaned a tiny gear, marveling at its delicate teeth. He loved intricate mechanisms, drawing closer to observe them. He pushed away a rusty pair of pliers, disliking their crude bulk. A loud car horn blared from the street outside, but Peter barely registered the sound as he focused on his work."
+  },
+  {
+   "id": "W289",
+   "kind": "K5",
+   "setting": "a town hall archive",
+   "text": "Maeve had worked in the archive for decades. Every morning, she automatically dusted the row of ledgers closest to her desk. She didn't plan to do it; her hand simply reached for the cloth. The ritual began before she even fully woke up, a silent start to her day."
+  },
+  {
+   "id": "W290",
+   "kind": "K2",
+   "setting": "a fairground",
+   "text": "At the fairground, young Leo excitedly pulled his mother towards the brightly lit rollercoaster. He clapped his hands with glee at the sight of its towering loops. However, when they passed the loud, clanking Whack-a-Mole game, he recoiled slightly, barely giving it a glance. The thrill of speed called to him far more strongly."
+  },
+  {
+   "id": "W291",
+   "kind": "K9",
+   "setting": "a concert hall cloakroom",
+   "text": "Charles took the coat from the man and handed him a ticket. He hung the coat on an empty hook. Then he collected another coat and placed it on a hanger. He found the next available number on the rack. A woman asked for her scarf, and he located it quickly."
+  },
+  {
+   "id": "W292",
+   "kind": "K1",
+   "setting": "a village hall",
+   "text": "Eleanor walked into the village hall. The smell of floor polish and old wood hit her, instantly reminding her of her primary school assembly hall. She could almost hear the rustle of uniforms and the hesitant notes of the school piano. That familiar smell always brought those days back vividly."
+  },
+  {
+   "id": "W293",
+   "kind": "K4",
+   "setting": "a costume hire shop",
+   "text": "Bethany examined the returned knight’s costume, identifying each damaged section. The velvet tunic needed mending, the plastic helmet had a crack, and one gauntlet was missing a finger. She separated the components: the main garment, the headwear, and the accessories. Each piece presented its own repair challenge."
+  },
+  {
+   "id": "W294",
+   "kind": "K2",
+   "setting": "a hat maker's workshop",
+   "text": "Thomas ran his fingers over the smooth felt of a half-finished fedora. He appreciated the intricate stitching and fine craftsmanship. A pile of brightly coloured, synthetic fascinators in the corner seemed garish and unappealing. The faint scent of steam and leather barely caught his notice. He much preferred the classic, understated elegance of traditional headwear."
+  },
+  {
+   "id": "W295",
+   "kind": "K6",
+   "setting": "a clock repair shop",
+   "text": "Martin listened to the gentle ticking of the grandfather clock. A tiny, almost imperceptible hesitation accompanied every fifth tick. To an untrained ear, it was just background noise, but Martin immediately recognized the tell-tale sign. A minute pivot jewel was wearing thin, requiring urgent attention."
+  },
+  {
+   "id": "W296",
+   "kind": "K8",
+   "setting": "a newsagent's shop",
+   "text": "The morning sun streamed through the front window, illuminating dust motes in the air. A chilled drinks fridge hummed quietly by the counter. Newspaper bundles lay stacked on the pavement outside. A delivery van pulled up, its engine cutting with a soft click. The glass door jingled as it swung inwards."
+  },
+  {
+   "id": "W297",
+   "kind": "K8",
+   "setting": "a tyre fitting bay",
+   "text": "The air compressor hissed, building pressure in its large tank. A pneumatic wrench spun rapidly, loosening wheel nuts with a series of sharp clacks. A car chassis rested on a hydraulic lift, its underside exposed. Droplets of oil glistened on the concrete floor beneath the vehicle."
+  },
+  {
+   "id": "W298",
+   "kind": "K4",
+   "setting": "an olive press",
+   "text": "Isabel examined the stopped olive press. She systematically checked the conveyor belt, then the crushing stones for obstructions. Next, she looked at the separator drum for blockages, and finally the pressure plate for uneven wear. The overall breakdown was a failure across four key components. It needed repairs to each section."
+  },
+  {
+   "id": "W299",
+   "kind": "K7",
+   "setting": "a bookbinder's workshop",
+   "text": "Elaine examined the faded inscription on the old book's spine. The date read 1789, but the typeface looked older. She checked the watermarks on several pages, finding a pattern used by an obscure German printer. The binding style, with its hand-stitched linen threads, confirmed her suspicion. It was a rare first edition from a different press than initially thought."
+  },
+  {
+   "id": "W300",
+   "kind": "K4",
+   "setting": "a violin maker's workshop",
+   "text": "Linda examined the buzz coming from her sanding machine. She first checked the motor mountings for looseness. Then she inspected the belt for any frayed edges or slippage. Finally, she discovered a tiny shard of wood caught under the sanding pad itself. The fault was the debris, the belt, and the mountings, she realised."
+  },
+  {
+   "id": "W301",
+   "kind": "K5",
+   "setting": "an olive press",
+   "text": "Maria guided the olives into the press. Her hands moved swiftly, clearing any stray leaves or twigs without conscious observation. She knew precisely when to add more fruit, her timing perfect. The smell of crushed olives, once strong, now barely registered to her senses. This routine was second nature."
+  },
+  {
+   "id": "W302",
+   "kind": "K8",
+   "setting": "a boarding kennel",
+   "text": "A narrow stream of sunlight crept along the floor tiles, widening slowly with the morning. A solitary fly buzzed against the windowpane, making a faint, insistent sound. Water lapped gently inside a stainless-steel bowl where a small amount of liquid remained. Outside, the distant chirping of sparrows carried on the breeze. A single dry leaf skittered across the concrete."
+  },
+  {
+   "id": "W303",
+   "kind": "K9",
+   "setting": "a rope factory",
+   "text": "Karen fed the thick strands of fiber into the braiding machine. The heavy spools spun quickly around the central core. She kept her eyes on the tension dials, making small adjustments. Later, she neatly coiled the finished rope and stacked it on a pallet. She then swept the loose fibers from the floor."
+  },
+  {
+   "id": "W304",
+   "kind": "K1",
+   "setting": "a telephone exchange",
+   "text": "The steady, almost imperceptible hum of the exchange equipment filled Daniel's ears. He suddenly thought of crickets chirping on a warm summer night. The constant, low background noise had a similar comforting quality. He imagined stars in a dark sky. That familiar sound brought a quiet, natural scene to his awareness."
+  },
+  {
+   "id": "W305",
+   "kind": "K6",
+   "setting": "a potato packing shed",
+   "text": "Megan stood by the main sorter. She heard a tiny, irregular hesitation in the whirring of a rotor blade. This slight falter meant a bearing was beginning to wear out. If not addressed quickly, the entire mechanism would jam before the end of the shift. She made a note to alert maintenance."
+  },
+  {
+   "id": "W306",
+   "kind": "K1",
+   "setting": "a pet shop",
+   "text": "Kyle, a small boy, pressed his face against the glass of a cage. Inside, a fluffy white rabbit twitched its nose. The sight of its soft, white fur immediately brought a different picture to his thoughts. He remembered a heavy snow day from the previous winter. He had built a giant snowman in the garden with his older sister."
+  },
+  {
+   "id": "W307",
+   "kind": "K2",
+   "setting": "a golf course",
+   "text": "Karen loved the quiet solitude of the early morning fairway. The fresh dew on the grass made her smile. She found the boisterous laughter from the clubhouse terrace particularly grating, however. The sound of a distant chainsaw in the woods barely registered as she lined up her shot. Her focus remained purely on the ball."
+  },
+  {
+   "id": "W308",
+   "kind": "K7",
+   "setting": "a rowing club",
+   "text": "Clara wiped down her scull. She noticed a faint scratch near the oarlock pin. Then she remembered seeing a different boat with a similar mark by the rack earlier. The crew had struggled to dock it in the crosswind, she recalled. That explained the precise scraping pattern."
+  },
+  {
+   "id": "W309",
+   "kind": "K9",
+   "setting": "a rowing club",
+   "text": "Sam unlashed his sculling boat from its rack. He carried the lightweight shell carefully down to the water's edge. He placed the oars into the oarlocks, checking their alignment. Then he stepped into the boat and pushed off from the pontoon. The blades dipped into the smooth water."
+  },
+  {
+   "id": "W310",
+   "kind": "K8",
+   "setting": "a golf course",
+   "text": "The automatic sprinkler system whirred across the fairway. Fine droplets arched through the air, landing softly on the close-cut grass. A light breeze stirred, carrying the moisture sideways in shimmering sheets. Small pools gathered momentarily on the leaves before soaking into the ground. Sunlight reflected off the wet blades."
+  },
+  {
+   "id": "W311",
+   "kind": "K7",
+   "setting": "a botanical garden",
+   "text": "Irene observed the unusual leaf shape, noting its serrated edges. She cross-referenced it with several entries in her field guide, discarding possibilities due to differing flower structures. The plant’s distinct purple berries then caught her eye, a rare characteristic for that family. Comparing these details, she confidently identified it as a newly invasive species."
+  },
+  {
+   "id": "W312",
+   "kind": "K4",
+   "setting": "an athletics track",
+   "text": "Tina broke down her sprint training plan. It involved warm-up drills, short bursts of acceleration, and longer interval repetitions. Then came the cool-down stretches, and finally, a review of her timing splits. Each segment built upon the last, forming the complete regimen. She knew a strong performance depended on perfecting every single component."
+  },
+  {
+   "id": "W313",
+   "kind": "K5",
+   "setting": "a potato packing shed",
+   "text": "Michael stood by the sorting belt, watching potatoes pass. His left hand automatically snatched out any green ones. His right hand quickly picked off any damaged skins. The movements were fluid, precise, and completely unthinking. He rarely missed a single defective potato, his attention elsewhere."
+  },
+  {
+   "id": "W314",
+   "kind": "K5",
+   "setting": "a costume hire shop",
+   "text": "Jean finished sorting the returned wigs onto their stands. The clock on the wall chimed four times, marking the afternoon rush. Without looking, she moved to the counter and picked up the largest pricing gun. She always used that one for children's costumes, even though smaller ones were closer. The movement was automatic, part of her daily routine."
+  },
+  {
+   "id": "W315",
+   "kind": "K7",
+   "setting": "a town hall archive",
+   "text": "Julia found the old property deed but noticed a missing signature. She cross-referenced the names with the 1902 electoral roll. One grantor was not listed there. She then checked the parish records for emigration dates. It appeared the person had left the country weeks before the deed was signed."
+  },
+  {
+   "id": "W316",
+   "kind": "K1",
+   "setting": "a concert hall cloakroom",
+   "text": "Clara folded a patron's scarf, its faint, sweet scent filling her nostrils. It smelled exactly like the wild honeysuckle that grew by her grandmother’s cottage. A vivid image of summer evenings by the open window, the sound of crickets chirping, instantly came back to her."
+  },
+  {
+   "id": "W317",
+   "kind": "K2",
+   "setting": "a recycling centre",
+   "text": "Penny approached the large, clanking machinery. The roar of the crushers made her flinch, and she quickly averted her gaze from the churning conveyor belts. However, a neatly stacked pile of colorful glass bottles immediately drew her attention. She carefully added her own green bottle to the collection, feeling a small surge of satisfaction. The general noise and grime hardly bothered her at all then."
+  },
+  {
+   "id": "W318",
+   "kind": "K3",
+   "setting": "a second-hand bookshop",
+   "text": "Charles browsed the worn spines in the history section. He picked up a thick volume on ancient Rome, turning it over in his hands. Having taught classical history for forty years, he could tell instantly if a book presented new research or merely rehashed old arguments. A glance at the bibliography confirmed his suspicion. He gently returned it to its shelf."
+  },
+  {
+   "id": "W319",
+   "kind": "K5",
+   "setting": "a telephone exchange",
+   "text": "Peter walked through the rows of humming servers every day. When he passed rack 7, his hand always reached out. He would brush a speck of dust from the indicator light. He did this without conscious thought, a small, ingrained habit from years of daily inspection routes."
+  },
+  {
+   "id": "W320",
+   "kind": "K4",
+   "setting": "an athletics track",
+   "text": "Peter, an athletics coach, outlined the strategy for the upcoming relay race. He detailed the specific order of the four runners. He then marked the precise baton exchange points on his diagram. Next, he calculated the sprint segments for each athlete. Finally, he planned the recovery pace between their efforts."
+  },
+  {
+   "id": "W321",
+   "kind": "K8",
+   "setting": "a golf course",
+   "text": "The sprinkler head rotated slowly, casting an arc of fine droplets across the green. Water hissed as it struck the closely mown grass. A gentle breeze lifted some of the mist, carrying it toward a distant cluster of trees. The sun reflected off the droplets, creating tiny, fleeting rainbows in the air."
+  },
+  {
+   "id": "W322",
+   "kind": "K7",
+   "setting": "a stonemason's yard",
+   "text": "Ian noticed the faint hairline crack near the base of the pillar. He then examined the weight distribution plans, observing where the stress points lay. Next, he recalled the recent delivery of slightly softer sandstone blocks. Finally, he checked the chisel marks, which seemed a little too deep for the chosen stone. He concluded the pillar would need reinforcing."
+  },
+  {
+   "id": "W323",
+   "kind": "K8",
+   "setting": "a costume hire shop",
+   "text": "Sunlight fell across a rack of sequined jackets. A faint smell of mothballs lingered near the heavy velvet cloaks. Empty hangers clinked softly as a gust of wind pushed through the door. A small bell above the counter chimed. Dust motes floated visibly in the bright air."
+  },
+  {
+   "id": "W324",
+   "kind": "K6",
+   "setting": "a wallpaper shop",
+   "text": "Brenda ran her hand along the edge of a new roll of wallpaper. A faint, almost invisible, crease marked the selvedge. She instantly recognised it as a flaw from the manufacturing process. It meant this batch was likely to have slight imperfections along the edge. She decided to check a few more rolls before putting them out."
+  },
+  {
+   "id": "W325",
+   "kind": "K4",
+   "setting": "a rope factory",
+   "text": "Daniel analyzed the recent complaint about rope quality. He broke down the manufacturing process. The fibres were initially twisted incorrectly, giving a weak core. Then, the braiding machine tension was too loose on the outer strands. Finally, the heating process was cut short, failing to properly set the finished product. Each step contributed to the flaw."
+  },
+  {
+   "id": "W326",
+   "kind": "K3",
+   "setting": "a trout hatchery",
+   "text": "Susan walked past the rows of trout tanks, checking water levels. The gurgling of the filters and aeration systems was a familiar background noise. She had spent decades observing the fish, learning their subtle cues. The slightly less vigorous swim of a group of fry told her they needed more oxygen, a sign she instantly recognised from years of experience. She quickly adjusted the flow."
+  },
+  {
+   "id": "W327",
+   "kind": "K8",
+   "setting": "a lifeboat station",
+   "text": "The diesel engine of the lifeboat sputtered, then roared to life. Thick exhaust fumes drifted from the stern into the brisk morning air. Inside the boathouse, a winch slowly pulled a heavy metal chain. Water dripped from the hull onto the concrete slipway, forming small puddles."
+  },
+  {
+   "id": "W328",
+   "kind": "K2",
+   "setting": "a wallpaper shop",
+   "text": "Julia bypassed the bold geometric patterns with a quick glance, feeling no connection to their stark lines. Her hand hovered over a roll of subtle floral print, a quiet warmth spreading through her. The shop assistant's hurried explanation about durability barely registered. She simply felt drawn to the gentle tones."
+  },
+  {
+   "id": "W329",
+   "kind": "K5",
+   "setting": "a roadside diner",
+   "text": "Martha carried two coffee cups, a plate of eggs, and a stack of napkins. She placed the mugs down first, then slid the plate into position before the customer. Her hand automatically reached for the napkin dispenser, tilting it slightly. Every morning, the movement had been exactly the same for years. She did not even glance at the table as she moved away to the next order."
+  },
+  {
+   "id": "W330",
+   "kind": "K5",
+   "setting": "a clock repair shop",
+   "text": "Philip cleaned the delicate escapement wheel, his breath held almost instinctively. Years of intricate work had trained his hands to an extreme steadiness. He never consciously worried about breaking tiny cogs. His muscles had simply learned the precise pressure required, performing the task without a flicker of doubt."
+  },
+  {
+   "id": "W331",
+   "kind": "K5",
+   "setting": "a recycling centre",
+   "text": "Victor sorted plastic bottles, his hands working without conscious thought. Each blue bottle went into one bin, clear into another. His eyes registered the material and colour automatically. He had performed this precise sequence hundreds of thousands of times over the years, his movements fluid and efficient."
+  },
+  {
+   "id": "W332",
+   "kind": "K2",
+   "setting": "a golf course",
+   "text": "Eleanor preferred the quiet back nine, away from the clubhouse chatter. The thought of waiting for a busy tee time made her sigh with impatience. A gentle breeze barely stirred her hair as she teed off on the seventh hole. The ball soared, and she felt a deep satisfaction. Her earlier frustration completely vanished."
+  },
+  {
+   "id": "W333",
+   "kind": "K2",
+   "setting": "a newsagent's shop",
+   "text": "Ben always sought out the foreign newspapers. The racks of celebrity magazines held no interest for him whatsoever. The chatter of other customers in the small shop seemed to fade into the background. However, finding his favourite international daily felt like a small triumph. He always bought a fresh copy."
+  },
+  {
+   "id": "W334",
+   "kind": "K7",
+   "setting": "a wallpaper shop",
+   "text": "Mr. Henderson found a strip of faded wallpaper on the floor. It showed a faint floral pattern. He then noticed a patch of lighter paint on the wall where a picture frame once hung. Next, he observed a small scorch mark near the window. He concluded the previous owner had perhaps smoked heavily in the room."
+  },
+  {
+   "id": "W335",
+   "kind": "K1",
+   "setting": "a garden centre",
+   "text": "Ian picked up a small terracotta pot. The rough texture and earthy smell instantly brought back his grandmother's greenhouse. He remembered the specific warmth and dampness of that space. The vivid colours of her fuchsias came to his thoughts then. He smiled, a faraway look in his eyes."
+  },
+  {
+   "id": "W336",
+   "kind": "K9",
+   "setting": "a funicular railway",
+   "text": "Xavier, the funicular operator, closed the carriage doors. He pressed a sequence of buttons on the control panel. His eyes scanned the array of gauges, checking their readings. He repeated the same actions he performed many times each day. The carriage began its slow ascent up the steep incline."
+  },
+  {
+   "id": "W337",
+   "kind": "K7",
+   "setting": "a carpet showroom",
+   "text": "Janet noticed the customer kept touching the samples of short-pile wool. They hesitated near the muted greens and grays. Her questions focused on durability and ease of cleaning, not luxurious feel. The customer also mentioned having a busy family and pets. Janet concluded that a hard-wearing, practical carpet was the best fit for them."
+  },
+  {
+   "id": "W338",
+   "kind": "K8",
+   "setting": "a costume hire shop",
+   "text": "A dress on a hanger swung gently from a ceiling fan. Fabric rustled softly as air moved through the rails. Dust motes danced in the sunlight streaming through the high window. A metal trolley with stacked boxes rolled across the polished floorboards. Rain began to patter lightly on the corrugated roof."
+  },
+  {
+   "id": "W339",
+   "kind": "K8",
+   "setting": "a rope factory",
+   "text": "Thick strands of hemp fed into the spinning machine. Gears ground steadily, twisting the fibres together. The newly formed rope coiled onto large spools, growing steadily in diameter. Dust motes floated in the air, catching the light from overhead lamps. A low, continuous hum filled the workshop."
+  },
+  {
+   "id": "W340",
+   "kind": "K3",
+   "setting": "a roadside diner",
+   "text": "Frank watched the cook flip burgers with practiced ease. He recognized the subtle cues of a busy diner kitchen: the sizzle of the grill, the clatter of plates, the curt calls for orders. Having worked in similar places decades ago, he understood the quick, efficient movements and the unspoken communication between staff members."
+  },
+  {
+   "id": "W341",
+   "kind": "K3",
+   "setting": "a rope factory",
+   "text": "Anne ran her fingers along a newly spun length of rope. She felt for the slightest inconsistency in its weave. Decades of working here had trained her sense of touch. She could instantly detect a weak point or an uneven strand. Her practiced hands never missed a flaw."
+  },
+  {
+   "id": "W342",
+   "kind": "K1",
+   "setting": "a tyre fitting bay",
+   "text": "Fiona, a seasoned mechanic, finished tightening a wheel. The sharp, acrid smell of burnt rubber from a recent tyre change lingered in the bay. Her awareness shifted to a distant past. She remembered the thrill of childhood go-kart races on dusty tracks. The smell brought back scraped knees and triumphant shouts from forgotten afternoons."
+  },
+  {
+   "id": "W343",
+   "kind": "K3",
+   "setting": "a golf course",
+   "text": "At the eighteenth green, Margaret watched her opponent’s ball veer wide. Years of playing in unpredictable coastal winds taught her not to celebrate too early. She remembered a tournament where a perfectly struck shot was ruined by a sudden gust. One never truly knew the outcome until the ball settled."
+  },
+  {
+   "id": "W344",
+   "kind": "K8",
+   "setting": "an orchard at picking time",
+   "text": "A light breeze stirred the apple leaves, sending a few yellowed ones fluttering to the ground. Sunlight filtered through the branches, dappling the grass beneath. Crates of picked fruit were stacked high near the edge of the field. A tractor rumbled slowly between the rows, pulling a trailer laden with more empty bins. The air carried a faint, sweet smell."
+  },
+  {
+   "id": "W345",
+   "kind": "K2",
+   "setting": "a golf course",
+   "text": "Quentin found himself at the edge of the rough, his ball nestled among thick weeds. He felt a wave of frustration, disliking the tangled challenge before him. But then his eyes landed on the pristine green of the distant hole, perfectly mowed and inviting. His previous annoyance faded as he imagined the satisfying putt. The rough grass around him barely registered anymore."
+  },
+  {
+   "id": "W346",
+   "kind": "K4",
+   "setting": "a second-hand bookshop",
+   "text": "Doreen looked at the damaged antique atlas. The repair would involve several steps. First, she needed to carefully remove the tattered binding. Then, she would mend the torn map pages with archival tissue. After that, new endpapers had to be cut and attached, followed by the careful re-sewing of the text block. Finally, she would construct a new leather spine and covers."
+  },
+  {
+   "id": "W347",
+   "kind": "K6",
+   "setting": "a salt works",
+   "text": "Frank watched the brine crystallise in the evaporation pans. A slight, almost invisible film of salt across the surface indicated the water content was optimal. If it thickened too quickly, the salt would become impure. This subtle sheen was the precise moment to begin harvesting. He knew the yield would be perfect."
+  },
+  {
+   "id": "W348",
+   "kind": "K6",
+   "setting": "a fairground",
+   "text": "Dennis stood by the Ferris wheel. He watched a young boy operating the tilt-a-whirl, loading passengers. The boy smiled and chatted, but Dennis saw the slight tremor in his hand as he engaged the lever. He knew the boy felt anxious about the afternoon crowd, despite his cheerful front."
+  },
+  {
+   "id": "W349",
+   "kind": "K4",
+   "setting": "a boarding kennel",
+   "text": "Brenda reviewed the kennel's feeding schedule for the day. It consisted of morning kibble, mid-day wet food for puppies, and evening boiled chicken for older dogs. Each meal had a different preparation and timing. The routine ensured every animal received its proper diet. She meticulously followed these individual steps."
+  },
+  {
+   "id": "W350",
+   "kind": "K6",
+   "setting": "a funicular railway",
+   "text": "Arthur, the funicular operator, saw the tiny scratch on the cable housing. Most riders would never have noticed it. He knew it meant the guide wheel near the top station needed a slight adjustment. He would report it at the end of his shift. This was a common indicator to him."
+  },
+  {
+   "id": "W351",
+   "kind": "K2",
+   "setting": "an ice cream parlour",
+   "text": "Philip loved the sight of brightly coloured sprinkles, always adding extra to his ice cream. He avoided anything with nuts, finding their texture unpleasant. The smooth, cold sweetness of vanilla delighted him deeply. A new flavour of rocky road, however, he found completely unappealing and ignored it entirely. He always chose the plainest options."
+  },
+  {
+   "id": "W352",
+   "kind": "K6",
+   "setting": "a telephone exchange",
+   "text": "George heard a subtle, irregular click in bay four. It was almost masked by the general hum of the equipment. Other ears might have dismissed it as background noise. He knew that particular off-beat sound well. A line card was about to fail, signaling an imminent service interruption."
+  },
+  {
+   "id": "W353",
+   "kind": "K5",
+   "setting": "an ice cream parlour",
+   "text": "Every shift, Brenda wiped down the same counter in the ice cream parlour. Her cloth always moved in the same circular pattern, starting from the left. She never thought about the action itself, only the gleaming surface it left behind. It was a small, steady ritual that brought order to her workday."
+  },
+  {
+   "id": "W354",
+   "kind": "K1",
+   "setting": "a roadside diner",
+   "text": "The old juke box in the corner played a forgotten tune. Its tinny sound carried across the diner, reaching Mark. It made him think of his high school dances, the awkward shuffles, and the bright, hopeful faces of his friends. He briefly recalled the weight of his own worn-out jacket from those nights."
+  },
+  {
+   "id": "W355",
+   "kind": "K5",
+   "setting": "a salt works",
+   "text": "Liam adjusted the flow valve on the crystallizer. At exactly half past the hour, the alarm sounded to signal a filter check. Liam, without thinking, reached for his safety goggles. He had been doing this for twenty years. The familiar chime always preceded the need for eye protection during that specific task."
+  },
+  {
+   "id": "W356",
+   "kind": "K1",
+   "setting": "a rowing club",
+   "text": "Arthur, an older man who worked as a club caretaker, wiped down a wooden oar. The damp wood smell, mingled with river water and varnish, drifted up to him. He was suddenly taken back to school days. He remembered the musty smell of the changing rooms, filled with old football boots and forgotten kit bags. It had been decades since he last saw a locker like that."
+  },
+  {
+   "id": "W357",
+   "kind": "K1",
+   "setting": "a wallpaper shop",
+   "text": "Nancy unrolled a sample of patterned wallpaper. The repeating floral motif reminded her of the old tea set her grandmother owned. She remembered the delicate porcelain and the scent of Earl Grey tea. The wallpaper pattern brought a sense of quiet comfort. It was a familiar pattern from a long time ago."
+  },
+  {
+   "id": "W358",
+   "kind": "K7",
+   "setting": "a town hall archive",
+   "text": "William found an old deed referencing a lost parcel of land. The document mentioned a specific boundary stone. He then cross-referenced it with an 18th-century survey map. The map showed a river that no longer existed, diverted decades ago. This meant the land parcel, though geographically changed, legally still belonged to the original family line."
+  },
+  {
+   "id": "W359",
+   "kind": "K2",
+   "setting": "a golf course",
+   "text": "Hannah lined up her putt, finding the gentle slope appealing. The harsh glare off the distant water hazard always distracted her. A tiny fly landed on her arm, but she barely registered it. She found herself focusing on the smooth green surface. The distant sound of mowers made no impression on her concentration."
+  },
+  {
+   "id": "W360",
+   "kind": "K2",
+   "setting": "a stonemason's yard",
+   "text": "Alice, a sculptor, walked through the stonemason's yard. She felt strongly drawn to a smooth, uncarved slab of white marble, imagining its potential. The grating sound of a diamond saw cutting through granite nearby made her wince, definitely putting her off. A light drizzle beginning to fall hardly registered on her skin."
+  },
+  {
+   "id": "W361",
+   "kind": "K1",
+   "setting": "a newsagent's shop",
+   "text": "Robert stocked the shelves with the morning papers. The smell of fresh ink and cheap paper filled the small shop. It immediately took him back to his primary school art class, where he loved pressing his thumbprint onto newsprint and seeing the smudges. He remembered the simple joy of mixing vibrant poster paints in plastic trays."
+  },
+  {
+   "id": "W362",
+   "kind": "K4",
+   "setting": "an aquarium",
+   "text": "Olivia reviewed the new exhibit design. She identified the habitat dimensions, the species compatibility list, the filtration system specifics, and the daily feeding schedule. Each element played a crucial part in the overall welfare of the aquatic life. The success of the whole depended on these individual factors."
+  },
+  {
+   "id": "W363",
+   "kind": "K2",
+   "setting": "a concert hall cloakroom",
+   "text": "Kevin enjoyed the quiet moments between rushes in the cloakroom. The loud chatter of arriving crowds grated on him. He felt drawn to the orderly rows of hanging coats. A woman's complaint about her misplaced hat bothered him little. He simply scanned the numbered hooks with calm efficiency."
+  },
+  {
+   "id": "W364",
+   "kind": "K3",
+   "setting": "a botanical garden",
+   "text": "Eleanor observed the newly planted bed of rare orchids. The label described them as needing specific humidity and light. She recalled years spent cultivating delicate specimens in far less controlled environments. Her own success came from intuition and trial-and-error, not just strict instructions. The elaborate irrigation system seemed almost too much."
+  },
+  {
+   "id": "W365",
+   "kind": "K3",
+   "setting": "a salt works",
+   "text": "Victor, who worked at the salt works for forty years, visited the site again. He inhaled deeply, instantly discerning the subtle difference between two types of drying salt by their scent alone. His experienced eyes could immediately spot the early patterns forming as the brine evaporated, a skill developed over a lifetime."
+  },
+  {
+   "id": "W366",
+   "kind": "K4",
+   "setting": "a newsagent's shop",
+   "text": "Ian studied the broken newspaper delivery machine. He saw the jammed coin mechanism, the tangled paper feed, and the stripped gear in the dispenser. Each failed part contributed to the larger problem. The faulty sensor also prevented the correct number of papers from dispensing. Repairing it meant addressing these individual malfunctions one by one."
+  },
+  {
+   "id": "W367",
+   "kind": "K8",
+   "setting": "a town hall archive",
+   "text": "The heavy oak door creaked shut, echoing slightly in the vast room. Rows of metal shelving stretched to the high ceiling, filled with bound volumes. A faint smell of aged paper and dust hung in the air. Sunlight streamed through a high window, illuminating floating particles. The gentle whir of the climate control system was barely audible."
+  },
+  {
+   "id": "W368",
+   "kind": "K7",
+   "setting": "a village hall",
+   "text": "Helen, the village hall manager, surveyed the scene after the youth club meeting. She noticed several muddy footprints leading from the back door. Near the stage, she found a half-eaten sandwich wrapper. An old folding chair lay overturned in the corner. Helen concluded that someone had managed to sneak in after hours."
+  },
+  {
+   "id": "W369",
+   "kind": "K3",
+   "setting": "a garden centre",
+   "text": "Christine examined the wilting roses. She immediately noticed the slight yellowing on the lower leaves. Years of tending plants had taught her the early signs of disease. She knew exactly which fungal spray would help. Her practised eye quickly identified the problem without hesitation."
+  },
+  {
+   "id": "W370",
+   "kind": "K8",
+   "setting": "a bell foundry",
+   "text": "The pouring crane lifted a heavy cast bell from its mould. Steam curled from the hot metal as it rose. Fine sand sifted down from the cooling surface to the foundry floor. A sharp, metallic smell filled the air. The bell, now a dark, unpolished mass, swung gently on its chain."
+  },
+  {
+   "id": "W371",
+   "kind": "K6",
+   "setting": "a hat maker's workshop",
+   "text": "Beatrice smoothed the felt over the wooden block. Her fingers brushed against a tiny imperfection, a barely perceptible fuzziness near the brim. A younger apprentice might have missed it, or thought nothing of it. Beatrice, after fifty years shaping felt, knew it meant the dye lot was slightly off, and this particular hat would not hold its crisp form for long. She marked it for a different, less demanding design."
+  },
+  {
+   "id": "W372",
+   "kind": "K3",
+   "setting": "a telephone exchange",
+   "text": "Walter, a retired engineer, walked through the old telephone exchange building. He saw the intricate wiring, the manual switchboards, the rows of humming equipment. He remembered the complexity of connecting each call by hand, the precise movements. The sheer volume of copper and relays spoke of a bygone era of physical connections, a technology he understood intimately. It brought back a sense of proud familiarity."
+  },
+  {
+   "id": "W373",
+   "kind": "K5",
+   "setting": "a tyre fitting bay",
+   "text": "Xanthe removed the final lug nut, her wrench movements practiced and smooth. She knew the weight of the tyre before she lifted it from the hub. The new tyre was already positioned on the machine for inflation. Her hands found each tool in its place, completing the swap in a steady, unbroken flow."
+  },
+  {
+   "id": "W374",
+   "kind": "K3",
+   "setting": "a shipyard",
+   "text": "George watched the crane hoist the massive engine block. A slight wobble in the hoist chain made younger workers nervous. He had seen far worse during his thirty years in the shipyard. It was merely the chain settling, not a sign of instability. He just kept an eye on the riggers, confident in their work."
+  },
+  {
+   "id": "W375",
+   "kind": "K2",
+   "setting": "a boarding kennel",
+   "text": "Sarah, a new customer, walked past the runs. The small, yapping terrier at the front of the kennel made her frown, its frantic barking grating on her ears. But the quiet, older spaniel curled peacefully in the corner drew her gaze. She felt a strong warmth towards its calm presence. The noise from the other dogs barely registered then."
+  },
+  {
+   "id": "W376",
+   "kind": "K3",
+   "setting": "a violin maker's workshop",
+   "text": "Doris carefully planed a piece of maple for a violin back. Her instructor, a master craftsman for decades, watched over her shoulder. He pointed to a faint grain irregularity that Doris had overlooked. Years of experience taught him to spot imperfections quickly, distinguishing between a flaw that added character and one that compromised the instrument's sound. Doris made a mental note of the subtle difference."
+  },
+  {
+   "id": "W377",
+   "kind": "K5",
+   "setting": "a pet shop",
+   "text": "Sam spent his days surrounded by chirping birds and barking dogs. He learned to speak in a calm, soothing voice without thinking about it. When a customer became agitated, he instinctively softened his tone. The constant animal sounds had trained his vocal approach. He handled every interaction with quiet composure."
+  },
+  {
+   "id": "W378",
+   "kind": "K8",
+   "setting": "a village hall",
+   "text": "Dust motes floated in the shafts of afternoon sunlight. A window rattled slightly in the gentle breeze. The heating system hummed a low, consistent tune from beneath the stage. A faint smell of old polish hung in the air. A loose floorboard creaked with every passing footstep."
+  },
+  {
+   "id": "W379",
+   "kind": "K1",
+   "setting": "a stonemason's yard",
+   "text": "Julia chipped away at a block of granite. The fine, gritty dust settled on her protective goggles. The dry, mineral smell filled her nose, reminding her of an ancient church crypt she once visited. She remembered the cool, still air and the silence there. That scent always evoked that memory."
+  },
+  {
+   "id": "W380",
+   "kind": "K9",
+   "setting": "an orchard at picking time",
+   "text": "Maria carefully positioned her ladder against an apple tree. She reached for the ripe fruit, twisting each one gently from its branch. The apples went into her woven basket, making a soft thump as they landed. When the basket was full, she carried it to a waiting crate. Then she moved her ladder to the next section."
+  },
+  {
+   "id": "W381",
+   "kind": "K7",
+   "setting": "a botanical garden",
+   "text": "Wendy, the botanical garden curator, examined a struggling plant. She observed its wilting leaves, then noted the unusual brown spots on the underside. Digging gently, she found the soil near the roots was surprisingly dry. Stepping back, Wendy concluded that the plant was suffering from a specific nutrient deficiency combined with underwatering."
+  },
+  {
+   "id": "W382",
+   "kind": "K4",
+   "setting": "a bookbinder's workshop",
+   "text": "Penny heard a grinding sound from the bookbinding sewing machine. She first checked the needle for a bend or break. Then she looked at the thread tension, which seemed fine. The main problem was a small piece of stray paper caught in the feed mechanism. The fault involved the needle, the thread, and the jammed paper."
+  },
+  {
+   "id": "W383",
+   "kind": "K2",
+   "setting": "a village hall",
+   "text": "At the village hall bake sale, Martha bypassed the elaborate frosted cakes. Her gaze settled on a simple, rustic apple pie. She instantly knew she had to buy it. When someone offered her a brightly colored cupcake, she politely declined, barely even glancing at its sugary adornments. The pie had already won her heart."
+  },
+  {
+   "id": "W384",
+   "kind": "K4",
+   "setting": "a fairground",
+   "text": "Thomas examined the faulty Ferris wheel motor. The problem had several components. First, there was the worn main bearing, causing excessive friction. Then, the overheating coil in the electrical unit. Next, he noted the loose connection to the power supply. Finally, the old belt was slipping, not transmitting enough force. It all added up to a stalled ride."
+  },
+  {
+   "id": "W385",
+   "kind": "K1",
+   "setting": "a newsagent's shop",
+   "text": "In the newsagent's shop, the smell of freshly printed newspapers always brought a specific image to George's thoughts. He pictured a quiet Sunday morning. He saw himself sitting in his favorite armchair, a cup of strong coffee beside him. The scent simply meant relaxation and undisturbed peace."
+  },
+  {
+   "id": "W386",
+   "kind": "K7",
+   "setting": "a boarding kennel",
+   "text": "Robert walked past the dog runs, noting a new, peculiar scratching sound. It seemed to come from the wall dividing runs three and four. He checked the floor, finding no loose gravel. A faint whiff of wood dust was in the air. Someone was definitely trying to dig out."
+  },
+  {
+   "id": "W387",
+   "kind": "K4",
+   "setting": "an orchard at picking time",
+   "text": "Mark looked at the picking schedule for the week. The plan required coordinating the pickers, managing the transport trucks, and ensuring packing materials were ready. He also had to account for unpredictable weather delays. The plan's elements were the labour, the logistics, and the weather contingency. Each piece needed its own attention."
+  },
+  {
+   "id": "W388",
+   "kind": "K4",
+   "setting": "a trout hatchery",
+   "text": "Daniel reviewed the water filtration system's malfunction. He mentally broke it down: the intake pump, the sediment filters, the UV sterilizer, and the outflow regulators. Each component played a specific part in maintaining water quality. He needed to isolate which of these separate elements had failed."
+  },
+  {
+   "id": "W389",
+   "kind": "K2",
+   "setting": "a recycling centre",
+   "text": "Rachel drove her car into the recycling centre. She felt drawn to the neat, empty paper recycling bin, appreciating its order. However, her gaze fell upon the overflowing general waste skip, and she felt a strong aversion. A faint, tinny radio playing somewhere in the background landed on her ears, but she paid it no attention."
+  },
+  {
+   "id": "W390",
+   "kind": "K5",
+   "setting": "a garden centre",
+   "text": "James walked past the herb section. Without breaking his stride, he reached out and adjusted a drooping rosemary plant. He then moved on to check the hanging baskets, straightening labels as he went. This daily routine had become an unconscious extension of his morning rounds. He barely even noticed doing it anymore."
+  },
+  {
+   "id": "W391",
+   "kind": "K8",
+   "setting": "an aquarium",
+   "text": "Tiny fish darted through the swaying kelp forest display. Streams of bubbles rose from hidden air diffusers at the tank's base. Overhead, the artificial light shimmered through the water, casting shifting patterns on the sandy floor. A slow-moving shark glided past the viewing window, its fins barely stirring the current. Small detritus particles drifted idly through the water column."
+  },
+  {
+   "id": "W392",
+   "kind": "K1",
+   "setting": "a salt works",
+   "text": "Abigail reviewed the purity reports. The sharp, acrid tang of brine in the air caught her attention. Instantly, she pictured her grandmother's seaside cottage, even though it was miles away. She remembered the salty spray hitting the windows during storms. The memory brought a fleeting moment of peace before she returned to the figures."
+  },
+  {
+   "id": "W393",
+   "kind": "K7",
+   "setting": "a boarding kennel",
+   "text": "Martha checked the feeding chart. Barnaby, a terrier, had eaten nothing since yesterday evening. The water bowl was full, untouched. She noticed a faint whimpering from his run, then spotted a small, dark pellet near his bed. Its shape was wrong for dog food. She decided Barnaby needed a vet to look him over."
+  },
+  {
+   "id": "W394",
+   "kind": "K3",
+   "setting": "a funicular railway",
+   "text": "Anna, a lifelong resident of the mountain town, watched the funicular ascend. Newcomers often gasped at the steep incline. She, however, simply saw a reliable mode of transport. Decades of trips up and down the mountain had normalized the dramatic climb for her. It was merely part of her daily landscape."
+  },
+  {
+   "id": "W395",
+   "kind": "K5",
+   "setting": "a golf course",
+   "text": "Yvonne spent years driving the greens mower. She had learned to anticipate every dip and rise of the golf course terrain. Her hands moved the steering wheel with an unconscious precision. The constant repetition had honed her physical responses. She navigated the course with an almost automatic grace."
+  },
+  {
+   "id": "W396",
+   "kind": "K8",
+   "setting": "a second-hand bookshop",
+   "text": "The doorbell above the entrance chimed faintly as the door opened. A cool breeze swept in, rustling the pages of an open book on the counter. Dust motes danced in the sliver of sunlight streaming through the high window. A small pile of returned paperbacks slid slightly, settling into a new arrangement. The old floorboards creaked underfoot."
+  },
+  {
+   "id": "W397",
+   "kind": "K2",
+   "setting": "an aquarium",
+   "text": "Emily pressed her face close to the glass, mesmerized by the slow, graceful movements of the jellyfish. She felt a deep sense of calm watching them drift. The loud, splashing antics of the penguins in the next tank barely registered with her. She found their noisy play quite unappealing. Only the quiet beauty of the deep-sea creatures truly captivated her."
+  },
+  {
+   "id": "W398",
+   "kind": "K8",
+   "setting": "a bookbinder's workshop",
+   "text": "The heavy pressing machine exerted slow, steady pressure on the stacked book blocks. Glue pots warmed on a small hotplate, releasing a faint sweet scent. Sheets of leather lay flat on a cutting mat, their smooth surfaces waiting. A fine layer of gold dust glittered on the workbench."
+  },
+  {
+   "id": "W399",
+   "kind": "K7",
+   "setting": "a tyre fitting bay",
+   "text": "Linda heard an unusual scraping from the left front wheel. She first checked the tyre pressure, finding it normal. Then she visually inspected the brake pads, which appeared fine. Next, she lifted the car and spun the wheel, hearing the faint rub again. The sound pointed to a small stone lodged in the caliper assembly. She knew exactly what to do."
+  },
+  {
+   "id": "W400",
+   "kind": "K4",
+   "setting": "a tyre fitting bay",
+   "text": "Brenda outlined the standard tyre fitting procedure for her new apprentice. First, remove the wheel nuts, then lift the vehicle. Next, take off the old wheel, carefully dismounting the worn tyre from the rim. Finally, fit the new tyre, balance it, and reinstall the wheel, tightening the nuts to the correct torque."
+  },
+  {
+   "id": "W401",
+   "kind": "K7",
+   "setting": "a concert hall cloakroom",
+   "text": "Agnes found a dropped ticket stub. It had a number but no matching coat. She noticed a faint scent of lilies on the fabric of a discarded scarf nearby. Then she remembered an older woman who had left early, asking for her hat and coat quickly. Agnes concluded the woman must have accidentally swapped her ticket with someone else's."
+  },
+  {
+   "id": "W402",
+   "kind": "K3",
+   "setting": "a rope factory",
+   "text": "As a young man, David learned to judge rope strength by feel. He ran a newly spun length of twine through his fingers. The slight unevenness, the subtle give, told him its limitations. Experience taught him that the best-looking ropes sometimes failed, while humble ones endured. He trusted his hands more than specifications."
+  },
+  {
+   "id": "W403",
+   "kind": "K1",
+   "setting": "a garden centre",
+   "text": "David walked past a display of purple hydrangeas. The vibrant colour suddenly reminded him of the bright scarf his grandmother always wore. He pictured her smiling, holding a small teacup in her hand. The memory felt warm and comforting, despite the slight chill in the air."
+  },
+  {
+   "id": "W404",
+   "kind": "K9",
+   "setting": "a salt works",
+   "text": "Wendy operated a shovel, moving mounds of dried salt into a hopper. The white crystals sparkled under the harsh industrial lights. She checked the gauges on the conveyor belt, ensuring a steady flow. Periodically, she adjusted a valve, directing the processed salt towards the bagging station. She emptied another shovel load and waited for the next cycle."
+  },
+  {
+   "id": "W405",
+   "kind": "K2",
+   "setting": "a boarding kennel",
+   "text": "At the boarding kennel, Jane spent extra time petting the shy cocker spaniel. Its gentle whimper melted her heart, and she offered it an extra treat. Later, a boisterous bulldog barked loudly at her through its enclosure. She merely gave it a quick pat and moved on, the loud greeting hardly making an impression."
+  },
+  {
+   "id": "W406",
+   "kind": "K3",
+   "setting": "a rowing club",
+   "text": "Susan watched the novice sculler struggle with her blade work. Others might simply see awkwardness, but Susan recognized the early signs of determination. Years of coaching taught her to look beyond initial fumbles for underlying strength. That slight forward lean hinted at untapped potential, a willingness to push through discomfort."
+  },
+  {
+   "id": "W407",
+   "kind": "K4",
+   "setting": "a shipyard",
+   "text": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them. The cooling system, ventilation ducts, and various control consoles also formed critical elements. He understood how each component supported the others within the complex arrangement. Every pipe and wire had its place."
+  },
+  {
+   "id": "W408",
+   "kind": "K1",
+   "setting": "an athletics track",
+   "text": "Quinn, a long-distance runner, stretched beside the track. The fresh scent of newly cut grass filled the cool morning air. This familiar smell brought a sudden, vivid memory to her thoughts. She recalled her childhood summer camps, where boundless freedom seemed to stretch out before her every day. She smiled faintly."
+  },
+  {
+   "id": "W409",
+   "kind": "K4",
+   "setting": "a boarding kennel",
+   "text": "Robert examined the new dog kennel's daily schedule. First came the morning feeding and fresh water, followed by individual exercise time in the runs. Afterwards, they had a short nap period, then an afternoon play session, and finally, the evening feeding. He considered each slot essential for the dogs' well-being. The structure ensured a happy stay."
+  },
+  {
+   "id": "W410",
+   "kind": "K3",
+   "setting": "a newsagent's shop",
+   "text": "Brenda watched the young boy count out his pennies for a lollipop. His brow furrowed with concentration. She had seen countless children do the same over her forty years behind the counter. Some carefully presented the exact change, others needed help. She simply waited, her patience an ingrained reflex."
+  },
+  {
+   "id": "W411",
+   "kind": "K8",
+   "setting": "a potato packing shed",
+   "text": "The conveyor belt ran in a steady loop, carrying potatoes along its rubber surface. They tumbled from a hopper, rattling lightly as they dropped into the sorting machine. Water sprayed over them in a fine mist, washing away clinging soil. A faint earthy smell filled the large corrugated iron building."
+  },
+  {
+   "id": "W412",
+   "kind": "K6",
+   "setting": "a salt works",
+   "text": "Frank observed a faint shimmer on the surface of crystallization pond three. It was barely perceptible, a slight deviation from the usual calm. The air also carried a sharper, more distinct tang than normal. He recognized these subtle shifts. The brine concentration was increasing more rapidly than predicted."
+  },
+  {
+   "id": "W413",
+   "kind": "K5",
+   "setting": "a hat maker's workshop",
+   "text": "Quentin carefully steamed a felt brim. The radio in the corner played a specific classical piece every Tuesday morning. As the music reached its crescendo, Quentin instinctively reached for the sandpaper. He always smoothed the brim's edge at that exact point in the melody. It was a perfectly ingrained part of his weekly routine."
+  },
+  {
+   "id": "W414",
+   "kind": "K2",
+   "setting": "an ice cream parlour",
+   "text": "Victor was immediately drawn to the vibrant pink swirl of raspberry ripple, his eyes wide with anticipation. He felt quite repulsed by the dull, greyish pistachio, a flavour he never liked. A spoon clattered loudly onto the tiled floor behind him, making him jump. But the constant low hum of the freezer unit he simply did not register at all."
+  },
+  {
+   "id": "W415",
+   "kind": "K8",
+   "setting": "an athletics track",
+   "text": "The sun beat down on the red track, warming the synthetic surface. A slight breeze moved across the infield, rustling the tall grass near the long jump pit. Far off, a sprinkler system whirred, sending fine droplets arcing over the green field. The metal hurdles stood in neat rows, casting sharp shadows on the lane lines."
+  },
+  {
+   "id": "W416",
+   "kind": "K3",
+   "setting": "an orchard at picking time",
+   "text": "Sarah tasted a small apple, her tongue discerning the subtle tartness. Her grandmother had always taught her to pick fruit at its peak, explaining the changing flavors. She knew which trees produced the sweetest varieties and could tell ripeness by the fruit’s weight and scent alone. Years of experience guided her choice."
+  },
+  {
+   "id": "W417",
+   "kind": "K6",
+   "setting": "a recycling centre",
+   "text": "Frank, the shift supervisor, scanned the sorting line. He noticed a single crumpled plastic bottle in the paper stream. It was a minor thing, easily overlooked by a newcomer. However, Frank understood it signalled a problem with the new sensor calibration. He quickly directed a technician to recalibrate the optical sorter."
+  },
+  {
+   "id": "W418",
+   "kind": "K5",
+   "setting": "a hat maker's workshop",
+   "text": "Every morning, without a second thought, Sarah selected the correct felt weight for the day’s hat orders. The familiar hum of the steaming machine began automatically as she approached it. Her hands moved swiftly, blocking and shaping the material with practiced ease. Years in the workshop made these actions fluid and unconscious."
+  },
+  {
+   "id": "W419",
+   "kind": "K3",
+   "setting": "an ice cream parlour",
+   "text": "Francesca tasted the new apricot sorbet, a tiny spoonful melting on her tongue. Its tartness might deter some, but she knew how seasonal palates shifted. Decades of serving summer crowds had taught her that bold flavours often found their niche. She imagined the sun-drenched days it would perfectly complement."
+  },
+  {
+   "id": "W420",
+   "kind": "K3",
+   "setting": "a carpet showroom",
+   "text": "Clara ran her hand over the samples of deep-pile shag. She remembered similar carpets from her childhood home in the seventies. The way they muffled sounds, absorbing every footfall, felt deeply familiar. This particular texture brought back comforting echoes of rainy afternoons spent building blanket forts. She smiled, appreciating the nostalgic comfort of the soft fibres."
+  },
+  {
+   "id": "W421",
+   "kind": "K1",
+   "setting": "a bell foundry",
+   "text": "Ian, a worker in the bell foundry, listened as a newly cast bell cooled. Its deep, sonorous ring filled the cavernous space. The sound transported him to a completely different scene. He remembered quiet Sunday mornings in his grandmother's village. The distant, gentle chimes of the church bells had always signalled peace."
+  },
+  {
+   "id": "W422",
+   "kind": "K1",
+   "setting": "a lifeboat station",
+   "text": "Liam wiped down a railing, inhaling the familiar tang of salt and diesel. The smell immediately brought him back to his grandfather’s old fishing trawler. He recalled sunny childhood afternoons spent watching nets being mended on deck. That boat, though much smaller, shared the same persistent scent of the sea."
+  },
+  {
+   "id": "W423",
+   "kind": "K1",
+   "setting": "a second-hand bookshop",
+   "text": "Kevin picked up a paperback with a faded abstract cover. The title, \"Echoes in the Labyrinth,\" caught his attention. He remembered a challenging philosophy lecture from college, where the professor spoke about the nature of perception. That long-ago discussion about how everyone experiences reality uniquely now returned to him clearly. He smiled faintly, placing the book back."
+  },
+  {
+   "id": "W424",
+   "kind": "K6",
+   "setting": "an athletics track",
+   "text": "Penny observed the young sprinter stretching on the track. She noticed a slight, almost imperceptible tremor in his left quadricep. A less experienced eye would have missed it completely. Penny knew instantly it was a sign of overtraining, a familiar warning from her own racing days. She decided to chat with his coach later."
+  },
+  {
+   "id": "W425",
+   "kind": "K7",
+   "setting": "a funicular railway",
+   "text": "Penny checked the car's speed gauge, noting it was slightly lower than usual. She then felt a slight drag as the cable moved over the rollers. Looking down the track, she saw a faint sheen on the rails, indicating a touch of morning dampness. The slight extra friction was slowing them down, meaning a minor adjustment to the motor speed was needed."
+  },
+  {
+   "id": "W426",
+   "kind": "K6",
+   "setting": "an orchard at picking time",
+   "text": "Sam, the orchard manager, walked among the apple trees. He noticed a few leaves on a specific branch showing a faint, unusual browning along their edges. This small sign was significant to him. He knew immediately that early blight was beginning to take hold in that section of the orchard. He would need to act swiftly."
+  },
+  {
+   "id": "W427",
+   "kind": "K4",
+   "setting": "a second-hand bookshop",
+   "text": "Nick, the owner of the second-hand bookshop, reviewed his recent pricing strategy. He broke down the components he considered for each book. He looked at its rarity first, then its physical condition. After that, he assessed the author's current popularity. Finally, he factored in the existing market demand for that specific title."
+  }
+ ]
+}

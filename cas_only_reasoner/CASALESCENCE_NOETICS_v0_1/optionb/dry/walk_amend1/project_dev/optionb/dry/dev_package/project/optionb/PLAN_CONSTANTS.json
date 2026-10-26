@@ -1,0 +1,1092 @@
+{
+ "schema": "casalescence/optionb-plan-constants/v1.0",
+ "plan_file": "08_OPTION_B_PLAN_v1_0.md",
+ "plan_version": "1.0",
+ "status": "PROPOSED. Not sealed yet. Nothing has been run. Revised on 2026-10-05 after review round 1; see plan section 26. Amended on 2026-10-05 after the outside review (amendments A1 to A12); see plan section 27.",
+ "how_to_read_this_file": [
+  "Every program reads its numbers and wordings from this file. No program hard-codes one.",
+  "A text constant with more than one line is stored as a list of lines. A program joins the lines with one line feed (LF).",
+  "A placeholder looks like <<NAME>>. A program fills it by plain text replacement. Never use str.format on these texts: some of them hold curly brackets.",
+  "Percent values are whole numbers. Compare with whole-number arithmetic, for example 100 * right >= 60 * total.",
+  "Claim states: the source hashes and the counts under counts_real were measured on 2026-10-05 (REAL). Every threshold, seed, wording and limit is the plan's rule (PROPOSED). Numbers under expected are estimates (EXPECTED)."
+ ],
+ "root": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1",
+ "work_folder": "optionb",
+ "job_folder": "optionb/job",
+
+ "sources": {
+  "labels_team_a": {"path": "verdict/labels_team_a.json", "bytes": 314980, "sha256": "afb609c95adc45da43a8ef2b3ab5718ffbfc46e4a92bd1b56d8b3dfae7218584"},
+  "labels_team_b": {"path": "verdict/labels_team_b.json", "bytes": 358934, "sha256": "8c5be47223ea6b7a840c11f7e3eba51fbb34767640240c924869b8515038b460"},
+  "passages": {"path": "verdict/passages_kinds_HIDDEN_FROM_LABELERS.json", "bytes": 174797, "sha256": "e9b6f8030d698af7c6f3bb8bb8439ba26fcfcceccbc4740769e64eb71e139622"},
+  "labeling_guide": {"path": "02_LABELING_GUIDE_v1_2.md", "bytes": 19265, "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"},
+  "verdict_program": {"path": "tools/verdict.py", "bytes": 13018, "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"},
+  "passage_writer_tool": {"path": "tools/write_verdict_passages.py", "bytes": 7968, "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"},
+  "scorer_rules_v0_1": {"path": "03_SCORER_RULES_v0_1.md", "bytes": 4375, "sha256": "d611de5fa2b8e9d133f9ba28f3dadf783de6ffc159a1c9c451d2c5a1f40ef3d1"},
+  "scorer_source_v0_1": {"path": "tools/scorer_v0_1.py", "bytes": 3030, "sha256": "8fe3a88512b08cadd3190602345ea81d113f2062b230c20b3dd66d29c392181e"},
+  "scorer_examples_v0_1": {"path": "scorer_examples_v0_1.json", "bytes": 4527, "sha256": "f1b40f166dd85303f751d3785c7d2a85de293be0fad24ff353fef70611a58aba"},
+  "design": {"path": "design_v2/optionB_final.json", "bytes": 131627, "sha256": "de0a0a50dcde3914054ee7cca2951b5a5077348f42409478240c1e40dbc52425"},
+  "design_reviews": {"path": "design_v2/optionB_reviews.json", "bytes": 43218, "sha256": "06c9d2884b1510ad7f65946ae8a69d88a1d16d9fe3f8f51fa7898d677ba6ffe5"},
+  "owner_direction": {"path": "OWNER_DIRECTION_POINTING_AND_OPTION_B_20261005.json", "bytes": 4405, "sha256": "689f4b5622b0f28d60e0146e3b2e41d68c40f9eec7ddf42c06719c42d4f692fc"},
+  "directive": {"path": "DIRECTIVE_R2.md", "bytes": 14760, "sha256": "eb667f2549a89a1eda7fc5955b14395915c69023e093f43580c26243f558198b"}
+ },
+
+ "seeds": {
+  "how_to_use": "A whole-list shuffle or sample uses random.Random(<integer seed>). A per-object choice uses random.Random('<integer seed>|<label>') with the label named in FILE_FORMATS.md.",
+  "split": 20261005,
+  "writer_batch_order_p1": 20261005,
+  "writer_batch_order_p2": 20261006,
+  "solver_option_shuffle": 20261007,
+  "selection": 20261008,
+  "length_backstop": 20261009,
+  "letters": 20261010,
+  "support_batch_order": 20261011,
+  "sheet_item_order": 20261012,
+  "final_call_order": 20261013,
+  "practice_call_order": 20261014,
+  "review_sample": 20261015,
+  "owner_role_note_sample": 20261016,
+  "selftest_random_letters": 20261017,
+  "sign_flip_test": 20261005,
+  "bootstrap": 20261005
+ },
+
+ "model_b": {
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "file_count": 7,
+  "total_bytes": 999586347,
+  "files": {
+   "config.json": {"bytes": 659, "sha256": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45"},
+   "generation_config.json": {"bytes": 242, "sha256": "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6"},
+   "merges.txt": {"bytes": 1671839, "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"},
+   "model.safetensors": {"bytes": 988097824, "sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe"},
+   "tokenizer_config.json": {"bytes": 7305, "sha256": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583"},
+   "tokenizer.json": {"bytes": 7031645, "sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"},
+   "vocab.json": {"bytes": 2776833, "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"}
+  },
+  "inventory_source": "D:/tksCAS-runs/controller_cas_small_op11_claude_c1/MODEL_CACHE_FILE_INVENTORY.json",
+  "snapshot_path_in_payload": "models/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775",
+  "precheck_files": ["config.json", "generation_config.json", "merges.txt", "tokenizer_config.json", "tokenizer.json", "vocab.json"],
+  "precheck_files_total_bytes": 11488523,
+  "weights": "frozen; no training; no adapters; no download inside the job"
+ },
+
+ "decoding": {
+  "do_sample": false,
+  "num_beams": 1,
+  "repetition_penalty": 1.0,
+  "max_new_tokens": 64,
+  "stop_at_end_token": true,
+  "prompts_per_call": 1,
+  "retries": 0,
+  "float_type": "float32",
+  "chat_template": "the model's own template; one user message; the template's default system text is left as it is; add_generation_prompt true",
+  "cut_off_rule": "cut_off is true when 64 new tokens were written and none of them is an end token",
+  "raw_answer_rule": "the new tokens decoded with special tokens skipped; nothing else is changed",
+  "token_count_rule": "len(tokenizer.encode(text, add_special_tokens=False))"
+ },
+
+ "outside_services": {
+  "key_rule": "Read the key from the environment variable at run time. Never read a key file. Never print, log or store a key. Remove the key from any error text before it is logged.",
+  "model_name_rule": "Amendment A9. Every tool that calls an outside service stores, for every call, the model name the service put in its reply. It is the field model_in_reply of the call log line (FILE_FORMATS.md section 0). The field model of a line is the name the tool asked for. The tool stores the reply's name as it is. It does not judge it.",
+  "deepseek": {
+   "endpoint": "https://api.deepseek.com/chat/completions",
+   "key_environment_variable": "DEEPSEEK_API_KEY",
+   "model": "deepseek-chat",
+   "model_name_note": "This is the name the tools ask for. REAL, measured 2026-10-05 (verdict/NOTE_TEAM_B_MODEL_NAME_20261005.md): the name deepseek-chat is now an alias answered by deepseek-flash. Label team B was asked for under this name and the answering model was not recorded then.",
+   "temperature": 0,
+   "uses": ["key solver (one item per call)", "ordinary-note writer (one passage per call)"],
+   "transport_retries": 2,
+   "content_retries": 0,
+   "spend_cap_usd": "4.00",
+   "spend_cap_status": "Operator decision, amendment A11: at most 4.00 USD in total for the ordinary notes and the key solver together. The tools enforce it as the two token limits below.",
+   "spend_cap_input_tokens": 2430240,
+   "spend_cap_output_tokens": 1156520,
+   "spend_cap_counted_logs": ["solve/deepseek_calls_practice.jsonl", "solve/deepseek_calls_final.jsonl", "notes_ord/ordinary_calls_practice.jsonl", "notes_ord/ordinary_calls_final.jsonl"],
+   "spend_cap_stop_status": "STOPPED_TOKEN_CAP",
+   "spend_cap_no_count_status": "STOPPED_NO_TOKEN_COUNT",
+   "spend_cap_rule": [
+    "The input count is the sum of usage.prompt_tokens over every line of the four counted logs. The output count is the sum of usage.completion_tokens over the same lines.",
+    "Before each DeepSeek call the tool knows both counts as the four logs then stand. It may read the four logs once at its start and then add each of its own calls as it logs it.",
+    "If the input count has reached spend_cap_input_tokens, or the output count has reached spend_cap_output_tokens, the tool makes no call and stops with the status STOPPED_TOKEN_CAP. The checkpoint is kept.",
+    "A reply with HTTP status 200 whose usage does not hold whole numbers prompt_tokens and completion_tokens is logged. Then the tool stops with the status STOPPED_NO_TOKEN_COUNT.",
+    "The two DeepSeek tools are not run at the same time.",
+    "A limit is never raised without a new reviewed plan version.",
+    "A tool whose work folder sits under optionb/dry/ calls no service and counts nothing."
+   ],
+   "spend_cap_basis": "REAL, the operator's reading on 2026-10-05: two calls to deepseek-v4-pro with 60756 input tokens and 28913 output tokens in total cost about 0.10 USD. The input price and the output price were not measured apart. Each limit is 40 times the measured count: 40 * 60756 = 2430240 and 40 * 28913 = 1156520. Whatever the split between the two prices, a spend inside both limits costs at most 40 * 0.10 = 4.00 USD at that model's prices.",
+   "spend_cap_expected": "EXPECTED, NOT MEASURED: deepseek-chat costs no more per input token and no more per output token than deepseek-v4-pro. The label run's receipt (verdict/labels_team_b.json.receipt.json) holds token counts only (2327821 input tokens and 88948 output tokens in 428 calls) and no price, so it gives no price basis. EXPECTED need: at the very most about half of each limit, if every note is written twice and every possible question is solved; an estimate from word and punctuation counts, not a tokenizer count.",
+   "spend_cap_limit_of_the_count": "Calls that are running when a limit is reached still finish. So a count can pass its limit by a few calls.",
+   "expected_spend_usd": "under 2.00"
+  },
+  "deepseek_reviewer": {
+   "model": "deepseek-reasoner",
+   "use": "the one review round (Step 8); it reads, it does not edit"
+  },
+  "gemini_question_writer": {
+   "endpoint": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+   "key_environment_variable": "GEMINI_API_KEY",
+   "model_by_set": {"practice": "gemini-3.5-flash-lite", "final": "gemini-3.5-flash-lite"},
+   "one_model_per_set": true,
+   "one_model_rule": "Amendment A1. One model writes the practice set, the final set and the spare pass. The two values of model_by_set are the same name. The tool refuses any other model name.",
+   "vendor_note": "Gemini is a third vendor: not the vendor of label team A (Claude) and not the vendor of label team B (DeepSeek). The passages were written by another model of the same vendor, gemini-2.5-flash.",
+   "temperature": 1.0,
+   "max_tokens": 30000,
+   "passages_per_call": 4,
+   "batch_rule": "Up to 4 passages per call. Sort the passage ids, shuffle them with the seed of the pass, cut them into groups of 4. Each passage is fenced. The brief tells the writer to treat every passage on its own.",
+   "passes": ["p1", "p2"],
+   "pass_meaning": {"p1": "first pass", "p2": "spare pass: same brief, different seeded batch order"},
+   "unreadable_reply_retries": 1,
+   "calls_seen_note": "REAL, measured by the operator on 2026-10-05: 47 one-word calls to gemini-3.5-flash-lite were answered with no refusal. The daily cap is not known (NOT MEASURED).",
+   "on_http_429": "A refused call (HTTP 429) is not counted as an attempt. The tool stops cleanly, keeps the checkpoint, and resumes when it is run again later."
+  },
+  "gemini_support_checker": {
+   "endpoint": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+   "key_environment_variable": "GEMINI_API_KEY",
+   "model": "gemini-3.1-flash-lite",
+   "temperature": 0,
+   "max_tokens": 4000,
+   "notes_per_call": 12,
+   "passages_per_call": 2,
+   "unreadable_reply_retries": 1,
+   "on_daily_cap": "Stop cleanly. Keep the checkpoint. Record the time of the stop. Run the same step again on a later day.",
+   "daily_cap_error_regex": "per\\s*day|perday|daily",
+   "daily_cap_refusal": "an HTTP 429 reply whose error text matches daily_cap_error_regex, in any letter case",
+   "rate_refusal": "any other HTTP 429 reply. After the allowed waits the run stops with the status STOPPED_RATE_LIMIT. A rate refusal is never logged as a daily-cap stop.",
+   "one_checker_rule": "Amendment A2. This model is the only checker of the ordinary notes, for both sets and both rounds. There is no fallback checker and no Claude checker: a Claude sub-agent carries the CAS definitions in its project instructions, so it must not shape the rival notes. The tool has no export step and no import step.",
+   "if_gemini_refuses": "The build waits. The same step is run again later, from its checkpoint. Nobody else judges a note.",
+   "daily_cap_note": "The daily cap of gemini-3.1-flash-lite is NOT MEASURED."
+  },
+  "claude_solver": {
+   "name": "claude-sonnet-subagent",
+   "model_id": "claude-sonnet-5-5",
+   "model_id_rule": "Pinned by amendment A3 on 2026-10-05. By the operator's statement it is the model the Agent tool's sonnet alias names. The operator records the model name from every sub-agent transcript; the import step of tools/ob_solve_blind.py stores it. Seal step 1 refuses the value null. The id serves the key solver only: there is no Claude note checker. No sub-agent of another model id is used.",
+   "limit": "A Claude sub-agent carries the CAS definitions in its project instructions. So it is not blind to CAS. It only picks a letter. It never writes or edits a question, a key or a note.",
+   "access": "text only; no file access; it gets one exported sheet and returns one answer sheet",
+   "separate_agents": "The no-passage sheet goes to a fresh sub-agent that never saw the with-passage sheet."
+  }
+ },
+
+ "eligibility": {
+  "passage_kinds_used": ["K1", "K2", "K3", "K4", "K5"],
+  "passage_kinds_not_used": ["K6", "K7", "K8", "K9"],
+  "barred_passage_ids": ["V009", "V076"],
+  "barred_reason": "printed with example questions in an earlier design; they are never a task in any set",
+  "frozen_functions": "Import clean, select, same_span, same_field, lenient_span, content and REQUIRED from tools/verdict.py after its sha256 has been checked. Do not copy or rewrite them.",
+  "clear_entry_rule": "verdict.clean() then verdict.select(entries, noetic): a kept entry that is not uncertain, and for ^9 not reached by reasoning",
+  "exclusion_rule": {
+   "applies_to": "the raw entries of either team, before cleaning",
+   "exclude_passage_if_any_entry_has": [
+    "noetic ^8 or ^9 with certainty ambiguous",
+    "other_candidate equal to reasoning",
+    "reached_by equal to reasoning"
+   ]
+  },
+  "pairing_rule": "One to one, per passage and per Noetic. Take team A's clear entries in file order. For each, take the first team B clear entry in file order that is not yet used and is the same reading: same_span on the words, and same_field on every field in REQUIRED for that Noetic. Entries left over are only_a or only_b.",
+  "checked_entry": "an agreed pair made by pairing_rule",
+  "fields_printed": {"^1": [], "^2": ["mind"], "^3": ["mind"], "^4": ["mind", "relative_to"], "^5": ["mind"], "^6": ["relative_to"], "^7": ["mind", "relative_to"], "^8": ["mind", "relative_to"], "^9": ["mind", "relative_to"]}
+ },
+
+ "counts_real": {
+  "note": "REAL. Recounted on 2026-10-05 from the sealed files with the rules in this file. tools/ob_eligibility.py must reproduce every number here and stop if it cannot.",
+  "passages": 428,
+  "settings": 40,
+  "entries_agreed_only_a_only_b": {"^1": [384, 19, 46], "^2": [51, 24, 19], "^3": [35, 13, 17], "^4": [54, 40, 58], "^5": [88, 31, 65], "^6": [173, 140, 156], "^7": [35, 31, 61], "^8": [38, 23, 32], "^9": [38, 23, 34]},
+  "excluded_passages": 104,
+  "excluded_by_kind": {"K1": 1, "K3": 29, "K4": 11, "K5": 3, "K6": 30, "K7": 30},
+  "passages_after_exclusion": 324,
+  "eligible_passages": 192,
+  "eligible_by_kind": {"K1": 36, "K2": 55, "K3": 25, "K4": 37, "K5": 39},
+  "passages_per_type": {"BRING": 36, "PULL-PUSH": 54, "LAND": 43, "FORMED": 45, "PARTS": 37, "HABIT": 33},
+  "passages_by_number_of_types": {"1": 137, "2": 54, "3": 1},
+  "k1_to_k5_passages": 293,
+  "eligible_passage_without_agreed_mind_entry": ["V082"],
+  "eligible_passages_holding_the_whole_word_correct": ["V027", "V231", "V335", "V413"],
+  "by_practice_setting_count": {
+   "8": {"practice_passages": 34, "final_passages": 156, "role_step_ceiling_practice": 66, "role_step_ceiling_final": 300, "k1_to_k5_practice": 58, "k1_to_k5_final": 235},
+   "9": {"practice_passages": 40, "final_passages": 150, "role_step_ceiling_practice": 77, "role_step_ceiling_final": 289, "k1_to_k5_practice": 64, "k1_to_k5_final": 229},
+   "10": {"practice_passages": 45, "final_passages": 145, "role_step_ceiling_practice": 87, "role_step_ceiling_final": 279, "k1_to_k5_practice": 71, "k1_to_k5_final": 222},
+   "11": {"practice_passages": 47, "final_passages": 143, "role_step_ceiling_practice": 91, "role_step_ceiling_final": 275, "k1_to_k5_practice": 79, "k1_to_k5_final": 214},
+   "12": {"practice_passages": 50, "final_passages": 140, "role_step_ceiling_practice": 96, "role_step_ceiling_final": 270, "k1_to_k5_practice": 87, "k1_to_k5_final": 206}
+  },
+  "practice_at_8_passages_per_type": {"BRING": 5, "PULL-PUSH": 11, "LAND": 8, "FORMED": 8, "PARTS": 7, "HABIT": 4},
+  "final_at_8_passages_per_type": {"BRING": 30, "PULL-PUSH": 43, "LAND": 35, "FORMED": 37, "PARTS": 29, "HABIT": 29},
+  "final_at_8_passages_that_can_carry_one_task_only": 12
+ },
+
+ "split": {
+  "rule": "random.Random(20261005).sample(sorted(setting names), 12). The first 8 are practice. The next 4 are the reserve, in that order. Every other setting is final.",
+  "practice_settings": ["a locksmith's van", "a tailor's shop", "a mountain hut", "a quarry", "a dairy at milking time", "a chess club", "a swimming pool", "a beekeeper's yard"],
+  "reserve_settings_in_order": ["a cheese cellar", "a boxing gym", "a post office sorting room", "a taxi rank at night"],
+  "practice_setting_count_start": 8,
+  "practice_setting_count_max": 12,
+  "reserve_target_practice_role_step_tasks": 45,
+  "reserve_target_practice_plain_fact_tasks": 25,
+  "reserve_rule": "Counted after Step 6 on the practice set. If fewer than 45 practice role-step tasks or fewer than 25 practice plain-fact tasks survive selection, the next reserve setting moves from final to practice. Repeat until both targets are met or all 4 are used. This is done before seal step 3A and before any final question is written. No setting is moved once both targets are met.",
+  "reserve_block_read_by": ["tools/ob_write_questions.py", "tools/ob_select.py", "tools/ob_seal.py"],
+  "reserve_block_rule": "Amendment A8. All three tools act on the reserve rule by reading the same block, reserve, of select/selection_practice.json (FILE_FORMATS.md section 7.1). None of them reads floor.met for this rule. tools/ob_write_questions.py adds the wave of reserve setting k only when that file exists, its practice_setting_count is practice_setting_count_start + k - 1, and its reserve.finished is false; a file with no reserve block also stops it.",
+  "reserve_targets_note": "PROPOSED in review round 1. The targets are above the launch floor (36 and 20) on purpose: Step 7 comes after the reserve rule and can only remove passages. The launch floor itself does not change.",
+  "if_12_settings_miss_the_floor": "If the practice set is under the launch floor (36 role-step tasks or 20 plain-fact tasks) with all 12 settings: do not launch. Report the survival numbers to the owner. Missing a reserve target with all 12 settings is not a stop. Only the launch floor decides.",
+  "practice_first": [
+   "1. The practice questions are written, checked, solved and selected (Steps 1 to 6). The reserve rule is applied. Then seal steps 3A and 3B are written.",
+   "2. Step 7 is then run on the practice set alone: the practice ordinary notes are written and support-checked, and the answer-leak screen is run on the practice set in report-only mode.",
+   "3. The numbers are printed: the practice passages and tasks left after the support check and after the screen, the hits per screen rule, and each note's words against its word target.",
+   "4. Only then is the first final question written. If the practice set is by then under the launch floor, no final question is written: do not launch; report the numbers to the owner.",
+   "5. No brief, no filter and no screen rule is changed because of these numbers without a new reviewed plan version."
+  ],
+  "practice_first_on_record": "No program enforces the order of points 2 to 4. Every call log line and every file carries its time, and the reviewer checks the order from them."
+ },
+
+ "task_families": {
+  "role_step": {"name": "R", "options_written": 6, "wrong_options_written": 5},
+  "plain_fact": {"name": "F", "options_written": 4, "wrong_options_written": 3, "form_id": "FACT", "type": "FACT"}
+ },
+
+ "levels": {
+  "1": {"options_shown": 4, "role_step_rule": "the right option and the first three wrong options in the writer's order"},
+  "2": {"options_shown": 6, "role_step_rule": "all six options"},
+  "plain_fact_rule": "always four options, at every level",
+  "letters": ["A", "B", "C", "D", "E", "F"]
+ },
+
+ "types_in_order": ["BRING", "PULL-PUSH", "LAND", "FORMED", "PARTS", "HABIT"],
+ "forms_in_order": ["MEET_AGAIN", "TAKE_AWAY", "GOES_FOR", "KEEPS_AWAY", "WHAT_STUCK", "WHAT_SLID_OFF", "SWAP_PERSON", "WHERE_HELPS", "WHAT_LEFT", "NOT_BELONG", "LONG_BREAK", "NEW_STARTER"],
+ "forms": {
+  "MEET_AGAIN": {"plain_name": "Meet it again", "type": "BRING", "opens_when": {"^8": 1, "^9": 1}, "anchor_noetics": ["^8", "^9"], "option_check_noetics": ["^8", "^9"]},
+  "TAKE_AWAY": {"plain_name": "Take it away", "type": "BRING", "opens_when": {"^8": 1, "^9": 1}, "anchor_noetics": ["^8", "^9"], "option_check_noetics": ["^8", "^9"]},
+  "GOES_FOR": {"plain_name": "Goes for", "type": "PULL-PUSH", "opens_when": {"^2": 1}, "anchor_noetics": ["^2"], "option_check_noetics": ["^2", "^3"]},
+  "KEEPS_AWAY": {"plain_name": "Keeps away", "type": "PULL-PUSH", "opens_when": {"^3": 1}, "anchor_noetics": ["^3"], "option_check_noetics": ["^2", "^3"]},
+  "WHAT_STUCK": {"plain_name": "What stuck", "type": "LAND", "opens_when": {"^4": 1}, "anchor_noetics": ["^4"], "option_check_noetics": ["^4"]},
+  "WHAT_SLID_OFF": {"plain_name": "What slid off", "type": "LAND", "opens_when": {"^4": 1}, "anchor_noetics": ["^4"], "option_check_noetics": ["^4"]},
+  "SWAP_PERSON": {"plain_name": "Swap the person", "type": "FORMED", "opens_when": {"^5": 1}, "anchor_noetics": ["^5"], "option_check_noetics": ["^5"]},
+  "WHERE_HELPS": {"plain_name": "Where it helps", "type": "FORMED", "opens_when": {"^5": 1}, "anchor_noetics": ["^5"], "option_check_noetics": ["^5"]},
+  "WHAT_LEFT": {"plain_name": "What is left", "type": "PARTS", "opens_when": {"^6": 2}, "anchor_noetics": ["^6"], "option_check_noetics": ["^6"]},
+  "NOT_BELONG": {"plain_name": "Does not belong", "type": "PARTS", "opens_when": {"^6": 2}, "anchor_noetics": ["^6"], "option_check_noetics": ["^6"]},
+  "LONG_BREAK": {"plain_name": "After a long break", "type": "HABIT", "opens_when": {"^7": 1}, "anchor_noetics": ["^7"], "option_check_noetics": ["^7"]},
+  "NEW_STARTER": {"plain_name": "New starter", "type": "HABIT", "opens_when": {"^7": 1}, "anchor_noetics": ["^7"], "option_check_noetics": ["^7"]}
+ },
+ "form_rules": {
+  "opens_when_meaning": "the least number of agreed entries of each Noetic the passage must hold",
+  "land_second_question_needs_agreed_entries_of": {"^4": 2},
+  "max_role_step_tasks_per_passage": 2,
+  "two_tasks_need_different_forms": true,
+  "two_tasks_right_options_must_differ_by": "not lenient_span(right option 1, right option 2)",
+  "prefer_different_types": true,
+  "plain_fact_tasks_per_passage": 1,
+  "type_noetics_for_leftover_views": {"BRING": ["^8", "^9"], "PULL-PUSH": ["^2", "^3"], "LAND": ["^4"], "FORMED": ["^5"], "PARTS": ["^6"], "HABIT": ["^7"]},
+  "option_check_also_compares_related_thing_for": ["^4", "^7"]
+ },
+
+ "role_notes": {
+  "canon_source": "02_LABELING_GUIDE_v1_2.md, Part A. Read the lines from the file at build time. Never retype or reword them.",
+  "canon_section_start": "## Part A",
+  "canon_section_end": "## Part B",
+  "canon_line_regex": "^- `(\\^[0-9])` \\*\\*(.+?)\\*\\* \u2014 (.+)$",
+  "canon_lines_expected": 10,
+  "canon_noetics_used": ["^1", "^2", "^3", "^4", "^5", "^6", "^7", "^8", "^9"],
+  "canon_note_line": "<<NOETIC>> <<NAME>> \u2014 <<DEFINITION>>",
+  "label_rule": "the shorter of the two teams' quotes, by number of characters; on a tie team A's",
+  "field_rule": "for mind and for relative_to: the shorter of the two teams' quotes that is not empty; on a tie team A's; if both are empty the field is not printed",
+  "supporting_quote_rule": "the whole sentence or sentences of the passage that hold both teams' quotes: from the start of the sentence that holds the earlier quote start to the end of the sentence that holds the later quote end; each quote is located by its first occurrence in the passage",
+  "sentence_end_regex": "[.!?]+[\"\u201d\u2019')\\]]*(?=\\s|$)",
+  "sentence_end_not_after": ["Mr", "Mrs", "Ms", "Dr", "Prof", "St", "Jr", "Sr"],
+  "sentence_end_guard_rule": "A single full stop right after one of the words in sentence_end_not_after does not end a sentence.",
+  "entry_order": "The ^1 entries come first. Then come all other entries. Inside each part: by the smaller of the two quotes' first positions in the passage; then by Noetic number; then by team A's entry order.",
+  "repeated_quote_rule": "If an entry's supporting quote is the same text as one already printed in this note, print the same-as line instead.",
+  "line_mind_entry": "- <<NOETIC>> <<NAME>>: \"<<LABEL>>\".",
+  "line_entry_start": "- <<NOETIC>> <<NAME>>: \"<<LABEL>>\".",
+  "line_part_mind": " For the Mind \"<<MIND>>\".",
+  "line_part_relative": " Relative to \"<<RELATIVE_TO>>\".",
+  "line_part_quote": " Supporting quote: \"<<QUOTE>>\"",
+  "line_part_same_as": " Supporting quote: same as for \"<<EARLIER_LABEL>>\".",
+  "quotes_only_line_start": "- \"<<LABEL>>\".",
+  "mind_entries_have_no_supporting_quote": true,
+  "mixed_swap_table": {"^1": "^1", "^2": "^3", "^3": "^2", "^4": "^7", "^7": "^4", "^5": "^6", "^6": "^5", "^8": "^9", "^9": "^8"},
+  "mixed_rule": "Take the ROLE note. Replace each entry's Noetic number and name by the swap table. Print the canon lines of the Noetics that now appear, in number order. Labels, Minds, related things, supporting quotes and entry order do not change.",
+  "quotes_only_rule": "One line per ROLE entry, same order: the label and the supporting quote (or the same-as line). No Noetic, no name, no Mind, no related thing, no canon line.",
+  "no_heading_of_its_own": true,
+  "size_count_regex": "[A-Za-z0-9']+|[^\\sA-Za-z0-9']",
+  "size_count_meaning": "every word counts one and every punctuation mark counts one",
+  "owner_sample_size": 20
+ },
+
+ "groups": {
+  "must_run_in_order": ["NONE", "FILLER", "ROLE", "MIXED", "ORD-INFORMED", "ORD-FREE", "QUOTES-ONLY"],
+  "by_family": {
+   "role_step": ["NONE", "FILLER", "ROLE", "MIXED", "ORD-INFORMED", "ORD-FREE", "QUOTES-ONLY"],
+   "plain_fact": ["NONE", "FILLER", "ROLE", "MIXED", "ORD-INFORMED", "ORD-FREE"]
+  },
+  "practice_only_role_step": ["ANSWER-GIVEN"],
+  "task_check_role_step": ["NO-PASSAGE"],
+  "final_secondary_blocks_in_order": ["NO-PASSAGE"],
+  "groups_with_a_notes_block": ["FILLER", "ROLE", "MIXED", "ORD-INFORMED", "ORD-FREE", "QUOTES-ONLY", "ANSWER-GIVEN"],
+  "groups_without_a_notes_block": ["NONE", "NO-PASSAGE"],
+  "program_built": ["FILLER", "ROLE", "MIXED", "QUOTES-ONLY", "ANSWER-GIVEN"],
+  "ordinary": ["ORD-INFORMED", "ORD-FREE"],
+  "tested_group": "ROLE",
+  "better_rival_tie_goes_to": "ORD-INFORMED",
+  "struck": ["ROLE-PLAIN"],
+  "struck_rule": "No code path, no prompt part and no call exists for a struck group."
+ },
+
+ "forbidden_words": {
+  "list_a": {
+   "words": ["cause", "effect", "trigger", "positive", "negative", "vibration", "rhythm", "idea", "mind", "noetic", "resonate", "resonance"],
+   "source": "tools/write_verdict_passages.py line 19 (FORBIDDEN). The program compares this list with that line and stops if they differ.",
+   "match": "case-insensitive; any word that begins with the listed word: \\b<word>\\w*\\b",
+   "applies_to": ["question", "every option"]
+  },
+  "sign": {"text": "^", "match": "the character anywhere", "applies_to": ["question", "every option"]},
+  "list_b": {
+   "words": ["female", "male", "above", "below", "CAS", "affinity", "attracted", "adverse", "repelled", "impression", "impregnated", "composed", "entraining", "conditioning"],
+   "match": "case-insensitive; the whole word exactly: \\b<word>\\b",
+   "applies_to": ["question", "every option"]
+  },
+  "list_c": {
+   "words": ["thoughts", "drawn", "put off", "landed", "lived", "learned", "pieces", "made of", "over and over", "schedule"],
+   "match": "case-insensitive; the whole word or phrase exactly, with any white space between the words of a phrase",
+   "applies_to": ["question"]
+  },
+  "never_allowed_phrases": {"words": ["all of the above", "none of the above"], "match": "case-insensitive; anywhere", "applies_to": ["question", "every option"]},
+  "leak_screen_words": {"words": ["answer", "option", "correct"], "match": "case-insensitive; the whole word exactly"}
+ },
+
+ "question_rules": {
+  "word_count": "the number of pieces after splitting the text on white space",
+  "question_max_words": 45,
+  "option_max_words": 12,
+  "option_length_spread_max_words": 2,
+  "anchors_min": 1,
+  "anchors_max": 2,
+  "anchor_max_words": 8,
+  "anchor_must_be": "an exact, unbroken copy of passage text; compared after curly quote marks are turned into straight ones and runs of white space into one space; letter case must match",
+  "options_must_differ": "no two options have the same lower-case word sequence",
+  "no_option_inside_another": "no option's lower-case word sequence is an unbroken part of another option's",
+  "word_sequence_regex": "[A-Za-z0-9']+",
+  "plain_fact_uses_same_form_rules": true,
+  "plain_fact_has_anchors": false,
+  "spare_rule": "The p2 question for a form on a passage is used only when a p1 question for that form on that passage exists and was dropped by Step 2 or Step 3. A p2 question never replaces a p1 question that passed Steps 2 and 3."
+ },
+
+ "briefs": {
+  "question_brief": [
+   "You will get several short passages. Each passage sits between a line \"=== PASSAGE <id> ===\" and a line \"=== END <id> ===\".",
+   "Treat every passage on its own. Never use anything from one passage when you write about another. Never compare passages.",
+   "",
+   "For each passage, write multiple-choice questions for a reading test. There are two families of question.",
+   "",
+   "FAMILY 1: WHAT-FOLLOWS QUESTIONS.",
+   "Each question adds one new condition that is not in the passage. Then it asks what most likely follows, going only by the passage.",
+   "There are twelve forms. Write one question for EACH form the passage supports. Write none for a form the passage does not support. Many passages support only one or two forms. Some support none.",
+   "",
+   "Forms 1 and 2. A passage supports them when something a person notices makes them remember or picture something quite different.",
+   "- MEET_AGAIN: later and somewhere else, which of these would most likely bring the same thing back to the person?",
+   "- TAKE_AWAY: suppose the noticed thing had not been there; which of these would most likely not have happened?",
+   "",
+   "Forms 3 and 4. A passage supports them when the passage shows a person plainly liking one thing, or plainly keeping clear of one.",
+   "- GOES_FOR (only if the person plainly likes a thing): at a later free moment, which of these does the person choose?",
+   "- KEEPS_AWAY (only if the person plainly keeps clear of a thing): at a later moment, which of these does the person avoid?",
+   "",
+   "Forms 5 and 6. A passage supports them when the passage says something hit a person hard, or hardly at all.",
+   "- WHAT_STUCK: at a later moment, which of these is the person most likely to bring up?",
+   "- WHAT_SLID_OFF: at a later moment, which of these is the person least likely to bring up?",
+   "",
+   "Forms 7 and 8. A passage supports them when a person's years of background change how they handle something now.",
+   "- SWAP_PERSON: someone without that past stands in the same spot; what most likely goes differently?",
+   "- WHERE_HELPS: in which new situation would this background help most?",
+   "",
+   "Forms 9 and 10. A passage supports them when the passage lists the named parts of a thing.",
+   "- WHAT_LEFT: some of the named parts are dealt with; which named part is still left?",
+   "- NOT_BELONG: a spare kit holds one of each named part; which of these would not be in it?",
+   "",
+   "Forms 11 and 12. A passage supports them when doing the same thing again and again at set times has changed what a person does without trying.",
+   "- LONG_BREAK: the repeated thing stops for a year or two; which action has most likely faded?",
+   "- NEW_STARTER: someone on their first day takes the person's place; which of these would most likely be missing?",
+   "",
+   "Rules for every FAMILY 1 question:",
+   "- Give exactly six different options: one right option and five wrong options. Exactly one option may be right.",
+   "- Give the five wrong options in a fixed order. Where the form allows it, the FIRST wrong option uses the same things as the right option in a different relationship. Example: where the right option is the thing the person likes, the first wrong option is the thing the person keeps clear of.",
+   "- Every wrong option is a thing or an action named in the passage, or one that plainly fits the passage. No throwaway options.",
+   "- No option is longer than 12 words. All six options are within 2 words of each other in length. The right option must not stand out by its length. No option may contain another option.",
+   "- The question is at most 45 words long.",
+   "- Give one or two anchors. An anchor is an exact, unbroken copy of words from the passage, at most 8 words long, that the question turns on.",
+   "- Never ask the reader to name or sort the kind of moment. Ask only what most likely follows.",
+   "- Never ask what a sign means. Never ask about a conclusion that someone worked out step by step.",
+   "",
+   "FAMILY 2: ONE PLAIN-FACT QUESTION.",
+   "Write exactly one for every passage. It asks about a fact the passage states outright: where a thing was, who did what, which object.",
+   "The fact must not depend on what anyone thinks, likes, remembers, usually does or has been through, or on what a thing consists of.",
+   "Give exactly four different options: one right option and three wrong options. The same length rules apply.",
+   "",
+   "WORDS YOU MUST NOT USE.",
+   "In every question and in every option, never use these words or any word that begins with them: <<LIST_A>>.",
+   "In every question and in every option, never use the sign ^ and never use these words: <<LIST_B>>.",
+   "In every question and in every option, never write: <<NEVER_ALLOWED_PHRASES>>.",
+   "In the question sentence itself, also never use these words or phrases: <<LIST_C>>.",
+   "",
+   "REPLY FORMAT.",
+   "Reply with ONE JSON array and nothing else. It holds one object per passage, in the order the passages were given:",
+   "[{\"passage\": \"<id>\", \"what_follows\": [{\"form\": \"<FORM NAME>\", \"question\": \"...\", \"right\": \"...\", \"wrong\": [\"...\", \"...\", \"...\", \"...\", \"...\"], \"anchors\": [\"...\"]}], \"plain_fact\": {\"question\": \"...\", \"right\": \"...\", \"wrong\": [\"...\", \"...\", \"...\"]}}]",
+   "\"what_follows\" may be an empty list. Use the form names exactly as they are written in this brief.",
+   "",
+   "The passages follow."
+  ],
+  "question_brief_list_join": ", ",
+  "question_brief_phrase_quote": "\"",
+  "question_passage_fence": [
+   "=== PASSAGE <<ID>> ===",
+   "<<PASSAGE>>",
+   "=== END <<ID>> ==="
+  ],
+  "question_request_layout": "the brief, one empty line, then the fenced passages of the batch with one empty line between them",
+
+  "ord_informed_brief": [
+   "A weaker reader will be asked multiple-choice questions about this passage. You do not know the questions. They may ask what brought what into someone's thoughts, what someone is drawn toward or put off by, how strongly or weakly something landed, what a person has lived or learned, what named pieces a thing is made of, what someone does over and over on a schedule, and plain details. Write the notes that would help most. Plain words. Add nothing the passage does not support. About <<N>> words."
+  ],
+  "ord_free_brief": [
+   "A weaker reader will be asked multiple-choice questions about this passage. You do not know the questions. Write the notes that would help most. Plain words. Add nothing the passage does not support. About <<N>> words."
+  ],
+  "ordinary_request_frame": [
+   "<<BRIEF>>",
+   "",
+   "Reply with the notes only, as plain text. No heading.",
+   "",
+   "Passage:",
+   "<<PASSAGE>>"
+  ],
+  "ordinary_rewrite_frame": [
+   "<<BRIEF>>",
+   "",
+   "An earlier set of notes for this passage failed a check: at least one sentence was not supported by the passage. Write the notes again from the start.",
+   "",
+   "Reply with the notes only, as plain text. No heading.",
+   "",
+   "Passage:",
+   "<<PASSAGE>>"
+  ],
+
+  "support_brief": [
+   "You will get several items. Each item sits between a line \"=== ITEM <id> ===\" and a line \"=== END <id> ===\". Each item holds one passage and one note about that passage.",
+   "Treat every item on its own. Never use one item to judge another.",
+   "",
+   "For each item decide one thing only: is every sentence of the note supported by its passage?",
+   "A sentence is supported when the passage states it or plainly shows it. A sentence that says the passage does not mention something is supported when the passage indeed does not mention it.",
+   "A sentence is not supported when it adds a fact, a reason, a feeling or a detail that the passage does not give.",
+   "If every sentence is supported, the verdict is PASS. If one or more sentences are not supported, the verdict is FAIL.",
+   "",
+   "Reply with ONE JSON array and nothing else. It holds one object per item, in the order the items were given:",
+   "[{\"item\": \"<id>\", \"verdict\": \"PASS\"}, {\"item\": \"<id>\", \"verdict\": \"FAIL\"}]",
+   "",
+   "The items follow."
+  ],
+  "support_item_fence": [
+   "=== ITEM <<ID>> ===",
+   "Passage:",
+   "<<PASSAGE>>",
+   "",
+   "Note:",
+   "<<NOTE>>",
+   "=== END <<ID>> ==="
+  ],
+
+  "solver_with_passage": [
+   "Read the passage. Then answer the multiple-choice question. Go only by the passage.",
+   "",
+   "Passage:",
+   "<<PASSAGE>>",
+   "",
+   "Question: <<QUESTION>>",
+   "<<OPTION_LINES>>",
+   "",
+   "Reply with one JSON object and nothing else.",
+   "If exactly one option fits best, reply {\"answer\": \"<its capital letter>\"}.",
+   "If more than one option fits equally well, reply {\"answer\": \"MORE_THAN_ONE\"}.",
+   "If no option fits, reply {\"answer\": \"NONE\"}."
+  ],
+  "solver_no_passage": [
+   "Answer the multiple-choice question. The question was written about a short passage, but you are not given that passage. Use common sense only. Pick the single most likely option. You must pick one.",
+   "",
+   "Question: <<QUESTION>>",
+   "<<OPTION_LINES>>",
+   "",
+   "Reply with one JSON object and nothing else: {\"answer\": \"<its capital letter>\"}."
+  ],
+  "solver_sheet_header_with_passage": [
+   "SHEET <<SHEET_ID>>. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.",
+   "For each item write one line: the item id, one space, then your reply.",
+   "Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.",
+   "Write nothing else. Do not explain. Do not open any file."
+  ],
+  "solver_sheet_header_no_passage": [
+   "SHEET <<SHEET_ID>>. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.",
+   "For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.",
+   "Write nothing else. Do not explain. Do not open any file."
+  ],
+  "solver_sheet_item_with_passage": [
+   "=== ITEM <<ID>> ===",
+   "Passage:",
+   "<<PASSAGE>>",
+   "",
+   "Question: <<QUESTION>>",
+   "<<OPTION_LINES>>",
+   "=== END <<ID>> ==="
+  ],
+  "solver_sheet_item_no_passage": [
+   "=== ITEM <<ID>> ===",
+   "Question: <<QUESTION>>",
+   "<<OPTION_LINES>>",
+   "=== END <<ID>> ==="
+  ],
+  "solver_flags": ["MORE_THAN_ONE", "NONE"]
+ },
+
+ "solver_rules": {
+  "solvers": ["deepseek-chat", "claude-sonnet-subagent"],
+  "item_id_prefix": {"with_passage": "Q", "no_passage": "G", "support": "N"},
+  "item_id_digits": 4,
+  "options_shown_to_solvers": "all options the writer wrote (six for a role-step question, four for a plain-fact question), in an order shuffled with random.Random('<solver_option_shuffle>|<question id>|<solver>|<mode>')",
+  "key_check_keep_rule": "Keep a question only if both solvers picked the writer's right option and neither raised a flag. An unreadable reply counts as not picked.",
+  "no_passage_drop_rule": "Drop a question if both solvers picked the writer's right option with no passage. An unreadable reply counts as not picked.",
+  "applies_to": ["role_step", "plain_fact"]
+ },
+
+ "selection": {
+  "per_passage_rng": "random.Random('<selection>|<passage id>')",
+  "pair_rule": "List every pair of surviving role-step questions on the passage that have different forms, right options that are not the same thing, and respect the LAND rule. If any pair has two different types, keep only such pairs. Sort the pairs by form order. Pick one pair with the passage's random source. If no pair exists, sort the survivors by form order and pick one. If no survivor exists, the passage carries no role-step task.",
+  "length_backstop": {
+   "measure": "over the role-step tasks of one set (practice or final), the share whose right option is the single longest of its six options, and the share whose right option is the single shortest; both counted in words",
+   "single_longest_max_percent": 35,
+   "single_shortest_max_percent": 35,
+   "drop_rule": "While the longest share is above the cap, drop one task picked from the flagged tasks (sorted by task id) with random.Random(<length_backstop>). Then do the same for the shortest share. Every drop is logged.",
+   "order": "after the pair choice; before letters are set"
+  },
+  "letters": {
+   "when": "in tools/ob_assemble.py, after the answer-leak screen, when everything else is frozen",
+   "rule": "Per set, per task family and per level. For each type of the family, in the order of types_in_order (the plain-fact family has the one type FACT): sort the tasks of that type by id and shuffle them with random.Random('<letters>|<set>|<type>|<level>'). Join the shuffled lists, type after type, into one list. The task at place i of the joined list, counted from 0, gets the right letter letters[i % shown]. The count does not start again at A for a new type. shown is the number of options shown: 4 at level 1 and 6 at level 2 for a role-step task; 4 for a plain-fact task, which has level 1 only. The other shown options fill the other letters in an order drawn with random.Random('<letters>|<task id>|<level>').",
+   "balance": "So each letter is right equally often, to within one task, inside every type and over the whole family. tools/ob_assemble.py checks both and stops with LETTERS_NOT_BALANCED if either fails.",
+   "always_answer_a": "A rule that always answers A scores chance to within one task, in every family and at every level.",
+   "same_for_every_group": true
+  }
+ },
+
+ "ordinary_notes": {
+  "writer": "deepseek-chat, temperature 0, one passage per call, no memory",
+  "written_for": "every passage of the set that carries at least one selected task",
+  "written_when": "only after the questions and keys of that set are sealed",
+  "briefs_in_order": ["ORD-INFORMED", "ORD-FREE"],
+  "lengths_in_order": ["090", "100", "110"],
+  "length_percent": {"090": 90, "100": 100, "110": 110},
+  "target_words_rule": "N = (percent * C_role * W_p + 50 * M_p) // (100 * M_p). C_role is the size count of the passage's ROLE note. W_p is the number of words in the passage (regex [A-Za-z0-9']+). M_p is the size count of the passage (role_notes.size_count_regex).",
+  "target_words_min": 20,
+  "text_cleaning": "Strip white space at both ends. Turn CR LF into LF. Change nothing else.",
+  "rewrite_rule": "A note that fails the support check is written again once with ordinary_rewrite_frame. The second version is checked once. The support check is the only thing that can cause a rewrite.",
+  "second_failure_rule": "If the second version fails too, the passage is dropped for every group and the reason is logged.",
+  "length_pick_tie_order": ["100", "090", "110"]
+ },
+
+ "leak_screen": {
+  "screened_groups": ["FILLER", "ROLE", "MIXED", "QUOTES-ONLY", "ORD-INFORMED", "ORD-FREE"],
+  "not_screened": ["ANSWER-GIVEN"],
+  "ordinary_notes_screened": "all three lengths of both briefs, current version",
+  "program_built_notes_screened_text": "the frame text only: the note with every quoted passage part blanked",
+  "normalise": "lower case; words by regex [A-Za-z0-9']+; 'holds' means an unbroken run of the same words",
+  "rule_a_patterns": [
+   "\\(([A-F])\\)",
+   "(?<![A-Za-z0-9'])([A-F])\\.(?![A-Za-z0-9])",
+   "(?i:\\b(?:answer|option|choice)\\b\\s*(?:is|:|=)?\\s*[\"'(]?)([A-F])\\b"
+  ],
+  "rule_a": "an option letter written as a choice. Program-built note: any match in the frame text is a hit. Ordinary note: a hit when a pattern matches more often in the note than in the passage.",
+  "rule_b": "the note holds a sentence of the question that has 5 or more words, or the whole question",
+  "rule_b_min_words": 5,
+  "rule_c": "the note holds the full text of an option that the passage does not hold. Every written option of every selected task of the passage is tested.",
+  "rule_d": "the whole word answer, option or correct. Program-built note: any use in the frame text is a hit. Ordinary note: a hit when the note holds the word more often than the passage does.",
+  "on_hit": "The passage is dropped for every group, with the rule logged. No note is ever written again because of a hit.",
+  "report_only": "tools/ob_screen_notes.py --report-only, for the practice set only. It needs seal steps 3A and 3B and a finished practice support check (no practice passage with the status REWRITE_NEEDED or UNCHECKED). It does not need seal step 4. It applies rules a to d to the practice notes as they then stand. It prints the passages screened, the passages hit, the hits per rule, and what is left against the launch floor. It writes no file. It is an early look. The screen of record is the later full run, whose file is sealed in step 5.",
+  "rules_c_and_d_status": "Kept as written. Review round 1 named a risk: an ordinary note can hold a short option, or one of the three words, by chance. Making rule c looser would weaken the screen, so it was not done. The report-only run shows the real hit rate on the practice set before any final question is written."
+ },
+
+ "prompt": {
+  "heading_of_every_notes_block": "Notes:",
+  "frame_with_notes": [
+   "Read the passage and answer the question.",
+   "",
+   "Passage:",
+   "<<PASSAGE>>",
+   "",
+   "Notes:",
+   "<<PADDING_LINE>>",
+   "<<NOTES>>",
+   "",
+   "Question: <<QUESTION>>",
+   "<<OPTION_LINES>>",
+   "",
+   "<<CLOSING>>"
+  ],
+  "frame_none": [
+   "Read the passage and answer the question.",
+   "",
+   "Passage:",
+   "<<PASSAGE>>",
+   "",
+   "Question: <<QUESTION>>",
+   "<<OPTION_LINES>>",
+   "",
+   "<<CLOSING>>"
+  ],
+  "frame_no_passage": [
+   "Answer the question.",
+   "",
+   "Question: <<QUESTION>>",
+   "<<OPTION_LINES>>",
+   "",
+   "<<CLOSING>>"
+  ],
+  "option_line": "<<LETTER>>. <<TEXT>>",
+  "option_lines_join": "one option per line, in letter order",
+  "closing_wordings_in_order": [
+   "Return exactly one JSON object with key answer and no other text. The value of answer is one capital letter: <<LETTERS_OR>>.",
+   "Reply with one JSON object only. Its single key is \"answer\". Its value is the capital letter of your choice (<<LETTERS_OR>>) and nothing more. No option text, no explanation, no code fence.",
+   "Output format: {\"answer\": \"<letter>\"} where <letter> is exactly one of <<LETTERS_COMMA>>. Output the JSON object only."
+  ],
+  "letters_or": {"4": "A, B, C or D", "6": "A, B, C, D, E or F"},
+  "letters_comma": {"4": "A, B, C, D", "6": "A, B, C, D, E, F"},
+  "closing_tie_goes_to": "the wording listed first",
+  "filler_sentence": "No notes are provided for this passage.",
+  "answer_given_note": "The right answer to the question is <<LETTER>>.",
+  "prompt_hash": "sha256 of the UTF-8 bytes of the full prompt text after the chat template is applied"
+ },
+
+ "padding": {
+  "line_prefix": "[Padding:",
+  "line_unit": " neutral",
+  "line_suffix": "]",
+  "shortest_line": "[Padding: neutral]",
+  "line_rule": "prefix, then the unit k times (k is 1 or more), then the suffix",
+  "position": "the first line of the Notes block, in every group that has a Notes block",
+  "block_text": "the padding line, one line feed, then the group's notes text",
+  "length_pick": "For each passage and each ordinary group, take the length whose notes text is nearest in tokens to the ROLE notes text. A tie goes by ordinary_notes.length_pick_tie_order.",
+  "target": "for a passage: the largest token count, over its groups, of the block text built with the shortest padding line",
+  "fit": "For each group pick k so that the block's token count is as near the target as it can be. A tie goes to the smaller k.",
+  "token_difference_allowed": 1,
+  "if_difference_is_larger": "GATE_STOP_SELFTEST",
+  "padding_share": "token count of the padding line alone, divided by the token count of the block",
+  "average": "the mean of the per-passage shares, kept as an exact fraction; worked out for the practice passages and for the final passages apart",
+  "average_max_percent": 10,
+  "groups_under_the_rule": ["ROLE", "MIXED", "ORD-INFORMED", "ORD-FREE"],
+  "stop_rule": "If the average is above 10 percent for any group under the rule, in the practice passages or in the final passages, stop with GATE_STOP_PADDING.",
+  "always_reported": "the average padding share of every group, per set"
+ },
+
+ "practice_steps": {
+  "P1": "group NONE, level 1, every practice task (role-step and plain-fact), once under each of the three closing wordings",
+  "P2": "group NONE, level 2, every practice role-step task, under the chosen wording",
+  "P3": "at the chosen level and wording: FILLER, ROLE, MIXED, ORD-INFORMED, ORD-FREE, QUOTES-ONLY, ANSWER-GIVEN and NO-PASSAGE on every practice role-step task; FILLER, ROLE, MIXED, ORD-INFORMED and ORD-FREE on every practice plain-fact task",
+  "early_stop": "P3 does not start if Gate 2 or Gate 3 already fails after P2."
+ },
+
+ "gates": {
+  "order": ["GATE_0_SELFTEST", "GATE_1_CLOSING_WORDING", "GATE_2_DIFFICULTY", "GATE_3_NO_HARM_BASE", "GATE_4_FORMAT", "GATE_5_NOTES_ARE_READ", "GATE_6_PASSAGE_IS_NEEDED", "GATE_7_TIME"],
+  "first_failing_gate_gives_the_stop_code": true,
+  "gate_0": {
+   "score_time_factor": 5,
+   "score_time_limit_min_seconds": 120,
+   "score_time_limit_max_seconds": 240,
+   "planned_calls_must_not_exceed_call_cap": true
+  },
+  "gate_1": {"measure": "clean replies of group NONE at level 1 over all practice tasks, per closing wording", "pick": "the wording with the most clean replies; a tie goes to the wording listed first", "stop_code": null},
+  "gate_2": {
+   "measure": "share CORRECT of group NONE on practice role-step tasks, per level",
+   "window_percent": {"1": [35, 70], "2": [30, 70]},
+   "lower_edge_rule": "the larger of 30 percent and chance plus 10 points",
+   "pick": "If both levels are inside their window, the one nearer 50 percent; a tie goes to level 1. If one is inside, that one. If none, stop.",
+   "stop_code": "GATE_STOP_DIFFICULTY"
+  },
+  "gate_3": {"measure": "share CORRECT of group NONE on practice plain-fact tasks under the chosen wording", "min_percent": 60, "stop_code": "GATE_STOP_NO_HARM_BASE"},
+  "gate_4": {
+   "measure": "per must-run group and per task family, over the group's practice tasks of that family at the chosen level under the chosen wording: the share of clean replies, and the share FORMAT_FAIL plus CUT_OFF. Role-step tasks and plain-fact tasks are counted apart. Both families must clear both numbers. QUOTES-ONLY has role-step tasks only.",
+   "families_counted_apart": ["role_step", "plain_fact"],
+   "same_split_as": "validity rule V3 on the final tasks",
+   "clean_min_percent": 75,
+   "format_fail_plus_cut_off_max_percent": 25,
+   "stop_code": "GATE_STOP_FORMAT",
+   "secondary_group_under_the_bar": "NO-PASSAGE is dropped from the final phase; this does not stop the job"
+  },
+  "gate_5": {"measure": "among ANSWER-GIVEN replies that are clean, the share CORRECT", "min_percent": 90, "min_clean_replies": 20, "stop_code": "GATE_STOP_NOTES_NOT_READ"},
+  "gate_6": {"measure": "share CORRECT of NO-PASSAGE on practice role-step tasks at the chosen level", "stop_if_above_chance_plus_points": 15, "stop_code": "GATE_STOP_GUESSABLE", "also_printed": "NO-PASSAGE share minus NONE share, in points"},
+  "gate_7": {
+   "seconds_per_call": "the mean seconds of the practice calls in the seven must-run groups at the chosen level under the chosen wording",
+   "margin_percent": 125,
+   "spare_seconds": 300,
+   "must_fit": "calls * seconds_per_call * 125 / 100 + 300 <= work cutoff minus now, for the must-run block",
+   "secondary_rule": "NO-PASSAGE is added only if the must-run block plus the NO-PASSAGE block also fits by the same rule. Decided once, before the first final call.",
+   "stop_code": "GATE_STOP_TIME"
+  },
+  "printed_no_rule": [
+   "the share of practice role-step tasks on which ROLE and ORD-INFORMED give different results (one CORRECT, the other not)",
+   "the gap in clean replies between ROLE and each ordinary group"
+  ]
+ },
+
+ "launch_floor": {
+  "final_role_step_tasks_min": 100,
+  "final_plain_fact_tasks_min": 100,
+  "practice_role_step_tasks_min": 36,
+  "practice_plain_fact_tasks_min": 20
+ },
+
+ "tiers": {
+  "as_it_stands": {"final_role_step_tasks_min": 200, "final_passages_with_a_role_step_task_min": 120},
+  "exploratory_suffix": "_EXPLORATORY",
+  "suffix_applies_to": ["NO_ROLE_HELP_SHOWN", "HELP_NOT_TIED_TO_CORRECT_ROLES", "ROLE_HELP_NOT_ABOVE_ORDINARY_HELP", "HELPS_BUT_BREAKS_RIGHT_ANSWERS", "BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED", "POINTING_BEATS_ORDINARY_HELP_ROLE_NAMES_NOT_SHOWN", "ROLE_HELP_BEATS_STRONGEST_ORDINARY_HELP"],
+  "suffix_never_on": ["INVALID_RUN", "UNINFORMATIVE_DIFFICULTY", "FORMAT_GAP_NOT_READABLE", "PADDING_HURTS_B_NOT_READABLE"],
+  "no_launch_below_final_role_step_tasks": 100
+ },
+
+ "tests": {
+  "unit": "the final passage",
+  "per_passage_value": "d = (tasks CORRECT under X) minus (tasks CORRECT under Y), over the passage's final role-step tasks at the chosen level",
+  "sign_flips": 100000,
+  "bootstrap_resamples": 10000,
+  "alpha": "0.05",
+  "p_max_count_one_sided": 5000,
+  "p_rule": "p = (number of flips whose flipped sum is at least the real sum) / 100000. X beats Y when that number is at most 5000.",
+  "two_sided_rule": "p = (number of flips whose flipped sum is at least as far from zero as the real sum) / 100000. The test holds when that number is at most 5000.",
+  "random_source": "random.Random(seed) of the Python standard library; a fresh one for every test and for every range",
+  "flip_draw": "per flip r = rng.getrandbits(n_passages); the passages are sorted by passage id; bit j of r, counted from 0, belongs to passage j; a set bit flips the sign of that passage's d; the flipped sum is the real sum minus 2 times the sum of d over the flipped passages; compare whole-number sums",
+  "range_95": "per resample rng.choices(passages, k=n_passages), with the passages in passage-id order; the resampled difference is 100 * sum(d) / sum(tasks), in points, kept as a whole number of millionths of a point, rounded down; sort the 10000 values; the range is the values at index 250 and index 9749",
+  "one_sided_upper_95_index": 9499,
+  "standard_error": "Amendment A4. The standard error is the standard deviation of the 10000 resampled differences, in points. That is the bootstrap standard error. It is used as it stands: it is not divided by the number of resamples, by the number of passages or by any other count. The standard deviation is taken in its plain form: the square root of the average squared distance of the 10000 values from their average. Worked out with whole numbers, the square root rounded down.",
+  "random_procedure_note": "This is the procedure that optionb/job/analysis_b1.py runs. It needs no numpy. Review round 1 replaced an earlier text that named numpy; no program ever ran that one. A recount uses the same Python version as the job: Python promises the same random() sequence for the same seed on later versions, but gives no written promise for getrandbits and choices (EXPECTED to be the same)."
+ },
+
+ "validity": {
+  "V1": "Every planned final call in the seven must-run groups has an output line.",
+  "V2": "The model-hash receipt before the first call and the receipt after the last model call both exist and list the same files with the same sha256. The package matches the seal. Every prompt hash matches the dry build.",
+  "V3": "No must-run group is at format floor. Role-step tasks and plain-fact tasks are counted apart and both must clear.",
+  "format_floor_percent": 25,
+  "format_floor_rule": "A group is at format floor when FORMAT_FAIL plus CUT_OFF is above 25 percent of its final tasks of one family.",
+  "code": "INVALID_RUN",
+  "reasons": ["MISSING_FINAL_OUTPUTS", "MODEL_HASH_RECEIPT_MISSING", "MODEL_HASH_CHANGED", "PACKAGE_DOES_NOT_MATCH_SEAL", "PROMPT_HASH_MISMATCH", "FORMAT_FLOOR"]
+ },
+
+ "readability": {
+  "R1": {"code": "UNINFORMATIVE_DIFFICULTY", "rule": "group NONE on final role-step tasks is above 85 percent, or below chance plus 5 points", "above_percent": 85, "below_chance_plus_points": 5},
+  "R2": {"code": "FORMAT_GAP_NOT_READABLE", "rule": "on final role-step tasks the not-clean share of ROLE differs from that of ORD-INFORMED, or from that of ORD-FREE, by more than 5 points in either direction, AND the two-sided passage-level test on the not-clean counts holds", "points": 5},
+  "R3": {"code": "PADDING_HURTS_B_NOT_READABLE", "rule": "FILLER is 5 or more points below NONE on final role-step tasks, AND NONE beats FILLER by the test", "points": 5},
+  "chance_percent": {"4": "100/4", "6": "100/6"}
+ },
+
+ "conditions": {
+  "C1": "ROLE beats NONE, and ROLE beats FILLER.",
+  "C2": "ROLE beats ORD-INFORMED, and ROLE beats ORD-FREE, and ROLE's share is at least 5 points above the better of the two. On a tie the better one is ORD-INFORMED.",
+  "C2_margin_points": 5,
+  "C3": "ROLE beats MIXED.",
+  "C4": "The no-harm check is HELD.",
+  "C5": "ROLE beats QUOTES-ONLY."
+ },
+
+ "no_harm": {
+  "H1": "On final plain-fact tasks: (share CORRECT under NONE) minus (share CORRECT under ROLE) is at most 5 points.",
+  "H1_max_loss_points": 5,
+  "H2": "Take every final task, both families, that is CORRECT under NONE. The share of them still CORRECT under ROLE is not more than 5 points below the share still CORRECT under FILLER.",
+  "H2_max_gap_points": 5,
+  "H2_yardstick": "FILLER",
+  "not_measurable_if_final_plain_fact_tasks_below": 100,
+  "not_measurable_if_final_tasks_correct_under_none_below": 80,
+  "values": ["HELD", "NOT_HELD", "NOT_MEASURABLE"],
+  "also_printed_for": ["MIXED", "QUOTES-ONLY", "ORD-INFORMED", "ORD-FREE"],
+  "quotes_only_note": "QUOTES-ONLY has no plain-fact tasks. H1 does not apply to it. Its H2 is worked out on role-step tasks only and labeled so."
+ },
+
+ "missed_gain_x": {
+  "rule": "X = the larger of (2.485 * SE) and (5 + 0.84 * SE), rounded up to a whole point. SE is the standard error of the ROLE-minus-better-rival difference, in points.",
+  "standard_error_is": "Amendment A4. SE is the bootstrap standard error: the standard deviation of the 10000 resampled ROLE-minus-better-rival differences, in points, as tests.standard_error defines it. Nothing divides it by a count.",
+  "factor_a": "2.485",
+  "factor_b": "0.84",
+  "base_points": 5
+ },
+
+ "outcome_codes_in_checking_order": [
+  {"n": 1, "code": "INVALID_RUN", "when": "V1, V2 or V3 fails"},
+  {"n": 2, "code": "UNINFORMATIVE_DIFFICULTY", "when": "R1"},
+  {"n": 3, "code": "FORMAT_GAP_NOT_READABLE", "when": "R2"},
+  {"n": 4, "code": "PADDING_HURTS_B_NOT_READABLE", "when": "R3"},
+  {"n": 5, "code": "NO_ROLE_HELP_SHOWN", "when": "C1 does not hold"},
+  {"n": 6, "code": "HELP_NOT_TIED_TO_CORRECT_ROLES", "when": "C1 holds; C3 does not"},
+  {"n": 7, "code": "ROLE_HELP_NOT_ABOVE_ORDINARY_HELP", "when": "C1 and C3 hold; C2 does not"},
+  {"n": 8, "code": "HELPS_BUT_BREAKS_RIGHT_ANSWERS", "when": "C1, C2 and C3 hold; no-harm is NOT_HELD"},
+  {"n": 9, "code": "BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED", "when": "C1, C2 and C3 hold; no-harm is NOT_MEASURABLE"},
+  {"n": 10, "code": "POINTING_BEATS_ORDINARY_HELP_ROLE_NAMES_NOT_SHOWN", "when": "C1, C2, C3 and C4 hold; C5 does not"},
+  {"n": 11, "code": "ROLE_HELP_BEATS_STRONGEST_ORDINARY_HELP", "when": "C1 to C5 all hold"}
+ ],
+ "outcome_codes_count": 11,
+ "outcome_codes_numbering": "Amendment A7. The codes are numbered 1 to 11. No number is used twice.",
+ "pass_code": "ROLE_HELP_BEATS_STRONGEST_ORDINARY_HELP",
+ "code_format": "capital letters and underscores only, at most 80 characters; the guest turns anything else into RESULT_UNREADABLE",
+ "result_unreadable_text": "RESULT_UNREADABLE",
+
+ "stop_codes": ["GATE_STOP_SELFTEST", "GATE_STOP_PADDING", "GATE_STOP_DIFFICULTY", "GATE_STOP_NO_HARM_BASE", "GATE_STOP_FORMAT", "GATE_STOP_NOTES_NOT_READ", "GATE_STOP_GUESSABLE", "GATE_STOP_TIME"],
+ "runner_refusal_code": "GPU_REQUIRED",
+ "selftest_pass_status": "SELFTEST_PASS",
+ "run_stop_reasons": ["STOP_CALL_CAP", "STOP_WORK_CUTOFF"],
+
+ "report_sentences": {
+  "code_7": "Role information helped B. An advantage over a strong model's ordinary notes was not shown. A gain under about <<X>> points could have been missed.",
+  "code_10": "The checked label-and-quote notes beat ordinary help. A gain from the role names beyond pointing at the words was not shown.",
+  "no_harm_range": "A loss of up to <<X>> points cannot be ruled out."
+ },
+
+ "scorer": {
+  "version": "0.1.1",
+  "file": "optionb/job/scorer_v0_1_1.py",
+  "rules": "03_SCORER_RULES_v0_1.md, with one change: a reply whose top-level object repeats a key is FORMAT_FAIL",
+  "categories": ["CORRECT", "WRONG", "TYPE_MISMATCH", "FORMAT_FAIL", "CUT_OFF"],
+  "primary_score": "CORRECT = 1; every other category = 0",
+  "task_answer_type": "one capital letter, as a string",
+  "examples_file": "optionb/job/scorer_examples_v0_1_1.json",
+  "examples_old_count": 30,
+  "examples_added_count": 10,
+  "clean_reply": "scored CORRECT or WRONG, and the value is one of the letters shown for that task",
+  "not_clean_reply": "everything else: FORMAT_FAIL, CUT_OFF, TYPE_MISMATCH, and a WRONG reply whose value is not one of the letters shown",
+  "scorer_is_never_told_the_group": true
+ },
+
+ "selftest": {
+  "modes": ["precheck", "gate0"],
+  "precheck": "CPU allowed; no model is loaded; the GPU check is recorded as not checked",
+  "gate0": "the GPU must be present; a CPU makes the runner stop with GPU_REQUIRED",
+  "made_up_sets_in_order": ["ALL_RIGHT", "ALL_WRONG", "DESIGNED", "RANDOM_LETTERS", "ALL_MALFORMED"],
+  "made_up_sets": {
+   "ALL_RIGHT": {"replies": "every reply is the right letter, well formed", "gate_must_print": "GATE_STOP_DIFFICULTY", "analysis_must_print": "UNINFORMATIVE_DIFFICULTY"},
+   "ALL_WRONG": {"replies": "every reply is well formed and is the first shown letter that is not the right one", "gate_must_print": "GATE_STOP_DIFFICULTY", "analysis_must_print": "UNINFORMATIVE_DIFFICULTY"},
+   "DESIGNED": {"replies": "Sort the role-step tasks by id and number them from 0. ROLE and ANSWER-GIVEN: right on every task. NO-PASSAGE: wrong on every task. Every other group, every wording and both levels: right on even numbers, wrong on odd numbers. Plain-fact tasks: right in every group. A wrong reply is the first shown letter that is not the right one. Seconds per call: 1.0.", "gate_must_print": "GO", "gate_must_choose": {"wording": 1, "level": 1}, "analysis_must_print": "BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED_EXPLORATORY"},
+   "RANDOM_LETTERS": {"replies": "every reply is well formed; its letter is drawn from the letters shown with random.Random('<selftest_random_letters>|<call id>')", "gate_must_print": "GO or any listed stop code", "analysis_must_print": "any listed outcome code, with or without the suffix, except the pass code"},
+   "ALL_MALFORMED": {"replies": "every reply is the text: I think the answer is probably the second one", "gate_must_print": "GATE_STOP_DIFFICULTY", "analysis_must_print": "INVALID_RUN"}
+  },
+  "made_up_clock": "The gate program is given a made-up clock for these sets: now = 0 and work cutoff = 1000000 seconds.",
+  "made_up_receipts": "The analysis program is given two made-up model-hash receipts that are equal.",
+  "made_up_level_for_analysis": 1,
+  "precheck_binding": "The pre-check prints prompt_list_sha256 and padding_plan_sha256. Gate 0 of the GPU job must print the same two values. A mismatch is GATE_STOP_SELFTEST."
+ },
+
+ "aws": {
+  "gpu_job": {
+   "instance": "g5.2xlarge (one A10G 24 GB GPU)",
+   "image": "ami-0dddfa1ffa6b87af7",
+   "controller_folder_proposed": "D:/tksCAS-runs/controller_cas_optionb_b1/",
+   "derived_from": "D:/tksCAS-runs/controller_cas_small_op11_claude_c1/",
+   "cap_usd": "5.00",
+   "hard_time_limit_minutes": 180,
+   "attempts": 1,
+   "host_shuts_itself_down": true,
+   "price_usd_per_hour_expected": "1.212",
+   "clock_seconds": {"setup_must_end": 1800, "work_cutoff": 8100, "score_must_end": 8400, "forced_shutdown": 10500, "hard_limit": 10800},
+   "clock_minutes": {"setup_must_end": 30, "work_cutoff": 135, "score_must_end": 140, "forced_shutdown": 175, "hard_limit": 180},
+   "guest_end_hash_reserve_seconds": 1800,
+   "call_cap": 5000,
+   "archive_cap_bytes": 100000000,
+   "work_folder_in_job": "work/run_b1",
+   "model_receipt_before": "controller/MODEL_PRE.json",
+   "model_receipt_after_calls": "controller/MODEL_AFTER_CALLS.json",
+   "model_receipt_end": "controller/MODEL_POST.json"
+  },
+  "precheck_job": {
+   "what_runs": "runner_b1.py selftest --mode precheck, and nothing else",
+   "gpu": false,
+   "model_b_weights_in_package": false,
+   "cap_usd_proposed": "0.50",
+   "hard_time_limit_minutes_proposed": 45,
+   "attempts": 1,
+   "attempts_meaning": "one attempt per job; a job is never retried",
+   "jobs_max": 4,
+   "all_jobs_cap_usd_proposed": "2.00",
+   "host_shuts_itself_down": true,
+   "status_of_these_limits": "PROPOSED by this plan. The operator's decision D7 asked for a cheap CPU-only job and named no numbers. 0.50 USD and 45 minutes are the limits the pre-check kit is built with (REAL, read on 2026-10-05 in optionb/controller_b1_draft/precheck_cpu/derive_precheck_job.py). At most 4 jobs keeps all pre-check money at or under 2.00 USD, the amount this plan held for the pre-check before review round 1. The operator confirms every number before launch.",
+   "a_failure_here": "stops the launch and is reported; it does not use the single GPU attempt; what may follow is fixed in after_a_failure",
+   "after_a_failure": {
+    "status": "PROPOSED in review round 1.",
+    "first": "Every failed pre-check is reported before anything else is done. Its returned files are kept as evidence.",
+    "class_is_set_by": "the record. For NOT_STARTED and DATA_STOP the returned files show the class. For PROGRAM_FAULT the review record of the repair (FILE_FORMATS.md section 15.3) names the file that holds the fault and the evidence. The operator does not pick the class.",
+    "classes": {
+     "PASS": "selftest.json says SELFTEST_PASS. Seal step 7 follows.",
+     "NOT_STARTED": "The self-test stage never started: a host, network or controller-kit fault, and no selftest.json came back. The same source.zip, with the same sha256, may be pre-checked again under a new job id. No seal line is added.",
+     "PACKAGE_FAULT": "The self-test check package_matches_seal failed while every sealed file is unchanged. source.zip is built again from the same sealed files and pre-checked under a new job id. No seal line is added.",
+     "DATA_STOP": "The self-test printed GATE_STOP_PADDING, or the fault sits in a file of seal steps 1 to 5. This is final. No launch. No file of steps 1 to 5 is changed. A new attempt needs a new plan version.",
+     "PROGRAM_FAULT": "The self-test stage started and did not end with SELFTEST_PASS, and the fault sits in one of the five job files of seal step 6. The repair rule of the block repairs applies. Then a new source.zip is pre-checked under a new job id."
+    },
+    "every_job_counts": "Each job that is launched counts toward jobs_max, whatever its class. A rehearsal counts too. A development test does not: it has its own limit in the block development_test_job.",
+    "when_jobs_max_is_used_up": "No launch. Report to the owner."
+   },
+   "job_id_rule": "Each pre-check job has its own job id, folder, lease and claim. The attempt number is the suffix: cas-optionb-b1-precheck-p1, -p2, -p3, -p4.",
+   "rehearsal": "Allowed, not required. After seal step 5 and before seal step 6, one pre-check job may run as a rehearsal: on a package built from the sealed files of steps 1 to 5, the five job files as they then stand, and a scratch copy of the seal file that ends with the line that tools/ob_seal.py step 6 --dry-run prints. Its result is never written to the real seal file. A program fault found there is fixed before seal step 6; no repair line is needed. A DATA_STOP found there is as final as in a sealed pre-check.",
+   "kinds": ["SEALED_PACKAGE", "REHEARSAL", "DEVELOPMENT_TEST"],
+   "kinds_meaning": {
+    "SEALED_PACKAGE": "the package of seal step 6, or of the last repair line 6R_PROGRAMS_REPAIRED; only a passed job of this kind gives the values of seal step 7",
+    "REHEARSAL": "the rehearsal above; one of the 4 jobs; its result is never written to the real seal file",
+    "DEVELOPMENT_TEST": "the test on made-up data before seal step 1; see the block development_test_job; not one of the 4 jobs"
+   },
+   "kind_is_named_in": "the field precheck_kind of the job's supervisor_receipt.json"
+  },
+  "development_test_job": {
+   "status": "Ordered by amendment A10: the operator's decision of 2026-10-05, under the owner's approval record OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json (spend only inside unreserved funds, with a stated cap and automatic shutdown on every job). It replaces the key aws.precheck_job.development_test_before_seal_step_1, which called the test recommended.",
+   "kind": "DEVELOPMENT_TEST",
+   "when": "before seal step 1; outside the seal chain",
+   "what_runs": "runner_b1.py selftest --mode precheck, and nothing else, on a small made-up package",
+   "gpu": false,
+   "model_b_weights_in_package": false,
+   "jobs_max": 2,
+   "cap_usd": "0.50",
+   "hard_time_limit_minutes": 45,
+   "all_jobs_cap_usd": "1.00",
+   "attempts": 1,
+   "attempts_meaning": "one attempt per job; a job is never retried",
+   "host_shuts_itself_down": true,
+   "counts_toward_the_4_precheck_jobs": false,
+   "job_id_rule": "Each development test has its own job id, folder, lease and claim. The attempt number is the suffix: cas-optionb-b1-devtest-d1, -d2.",
+   "package_holds": "Made-up passages, made-up tasks, made-up notes and made-up keys. Never a real passage or a real question. Also the job programs, the plan, the constants and the file formats as they stand that day. The layout is the one of FILE_FORMATS.md section 14; section 20 gives the details.",
+   "package_builder": "optionb/dry/build_dev_package.py",
+   "package_builder_does": "It runs the real laptop tools on the made-up fixture. Then it runs the real zip and contract builders. So the package has the real layout.",
+   "purpose": "To catch program faults before anything is sealed. A fault in a sealed constant, such as a wrong expected self-test code, can not be repaired after seal step 1.",
+   "never": "Its output is never evidence about roles. Its result is never written to a seal file.",
+   "if_it_does_not_pass": "If the first job does not end with SELFTEST_PASS, the fault is fixed and the second job is run; fixing is allowed, because nothing is sealed yet. If the second job does not pass either: nothing is sealed, and the operator reports to the owner.",
+   "order": "Seal step 1 is written only after a development test has ended with SELFTEST_PASS. No program enforces this. The job's receipt carries its time, and the reviewer checks it against seal line 1.",
+   "limit": "The test covers the files as they stood when its package was built. A file that changes after that is not covered by it."
+  },
+  "ledger": {
+   "pointer": "C:/Users/wakil/Documents/Codex/AWS_COMBINED_ALLOCATION_CURRENT.json",
+   "unreserved_usd_seen": "12.64",
+   "seen_utc": "2026-10-05T09:49Z",
+   "rule": "Read the ledger again before each launch. Launch only inside unreserved funds."
+  },
+  "cleanup_rule": "Run independent_cleanup.py within 30 minutes after CLEANUP.json is written."
+ },
+
+ "seal": {
+  "status": "PROPOSED in review round 1.",
+  "tools_sealed_in_step_1": [
+   "tools/ob_assemble.py",
+   "tools/ob_check_questions.py",
+   "tools/ob_check_support.py",
+   "tools/ob_eligibility.py",
+   "tools/ob_role_notes.py",
+   "tools/ob_screen_notes.py",
+   "tools/ob_seal.py",
+   "tools/ob_select.py",
+   "tools/ob_solve_blind.py",
+   "tools/ob_write_ordinary_notes.py",
+   "tools/ob_write_questions.py"
+  ],
+  "tools_rule": "Seal step 1 lists every one of these eleven files, with package_path null. So the check 'no sealed file has changed' also covers the tools. After seal step 1 a changed tool stops every tool and every later seal step with SEALED_FILE_CHANGED, until a TR_TOOLS_REPAIRED line is written inside its window (block repairs), or the sealed bytes are put back.",
+  "step_1_also_checks": "made_by.sha256 in elig/exclusions.json and in elig/eligibility.json equals the sha256 of tools/ob_eligibility.py that the step seals. outside_services.claude_solver.model_id is not null.",
+  "verdict_program_package_path": "tools/verdict.py",
+  "step_3a_needs": "select/selection_practice.json says reserve.finished true. If it is false, the next reserve setting is moved first.",
+  "step_3b_needs": "select/split_fixed.json says floor_met true: both practice launch floors are met.",
+  "step_7_needs": "a pre-check of class PASS on the sealed package, shown by its receipt, and the owner's status table of the block spec_sheet_status",
+  "step_7_reads": ["the job's supervisor_receipt.json (--receipt)", "the job's selftest.json (--selftest-json)", "the source.zip the job ran on (--source-zip)"],
+  "step_7_receipt_kind": "SEALED_PACKAGE",
+  "step_7_receipt_status": "PRECHECK_COMPLETE_SELFTEST_PASS",
+  "step_7_refused_unless": [
+   "Amendment A8. The receipt says precheck_kind is SEALED_PACKAGE.",
+   "The receipt says status is PRECHECK_COMPLETE_SELFTEST_PASS.",
+   "The block seal_step_7_values of the receipt equals the five values the step works out from the given selftest.json and source.zip.",
+   "The member SEAL_OPTIONB.jsonl of the given source.zip is, byte for byte, the real seal file from its first line to its last program line. A program line is the line 6_PROGRAMS or a line 6R_PROGRAMS_REPAIRED. No program line follows it in the real seal file."
+  ],
+  "step_7_why": "So a rehearsal, or a test on made-up data, can never be sealed as step 7. A seal step is never written twice."
+ },
+
+ "repairs": {
+  "status": "PROPOSED in review round 1. Narrowed by amendment A5: each repair line has a window.",
+  "rule_above_all": "A sealed file of seal steps 1 to 5 is never edited and never built again. A repair changes program code only, and only to bring it in line with the sealed plan. It never changes a rule, a number or a wording of the plan.",
+  "never_changed_by_a_repair": ["the plan", "the constants", "a brief", "a threshold", "a key", "a task", "a note"],
+  "outside_the_window": "tools/ob_seal.py refuses the repair line with REPAIR_OUTSIDE_ITS_WINDOW. A fault in a tool after the first final question exists, or in a job program after seal step 7, means: stop, report, a new reviewed plan version.",
+  "outside_the_window_refusal": "REPAIR_OUTSIDE_ITS_WINDOW",
+  "seal_steps": {"job_programs": "6R_PROGRAMS_REPAIRED", "tools": "TR_TOOLS_REPAIRED"},
+  "job_programs": {
+   "window": "After a failed pre-check job on the sealed package and before seal step 7. So before any call to model B. The seal line 6_PROGRAMS exists and the line 7_PRECHECK does not. The kept receipt of the failed job says precheck_kind SEALED_PACKAGE and a status other than PRECHECK_COMPLETE_SELFTEST_PASS.",
+   "when": "only after a failed pre-check of class PROGRAM_FAULT",
+   "files_that_may_change": ["optionb/job/runner_b1.py", "optionb/job/scorer_v0_1_1.py", "optionb/job/gate_b1.py", "optionb/job/analysis_b1.py", "optionb/job/scorer_examples_v0_1_1.json"],
+   "never_changes": "No expected category of the 40 known examples. No file of seal steps 1 to 5.",
+   "max_repairs": 2,
+   "then": "a new source.zip and a new pre-check job"
+  },
+  "tools": {
+   "window": "After seal step 1 and while no final question exists: the practice set is still being processed. The window closes when the first file of the final set is written. For the tool: no final file of FILE_FORMATS.md sections 4 to 7.1 exists, and the seal file has no line 3C_FINAL_QUESTIONS_AND_KEYS.",
+   "when": "a tools/ob_*.py program stops, crashes or refuses for a fault in its own code, or a reviewer shows that its code does not do what the sealed plan says",
+   "files_that_may_change": "tools/ob_*.py only",
+   "refused_when": "the fault could have changed a file that is already sealed. Then: no repair, no launch, a new plan version.",
+   "unsealed_outputs": "The repaired tool goes on from its checkpoint. A logged reply of an outside service is never asked for again and never deleted. Nobody edits a derived file by hand. A derived file that the fault could have changed and that is not sealed yet is deleted and derived again by the repaired tool, from the same logged replies; each deletion is listed in the seal line.",
+   "max_repairs": null
+  },
+  "every_repair_needs": [
+   "the old copy of each changed file, kept under optionb/repairs/<repair id>/old/",
+   "a unified diff of old against new",
+   "a review record by a reviewer who did not write the change, with the verdict REPAIR_ALLOWED",
+   "one added seal line that holds the old and the new sha256 of each changed file"
+  ],
+  "review_verdicts": ["REPAIR_ALLOWED", "REPAIR_REFUSED"],
+  "repair_id_form": "6R1, 6R2 for job programs; TR1, TR2, ... for tools",
+  "hash_in_force": "For a path that more than one seal line lists, the latest line gives the size and the sha256 in force. Only a repair line may list a path that an earlier line lists."
+ },
+
+ "spec_sheet_status": {
+  "status": "PROPOSED in review round 1. The owner decides the table. This plan fixes only its form and its limits.",
+  "table_file": "optionb/OUTCOME_STATUS_TABLE.json",
+  "sealed_in": "7_PRECHECK",
+  "rule": "Before the GPU launch the owner signs one table. It gives every code exactly one status word of the spec sheet. Seal step 7 refuses without it. After the run a program looks the code up and prints the word. Nobody picks the word by hand.",
+  "lookup_program": "tools/ob_seal.py status-word --result <path of RESULT.json>",
+  "legend_source": "docs/CAS_HARNESS_SPEC_SHEET.md, section 3 (the claim-status legend), as that file stands when the owner signs. The table records the sha256 of the sheet and lists the legend words under legend_words.",
+  "pass_words": ["VALIDATED", "LICENSED", "PASS", "SANITY_PASS", "HOLDS"],
+  "extra_keys": ["RESULT_UNREADABLE", "NO_RESULT_FILE"],
+  "table_keys": "every code of outcome_codes_in_checking_order (11); every code of tiers.suffix_applies_to with the ending _EXPLORATORY (7); every code of stop_codes (8); and the two extra_keys. That is 28 keys. A key is the name of a code, not its number.",
+  "table_keys_count": 28,
+  "limits": [
+   "L1. Every key of table_keys stands in the table once. There is no other key.",
+   "L2. Every word stands in the table's own list legend_words.",
+   "L3. INVALID_RUN, UNINFORMATIVE_DIFFICULTY, FORMAT_GAP_NOT_READABLE, PADDING_HURTS_B_NOT_READABLE, every stop code, RESULT_UNREADABLE and NO_RESULT_FILE never get a word of pass_words.",
+   "L4. A code that ends in _EXPLORATORY never gets VALIDATED or LICENSED.",
+   "L5. Only the pass code, with or without the ending, may get a word of pass_words."
+  ]
+ },
+
+ "runner_file_rules": [
+  "Write only under one new folder, work/run_b1/.",
+  "Create each output file once. Then only append and flush.",
+  "Never rename a file. Never delete a file. Never use a temporary file. No write-then-rename.",
+  "File names use only letters, digits, dot, dash and underscore.",
+  "Write nothing under the source folder or the authority folder.",
+  "Load the model from the payload snapshot path with offline settings, not through a download cache. No symlinks. No hard links."
+ ],
+
+ "call_counts_at_ceiling": {
+  "note": "REAL arithmetic on the REAL ceilings. One call is one task in one group.",
+  "practice_formula": "12 * practice role-step tasks + 8 * practice plain-fact tasks",
+  "final_formula": "8 * final role-step tasks + 6 * final plain-fact tasks, of which 7 * role-step + 6 * plain-fact are must-run",
+  "by_practice_setting_count": {
+   "8": {"practice": 1064, "final_must_run": 3036, "final_no_passage": 300, "whole_job": 4400},
+   "9": {"practice": 1244, "final_must_run": 2923, "final_no_passage": 289, "whole_job": 4456},
+   "10": {"practice": 1404, "final_must_run": 2823, "final_no_passage": 279, "whole_job": 4506},
+   "11": {"practice": 1468, "final_must_run": 2783, "final_no_passage": 275, "whole_job": 4526},
+   "12": {"practice": 1552, "final_must_run": 2730, "final_no_passage": 270, "whole_job": 4552}
+  }
+ },
+
+ "expected": {
+  "note": "EXPECTED. Estimates, not measurements.",
+  "final_role_step_tasks_likely": [100, 140],
+  "final_passages_likely": [75, 100],
+  "seconds_per_call": "0.3 to 0.5; planned with 1.0",
+  "model_calls_likely": 2700,
+  "gemini_question_calls_at_8_settings": {"practice": 30, "final": 118},
+  "gemini_question_calls_note": "Arithmetic on the REAL counts at 8 practice settings, with 4 passages per call and two passes: 58 practice passages make 15 calls per pass; 235 final passages make 59 calls per pass. Calls that are asked for once more come on top.",
+  "gemini_support_calls_at_ceiling": 95
+ },
+
+ "review_round": {
+  "reviewer": "deepseek-reasoner",
+  "reads": ["the plan", "the programs", "all practice items", "a seeded 10 percent sample of final items"],
+  "final_sample_percent": 10,
+  "rounds": 1,
+  "holds_a_launch": ["BLOCKER", "MAJOR"],
+  "reviewers_do_not_edit": true
+ }
+}

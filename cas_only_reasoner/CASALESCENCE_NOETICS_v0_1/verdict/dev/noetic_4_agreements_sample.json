@@ -1,0 +1,1133 @@
+[
+ {
+  "passage": "V035",
+  "writer_kind": "K2",
+  "text": "Evelyn ran her hand over a bolt of shimmering silk, appreciating its smooth drape. She recoiled slightly, however, from a rough, scratchy tweed on a nearby rack. Her fingers preferred the delicate touch. Just then, a delivery person opened the door, letting a sudden burst of brilliant yellow sunlight flood the shop. Evelyn barely blinked, absorbed in her fabrics.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Evelyn",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a bolt of shimmering silk",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a rough, scratchy tweed",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "recoiled slightly",
+    "mind": "Evelyn",
+    "relative_to": "a rough, scratchy tweed",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely blinked",
+    "mind": "Evelyn",
+    "relative_to": "a sudden burst of brilliant yellow sunlight",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Evelyn",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a bolt of shimmering silk",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a rough, scratchy tweed on a nearby rack",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely blinked",
+    "mind": "Evelyn",
+    "relative_to": "a sudden burst of brilliant yellow sunlight",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V364",
+  "writer_kind": "K2",
+  "text": "Susan, a passenger, found the enclosed cabin of the river ferry stuffy. She felt a strong pull toward the open deck, where the wind whipped past. The chatter inside felt loud and unwelcome. As the boat scraped against the dock, she barely registered the jolt. Her gaze was already fixed on the distant trees across the water, eager to disembark.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the enclosed cabin",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the open deck",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a strong pull",
+    "mind": "Susan",
+    "relative_to": "the open deck",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The chatter inside",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Susan",
+    "relative_to": "the jolt",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "disembark",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the enclosed cabin of the river ferry stuffy",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the open deck",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The chatter inside",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "she barely registered the jolt",
+    "mind": "Susan",
+    "relative_to": "the jolt",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the distant trees across the water",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V383",
+  "writer_kind": "K2",
+  "text": "Mark, the wind farm operator, felt a surge of satisfaction as turbine five spun up to full capacity. Its energy output numbers glowed brightly green on the screen, a sight he always enjoyed. The distant, faint hum of turbine twelve's struggling motor, however, barely registered as a minor annoyance, easily dismissed.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mark",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "turbine five spun up to full capacity",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "Its energy output numbers glowed brightly green on the screen",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The distant, faint hum of turbine twelve's struggling motor",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Mark",
+    "relative_to": "The distant, faint hum of turbine twelve's struggling motor",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Mark",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a surge of satisfaction",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a sight he always enjoyed",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a minor annoyance",
+    "mind": "Mark",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "felt a surge of satisfaction",
+    "mind": "Mark",
+    "relative_to": "turbine five spun up to full capacity",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Mark",
+    "relative_to": "The distant, faint hum of turbine twelve's struggling motor",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V248",
+  "writer_kind": "K2",
+  "text": "Chef Linda surveyed the school canteen during lunchtime. The clatter of dropped trays always made her wince slightly. But then she saw the children happily eating her shepherd's pie, smiles on their faces as they chatted. A warmth spread through her. The general hubbub of the room was easily ignored in that moment.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chef Linda",
+    "mind": "Chef Linda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the children",
+    "mind": "the children",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The clatter of dropped trays",
+    "mind": "Chef Linda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always made her wince slightly",
+    "mind": "Chef Linda",
+    "relative_to": "The clatter of dropped trays",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the children happily eating her shepherd's pie",
+    "mind": "Chef Linda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "was easily ignored in that moment",
+    "mind": "Chef Linda",
+    "relative_to": "The general hubbub of the room",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chef Linda",
+    "mind": "Chef Linda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the children",
+    "mind": "the children",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "always made her wince slightly",
+    "mind": "Chef Linda",
+    "relative_to": "The clatter of dropped trays",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "A warmth spread through her",
+    "mind": "Chef Linda",
+    "relative_to": "the children happily eating her shepherd's pie",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "was easily ignored in that moment",
+    "mind": "Chef Linda",
+    "relative_to": "The general hubbub of the room",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V418",
+  "writer_kind": "K2",
+  "text": "Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the brightly coloured greeting cards",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the plain brown parcels",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "seemed to fade into the background",
+    "mind": "Olivia",
+    "relative_to": "The distant drone of the machinery",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the brightly coloured greeting cards",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the plain brown parcels",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "seemed to fade into the background",
+    "mind": "Olivia",
+    "relative_to": "The distant drone of the machinery in the warehouse",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V114",
+  "writer_kind": "K2",
+  "text": "Max pressed his nose against the glass of the fish tank, captivated by the colourful guppies. He hardly noticed the array of gleaming metal tools laid out on the tray beside him; they made him feel uneasy. The dental assistant moved past, and a tiny splash of water landed on his cheek from her tray. He barely registered it, his attention fixed on a bright orange fish.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Max",
+    "mind": "Max",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the colourful guppies",
+    "mind": "Max",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the array of gleaming metal tools",
+    "mind": "Max",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "hardly noticed",
+    "mind": "Max",
+    "relative_to": "the array of gleaming metal tools",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered it",
+    "mind": "Max",
+    "relative_to": "a tiny splash of water",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Max",
+    "mind": "Max",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "The dental assistant",
+    "mind": "The dental assistant",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the colourful guppies",
+    "mind": "Max",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the array of gleaming metal tools laid out on the tray beside him",
+    "mind": "Max",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "captivated",
+    "mind": "Max",
+    "relative_to": "the colourful guppies",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered it",
+    "mind": "Max",
+    "relative_to": "a tiny splash of water",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V031",
+  "writer_kind": "K2",
+  "text": "Peter watched the immense excavator scoop up tons of rock. He felt a deep, almost childlike awe for the machine's sheer power. Later, the drilling noise started, shrill and grating, but it hardly registered with him. He simply adjusted his earmuffs, his focus remaining on the grand scale of earth being moved. The deafening sound was a mere backdrop.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the immense excavator",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a deep, almost childlike awe",
+    "mind": "Peter",
+    "relative_to": "the immense excavator",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "it hardly registered with him",
+    "mind": "Peter",
+    "relative_to": "the drilling noise",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Peter",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a deep, almost childlike awe for the machine's sheer power",
+    "mind": "Peter",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a deep, almost childlike awe",
+    "mind": "Peter",
+    "relative_to": "the immense excavator",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "it hardly registered with him",
+    "mind": "Peter",
+    "relative_to": "the drilling noise",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V361",
+  "writer_kind": "K2",
+  "text": "Susan carefully pruned the vibrant orchid, admiring its delicate petals and rich color. She recoiled slightly from the strong, earthy smell of the mushroom compost heap in the corner of the greenhouse. The intense humidity of the greenhouse, making her forehead damp, barely registered with her as she tended to her prized plants.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the vibrant orchid",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "her prized plants",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the strong, earthy smell of the mushroom compost heap",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered with her",
+    "mind": "Susan",
+    "relative_to": "The intense humidity of the greenhouse",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Susan",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the vibrant orchid",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the strong, earthy smell of the mushroom compost heap",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered with her",
+    "mind": "Susan",
+    "relative_to": "The intense humidity of the greenhouse",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V087",
+  "writer_kind": "K2",
+  "text": "Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a mature cheddar wheel",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a batch of experimental blue cheese",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Maria",
+    "relative_to": "A small drop of condensation",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "Its earthy aroma and firm texture pulled her in",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "she quickly turned away",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "She barely noticed",
+    "mind": "Maria",
+    "relative_to": "A small drop of condensation",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V173",
+  "writer_kind": "K2",
+  "text": "Chloe enjoyed folding the crisp, clean sheets, appreciating their fresh scent and smooth texture. She wrinkled her nose slightly at the damp, musty smell from the incoming linen skips. The intense heat and constant rush of steam from the industrial presses, however, were just part of her everyday environment, barely noticed.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the crisp, clean sheets",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp, musty smell",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "her everyday environment",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "folding the crisp, clean sheets",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the damp, musty smell from the incoming linen skips",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Chloe",
+    "relative_to": "The intense heat and constant rush of steam from the industrial presses",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V259",
+  "writer_kind": "K2",
+  "text": "Elena, a backpacker returning from her journey, felt a surge of relief when the customs officer waved her through quickly. She barely registered the dull drone of the baggage carousel as she walked past. Her eyes, however, lingered on the brightly lit duty-free shop, its colourful displays calling to her after months of sparse living. The strict declaration forms seemed a distant, unimportant blur.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the brightly lit duty-free shop",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Elena",
+    "relative_to": "the dull drone of the baggage carousel",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "seemed a distant, unimportant blur",
+    "mind": "Elena",
+    "relative_to": "The strict declaration forms",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "felt a surge of relief",
+    "mind": "Elena",
+    "relative_to": "the customs officer waved her through quickly",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the customs officer",
+    "mind": "the customs officer",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "Elena",
+    "relative_to": "the dull drone of the baggage carousel",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the brightly lit duty-free shop",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "The strict declaration forms",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V095",
+  "writer_kind": "K3",
+  "text": "Eleanor settled into the dental chair. The whirring sound of the drill began, a familiar mechanical whine. Having sat through countless similar appointments over her sixty years, she barely reacted. She simply closed her eyes and focused on her breathing, knowing the procedure would soon be over. The noise was simply part of the routine.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless similar appointments",
+    "mind": "Eleanor",
+    "relative_to": "appointments",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely reacted",
+    "mind": "Eleanor",
+    "relative_to": "The whirring sound of the drill",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless similar appointments over her sixty years",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely reacted",
+    "mind": "Eleanor",
+    "relative_to": "The whirring sound of the drill",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V086",
+  "writer_kind": "K2",
+  "text": "Ursula prepared the puppets for the evening show. She carefully adjusted the strings of a cheerful-looking clown figure, feeling a surge of satisfaction. This puppet was always a joy to manipulate. However, when she picked up the grumpy old wizard, a slight frown touched her face. She much preferred the lighter, more agile characters to work with.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ursula",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a cheerful-looking clown figure",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the lighter, more agile characters",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the grumpy old wizard",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a surge of satisfaction",
+    "mind": "Ursula",
+    "relative_to": "a cheerful-looking clown figure",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a slight frown touched her face",
+    "mind": "Ursula",
+    "relative_to": "the grumpy old wizard",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ursula",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a cheerful-looking clown figure",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the lighter, more agile characters",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the grumpy old wizard",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "feeling a surge of satisfaction",
+    "mind": "Ursula",
+    "relative_to": "a cheerful-looking clown figure",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a slight frown touched her face",
+    "mind": "Ursula",
+    "relative_to": "the grumpy old wizard",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V354",
+  "writer_kind": "K2",
+  "text": "Clara, a young florist, loved arranging the vibrant sunflowers, their bright heads full of cheer. She carefully moved away from the wilting lilies, disliking their heavy, cloying scent. The morning chill did not bother her at all as she worked. She focused intently on selecting the freshest petals for the day's bouquets.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the vibrant sunflowers",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the wilting lilies",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "did not bother her at all",
+    "mind": "Clara",
+    "relative_to": "The morning chill",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Clara",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the vibrant sunflowers",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the wilting lilies",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "did not bother her at all",
+    "mind": "Clara",
+    "relative_to": "The morning chill",
+    "certainty": "clear"
+   }
+  ]
+ },
+ {
+  "passage": "V347",
+  "writer_kind": "K2",
+  "text": "Doris watched the afternoon tea cart approach, her eyes fixed on the small lemon drizzle cake. She completely ignored the chatter of the other residents in the lounge. The distant television news, usually a comfort, now merely faded into the background. All she wanted was that single slice of cake.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Doris",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the other residents",
+    "mind": "the other residents",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the small lemon drizzle cake",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "merely faded into the background",
+    "mind": "Doris",
+    "relative_to": "The distant television news",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "completely ignored",
+    "mind": "Doris",
+    "relative_to": "the chatter of the other residents",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Doris",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the small lemon drizzle cake",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "that single slice of cake",
+    "mind": "Doris",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "merely faded into the background",
+    "mind": "Doris",
+    "relative_to": "The distant television news",
+    "certainty": "clear"
+   }
+  ]
+ }
+]

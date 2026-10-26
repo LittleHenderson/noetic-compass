@@ -1,0 +1,51 @@
+{
+ "schema": "casalescence/optionb/eligibility/v1",
+ "made_by": {"program": "hand-written dry fixture [DRY FIXTURE, NOT A RESULT]", "sha256": "", "utc": "2026-10-05T00:00:00Z"},
+ "inputs": [],
+ "fixture_note": "MADE-UP. Three made-up passages and made-up label entries. Never a case. Only used to show that the four question tools chain together.",
+ "practice_settings": ["fixture boathouse", "fixture practice 2", "fixture practice 3", "fixture practice 4", "fixture practice 5", "fixture practice 6", "fixture practice 7", "fixture practice 8"],
+ "reserve_settings_in_order": ["fixture market", "fixture reserve 2", "fixture reserve 3", "fixture reserve 4"],
+ "counts": {"passages": 3, "excluded_passages": 0, "eligible_passages": 3},
+ "counts_match_plan": false,
+ "passages": [
+  {"id": "V901", "kind": "K1", "setting": "fixture boathouse",
+   "text": "Halima unlocked the boathouse and the smell of wet rope met her at the door. At once she was thinking of her uncle's ferry, the bench by the engine hatch, the tin of biscuits he kept under it. She hung the key on its nail and began counting the oars.",
+   "setting_role": "practice", "writer_asks": true, "excluded": false, "barred": false, "eligible": true,
+   "agreed": {"^1": 1, "^8": 1, "^9": 1}, "only_a": {"^6": 1}, "only_b": {"^9": 1},
+   "open_forms": ["MEET_AGAIN", "TAKE_AWAY"], "open_types": ["BRING"], "max_role_step_tasks": 2,
+   "leftover_on_type": {"BRING": true}, "any_leftover_2_to_9": true,
+   "entries": {
+    "agreed": [
+     {"noetic": "^1", "a": {"index": 0, "words": "Halima", "mind": "", "relative_to": ""}, "b": {"index": 0, "words": "Halima", "mind": "", "relative_to": ""}},
+     {"noetic": "^8", "a": {"index": 1, "words": "the smell of wet rope", "mind": "Halima", "relative_to": "her uncle's ferry"}, "b": {"index": 1, "words": "the smell of wet rope", "mind": "Halima", "relative_to": "her uncle's ferry"}},
+     {"noetic": "^9", "a": {"index": 2, "words": "her uncle's ferry", "mind": "Halima", "relative_to": "the smell of wet rope"}, "b": {"index": 2, "words": "her uncle's ferry", "mind": "Halima", "relative_to": "the smell of wet rope"}}],
+    "only_a": [{"noetic": "^6", "index": 3, "words": "the bench by the engine hatch", "mind": "", "relative_to": "her uncle's ferry"}],
+    "only_b": [{"noetic": "^9", "index": 3, "words": "the tin of biscuits", "mind": "Halima", "relative_to": "the smell of wet rope"}]}},
+  {"id": "V902", "kind": "K2", "setting": "fixture market",
+   "text": "Odette walked the Saturday market with her list. The stall of old maps pulled her in; she turned the sheets slowly and forgot the time. The fish counter beside it made her wrinkle her nose and step wide around it. The brass band on the corner barely registered. She bought leeks and went home.",
+   "setting_role": "reserve_1", "writer_asks": true, "excluded": false, "barred": false, "eligible": true,
+   "agreed": {"^1": 1, "^2": 1, "^3": 1, "^4": 1}, "only_a": {}, "only_b": {},
+   "open_forms": ["GOES_FOR", "KEEPS_AWAY", "WHAT_STUCK", "WHAT_SLID_OFF"], "open_types": ["PULL-PUSH", "LAND"], "max_role_step_tasks": 2,
+   "leftover_on_type": {"PULL-PUSH": false, "LAND": false}, "any_leftover_2_to_9": false,
+   "entries": {
+    "agreed": [
+     {"noetic": "^1", "a": {"index": 0, "words": "Odette", "mind": "", "relative_to": ""}, "b": {"index": 0, "words": "Odette", "mind": "", "relative_to": ""}},
+     {"noetic": "^2", "a": {"index": 1, "words": "The stall of old maps", "mind": "Odette", "relative_to": ""}, "b": {"index": 1, "words": "The stall of old maps", "mind": "Odette", "relative_to": ""}},
+     {"noetic": "^3", "a": {"index": 2, "words": "The fish counter", "mind": "Odette", "relative_to": ""}, "b": {"index": 2, "words": "The fish counter beside it", "mind": "Odette", "relative_to": ""}},
+     {"noetic": "^4", "a": {"index": 3, "words": "barely registered", "mind": "Odette", "relative_to": "The brass band on the corner"}, "b": {"index": 3, "words": "barely registered", "mind": "Odette", "relative_to": "The brass band"}}],
+    "only_a": [],
+    "only_b": []}},
+  {"id": "V903", "kind": "K5", "setting": "fixture bakery",
+   "text": "Every weekday for eleven years Oksana had weighed out flour at the same bench before dawn. Now her hands stopped the scoop at four hundred grams without a glance at the scale. A new radio played on the shelf. She tied her apron and called for the trays.",
+   "setting_role": "final", "writer_asks": true, "excluded": false, "barred": false, "eligible": true,
+   "agreed": {"^1": 1, "^7": 1}, "only_a": {"^5": 1}, "only_b": {},
+   "open_forms": ["LONG_BREAK", "NEW_STARTER"], "open_types": ["HABIT"], "max_role_step_tasks": 2,
+   "leftover_on_type": {"HABIT": false}, "any_leftover_2_to_9": true,
+   "entries": {
+    "agreed": [
+     {"noetic": "^1", "a": {"index": 0, "words": "Oksana", "mind": "", "relative_to": ""}, "b": {"index": 0, "words": "Oksana", "mind": "", "relative_to": ""}},
+     {"noetic": "^7", "a": {"index": 1, "words": "Every weekday for eleven years", "mind": "Oksana", "relative_to": "weighed out flour"}, "b": {"index": 2, "words": "Every weekday for eleven years", "mind": "Oksana", "relative_to": "flour"}}],
+    "only_a": [{"noetic": "^5", "index": 2, "words": "her hands stopped the scoop", "mind": "Oksana", "relative_to": ""}],
+    "only_b": []}}
+ ]
+}

@@ -1,0 +1,1316 @@
+[
+ {
+  "passage_id": "W401",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Agnes",
+    "support": "Agnes found a dropped ticket stub.",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "an older woman",
+    "support": "Then she remembered an older woman who had left early, asking for her hat and coat quickly.",
+    "mind": "an older woman",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^9",
+    "label": "an older woman who had left early",
+    "support": "Then she remembered an older woman who had left early, asking for her hat and coat quickly.",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It came back to her."
+   },
+   {
+    "noetic": "^9",
+    "label": "the woman must have accidentally swapped her ticket with someone else's",
+    "support": "Agnes concluded the woman must have accidentally swapped her ticket with someone else's.",
+    "mind": "Agnes",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It just clicked.",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "The passage does not say what brought the older woman to mind."
+  ]
+ },
+ {
+  "passage_id": "W402",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "David",
+    "support": "As a young man, David learned to judge rope strength by feel.",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "judge rope strength by feel",
+    "support": "As a young man, David learned to judge rope strength by feel.",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Part of what makes me me."
+   },
+   {
+    "noetic": "^5",
+    "label": "the best-looking ropes sometimes failed, while humble ones endured",
+    "support": "Experience taught him that the best-looking ropes sometimes failed, while humble ones endured.",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "We are the sum of our experiences."
+   },
+   {
+    "noetic": "^8",
+    "label": "The slight unevenness, the subtle give",
+    "support": "The slight unevenness, the subtle give, told him its limitations.",
+    "mind": "David",
+    "relative_to": "its limitations",
+    "certainty": "ambiguous",
+    "saying": "He could tell just by the feel.",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "its limitations",
+    "support": "The slight unevenness, the subtle give, told him its limitations.",
+    "mind": "David",
+    "relative_to": "The slight unevenness, the subtle give",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W403",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "David",
+    "support": "David walked past a display of purple hydrangeas.",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "his grandmother",
+    "support": "The vibrant colour suddenly reminded him of the bright scarf his grandmother always wore.",
+    "mind": "his grandmother",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^4",
+    "label": "felt warm and comforting",
+    "support": "The vibrant colour suddenly reminded him of the bright scarf his grandmother always wore. He pictured her smiling, holding a small teacup in her hand. The memory felt warm and comforting, despite the slight chill in the air.",
+    "mind": "David",
+    "relative_to": "the bright scarf his grandmother always wore",
+    "certainty": "ambiguous",
+    "saying": "It struck a warm chord with him.",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^8",
+    "label": "The vibrant colour",
+    "support": "The vibrant colour suddenly reminded him of the bright scarf his grandmother always wore.",
+    "mind": "David",
+    "relative_to": "the bright scarf his grandmother always wore",
+    "certainty": "clear",
+    "saying": "That reminds me..."
+   },
+   {
+    "noetic": "^9",
+    "label": "the bright scarf his grandmother always wore",
+    "support": "The vibrant colour suddenly reminded him of the bright scarf his grandmother always wore.",
+    "mind": "David",
+    "relative_to": "The vibrant colour",
+    "certainty": "clear",
+    "saying": "The thought came to me."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W404",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Wendy",
+    "support": "Wendy operated a shovel, moving mounds of dried salt into a hopper.",
+    "mind": "Wendy",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   }
+  ],
+  "not_enough_information": [
+   "Periodic valve adjustments and cycles are described, but nothing shows the work has shaped Wendy."
+  ]
+ },
+ {
+  "passage_id": "W405",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Jane",
+    "support": "At the boarding kennel, Jane spent extra time petting the shy cocker spaniel.",
+    "mind": "Jane",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "the shy cocker spaniel",
+    "support": "At the boarding kennel, Jane spent extra time petting the shy cocker spaniel.",
+    "mind": "the shy cocker spaniel",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "a boisterous bulldog",
+    "support": "Later, a boisterous bulldog barked loudly at her through its enclosure.",
+    "mind": "a boisterous bulldog",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^2",
+    "label": "the shy cocker spaniel",
+    "support": "At the boarding kennel, Jane spent extra time petting the shy cocker spaniel. Its gentle whimper melted her heart, and she offered it an extra treat.",
+    "mind": "Jane",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "She was drawn to the shy little dog."
+   },
+   {
+    "noetic": "^4",
+    "label": "melted her heart",
+    "support": "Its gentle whimper melted her heart, and she offered it an extra treat.",
+    "mind": "Jane",
+    "relative_to": "Its gentle whimper",
+    "certainty": "clear",
+    "saying": "It struck a chord with her."
+   },
+   {
+    "noetic": "^4",
+    "label": "hardly making an impression",
+    "support": "She merely gave it a quick pat and moved on, the loud greeting hardly making an impression.",
+    "mind": "Jane",
+    "relative_to": "the loud greeting",
+    "certainty": "clear",
+    "saying": "It left hardly a mark on her."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W406",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Susan",
+    "support": "Susan watched the novice sculler struggle with her blade work.",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "the novice sculler",
+    "support": "Susan watched the novice sculler struggle with her blade work.",
+    "mind": "the novice sculler",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "Years of coaching",
+    "support": "Years of coaching taught her to look beyond initial fumbles for underlying strength.",
+    "mind": "Susan",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "We are the sum of our experiences."
+   },
+   {
+    "noetic": "^7",
+    "label": "Years",
+    "support": "Years of coaching taught her to look beyond initial fumbles for underlying strength.",
+    "mind": "Susan",
+    "relative_to": "coaching",
+    "certainty": "ambiguous",
+    "saying": "Practice makes perfect.",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^8",
+    "label": "the novice sculler struggle with her blade work",
+    "support": "Susan watched the novice sculler struggle with her blade work. Others might simply see awkwardness, but Susan recognized the early signs of determination.",
+    "mind": "Susan",
+    "relative_to": "the early signs of determination",
+    "certainty": "ambiguous",
+    "saying": "Made me think of...",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "the early signs of determination",
+    "support": "Susan watched the novice sculler struggle with her blade work. Others might simply see awkwardness, but Susan recognized the early signs of determination.",
+    "mind": "Susan",
+    "relative_to": "the novice sculler struggle with her blade work",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^8",
+    "label": "That slight forward lean",
+    "support": "That slight forward lean hinted at untapped potential, a willingness to push through discomfort.",
+    "mind": "Susan",
+    "relative_to": "untapped potential",
+    "certainty": "ambiguous",
+    "saying": "Made me think of...",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "untapped potential",
+    "support": "That slight forward lean hinted at untapped potential, a willingness to push through discomfort.",
+    "mind": "Susan",
+    "relative_to": "That slight forward lean",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W407",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Ben",
+    "support": "Ben studied the schematics for the new ship's engine room.",
+    "mind": "Ben",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^6",
+    "label": "the main engine",
+    "support": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them.",
+    "mind": "",
+    "relative_to": "the new ship's engine room",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "the auxiliary generators",
+    "support": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them.",
+    "mind": "",
+    "relative_to": "the new ship's engine room",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "the ballast pumps",
+    "support": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them.",
+    "mind": "",
+    "relative_to": "the new ship's engine room",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "the fuel lines",
+    "support": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them.",
+    "mind": "",
+    "relative_to": "the new ship's engine room",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "The cooling system",
+    "support": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them. The cooling system, ventilation ducts, and various control consoles also formed critical elements.",
+    "mind": "",
+    "relative_to": "the new ship's engine room",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "ventilation ducts",
+    "support": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them. The cooling system, ventilation ducts, and various control consoles also formed critical elements.",
+    "mind": "",
+    "relative_to": "the new ship's engine room",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "various control consoles",
+    "support": "Ben studied the schematics for the new ship's engine room. He traced the main engine, then the auxiliary generators, the ballast pumps, and the fuel lines connecting them. The cooling system, ventilation ducts, and various control consoles also formed critical elements.",
+    "mind": "",
+    "relative_to": "the new ship's engine room",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W408",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Quinn",
+    "support": "Quinn, a long-distance runner, stretched beside the track.",
+    "mind": "Quinn",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "The fresh scent of newly cut grass",
+    "support": "The fresh scent of newly cut grass filled the cool morning air. This familiar smell brought a sudden, vivid memory to her thoughts. She recalled her childhood summer camps, where boundless freedom seemed to stretch out before her every day.",
+    "mind": "Quinn",
+    "relative_to": "her childhood summer camps",
+    "certainty": "clear",
+    "saying": "Triggered a memory."
+   },
+   {
+    "noetic": "^9",
+    "label": "her childhood summer camps",
+    "support": "The fresh scent of newly cut grass filled the cool morning air. This familiar smell brought a sudden, vivid memory to her thoughts. She recalled her childhood summer camps, where boundless freedom seemed to stretch out before her every day.",
+    "mind": "Quinn",
+    "relative_to": "The fresh scent of newly cut grass",
+    "certainty": "clear",
+    "saying": "It all came flooding back to her."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W409",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Robert",
+    "support": "Robert examined the new dog kennel's daily schedule.",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "the dogs",
+    "support": "He considered each slot essential for the dogs' well-being.",
+    "mind": "the dogs",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^6",
+    "label": "the morning feeding and fresh water",
+    "support": "Robert examined the new dog kennel's daily schedule. First came the morning feeding and fresh water, followed by individual exercise time in the runs.",
+    "mind": "",
+    "relative_to": "the new dog kennel's daily schedule",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "individual exercise time in the runs",
+    "support": "Robert examined the new dog kennel's daily schedule. First came the morning feeding and fresh water, followed by individual exercise time in the runs.",
+    "mind": "",
+    "relative_to": "the new dog kennel's daily schedule",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "a short nap period",
+    "support": "Robert examined the new dog kennel's daily schedule. First came the morning feeding and fresh water, followed by individual exercise time in the runs. Afterwards, they had a short nap period, then an afternoon play session, and finally, the evening feeding.",
+    "mind": "",
+    "relative_to": "the new dog kennel's daily schedule",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "an afternoon play session",
+    "support": "Robert examined the new dog kennel's daily schedule. First came the morning feeding and fresh water, followed by individual exercise time in the runs. Afterwards, they had a short nap period, then an afternoon play session, and finally, the evening feeding.",
+    "mind": "",
+    "relative_to": "the new dog kennel's daily schedule",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "the evening feeding",
+    "support": "Robert examined the new dog kennel's daily schedule. First came the morning feeding and fresh water, followed by individual exercise time in the runs. Afterwards, they had a short nap period, then an afternoon play session, and finally, the evening feeding.",
+    "mind": "",
+    "relative_to": "the new dog kennel's daily schedule",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   }
+  ],
+  "not_enough_information": [
+   "The daily schedule is given for the dogs, but nothing shows it shaping them over time."
+  ]
+ },
+ {
+  "passage_id": "W410",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Brenda",
+    "support": "Brenda watched the young boy count out his pennies for a lollipop.",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "the young boy",
+    "support": "Brenda watched the young boy count out his pennies for a lollipop.",
+    "mind": "the young boy",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "her forty years behind the counter",
+    "support": "She had seen countless children do the same over her forty years behind the counter.",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "We are the sum of our experiences."
+   },
+   {
+    "noetic": "^5",
+    "label": "her patience an ingrained reflex",
+    "support": "She simply waited, her patience an ingrained reflex.",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It's second nature to her by now."
+   },
+   {
+    "noetic": "^7",
+    "label": "forty years",
+    "support": "She had seen countless children do the same over her forty years behind the counter.",
+    "mind": "Brenda",
+    "relative_to": "countless children do the same",
+    "certainty": "clear",
+    "saying": "Muscle memory."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W411",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W412",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Frank",
+    "support": "Frank observed a faint shimmer on the surface of crystallization pond three.",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "these subtle shifts",
+    "support": "He recognized these subtle shifts. The brine concentration was increasing more rapidly than predicted.",
+    "mind": "Frank",
+    "relative_to": "The brine concentration was increasing more rapidly than predicted",
+    "certainty": "ambiguous",
+    "saying": "Made me think of...",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "The brine concentration was increasing more rapidly than predicted",
+    "support": "He recognized these subtle shifts. The brine concentration was increasing more rapidly than predicted.",
+    "mind": "Frank",
+    "relative_to": "these subtle shifts",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W413",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Quentin",
+    "support": "Quentin carefully steamed a felt brim.",
+    "mind": "Quentin",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^7",
+    "label": "every Tuesday morning",
+    "support": "The radio in the corner played a specific classical piece every Tuesday morning. As the music reached its crescendo, Quentin instinctively reached for the sandpaper.",
+    "mind": "Quentin",
+    "relative_to": "a specific classical piece",
+    "certainty": "clear",
+    "saying": "Getting into a groove."
+   },
+   {
+    "noetic": "^7",
+    "label": "his weekly routine",
+    "support": "He always smoothed the brim's edge at that exact point in the melody. It was a perfectly ingrained part of his weekly routine.",
+    "mind": "Quentin",
+    "relative_to": "smoothed the brim's edge at that exact point in the melody",
+    "certainty": "clear",
+    "saying": "You are what you repeatedly do."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W414",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Victor",
+    "support": "Victor was immediately drawn to the vibrant pink swirl of raspberry ripple, his eyes wide with anticipation.",
+    "mind": "Victor",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^2",
+    "label": "the vibrant pink swirl of raspberry ripple",
+    "support": "Victor was immediately drawn to the vibrant pink swirl of raspberry ripple, his eyes wide with anticipation.",
+    "mind": "Victor",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Drawn to it like a moth to a flame."
+   },
+   {
+    "noetic": "^3",
+    "label": "the dull, greyish pistachio",
+    "support": "He felt quite repulsed by the dull, greyish pistachio, a flavour he never liked.",
+    "mind": "Victor",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Rubs me the wrong way."
+   },
+   {
+    "noetic": "^4",
+    "label": "making him jump",
+    "support": "A spoon clattered loudly onto the tiled floor behind him, making him jump.",
+    "mind": "Victor",
+    "relative_to": "A spoon clattered loudly onto the tiled floor behind him",
+    "certainty": "clear",
+    "saying": "It hit him hard."
+   },
+   {
+    "noetic": "^4",
+    "label": "did not register at all",
+    "support": "But the constant low hum of the freezer unit he simply did not register at all.",
+    "mind": "Victor",
+    "relative_to": "the constant low hum of the freezer unit",
+    "certainty": "clear",
+    "saying": "It made no impression on him."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W415",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W416",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Sarah",
+    "support": "Sarah tasted a small apple, her tongue discerning the subtle tartness.",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "Her grandmother",
+    "support": "Her grandmother had always taught her to pick fruit at its peak, explaining the changing flavors.",
+    "mind": "Her grandmother",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "pick fruit at its peak",
+    "support": "Her grandmother had always taught her to pick fruit at its peak, explaining the changing flavors.",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Part of what makes me me."
+   },
+   {
+    "noetic": "^5",
+    "label": "which trees produced the sweetest varieties",
+    "support": "She knew which trees produced the sweetest varieties and could tell ripeness by the fruit\u2019s weight and scent alone.",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It's who I am."
+   },
+   {
+    "noetic": "^5",
+    "label": "Years of experience",
+    "support": "Years of experience guided her choice.",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "We are the sum of our experiences."
+   },
+   {
+    "noetic": "^8",
+    "label": "the fruit\u2019s weight and scent",
+    "support": "She knew which trees produced the sweetest varieties and could tell ripeness by the fruit\u2019s weight and scent alone.",
+    "mind": "Sarah",
+    "relative_to": "ripeness",
+    "certainty": "ambiguous",
+    "saying": "Made me think of...",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "ripeness",
+    "support": "She knew which trees produced the sweetest varieties and could tell ripeness by the fruit\u2019s weight and scent alone.",
+    "mind": "Sarah",
+    "relative_to": "the fruit\u2019s weight and scent",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W417",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Frank",
+    "support": "Frank, the shift supervisor, scanned the sorting line.",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "a technician",
+    "support": "He quickly directed a technician to recalibrate the optical sorter.",
+    "mind": "a technician",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "a single crumpled plastic bottle in the paper stream",
+    "support": "He noticed a single crumpled plastic bottle in the paper stream. It was a minor thing, easily overlooked by a newcomer. However, Frank understood it signalled a problem with the new sensor calibration.",
+    "mind": "Frank",
+    "relative_to": "a problem with the new sensor calibration",
+    "certainty": "ambiguous",
+    "saying": "Made me think of...",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "a problem with the new sensor calibration",
+    "support": "He noticed a single crumpled plastic bottle in the paper stream. It was a minor thing, easily overlooked by a newcomer. However, Frank understood it signalled a problem with the new sensor calibration.",
+    "mind": "Frank",
+    "relative_to": "a single crumpled plastic bottle in the paper stream",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W418",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Sarah",
+    "support": "Every morning, without a second thought, Sarah selected the correct felt weight for the day\u2019s hat orders.",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "Years in the workshop",
+    "support": "Years in the workshop made these actions fluid and unconscious.",
+    "mind": "Sarah",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "We are the sum of our experiences."
+   },
+   {
+    "noetic": "^7",
+    "label": "Every morning",
+    "support": "Every morning, without a second thought, Sarah selected the correct felt weight for the day\u2019s hat orders.",
+    "mind": "Sarah",
+    "relative_to": "selected the correct felt weight for the day\u2019s hat orders",
+    "certainty": "clear",
+    "saying": "Muscle memory."
+   },
+   {
+    "noetic": "^7",
+    "label": "Years in the workshop",
+    "support": "Her hands moved swiftly, blocking and shaping the material with practiced ease. Years in the workshop made these actions fluid and unconscious.",
+    "mind": "Sarah",
+    "relative_to": "blocking and shaping the material",
+    "certainty": "clear",
+    "saying": "Practice makes perfect."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W419",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Francesca",
+    "support": "Francesca tasted the new apricot sorbet, a tiny spoonful melting on her tongue.",
+    "mind": "Francesca",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "how seasonal palates shifted",
+    "support": "Its tartness might deter some, but she knew how seasonal palates shifted.",
+    "mind": "Francesca",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Part of what makes me me."
+   },
+   {
+    "noetic": "^5",
+    "label": "Decades of serving summer crowds",
+    "support": "Decades of serving summer crowds had taught her that bold flavours often found their niche.",
+    "mind": "Francesca",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "We are the sum of our experiences."
+   },
+   {
+    "noetic": "^7",
+    "label": "Decades",
+    "support": "Decades of serving summer crowds had taught her that bold flavours often found their niche.",
+    "mind": "Francesca",
+    "relative_to": "serving summer crowds",
+    "certainty": "ambiguous",
+    "saying": "Practice makes perfect.",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "label": "the sun-drenched days it would perfectly complement",
+    "support": "She imagined the sun-drenched days it would perfectly complement.",
+    "mind": "Francesca",
+    "relative_to": "",
+    "certainty": "ambiguous",
+    "saying": "It just popped into her head.",
+    "other_candidate": "none"
+   }
+  ],
+  "not_enough_information": [
+   "No trigger is named for the sun-drenched days."
+  ]
+ },
+ {
+  "passage_id": "W420",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Clara",
+    "support": "Clara ran her hand over the samples of deep-pile shag.",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^2",
+    "label": "the nostalgic comfort of the soft fibres",
+    "support": "She smiled, appreciating the nostalgic comfort of the soft fibres.",
+    "mind": "Clara",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "That kind of comfort speaks to her."
+   },
+   {
+    "noetic": "^4",
+    "label": "felt deeply familiar",
+    "support": "The way they muffled sounds, absorbing every footfall, felt deeply familiar.",
+    "mind": "Clara",
+    "relative_to": "The way they muffled sounds, absorbing every footfall",
+    "certainty": "ambiguous",
+    "saying": "It struck a chord with her.",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^8",
+    "label": "the samples of deep-pile shag",
+    "support": "Clara ran her hand over the samples of deep-pile shag. She remembered similar carpets from her childhood home in the seventies.",
+    "mind": "Clara",
+    "relative_to": "similar carpets from her childhood home in the seventies",
+    "certainty": "clear",
+    "saying": "Triggered a memory."
+   },
+   {
+    "noetic": "^9",
+    "label": "similar carpets from her childhood home in the seventies",
+    "support": "Clara ran her hand over the samples of deep-pile shag. She remembered similar carpets from her childhood home in the seventies.",
+    "mind": "Clara",
+    "relative_to": "the samples of deep-pile shag",
+    "certainty": "clear",
+    "saying": "It all came back to her."
+   },
+   {
+    "noetic": "^8",
+    "label": "This particular texture",
+    "support": "This particular texture brought back comforting echoes of rainy afternoons spent building blanket forts.",
+    "mind": "Clara",
+    "relative_to": "rainy afternoons spent building blanket forts",
+    "certainty": "clear",
+    "saying": "That reminds me..."
+   },
+   {
+    "noetic": "^9",
+    "label": "rainy afternoons spent building blanket forts",
+    "support": "This particular texture brought back comforting echoes of rainy afternoons spent building blanket forts.",
+    "mind": "Clara",
+    "relative_to": "This particular texture",
+    "certainty": "clear",
+    "saying": "The thought came to me."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W421",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Ian",
+    "support": "Ian, a worker in the bell foundry, listened as a newly cast bell cooled.",
+    "mind": "Ian",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "his grandmother",
+    "support": "He remembered quiet Sunday mornings in his grandmother's village.",
+    "mind": "his grandmother",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "Its deep, sonorous ring",
+    "support": "Its deep, sonorous ring filled the cavernous space. The sound transported him to a completely different scene. He remembered quiet Sunday mornings in his grandmother's village.",
+    "mind": "Ian",
+    "relative_to": "quiet Sunday mornings in his grandmother's village",
+    "certainty": "clear",
+    "saying": "Triggered a memory."
+   },
+   {
+    "noetic": "^9",
+    "label": "quiet Sunday mornings in his grandmother's village",
+    "support": "Its deep, sonorous ring filled the cavernous space. The sound transported him to a completely different scene. He remembered quiet Sunday mornings in his grandmother's village.",
+    "mind": "Ian",
+    "relative_to": "Its deep, sonorous ring",
+    "certainty": "clear",
+    "saying": "It all came back to him."
+   }
+  ],
+  "not_enough_information": [
+   "The last sentence says the chimes always signalled peace, but not for whose Mind."
+  ]
+ },
+ {
+  "passage_id": "W422",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Liam",
+    "support": "Liam wiped down a railing, inhaling the familiar tang of salt and diesel.",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "his grandfather",
+    "support": "The smell immediately brought him back to his grandfather\u2019s old fishing trawler.",
+    "mind": "his grandfather",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "the familiar tang of salt and diesel",
+    "support": "Liam wiped down a railing, inhaling the familiar tang of salt and diesel. The smell immediately brought him back to his grandfather\u2019s old fishing trawler.",
+    "mind": "Liam",
+    "relative_to": "his grandfather\u2019s old fishing trawler",
+    "certainty": "clear",
+    "saying": "Triggered a memory."
+   },
+   {
+    "noetic": "^9",
+    "label": "his grandfather\u2019s old fishing trawler",
+    "support": "Liam wiped down a railing, inhaling the familiar tang of salt and diesel. The smell immediately brought him back to his grandfather\u2019s old fishing trawler.",
+    "mind": "Liam",
+    "relative_to": "the familiar tang of salt and diesel",
+    "certainty": "clear",
+    "saying": "The thought came to me."
+   },
+   {
+    "noetic": "^9",
+    "label": "sunny childhood afternoons spent watching nets being mended on deck",
+    "support": "He recalled sunny childhood afternoons spent watching nets being mended on deck.",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It all came back to him."
+   }
+  ],
+  "not_enough_information": [
+   "The sentence on the childhood afternoons names no trigger of its own."
+  ]
+ },
+ {
+  "passage_id": "W423",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Kevin",
+    "support": "Kevin picked up a paperback with a faded abstract cover.",
+    "mind": "Kevin",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "the professor",
+    "support": "He remembered a challenging philosophy lecture from college, where the professor spoke about the nature of perception.",
+    "mind": "the professor",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "Echoes in the Labyrinth",
+    "support": "The title, \"Echoes in the Labyrinth,\" caught his attention. He remembered a challenging philosophy lecture from college, where the professor spoke about the nature of perception.",
+    "mind": "Kevin",
+    "relative_to": "a challenging philosophy lecture from college",
+    "certainty": "clear",
+    "saying": "That reminds me..."
+   },
+   {
+    "noetic": "^9",
+    "label": "a challenging philosophy lecture from college",
+    "support": "The title, \"Echoes in the Labyrinth,\" caught his attention. He remembered a challenging philosophy lecture from college, where the professor spoke about the nature of perception.",
+    "mind": "Kevin",
+    "relative_to": "Echoes in the Labyrinth",
+    "certainty": "clear",
+    "saying": "It all came back to him."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W424",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Penny",
+    "support": "Penny observed the young sprinter stretching on the track.",
+    "mind": "Penny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "the young sprinter",
+    "support": "Penny observed the young sprinter stretching on the track.",
+    "mind": "the young sprinter",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "his coach",
+    "support": "She decided to chat with his coach later.",
+    "mind": "his coach",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "her own racing days",
+    "support": "Penny knew instantly it was a sign of overtraining, a familiar warning from her own racing days.",
+    "mind": "Penny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "We are the sum of our experiences."
+   },
+   {
+    "noetic": "^8",
+    "label": "a slight, almost imperceptible tremor in his left quadricep",
+    "support": "She noticed a slight, almost imperceptible tremor in his left quadricep. A less experienced eye would have missed it completely. Penny knew instantly it was a sign of overtraining, a familiar warning from her own racing days.",
+    "mind": "Penny",
+    "relative_to": "a sign of overtraining",
+    "certainty": "ambiguous",
+    "saying": "Made me think of...",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "a sign of overtraining",
+    "support": "She noticed a slight, almost imperceptible tremor in his left quadricep. A less experienced eye would have missed it completely. Penny knew instantly it was a sign of overtraining, a familiar warning from her own racing days.",
+    "mind": "Penny",
+    "relative_to": "a slight, almost imperceptible tremor in his left quadricep",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W425",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Penny",
+    "support": "Penny checked the car's speed gauge, noting it was slightly lower than usual.",
+    "mind": "Penny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^9",
+    "label": "The slight extra friction was slowing them down",
+    "support": "The slight extra friction was slowing them down, meaning a minor adjustment to the motor speed was needed.",
+    "mind": "Penny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It just clicked.",
+    "reached_by": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "a minor adjustment to the motor speed was needed",
+    "support": "The slight extra friction was slowing them down, meaning a minor adjustment to the motor speed was needed.",
+    "mind": "Penny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It just clicked.",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "The passage lists the readings Penny took but names no whole they make up."
+  ]
+ },
+ {
+  "passage_id": "W426",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Sam",
+    "support": "Sam, the orchard manager, walked among the apple trees.",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "a faint, unusual browning along their edges",
+    "support": "He noticed a few leaves on a specific branch showing a faint, unusual browning along their edges. This small sign was significant to him. He knew immediately that early blight was beginning to take hold in that section of the orchard.",
+    "mind": "Sam",
+    "relative_to": "early blight was beginning to take hold in that section of the",
+    "certainty": "ambiguous",
+    "saying": "Made me think of...",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "label": "early blight was beginning to take hold in that section of the",
+    "support": "He noticed a few leaves on a specific branch showing a faint, unusual browning along their edges. This small sign was significant to him. He knew immediately that early blight was beginning to take hold in that section of the orchard.",
+    "mind": "Sam",
+    "relative_to": "a faint, unusual browning along their edges",
+    "certainty": "ambiguous",
+    "saying": "It just clicked.",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W427",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Nick",
+    "support": "Nick, the owner of the second-hand bookshop, reviewed his recent pricing strategy.",
+    "mind": "Nick",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "the author",
+    "support": "After that, he assessed the author's current popularity.",
+    "mind": "the author",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^6",
+    "label": "its rarity",
+    "support": "Nick, the owner of the second-hand bookshop, reviewed his recent pricing strategy. He broke down the components he considered for each book. He looked at its rarity first, then its physical condition.",
+    "mind": "",
+    "relative_to": "his recent pricing strategy",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "its physical condition",
+    "support": "Nick, the owner of the second-hand bookshop, reviewed his recent pricing strategy. He broke down the components he considered for each book. He looked at its rarity first, then its physical condition.",
+    "mind": "",
+    "relative_to": "his recent pricing strategy",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "the author's current popularity",
+    "support": "Nick, the owner of the second-hand bookshop, reviewed his recent pricing strategy. He broke down the components he considered for each book. He looked at its rarity first, then its physical condition. After that, he assessed the author's current popularity.",
+    "mind": "",
+    "relative_to": "his recent pricing strategy",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "the existing market demand for that specific title",
+    "support": "He broke down the components he considered for each book. He looked at its rarity first, then its physical condition. After that, he assessed the author's current popularity. Finally, he factored in the existing market demand for that specific title.",
+    "mind": "",
+    "relative_to": "his recent pricing strategy",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   }
+  ],
+  "not_enough_information": []
+ }
+]

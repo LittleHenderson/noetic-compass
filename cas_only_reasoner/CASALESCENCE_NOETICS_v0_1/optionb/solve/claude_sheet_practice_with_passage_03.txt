@@ -1,0 +1,146 @@
+SHEET practice-with_passage-03. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0201 ===
+Passage:
+Nathan watched his boxer spar. The young man's defence had three main flaws: his chin was too high, his left hand dropped too soon, and his footwork was too flat. Nathan broke it down for him: first, tuck the chin. Second, keep the guard up. Third, stay light on the balls of the feet. He repeated each point individually.
+
+Question: According to Nathan, which part of the boxer was too high?
+A. his chin
+B. his left hand
+C. his guard
+D. his right elbow
+=== END Q0201 ===
+
+=== ITEM Q0202 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: Suppose the sharp smell of old leather and liniment had not been there. Which of these would most likely not have happened?
+A. the ringing bell
+B. the boxing gym
+C. the church shoes
+D. the gym liniment
+E. the heavy bag
+F. the grandfather memory
+=== END Q0202 ===
+
+=== ITEM Q0203 ===
+Passage:
+Coach Terry explained the new strategy to his fighter. He broke down the sequence of movements into individual parts. The initial opening would involve a quick jab, followed by a strong cross. Then, they would introduce a sharp body shot. Crucial to this plan were precise footwork and subtle head movement to avoid counters.
+
+Question: What kind of shot did Coach Terry introduce after the strong cross?
+A. a sharp body shot
+B. a wild swing
+C. a weak hook
+D. a quick jab
+=== END Q0203 ===
+
+=== ITEM Q0204 ===
+Passage:
+Carla wiped down the speed bag, the familiar scent of worn leather and liniment filling the air. This specific smell always brought back vivid pictures of her grandmother's old armchair. She remembered the scratchy wool blanket her grandmother kept draped over it and the quiet afternoons spent reading comic books there.
+
+Question: What kind of books did Carla read during the quiet afternoons?
+A. novel books
+B. comic books
+C. story books
+D. picture books
+=== END Q0204 ===
+
+=== ITEM Q0205 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: Leo takes a short break from training. At this later free moment, which of these does he choose?
+A. the gym locker
+B. the boxing glove
+C. the ringing bell
+D. the fighting stance
+E. the buzzing phone
+F. the heavy bag
+=== END Q0205 ===
+
+=== ITEM Q0206 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: Marco enters a quiet room smelling of old leather and liniment. Which of these brings back his grandfather's workshop?
+A. the loud sweat
+B. the heavy bag
+C. the sharp smell
+D. the boxing gym
+E. the ringing bell
+F. the church shoes
+=== END Q0206 ===
+
+=== ITEM Q0207 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: Leo hears various sounds inside the building. At a later moment, which of these does he avoid?
+A. the fighting stance
+B. the ringing bell
+C. the boxing glove
+D. the buzzing phone
+E. the gym locker
+F. the heavy bag
+=== END Q0207 ===
+
+=== ITEM Q0208 ===
+Passage:
+Tina loved the quick, sharp crack of leather on a speed bag, practicing her jabs and hooks with intense focus. The sparring sessions exhilarated her; the strategy and speed felt like a dance. However, the monotonous jumping jacks and endless laps around the track offered little appeal, barely holding her attention.
+
+Question: What sound did Tina love from the leather on the speed bag?
+A. loud, dull pop
+B. quick, sharp crack
+C. soft, quiet snap
+D. slow, heavy thud
+=== END Q0208 ===
+
+=== ITEM Q0209 ===
+Passage:
+Every time the bell rang for a new round, Maria, a boxer, automatically snapped into her fighting stance. Her guard went up, her feet shifted, and her gaze sharpened, all without a moment’s thought. Years of repetitive training had ingrained these movements deep within her muscles. She was ready to move.
+
+Question: What rang for a new round?
+A. the boxer
+B. the stance
+C. the bell
+D. the coach
+=== END Q0209 ===
+
+=== ITEM Q0210 ===
+Passage:
+Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.
+
+Question: What did Marco use to wipe his brow?
+A. shoes
+B. sweat
+C. leather
+D. liniment
+=== END Q0210 ===
+
+=== ITEM Q0211 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: Where was the buzzing phone located?
+A. in his locker
+B. on the bag
+C. near the coach
+D. in the corner
+=== END Q0211 ===
+
+=== ITEM Q0212 ===
+Passage:
+Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.
+
+Question: Leo finishes his training session and talks with a friend. At this later moment, which of these is he least likely to bring up?
+A. the boxing glove
+B. the fighting stance
+C. the heavy bag
+D. the ringing phone
+E. the gym locker
+F. the distant voice
+=== END Q0212 ===

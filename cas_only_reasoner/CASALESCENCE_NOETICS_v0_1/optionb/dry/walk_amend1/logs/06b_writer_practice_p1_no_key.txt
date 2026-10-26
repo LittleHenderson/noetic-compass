@@ -1,0 +1,8 @@
+$ python -B tools/ob_write_questions.py --set practice --pass p1 --max-calls 5 --pace 0
+{
+ "program": "tools/ob_write_questions.py",
+ "status": "STOP",
+ "code": "KEY_NOT_SET",
+ "reason": "The environment variable GEMINI_API_KEY is not set."
+}
+[exit code 2]

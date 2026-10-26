@@ -1,0 +1,119 @@
+{
+ "schema": "casalescence/optionb/survival/v1",
+ "made_by": {
+  "program": "tools/ob_select.py",
+  "sha256": "3ad936fbac1113e5a872f081c7b4a96a3f7c65fdfa555b076a0d85bb116ae355",
+  "utc": "2026-10-05T16:22:05Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "55754fd5d66082cba937c8360f5b1643f6fc65a947e7742aa371a65fb9ea41ca"
+  },
+  {
+   "path": "optionb/checks/anchor_check_practice.json",
+   "sha256": "bdcebb82f87f7743eeb743395bfd718888a9a9983604c3ef3423207f915e83db"
+  },
+  {
+   "path": "optionb/checks/candidates_practice.json",
+   "sha256": "1e7d08b6716d6046a4e3d95b6d943636d3c089cde54c314ca8179788d87a3747"
+  },
+  {
+   "path": "optionb/checks/form_check_practice.json",
+   "sha256": "d2b14865ccb601b147c5afe600541d089c29e9ba7d01a4eff5c7b58cce532d7f"
+  },
+  {
+   "path": "optionb/checks/option_check_practice.json",
+   "sha256": "91b2187b96127818577affbe11bcdbeb0bb24a28f57ebcce8bfbba56ee72c991"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "1e134d553e3d7ae13eef3fdf684d5ebdb13021a136db08e8424d8765fe14b0f9"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "5de993c03d36bafa2d081565b43f3b820918fa9263100b7ef55a8f480b247008"
+  },
+  {
+   "path": "optionb/solve/key_check_practice.json",
+   "sha256": "84799b71f999a212c3febd9c6ff7c5ba72fad8bb936dc66110a76f8fda489e46"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "practice",
+ "practice_setting_count": 9,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "form check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "option check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "key check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "selection",
+   "role_step": 53,
+   "plain_fact": 27
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 53,
+   "plain_fact": 27
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 53,
+  "plain_fact_tasks": 27,
+  "passages_with_a_task": 27,
+  "passages_with_a_role_step_task": 27,
+  "single_longest": [
+   0,
+   53
+  ],
+  "single_shortest": [
+   0,
+   53
+  ]
+ },
+ "dropped_by_reason": {
+  "NOT_PICKED_BY_PAIR_RULE": 26
+ },
+ "decision": "GO",
+ "stop_reasons": [],
+ "next": "Seal step 3A. Then run: ob_select.py fix-split. Then seal step 3B. Then Step 7 runs on the practice set alone (ordinary notes, support check, the answer-leak screen with --report-only). Only then are final questions written.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+}

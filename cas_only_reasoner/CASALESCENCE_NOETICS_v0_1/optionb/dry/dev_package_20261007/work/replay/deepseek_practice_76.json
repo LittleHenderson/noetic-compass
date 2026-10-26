@@ -1,0 +1,114 @@
+{
+ "Q0077": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "F"
+  }
+ },
+ "Q0078": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "B"
+  }
+ },
+ "Q0079": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "F"
+  }
+ },
+ "Q0080": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "B"
+  }
+ },
+ "Q0081": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "F"
+  }
+ },
+ "Q0082": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "D"
+  }
+ },
+ "Q0083": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "A"
+  }
+ },
+ "Q0084": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "D"
+  }
+ },
+ "G0077": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "A"
+  }
+ },
+ "G0078": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "A"
+  }
+ },
+ "G0079": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "A"
+  }
+ },
+ "G0080": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "A"
+  }
+ },
+ "G0081": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "A"
+  }
+ },
+ "G0082": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "A"
+  }
+ },
+ "G0083": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "B"
+  }
+ },
+ "G0084": {
+  "http_status": 200,
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY",
+  "content_json": {
+   "answer": "B"
+  }
+ }
+}

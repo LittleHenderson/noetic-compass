@@ -1,0 +1,87 @@
+$ python -B tools/ob_screen_notes.py --set both
+{
+ "program": "tools/ob_screen_notes.py",
+ "dry_fixture": false,
+ "status": "SCREENED",
+ "sets_screened_in_this_run": [
+  "practice",
+  "final"
+ ],
+ "seal": "checked: 6 seal lines, all sealed files unchanged",
+ "screen_counts": {
+  "practice": {
+   "passages_screened": 27,
+   "passages_hit": 0,
+   "hits_by_rule": {
+    "a": 0,
+    "b": 0,
+    "c": 0,
+    "d": 0
+   }
+  },
+  "final": {
+   "passages_screened": 109,
+   "passages_hit": 1,
+   "hits_by_rule": {
+    "a": 0,
+    "b": 0,
+    "c": 0,
+    "d": 3
+   }
+  }
+ },
+ "what_is_left": {
+  "practice": {
+   "passages_that_carry_a_task": 27,
+   "passages_dropped_by_the_support_check": 0,
+   "passages_dropped_by_the_screen": 0,
+   "passages_left": 27,
+   "passages_left_with_a_role_step_task": 27,
+   "role_step_tasks_left": 53,
+   "plain_fact_tasks_left": 27
+  },
+  "final": {
+   "passages_that_carry_a_task": 110,
+   "passages_dropped_by_the_support_check": 1,
+   "passages_dropped_by_the_screen": 1,
+   "passages_left": 108,
+   "passages_left_with_a_role_step_task": 108,
+   "role_step_tasks_left": 212,
+   "plain_fact_tasks_left": 108
+  }
+ },
+ "launch_floor": {
+  "lines": [
+   {
+    "what": "practice role_step tasks",
+    "left": 53,
+    "floor": 36,
+    "met": true
+   },
+   {
+    "what": "practice plain_fact tasks",
+    "left": 27,
+    "floor": 20,
+    "met": true
+   },
+   {
+    "what": "final role_step tasks",
+    "left": 212,
+    "floor": 100,
+    "met": true
+   },
+   {
+    "what": "final plain_fact tasks",
+    "left": 108,
+    "floor": 100,
+    "met": true
+   }
+  ],
+  "checked_on_both_sets": true,
+  "met": true,
+  "tier": "EXPLORATORY"
+ },
+ "a_hit_never_causes_a_rewrite": "This program calls nobody. The note writer reads only the support check results.",
+ "next": "Next: tools/ob_assemble.py."
+}
+[exit code 0]

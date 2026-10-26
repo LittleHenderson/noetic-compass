@@ -1,0 +1,122 @@
+{
+ "schema": "casalescence/optionb/support_state/v1",
+ "made_by": {
+  "program": "tools/ob_check_support.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "05660139b058ef7d544e84f632ceba76c53cdd36f38da9578bd165c25bc100ac",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "5eaef0b21670ddd41eb4e1f254dbf793d48dfb90d9cbd5b9cca6e2d90e9f713c"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/SEAL_OPTIONB.jsonl",
+   "sha256": "f045f1022311ff8a2f80de257eb7e6dad9e9221bda5e25f63d317f79aa77c04c"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/elig/eligibility.json",
+   "sha256": "6246dcaaa904856126d7c2b7634ad641c484b030cbf60f0704eaf8017bc6a2c7"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/notes_ord/ordinary_notes_final.json",
+   "sha256": "7f590c45fff2f0f968d412a72bb7cf7d9ffc330b77b6f1d8801e13b87d908645"
+  },
+  {
+   "path": "optionb/dry/fixture_n/not_written_case/support/support_calls_final.jsonl",
+   "sha256": "94021418081727067332c8b46a8d421f4432c0a23b90b1af1daa18b2c88cbda7"
+  }
+ ],
+ "set": "final",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "rounds": [
+  {
+   "round": 1,
+   "batches": [
+    {
+     "batch": 0,
+     "item_ids": [
+      "N0001",
+      "N0002",
+      "N0003",
+      "N0004",
+      "N0005",
+      "N0006",
+      "N0007",
+      "N0008",
+      "N0009",
+      "N0010",
+      "N0011",
+      "N0012"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "item_ids": [
+      "N0013",
+      "N0014",
+      "N0015",
+      "N0016",
+      "N0017",
+      "N0018",
+      "N0019",
+      "N0020",
+      "N0021",
+      "N0022",
+      "N0023",
+      "N0024"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 2,
+     "item_ids": [
+      "N0025",
+      "N0026",
+      "N0027",
+      "N0028",
+      "N0029",
+      "N0030",
+      "N0031",
+      "N0032",
+      "N0033",
+      "N0034",
+      "N0035",
+      "N0036"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 3,
+     "item_ids": [
+      "N0037",
+      "N0038",
+      "N0039",
+      "N0040",
+      "N0041",
+      "N0042",
+      "N0043",
+      "N0044",
+      "N0045",
+      "N0046",
+      "N0047",
+      "N0048"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "first_cap_stop_utc": null,
+ "complete": true
+}

@@ -1,0 +1,10 @@
+[
+ {
+  "http_status": 200,
+  "content": "no JSON here"
+ },
+ {
+  "http_status": 200,
+  "content": "[{\"item\": \"X\", \"verdict\": \"MAYBE\"}]"
+ }
+]

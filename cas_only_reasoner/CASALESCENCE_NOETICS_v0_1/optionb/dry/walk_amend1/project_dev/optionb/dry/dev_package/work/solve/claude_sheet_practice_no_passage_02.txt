@@ -1,0 +1,79 @@
+SHEET practice-no_passage-02. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0085 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesel leave to someone else?
+A. locking up the weigh house
+B. lighting the big lamp
+C. working with the small scale
+D. counting every chalk there
+E. carrying the pan outside
+F. working on the cracked weight
+=== END G0085 ===
+
+=== ITEM G0086 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansel do first?
+A. leaving the door wide open
+B. reaching for the straight needle again
+C. sweeping the loft floor twice
+D. hanging the canvas on a hook
+E. moving the pot to the yard
+F. reaching for the curved needle again
+=== END G0086 ===
+
+=== ITEM G0087 ===
+Question: Where did the pot stand?
+A. under the bench
+B. on the trestle
+C. inside the cart
+D. behind the gate
+=== END G0087 ===
+
+=== ITEM G0088 ===
+Question: Where did the pan stand?
+A. on the sill
+B. behind the gate
+C. inside the cart
+D. under the bench
+=== END G0088 ===
+
+=== ITEM G0089 ===
+Question: Ansel spends two years far from the sail loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the sail loft before dawn
+B. knowing where the pot stands
+C. walking in through the door
+D. dusting the pot before anything else
+E. finding the trestle by the door
+F. seeing the canvas beside it
+=== END G0089 ===
+
+=== ITEM G0090 ===
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesel do first?
+A. moving the pan to the yard
+B. reaching for the large scale again
+C. reaching for the small scale again
+D. sweeping the house floor twice
+E. leaving the door wide open
+F. hanging the chalk on a hook
+=== END G0090 ===
+
+=== ITEM G0091 ===
+Question: Liesel spends two years far from the weigh house. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. seeing the chalk beside it
+C. finding the sill by the door
+D. opening the weigh house before dawn
+E. knowing where the pan stands
+F. dusting the pan before anything else
+=== END G0091 ===
+
+=== ITEM G0092 ===
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ansel leave to someone else?
+A. counting every canvas there
+B. working with the curved needle
+C. locking up the sail loft
+D. carrying the pot outside
+E. working on the blunt shears
+F. lighting the big lamp
+=== END G0092 ===

@@ -1,0 +1,34 @@
+$ python -B tools/ob_write_ordinary_notes.py --set practice --step first --max-calls 0
+{
+ "program": "tools/ob_write_ordinary_notes.py",
+ "dry_fixture": false,
+ "status": "PLAN_ONLY",
+ "set": "practice",
+ "step": "first",
+ "writer": "deepseek-chat",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "passages_that_carry_a_task": 27,
+ "notes_planned": 162,
+ "notes_with_version_1": 0,
+ "notes_with_version_2": 0,
+ "due_in_this_step_at_start": 162,
+ "still_open_in_this_step": 162,
+ "calls_this_run": 0,
+ "call_budget": 0,
+ "notes_written_this_run": 0,
+ "tokens_this_run_as_the_service_reported": {},
+ "deepseek_tokens_in_the_four_call_logs": {
+  "input": 26838,
+  "output": 424
+ },
+ "deepseek_token_limits": {
+  "input": 2430240,
+  "output": 1156520
+ },
+ "model_names_in_the_replies": [],
+ "empty_or_cut_off_replies_this_run": [],
+ "empty_or_cut_off_replies_in_the_log": {},
+ "words_written_and_words_asked_for_per_brief_and_length": {},
+ "next": "No call was made. The plan is written. Run again with a call budget."
+}
+[exit code 1]

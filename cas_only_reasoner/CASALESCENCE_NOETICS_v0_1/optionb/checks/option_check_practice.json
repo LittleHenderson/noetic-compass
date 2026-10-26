@@ -1,0 +1,974 @@
+{
+ "schema": "casalescence/optionb/option_check/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-07T01:19:53Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "ef5850a6959cff906503596049150fdb5fe026922311478e0039ad575b1c5c0e"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "8db5d2a81b3d38ba0c0bc739c238ac01e7dc2c16cb9c4cfe7b3f272bf5598e37"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "2a165f5a6c221b31ca9abf212af768e792f4e8ed7e522594c5427a8f0d4c9c65"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "3875323b6cd206955551c18b46744171b98f4892abf98d5bc834ed9ba8409d12"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "V019.p1.GOES_FOR",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "His own unfinished simple game",
+     "noetic": "^3",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V019.p2.GOES_FOR",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "his own unfinished game",
+     "noetic": "^3",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    },
+    {
+     "option_index": 4,
+     "option": "his own simple game",
+     "noetic": "^3",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V031.p1.WHAT_STUCK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V031.p2.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V031.p2.WHAT_STUCK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V035.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V035.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V035.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V035.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V041.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V041.p2.NEW_STARTER",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V042.p1.WHAT_LEFT",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 2,
+     "option": "Gently smoke the entrance of the box",
+     "noetic": "^6",
+     "team": "a",
+     "entry_index": 1,
+     "field": "words"
+    },
+    {
+     "option_index": 2,
+     "option": "Gently smoke the entrance of the box",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V042.p2.NOT_BELONG",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 3,
+     "option": "smoke the entrance",
+     "noetic": "^6",
+     "team": "a",
+     "entry_index": 1,
+     "field": "words"
+    },
+    {
+     "option_index": 3,
+     "option": "smoke the entrance",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V042.p2.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V047.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V047.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V047.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V051.p1.NOT_BELONG",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 4,
+     "option": "The cylinder",
+     "noetic": "^6",
+     "team": "a",
+     "entry_index": 4,
+     "field": "words"
+    },
+    {
+     "option_index": 4,
+     "option": "The cylinder",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 4,
+     "field": "words"
+    },
+    {
+     "option_index": 5,
+     "option": "The corrosion",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 4,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V051.p1.WHAT_LEFT",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 4,
+     "option": "Corrosion",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 4,
+     "field": "words"
+    },
+    {
+     "option_index": 5,
+     "option": "Cylinder",
+     "noetic": "^6",
+     "team": "a",
+     "entry_index": 4,
+     "field": "words"
+    },
+    {
+     "option_index": 5,
+     "option": "Cylinder",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 4,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V051.p2.WHAT_LEFT",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 0,
+     "option": "the cylinder",
+     "noetic": "^6",
+     "team": "a",
+     "entry_index": 4,
+     "field": "words"
+    },
+    {
+     "option_index": 0,
+     "option": "the cylinder",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 4,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V060.p1.KEEPS_AWAY",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 3,
+     "option": "A sense of peace",
+     "noetic": "^2",
+     "team": "b",
+     "entry_index": 1,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V064.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V069.p2.WHAT_LEFT",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 0,
+     "option": "Brined before entering cellar",
+     "noetic": "^6",
+     "team": "a",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V087.p1.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V087.p2.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V090.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V090.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V105.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V105.p1.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V109.p1.MEET_AGAIN",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 0,
+     "option": "The sweet, earthy smell of warm beeswax",
+     "noetic": "^8",
+     "team": "a",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V109.p1.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V109.p2.MEET_AGAIN",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 0,
+     "option": "warm beeswax",
+     "noetic": "^8",
+     "team": "a",
+     "entry_index": 3,
+     "field": "words"
+    },
+    {
+     "option_index": 1,
+     "option": "warm baking",
+     "noetic": "^8",
+     "team": "a",
+     "entry_index": 3,
+     "field": "words"
+    },
+    {
+     "option_index": 4,
+     "option": "sweet jam",
+     "noetic": "^8",
+     "team": "a",
+     "entry_index": 3,
+     "field": "words"
+    },
+    {
+     "option_index": 5,
+     "option": "earthy kitchen",
+     "noetic": "^8",
+     "team": "a",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V109.p2.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V120.p1.NOT_BELONG",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "subtle head movement",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 6,
+     "field": "words"
+    },
+    {
+     "option_index": 5,
+     "option": "precise footwork",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 5,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V120.p1.WHAT_LEFT",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 2,
+     "option": "precise footwork",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 5,
+     "field": "words"
+    },
+    {
+     "option_index": 3,
+     "option": "subtle head movement",
+     "noetic": "^6",
+     "team": "b",
+     "entry_index": 6,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V132.p1.GOES_FOR",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "the old, rusty bolts",
+     "noetic": "^3",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V132.p2.GOES_FOR",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "the old rusty bolts",
+     "noetic": "^3",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V134.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V134.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V134.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V134.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V153.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V153.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V153.p1.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V160.p1.NOT_BELONG",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V160.p1.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V160.p2.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V168.p1.KEEPS_AWAY",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "Quiet single passengers",
+     "noetic": "^2",
+     "team": "a",
+     "entry_index": 2,
+     "field": "words"
+    },
+    {
+     "option_index": 1,
+     "option": "Quiet single passengers",
+     "noetic": "^2",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    },
+    {
+     "option_index": 3,
+     "option": "Long shifts",
+     "noetic": "^2",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V168.p2.KEEPS_AWAY",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "Quiet, single passengers",
+     "noetic": "^2",
+     "team": "a",
+     "entry_index": 2,
+     "field": "words"
+    },
+    {
+     "option_index": 1,
+     "option": "Quiet, single passengers",
+     "noetic": "^2",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V194.p1.NEW_STARTER",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V194.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V197.p1.NOT_BELONG",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V197.p1.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V197.p2.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V198.p1.KEEPS_AWAY",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "The quiet steady ones",
+     "noetic": "^2",
+     "team": "a",
+     "entry_index": 1,
+     "field": "words"
+    },
+    {
+     "option_index": 1,
+     "option": "The quiet steady ones",
+     "noetic": "^2",
+     "team": "b",
+     "entry_index": 1,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V198.p2.KEEPS_AWAY",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "quiet, steady ones",
+     "noetic": "^2",
+     "team": "a",
+     "entry_index": 1,
+     "field": "words"
+    },
+    {
+     "option_index": 1,
+     "option": "quiet, steady ones",
+     "noetic": "^2",
+     "team": "b",
+     "entry_index": 1,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V200.p1.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V200.p2.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V221.p1.GOES_FOR",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "Electronic keypad",
+     "noetic": "^3",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V221.p2.GOES_FOR",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "A modern electronic keypad",
+     "noetic": "^3",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V221.p2.WHAT_SLID_OFF",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V231.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V231.p1.NEW_STARTER",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V231.p2.NEW_STARTER",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V236.p1.NOT_BELONG",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V236.p1.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V244.p1.MEET_AGAIN",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 1,
+     "option": "Shallow end",
+     "noetic": "^8",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V244.p1.TAKE_AWAY",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 2,
+     "option": "Shallow end",
+     "noetic": "^8",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    },
+    {
+     "option_index": 5,
+     "option": "Father",
+     "noetic": "^8",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V244.p2.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V249.p1.NOT_BELONG",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V249.p1.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V278.p1.WHERE_HELPS",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V278.p2.SWAP_PERSON",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V278.p2.WHERE_HELPS",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V279.p2.LONG_BREAK",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 2,
+     "option": "chiming church bell sound",
+     "noetic": "^7",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    },
+    {
+     "option_index": 2,
+     "option": "chiming church bell sound",
+     "noetic": "^7",
+     "team": "b",
+     "entry_index": 2,
+     "field": "relative_to"
+    }
+   ]
+  },
+  {
+   "question_id": "V279.p2.NEW_STARTER",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 2,
+     "option": "chiming church bell sound",
+     "noetic": "^7",
+     "team": "b",
+     "entry_index": 2,
+     "field": "words"
+    },
+    {
+     "option_index": 2,
+     "option": "chiming church bell sound",
+     "noetic": "^7",
+     "team": "b",
+     "entry_index": 2,
+     "field": "relative_to"
+    }
+   ]
+  },
+  {
+   "question_id": "V303.p1.MEET_AGAIN",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V303.p1.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V303.p2.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V305.p1.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V305.p2.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V329.p1.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V329.p2.NOT_BELONG",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V329.p2.WHAT_LEFT",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V344.p1.MEET_AGAIN",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V344.p1.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V344.p2.MEET_AGAIN",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V344.p2.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V353.p1.WHERE_HELPS",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 2,
+     "option": "a swift defeat",
+     "noetic": "^5",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    },
+    {
+     "option_index": 4,
+     "option": "a quiet defeat",
+     "noetic": "^5",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V353.p2.SWAP_PERSON",
+   "passed": false,
+   "hits": [
+    {
+     "option_index": 5,
+     "option": "avoiding swift swift defeat",
+     "noetic": "^5",
+     "team": "b",
+     "entry_index": 3,
+     "field": "words"
+    }
+   ]
+  },
+  {
+   "question_id": "V359.p1.WHERE_HELPS",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V359.p2.WHERE_HELPS",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V394.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V394.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V400.p1.WHERE_HELPS",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V400.p2.WHERE_HELPS",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V416.p1.MEET_AGAIN",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V416.p2.TAKE_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V418.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V418.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V418.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "V418.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  }
+ ],
+ "counts": {
+  "checked": 102,
+  "passed": 75
+ }
+}

@@ -1,0 +1,41 @@
+$ python -B tools/ob_check_support.py gemini --set final --max-calls 100 --pace 0
+{
+ "program": "tools/ob_check_support.py",
+ "dry_fixture": false,
+ "command": "gemini",
+ "status": "NOTHING_PENDING",
+ "seal": "checked: 5 seal lines, all sealed files unchanged",
+ "calls_this_run": 55,
+ "call_budget": 100,
+ "set": "final",
+ "checker": "gemini-3.1-flash-lite",
+ "model_names_in_the_replies": [
+  "made-up-checker-reply-name"
+ ],
+ "passages": 110,
+ "passages_by_status": {
+  "ALL_PASS": 109,
+  "REWRITE_NEEDED": 1
+ },
+ "notes": {
+  "notes_checked": 660,
+  "passed": 657,
+  "failed_once": 3,
+  "failed_twice": 0,
+  "passages_dropped": 0
+ },
+ "batches": {
+  "DONE": 55,
+  "PENDING": 0,
+  "UNREADABLE": 0
+ },
+ "rounds_planned": [
+  1
+ ],
+ "round_2_waits_for": "REWRITE",
+ "daily_cap_stops": 0,
+ "first_cap_stop_utc": null,
+ "ready_for_seal_step_4": false,
+ "next": "No batch is waiting for the checker. Some notes failed their first check. Run tools/ob_write_ordinary_notes.py --step rewrite, then gemini again."
+}
+[exit code 1]

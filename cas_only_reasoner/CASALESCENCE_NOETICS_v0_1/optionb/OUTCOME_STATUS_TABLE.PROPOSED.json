@@ -1,0 +1,27 @@
+{
+ "schema": "casalescence/optionb/outcome_status_table_proposal/v1",
+ "status": "PROPOSAL by the operator (Claude Code), written 2026-10-05 before any question exists and before model B has run. It has no force. The owner decides every word. The signed table is a separate file, optionb/OUTCOME_STATUS_TABLE.json, written from the owner's own words.",
+ "what_this_is": "For every code the option B programs can print, the one status word of the spec sheet legend (docs/CAS_HARNESS_SPEC_SHEET.md, section 3) that the result row would carry. Fixing it now means nobody picks a word after seeing the result.",
+ "proposed_groups": [
+  {"word": "PASS",
+   "legend_meaning": "A single pre-registered test met its stated criterion.",
+   "codes": ["ROLE_HELP_BEATS_STRONGEST_ORDINARY_HELP", "ROLE_HELP_BEATS_STRONGEST_ORDINARY_HELP_EXPLORATORY"],
+   "note": "The only pass. Even then no outside claim is licensed: the plan requires a repeat on fresh passages first. The exploratory ending stays in the code, so the row shows the small size."},
+  {"word": "FAIL",
+   "legend_meaning": "A single pre-registered test did not meet its stated criterion.",
+   "codes": ["NO_ROLE_HELP_SHOWN", "HELP_NOT_TIED_TO_CORRECT_ROLES", "ROLE_HELP_NOT_ABOVE_ORDINARY_HELP", "HELPS_BUT_BREAKS_RIGHT_ANSWERS", "BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED", "POINTING_BEATS_ORDINARY_HELP_ROLE_NAMES_NOT_SHOWN",
+             "NO_ROLE_HELP_SHOWN_EXPLORATORY", "HELP_NOT_TIED_TO_CORRECT_ROLES_EXPLORATORY", "ROLE_HELP_NOT_ABOVE_ORDINARY_HELP_EXPLORATORY", "HELPS_BUT_BREAKS_RIGHT_ANSWERS_EXPLORATORY", "BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED_EXPLORATORY", "POINTING_BEATS_ORDINARY_HELP_ROLE_NAMES_NOT_SHOWN_EXPLORATORY"],
+   "note": "A failed condition is a failure, never a pass with notes. The code itself says which conditions held."},
+  {"word": "VACUOUS",
+   "legend_meaning": "The test could not be read because a precondition failed. The claim was never tested, rather than tested and rejected.",
+   "codes": ["UNINFORMATIVE_DIFFICULTY", "FORMAT_GAP_NOT_READABLE", "PADDING_HURTS_B_NOT_READABLE", "GATE_STOP_DIFFICULTY", "GATE_STOP_NO_HARM_BASE", "GATE_STOP_FORMAT", "GATE_STOP_NOTES_NOT_READ", "GATE_STOP_GUESSABLE"],
+   "note": "Questions too easy or too hard for model B, replies not in the asked form, notes not read, or questions guessable without the passage."},
+  {"word": "VOID",
+   "legend_meaning": "The run is unusable for reasons unrelated to the hypothesis. Its numbers may never be cited.",
+   "codes": ["INVALID_RUN", "GATE_STOP_SELFTEST", "GATE_STOP_PADDING", "GATE_STOP_TIME", "RESULT_UNREADABLE", "NO_RESULT_FILE"],
+   "note": "A program fault, a broken length match, too little time, or no readable result file."}
+ ],
+ "count_of_codes": 28,
+ "one_line_to_sign_as_proposed": "SIGNED: option B status table as proposed (PASS / FAIL / VACUOUS / VOID groups).",
+ "how_to_change_one": "Add: except <CODE> = <legend word>. Only the pass code may carry a pass word; a code that ends in _EXPLORATORY may not carry VALIDATED or LICENSED (plan limits L1 to L5)."
+}

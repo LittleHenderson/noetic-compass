@@ -1,0 +1,3 @@
+Team A labelers of attempt 3: one Claude Sonnet sub-agent per chunk, started by the operator with the Agent tool and the text of label_v22/TEAM_A_WRAPPER.txt, word for word, with the prompt file's path in place of <PROMPT FILE>.
+Transcripts: C:/Users/wakil/.claude/projects/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner-CASALESCENCE-NOETICS-v0-1/6fbc6595-1bf9-4970-9753-be964ad6ed9c/subagents/agent-<id>.jsonl
+Practice labeler: 01=ab9e1dc940e5e5197 (started 2026-10-07 about 21:58 UTC, 2:58 PM Pacific)

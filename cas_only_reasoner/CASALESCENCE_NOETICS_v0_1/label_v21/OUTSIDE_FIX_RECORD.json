@@ -1,0 +1,133 @@
+{
+ "fix": {
+  "done": [
+   {
+    "item": "O1 (finding 1, blocking) - guide rule 15, last bullet",
+    "what_changed": "File 02_LABELING_GUIDE_v2_1.md. One clause changed: 'It may be `^4` under rule 10.' now reads 'It may be `^4` if rule 5 marks it.' A byte comparison (REAL, run today) shows rule 15 is the same for its first 1770 characters and its last 2; the only differing stretch is 'under rule 10' -> 'if rule 5 marks it' (1785 -> 1790 bytes). Before my edit rule 15 was equal to rule 15 of guide v1.2."
+   },
+   {
+    "item": "O2 (finding 2, major) - guide rule 2 now only says HOW to write",
+    "what_changed": "Heading and number kept. Removed: 'Mark a clear pair only when the passage says or plainly shows that ...', the 'exactly three other cases' sentence, and the closing 'merely sit side by side ... mark neither' sentence. NEW TEXT OF RULE 2, IN FULL: 2. **`^8` and `^9` come as a pair when the passage gives both.** This rule says only how to write them. Whether a Cause and an Effect are present is decided by rule 5 and by rule 15, the owner's working ruling on reading a sign. When the passage gives both, write them as a pair: each quotes the other in `relative_to`, from wherever it appears in the passage. The two rule-15 cases keep their flags: a conclusion reached by reasoning (rule 15b) is marked on its own, with `\"reached_by\": \"reasoning\"`; a sign whose way of working the passage does not reveal (rule 15d) is marked as an uncertain pair. When the passage gives only one of the two, and rule 5 marks it (for example a thought that comes out of nowhere, with no trigger named), write that one entry alone, with `relative_to` `\"\"` and a note under `not_enough_information`."
+   },
+   {
+    "item": "O3 (finding 3, major) - guide rule 5 follows the Diagnostic application; plan and sheet say what to expect",
+    "what_changed": "No list and no rule was added. NEW TEXT OF RULE 5, IN FULL: 5. **The Colloquialism Test decides `^2` to `^9` (owner's ruling, 2026-10-05).** For every possible entry of `^2` to `^9`, apply the Diagnostic application of Part A (A9), in its order. First ask what saying a native speaker would use for this moment. Then ask which Noetic's definition (A1) that saying aligns with. Mark that Noetic, and write the saying in `saying`. The canonical sayings of Part A (A4, A5) show the kind of saying that belongs to each Noetic; A4 calls them \"representative, not exhaustive\". If the saying aligns with several Noetics, write an entry for each. If no saying of any Noetic fits, write no entry. If you cannot tell, write the entry with `\"certainty\": \"ambiguous\"` and the other candidate. Where a saying and a definition appear to disagree, the definition governs (A10). The annotations of Part A apply: `^3` is visceral, not analytical (A6); `^8` is triggering, not reasoning (A8). Nothing else decides presence. Rules 2, 3 and 15 say how a pair or a lone entry is written; they do not decide presence beyond rule 15, which is the owner's own working ruling. --- The three quoted words are an exact copy from A4 (checked by a script). Plan section 3 now says: 'Two careful labelers can choose different sayings for one moment, so the pass mark may be missed for reasons of judgment even when pointing is right. Not measured yet.' The sheet's 'What to expect' says the same, ending '; how often is not measured.'"
+   },
+   {
+    "item": "O4 (finding 4, major, followed in part) - the strict-label view",
+    "what_changed": "The pass mark keeps its test. The scorer (tools/verdict_v21.py) now prints a second number beside every E, in tables 1, 3 and 4, in the column 'strict-label view (no bar)', and writes it to the JSON report as `strict_label_matched` and `strict_label_view`. How it is worked out: the entries are paired again, one to one, when two labels may pair only if their spans overlap AND they have the same content words in the same order. M' = those pairs. The number is M' / (A + B - M'). The Mind and the related thing keep the old test. It changes no other number (checked, see measured results). Plan: one bullet in section 5 names it, and the worked example shows it (1 / (1 + 2 + 2) = 0.20). Sheet item 3: one sentence says the second number is printed and carries no mark. Fixture: every row's strict-label number is pinned, and so is the printed column of table 1."
+   },
+   {
+    "item": "O5 (finding 5, major) - one report-only line on the reasoning flag",
+    "what_changed": "The scorer adds one line to a verdict (the last head line, also in the .md and the JSON under `reasoning_flag_line`). Per team it says how many clear `^9` entries without `reached_by` have a support that holds one of the words of guide rule 15(b), and names the passages. The five words are read from the guide when the program runs (function `rule15b_words`: the words in double quotes after 'Words that show this:' in bullet (b) under the line that starts '15. '). They are typed nowhere in the scorer. Match rule: whole words, capitals not read. It changes no count. Sheet item 1 has the one sentence asked for. Plan section 5 says the same."
+   },
+   {
+    "item": "O6 - limits and untouched parts",
+    "what_changed": "Guide 40821 bytes (limit 41000). Plan 25993 bytes (limit 26000). Sheet 3650 bytes (limit 3700). Scorer 850 lines (limit 850). Checker unchanged (sha256 c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9). Part A unchanged: 7425 bytes, identical, and its check prints IDENTICAL. Rule 16 unchanged: 2393 bytes, identical. No example passage changed. One example note changed: X8, whose last sentence cited the removed gate of rule 2; it now reads 'No saying of `^8` or `^9` fits, so there is no pair (rule 5).' The labeler instructions were not changed: no changed rule needs it."
+   },
+   {
+    "item": "O7 - plan section 18 'Outside review of version 2.1 and what was done'",
+    "what_changed": "New last section, one line per finding: 1 followed, 2 followed, 3 followed, 4 followed in part, 5 followed. The reason for 4 is given with the owner's own sentence, quoted exactly from OWNER_DIRECTION_POINTING_AND_OPTION_B_20261005.json: \"They largely agreed about the meaning but selected different amounts of text\". OWNER_RULING_AMENDMENT_RECORD.json was not edited."
+   },
+   {
+    "item": "Lines that had to follow (beyond the literal list O1 to O7)",
+    "what_changed": "(1) Guide: two sentences said rule 15 is 'byte for byte' the text of v1.2. That became false, so both now add 'but for one clause of rule 15'. One new row in the last change table records the changes to rules 2, 5, 15 and X8. One status sentence points to that row. (2) Plan: the same 'same bytes' qualifier in section 2; '(guide rule 15, unchanged)' lost the word 'unchanged'; the status line names the outside review. (3) Plan section 13, cost: the plan said 'guide at most 40,000 bytes'. I redid the ESTIMATE by simple proportion for 41,000 bytes: 'About 12,200 tokens sent per first try', 'about 7.6 million tokens sent', 'about 2.72 USD at peak hours, about 1.36 off-peak'. No price was read again. The caps are unchanged and the estimate stays under them. (4) Plan cuts made only to stay under 26,000 bytes: the sentence 'Attempt 1's rule gives 2 of 3 = 0.667 here ...' in the worked example (replaced by the strict-label example); 'Gone: rule 2's \"mark neither\" ...; rule 3's sentence on recalling on purpose.' in section 15 (still recorded in the guide's change table); 'The test is the owner's own and short; it also leaves more to each labeler's judgment ...' in section 3 (replaced by the O3 sentence); two sentences shortened with meaning kept (the `saying` line in section 5; the list in section 17). (5) Fixture: one made-up passage F23 added to all five data files, so the new line is pinned with a real case. Team A writes a `^9` without the flag, team B writes the same `^9` with the flag. All numbers that move with a 23rd passage were re-worked by hand in FIXTURE_EXPECTED.json before the first run."
+   }
+  ],
+  "files_changed": [
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/02_LABELING_GUIDE_v2_1.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/09_LABEL_AGREEMENT_PLAN_v2_1.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/OWNER_SIGNOFF_SHEET.md",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/tools/verdict_v21.py",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/FIXTURE_EXPECTED.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/passages.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_a.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_a.json.tries.jsonl",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_b.json",
+   "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/fixture/labels_team_b.json.tries.jsonl"
+  ],
+  "open_issues": [
+   "Nothing is signed, sealed or labeled. The guide and the plan changed, so the signing line changed. An earlier signing line (guide d65ad695bfa1, plan 84d874364747) no longer fits.",
+   "NOT MEASURED: how the reworded rules 2 and 5 move agreement. No labeler was run. No outside review has read the new text; OUTSIDE_REVIEW_GUIDE_PLAN_SHEET.md.receipt.json still names the old fingerprints, which is correct for what was reviewed then.",
+   "A choice in O4 that the operator may want to confirm: the strict-label view makes a NEW pairing under the stricter label test (the most pairs that can be made). It is not a filter on the pass-mark pairs. The two can differ only when the pass-mark pairing broke a tie in favour of a pair by containment. On the attempt-1 labels and on the fixture this choice is what produced the numbers reported.",
+   "The strict-label view is stricter for the LABEL only, as O4 words it. The Mind and the related thing keep the containment test. So a `^8` whose related thing is a shortened `^9` label still counts in the `^8` row, while the `^9` row drops that pair. In the fixture: `^8` strict 2/4 = 0.500 (same as E), `^9` strict 2/9 = 0.222. A reviewer may ask for the related thing to be strict too.",
+   "The reasoning-flag line is a hint, not a check. It reads only the support the labeler chose, and only the five example words. A conclusion reached by reasoning that uses other words, or sits in a support without those words, is not listed.",
+   "The fixture now holds the five rule-15(b) words as an expected value (in FIXTURE_EXPECTED.json: the pinned line and its hand-worked note). The scorer does not read them from there; the fixture only checks what the scorer read from the guide. If this counts as retyping, say so and I will pin only the counts.",
+   "Fixture mode now reads the guide file of the study folder (02_LABELING_GUIDE_v2_1.md) to get the words, because tools/seal_v21.py starts fixture mode without `--guide` and I may not edit the seal tool. With the default paths this is the same file the seal hashes. The seal tool's own fixture runner accepts the new output (run_fixture: exit code 0, 'PASS: every number equals FIXTURE_EXPECTED.json'); its check_bars still finds the four numbers.",
+   "No room left: the scorer is at exactly 850 lines (limit 850) and the plan at 25993 of 26000 bytes. Any further wording in the plan needs a cut or a higher limit. The plan cuts I made to fit are listed under 'Lines that had to follow'.",
+   "Plan section 13: the cost figures are an ESTIMATE redone by proportion, not a measurement, and the price was not read again. Section 18 does not mention this change (no bytes left).",
+   "Sheet item 4 still says 'Rule 15 (your sign-reading ruling, with the study's example words) stays'. True for the ruling; one cross-reference inside rule 15 now names rule 5. The plan says so (section 2 and section 18 line 1); the sheet does not, to stay short. 50 bytes are free on the sheet if the operator wants it added.",
+   "The change-table row in the guide quotes the old words \"under rule 10\" once, as history. A search for 'rule 10' will find it there and in the stub of rule 10.",
+   "Three files in the study folder changed while I worked, NOT by me: 08_OPTION_B_PLAN_v1_0.md, optionb/AMEND_3_RECORD.json, optionb/PLAN_CONSTANTS.json. Another job is writing there.",
+   "CHANGELOG.md and docs/CAS_HARNESS_SPEC_SHEET.md were not updated and nothing was committed: this task forbids it. The operator must do that.",
+   "Scratchpad only: my first copy command wrote into an existing scratch folder `before/` and overwrote seven same-named older scratch copies there (guide, plan, sheet, instructions, scorer, checker, seal tool). No project file was affected. My own before-copies are in scratchpad folder `o1o7_before/`.",
+   "SIMULATED, not a verdict: to make sure verdict mode does not crash on the new column and line, I ran it once on the made-up fixture with a made-up seal, writing only to the scratchpad (`o1o7_sim_verdict/`). It printed the tables and the new line and ended with exit code 1, 'THE RUN IS INVALID' (the fixture is invalid by design). No file was written in the study folder."
+  ],
+  "real_numbers_measured": [
+   "REAL - Part A check: `tools/build_guide_part_a_v21.py check` printed IDENTICAL, exit code 0 (run after the last guide edit).",
+   "REAL - scorer `fixture` mode: 'fixture: 23 passages, 62 checker cases, 8 outcome cases, 8 validity cases, 27 gate cases, and the order check' and 'PASS: every number equals FIXTURE_EXPECTED.json', exit code 0. It passed on the first run against the numbers I had worked by hand and written down before running.",
+   "REAL - fixture, strict-label view of table 1 (hand-worked first, then printed the same): ^1 17/21 = 0.810; ^2 1/8 = 0.125; ^3 1/5 = 0.200; ^4 0/1 = 0.000; ^5 2/3 = 0.667; ^6 4/11 = 0.364; ^7 0/2 = 0.000; ^8 2/4 = 0.500; ^9 2/9 = 0.222.",
+   "REAL - fixture, the new report-only line (hand-worked first, then printed the same): 'report only, no count changes: clear ^9 entries with no reasoning flag whose support holds a word of guide rule 15(b) (worked out, checked, ruled out, compared, so it had to be): team A 1 of 7 (F23); team B 0 of 4'.",
+   "REAL - scorer `old` mode on the attempt-1 labels (428 passages; 'THIS IS NOT A VERDICT'): the nine E values are unchanged: ^1 0.868, ^2 0.629, ^3 0.639, ^4 0.401, ^5 0.537, ^6 0.387, ^7 0.317, ^8 0.541, ^9 0.529. The check line still prints 'yes' for all 12 rows.",
+   "REAL - `old` mode, the nine strict-label values it now prints: ^1 378/455 = 0.831; ^2 38/107 = 0.355; ^3 26/74 = 0.351; ^4 47/159 = 0.296; ^5 75/197 = 0.381; ^6 135/507 = 0.266; ^7 34/128 = 0.266; ^8 31/100 = 0.310; ^9 28/105 = 0.267.",
+   "REAL - nothing else moved: the scorer before my edit and the scorer after it give the same value for every number of the attempt-1 report (0 differences; the only new keys are `strict_label_matched` and `strict_label_view`). The changed scorer also still gives every number of the OLD 22-passage FIXTURE_EXPECTED.json on the old fixture files (0 differences).",
+   "REAL - checker on every worked example record of the guide: 12 passages and 12 records found (P00, X1 to X11); all 12 pass with no message.",
+   "REAL - byte comparison of the guide against its text before my edit: Part A IDENTICAL (7425 bytes, sha256 starts e497551128628ffd). Rule 16 IDENTICAL (2393 bytes, sha256 starts fc6dc196c772557d). Rule 15: 1785 -> 1790 bytes; same first 1770 characters and same last 2; the one differing stretch is 'under rule 10' -> 'if rule 5 marks it'; only line 8 of its 8 lines differs. Seven guide lines differ in all (status line 7, rule 2, rule 5, the rule-15 bullet, the X8 note, the 'byte for byte' line 307) plus one new table row.",
+   "REAL - sizes: 02_LABELING_GUIDE_v2_1.md 40821 bytes (limit 41000); 09_LABEL_AGREEMENT_PLAN_v2_1.md 25993 bytes (limit 26000); label_v21/OWNER_SIGNOFF_SHEET.md 3650 bytes (limit 3700); tools/verdict_v21.py 850 lines (limit 850); all with LF line ends, 0 CR bytes. tools/check_labels_v21.py, tools/seal_v21.py and label_v21/LABELER_INSTRUCTIONS.txt are byte-identical to before. `ast.parse` of tools/verdict_v21.py: ok.",
+   "REAL - `tools/seal_v21.py signing-line` printed: SIGNED: label-agreement v2.1, guide 2b6617c15102, plan 657413f77f18, as proposed.",
+   "REAL - sha256 after the edit: guide 2b6617c1510270d34f00602a461082a2d4ca90bb89239ec4c60a990402751a29; plan 657413f77f182c7310071505e89d01452eb9e62cd97ac0c69d954051218430cd; sheet a7b6efc32aa48f857e639f4251a7efacf9b7e28c979b06350053067b1de36e6f; scorer ba9dd3115d8b14aa8e5afeb4e4b0722957a280623f9a9d03e0dde181b6859412; FIXTURE_EXPECTED.json cf4f3453253f775a329d9bd3fc79ce126ae68d6c939e96a8b491b72ebd70a258. Canon file still cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880; tools/verdict.py still ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb.",
+   "REAL - the words the scorer reads from the guide at run time: ['worked out', 'checked', 'ruled out', 'compared', 'so it had to be'] (the same from the guide before and after the edit).",
+   "REAL - the two sayings in the new fixture records ('The thought came to me.' and 'It just clicked.') are exact copies of A4 sayings (script check); the only fixture saying not in A4 is still team A's ^4 in F05."
+  ]
+ },
+ "confirm": {
+  "verdict": "ACCEPT",
+  "findings": [
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/label_v21/OWNER_SIGNOFF_SHEET.md",
+    "where": "Item 1, the sentence added for O5",
+    "problem": "The sheet says: \"the report lists entries where the flag may be missing\". The report does less than that. It prints one line. The line gives a count per team and the passage ids, not the entries. It finds only supports that hold one of the five example words of guide rule 15(b). A conclusion reached by reasoning in other words is not found. The plan (section 5) says this exactly; the sheet does not. The main point on the sheet is true: an Effect reached by reasoning is shown apart only when the labeler sets the flag.",
+    "evidence": "REAL, run today: fixture mode prints \"team A 1 of 7 (F23); team B 0 of 4\". Scorer functions rule15b_words and reasoning_flag_line (tools/verdict_v21.py, lines 468 to 486): a whole-word search for five phrases in the support, capitals not read.",
+    "fix": "Optional. Not needed to sign. Replace that clause with: \"the report names passages where it may be missing, by a scan for five example words\". The sheet then has 3,679 bytes (limit 3,700). The sheet is not part of the signing line, so the line stays the same."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/02_LABELING_GUIDE_v2_1.md",
+    "where": "Part B: rule 3; the last sentence of rule 5; the field rule for not_enough_information",
+    "problem": "Answer to question (a). Rule 2 holds no gate now. No sentence written in this round decides when a role is present, and no presence rule or word list for labelers slipped in. Two older study sentences still say when a role is NOT marked. (1) Rule 3: \"No Mind, no `^8`/`^9`. Rain making a road wet is not `^8`. The definition needs an Idea coming to Mind.\" (2) Field rule: \"Do not turn a hint into an entry.\" Rule 3 adds no gate of its own: it repeats the definition (A1), and the form already needs a Mind for `^8` and `^9`. But rule 5 ends by saying that rules 2, 3 and 15 \"say how a pair or a lone entry is written\". That is not what rule 3 says. Line (2) is a general rule on evidence, the same for every role.",
+    "evidence": "Rule 3 is the first three sentences of rule 3 in guide v1.2; its sentence on recalling on purpose was removed earlier. Both lines stood in the text the outside reviewer read (guide sha256 d65ad695bfa1...). It objected to rule 2 only.",
+    "fix": "No change before the owner signs. A change here would change the guide and the signing line, with no gain in labeling. If a later version is made, word the end of rule 5 so that it says rule 3 repeats the definition."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/OWNER_RULING_MIND_AND_COLLOQUIALISMS_20261005.json",
+    "where": "Field decisions_taken_from_it_labelled_as_interpretation, key presence_of_the_other_noetics",
+    "problem": "The operator's reading in this record is now one step behind guide rule 5. The record says: \"mark the Noetic whose canonical sayings and definition it matches\". Rule 5 now asks which Noetic's definition the saying aligns with, and says the canonical sayings show the kind of saying. The owner's own words in the record are untouched and still fit rule 5. Labelers never see the record. The plan lists the record as a frozen input, so a reader who compares the two will see the difference.",
+    "evidence": "REAL: the record has sha256 72699b024b52e5fa9b3aad14771fe76a7b8d50f37ed64ffd046948e99ef07e8c, 4,833 bytes, last written 11:15, before this round. Option B pins these bytes (optionb/PLAN_CONSTANTS.json, line 31).",
+    "fix": "Do not edit the record. The guide's change table (last row) already says what changed in rule 5 and why. Say it once in the changelog entry the operator writes."
+   },
+   {
+    "severity": "MINOR",
+    "file": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/09_LABEL_AGREEMENT_PLAN_v2_1.md",
+    "where": "Section 13 (cost), against sections 17 and 18",
+    "problem": "The cost estimate in section 13 changed in this round, and no section of the plan says so. Guide limit: 40,000 to 41,000 bytes. Tokens sent per first try: about 11,900 to about 12,200. Tokens sent in all: about 7.4 million to about 7.6 million. Cost: about 2.66 / 1.33 USD to about 2.72 / 1.36 USD. The new figures are an ESTIMATE by proportion, not a measurement. The price was not read again. The arithmetic is right and stays under the 4.00 USD cap. The plan has 7 bytes left, so the note cannot go there.",
+    "evidence": "Checked by hand: 7.6 x 0.30 + 0.37 x 1.20 = 2.72; 7.6 x 0.15 + 0.37 x 0.60 = 1.36. Seen in the diff of the plan against the copy the outside reviewer read (sha256 84d874364747...).",
+    "fix": "No plan change. Put the changed estimate in the changelog and spec-sheet entry the operator writes."
+   }
+  ],
+  "final_hashes": [
+   "guide: 02_LABELING_GUIDE_v2_1.md | sha256 2b6617c1510270d34f00602a461082a2d4ca90bb89239ec4c60a990402751a29 | 40821 bytes (limit 41000)",
+   "instructions: label_v21/LABELER_INSTRUCTIONS.txt | sha256 15941173a754f85ff191b2230cd43d34b29573e153ff285aa17124d2f55156d6 | 3560 bytes (not changed in this round)",
+   "plan: 09_LABEL_AGREEMENT_PLAN_v2_1.md | sha256 657413f77f182c7310071505e89d01452eb9e62cd97ac0c69d954051218430cd | 25993 bytes (limit 26000)",
+   "sheet: label_v21/OWNER_SIGNOFF_SHEET.md | sha256 a7b6efc32aa48f857e639f4251a7efacf9b7e28c979b06350053067b1de36e6f | 3650 bytes (limit 3700)",
+   "checker: tools/check_labels_v21.py | sha256 c32e2f7b5b986626529bd173405d93e1beb7184802634d26a54426385d2840f9 | 20711 bytes (not changed in this round)",
+   "scorer: tools/verdict_v21.py | sha256 ba9dd3115d8b14aa8e5afeb4e4b0722957a280623f9a9d03e0dde181b6859412 | 56317 bytes, 850 lines (limit 850)",
+   "seal tool: tools/seal_v21.py | sha256 d03e3e483fb342c49ea83452d055f8f31fb3e9bb1ca22d54891c847188a34e63 | 29423 bytes (not changed in this round)",
+   "FIXTURE_EXPECTED.json: label_v21/fixture/FIXTURE_EXPECTED.json | sha256 cf4f3453253f775a329d9bd3fc79ce126ae68d6c939e96a8b491b72ebd70a258 | 76546 bytes"
+  ],
+  "signing_line": "SIGNED: label-agreement v2.1, guide 2b6617c15102, plan 657413f77f18, as proposed.",
+  "rule_2_text": "2. **`^8` and `^9` come as a pair when the passage gives both.** This rule says only how to write them. Whether a Cause and an Effect are present is decided by rule 5 and by rule 15, the owner's working ruling on reading a sign. When the passage gives both, write them as a pair: each quotes the other in `relative_to`, from wherever it appears in the passage. The two rule-15 cases keep their flags: a conclusion reached by reasoning (rule 15b) is marked on its own, with `\"reached_by\": \"reasoning\"`; a sign whose way of working the passage does not reveal (rule 15d) is marked as an uncertain pair. When the passage gives only one of the two, and rule 5 marks it (for example a thought that comes out of nowhere, with no trigger named), write that one entry alone, with `relative_to` `\"\"` and a note under `not_enough_information`.",
+  "rule_5_text": "5. **The Colloquialism Test decides `^2` to `^9` (owner's ruling, 2026-10-05).** For every possible entry of `^2` to `^9`, apply the Diagnostic application of Part A (A9), in its order. First ask what saying a native speaker would use for this moment. Then ask which Noetic's definition (A1) that saying aligns with. Mark that Noetic, and write the saying in `saying`. The canonical sayings of Part A (A4, A5) show the kind of saying that belongs to each Noetic; A4 calls them \"representative, not exhaustive\". If the saying aligns with several Noetics, write an entry for each. If no saying of any Noetic fits, write no entry. If you cannot tell, write the entry with `\"certainty\": \"ambiguous\"` and the other candidate. Where a saying and a definition appear to disagree, the definition governs (A10). The annotations of Part A apply: `^3` is visceral, not analytical (A6); `^8` is triggering, not reasoning (A8). Nothing else decides presence. Rules 2, 3 and 15 say how a pair or a lone entry is written; they do not decide presence beyond rule 15, which is the owner's own working ruling."
+ }
+}

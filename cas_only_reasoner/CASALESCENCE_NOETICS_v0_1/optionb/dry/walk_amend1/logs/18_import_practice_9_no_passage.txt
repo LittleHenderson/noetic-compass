@@ -1,0 +1,28 @@
+$ python -B tools/ob_solve_blind.py import --set practice --mode no_passage --sheet 02 --transcript-model made-up-name-from-a-transcript
+{
+ "program": "tools/ob_solve_blind.py",
+ "dry_fixture": false,
+ "step": "import",
+ "status": "SHEET_IMPORTED",
+ "set": "practice",
+ "mode": "no_passage",
+ "sheet": "02",
+ "seal": "checked: 2 seal lines, all sealed files unchanged",
+ "answer_file": "optionb/solve/claude_answers_practice_no_passage_02.txt",
+ "answer_file_sha256": "9b0793c5606cdea8abe0250cc639563b89c623445abfce3c8b5b74b9e9a696a1",
+ "items_on_sheet": 12,
+ "model_name_from_the_transcript": "made-up-name-from-a-transcript",
+ "model_id_pinned_in_the_plan": "claude-sonnet-5-5",
+ "readable": 12,
+ "unreadable": 0,
+ "unreadable_by_cause": {
+  "missing": 0,
+  "repeated": 0,
+  "line_does_not_fit": 0,
+  "reply_not_allowed": 0
+ },
+ "lines_that_name_no_item_of_this_sheet": 0,
+ "first_such_lines": [],
+ "note": "An unreadable reply counts as not picked. It is not asked again."
+}
+[exit code 0]

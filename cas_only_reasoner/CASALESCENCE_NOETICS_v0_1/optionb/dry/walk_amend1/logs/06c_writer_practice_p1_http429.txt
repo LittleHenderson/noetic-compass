@@ -1,0 +1,31 @@
+$ python -B tools/ob_write_questions.py --set practice --pass p1 --max-calls 5 --pace 0
+{
+ "program": "tools/ob_write_questions.py",
+ "dry_fixture": false,
+ "status": "STOPPED_HTTP_429",
+ "set": "practice",
+ "pass": "p1",
+ "model": "gemini-3.5-flash-lite",
+ "seal": "checked: 2 seal lines, all sealed files unchanged",
+ "practice_setting_count": 8,
+ "waves": 1,
+ "batches": {
+  "DONE": 0,
+  "PENDING": 6,
+  "UNREADABLE": 0
+ },
+ "calls_this_run": 1,
+ "call_budget": 5,
+ "stops_after_http_429": 1,
+ "model_names_in_the_replies": [],
+ "passages_asked": 0,
+ "passages_by_status": {
+  "OK": 0,
+  "MISSING": 0,
+  "BAD_OBJECT": 0
+ },
+ "what_follows_questions": 0,
+ "plain_fact_questions": 0,
+ "next": "The service refused a call (HTTP 429). The refused call is not counted as a try. The checkpoint is kept. Run the same command again later. The daily cap of this model is not known."
+}
+[exit code 0]

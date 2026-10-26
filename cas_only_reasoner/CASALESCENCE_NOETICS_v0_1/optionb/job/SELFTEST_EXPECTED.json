@@ -1,0 +1,140 @@
+{
+ "schema": "casalescence/optionb/selftest-expected/v1",
+ "made_by": {
+  "program": "none: worked out by hand by the builder of the job programs",
+  "sha256": null,
+  "utc": "2026-10-05T15:48:00Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4",
+   "note": "the file as it stood after amendment A13, when this was read again (REAL, hashed on 2026-10-05); it was not sealed yet"
+  },
+  {
+   "path": "08_OPTION_B_PLAN_v1_0.md",
+   "sha256": "656c0aaf8a5352055b8df52046e72fb0de30b8eafaca274c5df2d2adbd17fe8f",
+   "note": "the file as it stood after amendment A13 and after its two length figures were measured again (REAL, hashed on 2026-10-05); it was not sealed yet"
+  }
+ ],
+ "what_this_file_is": [
+  "The five made-up answer sets of the self-test (Gate 0): how each set is built, and the code the gate program and the analysis program must print for it.",
+  "Every code here was worked out by hand from the rules. No program was run. Claim state of every code: EXPECTED.",
+  "A made-up answer set is a set of replies that no model wrote. It is there to prove that the two programs run from start to end and print the right code.",
+  "The runner does NOT read this file. It is not in the job package. The runner takes the expected codes from PLAN_CONSTANTS.json, under selftest.made_up_sets. This file must say the same. If the two ever differ, PLAN_CONSTANTS.json governs and this file is wrong.",
+  "The two hashes under inputs are a note of what was read. No program compares them. If the plan or the constants change again before the seal, this file is checked again by hand."
+ ],
+ "changed_in_review_round_1": [
+  "The two hashes under inputs were stale. They now name the plan and the constants as they stand after review round 1.",
+  "No expected code changed. The five sets and their codes are the same as before.",
+  "Gate 4 now counts role-step tasks and plain-fact tasks apart. The reason given for the DESIGNED set says so.",
+  "tools/verdict.py is now in the job package. So the three word views are worked out in every made-up set, and a set fails if they are not.",
+  "The test's random draws: the constants now name the procedure that the analysis program runs (Python's own random module, no numpy). The hand arithmetic for the DESIGNED set does not depend on the draws."
+ ],
+ "changed_by_amendments_A1_to_A12": [
+  "The two hashes under inputs now name the plan and the constants as they stand after the amendments.",
+  "No expected code changed. The five sets and their codes are the same as before. Each set was worked through by hand again on 2026-10-05.",
+  "Amendment A7: the outcome codes are numbered 1 to 11, each number once. INVALID_RUN is code 1, UNINFORMATIVE_DIFFICULTY is code 2, BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED is code 9 (before, two codes carried the number 8). Codes 1 to 4 still never carry the _EXPLORATORY ending. The analysis program now stops unless the constants number the codes 1 to 11, say outcome_codes_count 11, and hold the report sentences code_7, code_10 and no_harm_range. Every made-up set runs that check.",
+  "Amendment A4: the standard error is the standard deviation of the 10000 resampled values, with no division by a count. The program already worked it out that way; its comments now say so in plain words. The number X of each set is worked out from it. The block x_by_hand under the DESIGNED set gives the hand work. No program compares X.",
+  "Amendment A5: the check package_matches_seal now also treats a repair line outside its window as a problem: a 6R_PROGRAMS_REPAIRED line after a line 7_PRECHECK, or a TR_TOOLS_REPAIRED line after the line 3C_FINAL_QUESTIONS_AND_KEYS. A sound seal file holds neither.",
+  "Amendment A10: the five sets are first run by the development test on a made-up package, before seal step 1. The block what_a_made_up_development_package_needs lists what that package must hold for the self-test to end with SELFTEST_PASS."
+ ],
+ "changed_by_amendment_A13": [
+  "The two hashes under inputs now name the plan and the constants as they stand after amendment A13 (the canonical sayings lines in the ROLE and MIXED notes) and its small faults.",
+  "No expected code changed. Claim state: BY READING, not by a run. The five sets and their codes were not worked through by hand again. The reason: amendment A13 changes the text of the ROLE and MIXED notes, list C of the forbidden words, the source files of seal step 1 and one status of the support check. By a text search of the three job programs on 2026-10-05, none of them reads a constant that A13 changed or added. The made-up answer sets are built from the practice tasks and keys, not from the note texts.",
+  "The seal copy of a package now holds one more file entry in its line 1: the source of the sayings, with the path ../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md and package_path null. The check package_matches_seal skips an entry whose package_path is null (BY READING: optionb/job/analysis_b1.py). The 16 package paths are the same as before.",
+  "The note lengths in the block what_a_made_up_development_package_needs were counted again, because the ROLE and MIXED notes of the dry fixture now hold the sayings lines."
+ ],
+ "how_every_set_is_built": {
+  "tasks": "The practice tasks of prompts/prompt_parts_practice.json. The keys are keys_practice/keys_practice.json.",
+  "practice_file": "trial_<SET>_calls_practice.jsonl. Step P1: group NONE, level 1, every task, under closing wordings 1, 2 and 3. Then the wording is chosen by the Gate 1 rule. Step P2: group NONE, level 2, every role-step task, under the chosen wording. Then the level is chosen by the Gate 2 rule and Gate 3 is checked. Step P3 is written only if Gates 2 and 3 pass, as in a real run.",
+  "final_file": "trial_<SET>_calls_final.jsonl. The same practice tasks, written as phase final, level 1, wording 1: the must-run groups of every task, then NO-PASSAGE on every role-step task.",
+  "well_formed_reply": "{\"answer\": \"<letter>\"}",
+  "wrong_reply": "the first shown letter that is not the right one",
+  "other_fields_of_a_line": "prompt is the empty string; answer_token_ids is an empty list; new_tokens is 0; cut_off is false; seconds_text is 1.0; prompt_sha256 is the dry-build hash of the same practice prompt.",
+  "gate_clock": "made up: now = 0, work cutoff = 1000000 seconds. The final call counts for Gate 7 are the real planned counts of the package.",
+  "analysis_setting": "level 1, wording 1, two equal made-up model-hash receipts that list the pinned files, blocks MUST_RUN and NO-PASSAGE. The trial gate file is not read by the analysis.",
+  "how_a_printed_code_is_checked": "Where the expected value is one code, the printed code must be exactly that code. Where the expected value is a sentence, any listed code is accepted, as the sentence says."
+ },
+ "sets_in_order": ["ALL_RIGHT", "ALL_WRONG", "DESIGNED", "RANDOM_LETTERS", "ALL_MALFORMED"],
+ "sets": {
+  "ALL_RIGHT": {
+   "recipe": "Every reply is the right letter, well formed.",
+   "gate_must_print": "GATE_STOP_DIFFICULTY",
+   "why_gate": "Gate 1 has no stop code (wording 1 by the tie rule). At Gate 2, B alone is 100% right at level 1 and at level 2; that is above 70%, outside both windows, so no level can be chosen.",
+   "analysis_must_print": "UNINFORMATIVE_DIFFICULTY",
+   "why_analysis": "V1 to V3 hold (every call has a line, the receipts are equal, no reply is malformed). R1 trips: group NONE is 100% right on role-step tasks, above 85%. Codes 1 to 4 never carry the _EXPLORATORY ending."
+  },
+  "ALL_WRONG": {
+   "recipe": "Every reply is well formed and is the first shown letter that is not the right one.",
+   "gate_must_print": "GATE_STOP_DIFFICULTY",
+   "why_gate": "At Gate 2, B alone is 0% right at both levels; that is below 35% and below 30%, outside both windows.",
+   "analysis_must_print": "UNINFORMATIVE_DIFFICULTY",
+   "why_analysis": "V1 to V3 hold (every reply is well formed, so no group is at format floor). R1 trips: group NONE is 0% right, below chance plus 5 points (30% with four options)."
+  },
+  "DESIGNED": {
+   "recipe": "Sort the role-step tasks by id and number them from 0. ROLE and ANSWER-GIVEN: right on every task. NO-PASSAGE: wrong on every task. Every other group, every wording and both levels: right on even numbers, wrong on odd numbers. Plain-fact tasks: right in every group. A wrong reply is the first shown letter that is not the right one. Seconds per call: 1.0.",
+   "gate_must_print": "GO",
+   "gate_must_choose": {"wording": 1, "level": 1},
+   "why_gate": "Gate 1: all three wordings are fully clean, so the tie goes to wording 1. Gate 2: both levels are about 50% right, inside both windows and equally near 50%, so the tie goes to level 1. Gate 3: plain facts 100%. Gate 4: every reply is clean, so in every must-run group the role-step tasks and the plain-fact tasks, counted apart, are 100% clean with 0% FORMAT_FAIL plus CUT_OFF; QUOTES-ONLY is counted on role-step tasks only. Gate 5: every ANSWER-GIVEN reply is clean and right. Gate 6: NO-PASSAGE is 0% right. Gate 7: the planned calls times 1.0 second times 1.25 plus 300 seconds is far under 1000000 seconds.",
+   "analysis_must_print": "BEATS_ORDINARY_HELP_NO_HARM_NOT_MEASURED_EXPLORATORY",
+   "why_analysis": "R1 does not trip (NONE about 50%). R2 does not trip (no reply is unclean). R3 does not trip (FILLER equals NONE). ROLE is 100% and every other must-run group about 50%, and ROLE is never worse on any passage, so ROLE beats NONE, FILLER, MIXED and both ordinary groups, with a margin far above 5 points: C1, C3 and C2 hold. The practice set has fewer than 100 plain-fact tasks, so no-harm is NOT_MEASURABLE. It has fewer than 200 role-step tasks, so the code ends in _EXPLORATORY.",
+   "arithmetic_by_hand": [
+    "Two role-step tasks of one passage have ids next to each other in sorted order, so one gets an even number and one an odd number. So every passage carries at most one odd-numbered task.",
+    "Per passage, d = (right under ROLE) minus (right under the other group) = the number of odd-numbered tasks on it: 0 or 1. Never below 0.",
+    "A flipped sum is at least the real sum only when no passage with d = 1 is flipped. With m such passages that is 1 flip in 2 to the power m.",
+    "With n practice role-step tasks, m is n divided by 2, rounded down. The launch floor is n = 36, so m is at least 18, and about 0 of the 100000 flips reach the real sum. The line is 5000.",
+    "A made-up development-test package needs n of at least 20 (Gate 5). Then m is at least 10, and about 98 of the 100000 flips reach the real sum (100000 divided by 1024). The test needs m of at least 5: with m = 5 about 3125 flips reach the real sum; with m = 4 about 6250 do, which is above the line.",
+    "NONE at level 1 is right on the even numbers: n divided by 2, rounded up, out of n. For n = 36 that is 18 of 36 = 50%. For an odd n it is a little above 50%. Both are inside 35% to 70%, not above 85%, and not below 30%."
+   ],
+   "x_by_hand": [
+    "The analysis prints the number X in every run (the field x_points). The self-test does not compare it. No one value is expected, because X depends on how the role-step tasks sit on the passages. Claim state of every number below: EXPECTED for the job.",
+    "The better rival is ORD-INFORMED, by the tie rule. Per passage, d = the number of its odd-numbered role-step tasks. One resampled difference is 100 times the sum of d, divided by the sum of role-step tasks, over the drawn passages.",
+    "SE is the standard deviation of the 10000 resampled differences, as it stands (amendment A4). X is the larger of 2.485 times SE and 5 plus 0.84 times SE, rounded up to a whole point.",
+    "If every passage carries two role-step tasks: every resample gives exactly 50 points, SE is 0, and X is 5.",
+    "If every passage carries one role-step task: SE is near 50 divided by the square root of n, and X is 2.485 times SE, rounded up. Worked on the laptop with a small separate script (pure standard library, Python 3.14.0, seed 20261005, the draws of tests.range_95; it runs no job program): n = 20 gives SE 11.280 and X = 29; n = 36 gives SE 8.364 and X = 21; n = 66 gives SE 6.141 and X = 16.",
+    "A mixed case from the same script: 36 tasks on 28 passages (the first 8 passages in id order carry two tasks, the other 20 carry one) gives SE 6.417 and X = 16. And 20 tasks on 16 passages (the first 4 carry two, the other 12 carry one) gives SE 8.855 and X = 23.",
+    "How to read it: X is 5 only when SE is 0. If the job prints X = 5 or X = 6 for this set on a package where most passages carry one role-step task, the standard error was divided by a count, and that is the fault amendment A4 names. The same script shows it: with SE divided by 10000, X comes out as 6 in every case above where SE is not 0.",
+    "In the sets ALL_RIGHT, ALL_WRONG and ALL_MALFORMED every d is 0, so SE is 0 and X is 5."
+   ],
+   "what_this_code_needs_from_the_package": [
+    "At least 20 practice role-step tasks. Gate 5 needs 20 clean ANSWER-GIVEN replies. The launch floor of 36 gives this.",
+    "At least 10 practice role-step tasks, so that at least 5 passages carry an odd-numbered task and the test can hold.",
+    "At least 1 practice plain-fact task, for Gate 3 and for the plain-fact count of Gate 4. A task family with no call is not a pass. The launch floor is 20.",
+    "Fewer than 100 practice plain-fact tasks and fewer than 200 practice role-step tasks. The ceilings with 12 practice settings are 50 and 96 (REAL counts recorded in PLAN_CONSTANTS.json under counts_real; not recounted here)."
+   ]
+  },
+  "RANDOM_LETTERS": {
+   "recipe": "Every reply is well formed. Its letter is drawn from the letters shown with random.Random('<selftest_random_letters seed>|<call id>').choice(letters).",
+   "gate_must_print": "GO or any listed stop code",
+   "why_gate": "The result depends on the draw. Any listed stop code, or GO, shows that the gate program ran to its end. The most likely result is GATE_STOP_DIFFICULTY or GATE_STOP_NOTES_NOT_READ, because random letters are right about 25% of the time.",
+   "analysis_must_print": "any listed outcome code, with or without the suffix, except the pass code",
+   "why_analysis": "The result depends on the draw. The pass code can not come out: a practice set has fewer than 100 plain-fact tasks, so no-harm is NOT_MEASURABLE and C4 can not hold. The most likely result is UNINFORMATIVE_DIFFICULTY or NO_ROLE_HELP_SHOWN_EXPLORATORY."
+  },
+  "ALL_MALFORMED": {
+   "recipe": "Every reply is the text: I think the answer is probably the second one",
+   "gate_must_print": "GATE_STOP_DIFFICULTY",
+   "why_gate": "No reply is clean under any wording, so Gate 1 takes wording 1 by the tie rule and does not stop. At Gate 2, B alone is 0% right at both levels. Gate 2 is checked before the format gate, so the stop code is the difficulty code.",
+   "analysis_must_print": "INVALID_RUN",
+   "why_analysis": "Every reply is FORMAT_FAIL, so every must-run group is at format floor (100% is above 25%). V3 fails. The reason printed is FORMAT_FLOOR. INVALID_RUN never carries the _EXPLORATORY ending."
+  }
+ },
+ "also_required_of_every_set": [
+  "The analysis program must report no error in any extra view (the field view_errors must be empty).",
+  "The three word views must be worked out: sub_views.word_rule_misses_under_ROLE, extra_views.word_matching_rule and extra_views.anchor_in_ordinary_note each say available true. They need content() from tools/verdict.py, which is in the package. If that function can not be loaded, the analysis program lists it under view_errors, and the set fails.",
+  "The seconds of every analysis run are measured. 5 times the slowest must be at most 240 seconds, or the self-test stops with GATE_STOP_SELFTEST."
+ ],
+ "what_a_made_up_development_package_needs": [
+  "This list is for the builder of the development-test package (amendment A10; FILE_FORMATS.md section 20). It was read off the runner's self-test. Without one of these the self-test stops, and the stop says nothing about the job programs.",
+  "The 16 paths of FILE_FORMATS.md section 14. The runner reads PLAN_CONSTANTS.json at the package root and no override file.",
+  "A seal copy SEAL_OPTIONB.jsonl with an unbroken chain: n counts the lines from 1, and previous_line_sha256 is the sha256 of the line before, without its line feed (null on line 1).",
+  "The seal copy holds a line for each of these eight steps: 1_PLAN_AND_SOURCES, 2_ROLE_NOTES, 3A_PRACTICE_QUESTIONS_AND_KEYS, 3B_PRACTICE_SET_FIXED, 3C_FINAL_QUESTIONS_AND_KEYS, 4_ORDINARY_NOTES, 5_PROMPT_PARTS_AND_REMOVAL_LOG, 6_PROGRAMS. The check package_matches_seal fails if one is missing.",
+  "The seal copy names each of the 15 other package files with its package_path, its true size and its true sha256. Every entry that has a package_path must be a file of the package with those bytes. tools/verdict.py is named with the package_path tools/verdict.py, 13018 bytes, and the sha256 pinned in the constants.",
+  "The dry seal of today, optionb/dry/fixture_n/SEAL_OPTIONB.jsonl, does not fit yet (REAL, read on 2026-10-05): it has 7 lines, no line 6_PROGRAMS, and package_path null in every entry.",
+  "Practice tasks: at least 20 role-step tasks and at least 1 plain-fact task; fewer than 200 and fewer than 100. Final tasks: at least 1. The fixture of today holds 5 practice role-step tasks and 4 practice plain-fact tasks (REAL, counted), so it is too small: the DESIGNED set would stop at Gate 5.",
+  "Note lengths. For each set, the average padding share of ROLE, MIXED, ORD-INFORMED and ORD-FREE must be at most 10 percent, or the self-test ends with GATE_STOP_PADDING. So each made-up ordinary note, at its best-fitting length, and each MIXED note must be about as long as the ROLE note of the same passage, counted in model B's tokens. In the dry fixture optionb/dry/fixture_n, as it stands after amendment A13, the ordinary notes are 18 to 41 size units and the ROLE notes 129 to 216, in the four practice passages and four final passages of its prompt parts (REAL, counted again on 2026-10-05 with the size-count rule of FILE_FORMATS.md section 18; size units are not tokens; before amendment A13 the ROLE notes were 80 to 127 in the six passages counted then). A package built from notes like those ends with GATE_STOP_PADDING. That is a property of the made-up notes, not a program fault. The builder optionb/dry/build_dev_package.py sizes its made-up ordinary notes to the ROLE note: in a build of 2026-10-05 that stopped before the two controller builders, the ROLE notes of the 16 made-up passages were 129 to 304 size units and the ordinary notes 112 to 332 (REAL, counted the same way). Whether that keeps the padding at or under 10 percent in model B's tokens is NOT MEASURED on the laptop.",
+  "Practice keys: for every practice task and each of its levels, a key that is one of the letters shown. The practice prompt parts hold one ANSWER-GIVEN note per role-step task and level, and it states that key.",
+  "Task facts in keys_practice/task_meta_practice.json: type for every task; type_has_leftover, passage_any_leftover_2_to_9 and anchors_matched for every role-step task. A missing field puts an error in a view, and that fails the made-up set.",
+  "The model folder holds the six small pinned files of model_b.precheck_files and no model.safetensors. The pre-check kit supplies it."
+ ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "helm.owner-direct-approval/2",
+  "utc_recorded": "2026-10-05T05:37:00Z",
+  "received_pacific": "2026-10-04 about 22:30 PDT",
+  "channel": "Owner typed directly to Claude Code (desktop app, Code tab), session d2ce92aa-19e8-4dac-8de6-1ffa8931b6b0",
+  "owner_words_verbatim": "OK IMPLEMENT ALONG WITH YOUR ADDITION",
+  "what_it_answers": "Claude's revision 2 of the Noetics directive (DIRECTIVE_R2.md in this folder, sha256 eb667f2549a89a1eda7fc5955b14395915c69023e093f43580c26243f558198b) and Claude's addition: the label-agreement check comes before any building, because it costs no cloud money and no reader can be scored on a Noetic two independent teams cannot agree on.",
+  "scope_as_read_by_claude_labelled_as_interpretation": {
+    "started_now_no_spend": [
+      "definition and source inventory",
+      "labeling guide for the ten Noetics, from the verbatim definitions",
+      "scorer rules and known-example list for model B's answers",
+      "label-agreement FIRST LOOK (guide debugging only, not a verdict)",
+      "priced plan for the preliminary stages, for owner approval"
+    ],
+    "not_started_without_a_priced_plan_and_owner_yes": [
+      "any AWS job",
+      "any paid call to an outside model service",
+      "the label-agreement VERDICT (needs a label team that is not Claude)",
+      "building the new reader",
+      "the early Cause/Effect help-to-B check"
+    ],
+    "builder": "Claude Code with sub-agents, because the owner told Claude to implement; label team 2, reviewers and operator separation still need names",
+    "money_granted_by_these_words": 0
+  },
+  "limits_kept": [
+    "saved reader, saved models and earlier results are preserved and not altered",
+    "no interruption of the other session's active work; no use of the shared AWS storage slot",
+    "definitions are quoted word for word from docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md Clarification 1 (commit 1c8531ea)",
+    "a missed pre-written requirement is a failure; no status is upgraded by prose"
+  ],
+  "operator": "Claude Code (claude-fable-5-1)"
+}

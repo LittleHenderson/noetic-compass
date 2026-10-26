@@ -1,0 +1,1345 @@
+{
+ "note": "For the owner: 30 disagreements and 20 passages with no disagreement, drawn with a fixed seed.",
+ "disagreements": [
+  {
+   "passage": "Q28",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "years of weekly business trips",
+     "Maria",
+     "business trips"
+    ]
+   ],
+   "team_b": [
+    [
+     "years of weekly business trips",
+     "Maria",
+     "This routine"
+    ]
+   ],
+   "text": "Maria heard the first boarding announcement for her flight. Without a conscious thought, she picked up her small carry-on bag from the floor beside her. Her hand instinctively reached for her passport, already tucked into the front pocket of her jacket. This routine had been ingrained after years of weekly business trips. She stood up, ready to join the queue."
+  },
+  {
+   "passage": "Q18",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [
+    "the small yappy terrier"
+   ],
+   "team_b": [],
+   "text": "Maria, the veterinary assistant, winced slightly as the small yappy terrier snapped at her. She instinctively pulled her hand back. When the next patient, a placid tabby cat, purred softly against her arm, she smiled. The cat’s gentle presence comforted her instantly, making the earlier irritation vanish."
+  },
+  {
+   "passage": "Q13",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "The tinny, distant sound of a baby crying through the customer's phone line"
+   ],
+   "team_b": [],
+   "text": "Julia adjusted her headset. The tinny, distant sound of a baby crying through the customer's phone line made her pause. She remembered her own nephew, barely a year old, reaching for her finger last Christmas. His tiny hand had gripped so tightly, a surprising strength."
+  },
+  {
+   "passage": "Q28",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "This routine had been ingrained",
+     "Maria",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "years of weekly business trips",
+     "Maria",
+     ""
+    ]
+   ],
+   "text": "Maria heard the first boarding announcement for her flight. Without a conscious thought, she picked up her small carry-on bag from the floor beside her. Her hand instinctively reached for her passport, already tucked into the front pocket of her jacket. This routine had been ingrained after years of weekly business trips. She stood up, ready to join the queue."
+  },
+  {
+   "passage": "Q03",
+   "class": "uncertain ^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a coming squall",
+     "Robert",
+     "its low, dark belly and the way the gulls were flying"
+    ]
+   ],
+   "team_b": [
+    [
+     "a sudden storm years ago that nearly took his boat",
+     "Robert",
+     "the shape of a coming squall from its low, dark belly and the way the gulls were flying"
+    ]
+   ],
+   "text": "Robert watched the clouds gathering to the west. A younger man might have seen just rain, but Robert knew the shape of a coming squall from its low, dark belly and the way the gulls were flying. He remembered a sudden storm years ago that nearly took his boat. He pointed the bow towards the harbor without a word."
+  },
+  {
+   "passage": "Q29",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "so many identical turnarounds",
+     "Tom",
+     "turnarounds"
+    ]
+   ],
+   "team_b": [
+    [
+     "so many identical turnarounds",
+     "Tom",
+     "the precise moment for a short break"
+    ]
+   ],
+   "text": "Tom watched the last passengers file onto the plane. He then checked his watch, a movement done without truly seeing the time. After so many identical turnarounds, his body simply knew the precise moment for a short break. He walked toward the staff canteen, anticipating his usual cup of coffee. It was just another end to a familiar cycle."
+  },
+  {
+   "passage": "Q04",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Her fingers simply knew the moment",
+     "Sarah",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Every weekday for fifteen years, she had heard that recording signal the library's closing time",
+     "Sarah",
+     ""
+    ]
+   ],
+   "text": "Sarah reached for the phone at precisely 5:58 PM, just before the evening announcement played. Every weekday for fifteen years, she had heard that recording signal the library's closing time. Now, her hand moved to disconnect the call box without conscious thought, even if the phone had not yet rung. Her fingers simply knew the moment."
+  },
+  {
+   "passage": "Q13",
+   "class": "^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The tinny, distant sound of a baby crying through the customer's phone line"
+   ],
+   "text": "Julia adjusted her headset. The tinny, distant sound of a baby crying through the customer's phone line made her pause. She remembered her own nephew, barely a year old, reaching for her finger last Christmas. His tiny hand had gripped so tightly, a surprising strength."
+  },
+  {
+   "passage": "Q09",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his childhood village"
+   ],
+   "text": "Kevin gripped his shovel, the hot sun beating down. The distant clang of steel beams being hoisted into place reached him. It made him think of the sound of church bells from his childhood village, chiming on Sunday mornings. He remembered the quiet paths and the smell of freshly cut grass, a stark contrast to the dust around him."
+  },
+  {
+   "passage": "Q21",
+   "class": "uncertain ^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "A faint scent of old leather and damp wool",
+     "Martha",
+     "the worn brown satchel"
+    ]
+   ],
+   "team_b": [
+    [
+     "A faint scent of old leather and damp wool drifted from the seat in front",
+     "Martha",
+     "the worn brown satchel her father carried each morning"
+    ]
+   ],
+   "text": "Martha sat by the window on the number eight bus. A faint scent of old leather and damp wool drifted from the seat in front. She closed her eyes for a moment, picturing the worn brown satchel her father carried each morning. He always packed a small thermos of tea and a thick slice of fruitcake inside. That satchel had seen many seasons."
+  },
+  {
+   "passage": "Q13",
+   "class": "^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "her own nephew, barely a year old, reaching for her finger last Christmas"
+   ],
+   "text": "Julia adjusted her headset. The tinny, distant sound of a baby crying through the customer's phone line made her pause. She remembered her own nephew, barely a year old, reaching for her finger last Christmas. His tiny hand had gripped so tightly, a surprising strength."
+  },
+  {
+   "passage": "Q29",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "anticipating his usual cup of coffee"
+   ],
+   "text": "Tom watched the last passengers file onto the plane. He then checked his watch, a movement done without truly seeing the time. After so many identical turnarounds, his body simply knew the precise moment for a short break. He walked toward the staff canteen, anticipating his usual cup of coffee. It was just another end to a familiar cycle."
+  },
+  {
+   "passage": "Q10",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "barely registered the noise",
+     "Clara",
+     "The loud bang of a metal tray dropping in the next room"
+    ]
+   ],
+   "team_b": [
+    [
+     "barely registered",
+     "Clara",
+     "the noise"
+    ]
+   ],
+   "text": "Clara loved the soft, yeasty smell of the dough rising, a promise of warmth and sweet bread. She detested the harsh glare of the fluorescent lights that flickered in the early morning. The loud bang of a metal tray dropping in the next room made her flinch, but her concentration on kneading the sourdough was absolute. She barely registered the noise, focused on the dough's perfect elasticity."
+  },
+  {
+   "passage": "Q14",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "to end the conversation"
+   ],
+   "text": "Mark hated the aggressive tone of the last caller, pulling his chair back slightly. He wanted nothing more than to end the conversation. The next call, a quiet elderly woman asking simple questions, instantly calmed him. He felt a gentle warmth, speaking slowly and patiently. The previous upset faded completely."
+  },
+  {
+   "passage": "Q23",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "the slow wear of countless firings"
+   ],
+   "team_b": [],
+   "text": "Sarah inspected the crack near the kiln's heating element. She ran a finger along the fine line, tracing its path. This wasn't a sudden, acute break from overheating; the edges were too smooth. She recognized the slow wear of countless firings, a gradual stress across years. It pointed to material fatigue, not a recent operational error."
+  },
+  {
+   "passage": "Q03",
+   "class": "uncertain ^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "its low, dark belly and the way the gulls were flying",
+     "Robert",
+     "a coming squall"
+    ]
+   ],
+   "team_b": [
+    [
+     "the shape of a coming squall from its low, dark belly and the way the gulls were flying",
+     "Robert",
+     "a sudden storm years ago that nearly took his boat"
+    ]
+   ],
+   "text": "Robert watched the clouds gathering to the west. A younger man might have seen just rain, but Robert knew the shape of a coming squall from its low, dark belly and the way the gulls were flying. He remembered a sudden storm years ago that nearly took his boat. He pointed the bow towards the harbor without a word."
+  },
+  {
+   "passage": "Q23",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the edges"
+   ],
+   "text": "Sarah inspected the crack near the kiln's heating element. She ran a finger along the fine line, tracing its path. This wasn't a sudden, acute break from overheating; the edges were too smooth. She recognized the slow wear of countless firings, a gradual stress across years. It pointed to material fatigue, not a recent operational error."
+  },
+  {
+   "passage": "Q13",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "gripped so tightly, a surprising strength"
+   ],
+   "text": "Julia adjusted her headset. The tinny, distant sound of a baby crying through the customer's phone line made her pause. She remembered her own nephew, barely a year old, reaching for her finger last Christmas. His tiny hand had gripped so tightly, a surprising strength."
+  },
+  {
+   "passage": "Q23",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the slow wear of countless firings, a gradual stress across years",
+    "material fatigue, not a recent operational error"
+   ],
+   "text": "Sarah inspected the crack near the kiln's heating element. She ran a finger along the fine line, tracing its path. This wasn't a sudden, acute break from overheating; the edges were too smooth. She recognized the slow wear of countless firings, a gradual stress across years. It pointed to material fatigue, not a recent operational error."
+  },
+  {
+   "passage": "Q13",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "her own nephew"
+   ],
+   "team_b": [],
+   "text": "Julia adjusted her headset. The tinny, distant sound of a baby crying through the customer's phone line made her pause. She remembered her own nephew, barely a year old, reaching for her finger last Christmas. His tiny hand had gripped so tightly, a surprising strength."
+  },
+  {
+   "passage": "Q03",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [
+    "knew the shape of a coming squall"
+   ],
+   "team_b": [],
+   "text": "Robert watched the clouds gathering to the west. A younger man might have seen just rain, but Robert knew the shape of a coming squall from its low, dark belly and the way the gulls were flying. He remembered a sudden storm years ago that nearly took his boat. He pointed the bow towards the harbor without a word."
+  },
+  {
+   "passage": "Q15",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the customer's frustration",
+    "the actual account details"
+   ],
+   "text": "Eleanor, a veteran agent, listened to the rambling complaint about a billing error. She quickly separated the customer's frustration from the actual account details. The core issue, she knew from years of experience, was often a simple miscommunication regarding a promotional discount. She began to mentally trace the steps of the billing cycle."
+  },
+  {
+   "passage": "Q11",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "Years of early mornings"
+   ],
+   "team_b": [],
+   "text": "Sarah, a baker, noticed the yeast was a little sluggish. She knew immediately that the humidity in the air was off, even before looking at the gauge. Years of early mornings told her the dough needed a few more minutes to prove fully. It was always a delicate balance, one she understood deeply."
+  },
+  {
+   "passage": "Q23",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "the edges were too smooth"
+   ],
+   "team_b": [],
+   "text": "Sarah inspected the crack near the kiln's heating element. She ran a finger along the fine line, tracing its path. This wasn't a sudden, acute break from overheating; the edges were too smooth. She recognized the slow wear of countless firings, a gradual stress across years. It pointed to material fatigue, not a recent operational error."
+  },
+  {
+   "passage": "Q11",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a delicate balance, one she understood deeply",
+     "Sarah",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Years of early mornings",
+     "Sarah",
+     ""
+    ]
+   ],
+   "text": "Sarah, a baker, noticed the yeast was a little sluggish. She knew immediately that the humidity in the air was off, even before looking at the gauge. Years of early mornings told her the dough needed a few more minutes to prove fully. It was always a delicate balance, one she understood deeply."
+  },
+  {
+   "passage": "Q04",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Every weekday for fifteen years",
+     "Sarah",
+     "that recording"
+    ]
+   ],
+   "team_b": [
+    [
+     "Every weekday for fifteen years",
+     "Sarah",
+     "that recording signal the library's closing time"
+    ]
+   ],
+   "text": "Sarah reached for the phone at precisely 5:58 PM, just before the evening announcement played. Every weekday for fifteen years, she had heard that recording signal the library's closing time. Now, her hand moved to disconnect the call box without conscious thought, even if the phone had not yet rung. Her fingers simply knew the moment."
+  },
+  {
+   "passage": "Q01",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "rusty",
+    "strong",
+    "its chain always needing a drop of oil"
+   ],
+   "text": "The salty spray hit John's face as the boat cut through the waves. He caught the faint smell of diesel from the engine. It brought to him a sudden memory of his old bicycle, rusty and strong, that he rode home from school, its chain always needing a drop of oil. He remembered the feeling of the wind in his hair then."
+  },
+  {
+   "passage": "Q21",
+   "class": "uncertain ^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the worn brown satchel",
+     "Martha",
+     "A faint scent of old leather and damp wool"
+    ]
+   ],
+   "team_b": [
+    [
+     "the worn brown satchel her father carried each morning",
+     "Martha",
+     "A faint scent of old leather and damp wool drifted from the seat in front"
+    ]
+   ],
+   "text": "Martha sat by the window on the number eight bus. A faint scent of old leather and damp wool drifted from the seat in front. She closed her eyes for a moment, picturing the worn brown satchel her father carried each morning. He always packed a small thermos of tea and a thick slice of fruitcake inside. That satchel had seen many seasons."
+  }
+ ],
+ "agreements": [
+  {
+   "passage": "Q06",
+   "text": "Emily loved wandering through the fiction aisles, picking up novels with intriguing covers. She quickly avoided the computer lab, disliking the hum of machines and the bright screens. A loud phone conversation from a patron near the entrance barely registered with her. She was already absorbed in the back cover blurb of a new mystery, feeling nothing else.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Emily",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^1",
+     "words": "a patron",
+     "mind": "a patron",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "wandering through the fiction aisles",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "novels with intriguing covers",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the computer lab",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the hum of machines and the bright screens",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "barely registered with her",
+     "mind": "Emily",
+     "relative_to": "A loud phone conversation",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Emily",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "wandering through the fiction aisles",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "picking up novels with intriguing covers",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the computer lab",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the hum of machines and the bright screens",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "barely registered with her",
+     "mind": "Emily",
+     "relative_to": "A loud phone conversation from a patron near the entrance",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "absorbed in the back cover blurb of a new mystery",
+     "mind": "Emily",
+     "relative_to": "the back cover blurb of a new mystery",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q27",
+   "text": "Robert listened to the dryer's uneven thumping. He didn't need to open the door to know the problem. The sound wasn't the heavy, off-balance swish of too many wet towels. Instead, it was a sharp, intermittent knock. Years of using these public machines taught him that meant a shoe, or perhaps a stray toy, had worked its way free.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Robert",
+     "mind": "Robert",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "Years of using these public machines",
+     "mind": "Robert",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "a sharp, intermittent knock",
+     "mind": "Robert",
+     "relative_to": "a shoe, or perhaps a stray toy",
+     "uncertain": true,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "a shoe, or perhaps a stray toy",
+     "mind": "Robert",
+     "relative_to": "a sharp, intermittent knock",
+     "uncertain": true,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Robert",
+     "mind": "Robert",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "Years of using these public machines",
+     "mind": "Robert",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "a sharp, intermittent knock",
+     "mind": "Robert",
+     "relative_to": "a shoe, or perhaps a stray toy, had worked its way free",
+     "uncertain": true,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "a shoe, or perhaps a stray toy, had worked its way free",
+     "mind": "Robert",
+     "relative_to": "a sharp, intermittent knock",
+     "uncertain": true,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q20",
+   "text": "Mrs. Henderson stepped onto the bus at the market stop. Without thinking, her hand reached for the exact coin in her purse. She shuffled down to the third seat on the left, a spot she occupied every Tuesday. Her body knew the path, even as she gazed out the window.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Mrs. Henderson",
+     "mind": "Mrs. Henderson",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^7",
+     "words": "every Tuesday",
+     "mind": "Mrs. Henderson",
+     "relative_to": "the third seat on the left",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "Her body knew the path",
+     "mind": "Mrs. Henderson",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Mrs. Henderson",
+     "mind": "Mrs. Henderson",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^7",
+     "words": "every Tuesday",
+     "mind": "Mrs. Henderson",
+     "relative_to": "the third seat on the left",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "Her body knew the path",
+     "mind": "Mrs. Henderson",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q02",
+   "text": "Maria loved the quiet pull of the line, feeling for the fish below. She disliked the clatter of the winch as it brought up the heavy net, full of unwanted weeds and debris. When the captain yelled for her attention, his words hardly registered. She was already focused on a slight tug on her own handline, ignoring his booming voice completely.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Maria",
+     "mind": "Maria",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^1",
+     "words": "the captain",
+     "mind": "the captain",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "the quiet pull of the line",
+     "mind": "Maria",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the clatter of the winch",
+     "mind": "Maria",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "hardly registered",
+     "mind": "Maria",
+     "relative_to": "his words",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Maria",
+     "mind": "Maria",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^1",
+     "words": "the captain",
+     "mind": "the captain",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "the quiet pull of the line",
+     "mind": "Maria",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the clatter of the winch",
+     "mind": "Maria",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "his words hardly registered",
+     "mind": "Maria",
+     "relative_to": "his words",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q22",
+   "text": "David walked around the studio, his gaze lingering on the smooth, pale stoneware. He felt a quiet satisfaction working with its forgiving texture. The rough, dark earthenware, however, always made his shoulders tighten just looking at it. When the instructor mentioned his recent piece was \"a bit wonky,\" David barely registered the words. He was already reaching for another block of the creamy clay.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "David",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^1",
+     "words": "the instructor",
+     "mind": "the instructor",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "the smooth, pale stoneware",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "another block of the creamy clay",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "The rough, dark earthenware",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "barely registered",
+     "mind": "David",
+     "relative_to": "a bit wonky",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "David",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "the smooth, pale stoneware",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "The rough, dark earthenware",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "a quiet satisfaction",
+     "mind": "David",
+     "relative_to": "working with its forgiving texture",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "barely registered the words",
+     "mind": "David",
+     "relative_to": "his recent piece was \"a bit wonky\"",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q17",
+   "text": "Dr. Ben Carter gently stroked the soft fur of a Golden Retriever. The faint smell of antiseptic from the examination room carried him back to childhood visits to his grandmother’s house. She always cleaned her kitchen with a similar sharp, clean scent. He could almost hear her old radio playing in the background.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Dr. Ben Carter",
+     "mind": "Dr. Ben Carter",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "The faint smell of antiseptic from the examination room",
+     "mind": "Dr. Ben Carter",
+     "relative_to": "childhood visits to his grandmother’s house",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "childhood visits to his grandmother’s house",
+     "mind": "Dr. Ben Carter",
+     "relative_to": "The faint smell of antiseptic from the examination room",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Dr. Ben Carter",
+     "mind": "Dr. Ben Carter",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "The faint smell of antiseptic from the examination room",
+     "mind": "Dr. Ben Carter",
+     "relative_to": "childhood visits to his grandmother’s house",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "childhood visits to his grandmother’s house",
+     "mind": "Dr. Ben Carter",
+     "relative_to": "The faint smell of antiseptic from the examination room",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q25",
+   "text": "John tossed his jeans into the washing machine. A strong, sweet smell of floral fabric softener hung in the humid air, lingering from the previous load. He was suddenly back in his grandmother's kitchen, watching her fold warm towels fresh from the dryer. The scent used to cling to her aprons and the soft blankets on her sofa.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "John",
+     "mind": "John",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "A strong, sweet smell of floral fabric softener",
+     "mind": "John",
+     "relative_to": "his grandmother's kitchen",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "his grandmother's kitchen",
+     "mind": "John",
+     "relative_to": "A strong, sweet smell of floral fabric softener",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "John",
+     "mind": "John",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "A strong, sweet smell of floral fabric softener",
+     "mind": "John",
+     "relative_to": "his grandmother's kitchen",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "his grandmother's kitchen",
+     "mind": "John",
+     "relative_to": "A strong, sweet smell of floral fabric softener",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q07",
+   "text": "Frank watched the new guy trying to level a concrete pour. He saw the shovel scraping unevenly, the mix pooling in one corner, the edges already setting too fast. Years of mixing and pouring concrete himself allowed him to break down every mistake. He knew exactly what had gone wrong and the likely weak spots in the finished slab.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Frank",
+     "mind": "Frank",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "Years of mixing and pouring concrete himself",
+     "mind": "Frank",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^6",
+     "words": "the shovel scraping unevenly",
+     "mind": "",
+     "relative_to": "every mistake",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^6",
+     "words": "the mix pooling in one corner",
+     "mind": "",
+     "relative_to": "every mistake",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^6",
+     "words": "the edges already setting too fast",
+     "mind": "",
+     "relative_to": "every mistake",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "what had gone wrong",
+     "mind": "Frank",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": true
+    },
+    {
+     "noetic": "^9",
+     "words": "the likely weak spots in the finished slab",
+     "mind": "Frank",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": true
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Frank",
+     "mind": "Frank",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^1",
+     "words": "the new guy",
+     "mind": "the new guy",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "Years of mixing and pouring concrete himself",
+     "mind": "Frank",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^6",
+     "words": "the shovel scraping unevenly",
+     "mind": "",
+     "relative_to": "every mistake",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^6",
+     "words": "the mix pooling in one corner",
+     "mind": "",
+     "relative_to": "every mistake",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^6",
+     "words": "the edges already setting too fast",
+     "mind": "",
+     "relative_to": "every mistake",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "what had gone wrong and the likely weak spots in the finished slab",
+     "mind": "Frank",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": true
+    }
+   ]
+  },
+  {
+   "passage": "Q19",
+   "text": "Arthur, the bus driver, navigated the narrow country lane. He noticed the new patch of loose gravel near the old oak tree. His many years driving this route meant he could instantly adjust his speed and steering, anticipating exactly how the bus would handle the rough surface. He understood the road's every curve.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Arthur",
+     "mind": "Arthur",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "many years driving this route",
+     "mind": "Arthur",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "understood the road's every curve",
+     "mind": "Arthur",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "the new patch of loose gravel near the old oak tree",
+     "mind": "Arthur",
+     "relative_to": "how the bus would handle the rough surface",
+     "uncertain": true,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "how the bus would handle the rough surface",
+     "mind": "Arthur",
+     "relative_to": "the new patch of loose gravel near the old oak tree",
+     "uncertain": true,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Arthur",
+     "mind": "Arthur",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "His many years driving this route",
+     "mind": "Arthur",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "the new patch of loose gravel near the old oak tree",
+     "mind": "Arthur",
+     "relative_to": "how the bus would handle the rough surface",
+     "uncertain": true,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "how the bus would handle the rough surface",
+     "mind": "Arthur",
+     "relative_to": "the new patch of loose gravel near the old oak tree",
+     "uncertain": true,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q12",
+   "text": "David, a young apprentice, walked into the bakery at 3 AM. He reached for the heavy flour sack without looking, his hands already accustomed to its weight. Then he scooped the precise amount into the mixing bowl, a movement ingrained from months of repetition. His body moved through the familiar steps, hardly needing his conscious thought.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "David",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^7",
+     "words": "months of repetition",
+     "mind": "David",
+     "relative_to": "scooped the precise amount into the mixing bowl",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "a movement ingrained",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "his hands already accustomed to its weight",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "David",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "his hands already accustomed to its weight",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^5",
+     "words": "a movement ingrained from months of repetition",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^7",
+     "words": "months of repetition",
+     "mind": "David",
+     "relative_to": "scooped the precise amount into the mixing bowl",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q05",
+   "text": "David sat at a long wooden table, a stack of textbooks beside him. He opened an old history book, and a faint, sweet smell of vanilla and aged paper drifted up. Suddenly, he was thinking of his grandmother's kitchen, where she always kept a tin of homemade cookies. He remembered the patterned wallpaper and the ticking clock.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "David",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "a faint, sweet smell of vanilla and aged paper",
+     "mind": "David",
+     "relative_to": "his grandmother's kitchen",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "his grandmother's kitchen",
+     "mind": "David",
+     "relative_to": "a faint, sweet smell of vanilla and aged paper",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "David",
+     "mind": "David",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^8",
+     "words": "a faint, sweet smell of vanilla and aged paper drifted up",
+     "mind": "David",
+     "relative_to": "his grandmother's kitchen",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^9",
+     "words": "his grandmother's kitchen",
+     "mind": "David",
+     "relative_to": "a faint, sweet smell of vanilla and aged paper drifted up",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  },
+  {
+   "passage": "Q26",
+   "text": "Emily preferred the row of high-speed dryers, always aiming for one of those powerful machines. Their efficiency gave her a small sense of accomplishment. She actively avoided the older, rumbling models, which always seemed to leave clothes slightly damp. When her phone buzzed with an urgent work call, she barely glanced at the screen. Her focus remained on transferring her damp laundry.",
+   "team_a": [
+    {
+     "noetic": "^1",
+     "words": "Emily",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "the row of high-speed dryers",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the older, rumbling models",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "barely glanced at the screen",
+     "mind": "Emily",
+     "relative_to": "an urgent work call",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ],
+   "team_b": [
+    {
+     "noetic": "^1",
+     "words": "Emily",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^2",
+     "words": "the row of high-speed dryers",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^3",
+     "words": "the older, rumbling models",
+     "mind": "Emily",
+     "relative_to": "",
+     "uncertain": false,
+     "reasoning": false
+    },
+    {
+     "noetic": "^4",
+     "words": "barely glanced at the screen",
+     "mind": "Emily",
+     "relative_to": "her phone buzzed with an urgent work call",
+     "uncertain": false,
+     "reasoning": false
+    }
+   ]
+  }
+ ]
+}

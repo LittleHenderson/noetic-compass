@@ -1,0 +1,57 @@
+{
+ "schema": "casalescence/optionb/raw_questions/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+  "utc": "2026-10-05T18:34:01Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "optionb/dry/fixture_q/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "153a9397ab4ada332562260d844bfd226c8bf71b56fd9718df07c633d7996d0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/elig/eligibility.json",
+   "sha256": "2d43c903ad724f2368b00f94b6a57a2d82b3f800223af3b8a33a9df127a1cf0b"
+  },
+  {
+   "path": "optionb/dry/fixture_q/questions/writer_calls_final_p2.jsonl",
+   "sha256": "c12bc343f97f58c890649f52ef7f556dab512fdb6f1b945f0d4b25c56326d952"
+  },
+  {
+   "path": "optionb/dry/fixture_q/select/split_fixed.json",
+   "sha256": "636440e590f8377fe6b25413b56738e695012dd318faa6374510019c1fd5b8a6"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "final",
+ "pass": "p2",
+ "model": "DRY-FIXTURE-NO-MODEL",
+ "passages": [
+  {
+   "passage_id": "V903",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [],
+   "plain_fact": {
+    "question_id": "V903.p2.FACT",
+    "question": "What did Oksana call for?",
+    "right": "the trays",
+    "wrong": [
+     "the radio",
+     "the scale",
+     "the apron"
+    ]
+   },
+   "extra_dropped": []
+  }
+ ]
+}

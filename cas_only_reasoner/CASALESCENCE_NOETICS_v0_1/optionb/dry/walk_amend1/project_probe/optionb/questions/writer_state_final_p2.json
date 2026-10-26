@@ -1,0 +1,406 @@
+{
+ "schema": "casalescence/optionb/writer_state/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py",
+  "sha256": "da5dae95317e807e425b61a18b703646031bfc7deff4db6e5091d13bb6506fda",
+  "utc": "2026-10-05T16:32:59Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "d648fb72cd362889ae7ee32f37273c2c9946384d7ddd684f69251135ba973ad2"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/questions/writer_calls_final_p2.jsonl",
+   "sha256": "beb396fd9867b5eaad7ec8e6b8e98044db1184e8878985d4d0827568f397c16f"
+  },
+  {
+   "path": "optionb/select/split_fixed.json",
+   "sha256": "c7b69355a320ee813007bbcb6dfc69f15307d9c45daf217edd4b8c286b9c8101"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "final",
+ "pass": "p2",
+ "model": "gemini-3.5-flash-lite",
+ "seed": 20261006,
+ "waves": [
+  {
+   "wave": 0,
+   "settings": [
+    "made-up setting 01",
+    "made-up setting 03",
+    "made-up setting 04",
+    "made-up setting 05",
+    "made-up setting 06",
+    "made-up setting 08",
+    "made-up setting 09",
+    "made-up setting 11",
+    "made-up setting 12",
+    "made-up setting 13",
+    "made-up setting 14",
+    "made-up setting 15",
+    "made-up setting 16",
+    "made-up setting 17",
+    "made-up setting 20",
+    "made-up setting 21",
+    "made-up setting 22",
+    "made-up setting 23",
+    "made-up setting 24",
+    "made-up setting 25",
+    "made-up setting 27",
+    "made-up setting 28",
+    "made-up setting 29",
+    "made-up setting 30",
+    "made-up setting 31",
+    "made-up setting 32",
+    "made-up setting 33",
+    "made-up setting 37",
+    "made-up setting 38",
+    "made-up setting 39",
+    "made-up setting 40",
+    "made-up setting 41",
+    "made-up setting 42",
+    "made-up setting 43",
+    "made-up setting 44",
+    "made-up setting 45",
+    "made-up setting 46",
+    "made-up setting 47",
+    "made-up setting 48"
+   ],
+   "batches": [
+    {
+     "batch": 0,
+     "passage_ids": [
+      "V006",
+      "V030",
+      "V090",
+      "V055"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 1,
+     "passage_ids": [
+      "V080",
+      "V075",
+      "V042",
+      "V111"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 2,
+     "passage_ids": [
+      "V060",
+      "V056",
+      "V067",
+      "V077"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 3,
+     "passage_ids": [
+      "V109",
+      "V063",
+      "V073",
+      "V071"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 4,
+     "passage_ids": [
+      "V113",
+      "V091",
+      "V084",
+      "V038"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 5,
+     "passage_ids": [
+      "V064",
+      "V025",
+      "V045",
+      "V112"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 6,
+     "passage_ids": [
+      "V092",
+      "V085",
+      "V082",
+      "V098"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 7,
+     "passage_ids": [
+      "V096",
+      "V078",
+      "V101",
+      "V047"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 8,
+     "passage_ids": [
+      "V010",
+      "V051",
+      "V012",
+      "V097"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 9,
+     "passage_ids": [
+      "V019",
+      "V020",
+      "V049",
+      "V040"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 10,
+     "passage_ids": [
+      "V081",
+      "V036",
+      "V054",
+      "V023"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 11,
+     "passage_ids": [
+      "V041",
+      "V106",
+      "V053",
+      "V087"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 12,
+     "passage_ids": [
+      "V104",
+      "V027",
+      "V105",
+      "V079"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 13,
+     "passage_ids": [
+      "V007",
+      "V102",
+      "V044",
+      "V110"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 14,
+     "passage_ids": [
+      "V046",
+      "V043",
+      "V088",
+      "V033"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 15,
+     "passage_ids": [
+      "V059",
+      "V094",
+      "V003",
+      "V069"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 16,
+     "passage_ids": [
+      "V048",
+      "V086",
+      "V108",
+      "V065"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 17,
+     "passage_ids": [
+      "V052",
+      "V016",
+      "V037",
+      "V024"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 18,
+     "passage_ids": [
+      "V009",
+      "V058",
+      "V013",
+      "V004"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 19,
+     "passage_ids": [
+      "V008",
+      "V061",
+      "V022",
+      "V017"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 20,
+     "passage_ids": [
+      "V115",
+      "V018",
+      "V117",
+      "V021"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 21,
+     "passage_ids": [
+      "V095",
+      "V001",
+      "V029",
+      "V050"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 22,
+     "passage_ids": [
+      "V057",
+      "V076",
+      "V062",
+      "V034"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 23,
+     "passage_ids": [
+      "V116",
+      "V015",
+      "V032",
+      "V002"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 24,
+     "passage_ids": [
+      "V014",
+      "V005",
+      "V100",
+      "V099"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 25,
+     "passage_ids": [
+      "V072",
+      "V093",
+      "V107",
+      "V083"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 26,
+     "passage_ids": [
+      "V070",
+      "V031",
+      "V074",
+      "V103"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 27,
+     "passage_ids": [
+      "V026",
+      "V068",
+      "V114",
+      "V039"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    },
+    {
+     "batch": 28,
+     "passage_ids": [
+      "V089",
+      "V011",
+      "V066"
+     ],
+     "status": "DONE",
+     "attempts": 1
+    }
+   ]
+  }
+ ],
+ "cap_stops_utc": [],
+ "complete": true
+}

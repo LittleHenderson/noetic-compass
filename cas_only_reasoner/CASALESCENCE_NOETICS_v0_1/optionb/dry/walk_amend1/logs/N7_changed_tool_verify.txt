@@ -1,0 +1,9 @@
+$ python -B tools/ob_seal.py verify
+line 1  1_PLAN_AND_SOURCES               2026-10-05T16:19:56Z  21 file(s)
+line 2  2_ROLE_NOTES                     2026-10-05T16:20:01Z  2 file(s)
+line 3  3A_PRACTICE_QUESTIONS_AND_KEYS   2026-10-05T16:22:10Z  24 file(s)
+line 4  3B_PRACTICE_SET_FIXED            2026-10-05T16:22:11Z  1 file(s)
+SEALED FILES THAT ARE MISSING OR CHANGED: 1 of 48
+  tools/ob_select.py (step 1_PLAN_AND_SOURCES): CHANGED, sealed 34405 bytes 3ad936fbac1113e5a872f081c7b4a96a3f7c65fdfa555b076a0d85bb116ae355, now 34454 bytes 8598043f023b4e3844292835141c01fe0269920a16f7b75ba6ff578defa9266d
+The way out is to put the sealed bytes back, or a repair line under the rule of plan section 11.1 (ob_seal.py repair).
+[exit code 2]

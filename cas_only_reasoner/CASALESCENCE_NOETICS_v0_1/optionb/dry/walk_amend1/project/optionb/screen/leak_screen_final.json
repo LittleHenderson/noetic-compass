@@ -1,0 +1,630 @@
+{
+ "schema": "casalescence/optionb/leak_screen/v1",
+ "made_by": {
+  "program": "tools/ob_screen_notes.py",
+  "sha256": "69aa01ab4ac4ad59fe990c2471b597ad595fe5f047f57f3cb086854da52a8bd8",
+  "utc": "2026-10-05T16:25:53Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "acf84a5083d18d27b2aea42963416cb647095475f206cc47b353d6ce74a518df"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_final.json",
+   "sha256": "3c1d11144bd639bdf5f29a5913049b9d8d7a21b7529f419042e2ff923c35f55f"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_practice.json",
+   "sha256": "8c6e5fb9eba58f925c9bee16fe25d2da6163bd1dba8c73657ea61db35b52eb21"
+  },
+  {
+   "path": "optionb/notes_role/role_notes.json",
+   "sha256": "f645753b6457d9e37aad3be2889271fc19aef3db4edd41ee8ba6f184ad585b05"
+  },
+  {
+   "path": "optionb/select/selection_final.json",
+   "sha256": "f48384efc9bd9e8df5152b63c0c84c8dbb9c0c07938adc3f4599b7f702c1f6cb"
+  },
+  {
+   "path": "optionb/select/selection_practice.json",
+   "sha256": "da8c050021c3ded4ea6a140f1e2a43f284221cdf76b6e676a4ac45acb354bcf6"
+  },
+  {
+   "path": "optionb/support/support_results_final.json",
+   "sha256": "add014ddb9192b2c46078567e28afd81f4c816fa8b8dd8f4a7b4fdd268dfef04"
+  },
+  {
+   "path": "optionb/support/support_results_practice.json",
+   "sha256": "bc1a86e570682b18c0d3c900a68658e4728407b72cf65a78747a053e86a57122"
+  }
+ ],
+ "set": "final",
+ "passages": [
+  {
+   "passage_id": "V001",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V002",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V003",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V004",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V005",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V007",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V008",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V010",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V011",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V012",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V013",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V015",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V016",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V017",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V018",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V019",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V020",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V022",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V023",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V024",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V025",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V026",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V027",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V029",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V030",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V031",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V032",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V033",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V034",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V036",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V037",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V038",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V039",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V040",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V041",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V042",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V043",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V044",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V045",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V046",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V047",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V048",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V049",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V050",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V051",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V052",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V053",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V054",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V055",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V056",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V057",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V058",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V059",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V060",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V061",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V062",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V063",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V064",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V065",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V066",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V067",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V068",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V069",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V070",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V071",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V072",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V073",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V074",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V075",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V077",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V078",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V079",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V080",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V081",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V082",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V083",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V084",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V086",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V087",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V088",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V089",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V090",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V091",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V092",
+   "hit": true,
+   "hits": [
+    {
+     "group": "ORD-INFORMED",
+     "length": "090",
+     "rule": "d",
+     "task_id": null,
+     "detail": "the word answer: 1 in the note, 0 in the passage"
+    },
+    {
+     "group": "ORD-INFORMED",
+     "length": "100",
+     "rule": "d",
+     "task_id": null,
+     "detail": "the word answer: 1 in the note, 0 in the passage"
+    },
+    {
+     "group": "ORD-INFORMED",
+     "length": "110",
+     "rule": "d",
+     "task_id": null,
+     "detail": "the word answer: 1 in the note, 0 in the passage"
+    }
+   ]
+  },
+  {
+   "passage_id": "V093",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V094",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V095",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V096",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V097",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V098",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V099",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V100",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V101",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V102",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V103",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V104",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V105",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V106",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V107",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V108",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V109",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V110",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V111",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V112",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V113",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V114",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V115",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V116",
+   "hit": false,
+   "hits": []
+  },
+  {
+   "passage_id": "V117",
+   "hit": false,
+   "hits": []
+  }
+ ],
+ "counts": {
+  "passages_screened": 109,
+  "passages_hit": 1,
+  "hits_by_rule": {
+   "a": 0,
+   "b": 0,
+   "c": 0,
+   "d": 3
+  }
+ }
+}

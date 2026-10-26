@@ -1,0 +1,44 @@
+[
+ {"passage_id": "J01", "none_of_these": false,
+  "entries": [
+   {"noetic": "^1", "mind": "Nadia", "label": "Nadia", "support": "Nadia weighed the two parcels.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Nadia", "label": "it had to be the cups", "support": "The lighter one rattled, so it had to be the cups.", "measure": "", "relative_to": "", "certainty": "clear", "reached_by": "reasoning"}
+  ],
+  "not_enough_information": [], "guide_problem": ""},
+ {"passage_id": "J02", "none_of_these": false,
+  "entries": [
+   {"noetic": "^1", "mind": "Petra", "label": "Petra", "support": "Petra lit the small lamp.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^2", "mind": "Petra", "label": "Its warm glow", "support": "Petra lit the small lamp. Its warm glow gave her a quiet sense of comfort.", "measure": "", "relative_to": "", "certainty": "held", "held_under": "H2-COMFORT"}
+  ],
+  "not_enough_information": [], "guide_problem": ""},
+ {"passage_id": "J03", "none_of_these": false,
+  "entries": [
+   {"noetic": "^1", "mind": "Odile", "label": "Odile", "support": "Odile looked over the cart.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Odile", "label": "it had hit the kerb", "support": "She worked out that it had hit the kerb.", "measure": "", "relative_to": "", "certainty": "clear", "reached_by": "reasoning"},
+   {"noetic": "^6", "mind": "", "label": "One wheel wobbled", "support": "One wheel wobbled and the axle was bent.", "measure": "", "relative_to": "", "certainty": "clear", "clue": true},
+   {"noetic": "^6", "mind": "", "label": "the axle was bent", "support": "One wheel wobbled and the axle was bent.", "measure": "", "relative_to": "", "certainty": "clear", "clue": true}
+  ],
+  "not_enough_information": [], "guide_problem": ""},
+ {"passage_id": "J04", "none_of_these": false,
+  "entries": [
+   {"noetic": "^1", "mind": "Bruno", "label": "Bruno", "support": "Bruno watched the tide gauge by the pier.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Bruno", "label": "the tide gauge by the pier", "support": "Bruno watched the tide gauge by the pier. He knew the ferry would be late.", "measure": "", "relative_to": "the ferry would be late", "certainty": "ambiguous", "other_candidate": "reasoning"},
+   {"noetic": "^9", "mind": "Bruno", "label": "the ferry would be late", "support": "Bruno watched the tide gauge by the pier. He knew the ferry would be late.", "measure": "", "relative_to": "the tide gauge by the pier", "certainty": "ambiguous", "other_candidate": "reasoning"}
+  ],
+  "not_enough_information": [], "guide_problem": ""},
+ {"passage_id": "J05", "none_of_these": false,
+  "entries": [
+   {"noetic": "^1", "mind": "Signe", "label": "Signe", "support": "Signe saw the child drop the cone.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^8", "mind": "Signe", "label": "the child drop the cone", "support": "Signe saw the child drop the cone. She remembered her own spilled milk.", "measure": "", "relative_to": "her own spilled milk", "certainty": "held", "held_under": "H89-FOLLOWS"},
+   {"noetic": "^9", "mind": "Signe", "label": "her own spilled milk", "support": "Signe saw the child drop the cone. She remembered her own spilled milk.", "measure": "", "relative_to": "the child drop the cone", "certainty": "held", "held_under": "H89-FOLLOWS"}
+  ],
+  "not_enough_information": [], "guide_problem": ""},
+ {"passage_id": "J06", "none_of_these": false,
+  "entries": [
+   {"noetic": "^1", "mind": "Hale", "label": "Hale", "support": "Hale checked the pump.", "measure": "", "relative_to": "", "certainty": "clear"},
+   {"noetic": "^9", "mind": "Hale", "label": "the valve had stuck", "support": "He worked out that the valve had stuck.", "measure": "", "relative_to": "", "certainty": "clear", "reached_by": "reasoning"},
+   {"noetic": "^6", "mind": "", "label": "The dial read low", "support": "The dial read low and the pipe was cold.", "measure": "", "relative_to": "", "certainty": "clear", "clue": true},
+   {"noetic": "^6", "mind": "", "label": "the pipe was cold", "support": "The dial read low and the pipe was cold.", "measure": "", "relative_to": "", "certainty": "clear", "clue": true}
+  ],
+  "not_enough_information": [], "guide_problem": ""}
+]

@@ -1,0 +1,27 @@
+$ python -B tools/ob_solve_blind.py export --set final --mode no_passage
+{
+ "program": "tools/ob_solve_blind.py",
+ "dry_fixture": false,
+ "step": "export",
+ "status": "SHEETS_WRITTEN",
+ "set": "final",
+ "mode": "no_passage",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "sheets": [
+  {
+   "sheet": "01",
+   "file": "optionb/solve/claude_sheet_final_no_passage_01.txt",
+   "items": 437,
+   "sha256": "2a0f43e2ebf3bccf1ee542e532ebdd1bff4510955df675f311268feaf19d3bff",
+   "answers_go_to": "optionb/solve/claude_answers_final_no_passage_01.txt"
+  }
+ ],
+ "ask_for_the_sub_agent_with_model_id": "claude-sonnet-5-5",
+ "next": [
+  "Give each sheet, as text only, to a Claude Sonnet sub-agent with no file access. Ask for it with the pinned model id claude-sonnet-5-5. Give it nothing else.",
+  "A no_passage sheet goes to a fresh sub-agent that never saw a with_passage sheet.",
+  "Save the reply, unchanged, to the answers file named above. Read the model name from the sub-agent transcript.",
+  "Then run the import step for that sheet with --transcript-model NAME, the name exactly as the transcript shows it."
+ ]
+}
+[exit code 0]

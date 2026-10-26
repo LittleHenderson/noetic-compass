@@ -1,0 +1,1679 @@
+[
+ {
+  "passage_id": "V049",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a distinct clang",
+    "mind": "Robert",
+    "relative_to": "a snare drum",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a snare drum",
+    "mind": "Robert",
+    "relative_to": "a distinct clang",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "He then pictured his old garage band and remembered the thrill of the beat; the passage does not say what brought these to Mind, so no further pair is marked.",
+   "'the thrill of the beat' hints at attraction but no pull is stated."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V050",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a ski patrol veteran",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the unusual stillness",
+    "mind": "Daniel",
+    "relative_to": "the lift had halted unexpectedly",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "the lift had halted unexpectedly",
+    "mind": "Daniel",
+    "relative_to": "the unusual stillness",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "Several signs are listed (limp flags, no skiers loading, undisturbed snow, a STOP display); only the first-named, 'the unusual stillness', is quoted as the trigger.",
+   "The cause 'a mechanical fault' is given as likely, not settled."
+  ],
+  "guide_problem": "The guide does not say which sign to quote when several signs lead to one conclusion."
+ },
+ {
+  "passage_id": "V051",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ken",
+    "mind": "Ken",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "pins",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "springs",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "keyway",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "cylinder",
+    "mind": "",
+    "relative_to": "the faulty mechanism",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "No conclusion is reached; the faults are only suspected."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V052",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Harriet",
+    "mind": "Harriet",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "temperature control",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "humidity levels",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "turning of the wheels",
+    "mind": "",
+    "relative_to": "the aging schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "strain of surface bacteria",
+    "mind": "",
+    "relative_to": "the final flavor",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "rind development",
+    "mind": "",
+    "relative_to": "the final flavor",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "'Each element played a distinct part in the final flavor' could also make all five elements parts of the final flavor; the split between the schedule and the flavor follows the sentences."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V053",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Cathy",
+    "mind": "Cathy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "effortlessly identified the leather type and sole material",
+    "mind": "Cathy",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "had become background ambience",
+    "mind": "Cathy",
+    "relative_to": "The specific creak of the old polishing machine",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The creak 'had become background ambience' but no rate or pattern words are given, so no ^7.",
+   "Sorting thread spools 'without conscious selection' shows acting without thought; no pair."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V054",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a persistent squeaking sound",
+    "mind": "",
+    "relative_to": "These signs",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the chain was rusty and stiff",
+    "mind": "",
+    "relative_to": "These signs",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "one pedal felt loose",
+    "mind": "",
+    "relative_to": "These signs",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "The entire drivetrain needed a thorough overhaul",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage_id": "V055",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V056",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Yolanda",
+    "mind": "Yolanda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The metallic scent of cleaning fluid",
+    "mind": "Yolanda",
+    "relative_to": "the brass band",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the brass band",
+    "mind": "Yolanda",
+    "relative_to": "The metallic scent of cleaning fluid",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "'She recalled the loud, joyful music from family gatherings' follows the brass band memory; the passage does not say what brought it up, so no second pair is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V057",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a veteran locksmith",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The slight discolouration around the keyway",
+    "mind": "Robert",
+    "relative_to": "the lock had been exposed to harsh weather for years",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "the lock had been exposed to harsh weather for years",
+    "mind": "Robert",
+    "relative_to": "The slight discolouration around the keyway",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "'a full replacement was required' follows from the finding; how he got there is not stated, so it is not marked separately."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V058",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Nurse Owen",
+    "mind": "Nurse Owen",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Routine rounds only: no attraction, aversion, impression or trigger is shown."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V059",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The right shoulder",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the collar",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the cuff",
+    "mind": "",
+    "relative_to": "the jacket",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "Someone had probably pressed it incorrectly after cleaning",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "The passage gives 'probably' and 'explained' but no words such as 'worked out'; read as reasoning from the noticed details."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V060",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liam",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a seasoned hiker",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "The crisp mountain air",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "deeply cherished",
+    "mind": "Liam",
+    "relative_to": "The crisp mountain air",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^3",
+    "words": "The distant, faint sound of a snowmobile engine",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "quickly fading into the background of his thoughts",
+    "mind": "Liam",
+    "relative_to": "The distant, faint sound of a snowmobile engine",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "'a sense of peace' on surveying the valley is felt, but no pull toward the valley is stated."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V061",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "His experienced eye",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "A hairline crack and a hollow drill sound are noticed and 'They would need to reinforce that section' follows, but the passage does not say this came to Frank's Mind from the signs."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V062",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "knight's fork",
+    "mind": "",
+    "relative_to": "the impending assault",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "rook sacrifice",
+    "mind": "",
+    "relative_to": "the impending assault",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "queen's forced advance",
+    "mind": "",
+    "relative_to": "the impending assault",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V063",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Jane",
+    "mind": "Jane",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a barely perceptible click",
+    "mind": "Jane",
+    "relative_to": "a tiny digital glitch",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "a tiny digital glitch",
+    "mind": "Jane",
+    "relative_to": "a barely perceptible click",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "The vocalist is mentioned as not hearing the click; no awareness is shown, so not listed.",
+   "Her profession is named but no experience is stated, so no ^5."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V064",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Yvonne",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Daily for a decade",
+    "mind": "Yvonne",
+    "relative_to": "rotated countless wheels of cheddar",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Her muscle memory",
+    "mind": "Yvonne",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V065",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Rachel",
+    "mind": "Rachel",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Routine tidying and waiting only; nothing settles attraction, aversion, impression or a trigger."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V066",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Gary",
+    "mind": "Gary",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Routine cleaning only; nothing settles attraction, aversion, impression or a trigger."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V067",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "standing apart from the herd",
+    "mind": "",
+    "relative_to": "these clues",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "refusing her feed",
+    "mind": "",
+    "relative_to": "these clues",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "Her nose felt warm to his touch",
+    "mind": "",
+    "relative_to": "these clues",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "her eyes appeared a little dull",
+    "mind": "",
+    "relative_to": "these clues",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a slight swelling in her left front udder",
+    "mind": "",
+    "relative_to": "these clues",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "she needed an antibiotic injection for mastitis",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "Bessie (a cow) refuses her feed and stands apart, but this is presented as symptoms, not as a Mind taking in or being repelled; not listed."
+  ],
+  "guide_problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage_id": "V068",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "faced players like him for decades",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "That slight pause",
+    "mind": "Eleanor",
+    "relative_to": "a hidden trap",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "a hidden trap",
+    "mind": "Eleanor",
+    "relative_to": "That slight pause",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "'often signaled' is a general statement; the passage does not say a trap came to her Mind this time, only that she shifted her pawn."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V069",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Liam",
+    "mind": "Liam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "specific rennet and raw milk from local cows",
+    "mind": "",
+    "relative_to": "the recipe for his aged cheddar",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "cut, stirred, and pressed into molds",
+    "mind": "",
+    "relative_to": "the recipe for his aged cheddar",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "brined",
+    "mind": "",
+    "relative_to": "the recipe for his aged cheddar",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the cool, damp cellar for years",
+    "mind": "",
+    "relative_to": "the recipe for his aged cheddar",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V070",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Inspector Davies",
+    "mind": "Inspector Davies",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a veteran customs officer",
+    "mind": "Inspector Davies",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the slight tremor in the man's left hand",
+    "mind": "Inspector Davies",
+    "relative_to": "the man was likely nervous about something he was carrying",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "the man was likely nervous about something he was carrying",
+    "mind": "Inspector Davies",
+    "relative_to": "the slight tremor in the man's left hand",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "The crease in the passport photo is a second sign; only the tremor is quoted as the trigger.",
+   "The man is mentioned, but his own awareness is only inferred by Davies; not listed."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V071",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "paper alignment",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "ink saturation",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "plate registration",
+    "mind": "",
+    "relative_to": "The problem",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "The fault became clear",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "The fault itself is not named; 'The fault became clear' is marked as the conclusion reached after the checks.",
+   "The paper feeder, the colour calibration settings and the ink cylinder are things she checked; not marked as parts."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V072",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Samuel",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his own childhood fear of the dentist",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the dentist",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "lingered faintly even now",
+    "mind": "Samuel",
+    "relative_to": "his own childhood fear of the dentist",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a new patient wince slightly",
+    "mind": "Samuel",
+    "relative_to": "his own childhood fear of the dentist",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "words": "his own childhood fear of the dentist",
+    "mind": "Samuel",
+    "relative_to": "a new patient wince slightly",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "not_enough_information": [
+   "The patient winces but only a bodily reaction is shown, so the patient is not listed.",
+   "The passage does not say outright that the wince brought the memory to Mind."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V073",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the auctioneers",
+    "mind": "the auctioneers",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the strong, briny scent",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the display of gleaming, fresh mackerel",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "A wave of hunger hit him immediately",
+    "mind": "David",
+    "relative_to": "the display of gleaming, fresh mackerel",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely registered",
+    "mind": "David",
+    "relative_to": "The distant shouts of the auctioneers",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V074",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Leo",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "were constant",
+    "mind": "Leo",
+    "relative_to": "The roar of the crusher, the clang of falling steel, and the screech of machinery",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "After years, his ears simply filtered out the cacophony",
+    "mind": "Leo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "rarely flinched",
+    "mind": "Leo",
+    "relative_to": "sudden loud noises",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "'His attention remained fixed on identifying the various alloys' is attention alone, not attraction."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V075",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Dr. Anya Sharma",
+    "mind": "Dr. Anya Sharma",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an initial deep cleaning",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "two fillings",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "an impression for a crown",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "fitting the new crown",
+    "mind": "",
+    "relative_to": "the complex treatment plan",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V076",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Samuel",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "brass gear",
+    "mind": "",
+    "relative_to": "the lighthouse lamp's mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "spring",
+    "mind": "",
+    "relative_to": "the lighthouse lamp's mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "lever",
+    "mind": "",
+    "relative_to": "the lighthouse lamp's mechanism",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "electrical motor",
+    "mind": "",
+    "relative_to": "the lighthouse lamp's mechanism",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V077",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Tony",
+    "mind": "Tony",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the familiar, sharp scent of salt spray and warm diesel fumes",
+    "mind": "Tony",
+    "relative_to": "the old fishing boat of his grandfather",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fishing boat of his grandfather",
+    "mind": "Tony",
+    "relative_to": "the familiar, sharp scent of salt spray and warm diesel fumes",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "He then remembers sunny mornings, waves and bait; not marked as parts or as a further pair."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V078",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp, briny smell of the fresh oysters on ice",
+    "mind": "Frank",
+    "relative_to": "his childhood holidays by the sea",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his childhood holidays by the sea",
+    "mind": "Frank",
+    "relative_to": "The sharp, briny smell of the fresh oysters on ice",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "those simple summer days",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The memory of digging for clams with his father follows; no further pair is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V079",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a faint smudge on the postage stamp",
+    "mind": "",
+    "relative_to": "All these small imperfections",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "The postmark itself looked blurry and incomplete",
+    "mind": "",
+    "relative_to": "All these small imperfections",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the address was written in faded ink",
+    "mind": "",
+    "relative_to": "All these small imperfections",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the letter had likely been caught in a sorting machine malfunction",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage_id": "V080",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Emily",
+    "mind": "Emily",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Routine chess set-up only; nothing settles attraction, aversion, impression or a trigger."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V081",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V082",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Frank",
+    "mind": "Frank",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "cable tension check",
+    "mind": "",
+    "relative_to": "the required annual maintenance schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "lubrication of all moving parts",
+    "mind": "",
+    "relative_to": "the required annual maintenance schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "inspection of every individual chair hanger",
+    "mind": "",
+    "relative_to": "the required annual maintenance schedule",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "testing of all emergency stop mechanisms",
+    "mind": "",
+    "relative_to": "the required annual maintenance schedule",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V083",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a faint, almost imperceptible scrape",
+    "mind": "David",
+    "relative_to": "the bearings were nearly seized",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   },
+   {
+    "noetic": "^9",
+    "words": "the bearings were nearly seized",
+    "mind": "David",
+    "relative_to": "a faint, almost imperceptible scrape",
+    "certainty": "ambiguous",
+    "other_candidate": "reasoning"
+   }
+  ],
+  "not_enough_information": [
+   "'Time for a full overhaul, he concluded' is a conclusion, but the passage names no pieces he worked from beyond the sound, so it is not marked as reasoned."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V084",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Captain Helen",
+    "mind": "Captain Helen",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "Several signs (higher river, stronger current, rising wind, dark clouds) are followed by 'she decided to adjust her crossing angle'; the passage shows a decision to act but does not say a conclusion was reached by working through them, or that a different Idea came to Mind."
+  ],
+  "guide_problem": "The guide does not say whether a decision to act, after several noticed signs, counts as a reasoned conclusion."
+ },
+ {
+  "passage_id": "V085",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V086",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Ursula",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a cheerful-looking clown figure",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the lighter, more agile characters",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the grumpy old wizard",
+    "mind": "Ursula",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a surge of satisfaction",
+    "mind": "Ursula",
+    "relative_to": "a cheerful-looking clown figure",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a slight frown touched her face",
+    "mind": "Ursula",
+    "relative_to": "the grumpy old wizard",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V087",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a mature cheddar wheel",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "a batch of experimental blue cheese",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely noticed",
+    "mind": "Maria",
+    "relative_to": "A small drop of condensation",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V088",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Mike",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "worked on the loading bay for years",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Each Tuesday and Friday",
+    "mind": "Mike",
+    "relative_to": "three short honks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a practiced movement",
+    "mind": "Mike",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "His hands move 'without conscious thought' at the sound, so under rule 13 no pair is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V089",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Inspector Davies",
+    "mind": "Inspector Davies",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The crisp, clean scent of a new leather briefcase",
+    "mind": "Inspector Davies",
+    "relative_to": "his father's old work bag",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his father's old work bag",
+    "mind": "Inspector Davies",
+    "relative_to": "The crisp, clean scent of a new leather briefcase",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The remembered feel of the worn handle and smell of old documents are details of the memory, not parts."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V090",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Olivia",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the tailor",
+    "mind": "the tailor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "the smooth silk fabric",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the coarse tweed swatch",
+    "mind": "Olivia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a small grimace of distaste",
+    "mind": "Olivia",
+    "relative_to": "the coarse tweed swatch",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "unfazed",
+    "mind": "Olivia",
+    "relative_to": "the exorbitant price of the silk",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V091",
+  "none_of_these": true,
+  "entries": [],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V092",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "David",
+    "mind": "David",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint scent of pine wood",
+    "mind": "David",
+    "relative_to": "his grandfather’s old workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather’s old workshop",
+    "mind": "David",
+    "relative_to": "The faint scent of pine wood",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The wooden toy boat memory follows; no further pair is marked."
+  ],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V093",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Mr. Jenkins",
+    "mind": "Mr. Jenkins",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "reliance on inadmissible hearsay",
+    "mind": "",
+    "relative_to": "the opposing lawyer’s argument",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "misinterpretation of a key statute",
+    "mind": "",
+    "relative_to": "the opposing lawyer’s argument",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "weak chain of evidence for their main claim",
+    "mind": "",
+    "relative_to": "the opposing lawyer’s argument",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V094",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Quentin",
+    "mind": "Quentin",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the slight discrepancy in the light's flash sequence",
+    "mind": "",
+    "relative_to": "This combination",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a minor voltage drop",
+    "mind": "",
+    "relative_to": "This combination",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "a loose connection in the main circuit board",
+    "mind": "",
+    "relative_to": "This combination",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "intermittent faulty wiring",
+    "mind": "Quentin",
+    "relative_to": "",
+    "certainty": "clear",
+    "reached_by": "reasoning"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": "Rule 15(b) does not say what relative_to is for evidence pieces that compose no named whole."
+ },
+ {
+  "passage_id": "V095",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Eleanor",
+    "mind": "Eleanor",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "countless similar appointments",
+    "mind": "Eleanor",
+    "relative_to": "appointments",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "barely reacted",
+    "mind": "Eleanor",
+    "relative_to": "The whirring sound of the drill",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [],
+  "guide_problem": ""
+ },
+ {
+  "passage_id": "V096",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "words": "Michael",
+    "mind": "Michael",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The smell of diesel fumes",
+    "mind": "Michael",
+    "relative_to": "his father's old truck",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his father's old truck",
+    "mind": "Michael",
+    "relative_to": "The smell of diesel fumes",
+    "certainty": "clear"
+   }
+  ],
+  "not_enough_information": [
+   "The memory of changing the oil with his dad follows; no further pair is marked."
+  ],
+  "guide_problem": ""
+ }
+]

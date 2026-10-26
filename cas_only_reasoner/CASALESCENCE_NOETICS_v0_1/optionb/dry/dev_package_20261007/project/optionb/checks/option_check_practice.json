@@ -1,0 +1,385 @@
+{
+ "schema": "casalescence/optionb/option_check/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-07T00:14:15Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/elig/eligibility.json",
+   "sha256": "5cbec062ac5b855edd71cf893bda734c158b2e657ea6caba7102ff5a024d159c"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_practice_p1.json",
+   "sha256": "f5c0075b3023b05a99ee5296dbf7598a35436862071e349339f1064e9a44f464"
+  },
+  {
+   "path": "optionb/dry/dev_package_20261007/work/questions/raw_questions_practice_p2.json",
+   "sha256": "6b27b78f5d1d1e813ef8ce7db99e4ed0a68302aa2f107cc7f536e5b81038f951"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "rows": [
+  {
+   "question_id": "D001.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D001.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D001.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D001.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D001.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D001.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D002.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D002.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D002.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D002.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D002.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D002.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D003.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D003.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D003.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D003.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D003.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D003.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D004.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D004.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D004.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D004.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D004.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D004.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D005.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D005.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D005.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D005.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D005.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D005.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D006.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D006.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D007.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D007.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D007.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D007.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D007.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D007.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D008.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D008.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D008.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D008.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D008.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D008.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D009.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D009.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D009.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D009.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D009.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D009.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D010.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D010.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D010.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D010.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D010.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D010.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D011.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D011.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D011.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D011.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D011.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D011.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D012.p1.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D012.p1.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D012.p1.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D012.p2.GOES_FOR",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D012.p2.KEEPS_AWAY",
+   "passed": true,
+   "hits": []
+  },
+  {
+   "question_id": "D012.p2.LONG_BREAK",
+   "passed": true,
+   "hits": []
+  }
+ ],
+ "counts": {
+  "checked": 68,
+  "passed": 68
+ }
+}

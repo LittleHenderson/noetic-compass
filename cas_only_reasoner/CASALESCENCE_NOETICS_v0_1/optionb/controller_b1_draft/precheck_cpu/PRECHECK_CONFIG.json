@@ -1,0 +1,34 @@
+{
+ "schema": "cas.optionb.precheck-config/2",
+ "status": "FILLED by the operator (Claude Code) on 2026-10-07 for development test d1 on made-up data (package dev_package_20261007, built after the reviewed builder fix of 2026-10-07). The earlier d1 folder of 2026-10-05 was set aside, never launched. This file grants no authority.",
+ "how_to_use": [
+  "derive_precheck_job.py reads seven things from this file: attempt, kind, source_zip, source_zip_sha256, tokenizer_source_zip, previous, existing_allocation_usd.",
+  "A value that still says <<FILL>> stops the build.",
+  "attempt is a whole number. For a pre-check job it is 1 to 4. For a development test it is 1 or 2. It is the suffix of the job id, the folder, the lease and the claim: cas-optionb-b1-precheck-p1 to -p4, or cas-optionb-b1-devtest-d1 and -d2. Use the lowest number that was never launched. The build stops if a lower number has no claim file, and if this number already has a folder, a lease or a claim.",
+  "kind is SEALED_PACKAGE, REHEARSAL or DEVELOPMENT_TEST. The seal file decides which one a package is. The build stops if this file says another kind.",
+  "SEALED_PACKAGE: source.zip was built after seal step 6, or after the last repair line 6R_PROGRAMS_REPAIRED. Only this kind returns values for seal step 7.",
+  "REHEARSAL (plan section 19.1): after seal step 5 and before seal step 6. source.zip was built with 'build_source_zip_b1.py --seal <scratch copy>'. It is one of the 4 jobs. Its result is never written to the real seal file.",
+  "DEVELOPMENT_TEST (plan section 19.1, amendment A10): made-up data, before seal step 1 exists. It is ordered: one job, at most two. Each has a cap of 0.50 USD and 45 minutes. It is outside the seal chain and is not one of the 4 pre-check jobs. Its job id is cas-optionb-b1-devtest-d<attempt>. It is authorised by the operator's decision of 2026-10-05 under the owner's approval record OWNER_APPROVAL_ALL_STAGES_20261005T0610Z.json. source.zip comes from optionb/dry/build_dev_package.py and holds made-up data only. Its output is never evidence about roles.",
+  "The block 'previous' names the job that most recently used the shared four-key storage slot. Read the bus and the ledger again on the day of the build. The build stops unless this job is the last job the ledger carries. For a second job of this kit it is normally the job of this kit before it.",
+  "existing_allocation_usd must equal combined_allocation_usd in the ledger pointer at the moment of the build. The build stops if it does not."
+ ],
+ "attempt": 1,
+ "kind": "DEVELOPMENT_TEST",
+ "source_zip": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/CASALESCENCE_NOETICS_v0_1/optionb/dry/dev_package_20261007/package/source.zip",
+ "source_zip_sha256": "6b36f2cbe918b45a3757f76f9e366ba9006d02873ae1a603afbbdc21a39e89a0",
+ "tokenizer_source_zip": "D:/tksCAS-runs/controller_cas_small_op11_claude_c1/input.zip",
+ "tokenizer_source_note": "REAL, checked on 2026-10-05 by reading the archive's file list: this archive holds the six small model B files under models/models--Qwen--Qwen2.5-0.5B-Instruct/snapshots/7ae557604adf67be50417f59c2c2f167def9a775/ with the sizes in PLAN_CONSTANTS.json (11,488,523 bytes together). The build reads only those six files and checks each sha256 against PLAN_CONSTANTS.json. It never reads model.safetensors. The new b1 input.zip may be named here instead.",
+ "previous": {
+  "job": "helm-claude-asom-s1-collect-20261005-c07",
+  "folder": "controller_claude_asom_c07",
+  "cleanup_file": "aws-claude-asom-c07-independent-cleanup.json",
+  "cleanup_sha256": "67d8851e0dc3ee1687e2cda1f5212594f7a719ebd85993d973d4b7c707587fd1",
+  "instance": "i-0d5ff147f22868de2",
+  "volumes": [
+   "vol-0f6a5fbc724854130"
+  ]
+ },
+ "previous_note": "REAL, read by the operator on 2026-10-07 about 00:20Z: bus line claude-0052 (2026-10-05T16:55:27Z, SLOT RELEASED) is the last slot line and the ledger pointer (last_jobs) names helm-claude-asom-s1-collect-20261005-c07 as the last job on the slot. Its independent cleanup record has status VERIFIED and the sha256 above (hashed again on 2026-10-06).",
+ "existing_allocation_usd": 97.59,
+ "existing_allocation_note": "REAL, read by the operator on 2026-10-07 about 00:20Z: pointer written 2026-10-05T19:30:16.0944919Z, combined 97.59, unreserved 152.41, ceiling 250, last_jobs ['helm-claude-asom-s1-collect-20261005-c07']."
+}

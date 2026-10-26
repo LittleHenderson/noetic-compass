@@ -1,0 +1,10 @@
+You reviewed version 2.2 of a labeling study once before and answered VERDICT: REJECT, with one BLOCKER and four MAJOR findings. Your earlier review is attached, word for word, together with the operator's record of what was done for each finding, and the corrected guide, plan and sign-off sheet. Plan version 2.1 is attached for the sections version 2.2 cites as unchanged.
+
+Fixed ground you may not question. Part A of the guide is canon and belongs to the owner. The owner's sentence on Mind, his rulings and his recorded answers are his own decisions.
+
+Check only this:
+1. For each of your five findings: is it resolved by the corrected documents? Answer RESOLVED, PARTLY RESOLVED or NOT RESOLVED, with one or two sentences and the exact place.
+2. For finding 1 in particular: the measure, checker and fixture of attempt 2 are kept unchanged; instead no text a labeler reads names the flag's field any more, and a gate program stops the run before any verdict if a final entry carries the flag (plan section 7). Does that remove the dependence you described, so that no verdict is ever computed over a flagged entry?
+3. Did the corrections create any new BLOCKER or MAJOR defect? Name it, with the exact place and the smallest fix.
+
+Start your reply with one line: VERDICT: ACCEPT, ACCEPT_WITH_NOTES, or REJECT. Keep the reply under 600 words.

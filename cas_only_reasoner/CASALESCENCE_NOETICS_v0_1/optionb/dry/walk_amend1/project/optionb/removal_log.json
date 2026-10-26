@@ -1,0 +1,2051 @@
+{
+ "schema": "casalescence/optionb/removal_log/v1",
+ "made_by": {
+  "program": "tools/ob_assemble.py",
+  "sha256": "6353a3f75b5d2154826707210fc6b5ee457d7f9d0d32516a78284abcacd53ab0",
+  "utc": "2026-10-05T16:25:54Z"
+ },
+ "inputs": [
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "acf84a5083d18d27b2aea42963416cb647095475f206cc47b353d6ce74a518df"
+  },
+  {
+   "path": "optionb/checks/anchor_check_final.json",
+   "sha256": "5fd376f5cf23e96b933bca2fd84fd2bdafc07ecd7d52c1c03e737f2062db5d8c"
+  },
+  {
+   "path": "optionb/checks/anchor_check_practice.json",
+   "sha256": "bdcebb82f87f7743eeb743395bfd718888a9a9983604c3ef3423207f915e83db"
+  },
+  {
+   "path": "optionb/checks/candidates_final.json",
+   "sha256": "ed58ea9e4c9c47d3d5a921d6145cb5bb0e7766c57817b99ddc0985d9dac3266e"
+  },
+  {
+   "path": "optionb/checks/candidates_practice.json",
+   "sha256": "1e7d08b6716d6046a4e3d95b6d943636d3c089cde54c314ca8179788d87a3747"
+  },
+  {
+   "path": "optionb/checks/form_check_final.json",
+   "sha256": "22013d70f59bb8a67b895d5b905a07bece6c9d359f538bea3ba2afb6f4426ff1"
+  },
+  {
+   "path": "optionb/checks/form_check_practice.json",
+   "sha256": "d2b14865ccb601b147c5afe600541d089c29e9ba7d01a4eff5c7b58cce532d7f"
+  },
+  {
+   "path": "optionb/checks/option_check_final.json",
+   "sha256": "9ab8371701659af8521c4d8b8ff7d081d51779eb9ea577139fab96d3c729f595"
+  },
+  {
+   "path": "optionb/checks/option_check_practice.json",
+   "sha256": "91b2187b96127818577affbe11bcdbeb0bb24a28f57ebcce8bfbba56ee72c991"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4"
+  },
+  {
+   "path": "optionb/elig/exclusions.json",
+   "sha256": "88b8a2256e42c2fa848f7020f757272fab7ee011d2e8de1aa10d587bc1dcaec4"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_final.json",
+   "sha256": "3c1d11144bd639bdf5f29a5913049b9d8d7a21b7529f419042e2ff923c35f55f"
+  },
+  {
+   "path": "optionb/notes_ord/ordinary_notes_practice.json",
+   "sha256": "8c6e5fb9eba58f925c9bee16fe25d2da6163bd1dba8c73657ea61db35b52eb21"
+  },
+  {
+   "path": "optionb/notes_role/role_notes.json",
+   "sha256": "f645753b6457d9e37aad3be2889271fc19aef3db4edd41ee8ba6f184ad585b05"
+  },
+  {
+   "path": "optionb/questions/raw_questions_final_p1.json",
+   "sha256": "0340009589013557112c61d305f73a5bb8f5b0047f66090341e16181ecbec285"
+  },
+  {
+   "path": "optionb/questions/raw_questions_final_p2.json",
+   "sha256": "38815f494713dc0566b803f23924e8b49446f6b40da1102aa02effc5191b16ba"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "1e134d553e3d7ae13eef3fdf684d5ebdb13021a136db08e8424d8765fe14b0f9"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "5de993c03d36bafa2d081565b43f3b820918fa9263100b7ef55a8f480b247008"
+  },
+  {
+   "path": "optionb/screen/leak_screen_final.json",
+   "sha256": "8b967068c51df7d9ffc820e344d2b72ac614c70198bff42d79f6b0d5c5770b6f"
+  },
+  {
+   "path": "optionb/screen/leak_screen_practice.json",
+   "sha256": "6f35bad60088029e55b5085a6e44137a2ad13b1b6fbc188fc9f6cac0d1a9049d"
+  },
+  {
+   "path": "optionb/select/selection_final.json",
+   "sha256": "f48384efc9bd9e8df5152b63c0c84c8dbb9c0c07938adc3f4599b7f702c1f6cb"
+  },
+  {
+   "path": "optionb/select/selection_practice.json",
+   "sha256": "da8c050021c3ded4ea6a140f1e2a43f284221cdf76b6e676a4ac45acb354bcf6"
+  },
+  {
+   "path": "optionb/select/split_fixed.json",
+   "sha256": "c7b69355a320ee813007bbcb6dfc69f15307d9c45daf217edd4b8c286b9c8101"
+  },
+  {
+   "path": "optionb/solve/key_check_final.json",
+   "sha256": "27a1ab6aceaf1bceb6cadf437776d174a8e4a9a7ff5583fd49977b186bb3ad90"
+  },
+  {
+   "path": "optionb/solve/key_check_practice.json",
+   "sha256": "84799b71f999a212c3febd9c6ff7c5ba72fad8bb936dc66110a76f8fda489e46"
+  },
+  {
+   "path": "optionb/support/support_results_final.json",
+   "sha256": "add014ddb9192b2c46078567e28afd81f4c816fa8b8dd8f4a7b4fdd268dfef04"
+  },
+  {
+   "path": "optionb/support/support_results_practice.json",
+   "sha256": "bc1a86e570682b18c0d3c900a68658e4728407b72cf65a78747a053e86a57122"
+  },
+  {
+   "path": "verdict/passages_kinds_HIDDEN_FROM_LABELERS.json",
+   "sha256": "aa3cfc8cf363b2e9273abbbfe0c1b9d1ed94f982ae42ee0bc7290f87d12ef434"
+  }
+ ],
+ "entries": [
+  {
+   "set": "practice",
+   "step": "STEP_2_FORM_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V130.p1.GOES_FOR",
+   "rule": "OPTION_COUNT",
+   "detail": "OPTION_COUNT"
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V123.p1.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V123.p1.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V123.p2.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V123.p2.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V118.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V119.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V120.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V121.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V122.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V124.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V125.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V126.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V127.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V128.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V129.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V130.p2.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V131.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V132.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V133.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V134.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V135.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V136.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V137.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V138.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V139.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V140.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V141.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V142.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V143.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V144.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V137|ORD-FREE|090|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V137|ORD-FREE|100|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "practice",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V137|ORD-FREE|110|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V006.p1.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V006.p1.KEEPS_AWAY",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V006.p1.LONG_BREAK",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V006.p2.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V006.p2.KEEPS_AWAY",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V006.p2.LONG_BREAK",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V009.p1.GOES_FOR",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V009.p1.KEEPS_AWAY",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V009.p1.LONG_BREAK",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V009.p2.GOES_FOR",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V009.p2.KEEPS_AWAY",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V009.p2.LONG_BREAK",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V014.p1.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V014.p1.KEEPS_AWAY",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V014.p1.LONG_BREAK",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V014.p2.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V014.p2.KEEPS_AWAY",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V014.p2.LONG_BREAK",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V021.p1.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V021.p1.KEEPS_AWAY",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V021.p1.LONG_BREAK",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V021.p2.GOES_FOR",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V021.p2.KEEPS_AWAY",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V021.p2.LONG_BREAK",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V042.p1.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V042.p1.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V042.p2.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V042.p2.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V049.p1.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V049.p1.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V049.p2.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V049.p2.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V056.p1.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V056.p1.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V056.p2.KEEPS_AWAY",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V056.p2.LONG_BREAK",
+   "rule": "FORM_NOT_OPEN",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V076.p1.GOES_FOR",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V076.p1.KEEPS_AWAY",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V076.p1.LONG_BREAK",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V076.p2.GOES_FOR",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V076.p2.KEEPS_AWAY",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3A_ANCHOR_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V076.p2.LONG_BREAK",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_3B_OPTION_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V063.p1.GOES_FOR",
+   "rule": "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE",
+   "detail": "option 0 matches the words of a ^2 entry only team A gave; option 1 matches the words of a ^2 entry only team A gave"
+  },
+  {
+   "set": "final",
+   "step": "STEP_3B_OPTION_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V063.p1.KEEPS_AWAY",
+   "rule": "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE",
+   "detail": "option 1 matches the words of a ^2 entry only team A gave"
+  },
+  {
+   "set": "final",
+   "step": "STEP_3B_OPTION_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V063.p2.GOES_FOR",
+   "rule": "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE",
+   "detail": "option 0 matches the words of a ^2 entry only team A gave; option 1 matches the words of a ^2 entry only team A gave"
+  },
+  {
+   "set": "final",
+   "step": "STEP_3B_OPTION_CHECK",
+   "program": "tools/ob_check_questions.py",
+   "object": "question",
+   "id": "V063.p2.KEEPS_AWAY",
+   "rule": "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE",
+   "detail": "option 1 matches the words of a ^2 entry only team A gave"
+  },
+  {
+   "set": "final",
+   "step": "STEP_4_KEY_CHECK",
+   "program": "tools/ob_solve_blind.py",
+   "object": "question",
+   "id": "V070.p1.GOES_FOR",
+   "rule": "NOT_BOTH_SOLVERS_RIGHT_WITH_THE_PASSAGE",
+   "detail": "claude-sonnet-subagent: FLAG_MORE_THAN_ONE; deepseek-chat: RIGHT"
+  },
+  {
+   "set": "final",
+   "step": "STEP_5_NO_PASSAGE_CHECK",
+   "program": "tools/ob_solve_blind.py",
+   "object": "question",
+   "id": "V078.p1.KEEPS_AWAY",
+   "rule": "BOTH_SOLVERS_RIGHT_WITHOUT_THE_PASSAGE",
+   "detail": "claude-sonnet-subagent: RIGHT; deepseek-chat: RIGHT"
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V001.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V002.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V003.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V004.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V005.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V006.p1.FACT",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V007.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V008.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V009.p1.FACT",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V010.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V011.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V012.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V013.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V014.p1.FACT",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V015.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V016.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V017.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V018.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V019.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V020.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V021.p1.FACT",
+   "rule": "PASSAGE_NOT_ELIGIBLE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V022.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V023.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V024.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V025.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V026.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V027.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V029.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V030.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V031.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V032.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V033.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V034.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V036.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V037.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V038.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V039.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V040.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V041.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V043.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V044.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V045.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V046.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V047.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V048.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V050.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V051.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V052.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V053.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V054.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V055.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V057.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V058.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V059.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V060.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V061.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V062.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V064.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V065.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V066.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V067.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V068.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V069.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V071.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V072.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V073.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V074.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V075.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V076.p1.FACT",
+   "rule": "PASSAGE_BARRED",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V077.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V079.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V080.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V081.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V082.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V083.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V084.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V085.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V086.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V087.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V088.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V089.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V090.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V091.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V092.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V093.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V094.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V095.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V096.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V097.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V098.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V099.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V100.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V101.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V102.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V103.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V104.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V105.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V106.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V107.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V108.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V109.p1.KEEPS_AWAY",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V110.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V111.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V112.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V113.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V114.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V115.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V116.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_6_SELECTION",
+   "program": "tools/ob_select.py",
+   "object": "question",
+   "id": "V117.p1.GOES_FOR",
+   "rule": "NOT_PICKED_BY_PAIR_RULE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "passage",
+   "id": "V085",
+   "rule": "DROPPED_SECOND_FAILURE",
+   "detail": "a rewritten note failed the support check again; the passage is dropped for every group"
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V085|ORD-INFORMED|090|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V085|ORD-INFORMED|100|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_SUPPORT_CHECK",
+   "program": "tools/ob_check_support.py",
+   "object": "note",
+   "id": "V085|ORD-INFORMED|110|v1",
+   "rule": "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE",
+   "detail": ""
+  },
+  {
+   "set": "final",
+   "step": "STEP_7_LEAK_SCREEN",
+   "program": "tools/ob_screen_notes.py",
+   "object": "passage",
+   "id": "V092",
+   "rule": "d",
+   "detail": "3 hit(s) of rule (d); first: ORD-INFORMED 090: the word answer: 1 in the note, 0 in the passage"
+  }
+ ],
+ "counts_by_step_and_rule": {
+  "STEP_2_FORM_CHECK": {
+   "OPTION_COUNT": 1
+  },
+  "STEP_3A_ANCHOR_CHECK": {
+   "FORM_NOT_OPEN": 16,
+   "PASSAGE_NOT_ELIGIBLE": 18,
+   "PASSAGE_BARRED": 12
+  },
+  "STEP_3B_OPTION_CHECK": {
+   "OPTION_MATCHES_AN_ENTRY_ONLY_ONE_TEAM_GAVE": 4
+  },
+  "STEP_4_KEY_CHECK": {
+   "NOT_BOTH_SOLVERS_RIGHT_WITH_THE_PASSAGE": 1
+  },
+  "STEP_5_NO_PASSAGE_CHECK": {
+   "BOTH_SOLVERS_RIGHT_WITHOUT_THE_PASSAGE": 1
+  },
+  "STEP_6_SELECTION": {
+   "NOT_PICKED_BY_PAIR_RULE": 130,
+   "PASSAGE_NOT_ELIGIBLE": 3,
+   "PASSAGE_BARRED": 2
+  },
+  "STEP_7_SUPPORT_CHECK": {
+   "FIRST_VERSION_FAILED_WRITTEN_AGAIN_ONCE": 6,
+   "DROPPED_SECOND_FAILURE": 1
+  },
+  "STEP_7_LEAK_SCREEN": {
+   "d": 1
+  }
+ },
+ "survival": {
+  "practice": [
+   {
+    "filter": "written for an open form",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "form check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "anchor check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "option check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "key check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "no-passage check",
+    "role_step": 79,
+    "plain_fact": 27
+   },
+   {
+    "filter": "selection",
+    "role_step": 53,
+    "plain_fact": 27
+   },
+   {
+    "filter": "length backstop",
+    "role_step": 53,
+    "plain_fact": 27
+   },
+   {
+    "filter": "support check",
+    "role_step": 53,
+    "plain_fact": 27
+   },
+   {
+    "filter": "answer-leak screen",
+    "role_step": 53,
+    "plain_fact": 27
+   }
+  ],
+  "final": [
+   {
+    "filter": "written for an open form",
+    "role_step": 330,
+    "plain_fact": 115
+   },
+   {
+    "filter": "form check",
+    "role_step": 330,
+    "plain_fact": 115
+   },
+   {
+    "filter": "anchor check",
+    "role_step": 324,
+    "plain_fact": 115
+   },
+   {
+    "filter": "option check",
+    "role_step": 322,
+    "plain_fact": 115
+   },
+   {
+    "filter": "key check",
+    "role_step": 321,
+    "plain_fact": 115
+   },
+   {
+    "filter": "no-passage check",
+    "role_step": 320,
+    "plain_fact": 115
+   },
+   {
+    "filter": "selection",
+    "role_step": 216,
+    "plain_fact": 110
+   },
+   {
+    "filter": "length backstop",
+    "role_step": 216,
+    "plain_fact": 110
+   },
+   {
+    "filter": "support check",
+    "role_step": 214,
+    "plain_fact": 109
+   },
+   {
+    "filter": "answer-leak screen",
+    "role_step": 212,
+    "plain_fact": 108
+   }
+  ]
+ },
+ "final_counts": {
+  "final_role_step_tasks": 212,
+  "final_plain_fact_tasks": 108,
+  "final_passages_with_a_role_step_task": 108,
+  "practice_role_step_tasks": 53,
+  "practice_plain_fact_tasks": 27
+ },
+ "launch_floor_met": true,
+ "tier": "EXPLORATORY",
+ "estimated_padding": {
+  "note": "an estimate from size counts, not from the tokenizer; no rule uses it; percent of the Notes block, mean over the kept passages of both sets",
+  "FILLER": "95.8",
+  "ROLE": "3.7",
+  "MIXED": "5.2",
+  "ORD-INFORMED": "3.1",
+  "ORD-FREE": "2.6",
+  "QUOTES-ONLY": "62.0"
+ }
+}

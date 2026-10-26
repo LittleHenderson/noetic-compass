@@ -1,0 +1,362 @@
+[
+ {
+  "passage_id": "W029",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Jenny",
+    "support": "Jenny planned her route through the fairground.",
+    "mind": "Jenny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^2",
+    "label": "the dodgems",
+    "support": "First, she would visit the dodgems for a bit of bumpy fun. After that, the Ferris wheel offered good views, and finally, she would try her luck at the ring toss game. Each activity promised a different kind of enjoyment.",
+    "mind": "Jenny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Drawn to it like a moth to a flame."
+   },
+   {
+    "noetic": "^2",
+    "label": "the Ferris wheel",
+    "support": "First, she would visit the dodgems for a bit of bumpy fun. After that, the Ferris wheel offered good views, and finally, she would try her luck at the ring toss game. Each activity promised a different kind of enjoyment.",
+    "mind": "Jenny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It speaks to me."
+   },
+   {
+    "noetic": "^2",
+    "label": "the ring toss game",
+    "support": "First, she would visit the dodgems for a bit of bumpy fun. After that, the Ferris wheel offered good views, and finally, she would try her luck at the ring toss game. Each activity promised a different kind of enjoyment.",
+    "mind": "Jenny",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Can't resist."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W003",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Julian",
+    "support": "Julian walked straight past the display of small, darting fish, hardly glancing at them.",
+    "mind": "Julian",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^4",
+    "label": "offered him nothing",
+    "support": "Their frenetic energy offered him nothing.",
+    "mind": "Julian",
+    "relative_to": "Their frenetic energy",
+    "certainty": "clear",
+    "saying": "It made no impression on him."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W005",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Noah",
+    "support": "Noah had spent thirty years watching ropes being spun.",
+    "mind": "Noah",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^1",
+    "label": "Younger workers",
+    "support": "Younger workers barely noticed the sound, but for Noah, it was a familiar warning.",
+    "mind": "Younger workers",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^4",
+    "label": "made him instantly flinch",
+    "support": "The sound of a snapping fibre, faint and sharp, made him instantly flinch.",
+    "mind": "Noah",
+    "relative_to": "The sound of a snapping fibre",
+    "certainty": "clear",
+    "saying": "Hit me hard."
+   },
+   {
+    "noetic": "^4",
+    "label": "barely noticed",
+    "support": "The sound of a snapping fibre, faint and sharp, made him instantly flinch. He remembered a machine malfunction from years ago. Younger workers barely noticed the sound, but for Noah, it was a familiar warning.",
+    "mind": "Younger workers",
+    "relative_to": "The sound of a snapping fibre",
+    "certainty": "clear",
+    "saying": "It barely registered with them."
+   },
+   {
+    "noetic": "^8",
+    "label": "The sound of a snapping fibre",
+    "support": "The sound of a snapping fibre, faint and sharp, made him instantly flinch. He remembered a machine malfunction from years ago.",
+    "mind": "Noah",
+    "relative_to": "a machine malfunction from years ago",
+    "certainty": "ambiguous",
+    "saying": "Triggered a memory.",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "label": "a machine malfunction from years ago",
+    "support": "The sound of a snapping fibre, faint and sharp, made him instantly flinch. He remembered a machine malfunction from years ago.",
+    "mind": "Noah",
+    "relative_to": "The sound of a snapping fibre",
+    "certainty": "ambiguous",
+    "saying": "It came back to him.",
+    "other_candidate": "none"
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W002",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Gary",
+    "support": "Gary, a lifeboat volunteer, had served for years.",
+    "mind": "Gary",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^5",
+    "label": "a lifeboat volunteer",
+    "support": "Gary, a lifeboat volunteer, had served for years.",
+    "mind": "Gary",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "It's who I am."
+   },
+   {
+    "noetic": "^5",
+    "label": "a familiar routine imprinted on him",
+    "support": "He listened intently for the emergency details, a familiar routine imprinted on him.",
+    "mind": "Gary",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": "Part of what makes me me."
+   },
+   {
+    "noetic": "^7",
+    "label": "for years",
+    "support": "Gary, a lifeboat volunteer, had served for years.",
+    "mind": "Gary",
+    "relative_to": "a lifeboat volunteer",
+    "certainty": "clear",
+    "saying": "Practice makes perfect."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W020",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^6",
+    "label": "the power supply",
+    "support": "The faulty tanning machine puzzled Robert. He broke down the problem into its parts: the power supply, the main motor, the conveyor belt mechanism, and the spray nozzles. Then he considered the sensors, the temperature regulators, and the chemical lines.",
+    "mind": "",
+    "relative_to": "The faulty tanning machine",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "the sensors",
+    "support": "The faulty tanning machine puzzled Robert. He broke down the problem into its parts: the power supply, the main motor, the conveyor belt mechanism, and the spray nozzles. Then he considered the sensors, the temperature regulators, and the chemical lines.",
+    "mind": "",
+    "relative_to": "The faulty tanning machine",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W023",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^6",
+    "label": "a loose wire connecting the joystick",
+    "support": "She saw a loose wire connecting the joystick, a jammed coin mechanism, and a dusty screen. The main circuit board appeared scorched near a certain chip. Each problem contributed to the machine's unresponsiveness.",
+    "mind": "",
+    "relative_to": "the machine's unresponsiveness",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   },
+   {
+    "noetic": "^6",
+    "label": "a jammed coin mechanism",
+    "support": "She saw a loose wire connecting the joystick, a jammed coin mechanism, and a dusty screen. The main circuit board appeared scorched near a certain chip. Each problem contributed to the machine's unresponsiveness.",
+    "mind": "",
+    "relative_to": "the machine's unresponsiveness",
+    "certainty": "clear",
+    "saying": "Breaking it down."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W001",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Evelyn",
+    "support": "Evelyn checked the water temperature in tank seven.",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W022",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Yolanda",
+    "support": "Yolanda walked past the rows of potted saplings.",
+    "mind": "Yolanda",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "a subtle yellowing on the underside of a single leaf",
+    "support": "She noticed a subtle yellowing on the underside of a single leaf on an oak sapling. It was barely visible to the casual eye. Yolanda, who had nurtured plants for over forty years, immediately knew it signaled a nutrient deficiency that could quickly spread if left unaddressed.",
+    "mind": "Yolanda",
+    "relative_to": "a nutrient deficiency that could quickly spread if left unaddressed",
+    "certainty": "clear",
+    "saying": "Made me think of..."
+   },
+   {
+    "noetic": "^9",
+    "label": "a nutrient deficiency that could quickly spread if left unaddressed",
+    "support": "She noticed a subtle yellowing on the underside of a single leaf on an oak sapling. It was barely visible to the casual eye. Yolanda, who had nurtured plants for over forty years, immediately knew it signaled a nutrient deficiency that could quickly spread if left unaddressed.",
+    "mind": "Yolanda",
+    "relative_to": "a subtle yellowing on the underside of a single leaf",
+    "certainty": "clear",
+    "saying": "It just clicked."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W059",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Tina",
+    "support": "Tina reached for a ripe apple on a high branch.",
+    "mind": "Tina",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "The cool morning air and the sweet scent of apples",
+    "support": "The cool morning air and the sweet scent of apples reminded her of a day long ago.",
+    "mind": "Tina",
+    "relative_to": "a day long ago",
+    "certainty": "clear",
+    "saying": "That reminds me..."
+   },
+   {
+    "noetic": "^9",
+    "label": "a day long ago",
+    "support": "The cool morning air and the sweet scent of apples reminded her of a day long ago.",
+    "mind": "Tina",
+    "relative_to": "The cool morning air and the sweet scent of apples",
+    "certainty": "clear",
+    "saying": "It just popped into my head."
+   },
+   {
+    "noetic": "^9",
+    "label": "her childhood bedroom window, open to a similar breeze",
+    "support": "The cool morning air and the sweet scent of apples reminded her of a day long ago. She pictured her childhood bedroom window, open to a similar breeze.",
+    "mind": "Tina",
+    "relative_to": "The cool morning air and the sweet scent of apples",
+    "certainty": "clear",
+    "saying": "A vivid picture came to me."
+   },
+   {
+    "noetic": "^9",
+    "label": "A sense of youthful freedom",
+    "support": "The cool morning air and the sweet scent of apples reminded her of a day long ago. She pictured her childhood bedroom window, open to a similar breeze. A sense of youthful freedom came to her then.",
+    "mind": "Tina",
+    "relative_to": "The cool morning air and the sweet scent of apples",
+    "certainty": "clear",
+    "saying": "The thought came to me."
+   }
+  ],
+  "not_enough_information": []
+ },
+ {
+  "passage_id": "W137",
+  "none_of_these": false,
+  "entries": [
+   {
+    "noetic": "^1",
+    "label": "Brenda",
+    "support": "Brenda saw the small queue forming at the 'Ring Toss' game.",
+    "mind": "Brenda",
+    "relative_to": "",
+    "certainty": "clear",
+    "saying": ""
+   },
+   {
+    "noetic": "^8",
+    "label": "Its shortness, combined with the way families drifted quickly past",
+    "support": "Its shortness, combined with the way families drifted quickly past, told her exactly what was happening. She knew the prizes were too cheap to entice serious players, and the game attendant looked bored. It meant a slow day for that stall.",
+    "mind": "Brenda",
+    "relative_to": "a slow day for that stall",
+    "certainty": "clear",
+    "saying": "Made me think of..."
+   },
+   {
+    "noetic": "^9",
+    "label": "a slow day for that stall",
+    "support": "Its shortness, combined with the way families drifted quickly past, told her exactly what was happening. She knew the prizes were too cheap to entice serious players, and the game attendant looked bored. It meant a slow day for that stall.",
+    "mind": "Brenda",
+    "relative_to": "Its shortness, combined with the way families drifted quickly past",
+    "certainty": "clear",
+    "saying": "It just clicked."
+   }
+  ],
+  "not_enough_information": []
+ }
+]

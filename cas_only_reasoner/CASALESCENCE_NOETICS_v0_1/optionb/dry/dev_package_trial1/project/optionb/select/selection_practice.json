@@ -1,0 +1,933 @@
+{
+ "schema": "casalescence/optionb/selection/v1",
+ "made_by": {
+  "program": "tools/ob_select.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "59a63824c8f358c63ad3e81c67f63831040594a9aebf450238bf0cb6a46d6712",
+  "utc": "2026-10-05T18:09:02Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/anchor_check_practice.json",
+   "sha256": "a2050b9d7fa7583d20a7298f6bdb56df1dda932084bc10de5b1353eb6db2e50c"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/candidates_practice.json",
+   "sha256": "4d60d42347d27f244fafaab4f679704ede47c4191c77e0dadc283475aa7ee3ed"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/form_check_practice.json",
+   "sha256": "6d4eb270f82dedbc1e2f50ed43c2a2c3f0479e2ca6cd207347a619a14c917694"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/option_check_practice.json",
+   "sha256": "2e72d40efa43dd2200b90558aef5ce8721e8ab445ece15cff3fd498cf2973dd0"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/elig/eligibility.json",
+   "sha256": "307230ae14d018138efb539adbcbc7d99e89e7d4b82c93b8404f918bfde1ad83"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/questions/raw_questions_practice_p1.json",
+   "sha256": "671ab2d770aeb8ef0bb6646cca5b2a210d265599b6b5b1a93e4ca53ce021dfb5"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/questions/raw_questions_practice_p2.json",
+   "sha256": "d55f5e73f04b3802cca6356300dd3d07733f43def2c3410c95bf68fae2a38243"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/solve/key_check_practice.json",
+   "sha256": "099d57314ff98d52fc982e1c5af2de5df815d61def734b1b42ce0e11c191894a"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  }
+ ],
+ "set": "practice",
+ "practice_setting_count": 9,
+ "tasks": [
+  {
+   "task_id": "D001.GOES_FOR",
+   "passage_id": "D001",
+   "question_id": "D001.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Tamsin do first?",
+   "right": "reaching for the tar brush again",
+   "wrong": [
+    "reaching for the wire brush again",
+    "moving the lantern to the yard",
+    "hanging the rope on a hook",
+    "sweeping the shed floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the tar brush"
+   ],
+   "anchors_matched": [
+    "reached for the tar brush"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D001.LONG_BREAK",
+   "passage_id": "D001",
+   "question_id": "D001.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Tamsin spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the lantern before anything else",
+   "wrong": [
+    "opening the boat shed before dawn",
+    "finding the shelf by the door",
+    "seeing the rope beside it",
+    "knowing where the lantern stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D001.FACT",
+   "passage_id": "D001",
+   "question_id": "D001.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the lantern stand?",
+   "right": "on the shelf",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D002.KEEPS_AWAY",
+   "passage_id": "D002",
+   "question_id": "D002.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Odran leave to someone else?",
+   "right": "working on the rusty winch",
+   "wrong": [
+    "working with the bone needle",
+    "carrying the kettle outside",
+    "counting every twine there",
+    "locking up the net loft",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the rusty winch"
+   ],
+   "anchors_matched": [
+    "away from the rusty winch"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D002.LONG_BREAK",
+   "passage_id": "D002",
+   "question_id": "D002.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Odran spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the kettle before anything else",
+   "wrong": [
+    "opening the net loft before dawn",
+    "finding the stove by the door",
+    "seeing the twine beside it",
+    "knowing where the kettle stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D002.FACT",
+   "passage_id": "D002",
+   "question_id": "D002.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the kettle stand?",
+   "right": "on the stove",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D003.KEEPS_AWAY",
+   "passage_id": "D003",
+   "question_id": "D003.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Ilse leave to someone else?",
+   "right": "working on the damp cellar",
+   "wrong": [
+    "working with the oak scoop",
+    "carrying the ledger outside",
+    "counting every barley there",
+    "locking up the seed store",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the damp cellar"
+   ],
+   "anchors_matched": [
+    "away from the damp cellar"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D003.LONG_BREAK",
+   "passage_id": "D003",
+   "question_id": "D003.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Ilse spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the ledger before anything else",
+   "wrong": [
+    "opening the seed store before dawn",
+    "finding the counter by the door",
+    "seeing the barley beside it",
+    "knowing where the ledger stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D003.FACT",
+   "passage_id": "D003",
+   "question_id": "D003.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the ledger stand?",
+   "right": "on the counter",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D004.KEEPS_AWAY",
+   "passage_id": "D004",
+   "question_id": "D004.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Bram leave to someone else?",
+   "right": "working on the leaky bellows",
+   "wrong": [
+    "working with the cross hammer",
+    "carrying the bucket outside",
+    "counting every tongs there",
+    "locking up the nail forge",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the leaky bellows"
+   ],
+   "anchors_matched": [
+    "away from the leaky bellows"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D004.LONG_BREAK",
+   "passage_id": "D004",
+   "question_id": "D004.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Bram spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the bucket before anything else",
+   "wrong": [
+    "opening the nail forge before dawn",
+    "finding the floor by the door",
+    "seeing the tongs beside it",
+    "knowing where the bucket stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D004.FACT",
+   "passage_id": "D004",
+   "question_id": "D004.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the bucket stand?",
+   "right": "on the floor",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D005.KEEPS_AWAY",
+   "passage_id": "D005",
+   "question_id": "D005.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Maren leave to someone else?",
+   "right": "working on the lye vat",
+   "wrong": [
+    "working with the copper ladle",
+    "carrying the rack outside",
+    "counting every madder there",
+    "locking up the dye house",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the lye vat"
+   ],
+   "anchors_matched": [
+    "away from the lye vat"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D005.LONG_BREAK",
+   "passage_id": "D005",
+   "question_id": "D005.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Maren spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the rack before anything else",
+   "wrong": [
+    "opening the dye house before dawn",
+    "finding the wall by the door",
+    "seeing the madder beside it",
+    "knowing where the rack stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D005.FACT",
+   "passage_id": "D005",
+   "question_id": "D005.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the rack stand?",
+   "right": "on the wall",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D006.GOES_FOR",
+   "passage_id": "D006",
+   "question_id": "D006.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Corin do first?",
+   "right": "reaching for the hemp rope again",
+   "wrong": [
+    "reaching for the nylon rope again",
+    "moving the oilcan to the yard",
+    "hanging the gloves on a hook",
+    "sweeping the tower floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the hemp rope"
+   ],
+   "anchors_matched": [
+    "reached for the hemp rope"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D006.FACT",
+   "passage_id": "D006",
+   "question_id": "D006.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the oilcan stand?",
+   "right": "on the ledge",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D007.KEEPS_AWAY",
+   "passage_id": "D007",
+   "question_id": "D007.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Edda leave to someone else?",
+   "right": "working on the broken ladder",
+   "wrong": [
+    "working with the wicker tray",
+    "carrying the stool outside",
+    "counting every straw there",
+    "locking up the apple loft",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the broken ladder"
+   ],
+   "anchors_matched": [
+    "away from the broken ladder"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D007.LONG_BREAK",
+   "passage_id": "D007",
+   "question_id": "D007.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Edda spends two years far from the apple loft. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the stool before anything else",
+   "wrong": [
+    "opening the apple loft before dawn",
+    "finding the landing by the door",
+    "seeing the straw beside it",
+    "knowing where the stool stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D007.FACT",
+   "passage_id": "D007",
+   "question_id": "D007.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the stool stand?",
+   "right": "on the landing",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D008.KEEPS_AWAY",
+   "passage_id": "D008",
+   "question_id": "D008.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Joss leave to someone else?",
+   "right": "working on the cracked kiln",
+   "wrong": [
+    "working with the wooden mould",
+    "carrying the wheelbarrow outside",
+    "counting every pallets there",
+    "locking up the tile yard",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the cracked kiln"
+   ],
+   "anchors_matched": [
+    "away from the cracked kiln"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D008.LONG_BREAK",
+   "passage_id": "D008",
+   "question_id": "D008.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Joss spends two years far from the tile yard. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the wheelbarrow before anything else",
+   "wrong": [
+    "opening the tile yard before dawn",
+    "finding the path by the door",
+    "seeing the pallets beside it",
+    "knowing where the wheelbarrow stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D008.FACT",
+   "passage_id": "D008",
+   "question_id": "D008.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the wheelbarrow stand?",
+   "right": "on the path",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D009.GOES_FOR",
+   "passage_id": "D009",
+   "question_id": "D009.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Wren do first?",
+   "right": "reaching for the brass ruler again",
+   "wrong": [
+    "reaching for the plastic ruler again",
+    "moving the globe to the yard",
+    "hanging the tape on a hook",
+    "sweeping the room floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the brass ruler"
+   ],
+   "anchors_matched": [
+    "reached for the brass ruler"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D009.LONG_BREAK",
+   "passage_id": "D009",
+   "question_id": "D009.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Wren spends two years far from the map room. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the globe before anything else",
+   "wrong": [
+    "opening the map room before dawn",
+    "finding the table by the door",
+    "seeing the tape beside it",
+    "knowing where the globe stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D009.FACT",
+   "passage_id": "D009",
+   "question_id": "D009.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the globe stand?",
+   "right": "on the table",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D010.GOES_FOR",
+   "passage_id": "D010",
+   "question_id": "D010.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Fenn do first?",
+   "right": "reaching for the long saw again",
+   "wrong": [
+    "reaching for the short saw again",
+    "moving the sledge to the yard",
+    "hanging the sawdust on a hook",
+    "sweeping the house floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the long saw"
+   ],
+   "anchors_matched": [
+    "reached for the long saw"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D010.LONG_BREAK",
+   "passage_id": "D010",
+   "question_id": "D010.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Fenn spends two years far from the ice house. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the sledge before anything else",
+   "wrong": [
+    "opening the ice house before dawn",
+    "finding the step by the door",
+    "seeing the sawdust beside it",
+    "knowing where the sledge stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D010.FACT",
+   "passage_id": "D010",
+   "question_id": "D010.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the sledge stand?",
+   "right": "on the step",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D011.GOES_FOR",
+   "passage_id": "D011",
+   "question_id": "D011.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Liesel do first?",
+   "right": "reaching for the small scale again",
+   "wrong": [
+    "reaching for the large scale again",
+    "moving the pan to the yard",
+    "hanging the chalk on a hook",
+    "sweeping the house floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the small scale"
+   ],
+   "anchors_matched": [
+    "reached for the small scale"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D011.LONG_BREAK",
+   "passage_id": "D011",
+   "question_id": "D011.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Liesel spends two years far from the weigh house. Going only by the passage, which of these has most likely faded when she comes back?",
+   "right": "dusting the pan before anything else",
+   "wrong": [
+    "opening the weigh house before dawn",
+    "finding the sill by the door",
+    "seeing the chalk beside it",
+    "knowing where the pan stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D011.FACT",
+   "passage_id": "D011",
+   "question_id": "D011.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the pan stand?",
+   "right": "on the sill",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D012.KEEPS_AWAY",
+   "passage_id": "D012",
+   "question_id": "D012.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Ansel leave to someone else?",
+   "right": "working on the blunt shears",
+   "wrong": [
+    "working with the curved needle",
+    "carrying the pot outside",
+    "counting every canvas there",
+    "locking up the sail loft",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the blunt shears"
+   ],
+   "anchors_matched": [
+    "away from the blunt shears"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D012.LONG_BREAK",
+   "passage_id": "D012",
+   "question_id": "D012.p1.LONG_BREAK",
+   "family": "role_step",
+   "type": "HABIT",
+   "form": "LONG_BREAK",
+   "question": "Ansel spends two years far from the sail loft. Going only by the passage, which of these has most likely faded when he comes back?",
+   "right": "dusting the pot before anything else",
+   "wrong": [
+    "opening the sail loft before dawn",
+    "finding the trestle by the door",
+    "seeing the canvas beside it",
+    "knowing where the pot stands",
+    "walking in through the door"
+   ],
+   "anchors": [
+    "Every morning for nine years"
+   ],
+   "anchors_matched": [
+    "Every morning for nine years"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "D012.FACT",
+   "passage_id": "D012",
+   "question_id": "D012.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the pot stand?",
+   "right": "on the trestle",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  }
+ ],
+ "dropped": [
+  {
+   "question_id": "D001.p1.KEEPS_AWAY",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D002.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D003.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D004.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D005.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D007.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D008.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D009.p1.KEEPS_AWAY",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D010.p1.KEEPS_AWAY",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D011.p1.KEEPS_AWAY",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  },
+  {
+   "question_id": "D012.p1.GOES_FOR",
+   "reason": "NOT_PICKED_BY_PAIR_RULE"
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 23,
+  "plain_fact_tasks": 12,
+  "passages_with_a_task": 12,
+  "passages_with_a_role_step_task": 12,
+  "single_longest": [
+   0,
+   23
+  ],
+  "single_shortest": [
+   0,
+   23
+  ]
+ },
+ "floor": {
+  "practice_role_step_min": 19,
+  "practice_plain_fact_min": 10,
+  "met": true
+ },
+ "reserve": {
+  "role_step_target": 23,
+  "plain_fact_target": 12,
+  "target_met": true,
+  "settings_left": 3,
+  "finished": true
+ }
+}

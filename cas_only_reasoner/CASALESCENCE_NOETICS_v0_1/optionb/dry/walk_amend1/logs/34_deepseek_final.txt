@@ -1,0 +1,34 @@
+$ python -B tools/ob_solve_blind.py deepseek --set final --max-calls 2000 --pace 0
+{
+ "program": "tools/ob_solve_blind.py",
+ "dry_fixture": false,
+ "step": "deepseek",
+ "status": "ALL_ANSWERED",
+ "set": "final",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "candidates": 437,
+ "items": 874,
+ "items_answered": 874,
+ "items_readable": 874,
+ "items_open": 0,
+ "last_http_status_of_open_items_that_were_tried": {},
+ "calls_this_run": 874,
+ "call_budget": 2000,
+ "tokens_this_run_REAL": {
+  "prompt_tokens": 110415,
+  "completion_tokens": 1748
+ },
+ "deepseek_tokens_in_the_four_call_logs": {
+  "input": 157968,
+  "output": 30385
+ },
+ "deepseek_token_limits": {
+  "input": 2430240,
+  "output": 1156520
+ },
+ "model_names_in_the_replies": [
+  "made-up-solver-reply-name"
+ ],
+ "next": "Run the same command again until status is ALL_ANSWERED. An item with an answer is never asked again."
+}
+[exit code 0]

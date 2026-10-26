@@ -1,0 +1,40 @@
+$ python -B tools/ob_check_support.py decide --set final
+{
+ "program": "tools/ob_check_support.py",
+ "dry_fixture": false,
+ "command": "decide",
+ "status": "DECIDED",
+ "seal": "checked: 5 seal lines, all sealed files unchanged",
+ "set": "final",
+ "checker": "gemini-3.1-flash-lite",
+ "model_names_in_the_replies": [
+  "made-up-checker-reply-name"
+ ],
+ "passages": 110,
+ "passages_by_status": {
+  "ALL_PASS": 109,
+  "DROPPED_SECOND_FAILURE": 1
+ },
+ "notes": {
+  "notes_checked": 663,
+  "passed": 657,
+  "failed_once": 3,
+  "failed_twice": 3,
+  "passages_dropped": 1
+ },
+ "batches": {
+  "DONE": 56,
+  "PENDING": 0,
+  "UNREADABLE": 0
+ },
+ "rounds_planned": [
+  1,
+  2
+ ],
+ "round_2_waits_for": null,
+ "daily_cap_stops": 0,
+ "first_cap_stop_utc": null,
+ "ready_for_seal_step_4": true,
+ "next": "The results file is written. Every passage of this set is ALL_PASS or DROPPED_SECOND_FAILURE. This set is ready for seal step 4."
+}
+[exit code 0]

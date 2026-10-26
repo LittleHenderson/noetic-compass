@@ -1,0 +1,48 @@
+{
+ "Q0001": {
+  "http_status": 200,
+  "content": "```json\n{\"answer\": \"B\"}\n```",
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "Q0002": [
+  {
+   "http_status": 0,
+   "error": "MADE-UP: no answer from the service"
+  },
+  {
+   "http_status": 200,
+   "content_json": {
+    "answer": "D"
+   },
+   "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+  }
+ ],
+ "Q0003": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "B"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0001": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "D"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0002": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ },
+ "G0003": {
+  "http_status": 200,
+  "content_json": {
+   "answer": "A"
+  },
+  "model": "MADE-UP-NAME-IN-A-SOLVER-REPLY"
+ }
+}

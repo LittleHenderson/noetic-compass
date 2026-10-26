@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 7 --dry-run --receipt ../step7_probe/receipt_devtest.json --selftest-json ../step7_probe/selftest.json --source-zip ../step7_probe/source_devpkg.zip
+REFUSED: RECEIPT_IS_NOT_OF_A_JOB_ON_THE_SEALED_PACKAGE: the receipt says precheck_kind 'DEVELOPMENT_TEST'. Seal step 7 is written only from a job of kind SEALED_PACKAGE. A rehearsal or a test on made-up data is never sealed. Nothing was written.
+[exit code 2]

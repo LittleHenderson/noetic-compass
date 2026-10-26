@@ -1,0 +1,397 @@
+{
+ "schema": "casalescence/optionb/selection/v1",
+ "made_by": {
+  "program": "optionb/dry/fixture_n/run_dry_n.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "cb6581f30449edb17ac32e501a19231551bdfd0c75a87ef1dfba4fa8f8f9f409",
+  "utc": "2026-10-05T00:00:00Z"
+ },
+ "inputs": [],
+ "set": "final",
+ "practice_setting_count": 8,
+ "tasks": [
+  {
+   "task_id": "V906.FACT",
+   "passage_id": "V906",
+   "question_id": "V906.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the oil can stand?",
+   "right": "on the window ledge",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V906.GOES_FOR",
+   "passage_id": "V906",
+   "question_id": "V906.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Corin do first?",
+   "right": "reaching for the hemp rope again",
+   "wrong": [
+    "reaching for the nylon rope again",
+    "moving the oil can to the yard",
+    "hanging the gloves on a hook",
+    "sweeping the tower floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the hemp rope"
+   ],
+   "anchors_matched": [
+    "reached for the hemp rope"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V907.FACT",
+   "passage_id": "V907",
+   "question_id": "V907.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the step stool stand?",
+   "right": "on the landing",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V907.GOES_FOR",
+   "passage_id": "V907",
+   "question_id": "V907.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Edda do first?",
+   "right": "reaching for the wicker tray again",
+   "wrong": [
+    "reaching for the wire tray again",
+    "moving the step stool to the yard",
+    "hanging the straw on a hook",
+    "sweeping the loft floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the wicker tray"
+   ],
+   "anchors_matched": [
+    "reached for the wicker tray"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V908.FACT",
+   "passage_id": "V908",
+   "question_id": "V908.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the wheelbarrow stand?",
+   "right": "on the gravel path",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V908.GOES_FOR",
+   "passage_id": "V908",
+   "question_id": "V908.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Joss do first?",
+   "right": "reaching for the wooden mould again",
+   "wrong": [
+    "reaching for the metal mould again",
+    "moving the wheelbarrow to the yard",
+    "hanging the pallets on a hook",
+    "sweeping the yard floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the wooden mould"
+   ],
+   "anchors_matched": [
+    "reached for the wooden mould"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V909.FACT",
+   "passage_id": "V909",
+   "question_id": "V909.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the globe stand?",
+   "right": "on the side table",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V909.GOES_FOR",
+   "passage_id": "V909",
+   "question_id": "V909.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Wren do first?",
+   "right": "reaching for the brass ruler again",
+   "wrong": [
+    "reaching for the plastic ruler again",
+    "moving the globe to the yard",
+    "hanging the tape on a hook",
+    "sweeping the room floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the brass ruler"
+   ],
+   "anchors_matched": [
+    "reached for the brass ruler"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V910.FACT",
+   "passage_id": "V910",
+   "question_id": "V910.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the sledge stand?",
+   "right": "on the ramp",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V910.GOES_FOR",
+   "passage_id": "V910",
+   "question_id": "V910.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Fenn do first?",
+   "right": "reaching for the long saw again",
+   "wrong": [
+    "reaching for the short saw again",
+    "moving the sledge to the yard",
+    "hanging the sawdust on a hook",
+    "sweeping the house floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the long saw"
+   ],
+   "anchors_matched": [
+    "reached for the long saw"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V911.FACT",
+   "passage_id": "V911",
+   "question_id": "V911.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the brass pan stand?",
+   "right": "on the bench",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V911.GOES_FOR",
+   "passage_id": "V911",
+   "question_id": "V911.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Liesel do first?",
+   "right": "reaching for the small scale again",
+   "wrong": [
+    "reaching for the large scale again",
+    "moving the brass pan to the yard",
+    "hanging the chalk on a hook",
+    "sweeping the house floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the small scale"
+   ],
+   "anchors_matched": [
+    "reached for the small scale"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V912.FACT",
+   "passage_id": "V912",
+   "question_id": "V912.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the wax pot stand?",
+   "right": "on the trestle",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V912.GOES_FOR",
+   "passage_id": "V912",
+   "question_id": "V912.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Ansel do first?",
+   "right": "reaching for the curved needle again",
+   "wrong": [
+    "reaching for the straight needle again",
+    "moving the wax pot to the yard",
+    "hanging the canvas on a hook",
+    "sweeping the loft floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the curved needle"
+   ],
+   "anchors_matched": [
+    "reached for the curved needle"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V913.FACT",
+   "passage_id": "V913",
+   "question_id": "V913.p1.FACT",
+   "family": "plain_fact",
+   "type": "FACT",
+   "form": "FACT",
+   "question": "Where did the loupe stand?",
+   "right": "on the felt mat",
+   "wrong": [
+    "under the bench",
+    "behind the gate",
+    "inside the cart"
+   ],
+   "anchors": [],
+   "anchors_matched": [],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V913.GOES_FOR",
+   "passage_id": "V913",
+   "question_id": "V913.p1.GOES_FOR",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "GOES_FOR",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Petra do first?",
+   "right": "reaching for the fine tweezers again",
+   "wrong": [
+    "reaching for the flat pliers again",
+    "moving the loupe to the yard",
+    "hanging the springs on a hook",
+    "sweeping the shop floor twice",
+    "leaving the door wide open"
+   ],
+   "anchors": [
+    "reached for the fine tweezers"
+   ],
+   "anchors_matched": [
+    "reached for the fine tweezers"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  },
+  {
+   "task_id": "V913.KEEPS_AWAY",
+   "passage_id": "V913",
+   "question_id": "V913.p1.KEEPS_AWAY",
+   "family": "role_step",
+   "type": "PULL-PUSH",
+   "form": "KEEPS_AWAY",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Petra leave to someone else?",
+   "right": "working on the sticky oil",
+   "wrong": [
+    "working with the fine tweezers",
+    "carrying the loupe outside",
+    "counting every springs there",
+    "locking up the clock shop",
+    "lighting the big lamp"
+   ],
+   "anchors": [
+    "away from the sticky oil"
+   ],
+   "anchors_matched": [
+    "away from the sticky oil"
+   ],
+   "right_is_single_longest": false,
+   "right_is_single_shortest": false
+  }
+ ],
+ "dropped": [
+  {
+   "question_id": "V911.p1.KEEPS_AWAY",
+   "reason": "LENGTH_BACKSTOP_LONGEST"
+  }
+ ],
+ "counts": {}
+}

@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 7 --dry-run --receipt ../step7_probe/receipt_sealed_findings.json --selftest-json ../step7_probe/selftest.json --source-zip ../step7_probe/source_good.zip
+REFUSED: PRECHECK_DID_NOT_PASS: the receipt says status 'PRECHECK_COMPLETE_WITH_FINDINGS'; seal step 7 needs PRECHECK_COMPLETE_SELFTEST_PASS. A failed pre-check stops the launch. It is reported, not sealed. What may follow is fixed in plan section 19.1. Nothing was written.
+[exit code 2]

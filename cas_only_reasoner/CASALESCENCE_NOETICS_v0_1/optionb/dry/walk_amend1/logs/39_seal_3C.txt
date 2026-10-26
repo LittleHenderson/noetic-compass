@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py step 3C
+SEALED 3C_FINAL_QUESTIONS_AND_KEYS as line 5 of optionb/SEAL_OPTIONB.jsonl: 28 file(s). Line sha256 5a0648a0c0871583afd01a30189577f0d6d8389435a78ac8ccc3e89e25ab7d26
+[exit code 0]

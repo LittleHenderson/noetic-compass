@@ -1,0 +1,8 @@
+$ python -B tools/ob_select.py select --set practice --practice-settings 9
+{
+ "program": "tools/ob_select.py",
+ "status": "STOP",
+ "code": "SEALED_FILE_CHANGED",
+ "reason": "tools/ob_select.py was sealed in step 1_PLAN_AND_SOURCES and has changed."
+}
+[exit code 2]

@@ -1,0 +1,2406 @@
+{
+ "schema": "casalescence/optionb/candidates/v1",
+ "made_by": {
+  "program": "tools/ob_check_questions.py",
+  "sha256": "267a773a476b54e0d04410fe9c209d87f785a4fc56e55434f19b1545dadef45e",
+  "utc": "2026-10-07T01:19:53Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "ef5850a6959cff906503596049150fdb5fe026922311478e0039ad575b1c5c0e"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "8db5d2a81b3d38ba0c0bc739c238ac01e7dc2c16cb9c4cfe7b3f272bf5598e37"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p1.json",
+   "sha256": "2a165f5a6c221b31ca9abf212af768e792f4e8ed7e522594c5427a8f0d4c9c65"
+  },
+  {
+   "path": "optionb/questions/raw_questions_practice_p2.json",
+   "sha256": "3875323b6cd206955551c18b46744171b98f4892abf98d5bc834ed9ba8409d12"
+  },
+  {
+   "path": "tools/verdict.py",
+   "sha256": "ee85ccf5a909d0ed252f6b3faa42cdb5f57510613781e89d8d4aaa2d0d52cbbb"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "candidates": [
+  {
+   "question_id": "V002.p1.FACT",
+   "passage_id": "V002",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Tom arrived at the pool exactly at opening time, as he did every day. He walked directly to lane three, his usual spot. His feet automatically navigated the slick tiles without him looking down. He then stepped onto the starting block and dove in, all before anyone else had even reached the water.",
+   "question": "Which specific lane did Tom walk directly to?",
+   "right": "Lane three",
+   "wrong": [
+    "Lane two",
+    "Lane one",
+    "Lane four"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V004.p1.FACT",
+   "passage_id": "V004",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Paul rose before dawn, his hand finding the lamp switch in the dark. He stoked the wood stove, adding logs with a practiced, silent motion. He then fetched water from the spring, stepping carefully over familiar rocks. The smell of brewing coffee soon filled the hut, a signal that morning had arrived.",
+   "question": "What did Paul fetch from the spring before morning arrived?",
+   "right": "Water",
+   "wrong": [
+    "Coffee",
+    "Wood",
+    "Lamp"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V005.p1.FACT",
+   "passage_id": "V005",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Clara had kept bees since she was a girl. The constant, murmuring hum from the hives was a familiar backdrop to her days. She never actively listened, but her body registered tiny shifts. When the hum deepened in a particular way, her hand instinctively reached for her smoke pot. She just knew a swarm was thinking of leaving.",
+   "question": "What object did Clara's hand instinctively reach for when the hum deepened?",
+   "right": "her smoke pot",
+   "wrong": [
+    "her wooden box",
+    "her heavy gloves",
+    "her sharp knife"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V008.p1.FACT",
+   "passage_id": "V008",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Zach listened to the low, steady hum emanating from the hive. The sound was constant, a soft, vibrating drone. It suddenly brought to his thoughts a lullaby his mother used to sing when he was very young, a quiet, soothing melody. He remembered the comforting sensation of her hand stroking his hair.",
+   "question": "Whose hand did Zach remember stroking his hair?",
+   "right": "his mother",
+   "wrong": [
+    "his sister",
+    "his friend",
+    "his aunt"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V010.p1.FACT",
+   "passage_id": "V010",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Doris pressed the hot iron onto a wool jacket. The warm, slightly smoky scent reminded her of autumn evenings. She pictured her grandmother's kitchen, filled with the smell of baking bread and woodsmoke from the old stove. It was a clear image of a comfortable, quiet home.",
+   "question": "What item was Doris pressing with the hot iron?",
+   "right": "a wool jacket",
+   "wrong": [
+    "an apron",
+    "a blanket",
+    "a curtain"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V012.p1.FACT",
+   "passage_id": "V012",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Helen, who had sorted mail for decades, picked up a thin, stiff envelope. The feel of the paper and the faint, sweet scent of old ink told her it was probably a wedding invitation. She often guessed the contents before even reading the address. Her hands knew the weight and texture of every common type of correspondence.",
+   "question": "For how long had Helen sorted mail before picking up the envelope?",
+   "right": "decades",
+   "wrong": [
+    "years",
+    "months",
+    "days"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V014.p1.FACT",
+   "passage_id": "V014",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Bernard unfolded a roll of raw tweed. Its lanolin scent filled the small shop, a rich, earthy woolliness. Instantly, he pictured his grandfather’s old overcoat, heavy and warm, worn through countless winters. He saw the faint discolouration near the elbow where the fabric had always rubbed against a workbench, mending fishing nets.",
+   "question": "What fabric did Bernard unfold in the shop?",
+   "right": "Raw tweed",
+   "wrong": [
+    "Fishing nets",
+    "Heavy wool",
+    "Old overcoat"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V016.p1.FACT",
+   "passage_id": "V016",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Old Jakob, a mountain guide for decades, heard the distant rumble. Most people would have dismissed it as thunder. He recognized the particular heavy boom of shifting snow high on the peaks. His hand instinctively went to the radio on the shelf. He knew exactly what sort of storm was brewing above them.",
+   "question": "Where was the radio located according to the text?",
+   "right": "On the shelf.",
+   "wrong": [
+    "On the small table.",
+    "On the wooden desk.",
+    "On the kitchen counter."
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V017.p1.FACT",
+   "passage_id": "V017",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "George, a taxi driver with decades on the road, watched a group of young men approach. Their loud laughter and unsteady steps instantly signaled trouble. He knew from experience they would argue over the fare or try to negotiate a longer route. George simply flicked off his 'for hire' light and waited for them to pass.",
+   "question": "What did George flick off?",
+   "right": "His 'for hire' light",
+   "wrong": [
+    "His radio station",
+    "His car headlights",
+    "His dashboard screen"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V019.p1.FACT",
+   "passage_id": "V019",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Michael, at the chess club, felt a distinct pull towards the intricate endgame on board three, its complex strategy fascinating him. He admired the subtle rook sacrifice made by one player. His own unfinished game, however, with its simpler mid-game struggle, held little appeal, drawing only a cursory glance as he passed.",
+   "question": "Which board held the intricate endgame that felt fascinating to Michael at the chess club?",
+   "right": "Board three",
+   "wrong": [
+    "Board one",
+    "Board two",
+    "Board four"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V031.p1.WHAT_STUCK",
+   "passage_id": "V031",
+   "family": "role_step",
+   "form": "WHAT_STUCK",
+   "pass": "p1",
+   "passage": "Peter watched the immense excavator scoop up tons of rock. He felt a deep, almost childlike awe for the machine's sheer power. Later, the drilling noise started, shrill and grating, but it hardly registered with him. He simply adjusted his earmuffs, his focus remaining on the grand scale of earth being moved. The deafening sound was a mere backdrop.",
+   "question": "At dinner later, which of these is the person most likely to bring up?",
+   "right": "the immense excavator",
+   "wrong": [
+    "the drilling noise",
+    "the earmuffs",
+    "the earth",
+    "the rock",
+    "the backdrop"
+   ],
+   "anchors": [
+    "immense excavator",
+    "sheer power"
+   ]
+  },
+  {
+   "question_id": "V031.p1.FACT",
+   "passage_id": "V031",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Peter watched the immense excavator scoop up tons of rock. He felt a deep, almost childlike awe for the machine's sheer power. Later, the drilling noise started, shrill and grating, but it hardly registered with him. He simply adjusted his earmuffs, his focus remaining on the grand scale of earth being moved. The deafening sound was a mere backdrop.",
+   "question": "What did Peter adjust?",
+   "right": "his earmuffs",
+   "wrong": [
+    "the excavator",
+    "the rock",
+    "the drill"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V032.p1.FACT",
+   "passage_id": "V032",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "George pulled his car to the next spot in line. Without glancing at his watch, he knew the precise interval since the last fare had departed. He shifted the radio station to a news channel, a routine ingrained from countless quiet waits. His foot rested lightly on the brake pedal. He waited for the next customer automatically.",
+   "question": "Where did George rest his foot?",
+   "right": "On the brake pedal",
+   "wrong": [
+    "On the accelerator pedal",
+    "On the car floor",
+    "On the clutch pedal"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V035.p1.GOES_FOR",
+   "passage_id": "V035",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Evelyn ran her hand over a bolt of shimmering silk, appreciating its smooth drape. She recoiled slightly, however, from a rough, scratchy tweed on a nearby rack. Her fingers preferred the delicate touch. Just then, a delivery person opened the door, letting a sudden burst of brilliant yellow sunlight flood the shop. Evelyn barely blinked, absorbed in her fabrics.",
+   "question": "At a later free moment, which of these does the person choose?",
+   "right": "She picks up the smooth shimmering silk.",
+   "wrong": [
+    "She picks up the rough scratchy tweed.",
+    "She touches the smooth silk bolt.",
+    "She reaches for the tweed rack.",
+    "She handles the rough nearby tweed.",
+    "She checks the bright yellow sunlight."
+   ],
+   "anchors": [
+    "shimmering silk",
+    "Her fingers preferred"
+   ]
+  },
+  {
+   "question_id": "V035.p1.KEEPS_AWAY",
+   "passage_id": "V035",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Evelyn ran her hand over a bolt of shimmering silk, appreciating its smooth drape. She recoiled slightly, however, from a rough, scratchy tweed on a nearby rack. Her fingers preferred the delicate touch. Just then, a delivery person opened the door, letting a sudden burst of brilliant yellow sunlight flood the shop. Evelyn barely blinked, absorbed in her fabrics.",
+   "question": "At a later moment, which of these does the person avoid?",
+   "right": "She keeps clear of the rough scratchy tweed.",
+   "wrong": [
+    "She keeps clear of the smooth shimmering silk.",
+    "She avoids the delicate touch of silk.",
+    "She turns from the shimmering silk bolt.",
+    "She leaves the smooth silk on rack.",
+    "She ducks the bright yellow sunlight."
+   ],
+   "anchors": [
+    "recoiled slightly",
+    "rough, scratchy tweed"
+   ]
+  },
+  {
+   "question_id": "V035.p1.FACT",
+   "passage_id": "V035",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Evelyn ran her hand over a bolt of shimmering silk, appreciating its smooth drape. She recoiled slightly, however, from a rough, scratchy tweed on a nearby rack. Her fingers preferred the delicate touch. Just then, a delivery person opened the door, letting a sudden burst of brilliant yellow sunlight flood the shop. Evelyn barely blinked, absorbed in her fabrics.",
+   "question": "What flooded the shop just after the delivery person opened the door?",
+   "right": "Brilliant yellow sunlight.",
+   "wrong": [
+    "A cold evening breeze.",
+    "Heavy falling raindrops.",
+    "A sudden dust cloud."
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V036.p1.FACT",
+   "passage_id": "V036",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Xander pulled his cab to the front of the queue. His eyes automatically scanned the street for approaching passengers, checking their expressions for urgency. His foot rested lightly on the brake, ready to shift into gear. He had waited here every night for years, and his movements were entirely unthinking.",
+   "question": "Where did Xander pull his cab?",
+   "right": "front of the queue",
+   "wrong": [
+    "back of the line",
+    "side of the road",
+    "middle of the rank"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V041.p2.LONG_BREAK",
+   "passage_id": "V041",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p2",
+   "passage": "Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.",
+   "question": "The milking stops for two years; which action has most likely faded?",
+   "right": "practiced ease",
+   "wrong": [
+    "milking cow",
+    "steady pulsation",
+    "milk line",
+    "early morning",
+    "stall checking"
+   ],
+   "anchors": [
+    "practiced ease",
+    "Years of daily milking"
+   ]
+  },
+  {
+   "question_id": "V041.p2.NEW_STARTER",
+   "passage_id": "V041",
+   "family": "role_step",
+   "form": "NEW_STARTER",
+   "pass": "p2",
+   "passage": "Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.",
+   "question": "Someone on their first day takes Agnes's place; which of these would most likely be missing?",
+   "right": "practiced ease",
+   "wrong": [
+    "milking cow",
+    "steady pulsation",
+    "milk line",
+    "early morning",
+    "stall checking"
+   ],
+   "anchors": [
+    "practiced ease",
+    "Years of daily milking"
+   ]
+  },
+  {
+   "question_id": "V041.p1.FACT",
+   "passage_id": "V041",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.",
+   "question": "What did Agnes check automatically by scanning her eyes?",
+   "right": "the milk line pressure",
+   "wrong": [
+    "the early morning quiet",
+    "the steady pulsation",
+    "the familiar sound"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V042.p2.WHAT_LEFT",
+   "passage_id": "V042",
+   "family": "role_step",
+   "form": "WHAT_LEFT",
+   "pass": "p2",
+   "passage": "Ken explained the steps for a hive inspection to his new apprentice. First, they would gently smoke the entrance to calm the bees. Next, they would carefully open the top cover. Then, they would remove and examine each frame, looking for the queen. Finally, they would assess the brood pattern and honey stores before closing the hive.",
+   "question": "The hive inspection reaches the point where they smoke the entrance, open the top cover, and remove each frame. Which named part is still left?",
+   "right": "brood pattern and honey stores",
+   "wrong": [
+    "equipment purchases and tournament entry",
+    "membership fees and tournament costs",
+    "equipment purchases and upkeep costs",
+    "membership fees and upkeep costs",
+    "membership fees and equipment costs"
+   ],
+   "anchors": [
+    "brood pattern and honey stores"
+   ]
+  },
+  {
+   "question_id": "V042.p1.FACT",
+   "passage_id": "V042",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Ken explained the steps for a hive inspection to his new apprentice. First, they would gently smoke the entrance to calm the bees. Next, they would carefully open the top cover. Then, they would remove and examine each frame, looking for the queen. Finally, they would assess the brood pattern and honey stores before closing the hive.",
+   "question": "What did Ken and his apprentice look for while examining each frame?",
+   "right": "The queen",
+   "wrong": [
+    "The honey",
+    "The smoke",
+    "The cover"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V046.p1.FACT",
+   "passage_id": "V046",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Farmer George moved among his herd. He knew each cow by her unique markings and temperament after decades of working this land. The low moo of the first cow entering the parlour wasn't just a sound; it was the start of the daily routine, a familiar pattern ingrained in his very bones. He felt a deep connection to their gentle presence.",
+   "question": "Who moved among his herd?",
+   "right": "Farmer George",
+   "wrong": [
+    "the first cow",
+    "a locksmith",
+    "Peter"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V047.p1.GOES_FOR",
+   "passage_id": "V047",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Daniel carefully picked up a shimmering sample of quartz, admiring its crystalline structure. He wiped a bead of sweat from his brow, disliking the intense heat of the quarry sun. The blinding glare reflecting off the rock faces, however, did not deter him from his detailed examination of the new geological layer.",
+   "question": "At a later free moment, which of these does Daniel choose?",
+   "right": "the quartz sample",
+   "wrong": [
+    "the quarry sun",
+    "the blinding glare",
+    "the intense heat",
+    "the rock faces",
+    "the geological layer"
+   ],
+   "anchors": [
+    "sample of quartz"
+   ]
+  },
+  {
+   "question_id": "V047.p1.KEEPS_AWAY",
+   "passage_id": "V047",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Daniel carefully picked up a shimmering sample of quartz, admiring its crystalline structure. He wiped a bead of sweat from his brow, disliking the intense heat of the quarry sun. The blinding glare reflecting off the rock faces, however, did not deter him from his detailed examination of the new geological layer.",
+   "question": "At a later moment, which of these does Daniel avoid?",
+   "right": "the intense heat",
+   "wrong": [
+    "the quartz sample",
+    "the rock faces",
+    "the geological layer",
+    "the crystalline structure",
+    "the shimmering sample"
+   ],
+   "anchors": [
+    "disliking the intense heat"
+   ]
+  },
+  {
+   "question_id": "V047.p1.FACT",
+   "passage_id": "V047",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Daniel carefully picked up a shimmering sample of quartz, admiring its crystalline structure. He wiped a bead of sweat from his brow, disliking the intense heat of the quarry sun. The blinding glare reflecting off the rock faces, however, did not deter him from his detailed examination of the new geological layer.",
+   "question": "What did Daniel wipe from his brow?",
+   "right": "a bead of sweat",
+   "wrong": [
+    "a quartz sample",
+    "a blinding glare",
+    "a geological layer"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V051.p1.FACT",
+   "passage_id": "V051",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Ken examined the jammed door lock. He mentally disassembled the faulty mechanism. First, he suspected seized pins, stiff from lack of lubrication. Then, the springs inside might be worn, no longer pushing the pins correctly. A closer look suggested a bent keyway, making the key snag. Finally, he noted signs of corrosion inside the cylinder.",
+   "question": "What did Ken examine closely?",
+   "right": "The jammed door lock",
+   "wrong": [
+    "The faulty mechanism",
+    "The worn springs",
+    "The bent keyway"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V056.p1.FACT",
+   "passage_id": "V056",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Yolanda polished a brass lock cylinder in the locksmith's van. The metallic scent of cleaning fluid hung in the air. It briefly reminded her of the brass band her uncle played in years ago, all gleaming instruments and polished buttons. She recalled the loud, joyful music from family gatherings. She tightened the vice, bringing her attention back.",
+   "question": "According to the passage, what object was Yolanda polishing in the van?",
+   "right": "brass lock cylinder",
+   "wrong": [
+    "metal cleaning fluid",
+    "gleaming instrument",
+    "polished button"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V060.p1.FACT",
+   "passage_id": "V060",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Liam, a seasoned hiker, felt a sense of peace settle over him as he surveyed the expansive, green valley. The crisp mountain air filled his lungs, a feeling he deeply cherished. The distant, faint sound of a snowmobile engine, however, seemed a jarring intrusion, quickly fading into the background of his thoughts.",
+   "question": "According to the passage, what kind of air filled Liam's lungs?",
+   "right": "crisp mountain air",
+   "wrong": [
+    "warm valley air",
+    "faint snowmobile air",
+    "expansive green air"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V062.p1.FACT",
+   "passage_id": "V062",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Arthur analyzed his opponent's aggressive play. He mentally broke down the impending assault into its core components. First, there was the obvious knight's fork aiming at his king and queen. Following that, a rook sacrifice on the seventh rank seemed inevitable. Finally, he saw the queen's forced advance, leading to checkmate.",
+   "question": "Whose king and queen were targeted by the knight's fork?",
+   "right": "Arthur's king and queen",
+   "wrong": [
+    "the opponent's king",
+    "the rook's king",
+    "the queen's king"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V064.p1.FACT",
+   "passage_id": "V064",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Yvonne walked among the shelves, her hand instinctively turning specific cheeses. The exact rotational pattern, the pressure, the angle; these movements required no thought. Daily for a decade, she had rotated countless wheels of cheddar. Her muscle memory guided her without any deliberate instruction.",
+   "question": "How long had Yvonne rotated the wheels daily?",
+   "right": "For a decade.",
+   "wrong": [
+    "For a month.",
+    "For a year.",
+    "For a century."
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V068.p1.FACT",
+   "passage_id": "V068",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Eleanor watched her opponent's hand hover over the knight. She had faced players like him for decades, always confident, always ready to strike. That slight pause, that momentary hesitation before the move, often signaled a hidden trap. She shifted her pawn, ready for whatever complicated play might unfold.",
+   "question": "Which chess piece was the opponent's hand hovering over?",
+   "right": "The knight.",
+   "wrong": [
+    "The bishop.",
+    "The rook.",
+    "The queen."
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V069.p1.FACT",
+   "passage_id": "V069",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Liam explained the recipe for his aged cheddar. It began with specific rennet and raw milk from local cows. The curd was then cut, stirred, and pressed into molds. After that, it was brined before entering the cool, damp cellar for years. Each stage developed its distinct flavor profile.",
+   "question": "What kind of milk did Liam use for his cheddar?",
+   "right": "raw milk",
+   "wrong": [
+    "skim milk",
+    "goat milk",
+    "warm milk"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V087.p1.WHAT_SLID_OFF",
+   "passage_id": "V087",
+   "family": "role_step",
+   "form": "WHAT_SLID_OFF",
+   "pass": "p1",
+   "passage": "Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.",
+   "question": "At a later moment, which of these is the person least likely to bring up?",
+   "right": "She forgets the small drop of ceiling water.",
+   "wrong": [
+    "She forgets the dark mould on the cheese.",
+    "She misses the small drop of ceiling water.",
+    "She drops the small drop of ceiling water.",
+    "She leaves the small drop of ceiling water.",
+    "She drops the dark mould on the cheese."
+   ],
+   "anchors": [
+    "barely noticed"
+   ]
+  },
+  {
+   "question_id": "V087.p1.FACT",
+   "passage_id": "V087",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Maria walked along the rows of cheeses, stopping at a mature cheddar wheel. Its earthy aroma and firm texture pulled her in; she admired its perfect rind. Further down, a batch of experimental blue cheese had gone wrong, covered in unsightly, dark mould, and she quickly turned away. A small drop of condensation fell from the ceiling onto her sleeve. She barely noticed.",
+   "question": "Which specific item did Maria stop at along the rows?",
+   "right": "A mature cheddar wheel.",
+   "wrong": [
+    "A dark mould batch.",
+    "A small drop.",
+    "A ceiling sleeve."
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V090.p2.GOES_FOR",
+   "passage_id": "V090",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p2",
+   "passage": "Olivia ran her fingers over the smooth silk fabric, clearly delighting in its soft texture. She quickly pulled her hand away from the coarse tweed swatch next to it, making a small grimace of distaste. When the tailor mentioned the exorbitant price of the silk, Olivia simply nodded, unfazed, already imagining her new dress.",
+   "question": "Olivia is shopping for dress material later that day. Which of these does she choose?",
+   "right": "smooth silk fabric",
+   "wrong": [
+    "coarse tweed swatch",
+    "rough denim swatch",
+    "heavy wool tweed",
+    "coarse wool fabric",
+    "rough tweed fabric"
+   ],
+   "anchors": [
+    "smooth silk fabric"
+   ]
+  },
+  {
+   "question_id": "V090.p2.KEEPS_AWAY",
+   "passage_id": "V090",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p2",
+   "passage": "Olivia ran her fingers over the smooth silk fabric, clearly delighting in its soft texture. She quickly pulled her hand away from the coarse tweed swatch next to it, making a small grimace of distaste. When the tailor mentioned the exorbitant price of the silk, Olivia simply nodded, unfazed, already imagining her new dress.",
+   "question": "Olivia walks past several bolts of cloth at the shop. Which of these does she avoid?",
+   "right": "coarse tweed swatch",
+   "wrong": [
+    "smooth silk fabric",
+    "soft silk fabric",
+    "smooth tweed swatch",
+    "coarse silk fabric",
+    "smooth silk cloth"
+   ],
+   "anchors": [
+    "coarse tweed swatch"
+   ]
+  },
+  {
+   "question_id": "V090.p1.FACT",
+   "passage_id": "V090",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Olivia ran her fingers over the smooth silk fabric, clearly delighting in its soft texture. She quickly pulled her hand away from the coarse tweed swatch next to it, making a small grimace of distaste. When the tailor mentioned the exorbitant price of the silk, Olivia simply nodded, unfazed, already imagining her new dress.",
+   "question": "Which fabric did Olivia pull her hand away from?",
+   "right": "The coarse tweed swatch",
+   "wrong": [
+    "The smooth silk fabric",
+    "The tailor's new dress",
+    "The expensive silk cloth"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V103.p1.FACT",
+   "passage_id": "V103",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Tina loved the quick, sharp crack of leather on a speed bag, practicing her jabs and hooks with intense focus. The sparring sessions exhilarated her; the strategy and speed felt like a dance. However, the monotonous jumping jacks and endless laps around the track offered little appeal, barely holding her attention.",
+   "question": "What sound did Tina love from the leather on the speed bag?",
+   "right": "quick, sharp crack",
+   "wrong": [
+    "slow, heavy thud",
+    "loud, dull pop",
+    "soft, quiet snap"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V105.p1.GOES_FOR",
+   "passage_id": "V105",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.",
+   "question": "At a later free moment, which of these does the person choose?",
+   "right": "motorway driving",
+   "wrong": [
+    "city center",
+    "two blocks",
+    "short trip",
+    "minimal fare",
+    "small hops"
+   ],
+   "anchors": [
+    "preferred the long-distance fares"
+   ]
+  },
+  {
+   "question_id": "V105.p1.WHAT_SLID_OFF",
+   "passage_id": "V105",
+   "family": "role_step",
+   "form": "WHAT_SLID_OFF",
+   "pass": "p1",
+   "passage": "Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.",
+   "question": "At a later moment, which of these is the person least likely to bring up?",
+   "right": "minimal payment",
+   "wrong": [
+    "motorway driving",
+    "long-distance",
+    "steady fares",
+    "restful hours",
+    "long trips"
+   ],
+   "anchors": [
+    "minimal payment hardly mattered"
+   ]
+  },
+  {
+   "question_id": "V105.p1.FACT",
+   "passage_id": "V105",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.",
+   "question": "Where did a customer request a journey?",
+   "right": "just two blocks away",
+   "wrong": [
+    "the city center",
+    "a distant suburb",
+    "the motorway exit"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V109.p1.TAKE_AWAY",
+   "passage_id": "V109",
+   "family": "role_step",
+   "form": "TAKE_AWAY",
+   "pass": "p1",
+   "passage": "Sarah, a beekeeper, checked her hives. The sweet, earthy smell of warm beeswax reminded her of her grandmother’s kitchen, always filled with baking. She remembered helping to press fruit for jam on hot summer days. The scent brought back a wave of comfortable, happy childhood afternoons. She smiled to herself.",
+   "question": "Suppose the warm beeswax had no scent; which of these happy memories would most likely not have happened?",
+   "right": "Remembering helping to press fruit for jam",
+   "wrong": [
+    "Remembering the taste of fruit jam today",
+    "Checking the wooden hives in the yard",
+    "Carrying the heavy glass jars to town",
+    "Closing the top cover of the box",
+    "Cleaning the metal tools after work"
+   ],
+   "anchors": [
+    "warm beeswax"
+   ]
+  },
+  {
+   "question_id": "V109.p1.FACT",
+   "passage_id": "V109",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Sarah, a beekeeper, checked her hives. The sweet, earthy smell of warm beeswax reminded her of her grandmother’s kitchen, always filled with baking. She remembered helping to press fruit for jam on hot summer days. The scent brought back a wave of comfortable, happy childhood afternoons. She smiled to herself.",
+   "question": "What did Sarah check during her rounds?",
+   "right": "Her hives",
+   "wrong": [
+    "Her kitchen",
+    "Her garden",
+    "Her cellar"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V120.p1.FACT",
+   "passage_id": "V120",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Coach Terry explained the new strategy to his fighter. He broke down the sequence of movements into individual parts. The initial opening would involve a quick jab, followed by a strong cross. Then, they would introduce a sharp body shot. Crucial to this plan were precise footwork and subtle head movement to avoid counters.",
+   "question": "What kind of shot did Coach Terry introduce after the strong cross?",
+   "right": "a sharp body shot",
+   "wrong": [
+    "a quick jab",
+    "a weak hook",
+    "a wild swing"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V132.p1.FACT",
+   "passage_id": "V132",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Sarah opened her toolbox. The glint of the new, unused lock mechanisms always drew her eye; she appreciated their pristine engineering. The old, rusty bolts she had just removed, however, she quickly tossed into a separate discard bin without a second glance. A sudden downpour started drumming on the van roof, but she barely registered the sound, focused entirely on the shining brass.",
+   "question": "Where did Sarah toss the old, rusty bolts she had just removed?",
+   "right": "into a separate discard bin",
+   "wrong": [
+    "onto the van roof",
+    "inside her open toolbox",
+    "under the nearby seat"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V134.p1.GOES_FOR",
+   "passage_id": "V134",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Clara sorted through rolls of fabric for a new suit. The rough texture of the tweed made her fingers tingle unpleasantly. But then she touched a bolt of silk, soft and smooth, and a smile touched her lips. She moved away from the tweed swiftly. The distant whir of the sewing machine was just background noise to her.",
+   "question": "At a later free moment, which of these does Clara choose when given various materials?",
+   "right": "a bolt of silk",
+   "wrong": [
+    "the rough tweed",
+    "the sewing machine",
+    "the rough texture",
+    "the background noise",
+    "the distant whir"
+   ],
+   "anchors": [
+    "touched a bolt of silk",
+    "a smile touched her lips"
+   ]
+  },
+  {
+   "question_id": "V134.p1.KEEPS_AWAY",
+   "passage_id": "V134",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Clara sorted through rolls of fabric for a new suit. The rough texture of the tweed made her fingers tingle unpleasantly. But then she touched a bolt of silk, soft and smooth, and a smile touched her lips. She moved away from the tweed swiftly. The distant whir of the sewing machine was just background noise to her.",
+   "question": "At a later moment, which of these does Clara avoid when looking through rolls of fabric?",
+   "right": "the rough tweed",
+   "wrong": [
+    "a bolt of silk",
+    "the sewing machine",
+    "the rough texture",
+    "the background noise",
+    "the distant whir"
+   ],
+   "anchors": [
+    "rough texture of the tweed",
+    "moved away from the tweed swiftly"
+   ]
+  },
+  {
+   "question_id": "V134.p1.FACT",
+   "passage_id": "V134",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Clara sorted through rolls of fabric for a new suit. The rough texture of the tweed made her fingers tingle unpleasantly. But then she touched a bolt of silk, soft and smooth, and a smile touched her lips. She moved away from the tweed swiftly. The distant whir of the sewing machine was just background noise to her.",
+   "question": "What made Clara's fingers tingle unpleasantly as she sorted through rolls of fabric?",
+   "right": "the rough texture of the tweed",
+   "wrong": [
+    "the distant whir of the sewing machine",
+    "the soft and smooth bolt of silk",
+    "the bright glint of the metal"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V147.p1.FACT",
+   "passage_id": "V147",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Mr. Davies oversaw the blasting team. He had worked in quarries since he was a young man, understanding the rock formations like few others. The rumble of the distant explosion, a sound that unsettled new workers, simply told him the day's work was progressing. He could almost feel the strata shifting deep below the surface.",
+   "question": "Who oversaw the blasting team at the site?",
+   "right": "Mr. Davies",
+   "wrong": [
+    "Victor",
+    "Sarah",
+    "A young worker"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V153.p1.GOES_FOR",
+   "passage_id": "V153",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.",
+   "question": "Leo takes a short break from training. At this later free moment, which of these does he choose?",
+   "right": "the heavy bag",
+   "wrong": [
+    "the buzzing phone",
+    "the ringing bell",
+    "the boxing glove",
+    "the gym locker",
+    "the fighting stance"
+   ],
+   "anchors": [
+    "heavy bag hanging"
+   ]
+  },
+  {
+   "question_id": "V153.p1.KEEPS_AWAY",
+   "passage_id": "V153",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.",
+   "question": "Leo hears various sounds inside the building. At a later moment, which of these does he avoid?",
+   "right": "the buzzing phone",
+   "wrong": [
+    "the heavy bag",
+    "the ringing bell",
+    "the boxing glove",
+    "the gym locker",
+    "the fighting stance"
+   ],
+   "anchors": [
+    "insistent buzzing of his phone"
+   ]
+  },
+  {
+   "question_id": "V153.p1.WHAT_SLID_OFF",
+   "passage_id": "V153",
+   "family": "role_step",
+   "form": "WHAT_SLID_OFF",
+   "pass": "p1",
+   "passage": "Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.",
+   "question": "Leo finishes his training session and talks with a friend. At this later moment, which of these is he least likely to bring up?",
+   "right": "the distant voice",
+   "wrong": [
+    "the heavy bag",
+    "the ringing phone",
+    "the boxing glove",
+    "the gym locker",
+    "the fighting stance"
+   ],
+   "anchors": [
+    "distant, booming voice"
+   ]
+  },
+  {
+   "question_id": "V153.p1.FACT",
+   "passage_id": "V153",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.",
+   "question": "Where was the buzzing phone located?",
+   "right": "in his locker",
+   "wrong": [
+    "on the bag",
+    "in the corner",
+    "near the coach"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V157.p1.FACT",
+   "passage_id": "V157",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Wendy stepped to the edge of the pool. The cool mist rising from the water held no discomfort for her. Decades of early morning swims had acclimated her body to the chill. She slid gracefully into the lane, the familiar sensation of the water enveloping her with a comforting coolness. She began her gentle strokes.",
+   "question": "What rose from the water as Wendy stepped to the edge?",
+   "right": "Cool mist",
+   "wrong": [
+    "Warm steam",
+    "Familiar sensation",
+    "Comforting coolness"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V160.p1.WHAT_LEFT",
+   "passage_id": "V160",
+   "family": "role_step",
+   "form": "WHAT_LEFT",
+   "pass": "p1",
+   "passage": "Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.",
+   "question": "Pierre completed the short brining period and humidity adjustments. Which named part is still left?",
+   "right": "regular rotation frequency",
+   "wrong": [
+    "short brining period",
+    "gradual temperature drops",
+    "humidity adjustments",
+    "separate steps",
+    "aging schedule"
+   ],
+   "anchors": [
+    "short brining period",
+    "humidity adjustments"
+   ]
+  },
+  {
+   "question_id": "V160.p1.NOT_BELONG",
+   "passage_id": "V160",
+   "family": "role_step",
+   "form": "NOT_BELONG",
+   "pass": "p1",
+   "passage": "Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.",
+   "question": "A spare kit holds one of each named part. Which of these would not be in it?",
+   "right": "local cows",
+   "wrong": [
+    "regular rotation frequency",
+    "gradual temperature drops",
+    "short brining period",
+    "humidity adjustments",
+    "blue cheese"
+   ],
+   "anchors": [
+    "short brining period",
+    "humidity adjustments"
+   ]
+  },
+  {
+   "question_id": "V160.p1.FACT",
+   "passage_id": "V160",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Pierre reviewed the aging schedule for his new blue cheese. He broke down the process into its separate steps. First, there was the short brining period to set the rind. Next came the crucial phase of humidity adjustments, followed by gradual temperature drops over several weeks. Finally, he detailed the regular rotation frequency to ensure even ripening.",
+   "question": "What color was the cheese Pierre reviewed?",
+   "right": "blue",
+   "wrong": [
+    "red",
+    "white",
+    "green"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V162.p1.FACT",
+   "passage_id": "V162",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Patricia reviewed the last fare's convoluted directions. It involved a sharp left at the old oak, a short bypass along the river, and then a series of confusing one-way streets. The main problem was not the destination itself, but the order of the turns and the unexpected detours. She mentally broke it down.",
+   "question": "What kind of streets were part of the route?",
+   "right": "confusing one-way streets",
+   "wrong": [
+    "wide two-way streets",
+    "quiet residential lanes",
+    "busy commercial plazas"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V163.p1.FACT",
+   "passage_id": "V163",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Lars stirred the stew in the mountain hut. A sudden, sharp gust rattled the windowpane. Forty years of guiding through these peaks had taught him the language of the wind. He knew this particular shift meant a front was moving in faster than expected. He made a mental note to check the barometer more frequently tonight.",
+   "question": "What was Lars doing in the mountain hut when the gust hit?",
+   "right": "Stirring the stew.",
+   "wrong": [
+    "Checking the barometer.",
+    "Fixing the windowpane.",
+    "Cleaning the table."
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V168.p1.FACT",
+   "passage_id": "V168",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Liam, a taxi driver, disliked the loud, boisterous groups that often emerged from the clubs. He much preferred the quiet, single passengers heading home after a long shift. The flashing neon sign from the bar across the street did not distract him. He just wanted a straightforward fare for his last trip of the night.",
+   "question": "What was across the street from Liam?",
+   "right": "A bar",
+   "wrong": [
+    "A club",
+    "A taxi rank",
+    "A pub"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V177.p1.FACT",
+   "passage_id": "V177",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "George listened to the struggling milking machine. He quickly identified the components of the problem. First, the vacuum gauge was reading too low, pointing to a loss of suction. Then, he heard a slight hiss, suggesting a worn gasket needed replacing. Finally, he suspected a clogged filter, restricting the airflow. He knew exactly which parts he needed to order.",
+   "question": "Which gauge was reading too low according to George?",
+   "right": "The vacuum gauge",
+   "wrong": [
+    "The pressure gauge",
+    "The intake gauge",
+    "The airflow gauge"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V190.p1.FACT",
+   "passage_id": "V190",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Carla wiped down the speed bag, the familiar scent of worn leather and liniment filling the air. This specific smell always brought back vivid pictures of her grandmother's old armchair. She remembered the scratchy wool blanket her grandmother kept draped over it and the quiet afternoons spent reading comic books there.",
+   "question": "What kind of books did Carla read during the quiet afternoons?",
+   "right": "comic books",
+   "wrong": [
+    "picture books",
+    "story books",
+    "novel books"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V194.p2.LONG_BREAK",
+   "passage_id": "V194",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p2",
+   "passage": "Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.",
+   "question": "The repeated cellar work stops for two full years; which action has most likely faded?",
+   "right": "Brushing the cheeses",
+   "wrong": [
+    "Flipping the cheeses",
+    "Entering the cellar",
+    "Reaching for Gouda",
+    "Cool, damp cellar",
+    "Tuesday morning"
+   ],
+   "anchors": [
+    "flipped and brushed",
+    "Every Tuesday morning"
+   ]
+  },
+  {
+   "question_id": "V194.p1.NEW_STARTER",
+   "passage_id": "V194",
+   "family": "role_step",
+   "form": "NEW_STARTER",
+   "pass": "p1",
+   "passage": "Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.",
+   "question": "Someone on their first day takes the person's place; which of these would most likely be missing?",
+   "right": "The instant execution of the correct order.",
+   "wrong": [
+    "The clumsy execution of the correct order.",
+    "The quick execution of the correct order.",
+    "The fluent execution of the correct order.",
+    "The swift execution of the correct order.",
+    "The rapid execution of the correct order."
+   ],
+   "anchors": [
+    "specific order"
+   ]
+  },
+  {
+   "question_id": "V194.p1.FACT",
+   "passage_id": "V194",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Wendy entered the cool, damp cellar. Her hand automatically reached for the first wheel of aging Gouda on the top shelf. Every Tuesday morning, for twenty years, she had flipped and brushed the cheeses in a specific order. The repetitive action had become a practiced, unthinking part of her week.",
+   "question": "When did Wendy flip and brush the cheeses?",
+   "right": "Every Tuesday morning.",
+   "wrong": [
+    "Every Monday morning.",
+    "Every Friday morning.",
+    "Every Sunday morning."
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V197.p1.WHAT_LEFT",
+   "passage_id": "V197",
+   "family": "role_step",
+   "form": "WHAT_LEFT",
+   "pass": "p1",
+   "passage": "Mrs. Jenkins laid out the wedding dress pattern. It consisted of several key sections. There was the bodice, the full skirt panels, the delicate lace overlay for the sleeves, and the long train. Each piece needed careful cutting and precise stitching. She planned to assemble them one by one.",
+   "question": "Some of the named parts are dealt with; which named part is still left?",
+   "right": "the long train",
+   "wrong": [
+    "the bodice",
+    "the full skirt panels",
+    "the delicate lace overlay",
+    "the sleeve section",
+    "the dress pattern"
+   ],
+   "anchors": [
+    "the long train"
+   ]
+  },
+  {
+   "question_id": "V197.p1.NOT_BELONG",
+   "passage_id": "V197",
+   "family": "role_step",
+   "form": "NOT_BELONG",
+   "pass": "p1",
+   "passage": "Mrs. Jenkins laid out the wedding dress pattern. It consisted of several key sections. There was the bodice, the full skirt panels, the delicate lace overlay for the sleeves, and the long train. Each piece needed careful cutting and precise stitching. She planned to assemble them one by one.",
+   "question": "A spare kit holds one of each named part; which of these would not be in it?",
+   "right": "the wedding dress",
+   "wrong": [
+    "the bodice",
+    "the full skirt panels",
+    "the delicate lace overlay",
+    "the long train",
+    "the dress pattern"
+   ],
+   "anchors": [
+    "the bodice"
+   ]
+  },
+  {
+   "question_id": "V197.p1.FACT",
+   "passage_id": "V197",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Mrs. Jenkins laid out the wedding dress pattern. It consisted of several key sections. There was the bodice, the full skirt panels, the delicate lace overlay for the sleeves, and the long train. Each piece needed careful cutting and precise stitching. She planned to assemble them one by one.",
+   "question": "What pattern did Mrs. Jenkins lay out?",
+   "right": "the wedding dress pattern",
+   "wrong": [
+    "the bodice pattern",
+    "the skirt pattern",
+    "the lace pattern"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V198.p1.FACT",
+   "passage_id": "V198",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "David guided the cows into the milking parlour. He liked the quiet, steady ones that shuffled cooperatively into their stalls. A particularly restless heifer, however, made him sigh, pushing back against the gate. He quickly moved her along. Just then, a loud, frustrated moo burst from a cow nearby, making David jump, though he quickly regained his composure.",
+   "question": "Where did David guide the cows?",
+   "right": "Into the milking parlour",
+   "wrong": [
+    "Into the open field",
+    "Into the dairy barn",
+    "Into the cattle pen"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V200.p1.WHAT_SLID_OFF",
+   "passage_id": "V200",
+   "family": "role_step",
+   "form": "WHAT_SLID_OFF",
+   "pass": "p1",
+   "passage": "Mark watched the heavy excavator move rocks with powerful precision, feeling a pull towards its mechanical might. He instinctively turned his face away from the cloud of fine dust that billowed up after a blast. The deafening roar of the rock crusher nearby, however, barely registered in his ears as he focused on the excavator.",
+   "question": "At a later moment, which of these is the person least likely to bring up?",
+   "right": "The deafening roar",
+   "wrong": [
+    "The heavy excavator",
+    "The rock crusher",
+    "The fine dust",
+    "The heavy rocks",
+    "The distant blast"
+   ],
+   "anchors": [
+    "barely registered in his ears"
+   ]
+  },
+  {
+   "question_id": "V200.p1.FACT",
+   "passage_id": "V200",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Mark watched the heavy excavator move rocks with powerful precision, feeling a pull towards its mechanical might. He instinctively turned his face away from the cloud of fine dust that billowed up after a blast. The deafening roar of the rock crusher nearby, however, barely registered in his ears as he focused on the excavator.",
+   "question": "What object did Mark watch move rocks with powerful precision?",
+   "right": "The heavy excavator",
+   "wrong": [
+    "The rock crusher",
+    "The fine dust",
+    "The heavy blast"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V205.p1.FACT",
+   "passage_id": "V205",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Every time the bell rang for a new round, Maria, a boxer, automatically snapped into her fighting stance. Her guard went up, her feet shifted, and her gaze sharpened, all without a moment’s thought. Years of repetitive training had ingrained these movements deep within her muscles. She was ready to move.",
+   "question": "What rang for a new round?",
+   "right": "the bell",
+   "wrong": [
+    "the coach",
+    "the boxer",
+    "the stance"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V207.p1.FACT",
+   "passage_id": "V207",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Graham explained the day's blasting plan to his team. The process involved several distinct phases. First, the drilling of precise boreholes, then the careful insertion of charges, followed by the clearing of the area, and finally, the controlled detonation. Each step had to be executed flawlessly for safety and efficiency. Skipping any stage would have severe consequences.",
+   "question": "What did Graham explain to his team first?",
+   "right": "the day's blasting plan",
+   "wrong": [
+    "the clearing process",
+    "the charge insertion",
+    "the safety checks"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V210.p1.FACT",
+   "passage_id": "V210",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Arthur, a seasoned chess player, analyzed his opponent’s game. The opponent’s strength lay in their strong pawn structure and aggressive knight maneuvers. Their weaknesses, however, included an exposed king and underdeveloped rook. Arthur planned to exploit these specific components of their strategy. He then moved his queen.",
+   "question": "Which piece did Arthur move after planning to exploit his opponent's strategy?",
+   "right": "his queen",
+   "wrong": [
+    "his rook",
+    "his knight",
+    "his pawn"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V220.p1.FACT",
+   "passage_id": "V220",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Noah pulled up to the curb, a broken lock needing repair. Before opening the van door, his hand instinctively reached for his heavy-duty bolt cutters. Countless emergency calls had taught him to grab that specific tool first, without conscious thought, even before knowing the full situation. It was simply part of his routine now.",
+   "question": "What kind of problem did Noah need to repair after pulling up to the curb?",
+   "right": "a broken lock",
+   "wrong": [
+    "a leaking hose",
+    "a jammed control",
+    "a faulty wiring"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V221.p1.FACT",
+   "passage_id": "V221",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Mark, a young locksmith, found the old lockbox fascinating. He eagerly picked up a complex cylinder mechanism, examining its intricate pins and springs. The simpler, modern electronic keypads, however, left him cold; he found them dull and uninspiring. The faint scent of oil and metal in the van was comforting, while the smell of exhaust fumes from traffic barely registered.",
+   "question": "What kind of mechanism did Mark find fascinating in the box?",
+   "right": "Cylinder mechanism",
+   "wrong": [
+    "Electronic keypad",
+    "Lockbox",
+    "Spring"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V229.p1.FACT",
+   "passage_id": "V229",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Marta carefully handled the fragile-looking package. She had seen too many parcels burst open on the rollers over her thirty years here. A small \"Fragile\" sticker did little to ease her concern. She gently placed it in the bin for special handling, remembering the time a client's grandmother's antique teacups arrived in splinters.",
+   "question": "How long had Marta worked there before handling the package?",
+   "right": "thirty years",
+   "wrong": [
+    "twenty years",
+    "ten years",
+    "five years"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V230.p1.FACT",
+   "passage_id": "V230",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Nathan watched his boxer spar. The young man's defence had three main flaws: his chin was too high, his left hand dropped too soon, and his footwork was too flat. Nathan broke it down for him: first, tuck the chin. Second, keep the guard up. Third, stay light on the balls of the feet. He repeated each point individually.",
+   "question": "According to Nathan, which part of the boxer was too high?",
+   "right": "his chin",
+   "wrong": [
+    "his guard",
+    "his left hand",
+    "his right elbow"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V231.p1.LONG_BREAK",
+   "passage_id": "V231",
+   "family": "role_step",
+   "form": "LONG_BREAK",
+   "pass": "p1",
+   "passage": "Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.",
+   "question": "The repeated thing stops for a year or two; which action has most likely faded?",
+   "right": "Flicking each letter into its correct pigeonhole swiftly.",
+   "wrong": [
+    "Reaching for the next stack of letters slowly.",
+    "Sorting thousands of daily letters in the room.",
+    "Working in the sorting room with stacks.",
+    "Reading the postcodes at a glance on envelopes.",
+    "Fanning out letters with expert finger movements."
+   ],
+   "anchors": [
+    "developed after years of sorting",
+    "swift, almost unconscious action"
+   ]
+  },
+  {
+   "question_id": "V231.p1.NEW_STARTER",
+   "passage_id": "V231",
+   "family": "role_step",
+   "form": "NEW_STARTER",
+   "pass": "p1",
+   "passage": "Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.",
+   "question": "Someone on their first day takes the person's place; which of these would most likely be missing?",
+   "right": "The swift, almost unconscious action when flicking letters.",
+   "wrong": [
+    "The slow, highly conscious action when flicking letters.",
+    "Reaching for the next stack of mail envelopes.",
+    "Reading the postcodes at a glance on the letters.",
+    "Working in the sorting room with stacks of mail.",
+    "Sorting thousands of pieces of daily mail items."
+   ],
+   "anchors": [
+    "swift, almost unconscious action",
+    "years of sorting thousands"
+   ]
+  },
+  {
+   "question_id": "V231.p1.FACT",
+   "passage_id": "V231",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Daniel, working in the sorting room, reached for the next stack of letters. His fingers expertly fanned them out, reading the postcodes at a glance. He then flicked each letter into its correct pigeonhole. This swift, almost unconscious action had developed after years of sorting thousands of pieces of mail daily. It was purely habitual.",
+   "question": "Where was Daniel working when he reached for the letters?",
+   "right": "In the sorting room",
+   "wrong": [
+    "In a nearby village",
+    "By the warehouse bins",
+    "At the delivery truck"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V236.p1.WHAT_LEFT",
+   "passage_id": "V236",
+   "family": "role_step",
+   "form": "WHAT_LEFT",
+   "pass": "p1",
+   "passage": "The milking machine was malfunctioning during the morning run. Farmer Greg looked at the diagnostic display. The problem involved three components: a blocked filter, a faulty vacuum gauge, and a worn pulsator hose. He knew each part had to be addressed in turn. Ignoring one would lead to continued issues during milking.",
+   "question": "Farmer Greg addressed the blocked filter and the worn pulsator hose. Which component is still left to fix?",
+   "right": "a faulty vacuum gauge",
+   "wrong": [
+    "a worn pulsator hose",
+    "a blocked filter",
+    "the diagnostic display",
+    "the morning run",
+    "continued issues"
+   ],
+   "anchors": [
+    "blocked filter",
+    "faulty vacuum gauge"
+   ]
+  },
+  {
+   "question_id": "V236.p1.NOT_BELONG",
+   "passage_id": "V236",
+   "family": "role_step",
+   "form": "NOT_BELONG",
+   "pass": "p1",
+   "passage": "The milking machine was malfunctioning during the morning run. Farmer Greg looked at the diagnostic display. The problem involved three components: a blocked filter, a faulty vacuum gauge, and a worn pulsator hose. He knew each part had to be addressed in turn. Ignoring one would lead to continued issues during milking.",
+   "question": "A spare kit holds one of each named component from the milking machine. Which of these would not be in it?",
+   "right": "a diagnostic display",
+   "wrong": [
+    "a faulty vacuum gauge",
+    "a blocked filter",
+    "a worn pulsator hose",
+    "the milking machine",
+    "the morning run"
+   ],
+   "anchors": [
+    "blocked filter",
+    "worn pulsator hose"
+   ]
+  },
+  {
+   "question_id": "V236.p1.FACT",
+   "passage_id": "V236",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "The milking machine was malfunctioning during the morning run. Farmer Greg looked at the diagnostic display. The problem involved three components: a blocked filter, a faulty vacuum gauge, and a worn pulsator hose. He knew each part had to be addressed in turn. Ignoring one would lead to continued issues during milking.",
+   "question": "Which specific item did Farmer Greg examine during the morning run?",
+   "right": "the diagnostic display",
+   "wrong": [
+    "the milking machine",
+    "a worn pulsator hose",
+    "a blocked filter"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V244.p2.TAKE_AWAY",
+   "passage_id": "V244",
+   "family": "role_step",
+   "form": "TAKE_AWAY",
+   "pass": "p2",
+   "passage": "As Maya did laps, the chlorine smell was strong in the air. It instantly brought to her thoughts the municipal pool where she first learned to swim as a small child. She recalled the way the sun shone through the steamed-up windows then. The memory of her father patiently holding her in the shallow end brought a smile.",
+   "question": "Suppose the chlorine smell had not been there. Which of these would most likely not have happened?",
+   "right": "Maya remembering her childhood pool",
+   "wrong": [
+    "Maya swimming laps today",
+    "Maya smiling in the water",
+    "Maya noticing her father then",
+    "Maya finishing her swim laps",
+    "Maya seeing the sun shine"
+   ],
+   "anchors": [
+    "chlorine smell",
+    "brought to her thoughts"
+   ]
+  },
+  {
+   "question_id": "V244.p1.FACT",
+   "passage_id": "V244",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "As Maya did laps, the chlorine smell was strong in the air. It instantly brought to her thoughts the municipal pool where she first learned to swim as a small child. She recalled the way the sun shone through the steamed-up windows then. The memory of her father patiently holding her in the shallow end brought a smile.",
+   "question": "Where did Maya first learn to swim as a small child?",
+   "right": "Municipal pool",
+   "wrong": [
+    "Shallow end",
+    "Lake",
+    "Sea"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V249.p1.WHAT_LEFT",
+   "passage_id": "V249",
+   "family": "role_step",
+   "form": "WHAT_LEFT",
+   "pass": "p1",
+   "passage": "Samuel examined the malfunctioning milking machine. He identified the jammed release valve, the frayed electrical wire leading to the pump, and a loose suction cup connection. The main control panel appeared undamaged. Each of these components contributed to the poor milk flow. He started with the valve.",
+   "question": "Samuel started fixing the milk system by working on the jammed release valve. Using the text, which named part is still left?",
+   "right": "loose suction cup connection",
+   "wrong": [
+    "jammed release valve",
+    "frayed electrical wire",
+    "main control panel",
+    "malfunctioning milking machine",
+    "poor milk flow"
+   ],
+   "anchors": [
+    "jammed release valve",
+    "loose suction cup connection"
+   ]
+  },
+  {
+   "question_id": "V249.p1.NOT_BELONG",
+   "passage_id": "V249",
+   "family": "role_step",
+   "form": "NOT_BELONG",
+   "pass": "p1",
+   "passage": "Samuel examined the malfunctioning milking machine. He identified the jammed release valve, the frayed electrical wire leading to the pump, and a loose suction cup connection. The main control panel appeared undamaged. Each of these components contributed to the poor milk flow. He started with the valve.",
+   "question": "A repair kit holds one of each named part from the text. Which of these would not be in it?",
+   "right": "polished brass cylinder",
+   "wrong": [
+    "jammed release valve",
+    "frayed electrical wire",
+    "loose suction cup connection",
+    "main control panel",
+    "milking machine pump"
+   ],
+   "anchors": [
+    "jammed release valve",
+    "frayed electrical wire"
+   ]
+  },
+  {
+   "question_id": "V249.p1.FACT",
+   "passage_id": "V249",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Samuel examined the malfunctioning milking machine. He identified the jammed release valve, the frayed electrical wire leading to the pump, and a loose suction cup connection. The main control panel appeared undamaged. Each of these components contributed to the poor milk flow. He started with the valve.",
+   "question": "According to the passage, which part appeared undamaged?",
+   "right": "main control panel",
+   "wrong": [
+    "loose suction cup",
+    "jammed release valve",
+    "frayed electrical wire"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V263.p1.FACT",
+   "passage_id": "V263",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Paul, a mail carrier nearing retirement, glanced at a misaddressed package. He saw the street name was wrong but the postcode was correct for a nearby village. His years of walking the same routes meant he instantly knew the correct house number. He simply scrawled a small correction on the label and placed it in the right tray.",
+   "question": "What did Paul place the package in after writing on the label?",
+   "right": "The right tray",
+   "wrong": [
+    "The correct pigeonhole",
+    "The sorting room",
+    "The nearby village"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V267.p1.FACT",
+   "passage_id": "V267",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Peter reviewed the club’s annual budget. He saw distinct categories for membership fees, equipment purchases, and tournament entry costs. There was also a line for refreshments and another for general upkeep of the playing area. Each item required careful consideration for the upcoming year's allocation.",
+   "question": "What did Peter review?",
+   "right": "The club’s annual budget",
+   "wrong": [
+    "The playing area",
+    "The membership fees",
+    "The upcoming year"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V269.p1.FACT",
+   "passage_id": "V269",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Kevin, a taxi driver, leaned against his car at the quiet rank. The faint scent of stale beer drifted from the nearby pub door as it opened. Suddenly, he remembered the smell of his grandfather's old workshop. His grandfather used to brew his own ale there, even though he was never supposed to. It brought a small smile to Kevin's face.",
+   "question": "Where was Kevin leaning?",
+   "right": "Against his car",
+   "wrong": [
+    "Against the pub door",
+    "Against the taxi rank",
+    "Against his grandfather's shop"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V278.p1.WHERE_HELPS",
+   "passage_id": "V278",
+   "family": "role_step",
+   "form": "WHERE_HELPS",
+   "pass": "p1",
+   "passage": "Helen arrived at the pool and saw it was crowded with energetic children splashing loudly. Many years of competitive swimming had taught her patience and discipline in chaotic environments. She found an empty lane, mentally divided it into sections, and began her precise, measured strokes, unaffected by the surrounding activity.",
+   "question": "In which new situation would Helen's background help most?",
+   "right": "a crowded pool",
+   "wrong": [
+    "an empty pool",
+    "a quiet lane",
+    "a loud child",
+    "a chaotic game",
+    "a measured stroke"
+   ],
+   "anchors": [
+    "chaotic environments",
+    "competitive swimming"
+   ]
+  },
+  {
+   "question_id": "V278.p1.FACT",
+   "passage_id": "V278",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Helen arrived at the pool and saw it was crowded with energetic children splashing loudly. Many years of competitive swimming had taught her patience and discipline in chaotic environments. She found an empty lane, mentally divided it into sections, and began her precise, measured strokes, unaffected by the surrounding activity.",
+   "question": "What did Helen find at the pool before she began her strokes?",
+   "right": "an empty lane",
+   "wrong": [
+    "a crowded deck",
+    "a loud group",
+    "a warm shower"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V279.p1.FACT",
+   "passage_id": "V279",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Arthur, a beekeeper, always began his afternoon hive check at precisely 2 PM. For years, the chime of the nearby church bell had marked this time. Now, even on days the bell was silent for repair, Arthur found himself moving towards his smoker at two o'clock. His hands would reach for his gloves before he even looked at his watch. He sometimes hummed a tune he associated with the bell.",
+   "question": "At what time of day did Arthur always begin his afternoon hive check?",
+   "right": "Precisely 2 PM",
+   "wrong": [
+    "Precisely 1 PM",
+    "Precisely 3 PM",
+    "Precisely 4 PM"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V291.p1.FACT",
+   "passage_id": "V291",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Every time the van stopped at a client's address, Sam, an apprentice locksmith, automatically reached for the heavy toolbox. He swung it onto the ground before the engine even switched off. His hand then went to the clip on his belt, where he kept his small set of picks. He had done this hundreds of times.",
+   "question": "Where did Sam keep his small set of picks?",
+   "right": "On his belt",
+   "wrong": [
+    "In the van",
+    "In the toolbox",
+    "On the ground"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V301.p1.FACT",
+   "passage_id": "V301",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Elena, a tailor, pinned a hem, the soft whir of her sewing machine filling the shop. The sound reminded her of the old wind-up toys her grandmother used to make. She pictured the wooden soldiers dancing across the worn rug. A warmth spread through her as she recalled those quiet afternoons.",
+   "question": "What occupation does Elena hold in the shop?",
+   "right": "A tailor",
+   "wrong": [
+    "A toy maker",
+    "A shop keeper",
+    "A seamstress"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V303.p1.MEET_AGAIN",
+   "passage_id": "V303",
+   "family": "role_step",
+   "form": "MEET_AGAIN",
+   "pass": "p1",
+   "passage": "Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.",
+   "question": "Marco enters a quiet room smelling of old leather and liniment. Which of these brings back his grandfather's workshop?",
+   "right": "the sharp smell",
+   "wrong": [
+    "the loud sweat",
+    "the heavy bag",
+    "the boxing gym",
+    "the ringing bell",
+    "the church shoes"
+   ],
+   "anchors": [
+    "old leather and liniment"
+   ]
+  },
+  {
+   "question_id": "V303.p1.TAKE_AWAY",
+   "passage_id": "V303",
+   "family": "role_step",
+   "form": "TAKE_AWAY",
+   "pass": "p1",
+   "passage": "Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.",
+   "question": "Suppose the sharp smell of old leather and liniment had not been there. Which of these would most likely not have happened?",
+   "right": "the grandfather memory",
+   "wrong": [
+    "the gym liniment",
+    "the boxing gym",
+    "the heavy bag",
+    "the ringing bell",
+    "the church shoes"
+   ],
+   "anchors": [
+    "sharp smell of old leather"
+   ]
+  },
+  {
+   "question_id": "V303.p1.FACT",
+   "passage_id": "V303",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Marco wiped sweat from his brow. The sharp smell of old leather and liniment filled the boxing gym. It instantly pulled him back to his grandfather's small workshop. He pictured the careful way his grandfather polished church shoes, humming a quiet tune. That memory always made Marco feel steady before a sparring session.",
+   "question": "What did Marco use to wipe his brow?",
+   "right": "sweat",
+   "wrong": [
+    "liniment",
+    "leather",
+    "shoes"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V305.p1.TAKE_AWAY",
+   "passage_id": "V305",
+   "family": "role_step",
+   "form": "TAKE_AWAY",
+   "pass": "p1",
+   "passage": "Eleanor glided through the cool water, her strokes steady. A distant splash from the deep end reached her ears. For a moment, she was not in the busy public pool but in her grandmother's quiet garden. She recalled the gentle plash of the small stone fountain, always a peaceful sound on summer afternoons. It was a place she visited often in her thoughts.",
+   "question": "Suppose the noticed thing had not been there; which of these would most likely not have happened?",
+   "right": "A distant splash",
+   "wrong": [
+    "The public pool",
+    "The busy pool",
+    "The deep end",
+    "The cool water",
+    "The stone fountain"
+   ],
+   "anchors": [
+    "distant splash"
+   ]
+  },
+  {
+   "question_id": "V305.p1.FACT",
+   "passage_id": "V305",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Eleanor glided through the cool water, her strokes steady. A distant splash from the deep end reached her ears. For a moment, she was not in the busy public pool but in her grandmother's quiet garden. She recalled the gentle plash of the small stone fountain, always a peaceful sound on summer afternoons. It was a place she visited often in her thoughts.",
+   "question": "Where was Eleanor swimming when she heard the splash?",
+   "right": "In the public pool",
+   "wrong": [
+    "In the quiet garden",
+    "By the stone fountain",
+    "Near the town fair"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V313.p1.FACT",
+   "passage_id": "V313",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Olivia drove her locksmith's van through the city. The sight of a deadbolt on a door, even from a distance, instantly told her its brand and likely age. She instinctively knew which tools she would need before she even pulled over. Years of calls had honed this silent recognition. It was a useful shorthand for her work.",
+   "question": "What did Olivia drive through the city?",
+   "right": "her locksmith's van",
+   "wrong": [
+    "a large truck",
+    "her family car",
+    "a delivery van"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V315.p1.FACT",
+   "passage_id": "V315",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Brenda picked up a package, testing its weight and balance. The label listed \"books,\" but the package shifted oddly in her grip. Decades of handling parcels had given her a sixth sense for mislabeled contents. This package felt too light for books and too fluid for most other common items. She marked it for special inspection.",
+   "question": "What item was listed on the package label?",
+   "right": "Books",
+   "wrong": [
+    "Fluid",
+    "Inspection",
+    "Weight"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V320.p1.FACT",
+   "passage_id": "V320",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Victor examined the geological survey report for the quarry. He broke down the information into key elements: rock type, fault lines, water saturation, and stability ratings. Each section informed a different part of the excavation plan. He focused on the distribution of granite, the presence of schist, and the direction of the deepest veins. The data was clear.",
+   "question": "What type of report did Victor examine for the quarry?",
+   "right": "geological survey report",
+   "wrong": [
+    "financial audit report",
+    "safety inspection report",
+    "equipment status report"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V328.p1.FACT",
+   "passage_id": "V328",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Every morning at half past five, the old bell near the mountain hut rang out. Lena had heard its call for nearly a year now. Without thinking, she would often find herself glancing towards the eastern window as the moment approached. Her hands continued whatever task they were doing, yet her gaze sought the first streaks of dawn light. The sound had become part of her daily routine.",
+   "question": "At what time of day did the old bell near the mountain hut ring out?",
+   "right": "Half past five",
+   "wrong": [
+    "Half past six",
+    "Quarter to five",
+    "Seven o'clock"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V329.p1.WHAT_LEFT",
+   "passage_id": "V329",
+   "family": "role_step",
+   "form": "WHAT_LEFT",
+   "pass": "p1",
+   "passage": "Julia looked at the broken filtration pump. She saw the clogged intake screen, the seized impeller, and the corroded electrical terminals. The main motor casing seemed undamaged. Each of these parts contributed to the system's failure. She decided to address the screen first.",
+   "question": "Julia deals with the clogged intake screen and seized impeller; which named part is still left?",
+   "right": "The corroded electrical terminals",
+   "wrong": [
+    "The seized impeller",
+    "The clogged intake screen",
+    "The main motor casing",
+    "The filtration pump",
+    "The system failure"
+   ],
+   "anchors": [
+    "corroded electrical terminals"
+   ]
+  },
+  {
+   "question_id": "V329.p2.NOT_BELONG",
+   "passage_id": "V329",
+   "family": "role_step",
+   "form": "NOT_BELONG",
+   "pass": "p2",
+   "passage": "Julia looked at the broken filtration pump. She saw the clogged intake screen, the seized impeller, and the corroded electrical terminals. The main motor casing seemed undamaged. Each of these parts contributed to the system's failure. She decided to address the screen first.",
+   "question": "A spare repair kit holds one of each named part; which of these would not be in it?",
+   "right": "the cleaning brush",
+   "wrong": [
+    "the seized impeller",
+    "the corroded electrical terminals",
+    "the clogged intake screen",
+    "the main motor casing",
+    "the filtration pump"
+   ],
+   "anchors": [
+    "clogged intake screen, the seized impeller",
+    "corroded electrical terminals"
+   ]
+  },
+  {
+   "question_id": "V329.p1.FACT",
+   "passage_id": "V329",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Julia looked at the broken filtration pump. She saw the clogged intake screen, the seized impeller, and the corroded electrical terminals. The main motor casing seemed undamaged. Each of these parts contributed to the system's failure. She decided to address the screen first.",
+   "question": "Which part did Julia decide to address first?",
+   "right": "The screen",
+   "wrong": [
+    "The impeller",
+    "The motor casing",
+    "The electrical terminals"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V341.p1.FACT",
+   "passage_id": "V341",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Arthur lifted a frame from the hive, his gaze sweeping over the busy bees. He noticed the slight unevenness in the capped honey, a detail many might overlook. Decades spent tending bees allowed him to read their collective state from such tiny clues. That small irregularity signaled a subtle shift in their foraging patterns, perhaps due to a distant change in flora.",
+   "question": "According to the passage, what did Arthur lift from the hive?",
+   "right": "a frame",
+   "wrong": [
+    "a busy bee",
+    "some capped honey",
+    "a tiny clue"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V342.p1.FACT",
+   "passage_id": "V342",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Maria, a post office sorter, examined the complex delivery route. It involved four distinct segments. First, packages went to the city center; then, rural addresses received theirs; after that, international mail was handled; finally, special deliveries completed the round. Each stage had its own set of sorting rules and deadlines.",
+   "question": "Who examined the complex delivery route involving four distinct segments?",
+   "right": "Maria",
+   "wrong": [
+    "Graham",
+    "Helen",
+    "Marta"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V344.p1.MEET_AGAIN",
+   "passage_id": "V344",
+   "family": "role_step",
+   "form": "MEET_AGAIN",
+   "pass": "p1",
+   "passage": "Tom, a foreman, supervised the rock blasting. The distant, dull boom echoed through the vast quarry. He immediately pictured the fireworks display from last summer's town fair. He remembered the vibrant explosions of light against the night sky, and the excited gasps from the crowd around him.",
+   "question": "Later and somewhere else, which of these would most likely bring the same thing back to the person?",
+   "right": "The fireworks display",
+   "wrong": [
+    "The rock blasting",
+    "The vast quarry",
+    "The town fair",
+    "The dull boom",
+    "The excited gasps"
+   ],
+   "anchors": [
+    "fireworks display"
+   ]
+  },
+  {
+   "question_id": "V344.p1.TAKE_AWAY",
+   "passage_id": "V344",
+   "family": "role_step",
+   "form": "TAKE_AWAY",
+   "pass": "p1",
+   "passage": "Tom, a foreman, supervised the rock blasting. The distant, dull boom echoed through the vast quarry. He immediately pictured the fireworks display from last summer's town fair. He remembered the vibrant explosions of light against the night sky, and the excited gasps from the crowd around him.",
+   "question": "Suppose the noticed thing had not been there; which of these would most likely not have happened?",
+   "right": "The distant, dull boom",
+   "wrong": [
+    "The fireworks display",
+    "The vast quarry",
+    "The town fair",
+    "The vibrant explosions",
+    "The excited gasps"
+   ],
+   "anchors": [
+    "distant, dull boom"
+   ]
+  },
+  {
+   "question_id": "V344.p1.FACT",
+   "passage_id": "V344",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Tom, a foreman, supervised the rock blasting. The distant, dull boom echoed through the vast quarry. He immediately pictured the fireworks display from last summer's town fair. He remembered the vibrant explosions of light against the night sky, and the excited gasps from the crowd around him.",
+   "question": "What was Tom's job while supervising the site?",
+   "right": "Foreman",
+   "wrong": [
+    "Town fair host",
+    "Quarry worker",
+    "Crowd member"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V353.p1.FACT",
+   "passage_id": "V353",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Charles watched his opponent take an aggressive pawn move. Decades of playing had taught him patience and the deceptive nature of early attacks. He didn't rush his counter. Instead, he calmly developed a knight, recalling countless games where overeagerness had led to swift defeat. He knew how to wait.",
+   "question": "Which chess piece did Charles calmly develop as his counter move?",
+   "right": "a knight",
+   "wrong": [
+    "a pawn",
+    "a queen",
+    "a rook"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V359.p1.WHERE_HELPS",
+   "passage_id": "V359",
+   "family": "role_step",
+   "form": "WHERE_HELPS",
+   "pass": "p1",
+   "passage": "Old Klaus stoked the fire in the hut's hearth. He had weathered countless blizzards in these mountains over his eighty years. The howling wind outside, which might alarm a novice, merely sounded like a familiar, restless companion to him. He knew exactly how much wood was needed to keep the warmth through the long night.",
+   "question": "In which new situation would Old Klaus's mountain background help most?",
+   "right": "Staying calm during a heavy snowstorm",
+   "wrong": [
+    "Fleeing quickly from a heavy snowstorm",
+    "Building a sturdy wooden winter cabin",
+    "Lighting a dark hearth fire indoors",
+    "Finding lost wood in deep snow",
+    "Listening to quiet winter sounds"
+   ],
+   "anchors": [
+    "weathered countless blizzards in these mountains"
+   ]
+  },
+  {
+   "question_id": "V359.p1.FACT",
+   "passage_id": "V359",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Old Klaus stoked the fire in the hut's hearth. He had weathered countless blizzards in these mountains over his eighty years. The howling wind outside, which might alarm a novice, merely sounded like a familiar, restless companion to him. He knew exactly how much wood was needed to keep the warmth through the long night.",
+   "question": "What was Old Klaus stoking in the hut?",
+   "right": "the fire in the hearth",
+   "wrong": [
+    "the wood near the door",
+    "the stove in the corner",
+    "the coals on the floor"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V376.p1.FACT",
+   "passage_id": "V376",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Robert waited at the taxi rank, his engine idling quietly. A faint, distant siren wailed in the city. The sound made him think of the old fire station near his childhood home. He remembered the loud clang of the bell when the trucks were called out, and the exciting rush of the big red engines.",
+   "question": "Where was Robert waiting?",
+   "right": "the taxi rank",
+   "wrong": [
+    "the old fire station",
+    "his childhood home",
+    "the city center"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V385.p1.FACT",
+   "passage_id": "V385",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Uma walked onto the pool deck. The familiar smell of chlorine, once associated with grueling training sessions and fierce competition, now felt completely different. Years of pushing her limits had transformed it into a comforting scent of relaxation. She took a deep breath, anticipating a gentle, peaceful swim.",
+   "question": "Where did Uma walk?",
+   "right": "onto the pool deck",
+   "wrong": [
+    "into the pool",
+    "past the deep end",
+    "toward the water"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V387.p1.FACT",
+   "passage_id": "V387",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Owen approached the buzzing hive, not pausing to zip his veil completely. He had done this thousands of times. His hands moved automatically, reaching for the smoker, then the hive tool. The familiar drone of the bees no longer registered as a potential threat. He simply worked, his movements practiced and fluid.",
+   "question": "What object did Owen reach for first after approaching the buzzing hive?",
+   "right": "the smoker",
+   "wrong": [
+    "the veil",
+    "the hive",
+    "the tool"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V394.p2.GOES_FOR",
+   "passage_id": "V394",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p2",
+   "passage": "Victor felt a strong pull towards the aggressive Queen's Gambit opening. He disliked the more defensive setups, finding them tedious. His opponent's cautious play, however, barely registered with him. He focused intently on his own planned attack, dismissing the slow development across the board. The opponent’s strategy made no impression.",
+   "question": "At a later free moment, which of these does Victor choose?",
+   "right": "Queen's Gambit opening",
+   "wrong": [
+    "defensive setups",
+    "cautious play",
+    "slow development",
+    "Queen's Gambit setup",
+    "defensive opening"
+   ],
+   "anchors": [
+    "Queen's Gambit opening",
+    "strong pull towards"
+   ]
+  },
+  {
+   "question_id": "V394.p1.FACT",
+   "passage_id": "V394",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Victor felt a strong pull towards the aggressive Queen's Gambit opening. He disliked the more defensive setups, finding them tedious. His opponent's cautious play, however, barely registered with him. He focused intently on his own planned attack, dismissing the slow development across the board. The opponent’s strategy made no impression.",
+   "question": "Which opening did Victor feel a strong pull towards?",
+   "right": "Queen's Gambit",
+   "wrong": [
+    "King's Indian",
+    "Sicilian Defense",
+    "French Defense"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V398.p1.FACT",
+   "passage_id": "V398",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Sarah woke before dawn. Her hand automatically reached for the old kettle, filling it with water from the rain barrel. She then retrieved dry kindling and expertly arranged it in the cold hearth. These morning tasks required no conscious thought, a familiar pattern ingrained by many isolated winters.",
+   "question": "Where did Sarah get the water to fill the old kettle?",
+   "right": "rain barrel",
+   "wrong": [
+    "river stream",
+    "well pump",
+    "indoor tap"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V400.p1.WHERE_HELPS",
+   "passage_id": "V400",
+   "family": "role_step",
+   "form": "WHERE_HELPS",
+   "pass": "p1",
+   "passage": "Clara, a veteran of countless mountain expeditions, observed the darkening sky from the hut window. While others worried about the impending storm, she calmly began to boil water for tea. Her years of navigating unpredictable mountain weather had taught her to find comfort in small routines during challenging circumstances.",
+   "question": "In which new situation would this veteran background help most when facing unexpected trouble?",
+   "right": "A sudden blizzard on a high peak",
+   "wrong": [
+    "A quiet afternoon in a warm library",
+    "A fast train moving through open fields",
+    "A long meeting in a glass office",
+    "A bright morning near a calm lake",
+    "A short walk down a paved street"
+   ],
+   "anchors": [
+    "veteran of countless mountain",
+    "unpredictable mountain weather"
+   ]
+  },
+  {
+   "question_id": "V400.p1.FACT",
+   "passage_id": "V400",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Clara, a veteran of countless mountain expeditions, observed the darkening sky from the hut window. While others worried about the impending storm, she calmly began to boil water for tea. Her years of navigating unpredictable mountain weather had taught her to find comfort in small routines during challenging circumstances.",
+   "question": "What beverage did Clara calmly begin to boil water for from the hut window?",
+   "right": "Tea",
+   "wrong": [
+    "Milk",
+    "Soup",
+    "Cocoa"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V411.p1.FACT",
+   "passage_id": "V411",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Graham flicked through the stack of letters. He had seen every type of handwriting imaginable over his career, from careful cursive to hurried scrawls. The precise, almost ornamental script on this particular envelope suggested a formal occasion, perhaps a wedding invitation. He knew from experience that such envelopes rarely contained bad news, so he handled it without concern.",
+   "question": "What kind of item did Graham flick through in the stack?",
+   "right": "letters",
+   "wrong": [
+    "parcels",
+    "postcards",
+    "packages"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V416.p1.MEET_AGAIN",
+   "passage_id": "V416",
+   "family": "role_step",
+   "form": "MEET_AGAIN",
+   "pass": "p1",
+   "passage": "Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.",
+   "question": "Years later inside a dusty automotive repair garage, which of these would most likely bring the same childhood memory back?",
+   "right": "The smell of machine oil",
+   "wrong": [
+    "The scent of fresh flowers",
+    "The sight of heavy machinery",
+    "The taste of hot coffee",
+    "The sound of falling rock",
+    "The feel of damp earth"
+   ],
+   "anchors": [
+    "metallic tang",
+    "machine oil"
+   ]
+  },
+  {
+   "question_id": "V416.p2.TAKE_AWAY",
+   "passage_id": "V416",
+   "family": "role_step",
+   "form": "TAKE_AWAY",
+   "pass": "p2",
+   "passage": "Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.",
+   "question": "Suppose the noticed thing had not been there; which of these would most likely not have happened?",
+   "right": "childhood summers would not be remembered",
+   "wrong": [
+    "the heavy machinery would not excavate",
+    "the dust would not settle thickly",
+    "the boots would not get dusty",
+    "the rock would not be crushed",
+    "the workshop projects would stop"
+   ],
+   "anchors": [
+    "pulled her thoughts back to childhood summers"
+   ]
+  },
+  {
+   "question_id": "V416.p1.FACT",
+   "passage_id": "V416",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Susan watched the heavy machinery excavate rock, the dust settling thickly on her boots. The distinct metallic tang in the air, a mix of diesel and crushed stone, pulled her thoughts back to childhood summers. She remembered the smell of her father's toolshed, full of metal filings and machine oil from his workshop projects.",
+   "question": "What covered Susan's boots thickly while she watched the heavy machinery excavate rock?",
+   "right": "The dust",
+   "wrong": [
+    "The water",
+    "The leaves",
+    "The gravel"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V418.p1.GOES_FOR",
+   "passage_id": "V418",
+   "family": "role_step",
+   "form": "GOES_FOR",
+   "pass": "p1",
+   "passage": "Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.",
+   "question": "At a later free moment, which of these does the person choose?",
+   "right": "Handling more of the brightly coloured greeting cards.",
+   "wrong": [
+    "Handling more of the plain brown heavy parcels.",
+    "Lifting the heavy and awkward plain parcels.",
+    "Focusing on separating small envelopes into bins.",
+    "Listening to the distant drone of warehouse machinery.",
+    "Ignoring the bright greeting cards near holidays."
+   ],
+   "anchors": [
+    "Olivia, a postal sorter, always enjoyed handling",
+    "brightly coloured greeting cards"
+   ]
+  },
+  {
+   "question_id": "V418.p1.KEEPS_AWAY",
+   "passage_id": "V418",
+   "family": "role_step",
+   "form": "KEEPS_AWAY",
+   "pass": "p1",
+   "passage": "Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.",
+   "question": "At a later moment, which of these does the person avoid?",
+   "right": "Lifting the plain brown parcels that are heavy.",
+   "wrong": [
+    "Lifting the brightly coloured greeting cards for holidays.",
+    "Handling the brightly coloured greeting cards around holidays.",
+    "Separating the small envelopes into their respective bins.",
+    "Listening to the distant drone of the warehouse.",
+    "Focusing on separating small envelopes into bins."
+   ],
+   "anchors": [
+    "She disliked the plain brown parcels",
+    "heavy and awkward to lift"
+   ]
+  },
+  {
+   "question_id": "V418.p1.FACT",
+   "passage_id": "V418",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.",
+   "question": "What kind of parcels did Olivia dislike handling?",
+   "right": "Plain brown parcels",
+   "wrong": [
+    "Brightly coloured greeting cards",
+    "Small envelopes in bins",
+    "Misaddressed packages"
+   ],
+   "anchors": []
+  },
+  {
+   "question_id": "V421.p1.FACT",
+   "passage_id": "V421",
+   "family": "plain_fact",
+   "form": "FACT",
+   "pass": "p1",
+   "passage": "Fred knelt beside the malfunctioning milking unit. He knew its parts: the pulsator, the claw, the liner, and the milk hose. He checked the air filter, then the vacuum lines for cracks. Next, he unclipped the control panel, inspecting the wiring harness and the small solenoid valve. The fault lay in one of those components.",
+   "question": "What did Fred unclip after checking the air filter and vacuum lines?",
+   "right": "the control panel",
+   "wrong": [
+    "the milk hose",
+    "the small solenoid valve",
+    "the wiring harness"
+   ],
+   "anchors": []
+  }
+ ],
+ "counts": {
+  "role_step": 48,
+  "plain_fact": 86,
+  "spares_used": 10
+ }
+}

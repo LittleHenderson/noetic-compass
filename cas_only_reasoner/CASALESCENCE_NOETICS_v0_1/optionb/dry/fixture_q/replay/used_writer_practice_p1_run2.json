@@ -1,0 +1,88 @@
+[
+ {
+  "http_status": 200,
+  "content": "MADE-UP reply that is not a JSON array. Here are your questions: [ {",
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY"
+ },
+ {
+  "http_status": 200,
+  "content_json": [
+   {
+    "passage": "V901",
+    "what_follows": [
+     {
+      "form": "MEET_AGAIN",
+      "question": "On another day, far from the boathouse, which of these would most likely make Halima picture her uncle's ferry again?",
+      "right": "smelling damp rope on a quay",
+      "wrong": [
+       "hanging a key on a nail",
+       "counting a row of wooden oars",
+       "unlocking a heavy wooden side door",
+       "opening a door early in the morning",
+       "putting a key back in a pocket"
+      ],
+      "anchors": [
+       "the smell of wet rope",
+       "her uncle's ferry"
+      ]
+     },
+     {
+      "form": "TAKE_AWAY",
+      "question": "Suppose the boathouse had not smelled of wet rope that morning. Going only by the passage, which of these would most likely not have happened?",
+      "right": "Halima picturing the tin of biscuits",
+      "wrong": [
+       "Halima unlocking the old boathouse door",
+       "Halima hanging the key on its nail",
+       "Halima counting the oars one by one",
+       "Halima walking in through the door",
+       "Halima starting her usual morning jobs"
+      ],
+      "anchors": [
+       "the smell of wet rope"
+      ]
+     },
+     {
+      "form": "MEET_AGAIN",
+      "question": "A second question for a form already used. It must land in extra_dropped.",
+      "right": "one",
+      "wrong": [
+       "two",
+       "three",
+       "four",
+       "five",
+       "six"
+      ],
+      "anchors": [
+       "the oars"
+      ]
+     },
+     {
+      "form": "SMELL_TEST",
+      "question": "A question with a form name that is not one of the twelve.",
+      "right": "one",
+      "wrong": [
+       "two",
+       "three",
+       "four",
+       "five",
+       "six"
+      ],
+      "anchors": [
+       "the oars"
+      ]
+     }
+    ],
+    "plain_fact": {
+     "question": "Where did Halima hang the key?",
+     "right": "on its nail",
+     "wrong": [
+      "under the bench",
+      "by the hatch",
+      "in the tin"
+     ]
+    }
+   }
+  ],
+  "model": "MADE-UP-NAME-IN-A-WRITER-REPLY"
+ }
+]

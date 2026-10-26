@@ -1,0 +1,1814 @@
+[
+ {
+  "passage": "V008",
+  "miss_kind": "different words",
+  "writer_kind": "K1",
+  "text": "Zach listened to the low, steady hum emanating from the hive. The sound was constant, a soft, vibrating drone. It suddenly brought to his thoughts a lullaby his mother used to sing when he was very young, a quiet, soothing melody. He remembered the comforting sensation of her hand stroking his hair.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Zach",
+    "mind": "Zach",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the low, steady hum",
+    "mind": "Zach",
+    "relative_to": "a lullaby",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a lullaby",
+    "mind": "Zach",
+    "relative_to": "the low, steady hum",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Zach",
+    "mind": "Zach",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sound was constant, a soft, vibrating drone",
+    "mind": "Zach",
+    "relative_to": "a lullaby his mother used to sing",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a lullaby his mother used to sing",
+    "mind": "Zach",
+    "relative_to": "The sound was constant, a soft, vibrating drone",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "His mother is shown only inside the recalled song and touch; her own awareness is not shown, so she is not listed.",
+   "The remembered sensation of her hand stroking his hair is a detail of the same memory, not a separate trigger."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "Rule 4 does not say whether someone who sang inside a remembered scene counts as someone shown speaking.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V011",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Thomas observed the young skier struggling with the boarding gate. He remembered his own clumsy attempts decades ago. Instead of offering immediate help, he waited, knowing a moment of independent struggle often solidified the learning. The young man eventually managed, pushing off with a grin. Thomas gave a small, approving nod.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Thomas",
+    "mind": "Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his own clumsy attempts decades ago",
+    "mind": "Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "a moment of independent struggle often solidified the learning",
+    "mind": "Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Thomas",
+    "mind": "Thomas",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the young skier",
+    "mind": "the young skier",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the young skier struggling with the boarding gate",
+    "mind": "Thomas",
+    "relative_to": "his own clumsy attempts decades ago",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his own clumsy attempts decades ago",
+    "mind": "Thomas",
+    "relative_to": "the young skier struggling with the boarding gate",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The young skier is shown struggling and grinning, but nothing of his awareness; not listed.",
+   "The passage does not say that watching the skier brought his own early attempts to mind.",
+   "The approving nod is not stated as being drawn toward anything."
+  ],
+  "team_b_notes": [
+   "The passage does not settle whether Thomas is drawn toward or averse to anything, nor how strongly anything impressed him."
+  ],
+  "team_a_guide_problem": "Rule 2 does not say whether a memory placed right after an observation, with no linking word, counts as shown to be brought to mind.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V014",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Bernard unfolded a roll of raw tweed. Its lanolin scent filled the small shop, a rich, earthy woolliness. Instantly, he pictured his grandfather’s old overcoat, heavy and warm, worn through countless winters. He saw the faint discolouration near the elbow where the fabric had always rubbed against a workbench, mending fishing nets.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Bernard",
+    "mind": "Bernard",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "Its lanolin scent",
+    "mind": "Bernard",
+    "relative_to": "his grandfather’s old overcoat",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather’s old overcoat",
+    "mind": "Bernard",
+    "relative_to": "Its lanolin scent",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Bernard",
+    "mind": "Bernard",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "Its lanolin scent filled the small shop",
+    "mind": "Bernard",
+    "relative_to": "his grandfather’s old overcoat",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather’s old overcoat",
+    "mind": "Bernard",
+    "relative_to": "Its lanolin scent filled the small shop",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The faint discolouration and the fishing nets accompany the picture; not marked as its parts."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V018",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Chloe carefully unwrapped an old book. The dry, dusty scent of ancient paper filled the cool storeroom. This smell pulled her back to her university library's quiet stacks. She remembered late nights surrounded by books, the hushed atmosphere of study. That familiar feeling of intense focus settled over her once more.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The dry, dusty scent of ancient paper",
+    "mind": "Chloe",
+    "relative_to": "her university library's quiet stacks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her university library's quiet stacks",
+    "mind": "Chloe",
+    "relative_to": "The dry, dusty scent of ancient paper",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Chloe",
+    "mind": "Chloe",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "This smell",
+    "mind": "Chloe",
+    "relative_to": "her university library's quiet stacks",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her university library's quiet stacks",
+    "mind": "Chloe",
+    "relative_to": "This smell",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "That familiar feeling of intense focus settled over her once more",
+    "mind": "Chloe",
+    "relative_to": "her university library's quiet stacks",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_a_notes": [
+   "The familiar feeling of intense focus settling over her once more: the passage does not say what brought it or how strongly it impressed her."
+  ],
+  "team_b_notes": [
+   "The passage does not settle whether Chloe is drawn toward or averse to the book, the smell, or the memory."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V048",
+  "miss_kind": "different words",
+  "writer_kind": "K1",
+  "text": "Esther sat by the window, watching the rain. The faint scent of lavender polish from the polished table brought a vivid picture to her thoughts. She saw her mother carefully buffing the antique chest in their old house, humming a lullaby as she worked. A feeling of warmth spread through her, briefly masking the chill of the afternoon.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Esther",
+    "mind": "Esther",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint scent of lavender polish",
+    "mind": "Esther",
+    "relative_to": "her mother carefully buffing the antique chest",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her mother carefully buffing the antique chest",
+    "mind": "Esther",
+    "relative_to": "The faint scent of lavender polish",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Esther",
+    "mind": "Esther",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint scent of lavender polish from the polished table",
+    "mind": "Esther",
+    "relative_to": "a vivid picture",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a vivid picture",
+    "mind": "Esther",
+    "relative_to": "The faint scent of lavender polish from the polished table",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "Her mother is shown only inside the picture; her own awareness is not shown, so she is not listed.",
+   "A feeling of warmth spread through her: no stated degree of impression."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "Rule 4 does not say whether someone who hummed inside a remembered scene counts as someone shown speaking.",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V049",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Robert tightened a bolt under the bus. A wrench slipped, hitting the metal frame with a distinct clang. The sharp sound made him pause, suddenly hearing a snare drum in his thoughts. He pictured his old garage band, rehearsing loud and late. He remembered the thrill of the beat, filling the air with raw energy.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a distinct clang",
+    "mind": "Robert",
+    "relative_to": "a snare drum",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a snare drum",
+    "mind": "Robert",
+    "relative_to": "a distinct clang",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sharp sound",
+    "mind": "Robert",
+    "relative_to": "a snare drum",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a snare drum",
+    "mind": "Robert",
+    "relative_to": "The sharp sound",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "He then pictured his old garage band and remembered the thrill of the beat; the passage does not say what brought these to Mind, so no further pair is marked.",
+   "'the thrill of the beat' hints at attraction but no pull is stated."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V056",
+  "miss_kind": "different words",
+  "writer_kind": "K1",
+  "text": "Yolanda polished a brass lock cylinder in the locksmith's van. The metallic scent of cleaning fluid hung in the air. It briefly reminded her of the brass band her uncle played in years ago, all gleaming instruments and polished buttons. She recalled the loud, joyful music from family gatherings. She tightened the vice, bringing her attention back.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Yolanda",
+    "mind": "Yolanda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The metallic scent of cleaning fluid",
+    "mind": "Yolanda",
+    "relative_to": "the brass band",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the brass band",
+    "mind": "Yolanda",
+    "relative_to": "The metallic scent of cleaning fluid",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Yolanda",
+    "mind": "Yolanda",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The metallic scent of cleaning fluid",
+    "mind": "Yolanda",
+    "relative_to": "the brass band her uncle played in years ago",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the brass band her uncle played in years ago",
+    "mind": "Yolanda",
+    "relative_to": "The metallic scent of cleaning fluid",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'She recalled the loud, joyful music from family gatherings' follows the brass band memory; the passage does not say what brought it up, so no second pair is marked."
+  ],
+  "team_b_notes": [
+   "The passage does not settle whether Yolanda is drawn toward or repelled by the brass band or the music; no ^2 or ^3 is marked.",
+   "The passage does not state how strongly the scent or the memory impressed her; no ^4 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V072",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Samuel, the dental hygienist, watched a new patient wince slightly during a routine cleaning. Some patients were more sensitive than others. Samuel remembered his own childhood fear of the dentist, a feeling that lingered faintly even now. He adjusted the water flow and spoke in a soothing tone, his actions guided by old memory.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Samuel",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "his own childhood fear of the dentist",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^3",
+    "words": "the dentist",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "lingered faintly even now",
+    "mind": "Samuel",
+    "relative_to": "his own childhood fear of the dentist",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a new patient wince slightly",
+    "mind": "Samuel",
+    "relative_to": "his own childhood fear of the dentist",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   },
+   {
+    "noetic": "^9",
+    "words": "his own childhood fear of the dentist",
+    "mind": "Samuel",
+    "relative_to": "a new patient wince slightly",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Samuel",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "a new patient",
+    "mind": "a new patient",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a new patient wince slightly during a routine cleaning",
+    "mind": "Samuel",
+    "relative_to": "his own childhood fear of the dentist",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his own childhood fear of the dentist",
+    "mind": "Samuel",
+    "relative_to": "a new patient wince slightly during a routine cleaning",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "lingered faintly",
+    "mind": "Samuel",
+    "relative_to": "his own childhood fear of the dentist",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "old memory",
+    "mind": "Samuel",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The patient winces but only a bodily reaction is shown, so the patient is not listed.",
+   "The passage does not say outright that the wince brought the memory to Mind."
+  ],
+  "team_b_notes": [
+   "The passage does not settle whether Samuel is drawn toward or repelled by anything, so no ^2 or ^3 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V108",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Xenia watered the delicate ferns. The earthy scent of damp soil and growing plants filled the warm, humid air. This aroma transported her instantly to her childhood, digging in her grandfather's garden, making mud pies. She remembered the sticky feel of the soil between her fingers.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Xenia",
+    "mind": "Xenia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The earthy scent of damp soil and growing plants",
+    "mind": "Xenia",
+    "relative_to": "her childhood",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her childhood",
+    "mind": "Xenia",
+    "relative_to": "The earthy scent of damp soil and growing plants",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Xenia",
+    "mind": "Xenia",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "This aroma",
+    "mind": "Xenia",
+    "relative_to": "her childhood",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her childhood",
+    "mind": "Xenia",
+    "relative_to": "This aroma",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The sticky feel of the soil is a detail of the memory, not a separate trigger."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V115",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Lena adjusted her microscope, a faint whirring sound coming from the centrifuge across the room. The soft hum took her back to late-night study sessions in the library during her undergraduate years. She suddenly remembered the worn leather armchair by the window where she often fell asleep, books scattered around her. A quiet yearning for those simpler days washed over her.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "a faint whirring sound",
+    "mind": "Lena",
+    "relative_to": "late-night study sessions in the library",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "late-night study sessions in the library",
+    "mind": "Lena",
+    "relative_to": "a faint whirring sound",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "those simpler days",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The soft hum",
+    "mind": "Lena",
+    "relative_to": "late-night study sessions in the library during her undergraduate years",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "late-night study sessions in the library during her undergraduate years",
+    "mind": "Lena",
+    "relative_to": "The soft hum",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The soft hum",
+    "mind": "Lena",
+    "relative_to": "the worn leather armchair by the window",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the worn leather armchair by the window",
+    "mind": "Lena",
+    "relative_to": "The soft hum",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "A quiet yearning for those simpler days",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "She suddenly remembered the worn leather armchair: the passage does not say what brought it to mind, and it may be part of the same memory."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V125",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Sam plugged in another microphone cable, inhaling the faint, dusty smell of old electronics. The scent instantly whisked him away from the studio's dim control room. He suddenly pictured his grandmother's attic, crammed with forgotten treasures. He remembered opening dusty wooden chests, discovering brittle photographs and forgotten toys, a world of quiet history.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the faint, dusty smell of old electronics",
+    "mind": "Sam",
+    "relative_to": "his grandmother's attic",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandmother's attic",
+    "mind": "Sam",
+    "relative_to": "the faint, dusty smell of old electronics",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The scent",
+    "mind": "Sam",
+    "relative_to": "his grandmother's attic",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandmother's attic",
+    "mind": "Sam",
+    "relative_to": "The scent",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V154",
+  "miss_kind": "different words",
+  "writer_kind": "K1",
+  "text": "Esther snipped a heavy cluster of Cabernet Sauvignon grapes. Their dark, dusty bloom reminded her of the velvet cloak her grandmother wore on special occasions. She recalled the feel of the soft fabric against her cheek as a child. A fleeting image of her grandmother's garden, filled with ripening plums, crossed her thoughts.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Esther",
+    "mind": "Esther",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "Their dark, dusty bloom",
+    "mind": "Esther",
+    "relative_to": "the velvet cloak",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the velvet cloak",
+    "mind": "Esther",
+    "relative_to": "Their dark, dusty bloom",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Esther",
+    "mind": "Esther",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "Their dark, dusty bloom",
+    "mind": "Esther",
+    "relative_to": "the velvet cloak her grandmother wore on special occasions",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the velvet cloak her grandmother wore on special occasions",
+    "mind": "Esther",
+    "relative_to": "Their dark, dusty bloom",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'A fleeting image of her grandmother's garden ... crossed her thoughts' names no trigger, so no second pair; 'fleeting' hints at degree but is not stated as impression strength."
+  ],
+  "team_b_notes": [
+   "The passage does not say what brought the feel of the soft fabric or the image of the garden to mind; no trigger is named for either."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V158",
+  "miss_kind": "one team only",
+  "writer_kind": "K5",
+  "text": "Daniel had served as a court clerk for fifteen years in the same courtroom. Every day, just before the lunch break, Judge Davies would strike her gavel twice for adjournment. As soon as Daniel heard that distinct pair of sharp taps, his hand automatically reached for the case files on the table. He gathered them without a moment's conscious thought, ready for the recess.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Judge Davies",
+    "mind": "Judge Davies",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "served as a court clerk for fifteen years in the same courtroom",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every day, just before the lunch break",
+    "mind": "Daniel",
+    "relative_to": "strike her gavel twice",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Daniel",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "Judge Davies",
+    "mind": "Judge Davies",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "served as a court clerk for fifteen years in the same courtroom",
+    "mind": "Daniel",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "Every day, just before the lunch break",
+    "mind": "Daniel",
+    "relative_to": "Judge Davies would strike her gavel twice for adjournment",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "that distinct pair of sharp taps",
+    "mind": "Daniel",
+    "relative_to": "his hand automatically reached for the case files on the table",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his hand automatically reached for the case files on the table",
+    "mind": "Daniel",
+    "relative_to": "that distinct pair of sharp taps",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The taps set off the action without thought (rule 13), so no ^8/^9 pair."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V169",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Jake heard the loud clatter as a stack of trays fell to the floor. The sudden metallic crash made him flinch. It brought to his thoughts the sound of his older brother's drum kit, especially the cymbals, when he practiced in the garage. He remembered the deafening racket that always made their dog bark.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Jake",
+    "mind": "Jake",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "their dog",
+    "mind": "their dog",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the loud clatter",
+    "mind": "Jake",
+    "relative_to": "the sound of his older brother's drum kit",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the sound of his older brother's drum kit",
+    "mind": "Jake",
+    "relative_to": "the loud clatter",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "made him flinch",
+    "mind": "Jake",
+    "relative_to": "the loud clatter",
+    "certainty": "ambiguous",
+    "other_candidate": "none"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Jake",
+    "mind": "Jake",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sudden metallic crash",
+    "mind": "Jake",
+    "relative_to": "the sound of his older brother's drum kit",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the sound of his older brother's drum kit",
+    "mind": "Jake",
+    "relative_to": "The sudden metallic crash",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "made him flinch",
+    "mind": "Jake",
+    "relative_to": "The sudden metallic crash",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'especially the cymbals' and 'deafening racket' are memory details, not named parts and not a stated impression on Jake."
+  ],
+  "team_b_notes": [
+   "The dog is mentioned only as barking; the passage does not show it taking in or responding to an Idea as a Mind."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V190",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Carla wiped down the speed bag, the familiar scent of worn leather and liniment filling the air. This specific smell always brought back vivid pictures of her grandmother's old armchair. She remembered the scratchy wool blanket her grandmother kept draped over it and the quiet afternoons spent reading comic books there.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Carla",
+    "mind": "Carla",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the familiar scent of worn leather and liniment",
+    "mind": "Carla",
+    "relative_to": "her grandmother's old armchair",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's old armchair",
+    "mind": "Carla",
+    "relative_to": "the familiar scent of worn leather and liniment",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Carla",
+    "mind": "Carla",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "This specific smell",
+    "mind": "Carla",
+    "relative_to": "her grandmother's old armchair",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "vivid pictures of her grandmother's old armchair",
+    "mind": "Carla",
+    "relative_to": "This specific smell",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'vivid pictures' hints at degree but is not stated as impression strength; the blanket and afternoons are memory details (rule 7)."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V229",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Marta carefully handled the fragile-looking package. She had seen too many parcels burst open on the rollers over her thirty years here. A small \"Fragile\" sticker did little to ease her concern. She gently placed it in the bin for special handling, remembering the time a client's grandmother's antique teacups arrived in splinters.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Marta",
+    "mind": "Marta",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "too many parcels burst open on the rollers over her thirty years here",
+    "mind": "Marta",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Marta",
+    "mind": "Marta",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "her thirty years here",
+    "mind": "Marta",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "A small \"Fragile\" sticker",
+    "mind": "Marta",
+    "relative_to": "the time a client's grandmother's antique teacups arrived in splinters",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the time a client's grandmother's antique teacups arrived in splinters",
+    "mind": "Marta",
+    "relative_to": "A small \"Fragile\" sticker",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "Her concern about the fragile-looking package is stated, but it is worry rather than shown aversion, so no ^3 is marked.",
+   "She remembers the antique teacups while placing the package; the passage does not say the package brought that memory to mind, so no pair."
+  ],
+  "team_b_notes": [
+   "The passage does not state how strongly the sticker or the memory impressed her, so no ^4 is marked.",
+   "The passage does not show whether Marta is drawn toward or repelled by the package, so no ^2 or ^3 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V269",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Kevin, a taxi driver, leaned against his car at the quiet rank. The faint scent of stale beer drifted from the nearby pub door as it opened. Suddenly, he remembered the smell of his grandfather's old workshop. His grandfather used to brew his own ale there, even though he was never supposed to. It brought a small smile to Kevin's face.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Kevin",
+    "mind": "Kevin",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint scent of stale beer",
+    "mind": "Kevin",
+    "relative_to": "the smell of his grandfather's old workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the smell of his grandfather's old workshop",
+    "mind": "Kevin",
+    "relative_to": "The faint scent of stale beer",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Kevin",
+    "mind": "Kevin",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The faint scent of stale beer drifted from the nearby pub door as it opened",
+    "mind": "Kevin",
+    "relative_to": "the smell of his grandfather's old workshop",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the smell of his grandfather's old workshop",
+    "mind": "Kevin",
+    "relative_to": "The faint scent of stale beer drifted from the nearby pub door as it opened",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V301",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Elena, a tailor, pinned a hem, the soft whir of her sewing machine filling the shop. The sound reminded her of the old wind-up toys her grandmother used to make. She pictured the wooden soldiers dancing across the worn rug. A warmth spread through her as she recalled those quiet afternoons.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the soft whir of her sewing machine",
+    "mind": "Elena",
+    "relative_to": "the old wind-up toys",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old wind-up toys",
+    "mind": "Elena",
+    "relative_to": "the soft whir of her sewing machine",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Elena",
+    "mind": "Elena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sound",
+    "mind": "Elena",
+    "relative_to": "the old wind-up toys her grandmother used to make",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old wind-up toys her grandmother used to make",
+    "mind": "Elena",
+    "relative_to": "The sound",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the wooden soldiers dancing across the worn rug",
+    "mind": "Elena",
+    "relative_to": "the old wind-up toys her grandmother used to make",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "A warmth spread through her",
+    "mind": "Elena",
+    "relative_to": "those quiet afternoons",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The pictured soldiers and recalled afternoons follow from the same memory; no separate trigger is named.",
+   "The warmth she feels is a bodily reaction with no stated degree."
+  ],
+  "team_b_notes": [
+   "The passage does not name the sound as a thing in its own right; 'The sound' is the only naming words available for the ^8 trigger."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V325",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Sam tightened a bolt on a bike frame, the familiar scent of rubber and chain lubricant filling the air. This distinct workshop smell transported him back to his grandfather's shed, where they used to fix old engines together. He remembered the greasy rag his grandfather always kept in his back pocket.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the familiar scent of rubber and chain lubricant",
+    "mind": "Sam",
+    "relative_to": "his grandfather's shed",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's shed",
+    "mind": "Sam",
+    "relative_to": "the familiar scent of rubber and chain lubricant",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Sam",
+    "mind": "Sam",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "This distinct workshop smell",
+    "mind": "Sam",
+    "relative_to": "his grandfather's shed",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "his grandfather's shed",
+    "mind": "Sam",
+    "relative_to": "This distinct workshop smell",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'used to fix old engines together' hints at a habit but gives no rate or pattern."
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V343",
+  "miss_kind": "different words",
+  "writer_kind": "K1",
+  "text": "Evelyn sat by the window, folding napkins. The distant, faint aroma of baked apples drifted from the care home kitchen. It took her back to childhood Saturdays spent at her grandmother’s house, where a similar sweet scent always filled the air from pies cooling on the sill. She almost felt the worn kitchen linoleum beneath her feet again.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Evelyn",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distant, faint aroma of baked apples",
+    "mind": "Evelyn",
+    "relative_to": "childhood Saturdays",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood Saturdays",
+    "mind": "Evelyn",
+    "relative_to": "The distant, faint aroma of baked apples",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Evelyn",
+    "mind": "Evelyn",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The distant, faint aroma of baked apples",
+    "mind": "Evelyn",
+    "relative_to": "childhood Saturdays spent at her grandmother’s house",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "childhood Saturdays spent at her grandmother’s house",
+    "mind": "Evelyn",
+    "relative_to": "The distant, faint aroma of baked apples",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "The pie scent 'always' filled the air on those Saturdays: a rate word, but the passage does not frame it as conditioning",
+   "'almost felt the worn kitchen linoleum' is more of the same memory; not marked as a separate pair"
+  ],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V353",
+  "miss_kind": "one team only",
+  "writer_kind": "K3",
+  "text": "Charles watched his opponent take an aggressive pawn move. Decades of playing had taught him patience and the deceptive nature of early attacks. He didn't rush his counter. Instead, he calmly developed a knight, recalling countless games where overeagerness had led to swift defeat. He knew how to wait.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Charles",
+    "mind": "Charles",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Decades of playing",
+    "mind": "Charles",
+    "relative_to": "",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Charles",
+    "mind": "Charles",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "his opponent",
+    "mind": "his opponent",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "Decades of playing",
+    "mind": "Charles",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^5",
+    "words": "countless games where overeagerness had led to swift defeat",
+    "mind": "Charles",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "his opponent take an aggressive pawn move",
+    "mind": "Charles",
+    "relative_to": "countless games where overeagerness had led to swift defeat",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "countless games where overeagerness had led to swift defeat",
+    "mind": "Charles",
+    "relative_to": "his opponent take an aggressive pawn move",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'recalling countless games' is stated, but nothing shows the pawn move brought them to Mind"
+  ],
+  "team_b_notes": [
+   "The passage does not state whether Charles is drawn toward or averse to the aggressive pawn move or to patience."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V356",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Tanya arranged a bouquet of sweet peas. Their delicate, perfumed scent filled the air around her. The fragrance instantly brought her back to her grandmother's garden, a place she spent many happy summers. She remembered the bees buzzing around the tall flowering stalks and the feel of warm earth under her bare feet.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tanya",
+    "mind": "Tanya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "Their delicate, perfumed scent",
+    "mind": "Tanya",
+    "relative_to": "her grandmother's garden",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's garden",
+    "mind": "Tanya",
+    "relative_to": "Their delicate, perfumed scent",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Tanya",
+    "mind": "Tanya",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The fragrance",
+    "mind": "Tanya",
+    "relative_to": "her grandmother's garden",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother's garden",
+    "mind": "Tanya",
+    "relative_to": "The fragrance",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V367",
+  "miss_kind": "different words",
+  "writer_kind": "K3",
+  "text": "Arthur clipped steadily, listening to the new trainee chatter about weekend plans. He remembered his own early days, full of nervous energy and endless questions. The trainee's excitement reminded him of simpler times before the shop expanded and the quiet became a luxury. He finished the trim with a gentle brush, a gesture of quiet encouragement.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the new trainee",
+    "mind": "the new trainee",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The trainee's excitement",
+    "mind": "Arthur",
+    "relative_to": "simpler times",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "simpler times",
+    "mind": "Arthur",
+    "relative_to": "The trainee's excitement",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Arthur",
+    "mind": "Arthur",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^1",
+    "words": "the new trainee",
+    "mind": "the new trainee",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The trainee's excitement",
+    "mind": "Arthur",
+    "relative_to": "simpler times before the shop expanded and the quiet became a luxury",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "simpler times before the shop expanded and the quiet became a luxury",
+    "mind": "Arthur",
+    "relative_to": "The trainee's excitement",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [
+   "'He remembered his own early days' follows the trainee's chatter, but the passage does not say the chatter brought them to Mind"
+  ],
+  "team_b_notes": [
+   "Whether Arthur is drawn toward or averse to the trainee's chatter is not settled."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V376",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Robert waited at the taxi rank, his engine idling quietly. A faint, distant siren wailed in the city. The sound made him think of the old fire station near his childhood home. He remembered the loud clang of the bell when the trucks were called out, and the exciting rush of the big red engines.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "A faint, distant siren",
+    "mind": "Robert",
+    "relative_to": "the old fire station near his childhood home",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fire station near his childhood home",
+    "mind": "Robert",
+    "relative_to": "A faint, distant siren",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Robert",
+    "mind": "Robert",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The sound",
+    "mind": "Robert",
+    "relative_to": "the old fire station near his childhood home",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the old fire station near his childhood home",
+    "mind": "Robert",
+    "relative_to": "The sound",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not settle whether Robert is attracted toward or repelled by the memory of the fire station or the engines; 'exciting' is not shown as a pull."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V377",
+  "miss_kind": "different words",
+  "writer_kind": "K1",
+  "text": "Ricardo, a forklift operator, paused his machine. The repetitive beeping of a reversing truck pierced the air. It immediately reminded him of the electronic toy car his son had received last Christmas. He remembered his son's delighted squeals as the miniature vehicle backed away, beeping loudly across the living room floor.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ricardo",
+    "mind": "Ricardo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The repetitive beeping of a reversing truck",
+    "mind": "Ricardo",
+    "relative_to": "the electronic toy car",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the electronic toy car",
+    "mind": "Ricardo",
+    "relative_to": "The repetitive beeping of a reversing truck",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Ricardo",
+    "mind": "Ricardo",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The repetitive beeping of a reversing truck",
+    "mind": "Ricardo",
+    "relative_to": "the electronic toy car his son had received last Christmas",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "the electronic toy car his son had received last Christmas",
+    "mind": "Ricardo",
+    "relative_to": "The repetitive beeping of a reversing truck",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V388",
+  "miss_kind": "different words",
+  "writer_kind": "K1",
+  "text": "Maria finished trimming Mr. Henderson's hair and applied a splash of aftershave. The clean, sharp scent instantly transported her. She was a little girl again, watching her grandfather shave for Sunday church. She remembered the warmth of his hand, the neat comb of his hair, and the gentle way he always smiled at her.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The clean, sharp scent",
+    "mind": "Maria",
+    "relative_to": "a little girl again, watching her grandfather shave for Sunday church",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "a little girl again, watching her grandfather shave for Sunday church",
+    "mind": "Maria",
+    "relative_to": "The clean, sharp scent",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Maria",
+    "mind": "Maria",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "The clean, sharp scent",
+    "mind": "Maria",
+    "relative_to": "She was a little girl again",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "She was a little girl again",
+    "mind": "Maria",
+    "relative_to": "The clean, sharp scent",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^6",
+    "words": "the warmth of his hand",
+    "relative_to": "watching her grandfather shave for Sunday church",
+    "certainty": "ambiguous",
+    "other_candidate": "none",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the neat comb of his hair",
+    "relative_to": "watching her grandfather shave for Sunday church",
+    "certainty": "ambiguous",
+    "other_candidate": "none",
+    "mind": ""
+   },
+   {
+    "noetic": "^6",
+    "words": "the gentle way he always smiled at her",
+    "relative_to": "watching her grandfather shave for Sunday church",
+    "certainty": "ambiguous",
+    "other_candidate": "none",
+    "mind": ""
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [
+   "The passage does not show whether Maria is drawn toward or repelled by the scent or the memory, so no ^2 or ^3 is marked.",
+   "The passage does not state how strongly the scent impressed her beyond 'instantly transported her', so no ^4 is marked."
+  ],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ },
+ {
+  "passage": "V408",
+  "miss_kind": "same words, different relation",
+  "writer_kind": "K1",
+  "text": "Lena gently watered a tray of seedlings. The warm, damp air of the greenhouse carried the rich smell of earth and growing things. This familiar scent somehow shifted her thoughts to her grandmother’s kitchen. She imagined the yeasty warmth of rising bread dough. It was a comforting, solid memory she often visited.",
+  "team_a_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "the rich smell of earth and growing things",
+    "mind": "Lena",
+    "relative_to": "her grandmother’s kitchen",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother’s kitchen",
+    "mind": "Lena",
+    "relative_to": "the rich smell of earth and growing things",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^2",
+    "words": "a comforting, solid memory",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^7",
+    "words": "she often visited",
+    "mind": "Lena",
+    "relative_to": "a comforting, solid memory",
+    "certainty": "clear"
+   }
+  ],
+  "team_b_entries": [
+   {
+    "noetic": "^1",
+    "words": "Lena",
+    "mind": "Lena",
+    "relative_to": "",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^8",
+    "words": "This familiar scent",
+    "mind": "Lena",
+    "relative_to": "her grandmother’s kitchen",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^9",
+    "words": "her grandmother’s kitchen",
+    "mind": "Lena",
+    "relative_to": "This familiar scent",
+    "certainty": "clear"
+   },
+   {
+    "noetic": "^4",
+    "words": "a comforting, solid memory she often visited",
+    "mind": "Lena",
+    "relative_to": "her grandmother’s kitchen",
+    "certainty": "clear"
+   }
+  ],
+  "team_a_notes": [],
+  "team_b_notes": [],
+  "team_a_guide_problem": "",
+  "team_b_guide_problem": ""
+ }
+]

@@ -1,0 +1,2494 @@
+SHEET final-with_passage-01. Each item below holds a passage, a question and lettered options. Treat every item on its own. Go only by the passage of that item.
+For each item write one line: the item id, one space, then your reply.
+Your reply is the capital letter of the one option that fits best, or MORE_THAN_ONE if more than one option fits equally well, or NONE if no option fits.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM Q0438 ===
+Passage:
+Bramin opened the nail forge before dawn. He always reached for the brass brush before the plastic brush. The stool stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the stool first.
+
+Question: On the day Bramin opened up, where did the stool stand?
+A. inside the cart
+B. under the bench
+C. on the ledge
+D. behind the gate
+=== END Q0438 ===
+
+=== ITEM Q0439 ===
+Passage:
+Lieso opened the net loft before dawn. He always reached for the copper brush before the iron brush. The kettle stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Lieso do first?
+A. moving the kettle to the yard
+B. sweeping the loft floor twice
+C. reaching for the iron brush again
+D. reaching for the copper brush again
+E. hanging the tape on a hook
+F. leaving the door wide open
+=== END Q0439 ===
+
+=== ITEM Q0440 ===
+Passage:
+Tama opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tama leave to someone else?
+A. carrying the lantern outside
+B. working with the tar brush
+C. counting every rope there
+D. working on the bilge pump
+E. lighting the big lamp
+F. locking up the boat shed
+=== END Q0440 ===
+
+=== ITEM Q0441 ===
+Passage:
+Ansin opened the bell tower before dawn. He always reached for the oak saw before the tin saw. The oilcan stood on the stove by the door. A ball of twine lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the oilcan first.
+
+Question: On the day Ansin opened up, where did the oilcan stand?
+A. on the stove
+B. behind the gate
+C. inside the cart
+D. under the bench
+=== END Q0441 ===
+
+=== ITEM Q0442 ===
+Passage:
+Maro opened the net loft before dawn. He always reached for the curved tray before the straight tray. The rack stood on the table by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the rack first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Maro do first?
+A. reaching for the straight tray again
+B. leaving the door wide open
+C. hanging the twine on a hook
+D. moving the rack to the yard
+E. sweeping the loft floor twice
+F. reaching for the curved tray again
+=== END Q0442 ===
+
+=== ITEM Q0443 ===
+Passage:
+Fenna opened the nail forge before dawn. He always reached for the small spindle before the large spindle. The lantern stood on the table by the door. A ball of twine lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the lantern first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fenna leave to someone else?
+A. counting every twine there
+B. working on the damp cellar
+C. lighting the big lamp
+D. working with the small spindle
+E. carrying the lantern outside
+F. locking up the nail forge
+=== END Q0443 ===
+
+=== ITEM Q0444 ===
+Passage:
+Liesin opened the dye house before dawn. She always reached for the bone ruler before the steel ruler. The rack stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the rack first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesin leave to someone else?
+A. locking up the dye house
+B. working on the loose stair
+C. working with the bone ruler
+D. carrying the rack outside
+E. counting every rope there
+F. lighting the big lamp
+=== END Q0444 ===
+
+=== ITEM Q0445 ===
+Passage:
+Ilsin opened the seed store before dawn. She always reached for the wooden rake before the metal rake. The oilcan stood on the counter by the door. A coil of rope lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the oilcan first.
+
+Question: On the day Ilsin opened up, where did the oilcan stand?
+A. under the bench
+B. behind the gate
+C. inside the cart
+D. on the counter
+=== END Q0445 ===
+
+=== ITEM Q0446 ===
+Passage:
+Ilsen opened the bell tower before dawn. He always reached for the hemp mould before the nylon mould. The sledge stood on the counter by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the sledge first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilsen leave to someone else?
+A. carrying the sledge outside
+B. working with the hemp mould
+C. working on the leaky bellows
+D. counting every twine there
+E. lighting the big lamp
+F. locking up the bell tower
+=== END Q0446 ===
+
+=== ITEM Q0447 ===
+Passage:
+Tamen opened the nail forge before dawn. He always reached for the oak ladle before the tin ladle. The stool stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the stool first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Tamen do first?
+A. sweeping the forge floor twice
+B. reaching for the oak ladle again
+C. leaving the door wide open
+D. reaching for the tin ladle again
+E. hanging the tape on a hook
+F. moving the stool to the yard
+=== END Q0447 ===
+
+=== ITEM Q0448 ===
+Passage:
+Fenna opened the nail forge before dawn. He always reached for the small spindle before the large spindle. The lantern stood on the table by the door. A ball of twine lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the lantern first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Fenna do first?
+A. reaching for the large spindle again
+B. moving the lantern to the yard
+C. leaving the door wide open
+D. reaching for the small spindle again
+E. sweeping the forge floor twice
+F. hanging the twine on a hook
+=== END Q0448 ===
+
+=== ITEM Q0449 ===
+Passage:
+Ilsa opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilsa do first?
+A. reaching for the oak scoop again
+B. reaching for the tin scoop again
+C. leaving the door wide open
+D. sweeping the store floor twice
+E. moving the ledger to the yard
+F. hanging the barley on a hook
+=== END Q0449 ===
+
+=== ITEM Q0450 ===
+Passage:
+Ilsen opened the bell tower before dawn. He always reached for the hemp mould before the nylon mould. The sledge stood on the counter by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the sledge first.
+
+Question: Ilsen spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the counter by the door
+B. opening the bell tower before dawn
+C. dusting the sledge before anything else
+D. knowing where the sledge stands
+E. walking in through the door
+F. seeing the twine beside it
+=== END Q0450 ===
+
+=== ITEM Q0451 ===
+Passage:
+Ansa opened the bell tower before dawn. He always reached for the fine brush before the flat brush. The ledger stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the ledger first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansa do first?
+A. sweeping the tower floor twice
+B. reaching for the fine brush again
+C. hanging the tongs on a hook
+D. moving the ledger to the yard
+E. leaving the door wide open
+F. reaching for the flat brush again
+=== END Q0451 ===
+
+=== ITEM Q0452 ===
+Passage:
+Liesin opened the dye house before dawn. She always reached for the bone ruler before the steel ruler. The rack stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the rack first.
+
+Question: On the day Liesin opened up, where did the rack stand?
+A. behind the gate
+B. on the shelf
+C. inside the cart
+D. under the bench
+=== END Q0452 ===
+
+=== ITEM Q0453 ===
+Passage:
+Mara opened the dye house before dawn. She always reached for the hemp ladle before the nylon ladle. The rack stood on the table by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Mara do first?
+A. reaching for the nylon ladle again
+B. hanging the madder on a hook
+C. reaching for the hemp ladle again
+D. sweeping the house floor twice
+E. leaving the door wide open
+F. moving the rack to the yard
+=== END Q0453 ===
+
+=== ITEM Q0454 ===
+Passage:
+Bramin opened the nail forge before dawn. He always reached for the brass brush before the plastic brush. The stool stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the stool first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Bramin leave to someone else?
+A. lighting the big lamp
+B. working on the loose stair
+C. carrying the stool outside
+D. locking up the nail forge
+E. working with the brass brush
+F. counting every twine there
+=== END Q0454 ===
+
+=== ITEM Q0455 ===
+Passage:
+Liesa opened the dye house before dawn. She always reached for the curved rake before the straight rake. The kettle stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the kettle first.
+
+Question: Liesa spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the barley beside it
+B. walking in through the door
+C. dusting the kettle before anything else
+D. opening the dye house before dawn
+E. knowing where the kettle stands
+F. finding the shelf by the door
+=== END Q0455 ===
+
+=== ITEM Q0456 ===
+Passage:
+Fennin opened the nail forge before dawn. He always reached for the tar mould before the wire mould. The bucket stood on the table by the door. A roll of tape lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the bucket first.
+
+Question: Fennin spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the bucket stands
+B. walking in through the door
+C. opening the nail forge before dawn
+D. dusting the bucket before anything else
+E. seeing the tape beside it
+F. finding the table by the door
+=== END Q0456 ===
+
+=== ITEM Q0457 ===
+Passage:
+Josso opened the dye house before dawn. She always reached for the tar saw before the wire saw. The globe stood on the counter by the door. A tub of madder lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the globe first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Josso do first?
+A. leaving the door wide open
+B. hanging the madder on a hook
+C. moving the globe to the yard
+D. reaching for the wire saw again
+E. reaching for the tar saw again
+F. sweeping the house floor twice
+=== END Q0457 ===
+
+=== ITEM Q0458 ===
+Passage:
+Maren opened the net loft before dawn. He always reached for the wooden saw before the metal saw. The kettle stood on the table by the door. A pair of tongs lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the kettle first.
+
+Question: On the day Maren opened up, where did the kettle stand?
+A. on the table
+B. under the bench
+C. behind the gate
+D. inside the cart
+=== END Q0458 ===
+
+=== ITEM Q0459 ===
+Passage:
+Ilso opened the bell tower before dawn. He always reached for the long hammer before the short hammer. The ledger stood on the counter by the door. A roll of tape lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the ledger first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilso do first?
+A. sweeping the tower floor twice
+B. leaving the door wide open
+C. reaching for the short hammer again
+D. moving the ledger to the yard
+E. hanging the tape on a hook
+F. reaching for the long hammer again
+=== END Q0459 ===
+
+=== ITEM Q0460 ===
+Passage:
+Wreno opened the bell tower before dawn. He always reached for the bone spindle before the steel spindle. The sledge stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the sledge first.
+
+Question: On the day Wreno opened up, where did the sledge stand?
+A. inside the cart
+B. under the bench
+C. behind the gate
+D. on the ledge
+=== END Q0460 ===
+
+=== ITEM Q0461 ===
+Passage:
+Mara opened the dye house before dawn. She always reached for the hemp ladle before the nylon ladle. The rack stood on the table by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Mara leave to someone else?
+A. working on the lye vat
+B. locking up the dye house
+C. working with the hemp ladle
+D. counting every madder there
+E. carrying the rack outside
+F. lighting the big lamp
+=== END Q0461 ===
+
+=== ITEM Q0462 ===
+Passage:
+Odrin opened the net loft before dawn. He always reached for the wicker spindle before the mesh spindle. The rack stood on the stove by the door. A roll of tape lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the rack first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Odrin do first?
+A. reaching for the wicker spindle again
+B. reaching for the mesh spindle again
+C. leaving the door wide open
+D. sweeping the loft floor twice
+E. moving the rack to the yard
+F. hanging the tape on a hook
+=== END Q0462 ===
+
+=== ITEM Q0463 ===
+Passage:
+Anso opened the seed store before dawn. She always reached for the hemp needle before the nylon needle. The ledger stood on the stove by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the ledger first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Anso do first?
+A. reaching for the hemp needle again
+B. sweeping the store floor twice
+C. reaching for the nylon needle again
+D. hanging the rope on a hook
+E. moving the ledger to the yard
+F. leaving the door wide open
+=== END Q0463 ===
+
+=== ITEM Q0464 ===
+Passage:
+Tamo opened the nail forge before dawn. He always reached for the wooden needle before the metal needle. The lantern stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the lantern first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Tamo do first?
+A. reaching for the wooden needle again
+B. reaching for the metal needle again
+C. hanging the straw on a hook
+D. sweeping the forge floor twice
+E. moving the lantern to the yard
+F. leaving the door wide open
+=== END Q0464 ===
+
+=== ITEM Q0465 ===
+Passage:
+Fenna opened the nail forge before dawn. He always reached for the small spindle before the large spindle. The lantern stood on the table by the door. A ball of twine lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the lantern first.
+
+Question: On the day Fenna opened up, where did the lantern stand?
+A. on the table
+B. inside the cart
+C. behind the gate
+D. under the bench
+=== END Q0465 ===
+
+=== ITEM Q0466 ===
+Passage:
+Hala opened the net loft before dawn. He always reached for the tar scoop before the wire scoop. The rack stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the rack first.
+
+Question: On the day Hala opened up, where did the rack stand?
+A. inside the cart
+B. behind the gate
+C. on the ledge
+D. under the bench
+=== END Q0466 ===
+
+=== ITEM Q0467 ===
+Passage:
+Wrenin opened the seed store before dawn. She always reached for the birch tray before the zinc tray. The ledger stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the ledger first.
+
+Question: On the day Wrenin opened up, where did the ledger stand?
+A. inside the cart
+B. behind the gate
+C. under the bench
+D. on the ledge
+=== END Q0467 ===
+
+=== ITEM Q0468 ===
+Passage:
+Odra opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odra leave to someone else?
+A. locking up the net loft
+B. carrying the kettle outside
+C. lighting the big lamp
+D. working with the bone needle
+E. counting every twine there
+F. working on the rusty winch
+=== END Q0468 ===
+
+=== ITEM Q0469 ===
+Passage:
+Ilsen opened the bell tower before dawn. He always reached for the hemp mould before the nylon mould. The sledge stood on the counter by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the sledge first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilsen do first?
+A. sweeping the tower floor twice
+B. reaching for the nylon mould again
+C. reaching for the hemp mould again
+D. hanging the twine on a hook
+E. leaving the door wide open
+F. moving the sledge to the yard
+=== END Q0469 ===
+
+=== ITEM Q0470 ===
+Passage:
+Fenno opened the boat shed before dawn. She always reached for the oak rake before the tin rake. The lantern stood on the table by the door. A stack of pallets lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the lantern first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fenno leave to someone else?
+A. lighting the big lamp
+B. counting every pallets there
+C. working on the loose stair
+D. locking up the boat shed
+E. carrying the lantern outside
+F. working with the oak rake
+=== END Q0470 ===
+
+=== ITEM Q0471 ===
+Passage:
+Tamin opened the boat shed before dawn. She always reached for the hemp saw before the nylon saw. The bucket stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the bucket first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Tamin do first?
+A. reaching for the nylon saw again
+B. leaving the door wide open
+C. hanging the pallets on a hook
+D. moving the bucket to the yard
+E. sweeping the shed floor twice
+F. reaching for the hemp saw again
+=== END Q0471 ===
+
+=== ITEM Q0472 ===
+Passage:
+Eddin opened the boat shed before dawn. She always reached for the curved hammer before the straight hammer. The lantern stood on the stove by the door. A tub of madder lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the lantern first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Eddin do first?
+A. sweeping the shed floor twice
+B. moving the lantern to the yard
+C. hanging the madder on a hook
+D. reaching for the curved hammer again
+E. reaching for the straight hammer again
+F. leaving the door wide open
+=== END Q0472 ===
+
+=== ITEM Q0473 ===
+Passage:
+Liesa opened the dye house before dawn. She always reached for the curved rake before the straight rake. The kettle stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesa do first?
+A. hanging the barley on a hook
+B. reaching for the curved rake again
+C. reaching for the straight rake again
+D. sweeping the house floor twice
+E. leaving the door wide open
+F. moving the kettle to the yard
+=== END Q0473 ===
+
+=== ITEM Q0474 ===
+Passage:
+Anso opened the seed store before dawn. She always reached for the hemp needle before the nylon needle. The ledger stood on the stove by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the ledger first.
+
+Question: On the day Anso opened up, where did the ledger stand?
+A. behind the gate
+B. on the stove
+C. inside the cart
+D. under the bench
+=== END Q0474 ===
+
+=== ITEM Q0475 ===
+Passage:
+Halin opened the net loft before dawn. He always reached for the hemp rake before the nylon rake. The globe stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the globe first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Halin do first?
+A. leaving the door wide open
+B. moving the globe to the yard
+C. hanging the tongs on a hook
+D. reaching for the nylon rake again
+E. sweeping the loft floor twice
+F. reaching for the hemp rake again
+=== END Q0475 ===
+
+=== ITEM Q0476 ===
+Passage:
+Jossen opened the dye house before dawn. She always reached for the small brush before the large brush. The rack stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the rack first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Jossen leave to someone else?
+A. working on the rusty winch
+B. carrying the rack outside
+C. counting every pallets there
+D. lighting the big lamp
+E. working with the small brush
+F. locking up the dye house
+=== END Q0476 ===
+
+=== ITEM Q0477 ===
+Passage:
+Fenno opened the boat shed before dawn. She always reached for the oak rake before the tin rake. The lantern stood on the table by the door. A stack of pallets lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the lantern first.
+
+Question: On the day Fenno opened up, where did the lantern stand?
+A. inside the cart
+B. on the table
+C. behind the gate
+D. under the bench
+=== END Q0477 ===
+
+=== ITEM Q0478 ===
+Passage:
+Jossen opened the dye house before dawn. She always reached for the small brush before the large brush. The rack stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the rack first.
+
+Question: On the day Jossen opened up, where did the rack stand?
+A. under the bench
+B. on the counter
+C. behind the gate
+D. inside the cart
+=== END Q0478 ===
+
+=== ITEM Q0479 ===
+Passage:
+Odro opened the dye house before dawn. She always reached for the brass scoop before the plastic scoop. The kettle stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the kettle first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odro leave to someone else?
+A. working on the lye vat
+B. carrying the kettle outside
+C. counting every pallets there
+D. locking up the dye house
+E. working with the brass scoop
+F. lighting the big lamp
+=== END Q0479 ===
+
+=== ITEM Q0480 ===
+Passage:
+Bramin opened the nail forge before dawn. He always reached for the brass brush before the plastic brush. The stool stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the stool first.
+
+Question: Bramin spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the stool before anything else
+B. knowing where the stool stands
+C. opening the nail forge before dawn
+D. walking in through the door
+E. finding the ledge by the door
+F. seeing the twine beside it
+=== END Q0480 ===
+
+=== ITEM Q0481 ===
+Passage:
+Coro opened the seed store before dawn. She always reached for the fine mould before the flat mould. The oilcan stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the oilcan first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Coro leave to someone else?
+A. locking up the seed store
+B. carrying the oilcan outside
+C. lighting the big lamp
+D. counting every barley there
+E. working with the fine mould
+F. working on the rusty winch
+=== END Q0481 ===
+
+=== ITEM Q0482 ===
+Passage:
+Petrin opened the boat shed before dawn. She always reached for the copper spindle before the iron spindle. The stool stood on the counter by the door. A sack of barley lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the stool first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petrin leave to someone else?
+A. locking up the boat shed
+B. working with the copper spindle
+C. carrying the stool outside
+D. counting every barley there
+E. working on the bilge pump
+F. lighting the big lamp
+=== END Q0482 ===
+
+=== ITEM Q0483 ===
+Passage:
+Ilso opened the bell tower before dawn. He always reached for the long hammer before the short hammer. The ledger stood on the counter by the door. A roll of tape lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the ledger first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilso leave to someone else?
+A. counting every tape there
+B. working with the long hammer
+C. working on the loose stair
+D. carrying the ledger outside
+E. lighting the big lamp
+F. locking up the bell tower
+=== END Q0483 ===
+
+=== ITEM Q0484 ===
+Passage:
+Tamo opened the nail forge before dawn. He always reached for the wooden needle before the metal needle. The lantern stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the lantern first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tamo leave to someone else?
+A. working on the leaky bellows
+B. counting every straw there
+C. locking up the nail forge
+D. working with the wooden needle
+E. carrying the lantern outside
+F. lighting the big lamp
+=== END Q0484 ===
+
+=== ITEM Q0485 ===
+Passage:
+Jossin opened the net loft before dawn. He always reached for the fine ladle before the flat ladle. The kettle stood on the counter by the door. A heap of straw lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the kettle first.
+
+Question: On the day Jossin opened up, where did the kettle stand?
+A. under the bench
+B. inside the cart
+C. behind the gate
+D. on the counter
+=== END Q0485 ===
+
+=== ITEM Q0486 ===
+Passage:
+Jossa opened the net loft before dawn. He always reached for the brass ruler before the plastic ruler. The globe stood on the counter by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the globe first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Jossa leave to someone else?
+A. counting every tape there
+B. working on the bilge pump
+C. lighting the big lamp
+D. locking up the net loft
+E. working with the brass ruler
+F. carrying the globe outside
+=== END Q0486 ===
+
+=== ITEM Q0487 ===
+Passage:
+Petra opened the boat shed before dawn. She always reached for the birch needle before the zinc needle. The bucket stood on the counter by the door. A tub of madder lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the bucket first.
+
+Question: Petra spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. finding the counter by the door
+C. dusting the bucket before anything else
+D. seeing the madder beside it
+E. opening the boat shed before dawn
+F. knowing where the bucket stands
+=== END Q0487 ===
+
+=== ITEM Q0488 ===
+Passage:
+Wrenen opened the bell tower before dawn. He always reached for the curved needle before the straight needle. The oilcan stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the oilcan first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wrenen leave to someone else?
+A. locking up the bell tower
+B. lighting the big lamp
+C. counting every tape there
+D. carrying the oilcan outside
+E. working on the damp cellar
+F. working with the curved needle
+=== END Q0488 ===
+
+=== ITEM Q0489 ===
+Passage:
+Wrenen opened the bell tower before dawn. He always reached for the curved needle before the straight needle. The oilcan stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the oilcan first.
+
+Question: On the day Wrenen opened up, where did the oilcan stand?
+A. behind the gate
+B. on the ledge
+C. under the bench
+D. inside the cart
+=== END Q0489 ===
+
+=== ITEM Q0490 ===
+Passage:
+Sunna opened the seed store before dawn. She always reached for the bone hammer before the steel hammer. The oilcan stood on the table by the door. A stack of pallets lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the oilcan first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunna leave to someone else?
+A. lighting the big lamp
+B. carrying the oilcan outside
+C. counting every pallets there
+D. working on the bilge pump
+E. working with the bone hammer
+F. locking up the seed store
+=== END Q0490 ===
+
+=== ITEM Q0491 ===
+Passage:
+Odrin opened the net loft before dawn. He always reached for the wicker spindle before the mesh spindle. The rack stood on the stove by the door. A roll of tape lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the rack first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odrin leave to someone else?
+A. locking up the net loft
+B. counting every tape there
+C. lighting the big lamp
+D. working with the wicker spindle
+E. working on the leaky bellows
+F. carrying the rack outside
+=== END Q0491 ===
+
+=== ITEM Q0492 ===
+Passage:
+Mara opened the dye house before dawn. She always reached for the hemp ladle before the nylon ladle. The rack stood on the table by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.
+
+Question: On the day Mara opened up, where did the rack stand?
+A. behind the gate
+B. on the table
+C. inside the cart
+D. under the bench
+=== END Q0492 ===
+
+=== ITEM Q0493 ===
+Passage:
+Ilsen opened the bell tower before dawn. He always reached for the hemp mould before the nylon mould. The sledge stood on the counter by the door. A ball of twine lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the sledge first.
+
+Question: On the day Ilsen opened up, where did the sledge stand?
+A. on the counter
+B. behind the gate
+C. under the bench
+D. inside the cart
+=== END Q0493 ===
+
+=== ITEM Q0494 ===
+Passage:
+Corin opened the bell tower before dawn. He always reached for the small scoop before the large scoop. The sledge stood on the shelf by the door. A pair of tongs lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the sledge first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Corin leave to someone else?
+A. counting every tongs there
+B. working on the bilge pump
+C. locking up the bell tower
+D. carrying the sledge outside
+E. working with the small scoop
+F. lighting the big lamp
+=== END Q0494 ===
+
+=== ITEM Q0495 ===
+Passage:
+Ansen opened the seed store before dawn. She always reached for the tar ladle before the wire ladle. The sledge stood on the stove by the door. A sack of barley lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the sledge first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ansen leave to someone else?
+A. carrying the sledge outside
+B. counting every barley there
+C. lighting the big lamp
+D. working on the loose stair
+E. working with the tar ladle
+F. locking up the seed store
+=== END Q0495 ===
+
+=== ITEM Q0496 ===
+Passage:
+Ilso opened the bell tower before dawn. He always reached for the long hammer before the short hammer. The ledger stood on the counter by the door. A roll of tape lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the ledger first.
+
+Question: Ilso spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the ledger stands
+B. finding the counter by the door
+C. opening the bell tower before dawn
+D. walking in through the door
+E. dusting the ledger before anything else
+F. seeing the tape beside it
+=== END Q0496 ===
+
+=== ITEM Q0497 ===
+Passage:
+Liesin opened the dye house before dawn. She always reached for the bone ruler before the steel ruler. The rack stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the rack first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesin do first?
+A. moving the rack to the yard
+B. hanging the rope on a hook
+C. sweeping the house floor twice
+D. reaching for the steel ruler again
+E. leaving the door wide open
+F. reaching for the bone ruler again
+=== END Q0497 ===
+
+=== ITEM Q0498 ===
+Passage:
+Bramo opened the boat shed before dawn. She always reached for the small ladle before the large ladle. The bucket stood on the ledge by the door. A coil of rope lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the bucket first.
+
+Question: On the day Bramo opened up, where did the bucket stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the ledge
+=== END Q0498 ===
+
+=== ITEM Q0499 ===
+Passage:
+Bramo opened the boat shed before dawn. She always reached for the small ladle before the large ladle. The bucket stood on the ledge by the door. A coil of rope lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the bucket first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Bramo do first?
+A. reaching for the large ladle again
+B. reaching for the small ladle again
+C. sweeping the shed floor twice
+D. moving the bucket to the yard
+E. hanging the rope on a hook
+F. leaving the door wide open
+=== END Q0499 ===
+
+=== ITEM Q0500 ===
+Passage:
+Ansa opened the bell tower before dawn. He always reached for the fine brush before the flat brush. The ledger stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the ledger first.
+
+Question: Ansa spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the tongs beside it
+B. walking in through the door
+C. opening the bell tower before dawn
+D. dusting the ledger before anything else
+E. knowing where the ledger stands
+F. finding the stove by the door
+=== END Q0500 ===
+
+=== ITEM Q0501 ===
+Passage:
+Odrin opened the net loft before dawn. He always reached for the wicker spindle before the mesh spindle. The rack stood on the stove by the door. A roll of tape lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the rack first.
+
+Question: Odrin spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the rack before anything else
+B. walking in through the door
+C. knowing where the rack stands
+D. finding the stove by the door
+E. opening the net loft before dawn
+F. seeing the tape beside it
+=== END Q0501 ===
+
+=== ITEM Q0502 ===
+Passage:
+Eddin opened the boat shed before dawn. She always reached for the curved hammer before the straight hammer. The lantern stood on the stove by the door. A tub of madder lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the lantern first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Eddin leave to someone else?
+A. locking up the boat shed
+B. counting every madder there
+C. working on the rusty winch
+D. carrying the lantern outside
+E. lighting the big lamp
+F. working with the curved hammer
+=== END Q0502 ===
+
+=== ITEM Q0503 ===
+Passage:
+Brama opened the nail forge before dawn. He always reached for the copper hammer before the iron hammer. The bucket stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Brama leave to someone else?
+A. counting every tongs there
+B. working with the copper hammer
+C. locking up the nail forge
+D. working on the leaky bellows
+E. carrying the bucket outside
+F. lighting the big lamp
+=== END Q0503 ===
+
+=== ITEM Q0504 ===
+Passage:
+Ansin opened the bell tower before dawn. He always reached for the oak saw before the tin saw. The oilcan stood on the stove by the door. A ball of twine lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the oilcan first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansin do first?
+A. reaching for the oak saw again
+B. moving the oilcan to the yard
+C. sweeping the tower floor twice
+D. leaving the door wide open
+E. reaching for the tin saw again
+F. hanging the twine on a hook
+=== END Q0504 ===
+
+=== ITEM Q0505 ===
+Passage:
+Odrin opened the net loft before dawn. He always reached for the wicker spindle before the mesh spindle. The rack stood on the stove by the door. A roll of tape lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the rack first.
+
+Question: On the day Odrin opened up, where did the rack stand?
+A. under the bench
+B. inside the cart
+C. on the stove
+D. behind the gate
+=== END Q0505 ===
+
+=== ITEM Q0506 ===
+Passage:
+Sunnin opened the seed store before dawn. She always reached for the wicker brush before the mesh brush. The sledge stood on the table by the door. A tub of madder lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the sledge first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunnin leave to someone else?
+A. working with the wicker brush
+B. carrying the sledge outside
+C. counting every madder there
+D. lighting the big lamp
+E. working on the damp cellar
+F. locking up the seed store
+=== END Q0506 ===
+
+=== ITEM Q0507 ===
+Passage:
+Edda opened the boat shed before dawn. She always reached for the wooden mould before the metal mould. The stool stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.
+
+Question: On the day Edda opened up, where did the stool stand?
+A. on the stove
+B. behind the gate
+C. inside the cart
+D. under the bench
+=== END Q0507 ===
+
+=== ITEM Q0508 ===
+Passage:
+Wrenen opened the bell tower before dawn. He always reached for the curved needle before the straight needle. The oilcan stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the oilcan first.
+
+Question: Wrenen spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the bell tower before dawn
+B. dusting the oilcan before anything else
+C. walking in through the door
+D. knowing where the oilcan stands
+E. finding the ledge by the door
+F. seeing the tape beside it
+=== END Q0508 ===
+
+=== ITEM Q0509 ===
+Passage:
+Halen opened the dye house before dawn. She always reached for the oak mould before the tin mould. The kettle stood on the ledge by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the kettle first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Halen leave to someone else?
+A. working on the bilge pump
+B. counting every madder there
+C. lighting the big lamp
+D. carrying the kettle outside
+E. working with the oak mould
+F. locking up the dye house
+=== END Q0509 ===
+
+=== ITEM Q0510 ===
+Passage:
+Eddin opened the boat shed before dawn. She always reached for the curved hammer before the straight hammer. The lantern stood on the stove by the door. A tub of madder lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the lantern first.
+
+Question: Eddin spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the madder beside it
+B. opening the boat shed before dawn
+C. finding the stove by the door
+D. knowing where the lantern stands
+E. dusting the lantern before anything else
+F. walking in through the door
+=== END Q0510 ===
+
+=== ITEM Q0511 ===
+Passage:
+Odren opened the dye house before dawn. She always reached for the copper tray before the iron tray. The globe stood on the stove by the door. A coil of rope lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the globe first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Odren leave to someone else?
+A. working on the damp cellar
+B. carrying the globe outside
+C. lighting the big lamp
+D. locking up the dye house
+E. working with the copper tray
+F. counting every rope there
+=== END Q0511 ===
+
+=== ITEM Q0512 ===
+Passage:
+Sunnin opened the seed store before dawn. She always reached for the wicker brush before the mesh brush. The sledge stood on the table by the door. A tub of madder lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the sledge first.
+
+Question: On the day Sunnin opened up, where did the sledge stand?
+A. inside the cart
+B. on the table
+C. behind the gate
+D. under the bench
+=== END Q0512 ===
+
+=== ITEM Q0513 ===
+Passage:
+Sunnen opened the bell tower before dawn. He always reached for the copper ruler before the iron ruler. The ledger stood on the table by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the ledger first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunnen do first?
+A. sweeping the tower floor twice
+B. moving the ledger to the yard
+C. leaving the door wide open
+D. reaching for the iron ruler again
+E. hanging the straw on a hook
+F. reaching for the copper ruler again
+=== END Q0513 ===
+
+=== ITEM Q0514 ===
+Passage:
+Liesen opened the net loft before dawn. He always reached for the birch hammer before the zinc hammer. The globe stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the globe first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesen leave to someone else?
+A. carrying the globe outside
+B. working with the birch hammer
+C. lighting the big lamp
+D. locking up the net loft
+E. working on the lye vat
+F. counting every twine there
+=== END Q0514 ===
+
+=== ITEM Q0515 ===
+Passage:
+Wrenin opened the seed store before dawn. She always reached for the birch tray before the zinc tray. The ledger stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the ledger first.
+
+Question: Wrenin spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the ledge by the door
+B. dusting the ledger before anything else
+C. walking in through the door
+D. opening the seed store before dawn
+E. seeing the pallets beside it
+F. knowing where the ledger stands
+=== END Q0515 ===
+
+=== ITEM Q0516 ===
+Passage:
+Tamo opened the nail forge before dawn. He always reached for the wooden needle before the metal needle. The lantern stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the lantern first.
+
+Question: On the day Tamo opened up, where did the lantern stand?
+A. inside the cart
+B. behind the gate
+C. under the bench
+D. on the shelf
+=== END Q0516 ===
+
+=== ITEM Q0517 ===
+Passage:
+Tamin opened the boat shed before dawn. She always reached for the hemp saw before the nylon saw. The bucket stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the bucket first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tamin leave to someone else?
+A. lighting the big lamp
+B. working on the damp cellar
+C. locking up the boat shed
+D. working with the hemp saw
+E. carrying the bucket outside
+F. counting every pallets there
+=== END Q0517 ===
+
+=== ITEM Q0518 ===
+Passage:
+Fenna opened the nail forge before dawn. He always reached for the small spindle before the large spindle. The lantern stood on the table by the door. A ball of twine lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the lantern first.
+
+Question: Fenna spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the nail forge before dawn
+B. knowing where the lantern stands
+C. dusting the lantern before anything else
+D. finding the table by the door
+E. seeing the twine beside it
+F. walking in through the door
+=== END Q0518 ===
+
+=== ITEM Q0519 ===
+Passage:
+Fennin opened the nail forge before dawn. He always reached for the tar mould before the wire mould. The bucket stood on the table by the door. A roll of tape lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the bucket first.
+
+Question: On the day Fennin opened up, where did the bucket stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the table
+=== END Q0519 ===
+
+=== ITEM Q0520 ===
+Passage:
+Jossen opened the dye house before dawn. She always reached for the small brush before the large brush. The rack stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the rack first.
+
+Question: Jossen spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the dye house before dawn
+B. finding the counter by the door
+C. knowing where the rack stands
+D. walking in through the door
+E. seeing the pallets beside it
+F. dusting the rack before anything else
+=== END Q0520 ===
+
+=== ITEM Q0521 ===
+Passage:
+Maro opened the net loft before dawn. He always reached for the curved tray before the straight tray. The rack stood on the table by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the rack first.
+
+Question: On the day Maro opened up, where did the rack stand?
+A. inside the cart
+B. behind the gate
+C. on the table
+D. under the bench
+=== END Q0521 ===
+
+=== ITEM Q0522 ===
+Passage:
+Tamin opened the boat shed before dawn. She always reached for the hemp saw before the nylon saw. The bucket stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the bucket first.
+
+Question: On the day Tamin opened up, where did the bucket stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the shelf
+=== END Q0522 ===
+
+=== ITEM Q0523 ===
+Passage:
+Petrin opened the boat shed before dawn. She always reached for the copper spindle before the iron spindle. The stool stood on the counter by the door. A sack of barley lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the stool first.
+
+Question: On the day Petrin opened up, where did the stool stand?
+A. under the bench
+B. behind the gate
+C. on the counter
+D. inside the cart
+=== END Q0523 ===
+
+=== ITEM Q0524 ===
+Passage:
+Odro opened the dye house before dawn. She always reached for the brass scoop before the plastic scoop. The kettle stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the kettle first.
+
+Question: Odro spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the stove by the door
+B. dusting the kettle before anything else
+C. knowing where the kettle stands
+D. opening the dye house before dawn
+E. seeing the pallets beside it
+F. walking in through the door
+=== END Q0524 ===
+
+=== ITEM Q0525 ===
+Passage:
+Tamo opened the nail forge before dawn. He always reached for the wooden needle before the metal needle. The lantern stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the lantern first.
+
+Question: Tamo spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the nail forge before dawn
+B. walking in through the door
+C. seeing the straw beside it
+D. finding the shelf by the door
+E. dusting the lantern before anything else
+F. knowing where the lantern stands
+=== END Q0525 ===
+
+=== ITEM Q0526 ===
+Passage:
+Jossa opened the net loft before dawn. He always reached for the brass ruler before the plastic ruler. The globe stood on the counter by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the globe first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Jossa do first?
+A. leaving the door wide open
+B. moving the globe to the yard
+C. reaching for the plastic ruler again
+D. hanging the tape on a hook
+E. sweeping the loft floor twice
+F. reaching for the brass ruler again
+=== END Q0526 ===
+
+=== ITEM Q0527 ===
+Passage:
+Ilsa opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilsa leave to someone else?
+A. carrying the ledger outside
+B. working on the damp cellar
+C. counting every barley there
+D. lighting the big lamp
+E. locking up the seed store
+F. working with the oak scoop
+=== END Q0527 ===
+
+=== ITEM Q0528 ===
+Passage:
+Halen opened the dye house before dawn. She always reached for the oak mould before the tin mould. The kettle stood on the ledge by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Halen do first?
+A. reaching for the tin mould again
+B. reaching for the oak mould again
+C. hanging the madder on a hook
+D. sweeping the house floor twice
+E. moving the kettle to the yard
+F. leaving the door wide open
+=== END Q0528 ===
+
+=== ITEM Q0529 ===
+Passage:
+Jossin opened the net loft before dawn. He always reached for the fine ladle before the flat ladle. The kettle stood on the counter by the door. A heap of straw lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the kettle first.
+
+Question: Jossin spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the kettle before anything else
+B. opening the net loft before dawn
+C. knowing where the kettle stands
+D. finding the counter by the door
+E. seeing the straw beside it
+F. walking in through the door
+=== END Q0529 ===
+
+=== ITEM Q0530 ===
+Passage:
+Wreno opened the bell tower before dawn. He always reached for the bone spindle before the steel spindle. The sledge stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the sledge first.
+
+Question: Wreno spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the ledge by the door
+B. dusting the sledge before anything else
+C. seeing the straw beside it
+D. knowing where the sledge stands
+E. walking in through the door
+F. opening the bell tower before dawn
+=== END Q0530 ===
+
+=== ITEM Q0531 ===
+Passage:
+Wrenin opened the seed store before dawn. She always reached for the birch tray before the zinc tray. The ledger stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the ledger first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wrenin leave to someone else?
+A. working on the leaky bellows
+B. locking up the seed store
+C. lighting the big lamp
+D. carrying the ledger outside
+E. counting every pallets there
+F. working with the birch tray
+=== END Q0531 ===
+
+=== ITEM Q0532 ===
+Passage:
+Ilsa opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.
+
+Question: On the day Ilsa opened up, where did the ledger stand?
+A. behind the gate
+B. inside the cart
+C. on the counter
+D. under the bench
+=== END Q0532 ===
+
+=== ITEM Q0533 ===
+Passage:
+Fennen opened the boat shed before dawn. She always reached for the fine scoop before the flat scoop. The stool stood on the table by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the stool first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Fennen do first?
+A. reaching for the fine scoop again
+B. moving the stool to the yard
+C. reaching for the flat scoop again
+D. hanging the rope on a hook
+E. leaving the door wide open
+F. sweeping the shed floor twice
+=== END Q0533 ===
+
+=== ITEM Q0534 ===
+Passage:
+Liesa opened the dye house before dawn. She always reached for the curved rake before the straight rake. The kettle stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the kettle first.
+
+Question: On the day Liesa opened up, where did the kettle stand?
+A. under the bench
+B. on the shelf
+C. inside the cart
+D. behind the gate
+=== END Q0534 ===
+
+=== ITEM Q0535 ===
+Passage:
+Jossa opened the net loft before dawn. He always reached for the brass ruler before the plastic ruler. The globe stood on the counter by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the globe first.
+
+Question: Jossa spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the globe before anything else
+B. finding the counter by the door
+C. opening the net loft before dawn
+D. seeing the tape beside it
+E. walking in through the door
+F. knowing where the globe stands
+=== END Q0535 ===
+
+=== ITEM Q0536 ===
+Passage:
+Coro opened the seed store before dawn. She always reached for the fine mould before the flat mould. The oilcan stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the oilcan first.
+
+Question: Coro spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the shelf by the door
+B. dusting the oilcan before anything else
+C. knowing where the oilcan stands
+D. opening the seed store before dawn
+E. seeing the barley beside it
+F. walking in through the door
+=== END Q0536 ===
+
+=== ITEM Q0537 ===
+Passage:
+Edda opened the boat shed before dawn. She always reached for the wooden mould before the metal mould. The stool stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.
+
+Question: Edda spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the stove by the door
+B. dusting the stool before anything else
+C. walking in through the door
+D. seeing the pallets beside it
+E. opening the boat shed before dawn
+F. knowing where the stool stands
+=== END Q0537 ===
+
+=== ITEM Q0538 ===
+Passage:
+Josso opened the dye house before dawn. She always reached for the tar saw before the wire saw. The globe stood on the counter by the door. A tub of madder lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the globe first.
+
+Question: On the day Josso opened up, where did the globe stand?
+A. under the bench
+B. on the counter
+C. inside the cart
+D. behind the gate
+=== END Q0538 ===
+
+=== ITEM Q0539 ===
+Passage:
+Odro opened the dye house before dawn. She always reached for the brass scoop before the plastic scoop. The kettle stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the kettle first.
+
+Question: On the day Odro opened up, where did the kettle stand?
+A. behind the gate
+B. under the bench
+C. inside the cart
+D. on the stove
+=== END Q0539 ===
+
+=== ITEM Q0540 ===
+Passage:
+Liesa opened the dye house before dawn. She always reached for the curved rake before the straight rake. The kettle stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the kettle first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Liesa leave to someone else?
+A. lighting the big lamp
+B. working on the leaky bellows
+C. carrying the kettle outside
+D. working with the curved rake
+E. counting every barley there
+F. locking up the dye house
+=== END Q0540 ===
+
+=== ITEM Q0541 ===
+Passage:
+Ilsin opened the seed store before dawn. She always reached for the wooden rake before the metal rake. The oilcan stood on the counter by the door. A coil of rope lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the oilcan first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ilsin do first?
+A. moving the oilcan to the yard
+B. sweeping the store floor twice
+C. reaching for the metal rake again
+D. leaving the door wide open
+E. hanging the rope on a hook
+F. reaching for the wooden rake again
+=== END Q0541 ===
+
+=== ITEM Q0542 ===
+Passage:
+Corin opened the bell tower before dawn. He always reached for the small scoop before the large scoop. The sledge stood on the shelf by the door. A pair of tongs lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the sledge first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Corin do first?
+A. hanging the tongs on a hook
+B. reaching for the large scoop again
+C. sweeping the tower floor twice
+D. reaching for the small scoop again
+E. leaving the door wide open
+F. moving the sledge to the yard
+=== END Q0542 ===
+
+=== ITEM Q0543 ===
+Passage:
+Halin opened the net loft before dawn. He always reached for the hemp rake before the nylon rake. The globe stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the globe first.
+
+Question: Halin spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the globe stands
+B. seeing the tongs beside it
+C. walking in through the door
+D. dusting the globe before anything else
+E. opening the net loft before dawn
+F. finding the ledge by the door
+=== END Q0543 ===
+
+=== ITEM Q0544 ===
+Passage:
+Brama opened the nail forge before dawn. He always reached for the copper hammer before the iron hammer. The bucket stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Brama do first?
+A. reaching for the copper hammer again
+B. moving the bucket to the yard
+C. hanging the tongs on a hook
+D. reaching for the iron hammer again
+E. leaving the door wide open
+F. sweeping the forge floor twice
+=== END Q0544 ===
+
+=== ITEM Q0545 ===
+Passage:
+Fennin opened the nail forge before dawn. He always reached for the tar mould before the wire mould. The bucket stood on the table by the door. A roll of tape lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the bucket first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Fennin do first?
+A. leaving the door wide open
+B. reaching for the tar mould again
+C. reaching for the wire mould again
+D. moving the bucket to the yard
+E. sweeping the forge floor twice
+F. hanging the tape on a hook
+=== END Q0545 ===
+
+=== ITEM Q0546 ===
+Passage:
+Petrin opened the boat shed before dawn. She always reached for the copper spindle before the iron spindle. The stool stood on the counter by the door. A sack of barley lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the stool first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Petrin do first?
+A. leaving the door wide open
+B. reaching for the iron spindle again
+C. sweeping the shed floor twice
+D. moving the stool to the yard
+E. hanging the barley on a hook
+F. reaching for the copper spindle again
+=== END Q0546 ===
+
+=== ITEM Q0547 ===
+Passage:
+Wreno opened the bell tower before dawn. He always reached for the bone spindle before the steel spindle. The sledge stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the sledge first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Wreno leave to someone else?
+A. carrying the sledge outside
+B. working on the lye vat
+C. locking up the bell tower
+D. working with the bone spindle
+E. lighting the big lamp
+F. counting every straw there
+=== END Q0547 ===
+
+=== ITEM Q0548 ===
+Passage:
+Maro opened the net loft before dawn. He always reached for the curved tray before the straight tray. The rack stood on the table by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the rack first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Maro leave to someone else?
+A. counting every twine there
+B. carrying the rack outside
+C. working on the bilge pump
+D. working with the curved tray
+E. lighting the big lamp
+F. locking up the net loft
+=== END Q0548 ===
+
+=== ITEM Q0549 ===
+Passage:
+Fennen opened the boat shed before dawn. She always reached for the fine scoop before the flat scoop. The stool stood on the table by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the stool first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fennen leave to someone else?
+A. working on the leaky bellows
+B. lighting the big lamp
+C. carrying the stool outside
+D. locking up the boat shed
+E. counting every rope there
+F. working with the fine scoop
+=== END Q0549 ===
+
+=== ITEM Q0550 ===
+Passage:
+Coro opened the seed store before dawn. She always reached for the fine mould before the flat mould. The oilcan stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the oilcan first.
+
+Question: On the day Coro opened up, where did the oilcan stand?
+A. inside the cart
+B. behind the gate
+C. on the shelf
+D. under the bench
+=== END Q0550 ===
+
+=== ITEM Q0551 ===
+Passage:
+Maro opened the net loft before dawn. He always reached for the curved tray before the straight tray. The rack stood on the table by the door. A ball of twine lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the rack first.
+
+Question: Maro spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. walking in through the door
+B. dusting the rack before anything else
+C. finding the table by the door
+D. knowing where the rack stands
+E. opening the net loft before dawn
+F. seeing the twine beside it
+=== END Q0551 ===
+
+=== ITEM Q0552 ===
+Passage:
+Jossa opened the net loft before dawn. He always reached for the brass ruler before the plastic ruler. The globe stood on the counter by the door. A roll of tape lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the globe first.
+
+Question: On the day Jossa opened up, where did the globe stand?
+A. behind the gate
+B. on the counter
+C. inside the cart
+D. under the bench
+=== END Q0552 ===
+
+=== ITEM Q0553 ===
+Passage:
+Edden opened the nail forge before dawn. He always reached for the long rake before the short rake. The bucket stood on the stove by the door. A heap of straw lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the bucket first.
+
+Question: On the day Edden opened up, where did the bucket stand?
+A. on the stove
+B. behind the gate
+C. under the bench
+D. inside the cart
+=== END Q0553 ===
+
+=== ITEM Q0554 ===
+Passage:
+Odren opened the dye house before dawn. She always reached for the copper tray before the iron tray. The globe stood on the stove by the door. A coil of rope lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the globe first.
+
+Question: On the day Odren opened up, where did the globe stand?
+A. inside the cart
+B. on the stove
+C. under the bench
+D. behind the gate
+=== END Q0554 ===
+
+=== ITEM Q0555 ===
+Passage:
+Petra opened the boat shed before dawn. She always reached for the birch needle before the zinc needle. The bucket stood on the counter by the door. A tub of madder lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the bucket first.
+
+Question: On the day Petra opened up, where did the bucket stand?
+A. behind the gate
+B. under the bench
+C. on the counter
+D. inside the cart
+=== END Q0555 ===
+
+=== ITEM Q0556 ===
+Passage:
+Fennin opened the nail forge before dawn. He always reached for the tar mould before the wire mould. The bucket stood on the table by the door. A roll of tape lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the bucket first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Fennin leave to someone else?
+A. working on the lye vat
+B. carrying the bucket outside
+C. lighting the big lamp
+D. working with the tar mould
+E. locking up the nail forge
+F. counting every tape there
+=== END Q0556 ===
+
+=== ITEM Q0557 ===
+Passage:
+Eddin opened the boat shed before dawn. She always reached for the curved hammer before the straight hammer. The lantern stood on the stove by the door. A tub of madder lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the lantern first.
+
+Question: On the day Eddin opened up, where did the lantern stand?
+A. behind the gate
+B. on the stove
+C. inside the cart
+D. under the bench
+=== END Q0557 ===
+
+=== ITEM Q0558 ===
+Passage:
+Maren opened the net loft before dawn. He always reached for the wooden saw before the metal saw. The kettle stood on the table by the door. A pair of tongs lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the kettle first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Maren leave to someone else?
+A. working with the wooden saw
+B. counting every tongs there
+C. locking up the net loft
+D. lighting the big lamp
+E. working on the loose stair
+F. carrying the kettle outside
+=== END Q0558 ===
+
+=== ITEM Q0559 ===
+Passage:
+Corin opened the bell tower before dawn. He always reached for the small scoop before the large scoop. The sledge stood on the shelf by the door. A pair of tongs lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the sledge first.
+
+Question: On the day Corin opened up, where did the sledge stand?
+A. inside the cart
+B. on the shelf
+C. behind the gate
+D. under the bench
+=== END Q0559 ===
+
+=== ITEM Q0560 ===
+Passage:
+Edden opened the nail forge before dawn. He always reached for the long rake before the short rake. The bucket stood on the stove by the door. A heap of straw lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the bucket first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Edden do first?
+A. sweeping the forge floor twice
+B. reaching for the short rake again
+C. hanging the straw on a hook
+D. leaving the door wide open
+E. reaching for the long rake again
+F. moving the bucket to the yard
+=== END Q0560 ===
+
+=== ITEM Q0561 ===
+Passage:
+Liesen opened the net loft before dawn. He always reached for the birch hammer before the zinc hammer. The globe stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the globe first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Liesen do first?
+A. hanging the twine on a hook
+B. sweeping the loft floor twice
+C. leaving the door wide open
+D. reaching for the birch hammer again
+E. moving the globe to the yard
+F. reaching for the zinc hammer again
+=== END Q0561 ===
+
+=== ITEM Q0562 ===
+Passage:
+Odro opened the dye house before dawn. She always reached for the brass scoop before the plastic scoop. The kettle stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Odro do first?
+A. leaving the door wide open
+B. sweeping the house floor twice
+C. hanging the pallets on a hook
+D. moving the kettle to the yard
+E. reaching for the brass scoop again
+F. reaching for the plastic scoop again
+=== END Q0562 ===
+
+=== ITEM Q0563 ===
+Passage:
+Bramen opened the boat shed before dawn. She always reached for the wicker ruler before the mesh ruler. The lantern stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the lantern first.
+
+Question: On the day Bramen opened up, where did the lantern stand?
+A. under the bench
+B. behind the gate
+C. on the ledge
+D. inside the cart
+=== END Q0563 ===
+
+=== ITEM Q0564 ===
+Passage:
+Ilsin opened the seed store before dawn. She always reached for the wooden rake before the metal rake. The oilcan stood on the counter by the door. A coil of rope lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the oilcan first.
+
+Question: Ilsin spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the oilcan stands
+B. seeing the rope beside it
+C. walking in through the door
+D. finding the counter by the door
+E. dusting the oilcan before anything else
+F. opening the seed store before dawn
+=== END Q0564 ===
+
+=== ITEM Q0565 ===
+Passage:
+Halen opened the dye house before dawn. She always reached for the oak mould before the tin mould. The kettle stood on the ledge by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the kettle first.
+
+Question: On the day Halen opened up, where did the kettle stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the ledge
+=== END Q0565 ===
+
+=== ITEM Q0566 ===
+Passage:
+Fennen opened the boat shed before dawn. She always reached for the fine scoop before the flat scoop. The stool stood on the table by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the stool first.
+
+Question: Fennen spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the rope beside it
+B. knowing where the stool stands
+C. walking in through the door
+D. opening the boat shed before dawn
+E. dusting the stool before anything else
+F. finding the table by the door
+=== END Q0566 ===
+
+=== ITEM Q0567 ===
+Passage:
+Ansa opened the bell tower before dawn. He always reached for the fine brush before the flat brush. The ledger stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the ledger first.
+
+Question: On the day Ansa opened up, where did the ledger stand?
+A. under the bench
+B. on the stove
+C. behind the gate
+D. inside the cart
+=== END Q0567 ===
+
+=== ITEM Q0568 ===
+Passage:
+Fenno opened the boat shed before dawn. She always reached for the oak rake before the tin rake. The lantern stood on the table by the door. A stack of pallets lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the lantern first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Fenno do first?
+A. reaching for the oak rake again
+B. moving the lantern to the yard
+C. leaving the door wide open
+D. reaching for the tin rake again
+E. hanging the pallets on a hook
+F. sweeping the shed floor twice
+=== END Q0568 ===
+
+=== ITEM Q0569 ===
+Passage:
+Fennen opened the boat shed before dawn. She always reached for the fine scoop before the flat scoop. The stool stood on the table by the door. A coil of rope lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the stool first.
+
+Question: On the day Fennen opened up, where did the stool stand?
+A. inside the cart
+B. behind the gate
+C. under the bench
+D. on the table
+=== END Q0569 ===
+
+=== ITEM Q0570 ===
+Passage:
+Edden opened the nail forge before dawn. He always reached for the long rake before the short rake. The bucket stood on the stove by the door. A heap of straw lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the bucket first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Edden leave to someone else?
+A. working with the long rake
+B. lighting the big lamp
+C. working on the bilge pump
+D. locking up the nail forge
+E. carrying the bucket outside
+F. counting every straw there
+=== END Q0570 ===
+
+=== ITEM Q0571 ===
+Passage:
+Petra opened the boat shed before dawn. She always reached for the birch needle before the zinc needle. The bucket stood on the counter by the door. A tub of madder lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the bucket first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Petra leave to someone else?
+A. carrying the bucket outside
+B. lighting the big lamp
+C. working on the loose stair
+D. locking up the boat shed
+E. counting every madder there
+F. working with the birch needle
+=== END Q0571 ===
+
+=== ITEM Q0572 ===
+Passage:
+Coren opened the seed store before dawn. She always reached for the brass spindle before the plastic spindle. The ledger stood on the shelf by the door. A tub of madder lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the ledger first.
+
+Question: On the day Coren opened up, where did the ledger stand?
+A. under the bench
+B. on the shelf
+C. inside the cart
+D. behind the gate
+=== END Q0572 ===
+
+=== ITEM Q0573 ===
+Passage:
+Mara opened the dye house before dawn. She always reached for the hemp ladle before the nylon ladle. The rack stood on the table by the door. A tub of madder lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the rack first.
+
+Question: Mara spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the madder beside it
+B. finding the table by the door
+C. knowing where the rack stands
+D. opening the dye house before dawn
+E. dusting the rack before anything else
+F. walking in through the door
+=== END Q0573 ===
+
+=== ITEM Q0574 ===
+Passage:
+Wrenen opened the bell tower before dawn. He always reached for the curved needle before the straight needle. The oilcan stood on the ledge by the door. A roll of tape lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the oilcan first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Wrenen do first?
+A. reaching for the curved needle again
+B. moving the oilcan to the yard
+C. reaching for the straight needle again
+D. hanging the tape on a hook
+E. leaving the door wide open
+F. sweeping the tower floor twice
+=== END Q0574 ===
+
+=== ITEM Q0575 ===
+Passage:
+Odra opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.
+
+Question: Odra spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. finding the stove by the door
+B. walking in through the door
+C. seeing the twine beside it
+D. opening the net loft before dawn
+E. knowing where the kettle stands
+F. dusting the kettle before anything else
+=== END Q0575 ===
+
+=== ITEM Q0576 ===
+Passage:
+Tamen opened the nail forge before dawn. He always reached for the oak ladle before the tin ladle. The stool stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the stool first.
+
+Question: On the day Tamen opened up, where did the stool stand?
+A. on the shelf
+B. behind the gate
+C. inside the cart
+D. under the bench
+=== END Q0576 ===
+
+=== ITEM Q0577 ===
+Passage:
+Liesin opened the dye house before dawn. She always reached for the bone ruler before the steel ruler. The rack stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the rack first.
+
+Question: Liesin spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the shelf by the door
+B. dusting the rack before anything else
+C. opening the dye house before dawn
+D. walking in through the door
+E. knowing where the rack stands
+F. seeing the rope beside it
+=== END Q0577 ===
+
+=== ITEM Q0578 ===
+Passage:
+Maren opened the net loft before dawn. He always reached for the wooden saw before the metal saw. The kettle stood on the table by the door. A pair of tongs lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the kettle first.
+
+Question: Maren spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. seeing the tongs beside it
+B. walking in through the door
+C. dusting the kettle before anything else
+D. finding the table by the door
+E. knowing where the kettle stands
+F. opening the net loft before dawn
+=== END Q0578 ===
+
+=== ITEM Q0579 ===
+Passage:
+Tama opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Tama do first?
+A. hanging the rope on a hook
+B. moving the lantern to the yard
+C. reaching for the wire brush again
+D. leaving the door wide open
+E. sweeping the shed floor twice
+F. reaching for the tar brush again
+=== END Q0579 ===
+
+=== ITEM Q0580 ===
+Passage:
+Halin opened the net loft before dawn. He always reached for the hemp rake before the nylon rake. The globe stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the globe first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Halin leave to someone else?
+A. locking up the net loft
+B. counting every tongs there
+C. lighting the big lamp
+D. working on the rusty winch
+E. working with the hemp rake
+F. carrying the globe outside
+=== END Q0580 ===
+
+=== ITEM Q0581 ===
+Passage:
+Ilso opened the bell tower before dawn. He always reached for the long hammer before the short hammer. The ledger stood on the counter by the door. A roll of tape lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the ledger first.
+
+Question: On the day Ilso opened up, where did the ledger stand?
+A. inside the cart
+B. behind the gate
+C. under the bench
+D. on the counter
+=== END Q0581 ===
+
+=== ITEM Q0582 ===
+Passage:
+Coro opened the seed store before dawn. She always reached for the fine mould before the flat mould. The oilcan stood on the shelf by the door. A sack of barley lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the oilcan first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Coro do first?
+A. hanging the barley on a hook
+B. reaching for the flat mould again
+C. leaving the door wide open
+D. moving the oilcan to the yard
+E. reaching for the fine mould again
+F. sweeping the store floor twice
+=== END Q0582 ===
+
+=== ITEM Q0583 ===
+Passage:
+Cora opened the bell tower before dawn. He always reached for the wicker tray before the mesh tray. The oilcan stood on the shelf by the door. A heap of straw lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the oilcan first.
+
+Question: On the day Cora opened up, where did the oilcan stand?
+A. on the shelf
+B. under the bench
+C. behind the gate
+D. inside the cart
+=== END Q0583 ===
+
+=== ITEM Q0584 ===
+Passage:
+Ansen opened the seed store before dawn. She always reached for the tar ladle before the wire ladle. The sledge stood on the stove by the door. A sack of barley lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the sledge first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Ansen do first?
+A. reaching for the wire ladle again
+B. moving the sledge to the yard
+C. sweeping the store floor twice
+D. leaving the door wide open
+E. hanging the barley on a hook
+F. reaching for the tar ladle again
+=== END Q0584 ===
+
+=== ITEM Q0585 ===
+Passage:
+Sunnin opened the seed store before dawn. She always reached for the wicker brush before the mesh brush. The sledge stood on the table by the door. A tub of madder lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the sledge first.
+
+Question: Sunnin spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the madder beside it
+B. dusting the sledge before anything else
+C. walking in through the door
+D. opening the seed store before dawn
+E. knowing where the sledge stands
+F. finding the table by the door
+=== END Q0585 ===
+
+=== ITEM Q0586 ===
+Passage:
+Petra opened the boat shed before dawn. She always reached for the birch needle before the zinc needle. The bucket stood on the counter by the door. A tub of madder lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the bucket first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Petra do first?
+A. moving the bucket to the yard
+B. reaching for the birch needle again
+C. hanging the madder on a hook
+D. leaving the door wide open
+E. sweeping the shed floor twice
+F. reaching for the zinc needle again
+=== END Q0586 ===
+
+=== ITEM Q0587 ===
+Passage:
+Sunna opened the seed store before dawn. She always reached for the bone hammer before the steel hammer. The oilcan stood on the table by the door. A stack of pallets lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the oilcan first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunna do first?
+A. reaching for the steel hammer again
+B. hanging the pallets on a hook
+C. moving the oilcan to the yard
+D. sweeping the store floor twice
+E. reaching for the bone hammer again
+F. leaving the door wide open
+=== END Q0587 ===
+
+=== ITEM Q0588 ===
+Passage:
+Sunnen opened the bell tower before dawn. He always reached for the copper ruler before the iron ruler. The ledger stood on the table by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the ledger first.
+
+Question: On the day Sunnen opened up, where did the ledger stand?
+A. behind the gate
+B. on the table
+C. under the bench
+D. inside the cart
+=== END Q0588 ===
+
+=== ITEM Q0589 ===
+Passage:
+Tamen opened the nail forge before dawn. He always reached for the oak ladle before the tin ladle. The stool stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the stool first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Tamen leave to someone else?
+A. working on the rusty winch
+B. locking up the nail forge
+C. carrying the stool outside
+D. counting every tape there
+E. working with the oak ladle
+F. lighting the big lamp
+=== END Q0589 ===
+
+=== ITEM Q0590 ===
+Passage:
+Josso opened the dye house before dawn. She always reached for the tar saw before the wire saw. The globe stood on the counter by the door. A tub of madder lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the globe first.
+
+Question: Josso spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. walking in through the door
+B. finding the counter by the door
+C. seeing the madder beside it
+D. dusting the globe before anything else
+E. opening the dye house before dawn
+F. knowing where the globe stands
+=== END Q0590 ===
+
+=== ITEM Q0591 ===
+Passage:
+Tamen opened the nail forge before dawn. He always reached for the oak ladle before the tin ladle. The stool stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the stool first.
+
+Question: Tamen spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. walking in through the door
+B. knowing where the stool stands
+C. dusting the stool before anything else
+D. seeing the tape beside it
+E. finding the shelf by the door
+F. opening the nail forge before dawn
+=== END Q0591 ===
+
+=== ITEM Q0592 ===
+Passage:
+Jossen opened the dye house before dawn. She always reached for the small brush before the large brush. The rack stood on the counter by the door. A stack of pallets lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the rack first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Jossen do first?
+A. reaching for the large brush again
+B. moving the rack to the yard
+C. leaving the door wide open
+D. sweeping the house floor twice
+E. reaching for the small brush again
+F. hanging the pallets on a hook
+=== END Q0592 ===
+
+=== ITEM Q0593 ===
+Passage:
+Ilsin opened the seed store before dawn. She always reached for the wooden rake before the metal rake. The oilcan stood on the counter by the door. A coil of rope lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the oilcan first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ilsin leave to someone else?
+A. working on the lye vat
+B. working with the wooden rake
+C. carrying the oilcan outside
+D. locking up the seed store
+E. counting every rope there
+F. lighting the big lamp
+=== END Q0593 ===
+
+=== ITEM Q0594 ===
+Passage:
+Edda opened the boat shed before dawn. She always reached for the wooden mould before the metal mould. The stool stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Edda do first?
+A. leaving the door wide open
+B. reaching for the wooden mould again
+C. moving the stool to the yard
+D. sweeping the shed floor twice
+E. hanging the pallets on a hook
+F. reaching for the metal mould again
+=== END Q0594 ===
+
+=== ITEM Q0595 ===
+Passage:
+Sunna opened the seed store before dawn. She always reached for the bone hammer before the steel hammer. The oilcan stood on the table by the door. A stack of pallets lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the oilcan first.
+
+Question: Sunna spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the oilcan stands
+B. walking in through the door
+C. seeing the pallets beside it
+D. opening the seed store before dawn
+E. finding the table by the door
+F. dusting the oilcan before anything else
+=== END Q0595 ===
+
+=== ITEM Q0596 ===
+Passage:
+Maren opened the net loft before dawn. He always reached for the wooden saw before the metal saw. The kettle stood on the table by the door. A pair of tongs lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Maren do first?
+A. hanging the tongs on a hook
+B. leaving the door wide open
+C. reaching for the metal saw again
+D. reaching for the wooden saw again
+E. sweeping the loft floor twice
+F. moving the kettle to the yard
+=== END Q0596 ===
+
+=== ITEM Q0597 ===
+Passage:
+Odren opened the dye house before dawn. She always reached for the copper tray before the iron tray. The globe stood on the stove by the door. A coil of rope lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the globe first.
+
+Question: Odren spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the dye house before dawn
+B. walking in through the door
+C. seeing the rope beside it
+D. knowing where the globe stands
+E. dusting the globe before anything else
+F. finding the stove by the door
+=== END Q0597 ===
+
+=== ITEM Q0598 ===
+Passage:
+Bramen opened the boat shed before dawn. She always reached for the wicker ruler before the mesh ruler. The lantern stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the lantern first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Bramen do first?
+A. moving the lantern to the yard
+B. leaving the door wide open
+C. hanging the barley on a hook
+D. reaching for the mesh ruler again
+E. sweeping the shed floor twice
+F. reaching for the wicker ruler again
+=== END Q0598 ===
+
+=== ITEM Q0599 ===
+Passage:
+Sunnen opened the bell tower before dawn. He always reached for the copper ruler before the iron ruler. The ledger stood on the table by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the ledger first.
+
+Question: Sunnen spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the bell tower before dawn
+B. knowing where the ledger stands
+C. finding the table by the door
+D. walking in through the door
+E. seeing the straw beside it
+F. dusting the ledger before anything else
+=== END Q0599 ===
+
+=== ITEM Q0600 ===
+Passage:
+Halin opened the net loft before dawn. He always reached for the hemp rake before the nylon rake. The globe stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the globe first.
+
+Question: On the day Halin opened up, where did the globe stand?
+A. inside the cart
+B. behind the gate
+C. under the bench
+D. on the ledge
+=== END Q0600 ===
+
+=== ITEM Q0601 ===
+Passage:
+Sunnin opened the seed store before dawn. She always reached for the wicker brush before the mesh brush. The sledge stood on the table by the door. A tub of madder lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the sledge first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Sunnin do first?
+A. leaving the door wide open
+B. hanging the madder on a hook
+C. moving the sledge to the yard
+D. reaching for the mesh brush again
+E. sweeping the store floor twice
+F. reaching for the wicker brush again
+=== END Q0601 ===
+
+=== ITEM Q0602 ===
+Passage:
+Odra opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Odra do first?
+A. sweeping the loft floor twice
+B. hanging the twine on a hook
+C. reaching for the bone needle again
+D. reaching for the steel needle again
+E. leaving the door wide open
+F. moving the kettle to the yard
+=== END Q0602 ===
+
+=== ITEM Q0603 ===
+Passage:
+Bramin opened the nail forge before dawn. He always reached for the brass brush before the plastic brush. The stool stood on the ledge by the door. A ball of twine lay beside it. He kept well away from the loose stair. Every morning for nine years he had dusted the stool first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Bramin do first?
+A. hanging the twine on a hook
+B. leaving the door wide open
+C. moving the stool to the yard
+D. reaching for the brass brush again
+E. sweeping the forge floor twice
+F. reaching for the plastic brush again
+=== END Q0603 ===
+
+=== ITEM Q0604 ===
+Passage:
+Odra opened the net loft before dawn. He always reached for the bone needle before the steel needle. The kettle stood on the stove by the door. A ball of twine lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the kettle first.
+
+Question: On the day Odra opened up, where did the kettle stand?
+A. on the stove
+B. inside the cart
+C. behind the gate
+D. under the bench
+=== END Q0604 ===
+
+=== ITEM Q0605 ===
+Passage:
+Liesen opened the net loft before dawn. He always reached for the birch hammer before the zinc hammer. The globe stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the globe first.
+
+Question: On the day Liesen opened up, where did the globe stand?
+A. inside the cart
+B. behind the gate
+C. under the bench
+D. on the shelf
+=== END Q0605 ===
+
+=== ITEM Q0606 ===
+Passage:
+Tama opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.
+
+Question: On the day Tama opened up, where did the lantern stand?
+A. under the bench
+B. behind the gate
+C. on the shelf
+D. inside the cart
+=== END Q0606 ===
+
+=== ITEM Q0607 ===
+Passage:
+Wrena opened the seed store before dawn. She always reached for the long saw before the short saw. The sledge stood on the ledge by the door. A coil of rope lay beside it. She kept well away from the rusty winch. Every morning for nine years she had dusted the sledge first.
+
+Question: On the day Wrena opened up, where did the sledge stand?
+A. on the ledge
+B. inside the cart
+C. behind the gate
+D. under the bench
+=== END Q0607 ===
+
+=== ITEM Q0608 ===
+Passage:
+Eddo opened the nail forge before dawn. He always reached for the birch ruler before the zinc ruler. The stool stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the stool first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Eddo leave to someone else?
+A. lighting the big lamp
+B. working with the birch ruler
+C. locking up the nail forge
+D. carrying the stool outside
+E. counting every tongs there
+F. working on the damp cellar
+=== END Q0608 ===
+
+=== ITEM Q0609 ===
+Passage:
+Sunnen opened the bell tower before dawn. He always reached for the copper ruler before the iron ruler. The ledger stood on the table by the door. A heap of straw lay beside it. He kept well away from the rusty winch. Every morning for nine years he had dusted the ledger first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Sunnen leave to someone else?
+A. counting every straw there
+B. working with the copper ruler
+C. locking up the bell tower
+D. carrying the ledger outside
+E. lighting the big lamp
+F. working on the rusty winch
+=== END Q0609 ===
+
+=== ITEM Q0610 ===
+Passage:
+Tama opened the boat shed before dawn. She always reached for the tar brush before the wire brush. The lantern stood on the shelf by the door. A coil of rope lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the lantern first.
+
+Question: Tama spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the shelf by the door
+B. seeing the rope beside it
+C. opening the boat shed before dawn
+D. walking in through the door
+E. dusting the lantern before anything else
+F. knowing where the lantern stands
+=== END Q0610 ===
+
+=== ITEM Q0611 ===
+Passage:
+Edden opened the nail forge before dawn. He always reached for the long rake before the short rake. The bucket stood on the stove by the door. A heap of straw lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the bucket first.
+
+Question: Edden spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. dusting the bucket before anything else
+B. walking in through the door
+C. finding the stove by the door
+D. opening the nail forge before dawn
+E. knowing where the bucket stands
+F. seeing the straw beside it
+=== END Q0611 ===
+
+=== ITEM Q0612 ===
+Passage:
+Fenno opened the boat shed before dawn. She always reached for the oak rake before the tin rake. The lantern stood on the table by the door. A stack of pallets lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the lantern first.
+
+Question: Fenno spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the pallets beside it
+B. opening the boat shed before dawn
+C. knowing where the lantern stands
+D. finding the table by the door
+E. walking in through the door
+F. dusting the lantern before anything else
+=== END Q0612 ===
+
+=== ITEM Q0613 ===
+Passage:
+Halen opened the dye house before dawn. She always reached for the oak mould before the tin mould. The kettle stood on the ledge by the door. A tub of madder lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the kettle first.
+
+Question: Halen spends two years far from the dye house. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the kettle stands
+B. opening the dye house before dawn
+C. walking in through the door
+D. dusting the kettle before anything else
+E. seeing the madder beside it
+F. finding the ledge by the door
+=== END Q0613 ===
+
+=== ITEM Q0614 ===
+Passage:
+Ansen opened the seed store before dawn. She always reached for the tar ladle before the wire ladle. The sledge stood on the stove by the door. A sack of barley lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the sledge first.
+
+Question: On the day Ansen opened up, where did the sledge stand?
+A. behind the gate
+B. on the stove
+C. under the bench
+D. inside the cart
+=== END Q0614 ===
+
+=== ITEM Q0615 ===
+Passage:
+Brama opened the nail forge before dawn. He always reached for the copper hammer before the iron hammer. The bucket stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.
+
+Question: On the day Brama opened up, where did the bucket stand?
+A. under the bench
+B. inside the cart
+C. on the ledge
+D. behind the gate
+=== END Q0615 ===
+
+=== ITEM Q0616 ===
+Passage:
+Liesen opened the net loft before dawn. He always reached for the birch hammer before the zinc hammer. The globe stood on the shelf by the door. A ball of twine lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the globe first.
+
+Question: Liesen spends two years far from the net loft. Going only by the passage, which of these has most likely faded when he comes back?
+A. walking in through the door
+B. opening the net loft before dawn
+C. knowing where the globe stands
+D. finding the shelf by the door
+E. seeing the twine beside it
+F. dusting the globe before anything else
+=== END Q0616 ===
+
+=== ITEM Q0617 ===
+Passage:
+Bramen opened the boat shed before dawn. She always reached for the wicker ruler before the mesh ruler. The lantern stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the lantern first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Bramen leave to someone else?
+A. counting every barley there
+B. lighting the big lamp
+C. carrying the lantern outside
+D. working on the lye vat
+E. locking up the boat shed
+F. working with the wicker ruler
+=== END Q0617 ===
+
+=== ITEM Q0618 ===
+Passage:
+Wreno opened the bell tower before dawn. He always reached for the bone spindle before the steel spindle. The sledge stood on the ledge by the door. A heap of straw lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the sledge first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Wreno do first?
+A. sweeping the tower floor twice
+B. reaching for the steel spindle again
+C. reaching for the bone spindle again
+D. leaving the door wide open
+E. moving the sledge to the yard
+F. hanging the straw on a hook
+=== END Q0618 ===
+
+=== ITEM Q0619 ===
+Passage:
+Tamin opened the boat shed before dawn. She always reached for the hemp saw before the nylon saw. The bucket stood on the shelf by the door. A stack of pallets lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the bucket first.
+
+Question: Tamin spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. opening the boat shed before dawn
+B. finding the shelf by the door
+C. walking in through the door
+D. dusting the bucket before anything else
+E. knowing where the bucket stands
+F. seeing the pallets beside it
+=== END Q0619 ===
+
+=== ITEM Q0620 ===
+Passage:
+Petrin opened the boat shed before dawn. She always reached for the copper spindle before the iron spindle. The stool stood on the counter by the door. A sack of barley lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the stool first.
+
+Question: Petrin spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. knowing where the stool stands
+B. opening the boat shed before dawn
+C. finding the counter by the door
+D. dusting the stool before anything else
+E. walking in through the door
+F. seeing the barley beside it
+=== END Q0620 ===
+
+=== ITEM Q0621 ===
+Passage:
+Ansen opened the seed store before dawn. She always reached for the tar ladle before the wire ladle. The sledge stood on the stove by the door. A sack of barley lay beside it. She kept well away from the loose stair. Every morning for nine years she had dusted the sledge first.
+
+Question: Ansen spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. finding the stove by the door
+B. dusting the sledge before anything else
+C. opening the seed store before dawn
+D. seeing the barley beside it
+E. knowing where the sledge stands
+F. walking in through the door
+=== END Q0621 ===
+
+=== ITEM Q0622 ===
+Passage:
+Eddo opened the nail forge before dawn. He always reached for the birch ruler before the zinc ruler. The stool stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the stool first.
+
+Question: On the day Eddo opened up, where did the stool stand?
+A. behind the gate
+B. under the bench
+C. inside the cart
+D. on the stove
+=== END Q0622 ===
+
+=== ITEM Q0623 ===
+Passage:
+Edda opened the boat shed before dawn. She always reached for the wooden mould before the metal mould. The stool stood on the stove by the door. A stack of pallets lay beside it. She kept well away from the broken ladder. Every morning for nine years she had dusted the stool first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Edda leave to someone else?
+A. lighting the big lamp
+B. locking up the boat shed
+C. working with the wooden mould
+D. carrying the stool outside
+E. working on the broken ladder
+F. counting every pallets there
+=== END Q0623 ===
+
+=== ITEM Q0624 ===
+Passage:
+Ansa opened the bell tower before dawn. He always reached for the fine brush before the flat brush. The ledger stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the lye vat. Every morning for nine years he had dusted the ledger first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Ansa leave to someone else?
+A. carrying the ledger outside
+B. working on the lye vat
+C. lighting the big lamp
+D. counting every tongs there
+E. locking up the bell tower
+F. working with the fine brush
+=== END Q0624 ===
+
+=== ITEM Q0625 ===
+Passage:
+Eddo opened the nail forge before dawn. He always reached for the birch ruler before the zinc ruler. The stool stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the stool first.
+
+Question: Eddo spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. knowing where the stool stands
+B. opening the nail forge before dawn
+C. dusting the stool before anything else
+D. finding the stove by the door
+E. walking in through the door
+F. seeing the tongs beside it
+=== END Q0625 ===
+
+=== ITEM Q0626 ===
+Passage:
+Corin opened the bell tower before dawn. He always reached for the small scoop before the large scoop. The sledge stood on the shelf by the door. A pair of tongs lay beside it. He kept well away from the bilge pump. Every morning for nine years he had dusted the sledge first.
+
+Question: Corin spends two years far from the bell tower. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the bell tower before dawn
+B. walking in through the door
+C. seeing the tongs beside it
+D. dusting the sledge before anything else
+E. knowing where the sledge stands
+F. finding the shelf by the door
+=== END Q0626 ===
+
+=== ITEM Q0627 ===
+Passage:
+Wrenin opened the seed store before dawn. She always reached for the birch tray before the zinc tray. The ledger stood on the ledge by the door. A stack of pallets lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the ledger first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Wrenin do first?
+A. sweeping the store floor twice
+B. leaving the door wide open
+C. moving the ledger to the yard
+D. hanging the pallets on a hook
+E. reaching for the birch tray again
+F. reaching for the zinc tray again
+=== END Q0627 ===
+
+=== ITEM Q0628 ===
+Passage:
+Bramen opened the boat shed before dawn. She always reached for the wicker ruler before the mesh ruler. The lantern stood on the ledge by the door. A sack of barley lay beside it. She kept well away from the lye vat. Every morning for nine years she had dusted the lantern first.
+
+Question: Bramen spends two years far from the boat shed. Going only by the passage, which of these has most likely faded when she comes back?
+A. dusting the lantern before anything else
+B. knowing where the lantern stands
+C. opening the boat shed before dawn
+D. walking in through the door
+E. finding the ledge by the door
+F. seeing the barley beside it
+=== END Q0628 ===
+
+=== ITEM Q0629 ===
+Passage:
+Jossin opened the net loft before dawn. He always reached for the fine ladle before the flat ladle. The kettle stood on the counter by the door. A heap of straw lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the kettle first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Jossin leave to someone else?
+A. working on the damp cellar
+B. carrying the kettle outside
+C. counting every straw there
+D. locking up the net loft
+E. working with the fine ladle
+F. lighting the big lamp
+=== END Q0629 ===
+
+=== ITEM Q0630 ===
+Passage:
+Brama opened the nail forge before dawn. He always reached for the copper hammer before the iron hammer. The bucket stood on the ledge by the door. A pair of tongs lay beside it. He kept well away from the leaky bellows. Every morning for nine years he had dusted the bucket first.
+
+Question: Brama spends two years far from the nail forge. Going only by the passage, which of these has most likely faded when he comes back?
+A. opening the nail forge before dawn
+B. finding the ledge by the door
+C. dusting the bucket before anything else
+D. knowing where the bucket stands
+E. seeing the tongs beside it
+F. walking in through the door
+=== END Q0630 ===
+
+=== ITEM Q0631 ===
+Passage:
+Jossin opened the net loft before dawn. He always reached for the fine ladle before the flat ladle. The kettle stood on the counter by the door. A heap of straw lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the kettle first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Jossin do first?
+A. sweeping the loft floor twice
+B. moving the kettle to the yard
+C. hanging the straw on a hook
+D. leaving the door wide open
+E. reaching for the fine ladle again
+F. reaching for the flat ladle again
+=== END Q0631 ===
+
+=== ITEM Q0632 ===
+Passage:
+Josso opened the dye house before dawn. She always reached for the tar saw before the wire saw. The globe stood on the counter by the door. A tub of madder lay beside it. She kept well away from the leaky bellows. Every morning for nine years she had dusted the globe first.
+
+Question: A visitor asks for help later that day. Going only by the passage, which of these does Josso leave to someone else?
+A. counting every madder there
+B. working with the tar saw
+C. lighting the big lamp
+D. locking up the dye house
+E. carrying the globe outside
+F. working on the leaky bellows
+=== END Q0632 ===
+
+=== ITEM Q0633 ===
+Passage:
+Odren opened the dye house before dawn. She always reached for the copper tray before the iron tray. The globe stood on the stove by the door. A coil of rope lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the globe first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Odren do first?
+A. moving the globe to the yard
+B. leaving the door wide open
+C. sweeping the house floor twice
+D. reaching for the copper tray again
+E. reaching for the iron tray again
+F. hanging the rope on a hook
+=== END Q0633 ===
+
+=== ITEM Q0634 ===
+Passage:
+Lieso opened the net loft before dawn. He always reached for the copper brush before the iron brush. The kettle stood on the shelf by the door. A roll of tape lay beside it. He kept well away from the broken ladder. Every morning for nine years he had dusted the kettle first.
+
+Question: On the day Lieso opened up, where did the kettle stand?
+A. behind the gate
+B. inside the cart
+C. under the bench
+D. on the shelf
+=== END Q0634 ===
+
+=== ITEM Q0635 ===
+Passage:
+Ilsa opened the seed store before dawn. She always reached for the oak scoop before the tin scoop. The ledger stood on the counter by the door. A sack of barley lay beside it. She kept well away from the damp cellar. Every morning for nine years she had dusted the ledger first.
+
+Question: Ilsa spends two years far from the seed store. Going only by the passage, which of these has most likely faded when she comes back?
+A. seeing the barley beside it
+B. dusting the ledger before anything else
+C. opening the seed store before dawn
+D. finding the counter by the door
+E. walking in through the door
+F. knowing where the ledger stands
+=== END Q0635 ===
+
+=== ITEM Q0636 ===
+Passage:
+Sunna opened the seed store before dawn. She always reached for the bone hammer before the steel hammer. The oilcan stood on the table by the door. A stack of pallets lay beside it. She kept well away from the bilge pump. Every morning for nine years she had dusted the oilcan first.
+
+Question: On the day Sunna opened up, where did the oilcan stand?
+A. on the table
+B. behind the gate
+C. inside the cart
+D. under the bench
+=== END Q0636 ===
+
+=== ITEM Q0637 ===
+Passage:
+Eddo opened the nail forge before dawn. He always reached for the birch ruler before the zinc ruler. The stool stood on the stove by the door. A pair of tongs lay beside it. He kept well away from the damp cellar. Every morning for nine years he had dusted the stool first.
+
+Question: A free hour comes up next week. Going only by the passage, which of these does Eddo do first?
+A. reaching for the zinc ruler again
+B. reaching for the birch ruler again
+C. moving the stool to the yard
+D. sweeping the forge floor twice
+E. leaving the door wide open
+F. hanging the tongs on a hook
+=== END Q0637 ===

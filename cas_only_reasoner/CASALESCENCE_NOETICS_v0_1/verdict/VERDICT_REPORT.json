@@ -1,0 +1,6397 @@
+{
+ "plan": "06_VERDICT_PLAN_v1_2.md",
+ "passages_sealed": 428,
+ "passages_analysed": 428,
+ "passages_excluded": [],
+ "entries_dropped_for_bad_quote_or_label": {
+  "team_a": 0,
+  "team_b": 0
+ },
+ "entries_kept": {
+  "team_a": 1470,
+  "team_b": 1590
+ },
+ "bars": {
+  "strict_agreement_min": 0.8,
+  "kappa_min": 0.6,
+  "min_cases": 50,
+  "min_absent": 50
+ },
+ "valid": true,
+ "per_class": {
+  "^1": {
+   "marked_by_a": 368,
+   "marked_by_b": 373,
+   "marked_by_both": 368,
+   "cases_marked_by_at_least_one": 373,
+   "passages_marked_by_neither": 55,
+   "strict_agreement_count": 365,
+   "strict_agreement_share": 0.9785522788203753,
+   "strict_agreement_interval95": [
+    0.9582550827786123,
+    0.9890929108837676
+   ],
+   "kappa": 0.9497888315344907,
+   "kappa_interval95": [
+    0.8989231059890423,
+    0.9893192253942902
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9813084112149533,
+    "same_words_only_share": 0.9785522788203753,
+    "exact_same_words_share": 0.9651474530831099,
+    "lenient_same_words_share": 0.9865951742627346
+   },
+   "outcome": "LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^2": {
+   "marked_by_a": 64,
+   "marked_by_b": 60,
+   "marked_by_both": 59,
+   "cases_marked_by_at_least_one": 65,
+   "passages_marked_by_neither": 363,
+   "strict_agreement_count": 47,
+   "strict_agreement_share": 0.7230769230769231,
+   "strict_agreement_interval95": [
+    0.6041936154722188,
+    0.8170641624898226
+   ],
+   "kappa": 0.9434261543884387,
+   "kappa_interval95": [
+    0.8896079534796474,
+    0.9823045437631788
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9579439252336449,
+    "same_words_only_share": 0.7230769230769231,
+    "exact_same_words_share": 0.5230769230769231,
+    "lenient_same_words_share": 0.8
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^3": {
+   "marked_by_a": 47,
+   "marked_by_b": 51,
+   "marked_by_both": 42,
+   "cases_marked_by_at_least_one": 56,
+   "passages_marked_by_neither": 372,
+   "strict_agreement_count": 35,
+   "strict_agreement_share": 0.625,
+   "strict_agreement_interval95": [
+    0.4940536580553375,
+    0.7398978575280472
+   ],
+   "kappa": 0.8387079407806193,
+   "kappa_interval95": [
+    0.7467005977392438,
+    0.9138659690078487
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9509345794392523,
+    "same_words_only_share": 0.625,
+    "exact_same_words_share": 0.4642857142857143,
+    "lenient_same_words_share": 0.6964285714285714
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^4": {
+   "marked_by_a": 68,
+   "marked_by_b": 84,
+   "marked_by_both": 56,
+   "cases_marked_by_at_least_one": 96,
+   "passages_marked_by_neither": 332,
+   "strict_agreement_count": 44,
+   "strict_agreement_share": 0.4583333333333333,
+   "strict_agreement_interval95": [
+    0.3621884941148445,
+    0.5576844715885974
+   ],
+   "kappa": 0.6807875894988067,
+   "kappa_interval95": [
+    0.5858658256880735,
+    0.7679932853046094
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.8785046728971962,
+    "same_words_only_share": 0.5520833333333334,
+    "exact_same_words_share": 0.4375,
+    "lenient_same_words_share": 0.5625
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^5": {
+   "marked_by_a": 111,
+   "marked_by_b": 128,
+   "marked_by_both": 110,
+   "cases_marked_by_at_least_one": 129,
+   "passages_marked_by_neither": 299,
+   "strict_agreement_count": 85,
+   "strict_agreement_share": 0.6589147286821705,
+   "strict_agreement_interval95": [
+    0.5735712854960489,
+    0.7350673002683292
+   ],
+   "kappa": 0.8899236558557584,
+   "kappa_interval95": [
+    0.8426292567032471,
+    0.9336901408450705
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.897196261682243,
+    "same_words_only_share": 0.6589147286821705,
+    "exact_same_words_share": 0.5271317829457365,
+    "lenient_same_words_share": 0.7286821705426356
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^6": {
+   "marked_by_a": 84,
+   "marked_by_b": 95,
+   "marked_by_both": 79,
+   "cases_marked_by_at_least_one": 100,
+   "passages_marked_by_neither": 328,
+   "strict_agreement_count": 54,
+   "strict_agreement_share": 0.54,
+   "strict_agreement_interval95": [
+    0.4426486024827802,
+    0.6343919176157
+   ],
+   "kappa": 0.8518103277715491,
+   "kappa_interval95": [
+    0.7853640416047549,
+    0.9097339390006488
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.8925233644859814,
+    "same_words_only_share": 0.75,
+    "exact_same_words_share": 0.63,
+    "lenient_same_words_share": 0.75
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^7": {
+   "marked_by_a": 62,
+   "marked_by_b": 70,
+   "marked_by_both": 53,
+   "cases_marked_by_at_least_one": 79,
+   "passages_marked_by_neither": 349,
+   "strict_agreement_count": 34,
+   "strict_agreement_share": 0.43037974683544306,
+   "strict_agreement_interval95": [
+    0.32693823359163393,
+    0.5402780111661755
+   ],
+   "kappa": 0.7672745524510626,
+   "kappa_interval95": [
+    0.6712067104061124,
+    0.8480533312295375
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.8948598130841121,
+    "same_words_only_share": 0.6075949367088608,
+    "exact_same_words_share": 0.5443037974683544,
+    "lenient_same_words_share": 0.620253164556962
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^8": {
+   "marked_by_a": 59,
+   "marked_by_b": 64,
+   "marked_by_both": 59,
+   "cases_marked_by_at_least_one": 64,
+   "passages_marked_by_neither": 364,
+   "strict_agreement_count": 37,
+   "strict_agreement_share": 0.578125,
+   "strict_agreement_interval95": [
+    0.45610031445865895,
+    0.6913021760670425
+   ],
+   "kappa": 0.9525414707708683,
+   "kappa_interval95": [
+    0.9056361741361342,
+    0.9899549380398046
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9369158878504673,
+    "same_words_only_share": 0.6875,
+    "exact_same_words_share": 0.484375,
+    "lenient_same_words_share": 0.71875
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^9": {
+   "marked_by_a": 59,
+   "marked_by_b": 64,
+   "marked_by_both": 59,
+   "cases_marked_by_at_least_one": 64,
+   "passages_marked_by_neither": 364,
+   "strict_agreement_count": 37,
+   "strict_agreement_share": 0.578125,
+   "strict_agreement_interval95": [
+    0.45610031445865895,
+    0.6913021760670425
+   ],
+   "kappa": 0.9525414707708683,
+   "kappa_interval95": [
+    0.9056361741361342,
+    0.9894871291019846
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9369158878504673,
+    "same_words_only_share": 0.796875,
+    "exact_same_words_share": 0.5625,
+    "lenient_same_words_share": 0.90625
+   },
+   "outcome": "NOT_LABELABLE_UNDER_THIS_METHOD"
+  },
+  "^9 reached by reasoning": {
+   "marked_by_a": 32,
+   "marked_by_b": 44,
+   "marked_by_both": 30,
+   "cases_marked_by_at_least_one": 46,
+   "passages_marked_by_neither": 382,
+   "strict_agreement_count": 29,
+   "strict_agreement_share": 0.6304347826086957,
+   "strict_agreement_interval95": [
+    0.48600096310376883,
+    0.7547624549289894
+   ],
+   "kappa": 0.7695207323640278,
+   "kappa_interval95": [
+    0.6528121137206424,
+    0.8685862445414845
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9602803738317757,
+    "same_words_only_share": 0.6521739130434783,
+    "exact_same_words_share": 0.41304347826086957,
+    "lenient_same_words_share": 0.6521739130434783
+   },
+   "outcome": "REPORTED_ONLY_NO_BAR"
+  },
+  "uncertain ^8": {
+   "marked_by_a": 59,
+   "marked_by_b": 59,
+   "marked_by_both": 53,
+   "cases_marked_by_at_least_one": 65,
+   "passages_marked_by_neither": 363,
+   "strict_agreement_count": 37,
+   "strict_agreement_share": 0.5692307692307692,
+   "strict_agreement_interval95": [
+    0.4483297458123005,
+    0.6824054266586779
+   ],
+   "kappa": 0.8820449221441367,
+   "kappa_interval95": [
+    0.8062276774485639,
+    0.9398779900465565
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9345794392523364,
+    "same_words_only_share": 0.5846153846153846,
+    "exact_same_words_share": 0.3384615384615385,
+    "lenient_same_words_share": 0.7230769230769231
+   },
+   "outcome": "REPORTED_ONLY_NO_BAR"
+  },
+  "uncertain ^9": {
+   "marked_by_a": 59,
+   "marked_by_b": 59,
+   "marked_by_both": 53,
+   "cases_marked_by_at_least_one": 65,
+   "passages_marked_by_neither": 363,
+   "strict_agreement_count": 35,
+   "strict_agreement_share": 0.5384615384615384,
+   "strict_agreement_interval95": [
+    0.41853399175528333,
+    0.6540966596174824
+   ],
+   "kappa": 0.8820449221441367,
+   "kappa_interval95": [
+    0.8091891324871497,
+    0.9426452852101669
+   ],
+   "secondary": {
+    "all_passage_agreement_share": 0.9299065420560748,
+    "same_words_only_share": 0.7846153846153846,
+    "exact_same_words_share": 0.676923076923077,
+    "lenient_same_words_share": 0.8153846153846154
+   },
+   "outcome": "REPORTED_ONLY_NO_BAR"
+  }
+ },
+ "confusions_same_words_different_noetic": {
+  "^5 vs ^7": 28,
+  "^6 vs ^8": 5,
+  "^8 vs ^9": 4,
+  "^2 vs ^4": 3,
+  "^4 vs ^7": 3,
+  "^5 vs ^9": 2,
+  "^4 vs ^8": 2,
+  "^1 vs ^8": 2,
+  "^3 vs ^8": 1,
+  "^6 vs ^7": 1,
+  "^3 vs ^4": 1
+ },
+ "none_of_these": {
+  "team_a": 59,
+  "team_b": 55,
+  "agree": 424
+ },
+ "descriptive_by_writer_kind": {
+  "K1": {
+   "^1 both": 57,
+   "^2 both": 2,
+   "^2 neither": 54,
+   "^2 one": 1,
+   "^3 neither": 57,
+   "^4 neither": 51,
+   "^4 one": 6,
+   "^5 neither": 56,
+   "^5 one": 1,
+   "^6 both": 1,
+   "^6 neither": 53,
+   "^6 one": 3,
+   "^7 neither": 54,
+   "^7 one": 3,
+   "^8 both": 57,
+   "^9 both": 57
+  },
+  "K2": {
+   "^1 both": 58,
+   "^2 both": 56,
+   "^2 one": 2,
+   "^3 both": 41,
+   "^3 neither": 6,
+   "^3 one": 11,
+   "^4 both": 45,
+   "^4 neither": 4,
+   "^4 one": 9,
+   "^5 both": 1,
+   "^5 neither": 56,
+   "^5 one": 1,
+   "^6 neither": 57,
+   "^6 one": 1,
+   "^7 neither": 56,
+   "^7 one": 2,
+   "^8 neither": 58,
+   "^9 neither": 58
+  },
+  "K3": {
+   "^1 both": 60,
+   "^2 both": 1,
+   "^2 neither": 56,
+   "^2 one": 3,
+   "^3 both": 1,
+   "^3 neither": 56,
+   "^3 one": 3,
+   "^4 both": 7,
+   "^4 neither": 39,
+   "^4 one": 14,
+   "^5 both": 57,
+   "^5 neither": 1,
+   "^5 one": 2,
+   "^6 both": 1,
+   "^6 neither": 55,
+   "^6 one": 4,
+   "^7 both": 4,
+   "^7 neither": 45,
+   "^7 one": 11,
+   "^8 both": 2,
+   "^8 neither": 54,
+   "^8 one": 4,
+   "^9 both": 2,
+   "^9 neither": 54,
+   "^9 one": 4
+  },
+  "K4": {
+   "^1 both": 60,
+   "^2 neither": 60,
+   "^3 neither": 60,
+   "^4 neither": 60,
+   "^5 both": 1,
+   "^5 neither": 56,
+   "^5 one": 3,
+   "^6 both": 58,
+   "^6 one": 2,
+   "^7 neither": 58,
+   "^7 one": 2,
+   "^8 neither": 60,
+   "^9 neither": 60
+  },
+  "K5": {
+   "^1 both": 58,
+   "^2 neither": 58,
+   "^3 neither": 58,
+   "^4 both": 4,
+   "^4 neither": 47,
+   "^4 one": 7,
+   "^5 both": 41,
+   "^5 neither": 6,
+   "^5 one": 11,
+   "^6 neither": 57,
+   "^6 one": 1,
+   "^7 both": 49,
+   "^7 neither": 2,
+   "^7 one": 7,
+   "^8 neither": 57,
+   "^8 one": 1,
+   "^9 neither": 57,
+   "^9 one": 1
+  },
+  "K6": {
+   "^1 both": 30,
+   "^2 neither": 30,
+   "^3 neither": 30,
+   "^4 neither": 26,
+   "^4 one": 4,
+   "^5 both": 9,
+   "^5 neither": 20,
+   "^5 one": 1,
+   "^6 neither": 29,
+   "^6 one": 1,
+   "^7 neither": 30,
+   "^8 neither": 30,
+   "^9 neither": 30
+  },
+  "K7": {
+   "^1 both": 30,
+   "^2 neither": 30,
+   "^3 neither": 30,
+   "^4 neither": 30,
+   "^5 both": 1,
+   "^5 neither": 29,
+   "^6 both": 19,
+   "^6 neither": 2,
+   "^6 one": 9,
+   "^7 neither": 29,
+   "^7 one": 1,
+   "^8 neither": 30,
+   "^9 neither": 30
+  },
+  "K8": {
+   "^1 neither": 55,
+   "^2 neither": 55,
+   "^3 neither": 55,
+   "^4 neither": 55,
+   "^5 neither": 55,
+   "^6 neither": 55,
+   "^7 neither": 55,
+   "^8 neither": 55,
+   "^9 neither": 55
+  },
+  "K9": {
+   "^1 both": 15,
+   "^1 one": 5,
+   "^2 neither": 20,
+   "^3 neither": 20,
+   "^4 neither": 20,
+   "^5 neither": 20,
+   "^6 neither": 20,
+   "^7 neither": 20,
+   "^8 neither": 20,
+   "^9 neither": 20
+  }
+ },
+ "disagreements": [
+  {
+   "passage": "V067",
+   "class": "^1",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Robert",
+     "Robert",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Robert, the dairy farmer",
+     "Robert, the dairy farmer",
+     ""
+    ],
+    [
+     "Bessie",
+     "Bessie",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V082",
+   "class": "^1",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Frank",
+     "Frank",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Frank, the ski lift engineer",
+     "Frank, the ski lift engineer",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V152",
+   "class": "^1",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Michael, the captain"
+   ]
+  },
+  {
+   "passage": "V155",
+   "class": "^1",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Gary"
+   ]
+  },
+  {
+   "passage": "V161",
+   "class": "^1",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Gary"
+   ]
+  },
+  {
+   "passage": "V337",
+   "class": "^1",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Leo"
+   ]
+  },
+  {
+   "passage": "V405",
+   "class": "^1",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Thomas",
+     "Thomas",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Thomas, the archive manager",
+     "Thomas, the archive manager",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V415",
+   "class": "^1",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Leo"
+   ]
+  },
+  {
+   "passage": "V003",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a small, vibrant potted plant on a bench"
+   ]
+  },
+  {
+   "passage": "V031",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the immense excavator",
+     "Peter",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "a deep, almost childlike awe for the machine's sheer power",
+     "Peter",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V087",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a mature cheddar wheel",
+     "Maria",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Its earthy aroma and firm texture pulled her in",
+     "Maria",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V099",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the plump, dark grapes",
+     "Elena",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the plump, dark grapes, heavy with juice, ready for picking",
+     "Elena",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V168",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the quiet, single passengers",
+     "Liam",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the quiet, single passengers heading home after a long shift",
+     "Liam",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V181",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "an old, scuffed pair of leather boots",
+     "Quinn",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the task would be a pleasure",
+     "Quinn",
+     ""
+    ],
+    [
+     "restoring such items",
+     "Quinn",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V198",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the quiet, steady ones",
+     "David",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the quiet, steady ones that shuffled cooperatively into their stalls",
+     "David",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V200",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the heavy excavator",
+     "Mark",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "its mechanical might",
+     "Mark",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V248",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [
+    "the children happily eating her shepherd's pie"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V251",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a robin",
+     "Miriam",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "a robin was pecking at the bird feeder",
+     "Miriam",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V273",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the neatness of the new bottles",
+     "Dr. Perez",
+     ""
+    ],
+    [
+     "an orderly workspace",
+     "Dr. Perez",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the fresh reagents",
+     "Dr. Perez",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V290",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [
+    "the performance"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V294",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the precision",
+     "Maria",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the barber skillfully trim a client's beard",
+     "Maria",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V383",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "turbine five spun up to full capacity",
+     "Mark",
+     ""
+    ],
+    [
+     "Its energy output numbers glowed brightly green on the screen",
+     "Mark",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "a surge of satisfaction",
+     "Mark",
+     ""
+    ],
+    [
+     "a sight he always enjoyed",
+     "Mark",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V385",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [
+    "a comforting scent of relaxation"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V391",
+   "class": "^2",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the quiet corner",
+     "Clara",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the quiet corner where a small boy was carefully building a tower of blocks",
+     "Clara",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V400",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [
+    "small routines"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V408",
+   "class": "^2",
+   "kind": "one team only",
+   "team_a": [
+    "a comforting, solid memory"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V019",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "His own unfinished game"
+   ]
+  },
+  {
+   "passage": "V072",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [
+    "the dentist"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V073",
+   "class": "^3",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the strong, briny scent",
+     "David",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the strong, briny scent near the clam vendor's stall",
+     "David",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V087",
+   "class": "^3",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a batch of experimental blue cheese",
+     "Maria",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "she quickly turned away",
+     "Maria",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V099",
+   "class": "^3",
+   "kind": "different words",
+   "team_a": [
+    [
+     "shriveled, diseased berries",
+     "Elena",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "some shriveled, diseased berries hung limp and unappealing",
+     "Elena",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V103",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the monotonous jumping jacks and endless laps around the track"
+   ]
+  },
+  {
+   "passage": "V132",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The old, rusty bolts she had just removed"
+   ]
+  },
+  {
+   "passage": "V147",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [
+    "The rumble of the distant explosion"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V181",
+   "class": "^3",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a synthetic running shoe with a torn mesh",
+     "Quinn",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "a distinct aversion",
+     "Quinn",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V184",
+   "class": "^3",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the deep red roses",
+     "A customer",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the roses",
+     "A customer",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V189",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "A pile of greasy engine blocks"
+   ]
+  },
+  {
+   "passage": "V200",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [
+    "the cloud of fine dust"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V221",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The simpler, modern electronic keypads"
+   ]
+  },
+  {
+   "passage": "V248",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [
+    "The clatter of dropped trays"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V251",
+   "class": "^3",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the television",
+     "Miriam",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the television, which blared a loud game show",
+     "Miriam",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V259",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The strict declaration forms"
+   ]
+  },
+  {
+   "passage": "V346",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The display of ancient pottery shards"
+   ]
+  },
+  {
+   "passage": "V375",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [
+    "missing their delivery shift"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V383",
+   "class": "^3",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The distant, faint hum of turbine twelve's struggling motor",
+     "Mark",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "a minor annoyance",
+     "Mark",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V392",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The common, robust tomato plants"
+   ]
+  },
+  {
+   "passage": "V395",
+   "class": "^3",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The dry, statistics-heavy report on economic trends"
+   ]
+  },
+  {
+   "passage": "V005",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "her body registered tiny shifts"
+   ]
+  },
+  {
+   "passage": "V046",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "a deep connection"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V053",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "had become background ambience"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V057",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "barely visible to an untrained eye"
+   ]
+  },
+  {
+   "passage": "V060",
+   "class": "^4",
+   "kind": "different words",
+   "team_a": [
+    [
+     "quickly fading into the background of his thoughts",
+     "Liam",
+     "The distant, faint sound of a snowmobile engine"
+    ]
+   ],
+   "team_b": [
+    [
+     "a feeling he deeply cherished",
+     "Liam",
+     "The crisp mountain air"
+    ],
+    [
+     "seemed a jarring intrusion",
+     "Liam",
+     "The distant, faint sound of a snowmobile engine"
+    ]
+   ]
+  },
+  {
+   "passage": "V063",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "barely perceptible"
+   ]
+  },
+  {
+   "passage": "V074",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "rarely flinched"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V083",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a faint, almost imperceptible scrape"
+   ]
+  },
+  {
+   "passage": "V090",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "a small grimace of distaste",
+    "unfazed"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V097",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "always brought a frown to her face",
+    "completely ignored"
+   ]
+  },
+  {
+   "passage": "V112",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "spoke volumes to him"
+   ]
+  },
+  {
+   "passage": "V122",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "nearly imperceptible to others"
+   ]
+  },
+  {
+   "passage": "V133",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a profound sense of peace",
+     "George",
+     "The constant, pulsing beam"
+    ]
+   ],
+   "team_b": [
+    [
+     "brought him a profound sense of peace",
+     "George",
+     "The constant, pulsing beam sweeping across the dark sea"
+    ]
+   ]
+  },
+  {
+   "passage": "V134",
+   "class": "^4",
+   "kind": "different words",
+   "team_a": [
+    [
+     "just background noise to her",
+     "Clara",
+     "The distant whir of the sewing machine"
+    ]
+   ],
+   "team_b": [
+    [
+     "made her fingers tingle unpleasantly",
+     "Clara",
+     "The rough texture of the tweed"
+    ],
+    [
+     "a smile touched her lips",
+     "Clara",
+     "a bolt of silk, soft and smooth"
+    ]
+   ]
+  },
+  {
+   "passage": "V150",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "always seemed to follow him"
+   ]
+  },
+  {
+   "passage": "V168",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "did not distract him"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V169",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "made him flinch"
+   ]
+  },
+  {
+   "passage": "V180",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "winced at a particularly greasy stain on a tablecloth, clearly disgusted"
+   ]
+  },
+  {
+   "passage": "V181",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "felt a distinct aversion"
+   ]
+  },
+  {
+   "passage": "V189",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "made her jump"
+   ]
+  },
+  {
+   "passage": "V198",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "making David jump"
+   ]
+  },
+  {
+   "passage": "V211",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "barely perceptible to most"
+   ]
+  },
+  {
+   "passage": "V224",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "barely noticed she had done it",
+     "Eleanor",
+     "touched the petals of a peony"
+    ]
+   ],
+   "team_b": [
+    [
+     "barely noticed",
+     "Eleanor",
+     "This familiar contact"
+    ]
+   ]
+  },
+  {
+   "passage": "V226",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "barely noticeable over the steam and detergent"
+   ]
+  },
+  {
+   "passage": "V242",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "felt like an unending chore"
+   ]
+  },
+  {
+   "passage": "V246",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "was simply the sound of another working night to him"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V251",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "held her attention completely",
+     "Miriam",
+     "a robin"
+    ]
+   ],
+   "team_b": [
+    [
+     "held her attention completely",
+     "Miriam",
+     "a robin was pecking at the bird feeder"
+    ]
+   ]
+  },
+  {
+   "passage": "V255",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "had become a quiet backdrop to her thoughts, unnoticed for years"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V260",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "felt the slight sway of the cabin"
+   ]
+  },
+  {
+   "passage": "V272",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a strong pull",
+     "Sophie",
+     "the slopes"
+    ],
+    [
+     "barely registered",
+     "Sophie",
+     "a temporary delay"
+    ]
+   ],
+   "team_b": [
+    [
+     "barely registered",
+     "Sophie",
+     "The station's loudspeaker announced a temporary delay"
+    ]
+   ]
+  },
+  {
+   "passage": "V273",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "made him jump"
+   ]
+  },
+  {
+   "passage": "V277",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "felt warm and familiar"
+   ]
+  },
+  {
+   "passage": "V278",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "unaffected by the surrounding activity"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V285",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "once overwhelming, now felt like a comforting hum"
+   ]
+  },
+  {
+   "passage": "V288",
+   "class": "^4",
+   "kind": "different words",
+   "team_a": [
+    [
+     "became background noise, utterly ignored",
+     "Nathan",
+     "The loud thumping"
+    ]
+   ],
+   "team_b": [
+    [
+     "utterly ignored",
+     "Nathan",
+     "The loud thumping"
+    ]
+   ]
+  },
+  {
+   "passage": "V290",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Her appreciation for the performance ran deep"
+   ]
+  },
+  {
+   "passage": "V295",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "an almost imperceptible droop"
+   ]
+  },
+  {
+   "passage": "V301",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "A warmth spread through her"
+   ]
+  },
+  {
+   "passage": "V303",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "always made Marco feel steady before a sparring session"
+   ]
+  },
+  {
+   "passage": "V323",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "barely registered",
+     "Sarah",
+     "spilling juice everywhere"
+    ]
+   ],
+   "team_b": [
+    [
+     "barely registered",
+     "Sarah",
+     "the mess"
+    ]
+   ]
+  },
+  {
+   "passage": "V334",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "no longer noticed"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V338",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "faded quickly in her awareness",
+     "Martha",
+     "A sudden metallic clanging from the industrial dryer"
+    ]
+   ],
+   "team_b": [
+    [
+     "made her flinch",
+     "Martha",
+     "A sudden metallic clanging from the industrial dryer"
+    ],
+    [
+     "faded quickly in her awareness",
+     "Martha",
+     "The dryer noise"
+    ]
+   ]
+  },
+  {
+   "passage": "V346",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "held little appeal",
+    "faded from her awareness"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V359",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "merely sounded like a familiar, restless companion to him"
+   ]
+  },
+  {
+   "passage": "V368",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "unheard"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V375",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "felt every breakage keenly",
+     "Arthur",
+     "countless bent rims and snapped spokes"
+    ],
+    [
+     "only presented a familiar challenge",
+     "Arthur",
+     "the buckled front wheel"
+    ]
+   ],
+   "team_b": [
+    [
+     "felt every breakage keenly",
+     "Arthur",
+     "every breakage"
+    ],
+    [
+     "the damage only presented a familiar challenge",
+     "Arthur",
+     "the damage"
+    ]
+   ]
+  },
+  {
+   "passage": "V385",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "now felt completely different"
+   ]
+  },
+  {
+   "passage": "V390",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [
+    "simply registered as part of the air he breathed"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V391",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The other noise faded for her",
+     "Clara",
+     "The cacophony of shrieking children"
+    ]
+   ],
+   "team_b": [
+    [
+     "made her step back slightly",
+     "Clara",
+     "The cacophony of shrieking children"
+    ],
+    [
+     "The other noise faded for her",
+     "Clara",
+     "The other noise"
+    ]
+   ]
+  },
+  {
+   "passage": "V402",
+   "class": "^4",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "barely flinched",
+     "Emily",
+     "local anaesthetic"
+    ]
+   ],
+   "team_b": [
+    [
+     "barely flinched",
+     "Young Emily",
+     "the dentist injected local anaesthetic into her gum"
+    ]
+   ]
+  },
+  {
+   "passage": "V404",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "immense"
+   ]
+  },
+  {
+   "passage": "V408",
+   "class": "^4",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a comforting, solid memory she often visited"
+   ]
+  },
+  {
+   "passage": "V011",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [
+    "his own clumsy attempts decades ago",
+    "a moment of independent struggle often solidified the learning"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V032",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a routine ingrained",
+     "George",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "countless quiet waits",
+     "George",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V036",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his movements were entirely unthinking"
+   ]
+  },
+  {
+   "passage": "V041",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "shaped every gesture",
+     "Agnes",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Years of daily milking",
+     "Agnes",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V044",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "had operated the harbour crane for twenty years",
+     "Ben",
+     ""
+    ],
+    [
+     "became second nature",
+     "Ben",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "twenty years",
+     "Ben",
+     ""
+    ],
+    [
+     "His hands moved without thinking",
+     "Ben",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V053",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "effortlessly identified the leather type and sole material",
+     "Cathy",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the cobbler",
+     "Cathy",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V072",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "his own childhood fear of the dentist",
+     "Samuel",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "old memory",
+     "Samuel",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V074",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "After years, his ears simply filtered out the cacophony",
+     "Leo",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "After years",
+     "Leo",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V095",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "countless similar appointments over her sixty years"
+   ]
+  },
+  {
+   "passage": "V127",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "second nature to him",
+     "Peter",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "The high humidity and constant warm air had become second nature to him",
+     "Peter",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V131",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "learned how to service a complex derailleur"
+   ]
+  },
+  {
+   "passage": "V138",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a routine performed twice daily for decades"
+   ]
+  },
+  {
+   "passage": "V157",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "acclimated her body to the chill",
+     "Wendy",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Decades of early morning swims",
+     "Wendy",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V170",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Her hand just knew when a plant needed water",
+     "Wendy",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "for years, she had performed this exact task",
+     "Wendy",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V181",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "He rarely enjoyed repairing those"
+   ]
+  },
+  {
+   "passage": "V182",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "It was a familiar mark to her"
+   ]
+  },
+  {
+   "passage": "V194",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a practiced, unthinking part of her week"
+   ]
+  },
+  {
+   "passage": "V195",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a habit formed",
+     "Sarah",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "years of recording sessions",
+     "Sarah",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V199",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the seasoned barber"
+   ]
+  },
+  {
+   "passage": "V210",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a seasoned chess player"
+   ]
+  },
+  {
+   "passage": "V214",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "He no longer consciously read each one for urgency"
+   ]
+  },
+  {
+   "passage": "V220",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "taught him to grab that specific tool first",
+     "Noah",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Countless emergency calls had taught him",
+     "Noah",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V224",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "an unconscious habit",
+     "Eleanor",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "a baker in her fifties",
+     "Eleanor",
+     ""
+    ],
+    [
+     "years of weekly visits to the market",
+     "Eleanor",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V225",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "countless beginners make the same mistake over his fifty years",
+     "George",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "his fifty years",
+     "George, the puppeteer",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V229",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "too many parcels burst open on the rollers over her thirty years here",
+     "Marta",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "her thirty years here",
+     "Marta",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V231",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "This swift, almost unconscious action had developed",
+     "Daniel",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "years of sorting thousands of pieces of mail daily",
+     "Daniel",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V232",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "without thinking"
+   ]
+  },
+  {
+   "passage": "V237",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "countless pallets move down the conveyor belt",
+    "His muscles simply knew where to place the forks to lift the next load"
+   ]
+  },
+  {
+   "passage": "V246",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "For twenty years, he had started his shift in this dimly lit depot",
+     "Peter",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "twenty years",
+     "Peter",
+     ""
+    ],
+    [
+     "the distinct feel of each bus's steering wheel in his hands",
+     "Peter",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V247",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "so ingrained that he would sometimes pat his pocket even on his days off",
+     "Julian",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "The routine became so ingrained",
+     "Julian",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V253",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "as a student"
+   ]
+  },
+  {
+   "passage": "V255",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "unnoticed for years"
+   ]
+  },
+  {
+   "passage": "V279",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "found himself moving towards his smoker at two o'clock",
+     "Arthur",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "For years, the chime of the nearby church bell had marked this time",
+     "Arthur",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V288",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his movements precise and unhurried"
+   ]
+  },
+  {
+   "passage": "V313",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "this silent recognition",
+     "Olivia",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Years of calls",
+     "Olivia",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V328",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The sound had become part of her daily routine"
+   ]
+  },
+  {
+   "passage": "V334",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Her routine was a seamless flow of loading, transferring, and folding"
+   ]
+  },
+  {
+   "passage": "V340",
+   "class": "^5",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "For two years"
+   ]
+  },
+  {
+   "passage": "V398",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "These morning tasks required no conscious thought",
+     "Sarah",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "ingrained by many isolated winters",
+     "Sarah",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V404",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "honed her ability to process the soundscape",
+     "Mrs. Jenkins",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "Decades spent managing busy lunchtimes",
+     "Mrs. Jenkins",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V411",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "had seen every type of handwriting imaginable over his career",
+     "Graham",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "his career",
+     "Graham",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V423",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The precise movements had become second nature to her",
+     "Dr. Lena",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "second nature",
+     "Dr. Lena",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V427",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "He knew exactly what tone to use when he arrived",
+     "Quinn",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "supervised hundreds of lunch periods over the decades",
+     "Quinn",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V428",
+   "class": "^5",
+   "kind": "different words",
+   "team_a": [
+    [
+     "He knew exactly where each box would go inside the truck",
+     "David",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "years of loading and unloading",
+     "David",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V009",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "tools",
+    "the lingering smell of coal dust and engine oil"
+   ]
+  },
+  {
+   "passage": "V013",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a faint shadow near the gum line",
+     "",
+     "All these signs"
+    ],
+    [
+     "a slight sensitivity to cold",
+     "",
+     "All these signs"
+    ],
+    [
+     "a tiny chip on the chewing surface of the molar",
+     "",
+     "All these signs"
+    ]
+   ],
+   "team_b": [
+    [
+     "a faint shadow near the gum line",
+     "",
+     "the X-ray"
+    ],
+    [
+     "a tiny chip on the chewing surface of the molar",
+     "",
+     "the X-ray"
+    ]
+   ]
+  },
+  {
+   "passage": "V028",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the oil pressure light came on",
+     "",
+     ""
+    ],
+    [
+     "a faint knocking sound",
+     "",
+     ""
+    ],
+    [
+     "the dipstick; it was dry",
+     "",
+     ""
+    ],
+    [
+     "a fresh puddle of dark fluid beneath the engine block",
+     "",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the oil pressure light came on",
+     "",
+     "the broken-down bus"
+    ],
+    [
+     "a faint knocking sound",
+     "",
+     "the broken-down bus"
+    ],
+    [
+     "it was dry",
+     "",
+     "the broken-down bus"
+    ],
+    [
+     "a fresh puddle of dark fluid beneath the engine block",
+     "",
+     "the broken-down bus"
+    ]
+   ]
+  },
+  {
+   "passage": "V029",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a slightly darker rind",
+     "",
+     ""
+    ],
+    [
+     "Its aroma, usually sharp, seemed a little muted today",
+     "",
+     ""
+    ],
+    [
+     "the cheese felt subtly firmer than it should for its age",
+     "",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "a slightly darker rind",
+     "",
+     "One large round"
+    ],
+    [
+     "Its aroma, usually sharp, seemed a little muted today",
+     "",
+     "One large round"
+    ],
+    [
+     "the cheese felt subtly firmer than it should for its age",
+     "",
+     "One large round"
+    ]
+   ]
+  },
+  {
+   "passage": "V054",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a persistent squeaking sound",
+     "",
+     "These signs"
+    ],
+    [
+     "the chain was rusty and stiff",
+     "",
+     "These signs"
+    ],
+    [
+     "one pedal felt loose",
+     "",
+     "These signs"
+    ]
+   ],
+   "team_b": [
+    [
+     "the chain was rusty and stiff",
+     "",
+     "The entire drivetrain"
+    ],
+    [
+     "one pedal felt loose",
+     "",
+     "The entire drivetrain"
+    ]
+   ]
+  },
+  {
+   "passage": "V079",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a faint smudge on the postage stamp",
+     "",
+     "All these small imperfections"
+    ],
+    [
+     "The postmark itself looked blurry and incomplete",
+     "",
+     "All these small imperfections"
+    ],
+    [
+     "the address was written in faded ink",
+     "",
+     "All these small imperfections"
+    ]
+   ],
+   "team_b": [
+    [
+     "a faint smudge on the postage stamp",
+     "",
+     "the letter"
+    ],
+    [
+     "The postmark itself looked blurry and incomplete",
+     "",
+     "the letter"
+    ],
+    [
+     "the address was written in faded ink, almost illegible in places",
+     "",
+     "the letter"
+    ]
+   ]
+  },
+  {
+   "passage": "V084",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the river's higher level",
+    "The current felt stronger",
+    "The north wind, she observed, was picking up too",
+    "the dark, heavy clouds approaching from the west"
+   ]
+  },
+  {
+   "passage": "V094",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the slight discrepancy in the light's flash sequence",
+     "",
+     "This combination"
+    ],
+    [
+     "a minor voltage drop",
+     "",
+     "This combination"
+    ],
+    [
+     "a loose connection in the main circuit board",
+     "",
+     "This combination"
+    ]
+   ],
+   "team_b": [
+    [
+     "the slight discrepancy in the light's flash sequence",
+     "",
+     "intermittent faulty wiring that needed immediate repair"
+    ],
+    [
+     "a minor voltage drop",
+     "",
+     "intermittent faulty wiring that needed immediate repair"
+    ],
+    [
+     "a loose connection in the main circuit board",
+     "",
+     "intermittent faulty wiring that needed immediate repair"
+    ]
+   ]
+  },
+  {
+   "passage": "V123",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the rusted tracks",
+    "the crumbling platform"
+   ]
+  },
+  {
+   "passage": "V126",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a faint grey discoloration on the gills of the halibut",
+    "Its eyes, usually bright, appeared slightly sunken",
+    "its flesh, which lacked the firm springiness of fresh catch"
+   ]
+  },
+  {
+   "passage": "V129",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a small tear in the paper roll",
+     "",
+     "The issue"
+    ],
+    [
+     "a slight misalignment of the printing plate",
+     "",
+     "The issue"
+    ],
+    [
+     "an uneven pressure from the impression cylinder",
+     "",
+     "The issue"
+    ]
+   ],
+   "team_b": [
+    [
+     "a small tear in the paper roll",
+     "",
+     "the misprinted batch"
+    ],
+    [
+     "a slight misalignment of the printing plate",
+     "",
+     "the misprinted batch"
+    ],
+    [
+     "an uneven pressure from the impression cylinder",
+     "",
+     "the misprinted batch"
+    ]
+   ]
+  },
+  {
+   "passage": "V166",
+   "class": "^6",
+   "kind": "different words",
+   "team_a": [
+    [
+     "dried residue",
+     "",
+     "smudged ink"
+    ],
+    [
+     "a slightly uneven texture",
+     "",
+     "smudged ink"
+    ],
+    [
+     "a higher reading than usual",
+     "",
+     "smudged ink"
+    ]
+   ],
+   "team_b": [
+    [
+     "the rollers",
+     "",
+     "the first batch of posters"
+    ],
+    [
+     "the paper stock",
+     "",
+     "the first batch of posters"
+    ],
+    [
+     "the humidity gauge",
+     "",
+     "the first batch of posters"
+    ]
+   ]
+  },
+  {
+   "passage": "V192",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the rusted tools on the workbench",
+    "the faint smell of oil",
+    "the quiet concentration as his grandfather repaired intricate clock mechanisms"
+   ]
+  },
+  {
+   "passage": "V202",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "steel beams",
+    "copper wiring",
+    "aluminum sheeting"
+   ]
+  },
+  {
+   "passage": "V207",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the drilling of precise boreholes",
+     "",
+     "the day's blasting plan"
+    ],
+    [
+     "the careful insertion of charges",
+     "",
+     "the day's blasting plan"
+    ],
+    [
+     "the clearing of the area",
+     "",
+     "the day's blasting plan"
+    ],
+    [
+     "the controlled detonation",
+     "",
+     "the day's blasting plan"
+    ]
+   ],
+   "team_b": [
+    [
+     "the drilling of precise boreholes",
+     "",
+     "The process"
+    ],
+    [
+     "the careful insertion of charges",
+     "",
+     "The process"
+    ],
+    [
+     "the clearing of the area",
+     "",
+     "The process"
+    ],
+    [
+     "the controlled detonation",
+     "",
+     "The process"
+    ]
+   ]
+  },
+  {
+   "passage": "V211",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the years of neglected potholes",
+    "sudden braking",
+    "hasty repairs"
+   ]
+  },
+  {
+   "passage": "V221",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "its intricate pins and springs"
+   ]
+  },
+  {
+   "passage": "V230",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "his chin was too high",
+     "",
+     "three main flaws"
+    ],
+    [
+     "his left hand dropped too soon",
+     "",
+     "three main flaws"
+    ],
+    [
+     "his footwork was too flat",
+     "",
+     "three main flaws"
+    ],
+    [
+     "tuck the chin",
+     "",
+     "three main flaws"
+    ],
+    [
+     "keep the guard up",
+     "",
+     "three main flaws"
+    ],
+    [
+     "stay light on the balls of the feet",
+     "",
+     "three main flaws"
+    ]
+   ],
+   "team_b": [
+    [
+     "his chin was too high",
+     "",
+     "The young man's defence"
+    ],
+    [
+     "his left hand dropped too soon",
+     "",
+     "The young man's defence"
+    ],
+    [
+     "his footwork was too flat",
+     "",
+     "The young man's defence"
+    ]
+   ]
+  },
+  {
+   "passage": "V238",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the slight hiss from the microphone",
+     "",
+     "the playback"
+    ],
+    [
+     "the uneven timing in the percussion",
+     "",
+     "the playback"
+    ],
+    [
+     "the lead singer\u2019s voice",
+     "",
+     "the playback"
+    ],
+    [
+     "the bass guitar",
+     "",
+     "the playback"
+    ]
+   ],
+   "team_b": [
+    [
+     "the slight hiss from the microphone",
+     "",
+     "The recording"
+    ],
+    [
+     "the uneven timing in the percussion",
+     "",
+     "The recording"
+    ],
+    [
+     "the lead singer\u2019s voice a fraction sharp on the bridge",
+     "",
+     "The recording"
+    ],
+    [
+     "the bass guitar, slightly out of tune",
+     "",
+     "The recording"
+    ]
+   ]
+  },
+  {
+   "passage": "V254",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "restless in her stall and wasn't letting down milk as usual",
+     "",
+     "these facts"
+    ],
+    [
+     "the milking machine's suction, finding it slightly weak",
+     "",
+     "these facts"
+    ],
+    [
+     "a subtle warmth",
+     "",
+     "these facts"
+    ]
+   ],
+   "team_b": [
+    [
+     "the milking machine's suction",
+     "",
+     "the milking machine"
+    ],
+    [
+     "the udder",
+     "",
+     "Daisy"
+    ]
+   ]
+  },
+  {
+   "passage": "V256",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [
+    "remove the old sole",
+    "clean and prepare the upper",
+    "select and cut a new sole",
+    "meticulous gluing and stitching",
+    "polish the refurbished footwear"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V266",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [
+    "inspect the label",
+    "scan the barcode",
+    "wrap the box"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V267",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [
+    "membership fees",
+    "equipment purchases",
+    "tournament entry costs",
+    "refreshments",
+    "general upkeep of the playing area"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V271",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "minor flaws",
+    "survival and time"
+   ]
+  },
+  {
+   "passage": "V274",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the sparse snow patches",
+    "the direction of the wind",
+    "some faint boot prints heading uphill",
+    "a rocky outcrop",
+    "The temperature had dropped significantly overnight"
+   ]
+  },
+  {
+   "passage": "V275",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the buffer's pH",
+     "",
+     "the failed experiment results"
+    ],
+    [
+     "the incubation temperature",
+     "",
+     "the failed experiment results"
+    ],
+    [
+     "the purity of the enzyme stock",
+     "",
+     "the failed experiment results"
+    ]
+   ],
+   "team_b": [
+    [
+     "the buffer's pH was slightly off",
+     "",
+     "the outcome"
+    ],
+    [
+     "the incubation temperature had fluctuated",
+     "",
+     "the outcome"
+    ],
+    [
+     "the purity of the enzyme stock was compromised",
+     "",
+     "the outcome"
+    ]
+   ]
+  },
+  {
+   "passage": "V278",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "sections"
+   ]
+  },
+  {
+   "passage": "V302",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a collection of pressed wildflowers",
+    "a faded ribbon",
+    "a tiny, intricately carved locket"
+   ]
+  },
+  {
+   "passage": "V304",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the particular shade of orange rust",
+    "flaking rather than solid",
+    "the casting marks"
+   ]
+  },
+  {
+   "passage": "V307",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the fuel line",
+     "",
+     "the lamp"
+    ],
+    [
+     "the wick",
+     "",
+     "the lamp"
+    ],
+    [
+     "the air intake",
+     "",
+     "the lamp"
+    ]
+   ],
+   "team_b": [
+    [
+     "the fuel line",
+     "",
+     "the lamp\u2019s flicker"
+    ],
+    [
+     "the wick",
+     "",
+     "the lamp\u2019s flicker"
+    ],
+    [
+     "the air intake",
+     "",
+     "the lamp\u2019s flicker"
+    ]
+   ]
+  },
+  {
+   "passage": "V309",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "unusual traffic delays near the city's main bridge",
+    "a minor incident involving a stray dog",
+    "high winds for the afternoon"
+   ]
+  },
+  {
+   "passage": "V314",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the hydraulic pressure readings",
+    "a small leak near one of the piston seals"
+   ]
+  },
+  {
+   "passage": "V320",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "rock type",
+     "",
+     "the geological survey report"
+    ],
+    [
+     "fault lines",
+     "",
+     "the geological survey report"
+    ],
+    [
+     "water saturation",
+     "",
+     "the geological survey report"
+    ],
+    [
+     "stability ratings",
+     "",
+     "the geological survey report"
+    ]
+   ],
+   "team_b": [
+    [
+     "rock type",
+     "",
+     "the information"
+    ],
+    [
+     "fault lines",
+     "",
+     "the information"
+    ],
+    [
+     "water saturation",
+     "",
+     "the information"
+    ],
+    [
+     "stability ratings",
+     "",
+     "the information"
+    ]
+   ]
+  },
+  {
+   "passage": "V336",
+   "class": "^6",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The postcode",
+     "",
+     "a different, handwritten address"
+    ]
+   ],
+   "team_b": [
+    [
+     "the unusual stamp",
+     "",
+     "the package"
+    ],
+    [
+     "the faint smudge beneath the address label",
+     "",
+     "the package"
+    ],
+    [
+     "a different, handwritten address underneath",
+     "",
+     "the package"
+    ]
+   ]
+  },
+  {
+   "passage": "V342",
+   "class": "^6",
+   "kind": "different words",
+   "team_a": [
+    [
+     "packages went to the city center",
+     "",
+     "the complex delivery route"
+    ],
+    [
+     "rural addresses received theirs",
+     "",
+     "the complex delivery route"
+    ],
+    [
+     "international mail was handled",
+     "",
+     "the complex delivery route"
+    ],
+    [
+     "special deliveries completed the round",
+     "",
+     "the complex delivery route"
+    ]
+   ],
+   "team_b": [
+    [
+     "four distinct segments",
+     "",
+     "the complex delivery route"
+    ]
+   ]
+  },
+  {
+   "passage": "V345",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a corroded fuel line",
+     "",
+     "the fault in the ferry\u2019s engine"
+    ],
+    [
+     "a partially clogged filter",
+     "",
+     "the fault in the ferry\u2019s engine"
+    ],
+    [
+     "a worn-out spark plug",
+     "",
+     "the fault in the ferry\u2019s engine"
+    ]
+   ],
+   "team_b": [
+    [
+     "a corroded fuel line",
+     "",
+     "the issue"
+    ],
+    [
+     "a partially clogged filter",
+     "",
+     "the issue"
+    ],
+    [
+     "a worn-out spark plug",
+     "",
+     "the issue"
+    ]
+   ]
+  },
+  {
+   "passage": "V351",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the main motor",
+     "",
+     "the faulty washing machine"
+    ],
+    [
+     "the drum bearings",
+     "",
+     "the faulty washing machine"
+    ],
+    [
+     "the water pump",
+     "",
+     "the faulty washing machine"
+    ],
+    [
+     "the heating element",
+     "",
+     "the faulty washing machine"
+    ]
+   ],
+   "team_b": [
+    [
+     "the main motor",
+     "",
+     "a sequence of components"
+    ],
+    [
+     "the drum bearings",
+     "",
+     "a sequence of components"
+    ],
+    [
+     "the water pump",
+     "",
+     "a sequence of components"
+    ],
+    [
+     "the heating element",
+     "",
+     "a sequence of components"
+    ]
+   ]
+  },
+  {
+   "passage": "V360",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the empty bucket of hydrangeas",
+     "",
+     ""
+    ],
+    [
+     "a few scattered petals on the pavement",
+     "",
+     ""
+    ],
+    [
+     "A small puddle of water",
+     "",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "the empty bucket of hydrangeas",
+     "",
+     "the display"
+    ],
+    [
+     "a few scattered petals on the pavement leading away",
+     "",
+     "the display"
+    ],
+    [
+     "A small puddle of water had also dried unevenly near the kerb",
+     "",
+     "the display"
+    ]
+   ]
+  },
+  {
+   "passage": "V370",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The first needed six pallets for the north route",
+     "",
+     "the next day's loading schedule"
+    ],
+    [
+     "The second required ten crates for the city centre",
+     "",
+     "the next day's loading schedule"
+    ],
+    [
+     "the third delivery was for four bulky items headed out of state",
+     "",
+     "the next day's loading schedule"
+    ]
+   ],
+   "team_b": [
+    [
+     "three separate outbound deliveries",
+     "",
+     "the next day's loading schedule"
+    ],
+    [
+     "six pallets for the north route",
+     "",
+     "The first"
+    ],
+    [
+     "ten crates for the city centre",
+     "",
+     "The second"
+    ],
+    [
+     "four bulky items headed out of state",
+     "",
+     "the third delivery"
+    ]
+   ]
+  },
+  {
+   "passage": "V372",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the high volume of cod",
+     "",
+     "the morning's overall profit margin"
+    ],
+    [
+     "the unexpectedly low demand for sole",
+     "",
+     "the morning's overall profit margin"
+    ],
+    [
+     "the complete absence of haddock orders",
+     "",
+     "the morning's overall profit margin"
+    ],
+    [
+     "The fluctuating price of ice",
+     "",
+     "the morning's overall profit margin"
+    ]
+   ],
+   "team_b": [
+    [
+     "the high volume of cod",
+     "",
+     "the daily sales report"
+    ],
+    [
+     "the unexpectedly low demand for sole",
+     "",
+     "the daily sales report"
+    ],
+    [
+     "the complete absence of haddock orders",
+     "",
+     "the daily sales report"
+    ],
+    [
+     "The fluctuating price of ice",
+     "",
+     "the daily sales report"
+    ]
+   ]
+  },
+  {
+   "passage": "V378",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [
+    "The skin felt soft, almost too soft",
+    "a few berries had split",
+    "a faint sour smell",
+    "tiny black spots on the leaves"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V381",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a unique inscription on a ceramic shard"
+   ]
+  },
+  {
+   "passage": "V407",
+   "class": "^6",
+   "kind": "one team only",
+   "team_a": [
+    "His breakfast tray sat untouched",
+    "The room seemed unusually quiet",
+    "he had not stirred",
+    "it felt a little warmer than usual"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V416",
+   "class": "^6",
+   "kind": "different words",
+   "team_a": [
+    [
+     "diesel",
+     "",
+     "The distinct metallic tang in the air"
+    ],
+    [
+     "crushed stone",
+     "",
+     "The distinct metallic tang in the air"
+    ]
+   ],
+   "team_b": [
+    [
+     "metal filings",
+     "",
+     "the smell of her father's toolshed"
+    ],
+    [
+     "machine oil",
+     "",
+     "the smell of her father's toolshed"
+    ]
+   ]
+  },
+  {
+   "passage": "V420",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a misaligned light source",
+     "",
+     "the faulty spectrometer"
+    ],
+    [
+     "a scratched diffraction grating",
+     "",
+     "the faulty spectrometer"
+    ],
+    [
+     "a degraded sensor array",
+     "",
+     "the faulty spectrometer"
+    ],
+    [
+     "a failing power supply unit",
+     "",
+     "the faulty spectrometer"
+    ]
+   ],
+   "team_b": [
+    [
+     "a misaligned light source",
+     "",
+     "The problem"
+    ],
+    [
+     "a scratched diffraction grating",
+     "",
+     "The problem"
+    ],
+    [
+     "a degraded sensor array",
+     "",
+     "The problem"
+    ],
+    [
+     "a failing power supply unit",
+     "",
+     "The problem"
+    ]
+   ]
+  },
+  {
+   "passage": "V421",
+   "class": "^6",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the pulsator",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the claw",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the liner",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the milk hose",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the air filter",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the vacuum lines",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the control panel",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the wiring harness",
+     "",
+     "the malfunctioning milking unit"
+    ],
+    [
+     "the small solenoid valve",
+     "",
+     "the malfunctioning milking unit"
+    ]
+   ],
+   "team_b": [
+    [
+     "the pulsator",
+     "",
+     "its parts"
+    ],
+    [
+     "the claw",
+     "",
+     "its parts"
+    ],
+    [
+     "the liner",
+     "",
+     "its parts"
+    ],
+    [
+     "the milk hose",
+     "",
+     "its parts"
+    ],
+    [
+     "the wiring harness",
+     "",
+     "the control panel"
+    ],
+    [
+     "the small solenoid valve",
+     "",
+     "the control panel"
+    ]
+   ]
+  },
+  {
+   "passage": "V002",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "every day",
+     "Tom",
+     "the pool"
+    ]
+   ],
+   "team_b": [
+    [
+     "as he did every day",
+     "Tom",
+     "arrived at the pool exactly at opening time"
+    ],
+    [
+     "His feet automatically navigated the slick tiles without him looking down",
+     "Tom",
+     "the slick tiles"
+    ]
+   ]
+  },
+  {
+   "passage": "V005",
+   "class": "^7",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a familiar backdrop to her days",
+     "Clara",
+     "The constant, murmuring hum from the hives"
+    ]
+   ],
+   "team_b": [
+    [
+     "The constant, murmuring hum from the hives",
+     "Clara",
+     "the hives"
+    ]
+   ]
+  },
+  {
+   "passage": "V012",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "often"
+   ]
+  },
+  {
+   "passage": "V027",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Years of cutting hair"
+   ]
+  },
+  {
+   "passage": "V032",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "countless quiet waits",
+     "George",
+     "quiet waits"
+    ]
+   ],
+   "team_b": [
+    [
+     "countless quiet waits",
+     "George",
+     "the next customer"
+    ],
+    [
+     "automatically",
+     "George",
+     "the next customer"
+    ]
+   ]
+  },
+  {
+   "passage": "V033",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "countless repetitions",
+     "Owen",
+     "His movements"
+    ]
+   ],
+   "team_b": [
+    [
+     "just as he had for twenty years",
+     "Owen",
+     "arrived before dawn"
+    ],
+    [
+     "countless repetitions",
+     "Owen",
+     "a dance"
+    ]
+   ]
+  },
+  {
+   "passage": "V036",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "every night for years",
+     "Xander",
+     "the front of the queue"
+    ]
+   ],
+   "team_b": [
+    [
+     "every night for years",
+     "Xander",
+     "waited here"
+    ]
+   ]
+  },
+  {
+   "passage": "V044",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "whenever a particular dull thud echoed"
+   ]
+  },
+  {
+   "passage": "V053",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "had become background ambience",
+    "without conscious selection"
+   ]
+  },
+  {
+   "passage": "V074",
+   "class": "^7",
+   "kind": "different words",
+   "team_a": [
+    [
+     "were constant",
+     "Leo",
+     "The roar of the crusher, the clang of falling steel, and the screech of machinery"
+    ]
+   ],
+   "team_b": [
+    [
+     "After years",
+     "Leo",
+     "the cacophony"
+    ]
+   ]
+  },
+  {
+   "passage": "V088",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Each Tuesday and Friday",
+     "Mike",
+     "three short honks"
+    ]
+   ],
+   "team_b": [
+    [
+     "Each Tuesday and Friday",
+     "Mike",
+     "the same delivery truck signaled its arrival with three short honks"
+    ],
+    [
+     "a practiced movement",
+     "Mike",
+     "moved the forklift towards Lane Four"
+    ]
+   ]
+  },
+  {
+   "passage": "V095",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "countless similar appointments"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V100",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "long practice",
+    "so many years"
+   ]
+  },
+  {
+   "passage": "V103",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "practicing her jabs and hooks"
+   ]
+  },
+  {
+   "passage": "V106",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Years spent sorting through discarded machinery"
+   ]
+  },
+  {
+   "passage": "V112",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Years of early mornings",
+     "Old Thomas",
+     "early mornings"
+    ]
+   ],
+   "team_b": [
+    [
+     "Years of early mornings",
+     "Old Thomas",
+     "the fresh catches"
+    ]
+   ]
+  },
+  {
+   "passage": "V121",
+   "class": "^7",
+   "kind": "different words",
+   "team_a": [
+    [
+     "every month for over twenty years",
+     "George",
+     "cut Mr. Henderson's hair"
+    ]
+   ],
+   "team_b": [
+    [
+     "every month",
+     "George",
+     "Mr. Henderson's hair"
+    ]
+   ]
+  },
+  {
+   "passage": "V127",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "constant warm air"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V130",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "She always checked the prevailing wind and the snow conditions carefully before pushing off"
+   ]
+  },
+  {
+   "passage": "V150",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "always seemed to follow him"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V151",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "every fifteen minutes",
+     "Robert",
+     "the main display"
+    ]
+   ],
+   "team_b": [
+    [
+     "every fifteen minutes",
+     "Robert",
+     "the wind speed readings"
+    ],
+    [
+     "for years",
+     "Robert",
+     "checking the wind speed readings"
+    ]
+   ]
+  },
+  {
+   "passage": "V157",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Decades of early morning swims",
+     "Wendy",
+     "early morning swims"
+    ]
+   ],
+   "team_b": [
+    [
+     "Decades of early morning swims",
+     "Wendy",
+     "swims"
+    ]
+   ]
+  },
+  {
+   "passage": "V158",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Every day, just before the lunch break",
+     "Daniel",
+     "strike her gavel twice"
+    ]
+   ],
+   "team_b": [
+    [
+     "Every day, just before the lunch break",
+     "Daniel",
+     "Judge Davies would strike her gavel twice for adjournment"
+    ]
+   ]
+  },
+  {
+   "passage": "V159",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "misted it daily"
+   ]
+  },
+  {
+   "passage": "V173",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "her everyday environment"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V195",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "every time she entered the booth",
+     "Sarah",
+     "tapped the microphone stand twice"
+    ],
+    [
+     "years of recording sessions",
+     "Sarah",
+     "recording sessions"
+    ]
+   ],
+   "team_b": [
+    [
+     "every time she entered the booth",
+     "Sarah",
+     "the booth"
+    ]
+   ]
+  },
+  {
+   "passage": "V218",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "her arm extending for the main course before she even looked",
+    "sorting the fork and spoon into her left hand without glancing down",
+    "Her feet knew the path to her usual table, turning left at the beverage dispenser"
+   ]
+  },
+  {
+   "passage": "V220",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Countless emergency calls"
+   ]
+  },
+  {
+   "passage": "V230",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "repeated each point individually"
+   ]
+  },
+  {
+   "passage": "V237",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "day in and day out",
+     "Omar",
+     "countless pallets"
+    ]
+   ],
+   "team_b": [
+    [
+     "day in and day out",
+     "Omar",
+     "pallets move down the conveyor belt"
+    ]
+   ]
+  },
+  {
+   "passage": "V243",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "every Tuesday and Thursday",
+     "Karen",
+     "her end-of-day sequence"
+    ]
+   ],
+   "team_b": [
+    [
+     "every Tuesday and Thursday",
+     "Karen",
+     "this"
+    ]
+   ]
+  },
+  {
+   "passage": "V246",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "twenty years, he had started his shift"
+   ]
+  },
+  {
+   "passage": "V255",
+   "class": "^7",
+   "kind": "different words",
+   "team_a": [
+    [
+     "constant",
+     "Clara",
+     "The constant hum of the industrial dryers"
+    ]
+   ],
+   "team_b": [
+    [
+     "for years",
+     "Clara",
+     "The constant hum of the industrial dryers"
+    ],
+    [
+     "When the afternoon shift bell chimed",
+     "Clara",
+     "the afternoon shift bell"
+    ]
+   ]
+  },
+  {
+   "passage": "V285",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "daily"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V288",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Without thinking"
+   ]
+  },
+  {
+   "passage": "V291",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Every time the van stopped at a client's address",
+     "Sam",
+     "a client's address"
+    ]
+   ],
+   "team_b": [
+    [
+     "Every time the van stopped at a client's address",
+     "Sam",
+     "the heavy toolbox"
+    ],
+    [
+     "hundreds of times",
+     "Sam",
+     "reached for the heavy toolbox"
+    ]
+   ]
+  },
+  {
+   "passage": "V298",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "always"
+   ]
+  },
+  {
+   "passage": "V305",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "visited often in her thoughts"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V314",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "every time he lifted a particularly heavy container"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V316",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "countless tangled strings"
+   ]
+  },
+  {
+   "passage": "V387",
+   "class": "^7",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "thousands of times",
+     "Owen",
+     "the buzzing hive"
+    ]
+   ],
+   "team_b": [
+    [
+     "thousands of times",
+     "Owen",
+     "this"
+    ]
+   ]
+  },
+  {
+   "passage": "V390",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "moved automatically",
+    "now simply registered as part of the air he breathed",
+    "his fingers would adjust the alignment rollers without him even looking up"
+   ]
+  },
+  {
+   "passage": "V398",
+   "class": "^7",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a familiar pattern ingrained by many isolated winters",
+     "Sarah",
+     "These morning tasks"
+    ]
+   ],
+   "team_b": [
+    [
+     "These morning tasks required no conscious thought, a familiar pattern",
+     "Sarah",
+     "the old kettle"
+    ]
+   ]
+  },
+  {
+   "passage": "V404",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "Decades spent managing busy lunchtimes"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V408",
+   "class": "^7",
+   "kind": "one team only",
+   "team_a": [
+    "she often visited"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V008",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the low, steady hum",
+     "Zach",
+     "a lullaby"
+    ]
+   ],
+   "team_b": [
+    [
+     "The sound was constant, a soft, vibrating drone",
+     "Zach",
+     "a lullaby his mother used to sing"
+    ]
+   ]
+  },
+  {
+   "passage": "V011",
+   "class": "^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the young skier struggling with the boarding gate"
+   ]
+  },
+  {
+   "passage": "V014",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Its lanolin scent",
+     "Bernard",
+     "his grandfather\u2019s old overcoat"
+    ]
+   ],
+   "team_b": [
+    [
+     "Its lanolin scent filled the small shop",
+     "Bernard",
+     "his grandfather\u2019s old overcoat"
+    ]
+   ]
+  },
+  {
+   "passage": "V018",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The dry, dusty scent of ancient paper",
+     "Chloe",
+     "her university library's quiet stacks"
+    ]
+   ],
+   "team_b": [
+    [
+     "This smell",
+     "Chloe",
+     "her university library's quiet stacks"
+    ]
+   ]
+  },
+  {
+   "passage": "V048",
+   "class": "^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The faint scent of lavender polish",
+     "Esther",
+     "her mother carefully buffing the antique chest"
+    ]
+   ],
+   "team_b": [
+    [
+     "The faint scent of lavender polish from the polished table",
+     "Esther",
+     "a vivid picture"
+    ]
+   ]
+  },
+  {
+   "passage": "V049",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a distinct clang",
+     "Robert",
+     "a snare drum"
+    ]
+   ],
+   "team_b": [
+    [
+     "The sharp sound",
+     "Robert",
+     "a snare drum"
+    ]
+   ]
+  },
+  {
+   "passage": "V056",
+   "class": "^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The metallic scent of cleaning fluid",
+     "Yolanda",
+     "the brass band"
+    ]
+   ],
+   "team_b": [
+    [
+     "The metallic scent of cleaning fluid",
+     "Yolanda",
+     "the brass band her uncle played in years ago"
+    ]
+   ]
+  },
+  {
+   "passage": "V072",
+   "class": "^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a new patient wince slightly during a routine cleaning"
+   ]
+  },
+  {
+   "passage": "V108",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The earthy scent of damp soil and growing plants",
+     "Xenia",
+     "her childhood"
+    ]
+   ],
+   "team_b": [
+    [
+     "This aroma",
+     "Xenia",
+     "her childhood"
+    ]
+   ]
+  },
+  {
+   "passage": "V115",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a faint whirring sound",
+     "Lena",
+     "late-night study sessions in the library"
+    ]
+   ],
+   "team_b": [
+    [
+     "The soft hum",
+     "Lena",
+     "late-night study sessions in the library during her undergraduate years"
+    ],
+    [
+     "The soft hum",
+     "Lena",
+     "the worn leather armchair by the window"
+    ]
+   ]
+  },
+  {
+   "passage": "V125",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the faint, dusty smell of old electronics",
+     "Sam",
+     "his grandmother's attic"
+    ]
+   ],
+   "team_b": [
+    [
+     "The scent",
+     "Sam",
+     "his grandmother's attic"
+    ]
+   ]
+  },
+  {
+   "passage": "V154",
+   "class": "^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Their dark, dusty bloom",
+     "Esther",
+     "the velvet cloak"
+    ]
+   ],
+   "team_b": [
+    [
+     "Their dark, dusty bloom",
+     "Esther",
+     "the velvet cloak her grandmother wore on special occasions"
+    ]
+   ]
+  },
+  {
+   "passage": "V158",
+   "class": "^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "that distinct pair of sharp taps"
+   ]
+  },
+  {
+   "passage": "V169",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the loud clatter",
+     "Jake",
+     "the sound of his older brother's drum kit"
+    ]
+   ],
+   "team_b": [
+    [
+     "The sudden metallic crash",
+     "Jake",
+     "the sound of his older brother's drum kit"
+    ]
+   ]
+  },
+  {
+   "passage": "V190",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the familiar scent of worn leather and liniment",
+     "Carla",
+     "her grandmother's old armchair"
+    ]
+   ],
+   "team_b": [
+    [
+     "This specific smell",
+     "Carla",
+     "her grandmother's old armchair"
+    ]
+   ]
+  },
+  {
+   "passage": "V229",
+   "class": "^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "A small \"Fragile\" sticker"
+   ]
+  },
+  {
+   "passage": "V269",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The faint scent of stale beer",
+     "Kevin",
+     "the smell of his grandfather's old workshop"
+    ]
+   ],
+   "team_b": [
+    [
+     "The faint scent of stale beer drifted from the nearby pub door as it opened",
+     "Kevin",
+     "the smell of his grandfather's old workshop"
+    ]
+   ]
+  },
+  {
+   "passage": "V301",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the soft whir of her sewing machine",
+     "Elena",
+     "the old wind-up toys"
+    ]
+   ],
+   "team_b": [
+    [
+     "The sound",
+     "Elena",
+     "the old wind-up toys her grandmother used to make"
+    ]
+   ]
+  },
+  {
+   "passage": "V325",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the familiar scent of rubber and chain lubricant",
+     "Sam",
+     "his grandfather's shed"
+    ]
+   ],
+   "team_b": [
+    [
+     "This distinct workshop smell",
+     "Sam",
+     "his grandfather's shed"
+    ]
+   ]
+  },
+  {
+   "passage": "V343",
+   "class": "^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The distant, faint aroma of baked apples",
+     "Evelyn",
+     "childhood Saturdays"
+    ]
+   ],
+   "team_b": [
+    [
+     "The distant, faint aroma of baked apples",
+     "Evelyn",
+     "childhood Saturdays spent at her grandmother\u2019s house"
+    ]
+   ]
+  },
+  {
+   "passage": "V353",
+   "class": "^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his opponent take an aggressive pawn move"
+   ]
+  },
+  {
+   "passage": "V356",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "Their delicate, perfumed scent",
+     "Tanya",
+     "her grandmother's garden"
+    ]
+   ],
+   "team_b": [
+    [
+     "The fragrance",
+     "Tanya",
+     "her grandmother's garden"
+    ]
+   ]
+  },
+  {
+   "passage": "V367",
+   "class": "^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The trainee's excitement",
+     "Arthur",
+     "simpler times"
+    ]
+   ],
+   "team_b": [
+    [
+     "The trainee's excitement",
+     "Arthur",
+     "simpler times before the shop expanded and the quiet became a luxury"
+    ]
+   ]
+  },
+  {
+   "passage": "V376",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "A faint, distant siren",
+     "Robert",
+     "the old fire station near his childhood home"
+    ]
+   ],
+   "team_b": [
+    [
+     "The sound",
+     "Robert",
+     "the old fire station near his childhood home"
+    ]
+   ]
+  },
+  {
+   "passage": "V377",
+   "class": "^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The repetitive beeping of a reversing truck",
+     "Ricardo",
+     "the electronic toy car"
+    ]
+   ],
+   "team_b": [
+    [
+     "The repetitive beeping of a reversing truck",
+     "Ricardo",
+     "the electronic toy car his son had received last Christmas"
+    ]
+   ]
+  },
+  {
+   "passage": "V388",
+   "class": "^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The clean, sharp scent",
+     "Maria",
+     "a little girl again, watching her grandfather shave for Sunday church"
+    ]
+   ],
+   "team_b": [
+    [
+     "The clean, sharp scent",
+     "Maria",
+     "She was a little girl again"
+    ]
+   ]
+  },
+  {
+   "passage": "V408",
+   "class": "^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the rich smell of earth and growing things",
+     "Lena",
+     "her grandmother\u2019s kitchen"
+    ]
+   ],
+   "team_b": [
+    [
+     "This familiar scent",
+     "Lena",
+     "her grandmother\u2019s kitchen"
+    ]
+   ]
+  },
+  {
+   "passage": "V008",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a lullaby",
+     "Zach",
+     "the low, steady hum"
+    ]
+   ],
+   "team_b": [
+    [
+     "a lullaby his mother used to sing",
+     "Zach",
+     "The sound was constant, a soft, vibrating drone"
+    ]
+   ]
+  },
+  {
+   "passage": "V011",
+   "class": "^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his own clumsy attempts decades ago"
+   ]
+  },
+  {
+   "passage": "V014",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "his grandfather\u2019s old overcoat",
+     "Bernard",
+     "Its lanolin scent"
+    ]
+   ],
+   "team_b": [
+    [
+     "his grandfather\u2019s old overcoat",
+     "Bernard",
+     "Its lanolin scent filled the small shop"
+    ]
+   ]
+  },
+  {
+   "passage": "V018",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "her university library's quiet stacks",
+     "Chloe",
+     "The dry, dusty scent of ancient paper"
+    ]
+   ],
+   "team_b": [
+    [
+     "her university library's quiet stacks",
+     "Chloe",
+     "This smell"
+    ]
+   ]
+  },
+  {
+   "passage": "V048",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "her mother carefully buffing the antique chest",
+     "Esther",
+     "The faint scent of lavender polish"
+    ]
+   ],
+   "team_b": [
+    [
+     "a vivid picture",
+     "Esther",
+     "The faint scent of lavender polish from the polished table"
+    ]
+   ]
+  },
+  {
+   "passage": "V049",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a snare drum",
+     "Robert",
+     "a distinct clang"
+    ]
+   ],
+   "team_b": [
+    [
+     "a snare drum",
+     "Robert",
+     "The sharp sound"
+    ]
+   ]
+  },
+  {
+   "passage": "V056",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the brass band",
+     "Yolanda",
+     "The metallic scent of cleaning fluid"
+    ]
+   ],
+   "team_b": [
+    [
+     "the brass band her uncle played in years ago",
+     "Yolanda",
+     "The metallic scent of cleaning fluid"
+    ]
+   ]
+  },
+  {
+   "passage": "V072",
+   "class": "^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his own childhood fear of the dentist"
+   ]
+  },
+  {
+   "passage": "V108",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "her childhood",
+     "Xenia",
+     "The earthy scent of damp soil and growing plants"
+    ]
+   ],
+   "team_b": [
+    [
+     "her childhood",
+     "Xenia",
+     "This aroma"
+    ]
+   ]
+  },
+  {
+   "passage": "V115",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "late-night study sessions in the library",
+     "Lena",
+     "a faint whirring sound"
+    ]
+   ],
+   "team_b": [
+    [
+     "late-night study sessions in the library during her undergraduate years",
+     "Lena",
+     "The soft hum"
+    ],
+    [
+     "the worn leather armchair by the window",
+     "Lena",
+     "The soft hum"
+    ]
+   ]
+  },
+  {
+   "passage": "V125",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "his grandmother's attic",
+     "Sam",
+     "the faint, dusty smell of old electronics"
+    ]
+   ],
+   "team_b": [
+    [
+     "his grandmother's attic",
+     "Sam",
+     "The scent"
+    ]
+   ]
+  },
+  {
+   "passage": "V154",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the velvet cloak",
+     "Esther",
+     "Their dark, dusty bloom"
+    ]
+   ],
+   "team_b": [
+    [
+     "the velvet cloak her grandmother wore on special occasions",
+     "Esther",
+     "Their dark, dusty bloom"
+    ]
+   ]
+  },
+  {
+   "passage": "V158",
+   "class": "^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "his hand automatically reached for the case files on the table"
+   ]
+  },
+  {
+   "passage": "V169",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the sound of his older brother's drum kit",
+     "Jake",
+     "the loud clatter"
+    ]
+   ],
+   "team_b": [
+    [
+     "the sound of his older brother's drum kit",
+     "Jake",
+     "The sudden metallic crash"
+    ]
+   ]
+  },
+  {
+   "passage": "V190",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "her grandmother's old armchair",
+     "Carla",
+     "the familiar scent of worn leather and liniment"
+    ]
+   ],
+   "team_b": [
+    [
+     "vivid pictures of her grandmother's old armchair",
+     "Carla",
+     "This specific smell"
+    ]
+   ]
+  },
+  {
+   "passage": "V229",
+   "class": "^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the time a client's grandmother's antique teacups arrived in splinters"
+   ]
+  },
+  {
+   "passage": "V269",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the smell of his grandfather's old workshop",
+     "Kevin",
+     "The faint scent of stale beer"
+    ]
+   ],
+   "team_b": [
+    [
+     "the smell of his grandfather's old workshop",
+     "Kevin",
+     "The faint scent of stale beer drifted from the nearby pub door as it opened"
+    ]
+   ]
+  },
+  {
+   "passage": "V301",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the old wind-up toys",
+     "Elena",
+     "the soft whir of her sewing machine"
+    ]
+   ],
+   "team_b": [
+    [
+     "the old wind-up toys her grandmother used to make",
+     "Elena",
+     "The sound"
+    ],
+    [
+     "the wooden soldiers dancing across the worn rug",
+     "Elena",
+     "the old wind-up toys her grandmother used to make"
+    ]
+   ]
+  },
+  {
+   "passage": "V325",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "his grandfather's shed",
+     "Sam",
+     "the familiar scent of rubber and chain lubricant"
+    ]
+   ],
+   "team_b": [
+    [
+     "his grandfather's shed",
+     "Sam",
+     "This distinct workshop smell"
+    ]
+   ]
+  },
+  {
+   "passage": "V343",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "childhood Saturdays",
+     "Evelyn",
+     "The distant, faint aroma of baked apples"
+    ]
+   ],
+   "team_b": [
+    [
+     "childhood Saturdays spent at her grandmother\u2019s house",
+     "Evelyn",
+     "The distant, faint aroma of baked apples"
+    ]
+   ]
+  },
+  {
+   "passage": "V353",
+   "class": "^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "countless games where overeagerness had led to swift defeat"
+   ]
+  },
+  {
+   "passage": "V356",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "her grandmother's garden",
+     "Tanya",
+     "Their delicate, perfumed scent"
+    ]
+   ],
+   "team_b": [
+    [
+     "her grandmother's garden",
+     "Tanya",
+     "The fragrance"
+    ]
+   ]
+  },
+  {
+   "passage": "V367",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "simpler times",
+     "Arthur",
+     "The trainee's excitement"
+    ]
+   ],
+   "team_b": [
+    [
+     "simpler times before the shop expanded and the quiet became a luxury",
+     "Arthur",
+     "The trainee's excitement"
+    ]
+   ]
+  },
+  {
+   "passage": "V376",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the old fire station near his childhood home",
+     "Robert",
+     "A faint, distant siren"
+    ]
+   ],
+   "team_b": [
+    [
+     "the old fire station near his childhood home",
+     "Robert",
+     "The sound"
+    ]
+   ]
+  },
+  {
+   "passage": "V377",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the electronic toy car",
+     "Ricardo",
+     "The repetitive beeping of a reversing truck"
+    ]
+   ],
+   "team_b": [
+    [
+     "the electronic toy car his son had received last Christmas",
+     "Ricardo",
+     "The repetitive beeping of a reversing truck"
+    ]
+   ]
+  },
+  {
+   "passage": "V388",
+   "class": "^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a little girl again, watching her grandfather shave for Sunday church",
+     "Maria",
+     "The clean, sharp scent"
+    ]
+   ],
+   "team_b": [
+    [
+     "She was a little girl again",
+     "Maria",
+     "The clean, sharp scent"
+    ]
+   ]
+  },
+  {
+   "passage": "V408",
+   "class": "^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "her grandmother\u2019s kitchen",
+     "Lena",
+     "the rich smell of earth and growing things"
+    ]
+   ],
+   "team_b": [
+    [
+     "her grandmother\u2019s kitchen",
+     "Lena",
+     "This familiar scent"
+    ]
+   ]
+  },
+  {
+   "passage": "V017",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "they would argue over the fare or try to negotiate a longer route"
+   ]
+  },
+  {
+   "passage": "V057",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a full replacement was required"
+   ]
+  },
+  {
+   "passage": "V062",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "checkmate"
+   ]
+  },
+  {
+   "passage": "V067",
+   "class": "^9 reached by reasoning",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "she needed an antibiotic injection for mastitis",
+     "Robert",
+     ""
+    ]
+   ],
+   "team_b": [
+    [
+     "she needed an antibiotic injection for mastitis",
+     "Robert, the dairy farmer",
+     ""
+    ]
+   ]
+  },
+  {
+   "passage": "V083",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the wheel would lock up completely on the next long ride",
+    "Time for a full overhaul"
+   ]
+  },
+  {
+   "passage": "V084",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "adjust her crossing angle"
+   ]
+  },
+  {
+   "passage": "V126",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the fish was several days old, not suitable for her premium display"
+   ]
+  },
+  {
+   "passage": "V141",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Each element contributed to the unpleasant noise, requiring separate adjustments"
+   ]
+  },
+  {
+   "passage": "V257",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "he needed to replace the parts sequentially to ensure safety"
+   ]
+  },
+  {
+   "passage": "V271",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a mark of its long, enduring history"
+   ]
+  },
+  {
+   "passage": "V282",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [
+    "This shipment seemed to contradict itself"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V304",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "it was from an early 1980s European diesel engine"
+   ]
+  },
+  {
+   "passage": "V345",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "These three problems combined to create the intermittent power loss"
+   ]
+  },
+  {
+   "passage": "V372",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the morning's overall profit margin"
+   ]
+  },
+  {
+   "passage": "V378",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [
+    "the early morning rain had brought on some mildew"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V411",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "such envelopes rarely contained bad news"
+   ]
+  },
+  {
+   "passage": "V421",
+   "class": "^9 reached by reasoning",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "The fault lay in one of those components"
+   ]
+  },
+  {
+   "passage": "V010",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "The warm, slightly smoky scent"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V034",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "A subtle flicker",
+     "Elara",
+     "a developing lubrication issue"
+    ]
+   ],
+   "team_b": [
+    [
+     "A subtle flicker appeared on the diagnostic for Turbine 14",
+     "Elara",
+     "a developing lubrication issue"
+    ]
+   ]
+  },
+  {
+   "passage": "V043",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "his eagerness and the customer's cautiousness"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V061",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a faint hairline crack running through a large granite slab",
+    "the slightly hollow sound the drill made on its last pass"
+   ]
+  },
+  {
+   "passage": "V063",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a barely perceptible click",
+     "Jane",
+     "a tiny digital glitch"
+    ]
+   ],
+   "team_b": [
+    [
+     "a barely perceptible click during a quiet guitar solo",
+     "Jane",
+     "it wasn't a performance error but a tiny digital glitch"
+    ]
+   ]
+  },
+  {
+   "passage": "V068",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "That slight pause",
+     "Eleanor",
+     "a hidden trap"
+    ]
+   ],
+   "team_b": [
+    [
+     "That slight pause, that momentary hesitation before the move",
+     "Eleanor",
+     "a hidden trap"
+    ]
+   ]
+  },
+  {
+   "passage": "V072",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "a new patient wince slightly"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V083",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a faint, almost imperceptible scrape",
+     "David",
+     "the bearings were nearly seized"
+    ]
+   ],
+   "team_b": [
+    [
+     "That slight sound, a mere whisper",
+     "David",
+     "the bearings were nearly seized"
+    ]
+   ]
+  },
+  {
+   "passage": "V106",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "Her calloused fingers ran over its surface"
+   ]
+  },
+  {
+   "passage": "V112",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The glint on the scales, the clarity of the eyes, and the firmness of the flesh",
+     "Old Thomas",
+     "which boat brought each fish in and its journey"
+    ]
+   ],
+   "team_b": [
+    [
+     "The glint on the scales",
+     "Old Thomas",
+     "which boat brought each fish in and its journey"
+    ]
+   ]
+  },
+  {
+   "passage": "V126",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "a faint grey discoloration on the gills of the halibut",
+    "Its eyes, usually bright, appeared slightly sunken",
+    "its flesh, which lacked the firm springiness of fresh catch"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V148",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a sudden, subtle hush",
+     "Ms. Jenkins",
+     "A teacher was approaching that area"
+    ]
+   ],
+   "team_b": [
+    [
+     "That specific dip in the general chatter, a quietening of voices",
+     "Ms. Jenkins",
+     "A teacher was approaching that area"
+    ]
+   ]
+  },
+  {
+   "passage": "V165",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the slight slump in the old woman's shoulders",
+     "Joan",
+     "Mrs. Davies was feeling a little unwell"
+    ],
+    [
+     "a barely perceptible tremor in her hand",
+     "Joan",
+     "Mrs. Davies was feeling a little unwell"
+    ]
+   ],
+   "team_b": [
+    [
+     "the slight slump in the old woman's shoulders and a barely perceptible tremor in her hand as she held her teacup",
+     "Joan",
+     "Mrs. Davies was feeling a little unwell"
+    ]
+   ]
+  },
+  {
+   "passage": "V188",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "A thin, high wispy cloud",
+     "Ingrid",
+     "a drastic weather change was coming soon"
+    ]
+   ],
+   "team_b": [
+    [
+     "A thin, high wispy cloud, like a painter\u2019s brushstroke, stretched across the distant peak",
+     "Ingrid",
+     "a drastic weather change was coming soon"
+    ]
+   ]
+  },
+  {
+   "passage": "V211",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "The slight wobble in the rim"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V226",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a faint, metallic scent",
+     "Gary",
+     "The bearing in the large drum motor of Unit 7 was beginning to fail"
+    ]
+   ],
+   "team_b": [
+    [
+     "This specific smell, a hint of ozone",
+     "Gary",
+     "The bearing in the large drum motor of Unit 7 was beginning to fail"
+    ]
+   ]
+  },
+  {
+   "passage": "V260",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the slight sway of the cabin"
+   ]
+  },
+  {
+   "passage": "V263",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a misaddressed package",
+     "Paul",
+     "the correct house number"
+    ]
+   ],
+   "team_b": [
+    [
+     "the street name was wrong but the postcode was correct for a nearby village",
+     "Paul",
+     "the correct house number"
+    ]
+   ]
+  },
+  {
+   "passage": "V268",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the slight misalignment of the laser"
+   ]
+  },
+  {
+   "passage": "V299",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a faint, almost silvery sheen",
+     "Silas",
+     "the initial powdery mildew infection"
+    ],
+    [
+     "the initial powdery mildew infection",
+     "Silas",
+     "they needed to spray before the week was out"
+    ]
+   ],
+   "team_b": [
+    [
+     "a faint, almost silvery sheen on a few lower leaves of a Chardonnay vine",
+     "Silas",
+     "the initial powdery mildew infection"
+    ]
+   ]
+  },
+  {
+   "passage": "V304",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [
+    "the particular shade of orange rust"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V315",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "the package shifted oddly in her grip"
+   ]
+  },
+  {
+   "passage": "V332",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the distinctive curve",
+     "George",
+     "a 1950s bumper"
+    ]
+   ],
+   "team_b": [
+    [
+     "A glint of chrome caught his eye",
+     "George",
+     "the distinctive curve of a 1950s bumper"
+    ]
+   ]
+  },
+  {
+   "passage": "V341",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "the slight unevenness in the capped honey",
+     "Arthur",
+     "a subtle shift in their foraging patterns"
+    ]
+   ],
+   "team_b": [
+    [
+     "That small irregularity",
+     "Arthur",
+     "a subtle shift in their foraging patterns"
+    ]
+   ]
+  },
+  {
+   "passage": "V378",
+   "class": "uncertain ^8",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "tiny black spots on the leaves of a nearby vine"
+   ]
+  },
+  {
+   "passage": "V393",
+   "class": "uncertain ^8",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the familiar tightening around his eyes",
+     "Eleanor",
+     "a full-blown tantrum"
+    ]
+   ],
+   "team_b": [
+    [
+     "the familiar tightening around his eyes",
+     "Eleanor",
+     "a full-blown tantrum about sharing the red crayon"
+    ]
+   ]
+  },
+  {
+   "passage": "V397",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "The subtle shift in magenta",
+     "Sophie",
+     "the ink reservoir was running low"
+    ]
+   ],
+   "team_b": [
+    [
+     "The subtle shift in magenta, barely discernible to an untrained eye",
+     "Sophie",
+     "the ink reservoir was running low"
+    ]
+   ]
+  },
+  {
+   "passage": "V405",
+   "class": "uncertain ^8",
+   "kind": "different words",
+   "team_a": [
+    [
+     "A faint, almost invisible bloom of white",
+     "Thomas",
+     "mildew starting to form"
+    ]
+   ],
+   "team_b": [
+    [
+     "A faint, almost invisible bloom of white appeared on a dark thread in the fabric's deepest folds",
+     "Thomas, the archive manager",
+     "the tell-tale sign of mildew starting to form"
+    ]
+   ]
+  },
+  {
+   "passage": "V010",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "her grandmother's kitchen"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V034",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a developing lubrication issue",
+     "Elara",
+     "A subtle flicker"
+    ]
+   ],
+   "team_b": [
+    [
+     "a developing lubrication issue",
+     "Elara",
+     "A subtle flicker appeared on the diagnostic for Turbine 14"
+    ]
+   ]
+  },
+  {
+   "passage": "V043",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "a good deal forming"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V061",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "They would need to reinforce that section",
+    "They would need to reinforce that section"
+   ]
+  },
+  {
+   "passage": "V063",
+   "class": "uncertain ^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a tiny digital glitch",
+     "Jane",
+     "a barely perceptible click"
+    ]
+   ],
+   "team_b": [
+    [
+     "it wasn't a performance error but a tiny digital glitch",
+     "Jane",
+     "a barely perceptible click during a quiet guitar solo"
+    ]
+   ]
+  },
+  {
+   "passage": "V068",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a hidden trap",
+     "Eleanor",
+     "That slight pause"
+    ]
+   ],
+   "team_b": [
+    [
+     "a hidden trap",
+     "Eleanor",
+     "That slight pause, that momentary hesitation before the move"
+    ]
+   ]
+  },
+  {
+   "passage": "V072",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "his own childhood fear of the dentist"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V083",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the bearings were nearly seized",
+     "David",
+     "a faint, almost imperceptible scrape"
+    ]
+   ],
+   "team_b": [
+    [
+     "the bearings were nearly seized",
+     "David",
+     "That slight sound, a mere whisper"
+    ]
+   ]
+  },
+  {
+   "passage": "V106",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "its grade and weight"
+   ]
+  },
+  {
+   "passage": "V112",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "which boat brought each fish in and its journey",
+     "Old Thomas",
+     "The glint on the scales, the clarity of the eyes, and the firmness of the flesh"
+    ]
+   ],
+   "team_b": [
+    [
+     "which boat brought each fish in and its journey",
+     "Old Thomas",
+     "The glint on the scales"
+    ]
+   ]
+  },
+  {
+   "passage": "V126",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "the fish was several days old"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V148",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "A teacher was approaching that area",
+     "Ms. Jenkins",
+     "a sudden, subtle hush"
+    ]
+   ],
+   "team_b": [
+    [
+     "A teacher was approaching that area",
+     "Ms. Jenkins",
+     "That specific dip in the general chatter, a quietening of voices"
+    ]
+   ]
+  },
+  {
+   "passage": "V165",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "Mrs. Davies was feeling a little unwell",
+     "Joan",
+     "the slight slump in the old woman's shoulders"
+    ]
+   ],
+   "team_b": [
+    [
+     "Mrs. Davies was feeling a little unwell",
+     "Joan",
+     "the slight slump in the old woman's shoulders and a barely perceptible tremor in her hand as she held her teacup"
+    ]
+   ]
+  },
+  {
+   "passage": "V188",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a drastic weather change was coming soon",
+     "Ingrid",
+     "A thin, high wispy cloud"
+    ]
+   ],
+   "team_b": [
+    [
+     "a drastic weather change was coming soon",
+     "Ingrid",
+     "A thin, high wispy cloud, like a painter\u2019s brushstroke, stretched across the distant peak"
+    ]
+   ]
+  },
+  {
+   "passage": "V191",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a rapidly approaching storm",
+     "Frank",
+     "The wind had shifted"
+    ]
+   ],
+   "team_b": [
+    [
+     "a rapidly approaching storm",
+     "Frank",
+     "The wind had shifted, now blowing from the north"
+    ],
+    [
+     "a rapidly approaching storm",
+     "Frank",
+     "the temperature dropped sharply"
+    ],
+    [
+     "a rapidly approaching storm",
+     "Frank",
+     "thick clouds beginning to gather swiftly over the highest peaks"
+    ]
+   ]
+  },
+  {
+   "passage": "V211",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "the years of neglected potholes, sudden braking, and hasty repairs"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V226",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "The bearing in the large drum motor of Unit 7 was beginning to fail",
+     "Gary",
+     "a faint, metallic scent"
+    ]
+   ],
+   "team_b": [
+    [
+     "The bearing in the large drum motor of Unit 7 was beginning to fail",
+     "Gary",
+     "This specific smell, a hint of ozone"
+    ]
+   ]
+  },
+  {
+   "passage": "V260",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "how much wind it would take to truly challenge the machine"
+   ]
+  },
+  {
+   "passage": "V263",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the correct house number",
+     "Paul",
+     "a misaddressed package"
+    ]
+   ],
+   "team_b": [
+    [
+     "the correct house number",
+     "Paul",
+     "the street name was wrong but the postcode was correct for a nearby village"
+    ]
+   ]
+  },
+  {
+   "passage": "V268",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "a simple correction"
+   ]
+  },
+  {
+   "passage": "V299",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the initial powdery mildew infection",
+     "Silas",
+     "a faint, almost silvery sheen"
+    ],
+    [
+     "they needed to spray before the week was out",
+     "Silas",
+     "the initial powdery mildew infection"
+    ]
+   ],
+   "team_b": [
+    [
+     "the initial powdery mildew infection",
+     "Silas",
+     "a faint, almost silvery sheen on a few lower leaves of a Chardonnay vine"
+    ]
+   ]
+  },
+  {
+   "passage": "V304",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [
+    "an early 1980s European diesel engine"
+   ],
+   "team_b": []
+  },
+  {
+   "passage": "V315",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "mislabeled contents"
+   ]
+  },
+  {
+   "passage": "V332",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a 1950s bumper",
+     "George",
+     "the distinctive curve"
+    ]
+   ],
+   "team_b": [
+    [
+     "the distinctive curve of a 1950s bumper",
+     "George",
+     "A glint of chrome caught his eye"
+    ]
+   ]
+  },
+  {
+   "passage": "V341",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "a subtle shift in their foraging patterns",
+     "Arthur",
+     "the slight unevenness in the capped honey"
+    ]
+   ],
+   "team_b": [
+    [
+     "a subtle shift in their foraging patterns",
+     "Arthur",
+     "That small irregularity"
+    ]
+   ]
+  },
+  {
+   "passage": "V378",
+   "class": "uncertain ^9",
+   "kind": "one team only",
+   "team_a": [],
+   "team_b": [
+    "some mildew"
+   ]
+  },
+  {
+   "passage": "V393",
+   "class": "uncertain ^9",
+   "kind": "different words",
+   "team_a": [
+    [
+     "a full-blown tantrum",
+     "Eleanor",
+     "the familiar tightening around his eyes"
+    ]
+   ],
+   "team_b": [
+    [
+     "a full-blown tantrum about sharing the red crayon",
+     "Eleanor",
+     "the familiar tightening around his eyes"
+    ]
+   ]
+  },
+  {
+   "passage": "V397",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the ink reservoir was running low",
+     "Sophie",
+     "The subtle shift in magenta"
+    ]
+   ],
+   "team_b": [
+    [
+     "the ink reservoir was running low",
+     "Sophie",
+     "The subtle shift in magenta, barely discernible to an untrained eye"
+    ]
+   ]
+  },
+  {
+   "passage": "V405",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "mildew starting to form",
+     "Thomas",
+     "A faint, almost invisible bloom of white"
+    ]
+   ],
+   "team_b": [
+    [
+     "the tell-tale sign of mildew starting to form",
+     "Thomas, the archive manager",
+     "A faint, almost invisible bloom of white appeared on a dark thread in the fabric's deepest folds"
+    ]
+   ]
+  },
+  {
+   "passage": "V424",
+   "class": "uncertain ^9",
+   "kind": "same words, different relation",
+   "team_a": [
+    [
+     "the rollers were misaligned",
+     "Mr. Henderson",
+     "A faint, almost imperceptible tremor"
+    ]
+   ],
+   "team_b": [
+    [
+     "the rollers were misaligned",
+     "Mr. Henderson",
+     "a subtle change in the machine's customary hum"
+    ]
+   ]
+  }
+ ]
+}

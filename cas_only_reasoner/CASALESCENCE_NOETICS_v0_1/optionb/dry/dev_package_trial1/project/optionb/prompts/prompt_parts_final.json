@@ -1,0 +1,782 @@
+{
+ "schema": "casalescence/optionb/prompt_parts/v1",
+ "made_by": {
+  "program": "tools/ob_assemble.py [DRY FIXTURE, NOT A RESULT]",
+  "sha256": "13eebd988508aaaffd8dae23b7ceaccbe813f9fe1ffb66d3026d1dd1363db8f4",
+  "utc": "2026-10-05T18:09:04Z"
+ },
+ "inputs": [
+  {
+   "path": "../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+   "sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880"
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "7dd40833e8a354796ddf1b1d524afab89b628b1fd58308881724c7b4d35cdaf4"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/DRY_CONSTANT_OVERRIDES.json",
+   "sha256": "6d36dcede48a58b2891ecf812931852ce660e963080ffc30b5ceb2cc8ff9a174"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/SEAL_OPTIONB.jsonl",
+   "sha256": "376438d71d16bdd17d2e4e6387fb25283f84c00f65b2de83ae4544cc48b3aa12"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/anchor_check_final.json",
+   "sha256": "51ee55e994a5686458d55470ae7241ce50431139d4cb5e2dea1dbce11658b49f"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/anchor_check_practice.json",
+   "sha256": "a2050b9d7fa7583d20a7298f6bdb56df1dda932084bc10de5b1353eb6db2e50c"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/candidates_final.json",
+   "sha256": "22b902edb4fb2b3a227051bafd0883af34dbd7abd7f37d7bdc74a88af09e439c"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/candidates_practice.json",
+   "sha256": "4d60d42347d27f244fafaab4f679704ede47c4191c77e0dadc283475aa7ee3ed"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/form_check_final.json",
+   "sha256": "bec477bf619bb21dbce402765d19c60a0f0fee5b4519eb03e4ea794f78f4bc8d"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/form_check_practice.json",
+   "sha256": "6d4eb270f82dedbc1e2f50ed43c2a2c3f0479e2ca6cd207347a619a14c917694"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/option_check_final.json",
+   "sha256": "a3e51e6e940ffe19122d89d7011e9afc7838641fd1310a2c6d711be51e620297"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/checks/option_check_practice.json",
+   "sha256": "2e72d40efa43dd2200b90558aef5ce8721e8ab445ece15cff3fd498cf2973dd0"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/elig/eligibility.json",
+   "sha256": "307230ae14d018138efb539adbcbc7d99e89e7d4b82c93b8404f918bfde1ad83"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/elig/exclusions.json",
+   "sha256": "3b172d178450892de42962768278e3e887fbca7e6675d615e5b9a3a0bd96bcb4"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/notes_ord/ordinary_notes_final.json",
+   "sha256": "a1783cb686b058cae189b6a41b17d64ae09ad90af8c371acb3b8170b04c03e22"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/notes_ord/ordinary_notes_practice.json",
+   "sha256": "89909fa0fe7110f0442d82572ad857308d8445f8862322501b0e3759d6070e0e"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/notes_role/role_notes.json",
+   "sha256": "be21374a00c731722a4c5a1e7f9556d618279642dd5bb2b912d4018a8c3c0215"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/questions/raw_questions_final_p1.json",
+   "sha256": "14696e53ab54154b0b1e3f207f6d52accbd2f2400a200eb7badee549aa5c5f98"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/questions/raw_questions_final_p2.json",
+   "sha256": "2c38dcbd997fabfceeca01300d7de7c02af69c53349cb5fec2df4ee1f6051fa9"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/questions/raw_questions_practice_p1.json",
+   "sha256": "671ab2d770aeb8ef0bb6646cca5b2a210d265599b6b5b1a93e4ca53ce021dfb5"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/questions/raw_questions_practice_p2.json",
+   "sha256": "d55f5e73f04b3802cca6356300dd3d07733f43def2c3410c95bf68fae2a38243"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/screen/leak_screen_final.json",
+   "sha256": "74946104944b214cae8d49654dcee1c50f023fbe53815a3c2fcd296ee00f521e"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/screen/leak_screen_practice.json",
+   "sha256": "4eac1b327bddf8cb9dec0fc2b5529a27e5fb7670ada5ce97e52bd7165f5daf8b"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/select/selection_final.json",
+   "sha256": "1db976e3cade099d903d2a21fedc446cc02af6235a82639c01f80e55eb2236ca"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/select/selection_practice.json",
+   "sha256": "f576916f36ca8d7229f6d1cabfc30410946e3bdaf2a15a0355ffa0c3aaf7c7eb"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/select/split_fixed.json",
+   "sha256": "8b12d77c551a58cf0ee149ee27224b9471e037244879ccaea422cbc142e625bc"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/solve/key_check_final.json",
+   "sha256": "82ca13862edf02adbb65c4cdcf54c4782321bde5bb5f6db243508fa641cf6882"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/solve/key_check_practice.json",
+   "sha256": "099d57314ff98d52fc982e1c5af2de5df815d61def734b1b42ce0e11c191894a"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/support/support_results_final.json",
+   "sha256": "c5be25cf559178bedfa7dde019bbabfc976b41e4540e3dc57ea755c653f1c006"
+  },
+  {
+   "path": "optionb/dry/dev_package_trial1/work/support/support_results_practice.json",
+   "sha256": "b24bacbea04e876534eed632b9807bfdb384f76747f830c70e4cac7bfb67946a"
+  }
+ ],
+ "set": "final",
+ "passages": [
+  {
+   "passage_id": "D013",
+   "text": "Petra opened the clock shop before dawn. She always reached for the fine tweezers before the flat pliers. The loupe stood on the mat by the door. A tray of springs lay beside it. She kept well away from the sticky oil. Every morning for nine years she had dusted the loupe first.",
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Petra\".\n- ^2 Positive: \"the fine tweezers\". For the Mind \"Petra\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- ^3 Negative: \"the sticky oil\". For the Mind \"Petra\". Supporting quote: \"She kept well away from the sticky oil.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Petra\". Relative to \"dusted the loupe\". Supporting quote: \"Every morning for nine years she had dusted the loupe first.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Petra\".\n- ^3 Negative: \"the fine tweezers\". For the Mind \"Petra\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- ^2 Positive: \"the sticky oil\". For the Mind \"Petra\". Supporting quote: \"She kept well away from the sticky oil.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Petra\". Relative to \"dusted the loupe\". Supporting quote: \"Every morning for nine years she had dusted the loupe first.\"",
+    "QUOTES-ONLY": "- \"Petra\".\n- \"the fine tweezers\". Supporting quote: \"She always reached for the fine tweezers before the flat pliers.\"\n- \"the sticky oil\". Supporting quote: \"She kept well away from the sticky oil.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the loupe first.\"",
+    "ORD-INFORMED": {
+     "090": "A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers.",
+     "100": "A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn.",
+     "110": "A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door."
+    },
+    "ORD-FREE": {
+     "090": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers.",
+     "100": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers.",
+     "110": "Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn. Petra opens the clock shop before dawn. Petra reaches for the fine tweezers before the flat pliers. The loupe stands on the mat by the door. A tray of springs lies beside the loupe. Petra keeps well away from the sticky oil. The flat pliers comes after the fine tweezers. The mat is by the door of the clock shop. Petra dusts the loupe first every morning. The clock shop is open before dawn."
+    }
+   }
+  },
+  {
+   "passage_id": "D014",
+   "text": "Hale opened the rope walk before dawn. He always reached for the long spindle before the short spindle. The board stood on the post by the door. A bucket of tallow lay beside it. He kept well away from the tar kettle. Every morning for nine years he had dusted the board first.",
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Hale\".\n- ^2 Positive: \"the long spindle\". For the Mind \"Hale\". Supporting quote: \"He always reached for the long spindle before the short spindle.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Hale\".\n- ^3 Negative: \"the long spindle\". For the Mind \"Hale\". Supporting quote: \"He always reached for the long spindle before the short spindle.\"",
+    "QUOTES-ONLY": "- \"Hale\".\n- \"the long spindle\". Supporting quote: \"He always reached for the long spindle before the short spindle.\"",
+    "ORD-INFORMED": {
+     "090": "A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk.",
+     "100": "A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning.",
+     "110": "A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn."
+    },
+    "ORD-FREE": {
+     "090": "Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door.",
+     "100": "Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle.",
+     "110": "Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle. The post is by the door of the rope walk. Hale dusts the board first every morning. The rope walk is open before dawn. Hale opens the rope walk before dawn. Hale reaches for the long spindle before the short spindle. The board stands on the post by the door. A bucket of tallow lies beside the board. Hale keeps well away from the tar kettle. The short spindle comes after the long spindle."
+    }
+   }
+  },
+  {
+   "passage_id": "D015",
+   "text": "Sunniva opened the salt store before dawn. She always reached for the birch rake before the iron rake. The barrow stood on the ramp by the door. A pile of crates lay beside it. She kept well away from the wet sacks. Every morning for nine years she had dusted the barrow first.",
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Sunniva\".\n- ^2 Positive: \"the birch rake\". For the Mind \"Sunniva\". Supporting quote: \"She always reached for the birch rake before the iron rake.\"\n- ^3 Negative: \"the wet sacks\". For the Mind \"Sunniva\". Supporting quote: \"She kept well away from the wet sacks.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Sunniva\". Relative to \"dusted the barrow\". Supporting quote: \"Every morning for nine years she had dusted the barrow first.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Sunniva\".\n- ^3 Negative: \"the birch rake\". For the Mind \"Sunniva\". Supporting quote: \"She always reached for the birch rake before the iron rake.\"\n- ^2 Positive: \"the wet sacks\". For the Mind \"Sunniva\". Supporting quote: \"She kept well away from the wet sacks.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Sunniva\". Relative to \"dusted the barrow\". Supporting quote: \"Every morning for nine years she had dusted the barrow first.\"",
+    "QUOTES-ONLY": "- \"Sunniva\".\n- \"the birch rake\". Supporting quote: \"She always reached for the birch rake before the iron rake.\"\n- \"the wet sacks\". Supporting quote: \"She kept well away from the wet sacks.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years she had dusted the barrow first.\"",
+    "ORD-INFORMED": {
+     "090": "A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake.",
+     "100": "A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn.",
+     "110": "A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door."
+    },
+    "ORD-FREE": {
+     "090": "Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake.",
+     "100": "Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake.",
+     "110": "Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn. Sunniva opens the salt store before dawn. Sunniva reaches for the birch rake before the iron rake. The barrow stands on the ramp by the door. A pile of crates lies beside the barrow. Sunniva keeps well away from the wet sacks. The iron rake comes after the birch rake. The ramp is by the door of the salt store. Sunniva dusts the barrow first every morning. The salt store is open before dawn."
+    }
+   }
+  },
+  {
+   "passage_id": "D016",
+   "text": "Garrick opened the cooper yard before dawn. He always reached for the curved adze before the straight adze. The mallet stood on the block by the door. A hoop of iron lay beside it. He kept well away from the split stave. Every morning for nine years he had dusted the mallet first.",
+   "notes": {
+    "FILLER": "No notes are provided for this passage.",
+    "ROLE": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Garrick\".\n- ^2 Positive: \"the curved adze\". For the Mind \"Garrick\". Supporting quote: \"He always reached for the curved adze before the straight adze.\"\n- ^3 Negative: \"the split stave\". For the Mind \"Garrick\". Supporting quote: \"He kept well away from the split stave.\"\n- ^7 Rhythm: \"Every morning for nine years\". For the Mind \"Garrick\". Relative to \"dusted the mallet\". Supporting quote: \"Every morning for nine years he had dusted the mallet first.\"",
+    "MIXED": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Garrick\".\n- ^3 Negative: \"the curved adze\". For the Mind \"Garrick\". Supporting quote: \"He always reached for the curved adze before the straight adze.\"\n- ^2 Positive: \"the split stave\". For the Mind \"Garrick\". Supporting quote: \"He kept well away from the split stave.\"\n- ^4 Vibration: \"Every morning for nine years\". For the Mind \"Garrick\". Relative to \"dusted the mallet\". Supporting quote: \"Every morning for nine years he had dusted the mallet first.\"",
+    "QUOTES-ONLY": "- \"Garrick\".\n- \"the curved adze\". Supporting quote: \"He always reached for the curved adze before the straight adze.\"\n- \"the split stave\". Supporting quote: \"He kept well away from the split stave.\"\n- \"Every morning for nine years\". Supporting quote: \"Every morning for nine years he had dusted the mallet first.\"",
+    "ORD-INFORMED": {
+     "090": "A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze.",
+     "100": "A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn.",
+     "110": "A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door."
+    },
+    "ORD-FREE": {
+     "090": "Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze.",
+     "100": "Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze.",
+     "110": "Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn. Garrick opens the cooper yard before dawn. Garrick reaches for the curved adze before the straight adze. The mallet stands on the block by the door. A hoop of iron lies beside the mallet. Garrick keeps well away from the split stave. The straight adze comes after the curved adze. The block is by the door of the cooper yard. Garrick dusts the mallet first every morning. The cooper yard is open before dawn."
+    }
+   }
+  }
+ ],
+ "tasks": [
+  {
+   "task_id": "D013.FACT",
+   "passage_id": "D013",
+   "family": "plain_fact",
+   "question": "Where did the loupe stand?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "inside the cart"
+     },
+     {
+      "letter": "B",
+      "text": "on the mat"
+     },
+     {
+      "letter": "C",
+      "text": "behind the gate"
+     },
+     {
+      "letter": "D",
+      "text": "under the bench"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE"
+   ]
+  },
+  {
+   "task_id": "D013.GOES_FOR",
+   "passage_id": "D013",
+   "family": "role_step",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Petra do first?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "reaching for the fine tweezers again"
+     },
+     {
+      "letter": "B",
+      "text": "reaching for the flat pliers again"
+     },
+     {
+      "letter": "C",
+      "text": "hanging the springs on a hook"
+     },
+     {
+      "letter": "D",
+      "text": "moving the loupe to the yard"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "reaching for the fine tweezers again"
+     },
+     {
+      "letter": "B",
+      "text": "moving the loupe to the yard"
+     },
+     {
+      "letter": "C",
+      "text": "reaching for the flat pliers again"
+     },
+     {
+      "letter": "D",
+      "text": "leaving the door wide open"
+     },
+     {
+      "letter": "E",
+      "text": "hanging the springs on a hook"
+     },
+     {
+      "letter": "F",
+      "text": "sweeping the shop floor twice"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE",
+    "QUOTES-ONLY"
+   ]
+  },
+  {
+   "task_id": "D013.LONG_BREAK",
+   "passage_id": "D013",
+   "family": "role_step",
+   "question": "Petra spends two years far from the clock shop. Going only by the passage, which of these has most likely faded when she comes back?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "dusting the loupe before anything else"
+     },
+     {
+      "letter": "B",
+      "text": "finding the mat by the door"
+     },
+     {
+      "letter": "C",
+      "text": "seeing the springs beside it"
+     },
+     {
+      "letter": "D",
+      "text": "opening the clock shop before dawn"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "dusting the loupe before anything else"
+     },
+     {
+      "letter": "B",
+      "text": "finding the mat by the door"
+     },
+     {
+      "letter": "C",
+      "text": "seeing the springs beside it"
+     },
+     {
+      "letter": "D",
+      "text": "walking in through the door"
+     },
+     {
+      "letter": "E",
+      "text": "knowing where the loupe stands"
+     },
+     {
+      "letter": "F",
+      "text": "opening the clock shop before dawn"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE",
+    "QUOTES-ONLY"
+   ]
+  },
+  {
+   "task_id": "D014.FACT",
+   "passage_id": "D014",
+   "family": "plain_fact",
+   "question": "Where did the board stand?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "on the post"
+     },
+     {
+      "letter": "B",
+      "text": "behind the gate"
+     },
+     {
+      "letter": "C",
+      "text": "inside the cart"
+     },
+     {
+      "letter": "D",
+      "text": "under the bench"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE"
+   ]
+  },
+  {
+   "task_id": "D014.GOES_FOR",
+   "passage_id": "D014",
+   "family": "role_step",
+   "question": "A free hour comes up next week. Going only by the passage, which of these does Hale do first?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "moving the board to the yard"
+     },
+     {
+      "letter": "B",
+      "text": "reaching for the long spindle again"
+     },
+     {
+      "letter": "C",
+      "text": "hanging the tallow on a hook"
+     },
+     {
+      "letter": "D",
+      "text": "reaching for the short spindle again"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "moving the board to the yard"
+     },
+     {
+      "letter": "B",
+      "text": "reaching for the long spindle again"
+     },
+     {
+      "letter": "C",
+      "text": "leaving the door wide open"
+     },
+     {
+      "letter": "D",
+      "text": "sweeping the walk floor twice"
+     },
+     {
+      "letter": "E",
+      "text": "reaching for the short spindle again"
+     },
+     {
+      "letter": "F",
+      "text": "hanging the tallow on a hook"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE",
+    "QUOTES-ONLY"
+   ]
+  },
+  {
+   "task_id": "D015.FACT",
+   "passage_id": "D015",
+   "family": "plain_fact",
+   "question": "Where did the barrow stand?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "inside the cart"
+     },
+     {
+      "letter": "B",
+      "text": "behind the gate"
+     },
+     {
+      "letter": "C",
+      "text": "under the bench"
+     },
+     {
+      "letter": "D",
+      "text": "on the ramp"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE"
+   ]
+  },
+  {
+   "task_id": "D015.KEEPS_AWAY",
+   "passage_id": "D015",
+   "family": "role_step",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Sunniva leave to someone else?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "carrying the barrow outside"
+     },
+     {
+      "letter": "B",
+      "text": "counting every crates there"
+     },
+     {
+      "letter": "C",
+      "text": "working on the wet sacks"
+     },
+     {
+      "letter": "D",
+      "text": "working with the birch rake"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "working with the birch rake"
+     },
+     {
+      "letter": "B",
+      "text": "locking up the salt store"
+     },
+     {
+      "letter": "C",
+      "text": "carrying the barrow outside"
+     },
+     {
+      "letter": "D",
+      "text": "working on the wet sacks"
+     },
+     {
+      "letter": "E",
+      "text": "counting every crates there"
+     },
+     {
+      "letter": "F",
+      "text": "lighting the big lamp"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE",
+    "QUOTES-ONLY"
+   ]
+  },
+  {
+   "task_id": "D015.LONG_BREAK",
+   "passage_id": "D015",
+   "family": "role_step",
+   "question": "Sunniva spends two years far from the salt store. Going only by the passage, which of these has most likely faded when she comes back?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "opening the salt store before dawn"
+     },
+     {
+      "letter": "B",
+      "text": "dusting the barrow before anything else"
+     },
+     {
+      "letter": "C",
+      "text": "finding the ramp by the door"
+     },
+     {
+      "letter": "D",
+      "text": "seeing the crates beside it"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "seeing the crates beside it"
+     },
+     {
+      "letter": "B",
+      "text": "finding the ramp by the door"
+     },
+     {
+      "letter": "C",
+      "text": "opening the salt store before dawn"
+     },
+     {
+      "letter": "D",
+      "text": "knowing where the barrow stands"
+     },
+     {
+      "letter": "E",
+      "text": "dusting the barrow before anything else"
+     },
+     {
+      "letter": "F",
+      "text": "walking in through the door"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE",
+    "QUOTES-ONLY"
+   ]
+  },
+  {
+   "task_id": "D016.FACT",
+   "passage_id": "D016",
+   "family": "plain_fact",
+   "question": "Where did the mallet stand?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "under the bench"
+     },
+     {
+      "letter": "B",
+      "text": "inside the cart"
+     },
+     {
+      "letter": "C",
+      "text": "on the block"
+     },
+     {
+      "letter": "D",
+      "text": "behind the gate"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE"
+   ]
+  },
+  {
+   "task_id": "D016.KEEPS_AWAY",
+   "passage_id": "D016",
+   "family": "role_step",
+   "question": "A visitor asks for help later that day. Going only by the passage, which of these does Garrick leave to someone else?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "working with the curved adze"
+     },
+     {
+      "letter": "B",
+      "text": "counting every iron there"
+     },
+     {
+      "letter": "C",
+      "text": "carrying the mallet outside"
+     },
+     {
+      "letter": "D",
+      "text": "working on the split stave"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "counting every iron there"
+     },
+     {
+      "letter": "B",
+      "text": "carrying the mallet outside"
+     },
+     {
+      "letter": "C",
+      "text": "working on the split stave"
+     },
+     {
+      "letter": "D",
+      "text": "locking up the cooper yard"
+     },
+     {
+      "letter": "E",
+      "text": "working with the curved adze"
+     },
+     {
+      "letter": "F",
+      "text": "lighting the big lamp"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE",
+    "QUOTES-ONLY"
+   ]
+  },
+  {
+   "task_id": "D016.LONG_BREAK",
+   "passage_id": "D016",
+   "family": "role_step",
+   "question": "Garrick spends two years far from the cooper yard. Going only by the passage, which of these has most likely faded when he comes back?",
+   "options": {
+    "1": [
+     {
+      "letter": "A",
+      "text": "finding the block by the door"
+     },
+     {
+      "letter": "B",
+      "text": "opening the cooper yard before dawn"
+     },
+     {
+      "letter": "C",
+      "text": "dusting the mallet before anything else"
+     },
+     {
+      "letter": "D",
+      "text": "seeing the iron beside it"
+     }
+    ],
+    "2": [
+     {
+      "letter": "A",
+      "text": "walking in through the door"
+     },
+     {
+      "letter": "B",
+      "text": "finding the block by the door"
+     },
+     {
+      "letter": "C",
+      "text": "knowing where the mallet stands"
+     },
+     {
+      "letter": "D",
+      "text": "opening the cooper yard before dawn"
+     },
+     {
+      "letter": "E",
+      "text": "seeing the iron beside it"
+     },
+     {
+      "letter": "F",
+      "text": "dusting the mallet before anything else"
+     }
+    ]
+   },
+   "groups": [
+    "NONE",
+    "FILLER",
+    "ROLE",
+    "MIXED",
+    "ORD-INFORMED",
+    "ORD-FREE",
+    "QUOTES-ONLY"
+   ]
+  }
+ ]
+}

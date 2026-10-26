@@ -1,0 +1,3 @@
+$ python -B tools/ob_seal.py repair TR1 --dry-run
+REFUSED: REPAIR_OUTSIDE_ITS_WINDOW: a TR_TOOLS_REPAIRED line may be written only while no final question exists: the practice set is still being processed. The seal file does not hold the line 3C_FINAL_QUESTIONS_AND_KEYS, and 3 final file(s) lie under optionb/questions/, optionb/checks/, optionb/solve/, optionb/select/: optionb/questions/raw_questions_final_p1.json, optionb/questions/writer_calls_final_p1.jsonl, optionb/questions/writer_state_final_p1.json. A fault in a tool after the first final question exists means: stop, report, a new reviewed plan version. Nothing was written.
+[exit code 2]

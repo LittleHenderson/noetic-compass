@@ -1,0 +1,3 @@
+$ python -B tools/ob_eligibility.py 
+STOPPED: ALREADY_SEALED: optionb/SEAL_OPTIONB.jsonl exists. The eligibility files are sealed in step 1 and are not written again. Nothing was written.
+[exit code 2]

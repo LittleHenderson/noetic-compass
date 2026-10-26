@@ -1,0 +1,46 @@
+$ python -B tools/ob_screen_notes.py --set practice --report-only
+{
+ "program": "tools/ob_screen_notes.py",
+ "dry_fixture": false,
+ "status": "REPORT_ONLY",
+ "set": "practice",
+ "seal": "checked: 4 seal lines, all sealed files unchanged",
+ "files_written": [],
+ "screen_counts": {
+  "passages_screened": 27,
+  "passages_hit": 0,
+  "hits_by_rule": {
+   "a": 0,
+   "b": 0,
+   "c": 0,
+   "d": 0
+  }
+ },
+ "passages_hit": [],
+ "what_would_be_left": {
+  "passages_that_carry_a_task": 27,
+  "passages_dropped_by_the_support_check": 0,
+  "passages_dropped_by_the_screen": 0,
+  "passages_left": 27,
+  "passages_left_with_a_role_step_task": 27,
+  "role_step_tasks_left": 53,
+  "plain_fact_tasks_left": 27
+ },
+ "practice_launch_floor": [
+  {
+   "what": "practice role_step tasks",
+   "left": 53,
+   "floor": 36,
+   "met": true
+  },
+  {
+   "what": "practice plain_fact tasks",
+   "left": 27,
+   "floor": 20,
+   "met": true
+  }
+ ],
+ "what_this_run_is": "An early look. It wrote no file. The screen of record is the later full run after seal step 4. A hit never causes a note to be written again. No brief, no filter and no screen rule is changed because of these numbers without a new reviewed plan version.",
+ "next": "The practice set is at or above both practice launch floors. The final questions may now be written."
+}
+[exit code 0]

@@ -1,0 +1,188 @@
+{
+ "note": "MADE-UP DATA WALK, NOT A RESULT. The scratch constants are the real constants with only the keys below changed. They pin the made-up source files, state their counts, and name the made-up settings of the seeded draw.",
+ "real_constants_sha256": "980ef44f02dd8e95877604c08b27270cead350f972f8bc68225fc23c07334c9c",
+ "scratch_constants": {
+  "bytes": 87077,
+  "sha256": "f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7"
+ },
+ "changed_keys": [
+  {
+   "key": "sources.passages.bytes",
+   "real_value_sha256": "0a75502ba590f149da1c9dbd3e844a9ec5f6a608da5277071e00cb18eccb8d64",
+   "made_up_value_sha256": "5f0fd77fde1018409092012e0c3832ed4f1f28289140eb3f799811a55d2c996b"
+  },
+  {
+   "key": "sources.passages.sha256",
+   "real_value_sha256": "ec4351347cf5c760013061dbbe680b77d157f42bbf9f0e70abc58988f325ce15",
+   "made_up_value_sha256": "85721c63f925a92cc4649cf8537c8c2bd62fa043f3f133b80bd1bc0988e169a9"
+  },
+  {
+   "key": "sources.labels_team_a.bytes",
+   "real_value_sha256": "f257e84b3920a40ccf5db30aaf01afcd7ffb04bcad57f6d81d300d36282b2c12",
+   "made_up_value_sha256": "6d38cb1049ac1ef16bc5e589023a01b49ca481158ecf2f0ec0fe8bd242eef585"
+  },
+  {
+   "key": "sources.labels_team_a.sha256",
+   "real_value_sha256": "d39a9ecd30ddedd786e59cfcbe9d98cd5d1d2d755dc2bdbda61a99e85beaaf9e",
+   "made_up_value_sha256": "169e5851ac64e7799c682fe94595662fc0b5dbda0b54927869ca9f1a0b60421c"
+  },
+  {
+   "key": "sources.labels_team_b.bytes",
+   "real_value_sha256": "5858d5d338a7ffbd8bc30f5799e335e36abe5e296feb97060f1d4943d7d36c83",
+   "made_up_value_sha256": "c35b187363c1037fb818c0eba068b3653d10f87147cacddb51ac462d66fb0b38"
+  },
+  {
+   "key": "sources.labels_team_b.sha256",
+   "real_value_sha256": "e83da992c6d3649f7f881ff0ad718eb9d16324b1b33a1261626b5e5e147935cf",
+   "made_up_value_sha256": "ca4abcec21917842602711e52e26a6b39db8e804bf33efa7b8a71382b144a879"
+  },
+  {
+   "key": "split.practice_settings",
+   "real_value_sha256": "9e826dde1d0afe41a38b820b7bc3b5e89f7a1d70d7e80939c46c6626ed5168b4",
+   "made_up_value_sha256": "4143b06c8c9b895dca8d7245ad96ca9b489f3ad6b345245d4f89faae9126672f"
+  },
+  {
+   "key": "split.reserve_settings_in_order",
+   "real_value_sha256": "b2fb678bf4ea03a6d8fe9ef1bb3a36baaa3ab2909a07947430245eb37bc456c1",
+   "made_up_value_sha256": "ab5def5cbccf59aafbfb9064e2c3d4cce8f37ff10546f71c5dcb5958803ade1a"
+  },
+  {
+   "key": "sources.design.bytes",
+   "real_value_sha256": "b89530835ef2af8e103575be0a0b0317ceb6c76f179922801ea8dd641fc9a4f0",
+   "made_up_value_sha256": "cbd02d97b0731d88c78d30c20d90492b2d4c3f2f983931c38fef2dedc7ce48d4"
+  },
+  {
+   "key": "sources.design.sha256",
+   "real_value_sha256": "14f94b0cb670102d39714397cfb057ccc65fd30df1bfbfb48cc50aa7a299090b",
+   "made_up_value_sha256": "0a4e0d4ffd29dd4f8d801dcacf723bc3b9ea1b428874e5a86ca328a7e673ed95"
+  },
+  {
+   "key": "counts_real",
+   "real_value_sha256": "f91ad37ed9660c408a9c192bddffb8b8e27a2ceba074cd251471d0ef1227c283",
+   "made_up_value_sha256": "58e902175401f8fabfcec7cd062c42d4762046f89c6ffb761ddec23b0b6a645a"
+  }
+ ],
+ "made_up_counts": {
+  "passages": 144,
+  "settings": 48,
+  "excluded_passages": 3,
+  "eligible_passages": 139,
+  "k1_to_k5_passages": 142,
+  "by_practice_setting_count": {
+   "8": {
+    "practice_passages": 24,
+    "final_passages": 113,
+    "role_step_ceiling_practice": 47,
+    "role_step_ceiling_final": 223,
+    "k1_to_k5_practice": 24,
+    "k1_to_k5_final": 118
+   },
+   "9": {
+    "practice_passages": 27,
+    "final_passages": 110,
+    "role_step_ceiling_practice": 53,
+    "role_step_ceiling_final": 217,
+    "k1_to_k5_practice": 27,
+    "k1_to_k5_final": 115
+   },
+   "10": {
+    "practice_passages": 30,
+    "final_passages": 107,
+    "role_step_ceiling_practice": 59,
+    "role_step_ceiling_final": 211,
+    "k1_to_k5_practice": 30,
+    "k1_to_k5_final": 112
+   },
+   "11": {
+    "practice_passages": 33,
+    "final_passages": 104,
+    "role_step_ceiling_practice": 65,
+    "role_step_ceiling_final": 205,
+    "k1_to_k5_practice": 33,
+    "k1_to_k5_final": 109
+   },
+   "12": {
+    "practice_passages": 36,
+    "final_passages": 101,
+    "role_step_ceiling_practice": 71,
+    "role_step_ceiling_final": 199,
+    "k1_to_k5_practice": 36,
+    "k1_to_k5_final": 106
+   }
+  }
+ },
+ "special_passages": {
+  "V006": [
+   "EXCLUDED_A_UNCERTAIN_8",
+   "final"
+  ],
+  "V014": [
+   "EXCLUDED_B_REACHED_BY_REASONING",
+   "final"
+  ],
+  "V021": [
+   "EXCLUDED_A_OTHER_CANDIDATE",
+   "final"
+  ],
+  "V028": [
+   "KIND_K6",
+   "final"
+  ],
+  "V035": [
+   "KIND_K7",
+   "final"
+  ],
+  "V042": [
+   "SINGLE_FORM",
+   "final"
+  ],
+  "V049": [
+   "SINGLE_FORM",
+   "final"
+  ],
+  "V056": [
+   "SINGLE_FORM",
+   "final"
+  ],
+  "V063": [
+   "ONLY_A_EXTRA_2",
+   "final"
+  ],
+  "V070": [
+   "CLAUDE_FLAG",
+   "final"
+  ],
+  "V078": [
+   "GUESSABLE",
+   "final"
+  ],
+  "V085": [
+   "SUPPORT_FAILS_TWICE",
+   "final"
+  ],
+  "V092": [
+   "LEAK_WORD",
+   "final"
+  ],
+  "V123": [
+   "SINGLE_FORM",
+   "practice"
+  ],
+  "V130": [
+   "SPARE_PASS",
+   "practice"
+  ],
+  "V137": [
+   "SUPPORT_FAILS_ONCE",
+   "practice"
+  ]
+ },
+ "barred": {
+  "V009": [
+   "final"
+  ],
+  "V076": [
+   "final"
+  ]
+ }
+}

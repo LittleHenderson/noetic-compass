@@ -1,0 +1,283 @@
+{
+ "schema": "casalescence/optionb/owner_role_note_sample/v1",
+ "made_by": {
+  "program": "tools/ob_role_notes.py",
+  "sha256": "1f0640abb8b4a53a040c6b93fdbdf9da2805a5fc1d8eea43cbafbf7960b2dafb",
+  "utc": "2026-10-05T18:34:17Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/dry/elig/eligibility.json",
+   "sha256": "a626991a9ab68592d09a2338f9bae9f3cf65aa896432d267ce43c861a4aa069d"
+  },
+  {
+   "path": "02_LABELING_GUIDE_v1_2.md",
+   "sha256": "3ed4196dbfb0ad0d96a785f03929229e18d23ff226c7687df363d683bfd8022e"
+  },
+  {
+   "path": "../../docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+   "sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880"
+  },
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "ea34dd9781fcda8d5c17689e8e328b49cfc5de1d71c5e1dc8ec20e9dcf1559e8"
+  },
+  {
+   "path": "tools/ob_eligibility.py",
+   "sha256": "ae43442bac1a491b962406b67a9298d14317896c4aec17b5604fd077f6b610bb"
+  },
+  {
+   "path": "tools/ob_seal.py",
+   "sha256": "eb44758756232a8885666aa4c1442a9fc04f86d75a16526b747530d25fff44cb"
+  },
+  {
+   "path": "design_v2/optionB_final.json",
+   "sha256": "de0a0a50dcde3914054ee7cca2951b5a5077348f42409478240c1e40dbc52425"
+  }
+ ],
+ "seed": 20261016,
+ "passages": [
+  {
+   "id": "V092",
+   "text": "David stacked pallets onto the awaiting truck. The faint scent of pine wood from a newly opened crate drifted past him. Instantly, he pictured his grandfather’s old workshop, filled with sawdust and the smell of freshly cut timber. He remembered the sturdy wooden toy boat his grandfather had carved for him, its painted hull now chipped with age.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^8 Above/Cause — An Idea that triggers a different Idea than itself to come to Mind.\nSayings: \"That reminds me...\" / \"One thing leads to another.\" / \"Triggered a memory.\" / \"Made me think of...\"\n^9 Below/Effect — The Idea brought to Mind by an Above/Cause trigger.\nSayings: \"It just popped into my head.\" / \"Out of nowhere I thought of...\" / \"The thought came to me.\" / \"It just clicked.\"\n- ^1 Mind: \"David\".\n- ^8 Above/Cause: \"The faint scent of pine wood\". For the Mind \"David\". Relative to \"his grandfather’s old workshop\". Supporting quote: \"The faint scent of pine wood from a newly opened crate drifted past him.\"\n- ^9 Below/Effect: \"his grandfather’s old workshop\". For the Mind \"David\". Relative to \"The faint scent of pine wood\". Supporting quote: \"Instantly, he pictured his grandfather’s old workshop, filled with sawdust and the smell of freshly cut timber.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {
+     "^8": 1,
+     "^9": 1
+    }
+   }
+  },
+  {
+   "id": "V418",
+   "text": "Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays. She disliked the plain brown parcels, which were often heavy and awkward to lift. The distant drone of the machinery in the warehouse seemed to fade into the background. She just focused on separating the small envelopes into their respective bins.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Olivia\".\n- ^2 Positive: \"the brightly coloured greeting cards\". For the Mind \"Olivia\". Supporting quote: \"Olivia, a postal sorter, always enjoyed handling the brightly coloured greeting cards, especially around holidays.\"\n- ^3 Negative: \"the plain brown parcels\". For the Mind \"Olivia\". Supporting quote: \"She disliked the plain brown parcels, which were often heavy and awkward to lift.\"\n- ^4 Vibration: \"seemed to fade into the background\". For the Mind \"Olivia\". Relative to \"The distant drone of the machinery\". Supporting quote: \"The distant drone of the machinery in the warehouse seemed to fade into the background.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V321",
+   "text": "Peter, a radio journalist, found himself drawn to the urgent, breaking news wire flashing across his screen. He felt an intense pull towards the unfolding story. However, a lengthy, pre-recorded interview waiting for transcription sat untouched on his desk. Its persistent blinking notification light received barely a moment of his attention.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Peter\".\n- ^2 Positive: \"the urgent, breaking news wire\". For the Mind \"Peter\". Supporting quote: \"Peter, a radio journalist, found himself drawn to the urgent, breaking news wire flashing across his screen.\"\n- ^4 Vibration: \"barely a moment of his attention\". For the Mind \"Peter\". Relative to \"persistent blinking notification light\". Supporting quote: \"Its persistent blinking notification light received barely a moment of his attention.\"",
+   "left_out": {
+    "only_a": {
+     "^4": 1
+    },
+    "only_b": {
+     "^4": 1
+    }
+   }
+  },
+  {
+   "id": "V287",
+   "text": "Arthur, the cobbler, examined the worn boot. The sole had separated from the upper, and the stitching around the toe was frayed. He saw the detached heel block, the scuffed leather, and the bent eyelets. To fix it, he would need to repair the torn welt, reattach the heel, and replace the laces. Each component presented its own small challenge.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^6 Male — An Idea impregnated with another Idea, the Ideas an Idea is composed of.\nSayings: \"Unpacking an idea.\" / \"Breaking it down.\" / \"Looking at what's underneath.\" / \"Pulling apart the argument.\"\n- ^1 Mind: \"Arthur\".\n- ^6 Male: \"The sole\". Relative to \"the worn boot\". Supporting quote: \"The sole had separated from the upper, and the stitching around the toe was frayed.\"\n- ^6 Male: \"the upper\". Relative to \"the worn boot\". Supporting quote: same as for \"The sole\".\n- ^6 Male: \"the stitching around the toe\". Relative to \"the worn boot\". Supporting quote: same as for \"The sole\".\n- ^6 Male: \"the detached heel block\". Relative to \"the worn boot\". Supporting quote: \"He saw the detached heel block, the scuffed leather, and the bent eyelets.\"\n- ^6 Male: \"the scuffed leather\". Relative to \"the worn boot\". Supporting quote: same as for \"the detached heel block\".\n- ^6 Male: \"the bent eyelets\". Relative to \"the worn boot\". Supporting quote: same as for \"the detached heel block\".",
+   "left_out": {
+    "only_a": {
+     "^6": 2
+    },
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V383",
+   "text": "Mark, the wind farm operator, felt a surge of satisfaction as turbine five spun up to full capacity. Its energy output numbers glowed brightly green on the screen, a sight he always enjoyed. The distant, faint hum of turbine twelve's struggling motor, however, barely registered as a minor annoyance, easily dismissed.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Mark\".\n- ^4 Vibration: \"barely registered\". For the Mind \"Mark\". Relative to \"The distant, faint hum of turbine twelve's struggling motor\". Supporting quote: \"The distant, faint hum of turbine twelve's struggling motor, however, barely registered as a minor annoyance, easily dismissed.\"",
+   "left_out": {
+    "only_a": {
+     "^2": 2,
+     "^3": 1
+    },
+    "only_b": {
+     "^2": 2,
+     "^3": 1,
+     "^4": 1
+    }
+   }
+  },
+  {
+   "id": "V391",
+   "text": "Clara walked past the play area. The cacophony of shrieking children made her step back slightly. Her eyes, however, were drawn to the quiet corner where a small boy was carefully building a tower of blocks. She watched his focused movements, finding a calm stillness there. The other noise faded for her.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Clara\".\n- ^3 Negative: \"The cacophony of shrieking children\". For the Mind \"Clara\". Supporting quote: \"The cacophony of shrieking children made her step back slightly.\"",
+   "left_out": {
+    "only_a": {
+     "^2": 1,
+     "^4": 1
+    },
+    "only_b": {
+     "^1": 1,
+     "^2": 1,
+     "^4": 2
+    }
+   }
+  },
+  {
+   "id": "V235",
+   "text": "Catherine, the new assistant, tidied the playdough station. The sweet, slightly artificial scent of the colorful dough filled the room. She was instantly transported back to her own childhood. She remembered making elaborate cakes with her older sister, laughing as the dough got stuck under their fingernails.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^8 Above/Cause — An Idea that triggers a different Idea than itself to come to Mind.\nSayings: \"That reminds me...\" / \"One thing leads to another.\" / \"Triggered a memory.\" / \"Made me think of...\"\n^9 Below/Effect — The Idea brought to Mind by an Above/Cause trigger.\nSayings: \"It just popped into my head.\" / \"Out of nowhere I thought of...\" / \"The thought came to me.\" / \"It just clicked.\"\n- ^1 Mind: \"Catherine\".\n- ^8 Above/Cause: \"The sweet, slightly artificial scent of the colorful dough\". For the Mind \"Catherine\". Relative to \"her own childhood\". Supporting quote: \"The sweet, slightly artificial scent of the colorful dough filled the room.\"\n- ^9 Below/Effect: \"her own childhood\". For the Mind \"Catherine\". Relative to \"The sweet, slightly artificial scent of the colorful dough\". Supporting quote: \"She was instantly transported back to her own childhood.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V311",
+   "text": "Dr. Anya explained the proposed dental treatment to her patient. She outlined the steps clearly: first, a root canal, then a post and core procedure, followed by a crown. Each stage was a distinct procedure with its own duration. She itemized the X-rays, anesthetic, and lab fees as separate costs for transparency.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^6 Male — An Idea impregnated with another Idea, the Ideas an Idea is composed of.\nSayings: \"Unpacking an idea.\" / \"Breaking it down.\" / \"Looking at what's underneath.\" / \"Pulling apart the argument.\"\n- ^1 Mind: \"Dr. Anya\".\n- ^6 Male: \"a root canal\". Relative to \"the proposed dental treatment\". Supporting quote: \"She outlined the steps clearly: first, a root canal, then a post and core procedure, followed by a crown.\"\n- ^6 Male: \"a post and core procedure\". Relative to \"the proposed dental treatment\". Supporting quote: same as for \"a root canal\".\n- ^6 Male: \"a crown\". Relative to \"the proposed dental treatment\". Supporting quote: same as for \"a root canal\".",
+   "left_out": {
+    "only_a": {},
+    "only_b": {
+     "^1": 1,
+     "^6": 3
+    }
+   }
+  },
+  {
+   "id": "V170",
+   "text": "Wendy walked through the aisles, automatically checking the soil moisture of each plant. Her fingers dipped into the earth without conscious instruction, a quick, habitual touch. Every morning, for years, she had performed this exact task. Her hand just knew when a plant needed water.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Wendy\".\n- ^7 Rhythm: \"Every morning, for years\". For the Mind \"Wendy\". Relative to \"checking the soil moisture of each plant\". Supporting quote: \"Every morning, for years, she had performed this exact task.\"",
+   "left_out": {
+    "only_a": {
+     "^5": 1
+    },
+    "only_b": {
+     "^5": 1
+    }
+   }
+  },
+  {
+   "id": "V247",
+   "text": "Every Monday morning, Julian walked past the same row of ancient Roman amphorae. He always found his keys in his pocket precisely at the moment he reached the dusty cabinet with the Egyptian sarcophagus. The routine became so ingrained that he would sometimes pat his pocket even on his days off. It was a purely automatic gesture now.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Julian\".\n- ^7 Rhythm: \"Every Monday morning\". For the Mind \"Julian\". Relative to \"the same row of ancient Roman amphorae\". Supporting quote: \"Every Monday morning, Julian walked past the same row of ancient Roman amphorae.\"",
+   "left_out": {
+    "only_a": {
+     "^5": 1
+    },
+    "only_b": {
+     "^5": 1,
+     "^7": 1
+    }
+   }
+  },
+  {
+   "id": "V109",
+   "text": "Sarah, a beekeeper, checked her hives. The sweet, earthy smell of warm beeswax reminded her of her grandmother’s kitchen, always filled with baking. She remembered helping to press fruit for jam on hot summer days. The scent brought back a wave of comfortable, happy childhood afternoons. She smiled to herself.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^8 Above/Cause — An Idea that triggers a different Idea than itself to come to Mind.\nSayings: \"That reminds me...\" / \"One thing leads to another.\" / \"Triggered a memory.\" / \"Made me think of...\"\n^9 Below/Effect — The Idea brought to Mind by an Above/Cause trigger.\nSayings: \"It just popped into my head.\" / \"Out of nowhere I thought of...\" / \"The thought came to me.\" / \"It just clicked.\"\n- ^1 Mind: \"Sarah\".\n- ^8 Above/Cause: \"The sweet, earthy smell of warm beeswax\". For the Mind \"Sarah\". Relative to \"her grandmother’s kitchen\". Supporting quote: \"The sweet, earthy smell of warm beeswax reminded her of her grandmother’s kitchen, always filled with baking.\"\n- ^9 Below/Effect: \"her grandmother’s kitchen\". For the Mind \"Sarah\". Relative to \"The sweet, earthy smell of warm beeswax\". Supporting quote: same as for \"The sweet, earthy smell of warm beeswax\".",
+   "left_out": {
+    "only_a": {
+     "^8": 1,
+     "^9": 1
+    },
+    "only_b": {
+     "^8": 1,
+     "^9": 1
+    }
+   }
+  },
+  {
+   "id": "V076",
+   "text": "Samuel carefully disassembled the lighthouse lamp's mechanism. He laid out the components on a clean cloth. There was the small brass gear, worn smooth in places. Beside it sat a bent spring and a jammed lever. He also isolated the compact electrical motor, which hummed faintly but failed to turn the gears.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^6 Male — An Idea impregnated with another Idea, the Ideas an Idea is composed of.\nSayings: \"Unpacking an idea.\" / \"Breaking it down.\" / \"Looking at what's underneath.\" / \"Pulling apart the argument.\"\n- ^1 Mind: \"Samuel\".\n- ^6 Male: \"brass gear\". Relative to \"the lighthouse lamp's mechanism\". Supporting quote: \"There was the small brass gear, worn smooth in places.\"\n- ^6 Male: \"spring\". Relative to \"the lighthouse lamp's mechanism\". Supporting quote: \"Beside it sat a bent spring and a jammed lever.\"\n- ^6 Male: \"lever\". Relative to \"the lighthouse lamp's mechanism\". Supporting quote: same as for \"spring\".\n- ^6 Male: \"electrical motor\". Relative to \"the lighthouse lamp's mechanism\". Supporting quote: \"He also isolated the compact electrical motor, which hummed faintly but failed to turn the gears.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V409",
+   "text": "Karen reviewed the draft news story. It had several distinct parts: the initial event, the official statement, eyewitness accounts, and background context. Each needed a clear paragraph, a separate voice. She considered the opening sentence, the main body's structure, and the concluding remarks. The piece required careful reordering for clarity.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^6 Male — An Idea impregnated with another Idea, the Ideas an Idea is composed of.\nSayings: \"Unpacking an idea.\" / \"Breaking it down.\" / \"Looking at what's underneath.\" / \"Pulling apart the argument.\"\n- ^1 Mind: \"Karen\".\n- ^6 Male: \"the initial event\". Relative to \"the draft news story\". Supporting quote: \"It had several distinct parts: the initial event, the official statement, eyewitness accounts, and background context.\"\n- ^6 Male: \"the official statement\". Relative to \"the draft news story\". Supporting quote: same as for \"the initial event\".\n- ^6 Male: \"eyewitness accounts\". Relative to \"the draft news story\". Supporting quote: same as for \"the initial event\".\n- ^6 Male: \"background context\". Relative to \"the draft news story\". Supporting quote: same as for \"the initial event\".",
+   "left_out": {
+    "only_a": {
+     "^6": 3
+    },
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V338",
+   "text": "Martha sorted through the hotel linens. She picked up a stack of crisp, freshly folded towels, enjoying their softness. A sudden metallic clanging from the industrial dryer made her flinch. Then she spotted a pile of embroidered pillowcases, and she felt a sense of calm return. The dryer noise faded quickly in her awareness.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n- ^1 Mind: \"Martha\".\n- ^2 Positive: \"a stack of crisp, freshly folded towels\". For the Mind \"Martha\". Supporting quote: \"She picked up a stack of crisp, freshly folded towels, enjoying their softness.\"",
+   "left_out": {
+    "only_a": {
+     "^4": 1
+    },
+    "only_b": {
+     "^2": 1,
+     "^4": 2
+    }
+   }
+  },
+  {
+   "id": "V297",
+   "text": "Mr. Davies mentally broke down the prosecution's argument. He identified three main parts: the eyewitness testimony, the forensic report on the footprints, and the alleged motive presented. He knew his defence would need to address each of these individual components separately to undermine the overall case against his client.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^6 Male — An Idea impregnated with another Idea, the Ideas an Idea is composed of.\nSayings: \"Unpacking an idea.\" / \"Breaking it down.\" / \"Looking at what's underneath.\" / \"Pulling apart the argument.\"\n- ^1 Mind: \"Mr. Davies\".\n- ^6 Male: \"the eyewitness testimony\". Relative to \"the prosecution's argument\". Supporting quote: \"He identified three main parts: the eyewitness testimony, the forensic report on the footprints, and the alleged motive presented.\"\n- ^6 Male: \"the forensic report\". Relative to \"the prosecution's argument\". Supporting quote: same as for \"the eyewitness testimony\".\n- ^6 Male: \"the alleged motive\". Relative to \"the prosecution's argument\". Supporting quote: same as for \"the eyewitness testimony\".",
+   "left_out": {
+    "only_a": {},
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V134",
+   "text": "Clara sorted through rolls of fabric for a new suit. The rough texture of the tweed made her fingers tingle unpleasantly. But then she touched a bolt of silk, soft and smooth, and a smile touched her lips. She moved away from the tweed swiftly. The distant whir of the sewing machine was just background noise to her.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n- ^1 Mind: \"Clara\".\n- ^3 Negative: \"The rough texture of the tweed\". For the Mind \"Clara\". Supporting quote: \"The rough texture of the tweed made her fingers tingle unpleasantly.\"\n- ^2 Positive: \"a bolt of silk\". For the Mind \"Clara\". Supporting quote: \"But then she touched a bolt of silk, soft and smooth, and a smile touched her lips.\"",
+   "left_out": {
+    "only_a": {
+     "^4": 1
+    },
+    "only_b": {
+     "^4": 2
+    }
+   }
+  },
+  {
+   "id": "V298",
+   "text": "Beatrice stood in the wings, listening. The house lights dimmed, and a profound silence fell upon the puppet theatre. After fifty years of theatre work, she knew this quiet intimately. It was not just an absence of sound, but a shared anticipation, a moment brimming with unspoken stories about to unfold. She always found herself holding her breath too.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^5 Female — A Mind impregnated with an Idea, the Ideas a Mind is composed of.\nSayings: \"We are the sum of our experiences.\" / \"It's who I am.\" / \"Part of what makes me me.\"\n- ^1 Mind: \"Beatrice\".\n- ^5 Female: \"fifty years of theatre work\". For the Mind \"Beatrice\". Supporting quote: \"After fifty years of theatre work, she knew this quiet intimately.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {
+     "^7": 1
+    }
+   }
+  },
+  {
+   "id": "V153",
+   "text": "Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it. He actively disliked the insistent buzzing of his phone in his locker. The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Leo\".\n- ^2 Positive: \"the heavy bag\". For the Mind \"Leo\". Supporting quote: \"Leo’s gaze went straight to the heavy bag hanging in the corner, imagining his knuckles connecting with it.\"\n- ^3 Negative: \"the insistent buzzing of his phone\". For the Mind \"Leo\". Supporting quote: \"He actively disliked the insistent buzzing of his phone in his locker.\"\n- ^4 Vibration: \"hardly penetrated his concentration\". For the Mind \"Leo\". Relative to \"The distant, booming voice of the coach\". Supporting quote: \"The distant, booming voice of the coach instructing another fighter hardly penetrated his concentration on the bag.\"",
+   "left_out": {
+    "only_a": {
+     "^1": 1
+    },
+    "only_b": {}
+   }
+  },
+  {
+   "id": "V041",
+   "text": "Agnes guided the next cow into the stall without thinking. Her hands moved to attach the clusters, adjusting the hoses with practiced ease. The steady pulsation began, a familiar sound in the early morning quiet. She checked the milk line pressure, her eyes scanning the gauges automatically. Years of daily milking had shaped every gesture.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^7 Rhythm — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.\nSayings: \"Practice makes perfect.\" / \"You are what you repeatedly do.\" / \"Getting into a groove.\" / \"Muscle memory.\"\n- ^1 Mind: \"Agnes\".\n- ^7 Rhythm: \"Years of daily milking\". For the Mind \"Agnes\". Relative to \"milking\". Supporting quote: \"Years of daily milking had shaped every gesture.\"",
+   "left_out": {
+    "only_a": {
+     "^5": 1
+    },
+    "only_b": {
+     "^5": 1
+    }
+   }
+  },
+  {
+   "id": "V105",
+   "text": "Xenia always preferred the long-distance fares, finding the steady motorway driving restful. Short hops into the city center filled her with mild annoyance. A customer requested a journey just two blocks away; the short trip felt insignificant. The minimal payment hardly mattered to her.",
+   "role_text": "^1 Mind — Various degrees of awareness that processes, stores, outputs, and intakes Ideas.\nSayings: \"Paying attention.\" / \"Making up your mind.\" / \"Using your head.\"\n^2 Positive — An Idea the Mind has an affinity for and is attracted toward.\nSayings: \"Drawn to it like a moth to a flame.\" / \"Speaks to me.\" / \"Can't resist.\"\n^3 Negative — An Idea the Mind is adverse to and repelled by.\nSayings: \"Can't stomach it.\" / \"Rubs me the wrong way.\" / \"Wouldn't touch it with a ten-foot pole.\"\n^4 Vibration — The degree to which an Idea resonates with the Mind, its impression.\nSayings: \"Hit me hard.\" / \"Struck a chord.\" / \"Resonated.\" / \"Made an impression.\"\n- ^1 Mind: \"Xenia\".\n- ^2 Positive: \"the long-distance fares\". For the Mind \"Xenia\". Supporting quote: \"Xenia always preferred the long-distance fares, finding the steady motorway driving restful.\"\n- ^3 Negative: \"Short hops into the city center\". For the Mind \"Xenia\". Supporting quote: \"Short hops into the city center filled her with mild annoyance.\"\n- ^4 Vibration: \"felt insignificant\". For the Mind \"Xenia\". Relative to \"a journey just two blocks away\". Supporting quote: \"A customer requested a journey just two blocks away; the short trip felt insignificant.\"\n- ^4 Vibration: \"hardly mattered to her\". For the Mind \"Xenia\". Relative to \"The minimal payment\". Supporting quote: \"The minimal payment hardly mattered to her.\"",
+   "left_out": {
+    "only_a": {},
+    "only_b": {
+     "^4": 1
+    }
+   }
+  }
+ ]
+}

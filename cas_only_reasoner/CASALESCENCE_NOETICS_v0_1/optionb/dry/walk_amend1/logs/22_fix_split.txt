@@ -1,0 +1,35 @@
+$ python -B tools/ob_select.py fix-split
+{
+ "program": "tools/ob_select.py",
+ "dry_fixture": false,
+ "step": "fix-split",
+ "status": "SPLIT_FIXED",
+ "seal": "checked: 3 seal lines, all sealed files unchanged",
+ "practice_setting_count": 9,
+ "history": [
+  {
+   "practice_setting_count": 8,
+   "practice_role_step_tasks": 47,
+   "practice_plain_fact_tasks": 24,
+   "target_met": false
+  },
+  {
+   "practice_setting_count": 9,
+   "practice_role_step_tasks": 53,
+   "practice_plain_fact_tasks": 27,
+   "target_met": true
+  }
+ ],
+ "reserve_target_met": true,
+ "floor_met": true,
+ "launch_floor": {
+  "practice_role_step_min": 36,
+  "practice_plain_fact_min": 20,
+  "met": true
+ },
+ "final_settings": 39,
+ "final_writer_passages": 115,
+ "decision": "GO",
+ "next": "Seal step 3B. Then Step 7 on the practice set alone: the practice ordinary notes, their support check, and the answer-leak screen with --report-only. Only then are the final questions written."
+}
+[exit code 0]

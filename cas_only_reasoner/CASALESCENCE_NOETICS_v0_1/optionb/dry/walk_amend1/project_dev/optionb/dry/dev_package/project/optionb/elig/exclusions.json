@@ -1,0 +1,13 @@
+{
+ "schema": "casalescence/optionb/exclusions/v1",
+ "made_by": {
+  "program": "optionb/dry/build_dev_package.py [MADE-UP DATA FOR THE DEVELOPMENT TEST, NOT A RESULT]",
+  "sha256": "519634f7620c5aa75e7f466d66a929767af0d1aba5448aa9e5e68db8ee009db7",
+  "utc": "2026-10-05T16:27:17Z"
+ },
+ "inputs": [],
+ "fixture_note": "MADE-UP. 16 made-up passages and made-up label entries, written by optionb/dry/build_dev_package.py. Never a case.",
+ "count": 0,
+ "by_kind": {},
+ "passages": []
+}

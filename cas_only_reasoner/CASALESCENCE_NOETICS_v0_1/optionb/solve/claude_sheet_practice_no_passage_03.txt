@@ -1,0 +1,109 @@
+SHEET practice-no_passage-03. Each item below holds a question and lettered options. The questions were written about short passages that you are not given. Treat every item on its own. Use common sense only.
+For each item write one line: the item id, one space, then the capital letter of the single most likely option. You must pick one letter for every item.
+Write nothing else. Do not explain. Do not open any file.
+
+=== ITEM G0201 ===
+Question: What rang for a new round?
+A. the boxer
+B. the coach
+C. the bell
+D. the stance
+=== END G0201 ===
+
+=== ITEM G0202 ===
+Question: Leo hears various sounds inside the building. At a later moment, which of these does he avoid?
+A. the fighting stance
+B. the buzzing phone
+C. the gym locker
+D. the boxing glove
+E. the heavy bag
+F. the ringing bell
+=== END G0202 ===
+
+=== ITEM G0203 ===
+Question: Leo takes a short break from training. At this later free moment, which of these does he choose?
+A. the fighting stance
+B. the gym locker
+C. the heavy bag
+D. the boxing glove
+E. the ringing bell
+F. the buzzing phone
+=== END G0203 ===
+
+=== ITEM G0204 ===
+Question: What kind of books did Carla read during the quiet afternoons?
+A. novel books
+B. story books
+C. comic books
+D. picture books
+=== END G0204 ===
+
+=== ITEM G0205 ===
+Question: What sound did Tina love from the leather on the speed bag?
+A. slow, heavy thud
+B. soft, quiet snap
+C. loud, dull pop
+D. quick, sharp crack
+=== END G0205 ===
+
+=== ITEM G0206 ===
+Question: Leo finishes his training session and talks with a friend. At this later moment, which of these is he least likely to bring up?
+A. the distant voice
+B. the gym locker
+C. the ringing phone
+D. the fighting stance
+E. the boxing glove
+F. the heavy bag
+=== END G0206 ===
+
+=== ITEM G0207 ===
+Question: What did Marco use to wipe his brow?
+A. liniment
+B. shoes
+C. leather
+D. sweat
+=== END G0207 ===
+
+=== ITEM G0208 ===
+Question: Marco enters a quiet room smelling of old leather and liniment. Which of these brings back his grandfather's workshop?
+A. the sharp smell
+B. the loud sweat
+C. the heavy bag
+D. the church shoes
+E. the boxing gym
+F. the ringing bell
+=== END G0208 ===
+
+=== ITEM G0209 ===
+Question: According to Nathan, which part of the boxer was too high?
+A. his chin
+B. his left hand
+C. his right elbow
+D. his guard
+=== END G0209 ===
+
+=== ITEM G0210 ===
+Question: Suppose the sharp smell of old leather and liniment had not been there. Which of these would most likely not have happened?
+A. the ringing bell
+B. the grandfather memory
+C. the boxing gym
+D. the heavy bag
+E. the church shoes
+F. the gym liniment
+=== END G0210 ===
+
+=== ITEM G0211 ===
+Question: What kind of shot did Coach Terry introduce after the strong cross?
+A. a quick jab
+B. a wild swing
+C. a sharp body shot
+D. a weak hook
+=== END G0211 ===
+
+=== ITEM G0212 ===
+Question: Where was the buzzing phone located?
+A. in the corner
+B. near the coach
+C. on the bag
+D. in his locker
+=== END G0212 ===

@@ -1,0 +1,73 @@
+$ python -B tools/ob_select.py select --set practice --practice-settings 9
+{
+ "program": "tools/ob_select.py",
+ "dry_fixture": false,
+ "step": "select",
+ "seal": "checked: 2 seal lines, all sealed files unchanged",
+ "set": "practice",
+ "practice_setting_count": 9,
+ "rows": [
+  {
+   "filter": "written for an open form",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "form check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "anchor check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "option check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "key check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "no-passage check",
+   "role_step": 79,
+   "plain_fact": 27
+  },
+  {
+   "filter": "selection",
+   "role_step": 53,
+   "plain_fact": 27
+  },
+  {
+   "filter": "length backstop",
+   "role_step": 53,
+   "plain_fact": 27
+  }
+ ],
+ "counts": {
+  "role_step_tasks": 53,
+  "plain_fact_tasks": 27,
+  "passages_with_a_task": 27,
+  "passages_with_a_role_step_task": 27,
+  "single_longest": [
+   0,
+   53
+  ],
+  "single_shortest": [
+   0,
+   53
+  ]
+ },
+ "dropped_by_reason": {
+  "NOT_PICKED_BY_PAIR_RULE": 26
+ },
+ "decision": "GO",
+ "stop_reasons": [],
+ "next": "Seal step 3A. Then run: ob_select.py fix-split. Then seal step 3B. Then Step 7 runs on the practice set alone (ordinary notes, support check, the answer-leak screen with --report-only). Only then are final questions written.",
+ "note": "A report for people. No program reads this file. GO means: go on to the next build step. It is not a result about roles."
+}
+[exit code 0]

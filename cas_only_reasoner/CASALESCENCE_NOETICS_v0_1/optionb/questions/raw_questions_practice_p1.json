@@ -1,0 +1,4412 @@
+{
+ "schema": "casalescence/optionb/raw_questions/v1",
+ "made_by": {
+  "program": "tools/ob_write_questions.py",
+  "sha256": "ae250776d960b5061e802ca1a2e088b832a4e273f70ca372c74f86068a06a159",
+  "utc": "2026-10-07T01:19:30Z"
+ },
+ "inputs": [
+  {
+   "path": "optionb/PLAN_CONSTANTS.json",
+   "sha256": "65efcbd1f092024ec73d8aba168d22c8553c0c206320b6a69fee01e436493b34"
+  },
+  {
+   "path": "optionb/SEAL_OPTIONB.jsonl",
+   "sha256": "ef5850a6959cff906503596049150fdb5fe026922311478e0039ad575b1c5c0e"
+  },
+  {
+   "path": "optionb/elig/eligibility.json",
+   "sha256": "8db5d2a81b3d38ba0c0bc739c238ac01e7dc2c16cb9c4cfe7b3f272bf5598e37"
+  },
+  {
+   "path": "optionb/questions/writer_calls_practice_p1.jsonl",
+   "sha256": "83a869b3b0ec68c259a6581dae77776a4f2febb58ea4c1b93220a607b5f8c00d"
+  },
+  {
+   "path": "optionb/select/selection_practice.json",
+   "sha256": "f4e383d25fb33ac9318f6460dcb8974c53ed1f556e4bea63bbced136c2364a32"
+  },
+  {
+   "path": "tools/write_verdict_passages.py",
+   "sha256": "6989789a0d0110b1374fccec06975706d54013b4d3e66006792368de1f6f53da"
+  }
+ ],
+ "set": "practice",
+ "pass": "p1",
+ "model": "gemini-3.5-flash-lite",
+ "passages": [
+  {
+   "passage_id": "V041",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V041.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The repeated milking stops for two years; which action has most likely faded?",
+     "right": "attaching the clusters",
+     "wrong": [
+      "guiding the cow",
+      "checking the gauges",
+      "adjusting the hoses",
+      "scanning the eyes",
+      "checking the pressure"
+     ],
+     "anchors": [
+      "attach the clusters"
+     ]
+    },
+    {
+     "question_id": "V041.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes her place; which of these would most likely be missing?",
+     "right": "practiced ease",
+     "wrong": [
+      "early morning quiet",
+      "steady pulsation",
+      "familiar sound",
+      "milk line",
+      "gauge scanning"
+     ],
+     "anchors": [
+      "practiced ease"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V041.p1.FACT",
+    "question": "What did Agnes check automatically by scanning her eyes?",
+    "right": "the milk line pressure",
+    "wrong": [
+     "the early morning quiet",
+     "the steady pulsation",
+     "the familiar sound"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V008",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V008.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later and somewhere else, which of these would most likely bring the same thing back?",
+     "right": "a soothing melody",
+     "wrong": [
+      "a low hum",
+      "a soft drone",
+      "a morning sun",
+      "a quiet room",
+      "a gentle voice"
+     ],
+     "anchors": [
+      "soothing melody"
+     ]
+    },
+    {
+     "question_id": "V008.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the hum had not been there; which of these would most likely not have happened?",
+     "right": "remembering the lullaby",
+     "wrong": [
+      "hearing the drone",
+      "stroking the hair",
+      "singing the song",
+      "feeling the hand",
+      "listening to Zach"
+     ],
+     "anchors": [
+      "bring to his thoughts a lullaby"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V008.p1.FACT",
+    "question": "Whose hand did Zach remember stroking his hair?",
+    "right": "his mother",
+    "wrong": [
+     "his sister",
+     "his friend",
+     "his aunt"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V047",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V047.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does Daniel choose?",
+     "right": "the quartz sample",
+     "wrong": [
+      "the quarry sun",
+      "the blinding glare",
+      "the intense heat",
+      "the rock faces",
+      "the geological layer"
+     ],
+     "anchors": [
+      "sample of quartz"
+     ]
+    },
+    {
+     "question_id": "V047.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does Daniel avoid?",
+     "right": "the intense heat",
+     "wrong": [
+      "the quartz sample",
+      "the rock faces",
+      "the geological layer",
+      "the crystalline structure",
+      "the shimmering sample"
+     ],
+     "anchors": [
+      "disliking the intense heat"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V047.p1.FACT",
+    "question": "What did Daniel wipe from his brow?",
+    "right": "a bead of sweat",
+    "wrong": [
+     "a quartz sample",
+     "a blinding glare",
+     "a geological layer"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V197",
+   "wave": 0,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V197.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Some of the named parts are dealt with; which named part is still left?",
+     "right": "the long train",
+     "wrong": [
+      "the bodice",
+      "the full skirt panels",
+      "the delicate lace overlay",
+      "the sleeve section",
+      "the dress pattern"
+     ],
+     "anchors": [
+      "the long train"
+     ]
+    },
+    {
+     "question_id": "V197.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part; which of these would not be in it?",
+     "right": "the wedding dress",
+     "wrong": [
+      "the bodice",
+      "the full skirt panels",
+      "the delicate lace overlay",
+      "the long train",
+      "the dress pattern"
+     ],
+     "anchors": [
+      "the bodice"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V197.p1.FACT",
+    "question": "What pattern did Mrs. Jenkins lay out?",
+    "right": "the wedding dress pattern",
+    "wrong": [
+     "the bodice pattern",
+     "the skirt pattern",
+     "the lace pattern"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V109",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V109.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Years later at a farmers market, which of these would most likely bring the same childhood afternoons back?",
+     "right": "The sweet, earthy smell of warm beeswax",
+     "wrong": [
+      "The bitter smell of old burnt beehives",
+      "The heavy wooden lid of the hive",
+      "The sharp metal edge of the hive",
+      "The empty glass jars on the table",
+      "The white cloth of the bee suit"
+     ],
+     "anchors": [
+      "sweet, earthy smell of warm beeswax"
+     ]
+    },
+    {
+     "question_id": "V109.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the warm beeswax had no scent; which of these happy memories would most likely not have happened?",
+     "right": "Remembering helping to press fruit for jam",
+     "wrong": [
+      "Remembering the taste of fruit jam today",
+      "Checking the wooden hives in the yard",
+      "Carrying the heavy glass jars to town",
+      "Closing the top cover of the box",
+      "Cleaning the metal tools after work"
+     ],
+     "anchors": [
+      "warm beeswax"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V109.p1.FACT",
+    "question": "What did Sarah check during her rounds?",
+    "right": "Her hives",
+    "wrong": [
+     "Her kitchen",
+     "Her garden",
+     "Her cellar"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V042",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V042.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Ken and his apprentice have already smoked the entrance and opened the top cover. Which named step is still left?",
+     "right": "Assess the brood pattern and honey stores",
+     "wrong": [
+      "Open the top cover of the box",
+      "Gently smoke the entrance of the box",
+      "Assess the empty boxes near the tree",
+      "Close the small wooden door outside",
+      "Remove the empty frames from the shed"
+     ],
+     "anchors": [
+      "assess the brood pattern"
+     ]
+    },
+    {
+     "question_id": "V042.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A training kit holds one tool for each named step. Which of these items would not be in it?",
+     "right": "A small hand shovel for digging dirt",
+     "wrong": [
+      "A metal tool used to examine each frame",
+      "A small metal can to smoke the entrance",
+      "A heavy wooden lid for the top cover",
+      "A sealed glass jar for the honey stores",
+      "A large magnifying glass for the brood pattern"
+     ],
+     "anchors": [
+      "smoke the entrance"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V042.p1.FACT",
+    "question": "What did Ken and his apprentice look for while examining each frame?",
+    "right": "The queen",
+    "wrong": [
+     "The honey",
+     "The smoke",
+     "The cover"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V291",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V291.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Sam takes a long office desk job away from the van. Which action has most likely faded?",
+     "right": "Reaching for the heavy toolbox before the van stops",
+     "wrong": [
+      "Reaching for the small set of picks at noon",
+      "Swinging the heavy toolbox onto the shop floor",
+      "Switching off the office desk lamp at night",
+      "Opening the heavy office door with a key",
+      "Checking the small lock on the desk drawer"
+     ],
+     "anchors": [
+      "reached for the heavy toolbox"
+     ]
+    },
+    {
+     "question_id": "V291.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes Sam's place in the van. Which of these would most likely be missing?",
+     "right": "The automatic movement for the heavy toolbox",
+     "wrong": [
+      "The manual search for the heavy toolbox",
+      "The small set of picks on the belt",
+      "The heavy toolbox on the ground",
+      "The client address on the paper",
+      "The engine switch in the front"
+     ],
+     "anchors": [
+      "automatically reached for the heavy toolbox"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V291.p1.FACT",
+    "question": "Where did Sam keep his small set of picks?",
+    "right": "On his belt",
+    "wrong": [
+     "In the van",
+     "In the toolbox",
+     "On the ground"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V279",
+   "wave": 0,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V279.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Arthur stops keeping bees for two full years. Which action has most likely faded?",
+     "right": "Reaching for his smoker at precisely two o'clock",
+     "wrong": [
+      "Reaching for his church bell rope at noon",
+      "Moving towards his smoker on the shelf",
+      "Looking at his watch by the window",
+      "Humming a tune in the evening hours",
+      "Checking his gloves in the wooden shed"
+     ],
+     "anchors": [
+      "moving towards his smoker at two o'clock"
+     ]
+    },
+    {
+     "question_id": "V279.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "A new helper takes Arthur's place on day one. Which of these would most likely be missing?",
+     "right": "Reaching for the gloves before looking at the watch",
+     "wrong": [
+      "Checking the watch before reaching for the gloves",
+      "The church bell ringing near the garden wall",
+      "The smoker sitting on the wooden bench",
+      "The tune hummed during the afternoon check",
+      "The gloves left on the small table"
+     ],
+     "anchors": [
+      "reach for his gloves"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V279.p1.FACT",
+    "question": "At what time of day did Arthur always begin his afternoon hive check?",
+    "right": "Precisely 2 PM",
+    "wrong": [
+     "Precisely 1 PM",
+     "Precisely 3 PM",
+     "Precisely 4 PM"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V210",
+   "wave": 0,
+   "batch": 2,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V210.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Arthur dealt with the exposed king and moved his queen. Which named part is still left?",
+     "right": "underdeveloped rook",
+     "wrong": [
+      "exposed king",
+      "pawn structure",
+      "knight maneuvers",
+      "strategic element",
+      "chess piece"
+     ],
+     "anchors": [
+      "underdeveloped rook"
+     ]
+    },
+    {
+     "question_id": "V210.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part from Arthur's game strategy. Which of these would not be in it?",
+     "right": "wooden bishop",
+     "wrong": [
+      "pawn structure",
+      "knight maneuvers",
+      "exposed king",
+      "underdeveloped rook",
+      "queen piece"
+     ],
+     "anchors": [
+      "pawn structure",
+      "knight maneuvers",
+      "exposed king",
+      "underdeveloped rook"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V210.p1.FACT",
+    "question": "Which piece did Arthur move after planning to exploit his opponent's strategy?",
+    "right": "his queen",
+    "wrong": [
+     "his rook",
+     "his knight",
+     "his pawn"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V207",
+   "wave": 0,
+   "batch": 2,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V207.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Graham finished drilling precise boreholes and inserting charges. Which named part is still left?",
+     "right": "controlled detonation",
+     "wrong": [
+      "precise boreholes",
+      "insertion of charges",
+      "clearing of the area",
+      "blasting plan",
+      "safety check"
+     ],
+     "anchors": [
+      "controlled detonation"
+     ]
+    },
+    {
+     "question_id": "V207.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named phase from the plan. Which of these would not be in it?",
+     "right": "manual sorting",
+     "wrong": [
+      "precise boreholes",
+      "insertion of charges",
+      "clearing of the area",
+      "controlled detonation",
+      "blasting step"
+     ],
+     "anchors": [
+      "precise boreholes",
+      "insertion of charges",
+      "clearing of the area",
+      "controlled detonation"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V207.p1.FACT",
+    "question": "What did Graham explain to his team first?",
+    "right": "the day's blasting plan",
+    "wrong": [
+     "the clearing process",
+     "the charge insertion",
+     "the safety checks"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V359",
+   "wave": 0,
+   "batch": 2,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V359.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that mountain past stands in the same spot; what most likely goes differently?",
+     "right": "The howling wind alarms them",
+     "wrong": [
+      "The howling wind comforts them",
+      "The hearth fire pleases them",
+      "The cabin warmth helps them",
+      "The wood stack stops them",
+      "The mountain night greets them"
+     ],
+     "anchors": [
+      "howling wind outside, which might alarm a novice"
+     ]
+    },
+    {
+     "question_id": "V359.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would Old Klaus's mountain background help most?",
+     "right": "Staying calm during a heavy snowstorm",
+     "wrong": [
+      "Fleeing quickly from a heavy snowstorm",
+      "Building a sturdy wooden winter cabin",
+      "Lighting a dark hearth fire indoors",
+      "Finding lost wood in deep snow",
+      "Listening to quiet winter sounds"
+     ],
+     "anchors": [
+      "weathered countless blizzards in these mountains"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V359.p1.FACT",
+    "question": "What was Old Klaus stoking in the hut?",
+    "right": "the fire in the hearth",
+    "wrong": [
+     "the wood near the door",
+     "the stove in the corner",
+     "the coals on the floor"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V005",
+   "wave": 0,
+   "batch": 2,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V005.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later and somewhere else, which of these would most likely bring the same thing back to Clara?",
+     "right": "A deep humming sound",
+     "wrong": [
+      "A quiet humming sound",
+      "Her smoke pot",
+      "A wooden beehive",
+      "A wandering swarm",
+      "A girlhood memory"
+     ],
+     "anchors": [
+      "constant, murmuring hum",
+      "hum deepened"
+     ]
+    },
+    {
+     "question_id": "V005.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the hum had not deepened; which of these would most likely not have happened?",
+     "right": "Clara reaching for her smoke pot",
+     "wrong": [
+      "Clara dropping her smoke pot",
+      "Clara tending her beehives",
+      "Clara listening to bee sounds",
+      "Clara watching a swarm leave",
+      "Clara holding her smoke pot"
+     ],
+     "anchors": [
+      "hum deepened in a particular way, her hand instinctively reached for her smoke pot"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V005.p1.FACT",
+    "question": "What object did Clara's hand instinctively reach for when the hum deepened?",
+    "right": "her smoke pot",
+    "wrong": [
+     "her wooden box",
+     "her heavy gloves",
+     "her sharp knife"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V132",
+   "wave": 0,
+   "batch": 3,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V132.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does Sarah choose when given various loose hardware items?",
+     "right": "the new, unused lock mechanisms",
+     "wrong": [
+      "the old, rusty bolts",
+      "the separate discard bin",
+      "the shining brass",
+      "the heavy-duty bolt cutters",
+      "the sliding van door"
+     ],
+     "anchors": [
+      "glint of the new, unused lock mechanisms",
+      "appreciated their pristine engineering"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V132.p1.FACT",
+    "question": "Where did Sarah toss the old, rusty bolts she had just removed?",
+    "right": "into a separate discard bin",
+    "wrong": [
+     "onto the van roof",
+     "inside her open toolbox",
+     "under the nearby seat"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V421",
+   "wave": 0,
+   "batch": 3,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V421.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Fred inspected the air filter and vacuum lines; which named part of the milking unit is still left to check?",
+     "right": "the claw",
+     "wrong": [
+      "the vacuum lines",
+      "the control panel",
+      "the air filter",
+      "the wiring harness",
+      "the small solenoid valve"
+     ],
+     "anchors": [
+      "the pulsator, the claw, the liner",
+      "checked the air filter"
+     ]
+    },
+    {
+     "question_id": "V421.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part of the milking unit; which of these would not be in it?",
+     "right": "the heavy-duty bolt cutters",
+     "wrong": [
+      "the milk hose",
+      "the pulsator",
+      "the claw",
+      "the liner",
+      "the air filter"
+     ],
+     "anchors": [
+      "the pulsator, the claw, the liner, and the milk hose"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V421.p1.FACT",
+    "question": "What did Fred unclip after checking the air filter and vacuum lines?",
+    "right": "the control panel",
+    "wrong": [
+     "the milk hose",
+     "the small solenoid valve",
+     "the wiring harness"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V134",
+   "wave": 0,
+   "batch": 3,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V134.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does Clara choose when given various materials?",
+     "right": "a bolt of silk",
+     "wrong": [
+      "the rough tweed",
+      "the sewing machine",
+      "the rough texture",
+      "the background noise",
+      "the distant whir"
+     ],
+     "anchors": [
+      "touched a bolt of silk",
+      "a smile touched her lips"
+     ]
+    },
+    {
+     "question_id": "V134.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does Clara avoid when looking through rolls of fabric?",
+     "right": "the rough tweed",
+     "wrong": [
+      "a bolt of silk",
+      "the sewing machine",
+      "the rough texture",
+      "the background noise",
+      "the distant whir"
+     ],
+     "anchors": [
+      "rough texture of the tweed",
+      "moved away from the tweed swiftly"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V134.p1.FACT",
+    "question": "What made Clara's fingers tingle unpleasantly as she sorted through rolls of fabric?",
+    "right": "the rough texture of the tweed",
+    "wrong": [
+     "the distant whir of the sewing machine",
+     "the soft and smooth bolt of silk",
+     "the bright glint of the metal"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V220",
+   "wave": 0,
+   "batch": 3,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V220.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The emergency calls stop for a year or two; which action has most likely faded for Noah?",
+     "right": "reaching for his heavy-duty bolt cutters",
+     "wrong": [
+      "pulling up to the curb",
+      "opening the van door",
+      "knowing the full situation",
+      "repairing a broken lock",
+      "driving the heavy van"
+     ],
+     "anchors": [
+      "hand instinctively reached for his heavy-duty bolt cutters",
+      "part of his routine now"
+     ]
+    },
+    {
+     "question_id": "V220.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes Noah's place for an emergency call; which of these would most likely be missing?",
+     "right": "instinctively reaching for the heavy-duty bolt cutters",
+     "wrong": [
+      "pulling up to the correct curb",
+      "opening the front van door",
+      "repairing the broken lock mechanism",
+      "handling the emergency service call",
+      "stepping out of the vehicle"
+     ],
+     "anchors": [
+      "instinctively reached for his heavy-duty bolt cutters",
+      "without conscious thought"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V220.p1.FACT",
+    "question": "What kind of problem did Noah need to repair after pulling up to the curb?",
+    "right": "a broken lock",
+    "wrong": [
+     "a leaking hose",
+     "a jammed control",
+     "a faulty wiring"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V249",
+   "wave": 0,
+   "batch": 4,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V249.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Samuel started fixing the milk system by working on the jammed release valve. Using the text, which named part is still left?",
+     "right": "loose suction cup connection",
+     "wrong": [
+      "jammed release valve",
+      "frayed electrical wire",
+      "main control panel",
+      "malfunctioning milking machine",
+      "poor milk flow"
+     ],
+     "anchors": [
+      "jammed release valve",
+      "loose suction cup connection"
+     ]
+    },
+    {
+     "question_id": "V249.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A repair kit holds one of each named part from the text. Which of these would not be in it?",
+     "right": "polished brass cylinder",
+     "wrong": [
+      "jammed release valve",
+      "frayed electrical wire",
+      "loose suction cup connection",
+      "main control panel",
+      "milking machine pump"
+     ],
+     "anchors": [
+      "jammed release valve",
+      "frayed electrical wire"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V249.p1.FACT",
+    "question": "According to the passage, which part appeared undamaged?",
+    "right": "main control panel",
+    "wrong": [
+     "loose suction cup",
+     "jammed release valve",
+     "frayed electrical wire"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V341",
+   "wave": 0,
+   "batch": 4,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V341.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands by the hive. Using the text, what most likely goes differently?",
+     "right": "The small irregularity is missed.",
+     "wrong": [
+      "The small irregularity is spotted.",
+      "The busy bees are watched.",
+      "The hive frame is lifted.",
+      "The capped honey is seen.",
+      "The collective state is read."
+     ],
+     "anchors": [
+      "detail many might overlook",
+      "decades spent tending bees"
+     ]
+    },
+    {
+     "question_id": "V341.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Inspecting another beehive frame",
+     "wrong": [
+      "Fixing a milking machine",
+      "Polishing a brass lock",
+      "Surveying a green valley",
+      "Listening to a snowmobile",
+      "Tightening a steel vice"
+     ],
+     "anchors": [
+      "decades spent tending bees",
+      "read their collective state"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V341.p1.FACT",
+    "question": "According to the passage, what did Arthur lift from the hive?",
+    "right": "a frame",
+    "wrong": [
+     "a busy bee",
+     "some capped honey",
+     "a tiny clue"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V056",
+   "wave": 0,
+   "batch": 4,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V056.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later in a different van, which of these would most likely bring the same thing back?",
+     "right": "The metallic scent of cleaning fluid",
+     "wrong": [
+      "The loud joyful music",
+      "A polished brass lock",
+      "Her uncle playing music",
+      "Family gatherings in rooms",
+      "Shiny brass band buttons"
+     ],
+     "anchors": [
+      "metallic scent of cleaning fluid",
+      "reminded her of the brass band"
+     ]
+    },
+    {
+     "question_id": "V056.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose that metallic scent had not been there. Which of these would most likely not have happened?",
+     "right": "She would not remember her uncle's brass band.",
+     "wrong": [
+      "She would not tighten the vice.",
+      "She would not polish a brass lock.",
+      "She would not sit in the van.",
+      "She would not touch cleaning fluid.",
+      "She would not hold the cylinder."
+     ],
+     "anchors": [
+      "scent of cleaning fluid hung",
+      "reminded her of the brass band"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V056.p1.FACT",
+    "question": "According to the passage, what object was Yolanda polishing in the van?",
+    "right": "brass lock cylinder",
+    "wrong": [
+     "metal cleaning fluid",
+     "gleaming instrument",
+     "polished button"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V060",
+   "wave": 0,
+   "batch": 4,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V060.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does Liam choose?",
+     "right": "Surveying the expansive green valley",
+     "wrong": [
+      "Listening to snowmobile engines",
+      "Hiking near mountain snow",
+      "Feeling crisp air blow",
+      "Sitting in quiet rooms",
+      "Watching distant engines pass"
+     ],
+     "anchors": [
+      "expansive, green valley",
+      "feeling he deeply cherished"
+     ]
+    },
+    {
+     "question_id": "V060.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does Liam avoid?",
+     "right": "The distant sound of snowmobiles",
+     "wrong": [
+      "The expansive green valley",
+      "The crisp mountain air",
+      "A sense of peace",
+      "The green mountain views",
+      "The fresh open air"
+     ],
+     "anchors": [
+      "sound of a snowmobile engine",
+      "jarring intrusion"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V060.p1.FACT",
+    "question": "According to the passage, what kind of air filled Liam's lungs?",
+    "right": "crisp mountain air",
+    "wrong": [
+     "warm valley air",
+     "faint snowmobile air",
+     "expansive green air"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V090",
+   "wave": 0,
+   "batch": 5,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V090.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does the person choose?",
+     "right": "The smooth silk fabric",
+     "wrong": [
+      "The coarse tweed swatch",
+      "The exorbitant price",
+      "Her new dress",
+      "The small grimace",
+      "Her fingers"
+     ],
+     "anchors": [
+      "delighting in its soft texture"
+     ]
+    },
+    {
+     "question_id": "V090.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does the person avoid?",
+     "right": "The coarse tweed swatch",
+     "wrong": [
+      "The smooth silk fabric",
+      "The exorbitant price",
+      "Her new dress",
+      "The small grimace",
+      "Her fingers"
+     ],
+     "anchors": [
+      "grimace of distaste"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V090.p1.FACT",
+    "question": "Which fabric did Olivia pull her hand away from?",
+    "right": "The coarse tweed swatch",
+    "wrong": [
+     "The smooth silk fabric",
+     "The tailor's new dress",
+     "The expensive silk cloth"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V305",
+   "wave": 0,
+   "batch": 5,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V305.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later and somewhere else, which of these would most likely bring the same thing back to the person?",
+     "right": "The stone fountain",
+     "wrong": [
+      "The public pool",
+      "The busy pool",
+      "The deep end",
+      "The cool water",
+      "The distant splash"
+     ],
+     "anchors": [
+      "stone fountain"
+     ]
+    },
+    {
+     "question_id": "V305.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the noticed thing had not been there; which of these would most likely not have happened?",
+     "right": "A distant splash",
+     "wrong": [
+      "The public pool",
+      "The busy pool",
+      "The deep end",
+      "The cool water",
+      "The stone fountain"
+     ],
+     "anchors": [
+      "distant splash"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V305.p1.FACT",
+    "question": "Where was Eleanor swimming when she heard the splash?",
+    "right": "In the public pool",
+    "wrong": [
+     "In the quiet garden",
+     "By the stone fountain",
+     "Near the town fair"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V200",
+   "wave": 0,
+   "batch": 5,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V200.p1.WHAT_STUCK",
+     "form": "WHAT_STUCK",
+     "question": "At a later moment, which of these is the person most likely to bring up?",
+     "right": "The heavy excavator",
+     "wrong": [
+      "The rock crusher",
+      "The fine dust",
+      "The deafening roar",
+      "The heavy rocks",
+      "The distant blast"
+     ],
+     "anchors": [
+      "focused on the excavator"
+     ]
+    },
+    {
+     "question_id": "V200.p1.WHAT_SLID_OFF",
+     "form": "WHAT_SLID_OFF",
+     "question": "At a later moment, which of these is the person least likely to bring up?",
+     "right": "The deafening roar",
+     "wrong": [
+      "The heavy excavator",
+      "The rock crusher",
+      "The fine dust",
+      "The heavy rocks",
+      "The distant blast"
+     ],
+     "anchors": [
+      "barely registered in his ears"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V200.p1.FACT",
+    "question": "What object did Mark watch move rocks with powerful precision?",
+    "right": "The heavy excavator",
+    "wrong": [
+     "The rock crusher",
+     "The fine dust",
+     "The heavy blast"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V344",
+   "wave": 0,
+   "batch": 5,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V344.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later and somewhere else, which of these would most likely bring the same thing back to the person?",
+     "right": "The fireworks display",
+     "wrong": [
+      "The rock blasting",
+      "The vast quarry",
+      "The town fair",
+      "The dull boom",
+      "The excited gasps"
+     ],
+     "anchors": [
+      "fireworks display"
+     ]
+    },
+    {
+     "question_id": "V344.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the noticed thing had not been there; which of these would most likely not have happened?",
+     "right": "The distant, dull boom",
+     "wrong": [
+      "The fireworks display",
+      "The vast quarry",
+      "The town fair",
+      "The vibrant explosions",
+      "The excited gasps"
+     ],
+     "anchors": [
+      "distant, dull boom"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V344.p1.FACT",
+    "question": "What was Tom's job while supervising the site?",
+    "right": "Foreman",
+    "wrong": [
+     "Town fair host",
+     "Quarry worker",
+     "Crowd member"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V387",
+   "wave": 0,
+   "batch": 6,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V387.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes Owen's place at the hive; which of these would most likely be missing?",
+     "right": "the automatic movements",
+     "wrong": [
+      "the manual tools",
+      "the buzzing hive",
+      "the smoker tool",
+      "the familiar drone",
+      "the heavy veil"
+     ],
+     "anchors": [
+      "movements practiced and fluid",
+      "moved automatically"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V387.p1.FACT",
+    "question": "What object did Owen reach for first after approaching the buzzing hive?",
+    "right": "the smoker",
+    "wrong": [
+     "the veil",
+     "the hive",
+     "the tool"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V278",
+   "wave": 0,
+   "batch": 6,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V278.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would Helen's background help most?",
+     "right": "a crowded pool",
+     "wrong": [
+      "an empty pool",
+      "a quiet lane",
+      "a loud child",
+      "a chaotic game",
+      "a measured stroke"
+     ],
+     "anchors": [
+      "chaotic environments",
+      "competitive swimming"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V278.p1.FACT",
+    "question": "What did Helen find at the pool before she began her strokes?",
+    "right": "an empty lane",
+    "wrong": [
+     "a crowded deck",
+     "a loud group",
+     "a warm shower"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V353",
+   "wave": 0,
+   "batch": 6,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V353.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would Charles's background help most?",
+     "right": "a sudden attack",
+     "wrong": [
+      "a sudden rush",
+      "a swift defeat",
+      "a calm game",
+      "a quiet defeat",
+      "a slow attack"
+     ],
+     "anchors": [
+      "Decades of playing",
+      "early attacks"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V353.p1.FACT",
+    "question": "Which chess piece did Charles calmly develop as his counter move?",
+    "right": "a knight",
+    "wrong": [
+     "a pawn",
+     "a queen",
+     "a rook"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V010",
+   "wave": 0,
+   "batch": 6,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V010.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later at a bakery, which of these would most likely bring the same kitchen back to Doris?",
+     "right": "the baking bread",
+     "wrong": [
+      "the wool jacket",
+      "the hot iron",
+      "the smoky scent",
+      "the old stove",
+      "the autumn air"
+     ],
+     "anchors": [
+      "smell of baking bread",
+      "grandmother's kitchen"
+     ]
+    },
+    {
+     "question_id": "V010.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the warm, slightly smoky scent had not been present; which of these would most likely not have happened?",
+     "right": "the grandmother's kitchen appearing",
+     "wrong": [
+      "the wool jacket ironing",
+      "the baking bread smelling",
+      "the hot iron pressing",
+      "the autumn evening feeling",
+      "the quiet home resting"
+     ],
+     "anchors": [
+      "slightly smoky scent reminded",
+      "pictured her grandmother's kitchen"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V010.p1.FACT",
+    "question": "What item was Doris pressing with the hot iron?",
+    "right": "a wool jacket",
+    "wrong": [
+     "an apron",
+     "a blanket",
+     "a curtain"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V385",
+   "wave": 0,
+   "batch": 7,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V385.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later at a spa, which of these would most likely bring the same comfort back?",
+     "right": "the familiar smell of chlorine",
+     "wrong": [
+      "the grueling training sessions",
+      "the fierce competition",
+      "the pool deck",
+      "a gentle swim",
+      "a peaceful swim"
+     ],
+     "anchors": [
+      "chlorine",
+      "comforting scent"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V385.p1.FACT",
+    "question": "Where did Uma walk?",
+    "right": "onto the pool deck",
+    "wrong": [
+     "into the pool",
+     "past the deep end",
+     "toward the water"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V031",
+   "wave": 0,
+   "batch": 7,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V031.p1.WHAT_STUCK",
+     "form": "WHAT_STUCK",
+     "question": "At dinner later, which of these is the person most likely to bring up?",
+     "right": "the immense excavator",
+     "wrong": [
+      "the drilling noise",
+      "the earmuffs",
+      "the earth",
+      "the rock",
+      "the backdrop"
+     ],
+     "anchors": [
+      "immense excavator",
+      "sheer power"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V031.p1.FACT",
+    "question": "What did Peter adjust?",
+    "right": "his earmuffs",
+    "wrong": [
+     "the excavator",
+     "the rock",
+     "the drill"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V046",
+   "wave": 0,
+   "batch": 7,
+   "status": "OK",
+   "what_follows": [],
+   "plain_fact": {
+    "question_id": "V046.p1.FACT",
+    "question": "Who moved among his herd?",
+    "right": "Farmer George",
+    "wrong": [
+     "the first cow",
+     "a locksmith",
+     "Peter"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V313",
+   "wave": 0,
+   "batch": 7,
+   "status": "OK",
+   "what_follows": [],
+   "plain_fact": {
+    "question_id": "V313.p1.FACT",
+    "question": "What did Olivia drive through the city?",
+    "right": "her locksmith's van",
+    "wrong": [
+     "a large truck",
+     "her family car",
+     "a delivery van"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V320",
+   "wave": 0,
+   "batch": 8,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V320.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Victor deals with rock type and fault lines first. Which named part is still left?",
+     "right": "stability ratings",
+     "wrong": [
+      "rock type",
+      "fault lines",
+      "water saturation",
+      "granite distribution",
+      "deepest veins"
+     ],
+     "anchors": [
+      "rock type, fault lines, water saturation, and stability ratings"
+     ]
+    },
+    {
+     "question_id": "V320.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part. Which of these would not be in it?",
+     "right": "wind speed",
+     "wrong": [
+      "rock type",
+      "fault lines",
+      "water saturation",
+      "stability ratings",
+      "granite distribution"
+     ],
+     "anchors": [
+      "rock type, fault lines, water saturation, and stability ratings"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V320.p1.FACT",
+    "question": "What type of report did Victor examine for the quarry?",
+    "right": "geological survey report",
+    "wrong": [
+     "financial audit report",
+     "safety inspection report",
+     "equipment status report"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V398",
+   "wave": 0,
+   "batch": 8,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V398.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The repeated morning routine stops for a year or two. Which action has most likely faded?",
+     "right": "filling the kettle",
+     "wrong": [
+      "fetching dry kindling",
+      "filling the kettle",
+      "fetching dry kindling",
+      "filling the kettle",
+      "fetching dry kindling"
+     ],
+     "anchors": [
+      "familiar pattern ingrained"
+     ]
+    },
+    {
+     "question_id": "V398.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes Sarah's place. Which of these would most likely be missing?",
+     "right": "smooth routine",
+     "wrong": [
+      "rain barrel",
+      "old kettle",
+      "dry kindling",
+      "cold hearth",
+      "morning task"
+     ],
+     "anchors": [
+      "familiar pattern ingrained"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V398.p1.FACT",
+    "question": "Where did Sarah get the water to fill the old kettle?",
+    "right": "rain barrel",
+    "wrong": [
+     "river stream",
+     "well pump",
+     "indoor tap"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V147",
+   "wave": 0,
+   "batch": 8,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V147.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot. What most likely goes differently?",
+     "right": "fearing the rumble",
+     "wrong": [
+      "ignoring the rumble",
+      "fearing the rumble",
+      "ignoring the rumble",
+      "fearing the rumble",
+      "ignoring the rumble"
+     ],
+     "anchors": [
+      "unsettled new workers"
+     ]
+    },
+    {
+     "question_id": "V147.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "mining tunnels",
+     "wrong": [
+      "baking bread",
+      "painting walls",
+      "growing crops",
+      "steering ships",
+      "weaving cloth"
+     ],
+     "anchors": [
+      "worked in quarries"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V147.p1.FACT",
+    "question": "Who oversaw the blasting team at the site?",
+    "right": "Mr. Davies",
+    "wrong": [
+     "Victor",
+     "Sarah",
+     "A young worker"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V394",
+   "wave": 0,
+   "batch": 8,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V394.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does the person choose?",
+     "right": "Queen's Gambit opening",
+     "wrong": [
+      "defensive setup",
+      "Queen's Gambit opening",
+      "defensive setup",
+      "Queen's Gambit opening",
+      "defensive setup"
+     ],
+     "anchors": [
+      "aggressive Queen's Gambit opening"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V394.p1.FACT",
+    "question": "Which opening did Victor feel a strong pull towards?",
+    "right": "Queen's Gambit",
+    "wrong": [
+     "King's Indian",
+     "Sicilian Defense",
+     "French Defense"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V002",
+   "wave": 0,
+   "batch": 9,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V002.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The repeated visits stop for a year; which daily action has most likely faded?",
+     "right": "Walking directly to lane three",
+     "wrong": [
+      "Arriving at the pool later",
+      "Navigating the slick tiles",
+      "Stepping onto the block",
+      "Diving in the water",
+      "Reaching the water"
+     ],
+     "anchors": [
+      "as he did every day",
+      "automatically navigated the slick tiles"
+     ]
+    },
+    {
+     "question_id": "V002.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes Tom's place; which action would most likely be missing?",
+     "right": "Navigating the slick tiles without looking down",
+     "wrong": [
+      "Looking down at the slick tiles",
+      "Arriving at the pool early",
+      "Stepping onto the starting block",
+      "Diving into the water",
+      "Reaching the water first"
+     ],
+     "anchors": [
+      "without him looking down",
+      "automatically navigated the slick tiles"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V002.p1.FACT",
+    "question": "Which specific lane did Tom walk directly to?",
+    "right": "Lane three",
+    "wrong": [
+     "Lane two",
+     "Lane one",
+     "Lane four"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V051",
+   "wave": 0,
+   "batch": 9,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V051.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "The seized pins and worn springs are dealt with; which named part is still left?",
+     "right": "A bent keyway",
+     "wrong": [
+      "Seized pins",
+      "Worn springs",
+      "Lubrication",
+      "Corrosion",
+      "Cylinder"
+     ],
+     "anchors": [
+      "a bent keyway",
+      "signs of corrosion"
+     ]
+    },
+    {
+     "question_id": "V051.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A repair kit holds one of each named part; which of these would not be in it?",
+     "right": "A jammed door lock",
+     "wrong": [
+      "The seized pins",
+      "The worn springs",
+      "The bent keyway",
+      "The cylinder",
+      "The corrosion"
+     ],
+     "anchors": [
+      "faulty mechanism",
+      "inside the cylinder"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V051.p1.FACT",
+    "question": "What did Ken examine closely?",
+    "right": "The jammed door lock",
+    "wrong": [
+     "The faulty mechanism",
+     "The worn springs",
+     "The bent keyway"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V157",
+   "wave": 0,
+   "batch": 9,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V157.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "The person feels discomfort",
+     "wrong": [
+      "The person feels comfort",
+      "The person steps to the edge",
+      "The person slides into the lane",
+      "The person begins gentle strokes",
+      "The person feels the chill"
+     ],
+     "anchors": [
+      "held no discomfort",
+      "acclimated her body"
+     ]
+    },
+    {
+     "question_id": "V157.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Stepping into icy winter water",
+     "wrong": [
+      "Stepping into warm summer water",
+      "Stepping to the pool edge",
+      "Sliding into the lane",
+      "Beginning gentle strokes",
+      "Feeling the cool mist"
+     ],
+     "anchors": [
+      "Decades of early morning swims",
+      "acclimated her body to the chill"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V157.p1.FACT",
+    "question": "What rose from the water as Wendy stepped to the edge?",
+    "right": "Cool mist",
+    "wrong": [
+     "Warm steam",
+     "Familiar sensation",
+     "Comforting coolness"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V267",
+   "wave": 0,
+   "batch": 9,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V267.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Membership fees and equipment purchases are dealt with; which named category is still left?",
+     "right": "Tournament entry costs",
+     "wrong": [
+      "Membership fees",
+      "Equipment purchases",
+      "General upkeep",
+      "Refreshments",
+      "Annual budget"
+     ],
+     "anchors": [
+      "tournament entry costs",
+      "general upkeep"
+     ]
+    },
+    {
+     "question_id": "V267.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A filing folder holds one document for each named category; which of these would not be in it?",
+     "right": "The club building",
+     "wrong": [
+      "Membership fees",
+      "Equipment purchases",
+      "Tournament entry costs",
+      "Refreshments",
+      "General upkeep"
+     ],
+     "anchors": [
+      "distinct categories",
+      "line for refreshments"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V267.p1.FACT",
+    "question": "What did Peter review?",
+    "right": "The club’s annual budget",
+    "wrong": [
+     "The playing area",
+     "The membership fees",
+     "The upcoming year"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V177",
+   "wave": 0,
+   "batch": 10,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V177.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "George deals with the vacuum gauge and the worn gasket first; which named part is still left?",
+     "right": "A clogged filter",
+     "wrong": [
+      "A worn gasket",
+      "The vacuum gauge",
+      "The milking machine",
+      "A slight hiss",
+      "The airflow"
+     ],
+     "anchors": [
+      "suspected a clogged filter"
+     ]
+    },
+    {
+     "question_id": "V177.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part; which of these would not be in it?",
+     "right": "The milking machine",
+     "wrong": [
+      "The vacuum gauge",
+      "A worn gasket",
+      "A clogged filter",
+      "The main motor",
+      "A seized impeller"
+     ],
+     "anchors": [
+      "vacuum gauge",
+      "worn gasket",
+      "clogged filter"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V177.p1.FACT",
+    "question": "Which gauge was reading too low according to George?",
+    "right": "The vacuum gauge",
+    "wrong": [
+     "The pressure gauge",
+     "The intake gauge",
+     "The airflow gauge"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V301",
+   "wave": 0,
+   "batch": 10,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V301.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later and somewhere else, which of these would most likely bring the same thing back to Elena?",
+     "right": "An old wind-up toy",
+     "wrong": [
+      "Her grandmother making toys",
+      "The soft whir",
+      "A sewing machine",
+      "A wooden soldier",
+      "A worn rug"
+     ],
+     "anchors": [
+      "old wind-up toys",
+      "soft whir of her sewing machine"
+     ]
+    },
+    {
+     "question_id": "V301.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the soft whir had not been there; which of these would most likely not have happened?",
+     "right": "Elena remembering her grandmother",
+     "wrong": [
+      "Elena pinning a hem",
+      "A warmth spreading",
+      "A wooden soldier dancing",
+      "The shop filling",
+      "A sewing machine running"
+     ],
+     "anchors": [
+      "soft whir",
+      "reminded her of the old wind-up toys"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V301.p1.FACT",
+    "question": "What occupation does Elena hold in the shop?",
+    "right": "A tailor",
+    "wrong": [
+     "A toy maker",
+     "A shop keeper",
+     "A seamstress"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V198",
+   "wave": 0,
+   "batch": 10,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V198.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does David choose?",
+     "right": "The quiet steady ones",
+     "wrong": [
+      "A restless heifer",
+      "A cow nearby",
+      "A frustrated moo",
+      "The milking parlour",
+      "The closed gate"
+     ],
+     "anchors": [
+      "liked the quiet, steady ones"
+     ]
+    },
+    {
+     "question_id": "V198.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does David avoid?",
+     "right": "A restless heifer",
+     "wrong": [
+      "The quiet steady ones",
+      "A cow nearby",
+      "A frustrated moo",
+      "The milking parlour",
+      "The open gate"
+     ],
+     "anchors": [
+      "restless heifer",
+      "pushing back against the gate"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V198.p1.FACT",
+    "question": "Where did David guide the cows?",
+    "right": "Into the milking parlour",
+    "wrong": [
+     "Into the open field",
+     "Into the dairy barn",
+     "Into the cattle pen"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V329",
+   "wave": 0,
+   "batch": 10,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V329.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Julia deals with the clogged intake screen and seized impeller; which named part is still left?",
+     "right": "The corroded electrical terminals",
+     "wrong": [
+      "The seized impeller",
+      "The clogged intake screen",
+      "The main motor casing",
+      "The filtration pump",
+      "The system failure"
+     ],
+     "anchors": [
+      "corroded electrical terminals"
+     ]
+    },
+    {
+     "question_id": "V329.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part; which of these would not be in it?",
+     "right": "The filtration pump",
+     "wrong": [
+      "The clogged intake screen",
+      "The seized impeller",
+      "The corroded electrical terminals",
+      "The main motor casing",
+      "The vacuum gauge"
+     ],
+     "anchors": [
+      "intake screen",
+      "seized impeller",
+      "electrical terminals"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V329.p1.FACT",
+    "question": "Which part did Julia decide to address first?",
+    "right": "The screen",
+    "wrong": [
+     "The impeller",
+     "The motor casing",
+     "The electrical terminals"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V416",
+   "wave": 0,
+   "batch": 11,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V416.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Years later inside a dusty automotive repair garage, which of these would most likely bring the same childhood memory back?",
+     "right": "The smell of machine oil",
+     "wrong": [
+      "The scent of fresh flowers",
+      "The sight of heavy machinery",
+      "The taste of hot coffee",
+      "The sound of falling rock",
+      "The feel of damp earth"
+     ],
+     "anchors": [
+      "metallic tang",
+      "machine oil"
+     ]
+    },
+    {
+     "question_id": "V416.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the heavy machinery had not been excavating rock; which of these would most likely not have happened?",
+     "right": "Dust settling thickly on boots",
+     "wrong": [
+      "Dust settling softly on leaves",
+      "Susan watching the machinery",
+      "Susan hearing the loud engine",
+      "Susan feeling the warm sun",
+      "Susan tasting the sweet fruit"
+     ],
+     "anchors": [
+      "heavy machinery excavate rock",
+      "dust settling thickly"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V416.p1.FACT",
+    "question": "What covered Susan's boots thickly while she watched the heavy machinery excavate rock?",
+    "right": "The dust",
+    "wrong": [
+     "The water",
+     "The leaves",
+     "The gravel"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V400",
+   "wave": 0,
+   "batch": 11,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V400.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this veteran background help most when facing unexpected trouble?",
+     "right": "A sudden blizzard on a high peak",
+     "wrong": [
+      "A quiet afternoon in a warm library",
+      "A fast train moving through open fields",
+      "A long meeting in a glass office",
+      "A bright morning near a calm lake",
+      "A short walk down a paved street"
+     ],
+     "anchors": [
+      "veteran of countless mountain",
+      "unpredictable mountain weather"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V400.p1.FACT",
+    "question": "What beverage did Clara calmly begin to boil water for from the hut window?",
+    "right": "Tea",
+    "wrong": [
+     "Milk",
+     "Soup",
+     "Cocoa"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V328",
+   "wave": 0,
+   "batch": 11,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V328.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "After the bell stops ringing for two full years, which action has most likely faded away?",
+     "right": "Glancing towards the eastern window",
+     "wrong": [
+      "Hearing the bell ring out",
+      "Working on the morning tasks",
+      "Noticing the first dawn light",
+      "Staying inside the mountain hut",
+      "Waking up at half past"
+     ],
+     "anchors": [
+      "glancing towards the eastern",
+      "moment approached"
+     ]
+    },
+    {
+     "question_id": "V328.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes Lena's place; which of these habits would most likely be missing?",
+     "right": "Glancing towards the eastern window",
+     "wrong": [
+      "Glancing towards the western window",
+      "Hearing the old bell ring",
+      "Doing tasks with both hands",
+      "Seeing streaks of dawn light",
+      "Waiting near the mountain hut"
+     ],
+     "anchors": [
+      "glancing towards the eastern",
+      "Without thinking"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V328.p1.FACT",
+    "question": "At what time of day did the old bell near the mountain hut ring out?",
+    "right": "Half past five",
+    "wrong": [
+     "Half past six",
+     "Quarter to five",
+     "Seven o'clock"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V019",
+   "wave": 0,
+   "batch": 11,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V019.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment during the club meeting, which of these does Michael choose to examine?",
+     "right": "The intricate endgame on board three",
+     "wrong": [
+      "His own unfinished simple game",
+      "Another player's rook sacrifice",
+      "The empty tables near the door",
+      "The club notice board outside",
+      "The books on the back shelf"
+     ],
+     "anchors": [
+      "intricate endgame on board",
+      "fascinating him"
+     ]
+    },
+    {
+     "question_id": "V019.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment when looking for a challenge, which of these does Michael avoid?",
+     "right": "His own unfinished simple game",
+     "wrong": [
+      "The intricate endgame on board",
+      "The subtle rook sacrifice",
+      "The complex strategy puzzles",
+      "The club chess matches",
+      "The board three contest"
+     ],
+     "anchors": [
+      "unfinished game",
+      "little appeal"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V019.p1.FACT",
+    "question": "Which board held the intricate endgame that felt fascinating to Michael at the chess club?",
+    "right": "Board three",
+    "wrong": [
+     "Board one",
+     "Board two",
+     "Board four"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V014",
+   "wave": 0,
+   "batch": 12,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V014.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later at a market stall, which of these would most likely bring the grandfather back to Bernard?",
+     "right": "Raw tweed",
+     "wrong": [
+      "Raw wool",
+      "Fishing nets",
+      "Workbench",
+      "Small shop",
+      "Overcoat"
+     ],
+     "anchors": [
+      "raw tweed"
+     ]
+    },
+    {
+     "question_id": "V014.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose that specific roll had been missing; which of these would most likely not have occurred?",
+     "right": "Grandfather's overcoat",
+     "wrong": [
+      "Small shop",
+      "Raw tweed",
+      "Lanolin scent",
+      "Workbench",
+      "Fishing nets"
+     ],
+     "anchors": [
+      "raw tweed"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V014.p1.FACT",
+    "question": "What fabric did Bernard unfold in the shop?",
+    "right": "Raw tweed",
+    "wrong": [
+     "Fishing nets",
+     "Heavy wool",
+     "Old overcoat"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V004",
+   "wave": 0,
+   "batch": 12,
+   "status": "OK",
+   "what_follows": [],
+   "plain_fact": {
+    "question_id": "V004.p1.FACT",
+    "question": "What did Paul fetch from the spring before morning arrived?",
+    "right": "Water",
+    "wrong": [
+     "Coffee",
+     "Wood",
+     "Lamp"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V221",
+   "wave": 0,
+   "batch": 12,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V221.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment in the van, which of these does Mark choose?",
+     "right": "Complex cylinder",
+     "wrong": [
+      "Electronic keypad",
+      "Exhaust fumes",
+      "Lockbox",
+      "Metal",
+      "Oil"
+     ],
+     "anchors": [
+      "cylinder mechanism"
+     ]
+    },
+    {
+     "question_id": "V221.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment near the road, which of these does Mark avoid?",
+     "right": "Exhaust fumes",
+     "wrong": [
+      "Cylinder mechanism",
+      "Electronic keypad",
+      "Lockbox",
+      "Metal",
+      "Oil"
+     ],
+     "anchors": [
+      "exhaust fumes"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V221.p1.FACT",
+    "question": "What kind of mechanism did Mark find fascinating in the box?",
+    "right": "Cylinder mechanism",
+    "wrong": [
+     "Electronic keypad",
+     "Lockbox",
+     "Spring"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V244",
+   "wave": 0,
+   "batch": 12,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V244.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later at a local baths, which of these would most likely bring the father back to Maya?",
+     "right": "Chlorine smell",
+     "wrong": [
+      "Shallow end",
+      "Steam",
+      "Sunlight",
+      "Small child",
+      "Municipal pool"
+     ],
+     "anchors": [
+      "chlorine smell"
+     ]
+    },
+    {
+     "question_id": "V244.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose that chemical smell had been absent; which of these would most likely not have happened?",
+     "right": "Municipal pool",
+     "wrong": [
+      "Chlorine smell",
+      "Shallow end",
+      "Sunlight",
+      "Small child",
+      "Father"
+     ],
+     "anchors": [
+      "chlorine smell"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V244.p1.FACT",
+    "question": "Where did Maya first learn to swim as a small child?",
+    "right": "Municipal pool",
+    "wrong": [
+     "Shallow end",
+     "Lake",
+     "Sea"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V016",
+   "wave": 0,
+   "batch": 13,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V016.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot when the sound starts; what most likely goes differently?",
+     "right": "He mistakes the heavy boom for summer thunder.",
+     "wrong": [
+      "He reaches for the radio on the shelf.",
+      "He grabs the heavy radio from the shelf.",
+      "He expects a massive shifting snow on peaks.",
+      "He waits for the heavy shifting on peaks.",
+      "He listens to the distant rumble of peaks."
+     ],
+     "anchors": [
+      "heard the distant rumble",
+      "heavy boom of shifting snow"
+     ]
+    },
+    {
+     "question_id": "V016.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Hearing a winter avalanche start on steep slopes.",
+     "wrong": [
+      "Hearing a summer thunderstorm start on slopes.",
+      "Hearing a distant rumble near the mountain peaks.",
+      "Hearing a shifting snowstorm near the mountain peaks.",
+      "Hearing a heavy boom near the high peaks.",
+      "Hearing a radio on the wooden shelf."
+     ],
+     "anchors": [
+      "mountain guide for decades",
+      "heavy boom of shifting snow"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V016.p1.FACT",
+    "question": "Where was the radio located according to the text?",
+    "right": "On the shelf.",
+    "wrong": [
+     "On the small table.",
+     "On the wooden desk.",
+     "On the kitchen counter."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V035",
+   "wave": 0,
+   "batch": 13,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V035.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does the person choose?",
+     "right": "She picks up the smooth shimmering silk.",
+     "wrong": [
+      "She picks up the rough scratchy tweed.",
+      "She touches the smooth silk bolt.",
+      "She reaches for the tweed rack.",
+      "She handles the rough nearby tweed.",
+      "She checks the bright yellow sunlight."
+     ],
+     "anchors": [
+      "shimmering silk",
+      "Her fingers preferred"
+     ]
+    },
+    {
+     "question_id": "V035.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does the person avoid?",
+     "right": "She keeps clear of the rough scratchy tweed.",
+     "wrong": [
+      "She keeps clear of the smooth shimmering silk.",
+      "She avoids the delicate touch of silk.",
+      "She turns from the shimmering silk bolt.",
+      "She leaves the smooth silk on rack.",
+      "She ducks the bright yellow sunlight."
+     ],
+     "anchors": [
+      "recoiled slightly",
+      "rough, scratchy tweed"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V035.p1.FACT",
+    "question": "What flooded the shop just after the delivery person opened the door?",
+    "right": "Brilliant yellow sunlight.",
+    "wrong": [
+     "A cold evening breeze.",
+     "Heavy falling raindrops.",
+     "A sudden dust cloud."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V163",
+   "wave": 0,
+   "batch": 13,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V163.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "He ignores the sharp windowpane rattle.",
+     "wrong": [
+      "He checks the barometer frequently tonight.",
+      "He stirs the stew in the hut.",
+      "He reads the shift of the wind.",
+      "He watches the front move in fast.",
+      "He listens to the sharp wind gust."
+     ],
+     "anchors": [
+      "Forty years of guiding",
+      "language of the wind"
+     ]
+    },
+    {
+     "question_id": "V163.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Sensing a fast weather change while high up.",
+     "wrong": [
+      "Sensing a fast weather change near the home.",
+      "Sensing a wind gust rattling a glass pane.",
+      "Sensing a sudden shift in mountain weather.",
+      "Sensing a moving front near the wooden hut.",
+      "Sensing a barometer drop inside the cabin."
+     ],
+     "anchors": [
+      "Forty years of guiding",
+      "language of the wind"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V163.p1.FACT",
+    "question": "What was Lars doing in the mountain hut when the gust hit?",
+    "right": "Stirring the stew.",
+    "wrong": [
+     "Checking the barometer.",
+     "Fixing the windowpane.",
+     "Cleaning the table."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V068",
+   "wave": 0,
+   "batch": 13,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V068.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "He misses the hidden trap in the pause.",
+     "wrong": [
+      "He shifts his pawn for the play.",
+      "He watches the opponent hand hover.",
+      "He reads the player hesitation now.",
+      "He spots the hidden play in advance.",
+      "He plays against the confident rival."
+     ],
+     "anchors": [
+      "faced players like him for decades",
+      "signaled a hidden trap"
+     ]
+    },
+    {
+     "question_id": "V068.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Spotting a subtle bluff during a card match.",
+     "wrong": [
+      "Spotting a subtle bluff during a chess match.",
+      "Spotting a quiet pause from a chess player.",
+      "Spotting a knight move on a wooden board.",
+      "Spotting a hidden trap in a board game.",
+      "Spotting a slight hesitation in a game."
+     ],
+     "anchors": [
+      "faced players like him for decades",
+      "momentary hesitation"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V068.p1.FACT",
+    "question": "Which chess piece was the opponent's hand hovering over?",
+    "right": "The knight.",
+    "wrong": [
+     "The bishop.",
+     "The rook.",
+     "The queen."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V236",
+   "wave": 0,
+   "batch": 14,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V236.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Farmer Greg addressed the blocked filter and the worn pulsator hose. Which component is still left to fix?",
+     "right": "a faulty vacuum gauge",
+     "wrong": [
+      "a worn pulsator hose",
+      "a blocked filter",
+      "the diagnostic display",
+      "the morning run",
+      "continued issues"
+     ],
+     "anchors": [
+      "blocked filter",
+      "faulty vacuum gauge"
+     ]
+    },
+    {
+     "question_id": "V236.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named component from the milking machine. Which of these would not be in it?",
+     "right": "a diagnostic display",
+     "wrong": [
+      "a faulty vacuum gauge",
+      "a blocked filter",
+      "a worn pulsator hose",
+      "the milking machine",
+      "the morning run"
+     ],
+     "anchors": [
+      "blocked filter",
+      "worn pulsator hose"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V236.p1.FACT",
+    "question": "Which specific item did Farmer Greg examine during the morning run?",
+    "right": "the diagnostic display",
+    "wrong": [
+     "the milking machine",
+     "a worn pulsator hose",
+     "a blocked filter"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V062",
+   "wave": 0,
+   "batch": 14,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V062.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Arthur dealt with the knight's fork and the rook sacrifice. Which named assault part is still left?",
+     "right": "the queen's forced advance",
+     "wrong": [
+      "a rook sacrifice",
+      "a knight's fork",
+      "his king and queen",
+      "the seventh rank",
+      "aggressive play"
+     ],
+     "anchors": [
+      "knight's fork",
+      "queen's forced advance"
+     ]
+    },
+    {
+     "question_id": "V062.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part of the assault. Which of these would not be in it?",
+     "right": "the opponent's aggressive play",
+     "wrong": [
+      "the queen's forced advance",
+      "a rook sacrifice",
+      "a knight's fork",
+      "his king and queen",
+      "the seventh rank"
+     ],
+     "anchors": [
+      "knight's fork",
+      "rook sacrifice"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V062.p1.FACT",
+    "question": "Whose king and queen were targeted by the knight's fork?",
+    "right": "Arthur's king and queen",
+    "wrong": [
+     "the opponent's king",
+     "the rook's king",
+     "the queen's king"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V087",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V087.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does the person choose?",
+     "right": "She buys a mature cheddar wheel from the shelf.",
+     "wrong": [
+      "She buys a dark mould batch from the shelf.",
+      "She buys a mature cheddar wheel for dinner.",
+      "She picks the mature cheddar wheel for lunch.",
+      "She takes the mature cheddar wheel home today.",
+      "She grabs the mature cheddar wheel right now."
+     ],
+     "anchors": [
+      "pulled her in"
+     ]
+    },
+    {
+     "question_id": "V087.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does the person avoid?",
+     "right": "She steps past the experimental blue cheese batch.",
+     "wrong": [
+      "She steps past the mature cheddar wheel batch.",
+      "She avoids the experimental blue cheese batch.",
+      "She skips the experimental blue cheese batch.",
+      "She leaves the experimental blue cheese batch.",
+      "She turns from the experimental blue cheese batch."
+     ],
+     "anchors": [
+      "quickly turned away"
+     ]
+    },
+    {
+     "question_id": "V087.p1.WHAT_STUCK",
+     "form": "WHAT_STUCK",
+     "question": "At a later moment, which of these is the person most likely to bring up?",
+     "right": "She speaks of the mature cheddar wheel rind.",
+     "wrong": [
+      "She speaks of the dark mould cheese batch.",
+      "She talks about the mature cheddar wheel rind.",
+      "She mentions the mature cheddar wheel rind.",
+      "She recalls the mature cheddar wheel rind.",
+      "She describes the mature cheddar wheel rind."
+     ],
+     "anchors": [
+      "admired its perfect rind"
+     ]
+    },
+    {
+     "question_id": "V087.p1.WHAT_SLID_OFF",
+     "form": "WHAT_SLID_OFF",
+     "question": "At a later moment, which of these is the person least likely to bring up?",
+     "right": "She forgets the small drop of ceiling water.",
+     "wrong": [
+      "She forgets the dark mould on the cheese.",
+      "She misses the small drop of ceiling water.",
+      "She drops the small drop of ceiling water.",
+      "She leaves the small drop of ceiling water.",
+      "She drops the dark mould on the cheese."
+     ],
+     "anchors": [
+      "barely noticed"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V087.p1.FACT",
+    "question": "Which specific item did Maria stop at along the rows?",
+    "right": "A mature cheddar wheel.",
+    "wrong": [
+     "A dark mould batch.",
+     "A small drop.",
+     "A ceiling sleeve."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V052",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V052.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Some of the named parts are dealt with; which named part is still left?",
+     "right": "The desired rind development remains for treatment.",
+     "wrong": [
+      "The precise temperature control remains for treatment.",
+      "The desired rind development waits for completion.",
+      "The desired rind development stays for handling.",
+      "The desired rind development stays for testing.",
+      "The desired rind development stays for action."
+     ],
+     "anchors": [
+      "desired rind development"
+     ]
+    },
+    {
+     "question_id": "V052.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part; which of these would not be in it?",
+     "right": "An unrelated milk pasteurizer unit is missing.",
+     "wrong": [
+      "An exact temperature control unit is missing.",
+      "An unrelated milk pasteurizer unit is absent.",
+      "An unrelated milk pasteurizer unit is lacking.",
+      "An unrelated milk pasteurizer unit is absent here.",
+      "An unrelated milk pasteurizer unit is omitted."
+     ],
+     "anchors": [
+      "precise temperature control"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V052.p1.FACT",
+    "question": "What schedule was Harriet considering for the new batch?",
+    "right": "The aging schedule.",
+    "wrong": [
+     "The milking schedule.",
+     "The shipping schedule.",
+     "The tasting schedule."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V064",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V064.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "The newcomer pauses to think about each wheel.",
+     "wrong": [
+      "The newcomer pauses to think about every shelf.",
+      "The novice pauses to think about each wheel.",
+      "The stranger pauses to think about each wheel.",
+      "The visitor pauses to think about each wheel.",
+      "The person pauses to think about each wheel."
+     ],
+     "anchors": [
+      "required no thought"
+     ]
+    },
+    {
+     "question_id": "V064.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Sorting daily deliveries of cheddar on dairy racks.",
+     "wrong": [
+      "Sorting daily deliveries of Gouda on dairy racks.",
+      "Sorting heavy daily cheddar cheese on dairy racks.",
+      "Handling daily cheddar loads on cheese house racks.",
+      "Managing daily cheddar items on market stall racks.",
+      "Organizing daily cheddar wheels on cheese room racks."
+     ],
+     "anchors": [
+      "countless wheels of cheddar"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V064.p1.FACT",
+    "question": "How long had Yvonne rotated the wheels daily?",
+    "right": "For a decade.",
+    "wrong": [
+     "For a month.",
+     "For a year.",
+     "For a century."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V194",
+   "wave": 1,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V194.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The repeated thing stops for a year or two; which action has most likely faded?",
+     "right": "The automatic reach for the top shelf wheel.",
+     "wrong": [
+      "The deliberate reach for the top shelf wheel.",
+      "The automatic grab for the top shelf wheel.",
+      "The automatic touch for the top shelf wheel.",
+      "The automatic pull for the top shelf wheel.",
+      "The automatic grab for the top cellar shelf."
+     ],
+     "anchors": [
+      "automatically reached"
+     ]
+    },
+    {
+     "question_id": "V194.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes the person's place; which of these would most likely be missing?",
+     "right": "The instant execution of the correct order.",
+     "wrong": [
+      "The clumsy execution of the correct order.",
+      "The quick execution of the correct order.",
+      "The fluent execution of the correct order.",
+      "The swift execution of the correct order.",
+      "The rapid execution of the correct order."
+     ],
+     "anchors": [
+      "specific order"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V194.p1.FACT",
+    "question": "When did Wendy flip and brush the cheeses?",
+    "right": "Every Tuesday morning.",
+    "wrong": [
+     "Every Monday morning.",
+     "Every Friday morning.",
+     "Every Sunday morning."
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V160",
+   "wave": 1,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V160.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Pierre completed the short brining period and humidity adjustments. Which named part is still left?",
+     "right": "regular rotation frequency",
+     "wrong": [
+      "short brining period",
+      "gradual temperature drops",
+      "humidity adjustments",
+      "separate steps",
+      "aging schedule"
+     ],
+     "anchors": [
+      "short brining period",
+      "humidity adjustments"
+     ]
+    },
+    {
+     "question_id": "V160.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare kit holds one of each named part. Which of these would not be in it?",
+     "right": "local cows",
+     "wrong": [
+      "regular rotation frequency",
+      "gradual temperature drops",
+      "short brining period",
+      "humidity adjustments",
+      "blue cheese"
+     ],
+     "anchors": [
+      "short brining period",
+      "humidity adjustments"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V160.p1.FACT",
+    "question": "What color was the cheese Pierre reviewed?",
+    "right": "blue",
+    "wrong": [
+     "red",
+     "white",
+     "green"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V069",
+   "wave": 1,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [],
+   "plain_fact": {
+    "question_id": "V069.p1.FACT",
+    "question": "What kind of milk did Liam use for his cheddar?",
+    "right": "raw milk",
+    "wrong": [
+     "skim milk",
+     "goat milk",
+     "warm milk"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V120",
+   "wave": 2,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V120.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Coach Terry reviews the initial opening and the strong cross; which named part is still left?",
+     "right": "a sharp body shot",
+     "wrong": [
+      "a strong cross",
+      "precise footwork",
+      "subtle head movement",
+      "a quick jab",
+      "the new strategy"
+     ],
+     "anchors": [
+      "sharp body shot"
+     ]
+    },
+    {
+     "question_id": "V120.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare training kit holds one of each named part; which of these would not be in it?",
+     "right": "a flying knee strike",
+     "wrong": [
+      "subtle head movement",
+      "a quick jab",
+      "a strong cross",
+      "a sharp body shot",
+      "precise footwork"
+     ],
+     "anchors": [
+      "quick jab",
+      "strong cross"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V120.p1.FACT",
+    "question": "What kind of shot did Coach Terry introduce after the strong cross?",
+    "right": "a sharp body shot",
+    "wrong": [
+     "a quick jab",
+     "a weak hook",
+     "a wild swing"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V230",
+   "wave": 2,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V230.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Nathan addresses tucking the chin and keeping the guard up; which named flaw is still left?",
+     "right": "his footwork was too flat",
+     "wrong": [
+      "keep the guard up",
+      "his chin was too high",
+      "his left hand dropped",
+      "tuck the chin",
+      "stay light on feet"
+     ],
+     "anchors": [
+      "footwork was too flat"
+     ]
+    },
+    {
+     "question_id": "V230.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A kit lists the boxer's flaws; which of these would not be in it?",
+     "right": "his right knee was bent",
+     "wrong": [
+      "his footwork was too flat",
+      "his left hand dropped",
+      "his chin was too high",
+      "tuck the chin",
+      "keep the guard up"
+     ],
+     "anchors": [
+      "chin was too high",
+      "footwork was too flat"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V230.p1.FACT",
+    "question": "According to Nathan, which part of the boxer was too high?",
+    "right": "his chin",
+    "wrong": [
+     "his guard",
+     "his left hand",
+     "his right elbow"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V103",
+   "wave": 2,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V103.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "Tina has a later free moment; which of these does the person choose?",
+     "right": "practicing her jabs and hooks",
+     "wrong": [
+      "endless laps around the track",
+      "the monotonous jumping jacks",
+      "running the track laps",
+      "doing jumping jacks",
+      "skipping the rope exercises"
+     ],
+     "anchors": [
+      "practicing her jabs and hooks"
+     ]
+    },
+    {
+     "question_id": "V103.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "Tina faces a choice at a later moment; which of these does the person avoid?",
+     "right": "endless laps around the track",
+     "wrong": [
+      "practicing her jabs and hooks",
+      "the sparring sessions",
+      "the speed bag",
+      "the leather bag",
+      "working the speed bag"
+     ],
+     "anchors": [
+      "endless laps around the track"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V103.p1.FACT",
+    "question": "What sound did Tina love from the leather on the speed bag?",
+    "right": "quick, sharp crack",
+    "wrong": [
+     "slow, heavy thud",
+     "loud, dull pop",
+     "soft, quiet snap"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V190",
+   "wave": 2,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V190.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Carla visits a library later and spots a wool blanket; which of these would most likely bring the same thing back?",
+     "right": "her grandmother's old armchair",
+     "wrong": [
+      "the scratchy wool blanket",
+      "comic books",
+      "liniment",
+      "the speed bag",
+      "worn leather"
+     ],
+     "anchors": [
+      "grandmother's old armchair"
+     ]
+    },
+    {
+     "question_id": "V190.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the worn leather had not been there; which of these would most likely not have happened?",
+     "right": "vivid pictures of her grandmother's old armchair",
+     "wrong": [
+      "vivid pictures of comic books",
+      "reading comic books",
+      "wiping down the speed bag",
+      "smelling liniment",
+      "holding the scratchy wool blanket"
+     ],
+     "anchors": [
+      "worn leather",
+      "grandmother's old armchair"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V190.p1.FACT",
+    "question": "What kind of books did Carla read during the quiet afternoons?",
+    "right": "comic books",
+    "wrong": [
+     "picture books",
+     "story books",
+     "novel books"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V303",
+   "wave": 2,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V303.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Marco enters a quiet room smelling of old leather and liniment. Which of these brings back his grandfather's workshop?",
+     "right": "the sharp smell",
+     "wrong": [
+      "the loud sweat",
+      "the heavy bag",
+      "the boxing gym",
+      "the ringing bell",
+      "the church shoes"
+     ],
+     "anchors": [
+      "old leather and liniment"
+     ]
+    },
+    {
+     "question_id": "V303.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the sharp smell of old leather and liniment had not been there. Which of these would most likely not have happened?",
+     "right": "the grandfather memory",
+     "wrong": [
+      "the gym liniment",
+      "the boxing gym",
+      "the heavy bag",
+      "the ringing bell",
+      "the church shoes"
+     ],
+     "anchors": [
+      "sharp smell of old leather"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V303.p1.FACT",
+    "question": "What did Marco use to wipe his brow?",
+    "right": "sweat",
+    "wrong": [
+     "liniment",
+     "leather",
+     "shoes"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V205",
+   "wave": 2,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V205.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Maria stops boxing practice for two whole years. When the bell rings, which action has most likely faded?",
+     "right": "the fighting stance",
+     "wrong": [
+      "the fighting coach",
+      "the ringing bell",
+      "the heavy bag",
+      "the gym locker",
+      "the boxing glove"
+     ],
+     "anchors": [
+      "fighting stance"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V205.p1.FACT",
+    "question": "What rang for a new round?",
+    "right": "the bell",
+    "wrong": [
+     "the coach",
+     "the boxer",
+     "the stance"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V153",
+   "wave": 2,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V153.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "Leo takes a short break from training. At this later free moment, which of these does he choose?",
+     "right": "the heavy bag",
+     "wrong": [
+      "the buzzing phone",
+      "the ringing bell",
+      "the boxing glove",
+      "the gym locker",
+      "the fighting stance"
+     ],
+     "anchors": [
+      "heavy bag hanging"
+     ]
+    },
+    {
+     "question_id": "V153.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "Leo hears various sounds inside the building. At a later moment, which of these does he avoid?",
+     "right": "the buzzing phone",
+     "wrong": [
+      "the heavy bag",
+      "the ringing bell",
+      "the boxing glove",
+      "the gym locker",
+      "the fighting stance"
+     ],
+     "anchors": [
+      "insistent buzzing of his phone"
+     ]
+    },
+    {
+     "question_id": "V153.p1.WHAT_STUCK",
+     "form": "WHAT_STUCK",
+     "question": "Leo finishes his training session and talks with a friend. At this later moment, which of these is he most likely to bring up?",
+     "right": "the heavy bag",
+     "wrong": [
+      "the ringing phone",
+      "the boxing glove",
+      "the gym locker",
+      "the fighting stance",
+      "the distant voice"
+     ],
+     "anchors": [
+      "heavy bag hanging"
+     ]
+    },
+    {
+     "question_id": "V153.p1.WHAT_SLID_OFF",
+     "form": "WHAT_SLID_OFF",
+     "question": "Leo finishes his training session and talks with a friend. At this later moment, which of these is he least likely to bring up?",
+     "right": "the distant voice",
+     "wrong": [
+      "the heavy bag",
+      "the ringing phone",
+      "the boxing glove",
+      "the gym locker",
+      "the fighting stance"
+     ],
+     "anchors": [
+      "distant, booming voice"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V153.p1.FACT",
+    "question": "Where was the buzzing phone located?",
+    "right": "in his locker",
+    "wrong": [
+     "on the bag",
+     "in the corner",
+     "near the coach"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V411",
+   "wave": 3,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [],
+   "plain_fact": {
+    "question_id": "V411.p1.FACT",
+    "question": "What kind of item did Graham flick through in the stack?",
+    "right": "letters",
+    "wrong": [
+     "parcels",
+     "postcards",
+     "packages"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V342",
+   "wave": 3,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V342.p1.WHAT_LEFT",
+     "form": "WHAT_LEFT",
+     "question": "Maria completed the first three segments of sorting. Which segment is still left to do?",
+     "right": "special deliveries",
+     "wrong": [
+      "city center",
+      "rural addresses",
+      "international mail",
+      "sorting rules",
+      "delivery route"
+     ],
+     "anchors": [
+      "special deliveries completed the round"
+     ]
+    },
+    {
+     "question_id": "V342.p1.NOT_BELONG",
+     "form": "NOT_BELONG",
+     "question": "A spare sorting kit holds one part for each stage. Which of these would not be in it?",
+     "right": "postage stamp",
+     "wrong": [
+      "city center",
+      "rural addresses",
+      "international mail",
+      "special deliveries",
+      "sorting rules"
+     ],
+     "anchors": [
+      "four distinct segments"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V342.p1.FACT",
+    "question": "Who examined the complex delivery route involving four distinct segments?",
+    "right": "Maria",
+    "wrong": [
+     "Graham",
+     "Helen",
+     "Marta"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V012",
+   "wave": 3,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V012.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Years later, Helen handles a thick parcel with old ink. Which of these would most likely bring back the same memory?",
+     "right": "thin stiff envelope",
+     "wrong": [
+      "thick parcel",
+      "wedding invitation",
+      "old ink",
+      "common type",
+      "sorted mail"
+     ],
+     "anchors": [
+      "thin, stiff envelope",
+      "sweet scent of old ink"
+     ]
+    },
+    {
+     "question_id": "V012.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the sweet scent had not been on the paper; which of these would most likely not have happened?",
+     "right": "guessing the contents",
+     "wrong": [
+      "handling the envelope",
+      "reading the address",
+      "sorting the mail",
+      "picking up the paper",
+      "feeling the weight"
+     ],
+     "anchors": [
+      "faint, sweet scent",
+      "often guessed the contents"
+     ]
+    },
+    {
+     "question_id": "V012.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "A new worker without decades of sorting steps in. What most likely goes differently?",
+     "right": "guessing the contents",
+     "wrong": [
+      "handling the paper",
+      "reading the address",
+      "sorting the mail",
+      "picking up the envelope",
+      "feeling the weight"
+     ],
+     "anchors": [
+      "sorted mail for decades",
+      "guessed the contents"
+     ]
+    },
+    {
+     "question_id": "V012.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would Helen's decades of sorting background help most?",
+     "right": "sorting unlabelled old envelopes",
+     "wrong": [
+      "delivering heavy parcels",
+      "driving postal vans",
+      "selling stamp sheets",
+      "fixing sorting rollers",
+      "packing fragile boxes"
+     ],
+     "anchors": [
+      "sorted mail for decades",
+      "weight and texture"
+     ]
+    },
+    {
+     "question_id": "V012.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "Helen takes a long break from sorting letters. Which action has most likely faded?",
+     "right": "guessing the contents",
+     "wrong": [
+      "handling the paper",
+      "reading the address",
+      "sorting the mail",
+      "picking up envelopes",
+      "feeling the weight"
+     ],
+     "anchors": [
+      "sorted mail for decades",
+      "guessed the contents"
+     ]
+    },
+    {
+     "question_id": "V012.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "A novice takes Helen's place on their first day. Which of these would most likely be missing?",
+     "right": "guessing the contents",
+     "wrong": [
+      "handling the paper",
+      "reading the address",
+      "sorting the mail",
+      "picking up envelopes",
+      "feeling the weight"
+     ],
+     "anchors": [
+      "sorted mail for decades",
+      "guessed the contents"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V012.p1.FACT",
+    "question": "For how long had Helen sorted mail before picking up the envelope?",
+    "right": "decades",
+    "wrong": [
+     "years",
+     "months",
+     "days"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V229",
+   "wave": 3,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V229.p1.WHAT_STUCK",
+     "form": "WHAT_STUCK",
+     "question": "At a later moment, which of these is Marta most likely to bring up?",
+     "right": "antique teacups",
+     "wrong": [
+      "fragile-looking package",
+      "special handling",
+      "small sticker",
+      "burst parcels",
+      "metal rollers"
+     ],
+     "anchors": [
+      "grandmother's antique teacups"
+     ]
+    },
+    {
+     "question_id": "V229.p1.WHAT_SLID_OFF",
+     "form": "WHAT_SLID_OFF",
+     "question": "At a later moment, which of these is Marta least likely to bring up?",
+     "right": "small sticker",
+     "wrong": [
+      "antique teacups",
+      "fragile-looking package",
+      "special handling",
+      "burst parcels",
+      "metal rollers"
+     ],
+     "anchors": [
+      "small 'Fragile' sticker"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V229.p1.FACT",
+    "question": "How long had Marta worked there before handling the package?",
+    "right": "thirty years",
+    "wrong": [
+     "twenty years",
+     "ten years",
+     "five years"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V263",
+   "wave": 3,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V263.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "The newcomer takes longer to find the correct house number.",
+     "wrong": [
+      "The newcomer instantly knows the correct house number.",
+      "The newcomer places the package in the right tray.",
+      "The newcomer glances at the misaddressed small package.",
+      "The newcomer scrawls a small correction on the label.",
+      "The newcomer sees the wrong street name on it."
+     ],
+     "anchors": [
+      "His years of walking the same routes",
+      "instantly knew the correct house number"
+     ]
+    },
+    {
+     "question_id": "V263.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Sorting mail for an unfamiliar village with complex street layouts.",
+     "wrong": [
+      "Sorting mail for a familiar village with simple street layouts.",
+      "Delivering greeting cards around holidays in the warehouse.",
+      "Testing weight and balance of mislabeled books in boxes.",
+      "Fanning out stacks of letters into correct pigeonholes.",
+      "Reading postcodes at a glance on brightly coloured cards."
+     ],
+     "anchors": [
+      "years of walking the same routes",
+      "correct house number"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V263.p1.FACT",
+    "question": "What did Paul place the package in after writing on the label?",
+    "right": "The right tray",
+    "wrong": [
+     "The correct pigeonhole",
+     "The sorting room",
+     "The nearby village"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V231",
+   "wave": 3,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V231.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The repeated thing stops for a year or two; which action has most likely faded?",
+     "right": "Flicking each letter into its correct pigeonhole swiftly.",
+     "wrong": [
+      "Reaching for the next stack of letters slowly.",
+      "Sorting thousands of daily letters in the room.",
+      "Working in the sorting room with stacks.",
+      "Reading the postcodes at a glance on envelopes.",
+      "Fanning out letters with expert finger movements."
+     ],
+     "anchors": [
+      "developed after years of sorting",
+      "swift, almost unconscious action"
+     ]
+    },
+    {
+     "question_id": "V231.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes the person's place; which of these would most likely be missing?",
+     "right": "The swift, almost unconscious action when flicking letters.",
+     "wrong": [
+      "The slow, highly conscious action when flicking letters.",
+      "Reaching for the next stack of mail envelopes.",
+      "Reading the postcodes at a glance on the letters.",
+      "Working in the sorting room with stacks of mail.",
+      "Sorting thousands of pieces of daily mail items."
+     ],
+     "anchors": [
+      "swift, almost unconscious action",
+      "years of sorting thousands"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V231.p1.FACT",
+    "question": "Where was Daniel working when he reached for the letters?",
+    "right": "In the sorting room",
+    "wrong": [
+     "In a nearby village",
+     "By the warehouse bins",
+     "At the delivery truck"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V418",
+   "wave": 3,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V418.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does the person choose?",
+     "right": "Handling more of the brightly coloured greeting cards.",
+     "wrong": [
+      "Handling more of the plain brown heavy parcels.",
+      "Lifting the heavy and awkward plain parcels.",
+      "Focusing on separating small envelopes into bins.",
+      "Listening to the distant drone of warehouse machinery.",
+      "Ignoring the bright greeting cards near holidays."
+     ],
+     "anchors": [
+      "Olivia, a postal sorter, always enjoyed handling",
+      "brightly coloured greeting cards"
+     ]
+    },
+    {
+     "question_id": "V418.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does the person avoid?",
+     "right": "Lifting the plain brown parcels that are heavy.",
+     "wrong": [
+      "Lifting the brightly coloured greeting cards for holidays.",
+      "Handling the brightly coloured greeting cards around holidays.",
+      "Separating the small envelopes into their respective bins.",
+      "Listening to the distant drone of the warehouse.",
+      "Focusing on separating small envelopes into bins."
+     ],
+     "anchors": [
+      "She disliked the plain brown parcels",
+      "heavy and awkward to lift"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V418.p1.FACT",
+    "question": "What kind of parcels did Olivia dislike handling?",
+    "right": "Plain brown parcels",
+    "wrong": [
+     "Brightly coloured greeting cards",
+     "Small envelopes in bins",
+     "Misaddressed packages"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V315",
+   "wave": 3,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V315.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "The newcomer misses that the package content is mislabeled.",
+     "wrong": [
+      "The newcomer notices that the package content is mislabeled.",
+      "The newcomer marks the package for special inspection.",
+      "The newcomer lists books on the package label.",
+      "The newcomer feels the package shift oddly.",
+      "The newcomer picks up the package to test weight."
+     ],
+     "anchors": [
+      "Decades of handling parcels had given her",
+      "sixth sense for mislabeled contents"
+     ]
+    },
+    {
+     "question_id": "V315.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Spotting fraudulently packed boxes in a busy shipping warehouse.",
+     "wrong": [
+      "Sorting brightly coloured greeting cards near holiday seasons.",
+      "Flicking letters into correct pigeonholes in sorting rooms.",
+      "Delivering mail packets to houses in a nearby village.",
+      "Writing corrections on misaddressed package labels quickly.",
+      "Reading postcodes at a glance on stacks of letters."
+     ],
+     "anchors": [
+      "Decades of handling parcels",
+      "sixth sense for mislabeled contents"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V315.p1.FACT",
+    "question": "What item was listed on the package label?",
+    "right": "Books",
+    "wrong": [
+     "Fluid",
+     "Inspection",
+     "Weight"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V269",
+   "wave": 4,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V269.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later at a different pub door, which of these would most likely bring the same thing back?",
+     "right": "The scent of stale beer",
+     "wrong": [
+      "The faint scent",
+      "The quiet rank",
+      "The taxi driver",
+      "The old workshop",
+      "The small smile"
+     ],
+     "anchors": [
+      "faint scent of stale beer",
+      "smell of his grandfather's"
+     ]
+    },
+    {
+     "question_id": "V269.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the pub door had stayed shut; which of these would most likely not have happened?",
+     "right": "Kevin remembered the smell",
+     "wrong": [
+      "Kevin smelled the stale beer",
+      "Kevin leaned against his car",
+      "Kevin smiled a small smile",
+      "Kevin sat at the rank",
+      "Kevin drove his taxi cab"
+     ],
+     "anchors": [
+      "pub door as it opened",
+      "Suddenly, he remembered"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V269.p1.FACT",
+    "question": "Where was Kevin leaning?",
+    "right": "Against his car",
+    "wrong": [
+     "Against the pub door",
+     "Against the taxi rank",
+     "Against his grandfather's shop"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V168",
+   "wave": 4,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V168.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does the driver choose for his trip?",
+     "right": "Single passengers heading home",
+     "wrong": [
+      "Loud boisterous groups",
+      "Flashing neon signs",
+      "Straightforward fares",
+      "Quiet clubs",
+      "Last trips"
+     ],
+     "anchors": [
+      "preferred the quiet, single passengers"
+     ]
+    },
+    {
+     "question_id": "V168.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does Liam avoid on the street?",
+     "right": "Loud boisterous groups",
+     "wrong": [
+      "Quiet single passengers",
+      "Straightforward fares",
+      "Long shifts",
+      "Last trips",
+      "Neon signs"
+     ],
+     "anchors": [
+      "disliked the loud, boisterous groups"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V168.p1.FACT",
+    "question": "What was across the street from Liam?",
+    "right": "A bar",
+    "wrong": [
+     "A club",
+     "A taxi rank",
+     "A pub"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V017",
+   "wave": 4,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V017.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "The rookie waits for the group",
+     "wrong": [
+      "The veteran waits for the group",
+      "The driver flicks off his light",
+      "The group argues over the fare",
+      "The young men approach the taxi",
+      "The driver watches the young men"
+     ],
+     "anchors": [
+      "with decades on the road",
+      "knew from experience"
+     ]
+    },
+    {
+     "question_id": "V017.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "Spotting rowdy crowds late at night",
+     "wrong": [
+      "Finding lost keys in the dark",
+      "Negotiating a longer route",
+      "Watching young men approach",
+      "Flickering off a hire light",
+      "Waiting for people to pass"
+     ],
+     "anchors": [
+      "decades on the road",
+      "knew from experience"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V017.p1.FACT",
+    "question": "What did George flick off?",
+    "right": "His 'for hire' light",
+    "wrong": [
+     "His radio station",
+     "His car headlights",
+     "His dashboard screen"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V032",
+   "wave": 4,
+   "batch": 0,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V032.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The repeated thing stops for a year or two; which action has most likely faded?",
+     "right": "Waiting automatically",
+     "wrong": [
+      "Driving the car",
+      "Shifting the radio",
+      "Resting the foot",
+      "Glancing at watches",
+      "Pulling to spots"
+     ],
+     "anchors": [
+      "waiting for the next customer automatically"
+     ]
+    },
+    {
+     "question_id": "V032.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes the driver's place; which of these would most likely be missing?",
+     "right": "Precise interval knowledge",
+     "wrong": [
+      "The radio station",
+      "The brake pedal",
+      "The car",
+      "The next spot",
+      "The news channel"
+     ],
+     "anchors": [
+      "routine ingrained from countless quiet waits"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V032.p1.FACT",
+    "question": "Where did George rest his foot?",
+    "right": "On the brake pedal",
+    "wrong": [
+     "On the accelerator pedal",
+     "On the car floor",
+     "On the clutch pedal"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V105",
+   "wave": 4,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V105.p1.GOES_FOR",
+     "form": "GOES_FOR",
+     "question": "At a later free moment, which of these does the person choose?",
+     "right": "motorway driving",
+     "wrong": [
+      "city center",
+      "two blocks",
+      "short trip",
+      "minimal fare",
+      "small hops"
+     ],
+     "anchors": [
+      "preferred the long-distance fares"
+     ]
+    },
+    {
+     "question_id": "V105.p1.KEEPS_AWAY",
+     "form": "KEEPS_AWAY",
+     "question": "At a later moment, which of these does the person avoid?",
+     "right": "short hops",
+     "wrong": [
+      "long-distance",
+      "motorway driving",
+      "steady fares",
+      "long trips",
+      "distant routes"
+     ],
+     "anchors": [
+      "filled her with mild annoyance"
+     ]
+    },
+    {
+     "question_id": "V105.p1.WHAT_STUCK",
+     "form": "WHAT_STUCK",
+     "question": "At a later moment, which of these is the person most likely to bring up?",
+     "right": "motorway driving",
+     "wrong": [
+      "city center",
+      "two blocks",
+      "short hops",
+      "minimal payment",
+      "slight doubt"
+     ],
+     "anchors": [
+      "finding the steady motorway driving restful"
+     ]
+    },
+    {
+     "question_id": "V105.p1.WHAT_SLID_OFF",
+     "form": "WHAT_SLID_OFF",
+     "question": "At a later moment, which of these is the person least likely to bring up?",
+     "right": "minimal payment",
+     "wrong": [
+      "motorway driving",
+      "long-distance",
+      "steady fares",
+      "restful hours",
+      "long trips"
+     ],
+     "anchors": [
+      "minimal payment hardly mattered"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V105.p1.FACT",
+    "question": "Where did a customer request a journey?",
+    "right": "just two blocks away",
+    "wrong": [
+     "the city center",
+     "a distant suburb",
+     "the motorway exit"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V036",
+   "wave": 4,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V036.p1.LONG_BREAK",
+     "form": "LONG_BREAK",
+     "question": "The repeated task stops for a year or two; which action has most likely faded?",
+     "right": "unthinking movements",
+     "wrong": [
+      "thinking steps",
+      "checking expressions",
+      "shifting gears",
+      "resting feet",
+      "pulling cabs"
+     ],
+     "anchors": [
+      "movements were entirely unthinking"
+     ]
+    },
+    {
+     "question_id": "V036.p1.NEW_STARTER",
+     "form": "NEW_STARTER",
+     "question": "Someone on their first day takes the person's place; which of these would most likely be missing?",
+     "right": "automatic scans",
+     "wrong": [
+      "manual scans",
+      "waiting cabs",
+      "street queues",
+      "front stops",
+      "light brakes"
+     ],
+     "anchors": [
+      "eyes automatically scanned the street"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V036.p1.FACT",
+    "question": "Where did Xander pull his cab?",
+    "right": "front of the queue",
+    "wrong": [
+     "back of the line",
+     "side of the road",
+     "middle of the rank"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V376",
+   "wave": 4,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V376.p1.MEET_AGAIN",
+     "form": "MEET_AGAIN",
+     "question": "Later and somewhere else, which of these would most likely bring the same thing back to the person?",
+     "right": "a distant siren",
+     "wrong": [
+      "a close bell",
+      "a quiet engine",
+      "a red truck",
+      "a waiting rank",
+      "an idle car"
+     ],
+     "anchors": [
+      "distant siren wailed"
+     ]
+    },
+    {
+     "question_id": "V376.p1.TAKE_AWAY",
+     "form": "TAKE_AWAY",
+     "question": "Suppose the noticed thing had not been there; which of these would most likely not have happened?",
+     "right": "old home memory",
+     "wrong": [
+      "new home thought",
+      "taxi waiting",
+      "engine idling",
+      "rank standing",
+      "quiet parking"
+     ],
+     "anchors": [
+      "sound made him think of"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V376.p1.FACT",
+    "question": "Where was Robert waiting?",
+    "right": "the taxi rank",
+    "wrong": [
+     "the old fire station",
+     "his childhood home",
+     "the city center"
+    ]
+   },
+   "extra_dropped": []
+  },
+  {
+   "passage_id": "V162",
+   "wave": 4,
+   "batch": 1,
+   "status": "OK",
+   "what_follows": [
+    {
+     "question_id": "V162.p1.SWAP_PERSON",
+     "form": "SWAP_PERSON",
+     "question": "Someone without that past stands in the same spot; what most likely goes differently?",
+     "right": "turn order",
+     "wrong": [
+      "straight path",
+      "oak tree",
+      "river bypass",
+      "street names",
+      "city limits"
+     ],
+     "anchors": [
+      "order of the turns"
+     ]
+    },
+    {
+     "question_id": "V162.p1.WHERE_HELPS",
+     "form": "WHERE_HELPS",
+     "question": "In which new situation would this background help most?",
+     "right": "complex street map",
+     "wrong": [
+      "simple road",
+      "straight highway",
+      "open bridge",
+      "clear tunnel",
+      "plain alley"
+     ],
+     "anchors": [
+      "convoluted directions"
+     ]
+    }
+   ],
+   "plain_fact": {
+    "question_id": "V162.p1.FACT",
+    "question": "What kind of streets were part of the route?",
+    "right": "confusing one-way streets",
+    "wrong": [
+     "wide two-way streets",
+     "quiet residential lanes",
+     "busy commercial plazas"
+    ]
+   },
+   "extra_dropped": []
+  }
+ ]
+}

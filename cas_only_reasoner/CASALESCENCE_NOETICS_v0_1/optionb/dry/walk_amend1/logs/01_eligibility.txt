@@ -1,0 +1,137 @@
+$ python -B tools/ob_eligibility.py 
+Option B eligibility. Program tools/ob_eligibility.py. Constants sha256 f55082c01b5872c9eeae9a1b600750770b852efcb716643140a59ee9e5c838c7.
+A. COUNTS THE PLAN PINS (PLAN_CONSTANTS.json, counts_real). All must match, or nothing is written.
+  passages                                                   REAL 144                    plan        144                    MATCH
+  settings                                                   REAL 48                     plan        48                     MATCH
+  entries_agreed_only_a_only_b[^1]                           REAL [144, 0, 0]            plan        [144, 0, 0]            MATCH
+  entries_agreed_only_a_only_b[^2]                           REAL [144, 1, 0]            plan        [144, 1, 0]            MATCH
+  entries_agreed_only_a_only_b[^3]                           REAL [140, 0, 0]            plan        [140, 0, 0]            MATCH
+  entries_agreed_only_a_only_b[^4]                           REAL [0, 0, 0]              plan        [0, 0, 0]              MATCH
+  entries_agreed_only_a_only_b[^5]                           REAL [0, 1, 0]              plan        [0, 1, 0]              MATCH
+  entries_agreed_only_a_only_b[^6]                           REAL [0, 0, 0]              plan        [0, 0, 0]              MATCH
+  entries_agreed_only_a_only_b[^7]                           REAL [140, 0, 0]            plan        [140, 0, 0]            MATCH
+  entries_agreed_only_a_only_b[^8]                           REAL [0, 0, 0]              plan        [0, 0, 0]              MATCH
+  entries_agreed_only_a_only_b[^9]                           REAL [0, 0, 0]              plan        [0, 0, 0]              MATCH
+  excluded_passages                                          REAL 3                      plan        3                      MATCH
+  excluded_by_kind[K1]                                       REAL 2                      plan        2                      MATCH
+  excluded_by_kind[K4]                                       REAL 1                      plan        1                      MATCH
+  passages_after_exclusion                                   REAL 141                    plan        141                    MATCH
+  eligible_passages                                          REAL 139                    plan        139                    MATCH
+  eligible_by_kind[K1]                                       REAL 27                     plan        27                     MATCH
+  eligible_by_kind[K2]                                       REAL 29                     plan        29                     MATCH
+  eligible_by_kind[K3]                                       REAL 28                     plan        28                     MATCH
+  eligible_by_kind[K4]                                       REAL 28                     plan        28                     MATCH
+  eligible_by_kind[K5]                                       REAL 27                     plan        27                     MATCH
+  passages_per_type[BRING]                                   REAL 0                      plan        0                      MATCH
+  passages_per_type[FORMED]                                  REAL 0                      plan        0                      MATCH
+  passages_per_type[HABIT]                                   REAL 135                    plan        135                    MATCH
+  passages_per_type[LAND]                                    REAL 0                      plan        0                      MATCH
+  passages_per_type[PARTS]                                   REAL 0                      plan        0                      MATCH
+  passages_per_type[PULL-PUSH]                               REAL 139                    plan        139                    MATCH
+  passages_by_number_of_types[1]                             REAL 4                      plan        4                      MATCH
+  passages_by_number_of_types[2]                             REAL 135                    plan        135                    MATCH
+  k1_to_k5_passages                                          REAL 142                    plan        142                    MATCH
+  eligible_passage_without_agreed_mind_entry                 REAL []                     plan        []                     MATCH
+  eligible_passages_holding_the_whole_word_correct           REAL []                     plan        []                     MATCH
+  by_practice_setting_count[8].practice_passages             REAL 24                     plan        24                     MATCH
+  by_practice_setting_count[8].final_passages                REAL 113                    plan        113                    MATCH
+  by_practice_setting_count[8].role_step_ceiling_practice    REAL 47                     plan        47                     MATCH
+  by_practice_setting_count[8].role_step_ceiling_final       REAL 223                    plan        223                    MATCH
+  by_practice_setting_count[8].k1_to_k5_practice             REAL 24                     plan        24                     MATCH
+  by_practice_setting_count[8].k1_to_k5_final                REAL 118                    plan        118                    MATCH
+  by_practice_setting_count[9].practice_passages             REAL 27                     plan        27                     MATCH
+  by_practice_setting_count[9].final_passages                REAL 110                    plan        110                    MATCH
+  by_practice_setting_count[9].role_step_ceiling_practice    REAL 53                     plan        53                     MATCH
+  by_practice_setting_count[9].role_step_ceiling_final       REAL 217                    plan        217                    MATCH
+  by_practice_setting_count[9].k1_to_k5_practice             REAL 27                     plan        27                     MATCH
+  by_practice_setting_count[9].k1_to_k5_final                REAL 115                    plan        115                    MATCH
+  by_practice_setting_count[10].practice_passages            REAL 30                     plan        30                     MATCH
+  by_practice_setting_count[10].final_passages               REAL 107                    plan        107                    MATCH
+  by_practice_setting_count[10].role_step_ceiling_practice   REAL 59                     plan        59                     MATCH
+  by_practice_setting_count[10].role_step_ceiling_final      REAL 211                    plan        211                    MATCH
+  by_practice_setting_count[10].k1_to_k5_practice            REAL 30                     plan        30                     MATCH
+  by_practice_setting_count[10].k1_to_k5_final               REAL 112                    plan        112                    MATCH
+  by_practice_setting_count[11].practice_passages            REAL 33                     plan        33                     MATCH
+  by_practice_setting_count[11].final_passages               REAL 104                    plan        104                    MATCH
+  by_practice_setting_count[11].role_step_ceiling_practice   REAL 65                     plan        65                     MATCH
+  by_practice_setting_count[11].role_step_ceiling_final      REAL 205                    plan        205                    MATCH
+  by_practice_setting_count[11].k1_to_k5_practice            REAL 33                     plan        33                     MATCH
+  by_practice_setting_count[11].k1_to_k5_final               REAL 109                    plan        109                    MATCH
+  by_practice_setting_count[12].practice_passages            REAL 36                     plan        36                     MATCH
+  by_practice_setting_count[12].final_passages               REAL 101                    plan        101                    MATCH
+  by_practice_setting_count[12].role_step_ceiling_practice   REAL 71                     plan        71                     MATCH
+  by_practice_setting_count[12].role_step_ceiling_final      REAL 199                    plan        199                    MATCH
+  by_practice_setting_count[12].k1_to_k5_practice            REAL 36                     plan        36                     MATCH
+  by_practice_setting_count[12].k1_to_k5_final               REAL 106                    plan        106                    MATCH
+  practice_at_8_passages_per_type[BRING]                     REAL 0                      plan        0                      MATCH
+  practice_at_8_passages_per_type[FORMED]                    REAL 0                      plan        0                      MATCH
+  practice_at_8_passages_per_type[HABIT]                     REAL 23                     plan        23                     MATCH
+  practice_at_8_passages_per_type[LAND]                      REAL 0                      plan        0                      MATCH
+  practice_at_8_passages_per_type[PARTS]                     REAL 0                      plan        0                      MATCH
+  practice_at_8_passages_per_type[PULL-PUSH]                 REAL 24                     plan        24                     MATCH
+  final_at_8_passages_per_type[BRING]                        REAL 0                      plan        0                      MATCH
+  final_at_8_passages_per_type[FORMED]                       REAL 0                      plan        0                      MATCH
+  final_at_8_passages_per_type[HABIT]                        REAL 110                    plan        110                    MATCH
+  final_at_8_passages_per_type[LAND]                         REAL 0                      plan        0                      MATCH
+  final_at_8_passages_per_type[PARTS]                        REAL 0                      plan        0                      MATCH
+  final_at_8_passages_per_type[PULL-PUSH]                    REAL 113                    plan        113                    MATCH
+  final_at_8_passages_that_can_carry_one_task_only           REAL 3                      plan        3                      MATCH
+
+B. COUNTS THE DESIGN STATES IN ITS TEXT (design_v2/optionB_final.json). The first four must match.
+  eligible_agreed_entries                                    REAL 548                    design      548                    MATCH
+  eligible_agreed_entries_2_to_9                             REAL 409                    design      409                    MATCH
+  eligible_only_a_2_to_9                                     REAL 1                      design      1                      MATCH
+  eligible_only_b_2_to_9                                     REAL 0                      design      0                      MATCH
+
+C. MORE DESIGN NUMBERS, SHOWN FOR INFORMATION. They gate nothing.
+  eligible_with_a_type_without_leftover                      REAL 139                    design-info null                   NO DESIGN VALUE FOUND
+  eligible_without_any_leftover_2_to_9                       REAL 138                    design-info null                   NO DESIGN VALUE FOUND
+  final_with_a_type_without_leftover                         REAL 113                    design-info null                   NO DESIGN VALUE FOUND
+  final_without_any_leftover_2_to_9                          REAL 112                    design-info null                   NO DESIGN VALUE FOUND
+  final_open_a_type_other_than_land_or_habit                 REAL 113                    design-info null                   NO DESIGN VALUE FOUND
+  final_open_only_land_or_habit                              REAL 0                      design-info null                   NO DESIGN VALUE FOUND
+  final_open_one_type                                        REAL 3                      design-info null                   NO DESIGN VALUE FOUND
+  final_open_two_types                                       REAL 110                    design-info null                   NO DESIGN VALUE FOUND
+  pull_push_both_2_and_3                                     REAL 135                    design-info null                   NO DESIGN VALUE FOUND
+  pull_push_only_one                                         REAL 4                      design-info null                   NO DESIGN VALUE FOUND
+  final_passages_with_exactly_one_open_form                  REAL 3                      design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^2]                          REAL 144                    design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^3]                          REAL 140                    design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^4]                          REAL 0                      design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^5]                          REAL 0                      design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^6]                          REAL 0                      design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^7]                          REAL 140                    design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^8]                          REAL 0                      design-info null                   NO DESIGN VALUE FOUND
+  passages_with_an_agreed_entry[^9]                          REAL 0                      design-info null                   NO DESIGN VALUE FOUND
+  final_leftover_on_needed_noetic[BRING]                     REAL [0, 0]                 design-info null                   NO DESIGN VALUE FOUND
+  final_leftover_on_needed_noetic[PULL-PUSH]                 REAL [1, 113]               design-info null                   NO DESIGN VALUE FOUND
+  final_leftover_on_needed_noetic[LAND]                      REAL [0, 0]                 design-info null                   NO DESIGN VALUE FOUND
+  final_leftover_on_needed_noetic[FORMED]                    REAL [0, 0]                 design-info null                   NO DESIGN VALUE FOUND
+  final_leftover_on_needed_noetic[PARTS]                     REAL [0, 0]                 design-info null                   NO DESIGN VALUE FOUND
+  final_leftover_on_needed_noetic[HABIT]                     REAL [0, 110]               design-info null                   NO DESIGN VALUE FOUND
+
+D. THE TASK LIST IN PLAIN WORDS (REAL, from this run)
+  144 passages in 48 settings.
+  3 left out by rule 15 (K1 2, K4 1). 141 remain.
+  139 eligible (K1 27, K2 29, K3 28, K4 28, K5 27).
+  The eligible passages hold 548 agreed entries; 409 of them are ^2 to ^9.
+  Left out of every note and counted apart, ^2 to ^9: 1 only team A gave, 0 only team B gave.
+  Agreed / only team A / only team B, all passages: ^1 144/0/0; ^2 144/1/0; ^3 140/0/0; ^4 0/0/0; ^5 0/1/0; ^6 0/0/0; ^7 140/0/0; ^8 0/0/0; ^9 0/0/0.
+  Passages per type: BRING 0, PULL-PUSH 139, LAND 0, FORMED 0, PARTS 0, HABIT 135.
+  Practice (8 settings): 24 eligible passages (BRING 0, PULL-PUSH 24, LAND 0, FORMED 0, PARTS 0, HABIT 23).
+  Final: 113 passages (BRING 0, PULL-PUSH 113, LAND 0, FORMED 0, PARTS 0, HABIT 110).
+  The question writer is sent 142 K1 to K5 passages: 24 in practice settings, 118 in final settings.
+  Writer passages by setting role: {"final": 106, "practice": 24, "reserve_1": 3, "reserve_2": 3, "reserve_3": 3, "reserve_4": 3}.
+  Role-step ceilings: 223 final, 47 practice.
+  Final passages that can carry one task only: 3. Of these, 3 open exactly one form. The other 0 open both LAND forms but hold one agreed ^4 entry, so the LAND rule allows one task: [].
+  Barred passages: [{"id": "V009", "kind": "K4", "setting_role": "final", "eligible": true, "open_types": ["PULL-PUSH", "HABIT"]}, {"id": "V076", "kind": "K1", "setting_role": "final", "eligible": true, "open_types": ["PULL-PUSH", "HABIT"]}].
+  Entries dropped by the frozen clean step (bad quote or label): team A 0, team B 0.
+  Pairing check: the file-order rule finds as many pairs as the largest possible pairing in 569 of 569 passage-and-Noetic cells.
+  Passages of a kind that is not used (K6 to K9), not excluded, whose agreed entries would open a form: 2 ["V028", "V035"].
+
+COUNTS THAT DIFFER AND GATE THE BUILD: 0
+COUNTS THAT DIFFER AND GATE NOTHING: 0
+WROTE optionb/elig/exclusions.json  sha256 88b8a2256e42c2fa848f7020f757272fab7ee011d2e8de1aa10d587bc1dcaec4
+WROTE optionb/elig/eligibility.json  sha256 30047ef58d02a944379fe081f58ca077ae900edb2e71a01a9cfa476a9f4ed0f4
+ELIGIBILITY_OK. Every gating count matched.
+[exit code 0]
