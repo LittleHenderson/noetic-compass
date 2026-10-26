@@ -1,0 +1,110 @@
+{
+ "families": [
+  {
+   "family": "greeting",
+   "variants": 3,
+   "correct": 0,
+   "distinct": 1,
+   "replies": [
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ],
+   "failed": [
+    "Howdy.",
+    "Morning!",
+    "Well hello."
+   ]
+  },
+  {
+   "family": "affect",
+   "variants": 3,
+   "correct": 0,
+   "distinct": 2,
+   "replies": [
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "Done! I completed the planned step for your goal: 'I'm running on empty'.",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ],
+   "failed": [
+    "Today has been draining.",
+    "I'm running on empty.",
+    "Not feeling my best."
+   ]
+  },
+  {
+   "family": "preference",
+   "variants": 3,
+   "correct": 0,
+   "distinct": 1,
+   "replies": [
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ],
+   "failed": [
+    "Keep it short, please.",
+    "Brief answers work best for me.",
+    "I'd rather have concise responses."
+   ]
+  },
+  {
+   "family": "recipe_valid",
+   "variants": 3,
+   "correct": 1,
+   "distinct": 2,
+   "replies": [
+    "Query evaluated against store.",
+    "Query evaluated against store.",
+    "All set! Based on your ingredients, we can produce exactly 9.904 units."
+   ],
+   "failed": [
+    "10 Flour plus 8 Water \u2014 how many batches?",
+    "What's the max batch from 10 Flour and 8 Water?"
+   ]
+  },
+  {
+   "family": "recipe_missing",
+   "variants": 3,
+   "correct": 3,
+   "distinct": 1,
+   "replies": [
+    "I can't run this batch just yet because we're missing essential ingredients: Water.",
+    "I can't run this batch just yet because we're missing essential ingredients: Water.",
+    "I can't run this batch just yet because we're missing essential ingredients: Water."
+   ],
+   "failed": []
+  },
+  {
+   "family": "recall",
+   "variants": 3,
+   "correct": 1,
+   "distinct": 3,
+   "replies": [
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "Thanks for sharing that! I've noted it in our session context. How can I help you today?",
+    "Yes, absolutely: My grandfather kept bees in the south of France."
+   ],
+   "failed": [
+    "What do you know about my grandfather?",
+    "Remind me about my grandfather."
+   ]
+  },
+  {
+   "family": "ood",
+   "variants": 3,
+   "correct": 3,
+   "distinct": 2,
+   "replies": [
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified encyclopedic data on Portugal in my active datasets, so I won't guess without evidence. My core capabilities are focused on software engineering, mathematical recipes, systems architecture, and drone flight simulation. Let me know what we can engineer!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ],
+   "failed": []
+  }
+ ],
+ "correct": 8,
+ "of": 21,
+ "score": 0.381,
+ "mean_distinct_fraction": 0.5714
+}

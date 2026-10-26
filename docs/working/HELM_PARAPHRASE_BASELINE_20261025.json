@@ -1,0 +1,123 @@
+{
+ "families": [
+  {
+   "family": "greeting",
+   "variants": 5,
+   "correct": 3,
+   "distinct": 3,
+   "wrong_wording": [
+    "Good morning.",
+    "Greetings."
+   ],
+   "replies": [
+    "Hello! I'm HELM, your governed cognitive assistant. I'm ready to help with software engineering, code synthesis, testing, git workflows, or recipe calculations. What's on your mind?",
+    "Hello! I'm HELM, your governed cognitive assistant. I'm ready to help with software engineering, code synthesis, testing, git workflows, or recipe calculations. What's on your mind?",
+    "That's fantastic to hear! Glad you're feeling great today.",
+    "Hello! I'm HELM, your governed cognitive assistant. I'm ready to help with software engineering, code synthesis, testing, git workflows, or recipe calculations. What's on your mind?",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ]
+  },
+  {
+   "family": "affect",
+   "variants": 5,
+   "correct": 2,
+   "distinct": 3,
+   "wrong_wording": [
+    "Feeling pretty low right now.",
+    "I had a rough day.",
+    "I'm worn out this week."
+   ],
+   "replies": [
+    "I'm sorry to hear that you're feeling tired today! Take things easy. I'm here if you want to offload any coding, design, testing, or recipe tasks, or we can keep our exchanges brief and low-key.",
+    "I'm sorry to hear that you're feeling down. Let me know how I can help.",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ]
+  },
+  {
+   "family": "preference",
+   "variants": 5,
+   "correct": 1,
+   "distinct": 3,
+   "wrong_wording": [
+    "Please keep it brief.",
+    "Keep your replies concise.",
+    "Short answers please.",
+    "I like concise replies."
+   ],
+   "replies": [
+    "Understood. I've noted your preference for short, concise answers and will keep future replies brief.",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "That's fantastic to hear! Glad you're feeling great today."
+   ]
+  },
+  {
+   "family": "recipe_valid",
+   "variants": 5,
+   "correct": 5,
+   "distinct": 1,
+   "wrong_wording": [],
+   "replies": [
+    "All set! Based on your ingredients, we can produce exactly 9.904 units.",
+    "All set! Based on your ingredients, we can produce exactly 9.904 units.",
+    "All set! Based on your ingredients, we can produce exactly 9.904 units.",
+    "All set! Based on your ingredients, we can produce exactly 9.904 units.",
+    "All set! Based on your ingredients, we can produce exactly 9.904 units."
+   ]
+  },
+  {
+   "family": "recipe_missing",
+   "variants": 5,
+   "correct": 5,
+   "distinct": 1,
+   "wrong_wording": [],
+   "replies": [
+    "I can't run this batch just yet because we're missing essential ingredients: Water.",
+    "I can't run this batch just yet because we're missing essential ingredients: Water.",
+    "I can't run this batch just yet because we're missing essential ingredients: Water.",
+    "I can't run this batch just yet because we're missing essential ingredients: Water.",
+    "I can't run this batch just yet because we're missing essential ingredients: Water."
+   ]
+  },
+  {
+   "family": "recall",
+   "variants": 5,
+   "correct": 1,
+   "distinct": 3,
+   "wrong_wording": [
+    "What did I tell you about my grandfather?",
+    "What do you remember about my grandfather?",
+    "Recall anything about my grandfather.",
+    "What was it about my grandfather?"
+   ],
+   "replies": [
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "Yes, absolutely: My grandfather kept bees in the south of France.",
+    "Thanks for sharing that! I've noted it in our session context. How can I help you today?",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ]
+  },
+  {
+   "family": "ood",
+   "variants": 5,
+   "correct": 5,
+   "distinct": 2,
+   "wrong_wording": [],
+   "replies": [
+    "I don't have verified encyclopedic data on capital of Portugal in my active datasets, so I won't guess without evidence. My core capabilities are focused on software engineering, mathematical recipes, systems architecture, and drone flight simulation. Let me know what we can engineer!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!",
+    "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
+   ]
+  }
+ ],
+ "correct": 22,
+ "of": 35,
+ "score": 0.6286,
+ "mean_distinct_fraction": 0.4571
+}
