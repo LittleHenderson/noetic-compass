@@ -1,0 +1,121 @@
+{
+  "recorded_at_utc": "2026-10-25T08:20:27Z",
+  "run_id": "typed-probe-v5-stage-s-transformers-retry-20261025",
+  "authorization": {
+    "single_stage_s_launch_consumed": true,
+    "stage_c": "NOT AUTHORIZED"
+  },
+  "status": {
+    "transformers_environment": "🔧 METHOD / PROCESS WIN — VALIDATED",
+    "watchdog": "🔧 METHOD / PROCESS WIN — VALIDATED",
+    "stage_s_outputs": "🟨 PARTIAL — REAL",
+    "stage_s_science": "⬜ NULL / INCONCLUSIVE / NOT RUN",
+    "cleanup": "🔧 METHOD / PROCESS WIN — VALIDATED"
+  },
+  "aws": {
+    "region": "us-west-2",
+    "availability_zone": "us-west-2c",
+    "instance_type": "g5.2xlarge",
+    "instance_id": "i-0479d31ec92c66f53",
+    "launch_event_utc": "2026-10-25T06:44:54Z",
+    "launch_request_id": "788eb0fe-c4eb-45e5-97c5-060a29445a5c",
+    "cloudtrail_launch_event_count_for_instance": 1,
+    "watchdog_termination_request_utc": "2026-10-25T08:10:30Z",
+    "watchdog_termination_request_id": "eb0c0952-9767-4e3c-ad4c-54d33dc5580a",
+    "launch_to_termination_request_elapsed_seconds": "5135.397787",
+    "stage_s_cap_tally_seconds": 5136,
+    "stage_s_cap_seconds": 5400,
+    "stage_s_seconds_remaining": 264,
+    "aws_max_scenario_estimate_usd": "3.707840740740740740740740740",
+    "aws_cap_usd": "5.00",
+    "invoice_settled": false,
+    "conservative_combined_ec2_tally_seconds": {
+      "prior": 1812,
+      "new_watchdog_proof": 53,
+      "stage_s_rounded_up": 5136,
+      "total": 7001,
+      "cap": 10800,
+      "remaining": 3799
+    },
+    "cleanup": {
+      "instance_state": "terminated",
+      "run_tagged_volumes_remaining": 0,
+      "secure_parameter_absent": true,
+      "watchdog_lambda_absent": true,
+      "instance_profile_absent": true,
+      "temporary_roles_absent": 3,
+      "schedules_absent": 2,
+      "s3_evidence_objects_retained": 137,
+      "watchdog_log_group_exists": true,
+      "watchdog_log_group_stored_bytes_reported": 0
+    }
+  },
+  "runtime": {
+    "python": "3.12.10",
+    "torch": "2.8.0+cu129",
+    "transformers": "4.57.1",
+    "gpu": "NVIDIA A10G"
+  },
+  "watchdog": {
+    "status": "PASS",
+    "tracked_ec2_seconds": 53,
+    "prior_ec2_seconds": 213,
+    "cumulative_ec2_seconds": 266,
+    "allowance_seconds": 300,
+    "proof_script_sha256": "167111517972eb906bc867c2bfb7ee9c5e2dbf6190c142e1b25f67c01e28e1dd",
+    "s3_key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-transformers-retry-20261025/provenance/watchdog_proof.json",
+    "s3_version_id": "hWOtQaXrw3zobc9Tf42awcX0_Jct_cS5",
+    "s3_bytes": 1611,
+    "s3_sha256": "bff3bbca7952a3567b861443972829dc41185bbe3c74fe597663a0f5a5d26749"
+  },
+  "stage_s": {
+    "manifest_status": "MISTRAL_LABELING",
+    "prompts": 120,
+    "samples_per_prompt": 16,
+    "saved_replies": 1920,
+    "distinct_prompt_ids": 120,
+    "distinct_trace_ids": 1920,
+    "sample_indexes": "0..15 for every prompt",
+    "capture_structure_errors": 0,
+    "capture_body_sha256_sorted_by_s3_key": "26a3aba342e0a0cf1d13d0875c931bd6e81f61de48af22e09a374ead8e34d832",
+    "mistral_labeled_rows": 1280,
+    "mistral_unique_trace_ids": 1280,
+    "mistral_trace_ids_missing_from_captures": 0,
+    "raw_mistral_label_code_counts": {
+      "C": 2,
+      "I": 1243,
+      "R": 11,
+      "U": 24
+    },
+    "claude_api_actual_cost_recorded_usd": "0",
+    "claude_token_count_result": "NOT RECORDED",
+    "judge_batch_result": "NOT RECORDED",
+    "scientific_conclusion": "NOT AVAILABLE"
+  },
+  "s3_artifacts": [
+    {
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-transformers-retry-20261025/output/run_manifest_stage_s.json",
+      "version_id": "R.WaTufVeoOjQ_M0AqoTowTlOsw0O9Nx",
+      "bytes": 1708,
+      "sha256": "06556ba04ce37b5a6a2cc104140fa184177c8565665ffde6d7326c162309ead8"
+    },
+    {
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-transformers-retry-20261025/output/mistral_votes_stage_s.jsonl",
+      "version_id": "UaVLnN.nEcujm3kWFTG1r4ci2UWFgN9f",
+      "bytes": 104944,
+      "sha256": "54724f4f15f1eaed2ce840694e7e750810c6db9c224ec1c54bfdcb1808279868"
+    },
+    {
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-transformers-retry-20261025/provenance/stage_s_launch_attempt.json",
+      "version_id": "sOJ4r4Te2Q91FT3iRuEmrbCAmlZ.uXsy",
+      "bytes": 480,
+      "sha256": "11ca394ade2e798b47fb448647bae4d2a40b73b27584af4dcb1d13f821c4682b"
+    },
+    {
+      "key": "typed_probe_v5_20261025/typed-probe-v5-stage-s-transformers-retry-20261025/provenance/watchdog_proof.json",
+      "version_id": "hWOtQaXrw3zobc9Tf42awcX0_Jct_cS5",
+      "bytes": 1611,
+      "sha256": "bff3bbca7952a3567b861443972829dc41185bbe3c74fe597663a0f5a5d26749"
+    }
+  ]
+}

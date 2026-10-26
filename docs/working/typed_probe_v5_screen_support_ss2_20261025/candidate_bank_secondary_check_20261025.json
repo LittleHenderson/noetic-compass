@@ -1,0 +1,42 @@
+{
+  "bank_sha256": "fc3b74c79a878a9326c0aca442553916e748b0ffde29791d3a88c557cd2fe091",
+  "builder_sha256": "c23d7e6ceaea7f016998361968696b03bce18f2be4893c4b1c516e30e3dd7e75",
+  "comparison_source_hashes": {
+    "240_row_source": "0d22f5e896075d8a89d935a87812da53338d59184d70f7bc46c74110477ea7fa",
+    "retry5_candidate_bank": "4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f"
+  },
+  "domain_counts": {
+    "code_comment": 40,
+    "document_qa": 40,
+    "email": 40,
+    "faq": 40,
+    "meeting_notes": 40,
+    "news": 40,
+    "product_review": 40,
+    "recipe": 40,
+    "support_ticket": 40,
+    "travel": 40
+  },
+  "domain_payload_cells": 80,
+  "exact_normalized_prior_context_overlaps": 0,
+  "limits": "This checks structure and exact normalized text overlap. It does not establish semantic uniqueness or replace human review.",
+  "payload_counts": {
+    "ext_0": 50,
+    "ext_1": 50,
+    "ext_2": 50,
+    "ext_3": 50,
+    "ext_4": 50,
+    "ext_5": 50,
+    "ext_6": 50,
+    "ext_7": 50
+  },
+  "rows": 400,
+  "rows_per_domain_payload_cell": [
+    5
+  ],
+  "run_status": "NOT RUN; no model, AWS, or paid API execution",
+  "status": "SECOND_PASS_STRUCTURAL_CHECK_PASSED",
+  "unique_normalized_prompt_text": 400,
+  "unique_prompt_ids": 400,
+  "validator_sha256": "0809eba6d47543e473f1766e0c31ef947d1398f0a1d8884490eec1ddc415471f"
+}
