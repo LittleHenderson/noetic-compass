@@ -52,3 +52,26 @@ None of this is fatal; all of it must be fixed before the corpus is used, or the
 - Stats: `public_corpus_stats.json`.
 - Sample committed: `public_turns_sample.jsonl` (203 rows).
 - Full corpus (34.4 MB, 114,678 rows) kept in the training payload and uploaded to S3 for durability.
+
+## Origin of the "no foreign distillation" rule (added 2026-10-26 after the owner asked who said it)
+
+It is the owner's rule, recorded in three places:
+
+1. `noetic-compass-scaffold/noetic-compass/HONEST_STATUS.md` line 55: "**Architectural rule (user-ratified
+   2026-05-04):** No foreign pretrained models. No TinyLlama, no Llama, no Qwen, no Mistral, no GPT-2, nothing
+   borrowed. ... CAS gets the glory or the project doesn't ship." It was ratified after a TinyLlama LoRA infrastructure
+   commit was prepared and then hard-reset out of git history.
+2. `docs/working/agent_exchange/codex_onboarding_2026_05_14.md` lines 91-92: no foreign pretrained models in the
+   production stack; **no foreign-model distillation as CAS supervision**; style priors only, with sample-read audits.
+3. The CTT design set, `Documents/Codex/2026-10-19/cas_token_transformer_design_v1/`:
+   - `ARCHITECTURE.md` line 272: "trained from scratch (constraint (d): no foreign pretrained weights)";
+   - `OPEN_QUESTIONS.md` Q5: "The 'foreign answers never' rule — confirm it for this part", with the recorded pick
+     "**strict, templates are ours**" — foreign text may be input only, every target traces to our generator, reader or
+     compiler;
+   - `ctt2_design_v1/TRAINING_CHANGES.md` line 29: "Rules kept: foreign questions OK, foreign answers never."
+
+Plain meaning: distillation is training a small model to imitate a bigger model's answers. "Foreign" means a model we
+did not build. The rule forbids two things: (1) loading another model's weights into our stack, and (2) using another
+model's answers as training targets. Public human text may be used for style, with audits. Using a rented model at
+runtime to phrase a checked sentence is not distillation; training our model on its output would be.
+
