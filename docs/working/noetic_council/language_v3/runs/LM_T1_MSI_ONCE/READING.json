@@ -1,0 +1,22 @@
+{
+  "hard_marks": {
+    "M1": true,
+    "M2": true,
+    "M3": true,
+    "M5_00459": true,
+    "M5b": true,
+    "M6": true,
+    "M7": true
+  },
+  "LM_T1_core": "PASS",
+  "failed_hard_marks": [],
+  "M4_SDG_mark": "SDG mark met",
+  "M4_numbers": {
+    "alias_wide_match": 233,
+    "of": 439,
+    "mark": 176,
+    "bridge_v2_match_same_rows": 118
+  },
+  "claim_ceiling": "ENGINEERED-NOT-VALIDATED (translator); FORM only; no meaning claim",
+  "reading_rule": "LM-T1 core = PASS only if M1, M2, M3, M5 (00459), M5b, M6 and M7 all pass. Any failed hard mark is a FAILURE, never 'pass with caveats'. M4 is read separately as 'SDG mark met' / 'SDG mark not met'. Claim ceiling: ENGINEERED-NOT-VALIDATED for the translator; no meaning claim; no Noetic-label claim for free English."
+}

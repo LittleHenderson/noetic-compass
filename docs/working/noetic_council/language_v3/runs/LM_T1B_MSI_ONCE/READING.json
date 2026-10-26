@@ -1,0 +1,18 @@
+{
+  "hard_marks": {
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "B4": true,
+    "B5": true
+  },
+  "LM_T1b_core": "PASS",
+  "failed_hard_marks": [],
+  "B6_book_examples_exact_of_accepted": "52 of 60",
+  "B7_recipe_grammar_disagreements": 0,
+  "compiler_used": {
+    "path": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-08\\task-4\\cas-online\\dist\\compiler\\api\\notation\\compiler.py",
+    "sha256": "464fd4adfae90a35ba54aa794829da1fe713b9b9cccd68b630ecccfdfbca2f56"
+  },
+  "claim_ceiling": "ENGINEERED-NOT-VALIDATED; FORM only; nesting meaning (N1-N13) not settled"
+}

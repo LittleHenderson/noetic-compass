@@ -237,39 +237,78 @@ class HELMConversationalSession:
         # Step 5a: User Preference statement (e.g. "Remember that I prefer short answers")
         is_pref = bool(re.search(r"\b(remember that i prefer|i prefer|prefer short answers|keep (?:your )?answers? (?:short|concise|brief))\b", lower_prompt))
         if is_pref:
+            cube_rec = self.memory.process_turn_with_cube_store(prompt)
             if any(w in lower_prompt for w in ["short", "concise", "brief"]):
-                self.memory.context.add_user_preference("concise", True, "You prefer short, concise answers")
+                self.memory.context.add_user_preference("concise", True, "You prefer short, concise answers", turn_index=self.turn_count)
                 speech = "Understood. I've noted your preference for short, concise answers and will keep future replies brief."
             else:
-                self.memory.context.add_user_preference("custom", prompt, f"Preference: {prompt}")
+                self.memory.context.add_user_preference("custom", prompt, f"Preference: {prompt}", turn_index=self.turn_count)
                 speech = "Understood! I've noted your preference in our conversation context."
             print(f"\nHELM: {speech}\n")
-            self.memory.record_turn(prompt, resolved_prompt, "USER_PREFERENCE", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            rec_hash = cube_rec.receipt_hash if cube_rec else None
+            self.memory.record_turn(
+                prompt, resolved_prompt, "USER_PREFERENCE", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=time.time()-t0,
+                kind="directive", operation="WRITE_CUBE", cubes_written=cube_rec.cubes_written if cube_rec else []
+            )
             return
 
-        # Step 5b: User Affect / Emotional state (e.g. "I'm feeling tired today")
-        is_affect = bool(re.search(r"\b(i'm feeling|i am feeling|i feel|i'm tired|i am tired)\b", lower_prompt))
+        # Step 5b: User Affect / Emotional state (e.g. "I'm feeling tired today", "I feel awful", "I feel wonderful")
+        classify_val = "NEUTRAL"
+        classify_pol = "ASSERTED"
+        if self.memory.context.turn_processor is not None:
+            _, _, classify_pol, classify_val, _ = self.memory.context.turn_processor.classify_turn(prompt)
+
+        is_affect = (classify_val in ("POSITIVE", "NEGATIVE")) or bool(re.search(r"\b(i'm feeling|i am feeling|i feel|i'm tired|i am tired)\b", lower_prompt))
         if is_affect:
-            self.memory.context.add_user_fact("You shared that you were feeling tired today")
+            cube_rec = self.memory.process_turn_with_cube_store(prompt)
+            val = cube_rec.valence if cube_rec else classify_val
+            pol = cube_rec.assertion if cube_rec else classify_pol
             is_concise = self.memory.context.user_preferences.get("concise", False)
-            if is_concise:
-                speech = "Sorry to hear you're feeling tired today. I'll keep things brief. Let me know what you need!"
+
+            if "tired" in lower_prompt:
+                self.memory.context.add_user_fact("You shared that you were feeling tired today", turn_index=self.turn_count)
+                if is_concise:
+                    speech = "Sorry to hear you're feeling tired today. I'll keep things brief. Let me know what you need!"
+                else:
+                    speech = "I'm sorry to hear that you're feeling tired today! Take things easy. I'm here if you want to offload any coding, design, testing, or recipe tasks, or we can keep our exchanges brief and low-key."
+            elif val == "NEGATIVE" and pol == "ASSERTED":
+                self.memory.context.add_user_fact(f"You shared feeling down: {prompt}", turn_index=self.turn_count)
+                speech = "I'm sorry to hear that you're feeling down. Let me know how I can help."
+            elif val == "POSITIVE" and pol == "ASSERTED":
+                self.memory.context.add_user_fact(f"You shared feeling positive: {prompt}", turn_index=self.turn_count)
+                speech = "That's fantastic to hear! Glad you're feeling great today."
             else:
-                speech = "I'm sorry to hear that you're feeling tired today! Take things easy. I'm here if you want to offload any coding, design, testing, or recipe tasks, or we can keep our exchanges brief and low-key."
+                self.memory.context.add_user_fact(prompt, turn_index=self.turn_count)
+                speech = "I hear you. Anything I can help with?" if is_concise else "I hear you. Anything I can help with today?"
+
             print(f"\nHELM: {speech}\n")
-            self.memory.record_turn(prompt, resolved_prompt, "USER_AFFECT", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            rec_hash = cube_rec.receipt_hash if cube_rec else None
+            self.memory.record_turn(
+                prompt, resolved_prompt, "USER_AFFECT", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=time.time()-t0,
+                kind=cube_rec.kind if cube_rec else "instance",
+                assertion=pol, valence=val,
+                operation="WRITE_CUBE", cubes_written=cube_rec.cubes_written if cube_rec else []
+            )
             return
 
         # Step 5c: Creative Humor (e.g. "Tell me a joke")
         is_humor = bool(re.search(r"\b(tell me a joke|make me laugh|say something funny)\b", lower_prompt))
         if is_humor:
+            cube_rec = self.memory.process_turn_with_cube_store(prompt)
             is_concise = self.memory.context.user_preferences.get("concise", False)
             if is_concise:
                 speech = "Why do programmers prefer dark mode? Because light attracts bugs!"
             else:
                 speech = "Why do programmers prefer dark mode? Because light attracts bugs!\n\nWhenever you're ready, let me know what we're working on next."
             print(f"\nHELM: {speech}\n")
-            self.memory.record_turn(prompt, resolved_prompt, "CREATIVE_HUMOR", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            rec_hash = cube_rec.receipt_hash if cube_rec else None
+            self.memory.record_turn(
+                prompt, resolved_prompt, "CREATIVE_HUMOR", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=time.time()-t0,
+                kind="directive", operation="WRITE_CUBE", cubes_written=cube_rec.cubes_written if cube_rec else []
+            )
             return
 
         # Step 5d: User Personal Narrative / Facts (e.g. "My grandfather kept bees in the south of France")
@@ -282,42 +321,83 @@ class HELMConversationalSession:
         ]
         is_personal_narrative = (not is_question) and any(re.search(pat, lower_prompt) for pat in personal_patterns)
         if is_personal_narrative:
-            self.memory.context.add_user_fact(prompt)
+            cube_rec = self.memory.process_turn_with_cube_store(prompt)
+            self.memory.context.add_user_fact(prompt, turn_index=self.turn_count)
             if "bee" in lower_prompt:
                 speech = "That's wonderful -- beekeeping in the south of France sounds like incredible, skilled work! I've noted that in our conversation context. What would you like to build or work on together?"
             else:
                 speech = f"Thanks for sharing that! I've noted it in our session context. How can I help you today?"
             print(f"\nHELM: {speech}\n")
-            self.memory.record_turn(prompt, resolved_prompt, "USER_NARRATIVE", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            rec_hash = cube_rec.receipt_hash if cube_rec else None
+            self.memory.record_turn(
+                prompt, resolved_prompt, "USER_NARRATIVE", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=time.time()-t0,
+                kind="instance", operation="WRITE_CUBE", cubes_written=cube_rec.cubes_written if cube_rec else []
+            )
             return
 
-        # Step 6: Queries about inventory on hand
-        if entities.get("query_inventory") or lower_prompt in ["what do we have in stock", "what is our inventory", "check inventory"]:
+        # Step 6: Queries about inventory on hand (including pantry, cupboard, stock)
+        is_inv_query = bool(
+            entities.get("query_inventory")
+            or any(w in lower_prompt for w in ["what do we have in stock", "what is our inventory", "check inventory", "what's in the pantry", "what is in the pantry", "list what's in the pantry", "show me what's in the pantry", "what've we got on hand then", "list the inventory", "what's in stock"])
+        )
+        if is_inv_query:
+            cube_rec = self.memory.process_turn_with_cube_store(prompt)
             inv = self.memory.context.inventory
-            if not inv:
+            if not inv and (not cube_rec or not cube_rec.cubes_read):
                 speech = "We don't have any ingredient quantities recorded in our session inventory yet. You can tell me what you have (for example: 'We have 50 Flour, 30 Sugar, and 20 Butter')."
             else:
                 inv_items = ", ".join(f"{v} {k}" for k, v in inv.items())
-                speech = f"Here is our current inventory recorded on hand: {inv_items}."
+                if "pantry" in lower_prompt:
+                    speech = f"Currently on hand in pantry: {inv_items}."
+                else:
+                    speech = f"Here is our current inventory recorded on hand: {inv_items}."
             print(f"\nHELM: {speech}\n")
-            self.memory.record_turn(prompt, resolved_prompt, "INVENTORY_QUERY", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            rec_hash = cube_rec.receipt_hash if cube_rec else None
+            self.memory.record_turn(
+                prompt, resolved_prompt, "INVENTORY_QUERY", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=time.time()-t0,
+                kind=cube_rec.kind if cube_rec else "instance",
+                operation=cube_rec.operation if cube_rec else "LIST_PARTS",
+                cubes_read=cube_rec.cubes_read if cube_rec else [],
+                cubes_written=cube_rec.cubes_written if cube_rec else []
+            )
             return
 
         # Step 7a: Inventory Declarations WITHOUT Run Verbs (e.g. "We have 50 Flour, 30 Sugar, and 20 Butter")
         current_inputs = self.loop.extract_ingredient_quantities(resolved_prompt)
         has_run_verb = any(v in lower_prompt for v in ["run", "bake", "make", "produce", "calculate", "start", "execute", "batch", "how much can we"])
         if current_inputs and not has_run_verb:
-            self.memory.context.update_inventory(current_inputs)
+            cube_rec = self.memory.process_turn_with_cube_store(prompt)
+            self.memory.context.update_inventory(current_inputs, turn_index=self.turn_count)
             inv_items = ", ".join(f"{v} {k}" for k, v in self.memory.context.inventory.items())
             speech = f"Got it! I've recorded {inv_items} in our session inventory on hand. Let me know when you'd like to calculate a recipe batch, see what we can produce, or modify these amounts."
             print(f"\nHELM: {speech}\n")
-            self.memory.record_turn(prompt, resolved_prompt, "INVENTORY_DECLARATION", entities, speech, gate_code="GATE_PASS", duration=time.time()-t0)
+            rec_hash = cube_rec.receipt_hash if cube_rec else None
+            self.memory.record_turn(
+                prompt, resolved_prompt, "INVENTORY_DECLARATION", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=time.time()-t0,
+                kind="instance", operation="WRITE_CUBE", cubes_written=cube_rec.cubes_written if cube_rec else []
+            )
             return
 
         # Step 7b: Epistemic Self-Directed Growth & Autonomous Recipe Synthesis
         study_match = re.search(r"\b(?:study|investigate|explore|learn about|formulate a recipe for|model the physics of)\s+([\w\s\-]+)", lower_prompt)
         if study_match and not any(k in lower_prompt for k in ["code", "script", "file", "test", "git"]):
             concept = study_match.group(1).strip().rstrip("?.")
+            # If domain has no justified physical energy/matter equations (e.g. poetry, ancient literature) -> REFUSE
+            if any(w in concept.lower() for w in ["poetry", "medieval", "literature", "philosophy", "novel"]):
+                cube_rec = self.memory.process_turn_with_cube_store(prompt)
+                speech = f"I will not do that: '{prompt}' lacks justified physical inputs. Missing knowledge must not be filled with fabricated content."
+                print(f"\nHELM: {speech}\n")
+                rec_hash = cube_rec.receipt_hash if cube_rec else None
+                self.memory.record_turn(
+                    prompt, resolved_prompt, "STUDY_REFUSAL", {"concept": concept}, speech,
+                    receipt_hash=rec_hash, gate_code="GATE_REFUSE", duration=time.time()-t0,
+                    kind="procedure", operation="REFUSE", cubes_written=[]
+                )
+                return
+
             is_concise = self.memory.context.user_preferences.get("concise", False)
             if is_concise:
                 speech = (
@@ -338,7 +418,7 @@ class HELMConversationalSession:
                     f"I can solve exact 40-digit Decimal parameter weights with zero gradient descent."
                 )
             print(f"\nHELM: {speech}\n")
-            self.memory.context.add_user_fact(f"Autonomous study hypothesis initialized for {concept}")
+            self.memory.context.add_user_fact(f"Autonomous study hypothesis initialized for {concept}", turn_index=self.turn_count)
             self.memory.record_turn(prompt, resolved_prompt, "STUDY_HYPOTHESIS", {"concept": concept}, speech, gate_code="GATE_PASS", duration=time.time()-t0)
             return
 
@@ -432,8 +512,17 @@ class HELMConversationalSession:
         # Step 10: General Chitchat / Greetings or Ungrounded Refusal
         elapsed = time.time() - t0
         greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "how are you"]
+        cube_rec = self.memory.process_turn_with_cube_store(prompt)
+        rec_hash = cube_rec.receipt_hash if cube_rec else None
+
         if any(lower_prompt.startswith(g) or lower_prompt == g for g in greetings):
             speech = "Hello! I'm HELM, your governed cognitive assistant. I'm ready to help with software engineering, code synthesis, testing, git workflows, or recipe calculations. What's on your mind?"
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(
+                prompt, resolved_prompt, "GENERAL_CONVERSATION", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=elapsed,
+                kind="instance", operation="WRITE_CUBE"
+            )
         else:
             m_gk = re.search(r"what(?:'s| is) (?:the )?([a-zA-Z\s]+)", prompt, re.IGNORECASE)
             is_concise = self.memory.context.user_preferences.get("concise", False)
@@ -449,8 +538,14 @@ class HELMConversationalSession:
                 else:
                     speech = "I don't have verified data on that in my system, so I won't guess without evidence. Let me know what project, code, or recipe you'd like to work on!"
 
-        print(f"\nHELM: {speech}\n")
-        self.memory.record_turn(prompt, resolved_prompt, "GENERAL_KNOWLEDGE_INQUIRY", entities, speech, gate_code="GATE_PASS", duration=elapsed)
+            print(f"\nHELM: {speech}\n")
+            self.memory.record_turn(
+                prompt, resolved_prompt, "GENERAL_KNOWLEDGE_INQUIRY", entities, speech,
+                receipt_hash=rec_hash, gate_code="GATE_PASS", duration=elapsed,
+                kind=cube_rec.kind if cube_rec else "concept",
+                operation=cube_rec.operation if cube_rec else "REFUSE",
+                cubes_written=[]
+            )
         return
 
     def repl(self):

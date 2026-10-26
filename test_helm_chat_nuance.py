@@ -211,6 +211,66 @@ def test_epistemic_study_hypothesis():
     print("  [PASS] Epistemic study hypothesis successfully formulated under 80/20 ratio.")
 
 
+def test_unified_cube_store_dialogue_integration():
+    print("\n--- Running Unified Cube Store Dialogue Integration & Audit ---")
+    session = hc.HELMConversationalSession(mode="everyday", session_id="test_cube_store_live")
+    
+    # 1. Inventory declaration: writes cubes into CubeStore
+    f = io.StringIO()
+    with redirect_stdout(f):
+        session.handle_turn("We have 50 Flour, 30 Sugar, and 20 Butter.")
+    t1 = session.memory.turns[-1]
+    assert t1.operation == "WRITE_CUBE"
+    assert "cube_inventory_on_hand" in t1.cubes_written
+    assert t1.receipt_hash is not None and len(t1.receipt_hash) == 16
+    print("  [PASS] Probe 1: Inventory declaration wrote CubeNode with 16-char SHA-256 receipt.")
+
+    # 2. Pantry query: READ operation (LIST_PARTS) writing ZERO cubes
+    f = io.StringIO()
+    with redirect_stdout(f):
+        session.handle_turn("list what's in the pantry")
+    out = f.getvalue()
+    t2 = session.memory.turns[-1]
+    assert t2.operation == "LIST_PARTS"
+    assert t2.cubes_written == []
+    assert len(t2.cubes_read) > 0
+    assert "50 flour" in out.lower() and "30 sugar" in out.lower()
+    print("  [PASS] Probe 2: 'list what's in the pantry' executed LIST_PARTS and wrote 0 cubes.")
+
+    # 3. State affect "I feel awful" -> ASSERTED, NEGATIVE
+    f = io.StringIO()
+    with redirect_stdout(f):
+        session.handle_turn("I feel awful today.")
+    out = f.getvalue()
+    t3 = session.memory.turns[-1]
+    assert t3.valence == "NEGATIVE"
+    assert t3.assertion == "ASSERTED"
+    assert "sorry to hear" in out.lower()
+    assert len(t3.cubes_written) > 0
+    print("  [PASS] Probe 3: 'I feel awful' correctly resolved to NEGATIVE valence.")
+
+    # 4. Directive "Tell me a joke" -> kind: directive
+    f = io.StringIO()
+    with redirect_stdout(f):
+        session.handle_turn("Tell me a joke.")
+    t4 = session.memory.turns[-1]
+    assert t4.kind == "directive"
+    assert t4.receipt_hash is not None
+    print("  [PASS] Probe 4: 'Tell me a joke' registered as kind: directive.")
+
+    # 5. Non-grounded domain refusal "Study medieval poetry" -> REFUSE, 0 cubes written
+    f = io.StringIO()
+    with redirect_stdout(f):
+        session.handle_turn("Study medieval poetry.")
+    out = f.getvalue()
+    t5 = session.memory.turns[-1]
+    assert t5.operation == "REFUSE"
+    assert t5.gate_code == "GATE_REFUSE"
+    assert t5.cubes_written == []
+    assert "will not do that" in out.lower() or "missing knowledge" in out.lower()
+    print("  [PASS] Probe 5: Non-grounded domain refusal wrote zero cubes under strict claim ceiling.")
+
+
 if __name__ == "__main__":
     print("=" * 72)
     print("      HELM CONVERSATIONAL NUANCE & MULTI-TURN AUDIT SUITE       ")
@@ -219,6 +279,7 @@ if __name__ == "__main__":
     test_sequence_b()
     test_deepseek_7turn_offpath()
     test_epistemic_study_hypothesis()
+    test_unified_cube_store_dialogue_integration()
     print("\n" + "=" * 72)
     print("ALL HELM CONVERSATIONAL NUANCE TESTS PASSED (100% VERIFIED)")
     print("=" * 72)

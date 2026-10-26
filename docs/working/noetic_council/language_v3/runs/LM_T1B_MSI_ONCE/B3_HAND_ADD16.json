@@ -1,0 +1,169 @@
+{
+  "items": 16,
+  "ok": 16,
+  "by_group": {
+    "NESTED": "8 of 8",
+    "METALOGIC": "8 of 8"
+  },
+  "pass": true,
+  "rows": [
+    {
+      "id": "N01",
+      "group": "NESTED",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "N02",
+      "group": "NESTED",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "N03",
+      "group": "NESTED",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "N04",
+      "group": "NESTED",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "N05",
+      "group": "NESTED",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "N06",
+      "group": "NESTED",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "N07",
+      "group": "NESTED",
+      "kind": "POSITIVE",
+      "wording": "ALIAS",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "N08",
+      "group": "NESTED",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "refusal": "NEST_TOO_DEEP",
+      "refusal_detail": "a nested Noetic sequence of 6 terms (cap 5)",
+      "ok": true
+    },
+    {
+      "id": "M01",
+      "group": "METALOGIC",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "M02",
+      "group": "METALOGIC",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "M03",
+      "group": "METALOGIC",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "M04",
+      "group": "METALOGIC",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "M05",
+      "group": "METALOGIC",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "M06",
+      "group": "METALOGIC",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "M07",
+      "group": "METALOGIC",
+      "kind": "POSITIVE",
+      "wording": "CANON",
+      "refusal": null,
+      "content_equal": true,
+      "round_trip": true,
+      "ok": true
+    },
+    {
+      "id": "M08",
+      "group": "METALOGIC",
+      "kind": "TRAP_REFUSE",
+      "wording": "CANON",
+      "refusal": "NOT_CCE",
+      "refusal_detail": "not a set phrase: the Mood set {calm, tense}",
+      "ok": true
+    }
+  ]
+}

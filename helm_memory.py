@@ -16,10 +16,26 @@ import hashlib
 import json
 import os
 import re
+import sys
 import time
 from dataclasses import dataclass, field, asdict
 from decimal import Decimal
 from typing import Dict, List, Any, Optional, Tuple
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+CUBE_STORE_DIR = os.path.join(HERE, "docs", "working", "noetic_council", "cube_store")
+if os.path.isdir(CUBE_STORE_DIR) and CUBE_STORE_DIR not in sys.path:
+    sys.path.insert(0, CUBE_STORE_DIR)
+
+try:
+    from store import CubeStore, AdmissionRefusal
+    from turn import TurnProcessor, TurnReceipt, extract_assertion_and_valence, INVENTORY_NODE_ID
+    from cube import CubeNode, Core, Face, Provenance, Branch
+    from operations import list_parts, find_shared_part, reached_via
+    CUBE_STORE_AVAILABLE = True
+except ImportError:
+    CUBE_STORE_AVAILABLE = False
+    INVENTORY_NODE_ID = "cube_inventory_on_hand"
 
 
 @dataclass
@@ -34,10 +50,16 @@ class ConversationTurn:
     receipt_hash: Optional[str] = None
     gate_code: str = "GATE_PASS"
     duration_seconds: float = 0.0
+    kind: Optional[str] = None
+    assertion: str = "ASSERTED"
+    valence: str = "NEUTRAL"
+    operation: Optional[str] = None
+    cubes_read: List[str] = field(default_factory=list)
+    cubes_written: List[str] = field(default_factory=list)
 
 
 class WorkingMemoryContext:
-    def __init__(self):
+    def __init__(self, context_id: str = "helm_session_store"):
         self.active_project: Optional[str] = None
         self.active_files: List[str] = []
         self.active_tools: List[str] = []
@@ -52,11 +74,42 @@ class WorkingMemoryContext:
             "dial_preset": "BALANCED",
             "verbose": False
         }
+        self.cube_store: Optional[CubeStore] = CubeStore(context_id=context_id) if CUBE_STORE_AVAILABLE else None
+        self.turn_processor: Optional[TurnProcessor] = TurnProcessor(store=self.cube_store) if CUBE_STORE_AVAILABLE else None
 
-    def add_user_preference(self, key: str, value: Any, note: Optional[str] = None):
+    def process_turn_with_cube_store(self, text: str) -> Optional[TurnReceipt]:
+        if self.turn_processor is not None:
+            return self.turn_processor.process_turn(text)
+        return None
+
+    def add_user_preference(self, key: str, value: Any, note: Optional[str] = None, turn_index: int = 1):
         self.user_preferences[key] = value
         if note:
-            self.add_user_fact(note)
+            self.add_user_fact(note, turn_index=turn_index)
+
+        # Record directive into cube store
+        if self.cube_store is not None:
+            dir_text = note or f"Preference {key}: {value}"
+            node_id = f"directive_{key}_{turn_index}"
+            if node_id not in self.cube_store.nodes:
+                core = Core(label=dir_text, kind="directive", identity_statement=f"User directive recorded on turn {turn_index}.")
+                faces = {
+                    f"face_{i}": Face(
+                        availability="unknown" if i > 1 else "populated",
+                        human_text=dir_text if i == 1 else "Directive has no technical decomposition."
+                    )
+                    for i in range(1, 7)
+                }
+                node = CubeNode(
+                    node_id=node_id,
+                    core=core,
+                    faces=faces,
+                    turn_index=turn_index,
+                    provenance=Provenance(source="USER_SAID"),
+                    assertion="ASSERTED",
+                    valence="NEUTRAL"
+                )
+                self.cube_store.write_cube(node)
 
     def find_memory_match(self, query: str) -> List[str]:
         tokens = [w for w in re.findall(r'\b\w+\b', query.lower()) if len(w) > 3 and w not in ["what", "said", "about", "remember", "know", "have", "told", "that", "this", "tell"]]
@@ -70,12 +123,37 @@ class WorkingMemoryContext:
                 matches.append(f"{k}: {v}")
         return matches
 
-    def add_user_fact(self, fact: str):
+    def add_user_fact(self, fact: str, turn_index: int = 1):
         cleaned = fact.strip().rstrip(".").strip()
         if cleaned and cleaned not in self.user_facts:
             self.user_facts.append(cleaned)
         # Bounded cap: keep last 20 user narrative facts
         self.user_facts = self.user_facts[:20]
+
+        # Record into cube store
+        if self.cube_store is not None and cleaned:
+            fact_hash = hashlib.sha256(cleaned.encode("utf-8")).hexdigest()[:12]
+            node_id = f"fact_{fact_hash}"
+            if node_id not in self.cube_store.nodes:
+                assertion, valence = extract_assertion_and_valence(cleaned)
+                core = Core(label=cleaned, kind="instance", identity_statement=f"User stated fact: {cleaned}")
+                faces = {
+                    f"face_{i}": Face(
+                        availability="unknown" if i > 1 else "populated",
+                        human_text=cleaned if i == 1 else "Fact has no physical part decomposition."
+                    )
+                    for i in range(1, 7)
+                }
+                node = CubeNode(
+                    node_id=node_id,
+                    core=core,
+                    faces=faces,
+                    turn_index=turn_index,
+                    provenance=Provenance(source="USER_SAID"),
+                    assertion=assertion,
+                    valence=valence
+                )
+                self.cube_store.write_cube(node)
 
     def update_files(self, files: List[str]):
         for f in files:
@@ -85,9 +163,74 @@ class WorkingMemoryContext:
         # Bounded cap: keep last 10 active files
         self.active_files = self.active_files[:10]
 
-    def update_inventory(self, items: Dict[str, Decimal]):
+    def update_inventory(self, items: Dict[str, Decimal], turn_index: int = 1):
         for k, v in items.items():
             self.inventory[k] = v
+
+        if self.cube_store is not None and self.inventory:
+            inv_node = self.cube_store.get_cube(INVENTORY_NODE_ID, view_profile="Authoring")
+            rev = (inv_node.revision + 1) if inv_node else 1
+            inv_core = Core(
+                label="Current Inventory",
+                kind="instance",
+                identity_statement="Aggregated session inventory of available ingredients."
+            )
+            inv_faces = {
+                f"face_{i}": Face(
+                    availability="populated",
+                    human_text="Direct ingredient stock on hand.",
+                    structured={"items": list(self.inventory.keys())} if i == 5 else {}
+                )
+                for i in range(1, 7)
+            }
+            inv_node = CubeNode(
+                node_id=INVENTORY_NODE_ID,
+                core=inv_core,
+                faces=inv_faces,
+                revision=rev,
+                turn_index=turn_index,
+                provenance=Provenance(source="USER_SAID"),
+                assertion="ASSERTED",
+                valence="NEUTRAL"
+            )
+            self.cube_store.write_cube(inv_node)
+
+            for item_name, amt in self.inventory.items():
+                item_id = f"item_{item_name.lower()}"
+                item_core = Core(
+                    label=item_name,
+                    kind="instance",
+                    identity_statement=f"Stock constituent: {amt} units of {item_name}."
+                )
+                item_faces = {
+                    f"face_{i}": Face(
+                        availability="unknown" if i > 1 else "populated",
+                        human_text=f"{amt} {item_name}" if i == 1 else "Constituent of inventory."
+                    )
+                    for i in range(1, 7)
+                }
+                prev_item = self.cube_store.get_cube(item_id, view_profile="Authoring")
+                item_rev = (prev_item.revision + 1) if prev_item else 1
+                item_node = CubeNode(
+                    node_id=item_id,
+                    core=item_core,
+                    faces=item_faces,
+                    revision=item_rev,
+                    turn_index=turn_index,
+                    provenance=Provenance(source="USER_SAID"),
+                    assertion="ASSERTED",
+                    valence="NEUTRAL"
+                )
+                self.cube_store.write_cube(item_node)
+                branch = Branch(
+                    branch_id=f"branch_inv_{item_name.lower()}_{turn_index}_{item_rev}",
+                    context_id=self.cube_store.context_id,
+                    source_node_id=INVENTORY_NODE_ID,
+                    predicate="contains",
+                    target_node_id=item_id,
+                    commonality={"amount": str(amt), "unit": item_name}
+                )
+                self.cube_store.write_branch(branch)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -146,8 +289,8 @@ class AnaphoraResolver:
         if re.search(r'\b(what did we just do|previous result|last result|what was accomplished|summary)\b', text, re.IGNORECASE):
             entities_found["query_last_result"] = True
 
-        # 5. Resolve 'what do we have in stock?' / 'what is our inventory?'
-        if re.search(r'\b(what do we have|current inventory|what ingredients|in stock|on hand)\b', text, re.IGNORECASE):
+        # 5. Resolve 'what do we have in stock?' / 'what is our inventory?' / 'what is in the pantry?'
+        if re.search(r'\b(what do we have|current inventory|what ingredients|in stock|on hand|in the pantry|in pantry|list what|list the inventory|what is in the pantry|what\'s in the pantry|show me what\'s in the pantry|what\'ve we got on hand then)\b', text, re.IGNORECASE):
             entities_found["query_inventory"] = True
 
         return resolved, entities_found
@@ -167,6 +310,9 @@ class HELMConversationalMemory:
         os.makedirs(self.storage_dir, exist_ok=True)
         self.session_file = os.path.join(self.storage_dir, f"{self.session_id}.jsonl")
 
+    def process_turn_with_cube_store(self, text: str) -> Optional[TurnReceipt]:
+        return self.context.process_turn_with_cube_store(text)
+
     def record_turn(self,
                     user_raw_text: str,
                     resolved_text: str,
@@ -175,7 +321,13 @@ class HELMConversationalMemory:
                     helm_response: str,
                     receipt_hash: Optional[str] = None,
                     gate_code: str = "GATE_PASS",
-                    duration: float = 0.0) -> ConversationTurn:
+                    duration: float = 0.0,
+                    kind: Optional[str] = None,
+                    assertion: str = "ASSERTED",
+                    valence: str = "NEUTRAL",
+                    operation: Optional[str] = None,
+                    cubes_read: Optional[List[str]] = None,
+                    cubes_written: Optional[List[str]] = None) -> ConversationTurn:
         turn_id = len(self.turns) + 1
         turn = ConversationTurn(
             turn_id=turn_id,
@@ -187,7 +339,13 @@ class HELMConversationalMemory:
             helm_response=helm_response,
             receipt_hash=receipt_hash,
             gate_code=gate_code,
-            duration_seconds=round(duration, 3)
+            duration_seconds=round(duration, 3),
+            kind=kind,
+            assertion=assertion,
+            valence=valence,
+            operation=operation,
+            cubes_read=cubes_read or [],
+            cubes_written=cubes_written or []
         )
         self.turns.append(turn)
 
