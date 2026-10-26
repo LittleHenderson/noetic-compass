@@ -205,5 +205,39 @@ class TestHELMEndToEndLoop(unittest.TestCase):
         self.assertIsNotNone(r["receipt_hash"])
 
 
+    def test_12_cce_check_fails_closed_when_module_unavailable(self):
+        """With the CCE module absent the check must fail, not silently pass."""
+        import helm_end_to_end_loop as mod
+        saved = mod.cce
+        try:
+            mod.cce = None
+            res = self.loop.verify_cce_round_trip("Can we bake a batch with 15 Flour and 8 Water?")
+            self.assertFalse(res["verified"])
+            self.assertEqual(res["rejection"], "CCE_UNAVAILABLE")
+            self.assertEqual(len(res["receipt_id"]), 16)
+        finally:
+            mod.cce = saved
+
+    def test_13_cce_gate_is_advisory_by_default(self):
+        """Execution proceeds by default, but the result says the gate was advisory, not passed."""
+        r = self.loop.process_turn("Can we bake a batch with 15 Flour and 8 Water?", tick=6)
+        self.assertIn(r["loop_status"], ("SUCCESS_EVALUATED", "CCE_GATE_REFUSED"))
+        self.assertIn(r["cce_gate"], ("PASS", "ADVISORY_FAIL"))
+        if not r["cce_round_trip"]["verified"]:
+            self.assertEqual(r["cce_gate"], "ADVISORY_FAIL")
+
+    def test_14_strict_cce_gate_refuses_unparseable_execution(self):
+        """In strict mode an unparseable execution request is refused, not executed."""
+        from helm_end_to_end_loop import HELMEndToEndLoop
+        strict = HELMEndToEndLoop(cce_gate_strict=True)
+        r = strict.process_turn("Can we bake a batch with 15 Flour and 8 Water?", tick=7)
+        if not r["cce_round_trip"]["verified"]:
+            self.assertEqual(r["loop_status"], "CCE_GATE_REFUSED")
+            self.assertEqual(r["cce_rejection"], r["cce_round_trip"]["rejection"])
+            self.assertIsNotNone(r["receipt_hash"])
+        else:
+            self.assertNotEqual(r["loop_status"], "CCE_GATE_REFUSED")
+
+
 if __name__ == "__main__":
     unittest.main()

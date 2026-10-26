@@ -122,7 +122,12 @@ class HELMEndToEndLoop:
                  vocab_path: Optional[str] = None,
                  valve_weights_path: Optional[str] = None,
                  default_aperture: Any = "0.75",
-                 cube_store: Optional[Any] = None):
+                 cube_store: Optional[Any] = None,
+                 cce_gate_strict: bool = False):
+        # CCE gate mode. False (default): the round-trip result is recorded as advisory and execution proceeds.
+        # True: an execution request whose CCE round trip fails is refused (CCE_GATE_REFUSED).
+        self.cce_gate_strict = bool(cce_gate_strict)
+
         # 1. Initialize Station S0 22x40 Recipe Brain (40-digit Decimal)
         self.brain = HELMRecipeBrain22x40()
 
@@ -169,12 +174,16 @@ class HELMEndToEndLoop:
         return inputs
 
     def verify_cce_round_trip(self, content_or_text: Any) -> Dict[str, Any]:
-        """Verify CCE round-trip equality: eps o eta == id.
-        
-        Guarantees 0 invented facts and 0 hallucinated structures.
+        """Check CCE round-trip equality: eps o eta == id.
+
+        Fails closed: if the CCE module is unavailable the result is verified=False with rejection
+        CCE_UNAVAILABLE, never a silent pass. A pass means only that this sentence survived the CCE
+        parse/render round trip; it is not a factual or semantic guarantee.
         """
         if cce is None:
-            return {"verified": True, "rejection": None, "receipt_id": "cce_native_shim"}
+            raw = content_or_text if isinstance(content_or_text, str) else json.dumps(content_or_text, sort_keys=True)
+            return {"verified": False, "rejection": "CCE_UNAVAILABLE",
+                    "receipt_id": hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]}
 
         if isinstance(content_or_text, str):
             try:
@@ -291,9 +300,10 @@ class HELMEndToEndLoop:
             result["receipt_hash"] = hashlib.sha256(f"CLARIFY_REFUSAL_{user_english}_{tick}".encode("utf-8")).hexdigest()[:16]
             return result
 
-        # Step 2: CCE Round-Trip Verification Gate (eps o eta == id)
+        # Step 2: CCE Round-Trip Check (eps o eta == id). Advisory by default; strict mode enforces it below.
         cce_rt = self.verify_cce_round_trip(user_english)
         result["cce_round_trip"] = cce_rt
+        result["cce_gate"] = "PASS" if cce_rt.get("verified") else "ADVISORY_FAIL"
 
         # Step 3: Intent Discrimination: Physical Recipe Execution vs. Store Operations
         # Physical recipe execution is requested when run/execution verbs are present:
@@ -358,6 +368,17 @@ class HELMEndToEndLoop:
         # =========================================================================
         # PATH B: PHYSICAL RECIPE EXECUTION (Gated by Phase 3 Meta Valve & Brain)
         # =========================================================================
+        # Strict CCE gate (opt-in). Reads and declarations above are exempt; only execution is blocked.
+        if self.cce_gate_strict and not cce_rt.get("verified", False):
+            result["loop_status"] = "CCE_GATE_REFUSED"
+            msg = HELMVoiceAdapter.format_clarify("a parseable CCE instruction")
+            result["everyday_english_response"] = msg
+            result["response"] = msg
+            result["text"] = msg
+            result["cce_rejection"] = cce_rt.get("rejection")
+            result["receipt_hash"] = hashlib.sha256(
+                f"CCE_GATE_REFUSED_{user_english}_{cce_rt.get('receipt_id')}_{tick}".encode("utf-8")).hexdigest()[:16]
+            return result
         # Merge all available ingredients:
         # 1. Ingredients previously declared and retained in working memory
         # 2. Ingredients explicitly passed via current_inventory parameter
@@ -462,3 +483,4 @@ class HELMEndToEndLoop:
             result["text"] = msg
 
         return result
+
