@@ -1,0 +1,127 @@
+{
+ "tags": 24,
+ "rows": 2760,
+ "per_tag": {
+  "GREETING": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "FAREWELL": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "THANKS": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "APOLOGY": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "CONGRATS": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "CONDOLENCE": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "EMPATHY": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "ENCOURAGE": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "REASSURANCE": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "PLAYFUL": {
+   "kept": 90,
+   "rejected": 30,
+   "distinct_replies": 6
+  },
+  "SMALLTALK": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "CLARIFY": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "CONFIRM": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "CORRECT": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "HEDGE": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "REFUSE_POLITE": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "EXPLAIN": {
+   "kept": 90,
+   "rejected": 30,
+   "distinct_replies": 6
+  },
+  "STATUS": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "PLAN": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "WARN": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "SUGGEST": {
+   "kept": 120,
+   "rejected": 0,
+   "distinct_replies": 8
+  },
+  "OFF": {
+   "kept": 105,
+   "rejected": 15,
+   "distinct_replies": 7
+  },
+  "WORLD": {
+   "kept": 105,
+   "rejected": 15,
+   "distinct_replies": 7
+  },
+  "SELF": {
+   "kept": 90,
+   "rejected": 30,
+   "distinct_replies": 6
+  }
+ },
+ "file": "C:\\Users\\wakil\\Documents\\Codex\\2026-10-23\\lacunarity_e1\\data\\mouth_train_v2_new_tags.jsonl"
+}
