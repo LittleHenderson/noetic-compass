@@ -1,0 +1,1217 @@
+{
+ "guard_pass": 176,
+ "of": 176,
+ "rate": 1.0,
+ "tags": {
+  "GREETING": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 6,
+   "replies": [
+    {
+     "trigger": "Hello there.",
+     "reply": "Hey there. I'm here and ready \u2014 what's on your mind?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Hi, how are you?",
+     "reply": "Hey. Nice to hear from you. What's the plan?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Good morning.",
+     "reply": "Hi there! What can I help you with today?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Hey.",
+     "reply": "Hello. I'm listening \u2014 tell me what you need.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Greetings.",
+     "reply": "Hello! Good to see you. What are we working on today?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Morning!",
+     "reply": "Morning! Hope you slept well. Where should we start?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Hiya.",
+     "reply": "Hello! Good to see you. What are we working on today?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Hello, anyone there?",
+     "reply": "Hello. I'm listening \u2014 tell me what you need.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "EMPATHY": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 6,
+   "replies": [
+    {
+     "trigger": "I feel tired today.",
+     "reply": "I'm sorry you're feeling that way. What do you need?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I am exhausted.",
+     "reply": "I'm sorry you're feeling that way. What do you need?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Feeling pretty low right now.",
+     "reply": "That sounds heavy. We can keep things light if you prefer.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I had a rough day.",
+     "reply": "That sounds heavy. We can keep things light if you prefer.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I'm worn out this week.",
+     "reply": "I hear you. Want to offload any of it, or park work for now?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Today has been draining.",
+     "reply": "Rough days are real. I'm here either way.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I'm running on empty.",
+     "reply": "That sounds draining. Do you want to talk it through or take it easy?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Not feeling my best.",
+     "reply": "I'm sorry \u2014 that's a lot. What would help most right now?",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "SMALLTALK": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "Nice weather today.",
+     "reply": "Quiet on my side \u2014 which is how I like it. You?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How's your day going?",
+     "reply": "Good, thanks. What's on your plate?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Busy week?",
+     "reply": "No complaints. What's new with you?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Anything new?",
+     "reply": "Same as ever: ready when you are. How's your day?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How have you been?",
+     "reply": "Not bad at all. What about you?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Quiet around here.",
+     "reply": "Same as ever: ready when you are. How's your day?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Long day?",
+     "reply": "Not bad at all. What about you?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's the mood?",
+     "reply": "Quiet on my side \u2014 which is how I like it. You?",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "ENCOURAGE": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 6,
+   "replies": [
+    {
+     "trigger": "I don't think I can do this.",
+     "reply": "You've handled harder. Pick one thread and we'll pull it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "This is too hard.",
+     "reply": "That frustration usually means you're close. Where exactly does it break?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I'm stuck.",
+     "reply": "It's allowed to be hard. What would make it ten percent easier?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I keep failing at it.",
+     "reply": "You don't have to solve it all at once. One piece at a time.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I'll never finish.",
+     "reply": "You don't have to solve it all at once. One piece at a time.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "It's not working.",
+     "reply": "Don't write it off yet \u2014 show me where it stops working.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I'm not good enough for this.",
+     "reply": "Don't write it off yet \u2014 show me where it stops working.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I want to give up.",
+     "reply": "You've got further than you think. What's the smallest next step?",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "THANKS": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "Thank you.",
+     "reply": "No trouble at all.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Thanks, that helped.",
+     "reply": "Any time. Say the word if you want more.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Appreciate it.",
+     "reply": "Glad that was useful.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Cheers for that.",
+     "reply": "Anytime \u2014 that's what I'm here for.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Thanks so much.",
+     "reply": "Anytime \u2014 that's what I'm here for.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "That was useful, thanks.",
+     "reply": "Glad that was useful.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Much appreciated.",
+     "reply": "Pleasure. Let me know how it goes.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Nice one, thanks.",
+     "reply": "Any time. Say the word if you want more.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "FAREWELL": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "Goodbye.",
+     "reply": "Alright, talk later. Good luck with the rest.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I'm heading off now.",
+     "reply": "Bye for now. Ping me whenever you want to continue.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Talk later.",
+     "reply": "Go well. We can pick this up whenever.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "See you tomorrow.",
+     "reply": "See you. I'll hold onto where we got to.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Bye for now.",
+     "reply": "See you soon. Everything's saved.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I have to go.",
+     "reply": "Alright, talk later. Good luck with the rest.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "That's all for today.",
+     "reply": "Go well. We can pick this up whenever.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Catch you later.",
+     "reply": "See you soon. Everything's saved.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "PLAYFUL": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 4,
+   "replies": [
+    {
+     "trigger": "Tell me a joke.",
+     "reply": "I'm reading a book on anti - gravity \u2014 impossible to put down.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Say something funny.",
+     "reply": "Two bytes met. One said'you look thin'\u2014'lost a bit'.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Cheer me up.",
+     "reply": "I tried to be a stand - up comic, but I kept sitting down.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Got any jokes?",
+     "reply": "I tried to be a stand - up comic, but I kept sitting down.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Make me laugh.",
+     "reply": "I tried to be a stand - up comic, but I kept sitting down.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Be silly for a second.",
+     "reply": "Two bytes met. One said'you look thin'\u2014'lost a bit'.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's a good pun?",
+     "reply": "I'm reading a book on anti - gravity \u2014 impossible to put down.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Surprise me with something light.",
+     "reply": "I'd tell you a udp joke, but you might not get it.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "APOLOGY": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "Sorry, I got that wrong.",
+     "reply": "Don't worry about it. Shall we correct it now?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "My mistake.",
+     "reply": "It's fine. Tell me what the right version is.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Apologies for the confusion.",
+     "reply": "No need to apologise. Where did it go wrong?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Sorry about that.",
+     "reply": "No need to apologise. Where did it go wrong?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I messed that up.",
+     "reply": "No need to apologise. Where did it go wrong?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "My fault.",
+     "reply": "Not an issue. We can redo it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Sorry for the mix-up.",
+     "reply": "Don't worry about it. Shall we correct it now?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I should have checked.",
+     "reply": "No harm done \u2014 let's fix it together.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "CONGRATS": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 7,
+   "replies": [
+    {
+     "trigger": "We shipped it.",
+     "reply": "Excellent. Take a moment \u2014 then onwards.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "It passed!",
+     "reply": "Congratulations \u2014 that took persistence.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "The tests are green.",
+     "reply": "Great result. What's the next milestone?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "We got the contract.",
+     "reply": "That's a win. Shall we bank it and move on?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "It worked first time.",
+     "reply": "That's excellent news \u2014 well done.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "We hit the target.",
+     "reply": "Brilliant. Let's lock in what worked.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "The build succeeded.",
+     "reply": "Good news indeed. Want to record the outcome?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "We won.",
+     "reply": "Congratulations \u2014 that took persistence.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "REASSURANCE": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "Did I break something?",
+     "reply": "It's fine. Here's exactly where things stand.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Is it ruined?",
+     "reply": "No damage. Let me show you the state.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Am I in trouble?",
+     "reply": "It didn't break anything important.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Did I lose the work?",
+     "reply": "It's fine. Here's exactly where things stand.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Is everything okay?",
+     "reply": "It failed cleanly \u2014 nothing else was touched.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Did I mess it up?",
+     "reply": "Everything's intact. Want the details?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Should I be worried?",
+     "reply": "It didn't break anything important.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Did that fail?",
+     "reply": "It's fine. Here's exactly where things stand.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "CLARIFY": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "Do the thing.",
+     "reply": "Point me at the specific one and I'll do it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Fix it.",
+     "reply": "Do you mean the last task, or a new one?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Use the usual.",
+     "reply": "Point me at the specific one and I'll do it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Same as before.",
+     "reply": "I want to get this right: which item are we talking about?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "You know what I mean.",
+     "reply": "I want to get this right: which item are we talking about?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "The other one.",
+     "reply": "Give me the target and I'll take it from there.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Do that again.",
+     "reply": "Which of the two should I use?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "The normal way.",
+     "reply": "Point me at the specific one and I'll do it.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "CONFIRM": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "So we're agreed?",
+     "reply": "That's right. Nothing ambiguous from my side.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Is that right?",
+     "reply": "Understood, and I've kept it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Did you get that?",
+     "reply": "Understood, and I've kept it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Understood?",
+     "reply": "Yes, clearly. I've noted it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Am I clear?",
+     "reply": "Yes \u2014 that matches what I have.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Does that make sense?",
+     "reply": "Confirmed. I'll proceed on that basis.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "You've got it?",
+     "reply": "Understood, and I've kept it.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Right?",
+     "reply": "Yes, clearly. I've noted it.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "CORRECT": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "No, it's the other one.",
+     "reply": "Noted \u2014 I'll adjust and continue.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "That's wrong, I meant the second.",
+     "reply": "Got it, my mistake. Applying your correction.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Not that file.",
+     "reply": "Noted \u2014 I'll adjust and continue.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Wrong number.",
+     "reply": "Understood, switching to the other one.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I said Tuesday, not Thursday.",
+     "reply": "Understood. The other way round.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "The other way round.",
+     "reply": "Noted \u2014 I'll adjust and continue.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "No \u2014 reverse it.",
+     "reply": "Corrected \u2014 I'll work from that.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "That's not what I asked.",
+     "reply": "Understood, switching to the other one.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "HEDGE": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 4,
+   "replies": [
+    {
+     "trigger": "Are you sure?",
+     "reply": "That's from memory, not from a checked source.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How confident are you?",
+     "reply": "That's from memory, not from a checked source.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Is that certain?",
+     "reply": "Unverified. I'd rather check than assert.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Could you be wrong?",
+     "reply": "I don't know for certain. Want me to check?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Do you know that for a fact?",
+     "reply": "I can't guarantee it \u2014 treat it as likely, not certain.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How reliable is that?",
+     "reply": "Unverified. I'd rather check than assert.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Any doubt?",
+     "reply": "That's from memory, not from a checked source.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Is it verified?",
+     "reply": "I don't know for certain. Want me to check?",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "REFUSE_POLITE": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 6,
+   "replies": [
+    {
+     "trigger": "Can you delete the logs?",
+     "reply": "I'll pass on that. It risks the work.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Just make up a number.",
+     "reply": "That would mean guessing, and I won't.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Guess the answer.",
+     "reply": "I won't do it unchecked. Want the checked version?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Send it without checking.",
+     "reply": "I'm going to decline that step.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Skip the tests.",
+     "reply": "I can't do that one, but I can do this instead.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Tell me something you can't know.",
+     "reply": "I'm going to decline that step.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Bypass the gate.",
+     "reply": "I'd rather not do that without a check \u2014 here's why.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Assume it works.",
+     "reply": "I'll pass on that. It risks the work.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "EXPLAIN": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "How does that work?",
+     "reply": "The rule is deterministic: same inputs, same output.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Why?",
+     "reply": "I checked the parts against your input before answering.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Explain it to me.",
+     "reply": "I can show each step \u2014 want the full trace?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's the reasoning?",
+     "reply": "I can show each step \u2014 want the full trace?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Walk me through it.",
+     "reply": "I can show each step \u2014 want the full trace?",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How did you get that?",
+     "reply": "It follows from the constraint you gave me.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What does that mean?",
+     "reply": "I checked the parts against your input before answering.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Why that answer?",
+     "reply": "The reasoning is arithmetic, not a guess.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "STATUS": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 6,
+   "replies": [
+    {
+     "trigger": "Where are we?",
+     "reply": "The results are committed; nothing is pending.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's the status?",
+     "reply": "One check outstanding, the rest complete.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How far along is it?",
+     "reply": "No jobs are running right now.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's left?",
+     "reply": "We finished the last step and stopped cleanly.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Are we done?",
+     "reply": "Most of it is done; one step remains.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What changed?",
+     "reply": "One check outstanding, the rest complete.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's running?",
+     "reply": "Nothing in flight \u2014 ready for the next step.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Give me a progress update.",
+     "reply": "The results are committed; nothing is pending.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "PLAN": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 6,
+   "replies": [
+    {
+     "trigger": "What should we do next?",
+     "reply": "Three steps: measure, fix, re - measure.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Give me a plan.",
+     "reply": "Plan: establish the baseline, change one thing, compare.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How do we approach this?",
+     "reply": "First pin the inputs, then run the check, then record the result.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's the order?",
+     "reply": "Start with what can fail cheaply.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Where do we start?",
+     "reply": "Sequence: gather, decide, execute, verify.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Outline the steps.",
+     "reply": "Plan: establish the baseline, change one thing, compare.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's the sequence?",
+     "reply": "Plan: establish the baseline, change one thing, compare.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How do we get there?",
+     "reply": "One step at a time, each with a check.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "WARN": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "Is it safe?",
+     "reply": "The weak point is the unverified assumption.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Any risk?",
+     "reply": "There's a catch: it only holds for the tested range.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What could go wrong?",
+     "reply": "If the state is stale, the answer will be wrong.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Should I worry about this?",
+     "reply": "It can fail silently if we skip verification.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Any danger?",
+     "reply": "It can fail silently if we skip verification.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's the catch?",
+     "reply": "Main risk: the inputs aren't checked yet.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Is that risky?",
+     "reply": "There's a catch: it only holds for the tested range.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Anything I should know?",
+     "reply": "If the state is stale, the answer will be wrong.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "SUGGEST": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 6,
+   "replies": [
+    {
+     "trigger": "What do you recommend?",
+     "reply": "Start with the baseline you can defend.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Any suggestions?",
+     "reply": "Start with the baseline you can defend.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What would you do?",
+     "reply": "Start with the baseline you can defend.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Options?",
+     "reply": "I'd keep a control arm so the result means something.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Give me alternatives.",
+     "reply": "I'd test the smallest version before committing.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What's the best move?",
+     "reply": "Option one is safer; option two is faster.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Any ideas?",
+     "reply": "Recommendation: verify first, then scale.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How would you handle it?",
+     "reply": "Prefer the reversible option here.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "SELF": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 4,
+   "replies": [
+    {
+     "trigger": "What can you do?",
+     "reply": "I answer only what I can ground.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Who are you?",
+     "reply": "My limits: no world knowledge, no guessing.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What are you good at?",
+     "reply": "I can compute, remember and refuse \u2014 but not invent facts.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "Tell me about yourself.",
+     "reply": "I do arithmetic, recall and admission control.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What are your limits?",
+     "reply": "I do arithmetic, recall and admission control.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "How do you work?",
+     "reply": "I can compute, remember and refuse \u2014 but not invent facts.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What can't you do?",
+     "reply": "I answer only what I can ground.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "What are you?",
+     "reply": "I do arithmetic, recall and admission control.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  },
+  "CONDOLENCE": {
+   "pass": 8,
+   "of": 8,
+   "distinct": 5,
+   "replies": [
+    {
+     "trigger": "My father passed away.",
+     "reply": "That's a heavy thing to carry. I'm sorry.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "We lost the dog last week.",
+     "reply": "That's a heavy thing to carry. I'm sorry.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "A friend died yesterday.",
+     "reply": "I'm sorry for your loss. Take the time you need.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "My grandmother is gone.",
+     "reply": "I'm very sorry. There's no rush here.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "We had a bereavement.",
+     "reply": "I'm sorry for your loss. Take the time you need.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "I lost someone close.",
+     "reply": "That's difficult news. I'm here.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "My uncle passed.",
+     "reply": "I'm very sorry. There's no rush here.",
+     "ok": true,
+     "why": ""
+    },
+    {
+     "trigger": "It's been a sad week.",
+     "reply": "That's hard. I'm here if you want to talk or just sit with it.",
+     "ok": true,
+     "why": ""
+    }
+   ]
+  }
+ }
+}
