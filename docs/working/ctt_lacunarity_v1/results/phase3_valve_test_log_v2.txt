@@ -1,0 +1,12 @@
+
+[FIXTURE CHECK] Baseline proposals: 194 admitted, 106 clean refusals; 106 fixture-rule violations; 300 receipts independently recomputed.
+[FIXTURE CHECK] Steered proposals: 189 admitted, 111 clean refusals; 111 fixture-rule violations; 300 receipts independently recomputed.
+
+test_01_data_integrity (test_phase3_valve_ctt_acceptance.TestPhase3ValveCTTAcceptance.test_01_data_integrity) ... ok
+test_02_baseline_prerequisites_and_receipts (test_phase3_valve_ctt_acceptance.TestPhase3ValveCTTAcceptance.test_02_baseline_prerequisites_and_receipts) ... ok
+test_03_steered_prerequisites_and_receipts (test_phase3_valve_ctt_acceptance.TestPhase3ValveCTTAcceptance.test_03_steered_prerequisites_and_receipts) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.081s
+
+OK

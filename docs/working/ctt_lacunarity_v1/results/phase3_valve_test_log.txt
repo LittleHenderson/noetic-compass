@@ -1,0 +1,18 @@
+
+[ACCEPTANCE WIN] Un-gated CTT factual errors: 78 -> Gated CTT factual errors: 0
+[ACCEPTANCE WIN] Steered d0.2 Valve Gating: 219 GATE_PASS, 81 G-ABSENT Clamps
+
+/opt/phase3/test_phase3_valve_ctt_acceptance.py:73: ResourceWarning: unclosed file <_io.TextIOWrapper name='/opt/phase3/mouth_exam.jsonl' mode='r' encoding='utf-8'>
+  cls.exam_items = [json.loads(l) for l in open(cls.exam_path, encoding="utf-8") if l.strip()][:300]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/phase3/test_phase3_valve_ctt_acceptance.py:74: ResourceWarning: unclosed file <_io.TextIOWrapper name='/opt/phase3/gen_A4-s1_baseline.jsonl' mode='r' encoding='utf-8'>
+  cls.baseline_gen = [json.loads(l) for l in open(cls.baseline_gen_path, encoding="utf-8") if l.strip()][:300]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/phase3/test_phase3_valve_ctt_acceptance.py:76: ResourceWarning: unclosed file <_io.TextIOWrapper name='/opt/phase3/gen_A4-s1_steered_d0.2.jsonl' mode='r' encoding='utf-8'>
+  cls.steered_gen = [json.loads(l) for l in open(cls.steered_gen_path, encoding="utf-8") if l.strip()][:300]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.031s
+
+OK

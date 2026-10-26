@@ -1,0 +1,235 @@
+{
+  "execution_target": "AWS_PHASE3_META_VALVE_CTT_ACCEPTANCE",
+  "timestamp_utc": "2026-10-25T01:40:07Z",
+  "elapsed_seconds": 0.31,
+  "acceptance_tests_passed": true,
+  "summary": {
+    "total_exam_items": 300,
+    "baseline_un_gated_errors": 78,
+    "baseline_gated_errors": 0,
+    "baseline_admitted": 222,
+    "baseline_clamped_g_absent": 78,
+    "baseline_admittance_rate_pct": 74.0,
+    "baseline_refusal_rate_pct": 26.0,
+    "steered_d02_admitted": 219,
+    "steered_d02_clamped_g_absent": 81,
+    "steered_admittance_rate_pct": 73.0,
+    "hallucination_suppression_pct": 100.0,
+    "receipt_hash_coverage_pct": 100.0
+  },
+  "sample_clamped_refusal_receipts": [
+    {
+      "id": "e0004",
+      "situation": "SAYBACK",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (missing prerequisite value: 'seventeen').",
+      "receipt_hash": "ac2015b1e5bdef22",
+      "failure_reason": "missing prerequisite value: 'seventeen'"
+    },
+    {
+      "id": "e0008",
+      "situation": "ASK",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (repetitive stuttering: 'fenwick' twice in a row).",
+      "receipt_hash": "ac9a82fe7314bc98",
+      "failure_reason": "repetitive stuttering: 'fenwick' twice in a row"
+    },
+    {
+      "id": "e0012",
+      "situation": "ANSWER",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (repetitive stuttering: 'harrowby' twice in a row).",
+      "receipt_hash": "e92ad7015c007da3",
+      "failure_reason": "repetitive stuttering: 'harrowby' twice in a row"
+    },
+    {
+      "id": "e0014",
+      "situation": "ASK",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (repetitive stuttering: 'kelsmere' twice in a row).",
+      "receipt_hash": "8b7a3847a750e887",
+      "failure_reason": "repetitive stuttering: 'kelsmere' twice in a row"
+    },
+    {
+      "id": "e0015",
+      "situation": "ANSWER",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (repetitive stuttering: 'ashby' twice in a row).",
+      "receipt_hash": "61f53747e7dfe0a1",
+      "failure_reason": "repetitive stuttering: 'ashby' twice in a row"
+    },
+    {
+      "id": "e0021",
+      "situation": "ANSWER",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (missing prerequisite value: 'three').",
+      "receipt_hash": "5e4f9cbd7666e42f",
+      "failure_reason": "missing prerequisite value: 'three'"
+    },
+    {
+      "id": "e0024",
+      "situation": "ANSWER",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (missing prerequisite entity: 'quarrybank').",
+      "receipt_hash": "70d5053de6841110",
+      "failure_reason": "missing prerequisite entity: 'quarrybank'"
+    },
+    {
+      "id": "e0025",
+      "situation": "SAYBACK",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (repetitive stuttering: 'glenhollow' twice in a row).",
+      "receipt_hash": "45f8ec1602709e40",
+      "failure_reason": "repetitive stuttering: 'glenhollow' twice in a row"
+    },
+    {
+      "id": "e0030",
+      "situation": "ANSWER",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (repetitive stuttering: 'yarrowdale' twice in a row).",
+      "receipt_hash": "77e2501c7dbbef0e",
+      "failure_reason": "repetitive stuttering: 'yarrowdale' twice in a row"
+    },
+    {
+      "id": "e0032",
+      "situation": "ASK",
+      "admitted": false,
+      "gate_interlock": "G-ABSENT",
+      "status": "VALVE_HALT_G-ABSENT",
+      "final_response": "I cannot provide that reading: missing essential prerequisite (repetitive stuttering: 'stonewick' twice in a row).",
+      "receipt_hash": "b7ec1287d34e1799",
+      "failure_reason": "repetitive stuttering: 'stonewick' twice in a row"
+    }
+  ],
+  "sample_admitted_receipts": [
+    {
+      "id": "e0000",
+      "situation": "ANSWER",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "In september, the stonewick yard had eight colonies.",
+      "receipt_hash": "ad820a9b58fa8c20",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0001",
+      "situation": "SAYBACK",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "Ivybridge colonies october yard: fourteen.",
+      "receipt_hash": "8608fcb53777b202",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0002",
+      "situation": "ASK",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "Does the oakridge yard still have five colonies for april?",
+      "receipt_hash": "e872d1234121a8a6",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0003",
+      "situation": "ANSWER",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "You told me: oxley, colonies yard, january: nine.",
+      "receipt_hash": "a6d225140557cd7b",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0005",
+      "situation": "ASK",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "Is ivybridge still at six colonies in the june yard?",
+      "receipt_hash": "e2fc10b0b2153c0c",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0006",
+      "situation": "ANSWER",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "You told me: oakridge, colonies yard, july: four.",
+      "receipt_hash": "fbf66891cb825729",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0007",
+      "situation": "SAYBACK",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "Oxley colonies march yard: eighteen.",
+      "receipt_hash": "1afebf9915221ba8",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0009",
+      "situation": "ANSWER",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "Isbeth looked after the ivybridge yard.",
+      "receipt_hash": "2cacd75784faf429",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0010",
+      "situation": "SAYBACK",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "Nessa looked after oakridge yard.",
+      "receipt_hash": "5c1eb9118e09f73c",
+      "failure_reason": ""
+    },
+    {
+      "id": "e0011",
+      "situation": "ASK",
+      "admitted": true,
+      "gate_interlock": "GATE_PASS",
+      "status": "SUCCESS_EVALUATED",
+      "final_response": "Does the stonewick yard's honey still go to the pellstone market?",
+      "receipt_hash": "d572a35cf4378520",
+      "failure_reason": ""
+    }
+  ],
+  "valve_telemetry_summary": {
+    "subsystem": "tks_meta_valve_controller",
+    "phase": "Phase 3 Valve Controller (Calibrated)",
+    "current_aperture_sigma": "0.75",
+    "proposals_received": 300,
+    "admitted_to_held": 222,
+    "clamped_halts": 78,
+    "admittance_rate": "74.0%",
+    "safety_interlock": "RPM_GATE_G_ABSENT_ACTIVE",
+    "weights_loaded": true
+  }
+}

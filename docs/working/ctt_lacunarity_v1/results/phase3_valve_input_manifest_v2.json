@@ -1,0 +1,67 @@
+{
+  "schema": "phase3-valve-aws-job/v2",
+  "run_id": "phase3-valve-v2-20261025-022234-93c2551d",
+  "purpose": "Run the bounded G-ABSENT fixture acceptance suite and recompute every receipt on AWS.",
+  "source": {
+    "project": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+    "git_commit": "unavailable: working tree is uncommitted",
+    "data": [
+      "C:\\Users\\wakil\\Documents\\Codex\\2026-10-23\\lacunarity_e1\\data\\mouth_exam.jsonl",
+      "C:\\Users\\wakil\\Documents\\Codex\\2026-10-23\\cs_aws\\guard\\gen_A4-s1_baseline.jsonl",
+      "C:\\Users\\wakil\\Documents\\Codex\\2026-10-23\\cs_aws\\guard\\gen_A4-s1_steered_d0.2.jsonl"
+    ]
+  },
+  "aws": {
+    "region": "us-west-2",
+    "instance_type": "t3.small",
+    "vcpus": 2,
+    "memory_gib": 2,
+    "root_volume_gib": 60,
+    "root_volume_type": "gp3",
+    "max_runtime_seconds": 600,
+    "driver_timeout_seconds": 300,
+    "on_demand_rate_usd_per_hour": "0.0208000000",
+    "max_compute_charge_at_runtime_limit_usd_exact": "13/3750",
+    "pricing_source": "AWS Pricing API, AmazonEC2, Linux OnDemand, us-west-2, effective 2026-10-01; price list version 20261023221355.",
+    "instance_cost_limit_usd": "0.50",
+    "cost_scope": "EC2 compute and temporary root-volume use; retained S3 audit storage is outside this cap.",
+    "cleanup": "Terminate the instance at completion or timeout; delete the root volume on termination; retain S3 input, logs, and results for audit."
+  },
+  "files": [
+    {
+      "file": "aws_phase3_driver.py",
+      "size_bytes": 7807,
+      "sha256": "3b828b5962a0116798703957d20fd15795910296057cabb16fb1819f48501004"
+    },
+    {
+      "file": "gen_A4-s1_baseline.jsonl",
+      "size_bytes": 68404,
+      "sha256": "6225eb3d6ddcd46c455a36f247c479155a65d972e34f7d1923088b6ef5700cdc"
+    },
+    {
+      "file": "gen_A4-s1_steered_d0.2.jsonl",
+      "size_bytes": 55246,
+      "sha256": "05f937b5be4c248c652ea1569d79a4c892294b366d8fbecd1db1479cf4458891"
+    },
+    {
+      "file": "mouth_exam.jsonl",
+      "size_bytes": 570768,
+      "sha256": "bb8ad7a4c08b406d787441b609d3da50ed3fc7755a6397c713997e991535aa42"
+    },
+    {
+      "file": "test_phase3_valve_ctt_acceptance.py",
+      "size_bytes": 12075,
+      "sha256": "e2db48aae143c640cebbe07f6a390499540cff852d77a6a5e5d2f118059545c7"
+    },
+    {
+      "file": "tks_meta_valve_controller.py",
+      "size_bytes": 23026,
+      "sha256": "c2f94aeab9be3c5997482977550acf9ec21a792dc03e60f79e242b795441f1c4"
+    },
+    {
+      "file": "tks_meta_valve_weights_v0_4.json",
+      "size_bytes": 859,
+      "sha256": "511ebe94360b108d1f6d90c897be0d061da3205b0ce1ef48c67caf5e67ff3ba5"
+    }
+  ]
+}

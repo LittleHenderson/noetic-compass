@@ -1,0 +1,63 @@
+Starting bounded AWS Phase 3 fixture acceptance run
+Time (UTC): 2026-10-25T02:24:07.179158+00:00
+Python: /usr/bin/python3
+
+[FIXTURE CHECK] Baseline proposals: 194 admitted, 106 clean refusals; 106 fixture-rule violations; 300 receipts independently recomputed.
+[FIXTURE CHECK] Steered proposals: 189 admitted, 111 clean refusals; 111 fixture-rule violations; 300 receipts independently recomputed.
+
+test_01_data_integrity (test_phase3_valve_ctt_acceptance.TestPhase3ValveCTTAcceptance.test_01_data_integrity) ... ok
+test_02_baseline_prerequisites_and_receipts (test_phase3_valve_ctt_acceptance.TestPhase3ValveCTTAcceptance.test_02_baseline_prerequisites_and_receipts) ... ok
+test_03_steered_prerequisites_and_receipts (test_phase3_valve_ctt_acceptance.TestPhase3ValveCTTAcceptance.test_03_steered_prerequisites_and_receipts) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.081s
+
+OK
+
+Measured result summary:
+{
+  "baseline": {
+    "items": 300,
+    "fixture_rule_violations": 106,
+    "admitted": 194,
+    "clamped_g_absent": 106,
+    "fixture_rule_violations_admitted": 0,
+    "fixture_compliant_items_refused": 0,
+    "receipts_independently_recomputed": 300,
+    "unique_full_sha256_receipts": 300,
+    "telemetry": {
+      "subsystem": "tks_meta_valve_controller",
+      "phase": "Phase 3 Valve Controller (Calibrated)",
+      "current_aperture_sigma": "0.75",
+      "proposals_received": 300,
+      "admitted_to_held": 194,
+      "clamped_halts": 106,
+      "admittance_rate": "64.7%",
+      "safety_interlock": "RPM_GATE_G_ABSENT_ACTIVE",
+      "weights_loaded": true
+    }
+  },
+  "steered_d0_2": {
+    "items": 300,
+    "fixture_rule_violations": 111,
+    "admitted": 189,
+    "clamped_g_absent": 111,
+    "fixture_rule_violations_admitted": 0,
+    "fixture_compliant_items_refused": 0,
+    "receipts_independently_recomputed": 300,
+    "unique_full_sha256_receipts": 300,
+    "telemetry": {
+      "subsystem": "tks_meta_valve_controller",
+      "phase": "Phase 3 Valve Controller (Calibrated)",
+      "current_aperture_sigma": "0.75",
+      "proposals_received": 300,
+      "admitted_to_held": 189,
+      "clamped_halts": 111,
+      "admittance_rate": "63.0%",
+      "safety_interlock": "RPM_GATE_G_ABSENT_ACTIVE",
+      "weights_loaded": true
+    }
+  }
+}
+Scope: 300 fixture rows; lexical checks only; no general zero-hallucination claim.
+Acceptance tests passed and all receipt hashes were recomputed.
