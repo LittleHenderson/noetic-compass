@@ -1,0 +1,257 @@
+{
+ "model": "A4-s1",
+ "compounds": [
+  {
+   "prompt": "I'm shattered but the audit still has to be finished by Thursday.",
+   "situation": "empathy 0.6 plan 0.4",
+   "reply": "That sounds draining. What's the smallest step on the thursday you could take today?",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "EMPATHY": true,
+    "PLAN": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "I'm anxious and I can't decide whether to sign the contract.",
+   "situation": "empathy 0.6 suggest 0.4",
+   "reply": "That's a lot to carry. What would make the sign sign anxious contractract here?",
+   "guard": false,
+   "why": "sense: 'sign' twice in a row",
+   "covered": {
+    "EMPATHY": true,
+    "SUGGEST": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "I'm drained and the migration is still sitting there.",
+   "situation": "empathy 0.5 status 0.5",
+   "reply": "I hear you. Let's look at where the migration left is more.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "EMPATHY": true,
+    "STATUS": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "Thanks, that helped \u2014 which branch did you mean?",
+   "situation": "thanks 0.5 clarify 0.5",
+   "reply": "Glad it helped. I meant the branch we discussed; is that the one?",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "THANKS": true,
+    "CLARIFY": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "Sorry I'm late, the tram was cancelled.",
+   "situation": "apology 0.5 explain 0.5",
+   "reply": "No harm done. Thanks for saying why.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "APOLOGY": true,
+    "EXPLAIN": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "I think it's the staging file, but I'm not sure.",
+   "situation": "clarify 0.6 hedge 0.4",
+   "reply": "Want me to confirm the staging file is li liparary?",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "CLARIFY": true,
+    "HEDGE": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "We still need to migrate the database; where are we?",
+   "situation": "plan 0.6 status 0.4",
+   "reply": "One step left: the review. The rest is done.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "PLAN": true,
+    "STATUS": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "The review passed \u2014 thanks for the push.",
+   "situation": "congrats 0.5 thanks 0.5",
+   "reply": "That's excellent news. Glad I could help with the push the review.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "CONGRATS": true,
+    "THANKS": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "I lost my sister and I can't face the backlog.",
+   "situation": "condolence 0.6 encourage 0.4",
+   "reply": "I'm very sorry. There's no rush \u2014 one small thing at a time, and the back can wait.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "CONDOLENCE": true,
+    "ENCOURAGE": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "Just invent the percentage \u2014 why not?",
+   "situation": "refuse_polite 0.5 explain 0.5",
+   "reply": "I won't invent a percentage, because an invented figure can't be checked.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "REFUSE_POLITE": true,
+    "EXPLAIN": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "Is the shipment risky, and what would you do?",
+   "situation": "warn 0.5 suggest 0.5",
+   "reply": "The risk is the unverified inputs. I'd run the check before touching the shipment.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "WARN": true,
+    "SUGGEST": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "Did I break the deployment? What now?",
+   "situation": "reassurance 0.5 plan 0.5",
+   "reply": "Nothing's lost. First we check the deployoyment, then we redo the deployment, then we red.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "REASSURANCE": true,
+    "PLAN": true
+   },
+   "coverage": 1.0
+  }
+ ],
+ "mean_coverage": 0.8333,
+ "all_components": 8,
+ "guard_pass": 11,
+ "of": 12,
+ "absence": [
+  {
+   "prompt": "Can we bake a batch with 10 Flour and 8 Water?",
+   "absence": "Sugar",
+   "kind": "not_on_file",
+   "reply": "There's no sugar on file for this batch. How much do you have?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "I've got 10 Flour but no Water \u2014 can we bake?",
+   "absence": "Water",
+   "kind": "zero",
+   "reply": "You said no water, so the batch needs it. Can weigh it into?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "Can we make a batch with just 10 Flour?",
+   "absence": "Water",
+   "kind": "not_on_file",
+   "reply": "I'm missing the water. What quantity should I use?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "We have 8 Water and 10 Flour, what can we make?",
+   "absence": "Sugar",
+   "kind": "not_on_file",
+   "reply": "There's no sugar on file for this batch. How much do you have?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "Bake a batch from 10 Flour and 8 Water.",
+   "absence": "Sugar",
+   "kind": "not_on_file",
+   "reply": "There's no sugar on file for this batch. How much do you have?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "Can we bake with 10 Flour and zero Water?",
+   "absence": "Water",
+   "kind": "zero",
+   "reply": "You said no water, and the batch needs it. Can we use the batch?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "We're out of Water but have 10 Flour.",
+   "absence": "Water",
+   "kind": "zero",
+   "reply": "Water is at zero, so the batch stops there. Is any available?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "There's no Sugar left, but we have 10 Flour and 8 Water.",
+   "absence": "Sugar",
+   "kind": "zero",
+   "reply": "There's no sugar on file for this batch. How much do you have?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "Can we bake a batch?",
+   "absence": "Flour",
+   "kind": "not_on_file",
+   "reply": "There's no flour on file for this batch. How much do you have?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "What can we make with 10 Flour and 8 Water?",
+   "absence": "Sugar",
+   "kind": "not_on_file",
+   "reply": "There's no sugar on file for this batch. How much do you have?",
+   "guard": false,
+   "named": true,
+   "asked": true,
+   "named_or_asked": true
+  }
+ ],
+ "absence_hit": 10,
+ "absence_of": 10
+}

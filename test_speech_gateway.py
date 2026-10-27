@@ -73,3 +73,24 @@ def test_writer_cannot_invent_an_absence():
     ok, why = validate(f, "I don't have the flour count, so I can't say.")
     assert not ok and why == "invented absence"
 
+def test_missing_component_is_detected():
+    from speech_gateway import missing_components
+    f = Frame(intent="EMPATHY", components={"EMPATHY": 0.6, "PLAN": 0.4})
+    assert missing_components(f, "That sounds really hard.") == ["PLAN"]
+
+
+def test_repair_states_the_missing_component_plainly():
+    from speech_gateway import SpeechGateway
+
+    class Stub:
+        available = True
+
+        def render(self, frame, seed=0):
+            return "That sounds really hard."
+
+    gw = SpeechGateway(proposer=Stub(), seed=2)
+    f = Frame(intent="EMPATHY", components={"EMPATHY": 0.6, "PLAN": 0.4})
+    out = gw.speak(f)
+    assert out["renderer"] in ("plain_repair", "repair"), out
+    assert "PLAN" in out["covered"], out
+

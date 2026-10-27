@@ -41,6 +41,9 @@ class Frame:
     # What the BRAIN has decided is missing (limiting reagent, absent prerequisite, open slot).
     # The writer may name it or ask about it. The writer may never invent an absence of its own.
     absence: Optional[str] = None
+    # The compound the brain has decided this turn is: {"EMPATHY": 0.6, "PLAN": 0.4}.
+    # Every component above the threshold must be visible in the sentence; missing ones are repaired.
+    components: Dict[str, float] = field(default_factory=dict)
 
 
 # ------------------------------------------------------------------------------------ validation
@@ -178,6 +181,63 @@ class LearnedProposer:
             return None
 
 
+
+
+COMPONENT_CUES = {
+    "EMPATHY": r"sorry|draining|hear you|hear that|heavy|hard|tough|carry|rough",
+    "PLAN": r"step|first|next|start|today|one thing",
+    "SUGGEST": r"what would|could|might|try|maybe|option|instead",
+    "STATUS": r"where|stands|done|left|pending|state|finished",
+    "CLARIFY": r"which|mean|confirm|check|\?",
+    "HEDGE": r"sure|certain|might|not sure|verify|check|guess",
+    "THANKS": r"glad|welcome|pleasure|any time|happy",
+    "APOLOGY": r"no harm|fine|alright|no need|don't worry|forget",
+    "EXPLAIN": r"because|since|reason|so that|explains|what happened",
+    "CONGRATS": r"excellent|great|well done|congrat|brilliant|good news",
+    "CONDOLENCE": r"sorry|loss|heavy|no rush|gentle|here",
+    "ENCOURAGE": r"next|smallest|one piece|not all at once|stuck|further|step|normal",
+    "REFUSE_POLITE": r"won't|decline|rather not|can't|don't",
+    "WARN": r"risk|catch|careful|watch|danger",
+    "REASSURANCE": r"nothing|lost|fine|intact|safe|alright",
+    "CONFIRM": r"right|correct|yes|agreed|confirmed",
+    "PLAYFUL": r"joke|funny|pun|ha|udp",
+    "SMALLTALK": r"day|quiet|busy|you|here",
+}
+PLAIN_COMPONENT = {
+    "EMPATHY": "That sounds genuinely hard.",
+    "PLAN": "The next step is the smallest piece you can check.",
+    "SUGGEST": "I'd try the narrow version first.",
+    "STATUS": "Here is where things stand: nothing is pending on my side.",
+    "CLARIFY": "Tell me which one you mean and I'll take it from there.",
+    "HEDGE": "I'm not fully certain, so I would check before relying on it.",
+    "THANKS": "Glad it helped.",
+    "APOLOGY": "No harm done.",
+    "EXPLAIN": "The reason is that the inputs decide the answer.",
+    "CONGRATS": "That's a real result.",
+    "CONDOLENCE": "I'm sorry for your loss.",
+    "ENCOURAGE": "You don't have to solve everything at the same time.",
+    "REFUSE_POLITE": "I'd rather not do that unchecked.",
+    "WARN": "There is a risk here worth naming.",
+    "REASSURANCE": "Nothing is lost.",
+    "CONFIRM": "That matches what I have.",
+    "PLAYFUL": "I'll keep it light.",
+    "SMALLTALK": "I'm here and listening.",
+}
+MIN_WEIGHT = 0.3
+
+
+def missing_components(frame: Frame, text: str) -> List[str]:
+    """Components above the threshold that the sentence does not visibly address."""
+    missing = []
+    for tag, weight in frame.components.items():
+        if weight < MIN_WEIGHT:
+            continue
+        rx = COMPONENT_CUES.get(tag)
+        if rx and not re.search(rx, text, re.I):
+            missing.append(tag)
+    return missing
+
+
 # ------------------------------------------------------------------------------------ gateway
 class SpeechGateway:
     def __init__(self, proposer: Optional[LearnedProposer] = None, seed: int = 0):
@@ -204,7 +264,34 @@ class SpeechGateway:
             ok, why = validate(frame, text)
             attempts.append({"text": text, "ok": ok, "why": why})
             if ok:
-                return {"text": text, "ok": True, "renderer": frame.intent, "attempts": attempts}
+                missing = missing_components(frame, text)
+                if not missing:
+                    return {"text": text, "ok": True, "renderer": frame.intent, "attempts": attempts,
+                            "covered": sorted(set(frame.components) - set(missing))}
+                # one repair: ask the writer for the missing components, keep it only if it validates
+                repair = Frame(intent="REPAIR", slots=dict(frame.slots), licensed=list(frame.licensed),
+                               facts=frame.facts, absence=frame.absence, components=frame.components,
+                               history=frame.history)
+                repaired = self.proposer.render(repair, self.rng.randrange(1 << 30)) if self.proposer.available else None
+                if repaired:
+                    ok2, why2 = validate(frame, repaired)
+                    if ok2 and not missing_components(frame, repaired):
+                        attempts.append({"text": repaired, "ok": True, "why": "", "repair": True})
+                        return {"text": repaired, "ok": True, "renderer": "repair", "attempts": attempts,
+                                "covered": sorted(frame.components)}
+                    attempts.append({"text": repaired, "ok": ok2, "why": why2 or "components still missing",
+                                     "repair": True})
+                # the plain path: state the missing components explicitly, then re-validate
+                tail = " ".join(PLAIN_COMPONENT.get(m, "") for m in missing).strip()
+                combined = (text.rstrip() + " " + tail).strip()
+                ok3, why3 = validate(frame, combined)
+                if ok3:
+                    attempts.append({"text": combined, "ok": True, "why": "", "plain_repair": missing})
+                    return {"text": combined, "ok": True, "renderer": "plain_repair", "attempts": attempts,
+                            "covered": sorted(frame.components)}
+                attempts.append({"text": combined, "ok": False, "why": why3})
+                return {"text": text, "ok": True, "renderer": frame.intent, "attempts": attempts,
+                        "covered": sorted(set(frame.components) - set(missing)), "unrepaired": missing}
         # One repair pass: ask the proposer again, then a composer fallback.
         if frame.intent not in ("GREETING", "REFUSE", "ANSWER", "RECALL", "YIELD"):
             text = self.proposer.render(frame, self.rng.randrange(1 << 30))
