@@ -75,3 +75,31 @@ did not build. The rule forbids two things: (1) loading another model's weights 
 model's answers as training targets. Public human text may be used for style, with audits. Using a rented model at
 runtime to phrase a checked sentence is not distillation; training our model on its output would be.
 
+## REVERSAL — owner decision, 2026-10-26 19:36 PDT
+
+Owner, verbatim: **"IN REGARD TO THE PRIOR DICTATE ON DISTILLATION, I HEREBY REVERSE THAT DICTATE."**
+
+What is now permitted:
+
+- **Foreign-model answers may be used as training targets.** The 2026-05-04 "foreign answers never" rule is reversed.
+- Model-generated corpora are therefore allowed: ShareGPT, LMSYS-Chat-1M, UltraChat, SODA, and DeepSeek outputs
+  produced during HELM use, subject only to the licence of each source and to quality filtering.
+- Human-written corpora remain allowed, as before.
+
+What this instruction does **not** say, and what I am therefore leaving in place until told otherwise:
+
+- The separate rule about **loading foreign pretrained weights into our stack** was not named in this reversal. The
+  2026-05-04 ruling had two parts; only distillation was reversed. So: our model is still trained from its own random
+  initialisation, and no Llama/Qwen/DeepSeek weights are loaded. If the owner intends to reverse that part too, it needs
+  its own instruction, because it changes what the product is.
+
+Consequences recorded now:
+
+1. The "no foreign distillation" objection I raised against ShareGPT/LMSYS/UltraChat/SODA is withdrawn.
+2. The corpus scope becomes: human-written text + model-written text + our own seeds, all licence-checked and quality
+   filtered.
+3. The claim that HELM's model is "trained only on our own checked corpus" is withdrawn. Any future claim must state
+   exactly which corpora, including model-generated ones, contributed to a checkpoint.
+4. Provenance stays mandatory: every row keeps `source` and `licence`, and model-generated rows additionally carry
+   `synthetic: true`.
+
