@@ -55,3 +55,21 @@ def test_composer_used_when_proposer_unavailable():
     assert out["ok"] is False
     assert out["renderer"] == "refusal"
     assert out["text"].endswith(".")
+
+def test_brain_declared_absence_must_be_named():
+    f = Frame(intent="CLARIFY", absence="deadline")
+    ok, why = validate(f, "When is it due? I don't have a date from you yet.")
+    assert ok, why
+
+
+def test_brain_declared_absence_cannot_be_ignored():
+    f = Frame(intent="CLARIFY", absence="deadline")
+    ok, why = validate(f, "That sounds hard. Take it easy.")
+    assert not ok and "absence not named" in why
+
+
+def test_writer_cannot_invent_an_absence():
+    f = Frame(intent="EMPATHY")
+    ok, why = validate(f, "I don't have the flour count, so I can't say.")
+    assert not ok and why == "invented absence"
+

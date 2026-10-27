@@ -38,6 +38,9 @@ class Frame:
     facts: bool = False                          # may the sentence assert facts?
     tone: str = "warm"
     history: List[str] = field(default_factory=list)
+    # What the BRAIN has decided is missing (limiting reagent, absent prerequisite, open slot).
+    # The writer may name it or ask about it. The writer may never invent an absence of its own.
+    absence: Optional[str] = None
 
 
 # ------------------------------------------------------------------------------------ validation
@@ -62,6 +65,14 @@ def validate(frame: Frame, text: str) -> tuple[bool, str]:
     bad_numwords = {w for w in words if w in NUMBER_WORDS and w not in licensed and w not in frame.slots.values()}
     if bad_numwords:
         return False, "unlicensed number word: %s" % ",".join(sorted(bad_numwords))
+    # Absence is decided by the brain, never by the writer.
+    ABSENCE_RX = r"(don'?t have|do not have|don'?t know|no [a-z]+ yet|not have|missing|without)"
+    if frame.absence:
+        if frame.absence.lower() not in low and "?" not in t:
+            return False, "absence not named: %s" % frame.absence
+    else:
+        if re.search(ABSENCE_RX, low):
+            return False, "invented absence"
     # Proper nouns must be licensed, factual frame or not: an unlicensed name is an invented fact either way.
     for m in re.finditer(r"(?<![.!?]\s)(?<!^)\b([A-Z][a-z]{2,})\b", t):
         if m.group(1).lower() not in licensed:

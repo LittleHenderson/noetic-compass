@@ -60,3 +60,34 @@ that our single tag erased, for example:
 
 - `situation_mixtures.py`; result sample `data/public_corpus/situation_mixtures_sample.json`.
 - Cleaned corpus: 42,162 rows (`public_turns_clean.jsonl`), single-tag as built.
+
+## Correction (2026-10-26, owner challenge): absence is decided by the recipe, not by the writer
+
+The owner asked, correctly: absence is already decided by the recipe, so what does "wiring absence into the model"
+mean?
+
+**What it does not mean.** The model never decides what is missing. If it did, it would be inventing gaps — the same
+failure as inventing facts.
+
+**What it does mean.** The mouth receives a field that says what the brain has already found missing — the limiting
+reagent, the absent prerequisite, the unfilled slot. Its only job is to phrase that: name it, or ask for it. The field is
+filled from the brain's receipt, not from the writer and not from me.
+
+**Where I was wrong.** The 424 compound/absence rows I built had **hand-written** absence labels. They teach the
+phrasing pattern, which is useful, but they are the wrong *source*: an authored absence is a guess, not a receipt. Two
+consequences follow:
+
+1. Training rows must be generated from real brain runs: feed the recipe brain a scenario with a missing ingredient or an
+   open slot, take its receipt, and pair that receipt with a sentence. Then the model learns to phrase decisions the
+   brain actually made.
+2. The gateway must enforce both directions, which it now does:
+   - if the brain declared an absence, the sentence must name it or ask about it — otherwise rejected
+     ("absence not named");
+   - if the brain declared none, the sentence may not claim something is missing — otherwise rejected
+     ("invented absence").
+
+Both checks are implemented in `speech_gateway.validate` and covered by three tests (9/9 in the gateway suite).
+
+**So the ordering is:** recipe decides absence → frame carries it → writer phrases it → check verifies the phrasing
+matches the receipt. The writer never gets a vote.
+
