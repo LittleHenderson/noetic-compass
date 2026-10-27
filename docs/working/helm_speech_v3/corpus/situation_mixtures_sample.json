@@ -1,0 +1,222 @@
+{
+ "rows": 42162,
+ "single_component": 40578,
+ "multi_component": 1584,
+ "multi_fraction": 0.0376,
+ "top_combinations": [
+  [
+   "CONDOLENCE + CONGRATS",
+   145
+  ],
+  [
+   "EMPATHY + EXPLAIN",
+   123
+  ],
+  [
+   "CLARIFY + HEDGE",
+   89
+  ],
+  [
+   "THANKS + SUGGEST",
+   74
+  ],
+  [
+   "EMPATHY + STATUS",
+   70
+  ],
+  [
+   "STATUS + EXPLAIN",
+   65
+  ],
+  [
+   "EMPATHY + CLARIFY",
+   62
+  ],
+  [
+   "EMPATHY + CONDOLENCE",
+   49
+  ],
+  [
+   "EXPLAIN + CLARIFY",
+   48
+  ],
+  [
+   "EMPATHY + PLAN",
+   47
+  ]
+ ],
+ "samples": [
+  {
+   "user": "I would imagine this is similar or even the same as a \"monopoly\" but I am not sure. Assuming that this some kind of \"final state\" of a particular industry or ev",
+   "single_tag": "SMALLTALK",
+   "mixture": [
+    {
+     "tag": "CLARIFY",
+     "weight": 0.5
+    },
+    {
+     "tag": "HEDGE",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "Thank you. Can you explain American folk music to me?",
+   "single_tag": "THANKS",
+   "mixture": [
+    {
+     "tag": "EXPLAIN",
+     "weight": 0.5
+    },
+    {
+     "tag": "THANKS",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "How much tea does the average person drink each year? I think that my usual three to five cups per day is healthy, but I am not sure. I have recently started to",
+   "single_tag": "ASK",
+   "mixture": [
+    {
+     "tag": "CLARIFY",
+     "weight": 0.5
+    },
+    {
+     "tag": "SUGGEST",
+     "weight": 0.25
+    },
+    {
+     "tag": "HEDGE",
+     "weight": 0.25
+    }
+   ]
+  },
+  {
+   "user": "They were brilliant, thank you! Which one do you think is best?",
+   "single_tag": "THANKS",
+   "mixture": [
+    {
+     "tag": "THANKS",
+     "weight": 0.5
+    },
+    {
+     "tag": "CLARIFY",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "Ok, but what if I'm worried about one of the individuals who is fighting? Let's say that one of them is my brother. What should I do then? I can't just watch hi",
+   "single_tag": "EMPATHY",
+   "mixture": [
+    {
+     "tag": "EMPATHY",
+     "weight": 0.5
+    },
+    {
+     "tag": "SUGGEST",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "Ok, but what if I'm worried about one of the individuals who is fighting? Let's say that one of them is my brother. What should I do then? I can't just watch hi",
+   "single_tag": "EMPATHY",
+   "mixture": [
+    {
+     "tag": "EMPATHY",
+     "weight": 0.5
+    },
+    {
+     "tag": "SUGGEST",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "If I only have time to listen to one Beethoven symphony, which one should I choose? Can you recommend a good recording?",
+   "single_tag": "CLARIFY",
+   "mixture": [
+    {
+     "tag": "CLARIFY",
+     "weight": 0.5
+    },
+    {
+     "tag": "SUGGEST",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "What advice would you give to someone struggling with social anxiety and being socially awkward?",
+   "single_tag": "ASK",
+   "mixture": [
+    {
+     "tag": "EMPATHY",
+     "weight": 0.5
+    },
+    {
+     "tag": "SUGGEST",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "Thank you! Which of these crops should I plant to provide enough caloric/nutrient content to 2 adults with 1/3 acre?",
+   "single_tag": "THANKS",
+   "mixture": [
+    {
+     "tag": "THANKS",
+     "weight": 0.5
+    },
+    {
+     "tag": "SUGGEST",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "I'm afraid I might look dumb if I ask for help, how can I overcome this?",
+   "single_tag": "EMPATHY",
+   "mixture": [
+    {
+     "tag": "EMPATHY",
+     "weight": 0.5
+    },
+    {
+     "tag": "HEDGE",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "How do I know for sure, though? It hurts really bad and I'm scared. Should I not go to the emergency room?",
+   "single_tag": "EMPATHY",
+   "mixture": [
+    {
+     "tag": "EMPATHY",
+     "weight": 0.5
+    },
+    {
+     "tag": "SUGGEST",
+     "weight": 0.5
+    }
+   ]
+  },
+  {
+   "user": "Pretend you are a doctor. I'm feeling a subtle pain in my chest and my sternum feels like I need to stretch it until it pops. Am I having a heart attack? Is the",
+   "single_tag": "EMPATHY",
+   "mixture": [
+    {
+     "tag": "EMPATHY",
+     "weight": 0.5
+    },
+    {
+     "tag": "PLAN",
+     "weight": 0.5
+    }
+   ]
+  }
+ ]
+}
