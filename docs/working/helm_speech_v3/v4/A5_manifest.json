@@ -1,0 +1,53 @@
+{
+ "config": {
+  "d_model": 128,
+  "dec_layers": 3,
+  "enc_layers": 3,
+  "ff": 512,
+  "heads": 4
+ },
+ "config_name": "A5_2p5M",
+ "data_manifest_sha256": "4c5c05804e2e19bfe682b2dc34e3db0212fd4dc6daeae055cfd30e1c0c909f28",
+ "final_sha256": "7a9a8a29f979c0b7c1396598cb12ff71b8031d6f84192d89b4760cab7670a9ae",
+ "final_train_loss": 2.0258440375328064,
+ "frozen": {
+  "batch": 256,
+  "lr": 0.0005,
+  "mix": {
+   "CAS": 2,
+   "CUBE": 2,
+   "EAR_M": 1,
+   "MOUTH": 5
+  },
+  "steps": 6000
+ },
+ "gpu": "NVIDIA A10G",
+ "init_sha256": "07a54adcdb58cfb746f35e0d4350a9bde536eb72f97d6b29451960313fca4bc1",
+ "instrumentation": {
+  "checkpoint_every": 1000,
+  "lacunarity_boxes": [
+   4,
+   8,
+   16
+  ],
+  "micro_batch": 64,
+  "note": "E1 instrumentation only; effective batch unchanged by gradient accumulation",
+  "resume_every": 250
+ },
+ "model": "A5-s1",
+ "order_seed": 107,
+ "parameters": 2482847,
+ "pool_rows": {
+  "CAS": 20000,
+  "CUBE": 41503,
+  "EAR_M": 5306,
+  "MOUTH": 56494
+ },
+ "schema": "mouth-train.weights-manifest/1",
+ "seconds": 1120.4,
+ "seed": 6007013694207075713,
+ "steps": 6000,
+ "torch": "2.9.1+cu130",
+ "vocab_sha256": "825b417a62b6df94567fdb686200988b92a058cafefb127561c661c28db1265a",
+ "vocab_size": 8350
+}
