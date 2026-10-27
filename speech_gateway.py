@@ -21,6 +21,24 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 WORD_RX = re.compile(r"[a-z]+|\d+")
+
+HERE = Path(__file__).resolve().parent
+
+
+def _load_lexicon() -> set:
+    """Words our corpus and banks actually contain. Used to catch invented words ("deployoyment")."""
+    import os
+    cands = [os.environ.get("HELM_LEXICON"),
+             str(HERE / "data" / "lexicon_words.txt"),
+             str(HERE / "docs" / "working" / "helm_speech_v3" / "lexicon_words.txt")]
+    for c in cands:
+        if c and Path(c).exists():
+            return {w.strip().lower() for w in Path(c).read_text(encoding="utf-8").splitlines() if w.strip()}
+    return set()
+
+
+LEXICON = _load_lexicon()
+
 NUMBER_WORDS = {
     "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
     "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty",
@@ -60,6 +78,16 @@ def validate(frame: Frame, text: str) -> tuple[bool, str]:
         return False, "too many sentences"
     low = t.lower()
     licensed = {w.lower() for w in frame.licensed}
+    slot_words = {str(v).lower() for v in frame.slots.values() if isinstance(v, str)}
+    if LEXICON:
+        for token in re.findall(r"[A-Za-z']+", t):
+            for part in token.lower().replace("'", " ").split():
+                if len(part) < 2:
+                    continue
+                if part in licensed or part in slot_words:
+                    continue
+                if part not in LEXICON:
+                    return False, "unknown word: %s" % part
     digits = set(re.findall(r"\d+", t))
     bad_digits = {d for d in digits if d not in licensed}
     if bad_digits:
@@ -186,16 +214,16 @@ class LearnedProposer:
 COMPONENT_CUES = {
     "EMPATHY": r"sorry|draining|hear you|hear that|heavy|hard|tough|carry|rough",
     "PLAN": r"step|first|next|start|today|one thing",
-    "SUGGEST": r"what would|could|might|try|maybe|option|instead",
+    "SUGGEST": r"what would|could|might|try|maybe|option|instead|i'd|run the check|check the",
     "STATUS": r"where|stands|done|left|pending|state|finished",
     "CLARIFY": r"which|mean|confirm|check|\?",
     "HEDGE": r"sure|certain|might|not sure|verify|check|guess",
     "THANKS": r"glad|welcome|pleasure|any time|happy",
     "APOLOGY": r"no harm|fine|alright|no need|don't worry|forget",
-    "EXPLAIN": r"because|since|reason|so that|explains|what happened",
+    "EXPLAIN": r"because|since|reason|so that|explains|what happened|saying why|explain",
     "CONGRATS": r"excellent|great|well done|congrat|brilliant|good news",
     "CONDOLENCE": r"sorry|loss|heavy|no rush|gentle|here",
-    "ENCOURAGE": r"next|smallest|one piece|not all at once|stuck|further|step|normal",
+    "ENCOURAGE": r"next|smallest|one piece|not all at once|stuck|further|step|normal|small thing|at a time|no rush",
     "REFUSE_POLITE": r"won't|decline|rather not|can't|don't",
     "WARN": r"risk|catch|careful|watch|danger",
     "REASSURANCE": r"nothing|lost|fine|intact|safe|alright",

@@ -94,3 +94,14 @@ def test_repair_states_the_missing_component_plainly():
     assert out["renderer"] in ("plain_repair", "repair"), out
     assert "PLAN" in out["covered"], out
 
+def test_invented_word_is_rejected():
+    f = Frame(intent="STATUS")
+    ok, why = validate(f, "We check the deployoyment next.")
+    assert not ok and why.startswith("unknown word"), why
+
+
+def test_ordinary_sentence_passes_the_word_gate():
+    f = Frame(intent="EMPATHY")
+    ok, why = validate(f, "That sounds draining. Do you want to talk it through?")
+    assert ok, why
+

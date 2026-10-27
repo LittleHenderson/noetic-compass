@@ -1,0 +1,622 @@
+[
+ {
+  "id": 18,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.5,
+   "PLAN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 54,
+  "kind": "absence",
+  "components": {
+   "CLARIFY": 1.0
+  },
+  "absence": "Flour",
+  "guard": false,
+  "why": "recipe-speak"
+ },
+ {
+  "id": 39,
+  "kind": "compound",
+  "components": {
+   "STATUS": 0.5,
+   "HEDGE": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 34,
+  "kind": "compound",
+  "components": {
+   "CONDOLENCE": 0.6,
+   "ENCOURAGE": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 43,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.5,
+   "PLAN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 9,
+  "kind": "compound",
+  "components": {
+   "CONDOLENCE": 0.6,
+   "ENCOURAGE": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 4,
+  "kind": "compound",
+  "components": {
+   "THANKS": 0.5,
+   "CLARIFY": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 14,
+  "kind": "compound",
+  "components": {
+   "STATUS": 0.5,
+   "HEDGE": 0.5
+  },
+  "absence": null,
+  "guard": false,
+  "why": "sense: 'we' twice in a row"
+ },
+ {
+  "id": 49,
+  "kind": "compound",
+  "components": {
+   "CONGRATS": 0.5,
+   "PLAN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 46,
+  "kind": "compound",
+  "components": {
+   "REFUSE_POLITE": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 24,
+  "kind": "compound",
+  "components": {
+   "CONGRATS": 0.5,
+   "PLAN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 23,
+  "kind": "compound",
+  "components": {
+   "REASSURANCE": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 16,
+  "kind": "compound",
+  "components": {
+   "CONDOLENCE": 0.5,
+   "ENCOURAGE": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 5,
+  "kind": "compound",
+  "components": {
+   "APOLOGY": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 21,
+  "kind": "compound",
+  "components": {
+   "REFUSE_POLITE": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 25,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.5,
+   "HEDGE": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 53,
+  "kind": "absence",
+  "components": {
+   "CLARIFY": 1.0
+  },
+  "absence": "Sugar",
+  "guard": false,
+  "why": "sense: 'sugar' three times"
+ },
+ {
+  "id": 37,
+  "kind": "compound",
+  "components": {
+   "REASSURANCE": 0.5,
+   "PLAN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 19,
+  "kind": "compound",
+  "components": {
+   "THANKS": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 22,
+  "kind": "compound",
+  "components": {
+   "WARN": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 47,
+  "kind": "compound",
+  "components": {
+   "WARN": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 15,
+  "kind": "compound",
+  "components": {
+   "PLAN": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 32,
+  "kind": "compound",
+  "components": {
+   "PLAN": 0.6,
+   "STATUS": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 44,
+  "kind": "compound",
+  "components": {
+   "THANKS": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 8,
+  "kind": "compound",
+  "components": {
+   "CONGRATS": 0.5,
+   "THANKS": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 42,
+  "kind": "compound",
+  "components": {
+   "APOLOGY": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 28,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.5,
+   "STATUS": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 2,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.6,
+   "SUGGEST": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 55,
+  "kind": "absence",
+  "components": {
+   "CLARIFY": 1.0
+  },
+  "absence": "Egg",
+  "guard": false,
+  "why": "sense: 'whether' twice in a row"
+ },
+ {
+  "id": 17,
+  "kind": "compound",
+  "components": {
+   "APOLOGY": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 27,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.6,
+   "SUGGEST": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 1,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.6,
+   "PLAN": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 11,
+  "kind": "compound",
+  "components": {
+   "WARN": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 45,
+  "kind": "compound",
+  "components": {
+   "CLARIFY": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 26,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.6,
+   "PLAN": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 3,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.5,
+   "STATUS": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 35,
+  "kind": "compound",
+  "components": {
+   "REFUSE_POLITE": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 6,
+  "kind": "compound",
+  "components": {
+   "CLARIFY": 0.6,
+   "HEDGE": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 10,
+  "kind": "compound",
+  "components": {
+   "REFUSE_POLITE": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 20,
+  "kind": "compound",
+  "components": {
+   "CLARIFY": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 52,
+  "kind": "absence",
+  "components": {
+   "CLARIFY": 1.0
+  },
+  "absence": "Yeast",
+  "guard": false,
+  "why": "sense: 'we' twice in a row"
+ },
+ {
+  "id": 7,
+  "kind": "compound",
+  "components": {
+   "PLAN": 0.6,
+   "STATUS": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 48,
+  "kind": "compound",
+  "components": {
+   "REASSURANCE": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 40,
+  "kind": "compound",
+  "components": {
+   "PLAN": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 41,
+  "kind": "compound",
+  "components": {
+   "CONDOLENCE": 0.5,
+   "ENCOURAGE": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 31,
+  "kind": "compound",
+  "components": {
+   "CLARIFY": 0.6,
+   "HEDGE": 0.4
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 51,
+  "kind": "absence",
+  "components": {
+   "CLARIFY": 1.0
+  },
+  "absence": "Sugar",
+  "guard": false,
+  "why": "recipe-speak"
+ },
+ {
+  "id": 12,
+  "kind": "compound",
+  "components": {
+   "REASSURANCE": 0.5,
+   "PLAN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 13,
+  "kind": "compound",
+  "components": {
+   "ENCOURAGE": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 38,
+  "kind": "compound",
+  "components": {
+   "ENCOURAGE": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 33,
+  "kind": "compound",
+  "components": {
+   "CONGRATS": 0.5,
+   "THANKS": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 57,
+  "kind": "absence",
+  "components": {
+   "CLARIFY": 1.0
+  },
+  "absence": "Water",
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 30,
+  "kind": "compound",
+  "components": {
+   "APOLOGY": 0.5,
+   "EXPLAIN": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 50,
+  "kind": "compound",
+  "components": {
+   "EMPATHY": 0.5,
+   "HEDGE": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 36,
+  "kind": "compound",
+  "components": {
+   "WARN": 0.5,
+   "SUGGEST": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ },
+ {
+  "id": 56,
+  "kind": "absence",
+  "components": {
+   "CLARIFY": 1.0
+  },
+  "absence": "Water",
+  "guard": false,
+  "why": "recipe-speak"
+ },
+ {
+  "id": 29,
+  "kind": "compound",
+  "components": {
+   "THANKS": 0.5,
+   "CLARIFY": 0.5
+  },
+  "absence": null,
+  "guard": true,
+  "why": ""
+ }
+]
