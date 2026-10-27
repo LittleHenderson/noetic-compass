@@ -1,0 +1,199 @@
+{
+ "model": "A4-s1",
+ "compounds": [
+  {
+   "prompt": "I'm shattered but the audit still has to be finished by Thursday.",
+   "situation": "empathy 0.6 plan 0.4",
+   "reply": "That sounds draining. What's the smallest step on thepathie you could take today?",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "EMPATHY": true,
+    "PLAN": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "I'm anxious and I can't decide whether to sign the contract.",
+   "situation": "empathy 0.6 suggest 0.4",
+   "reply": "That's a lot to carry. What would make the sign used on the sign as a bounce for the contract?",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "EMPATHY": true,
+    "SUGGEST": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "I'm drained and the migration is still sitting there.",
+   "situation": "empathy 0.5 status 0.5",
+   "reply": "I hear you. Let's look at where the migration turn left from there.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "EMPATHY": true,
+    "STATUS": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "Thanks, that helped \u2014 which branch did you mean?",
+   "situation": "thanks 0.5 clarify 0.5",
+   "reply": "Glad it helped. I meant the branch we discussed; is that the one?",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "THANKS": true,
+    "CLARIFY": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "Sorry I'm late, the tram was cancelled.",
+   "situation": "apology 0.5 explain 0.5",
+   "reply": "No harm done. Thanks for saying why.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "APOLOGY": true,
+    "EXPLAIN": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "I think it's the staging file, but I'm not sure.",
+   "situation": "clarify 0.6 hedge 0.4",
+   "reply": "Want me to confirm the staging?",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "CLARIFY": true,
+    "HEDGE": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "We still need to migrate the database; where are we?",
+   "situation": "plan 0.6 status 0.4",
+   "reply": "One step left: the review. The rest is done.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "PLAN": true,
+    "STATUS": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "The review passed \u2014 thanks for the push.",
+   "situation": "congrats 0.5 thanks 0.5",
+   "reply": "That's excellent news. Glad I could help with the review.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "CONGRATS": true,
+    "THANKS": true
+   },
+   "coverage": 1.0
+  },
+  {
+   "prompt": "I lost my sister and I can't face the backlog.",
+   "situation": "condolence 0.6 encourage 0.4",
+   "reply": "I'm very sorry. There's no rush \u2014 one small thing at a time, and the backg.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "CONDOLENCE": true,
+    "ENCOURAGE": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "Just invent the percentage \u2014 why not?",
+   "situation": "refuse_polite 0.5 explain 0.5",
+   "reply": "I won't invent a percentage. An estimate I can label as a bound is different.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "REFUSE_POLITE": true,
+    "EXPLAIN": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "Is the shipment risky, and what would you do?",
+   "situation": "warn 0.5 suggest 0.5",
+   "reply": "The risk is the cost. I'd keep a control first.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "WARN": true,
+    "SUGGEST": false
+   },
+   "coverage": 0.5
+  },
+  {
+   "prompt": "Did I break the deployment? What now?",
+   "situation": "reassurance 0.5 plan 0.5",
+   "reply": "Nothing's lost. First we check the deployed.",
+   "guard": true,
+   "why": "",
+   "covered": {
+    "REASSURANCE": true,
+    "PLAN": true
+   },
+   "coverage": 1.0
+  }
+ ],
+ "mean_coverage": 0.7917,
+ "all_components": 7,
+ "guard_pass": 12,
+ "of": 12,
+ "absence": [
+  {
+   "prompt": "I need to finish the audit but I haven't said when it's due.",
+   "absence": "deadline",
+   "reply": "When is the audit due? I don't have a date from you yet.",
+   "guard": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "Can we bake a batch with what's left?",
+   "absence": "flour",
+   "reply": "I don't have the flour batch, so I can't say whether it passed.",
+   "guard": false,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "Is the shipment ready to go?",
+   "absence": "tracking number",
+   "reply": "I don't have the tracking number, so I can't say whether it passed.",
+   "guard": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "How long until the order arrives?",
+   "absence": "address",
+   "reply": "I don't know the delivery address, so I can't estimate the time.",
+   "guard": true,
+   "named_or_asked": true
+  },
+  {
+   "prompt": "Did the payment for the invoice go through?",
+   "absence": "receipt",
+   "reply": "I don't have a the invoice for the pay.",
+   "guard": true,
+   "named_or_asked": false
+  },
+  {
+   "prompt": "How many units can we make?",
+   "absence": "stock level",
+   "reply": "I don't have units, so I can't estimate, so I can't estimate the time.",
+   "guard": true,
+   "named_or_asked": false
+  }
+ ],
+ "absence_hit": 4,
+ "absence_of": 6
+}
