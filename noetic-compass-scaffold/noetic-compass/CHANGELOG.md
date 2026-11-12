@@ -1,5 +1,29 @@
 # Noetic Compass — Progress Log
 
+## Isolated account test publication (Nov 12, 2026 PST) — PREPARATION ONLY
+
+Recovered the Nov 8 candidate with matching archive/member hashes and applied it to pinned
+source b574170. The owner authorized a public test branch and fictional-data CI, not deployment.
+Added a branch-only standard Ubuntu workflow for frontend/auth/browser checks and temporary
+PostgreSQL tests, without production credentials, caches or artifact uploads. Browser checks
+block service workers and retain Chromium's sandbox. Vercel automatic deployment is disabled
+only for this test branch; existing routes and master behavior are unchanged. Results remain
+unverified until the remote workflow runs. The legacy dashboard private-route retirement stays.
+
+
+## Isolated account frontend repair candidate (Nov 8, 2026 PST) — PREPARATION ONLY
+
+Prepared against b574170436a73db707453a1e165012d934695240 without publishing or changing live
+services. Hardened the existing Atlas account UI with API-bound session storage, verified-binding
+epoch checks, stale-auth cancellation, immediate local logout, and no-remint 401/429 behavior.
+Added a fail-closed account build and synthetic shared-mint leak tests. Retired the legacy dashboard
+login/private route tree while preserving its source and public FAQ/how-it-works claim pages.
+Backend allowlists and hosted startup safety requirements are unchanged. Independent review caught
+an initial unscoped stored-JWT/retained-callback gap; the candidate now binds both to the verified API.
+See `docs/runbooks/isolated_account_frontend_repair.md` for the feature boundary and proposed
+staging gates. Customer-production acceptance remains OPEN. Tests/builds are preparation, not
+learning, reasoning, retention, neural-growth, cooperation, or launch accomplishments.
+
 ## HELM ability 2: a told lesson, retained across fresh processes, applied to unfamiliar instances; neural-learning directive received and planned (Oct 6, 2026) — SYMBOLIC DEVELOPMENT/FIRST-LOOK RESULT + PREPARATION
 
 **Label.** The lesson result is a symbolic development demonstration plus a first-look run on 20 unseen seeds; not the frozen result (no custodian, same builder). **Neural change: none.** Everything under the neural-learning directive is preparation.

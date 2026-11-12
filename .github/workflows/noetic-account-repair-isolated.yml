@@ -1,0 +1,128 @@
+name: Noetic isolated account repair
+
+on:
+  push:
+    branches: ['noetic/account-repair-tests-20261112']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noetic-account-repair-${{ github.ref }}
+  cancel-in-progress: false
+
+# Standard public-repository runners only. No deployment, provider credentials,
+# artifact/cache upload, production database, or paid cloud job is involved.
+jobs:
+  frontends:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Check both frontends with a clean, credential-free environment
+        working-directory: noetic-compass-scaffold/noetic-compass
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/noetic-home" "$RUNNER_TEMP/noetic-tmp"
+          env -i PATH="$PATH" HOME="$RUNNER_TEMP/noetic-home" TMPDIR="$RUNNER_TEMP/noetic-tmp" CI=true \
+            PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/noetic-browsers" bash --noprofile --norc <<'CHECKS'
+          set -euo pipefail
+          for frontend in atlas-viewer dashboard; do
+            (
+              cd "$frontend"
+              npm ci --ignore-scripts --no-audit --no-fund
+              npm test
+              npm run test:claim-surfaces
+              npm run test:auth-build
+              npm run build
+            )
+          done
+          cd atlas-viewer
+          npm run build:accounts
+          npx --no-install playwright install --with-deps chromium
+          # Only the synthetic localhost suite, never the historical live E2E.
+          npx --no-install playwright test --config playwright.accounts.config.ts --reporter=list
+          CHECKS
+
+  backend_auth:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Prepare task-local Python and native dependencies
+        working-directory: noetic-compass-scaffold/noetic-compass
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/noetic-venv"
+          "$RUNNER_TEMP/noetic-venv/bin/python" -m pip install --no-cache-dir \
+            --index-url https://pypi.org/simple -r requirements.txt \
+            'pytest>=8,<10' 'pytest-asyncio>=0.23,<2' 'maturin==1.9.6' 'pytest-socket==0.7.0'
+          rustup toolchain install 1.92.0 --profile minimal
+          RUSTUP_TOOLCHAIN=1.92.0 "$RUNNER_TEMP/noetic-venv/bin/python" -m pip install \
+            --no-cache-dir --index-url https://pypi.org/simple ./cas-engine
+      - name: Run focused account and ownership checks without external sockets
+        working-directory: noetic-compass-scaffold/noetic-compass
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/noetic-home" "$RUNNER_TEMP/noetic-tmp"
+          env -i PATH="$RUNNER_TEMP/noetic-venv/bin:$PATH" HOME="$RUNNER_TEMP/noetic-home" \
+            TMPDIR="$RUNNER_TEMP/noetic-tmp" PYTHONPATH=. AWS_EC2_METADATA_DISABLED=true \
+            python -m pytest -q --disable-socket --allow-unix-socket \
+            tests/test_middleware.py tests/test_accounts_invites.py \
+            tests/test_account_lifecycle_config.py tests/test_public_capabilities.py \
+            tests/test_audit_identity_scope.py tests/test_evidence_ownership.py
+
+  postgres_state:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: synthetic-isolated-only
+          POSTGRES_DB: noetic_isolated_test
+        ports:
+          - 127.0.0.1:5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d noetic_isolated_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Prepare only the database-test dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/noetic-pg-venv"
+          "$RUNNER_TEMP/noetic-pg-venv/bin/python" -m pip install --no-cache-dir \
+            --index-url https://pypi.org/simple 'psycopg[binary]>=3.1,<4' 'pytest>=8,<10' 'pytest-socket==0.7.0'
+      - name: Run the real disposable PostgreSQL contract and fencing checks
+        working-directory: noetic-compass-scaffold/noetic-compass
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/noetic-home" "$RUNNER_TEMP/noetic-tmp"
+          env -i PATH="$RUNNER_TEMP/noetic-pg-venv/bin:$PATH" HOME="$RUNNER_TEMP/noetic-home" \
+            TMPDIR="$RUNNER_TEMP/noetic-tmp" PYTHONPATH=. \
+            NC_TEST_POSTGRES_URL=postgresql://postgres:synthetic-isolated-only@127.0.0.1:5432/noetic_isolated_test \
+            python -m pytest tests/test_state_substrate_postgres.py -q --noconftest -p no:cacheprovider \
+            --disable-socket --allow-unix-socket --allow-hosts=127.0.0.1

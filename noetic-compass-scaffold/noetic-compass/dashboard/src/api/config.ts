@@ -19,22 +19,3 @@ function isLocalStaticHost(): boolean {
 export const API_BASE = import.meta.env.PROD
   ? (isLocalStaticHost() ? DEPLOYED_API_BASE : '/api')
   : (import.meta.env.VITE_API_URL ?? '/api');
-
-/**
- * Mint credential headers for `POST /auth/token` (CAS Harness scoped-beta Phase 1).
- *
- * The API's token mint is locked in production: a request must present the shared
- * `NC_AUTH_MINT_SECRET` or it is refused with 401. The official dashboard build carries
- * the same value via `VITE_AUTH_MINT_SECRET` and sends it as the `X-Auth-Mint-Secret`
- * header. Left unset (local dev against a `debug` API), no header is sent and the open
- * mint still works — so local work is unaffected.
- *
- * Caveat: a secret baked into a client bundle is readable by anyone who downloads the
- * bundle, so this only raises the bar above an anonymous request; it is explicitly an
- * interim Phase-1 measure. Phase 2 replaces the shared secret with per-account issued
- * API keys (the dashboard authenticates the human, not the client build).
- */
-export function authMintHeaders(): Record<string, string> {
-  const secret = import.meta.env.VITE_AUTH_MINT_SECRET ?? '';
-  return secret ? { 'X-Auth-Mint-Secret': secret } : {};
-}

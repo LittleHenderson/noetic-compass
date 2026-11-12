@@ -9,30 +9,59 @@
       "source": "/api/:path*",
       "destination": "https://bmxq2dmdam.us-west-2.awsapprunner.com/:path*"
     },
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/audit-console", "destination": "/audit-console/index.html" },
-    { "source": "/audit-console/", "destination": "/audit-console/index.html" },
-    { "source": "/((?!assets/|api/).*)", "destination": "/spa.html" }
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/audit-console",
+      "destination": "/audit-console/index.html"
+    },
+    {
+      "source": "/audit-console/",
+      "destination": "/audit-console/index.html"
+    },
+    {
+      "source": "/((?!assets/|api/).*)",
+      "destination": "/spa.html"
+    }
   ],
   "headers": [
     {
       "source": "/sw.js",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache" },
-        { "key": "Service-Worker-Allowed", "value": "/" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
       ]
     },
     {
       "source": "/manifest.json",
       "headers": [
-        { "key": "Content-Type", "value": "application/manifest+json" }
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        }
       ]
     },
     {
       "source": "/api/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
       ]
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "noetic/account-repair-tests-20261112": false
+    }
+  }
 }

@@ -1,4 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "ignoreCommand": "git diff HEAD^ HEAD --quiet -- noetic-compass-scaffold/noetic-compass/dashboard/"
+  "ignoreCommand": "git diff HEAD^ HEAD --quiet -- noetic-compass-scaffold/noetic-compass/dashboard/",
+  "git": {
+    "deploymentEnabled": {
+      "noetic/account-repair-tests-20261112": false
+    }
+  }
 }

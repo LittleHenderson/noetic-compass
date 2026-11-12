@@ -2,7 +2,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
-import { ACCOUNT_SESSION_STORAGE_KEY } from './auth/AccountAuthProvider';
+import { ACCOUNT_SESSION_STORAGE_KEY, ACCOUNT_SESSION_API_KEY, accountSessionBinding } from './auth/AccountAuthProvider';
 
 function segment(value: unknown): string {
   return btoa(JSON.stringify(value)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
@@ -82,6 +82,7 @@ describe('App account-mode routing', () => {
 
   it('allows an account-ON signed-in session through model and audit gates', async () => {
     vi.stubEnv('VITE_ACCOUNTS_ENABLED', 'true');
+    sessionStorage.setItem(ACCOUNT_SESSION_API_KEY, accountSessionBinding());
     sessionStorage.setItem(ACCOUNT_SESSION_STORAGE_KEY, accountToken());
     const first = renderAt('/model-config');
     expect(await screen.findByRole('heading', { name: 'Choose a model' })).toBeInTheDocument();

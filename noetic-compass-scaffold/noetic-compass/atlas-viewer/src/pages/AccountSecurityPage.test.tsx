@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ACCOUNT_SESSION_STORAGE_KEY, AccountAuthProvider } from '../auth/AccountAuthProvider';
+import { ACCOUNT_SESSION_STORAGE_KEY, ACCOUNT_SESSION_API_KEY, accountSessionBinding, AccountAuthProvider } from '../auth/AccountAuthProvider';
 import { AuthGate } from '../components/auth/AuthGate';
 import AccountSecurityPage from './AccountSecurityPage';
 import LoginPage from './LoginPage';
@@ -24,6 +24,7 @@ describe('AccountSecurityPage', () => {
   it('rotates with a browser-generated credential, revokes the session, and hands off one visible copy', async () => {
     const user = userEvent.setup();
     const token = accountToken();
+    sessionStorage.setItem(ACCOUNT_SESSION_API_KEY, accountSessionBinding());
     sessionStorage.setItem(ACCOUNT_SESSION_STORAGE_KEY, token);
     const fetchImpl = vi.fn(async (input: RequestInfo | URL) => new Response(JSON.stringify(
       String(input).endsWith('/public/capabilities')

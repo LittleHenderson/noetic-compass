@@ -81,57 +81,18 @@ describe('apiFetch', () => {
     }
   });
 
-  it('refreshes the dashboard token once when Authorization is missing or invalid', async () => {
+  it('clears a rejected session without minting or retrying', async () => {
     setToken('stale-jwt');
-    const authHeaders: string[] = [];
+    let mintCalls = 0;
+    let calls = 0;
     server.use(
-      http.post('/api/auth/token', () => HttpResponse.json({ token: 'fresh-jwt' })),
-      http.get('/api/config', ({ request }) => {
-        const auth = request.headers.get('Authorization') ?? '';
-        authHeaders.push(auth);
-        if (auth !== 'Bearer fresh-jwt') {
-          return HttpResponse.json(
-            { detail: 'Missing or invalid Authorization header', error_type: 'auth_error' },
-            { status: 401 },
-          );
-        }
-        return HttpResponse.json({ ok: true });
-      }),
+      http.post('/api/auth/token', () => { mintCalls++; return HttpResponse.json({ token: 'fresh-jwt' }); }),
+      http.get('/api/config', () => { calls++; return HttpResponse.json({ detail: 'Invalid token' }, { status: 401 }); }),
     );
-
-    const result = await apiFetch<{ ok: boolean }>('/config');
-
-    expect(result.ok).toBe(true);
-    expect(authHeaders).toEqual(['Bearer stale-jwt', 'Bearer fresh-jwt']);
-    expect(getToken()).toBe('fresh-jwt');
-  });
-
-  it('sends the configured mint secret when refreshing the dashboard token', async () => {
-    vi.stubEnv('VITE_AUTH_MINT_SECRET', 'mint-secret-123');
-    setToken('stale-jwt');
-    let capturedMintSecret = '';
-    server.use(
-      http.post('/api/auth/token', ({ request }) => {
-        capturedMintSecret = request.headers.get('X-Auth-Mint-Secret') ?? '';
-        return HttpResponse.json({ token: 'fresh-jwt' });
-      }),
-      http.get('/api/config', ({ request }) => {
-        const auth = request.headers.get('Authorization') ?? '';
-        if (auth !== 'Bearer fresh-jwt') {
-          return HttpResponse.json(
-            { detail: 'Missing or invalid Authorization header', error_type: 'auth_error' },
-            { status: 401 },
-          );
-        }
-        return HttpResponse.json({ ok: true });
-      }),
-    );
-
-    const result = await apiFetch<{ ok: boolean }>('/config');
-
-    expect(result.ok).toBe(true);
-    expect(capturedMintSecret).toBe('mint-secret-123');
-    expect(getToken()).toBe('fresh-jwt');
+    await expect(apiFetch('/config')).rejects.toMatchObject({ status: 401 });
+    expect(calls).toBe(1);
+    expect(mintCalls).toBe(0);
+    expect(getToken()).toBeNull();
   });
 
   it('throws ApiError on 422', async () => {
@@ -165,31 +126,18 @@ describe('apiFetch', () => {
     }
   });
 
-  it('refreshes the dashboard token once when the monthly cap is exhausted', async () => {
+  it.each([ 'Monthly limit exceeded', 'Too many requests' ])('retains identity on 429: %s', async (detail) => {
     setToken('old-jwt');
-    const authHeaders: string[] = [];
+    let mintCalls = 0;
+    let calls = 0;
     server.use(
-      http.post('/api/auth/token', () => HttpResponse.json({ token: 'fresh-jwt' })),
-      http.post('/api/notation/compile', ({ request }) => {
-        const auth = request.headers.get('Authorization') ?? '';
-        authHeaders.push(auth);
-        if (auth === 'Bearer old-jwt') {
-          return HttpResponse.json(
-            { detail: 'Monthly limit exceeded (50 assessments). Upgrade tier or wait until next month.' },
-            { status: 429 },
-          );
-        }
-        return HttpResponse.json({ valid: true });
-      }),
+      http.post('/api/auth/token', () => { mintCalls++; return HttpResponse.json({ token: 'fresh-jwt' }); }),
+      http.post('/api/notation/compile', () => { calls++; return HttpResponse.json({ detail }, { status: 429 }); }),
     );
-
-    const result = await apiFetch<{ valid: boolean }>('/notation/compile', {
-      method: 'POST',
-      body: JSON.stringify({ expression: 'Phi<3:8:5:2>' }),
-    });
-
-    expect(result.valid).toBe(true);
-    expect(authHeaders).toEqual(['Bearer old-jwt', 'Bearer fresh-jwt']);
-    expect(getToken()).toBe('fresh-jwt');
+    await expect(apiFetch('/notation/compile', { method: 'POST', body: '{}' }))
+      .rejects.toMatchObject({ status: 429, detail: expect.stringContaining('identity is unchanged') });
+    expect(calls).toBe(1);
+    expect(mintCalls).toBe(0);
+    expect(getToken()).toBe('old-jwt');
   });
 });

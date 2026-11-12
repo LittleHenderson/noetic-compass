@@ -1,3 +1,4 @@
+import { browserAuthBuildGuard } from '../scripts/browser-auth-build-guard.mjs';
 ///<reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -6,7 +7,7 @@ import path from 'node:path';
 const API_BASE_URL = process.env.ATLAS_API_BASE_URL ?? 'http://localhost:8000';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [browserAuthBuildGuard(), react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

@@ -1,9 +1,10 @@
+import { browserAuthBuildGuard } from '../scripts/browser-auth-build-guard.mjs';
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [browserAuthBuildGuard(), react(), tailwindcss()],
   server: {
     port: 3000,
     proxy: {

@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccountAuth } from '../auth/AccountAuthProvider';
 import { GlassPanel } from '../components/ui/GlassPanel';
@@ -124,6 +124,16 @@ export default function LoginPage(): JSX.Element {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const active = useRef(true);
+  const submitting = useRef(false);
+  const cancelPendingAuth = auth.cancelPendingAuth;
+  useEffect(() => {
+    active.current = true;
+    return () => {
+      active.current = false;
+      cancelPendingAuth();
+    };
+  }, [cancelPendingAuth]);
 
   useEffect(() => {
     if (auth.credentialHandoff?.credential) {
@@ -134,16 +144,20 @@ export default function LoginPage(): JSX.Element {
 
   const submitLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     setBusy(true);
     setError(null);
     try {
       await auth.login(identity, credential);
+      if (!active.current) return;
       setCredential('');
       navigate(destinationFrom(location.state), { replace: true });
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Sign in failed.');
+      if (active.current) setError(caught instanceof Error ? caught.message : 'Sign in failed.');
     } finally {
-      setBusy(false);
+      submitting.current = false;
+      if (active.current) setBusy(false);
     }
   };
 
@@ -156,7 +170,8 @@ export default function LoginPage(): JSX.Element {
 
   const submitRedemption = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!generatedCredential || !savedCredential) return;
+    if (submitting.current || !generatedCredential || !savedCredential) return;
+    submitting.current = true;
     setBusy(true);
     setError(null);
     setNotice(null);
@@ -167,15 +182,18 @@ export default function LoginPage(): JSX.Element {
         apiCredential: generatedCredential,
         displayName,
       });
+      if (!active.current) return;
       setRedeemed(true);
       setNotice('Invite redeemed and account session opened. The credential is still shown only so you can finish saving it.');
     } catch (caught) {
+      if (!active.current) return;
       setError(caught instanceof Error ? caught.message : 'Invite redemption failed.');
       setNotice(
         'The same generated credential is retained for a safe retry. Do not generate a different credential after an uncertain response.',
       );
     } finally {
-      setBusy(false);
+      submitting.current = false;
+      if (active.current) setBusy(false);
     }
   };
 
@@ -230,6 +248,7 @@ export default function LoginPage(): JSX.Element {
           <button
             type="button"
             role="tab"
+            disabled={busy}
             aria-selected={mode === 'sign-in'}
             style={buttonStyle(mode === 'sign-in')}
             onClick={() => { setMode('sign-in'); setError(null); }}
@@ -239,6 +258,7 @@ export default function LoginPage(): JSX.Element {
           <button
             type="button"
             role="tab"
+            disabled={busy}
             aria-selected={mode === 'redeem'}
             style={buttonStyle(mode === 'redeem')}
             onClick={() => { setMode('redeem'); setError(null); }}

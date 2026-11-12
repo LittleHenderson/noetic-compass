@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
 import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
-import { ACCOUNT_SESSION_STORAGE_KEY, AccountAuthProvider } from '../auth/AccountAuthProvider';
+import { ACCOUNT_SESSION_STORAGE_KEY, ACCOUNT_SESSION_API_KEY, accountSessionBinding, AccountAuthProvider } from '../auth/AccountAuthProvider';
 
 const LIVE_WORKER_HEALTH_PATH = '/api/cas-harness/live-worker/health';
 
@@ -931,6 +931,7 @@ describe('AuditConsolePage', () => {
 
   it('automatically propagates the signed-in account Bearer token to customer audit and evidence actions', async () => {
     const token = signedAccountToken();
+    sessionStorage.setItem(ACCOUNT_SESSION_API_KEY, accountSessionBinding());
     sessionStorage.setItem(ACCOUNT_SESSION_STORAGE_KEY, token);
     const fetchMock = vi
       .fn()

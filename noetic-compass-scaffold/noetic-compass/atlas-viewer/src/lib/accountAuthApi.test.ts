@@ -220,3 +220,9 @@ describe('accountAuthApi', () => {
       .rejects.toMatchObject({ httpStatus: 401, detail: 'Invalid account credentials.' });
   });
 });
+
+it.each(['//untrusted.example', 'https://user:password@api.example', 'https://api.example?redirect=bad', '/api#bad'])('refuses invalid credential destination %s before fetch', async (baseUrl) => {
+  const fetchImpl = vi.fn();
+  await expect(loginAccount({ username: 'synthetic', apiCredential: 'casak_synthetic' }, { baseUrl, fetchImpl })).rejects.toThrow('invalid');
+  expect(fetchImpl).not.toHaveBeenCalled();
+});

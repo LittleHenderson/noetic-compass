@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:claim-surfaces": "node --test scripts/prerender-claim-surfaces.test.mjs",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:auth-build": "node --test ../scripts/browser-auth-build-guard.test.mjs"
   },
   "dependencies": {
     "@mediapipe/camera_utils": "^0.3.1675466124",

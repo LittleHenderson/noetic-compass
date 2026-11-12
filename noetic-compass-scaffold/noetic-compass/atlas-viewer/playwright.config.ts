@@ -12,6 +12,7 @@ const previewUrl = `http://127.0.0.1:${previewPort}`;
 // - HTML report is generated but not auto-opened so CI doesn't block.
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: '**/account-auth.isolated.spec.ts',
   outputDir: 'test-results/',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

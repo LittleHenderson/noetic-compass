@@ -328,9 +328,13 @@ async function requestJson(
     throw new AccountAuthApiError('Account authentication requires fetch support.');
   }
 
+  // Apply the same URL validation as the anonymous handshake to every
+  // credential-bearing request, including direct helper callers.
+  const capabilityUrl = resolveAccountCapabilityUrl(options?.baseUrl);
+  const baseUrl = capabilityUrl.slice(0, -ACCOUNT_CAPABILITIES_PATH.length);
   let response: Response;
   try {
-    response = await fetchImpl(`${resolveAccountApiBaseUrl(options?.baseUrl)}${path}`, {
+    response = await fetchImpl(`${baseUrl}${path}`, {
       ...init,
       cache: 'no-store',
       credentials: 'omit',
@@ -344,7 +348,9 @@ async function requestJson(
     });
   }
   if (!response.ok) {
-    const detail = await readErrorDetail(response);
+    const detail = response.status === 429
+      ? 'Account limit reached. Your identity is unchanged. Wait for the limit to reset or contact the platform operator.'
+      : await readErrorDetail(response);
     throw new AccountAuthApiError(detail, {
       httpStatus: response.status,
       detail,

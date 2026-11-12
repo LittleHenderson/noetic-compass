@@ -1,5 +1,5 @@
-import { clearToken, getToken, setToken } from './auth';
-import { API_BASE, authMintHeaders } from './config';
+import { clearToken, getToken } from './auth';
+import { API_BASE } from './config';
 
 export class ApiError extends Error {
   status: number;
@@ -25,36 +25,9 @@ function stringifyDetail(detail: unknown, fallback: string): string {
   }
 }
 
-function isMonthlyLimit(detail: string): boolean {
-  return /monthly limit exceeded/i.test(detail);
-}
-
-function freshDashboardUsername(): string {
-  const rand = Math.random().toString(36).slice(2, 8);
-  return `dashboard-${Date.now().toString(36)}-${rand}`;
-}
-
-async function refreshDashboardToken(): Promise<boolean> {
-  try {
-    const res = await fetch(`${API_BASE}/auth/token`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...authMintHeaders() },
-      body: JSON.stringify({ username: freshDashboardUsername() }),
-    });
-    if (!res.ok) return false;
-    const data: { token?: string } = await res.json();
-    if (!data.token) return false;
-    setToken(data.token);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
-  allowRecovery: boolean = true,
 ): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
@@ -88,21 +61,12 @@ export async function apiFetch<T>(
     }
     if (res.status === 401) {
       clearToken();
-      if (allowRecovery && path !== '/auth/token' && await refreshDashboardToken()) {
-        return apiFetch<T>(path, options, false);
-      }
       if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
         window.location.assign('/login');
       }
     }
-    if (
-      res.status === 429 &&
-      allowRecovery &&
-      path !== '/auth/token' &&
-      isMonthlyLimit(detail) &&
-      await refreshDashboardToken()
-    ) {
-      return apiFetch<T>(path, options, false);
+    if (res.status === 429) {
+      detail = 'Account limit reached. Your identity is unchanged. Wait for the limit to reset or contact the platform operator.';
     }
     throw new ApiError(res.status, detail, errorType);
   }
